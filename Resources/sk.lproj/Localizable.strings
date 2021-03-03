@@ -70,14 +70,14 @@
 "gpx_updown" = "Hore/Dole";
 "gpx_speed" = "Rýchlosť";
 // Map settings
-"m_style_overview" = "Prehľad";
+"rendering_value_browse_map_name" = "Prehľad";
 "m_style_car" = "Auto";
 "m_style_walk" = "Chôdza";
 "m_style_bicycle" = "Bicykel";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Zobraziť na mape";
 "map_settings_type" = "Typ mapy";
-"map_settings_mode" = "Režim aplikácie";
+"map_mode" = "Režim aplikácie";
 "map_settings_day" = "Deň";
 "map_settings_night" = "Noc";
 "map_settings_style" = "Štýl vykresľovania";
@@ -198,7 +198,7 @@
 "prch_items_failed" = "položiek nebolo obnovených. Prosím skúste to znova.";
 // Resources
 "res_mapsres" = "Mapy & Zdroje";
-"res_installed" = "Nainštalované";
+"download_tab_local" = "Nainštalované";
 "res_banner_free_maps_title" = "Máte %d máp zdarma!";
 "res_banner_free_maps_desc" = "Môžete si zadarmo stiahnuť %d máp, bez aktualizácií";
 "res_banner_no_free_maps_title" = "Máte už žiadne voľné mapy!";
@@ -384,7 +384,7 @@
 "gpx_trip_groups" = "Skupiny výletov";
 "gpx_group_select" = "Výber skupiny";
 "show_all" = "Zobraziť všetko";
-"directions" = "Pokyny";
+"get_directions" = "Pokyny";
 "parking" = "Parkovanie";
 "est_travel_time" = "Odhadovaný čas cesty";
 "pedestrian" = "Chodec";
@@ -1024,7 +1024,7 @@
 "show_tunnels" = "Tunely";
 "map_settings_map_magnifier" = "Zväčšenie mapy";
 "map_settings_text_size" = "Veľkosť textu";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "mapillary_image" = "Obrázok Mapillary";
 "shared_string_retry" = "Skúsiť znova";
 // Mapillary
@@ -1135,7 +1135,7 @@
 "gpx_slope" = "Svah";
 "simulate_navigation" = "Simulovať navigáciu";
 "select_avoid_descr" = "Zvoľte cesty, ktorým sa chcete počas navigácie vyhnúť. Môžete zvoliť cestu na mape alebo typ zo zoznamu nižšie.";
-"route_params" = "Parametre trasy";
+"route_parameters" = "Parametre trasy";
 "by_name" = "Podľa názvu";
 "by_dist" = "Podľa vzdialenosti";
 "sort_by" = "Zotriediť";
@@ -1627,8 +1627,8 @@
 "vessel_width_limit_description" = "Nastavte šírku plavidla, aby sa dalo vyhnúť úzkym mostom.";
 "profile_type_user_string" = "Profil používateľa";
 "quick_action_mapillary_hide" = "Skryť Mapillary";
-"map_settings_terrain" = "Terén";
-"voice_prompts" = "Hlasové výzvy";
+"shared_string_terrain" = "Terén";
+"voice_announces" = "Hlasové výzvy";
 "public_transport_hide" = "Skryť verejnú dopravu";
 "configure_screen_descr" = "Zvoľte nastavenia obrazovky pre profil";
 "osmand_routing" = "Navigácia OsmAnd";

@@ -70,6 +70,7 @@
 
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Search";
+"address_search" = "Address search";
 "search_radius" = "Search radius";
 "targets" = "Destinations";
 "search_radius_proximity" = "Within";
@@ -182,6 +183,11 @@
 "configure_screen_descr" = "Select screen options for the profile";
 "map_markers" = "Map markers";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
+"map_markers_empty" = "You have no active map markers";
+"tracks_empty" = "Your track list is empty";
+"favorites_empty" = "You have not saved any favorite points";
+
+"carplay_active_message" = "Map is displayed via CarPlay";
 
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
@@ -230,13 +236,13 @@
 "map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 
-"route_params" = "Route parameters";
+"route_parameters" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "nav_type_title" = "Navigation type";
-"voice_prompts" = "Voice prompts";
+"voice_announces" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";
-"map_behavior" = "Map behavior";
+"map_during_navigation" = "Map during navigation";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -298,6 +304,7 @@
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigation";
+"get_directions" = "Directions";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
 "app_mode_truck" = "Truck";
@@ -354,6 +361,7 @@
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
+"route_calc_progress" = "Calculating: %d%%";
 "internet_connection_required_for_online_route" = "An online navigation service is selected but no Internet connection is available.";
 "empty_route_calculated" = "Error: Calculated route is empty";
 "destination_point" = "Destination %@";
@@ -435,6 +443,7 @@
 "nearest_cities" = "Nearest cities";
 "type_address" = "Type address";
 "search_poi_category_hint" = "Type to search all";
+"poi_categories" = "POI categories";
 
 // Shared Strings
 "shared_string_apply" = "Apply";
@@ -629,7 +638,7 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"m_style_overview" = "Overview";
+"rendering_value_browse_map_name" = "Browse map";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
@@ -639,7 +648,7 @@
 "layer_amenity_label" = "POI overlay labels";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
+"map_mode" = "Map mode";
 "map_settings_map_magnifier" = "Map magnifier";
 "map_settings_text_size" = "Text size";
 "map_settings_day" = "Day";
@@ -657,8 +666,9 @@
 "map_settings_base_transp" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
-"map_settings_mapillary" = "Mapillary";
-"map_settings_terrain" = "Terrain";
+"mapillary" = "Mapillary";
+"street_level_imagery" = "Street-level imagery";
+"shared_string_terrain" = "Terrain";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
 "map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
@@ -689,7 +699,7 @@
 "angular_measurment_units" = "Angular measurment units";
 "units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
-"global_settings" = "Global settings";
+"osmand_settings" = "OsmAnd settings";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
@@ -886,7 +896,6 @@
 "open_saved_track" = "Open saved track";
 "plan_route_create_new_route" = "Create new route";
 "track_is_saved" = "%@\nis saved!";
-"plan_route_create_new_route" = "Create new route";
 "plan_route_open_existing_track" = "Open existing track";
 "plan_route_last_modified" = "Last modified";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
@@ -913,7 +922,7 @@
 
 // Resources
 "res_mapsres" = "Maps & Resources";
-"res_installed" = "Installed";
+"download_tab_local" = "Local";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Live updates";
 "osmand_live_available_maps" = "Available maps";
@@ -1008,7 +1017,6 @@
 "menu" = "Menu";
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
-"menu_my_directions" = "My Directions";
 "menu_feedback" = "Feedback";
 "menu_help" = "Help";
 
@@ -1017,6 +1025,7 @@
 "closing_changeset" = "Closing changeset…";
 "commiting_node" = "Committing node…";
 "loading_poi_obj" = "Loading POI…";
+"shared_string_loading" = "Loading…";
 
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
@@ -1352,7 +1361,7 @@
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
 "ctx_mnu_share" = "Share";
-"ctx_mnu_direction" = "Direction";
+"ctx_mnu_direction" = "Map marker";
 
 // Location Services
 "loc_access_denied" = "Access denied";
@@ -1570,7 +1579,6 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"directions" = "Directions";
 "parking" = "Parking";
 
 "directions_more_options" = "Directions from";
@@ -1657,6 +1665,7 @@
 "no_inet_connection_desc_map" = "Required to download maps.";
 "try_again" = "Try again";
 
+"search_preogress" = "Searching…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Select another region";

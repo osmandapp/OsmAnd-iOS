@@ -98,6 +98,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIView *actionButtonsContainer;
 @property (weak, nonatomic) IBOutlet UIButton *modeButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
+@property (weak, nonatomic) IBOutlet UIView *navbarView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
 
 @end
 
@@ -220,7 +222,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self adjustMapViewPort];
     [self changeMapRulerPosition];
     [self adjustActionButtonsPosition:self.getViewHeight];
-    
+    [self adjustNavbarPosition];
+
     self.tableView.userInteractionEnabled = YES;
     [self.view bringSubviewToFront:self.tableView];
     
@@ -257,9 +260,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return NO;
 }
 
-- (CGFloat) additionalLandscapeOffset
+- (BOOL) isLeftSidePresentation
 {
-    return 100.;
+    if (OAUtilities.isIPad)
+        return OAUtilities.isLandscape && _hudMode == EOAHudModeRoutePlanning && !OAUtilities.isWindowed;
+    return OAUtilities.isLandscape;
 }
 
 - (void) addInitialPoint
@@ -274,7 +279,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) adjustActionButtonsPosition:(CGFloat)height
 {
     CGRect buttonsFrame = _actionButtonsContainer.frame;
-    if (OAUtilities.isLandscapeIpadAware)
+    if ([self isLeftSidePresentation])
         buttonsFrame.origin = CGPointMake(self.scrollableView.frame.size.width, DeviceScreenHeight - buttonsFrame.size.height - 15. - OAUtilities.getBottomMargin);
     else
         buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
@@ -283,14 +288,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin = OAUtilities.isLandscapeIpadAware ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
+    CGFloat bottomMargin = [self isLeftSidePresentation] ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
+    CGFloat leftMargin = [self isLeftSidePresentation] ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
 - (void) changeCenterOffset:(CGFloat)contentHeight
 {
-    if (OAUtilities.isLandscapeIpadAware)
+    if ([self isLeftSidePresentation])
     {
         _centerImageView.center = CGPointMake(DeviceScreenWidth * 0.75,
                                         self.view.frame.size.height * 0.5);
@@ -305,7 +310,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)adjustMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if ([OAUtilities isLandscapeIpadAware])
+    if ([self isLeftSidePresentation])
     {
         mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
         mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
@@ -324,6 +329,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
+}
+
+- (void) adjustNavbarPosition
+{
+    _navbarLeadingConstraint.constant = [self isLeftSidePresentation] ? self.scrollableView.frame.size.width : 0.;
 }
 
 - (void) updateDistancePointsText
@@ -377,7 +387,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (selectedFile != nullptr)
         gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
     else
-        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.file]];
+        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
     
     if (!gpxFile.routes)
         gpxFile.routes = [NSMutableArray new];
@@ -403,7 +413,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)centerMapOnBBox:(OAGpxBounds)routeBBox
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    BOOL landscape = [OAUtilities isLandscapeIpadAware];
+    BOOL landscape = [self isLeftSidePresentation];
     [mapPanel displayAreaOnMap:routeBBox.topLeft bottomRight:routeBBox.bottomRight zoom:0 bottomInset:!landscape ? self.getViewHeight : 0 leftInset:landscape ? self.tableView.frame.size.width : 0];
 }
 
@@ -683,7 +693,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     OAGpxData *gpxData = _editingContext.gpxData;
     if (gpxData != nil && gpxData.gpxFile.fileName.length > 0)
-        return [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:gpxData.gpxFile.fileName];
+        return [OAUtilities getGpxShortPath:gpxData.gpxFile.fileName];
     else
         return [[self getSuggestedFileName] stringByAppendingPathExtension:@"gpx"];
 }
@@ -865,7 +875,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
     }
     OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-    NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:outFile];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:outFile];
     if ([_settings.mapSettingVisibleGpx containsObject:gpxFilePath])
     {
         // Refresh track if visible
@@ -912,10 +922,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:OAUtilities.isLandscapeIpadAware ? 0. : (height - 30.) animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? 0. : (height - ([OAUtilities isIPad] ? 0. : 30.)) animated:YES];
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];
     [self adjustMapViewPort];
+    [self adjustNavbarPosition];
 }
 
 - (void) onPointsListChanged
@@ -1519,8 +1530,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
 {
-    
-    [self saveNewGpx:fileName.stringByDeletingLastPathComponent fileName:fileName.lastPathComponent showOnMap:showOnMap simplifiedTrack:simplifiedTrack finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
+    [self saveNewGpx:@"" fileName:fileName showOnMap:showOnMap simplifiedTrack:simplifiedTrack finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }
 
 #pragma mark - OAExitRoutePlanningDelegate

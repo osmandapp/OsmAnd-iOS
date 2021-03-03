@@ -68,7 +68,7 @@
             continue;
         }
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:gpx.file];
+        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
         {
@@ -89,7 +89,7 @@
     }
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); )
     {
-        NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:it.key().toNSString()];
+        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
         if (![_settings.mapSettingVisibleGpx containsObject:gpxFilePath])
             it = _activeGpx.erase(it);
         else

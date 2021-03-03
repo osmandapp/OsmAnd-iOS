@@ -372,7 +372,7 @@
             [doc saveTo:fout];
             
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:fout];
+            NSString *gpxFilePath = [OAUtilities getGpxShortPath:fout];
             [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
         }
@@ -932,7 +932,7 @@
 {
     OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
     [currentTrack applyBounds];
-    return [[OAGPX alloc] initWithFilePath:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
+    return [[OAGPXDatabase sharedDb] buildGpxItem:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
 }
 
 @end

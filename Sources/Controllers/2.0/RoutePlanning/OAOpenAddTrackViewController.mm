@@ -201,7 +201,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             selectedFolderName = @"";
         
         return[data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {
-            NSString *folderName = object.file.stringByDeletingLastPathComponent;
+            NSString *folderName = object.gpxFilePath.stringByDeletingLastPathComponent;
             return [folderName isEqualToString:selectedFolderName];
         }]];
     }
@@ -213,8 +213,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         switch (_sortingMode) {
             case EOAModifiedDate:
             {
-                NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.file];
-                NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.file];
+                NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFilePath];
+                NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFilePath];
                 return [time2 compare:time1];
             }
             case EOANameAscending:
@@ -270,6 +270,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0, self.tableView.safeAreaInsets.left + kGPXCellTextLeftOffset, 0, 0);
+            cell.separatorView.hidden = YES;
         }
         if (cell)
         {
@@ -333,7 +334,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if (self.delegate)
             [self.delegate closeBottomSheet];
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.file]];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
         return;
     }
     else
@@ -341,9 +342,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         OAGPX* track = item[@"track"];
         NSString *filename = nil;
         if (track)
-            filename = [OAGPXDatabase.sharedDb getFileName:track.file];
+            filename = track.gpxFilePath;
         if (self.delegate)
-            [self.delegate onFileSelected:track.file];
+            [self.delegate onFileSelected:track.gpxFilePath];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
     }

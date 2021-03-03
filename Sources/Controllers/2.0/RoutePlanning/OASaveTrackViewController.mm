@@ -35,7 +35,6 @@
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
     OAAppSettings *_settings;
-    OAGPX *_gpx;
     
     NSString *_fileName;
     NSString *_sourceFileName;
@@ -60,10 +59,8 @@
         _settings = [OAAppSettings sharedManager];
         _fileName = fileName;
         _sourceFileName = fileName;
-        _filePath = filePath;
         _showSimplifiedButton = simplifiedTrack;
         _showOnMap = showOnMap;
-        _gpx = [OAGPXDatabase.sharedDb getGPXItem:filePath];
         
         _rightButtonEnabled = YES;
         _simplifiedTrack = NO;
@@ -82,6 +79,7 @@
     
     self.cancelButton.layer.cornerRadius = 9.0;
     self.saveButton.layer.cornerRadius = 9.0;
+    
     [self updateBottomButtons];
 }
 
@@ -166,7 +164,7 @@
             @"values" : _allFolders,
         },
     ]];
-    
+
     if (_showSimplifiedButton)
     {
         [data addObject:@[
@@ -241,6 +239,10 @@
     }
     else
     {
+//        [self dismissViewControllerAnimated:NO completion:nil];
+//        if (self.delegate)
+//            [self.delegate onSaveAsNewTrack:_fileName showOnMap:_showOnMap simplifiedTrack:_simplifiedTrack];
+        
         [self dismissViewControllerAnimated:NO completion:nil];
         NSString *savingPath;
         if ([_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])

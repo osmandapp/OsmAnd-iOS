@@ -107,7 +107,7 @@
 {
     [super viewDidLoad];
     
-    self.titleLabel.text = OALocalizedString(@"menu_my_directions");
+    self.titleLabel.text = OALocalizedString(@"map_markers");
     
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {

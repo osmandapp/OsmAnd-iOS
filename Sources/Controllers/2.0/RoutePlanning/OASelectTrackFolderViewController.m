@@ -70,7 +70,7 @@
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
-    NSString *selectedFolderName = [[_gpx.file  stringByDeletingLastPathComponent] lastPathComponent];
+    NSString *selectedFolderName = [[_gpx.gpxFilePath  stringByDeletingLastPathComponent] lastPathComponent];
     if ([selectedFolderName isEqualToString:@""])
         selectedFolderName = OALocalizedString(@"tracks");
     
@@ -238,9 +238,6 @@
         [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
     
     [self reloadData];
-    
-    if (_delegate)
-        [_delegate onNewFolderAdded];
 }
 
 @end

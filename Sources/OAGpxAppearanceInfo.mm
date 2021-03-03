@@ -32,7 +32,7 @@
 //        _gradientSlopeColor = dataItem.getGradientSlopeColor;
 //        _gradientAltitudeColor = dataItem.getGradientAltitudeColor;
 //
-        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:dataItem.file];
+        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:dataItem.gpxFilePath];
         OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
         if (analysis)
         {

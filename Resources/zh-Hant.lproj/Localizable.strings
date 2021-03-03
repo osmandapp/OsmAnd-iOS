@@ -102,14 +102,14 @@
 "track_clear_q" = "您想要清除目前的軌跡嗎？";
 "show_info" = "顯示資訊";
 // Map settings
-"m_style_overview" = "概覽";
+"rendering_value_browse_map_name" = "概覽";
 "m_style_car" = "汽車";
 "m_style_walk" = "步行";
 "m_style_bicycle" = "自行車";
 "map_settings_map" = "地圖";
 "map_settings_show" = "在地圖上顯示";
 "map_settings_type" = "地圖類型";
-"map_settings_mode" = "應用程式模式";
+"map_mode" = "應用程式模式";
 "map_settings_day" = "日間";
 "map_settings_night" = "夜間";
 "map_settings_style" = "地圖樣式";
@@ -160,7 +160,7 @@
 "prch_items_failed" = "項目未還原。請再試一次。";
 // Resources
 "res_mapsres" = "地圖和資源";
-"res_installed" = "已安裝";
+"download_tab_local" = "已安裝";
 "res_banner_free_maps_title" = "您尚有 %d 個免費地圖！";
 "res_banner_free_maps_desc" = "您尚可以下載 %d 個免費地圖，無更新";
 "res_banner_no_free_maps_title" = "您已無免費地圖！";
@@ -377,7 +377,7 @@
 "gpx_trip_groups" = "旅程群組";
 "gpx_group_select" = "群組選擇";
 "show_all" = "全部顯示";
-"directions" = "導引";
+"get_directions" = "導引";
 "shared_string_dismiss" = "退出";
 "shared_string_modify" = "修改";
 "parking" = "停車場";
@@ -1072,7 +1072,7 @@
 "gpx_avg_altitude" = "平均海拔";
 "mapillary_get_title" = "提高 Mapillary 照片覆蓋的範圍";
 "add_action" = "增加動作";
-"route_params" = "路徑參數";
+"route_parameters" = "路徑參數";
 "angular_units_descr" = "變更測量的方位角。";
 "quick_action_name" = "快速動作";
 "osm_edit_without_name" = "沒有名稱";
@@ -1083,7 +1083,7 @@
 "units_min_short" = "公尺";
 "show_contour_lines" = "顯示等高線";
 "add_map_marker" = "增加地圖標記";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "fav_add_group" = "新增群組";
 "add_gpx_waypoint" = "增加 GPX 航點";
 "shared_string_show_more" = "顯示更多";
@@ -1550,7 +1550,7 @@
 "quick_action_mapillary_show" = "顯示 Mapillary";
 "configure_map_descr" = "地圖外觀";
 "route_recalculation_descr" = "如果從路徑到目前位置的距離大於選定的值，將會重新計算路徑。";
-"voice_prompts" = "語音導航";
+"voice_announces" = "語音導航";
 "help_nav_profiles" = "導航設定檔";
 "listed_exist" = "列出的 %@ 已存在於 OsmAnd 中。";
 "meters" = "公尺";
@@ -1559,7 +1559,7 @@
 "one" = "一";
 "consider_limitations_param" = "考慮暫時限制";
 "create_profile_descr" = "讓您自訂的設定檔以其中一個預設應用程式設定檔為基礎，這定義了如小工具、速度單位與距離的顯示方式。這些是預設的應用程式設定檔，連同其可以擴展成的自訂設定檔範例：";
-"map_settings_terrain" = "地形";
+"shared_string_terrain" = "地形";
 "select_icon" = "選取圖示";
 "help_mapillary" = "OsmAnd + Mapillary";
 "reverse_route" = "反向路線";

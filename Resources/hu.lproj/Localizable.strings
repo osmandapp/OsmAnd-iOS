@@ -91,14 +91,14 @@
 "track_clear_q" = "Szeretné törölni a jelenlegi utat?";
 "show_info" = "Információk megjelenítése";
 // Map settings
-"m_style_overview" = "Áttekintés";
+"rendering_value_browse_map_name" = "Áttekintés";
 "m_style_car" = "Autó";
 "m_style_walk" = "Gyalog";
 "m_style_bicycle" = "Kerékpár";
 "map_settings_map" = "Térkép";
 "map_settings_show" = "Megjelenítés a térképen";
 "map_settings_type" = "Térképtípus";
-"map_settings_mode" = "Alkalmazásmód";
+"map_mode" = "Alkalmazásmód";
 "map_settings_day" = "Nappal";
 "map_settings_night" = "Éjjel";
 "map_settings_style" = "Térképstílus";
@@ -154,7 +154,7 @@
 "prch_items_failed" = "elem nem került visszaállításra. Próbálja újra.";
 // Resources
 "res_mapsres" = "Térképek és erőforrások";
-"res_installed" = "Telepítve";
+"download_tab_local" = "Telepítve";
 "res_banner_free_maps_title" = "Önnek %d ingyenes térképe van!";
 "res_banner_free_maps_desc" = "%d ingyenes térképet tölthet le frissítések nélkül";
 "res_banner_no_free_maps_title" = "Önnek nincs ingyenes térképe!";
@@ -377,7 +377,7 @@
 "gpx_trip_groups" = "Utazás csoportok";
 "gpx_group_select" = "Csoportos kijelölés";
 "show_all" = "Összes megjelenítése";
-"directions" = "Irányok";
+"get_directions" = "Irányok";
 "shared_string_dismiss" = "Bezárás";
 "shared_string_modify" = "Módosítás";
 "parking" = "Parkolás";
@@ -881,7 +881,7 @@
 "prefer_in_routing_descr" = "Autópálya előnyben részesítése";
 "osm_editing_offline" = "Offline szerkesztés";
 "translucent_orange" = "Átlátszó narancs";
-"route_params" = "Útvonal paraméterek";
+"route_parameters" = "Útvonal paraméterek";
 "osm_alert_title" = "Véglegesítés";
 "create_poi_short" = "POI létrehozása";
 "osmand_live_weekly" = "Hetente";
@@ -952,7 +952,7 @@
 "product_desc_wikivoyage" = "Az ingyenes, világméretű útikönyv, amit bárki szerkeszthet.";
 "osmand_live_daily" = "Naponta";
 "add_map_marker" = "Térképjelölő hozzáadása";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "shared_string_time_of_day" = "Napszak";
 "help_follow_us" = "Kövess minket";
 "product_title_sea_depth_contours" = "Tengeri mélységvonalak";
@@ -1437,7 +1437,7 @@
 "shared_string_add_profile" = "Profil hozzáadása";
 "public_transport_show" = "Tömegközlekedés megjelenítése";
 "shared_string_min" = "Min";
-"voice_prompts" = "Hangutasítások";
+"voice_announces" = "Hangutasítások";
 "quick_action_mapillary_show" = "Mapillary megjelenítése";
 "default_speed" = "Alapértelmezett sebesség";
 "nav_type_ski" = "Sí";
@@ -1449,7 +1449,7 @@
 "total" = "Összesen";
 "meters" = "méter";
 "plugin_settings_reset" = "Bővítménybeállítások visszaállítása alapértelmezettre";
-"map_settings_terrain" = "Domborzat";
+"shared_string_terrain" = "Domborzat";
 "public_transport_menu" = "Tömegközlekedés";
 "res_source_one_per_tile" = "Egy képfájl csempénként";
 "add_to_track" = "Hozzáadás nyomvonalhoz";

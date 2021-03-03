@@ -269,7 +269,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) setupView
 {
-    title = OALocalizedString(@"map_settings_terrain");
+    title = OALocalizedString(@"shared_string_terrain");
 
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     _possibleZoomValues = [self getPossibleZoomValues];

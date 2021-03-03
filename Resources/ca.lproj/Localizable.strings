@@ -88,14 +88,14 @@
 "track_clear_q" = "Voleu eliminar el trajecte actual?";
 "show_info" = "Mostra informació";
 // Map settings
-"m_style_overview" = "Informació general";
+"rendering_value_browse_map_name" = "Informació general";
 "m_style_car" = "Cotxe";
 "m_style_walk" = "A peu";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Mostra al mapa";
 "map_settings_type" = "Tipus de mapa";
-"map_settings_mode" = "Mode d'aplicació";
+"map_mode" = "Mode d'aplicació";
 "map_settings_day" = "Dia";
 "map_settings_night" = "Nit";
 "map_settings_style" = "Estil del mapa";
@@ -143,7 +143,7 @@
 "proceed_q" = "Voleu continuar?";
 "download" = "Baixa";
 "nothanks" = "No, gràcies";
-"res_installed" = "Instal·lat";
+"download_tab_local" = "Instal·lat";
 "units_minutes_short" = "min";
 "units_seconds_short" = "seg";
 "download_now" = "Baixa el mapa ara";
@@ -377,7 +377,7 @@
 "gpx_trip_groups" = "Agrupacions de trajectes";
 "gpx_group_select" = "Selecciona grup";
 "show_all" = "Mostra tot";
-"directions" = "Direccions";
+"get_directions" = "Direccions";
 "shared_string_dismiss" = "Descarta";
 "shared_string_modify" = "Modifica";
 "parking" = "Aparcament";
@@ -1026,7 +1026,7 @@
 "show_tunnels" = "Túnels";
 "map_settings_map_magnifier" = "Escalat del mapa";
 "map_settings_text_size" = "Mida del text";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "mapillary_image" = "Imatge Mapillary";
 "shared_string_retry" = "Torna-hi";
 // Mapillary
@@ -1222,7 +1222,7 @@
 "gpx_slope" = "Pista";
 "simulate_navigation" = "Simula la navegació";
 "select_avoid_descr" = "Indiqueu les vies que voleu evitar en la navegació. Podeu seleccionar-ne una en el mapa o triar-la de la llista de sota.";
-"route_params" = "Paràmetres de la ruta";
+"route_parameters" = "Paràmetres de la ruta";
 "by_name" = "Per nom";
 "by_dist" = "Per distància";
 "sort_by" = "Ordena";
@@ -1673,7 +1673,7 @@
 "map_settings_slopes_description" = "Els mapes de pistes utilitzen diferents colors per visualitzar el terreny";
 "map_settings_slopes_legend" = "Podeu trobar més informació sobre les pistes a Viquipèdia";
 "map_settings_layer_transparency" = "Transparència de la capa";
-"map_settings_terrain" = "Terreny";
+"shared_string_terrain" = "Terreny";
 "m_style_pulic_transport" = "Transport públic";
 "transfers" = "Transferències:";
 "consider_limitations_param" = "Considereu les limitacions temporals";
@@ -1742,7 +1742,7 @@
 "nav_type_ski" = "Esquí";
 "vehicle_parameters" = "Paràmetres del vehicle";
 "screen_alerts" = "Alertes de pantalla";
-"voice_prompts" = "Indicacions per veu";
+"voice_announces" = "Indicacions per veu";
 "max_speed" = "Velocitat màxima";
 "min_speed" = "Velocitat mínima";
 "default_speed" = "Velocitat predeterminada";
@@ -1750,7 +1750,7 @@
 "create_profile_descr" = "Comenceu el vostre perfil personalitzat des d'un perfil predeterminat de l'aplicació,que defineixi la configuració bàsica com visibilitat predeterminada, extensions i unitats de velocitat i distància. Aquests són els perfils d'aplicació predeterminats, junt amb exemples de personalització que es poden anar ampliant:";
 "export_profile" = "Exporta el perfil";
 "global_settings_descr" = "Afecta tota l’aplicació.";
-"global_settings" = "Configuració global";
+"osmand_settings" = "Configuració global";
 "device_settings" = "Configuració del dispositiu";
 "units_and_formats" = "Unitats i formats";
 "angular_measurment_units" = "Unitats de mesura angular";
@@ -1770,7 +1770,7 @@
 "speed_limit_tolerance_descr" = "Seleccioneu la tolerància del límit de velocitat per sobre del qual rebreu un avís de veu.";
 "import_routing_file_descr" = "Podeu importar el fitxer de la ruta des de qualsevol servei d’emmagatzematge al núvol o bé introduint-lo a la carpeta OsmAnd dins iTunes.";
 "change_map_behavior" = "Canvia l'estil del mapa durant la navegació";
-"map_behavior" = "Estil del mapa";
+"map_during_navigation" = "Estil del mapa";
 "send_anonymous_data_desc" = "Envieu a OsmAnd estadístiques de baixada de mapes, no recopilem dades de localització ni cap informació personal.";
 "default_profile_descr" = "Seleccioneu un perfil que s'utilitzarà en iniciar l'aplicació.";
 "settings_item_read_error" = "No s'ha pogut llegir %@.";

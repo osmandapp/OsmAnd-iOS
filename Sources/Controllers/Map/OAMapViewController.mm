@@ -447,6 +447,11 @@
         [_mapLayers didReceiveMemoryWarning];
 }
 
+- (BOOL) isDisplayedInCarPlay
+{
+    return self.parentViewController != OARootViewController.instance.mapPanel;
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameRendered
@@ -542,7 +547,7 @@
 {
     [super viewDidDisappear:animated];
     
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -587,7 +592,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -596,7 +601,7 @@
 
 - (void) applicationWillEnterForeground:(UIApplication*)application
 {
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Resume rendering
         [_mapView resumeRendering];
@@ -617,6 +622,9 @@
 
 - (void) showProgressHUD
 {
+    if (_app.carPlayActive)
+        return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         BOOL wasVisible = NO;
         if (_progressHUD)
@@ -1628,7 +1636,7 @@
             
             [_gpxRouter.routeDoc buildRouteTrack];
             [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.file];
+            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self refreshGpxTracks];
@@ -1978,7 +1986,7 @@
         {
             [_gpxRouter.routeDoc buildRouteTrack];
             [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.file];
+            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
         }
         
         [_selectedGpxHelper buildGpxList];
@@ -2238,7 +2246,7 @@
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = [filePath copy];
             OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.file];
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
@@ -2314,7 +2322,7 @@
 
     std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _gpxDocsTemp.first();
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.file]; 
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]; 
     QString qPath = QString::fromNSString(path);
     if (![[OAAppSettings sharedManager].mapSettingVisibleGpx containsObject:_gpxDocFileTemp])
     {
@@ -3345,7 +3353,10 @@
     if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            if (![self isDisplayedInCarPlay])
+            {
+                [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            }
         });
     }
 }

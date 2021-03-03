@@ -176,7 +176,7 @@
 "app_mode_truck" = "Φορτηγό";
 "nm" = "ναυτικό μίλι";
 "prefer_in_routing_title" = "Να προτιμώνται…";
-"directions" = "Οδηγίες";
+"get_directions" = "Οδηγίες";
 "osm_note_action_field_descr" = "Αυτό το μήνυμα περιλαμβάνεται στο πεδίο σχολίων.";
 "shared_string_time" = "Χρόνος";
 "avoid_in_routing_title" = "Αποφυγή…";
@@ -248,7 +248,7 @@
 "help_install_and_troubleshoot" = "Εγκατάσταση και επίλυση προβλημάτων";
 "groups" = "Ομάδες";
 "commiting_node" = "Δέσμευση κόμβου…";
-"m_style_overview" = "Επισκόπηση";
+"rendering_value_browse_map_name" = "Επισκόπηση";
 "years_2_4" = "Έτη";
 "shared_string_filters" = "Φίλτρα";
 "type_postcode" = "Πληκτρολόγησε ταχυδρομικό κώδικα";
@@ -266,7 +266,7 @@
 "black" = "Μαύρο";
 "day_off_label" = "κλειστό";
 "mapil_pano_only" = "Εμφάνιση μόνο εικόνων 360°";
-"route_params" = "Παράμετροι διαδρομής";
+"route_parameters" = "Παράμετροι διαδρομής";
 "fav_name" = "Όνομα";
 "rotate_map_to_bearing" = "Προσανατολισμός χάρτη";
 "city_type_city" = "Πόλη";
@@ -348,7 +348,7 @@
 "settings_preset_descr" = "Η εμφάνιση χάρτη και οι ρυθμίσεις πλοήγησης απομνημονευονται ανά προφίλ χρήστη. Καθορίστε το προεπιλεγμένο προφίλ σας εδώ.";
 "green" = "Πράσινο";
 "road_blocked" = "Κλειστός δρόμος";
-"osm_alert_title" = "Commit";
+"osm_alert_title" = "Υποβολή";
 "min_mile" = "λεπτά/μίλι";
 "shared_string_is_open" = "Άνοιγμα";
 "day_night_info" = "Πληρ. Ημέρας/Νύχτας";
@@ -578,7 +578,7 @@
 "shared_string_go" = "Εκτέλεση";
 "maps" = "Χάρτες";
 "nothanks" = "Όχι, ευχαριστώ";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "gpx_finish" = "Τερματισμός";
 "destination_point" = "Προορισμός %@";
 "gpx_start" = "Έναρξη";
@@ -988,7 +988,7 @@
 "map_orientation_change_in_accordance_with_speed_descr" = "Επιλογή ταχύτητας που ο προσανατολισμός του χάρτη θα αλλάξει από «Προς την κατεύθυνση κίνησης» σε «Προς την πυξίδα»";
 "vehicle_parameters" = "Παράμετροι οχήματος";
 "screen_alerts" = "Προειδοποιήσεις οθόνης";
-"voice_prompts" = "Φωνητικές οδηγίες";
+"voice_announces" = "Φωνητικές οδηγίες";
 "nav_type_title" = "Τύπος πλοήγησης";
 "nav_type_geocoding" = "Fεωκωδικοποίηση";
 "nav_type_ski" = "Σκί";
@@ -1000,7 +1000,7 @@
 "change_map_behavior" = "Αλλαγή συμπεριφοράς χάρτη κατά την διάρκεια της πλοήγησης";
 "weeks_short" = "Εβδ";
 "shared_string_next" = "Επόμενο";
-"map_behavior" = "Συμπεριφορά χάρτη";
+"map_during_navigation" = "Συμπεριφορά χάρτη";
 "mapil_usernames" = "Ονόματα χρηστών";
 "mapil_select_user" = "Επιλογή χρήστη";
 "select_map_style" = "Επιλογή στυλ χάρτη";
@@ -1014,7 +1014,6 @@
 "utm_description" = "Προσοχή, το OsmAnd χρησιμοποιεί το UTM Standard πρότυπο το οποίο είναι παρόμοιο αλλά όχι ίδιο με το UTM NATO.";
 "week_short" = "'Εβδ";
 "day_short" = "Μ";
-
 "consider_limitations_param" = "Λάβετε υπόψη τους προσωρινούς περιορισμούς";
 "base_profile_descr_bicycle" = "Ποδήλατο βουνού, μοτοποδήλατο, άλογο";
 "shared_string_profiles" = "Κατανομές";
@@ -1029,7 +1028,7 @@
 "language" = "Γλώσσα";
 "osm_notes" = "Σημειώσεις OSM";
 "help_osmand_live" = "Συνδρομή - OsmAnd Live";
-"map_settings_terrain" = "Έδαφος";
+"shared_string_terrain" = "Έδαφος";
 "total" = "Σύνολο";
 "arrived_at_destination" = "Φτάσατε.";
 "search_activity" = "Αναζήτηση";

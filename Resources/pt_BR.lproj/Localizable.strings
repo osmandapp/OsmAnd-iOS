@@ -2003,3 +2003,12 @@
 "map_widget_ruler_control" = "Régua de raio";
 "tracks_on_map" = "trilhas no mapa";
 "visible" = "Visível";
+"search_preogress" = "Pesquisando…";
+"shared_string_loading" = "Carregando…";
+"poi_categories" = "Categorias de POI";
+"route_calc_progress" = "Calculando: %d%%";
+"carplay_active_message" = "O mapa é exibido via CarPlay";
+"favorites_empty" = "Você não salvou nenhum ponto favorito";
+"tracks_empty" = "Sua lista de trilhas está vazia";
+"map_markers_empty" = "Você não tem marcadores de mapa ativos";
+"address_search" = "Pesquisar endereço";

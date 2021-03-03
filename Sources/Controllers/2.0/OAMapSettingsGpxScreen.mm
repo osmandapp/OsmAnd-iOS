@@ -125,7 +125,7 @@
             
             NSArray *visible = _settings.mapSettingVisibleGpx;
             
-            if ([visible containsObject:item.file])
+            if ([visible containsObject:item.gpxFilePath])
                 [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
             else
                 [cell.iconView setImage:nil];
@@ -170,13 +170,13 @@
     {
         NSArray *visible = _settings.mapSettingVisibleGpx;
         OAGPX *gpx = gpxList[indexPath.row - (hasCurrentTrack ? 1 : 0)];
-        if ([visible containsObject:gpx.file])
+        if ([visible containsObject:gpx.gpxFilePath])
         {
-            [_settings hideGpx:@[gpx.file]];
+            [_settings hideGpx:@[gpx.gpxFilePath]];
         }
         else
         {
-            [_settings showGpx:@[gpx.file]];
+            [_settings showGpx:@[gpx.gpxFilePath]];
 
             [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
         }

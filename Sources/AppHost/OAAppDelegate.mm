@@ -22,6 +22,8 @@
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
 #import "OAMapViewState.h"
+#import "OACarPlayMapViewController.h"
+#import "OACarPlayDashboardInterfaceController.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -50,6 +52,11 @@
     
     NSURL *loadedURL;
     NSTimer *_checkLiveTimer;
+    
+    OACarPlayMapViewController *_carPlayMapController API_AVAILABLE(ios(12.0));
+    OACarPlayDashboardInterfaceController *_carPlayDashboardController API_AVAILABLE(ios(12.0));
+    CPWindow *_windowToAttach API_AVAILABLE(ios(12.0));
+    CPInterfaceController *_carPlayInterfaceController API_AVAILABLE(ios(12.0));
 }
 
 @synthesize window = _window;
@@ -143,6 +150,18 @@
             [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:kCheckLiveIntervalHour];
             // Check for updates every hour when the app is in the foreground
             _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour target:self selector:@selector(performUpdateCheck) userInfo:nil repeats:YES];
+            
+            // show map in carPlay if it is a cold start
+            if (@available(iOS 12.0, *)) {
+                if (_windowToAttach && _carPlayInterfaceController)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self presentInCarPlay:_carPlayInterfaceController window:_windowToAttach];
+                        _carPlayInterfaceController = nil;
+                        _window = nil;
+                    });
+                }
+            }
         });
     });
     
@@ -342,6 +361,51 @@
 - (void) application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
 {
     [OASharedVariables setStatusBarHeight:newStatusBarFrame.size.height];
+}
+
+#pragma mark - CFCarPlayDelegate
+
+- (void)presentInCarPlay:(CPInterfaceController * _Nonnull)interfaceController window:(CPWindow * _Nonnull)window API_AVAILABLE(ios(12.0))
+{
+    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+    if (!mapVc)
+        mapVc = [[OAMapViewController alloc] init];
+    
+    _carPlayMapController = [[OACarPlayMapViewController alloc] initWithCarPlayWindow:window mapViewController:mapVc];
+    
+    window.rootViewController = _carPlayMapController;
+    
+    _carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
+    _carPlayDashboardController.delegate = _carPlayMapController;
+    [_carPlayDashboardController present];
+    
+    [OARootViewController.instance.mapPanel onCarPlayConnected];
+}
+
+- (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
+{
+    _app.carPlayActive = YES;
+    if (!_appInitDone)
+    {
+        _windowToAttach = window;
+        _carPlayInterfaceController = interfaceController;
+        if (!_appInitializing)
+            [self initialize];
+        return;
+    }
+    [self presentInCarPlay:interfaceController window:window];
+}
+
+- (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
+{
+    _app.carPlayActive = NO;
+    [OARootViewController.instance.mapPanel onCarPlayDisconnected:^{
+        [_carPlayMapController detachFromCarPlayWindow];
+        _carPlayDashboardController = nil;
+        [_carPlayMapController.navigationController popViewControllerAnimated:YES];
+        window.rootViewController = nil;
+        _carPlayMapController = nil;
+    }];
 }
 
 @end

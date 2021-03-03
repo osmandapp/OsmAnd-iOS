@@ -172,4 +172,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSDate *) getFileLastModificationDate:(NSString *)fileName;
 
++ (NSString *) getGpxShortPath:(NSString *)fullFilePath;
+
 @end

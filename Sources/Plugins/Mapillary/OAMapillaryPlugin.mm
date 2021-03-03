@@ -58,7 +58,7 @@
 
 - (NSString *) getName
 {
-    return OALocalizedString(@"map_settings_mapillary");
+    return OALocalizedString(@"mapillary");
 }
 
 - (void) registerLayers

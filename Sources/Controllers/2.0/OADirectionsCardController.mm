@@ -48,7 +48,7 @@
         _isAnimating = NO;
         
         _cardHeaderView = [[OADestinationCardHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 50.0)];
-        _cardHeaderView.title.text = [OALocalizedString(@"directions") uppercaseStringWithLocale:[NSLocale currentLocale]];
+        _cardHeaderView.title.text = [OALocalizedString(@"map_markers") uppercaseStringWithLocale:[NSLocale currentLocale]];
         [_cardHeaderView.rightButton removeFromSuperview];
         
         _items = [NSMutableArray array];

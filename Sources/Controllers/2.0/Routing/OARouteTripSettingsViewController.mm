@@ -233,7 +233,7 @@
             [cell.iconView setImage:[UIImage imageNamed:@"ic_custom_trip"]];
             
             OAGPXRouteParamsBuilder *currentGPXRoute = [self.routingHelper getCurrentGPXRoute];
-            if (currentGPXRoute && [currentGPXRoute.file.fileName isEqualToString:[gpx.file lastPathComponent]])
+            if (currentGPXRoute && [currentGPXRoute.file.fileName isEqualToString:gpx.gpxFileName])
                 [cell.overflowButton setImage:[UIImage imageNamed:@"menu_cell_selected.png"] forState:UIControlStateNormal];
             else
                 [cell.overflowButton setImage:nil forState:UIControlStateNormal];
@@ -262,7 +262,7 @@
         OAGPX *gpx = (OAGPX *)param;
         OAGPXRouteParamsBuilder *currentGPXRoute = [self.routingHelper getCurrentGPXRoute];
         
-        if (currentGPXRoute && [currentGPXRoute.file.fileName isEqualToString:gpx.file])
+        if (currentGPXRoute && [currentGPXRoute.file.fileName isEqualToString:gpx.gpxFilePath])
         {
             [self.routingHelper setGpxParams:nil];
             self.settings.followTheGpxRoute = nil;
@@ -271,7 +271,7 @@
         }
         else
         {
-            [[OAAppSettings sharedManager] showGpx:@[gpx.file]];
+            [[OAAppSettings sharedManager] showGpx:@[gpx.gpxFilePath]];
             [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:gpx];
             [self updateParameters];
             [self.routingHelper recalculateRouteDueToSettingsChange];

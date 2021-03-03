@@ -12,7 +12,6 @@
 @protocol OASelectTrackFolderDelegate <NSObject>
 
 - (void) onFolderSelected:(NSString *)selectedFolderName;
-- (void) onNewFolderAdded;
 
 @end
 

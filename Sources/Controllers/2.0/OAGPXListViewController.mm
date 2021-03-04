@@ -815,7 +815,7 @@ static UIViewController *parentController;
     self.gpxList = gpxArrNew;
     [_settings updateGpx:gpxFilesNew];
     
-    [self.gpxTableView setEditing:NO animated:YES];
+    [self.gpxTableView setEditing:NO animated:NO];
     _editActive = NO;
     [_selectedItems removeAllObjects];
     [_selectedIndexPaths removeAllObjects];
@@ -1075,6 +1075,15 @@ static UIViewController *parentController;
     else if (groupData.isOpen)
         return [groupData.groupItems count] + 1;
     return 1;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.gpxTableView.isEditing && [self.gpxTableView.indexPathsForSelectedRows containsObject:indexPath])
+    {
+        [cell setSelected:YES];
+        [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -72,18 +72,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (void) updateAllFoldersList
 {
-    NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
-    [allFoldersNames addObject:OALocalizedString(@"tracks")];
-    NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
-    for (NSString *name in filesList)
-    {
-        if (![name hasPrefix:@"."] && ![name.lowerCase hasSuffix:@".gpx"])
-            [allFoldersNames addObject:name];
-    }
-    NSArray<NSString *> *sortedAllFolderNames = [allFoldersNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-        return [obj1 compare:obj2];
-    }];
-    _allFolders = sortedAllFolderNames;
+    _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
 }
 
 - (void) viewDidLoad

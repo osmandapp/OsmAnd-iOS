@@ -1533,4 +1533,28 @@ static const double d180PI = 180.0 / M_PI_2;
     return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
 }
 
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddTracksFolder:(BOOL)shouldAddTracksFolder
+{
+    NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
+    NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
+    for (NSString *name in filesList)
+    {
+        if (![name hasPrefix:@"."] && ![name.lowerCase hasSuffix:@".gpx"])
+            [allFoldersNames addObject:name];
+    }
+    if (shouldAddTracksFolder)
+        [allFoldersNames addObject:OALocalizedString(@"tracks")];
+    
+    if (shouldSort)
+    {
+        return [allFoldersNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [obj1 compare:obj2];
+        }];
+    }
+    else
+    {
+        return [NSArray arrayWithArray:allFoldersNames];
+    }
+}
+
 @end

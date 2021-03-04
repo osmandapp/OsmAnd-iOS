@@ -20,6 +20,6 @@
 @property (nonatomic, weak) id<OASelectTrackFolderDelegate> delegate;
 
 - (instancetype) initWithGPX:(OAGPX *)gpx;
-- (instancetype) initWithGPXFileName:(NSString *)fileName;
+- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
 
 @end

@@ -22,7 +22,7 @@
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
-@property (nonatomic) id<OAFolderCardsCellDelegate> delegate;
+@property (weak, nonatomic) id<OAFolderCardsCellDelegate> delegate;
 
 - (void) setValues:(NSArray<NSString *> *)values withSelectedIndex:(int)index;
 

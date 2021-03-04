@@ -29,6 +29,7 @@
 @implementation OASelectTrackFolderViewController
 {
     OAGPX *_gpx;
+    NSString *_selectedFolderName;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
@@ -37,18 +38,20 @@
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
-        _gpx = gpx;
+        _selectedFolderName = [[gpx.gpxFilePath  stringByDeletingLastPathComponent] lastPathComponent];
+        if ([_selectedFolderName isEqualToString:@""])
+            _selectedFolderName = OALocalizedString(@"tracks");
         [self reloadData];
     }
     return self;
 }
 
-- (instancetype) initWithGPXFileName:(NSString *)fileName;
+- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
-        _gpx = [OAGPXDatabase.sharedDb getGPXItem:fileName];
+        _selectedFolderName = selectedFolderName;
         [self reloadData];
     }
     return self;
@@ -70,10 +73,6 @@
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
-    NSString *selectedFolderName = [[_gpx.gpxFilePath  stringByDeletingLastPathComponent] lastPathComponent];
-    if ([selectedFolderName isEqualToString:@""])
-        selectedFolderName = OALocalizedString(@"tracks");
-    
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
@@ -84,11 +83,7 @@
     ]];
     
     NSMutableArray *cellFoldersData = [NSMutableArray new];
-    NSArray<NSString *> *sortedAllFolderNames = [allFolderNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-        return [obj1 compare:obj2];
-    }];
-    
-    for (NSString *folderName in sortedAllFolderNames)
+    for (NSString *folderName in allFolderNames)
     {
         NSArray *folderItems = foldersData[folderName];
         int tracksCount = folderItems ? folderItems.count : 0;
@@ -97,7 +92,7 @@
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : folderName,
             @"description" : [NSString stringWithFormat:@"%i", tracksCount],
-            @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: selectedFolderName]],
+            @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: _selectedFolderName]],
             @"img" : @"ic_custom_folder"
         }];
     }
@@ -108,14 +103,7 @@
 
 - (void) reloadData
 {
-    NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
-    [allFoldersNames addObject:OALocalizedString(@"tracks")];
-    NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
-    for (NSString *name in filesList)
-    {
-        if (![name hasPrefix:@"."] && ![name.lowerCase hasSuffix:@".gpx"])
-            [allFoldersNames addObject:name];
-    }
+    NSArray<NSString *> *allFoldersNames = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
         
     OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
     [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {

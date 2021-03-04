@@ -108,7 +108,7 @@
         return;
     }
     const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
-    if (activeGpx.find(QString::fromNSString(info.gpx.gpxFilePath)) == activeGpx.end())
+    if (activeGpx.find(QString::fromNSString(info.gpx.gpxFilepath)) == activeGpx.end())
     {
         [OAAppSettings.sharedManager showGpx:@[info.gpx.gpxFileName]];
     }

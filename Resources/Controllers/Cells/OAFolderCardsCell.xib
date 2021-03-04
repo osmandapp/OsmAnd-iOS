@@ -13,9 +13,8 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OAFolderCardsCell" rowHeight="77" id="KLk-i7-Jjw" customClass="OAFolderCardsCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="77"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="H2p-sc-9uM">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="77"/>
-                <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Ly2-zs-tB4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="77"/>
@@ -33,7 +32,16 @@
                         </connections>
                     </collectionView>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="height" constant="77" id="Nlt-jD-Mvd"/>
+                </constraints>
             </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="H2p-sc-9uM" firstAttribute="leading" secondItem="KLk-i7-Jjw" secondAttribute="leading" id="FnS-bl-fuS"/>
+                <constraint firstItem="H2p-sc-9uM" firstAttribute="top" secondItem="KLk-i7-Jjw" secondAttribute="top" id="QUS-2w-9XP"/>
+                <constraint firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottom" id="qSh-Gs-RXQ"/>
+                <constraint firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailing" id="s9b-ne-hdN"/>
+            </constraints>
             <connections>
                 <outlet property="collectionView" destination="Ly2-zs-tB4" id="9sF-7T-sZZ"/>
             </connections>

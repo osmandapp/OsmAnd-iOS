@@ -378,16 +378,6 @@
     return item[@"footer"];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kFolderCardsCell])
-        return 77;
-
-    return UITableViewAutomaticDimension;
-}
-
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];

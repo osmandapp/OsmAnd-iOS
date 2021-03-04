@@ -1450,7 +1450,7 @@ static UIViewController *parentController;
         {
             OAGPX *gpx = track[@"track"];
             OAGPX *selectedGpx = selectedItem[@"track"];
-            if ([gpx.gpxFilePath isEqualToString:selectedGpx.gpxFilePath])
+            if ([gpx.gpxFilepath isEqualToString:selectedGpx.gpxFilepath])
             {
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
                 if (select)

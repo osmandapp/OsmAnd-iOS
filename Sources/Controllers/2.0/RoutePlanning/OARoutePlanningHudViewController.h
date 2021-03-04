@@ -10,10 +10,13 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OABaseScrollableHudViewController.h"
 
+@class OAMeasurementEditingContext;
+
 @interface OARoutePlanningHudViewController : OABaseScrollableHudViewController
 
 - (instancetype) initWithFileName:(NSString *)fileName;
 - (instancetype) initWithInitialPoint:(CLLocation *)latLon;
+- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode;
 
 - (void) cancelModes;
 

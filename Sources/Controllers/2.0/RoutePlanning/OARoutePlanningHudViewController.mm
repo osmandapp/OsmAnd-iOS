@@ -166,7 +166,24 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
+- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode
+{
+    self = [super initWithNibName:@"OARoutePlanningHudViewController"
+                           bundle:nil];
+    if (self)
+    {
+        [self commonInit:editingCtx];
+        [self setMode:FOLLOW_TRACK_MODE on:followTrackMode];
+    }
+    return self;
+}
+
 - (void) commonInit
+{
+    [self commonInit:[[OAMeasurementEditingContext alloc] init]];
+}
+
+- (void) commonInit:(OAMeasurementEditingContext *)context
 {
     _app = OsmAndApp.instance;
     _settings = [OAAppSettings sharedManager];
@@ -174,7 +191,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _layer = _mapPanel.mapViewController.mapLayers.routePlanningLayer;
     _modes = 0x0;
     
-    _editingContext = [[OAMeasurementEditingContext alloc] init];
+    _editingContext = context;
     _editingContext.progressDelegate = self;
     _layer.editingCtx = _editingContext;
 }
@@ -228,6 +245,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self.view bringSubviewToFront:self.tableView];
     
     [self addInitialPoint];
+    
+    OAGpxData *gpxData = _editingContext.gpxData;
+    [self initMeasurementMode:gpxData addPoints:YES];
+    
+    if (gpxData)
+    {
+        OAGpxBounds bounds = gpxData.rect;
+        [self centerMapOnBBox:bounds];
+    }
     
     if (_fileName)
         [self addNewGpxData:[self getGpxFile:_fileName]];
@@ -549,6 +575,29 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return CLLocationCoordinate2DMake(lat, lon);
 }
 
+- (void) startTrackNavigation
+{
+    if (_editingContext.hasRoute || _editingContext.hasChanges)
+    {
+        NSString *trackName = [self getSuggestedFileName];
+        OAGPXDocument *gpx = [_editingContext exportGpx:trackName];
+        if (gpx != nil)
+        {
+            OAApplicationMode *appMode = _editingContext.appMode;
+            [self onCloseButtonPressed];
+            [self runNavigation:gpx appMode:appMode];
+        }
+        else
+        {
+            NSLog(@"An error occured while saving route planning track for navigation");
+        }
+    }
+    else
+    {
+        NSLog(@"An error occured while saving route planning track for navigation: no route to save");
+    }
+}
+
 - (IBAction)closePressed:(id)sender
 {
     if (_editingContext.hasChanges)
@@ -565,10 +614,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (IBAction)donePressed:(id)sender
 {
-//    if ([self isFollowTrackMode])
-//        [self startTrackNavigation];
-//    else
-    [self saveChanges:SHOW_SNACK_BAR_AND_CLOSE showDialog:NO];
+    if ([self isFollowTrackMode])
+        [self startTrackNavigation];
+    else
+        [self saveChanges:SHOW_SNACK_BAR_AND_CLOSE showDialog:NO];
     [self dismiss];
 }
 
@@ -1050,7 +1099,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 #pragma mark - OAMeasurementLayerDelegate
 
-- (void)onMeasue:(double)distance bearing:(double)bearing
+- (void)onMeasure:(double)distance bearing:(double)bearing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];

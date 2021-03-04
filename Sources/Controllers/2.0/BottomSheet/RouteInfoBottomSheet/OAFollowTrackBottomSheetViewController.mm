@@ -7,6 +7,8 @@
 //
 
 #import "OAFollowTrackBottomSheetViewController.h"
+#import "OAOpenAddTrackViewController.h"
+#import "OARoutePlanningHudViewController.h"
 #import "OATitleIconRoundCell.h"
 #import "Localization.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -24,6 +26,10 @@
 #import "OARoutingHelper.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARouteProvider.h"
+#import "OAGPXMutableDocument.h"
+#import "OARootViewController.h"
+#import "OAMeasurementEditingContext.h"
+#import "OAGpxData.h"
 #import "OATargetPointsHelper.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
@@ -33,7 +39,7 @@
 #define kCellTypeTitleRightIcon @"OATitleRightIconCell"
 
 
-@interface OAFollowTrackBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAFollowTrackBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
 @end
 
@@ -117,13 +123,12 @@
             @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
             @"key" : @"gpx_route"
         },
-        // TODO: add the ability to select another track to follow
-        /*@{
+        @{
             @"type" : kIconTitleDescrCell,
             @"title" : OALocalizedString(@"select_another_track"),
             @"img" : @"ic_custom_folder",
             @"key" : @"select_another"
-        },*/
+        },
         @{
             @"type" : kCellTypeProfileSwitch,
             @"title" : OALocalizedString(@"reverse_track_dir"),
@@ -192,6 +197,22 @@
     }
 }
 
+- (void) openPlanRoute
+{
+    if (_gpx)
+    {
+        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:[[OAGPXMutableDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_gpx.fileName]]];
+        OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
+        editingContext.gpxData = gpxData;
+        editingContext.appMode = OARoutingHelper.sharedInstance.getAppMode;
+//        editingContext.setSelectedSegment(app.getSettings().GPX_ROUTE_SEGMENT.get());
+        [self dismissViewControllerAnimated:NO completion:^{
+            [[OARootViewController instance].mapPanel closeRouteInfo];
+            [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES]];
+        }];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -249,8 +270,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsZero;
-            // TODO: add ability to edit the track in route planning
-//            [cell setRightButtonVisibility:YES];
+            [cell setRightButtonVisibility:YES];
+            [cell.editButton addTarget:self action:@selector(openPlanRoute) forControlEvents:UIControlEventTouchUpInside];
             cell.editButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
@@ -378,6 +399,19 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *key = item[@"key"];
+    if ([key isEqualToString:@"select_another"])
+    {
+        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAFollowTrack];
+        saveTrackViewController.delegate = self;
+        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+        return;
+    }
+    if ([key isEqualToString:@"gpx_route"])
+    {
+//        [self openPlanRoute];
+        return;
+    }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -404,6 +438,22 @@
         default:
             break;
     }
+}
+
+// MARK: OAOpenAddTrackDelegate
+
+- (void)onFileSelected:(NSString *)gpxFilePath
+{
+    OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFilePath]];
+    document.fileName = gpxFilePath;
+    _gpx = document;
+    
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+- (void)closeBottomSheet
+{
 }
 
 @end

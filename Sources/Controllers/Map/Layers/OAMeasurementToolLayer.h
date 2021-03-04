@@ -12,7 +12,7 @@
 
 @protocol OAMeasurementLayerDelegate <NSObject>
 
-- (void) onMeasue:(double)distance bearing:(double)bearing;
+- (void) onMeasure:(double)distance bearing:(double)bearing;
 
 - (void) onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress;
 

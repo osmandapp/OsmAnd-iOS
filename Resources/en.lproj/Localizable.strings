@@ -909,6 +909,7 @@
 "follow_track" = "Follow track";
 "track" = "Track";
 "select_another_track" = "Select another track";
+"select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Attach to the roads";
 "reverse_track_dir" = "Reverse track direction";
 "point_to_navigate" = "Navigate to";

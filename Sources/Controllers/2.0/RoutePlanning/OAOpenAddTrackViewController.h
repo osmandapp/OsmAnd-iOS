@@ -10,7 +10,8 @@
 
 typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
     EOAOpenExistingTrack = 0,
-    EOAAddToATrack
+    EOAAddToATrack,
+    EOAFollowTrack
 };
 
 @protocol OAOpenAddTrackDelegate <NSObject>

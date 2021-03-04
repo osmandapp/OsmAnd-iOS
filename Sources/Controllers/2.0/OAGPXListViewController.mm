@@ -1439,7 +1439,9 @@ static UIViewController *parentController;
         NSInteger row = 1;
         for (NSDictionary *track in groupData.groupItems)
         {
-            if ([track[@"title"] isEqualToString:selectedItem[@"title"]])
+            OAGPX *gpx = track[@"track"];
+            OAGPX *selectedGpx = selectedItem[@"track"];
+            if ([gpx.gpxFilePath isEqualToString:selectedGpx.gpxFilePath])
             {
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
                 if (select)

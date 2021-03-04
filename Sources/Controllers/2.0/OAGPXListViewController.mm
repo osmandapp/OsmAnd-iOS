@@ -1491,7 +1491,7 @@ static UIViewController *parentController;
         }
         if (select)
         {
-            if (numberOfSelectedRowsInSection == groupData.groupItems.count && !isGroupHeaderSelected)
+            if ((numberOfSelectedRowsInSection == groupData.groupItems.count && !isGroupHeaderSelected) || isGroupHeaderSelected)
             {
                 [self.gpxTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
                 [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:section]];

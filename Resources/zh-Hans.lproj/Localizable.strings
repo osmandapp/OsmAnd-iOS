@@ -125,14 +125,14 @@
 "gpx_max_speed" = "";
 "gpx_speed" = "速度";
 // Map settings
-"m_style_overview" = "概览";
+"rendering_value_browse_map_name" = "概览";
 "m_style_car" = "汽车";
 "m_style_walk" = "走路";
 "m_style_bicycle" = "自行车";
 "map_settings_map" = "地图";
 "map_settings_show" = "在地图上显示";
 "map_settings_type" = "地图类型";
-"map_settings_mode" = "程序应用模式";
+"map_mode" = "程序应用模式";
 "map_settings_day" = "白天";
 "map_settings_night" = "晚上";
 "map_settings_style" = "地图风格";
@@ -189,7 +189,7 @@
 "prch_items_failed" = "";
 // Resources
 "res_mapsres" = "";
-"res_installed" = "";
+"download_tab_local" = "";
 "res_banner_free_maps_title" = "";
 "res_banner_free_maps_desc" = "";
 "res_banner_no_free_maps_title" = "";
@@ -410,7 +410,7 @@
 "gpx_trip_groups" = "";
 "gpx_group_select" = "";
 "show_all" = "显示全部";
-"directions" = "";
+"get_directions" = "";
 "parking" = "";
 "est_travel_time" = "";
 "pedestrian" = "行人";
@@ -827,7 +827,7 @@
 "osmand_live_donation_switch_title" = "向 OpenStreetMap 社区捐赠";
 "osmand_live_support_reg_title" = "支持地区";
 "poi_type" = "POI 类型";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "shared_string_retry" = "重试";
 "day_short" = "天";
 "short_location_on_map" = "纬度 %@ 经度 %@";
@@ -1340,7 +1340,7 @@
 "save_changes" = "保存更改";
 "public_transport_show" = "显示公共交通";
 "shared_string_min" = "闽语";
-"voice_prompts" = "语音提示";
+"voice_announces" = "语音提示";
 "default_speed" = "默认速率";
 "quick_action_mapillary_show" = "显示Mapillary";
 "nav_type_ski" = "滑雪";
@@ -1350,7 +1350,7 @@
 "total" = "一共";
 "shared_string_importing" = "正在导入";
 "meters" = "米";
-"map_settings_terrain" = "地形";
+"shared_string_terrain" = "地形";
 "public_transport_menu" = "运输";
 "shared_string_profiles" = "个人资料";
 "add_to_track" = "添加到轨迹";
@@ -1427,5 +1427,5 @@
 // Route planning
 "plan_route" = "规划路线";
 "downloading" = "正在下载";
-"global_settings" = "全局设置";
+"osmand_settings" = "全局设置";
 "empty_filename" = "文件名不能为空";

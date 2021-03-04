@@ -262,7 +262,7 @@
         OAGPX *gpx = (OAGPX *)param;
         OAGPXRouteParamsBuilder *currentGPXRoute = [self.routingHelper getCurrentGPXRoute];
         
-        if (currentGPXRoute && [currentGPXRoute.file.fileName isEqualToString:gpx.gpxFileName])
+        if (currentGPXRoute && [currentGPXRoute.file.fileName isEqualToString:gpx.gpxFilePath])
         {
             [self.routingHelper setGpxParams:nil];
             self.settings.followTheGpxRoute = nil;
@@ -271,7 +271,7 @@
         }
         else
         {
-            [[OAAppSettings sharedManager] showGpx:@[gpx.gpxFileName]];
+            [[OAAppSettings sharedManager] showGpx:@[gpx.gpxFilePath]];
             [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:gpx];
             [self updateParameters];
             [self.routingHelper recalculateRouteDueToSettingsChange];

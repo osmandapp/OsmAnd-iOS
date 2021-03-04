@@ -79,14 +79,14 @@
 "rec_interval_minimum" = "Najmanj";
 "show_info" = "Pokaži podrobnosti";
 // Map settings
-"m_style_overview" = "Pregled";
+"rendering_value_browse_map_name" = "Pregled";
 "m_style_car" = "Vožnja z avtomobilom";
 "m_style_walk" = "Pohodništvo";
 "m_style_bicycle" = "Vožnja s kolesom";
 "map_settings_map" = "Zemljevid";
 "map_settings_show" = "Pokaži na zemljevidu";
 "map_settings_type" = "Vrsta zemljevida";
-"map_settings_mode" = "Način delovanja";
+"map_mode" = "Način delovanja";
 "map_settings_style" = "Slog zemljevida";
 "map_settings_overunder" = "Prekrivni zemljevid/Zemljevid za podlogo";
 "map_settings_over" = "Prekrivni zemljevid";
@@ -122,7 +122,7 @@
 "download_now" = "Prejmi zemljevid";
 // Resources
 "res_mapsres" = "Zemljevidi in drugi viri";
-"res_installed" = "Nameščeno";
+"download_tab_local" = "Nameščeno";
 "res_banner_free_maps_title" = "Na voljo so prosto dostopni zemljevidi (%d)!";
 "shared_string_and" = "in";
 "fav_select" = "Izbor prliljubljene";
@@ -672,7 +672,7 @@
 "create_new_trip" = "Ustvari novo potovanje";
 "gpx_cancel_route_q" = "Ali želite preklicati to pot?";
 "show_all" = "Pokaži vse";
-"directions" = "Navigacija";
+"get_directions" = "Navigacija";
 "parking" = "Parkirišča";
 "directions_more_options" = "Navigacija od …";
 "nearby_search" = "Poišči v bližini";
@@ -886,7 +886,7 @@
 "shared_string_category" = "Skupina";
 "translucent_red" = "Prosojna rdeča";
 "add_gpx_waypoint" = "Dodaj vmesno točko GPX";
-"route_params" = "Parametri poti";
+"route_parameters" = "Parametri poti";
 "quick_action_tags" = "Oznake";
 "osm_editing_lost_changes_descr" = "Vse neshranjene spremembe bodo izgubljene. Aliželite nadaljevati?";
 "change_map_overlay" = "Spremeni prekrivno plast zemljevida";
@@ -929,7 +929,7 @@
 "pause_resume_nav" = "Ustavi/Nadaljuj navigacijo";
 "coordinates_example" = "Primer";
 "osm_deleted" = "Izbrisano";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "poi_type" = "Vrsta točke POI";
 "translucent_blue" = "Prosojna modra";
 "map_settings_map_magnifier" = "Velikost zemljevida";
@@ -1306,7 +1306,7 @@
 "arrived_at_destination" = "Prispeli ste.";
 "default_speed" = "Privzeta hitrost";
 "active_markers" = "Dejavne označbe";
-"voice_prompts" = "Glasovna navodila";
+"voice_announces" = "Glasovna navodila";
 "shared_string_continue" = "Nadaljuj";
 "nav_type_ski" = "Smučanje";
 "arrival_announcement_frequency" = "Kako hitro naj se najavi napovedančas prihoda?";

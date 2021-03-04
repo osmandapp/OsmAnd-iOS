@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
 @protocol OAOpenAddTrackDelegate <NSObject>
 
 - (void) closeBottomSheet;
-- (void) onFileSelected:(NSString *)gpxFileName;
+- (void) onFileSelected:(NSString *)gpxFilePath;
 
 @end
 

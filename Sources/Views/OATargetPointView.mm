@@ -236,7 +236,7 @@ static const NSInteger _buttonsCount = 4;
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
     [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
     [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_info") upperCase] forState:UIControlStateNormal];
-    [_buttonRoute setTitle:[OALocalizedString(@"gpx_route") upperCase] forState:UIControlStateNormal];
+    [_buttonRoute setTitle:[OALocalizedString(@"get_directions") upperCase] forState:UIControlStateNormal];
 
     _backView4.hidden = YES;
     _buttonMore.hidden = YES;
@@ -2159,7 +2159,7 @@ static const NSInteger _buttonsCount = 4;
     if (_showFull || _showFullScreen)
         [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_collapse") upperCase] forState:UIControlStateNormal];
     else
-        [_buttonShowInfo setTitle:[OALocalizedString(@"description") upperCase] forState:UIControlStateNormal];
+        [_buttonShowInfo setTitle:[OALocalizedString(@"res_details") upperCase] forState:UIControlStateNormal];
 }
 
 - (void) applyMapInteraction:(CGFloat)height animated:(BOOL)animated

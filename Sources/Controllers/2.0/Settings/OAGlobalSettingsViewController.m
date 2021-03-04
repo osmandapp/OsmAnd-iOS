@@ -58,7 +58,7 @@
 
 - (void) applyLocalization
 {
-    self.titleLabel.text = _settingsType == EOAGlobalSettingsMain ? OALocalizedString(@"global_settings") : OALocalizedString(@"settings_preset");
+    self.titleLabel.text = _settingsType == EOAGlobalSettingsMain ? OALocalizedString(@"osmand_settings") : OALocalizedString(@"settings_preset");
 }
 
 - (void) viewDidLoad

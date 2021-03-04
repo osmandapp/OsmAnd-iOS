@@ -185,7 +185,8 @@ static UIViewController *parentController;
 
 - (void) removeFromDB
 {
-    [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_importUrl.path];
+    [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath];
     [[OAGPXDatabase sharedDb] save];
 }
 
@@ -300,8 +301,7 @@ static UIViewController *parentController;
         return;
     
     // Try to import gpx
-    BOOL exists = [[OAGPXDatabase sharedDb] containsGPXItem:[_importUrl.path lastPathComponent]];
-    
+    BOOL exists = [[OAGPXDatabase sharedDb] containsGPXItemByFileName:_importUrl.path.lastPathComponent];    
     _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
     if (_doc) {
         if (exists)
@@ -384,9 +384,12 @@ static UIViewController *parentController;
     
     OAGPXTrackAnalysis *analysis = [_doc getAnalysis:0];
     if (_newGpxName) {
-        item = [[OAGPXDatabase sharedDb] addGpxItem:_newGpxName title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        NSString *storingPathInRootFolder = _newGpxName;
+        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     } else {
-        item = [[OAGPXDatabase sharedDb] addGpxItem:[self getCorrectedFilename:[_importUrl.path lastPathComponent]] title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
+        NSString *storingPathInRootFolder = name;
+        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
     [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
@@ -601,14 +604,14 @@ static UIViewController *parentController;
     _visible = _settings.mapSettingVisibleGpx;
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
     
-    NSString *routeFileName = [[OAAppSettings sharedManager] mapSettingActiveRouteFileName];
-    _isRouteActive = (routeFileName != nil);
+    NSString *routeFilePath = [[OAAppSettings sharedManager] mapSettingActiveRouteFilePath];
+    _isRouteActive = (routeFilePath != nil);
     if (_isRouteActive)
     {
-        _routeItem = [db getGPXItem:routeFileName];
+        _routeItem = [db getGPXItem:routeFilePath];
         for (OAGPX *item in self.gpxList)
         {
-            if ([item.gpxFileName isEqualToString:routeFileName])
+            if ([item.gpxFilePath isEqualToString:routeFilePath])
             {
                 [self.gpxList removeObject:item];
                 break;
@@ -675,7 +678,7 @@ static UIViewController *parentController;
     visibleGroup.header = @"";
     for (OAGPX *item in _gpxList)
     {
-        if ([_visible containsObject:item.gpxFileName])
+        if ([_visible containsObject:item.gpxFilePath])
         {
             [visibleGroup.groupItems addObject:
              @{
@@ -700,6 +703,9 @@ static UIViewController *parentController;
         tracksGroup.header = @"";
         for (OAGpxInfo *track in _gpxFolders[key])
         {
+            if (!track.gpx)
+                continue;
+            
             [tracksGroup.groupItems addObject:@{
                 @"type" : kGPXTrackCell,
                 @"title" : [track getName],
@@ -741,6 +747,7 @@ static UIViewController *parentController;
     [self.gpxTableView setDelegate:self];
     self.gpxTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.gpxTableView reloadData];
+    self.gpxTableView.allowsMultipleSelectionDuringEditing = YES;
     
 }
 
@@ -760,9 +767,14 @@ static UIViewController *parentController;
 - (IBAction) goRootScreen:(id)sender
 {
     if (_popToParent)
+    {
         [super backButtonClicked:sender];
+    }
     else
+    {
+        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
         [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 - (void) updateRecButtonsAnimated
@@ -804,9 +816,9 @@ static UIViewController *parentController;
         [gpxArrNew addObject:gpx];
     }
     for (OAGPX *gpx in gpxArrHide)
-        [gpxFilesHide addObject:gpx.gpxFileName];
+        [gpxFilesHide addObject:gpx.gpxFilePath];
     for (OAGPX *gpx in gpxArrNew)
-        [gpxFilesNew addObject:gpx.gpxFileName];
+        [gpxFilesNew addObject:gpx.gpxFilePath];
     
     _settings.mapSettingShowRecordingTrack = currentTripSelected;
     [_settings hideGpx:gpxFilesHide];
@@ -868,13 +880,14 @@ static UIViewController *parentController;
     
     [doc saveTo:path];
     
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:path];
     OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-    OAGPX* item = [[OAGPXDatabase sharedDb] addGpxItem:[path lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+    OAGPX* item = [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
     [[OAGPXDatabase sharedDb] save];
     
     item.newGpx = YES;
     
-    [_settings showGpx:@[[path lastPathComponent]]];
+    [_settings showGpx:@[gpxFilePath]];
 
     [self doPush];
     [[OARootViewController instance].mapPanel openTargetViewWithGPXEdit:item pushed:YES];
@@ -1036,9 +1049,9 @@ static UIViewController *parentController;
     NSDictionary* item = [groupData.groupItems objectAtIndex:dataIndex];
     OAGPX *gpx = item[@"track"];
     if (sw.isOn)
-        [_settings showGpx:@[gpx.gpxFileName] update:NO];
-    else if ([_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName])
-        [_settings hideGpx:@[gpx.gpxFileName] update:NO];
+        [_settings showGpx:@[gpx.gpxFilePath] update:NO];
+    else if ([_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath])
+        [_settings hideGpx:@[gpx.gpxFilePath] update:NO];
     [self.gpxTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.gpxTableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [self.gpxTableView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
     return NO;
@@ -1230,9 +1243,9 @@ static UIViewController *parentController;
                     cell.textView.text = groupItem[@"title"];
                     cell.imgView.image = [[UIImage imageNamed:groupItem[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                    cell.switchView.on = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName];
+                    cell.switchView.on = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
-                    cell.imgView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                    cell.imgView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
                     cell.switchView.tag = indexPath.section << 10 | indexPath.row;
                 }
                 return cell;
@@ -1258,7 +1271,7 @@ static UIViewController *parentController;
                     [cell.editButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
                     cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
                     cell.leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_trip"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                    cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
                 }
                 return cell;
             }

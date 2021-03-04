@@ -108,8 +108,8 @@
     
     [data addObject:@[
         @{
-        @"name" : @"global_settings",
-        @"title" : OALocalizedString(@"global_settings"),
+        @"name" : @"osmand_settings",
+        @"title" : OALocalizedString(@"osmand_settings"),
         @"description" : OALocalizedString(@"global_settings_descr"),
         @"img" : @"left_menu_icon_settings",
         @"type" : kCellTypeIconTitleValue }
@@ -335,7 +335,7 @@
 - (void) selectSettingMain:(NSDictionary *)item
 {
     NSString *name = item[@"name"];
-    if ([name isEqualToString:@"global_settings"])
+    if ([name isEqualToString:@"osmand_settings"])
     {
         OAGlobalSettingsViewController* globalSettingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAGlobalSettingsMain];
         [self.navigationController pushViewController:globalSettingsViewController animated:YES];

@@ -51,7 +51,6 @@
 #import "OASaveGpxRouteAsyncTask.h"
 #import "OASaveTrackViewController.h"
 #import "OAOpenAddTrackViewController.h"
-#import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
 #import "QuadRect.h"
 
@@ -383,12 +382,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAGPXMutableDocument *gpxFile = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFileName];
-    const auto selectedFileConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName)]);
+    const auto selectedFileConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)]);
     const auto selectedFile = std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFileConst);
     if (selectedFile != nullptr)
         gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
     else
-        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath]];
+        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
     
     if (!gpxFile.routes)
         gpxFile.routes = [NSMutableArray new];
@@ -867,16 +866,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
     }
     OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-    if ([_settings.mapSettingVisibleGpx containsObject:outFile.lastPathComponent])
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:outFile];
+    if ([_settings.mapSettingVisibleGpx containsObject:gpxFilePath])
     {
         // Refresh track if visible
-        [_settings hideGpx:@[outFile.lastPathComponent] update:YES];
+        [_settings hideGpx:@[gpxFilePath] update:YES];
         helper.activeGpx.remove(QString::fromNSString(outFile));
         [helper buildGpxList];
     }
     if (showOnMap)
     {
-        [_settings showGpx:@[outFile.lastPathComponent]];
+        [_settings showGpx:@[gpxFilePath]];
     }
 }
 
@@ -1513,7 +1513,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     else
         gpxFile = [self getGpxFile:gpxFileName];
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFileName)) != selectedGpxHelper.activeGpx.end();
+    BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFileName.lastPathComponent)) != selectedGpxHelper.activeGpx.end();
     [self saveExistingGpx:gpxFile showOnMap:showOnMap simplified:NO addToTrack:YES finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }
 

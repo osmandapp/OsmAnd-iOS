@@ -176,7 +176,7 @@
 "arrival_distance_factor_at_last" = "In the last meters";
 "map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
-"route_params" = "Route parameters";
+"route_parameters" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
@@ -482,14 +482,14 @@
 "gpx_speed" = "Speed";
 "gpx_slope" = "Slope";
 // Map settings
-"m_style_overview" = "Overview";
+"rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
+"map_mode" = "Application mode";
 "map_settings_map_magnifier" = "Map magnifier";
 "map_settings_text_size" = "Text size";
 "map_settings_day" = "Day";
@@ -504,7 +504,7 @@
 "map_settings_transp" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 // Intro
 "intro_skip" = "Skip";
 "intro_download" = "Download\nmap";
@@ -562,7 +562,7 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
 "res_mapsres" = "Maps & Resources";
-"res_installed" = "Installed";
+"download_tab_local" = "Installed";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Live updates";
 "osmand_live_available_maps" = "Available maps";
@@ -1082,7 +1082,7 @@
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"directions" = "Directions";
+"get_directions" = "Directions";
 "parking" = "Parking";
 "directions_more_options" = "Directions from";
 "nearby_search" = "Search nearby";
@@ -1373,7 +1373,7 @@
 "enter_profile_name" = "Intratz lo nom dau perfiu";
 "osmand_routing" = "Navigacion OsmAnd";
 "special_routing" = "Navigacion particulara";
-"voice_prompts" = "Anóncias vocalas";
+"voice_announces" = "Anóncias vocalas";
 "osm_notes" = "Nòtas OSM";
 "m_style_pulic_transport" = "Transpòrt public";
 "app_profiles" = "Perfius de l\'aplicacion";

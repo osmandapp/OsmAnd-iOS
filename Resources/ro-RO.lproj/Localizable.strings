@@ -35,7 +35,7 @@
 "fast_route_mode_descr" = "Activați pentru a calcula ruta cea mai rapidă sau dezactivați pentru ruta cea mai scurtă";
 "loading_poi_obj" = "Seîncarcă POI…";
 "stop_routing_confirm" = "Sigur doriți să opriți navigarea?";
-"route_params" = "Parametrii rutei";
+"route_parameters" = "Parametrii rutei";
 "shared_string_upload" = "Încarcă (upload)";
 "poi_hide" = "Ascunde";
 "col_blue" = "Albastru";
@@ -70,7 +70,7 @@
 "shared_string_remove" = "Elimină";
 "translucent_yellow" = "Galben translucid";
 "purchase_get" = "Obțineți";
-"m_style_overview" = "Prezentare generală";
+"rendering_value_browse_map_name" = "Prezentare generală";
 "fav_color" = "Culoare";
 "shared_string_go" = "Pleacă";
 "custom_search" = "Căutare personalizată";
@@ -112,7 +112,7 @@
 "shared_string_close" = "Închideți";
 "red" = "Roșu";
 "quick_action_tags" = "Tag-uri";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "units_kmh" = "km/h";
 "map_markers_other" = "Alți marcatori";
 "search_radius_proximity" = "În imediata apropiere a";
@@ -460,7 +460,7 @@
 "traffic_warning_speed_camera" = "Cameră trafic";
 "si_mi_feet" = "Mile/picioare";
 "gpx_export" = "Export";
-"directions" = "Navigare";
+"get_directions" = "Navigare";
 "destination_point" = "Destinație %@";
 "green" = "Verde";
 "add_gpx_waypoint" = "Adaugă waypoint GPX";
@@ -850,7 +850,7 @@
 "select_icon" = "Selectați icoana";
 "add_to_track" = "Adăugați la traseu";
 "active_markers" = "Marcajele active";
-"voice_prompts" = "Anunțuri vocale";
+"voice_announces" = "Anunțuri vocale";
 "save_new_track" = "Salvați ca și traseu nou";
 "exit_at" = "Ieșire la";
 "base_profile_descr_bicycle" = "MTB, Moped, Cal";

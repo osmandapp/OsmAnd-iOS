@@ -457,7 +457,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (assign, nonatomic) BOOL mapSettingShowRecordingTrack;
 
-@property (nonatomic) NSString* mapSettingActiveRouteFileName;
+@property (nonatomic) NSString* mapSettingActiveRouteFilePath;
 @property (nonatomic) int mapSettingActiveRouteVariantType;
 
 @property (nonatomic) OAProfileString *selectedPoiFilters;
@@ -627,11 +627,11 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (BOOL) removeImpassableRoad:(CLLocation *)location;
 - (void) clearImpassableRoads;
 
-- (void) showGpx:(NSArray<NSString *> *)fileNames;
-- (void) showGpx:(NSArray<NSString *> *)fileNames update:(BOOL)update;
-- (void) updateGpx:(NSArray<NSString *> *)fileNames;
-- (void) hideGpx:(NSArray<NSString *> *)fileNames;
-- (void) hideGpx:(NSArray<NSString *> *)fileNames update:(BOOL)update;
+- (void) showGpx:(NSArray<NSString *> *)filePaths;
+- (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
+- (void) updateGpx:(NSArray<NSString *> *)filePaths;
+- (void) hideGpx:(NSArray<NSString *> *)filePaths;
+- (void) hideGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
 - (void) hideRemovedGpx;
 
 - (NSString *) getFormattedTrackInterval:(int)value;

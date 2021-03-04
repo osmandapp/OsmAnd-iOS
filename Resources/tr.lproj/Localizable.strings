@@ -106,14 +106,14 @@
 "gpx_max_speed" = "Max hız";
 "gpx_speed" = "Hız";
 // Map settings
-"m_style_overview" = "Genel bakış";
+"rendering_value_browse_map_name" = "Genel bakış";
 "m_style_car" = "Araba";
 "m_style_walk" = "Yürüyüş";
 "m_style_bicycle" = "Bisiklet";
 "map_settings_map" = "Harita";
 "map_settings_show" = "Haritada Göster";
 "map_settings_type" = "Harita türü";
-"map_settings_mode" = "Uygulama modu";
+"map_mode" = "Uygulama modu";
 "map_settings_day" = "Gün";
 "map_settings_night" = "Gece";
 "map_settings_style" = "Harita tarzı";
@@ -167,7 +167,7 @@
 "prch_items_failed" = "Ürün (ler) restore. Lütfen yeniden deneyin.";
 // Resources
 "res_mapsres" = "Haritalar ve kaynakları";
-"res_installed" = "Yüklü";
+"download_tab_local" = "Yüklü";
 "res_banner_free_maps_title" = "%d ücretsiz haritalar var!";
 "res_banner_free_maps_desc" = "%d güncelleştirmeler olmadan ücretsiz haritalar indirebilir miyim";
 "res_banner_no_free_maps_title" = "Ücretsiz hiçbir haritalar var!";
@@ -382,7 +382,7 @@
 "gpx_trip_groups" = "Yol grupları";
 "gpx_group_select" = "Grup Seç";
 "show_all" = "Tümünü göster";
-"directions" = "Yol tarifi";
+"get_directions" = "Yol tarifi";
 "parking" = "Otopark";
 "est_travel_time" = "Tahmini seyahat süresi";
 "pedestrian" = "Yaya";
@@ -865,7 +865,7 @@
 "osm_note_reopen" = "Yeniden Açmak";
 "translucent_lightblue" = "Yarı saydam açık mavi";
 "osm_edits_basic" = "Temel";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "help_tech_articles" = "Teknik makaleler";
 "help_map_viewing" = "Harita görüntüleme";
 "add_map_source" = "Harita kaynağı ekle";
@@ -1002,7 +1002,7 @@
 "osm_live_cancel_subscription" = "Aboneliği iptal et";
 "add_map_marker" = "Harita işaretleyici ekle";
 "prev_route" = "Önceki rota";
-"route_params" = "Rota parametreleri";
+"route_parameters" = "Rota parametreleri";
 "tile_cache" = "Döşeme önbelleği";
 "product_desc_ext_wikivoyage" = "İnternete bağlantısı olmadan, OsmAnd'ın içinde, gezegendeki en ilgi çekici yerlere ait rehberler.";
 "add_action" = "Eylem ekle";
@@ -1695,7 +1695,7 @@
 "map_settings_slopes_description" = "Yamaç haritaları araziyi görselleştirmek için farklı renkler kullanır";
 "map_settings_slopes_legend" = "Wikipedia'da yamaçlar hakkında daha fazla bilgi edinebilirsiniz";
 "map_settings_layer_transparency" = "Katman şeffaflığı";
-"map_settings_terrain" = "Arazi";
+"shared_string_terrain" = "Arazi";
 "appearance_on_map" = "Harita üzerinde görünüm";
 "arrows_on_map" = "Harita üzerinde oklar";
 "arrows_direction_to_markers" = "Oklar, eğer ekranın dışındaysa etkin işaretleyicinin yönünü gösterir. Yön çizgileri, etkin işaretleyicilere bir çizgi çizer.";
@@ -1748,7 +1748,7 @@
 "osmand_routing" = "OsmAnd yönlendirme";
 "select_nav_profile_dialog_message" = "'Navigasyon türü' güzergahın nasıl hesaplandığını yönetir.";
 "change_map_behavior" = "Navigasyon sırasında harita davranışını değiştir";
-"map_behavior" = "Harita davranışı";
+"map_during_navigation" = "Harita davranışı";
 "vehicle_parameters" = "Araç parametreleri";
 "screen_alerts" = "Ekran uyarıları";
 "move_map_to_select_area" = "Gerekli alanı seçmek için haritayı hareket ettir.";
@@ -1769,7 +1769,7 @@
 "nav_type_geocoding" = "Coğrafi Kodlama";
 "nav_type_ski" = "Kayak";
 "nav_type_brouter" = "BRouter";
-"voice_prompts" = "Sesli uyarılar";
+"voice_announces" = "Sesli uyarılar";
 "max_speed" = "En yüksek hız";
 "min_speed" = "En düşük hız";
 "default_speed" = "Öntanımlı hız";
@@ -1798,7 +1798,7 @@
 "send_anonymous_data" = "Anonim veri gönder";
 "profile_type_base_string" = "Temel profil";
 "global_settings_descr" = "Tüm uygulamayı etkiler.";
-"global_settings" = "Genel ayarlar";
+"osmand_settings" = "Genel ayarlar";
 "send_anonymous_data_desc" = "OsmAnd harita indirme istatistiklerini gönder, konum verileri veya herhangi bir kişisel bilgi toplamıyoruz.";
 "default_profile_descr" = "Uygulama başlatılırken kullanılacak bir profil seçin.";
 "not_available_profile_name" = "Bu ada sahip profil zaten var.";

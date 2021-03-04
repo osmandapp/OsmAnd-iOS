@@ -71,7 +71,7 @@
 #define settingMapLanguageShowLocalKey @"settingMapLanguageShowLocalKey"
 #define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
 
-#define mapSettingActiveRouteFileNameKey @"mapSettingActiveRouteFileNameKey"
+#define mapSettingActiveRouteFilePathKey @"mapSettingActiveRouteFilePathKey"
 #define mapSettingActiveRouteVariantTypeKey @"mapSettingActiveRouteVariantTypeKey"
 
 #define selectedPoiFiltersKey @"selectedPoiFiltersKey"
@@ -1892,7 +1892,7 @@
         _mapSettingSaveTrackIntervalApproved = [OAProfileBoolean withKey:mapSettingSaveTrackIntervalApprovedKey defValue:NO];
         [_registeredPreferences setObject:_mapSettingSaveTrackIntervalApproved forKey:@"save_global_track_remember"];
         
-        _mapSettingActiveRouteFileName = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFileNameKey];
+        _mapSettingActiveRouteFilePath = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFilePathKey];
         _mapSettingActiveRouteVariantType = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteVariantTypeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingActiveRouteVariantTypeKey] : 0;
 
         _selectedPoiFilters = [OAProfileString withKey:selectedPoiFiltersKey defValue:@""];
@@ -2625,10 +2625,10 @@
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowRecordingTrack forKey:mapSettingShowRecordingTrackKey];
 }
 
-- (void) setMapSettingActiveRouteFileName:(NSString *)mapSettingActiveRouteFileName
+- (void) setMapSettingActiveRouteFilePath:(NSString *)mapSettingActiveRouteFilePath
 {
-    _mapSettingActiveRouteFileName = mapSettingActiveRouteFileName;
-    [[NSUserDefaults standardUserDefaults] setObject:_mapSettingActiveRouteFileName forKey:mapSettingActiveRouteFileNameKey];
+    _mapSettingActiveRouteFilePath = mapSettingActiveRouteFilePath;
+    [[NSUserDefaults standardUserDefaults] setObject:_mapSettingActiveRouteFilePath forKey:mapSettingActiveRouteFilePathKey];
 }
 
 - (void) setMapSettingActiveRouteVariantType:(int)mapSettingActiveRouteVariantType
@@ -2712,15 +2712,15 @@
     [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
 }
 
-- (void) showGpx:(NSArray<NSString *> *)fileNames update:(BOOL)update
+- (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update
 {
     BOOL added = NO;
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
-    for (NSString *fileName in fileNames)
+    for (NSString *filePath in filePaths)
     {
-        if (![arr containsObject:fileName])
+        if (![arr containsObject:filePath])
         {
-            [arr addObject:fileName];
+            [arr addObject:filePath];
             added = YES;
         }
     }
@@ -2735,19 +2735,19 @@
     }
 }
 
-- (void) showGpx:(NSArray<NSString *> *)fileNames
+- (void) showGpx:(NSArray<NSString *> *)filePaths
 {
-    [self showGpx:fileNames update:YES];
+    [self showGpx:filePaths update:YES];
 }
 
-- (void) updateGpx:(NSArray<NSString *> *)fileNames
+- (void) updateGpx:(NSArray<NSString *> *)filePaths
 {
     BOOL added = NO;
     BOOL removed = NO;
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
-    for (NSString *fileName in fileNames)
+    for (NSString *filePath in filePaths)
     {
-        if (![arr containsObject:fileName])
+        if (![arr containsObject:filePath])
         {
             added = YES;
             break;
@@ -2755,7 +2755,7 @@
     }
     for (NSString *visible in arr)
     {
-        if (![fileNames containsObject:visible])
+        if (![filePaths containsObject:visible])
         {
             removed = YES;
             break;
@@ -2764,26 +2764,26 @@
 
     if (added || removed)
     {
-        self.mapSettingVisibleGpx = [NSMutableArray arrayWithArray:fileNames];
+        self.mapSettingVisibleGpx = [NSMutableArray arrayWithArray:filePaths];
         [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
-- (void) hideGpx:(NSArray<NSString *> *)fileNames
+- (void) hideGpx:(NSArray<NSString *> *)filePaths
 {
-    [self hideGpx:fileNames update:YES];
+    [self hideGpx:filePaths update:YES];
 }
 
-- (void) hideGpx:(NSArray<NSString *> *)fileNames update:(BOOL)update
+- (void) hideGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update
 {
     BOOL removed = NO;
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
     NSMutableArray *arrToDelete = [NSMutableArray array];
-    for (NSString *fileName in fileNames)
+    for (NSString *filePath in filePaths)
     {
-        if ([arr containsObject:fileName])
+        if ([arr containsObject:filePath])
         {
-            [arrToDelete addObject:fileName];
+            [arrToDelete addObject:filePath];
             removed = YES;
         }
     }
@@ -2799,16 +2799,17 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
     NSMutableArray *arrToDelete = [NSMutableArray array];
-    for (NSString *fileName in arr)
+    for (NSString *filepath in arr)
     {
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:fileName];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filepath];
+        NSString *fileName = filepath.lastPathComponent;
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])
             filenameWithoutPrefix = [fileName stringByReplacingOccurrencesOfString:@"_osmand_backup" withString:@""];
         
-        NSString *path = [app.gpxPath stringByAppendingPathComponent:filenameWithoutPrefix ? filenameWithoutPrefix : gpx.gpxFilepath];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path])
-            [arrToDelete addObject:fileName];
+        NSString *path = [app.gpxPath stringByAppendingPathComponent:filenameWithoutPrefix ? filenameWithoutPrefix : gpx.gpxFilePath];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path] || !gpx)
+            [arrToDelete addObject:filepath];
     }
     [arr removeObjectsInArray:arrToDelete];
     self.mapSettingVisibleGpx = [NSArray arrayWithArray:arr];

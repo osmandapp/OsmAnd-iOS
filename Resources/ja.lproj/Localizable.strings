@@ -176,7 +176,7 @@
 "arrival_distance_factor_at_last" = "最後の数メートル";
 "map_orientation_change_in_accordance_with_speed" = "マップ向きのしきい値";
 "map_orientation_change_in_accordance_with_speed_descr" = "マップの向きが’移動方向'から'方位'に切り替わる速度を選択します";
-"route_params" = "ルートパラメーター";
+"route_parameters" = "ルートパラメーター";
 "fast_route_mode" = "最速ルート";
 "fast_route_mode_descr" = "有効なら目的地までの最速ルートで計算し、無効なら燃費を抑えた短いルートで計算します";
 "avoid_in_routing_title" = "回避ルートの指定…";
@@ -482,14 +482,14 @@
 "gpx_speed" = "速度";
 "gpx_slope" = "勾配";
 // Map settings
-"m_style_overview" = "概要";
+"rendering_value_browse_map_name" = "概要";
 "m_style_car" = "車";
 "m_style_walk" = "徒歩";
 "m_style_bicycle" = "自転車";
 "map_settings_map" = "地図表示";
 "map_settings_show" = "マップ上に表示";
 "map_settings_type" = "マップ種類";
-"map_settings_mode" = "アプリケーションモード";
+"map_mode" = "アプリケーションモード";
 "map_settings_map_magnifier" = "マップ表示倍率";
 "map_settings_text_size" = "テキストサイズ";
 "map_settings_day" = "昼";
@@ -506,7 +506,7 @@
 "map_settings_transp" = "透明度";
 "map_settings_avail_lay" = "利用可能なレイヤー";
 "map_settings_hillshade" = "陰影起伏図";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 // Intro
 "intro_skip" = "スキップ";
 "intro_download" = "ダウンロード\nマップ";
@@ -565,7 +565,7 @@
 "prch_items_failed" = "アイテムの復元がなされませんでした。もう一度やり直してみてください。";
 // Resources
 "res_mapsres" = "マップ＆リソース";
-"res_installed" = "インストール済み";
+"download_tab_local" = "インストール済み";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Live更新";
 "osmand_live_available_maps" = "利用可能なマップ";
@@ -1095,7 +1095,7 @@
 "gpx_trip_groups" = "旅程のグループ";
 "gpx_group_select" = "グループの選択";
 "show_all" = "すべて表示";
-"directions" = "案内";
+"get_directions" = "案内";
 "parking" = "駐車場";
 "directions_more_options" = "道順";
 "nearby_search" = "近隣から検索";
@@ -1670,7 +1670,7 @@
 "new_profile" = "新規プロファイル";
 "app_profiles" = "アプリプロファイル";
 "selected_profile" = "現在選択中のプロファイル";
-"global_settings" = "グローバル設定";
+"osmand_settings" = "グローバル設定";
 "logging_accuracy" = "ロギング精度";
 "trip_rec_actions_descr" = "記録された経路は %@ にあります";
 "plugin_settings_reset" = "プラグイン設定を初期値に戻す";
@@ -1684,7 +1684,7 @@
 "shared_string_next" = "次へ";
 "choose_auto_center_map_view_descr" = "マップ表示時、移動後に現在地が画面中央に戻るまでの間隔を指定します";
 "change_map_behavior" = "ナビゲーション中のマップ動作を変更する";
-"map_behavior" = "マップ動作";
+"map_during_navigation" = "マップ動作";
 "tones" = "トン";
 "lenght_limit_description" = "車の長さを入力してください。一部のルートにおいては、長い車両では通行できない場合があります。";
 "meters" = "メートル";
@@ -1697,7 +1697,7 @@
 "instructions_repeat" = "「次の曲がる方向」ウィジェットをタップすると繰り返し指示されます";
 "only_manually" = "手動のみ";
 "speed_limit_tolerance_descr" = "制限速度超過の許容値を選択し、それを超えると音声警告がなされるようになります。";
-"voice_prompts" = "音声案内";
+"voice_announces" = "音声案内";
 "avoid_routes_and_road" = "特定のルートや特定の道路種別を避けるよう設定ができます";
 "recalculate_wrong_dir" = "逆方向の場合にルートを再計算";
 "select_distance_for_recalculation" = "ルートを再計算する距離を選択します。";
@@ -1823,7 +1823,7 @@
 "shared_string_continue" = "続行";
 "shared_string_routing" = "ルート検索";
 "search_activity" = "検索";
-"map_settings_terrain" = "地形";
+"shared_string_terrain" = "地形";
 "shared_string_finish" = "完了";
 "ui_customization_descr" = "ドロワー＆コンテキストメニューの表示項目";
 "keep_both" = "両方を維持する";

@@ -64,7 +64,7 @@
 {
     if ([settingKeyName isEqualToString:settingAppModeKey])
     {
-        title = OALocalizedString(@"map_settings_mode");
+        title = OALocalizedString(@"map_mode");
         int mode = [_settings.appearanceMode get];
         data = @[
                  @{

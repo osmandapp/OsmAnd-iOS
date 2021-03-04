@@ -388,14 +388,14 @@
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
 // Map settings
-"m_style_overview" = "Overview";
+"rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
+"map_mode" = "Application mode";
 "map_settings_day" = "Day";
 "map_settings_night" = "Night";
 "map_settings_style" = "Map style";
@@ -452,7 +452,7 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
 "res_mapsres" = "Mapy a zdroje";
-"res_installed" = "Installed";
+"download_tab_local" = "Installed";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -673,7 +673,7 @@
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"directions" = "Directions";
+"get_directions" = "Directions";
 "parking" = "Parking";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -952,11 +952,11 @@
 "map_underlays" = "Mapa podkladu";
 "sett_ext_input" = "Externí vstupní zařízení";
 "region_nautical" = "Námořní mapy";
-"route_params" = "Parametry trasy";
+"route_parameters" = "Parametry trasy";
 "quick_action_no_overlay" = "Bez překryvné vrstvy";
 "translucent_lightblue" = "Průsvitná světlemodrá";
 "tile_cache" = "Vyrovnávací paměť dlaždic";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "mapil_add_photos" = "Přidat fotografie";
 "get_discount_second_part" = "potom %@";
 "toggle_nav" = "Spustit/ukončit navigaci";
@@ -1459,7 +1459,7 @@
 "exit_at" = "Výjezd na";
 "select_distance_for_recalculation" = "Zvolte vzdálenost, při které bude trasa přepočítána.";
 "avoid_road" = "Vyhnout se cestě";
-"map_settings_terrain" = "Terén";
+"shared_string_terrain" = "Terén";
 "import_profile_select_descr" = "Vyberte data k importu.";
 "position_icon_at_rest" = "Ikona polohy v klidu";
 "nav_type_direct_to" = "Přímo k bodu";
@@ -1554,7 +1554,7 @@
 "quick_action_map_source_title" = "Mapové zdroje";
 "nothing_found_empty" = "Nic nebylo nalezeno";
 "tones" = "tuny";
-"voice_prompts" = "Hlasová oznámení";
+"voice_announces" = "Hlasová oznámení";
 "product_title_antarctica" = "Antarktida";
 "walk" = "Chůze";
 "shared_string_exit" = "Konec";
@@ -1587,7 +1587,7 @@
 "nav_type_osmand" = "OsmAnd (offline navigace)";
 "nav_type_descr" = "Zvolte způsob výpočtu trasy pro tento profil";
 "change_map_behavior" = "Změnit chování mapy během navigace";
-"map_behavior" = "Chování mapy";
+"map_during_navigation" = "Chování mapy";
 "arrows_direction_to_markers" = "Šipky ukazují směr k aktivní značce, pokud se nachází mimo obrazovku. Směrové čáry vykreslí přímku k aktivní značce.";
 "choose_how_display_distance" = "Zvolte jakým způsobem zobrazovat vzdálenost k aktivním značkám";
 "specify_number_of_dir_indicators" = "Zadejte počet indikátorů směru. Tato hodnota ovlivňuje všechna nastavení níže.";
@@ -1632,7 +1632,7 @@
 "sett_deg180" = "180 stupňů";
 "plugin_settings_descr" = "Nastavení modulů pro vybraný profil.";
 "global_settings_descr" = "Ovlivní celou aplikaci.";
-"global_settings" = "Obecná nastavení";
+"osmand_settings" = "Obecná nastavení";
 "device_settings" = "Nastavení zařízení";
 "units_and_formats" = "Jednotky a formáty";
 "angular_measurment_units" = "Úhlové jednotky";

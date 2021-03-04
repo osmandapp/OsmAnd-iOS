@@ -70,7 +70,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderIconCell",
-                     @"title" : OALocalizedString(@"map_settings_mapillary"),
+                     @"title" : OALocalizedString(@"mapillary"),
                      @"description" : @"",
                      @"img" : @"ic_custom_mapillary_color_logo.png"
                      }];

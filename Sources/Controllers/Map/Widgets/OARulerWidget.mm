@@ -160,8 +160,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _centerIconDay = [UIImage imageNamed:@"ic_ruler_center.png"];
     _centerIconNight = [UIImage imageNamed:@"ic_ruler_center_light.png"];
     _imageView.image = _settings.nightMode ? _centerIconNight : _centerIconDay;
-    self.hidden = NO;
-    self.opaque = NO;
+    self.hidden = YES;
 
     _degrees = [NSMutableArray arrayWithCapacity:72];
     for (int i = 0; i < 72; i++)

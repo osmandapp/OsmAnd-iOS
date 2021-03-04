@@ -21,6 +21,7 @@
 #import "OAQuickActionHudViewController.h"
 #import "OAQuickActionListViewController.h"
 #import "OAColors.h"
+#import "OAMapLayers.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -204,6 +205,7 @@
         else if ([key isEqualToString:@"map_widget_distance_by_tap"])
         {
             [_settings.showDistanceRuler set:visible];
+            [[OARootViewController instance].mapPanel.mapViewController.mapLayers.rulerByTapControlLayer updateLayer];
         }
         else if ([key isEqualToString:@"map_widget_transparent"])
         {

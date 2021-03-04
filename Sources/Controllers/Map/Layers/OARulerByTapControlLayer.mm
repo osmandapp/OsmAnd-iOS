@@ -25,6 +25,9 @@
 @end
 
 @implementation OARulerByTapControlLayer
+{
+    OARulerByTapView *_rulerByTapView;
+}
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
 {
@@ -40,11 +43,8 @@
 - (void) initLayer
 {
     [super initLayer];
-    
-    [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
-    
-    OARulerByTapView *rulerByTapView = [[OARulerByTapView alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight)];
-    [self.mapView addSubview:rulerByTapView];
+
+    _rulerByTapView = [[OARulerByTapView alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight)];
 }
 
 - (void) deinitLayer
@@ -56,7 +56,26 @@
 {
     [super updateLayer];
     
+    [self.app.data.mapLayersConfiguration setLayer:self.layerId
+                                        Visibility:self.isVisible];
+    if (self.isVisible)
+        [self.mapView addSubview:_rulerByTapView];
+    else
+        [_rulerByTapView removeFromSuperview];
+    
     return YES;
+}
+
+- (BOOL) isVisible
+{
+    return [[OAAppSettings sharedManager].showDistanceRuler get];
+}
+
+- (void) onMapFrameRendered
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_rulerByTapView updateLayer];
+    });
 }
 
 @end
@@ -155,11 +174,6 @@
     // resize your layers based on the view's new bounds
     [super layoutSubviews];
     _fingerDistanceSublayer.frame = self.bounds;
-}
-
-- (void) drawRect:(CGRect)rect
-{
-    [super drawRect:rect];
 }
 
 - (BOOL) updateLayer
@@ -324,14 +338,17 @@
     CGContextRestoreGState(ctx);
 }
 
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return [self rulerModeOn];
+}
+
 - (void) touchDetected:(UITapGestureRecognizer *)recognizer
 {
     // Handle gesture only when it is ended
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
-    if (![_settings.showDistanceRuler get])
-        return;
-    
+
     if ([recognizer numberOfTouches] == 1 && !_twoFingersDist) {
         _oneFingerDist = YES;
         _twoFingersDist = NO;

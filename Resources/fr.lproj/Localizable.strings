@@ -1884,3 +1884,4 @@
 "gpx_export_failed" = "L'enregistrement de l'itinéraire a échoué";
 "attach_to_the_roads" = "Déplacer sur les routes";
 "join_segments" = "Joindre les segments";
+"address_search" = "Rechercher une adresse";

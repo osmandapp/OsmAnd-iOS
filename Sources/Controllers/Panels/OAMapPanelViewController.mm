@@ -229,6 +229,12 @@ typedef enum
     _topControlsVisible = YES;
 }
 
+// Used if the app was initiated via CarPlay
+- (void) setMapViewController:(OAMapViewController *)mapViewController
+{
+    _mapViewController = mapViewController;
+}
+
 - (void) loadView
 {
     OALog(@"Creating Map Panel views...");
@@ -241,11 +247,14 @@ typedef enum
     self.routeInfoView = [[OARouteInfoView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
 
     // Instantiate map view controller
-    _mapViewController = [[OAMapViewController alloc] init];
-    [self addChildViewController:_mapViewController];
-    [self.view addSubview:_mapViewController.view];
-    _mapViewController.view.frame = self.view.frame;
-    _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    if (!_mapViewController)
+    {
+        _mapViewController = [[OAMapViewController alloc] init];
+        [self addChildViewController:_mapViewController];
+        [self.view addSubview:_mapViewController.view];
+        _mapViewController.view.frame = self.view.frame;
+        _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    }
 
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
@@ -281,8 +290,12 @@ typedef enum
     
     [self.targetMenuView setNavigationController:self.navigationController];
 
-    if ([_mapViewController parentViewController] != self)
+    BOOL carPlayActive = OsmAndApp.instance.carPlayActive;
+    if ([_mapViewController parentViewController] != self && !carPlayActive)
         [self doMapRestore];
+    
+    if (carPlayActive)
+        [self onCarPlayConnected];
     
     [[OADiscountHelper instance] checkAndDisplay];
 }
@@ -3729,6 +3742,8 @@ typedef enum
 
 - (void) onCarPlayConnected
 {
+    if (_carPlayActiveController && _carPlayActiveController.presentingViewController == self)
+        return;
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
     _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:_carPlayActiveController animated:YES completion:nil];

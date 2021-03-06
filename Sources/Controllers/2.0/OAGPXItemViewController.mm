@@ -1483,7 +1483,7 @@
                     [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];
                 
                 BOOL saveFailed = ![_mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
-                self.doc.fileName = newPath;
+                self.doc.path = newPath;
                 self.doc.metadata = metadata;
                 
                 if (saveFailed)

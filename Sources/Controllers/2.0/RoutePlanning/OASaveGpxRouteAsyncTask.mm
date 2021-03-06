@@ -79,7 +79,7 @@
         NSString *trackName = [fileName stringByDeletingPathExtension];
         OAGPXDocument *gpx = [self generateGpxFile:trackName gpx:[[OAGPXMutableDocument alloc] init]];
         success = [gpx saveTo:_outFile];
-        gpx.fileName = _outFile;
+        gpx.path = _outFile;
         _savedGpxFile = gpx;
         //            if (showOnMap) {
         //                MeasurementToolFragment.showGpxOnMap(app, gpx, true);

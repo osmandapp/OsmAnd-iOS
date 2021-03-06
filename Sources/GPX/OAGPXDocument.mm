@@ -26,6 +26,7 @@
 {
     if (self = [super init])
     {
+        _path = @"";
         if ([self fetch:gpxDocument])
             return self;
         else
@@ -41,7 +42,7 @@
 {
     if (self = [super init])
     {
-        self.fileName = filename;
+        self.path = filename;
         if ([self loadFrom:filename])
             return self;
         else

@@ -580,7 +580,7 @@
     else
     {
         self.doc.locationMarks = points;
-        [self.doc saveTo:self.doc.fileName];
+        [self.doc saveTo:self.doc.path];
     }
 }
 
@@ -641,11 +641,11 @@
                 metadata.name = newName;
                 
                 
-                if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
-                    [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
+                if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.path])
+                    [NSFileManager.defaultManager removeItemAtPath:self.doc.path error:nil];
                 
                 BOOL saveFailed = ![_mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
-                self.doc.fileName = newPath;
+                self.doc.path = newPath;
                 self.doc.metadata = metadata;
                 
                 if (saveFailed)

@@ -30,6 +30,7 @@
 #import "OARootViewController.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAGpxData.h"
+#import "OAGpxInfo.h"
 #import "OATargetPointsHelper.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
@@ -109,18 +110,26 @@
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray new];
+    NSString *fileName = nil;
+    if (_gpx.path.length > 0)
+        fileName = _gpx.path;
+    else if (_gpx.tracks.count > 0)
+        fileName = _gpx.tracks.firstObject.name;
+    
+    if (fileName == nil || fileName.length == 0)
+        fileName = OALocalizedString(@"track");
+    
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    OAGPX *gpx = [db getGPXItem:_gpx.fileName];
+    OAGPX *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:fileName]];
     OsmAndAppInstance app = OsmAndApp.instance;
     
     [data addObject:@[
         @{
             @"type" : kGPXTrackCell,
-            @"track" : gpx,
-            @"title" : [gpx getNiceTitle],
-            @"distance" : [app getFormattedDistance:gpx.totalDistance],
-            @"time" : [app getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
-            @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
+            @"title" : gpxData ? [gpxData getNiceTitle] : fileName,
+            @"distance" : gpxData ? [app getFormattedDistance:gpxData.totalDistance] : @"",
+            @"time" : gpxData ? [app getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"",
+            @"wpt" : gpxData ? [NSString stringWithFormat:@"%d", gpxData.wptPoints] : @"",
             @"key" : @"gpx_route"
         },
         @{
@@ -201,7 +210,12 @@
 {
     if (_gpx)
     {
-        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:[[OAGPXMutableDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_gpx.fileName]]];
+        OAGPXMutableDocument *mutableGpx = nil;
+        if (_gpx.path && _gpx.path.length > 0)
+            mutableGpx = [[OAGPXMutableDocument alloc] initWithGpxFile:_gpx.path];
+        else if ([_gpx isKindOfClass:OAGPXMutableDocument.class])
+            mutableGpx = (OAGPXMutableDocument *) _gpx;
+        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:mutableGpx];
         OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
         editingContext.gpxData = gpxData;
         editingContext.appMode = OARoutingHelper.sharedInstance.getAppMode;
@@ -444,8 +458,9 @@
 
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
-    OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFilePath]];
-    document.fileName = gpxFilePath;
+    OAGPXDocument *document = OARoutingHelper.sharedInstance.getCurrentGPXRoute.file;
+//    [[OAGPXDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFilePath]];
+//    document.fileName = gpxFilePath;
     _gpx = document;
     
     [self generateData];

@@ -251,6 +251,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     if (gpxData)
     {
+        [gpxData.gpxFile initBounds];
         OAGpxBounds bounds = gpxData.rect;
         [self centerMapOnBBox:bounds];
     }
@@ -719,8 +720,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     NSString *displayedName = nil;
     if (gpxData != nil) {
         OAGPXDocument *gpxFile = gpxData.gpxFile;
-        if (gpxFile.fileName.length > 0)
-            displayedName = gpxFile.fileName.lastPathComponent.stringByDeletingPathExtension;
+        if (gpxFile.path.length > 0)
+            displayedName = gpxFile.path.lastPathComponent.stringByDeletingPathExtension;
         else if (gpxFile.tracks.count > 0)
             displayedName = gpxFile.tracks.firstObject.name;
     }
@@ -733,7 +734,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-        displayedName = gpxData.gpxFile.fileName.lastPathComponent.stringByDeletingPathExtension;
+        displayedName = gpxData.gpxFile.path.lastPathComponent.stringByDeletingPathExtension;
     }
     return displayedName;
 }
@@ -787,7 +788,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (gpx != nil)
     {
         OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-        BOOL showOnMap = helper.activeGpx.find(QString::fromNSString(gpx.fileName)) != helper.activeGpx.end();
+        BOOL showOnMap = helper.activeGpx.find(QString::fromNSString(gpx.path)) != helper.activeGpx.end();
         [self saveExistingGpx:gpx showOnMap:showOnMap simplified:NO addToTrack:NO finalSaveAction:finalSaveAction];
     }
 }
@@ -795,7 +796,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) saveExistingGpx:(OAGPXDocument *)gpx showOnMap:(BOOL)showOnMap
                                  simplified:(BOOL)simplified addToTrack:(BOOL)addToTrack finalSaveAction:(EOAFinalSaveAction)finalSaveAction
 {
-    [self saveGpx:gpx.fileName gpxFile:gpx simplified:simplified addToTrack:addToTrack finalSaveAction:finalSaveAction showOnMap:showOnMap];
+    [self saveGpx:gpx.path gpxFile:gpx simplified:simplified addToTrack:addToTrack finalSaveAction:finalSaveAction showOnMap:showOnMap];
 }
 
 - (void) saveNewGpx:(NSString *)folderName fileName:(NSString *)fileName showOnMap:(BOOL)showOnMap
@@ -1499,25 +1500,27 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.fileName];
+    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
     if (routingHelper.isFollowingMode)
     {
         if ([self isFollowTrackMode])
         {
-            [mapPanel.mapActions setGPXRouteParams:track];
+            [mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
             [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
             [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
         }
         else
         {
             [mapPanel.mapActions stopNavigationWithoutConfirm];
-            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+//            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
         }
     }
     else
     {
         [mapPanel.mapActions stopNavigationWithoutConfirm];
-        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+//        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
     }
 }
 

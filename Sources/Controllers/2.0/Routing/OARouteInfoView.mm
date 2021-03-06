@@ -1319,8 +1319,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
                 OAGPXDocument *gpx = gpxParams.file;
                 NSString *fileName = @"";
-                if (gpx.fileName.length != 0)
-                    fileName = [gpx.fileName.lastPathComponent stringByDeletingPathExtension];
+                if (gpx.path.length > 0)
+                    fileName = [gpx.path.lastPathComponent stringByDeletingPathExtension];
                 else if (gpx.tracks.count > 0)
                     fileName = gpx.tracks.firstObject.name;
                 

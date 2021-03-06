@@ -57,7 +57,6 @@
 + (OAGPXMutableDocument *) exportRoute:(NSString *)name trkSegments:(NSArray<OAGpxTrkSeg *> *)trkSegments points:(NSArray<OAGpxTrkPt *> *)points
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-    gpx.fileName = [name stringByAppendingPathExtension:@"gpx"];
     OAGpxTrk *track = [[OAGpxTrk alloc] init];
     track.name = name;
     [gpx addTrack:track];

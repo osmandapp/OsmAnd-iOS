@@ -251,7 +251,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     if (gpxData)
     {
-        [gpxData.gpxFile initBounds];
         OAGpxBounds bounds = gpxData.rect;
         [self centerMapOnBBox:bounds];
     }
@@ -584,6 +583,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         OAGPXDocument *gpx = [_editingContext exportGpx:trackName];
         if (gpx != nil)
         {
+            [gpx applyBounds];
             OAApplicationMode *appMode = _editingContext.appMode;
             [self onCloseButtonPressed];
             [self runNavigation:gpx appMode:appMode];

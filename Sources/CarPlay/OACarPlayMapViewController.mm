@@ -29,8 +29,14 @@
     CPWindow *_window;
     OAMapViewController *_mapVc;
     
+    CGFloat _originalViewportX;
+    CGFloat _originalViewportY;
+    
     CGFloat _cachedViewportX;
     CGFloat _cachedViewportY;
+    
+    CGFloat _cachedWidthOffset;
+    CGFloat _cachedHeightOffset;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -47,7 +53,6 @@
 {
     [super viewDidAppear:animated];
     [self attachMapToWindow];
-    _cachedViewportY = _mapVc.mapView.viewportYScale;
 }
 
 - (void)viewDidLayoutSubviews
@@ -62,8 +67,17 @@
     CGFloat widthOffset = insets.left / w;
     CGFloat heightOffset = insets.top / h;
     
-    _mapVc.mapView.viewportXScale = 1.0 + widthOffset;
-    _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
+    if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0)
+    {
+        _mapVc.mapView.viewportXScale = 1.0 + widthOffset;
+        _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
+        
+        _cachedWidthOffset = widthOffset;
+        _cachedHeightOffset = heightOffset;
+        
+        _cachedViewportX = _mapVc.mapView.viewportXScale;
+        _cachedViewportY = _mapVc.mapView.viewportYScale;
+    }
 }
 
 - (void) attachMapToWindow
@@ -80,6 +94,9 @@
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [_mapVc.mapView resumeRendering];
+        
+        _originalViewportX = _mapVc.mapView.viewportXScale;
+        _originalViewportY = _mapVc.mapView.viewportYScale;
     }
 }
 
@@ -102,6 +119,9 @@
         _mapVc.view.frame = mapPanel.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
+        
+        _mapVc.mapView.viewportXScale = _originalViewportX;
+        _mapVc.mapView.viewportYScale = _originalViewportY;
     }
 }
 
@@ -178,23 +198,18 @@
 
 - (void) centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
-    UIEdgeInsets safeAreaInsets = self.view.safeAreaInsets;
-    CGFloat viewWidth = self.view.frame.size.width;
-    CGFloat leftInset = viewWidth * 0.48;
-    CGSize screenBBox = CGSizeMake(viewWidth - leftInset, self.view.frame.size.height - safeAreaInsets.top - safeAreaInsets.bottom);
-    [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0. screenBBox:screenBBox bottomInset:safeAreaInsets.bottom leftInset:leftInset topInset:safeAreaInsets.top];
+    CGSize screenBBox = self.view.frame.size;
+    [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0. screenBBox:screenBBox bottomInset:0. leftInset:0. topInset:0.];
 }
 
 - (void) enterNavigationMode
 {
-    _cachedViewportX = _mapVc.mapView.viewportXScale;
     _mapVc.mapView.viewportXScale = 1.5;
 }
 
 - (void) exitNavigationMode
 {
     _mapVc.mapView.viewportXScale = _cachedViewportX;
-    _cachedViewportX = 1.0;
 }
 
 @end

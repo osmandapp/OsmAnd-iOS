@@ -144,21 +144,19 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _isInRoutePreview = YES;
     
+    [self centerMapOnRoute];
     if (_delegate)
         [_delegate enterNavigationMode];
-    
-    [self centerMapOnRoute];
 }
 
 - (void)exitNavigationMode
 {
+    if (!_navigationSession)
+        return;
     _currentDirectionInfo = nil;
     [_navigationSession finishTrip];
     _navigationSession = nil;
     [self enterBrowsingState];
-    
-    if (_delegate)
-        [_delegate exitNavigationMode];
 }
 
 - (void) centerMapOnRoute
@@ -190,6 +188,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             case EOACarPlayButtonTypeCenterMap: {
                 if (_delegate)
                     [_delegate onCenterMapPressed];
+                break;
             }
             default:
                 break;
@@ -223,11 +222,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             case EOACarPlayButtonTypeDirections: {
                 OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
                 [directionsGrid present];
+                break;
             }
             case EOACarPlayButtonTypeCancelRoute: {
                 [self stopNavigation];
+                if (_delegate)
+                    [_delegate exitNavigationMode];
                 [_mapTemplate hideTripPreviews];
                 [self enterBrowsingState];
+                break;
             }
             default: {
                 break;
@@ -339,12 +342,16 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) routeWasCancelled
 {
-    [self exitNavigationMode];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self exitNavigationMode];
+    });
 }
 
 - (void) routeWasFinished
 {
-    [self exitNavigationMode];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self exitNavigationMode];
+    });
 }
 
 // MARK: - OARouteCalculationProgressCallback

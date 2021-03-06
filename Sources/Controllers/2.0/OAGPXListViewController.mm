@@ -700,6 +700,9 @@ static UIViewController *parentController;
         tracksGroup.header = @"";
         for (OAGpxInfo *track in _gpxFolders[key])
         {
+            if (!track.gpx)
+                continue;
+            
             [tracksGroup.groupItems addObject:@{
                 @"type" : kGPXTrackCell,
                 @"title" : [track getName],

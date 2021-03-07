@@ -190,7 +190,7 @@
 "track_clear_q" = "Дійсно бажаєте очистити поточний трек?";
 "record_trip" = "Записувати вашу трек";
 "gpx_max_speed" = "Макс. швидкість";
-"map_mode" = "Режим застосунку";
+"map_mode" = "Режим мапи";
 "map_settings_style" = "Стиль мапи";
 "map_settings_overunder" = "Накладка та підкладка";
 "map_settings_over" = "Накладка";
@@ -231,7 +231,7 @@
 "prch_items_failed" = "об'єкти не були відновлені. Спробуйте ще раз.";
 // Resources
 "res_mapsres" = "Мапи та ресурси";
-"download_tab_local" = "Встановлено";
+"download_tab_local" = "Локальні";
 "res_banner_free_maps_title" = "У вас є %d безкоштовних мап!";
 "res_banner_free_maps_desc" = "Ви можете завантажити %d безкоштовних мап, без оновлень";
 "res_banner_no_free_maps_title" = "У Вас немає безкоштовних мап!";
@@ -306,7 +306,7 @@
 "ctx_mnu_edit_fav" = "Редагувати закладку";
 "ctx_mnu_add_fav" = "Додати закладку";
 "ctx_mnu_share" = "Поділитися";
-"ctx_mnu_direction" = "Напрямок";
+"ctx_mnu_direction" = "Позначка мапи";
 // Location Services
 "loc_access_denied" = "Доступ заборонений";
 "loc_access_denied_desc" = "Доступ до служби геолокації заборонений";
@@ -1063,7 +1063,7 @@
 "select_route_intermediate" = "Виберіть проміжну точку";
 "prev_route" = "Попередній маршрут";
 "select_avoid_descr" = "Виберіть дороги, яких ви хочете уникати під час навігації. Ви можете вибрати дорогу на мапі або вибрати вид зі списку нижче.";
-"route_parameters" = "Настройки маршруту";
+"route_parameters" = "Параметри маршруту";
 "no_active_route" = "Немає активного маршруту";
 "add_group" = "Додати групу";
 "poi_list" = "Список POI";
@@ -1761,7 +1761,7 @@
 "import_routing_file_descr" = "Ви можете перенести файл маршрутизації з будь-якого застосунку хмарного сховища або помістивши його до теки маршрутизації OsmAnd в iTunes.";
 "osmand_routing" = "Маршрутизація OsmAnd";
 "change_map_behavior" = "Зміна поведінки мапи під час навігації";
-"map_during_navigation" = "Поведінка мапи";
+"map_during_navigation" = "Мапа під час навігації";
 "voice_anounces" = "Голосові вказівки";
 "desert" = "Пустеля";
 "settings_item_read_error" = "Не вдається прочитати %@.";
@@ -1773,7 +1773,7 @@
 "nav_type_geocoding" = "Геокодування";
 "nav_type_ski" = "Лижі";
 "nav_type_brouter" = "BRouter";
-"voice_announces" = "Голосові сповіщення";
+"voice_announces" = "Голосові підказки";
 "max_speed" = "Макс. швидкість";
 "min_speed" = "Мін. швидкість";
 "default_speed" = "Типова швидкість";
@@ -1791,7 +1791,7 @@
 "profile_import_success" = "Профіль застосунку успішно імпортовано";
 "err_profile_import" = "Помилка читання даних елемента: %@";
 "global_settings_descr" = "Впливають на весь застосунок.";
-"osmand_settings" = "Загальні налаштування";
+"osmand_settings" = "Налаштування OsmAnd";
 "device_settings" = "Налаштування пристрою";
 "angular_measurment_units" = "Одиниці вимірювання кутів";
 "units_of_speed" = "Одиниці вимірювання швидкості";
@@ -2006,3 +2006,9 @@
 "tracks_empty" = "Список треків пустий";
 "map_markers_empty" = "У вас немає активних маркерів на мапі";
 "address_search" = "Пошук адреси";
+"add_folder" = "Додати Теку";
+"select_folder_descr" = "Виберіть теку або додайте нову";
+"plan_route_select_folder" = "Вибрати теку";
+"plan_route_change_folder" = "Змінити теку";
+"plan_route_folder" = "Тека";
+"street_level_imagery" = "Зображення вулиць";

@@ -113,7 +113,7 @@
 "map_settings_map" = "Harita";
 "map_settings_show" = "Haritada Göster";
 "map_settings_type" = "Harita türü";
-"map_mode" = "Uygulama modu";
+"map_mode" = "Harita kipi";
 "map_settings_day" = "Gün";
 "map_settings_night" = "Gece";
 "map_settings_style" = "Harita tarzı";
@@ -167,7 +167,7 @@
 "prch_items_failed" = "Ürün (ler) restore. Lütfen yeniden deneyin.";
 // Resources
 "res_mapsres" = "Haritalar ve kaynakları";
-"download_tab_local" = "Yüklü";
+"download_tab_local" = "Yerel";
 "res_banner_free_maps_title" = "%d ücretsiz haritalar var!";
 "res_banner_free_maps_desc" = "%d güncelleştirmeler olmadan ücretsiz haritalar indirebilir miyim";
 "res_banner_no_free_maps_title" = "Ücretsiz hiçbir haritalar var!";
@@ -258,7 +258,7 @@
 "ctx_mnu_edit_fav" = "Sık kullanılanı düzenle";
 "ctx_mnu_add_fav" = "Sık kullanılan ekle";
 "ctx_mnu_share" = "Paylaş";
-"ctx_mnu_direction" = "Yön";
+"ctx_mnu_direction" = "Harita işaretleyici";
 // Location Services
 "loc_access_denied" = "Erişim engellendi";
 "loc_access_denied_desc" = "Konumu hizmetine erişimi reddedildi";
@@ -382,7 +382,7 @@
 "gpx_trip_groups" = "Yol grupları";
 "gpx_group_select" = "Grup Seç";
 "show_all" = "Tümünü göster";
-"get_directions" = "Yol tarifi";
+"get_directions" = "Yol tarifleri";
 "parking" = "Otopark";
 "est_travel_time" = "Tahmini seyahat süresi";
 "pedestrian" = "Yaya";
@@ -1748,7 +1748,7 @@
 "osmand_routing" = "OsmAnd yönlendirme";
 "select_nav_profile_dialog_message" = "'Navigasyon türü' güzergahın nasıl hesaplandığını yönetir.";
 "change_map_behavior" = "Navigasyon sırasında harita davranışını değiştir";
-"map_during_navigation" = "Harita davranışı";
+"map_during_navigation" = "Navigasyon sırasında harita";
 "vehicle_parameters" = "Araç parametreleri";
 "screen_alerts" = "Ekran uyarıları";
 "move_map_to_select_area" = "Gerekli alanı seçmek için haritayı hareket ettir.";
@@ -1798,7 +1798,7 @@
 "send_anonymous_data" = "Anonim veri gönder";
 "profile_type_base_string" = "Temel profil";
 "global_settings_descr" = "Tüm uygulamayı etkiler.";
-"osmand_settings" = "Genel ayarlar";
+"osmand_settings" = "OsmAnd ayarları";
 "send_anonymous_data_desc" = "OsmAnd harita indirme istatistiklerini gönder, konum verileri veya herhangi bir kişisel bilgi toplamıyoruz.";
 "default_profile_descr" = "Uygulama başlatılırken kullanılacak bir profil seçin.";
 "not_available_profile_name" = "Bu ada sahip profil zaten var.";
@@ -2004,3 +2004,9 @@
 "tracks_empty" = "İzlenen yol listeniz boş";
 "map_markers_empty" = "Etkin harita işaretleyiciniz yok";
 "address_search" = "Adres arama";
+"add_folder" = "Klasör ekle";
+"select_folder_descr" = "Klasör seçin veya yeni bir tane ekleyin";
+"plan_route_select_folder" = "Klasör seç";
+"plan_route_change_folder" = "Klasörü değiştir";
+"plan_route_folder" = "Klasör";
+"street_level_imagery" = "Sokak seviyesi görüntüleri";

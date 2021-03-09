@@ -182,7 +182,7 @@
 "import_choose_type" = "Выберите что импортировать";
 "import_favorite" = "Избранное";
 "import_failed" = "Импорт завершился не успешно";
-"import_gpx" = "GPX путешествие";
+"import_gpx" = "GPX трек";
 // Context menu
 "ctx_mnu_edit_fav" = "Редактировать";
 "ctx_mnu_add_fav" = "В избранное";
@@ -362,8 +362,8 @@
 "open_url" = "Открыть в браузере";
 "no_other_translations" = "Нет других переводов";
 "wpt_remove_q" = "Удалить точку?";
-"gpx_select_track" = "Выберите поездку";
-"gpx_curr_new_track" = "Текущая поездка";
+"gpx_select_track" = "Выберите трек";
+"gpx_curr_new_track" = "Текущий трек";
 "enter_name" = "Введите имя";
 "not_selected" = "Не выбрано";
 "language" = "Язык";
@@ -385,7 +385,7 @@
 "gpx_max_speed" = "Макс. скорость";
 "menu_my_trips" = "Поездки";
 "menu_active_trips" = "Активные";
-"menu_all_trips" = "Все поездки";
+"menu_all_trips" = "Все треки";
 "total_time" = "Общее время";
 "moving_time" = "Время в движении";
 "gpx_speed" = "Скорость";
@@ -402,14 +402,14 @@
 "change_color" = "Выбрать цвет";
 "wpt_select" = "Пожалуйста, выберите точки";
 "gpx_remove_wpts_q" = "Удалить выбранные точки?";
-"create_new_trip" = "Создать поездку";
+"create_new_trip" = "Создать новый трек";
 "editing_waypoints" = "Редактирование точек";
 "select_wpt_on_map" = "Выберите точку на карте и добавьте в поездку";
-"gpx_rename_q" = "Переименовать поездку";
-"gpx_enter_new_name" = "Введите новое имя поездки";
+"gpx_rename_q" = "Переименовать трек";
+"gpx_enter_new_name" = "Пожалуйста, введите новое название трека";
 "gpx_cancel_route_q" = "Отменить этот маршрут?";
 "gpx_deactivated" = "Неактивные";
-"gpx_trip_groups" = "Группы";
+"gpx_trip_groups" = "Группы треков";
 "gpx_group_select" = "Выбор групп";
 "show_all" = "Показать все";
 "get_directions" = "Направления";
@@ -1637,8 +1637,8 @@
 "open_wiki_online" = "Открыть статью в Интернете";
 "wiki_sheet_title" = "Как открыть статьи в Wikipedia?";
 "import_raster_map_failed" = "Не удалось импортировать растровую карту";
-"trip_hint" = "Введите название поездки";
-"trip_name" = "Название поездки";
+"trip_hint" = "Введите название трека";
+"trip_name" = "Название трека";
 "res_offlineSQL_URL_warning" = "Не поддерживается для данного типа карт";
 "res_url_warning" = "URL-адрес не может быть пустым";
 "res_name_warning" = "Имя файла не может быть пустым";
@@ -1980,3 +1980,7 @@
 "hide_compass_ruler" = "Скрыть компас линейку";
 "show_compass_ruler" = "Показать компас линейку";
 "address_search" = "Поиск адреса";
+"shared_z_a" = "Я - А";
+"shared_a_z" = "А - Я";
+"search_preogress" = "Поиск…";
+"units_nm" = "мор. миля";

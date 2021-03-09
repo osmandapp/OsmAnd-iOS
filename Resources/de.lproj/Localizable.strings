@@ -228,7 +228,7 @@
 "import_gpx" = "GPX-Track";
 // Alerts
 "alert_inet_needed" = "Internetverbindung notwendig für diese Aktion. Bitte überprüfe deine Internetverbindung.";
-"ctx_mnu_direction" = "Richtung";
+"ctx_mnu_direction" = "Kartenmarkierung";
 "loc_access_denied_desc" = "Zugriff zum Ortungsdienst wurde abgelehnt";
 "gpx_export" = "Export";
 "gpx_import_already_exists" = "Die angegebene Trackdatei existiert bereits in der Liste. Bitte Aktion auswählen.";
@@ -2011,3 +2011,9 @@
 "tracks_empty" = "Ihre Trackliste ist leer";
 "map_markers_empty" = "Sie haben keine aktiven Kartenmarkierungen";
 "address_search" = "Adresssuche";
+"add_folder" = "Ordner hinzufügen";
+"select_folder_descr" = "Ordner auswählen oder neuen hinzufügen";
+"plan_route_select_folder" = "Ordner auswählen";
+"plan_route_change_folder" = "Ordner ändern";
+"plan_route_folder" = "Ordner";
+"street_level_imagery" = "Bilder auf Straßenebene";

@@ -392,7 +392,7 @@
 "m_style_car" = "سيارة";
 "m_style_walk" = "مشي";
 "m_style_bicycle" = "دراجة";
-"map_settings_map" = "الخرائط العادية";
+"map_settings_map" = "ضبط الخريطة";
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_mode" = "وضع الخريطة";
@@ -2005,3 +2005,9 @@
 "tracks_empty" = "قائمة المسارات فارغة";
 "map_markers_empty" = "لايوجد لديك توجيه مباشر نشط";
 "address_search" = "البحث عن عنوان";
+"add_folder" = "إضافة مجلد";
+"select_folder_descr" = "تحديد مجلد أو إضافة مجلد جديد";
+"plan_route_select_folder" = "تحديد مجلد";
+"plan_route_change_folder" = "تغيير المجلد";
+"plan_route_folder" = "المجلد";
+"street_level_imagery" = "صور للشارع";

@@ -392,7 +392,7 @@
 "m_style_car" = "سيارة";
 "m_style_walk" = "مشي";
 "m_style_bicycle" = "دراجة";
-"map_settings_map" = "ضبط الخريطة";
+"map_settings_map" = "الخريطة العادية";
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_mode" = "وضع الخريطة";

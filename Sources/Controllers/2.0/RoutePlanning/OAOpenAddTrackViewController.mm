@@ -189,7 +189,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if ([selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
             selectedFolderName = @"";
         
-        return[data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {
+        return [data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {
             NSString *folderName = object.gpxFilePath.stringByDeletingLastPathComponent;
             return [folderName isEqualToString:selectedFolderName];
         }]];

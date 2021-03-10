@@ -227,11 +227,7 @@
         [self showEmptyNameAlert];
     }
     else
-    {
-//        [self dismissViewControllerAnimated:NO completion:nil];
-//        if (self.delegate)
-//            [self.delegate onSaveAsNewTrack:_fileName showOnMap:_showOnMap simplifiedTrack:_simplifiedTrack];
-        
+    {        
         [self dismissViewControllerAnimated:NO completion:nil];
         NSString *savingPath;
         if ([_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])

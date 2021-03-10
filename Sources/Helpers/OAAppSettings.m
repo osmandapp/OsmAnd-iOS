@@ -2013,6 +2013,7 @@
         [_registeredPreferences setObject:_showStreetName forKey:@"show_street_name"];
         
         _showDistanceRuler = [OAProfileBoolean withKey:showDistanceRulerKey defValue:NO];
+        [_registeredPreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
         
         _showArrivalTime = [OAProfileBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OAProfileBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];

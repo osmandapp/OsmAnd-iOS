@@ -1634,7 +1634,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditFavoriteViewController *controller = [[OAEditFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title];
+    OAEditFavoriteViewController *controller = [[OAEditFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title address:self.targetMenuView.targetPoint.titleAddress];
     [self presentViewController:controller animated:YES completion:nil];
 }
 

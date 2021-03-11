@@ -78,6 +78,7 @@
         self.favorite = favorite;
         self.name = [self getItemName];
         self.desc = [self getItemDesc];
+        self.address = [self getItemAddress];
         self.groupTitle = [self getGroupTitle];
         self.groupColor = [self.favorite getColor];
         [self commonInit];
@@ -85,7 +86,7 @@
     return self;
 }
 
-- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation
+- (id) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation
 {
     self = [super initWithNibName:@"OAEditFavoriteViewController" bundle:nil];
     if (self)
@@ -98,7 +99,11 @@
         locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
         locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
         
-        QString title = QString::fromNSString(formattedLocation);
+        QString title = QString::fromNSString(formattedTitle);
+        QString address = QString::fromNSString(formattedLocation);
+        QString description = QString::null;
+        QString icon = QString::null;
+        QString background = QString::null;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *groupName;
@@ -119,11 +124,6 @@
             group = QString::fromNSString(groupName);
         else
             group = QString::null;
-        
-        QString description = QString::null;
-        QString address = QString::null;
-        QString icon = QString::null;
-        QString background = QString::null;
 
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
         
@@ -137,8 +137,17 @@
                                                                         OsmAnd::FColorRGB(r,g,b));
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
+        
+        self.name = formattedTitle ? formattedTitle : @"";
+        self.desc = @"";
+        self.address = formattedLocation ? formattedLocation : @"";
         self.groupTitle = [self getGroupTitle];
         self.groupColor = [self.favorite getColor];
+        
+        _selectedIconCategoryName = @"special";
+        _selectedIconIndex = 0;
+        _selectedColorIndex = 0;
+        _selectedBackgroundIndex = 0;
         
         [self commonInit];
     }
@@ -234,10 +243,6 @@
 
 - (void) generateData
 {
-    self.name = [self getItemName];
-    self.desc = [self getItemDesc];
-    self.address = [self getItemAddress];
-    
     NSMutableArray *data = [NSMutableArray new];
     
     NSMutableArray *section = [NSMutableArray new];

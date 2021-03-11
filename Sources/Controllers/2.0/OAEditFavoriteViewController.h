@@ -25,6 +25,6 @@
 @property (nonatomic, copy) UIColor *groupColor;
 
 - (id) initWithItem:(OAFavoriteItem *)favorite;
-- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation;
+- (id) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)title address:(NSString*)address;
 
 @end

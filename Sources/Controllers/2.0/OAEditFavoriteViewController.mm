@@ -210,6 +210,7 @@
                          @"octagon",
                          @"square"];
     
+    
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self getItemBackground]];
     if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;

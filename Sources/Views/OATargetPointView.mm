@@ -755,10 +755,15 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         if (_targetPoint.type == OATargetFavorite && ![self newItem])
+        {
             [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"ic_dialog_edit"] forState:UIControlStateNormal];
+        }
         else
+        {
             [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-        [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+        }
     }
     
     if (_targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXRoute)

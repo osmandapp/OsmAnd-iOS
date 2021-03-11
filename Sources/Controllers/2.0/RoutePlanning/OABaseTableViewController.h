@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 
+- (void)onCancelButtonPressed;
 - (void)onDoneButtonPressed;
 
 @end

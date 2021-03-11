@@ -550,6 +550,17 @@
 "select_favorite" = "Select favorite";
 "group_properties" = "Group preoperties";
 "add_group" = "Add group";
+"add_favorite" = "Add favorite";
+"name_and_descr" = "Name & description";
+"group" = "Group";
+"select_group" = "Select group";
+"icon" = "Icon";
+"shape" = "Shape";
+
+// Shapes
+"circle" = "Circle";
+"octagon" = "Octagon";
+"square" = "Square";
 
 // POI
 "poi_insrease_radius" = "Increase search radius to";

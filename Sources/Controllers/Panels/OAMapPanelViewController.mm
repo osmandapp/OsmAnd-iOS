@@ -113,6 +113,7 @@
 #import "OASizes.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OAHistoryViewController.h"
+#import "OAEditFavoriteViewController.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -1631,20 +1632,18 @@ typedef enum
 
 - (void) targetPointAddFavorite
 {
-    if ([_mapViewController hasFavoriteAt:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)])
-        return;
-    
-    OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title headerOnly:NO];
-    
-    UIColor* color = [UIColor colorWithRed:favoriteViewController.favorite.favorite->getColor().r/255.0 green:favoriteViewController.favorite.favorite->getColor().g/255.0 blue:favoriteViewController.favorite.favorite->getColor().b/255.0 alpha:1.0];
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-    self.targetMenuView.targetPoint.type = OATargetFavorite;
-    
-    [favoriteViewController activateEditing];
-    
-    [self.targetMenuView setCustomViewController:favoriteViewController needFullMenu:YES];
-    [self.targetMenuView updateTargetPointType:OATargetFavorite];
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    OAEditFavoriteViewController *controller = [[OAEditFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title];
+    [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (void) targetPointEditFavorite:(OAFavoriteItem *)item
+{
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    OAEditFavoriteViewController *controller = [[OAEditFavoriteViewController alloc] initWithItem:item];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (void) targetPointShare

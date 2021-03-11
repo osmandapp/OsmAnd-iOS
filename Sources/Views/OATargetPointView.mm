@@ -86,6 +86,8 @@
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIImageView *favoriteImagePoiView;
+@property (weak, nonatomic) IBOutlet UIImageView *favoriteImageBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonLeft;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
@@ -1702,13 +1704,37 @@ static const NSInteger _buttonsCount = 4;
             [_controlButtonRight setTitle:self.customController.rightControlButton.title forState:UIControlStateNormal];
         if (self.customController.downloadControlButton)
             [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
-
-        UIImage *icon = [self.customController getIcon];
-        _imageView.image = icon ? icon : _targetPoint.icon;
+        
+        if ([self.customController isKindOfClass:OAFavoriteViewController.class])
+        {
+            _imageView.hidden = YES;
+            _favoriteImageBackgroundView.hidden = NO;
+            _favoriteImagePoiView.hidden = NO;
+            
+            OAFavoriteViewController *favoriteController = (OAFavoriteViewController *)self.customController;
+            UIImage *icon = [favoriteController getIcon];
+            _favoriteImagePoiView.image = icon ? icon : _targetPoint.icon;
+            
+            UIImage *backgroundIcon = [favoriteController getBackgroundIcon];
+            _favoriteImageBackgroundView.image = [backgroundIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            _favoriteImageBackgroundView.tintColor = [favoriteController.favorite getColor];
+            
+        }
+        else
+        {
+            UIImage *icon = [self.customController getIcon];
+            _imageView.image = icon ? icon : _targetPoint.icon;
+            _imageView.hidden = NO;
+            _favoriteImageBackgroundView.hidden = YES;
+            _favoriteImagePoiView.hidden = YES;
+        }
     }
     else
     {
         _imageView.image = _targetPoint.icon;
+        _imageView.hidden = NO;
+        _favoriteImageBackgroundView.hidden = YES;
+        _favoriteImagePoiView.hidden = YES;
     }
 }
 
@@ -1999,6 +2025,10 @@ static const NSInteger _buttonsCount = 4;
         self.customController.topToolbarType = ETopToolbarTypeFixed;
         [self showFullMenu];
         [self.customController activateEditing];
+        
+        OAFavoriteItem *item = ((OAFavoriteViewController *)self.customController).favorite;
+        
+        [self.menuViewDelegate targetPointEditFavorite:item];
         return;
     }
     

@@ -217,14 +217,20 @@
         {
             QString title = favorite->getTitle();
             QString description = favorite->getDescription();
+            QString address = favorite->getAddress();
             QString group = favorite->getGroup();
+            QString icon = favorite->getIcon();
+            QString background = favorite->getBackground();
             OsmAnd::ColorRGB color = favorite->getColor();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
             self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
                                                             title,
                                                             description,
+                                                            address,
                                                             group,
+                                                            icon,
+                                                            background,
                                                             color);
             [self.app saveFavoritesToPermamentStorage];
         }

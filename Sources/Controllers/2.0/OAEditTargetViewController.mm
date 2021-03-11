@@ -30,12 +30,12 @@
 
 #include "Localization.h"
 
-#define kRowName 0
-#define kRowColor 1
-#define kRowGroup 2
-#define kRowDescription 3
-#define kRowWaypoints 4
-#define kRowCoordinates 5
+#define kRowNameCell @"OATextViewTableViewCell"
+#define kRowColorCell @"OAColorViewCell"
+#define kRowGroupCell @"OAIconTitleValueCell"
+#define kRowDescriptionCell @"OATextMultiViewCell"
+#define kRowWaypointsCell @"OATargetInfoCollapsableViewCell"
+#define kRowCoordinatesCell @"OATargetInfoCollapsableCoordinatesViewCell"
 
 @interface OAEditTargetViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAEditDescriptionViewControllerDelegate, UITextFieldDelegate>
 
@@ -55,6 +55,8 @@
     BOOL _editNameFirstTime;
     
     BOOL _askPreHide;
+    
+    NSMutableArray<NSDictionary *> *_data;
 }
 
 @synthesize editing = _editing;
@@ -138,9 +140,9 @@
         return;
     
     [self setupView];
-    [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-    [self.tableView endUpdates];
+    [self generateData];
+    [self.tableView reloadData];
+    
     if (self.delegate)
         [self.delegate contentHeightChanged:[self contentHeight]];
 }
@@ -328,6 +330,7 @@
     self.tableView.scrollEnabled = NO;
 
     [self registerForKeyboardNotifications];
+    [self generateData];
 }
 
 - (void) dealloc
@@ -385,6 +388,49 @@
         [self.deleteButton setImage:[UIImage imageNamed:@"icon_remove"] forState:UIControlStateNormal];
     else
         [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+}
+
+- (void) generateData
+{
+    _data = [NSMutableArray new];
+    [_data addObject:@{
+        @"type" : kRowColorCell,
+        @"label" : OALocalizedString(@"fav_color"),
+        @"color" : [OADefaultFavorite nearestFavColor:[self getItemColor]]
+    }];
+
+    NSString *selectedGroup = [self getItemGroup];
+    if (selectedGroup.length == 0)
+        selectedGroup = OALocalizedString(@"favorites");
+    
+    [_data addObject:@{
+        @"type" : kRowGroupCell,
+        @"label" : OALocalizedString(@"fav_group"),
+        @"description" : selectedGroup
+    }];
+    
+    if ([self hasDescription])
+    {
+        [_data addObject:@{
+            @"type" : kRowDescriptionCell,
+            @"label" : self.desc,
+            @"placeholder" : OALocalizedString(@"enter_description"),
+        }];
+    }
+    
+    [_data addObject:@{
+        @"type" : kRowWaypointsCell,
+        @"label" : self.groupTitle,
+        @"description" : OALocalizedString(@"all_group_points"),
+        @"iconName" : @"ic_custom_folder",
+        @"iconColor" : self.groupColor
+    }];
+    
+    [_data addObject:@{
+        @"type" : kRowCoordinatesCell,
+        @"lat" : [NSNumber numberWithFloat:self.location.latitude],
+        @"lon" : [NSNumber numberWithFloat:self.location.longitude]
+    }];
 }
 
 - (void) setupCollapableViewsWithData:(id)data lat:(double)lat lon:(double)lon
@@ -466,7 +512,7 @@
     
     if (self.wasEdited)
         return [self commitChangesAndExit];
-    return YES; 
+    return YES;
 }
 
 - (NSString *) getNewItemName:(NSString *)name
@@ -567,173 +613,144 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.editing)
-        return 6 - (![self hasDescription] ? 1 : 0);
-    else
-        return 5 - (![self hasDescription] ? 1 : 0);
+    return _data.count;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
-    static NSString* const reusableIdentifierGroupCell = @"OAIconTitleValueCell";
-    static NSString* const reusableIdentifierTextViewCell = @"OATextViewTableViewCell";
-    static NSString* const reusableIdentifierTextMultiViewCell = @"OATextMultiViewCell";
-    static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
-    static NSString* const reusableIdentifierCollapsableСoordinates = @"OATargetInfoCollapsableCoordinatesViewCell";
+    NSDictionary *item = _data[indexPath.row];
     
-    NSInteger index = indexPath.row;
-    if (!self.editing)
+    if ([item[@"type"] isEqualToString:kRowNameCell])
     {
-        index++;
-    }
-
-    switch (index)
-    {
-        case kRowName:
+        OATextViewTableViewCell* cell;
+        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowNameCell];
+        if (cell == nil)
         {
-            OATextViewTableViewCell* cell;
-            cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextViewCell];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
-                cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
-            }
-            
-            if (cell)
-            {
-                [cell.textView setText:self.name];
-                [cell.textView setPlaceholder:OALocalizedString(@"enter_name")];
-                [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-                [cell.textView addTarget:self action:@selector(editFavName:) forControlEvents:UIControlEventEditingChanged];
-                [cell.textView setDelegate:self];
-                
-                cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
-                cell.backgroundColor = UIColorFromRGB(0xffffff);
-                return cell;
-            }
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
+            cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
         }
-        case kRowColor:
+        
+        if (cell)
         {
-            OAColorViewCell* cell;
-            cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierColorCell];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorViewCell" owner:self options:nil];
-                cell = (OAColorViewCell *)[nib objectAtIndex:0];
-            }
+            [cell.textView setText:item[@"label"]];
+            [cell.textView setPlaceholder:item[@"placeholder"]];
+            [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.textView addTarget:self action:NSSelectorFromString(item[@"selector"]) forControlEvents:UIControlEventEditingChanged];
+            [cell.textView setDelegate:self];
             
-            UIColor* color = [self getItemColor];
-            
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            [cell.colorIconView setImage:favCol.icon];
-            [cell.descriptionView setText:favCol.name];
-            
-            cell.textView.text = OALocalizedString(@"fav_color");
-            cell.backgroundColor = UIColorFromRGB(0xffffff);
-            
-            return cell;
-        }
-        case kRowGroup:
-        {
-            OAIconTitleValueCell* cell;
-            cell = (OAIconTitleValueCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierGroupCell];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleValueCell" owner:self options:nil];
-                cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            }
-            
-            [cell showImage:NO];
-            if ([self getItemGroup].length == 0)
-                [cell.descriptionView setText: OALocalizedString(@"favorites")];
-            else
-                [cell.descriptionView setText: [self getItemGroup]];
-            
-            cell.textView.text = OALocalizedString(@"fav_group");
-            cell.backgroundColor = UIColorFromRGB(0xffffff);
-            
-            return cell;
-        }
-        case kRowDescription:
-        {
-            OATextMultiViewCell* cell;
-            cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextMultiViewCell];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextMultiViewCell" owner:self options:nil];
-                cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
-            }
-            
-            if (self.desc.length == 0)
-            {
-                cell.textView.font = [UIFont systemFontOfSize:16.0];
-                cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
-                cell.textView.text = OALocalizedString(@"enter_description");
-                cell.textView.textColor = [UIColor lightGrayColor];
-                cell.iconView.hidden = NO;
-            }
-            else
-            {
-                cell.textView.font = [UIFont systemFontOfSize:14.0];
-                
-                if (_descSingleLine)
-                    cell.textView.textContainerInset = UIEdgeInsetsMake(12,11,0,35);
-                else if (_descHeight > 44.0)
-                    cell.textView.textContainerInset = UIEdgeInsetsMake(5,11,0,35);
-                else
-                    cell.textView.textContainerInset = UIEdgeInsetsMake(3,11,0,35);
-                
-                cell.textView.textColor = [UIColor blackColor];
-                cell.textView.text = self.desc;
-                cell.iconView.hidden = NO;
-            }
             cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
             cell.backgroundColor = UIColorFromRGB(0xffffff);
-            
             return cell;
         }
-        case kRowWaypoints:
+    }
+    else if ([item[@"type"] isEqualToString:kRowColorCell])
+    {
+        OAColorViewCell* cell;
+        cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowColorCell];
+        if (cell == nil)
         {
-            OATargetInfoCollapsableViewCell* cell;
-            cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsable owner:self options:nil];
-                cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
-            }
-            cell.iconView.contentMode = UIViewContentModeCenter;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorViewCell" owner:self options:nil];
+            cell = (OAColorViewCell *)[nib objectAtIndex:0];
+        }
+        OAFavoriteColor *favCol = item[@"color"];
+        [cell.textView setText: item[@"label"]];
+        [cell.descriptionView setText:favCol.name];
+        cell.backgroundColor = UIColorFromRGB(0xffffff);
+        [cell.colorIconView setImage:favCol.icon];
+        
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kRowGroupCell])
+    {
+        OAIconTitleValueCell* cell;
+        cell = (OAIconTitleValueCell *)[tableView dequeueReusableCellWithIdentifier:kRowGroupCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleValueCell" owner:self options:nil];
+            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
+        }
+        
+        [cell showImage:NO];
+        [cell.textView setText: item[@"label"]];
+        [cell.descriptionView setText: item[@"description"]];
+        cell.backgroundColor = UIColorFromRGB(0xffffff);
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+    {
+        OATextMultiViewCell* cell;
+        cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowDescriptionCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextMultiViewCell" owner:self options:nil];
+            cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
+        }
+        
+        NSString *label = item[@"label"];
+        if (label.length == 0)
+        {
+            cell.textView.font = [UIFont systemFontOfSize:16.0];
+            cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
+            cell.textView.text = item[@"placeholder"];
+            cell.textView.textColor = [UIColor lightGrayColor];
+            cell.iconView.hidden = NO;
+        }
+        else
+        {
+            cell.textView.font = [UIFont systemFontOfSize:14.0];
             
-            [cell setImage:[[UIImage imageNamed:@"ic_custom_folder"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            cell.iconView.tintColor = self.groupColor;
-            cell.textView.text = self.groupTitle;
-            cell.descrLabel.hidden = NO;
-            cell.descrLabel.text = OALocalizedString(@"all_group_points");
+            if (_descSingleLine)
+                cell.textView.textContainerInset = UIEdgeInsetsMake(12,11,0,35);
+            else if (_descHeight > 44.0)
+                cell.textView.textContainerInset = UIEdgeInsetsMake(5,11,0,35);
+            else
+                cell.textView.textContainerInset = UIEdgeInsetsMake(3,11,0,35);
+            
+            cell.textView.textColor = [UIColor blackColor];
+            cell.textView.text = label;
+            cell.iconView.hidden = NO;
+        }
+        cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
+        cell.backgroundColor = UIColorFromRGB(0xffffff);
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+    {
+        OATargetInfoCollapsableViewCell* cell;
+        cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:kRowWaypointsCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kRowWaypointsCell owner:self options:nil];
+            cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
+        }
+        cell.iconView.contentMode = UIViewContentModeCenter;
+        
+        [cell setImage:[[UIImage imageNamed:item[@"iconName"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        cell.iconView.tintColor = item[@"iconColor"];
+        cell.textView.text = item[@"label"];
+        cell.descrLabel.hidden = NO;
+        cell.descrLabel.text = item[@"description"];
 
-            cell.collapsableView = self.collapsableGroupView;
-            [cell setCollapsed:self.collapsableGroupView.collapsed rawHeight:64.];
-            
-            return cell;
-        }
-        case kRowCoordinates:
+        cell.collapsableView = self.collapsableGroupView;
+        [cell setCollapsed:self.collapsableGroupView.collapsed rawHeight:64.];
+        
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+    {
+        OATargetInfoCollapsableCoordinatesViewCell* cell;
+        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:kRowCoordinatesCell];
+        
+        if (cell == nil)
         {
-            OATargetInfoCollapsableCoordinatesViewCell* cell;
-            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsableСoordinates];
-            
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsableСoordinates owner:self options:nil];
-                cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
-            }
-            
-            [cell setupCellWithLat:self.location.latitude lon:self.location.longitude];
-            cell.collapsableView = self.collapsableCoordinatesView;
-            [cell setCollapsed:self.collapsableCoordinatesView.collapsed rawHeight:64.];
-            return cell;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kRowCoordinatesCell owner:self options:nil];
+            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
         }
-            
-        default:
-            break;
+        
+        [cell setupCellWithLat:[item[@"lat"] floatValue] lon:[item[@"lon"] floatValue]];
+        cell.collapsableView = self.collapsableCoordinatesView;
+        [cell setCollapsed:self.collapsableCoordinatesView.collapsed rawHeight:64.];
+        return cell;
     }
     
     return nil;
@@ -756,83 +773,62 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger index = indexPath.row;
-    if (!self.editing)
-        index++;
-    
-    switch (index)
-    {
-        case kRowDescription:
-            return _descHeight;
-        case kRowWaypoints:
-            return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
-        case kRowCoordinates:
-            return 48. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height + 16.);
-        default:
-            return UITableViewAutomaticDimension;
-    }
+    NSDictionary *item = _data[indexPath.row];
+    if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+        return _descHeight;
+    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+        return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
+    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+        return 48. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height + 16.);
+    else
+        return UITableViewAutomaticDimension;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSInteger index = indexPath.row;
-    if (!self.editing)
-        index++;
-    
-    switch (index)
+    NSDictionary *item = _data[indexPath.row];
+    if ([item[@"type"] isEqualToString:kRowNameCell])
     {
-        case kRowName:
+    }
+    else if ([item[@"type"] isEqualToString:kRowColorCell])
+    {
+        if ([self supportEditing])
+            [self changeColorClicked];
+    }
+    else if ([item[@"type"] isEqualToString:kRowGroupCell])
+    {
+        if ([self supportEditing])
+            [self changeGroupClicked];
+    }
+    else if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+    {
+        [self changeDescriptionClicked];
+    }
+    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+    {
+        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+        if ([cell isKindOfClass:OATargetInfoCollapsableViewCell.class])
         {
-            break;
+            self.collapsableGroupView.collapsed = !self.collapsableGroupView.collapsed;
+            [self.collapsableGroupView adjustHeightForWidth:tableView.frame.size.width];
+            if (self.delegate)
+                [self.delegate contentHeightChanged];
+            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
-        case kRowColor:
+    }
+    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+    {
+        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+        if ([cell isKindOfClass:OATargetInfoCollapsableCoordinatesViewCell.class])
         {
-            if ([self supportEditing])
-                [self changeColorClicked];
-            break;
+            self.collapsableCoordinatesView.collapsed = !self.collapsableCoordinatesView.collapsed;
+            [self.collapsableCoordinatesView adjustHeightForWidth:tableView.frame.size.width];
+            if (self.delegate)
+                [self.delegate contentHeightChanged];
+            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
-        case kRowGroup:
-        {
-            if ([self supportEditing])
-                [self changeGroupClicked];
-            break;
-        }
-        case kRowDescription:
-        {
-            [self changeDescriptionClicked];
-            break;
-        }
-        case kRowWaypoints:
-        {
-            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
-            if ([cell isKindOfClass:OATargetInfoCollapsableViewCell.class])
-            {
-                self.collapsableGroupView.collapsed = !self.collapsableGroupView.collapsed;
-                [self.collapsableGroupView adjustHeightForWidth:tableView.frame.size.width];
-                if (self.delegate)
-                    [self.delegate contentHeightChanged];
-                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            break;
-        }
-        case kRowCoordinates:
-        {
-            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
-            if ([cell isKindOfClass:OATargetInfoCollapsableCoordinatesViewCell.class])
-            {
-                self.collapsableCoordinatesView.collapsed = !self.collapsableCoordinatesView.collapsed;
-                [self.collapsableCoordinatesView adjustHeightForWidth:tableView.frame.size.width];
-                if (self.delegate)
-                    [self.delegate contentHeightChanged];
-                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            break;
-        }
-            
-        default:
-            break;
     }
 }
 
@@ -843,9 +839,11 @@
 {
     OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
     [self setItemColor:favCol.color];
+    self.groupColor = favCol.color;
     
     _wasEdited = YES;
     [self setupColor];
+    [self generateData];
     [self.tableView reloadData];
 }
 
@@ -855,9 +853,11 @@
 - (void) groupChanged
 {
     [self setItemGroup:_groupController.groupName];
+    self.groupTitle = _groupController.groupName;
     
     _wasEdited = YES;
     [self setupGroup];
+    [self generateData];
     [self.tableView reloadData];
 }
 
@@ -872,6 +872,7 @@
     [self setItemDesc:self.desc];
     
     [self setupView];
+    [self generateData];
     [self.tableView reloadData];
     if (self.delegate)
         [self.delegate contentHeightChanged:[self contentHeight]];

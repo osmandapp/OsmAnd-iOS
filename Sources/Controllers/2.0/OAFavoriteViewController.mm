@@ -89,12 +89,18 @@
             group = QString::null;
         
         QString description = QString::null;
+        QString address = QString::null;
+        QString icon = QString::null;
+        QString background = QString::null;
 
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
         fav.favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                         title,
                                                                         description,
+                                                                        address,
                                                                         group,
+                                                                        icon,
+                                                                        background,
                                                                         OsmAnd::FColorRGB(r,g,b));
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
@@ -301,6 +307,67 @@
 - (void) setItemDesc:(NSString *)desc
 {
     self.favorite.favorite->setDescription(QString::fromNSString(desc));
+}
+
+- (NSString *) getItemIcon
+{
+    if (!self.favorite.favorite->getIcon().isNull())
+    {
+        return self.favorite.favorite->getIcon().toNSString();
+    }
+    else
+    {
+        return @"";
+    }
+}
+
+- (void) setItemIcon:(NSString *)icon
+{
+    self.favorite.favorite->setIcon(QString::fromNSString(icon));
+}
+
+- (NSString *) getItemBackground
+{
+    if (!self.favorite.favorite->getBackground().isNull())
+    {
+        return self.favorite.favorite->getBackground().toNSString();
+    }
+    else
+    {
+        return @"";
+    }
+}
+
+- (void) setItemBackground:(NSString *)background
+{
+    self.favorite.favorite->setBackground(QString::fromNSString(background));
+}
+
+- (UIImage *) getIcon
+{
+    NSString *poiIconName = [self getItemIcon];
+    if (!poiIconName || [poiIconName isEqualToString:@""])
+        poiIconName = @"mm_special_star";
+    else
+        poiIconName = [NSString stringWithFormat:@"mm_%@", poiIconName];
+    UIImage *poiIcon = [UIImage imageNamed:[OAUtilities drawablePath:poiIconName]];
+    return poiIcon;
+}
+
+- (UIImage *) getBackgroundIcon
+{
+    NSDictionary *icons = @{
+        @"circle" : @"bg_point_circle",
+        @"octagon" : @"bg_point_octagon",
+        @"square" : @"bg_point_square",
+    };
+    
+    NSString *selectedIcon = [self getItemBackground];
+    if (!selectedIcon || [selectedIcon isEqualToString:@""])
+        selectedIcon = @"circle";
+    NSString *poiBackgroundIconName = icons[selectedIcon];
+    UIImage *backroundImage = [UIImage imageNamed:poiBackgroundIconName];
+    return backroundImage;
 }
 
 @end

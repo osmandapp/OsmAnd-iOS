@@ -1,20 +1,20 @@
 //
-//  OAIconsTableViewCell.h
+//  OAPoiTableViewCell.h
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 18.06.2020.
+//  Created by nnngrach on 10.03.2021.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@protocol OAIconsTableViewCellDelegate <NSObject>
+@protocol OAPoiTableViewCellDelegate <NSObject>
 
-- (void)iconChanged:(NSInteger)tag;
+- (void)poiChanged:(NSInteger)tag;
 
 @end
 
-@interface OAIconsTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OAPoiTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -25,6 +25,6 @@
 @property (nonatomic) NSInteger currentColor;
 @property (nonatomic) NSInteger currentIcon;
 
-@property (nonatomic, weak) id<OAIconsTableViewCellDelegate> delegate;
+@property (nonatomic, weak) id<OAPoiTableViewCellDelegate> delegate;
 
 @end

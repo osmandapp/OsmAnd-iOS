@@ -106,7 +106,10 @@ static OAQuickActionType *TYPE;
     QString titleStr = QString::fromNSString(title);
     QString group = QString::fromNSString(groupName ? groupName : @"");
     QString description = QString::null;
-    fav.favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), titleStr, description, group, OsmAnd::FColorRGB(r,g,b));
+    QString address = QString::null;
+    QString icon = QString::null;
+    QString background = QString::null;
+    fav.favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
     
     [app saveFavoritesToPermamentStorage];
 }

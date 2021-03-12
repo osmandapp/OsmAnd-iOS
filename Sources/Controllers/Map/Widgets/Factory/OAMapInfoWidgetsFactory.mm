@@ -83,14 +83,13 @@
     rulerControl.updateInfoFunction = ^BOOL{
         CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
         CLLocation *centerLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-        NSString *distance = [[OARootViewController instance].mapPanel.hudViewController.mapInfoController getRulerWidgetDistance];
         if (currentLocation && centerLocation) {
             OAMapViewTrackingUtilities *trackingUtilities = [OAMapViewTrackingUtilities instance];
             if ([trackingUtilities isMapLinkedToLocation]) {
                 [rulerControlWeak setText:[_app getFormattedDistance:0] subtext:nil];
             }
             else {
-                distance = distance ? distance : [_app getFormattedDistance:OsmAnd::Utilities::distance(currentLocation.coordinate.longitude, currentLocation.coordinate.latitude,
+                NSString *distance = [_app getFormattedDistance:OsmAnd::Utilities::distance(currentLocation.coordinate.longitude, currentLocation.coordinate.latitude,
                                                                                                         centerLocation.coordinate.longitude, centerLocation.coordinate.latitude)];
                 NSUInteger ls = [distance rangeOfString:@" " options:NSBackwardsSearch].location;
                 [rulerControlWeak setText:[distance substringToIndex:ls] subtext:[distance substringFromIndex:ls + 1]];

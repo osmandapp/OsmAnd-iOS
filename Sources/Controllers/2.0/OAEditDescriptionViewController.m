@@ -65,10 +65,14 @@
 
     NSString *textHtml;
     if (![self isHtml:self.desc])
+    {
         textHtml = [self.desc stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
+        textHtml = [NSString stringWithFormat:@"<p><font size=\"6\" face=\"-apple-system\"> %@ </font></p>", textHtml];
+    }
     else
+    {
         textHtml = self.desc;
-    
+    }
     [_webView loadHTMLString:textHtml baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
     _textView.text = self.desc;
 }

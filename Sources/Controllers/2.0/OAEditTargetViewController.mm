@@ -358,7 +358,7 @@
 - (void) setupView
 {
     CGSize s = [OAUtilities calculateTextBounds:self.desc width:self.tableView.bounds.size.width - 38.0 font:[UIFont systemFontOfSize:14.0]];
-    CGFloat h = MIN(88.0, s.height + 10.0);
+    CGFloat h = MIN(188.0, s.height + 10.0);
     h = MAX(44.0, h);
     
     _descHeight = h;
@@ -393,22 +393,6 @@
 - (void) generateData
 {
     _data = [NSMutableArray new];
-    [_data addObject:@{
-        @"type" : kRowColorCell,
-        @"label" : OALocalizedString(@"fav_color"),
-        @"color" : [OADefaultFavorite nearestFavColor:[self getItemColor]]
-    }];
-
-    NSString *selectedGroup = [self getItemGroup];
-    if (selectedGroup.length == 0)
-        selectedGroup = OALocalizedString(@"favorites");
-    
-    [_data addObject:@{
-        @"type" : kRowGroupCell,
-        @"label" : OALocalizedString(@"fav_group"),
-        @"description" : selectedGroup
-    }];
-    
     if ([self hasDescription])
     {
         [_data addObject:@{
@@ -588,7 +572,7 @@
 
 - (void) changeDescriptionClicked
 {
-    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem readOnly:![self supportEditing]];
+    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem readOnly:YES];
     _editDescController.delegate = self;
     [self.navController pushViewController:_editDescController animated:YES];
 }
@@ -601,7 +585,7 @@
 
 - (BOOL) hasDescription
 {
-    return [self supportEditing] || self.desc.length > 0;
+    return [self supportEditing] && self.desc.length > 0;
 }
 
 #pragma mark - UITableViewDataSource

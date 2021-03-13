@@ -34,7 +34,7 @@
     {
         _name = [self formatName:[_file lastPathComponent]];
     }
-    return _name;
+    return [_name precomposedStringWithCanonicalMapping];
 }
 
 - (NSString *) formatName:(NSString *)name

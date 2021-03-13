@@ -747,6 +747,7 @@ static UIViewController *parentController;
     [self.gpxTableView setDelegate:self];
     self.gpxTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.gpxTableView reloadData];
+    self.gpxTableView.allowsMultipleSelectionDuringEditing = YES;
     
 }
 
@@ -826,7 +827,7 @@ static UIViewController *parentController;
     self.gpxList = gpxArrNew;
     [_settings updateGpx:gpxFilesNew];
     
-    [self.gpxTableView setEditing:NO animated:YES];
+    [self.gpxTableView setEditing:NO animated:NO];
     _editActive = NO;
     [_selectedItems removeAllObjects];
     [_selectedIndexPaths removeAllObjects];
@@ -1087,6 +1088,15 @@ static UIViewController *parentController;
     else if (groupData.isOpen)
         return [groupData.groupItems count] + 1;
     return 1;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.gpxTableView.isEditing && [self.gpxTableView.indexPathsForSelectedRows containsObject:indexPath])
+    {
+        [cell setSelected:YES];
+        [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1451,7 +1461,9 @@ static UIViewController *parentController;
         NSInteger row = 1;
         for (NSDictionary *track in groupData.groupItems)
         {
-            if ([track[@"title"] isEqualToString:selectedItem[@"title"]])
+            OAGPX *gpx = track[@"track"];
+            OAGPX *selectedGpx = selectedItem[@"track"];
+            if ([gpx.gpxFilePath isEqualToString:selectedGpx.gpxFilePath])
             {
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
                 if (select)
@@ -1488,7 +1500,7 @@ static UIViewController *parentController;
         }
         if (select)
         {
-            if (numberOfSelectedRowsInSection == groupData.groupItems.count && !isGroupHeaderSelected)
+            if ((numberOfSelectedRowsInSection == groupData.groupItems.count && !isGroupHeaderSelected) || isGroupHeaderSelected)
             {
                 [self.gpxTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
                 [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:section]];

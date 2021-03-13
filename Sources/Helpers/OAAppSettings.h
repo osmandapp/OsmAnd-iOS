@@ -575,6 +575,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *transparentMapTheme;
 @property (nonatomic) OAProfileBoolean *showStreetName;
 @property (nonatomic) OAProfileBoolean *centerPositionOnMap;
+@property (nonatomic) OAProfileBoolean *showDistanceRuler;
 
 @property (assign, nonatomic) BOOL simulateRouting;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;

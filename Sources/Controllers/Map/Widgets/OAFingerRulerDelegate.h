@@ -7,15 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OARulerWidget.h"
+#import "OARulerByTapControlLayer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAFingerRulerDelegate : NSObject<CALayerDelegate>
 
-@property (nonatomic, strong) OARulerWidget *rulerWidget;
+@property (nonatomic, strong) OARulerByTapView *rulerByTapControl;
 
-- (id)initWithRulerWidget:(OARulerWidget *)widget;
+- (id)initWithRulerLayer:(OARulerByTapView *)rulerLayer;
 
 @end
 

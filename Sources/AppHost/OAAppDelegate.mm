@@ -158,7 +158,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self presentInCarPlay:_carPlayInterfaceController window:_windowToAttach];
                         _carPlayInterfaceController = nil;
-                        _window = nil;
+                        _windowToAttach = nil;
                     });
                 }
             }
@@ -369,7 +369,10 @@
 {
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     if (!mapVc)
+    {
         mapVc = [[OAMapViewController alloc] init];
+        [OARootViewController.instance.mapPanel setMapViewController:mapVc];
+    }
     
     _carPlayMapController = [[OACarPlayMapViewController alloc] initWithCarPlayWindow:window mapViewController:mapVc];
     

@@ -27,10 +27,14 @@
 #import "OARouteProvider.h"
 #import "OAMapActions.h"
 #import "OASelectedGPXHelper.h"
+#import "OAFoldersCell.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
-
+#define kFoldersCell @"OAFoldersCell"
+#define kAllFoldersKey @"kAllFoldersKey"
+#define kFolderKey @"kFolderKey"
+#define kAllFoldersIndex 0
 #define kVerticalMargin 16.
 #define kHorizontalMargin 16.
 #define kGPXCellTextLeftOffset 62.
@@ -41,7 +45,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOANameDescending
 };
 
-@interface OAOpenAddTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASegmentSelectionDelegate>
+@interface OAOpenAddTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASegmentSelectionDelegate, OAFoldersCellDelegate>
 
 @end
 
@@ -50,6 +54,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSArray<NSArray<NSDictionary *> *> *_data;
     EOASortingMode _sortingMode;
     EOAPlanningTrackScreenType _screenType;
+    int _selectedFolderIndex;
+    NSArray<NSString *> *_allFolders;
 }
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
@@ -59,9 +65,21 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     if (self)
     {
         _screenType = screenType;
+        [self commonInit];
         [self generateData];
     }
     return self;
+}
+
+- (void) commonInit
+{
+    _selectedFolderIndex = kAllFoldersIndex;
+    [self updateAllFoldersList];
+}
+
+- (void) updateAllFoldersList
+{
+    _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
 }
 
 - (void) viewDidLoad
@@ -71,6 +89,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     _sortingMode = EOAModifiedDate;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
     if (_screenType == EOAAddToATrack)
@@ -115,7 +134,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSMutableArray *data = [NSMutableArray new];
     NSMutableArray *existingTracksSection = [NSMutableArray new];
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *gpxList = [NSMutableArray arrayWithArray:[self sortData:db.gpxList]];
+    NSArray *filteredData = [self filterData:db.gpxList];
+    NSArray *gpxList = [NSMutableArray arrayWithArray:[self sortData:filteredData]];
+    
+    [existingTracksSection addObject:@{
+        @"type" : kFoldersCell,
+        @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
+        @"values" : [self getFoldersList]
+    }];
     
     [existingTracksSection addObject:@{
         @"type" : kCellTypeSegment,
@@ -153,6 +179,45 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
     [data addObject:existingTracksSection];
     _data = data;
+}
+
+- (NSArray<NSDictionary *> *) getFoldersList
+{
+    NSArray *folderNames = _allFolders;
+    
+    NSMutableArray *folderButtonsData = [NSMutableArray new];
+    [folderButtonsData addObject:@{
+        @"title" : OALocalizedString(@"shared_string_all"),
+        @"img" : @"",
+        @"type" : kAllFoldersKey}];
+    
+    for (int i = 0; i < folderNames.count; i++)
+    {
+        [folderButtonsData addObject:@{
+            @"title" : folderNames[i],
+            @"img" : @"ic_custom_folder",
+            @"type" : kFolderKey}];
+    }
+    return folderButtonsData;
+}
+
+- (NSArray *) filterData:(NSArray *)data
+{
+    if (_selectedFolderIndex == kAllFoldersIndex)
+    {
+        return data;
+    }
+    else
+    {
+        NSString *selectedFolderName = _allFolders[_selectedFolderIndex - 1];
+        if ([selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+            selectedFolderName = @"";
+        
+        return [data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {
+            NSString *folderName = object.gpxFilePath.stringByDeletingLastPathComponent;
+            return [folderName isEqualToString:selectedFolderName];
+        }]];
+    }
 }
 
 - (NSArray *) sortData:(NSArray *)data
@@ -226,9 +291,30 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
+            cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
             cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:kFoldersCell])
+    {
+        static NSString* const identifierCell = kFoldersCell;
+        OAFoldersCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAFoldersCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = UIColor.clearColor;
+            cell.collectionView.backgroundColor = UIColor.clearColor;
+        }
+        if (cell)
+        {
+            cell.delegate = self;
+            [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;
     }
@@ -335,6 +421,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     if (self.delegate)
         [self.delegate onSegmentSelected:position];
+}
+
+#pragma mark - OAFoldersCellDelegate
+
+- (void) onItemSelected:(int)index type:(NSString *)type
+{
+    _selectedFolderIndex = index;
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

@@ -86,6 +86,7 @@
 #define color_tint_gray 0xCBC7D1
 
 #define color_primary_purple 0x5714CC
+#define color_primary_purple_10 0x105714CC
 #define color_primary_purple_50 0x805714CC
 #define color_bottom_sheet_secondary 0xD8D5DD
 #define color_bottom_sheet_secondary_night 0x3F3D43

@@ -23,6 +23,13 @@
 #import "OALocationSimulation.h"
 #import "OACommonTypes.h"
 
+#define unitsKm OALocalizedString(@"units_km")
+#define unitsM OALocalizedString(@"units_m")
+#define unitsMi OALocalizedString(@"units_mi")
+#define unitsYd OALocalizedString(@"units_yd")
+#define unitsFt OALocalizedString(@"units_ft")
+#define unitsNm OALocalizedString(@"units_nm")
+
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,
     EOACarPlayButtonTypePanMap,
@@ -137,21 +144,19 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _isInRoutePreview = YES;
     
+    [self centerMapOnRoute];
     if (_delegate)
         [_delegate enterNavigationMode];
-    
-    [self centerMapOnRoute];
 }
 
 - (void)exitNavigationMode
 {
+    if (!_navigationSession)
+        return;
     _currentDirectionInfo = nil;
     [_navigationSession finishTrip];
     _navigationSession = nil;
     [self enterBrowsingState];
-    
-    if (_delegate)
-        [_delegate exitNavigationMode];
 }
 
 - (void) centerMapOnRoute
@@ -183,6 +188,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             case EOACarPlayButtonTypeCenterMap: {
                 if (_delegate)
                     [_delegate onCenterMapPressed];
+                break;
             }
             default:
                 break;
@@ -216,11 +222,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             case EOACarPlayButtonTypeDirections: {
                 OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
                 [directionsGrid present];
+                break;
             }
             case EOACarPlayButtonTypeCancelRoute: {
                 [self stopNavigation];
+                if (_delegate)
+                    [_delegate exitNavigationMode];
                 [_mapTemplate hideTripPreviews];
                 [self enterBrowsingState];
+                break;
             }
             default: {
                 break;
@@ -332,12 +342,16 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) routeWasCancelled
 {
-    [self exitNavigationMode];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self exitNavigationMode];
+    });
 }
 
 - (void) routeWasFinished
 {
-    [self exitNavigationMode];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self exitNavigationMode];
+    });
 }
 
 // MARK: - OARouteCalculationProgressCallback
@@ -378,7 +392,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (NSMeasurement<NSUnitLength *> *) getFormattedDistance:(int)meters
 {
     NSString *distString = [OsmAndApp.instance getFormattedDistance:meters];
-    
     NSArray<NSString *> *components = [distString componentsSeparatedByString:@" "];
     if (components.count == 2)
         return [[NSMeasurement alloc] initWithDoubleValue:components.firstObject.doubleValue unit:[self getUnitByString:components.lastObject]];
@@ -387,20 +400,20 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSUnitLength *) getUnitByString:(NSString *)unitStr
 {
-    if ([unitStr isEqualToString:@"m"])
+    if ([unitStr isEqualToString:unitsM])
         return NSUnitLength.meters;
-    else if ([unitStr isEqualToString:@"km"])
+    else if ([unitStr isEqualToString:unitsKm])
         return NSUnitLength.kilometers;
-    else if ([unitStr isEqualToString:@"mi"])
+    else if ([unitStr isEqualToString:unitsMi])
         return NSUnitLength.miles;
-    else if ([unitStr isEqualToString:@"yd"])
+    else if ([unitStr isEqualToString:unitsYd])
         return NSUnitLength.yards;
-    else if ([unitStr isEqualToString:@"ft"])
+    else if ([unitStr isEqualToString:unitsFt])
         return NSUnitLength.feet;
-    else if ([unitStr isEqualToString:@"nmi"])
+    else if ([unitStr isEqualToString:unitsNm])
         return NSUnitLength.nauticalMiles;
     
-    return nil;
+    return NSUnitLength.meters;
 }
 
 // MARK: Location service updates

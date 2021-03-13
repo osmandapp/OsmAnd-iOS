@@ -185,6 +185,7 @@
 #define autoSplitRecordingKey @"autoSplitRecording"
 
 #define rulerModeKey @"rulerMode"
+#define showDistanceRulerKey @"showDistanceRuler"
 
 #define osmUserNameKey @"osm_user_name"
 #define osmPasswordKey @"osm_pass"
@@ -2011,6 +2012,9 @@
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_showStreetName forKey:@"show_street_name"];
+        
+        _showDistanceRuler = [OAProfileBoolean withKey:showDistanceRulerKey defValue:NO];
+        [_registeredPreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
         
         _showArrivalTime = [OAProfileBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OAProfileBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];

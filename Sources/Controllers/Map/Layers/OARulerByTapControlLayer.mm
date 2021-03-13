@@ -54,15 +54,16 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
-    [self.app.data.mapLayersConfiguration setLayer:self.layerId
-                                        Visibility:self.isVisible];
-    if (self.isVisible)
-        [self.mapView addSubview:_rulerByTapView];
-    else
-        [_rulerByTapView removeFromSuperview];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [super updateLayer];
+        
+        [self.app.data.mapLayersConfiguration setLayer:self.layerId
+                                            Visibility:self.isVisible];
+        if (self.isVisible)
+            [self.mapView addSubview:_rulerByTapView];
+        else if (_rulerByTapView.superview)
+            [_rulerByTapView removeFromSuperview];
+    });
     return YES;
 }
 

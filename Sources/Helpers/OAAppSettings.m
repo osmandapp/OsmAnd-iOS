@@ -173,6 +173,7 @@
 #define gpxRouteCalcOsmandPartsKey @"gpxRouteCalcOsmandParts"
 #define gpxCalculateRteptKey @"gpxCalculateRtept"
 #define gpxRouteCalcKey @"gpxRouteCalc"
+#define gpxRouteSegmentKey @"gpxRouteSegment"
 
 #define simulateRoutingKey @"simulateRouting"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
@@ -2198,6 +2199,7 @@
         _gpxRouteCalcOsmandParts = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcOsmandPartsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcOsmandPartsKey] : YES;
         _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
         _gpxRouteCalc = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcKey] : NO;
+        _gpxRouteSegment = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteSegmentKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteSegmentKey] : -1;
 
         _voiceMute = [OAProfileBoolean withKey:voiceMuteKey defValue:NO];
         [_registeredPreferences setObject:_voiceMute forKey:@"voice_mute"];

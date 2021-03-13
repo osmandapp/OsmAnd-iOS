@@ -19,6 +19,7 @@
 #import "OASegmentTableViewCell.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OASaveTrackBottomSheetViewController.h"
+#import "OATrackSegmentsViewController.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OATargetPointsHelper.h"
@@ -40,7 +41,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOANameDescending
 };
 
-@interface OAOpenAddTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
+@interface OAOpenAddTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASegmentSelectionDelegate>
 
 @end
 
@@ -286,9 +287,20 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 [OAAppSettings.sharedManager showGpx:@[filePath]];
             }
             
-            [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:track];
-            [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
-            [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:track.gpxFilePath]];
+            if (doc.getNonEmptySegmentsCount > 1)
+            {
+                OATrackSegmentsViewController *trackSegments = [[OATrackSegmentsViewController alloc] initWithFile:doc];
+                trackSegments.delegate = self;
+                [self.navigationController pushViewController:trackSegments animated:YES];
+                return;
+            }
+            else
+            {
+                [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:track];
+                [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+                [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+            }
             
             if (self.delegate)
                 [self.delegate onFileSelected:filePath];
@@ -315,6 +327,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         [pathsToReload removeObjectAtIndex:0];
         [self.tableView reloadRowsAtIndexPaths:pathsToReload withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+}
+
+// MARK: OASegmentSelectionDelegate
+
+- (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+{
+    if (self.delegate)
+        [self.delegate onSegmentSelected:position];
 }
 
 @end

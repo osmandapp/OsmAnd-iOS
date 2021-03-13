@@ -29,7 +29,7 @@
 
 // calculated vars
 // after action (excluding expectedTime)
-@property (nonatomic) int afterLeftTime;
+@property (nonatomic) long afterLeftTime;
 // distance after action (for i.e. after turn to next turn)
 @property (nonatomic) int distance;
 
@@ -46,6 +46,6 @@
 - (NSString *) getDescriptionRoute:(int)collectedDistance;
 - (void) setDescriptionRoute:(NSString *)descriptionRoute;
 
-- (int) getExpectedTime;
+- (long) getExpectedTime;
 
 @end

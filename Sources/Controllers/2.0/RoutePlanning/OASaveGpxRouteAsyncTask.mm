@@ -155,7 +155,7 @@
                 NSArray<NSArray<OAGpxRtePt *> *> *routePoints = [_editingCtx getRoutePoints];
                 for (NSArray<OAGpxRtePt *> *points in routePoints)
                 {
-                    [gpx addRoutePoints:points];
+                    [gpx addRoutePoints:points addRoute:YES];
                 }
                 if (gpxPoints.count > 0)
                     [gpx addWpts:gpxPoints];

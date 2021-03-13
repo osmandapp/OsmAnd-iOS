@@ -977,6 +977,7 @@
             return UIColorFromARGB(color.argb);
         }
     }
+    return nil;
 }
 
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions
@@ -988,6 +989,7 @@
             return [e.value doubleValue];
         }
     }
+    return 0.;
 }
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly

@@ -87,6 +87,7 @@
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
+- (NSInteger) getNonEmptySegmentsCount;
 
 @end
 

@@ -31,6 +31,7 @@
 #import "OAMeasurementEditingContext.h"
 #import "OAGpxData.h"
 #import "OAGpxInfo.h"
+#import "OAGPXUIHelper.h"
 #import "OATargetPointsHelper.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
@@ -58,6 +59,8 @@
     OALocalRoutingParameter *_navigationType;
     
     OALocalRoutingParameter *_reverseParam;
+    
+    UINavigationController *_navigationController;
 }
 
 - (instancetype) initWithFile:(OAGPXDocument *)gpx
@@ -119,17 +122,37 @@
     if (fileName == nil || fileName.length == 0)
         fileName = OALocalizedString(@"track");
     
+    OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     OAGPX *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:fileName]];
     OsmAndAppInstance app = OsmAndApp.instance;
     
+    NSString *title = [fileName.lastPathComponent stringByDeletingPathExtension];
+    BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;
+    if (isSegment)
+    {
+        title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"some_of"), params.selectedSegment + 1, _gpx.getNonEmptySegmentsCount], title];
+    }
+    
+    NSString *distance = gpxData ? [app getFormattedDistance:gpxData.totalDistance] : @"";
+    NSString *time = gpxData ? [app getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
+    if (isSegment)
+    {
+        OAGpxTrkSeg *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegments:NO][params.selectedSegment] : nil;
+        if (seg)
+        {
+            distance = [app getFormattedDistance:[OAGPXUIHelper getSegmentDistance:seg]];
+            time = [app getFormattedTimeInterval:[OAGPXUIHelper getSegmentTime:seg] shortFormat:YES];
+        }
+    }
+    
     [data addObject:@[
         @{
             @"type" : kGPXTrackCell,
-            @"title" : gpxData ? [gpxData getNiceTitle] : fileName,
-            @"distance" : gpxData ? [app getFormattedDistance:gpxData.totalDistance] : @"",
-            @"time" : gpxData ? [app getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"",
-            @"wpt" : gpxData ? [NSString stringWithFormat:@"%d", gpxData.wptPoints] : @"",
+            @"title" : title,
+            @"distance" : distance,
+            @"time" : time,
+            @"wpt" : gpxData && !isSegment ? [NSString stringWithFormat:@"%d", gpxData.wptPoints] : @"",
             @"key" : @"gpx_route"
         },
         @{
@@ -219,7 +242,7 @@
         OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
         editingContext.gpxData = gpxData;
         editingContext.appMode = OARoutingHelper.sharedInstance.getAppMode;
-//        editingContext.setSelectedSegment(app.getSettings().GPX_ROUTE_SEGMENT.get());
+        editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment;
         [self dismissViewControllerAnimated:NO completion:^{
             [[OARootViewController instance].mapPanel closeRouteInfo];
             [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES]];
@@ -287,6 +310,9 @@
             [cell setRightButtonVisibility:YES];
             [cell.editButton addTarget:self action:@selector(openPlanRoute) forControlEvents:UIControlEventTouchUpInside];
             cell.editButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
         {
@@ -294,9 +320,10 @@
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
-            cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            
+            cell.distanceImageView.hidden = cell.distanceLabel.text.length == 0;
+            cell.timeImageView.hidden = cell.timeLabel.text.length == 0;
+            cell.wptImageView.hidden = cell.wptLabel.text.length == 0;
             
         }
         return cell;
@@ -416,18 +443,22 @@
     NSString *key = item[@"key"];
     if ([key isEqualToString:@"select_another"])
     {
+        _navigationController = [[UINavigationController alloc] init];
+        _navigationController.navigationBarHidden = YES;
         OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAFollowTrack];
         saveTrackViewController.delegate = self;
-        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+        [_navigationController setViewControllers:@[saveTrackViewController]];
+        [self presentViewController:_navigationController animated:YES completion:nil];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
         return;
     }
-    if ([key isEqualToString:@"gpx_route"])
+    else if ([key isEqualToString:@"gpx_route"])
     {
-//        [self openPlanRoute];
+        [self openPlanRoute];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
         return;
     }
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -459,8 +490,6 @@
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
     OAGPXDocument *document = OARoutingHelper.sharedInstance.getCurrentGPXRoute.file;
-//    [[OAGPXDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFilePath]];
-//    document.fileName = gpxFilePath;
     _gpx = document;
     
     [self generateData];
@@ -469,6 +498,28 @@
 
 - (void)closeBottomSheet
 {
+}
+
+- (void)onSegmentSelected:(NSInteger)position
+{
+    OAAppSettings.sharedManager.gpxRouteSegment = position;
+    
+    OAGPXRouteParamsBuilder *paramsBuilder = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
+    if (paramsBuilder)
+    {
+        [paramsBuilder setSelectedSegment:position];
+        NSArray<CLLocation *> *ps = [paramsBuilder getPoints];
+        if (ps.count > 0)
+        {
+            OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
+            [tg clearStartPoint:NO];
+            CLLocation *loc = ps.lastObject;
+            [tg navigateToPoint:loc updateRoute:true intermediate:-1];
+        }
+    }
+    
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

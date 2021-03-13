@@ -29,7 +29,7 @@
 
 @interface OARouteProvider()
 
-+ (NSArray<OARouteDirectionInfo *> *) parseOsmAndGPXRoute:(NSArray<CLLocation *> *)res gpxFile:(OAGPXDocument *)gpxFile osmandRouter:(BOOL)osmandRouter leftSide:(BOOL)leftSide defSpeed:(float)defSpeed;
++ (NSArray<OARouteDirectionInfo *> *) parseOsmAndGPXRoute:(NSArray<CLLocation *> *)res gpxFile:(OAGPXDocument *)gpxFile osmandRouter:(BOOL)osmandRouter leftSide:(BOOL)leftSide defSpeed:(float)defSpeed selectedSegment:(NSInteger)selectedSegment;
 
 @end
 
@@ -133,10 +133,11 @@
     {
         self.wpt = [NSArray arrayWithArray:file.locationMarks];
     }
+    NSInteger selectedSegment = builder.selectedSegment;
     if ([file isCloudmadeRouteFile] || [OSMAND_ROUTER isEqualToString:file.creator])
     {
         NSMutableArray<CLLocation *> *points = [NSMutableArray arrayWithArray:self.points];
-        self.directions = [OARouteProvider parseOsmAndGPXRoute:points gpxFile:file osmandRouter:[OSMAND_ROUTER isEqualToString:file.creator] leftSide:builder.leftSide defSpeed:10];
+        self.directions = [OARouteProvider parseOsmAndGPXRoute:points gpxFile:file osmandRouter:[OSMAND_ROUTER isEqualToString:file.creator] leftSide:builder.leftSide defSpeed:10 selectedSegment:selectedSegment];
         self.points = [NSArray arrayWithArray:points];
         if ([OSMAND_ROUTER isEqualToString:file.creator])
         {
@@ -159,8 +160,11 @@
         {
             for (OAGpxTrk *tr in file.tracks)
             {
-                for (OAGpxTrkSeg *tkSeg in tr.segments)
+                for (NSInteger i = 0; i < tr.segments.count; i++)
                 {
+                    if (selectedSegment != -1 && i != selectedSegment)
+                        continue;
+                    OAGpxTrkSeg *tkSeg = tr.segments[i];
                     for (OAGpxTrkPt *pt in tkSeg.points)
                     {
                         CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.elevation horizontalAccuracy:pt.horizontalDilutionOfPrecision verticalAccuracy:pt.verticalDilutionOfPrecision course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
@@ -282,7 +286,7 @@
     return nil;
 }
 
-+ (NSArray<OARouteDirectionInfo *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)res gpxFile:(OAGPXDocument *)gpxFile osmandRouter:(BOOL)osmandRouter leftSide:(BOOL)leftSide defSpeed:(float)defSpeed
++ (NSArray<OARouteDirectionInfo *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)res gpxFile:(OAGPXDocument *)gpxFile osmandRouter:(BOOL)osmandRouter leftSide:(BOOL)leftSide defSpeed:(float)defSpeed selectedSegment:(NSInteger)selectedSegment
 {
     NSMutableArray<OARouteDirectionInfo *> *directions = nil;
     if (!osmandRouter)
@@ -298,8 +302,11 @@
     {
         for (OAGpxTrk *tr in gpxFile.tracks)
         {
-            for (OAGpxTrkSeg *ts in tr.segments)
+            for (NSInteger i = 0; i < tr.segments.count; i++)
             {
+                if (selectedSegment != -1 && i != selectedSegment)
+                    continue;
+                OAGpxTrkSeg *ts = tr.segments[i];
                 for (OAGpxTrkPt *pt in ts.points)
                 {
                     CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.elevation horizontalAccuracy:pt.horizontalDilutionOfPrecision verticalAccuracy:pt.verticalDilutionOfPrecision course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];

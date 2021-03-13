@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 @property (nonatomic) BOOL inApproximationMode;
 
 @property (nonatomic) OAGpxData *gpxData;
+@property (nonatomic) NSInteger selectedSegment;
 
 @property (nonatomic) EOACalculationMode lastCalculationMode;
 

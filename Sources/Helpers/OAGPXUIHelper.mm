@@ -62,4 +62,34 @@
     return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }
 
++ (long) getSegmentTime:(OAGpxTrkSeg *)segment
+{
+    long startTime = LONG_MAX;
+    long endTime = LONG_MIN;
+    for (NSInteger i = 0; i < segment.points.count; i++)
+    {
+        OAGpxTrkPt *point = segment.points[i];
+        long time = point.time;
+        if (time != 0) {
+            startTime = MIN(startTime, time);
+            endTime = MAX(endTime, time);
+        }
+    }
+    return endTime - startTime;
+}
+
++ (double) getSegmentDistance:(OAGpxTrkSeg *)segment
+{
+    double distance = 0;
+    OAGpxTrkPt *prevPoint = nil;
+    for (NSInteger i = 0; i < segment.points.count; i++)
+    {
+        OAGpxTrkPt *point = segment.points[i];
+        if (prevPoint != nil)
+            distance += getDistance(prevPoint.getLatitude, prevPoint.getLongitude, point.getLatitude, point.getLongitude);
+        prevPoint = point;
+    }
+    return distance;
+}
+
 @end

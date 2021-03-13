@@ -5096,6 +5096,8 @@
 		DA5F21FD229551A300B0D7B6 /* ic_custom_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5F21E0229551A300B0D7B6 /* ic_custom_user@2x.png */; };
 		DA5F21FE229551A300B0D7B6 /* ic_custom_user@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5F21E1229551A300B0D7B6 /* ic_custom_user@3x.png */; };
 		DA5F21FF229551A300B0D7B6 /* ic_custom_user@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5F21E1229551A300B0D7B6 /* ic_custom_user@3x.png */; };
+		DA5F57EB25F90A2D00652C2D /* OATrackSegmentsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5F57E925F90A2D00652C2D /* OATrackSegmentsViewController.mm */; };
+		DA5F57EC25F90A2D00652C2D /* OATrackSegmentsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5F57E925F90A2D00652C2D /* OATrackSegmentsViewController.mm */; };
 		DA5F6A0D245844A100C7DF71 /* map_public_transport_stop_shield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5F6A072458449F00C7DF71 /* map_public_transport_stop_shield@2x.png */; };
 		DA5F6A0E245844A100C7DF71 /* map_public_transport_stop_shield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5F6A072458449F00C7DF71 /* map_public_transport_stop_shield@2x.png */; };
 		DA5F6A0F245844A100C7DF71 /* map_public_transport_transfer.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5F6A08245844A000C7DF71 /* map_public_transport_transfer.png */; };
@@ -10023,6 +10025,8 @@
 		DA5F21DF229551A300B0D7B6 /* ic_custom_mapillary_symbol@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_mapillary_symbol@3x.png"; path = "Resources/Icons/ic_custom_mapillary_symbol@3x.png"; sourceTree = "<group>"; };
 		DA5F21E0229551A300B0D7B6 /* ic_custom_user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user@2x.png"; path = "Resources/Icons/ic_custom_user@2x.png"; sourceTree = "<group>"; };
 		DA5F21E1229551A300B0D7B6 /* ic_custom_user@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user@3x.png"; path = "Resources/Icons/ic_custom_user@3x.png"; sourceTree = "<group>"; };
+		DA5F57E925F90A2D00652C2D /* OATrackSegmentsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackSegmentsViewController.mm; sourceTree = "<group>"; };
+		DA5F57EA25F90A2D00652C2D /* OATrackSegmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATrackSegmentsViewController.h; sourceTree = "<group>"; };
 		DA5F6A072458449F00C7DF71 /* map_public_transport_stop_shield@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_public_transport_stop_shield@2x.png"; path = "Resources/Icons/map_public_transport_stop_shield@2x.png"; sourceTree = "<group>"; };
 		DA5F6A08245844A000C7DF71 /* map_public_transport_transfer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_public_transport_transfer.png; path = Resources/Icons/map_public_transport_transfer.png; sourceTree = "<group>"; };
 		DA5F6A09245844A000C7DF71 /* map_public_transport_transfer@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_public_transport_transfer@3x.png"; path = "Resources/Icons/map_public_transport_transfer@3x.png"; sourceTree = "<group>"; };
@@ -16227,6 +16231,8 @@
 		DA68B408233B925C00F5ACCC /* RouteInfoBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				DA5F57EA25F90A2D00652C2D /* OATrackSegmentsViewController.h */,
+				DA5F57E925F90A2D00652C2D /* OATrackSegmentsViewController.mm */,
 				DA22DC9725C413440070FFCA /* OAFollowTrackBottomSheetViewController.h */,
 				DA22DC9825C413440070FFCA /* OAFollowTrackBottomSheetViewController.mm */,
 				DA68B40A233B92D500F5ACCC /* OAAddDestinationBottomSheetViewController.h */,
@@ -21969,6 +21975,7 @@
 				847A1CB61DF94E9B003C1246 /* OAOcbfHelper.m in Sources */,
 				787AC306242A39D10007944C /* OAImageDescTableViewCell.m in Sources */,
 				32ADB41F25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */,
+				DA5F57EC25F90A2D00652C2D /* OATrackSegmentsViewController.mm in Sources */,
 				84354D601F06A1C70046F2CE /* OAAlarmInfo.mm in Sources */,
 				8A3F030121C7C1600043797E /* OAOsmLivePlansCardView.m in Sources */,
 				DA2558B824ADE40F0081D155 /* OASettingsModalPresentationViewController.m in Sources */,
@@ -23335,6 +23342,7 @@
 				155AC6B125387B9B00703073 /* OABaseSettingsWithBottomButtonsViewController.mm in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				DAFCB01023A90BC500CFBA58 /* OARouteDetailsViewController.mm in Sources */,
+				DA5F57EB25F90A2D00652C2D /* OATrackSegmentsViewController.mm in Sources */,
 				DAD228A02410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */,
 				15BECC70249BEB6100B36DC0 /* OALocationIconsTableViewCell.m in Sources */,
 				84185A7F1AA99ABE00F70328 /* OAIAPHelper.mm in Sources */,

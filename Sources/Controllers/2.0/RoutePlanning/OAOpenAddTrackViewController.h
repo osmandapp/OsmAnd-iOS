@@ -19,6 +19,10 @@ typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
 - (void) closeBottomSheet;
 - (void) onFileSelected:(NSString *)gpxFilePath;
 
+@optional
+
+- (void) onSegmentSelected:(NSInteger)position;
+
 @end
 
 @interface OAOpenAddTrackViewController : OABaseTableViewController

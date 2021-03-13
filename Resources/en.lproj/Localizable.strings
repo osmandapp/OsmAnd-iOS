@@ -920,6 +920,10 @@
 "plan_route_select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add a new one";
 "add_folder" = "Add folder";
+"select_segment" = "Select segment";
+"track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
+"segnet_num" = "Segment %ld";
+"some_of" = "%ld of %ld";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

@@ -76,6 +76,7 @@ struct PrecalculatedRouteDirection;
 @property (nonatomic) BOOL passWholeRoute;
 @property (nonatomic) BOOL calculateOsmAndRouteParts;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
+@property (nonatomic) NSInteger selectedSegment;
 
 - (instancetype)initWithDoc:(OAGPXDocument *)document;
 

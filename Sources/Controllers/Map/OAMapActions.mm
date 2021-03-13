@@ -118,6 +118,7 @@
         [params setCalculateOsmAndRouteParts:_settings.gpxRouteCalcOsmandParts];
         [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept];
         [params setCalculateOsmAndRoute:_settings.gpxRouteCalc];
+        [params setSelectedSegment:_settings.gpxRouteSegment];
         NSArray<CLLocation *> *ps = [params getPoints];
         [_routingHelper setGpxParams:params];
         _settings.followTheGpxRoute = path;

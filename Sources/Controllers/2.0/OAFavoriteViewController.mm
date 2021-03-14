@@ -154,6 +154,7 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     [settings setShowFavorites:YES];
     self.titleGradient.frame = self.navBar.frame;
+    self.deleteButton.hidden = YES;
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

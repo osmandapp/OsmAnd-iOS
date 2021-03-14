@@ -56,7 +56,9 @@
                 <outlet property="fieldLabel" destination="HJO-D1-QOG" id="6vY-Qm-aBq"/>
                 <outlet property="fieldLabelLeadingConstraint" destination="erZ-0L-Evh" id="v4b-83-bCL"/>
                 <outlet property="textField" destination="trV-3d-Z8h" id="kid-Ny-tBs"/>
+                <outlet property="textFieldBottomConstraint" destination="3dK-mq-pMT" id="oKW-49-wnC"/>
                 <outlet property="textFieldLeadingConstraint" destination="sJa-Fr-o1n" id="ICb-FO-aow"/>
+                <outlet property="textFieldTopConstraint" destination="v30-1N-8p6" id="QsJ-Bp-zAs"/>
                 <outlet property="textLabel" destination="HJO-D1-QOG" id="llV-Hh-FWc"/>
             </connections>
             <point key="canvasLocation" x="30.399999999999999" y="1.7991004497751126"/>

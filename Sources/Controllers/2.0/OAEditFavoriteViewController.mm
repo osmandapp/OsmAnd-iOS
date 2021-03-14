@@ -37,13 +37,22 @@
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
 
+#define kNameKey @"kNameKey"
+#define kDescKey @"kDescKey"
+#define kAddressKey @"kAddressKeyd"
 #define kIconsKey @"kIconsKey"
 #define kBackgroundsKey @"kBackgroundsKey"
 #define kSelectGroupKey @"kSelectGroupKey"
 #define kReplaceKey @"kReplaceKey"
 #define kDeleteKey @"kDeleteKey"
 
-@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, OAEditGroupViewControllerDelegate>
+#define kVerticalMargin 8.
+#define kSideMargin 20.
+#define kEmptyTextCellHeight 48.
+#define kTextCellTopMargin 18.
+#define kTextCellBottomMargin 17.
+
+@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, OAEditGroupViewControllerDelegate, MDCMultilineTextInputLayoutDelegate>
 
 @end
 
@@ -66,6 +75,7 @@
     int _selectedIconIndex;
     int _selectedColorIndex;
     int _selectedBackgroundIndex;
+    NSString *_editingTextFieldKey;;
 }
 
 - (id) initWithItem:(OAFavoriteItem *)favorite
@@ -157,6 +167,7 @@
 - (void) commonInit
 {
     _wasChanged = NO;
+    _editingTextFieldKey = @"";
     [self setupColors];
     [self setupIcons];
     [self generateData];
@@ -248,24 +259,24 @@
     
     NSMutableArray *section = [NSMutableArray new];
     [section addObject:@{
-        @"header" : OALocalizedString(@"name_and_descr").upperCase,
-        @"type" : kTextFieldCell,
+        @"type" : kTextInputFloatingCellWithIcon,
         @"title" : self.name,
-        @"placeholder" : OALocalizedString(@"fav_name"),
-        @"selector" : @"editName:"
+        @"hint" : OALocalizedString(@"fav_name"),
+        @"key" : kNameKey
     }];
     [section addObject:@{
-        @"type" : kTextFieldCell,
+        @"type" : kTextInputFloatingCellWithIcon,
         @"title" : self.desc,
-        @"placeholder" : OALocalizedString(@"description"),
-        @"selector" : @"editDescription:"
+        @"hint" : OALocalizedString(@"description"),
+        @"key" : kDescKey
     }];
     [section addObject:@{
-        @"type" : kTextFieldCell,
+        @"type" : kTextInputFloatingCellWithIcon,
         @"title" : self.address,
-        @"placeholder" : OALocalizedString(@"shared_string_address"),
-        @"selector" : @"editAddress:"
+        @"hint" : OALocalizedString(@"shared_string_address"),
+        @"key" : kAddressKey
     }];
+    
     [data addObject:[NSArray arrayWithArray:section]];
     
     section = [NSMutableArray new];
@@ -560,6 +571,38 @@
     [_app saveFavoritesToPermamentStorage];
 }
 
+-(void) clearButtonPressed:(UIButton *)sender
+{
+    NSIndexPath *indexPath = [self indexPathForCellContainingView:sender inTableView:self.tableView];
+    OATextInputFloatingCellWithIcon *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [self.tableView beginUpdates];
+    
+    cell.textField.text = @"";
+    
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *key = item[@"key"];
+    if ([key isEqualToString:kNameKey])
+        self.name = @"";
+    else if ([key isEqualToString:kDescKey])
+        self.desc = @"";
+    else if ([key isEqualToString:kAddressKey])
+        self.address = @"";
+
+    cell.fieldLabel.hidden = YES;
+    cell.textFieldTopConstraint.constant = 0;
+    cell.textFieldBottomConstraint.constant = 0;
+    
+    [self generateData];
+    [self.tableView endUpdates];
+}
+
+- (NSIndexPath *)indexPathForCellContainingView:(UIView *)view inTableView:(UITableView *)tableView
+{
+    CGPoint viewCenterRelativeToTableview = [tableView convertPoint:CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds)) fromView:view];
+    NSIndexPath *cellIndexPath = [tableView indexPathForRowAtPoint:viewCenterRelativeToTableview];
+    return cellIndexPath;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -577,29 +620,53 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([item[@"type"] isEqualToString:kTextFieldCell])
+    if ([cellType isEqualToString:kTextInputFloatingCellWithIcon])
     {
-        OATextViewTableViewCell* cell;
-        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kTextFieldCell];
-        if (cell == nil)
+        OATextInputFloatingCellWithIcon *resultCell = nil;
+        resultCell = [self.tableView dequeueReusableCellWithIdentifier:kTextInputFloatingCellWithIcon];
+        if (resultCell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
-            cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsZero;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputFloatingCellWithIcon owner:self options:nil];
+            resultCell = (OATextInputFloatingCellWithIcon *)[nib objectAtIndex:0];
+            resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        if (cell)
+        resultCell.fieldLabel.text = item[@"hint"];
+        MDCMultilineTextField *textField = resultCell.textField;
+        textField.underline.hidden = YES;
+        textField.textView.autocorrectionType = UITextAutocorrectionTypeNo;
+        textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        textField.placeholder = @"";
+        [textField.textView setText:item[@"title"]];
+        
+        textField.textView.delegate = self;
+        textField.layoutDelegate = self;
+        [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+        textField.font = [UIFont systemFontOfSize:17.0];
+        textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+        [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+        resultCell.buttonView.hidden = YES;
+        resultCell.fieldLabelLeadingConstraint.constant = 0;
+        resultCell.textFieldLeadingConstraint.constant = 0;
+        
+        textField.placeholder = item[@"hint"];
+        resultCell.separatorInset = UIEdgeInsetsZero;
+        
+        if (((NSString *)item[@"title"]).length == 0)
         {
-            [cell.textView setText:item[@"title"]];
-            [cell.textView setPlaceholder:item[@"placeholder"]];
-            [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.textView addTarget:self action:NSSelectorFromString(item[@"selector"]) forControlEvents:UIControlEventEditingChanged];
-            [cell.textView setDelegate:self];
-            
-            cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
-            cell.backgroundColor = UIColorFromRGB(0xffffff);
-            return cell;
+            resultCell.fieldLabel.hidden = YES;
+            resultCell.textFieldTopConstraint.constant = 0;
+            resultCell.textFieldBottomConstraint.constant = 0;
         }
+        else
+        {
+            resultCell.fieldLabel.hidden = NO;
+            resultCell.textFieldTopConstraint.constant = kTextCellTopMargin;
+            resultCell.textFieldBottomConstraint.constant = kTextCellBottomMargin;
+        }
+        
+        return resultCell;
     }
     else if ([cellType isEqualToString:kCellTypeTitle])
     {
@@ -733,7 +800,13 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *key = item[@"key"];
     
-    if ([key isEqualToString:kSelectGroupKey])
+    if ([key isEqualToString:kNameKey] || [key isEqualToString:kDescKey] || [key isEqualToString:kAddressKey])
+    {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        if ([cell canBecomeFirstResponder])
+            [cell becomeFirstResponder];
+    }
+    else if ([key isEqualToString:kSelectGroupKey])
     {
         _groupController = [[OAEditGroupViewController alloc] initWithGroupName:[self getItemGroup] groups:[self getItemGroups]];
         _groupController.delegate = self;
@@ -749,12 +822,108 @@
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class])
+    {
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        NSString *key = item[@"key"];
+        NSString *text;
+        if ([key isEqualToString:kNameKey])
+            text = self.name;
+        else if ([key isEqualToString:kDescKey])
+            text = self.desc;
+        else if ([key isEqualToString:kAddressKey])
+            text = self.address;
+        
+        if (text.length == 0)
+            return kEmptyTextCellHeight;
+        else
+        {
+            CGFloat cellSideMargin = kSideMargin;
+            CGFloat labelWidth = [OAUtilities calculateScreenWidth] - 2 * cellSideMargin - 2 * [OAUtilities getLeftMargin];
+            if ([key isEqualToString:_editingTextFieldKey])
+                labelWidth -= kSideMargin;
+            
+            CGSize textBounds = [OAUtilities calculateTextBounds:text width:labelWidth font:[UIFont systemFontOfSize:17]];
+            return textBounds.height + kTextCellTopMargin + kTextCellBottomMargin + kVerticalMargin;
+        }
+    }
+    
+    return UITableViewAutomaticDimension;
+}
+
+#pragma mark - UITextViewDelegate
+- (void) textChanged:(UITextView * _Nonnull)textView userInput:(BOOL)userInput
+{
+    _wasChanged = YES;
+    NSIndexPath *indexPath = [self indexPathForCellContainingView:textView inTableView:self.tableView];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *key = item[@"key"];
+    if ([key isEqualToString:kNameKey])
+        self.name = textView.text;
+    else if ([key isEqualToString:kDescKey])
+        self.desc = textView.text;
+    else if ([key isEqualToString:kAddressKey])
+        self.address = textView.text;
+    
+    [self.tableView beginUpdates];
+    OATextInputFloatingCellWithIcon *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if (textView.text.length == 0)
+    {
+        cell.fieldLabel.hidden = YES;
+        cell.textFieldTopConstraint.constant = 0;
+        cell.textFieldBottomConstraint.constant = 0;
+    }
+    else
+    {
+        cell.fieldLabel.hidden = NO;
+        cell.textFieldTopConstraint.constant = kTextCellTopMargin;
+        cell.textFieldBottomConstraint.constant = kTextCellBottomMargin;
+    }
+    [self generateData];
+    [self.tableView endUpdates];
+}
+
+-(void)textViewDidChange:(UITextView *)textView
+{
+    [self textChanged:textView userInput:YES];
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    NSIndexPath *indexPath = [self indexPathForCellContainingView:textView inTableView:self.tableView];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *key = item[@"key"];
+    _editingTextFieldKey = key;
+    
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    _editingTextFieldKey = @"";
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL) textFieldShouldReturn:(UITextField *)sender
 {
     [sender resignFirstResponder];
     return YES;
+}
+
+
+#pragma mark - MDCMultilineTextInputLayoutDelegate
+- (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
+      didChangeContentSize:(CGSize)size
+{
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 #pragma mark - OAPoiTableViewCellDelegate

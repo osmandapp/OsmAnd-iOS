@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet MDCMultilineTextField *textField;
 @property (weak, nonatomic) IBOutlet UILabel *fieldLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textFieldLeadingConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textFieldTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textFieldBottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *fieldLabelLeadingConstraint;
 
 @end

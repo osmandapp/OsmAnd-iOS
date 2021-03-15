@@ -1995,3 +1995,5 @@
 "visible" = "Sýnilegt";
 "hide_compass_ruler" = "Fela áttavitastiku";
 "show_compass_ruler" = "Birta áttavitastiku";
+"map_markers_empty" = "Þú ert ekki með nein virk kortamerki";
+"address_search" = "Leita að heimilisfangi";

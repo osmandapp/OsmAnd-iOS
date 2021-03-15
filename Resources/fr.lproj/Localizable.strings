@@ -1885,3 +1885,4 @@
 "attach_to_the_roads" = "Déplacer sur les routes";
 "join_segments" = "Joindre les segments";
 "address_search" = "Rechercher une adresse";
+"map_widget_distance_by_tap" = "Distance par appui";

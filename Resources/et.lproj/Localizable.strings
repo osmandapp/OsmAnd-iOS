@@ -322,8 +322,8 @@
 "si_min_km" = "Minutit kilomeetri kohta";
 "si_min_m" = "Minutit miili kohta";
 "si_nm_h" = "Meremiili tunnis (sõlm)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
+"nm" = "M";
+"nm_h" = "sõlme";
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
@@ -536,7 +536,7 @@
 "sett_arr" = "Kaardi nooled";
 "sett_arr_loc" = "Asukoht";
 "sett_arr_map" = "Kaardi keskkoht";
-"short_location_on_map" = "Lat %@ Lon %@";
+"short_location_on_map" = "Lai %@ Pik %@";
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
@@ -545,7 +545,7 @@
 "utm_description" = "OsmAnd kasutab UTM standardvormingut, mis on sarnane, kuid mitte identne UTM NATO vorminguga.";
 "coordinates_copy_descr" = "Puuduta koordinaatide lõikelauale kopeerimiseks.";
 "sett_lang_local" = "Kohalik";
-"sett_lang_trans" = "translit";
+"sett_lang_trans" = "transliteratsioon";
 "sett_pref_lang" = "Eelistatud keel";
 "sett_lang_show_local" = "Kuva kohalikud nimed";
 "sett_lang_show_trans" = "Translitereeri nimed";
@@ -1927,7 +1927,7 @@
 "selected_seg_recalc_descr" = "Vaid valitud lõik arvutatakse valitud profiili alusel ümber";
 "next_segs_recalc_descr" = "Kõik järgnevad lõigud arvutatakse valitud profiili alusel ümber";
 "personal_category_name" = "Isiklik";
-"whole_track" = "Terve teekond";
+"whole_track" = "Kogu teekond";
 "ios_release_3_90" = "• Tutvustasime funktsiooni \"Teekonna planeerimine\", et kavandada tuleviku teekondi. See lubab luua teekonna segmente kasutades erinevat tüüpi navigeerimist\n• Lisatud võimalus lubada kompass tööriistale \"Radiaaljoonlaud\"\n• Lisatud võimalus \"Huvipunktide siltide ülekate\", mis lubab kuvada lemmikuid, teekonna kontrollpunkte ja markereid kaardil\n• Lisatud uued kiirtegevused kontuurjoonte kuvamisele ja maastikule kaardil, rakenduse profiili muutmine ja lähima vahepunkti kustutamine\n• Parandati probleemid puuduva Wikipeedia otsingukategooriaga\n• Seadete importimine: parandati vigu, lisati kõigi OsmAnd toetatud andmetüüpide tugi\n• OpenStreetMap'i muutmine: parandati aja valija ja taastatai muudatuse kommentaari kohendamine\n";
 "ios_release_3_80" = "• Tutvustasime sõltumatute seadetega rakenduse profiile\n• Seadete uus paigutus profiilide ja tüüpide järgi: navigeerimine, üldine, kaart ja ekraan\n• Võimalus profiili seadeid importida või eksportida\n• Lisatud veebialaste fotode andmeallikaid\n• Lisatud võimalus veebikaarte vahemällu alla laadida\n• Täiustatud otsingu algoritme\n";
 "shared_string_max" = "Maks.";
@@ -1984,7 +1984,7 @@
 "start_of_track" = "Teekonna algus";
 "reverse_track_dir" = "Vaheta teekonna suund";
 "select_another_track" = "Vali muu teekond";
-"follow_track" = "Jälgi teekonda";
+"follow_track" = "Järgi teekonda";
 "route_between_points_add_track_desc" = "Vali teekonna fail, millele lisatada uus segment.";
 "plan_route_open_existing_track" = "Ava olemasolev teekond";
 "open_saved_track" = "Ava salvestatud teekond";
@@ -2001,3 +2001,4 @@
 "street_level_imagery" = "Tänavataseme vaated";
 "hide_compass_ruler" = "Peida kompassi joonlaud";
 "show_compass_ruler" = "Kuva kompassi joonlaud";
+"map_widget_distance_by_tap" = "Kaugus toksamise järgi";

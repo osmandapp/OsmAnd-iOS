@@ -1718,7 +1718,9 @@ static const NSInteger _buttonsCount = 4;
             
             OAFavoriteViewController *favoriteController = (OAFavoriteViewController *)self.customController;
             UIImage *icon = [favoriteController getIcon];
-            _favoriteImagePoiView.image = icon ? icon : _targetPoint.icon;
+            icon = icon ? icon : _targetPoint.icon;
+            _favoriteImagePoiView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            _favoriteImagePoiView.tintColor = UIColor.whiteColor;
             
             UIImage *backgroundIcon = [favoriteController getBackgroundIcon];
             _favoriteImageBackgroundView.image = [backgroundIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

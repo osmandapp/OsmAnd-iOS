@@ -52,6 +52,8 @@
 #define kEmptyTextCellHeight 48.
 #define kTextCellTopMargin 18.
 #define kTextCellBottomMargin 17.
+#define kCategoryCellIndex 0
+#define kPoiCellIndex 1
 
 @interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, OAEditGroupViewControllerDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate>
 
@@ -73,7 +75,7 @@
     
     OAFavoriteColor *_selectedColor;
     NSString *_selectedIconCategoryName;
-    int _selectedIconIndex;
+    NSString *_selectedIconName;
     int _selectedColorIndex;
     int _selectedBackgroundIndex;
     NSString *_editingTextFieldKey;;
@@ -156,7 +158,7 @@
         self.groupColor = [self.favorite getColor];
         
         _selectedIconCategoryName = @"special";
-        _selectedIconIndex = 0;
+        _selectedIconName = @"special_star";
         _selectedColorIndex = 0;
         _selectedBackgroundIndex = 0;
         
@@ -199,7 +201,7 @@
                     int index = (int)[icons indexOfObject:loadedPoiIconName];
                     if (index != -1)
                     {
-                        _selectedIconIndex = index;
+                        _selectedIconName = loadedPoiIconName;
                         _selectedIconCategoryName = categoryName;
                     }
                 }
@@ -207,11 +209,22 @@
         }
     }
     
-    _poiCategories = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
+    NSArray *categories = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
+    NSMutableArray *categoriesData = [NSMutableArray new];
+    for (NSString *category in categories)
+    {
+        [categoriesData addObject: @{
+            @"title" : OALocalizedString(category),
+            @"categoryName" : category,
+            @"img" : @"",
+        }];
+    }
+    _poiCategories = [NSArray arrayWithArray:categoriesData];
     
-    if (_selectedIconIndex == -1)
-        _selectedIconIndex = 0;
-    if (!_selectedIconCategoryName)
+    if (!_selectedIconName || _selectedIconName.length == 0)
+        _selectedIconName = @"special_star";
+    
+    if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
         _selectedIconCategoryName = @"special";
         
     _backgroundIcons = @[@"bg_point_circle",
@@ -248,7 +261,7 @@
     _headerIconBackground.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _headerIconBackground.tintColor = _selectedColor.color;
 
-    NSString *poiIconName = [NSString stringWithFormat:@"mm_%@", _poiIcons[_selectedIconCategoryName][_selectedIconIndex]];
+    NSString *poiIconName = [NSString stringWithFormat:@"mm_%@", _selectedIconName];
     UIImage *poiIcon = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:poiIconName]]];
     _headerIconPoi.image = [poiIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _headerIconPoi.tintColor = UIColor.whiteColor;
@@ -296,8 +309,10 @@
         @"type" : kCellTypePoiCollection,
         @"title" : OALocalizedString(@"icon"),
         @"value" : @"",
-        @"index" : [NSNumber numberWithInt:_selectedIconIndex],
-        @"data" : _poiIcons[_selectedIconCategoryName],
+        @"selectedCategoryName" : _selectedIconCategoryName,
+        @"categotyData" : _poiCategories,
+        @"selectedIconName" : _selectedIconName,
+        @"poiData" : _poiIcons[_selectedIconCategoryName],
         @"key" : kIconsKey
     }];
     [section addObject:@{
@@ -504,7 +519,7 @@
         [self setItemName:self.name];
         [self setItemDesc:self.desc ? self.desc : @""];
         [self setItemAddress:self.address ? self.address : @""];
-        [self setItemIcon:_poiIcons[_selectedIconCategoryName][_selectedIconIndex]];
+        [self setItemIcon:_selectedIconName];
         [self setItemColor:_selectedColor.color];
         [self setItemBackground:_backgroundIconNames[_selectedBackgroundIndex]];
         [self saveItemToStorage];
@@ -706,12 +721,15 @@
         }
         if (cell)
         {
-            int selectedIndex = [item[@"index"] intValue];
-            cell.dataArray = item[@"data"];
+            cell.categoriesCollectionView.tag = kCategoryCellIndex;
+            cell.currentCategory = item[@"selectedCategoryName"];
+            cell.catagoryDataArray = item[@"categotyData"];
+            
+            cell.collectionView.tag = kPoiCellIndex;
+            cell.poiDataArray = item[@"poiData"];
             cell.titleLabel.text = item[@"title"];
             cell.currentColor = _colors[_selectedColorIndex].intValue;
-            cell.currentIcon = selectedIndex;
-            [cell.collectionView reloadData];
+            cell.currentIcon = item[@"selectedIconName"];
             [cell layoutIfNeeded];
         }
         return cell;
@@ -931,10 +949,18 @@
 
 #pragma mark - OAPoiTableViewCellDelegate
 
-- (void)poiChanged:(NSInteger)tag
+- (void) onPoiCategorySelected:(NSString *)category
+{
+    _selectedIconCategoryName = category;
+    [self generateData];
+    [self.tableView reloadData];
+    [self.tableView layoutSubviews];
+}
+
+- (void) onPoiSelected:(NSString *)poiName;
 {
     _wasChanged = YES;
-    _selectedIconIndex = tag;
+    _selectedIconName = poiName;
     [self updateHeaderIcon];
     [self generateData];
     [self.tableView reloadData];

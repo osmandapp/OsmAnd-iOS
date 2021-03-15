@@ -10,7 +10,8 @@
 
 @protocol OAPoiTableViewCellDelegate <NSObject>
 
-- (void)poiChanged:(NSInteger)tag;
+- (void) onPoiCategorySelected:(NSString *)category;
+- (void) onPoiSelected:(NSString *)poiName;
 
 @end
 
@@ -20,10 +21,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
+@property (weak, nonatomic) IBOutlet UICollectionView *categoriesCollectionView;
 
-@property (nonatomic) NSArray *dataArray;
+@property (nonatomic) NSArray *poiDataArray;
 @property (nonatomic) NSInteger currentColor;
-@property (nonatomic) NSInteger currentIcon;
+@property (nonatomic) NSString *currentIcon;
+@property (nonatomic) NSArray *catagoryDataArray;
+@property (nonatomic) NSString *currentCategory;
 
 @property (nonatomic, weak) id<OAPoiTableViewCellDelegate> delegate;
 

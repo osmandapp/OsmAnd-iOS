@@ -2121,6 +2121,15 @@
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 
+"amenity" = "Amenity";
+"emergency" = "Emergency";
+"service" = "Service";
+"special" = "Special";
+"sport" = "Sport";
+"symbols" = "Symbols";
+"transport" = "Transport";
+"travel" = "Travel";
+
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";
 "app_mode_car" = "Driving";

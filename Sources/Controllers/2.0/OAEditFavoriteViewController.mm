@@ -22,6 +22,8 @@
 #import "OAPoiTableViewCell.h"
 #import "OAEditGroupViewController.h"
 #import "OAReplaceFavoriteViewController.h"
+#import "OAFolderCardsCell.h"
+#import "OAFavoritesHelper.h"
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
 
@@ -37,6 +39,7 @@
 #define kCellTypeColorCollection @"colorCollectionCell"
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
+#define kFolderCardsCell @"OAFolderCardsCell"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -55,7 +58,7 @@
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
 
-@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, OAEditGroupViewControllerDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate>
+@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, OAEditGroupViewControllerDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate>
 
 @end
 
@@ -73,6 +76,8 @@
     NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
     
+    NSArray<NSString *> *_groupNames;
+    NSArray<NSNumber *> *_groupSizes;
     OAFavoriteColor *_selectedColor;
     NSString *_selectedIconCategoryName;
     NSString *_selectedIconName;
@@ -171,9 +176,30 @@
 {
     _wasChanged = NO;
     _editingTextFieldKey = @"";
+    [self setupGroups];
     [self setupColors];
     [self setupIcons];
     [self generateData];
+}
+
+- (void) setupGroups
+{
+    NSMutableArray *names = [NSMutableArray new];
+    NSMutableArray *sizes = [NSMutableArray new];
+    const auto allFavorites = _app.favoritesCollection->getFavoriteLocations();
+    NSArray<OAFavoriteGroup *> *allGroups = [NSMutableArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
+    
+    for (OAFavoriteGroup *group in allGroups)
+    {
+        NSString *name = group.name;
+        if ([name isEqualToString:@""])
+            name = OALocalizedString(@"favorites");
+        
+        [names addObject:name];
+        [sizes addObject:[NSNumber numberWithInt:group.points.count]];
+    }
+    _groupNames = [NSArray arrayWithArray:names];
+    _groupSizes = [NSArray arrayWithArray:sizes];
 }
 
 - (void) setupIcons
@@ -298,9 +324,21 @@
         @"header" : OALocalizedString(@"group"),
         @"type" : kCellTypeTitle,
         @"title" : OALocalizedString(@"select_group"),
-        @"value" : [self getGroupTitle],
+        @"value" : self.groupTitle,
         @"key" : kSelectGroupKey
     }];
+    
+    int selectedGroupIndex = [_groupNames indexOfObject:self.groupTitle];
+    if (selectedGroupIndex < 0)
+        selectedGroupIndex = 0;
+    [section addObject:@{
+        @"type" : kFolderCardsCell,
+        @"selectedValue" : [NSNumber numberWithInt:selectedGroupIndex],
+        @"values" : _groupNames,
+        @"sizes" : _groupSizes,
+        @"addButtonTitle" : OALocalizedString(@"fav_add_group")
+    }];
+    
     [data addObject:[NSArray arrayWithArray:section]];
     
     section = [NSMutableArray new];
@@ -522,6 +560,10 @@
         [self setItemIcon:_selectedIconName];
         [self setItemColor:_selectedColor.color];
         [self setItemBackground:_backgroundIconNames[_selectedBackgroundIndex]];
+                
+        NSString *savingGroup = [self.groupTitle isEqualToString:OALocalizedString(@"favorites")] ? @"" : self.groupTitle;
+        [self setItemGroup:savingGroup];
+        
         [self saveItemToStorage];
     }
 }
@@ -730,7 +772,11 @@
             cell.titleLabel.text = item[@"title"];
             cell.currentColor = _colors[_selectedColorIndex].intValue;
             cell.currentIcon = item[@"selectedIconName"];
-            [cell layoutIfNeeded];
+//            [cell layoutIfNeeded];
+//            [cell layoutSubviews];
+            
+            [cell.collectionView reloadData];
+            [cell.categoriesCollectionView reloadData];
         }
         return cell;
     }
@@ -804,6 +850,23 @@
         [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         return cell;
     }
+    else if ([cellType isEqualToString:kFolderCardsCell])
+    {
+        static NSString* const identifierCell = kFolderCardsCell;
+        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            cell.delegate = self;
+            [cell setValues:item[@"values"] sizes:item[@"sizes"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+        }
+        return cell;
+    }
     
     return nil;
 }
@@ -827,7 +890,10 @@
     }
     else if ([key isEqualToString:kSelectGroupKey])
     {
-        _groupController = [[OAEditGroupViewController alloc] initWithGroupName:[self getItemGroup] groups:[self getItemGroups]];
+        NSString *selectedGroup = self.groupTitle;
+        if ([selectedGroup isEqualToString:OALocalizedString(@"favorites")])
+            selectedGroup = @"";
+        _groupController = [[OAEditGroupViewController alloc] initWithGroupName:selectedGroup groups:[self getItemGroups]];
         _groupController.delegate = self;
         [self presentViewController:_groupController animated:YES completion:nil];
     }
@@ -983,7 +1049,7 @@
 - (void)iconChanged:(NSInteger)tag
 {
     _wasChanged = YES;
-    _selectedBackgroundIndex = tag;
+    _selectedBackgroundIndex = (int)tag;
     [self updateHeaderIcon];
     [self generateData];
     [self.tableView reloadData];
@@ -993,7 +1059,9 @@
 
 - (void) groupChanged
 {
-    [self setItemGroup:_groupController.groupName];
+    self.groupTitle = _groupController.groupName;
+    if ([self.groupTitle isEqualToString:@""])
+        self.groupTitle = OALocalizedString(@"favorites");
     [self generateData];
     [self.tableView reloadData];
 }
@@ -1005,6 +1073,23 @@
     [self deleteFavoriteItem:favoriteItem];
     [self onDoneButtonPressed];
     [self dismissViewController];
+}
+
+#pragma mark - OAFolderCardsCellDelegate
+
+- (void) onItemSelected:(int)index
+{
+    _wasChanged = YES;
+    self.groupTitle = _groupNames[index];
+    if ([self.groupTitle isEqualToString:@""])
+        self.groupTitle = OALocalizedString(@"favorites");
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+- (void) onAddFolderButtonPressed
+{
+ 
 }
 
 @end

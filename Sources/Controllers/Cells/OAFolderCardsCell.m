@@ -40,20 +40,26 @@
     _data = [NSMutableArray new];
 }
 
-- (void) setValues:(NSArray *)values withSelectedIndex:(int)index
+- (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
 {
     _data = [NSMutableArray new];
     for (int i = 0; i < values.count; i++)
     {
+        NSString *sizeString;
+        NSNumber *size = sizes[i];
+        sizeString = size ? [NSString stringWithFormat:@"%i", size.intValue] : @"";
+            
         [_data addObject:@{
             @"title" : values[i],
+            @"size" : sizeString,
             @"img" : @"ic_custom_folder",
             @"isSelected" : [NSNumber numberWithBool:i == index],
             @"key" : @"home"}];
     }
     
     [_data addObject:@{
-        @"title" : OALocalizedString(@"add_folder"),
+        @"title" : addButtonTitle,
+        @"size" : @"",
         @"img" : @"zoom_in_button",
         @"isSelected" : @NO,
         @"key" : @"work"}];
@@ -91,6 +97,7 @@
     {
         OAFolderCardCollectionViewCell *destCell = (OAFolderCardCollectionViewCell *) cell;
         destCell.titleLabel.text = item[@"title"];
+        destCell.descLabel.text = item[@"size"];
         destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
         [destCell.imageView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         

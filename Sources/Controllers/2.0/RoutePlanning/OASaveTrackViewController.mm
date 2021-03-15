@@ -151,6 +151,7 @@
             @"type" : @"OAFolderCardsCell",
             @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
             @"values" : _allFolders,
+            @"addButtonTitle" : OALocalizedString(@"add_folder")
         },
     ]];
 
@@ -324,7 +325,7 @@
         if (cell)
         {
             cell.delegate = self;
-            [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [cell setValues:item[@"values"] sizes:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;
     }

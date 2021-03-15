@@ -186,7 +186,7 @@
 "sett_loc_fmt" = "Koordinatenformat";
 "sett_arr" = "Kartenpfeile";
 "sett_arr_map" = "Kartenmitte";
-"purchases" = "Einkäufe";
+"purchases" = "Käufe";
 // Purchases
 "prch_addons" = "Erweiterungen";
 "prch_items_failed" = "Elemente wurde nicht wieder hergestellt. Bitte versuch es erneut.";

@@ -492,6 +492,7 @@
 		326B4FC0257FD11400ABAB1D /* ic_action_light_aircraft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBB257FD11300ABAB1D /* ic_action_light_aircraft@2x.png */; };
 		326B4FC1257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
 		326B4FC2257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
+		3270DBBF25FF4BC000ADD4F7 /* OAReplaceFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBBE25FF4BC000ADD4F7 /* OAReplaceFavoriteViewController.mm */; };
 		32ADB41E25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */; };
 		32ADB41F25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */; };
 		32ADB42425D2E8AD00F5C634 /* OASelectTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB42225D2E8AC00F5C634 /* OASelectTrackFolderViewController.m */; };
@@ -6956,6 +6957,8 @@
 		326B4FBA257FD11300ABAB1D /* ic_action_light_aircraft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_light_aircraft.png; path = Resources/Icons/Profile/ic_action_light_aircraft.png; sourceTree = "<group>"; };
 		326B4FBB257FD11300ABAB1D /* ic_action_light_aircraft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@2x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@2x.png"; sourceTree = "<group>"; };
 		326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@3x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@3x.png"; sourceTree = "<group>"; };
+		3270DBBD25FF4BA100ADD4F7 /* OAReplaceFavoriteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAReplaceFavoriteViewController.h; path = Sources/Controllers/2.0/OAReplaceFavoriteViewController.h; sourceTree = "<group>"; };
+		3270DBBE25FF4BC000ADD4F7 /* OAReplaceFavoriteViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAReplaceFavoriteViewController.mm; path = Sources/Controllers/2.0/OAReplaceFavoriteViewController.mm; sourceTree = "<group>"; };
 		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
 		32ADB41C25D2E85100F5C634 /* OAAddTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddTrackFolderViewController.h; sourceTree = "<group>"; };
 		32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAddTrackFolderViewController.m; sourceTree = "<group>"; };
@@ -14291,6 +14294,8 @@
 				3219701325F5793200C3FED6 /* OAEditFavoriteViewController.h */,
 				3219701425F5798200C3FED6 /* OAEditFavoriteViewController.mm */,
 				3219701A25F57A8200C3FED6 /* OAEditFavoriteViewController.xib */,
+				3270DBBD25FF4BA100ADD4F7 /* OAReplaceFavoriteViewController.h */,
+				3270DBBE25FF4BC000ADD4F7 /* OAReplaceFavoriteViewController.mm */,
 			);
 			name = Favorite;
 			sourceTree = "<group>";
@@ -22811,6 +22816,7 @@
 				7851F2F6241A54D300F7F1ED /* OAMapSettingsTerrainScreen.mm in Sources */,
 				840E702C1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
 				8AF3C82220F65BD0006C86AA /* OATransportStopRoute.mm in Sources */,
+				3270DBBF25FF4BC000ADD4F7 /* OAReplaceFavoriteViewController.mm in Sources */,
 				84C41E721AB962420089EABB /* OAPOIHelper.mm in Sources */,
 				DA54AA7E24EFAB3A001E6560 /* OARouteParameterValuesViewController.mm in Sources */,
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,

@@ -21,6 +21,7 @@
 #import "OAIconsTableViewCell.h"
 #import "OAPoiTableViewCell.h"
 #import "OAEditGroupViewController.h"
+#import "OAReplaceFavoriteViewController.h"
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
 
@@ -52,7 +53,7 @@
 #define kTextCellTopMargin 18.
 #define kTextCellBottomMargin 17.
 
-@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, OAEditGroupViewControllerDelegate, MDCMultilineTextInputLayoutDelegate>
+@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, OAEditGroupViewControllerDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate>
 
 @end
 
@@ -493,7 +494,7 @@
 - (void)onCancelButtonPressed
 {
     if (_isNewItemAdding)
-        [self deleteItemSilent];
+        [self deleteFavoriteItem:self.favorite];
 }
 
 - (void)onDoneButtonPressed
@@ -534,15 +535,15 @@
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_yes")
                                                              action:^{
-                                            [self deleteItemSilent];
+                                            [self deleteFavoriteItem:self.favorite];
                                             [self dismissViewControllerAnimated:YES completion:nil];
                                         }],
       nil] show];
 }
 
-- (void) deleteItemSilent
+- (void) deleteFavoriteItem:(OAFavoriteItem *)favoriteItem
 {
-    _app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
+    _app.favoritesCollection->removeFavoriteLocation(favoriteItem.favorite);
     [_app saveFavoritesToPermamentStorage];
 }
 
@@ -814,7 +815,9 @@
     }
     else if ([key isEqualToString:kReplaceKey])
     {
-        
+        OAReplaceFavoriteViewController *replaceScreen = [[OAReplaceFavoriteViewController alloc] init];
+        replaceScreen.delegate = self;
+        [self presentViewController:replaceScreen animated:YES completion:nil];
     }
     else if ([key isEqualToString:kDeleteKey])
     {
@@ -967,6 +970,15 @@
     [self setItemGroup:_groupController.groupName];
     [self generateData];
     [self.tableView reloadData];
+}
+
+#pragma mark - OAReplaceFavoriteDelegate
+
+- (void) onReplaced:(OAFavoriteItem *)favoriteItem;
+{
+    [self deleteFavoriteItem:favoriteItem];
+    [self onDoneButtonPressed];
+    [self dismissViewController];
 }
 
 @end

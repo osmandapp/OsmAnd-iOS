@@ -689,6 +689,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return displayedName;
 }
 
+- (NSString *) getSuggestedFilePath
+{
+    OAGpxData *gpxData = _editingContext.gpxData;
+    if (gpxData != nil && gpxData.gpxFile.fileName.length > 0)
+        return [OAUtilities getGpxShortPath:gpxData.gpxFile.fileName];
+    else
+        return [[self getSuggestedFileName] stringByAppendingPathExtension:@"gpx"];
+}
+
 - (NSString *) createUniqueFileName:(NSString *)fileName
 {
     NSString *path = [[_app.gpxPath stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"gpx"];
@@ -891,7 +900,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (_editingContext.getPointsCount > 0)
     {
-        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithParams:[self getSuggestedFileName] showOnMap:YES simplifiedTrack:YES];
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:[self getSuggestedFileName] filePath:[self getSuggestedFilePath] showOnMap:YES simplifiedTrack:YES];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }

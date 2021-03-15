@@ -87,6 +87,9 @@
     
     _mapillaryLayer = [[OAMapillaryLayer alloc] initWithMapViewController:_mapViewController layerIndex:10];
     [self addLayer:_mapillaryLayer];
+    
+    _rulerByTapControlLayer = [[OARulerByTapControlLayer alloc] initWithMapViewController:_mapViewController baseOrder:-170000];
+    [self addLayer:_rulerByTapControlLayer];
 
     [OAPlugin createLayers];
 }

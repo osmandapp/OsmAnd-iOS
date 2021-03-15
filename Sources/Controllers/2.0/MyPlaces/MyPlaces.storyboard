@@ -293,7 +293,7 @@
                             <constraint firstItem="7U9-0B-5ap" firstAttribute="top" secondItem="IHz-d7-XHh" secondAttribute="bottom" constant="12" id="71C-03-eDt"/>
                             <constraint firstItem="Jig-oO-m4v" firstAttribute="top" secondItem="PSJ-dc-387" secondAttribute="top" id="7yX-0a-DZY"/>
                             <constraint firstItem="7U9-0B-5ap" firstAttribute="top" secondItem="SsY-mo-F9Q" secondAttribute="bottom" constant="6" id="8vS-2c-PNk"/>
-                            <constraint firstItem="7U9-0B-5ap" firstAttribute="trailing" secondItem="JhS-I6-wi0" secondAttribute="trailing" id="Bdn-Uk-zB3"/>
+                            <constraint firstItem="7U9-0B-5ap" firstAttribute="trailing" secondItem="PSJ-dc-387" secondAttribute="trailing" id="Bdn-Uk-zB3"/>
                             <constraint firstItem="7U9-0B-5ap" firstAttribute="top" secondItem="Jig-oO-m4v" secondAttribute="bottom" id="D0M-du-N9k"/>
                             <constraint firstItem="SsY-mo-F9Q" firstAttribute="leading" secondItem="JhS-I6-wi0" secondAttribute="leading" constant="16" id="D2f-c4-eKX"/>
                             <constraint firstItem="SsY-mo-F9Q" firstAttribute="leading" secondItem="JhS-I6-wi0" secondAttribute="leading" constant="16" id="GCl-ad-idK"/>
@@ -304,7 +304,7 @@
                             <constraint firstItem="Jig-oO-m4v" firstAttribute="leading" secondItem="PSJ-dc-387" secondAttribute="leading" id="e0H-Xu-gg3"/>
                             <constraint firstItem="7U9-0B-5ap" firstAttribute="top" secondItem="uLq-ce-cBy" secondAttribute="bottom" constant="7" id="eMi-TX-YiL"/>
                             <constraint firstItem="Jig-oO-m4v" firstAttribute="bottom" secondItem="JhS-I6-wi0" secondAttribute="top" priority="999" constant="44" id="ihs-2C-D4X"/>
-                            <constraint firstItem="7U9-0B-5ap" firstAttribute="leading" secondItem="JhS-I6-wi0" secondAttribute="leading" id="jzh-jl-hBq"/>
+                            <constraint firstItem="7U9-0B-5ap" firstAttribute="leading" secondItem="PSJ-dc-387" secondAttribute="leading" id="jzh-jl-hBq"/>
                             <constraint firstItem="7U9-0B-5ap" firstAttribute="top" secondItem="P4W-pj-Ubf" secondAttribute="bottom" constant="7" id="k6I-rC-q3U"/>
                             <constraint firstItem="IHz-d7-XHh" firstAttribute="centerX" secondItem="PSJ-dc-387" secondAttribute="centerX" id="uV3-Gs-2CA"/>
                             <constraint firstItem="JhS-I6-wi0" firstAttribute="trailing" secondItem="uLq-ce-cBy" secondAttribute="trailing" constant="16" id="vCK-tX-31f"/>

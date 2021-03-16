@@ -458,7 +458,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterate names";
 "maps" = "Maps";
-"purchases" = "Purchases";
+"purchases" = "Compras";
 // Purchases
 "prch_addons" = "Addons";
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
@@ -1369,7 +1369,6 @@
 "exit_at" = "Saír en";
 "public_transport_warning_title" = "A navegación en transporte público atópase agora en fase de proba beta, poden xerarse erros e imprecisións.";
 "routing_attr_length_name" = "Límite de lonxitude";
-
 "profile_type_osmand_string" = "Perfil do OsmAnd";
 "next_seg" = "Seguinte segmento";
 "nav_type_direct_to" = "Directoó punto";
@@ -1418,7 +1417,7 @@
 "importing_from" = "Estanse a importar datos de %@";
 "public_transport_menu" = "Transporte";
 "shared_string_finish" = "Rematar";
-"arrival_announcement_frequency" = "Cando desexa o anuncio da chegada\?";
+"arrival_announcement_frequency" = "Cando desexa o anuncio da chegada?";
 "personal_category_name" = "Persoal";
 "quick_action_switch_profile_descr" = "O botón de acción troca entre os perfís escollidos.";
 "voice_announces" = "Indicacións por voz";
@@ -1517,3 +1516,4 @@
 "shared_string_password" = "Contrasinal";
 "nav_type_geocoding" = "Xeocodificación";
 "res_online_source_cache_alert" = "Aplicando estas modificacións eliminarás os datos almacenados na caché para esta fonte de teselas";
+"map_widget_distance_by_tap" = "Distancia ao premer";

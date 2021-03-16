@@ -26,6 +26,7 @@
 {
     if (self = [super init])
     {
+        _path = @"";
         if ([self fetch:gpxDocument])
             return self;
         else
@@ -41,7 +42,7 @@
 {
     if (self = [super init])
     {
-        self.fileName = filename;
+        self.path = filename;
         if ([self loadFrom:filename])
             return self;
         else
@@ -976,6 +977,7 @@
             return UIColorFromARGB(color.argb);
         }
     }
+    return nil;
 }
 
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions
@@ -987,6 +989,7 @@
             return [e.value doubleValue];
         }
     }
+    return 0.;
 }
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly

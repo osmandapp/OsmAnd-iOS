@@ -26,7 +26,7 @@
 - (void) addTracks:(NSArray<OAGpxTrk *> *)tracks;
 - (void) addTrackSegment:(OAGpxTrkSeg *)s track:(OAGpxTrk *)track;
 - (void) addTrackPoint:(OAGpxTrkPt *)p segment:(OAGpxTrkSeg *)segment;
-- (void) addRoutePoints:(NSArray<OAGpxRtePt *> *)points;
+- (void) addRoutePoints:(NSArray<OAGpxRtePt *> *)points addRoute:(BOOL)addRoute;
 - (void) addRoutes:(NSArray<OAGpxRte *> *)routes;
 
 - (void)deleteWpt:(OAGpxWpt *)w;

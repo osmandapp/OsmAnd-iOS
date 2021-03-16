@@ -1185,12 +1185,12 @@ static BOOL _isDeviatedFromRoute = false;
     return [_route getDistanceToNextIntermediate:_lastFixedLocation];
 }
 
-- (int) getLeftTime
+- (long) getLeftTime
 {
     return [_route getLeftTime:_lastFixedLocation];
 }
 
-- (int) getLeftTimeNextIntermediate
+- (long) getLeftTimeNextIntermediate
 {
     return [_route getLeftTimeToNextIntermediate:_lastFixedLocation];
 }

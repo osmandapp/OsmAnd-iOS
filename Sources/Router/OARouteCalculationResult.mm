@@ -453,9 +453,9 @@
     return (int)_intermediatePoints.count - _nextIntermediate;
 }
 
-- (int) getLeftTime:(CLLocation *)fromLoc
+- (long) getLeftTime:(CLLocation *)fromLoc
 {
-    int time = 0;
+    long time = 0;
     if (_currentDirectionInfo < _directions.count)
     {
         OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
@@ -469,13 +469,12 @@
         if (fromLoc)
             distanceToNextTurn += [fromLoc distanceFromLocation:l];
         
-        if (!isnan(current.averageSpeed))
-            time += distanceToNextTurn / current.averageSpeed;
+        time += distanceToNextTurn / current.averageSpeed;
     }
     return time;
 }
 
-- (int) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc
+- (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc
 {
     if (_nextIntermediate >= _intermediatePoints.count)
         return 0;
@@ -765,7 +764,7 @@
         }
     }
     
-    int sum = 0;
+    long sum = 0;
     for (int i = (int)originalDirections.count - 1; i >= 0; i--)
     {
         originalDirections[i].afterLeftTime = sum;
@@ -919,7 +918,7 @@
  */
 + (void) updateDirectionsTime:(NSMutableArray<OARouteDirectionInfo *> *)directions listDistance:(NSMutableArray<NSNumber *> *)listDistance
 {
-    int sum = 0;
+    long sum = 0;
     for (int i = (int)directions.count - 1; i >= 0; i--)
     {
         directions[i].afterLeftTime = sum;

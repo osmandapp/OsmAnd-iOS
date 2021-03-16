@@ -94,7 +94,7 @@
             CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:centerLatLon.latitude longitude:centerLatLon.longitude];
             bearing = [loc1 bearingTo:loc2];
         }
-        [_delegate onMeasue:distance bearing:bearing];
+        [_delegate onMeasure:distance bearing:bearing];
     }
 }
 

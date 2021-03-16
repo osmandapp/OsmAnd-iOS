@@ -2297,7 +2297,7 @@
                 _gpxDocsRec << doc;
                 
                 QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > gpxDocs;
-                gpxDocs[QString::fromNSString(helper.currentTrack.fileName)] = doc;
+                gpxDocs[QString::fromNSString(helper.currentTrack.path)] = doc;
                 [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs];
             }
         }];

@@ -38,7 +38,7 @@
 @property (nonatomic) NSString *version;
 @property (nonatomic) NSString *creator;
 
-@property (nonatomic, copy) NSString *fileName;
+@property (nonatomic, copy) NSString *path;
 
 @property (nonatomic) OAGpxTrk *generalTrack;
 @property (nonatomic) OAGpxTrkSeg *generalSegment;
@@ -87,6 +87,7 @@
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
+- (NSInteger) getNonEmptySegmentsCount;
 
 @end
 

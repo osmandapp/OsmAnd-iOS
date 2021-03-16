@@ -79,7 +79,7 @@
         NSString *trackName = [fileName stringByDeletingPathExtension];
         OAGPXDocument *gpx = [self generateGpxFile:trackName gpx:[[OAGPXMutableDocument alloc] init]];
         success = [gpx saveTo:_outFile];
-        gpx.fileName = _outFile;
+        gpx.path = _outFile;
         _savedGpxFile = gpx;
         //            if (showOnMap) {
         //                MeasurementToolFragment.showGpxOnMap(app, gpx, true);
@@ -155,7 +155,7 @@
                 NSArray<NSArray<OAGpxRtePt *> *> *routePoints = [_editingCtx getRoutePoints];
                 for (NSArray<OAGpxRtePt *> *points in routePoints)
                 {
-                    [gpx addRoutePoints:points];
+                    [gpx addRoutePoints:points addRoute:YES];
                 }
                 if (gpxPoints.count > 0)
                     [gpx addWpts:gpxPoints];

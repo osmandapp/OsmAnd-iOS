@@ -33,7 +33,7 @@
 - (void) play:(OACommandBuilder *)command
 {
     int left = [_routingHelper getLeftDistance];
-    int time = [_routingHelper getLeftTime];
+    long time = [_routingHelper getLeftTime];
     if (left > 0)
     {
         if (_type == ROUTE_CALCULATED)

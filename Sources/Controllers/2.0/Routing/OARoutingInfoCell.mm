@@ -115,7 +115,6 @@
 {
     const OsmAnd::LatLon latLon(latitude, longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.type = OATargetTurn;

@@ -530,6 +530,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
 @property (assign, nonatomic) BOOL gpxCalculateRtept;
 @property (assign, nonatomic) BOOL gpxRouteCalc;
+@property (nonatomic) NSInteger gpxRouteSegment;
 @property (nonatomic) OAProfileBoolean *voiceMute;
 @property (nonatomic) OAProfileString *voiceProvider;
 @property (nonatomic) OAProfileBoolean *interruptMusic;

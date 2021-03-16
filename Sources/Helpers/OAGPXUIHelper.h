@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAGPXDocument;
+@class OAGPXDocument, OAGpxTrkSeg;
 @class OARouteCalculationResult;
 @class OAGPX;
 
@@ -16,6 +16,9 @@
 
 + (OAGPXDocument *) makeGpxFromRoute:(OARouteCalculationResult *)route;
 + (NSString *) getDescription:(OAGPX *)gpx;
+
++ (long) getSegmentTime:(OAGpxTrkSeg *)segment;
++ (double) getSegmentDistance:(OAGpxTrkSeg *)segment;
 
 @end
 

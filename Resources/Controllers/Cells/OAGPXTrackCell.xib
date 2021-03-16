@@ -97,6 +97,7 @@
                     <constraint firstItem="4UK-Ow-keo" firstAttribute="top" secondItem="Sag-Oa-hqC" secondAttribute="bottom" constant="4" id="4aE-hU-RHT"/>
                     <constraint firstItem="Sag-Oa-hqC" firstAttribute="leading" secondItem="64D-zO-yLt" secondAttribute="trailing" constant="16" id="65d-lW-kOD"/>
                     <constraint firstItem="64D-zO-yLt" firstAttribute="centerY" secondItem="AZA-wp-OC7" secondAttribute="centerY" id="9mb-27-H20"/>
+                    <constraint firstItem="BtU-Gk-L5K" firstAttribute="top" secondItem="jmc-x6-8Tp" secondAttribute="bottom" constant="11" id="ABd-mP-izA"/>
                     <constraint firstItem="BtU-Gk-L5K" firstAttribute="top" secondItem="X0C-qa-DFK" secondAttribute="bottom" constant="13" id="Bcu-Ab-yhI"/>
                     <constraint firstItem="foQ-3a-5YH" firstAttribute="leading" secondItem="4UK-Ow-keo" secondAttribute="trailing" constant="6" id="Fm5-ZO-8EN"/>
                     <constraint firstItem="64D-zO-yLt" firstAttribute="centerY" secondItem="AZA-wp-OC7" secondAttribute="centerY" id="GR3-pm-rY6"/>
@@ -114,11 +115,13 @@
                     <constraint firstItem="jmc-x6-8Tp" firstAttribute="leading" secondItem="foQ-3a-5YH" secondAttribute="trailing" constant="6" id="l5q-w7-SLh"/>
                     <constraint firstItem="09h-1B-NYa" firstAttribute="centerY" secondItem="AZA-wp-OC7" secondAttribute="centerY" id="lUa-Uf-VXy"/>
                     <constraint firstItem="4UK-Ow-keo" firstAttribute="leading" secondItem="64D-zO-yLt" secondAttribute="trailing" constant="16" id="mNK-el-xII"/>
+                    <constraint firstItem="BtU-Gk-L5K" firstAttribute="top" secondItem="Kdo-Ps-g2V" secondAttribute="bottom" constant="11" id="n5b-Eg-Lhr"/>
                     <constraint firstItem="Kdo-Ps-g2V" firstAttribute="leading" secondItem="3EO-DW-iW9" secondAttribute="trailing" constant="6" id="sMp-g0-uFm"/>
                     <constraint firstItem="09h-1B-NYa" firstAttribute="leading" secondItem="Sag-Oa-hqC" secondAttribute="trailing" constant="20" id="saT-Od-yTP"/>
                     <constraint firstItem="BtU-Gk-L5K" firstAttribute="leading" secondItem="AZA-wp-OC7" secondAttribute="leading" constant="62" id="szh-C9-nJw"/>
                     <constraint firstItem="jmc-x6-8Tp" firstAttribute="top" secondItem="Sag-Oa-hqC" secondAttribute="bottom" constant="4" id="tVl-IP-AL7"/>
                     <constraint firstItem="BtU-Gk-L5K" firstAttribute="top" secondItem="3EO-DW-iW9" secondAttribute="bottom" constant="13" id="vlD-zH-mfj"/>
+                    <constraint firstItem="BtU-Gk-L5K" firstAttribute="top" secondItem="4UK-Ow-keo" secondAttribute="bottom" constant="11" id="wUL-Kn-ZwC"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

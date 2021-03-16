@@ -68,7 +68,7 @@
 "map_settings_map" = "Karte";
 "map_settings_show" = "Zeige auf Karte";
 "map_settings_type" = "Kartentyp";
-"map_mode" = "Anwendungsmodus";
+"map_mode" = "Kartenmodus";
 "map_settings_day" = "Tag";
 "map_settings_night" = "Nacht";
 "map_settings_style" = "Kartenstil";
@@ -114,7 +114,7 @@
 "sett_deg" = "Grad";
 "incur_high_charges" = "Dies kann hohe Kosten verursachen.";
 "prch_failed" = "Kauf von \"%@\" ist fehlgeschlagen";
-"download_tab_local" = "Installiert";
+"download_tab_local" = "Lokal";
 "res_search_world" = "Weltweite Suche";
 "res_world_map" = "Weltkarte";
 "res_updates" = "Aktualisierungen";
@@ -376,7 +376,7 @@
 "gpx_trip_groups" = "Trackgruppen";
 "gpx_group_select" = "Gruppenauswahl";
 "show_all" = "Alle anzeigen";
-"get_directions" = "Wegbeschreibung";
+"get_directions" = "Navigation";
 "parking" = "Parkplatz";
 "est_travel_time" = "Reisezeit abschätzen";
 "pedestrian" = "Fußgänger";
@@ -833,7 +833,7 @@
 "osmand_live_weekly" = "Wöchentlich";
 "osmand_live_reports" = "Berichte";
 "osmand_live_server_date" = "Letztes Server-Update: %@";
-"osmand_live_upd_frequency" = "Update-Frequenz";
+"osmand_live_upd_frequency" = "Aktualisierungsintervall";
 "osmand_live_wifi_only" = "Update nur über WLAN";
 "osmand_live_donation_header" = "Spendeneinstellungen";
 "osmand_live_donations" = "Spenden";
@@ -1750,7 +1750,7 @@
 "empty_profile_name_warning" = "Profilname darf nicht leer sein.";
 "desert" = "Wüste";
 "change_map_behavior" = "Kartenverhalten während der Navigation ändern";
-"map_during_navigation" = "Kartenverhalten";
+"map_during_navigation" = "Karte während Navigation";
 "voice_anounces" = "Sprachansagen";
 "osmand_routing" = "OsmAnd-Routing";
 "settings_item_read_error" = "Konnte nicht von '%1$s' lesen.";
@@ -1813,7 +1813,7 @@
 "osmand_profile" = "OsmAnd-Profil";
 "will_be_show_while_moving" = "Es wird während der Bewegung angezeigt";
 "ui_customization" = "Anpassung der Benutzeroberfläche";
-"osmand_settings" = "Globale Einstellungen";
+"osmand_settings" = "OsmAnd Einstellungen";
 "width_limit_description" = "Geben Sie Ihre Fahrzeugbreite an. Für breite Fahrzeuge können einige Routenbeschränkungen gelten.";
 "weight_limit_description" = "Geben Sie Ihr Fahrzeuggewicht an, für schwere Fahrzeuge können einige Routenbeschränkungen gelten.";
 "send_anonymous_data" = "Anonyme Daten senden";
@@ -2017,3 +2017,9 @@
 "plan_route_change_folder" = "Ordner ändern";
 "plan_route_folder" = "Ordner";
 "street_level_imagery" = "Bilder auf Straßenebene";
+"map_widget_distance_by_tap" = "Entfernung durch Antippen";
+"some_of" = "%ld von %ld";
+"segnet_num" = "Segment %d";
+"track_multiple_segments_select" = "%@ hat mehr als ein Segment. Bitte wählen Sie einen Teil des Tracks aus, den Sie für die Navigation verwenden möchten.";
+"select_segment" = "Segment auswählen";
+"select_track_to_follow" = "Track auswählen, welchem gefolgt werden soll";

@@ -105,7 +105,7 @@
 "ctx_mnu_edit_fav" = "Editar favorito";
 "ctx_mnu_add_fav" = "Añadir favorito";
 "ctx_mnu_share" = "Compartir";
-"ctx_mnu_direction" = "Dirección";
+"ctx_mnu_direction" = "Marcador del mapa";
 // Location Services
 "loc_access_denied" = "Acceso denegado";
 "loc_access_denied_desc" = "El acceso al servicio de ubicación fue denegado";
@@ -2013,3 +2013,19 @@
 "tracks_empty" = "Lista de trazas vacía";
 "map_markers_empty" = "No existen marcadores de mapa activos";
 "address_search" = "Buscar dirección";
+"download_tab_local" = "Local";
+"add_folder" = "Añadir carpeta";
+"select_folder_descr" = "Elegir carpeta o añadir una nueva";
+"plan_route_select_folder" = "Elegir carpeta";
+"plan_route_change_folder" = "Cambiar carpeta";
+"plan_route_folder" = "Carpeta";
+"osmand_settings" = "Ajustes de OsmAnd";
+"shared_string_terrain" = "Terreno";
+"street_level_imagery" = "Imágenes a nivel de calle";
+"mapillary" = "Mapillary";
+"map_mode" = "Modo del mapa";
+"get_directions" = "Indicaciones";
+"map_during_navigation" = "Mapa durante la navegación";
+"voice_announces" = "Indicaciones por voz";
+"route_parameters" = "Parámetros de ruta";
+"map_widget_distance_by_tap" = "Distancia al pulsar";

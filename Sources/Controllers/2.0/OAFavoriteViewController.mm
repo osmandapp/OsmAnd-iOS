@@ -238,9 +238,19 @@
     [_app saveFavoritesToPermamentStorage];
 }
 
+- (NSString *) getItemName
+{
+    return [self.favorite getFavoriteName];
+}
+
 - (NSString *) getItemGroup
 {
     return [self.favorite getFavoriteGroup];
+}
+
+- (NSString *) getItemDesc
+{
+    return [self.favorite getFavoriteDesc];
 }
 
 - (UIImage *) getIcon

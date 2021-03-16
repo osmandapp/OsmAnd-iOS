@@ -187,7 +187,7 @@
 "sort_by_name" = "Sorteer op naam";
 "map_markers_other" = "Andere markeervlaggetjes";
 "directions_other" = "Other directions";
-"shared_string_turn" = "Turn";
+"shared_string_turn" = "Afslag";
 "stop_routing_confirm" = "Navigatie stoppen?";
 "cancel_route" = "Annuleer route";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
@@ -436,7 +436,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterate names";
 "maps" = "Maps";
-"purchases" = "Purchases";
+"purchases" = "Aankopen";
 // Purchases
 "prch_addons" = "Addons";
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
@@ -1430,7 +1430,6 @@
 "shared_string_preparing" = "Voorbereiding";
 "shared_string_import_complete" = "Importeren voltooid";
 "shared_string_importing" = "Bezig met importeren";
-
 "one" = "Een";
 "nothing_found_empty" = "Niets gevonden";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
@@ -1530,3 +1529,4 @@
 "res_pseudo_mercator" = "Pseudo-Mercatorprojectie";
 "vessel_width_limit_description" = "Stel de breedte van het vaartuig in om smalle bruggen te vermijden";
 "nav_type_direct_to" = "Recht-naar-punt";
+"map_widget_distance_by_tap" = "Afstand bij het tikken";

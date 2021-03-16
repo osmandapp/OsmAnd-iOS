@@ -1955,7 +1955,7 @@
 "shared_string_add_profile" = "Bæta við sniði";
 "profile_type_osmand_string" = "OsmAnd-snið";
 "quick_action_remove_next_destination_descr" = "Eyðir næsta áfangastað leiðarinnar. Ef þetta er sjálfur áfangastaðurinn, mun leiðsögn stöðvast.";
-"arrived_at_destination" = "Þú hefur náð á áfangastað.";
+"arrived_at_destination" = "Þú hefur náð á áfangastað";
 "quick_action_remove_next_destination" = "Eyða næsta markpunkti";
 "quick_action_mapillary_show" = "Sýna Mapillary";
 "quick_action_showhide_mapillary_title" = "Sýna/fela Mapillary";
@@ -2011,3 +2011,8 @@
 "carplay_active_message" = "Kortið er birt með CarPlay";
 "favorites_empty" = "Þú hefur ekki vistað neina eftirlætispunkta";
 "tracks_empty" = "Ferlalistinn þinn er tómur";
+"some_of" = "%ld af %ld";
+"segnet_num" = "Bútur %d";
+"track_multiple_segments_select" = "%@ er með fleiri en einn bút. Veldu þann hluta ferilsins sem þú vilt nota við leiðsögn.";
+"select_segment" = "Veldu bút";
+"select_track_to_follow" = "Veldu feril til að fylgja";

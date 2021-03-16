@@ -185,7 +185,7 @@
 "track_clear_q" = "Сапраўды хочаце ачысціць бягучы след?";
 "show_info" = "Паказаць інфармацыю";
 "m_style_walk" = "Пешаход";
-"map_mode" = "Рэжым праграмы";
+"map_mode" = "Рэжым мапы";
 "sett_zoom" = "Кнопкі маштабу";
 "sett_notshow" = "Не паказваць";
 "sett_loc_fmt" = "Фармат каардынат";
@@ -206,7 +206,7 @@
 "prch_items_failed" = "аб'екты не былі адноўленыя. Паспрабуйце яшчэ раз.";
 // Resources
 "res_mapsres" = "Мапы і рэсурсы";
-"download_tab_local" = "Усталявана";
+"download_tab_local" = "Мясцовыя";
 "res_banner_no_free_maps_title" = "У вас няма бясплатных мапаў!";
 "res_search_world" = "Шукаць па ўсім свеце";
 "res_catalog_upd" = "Абнаўленне каталога";
@@ -301,7 +301,7 @@
 "track_save_short_q" = "След занадта кароткі, хочаце захаваць?";
 "make_call" = "Патэлефанаваць";
 "track_clear" = "Ачысціць бягучы след";
-"purchases" = "Пакупкі";
+"purchases" = "Куплі";
 // Purchases
 "prch_addons" = "Дапаўненні";
 "res_banner_free_maps_title" = "У вас ёсць %d бясплатных мапаў!";
@@ -1410,7 +1410,7 @@
 "sett_deg180" = "180 градусаў";
 "plugin_settings_descr" = "Налады ўбудовы для абранага профілю.";
 "global_settings_descr" = "Уплывае на ўсю праграму.";
-"osmand_settings" = "Агульныя налады";
+"osmand_settings" = "Налады OsmAnd";
 "angular_measurment_units" = "Адзінкі вымярэння вуглоў";
 "map_settings_hillshade_description" = "Мапы схілаў візуалізуюць схілы, вяршыні і нізіны пры дапамозе розных адценняў шэрага колеру";
 "allow_3D_view" = "Выгляд 2.5D";
@@ -1514,7 +1514,7 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_straight_line" = "Прамая лінія";
 "nav_type_descr" = "Абярыце спосаб разліку маршруту для гэтага профілю";
-"map_during_navigation" = "Паводзіны мапы";
+"map_during_navigation" = "Мапа падчас навігацыі";
 "nav_type_title" = "Тып навігацыі";
 "arrows_direction_to_markers" = "Стрэлкі паказваюць кірунак актыўнай адзнакі, калі яна знаходзіцца па-за межамі экрана. Лініі кірунку паказваюць шлях да актыўных адзнак.";
 "appearance_on_map" = "Выгляд на мапе";
@@ -1914,3 +1914,4 @@
 "join_segments" = "Аб’яднаць сегменты";
 "import_duplicates_description" = "У OsmAnd ужо ёсць элементы з тымі самымі назвамі, што і імпартаваныя.\n\nАбярыце дзеянне.";
 "hide_compass_ruler" = "Схаваць лінейку компаса";
+"street_level_imagery" = "Выявы на ўзроўні вуліц";

@@ -20,7 +20,8 @@
 #import "OAColorsTableViewCell.h"
 #import "OAIconsTableViewCell.h"
 #import "OAPoiTableViewCell.h"
-#import "OAEditGroupViewController.h"
+#import "OASelectFavoriteGroupViewController.h"
+#import "OAAddFavoriteGroupViewController.h"
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFolderCardsCell.h"
 #import "OAFavoritesHelper.h"
@@ -58,14 +59,13 @@
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
 
-@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, OAEditGroupViewControllerDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate>
+@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate>
 
 @end
 
 @implementation OAEditFavoriteViewController
 {
     OsmAndAppInstance _app;
-    OAEditGroupViewController *_groupController;
     BOOL _isNewItemAdding;
     BOOL _wasChanged;
     
@@ -94,9 +94,9 @@
         _app = [OsmAndApp instance];
         _isNewItemAdding = NO;
         self.favorite = favorite;
-        self.name = [self getItemName];
-        self.desc = [self getItemDesc];
-        self.address = [self getItemAddress];
+        self.name = [self.favorite getFavoriteName];
+        self.desc = [self.favorite getFavoriteDesc];
+        self.address = [self.favorite getFavoriteAddress];
         self.groupTitle = [self getGroupTitle];
         self.groupColor = [self.favorite getColor];
         [self commonInit];
@@ -184,10 +184,12 @@
 
 - (void) setupGroups
 {
+    if (![OAFavoritesHelper isFavoritesLoaded])
+        [OAFavoritesHelper loadFavorites];
+    
     NSMutableArray *names = [NSMutableArray new];
     NSMutableArray *sizes = [NSMutableArray new];
-    const auto allFavorites = _app.favoritesCollection->getFavoriteLocations();
-    NSArray<OAFavoriteGroup *> *allGroups = [NSMutableArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
+    NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
     
     for (OAFavoriteGroup *group in allGroups)
     {
@@ -204,7 +206,7 @@
 
 - (void) setupIcons
 {
-    NSString *loadedPoiIconName = [self getItemIcon];
+    NSString *loadedPoiIconName = [self.favorite getFavoriteIcon];
     
     NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
     NSData *data = [NSData dataWithContentsOfFile:path];
@@ -261,15 +263,14 @@
                          @"octagon",
                          @"square"];
     
-    
-    _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self getItemBackground]];
+    _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getFavoriteBackground]];
     if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;
 }
 
 - (void) setupColors
 {
-    UIColor* loadedColor = [self getItemColor];
+    UIColor* loadedColor = [self.favorite getFavoriteColor];
     _selectedColor = [OADefaultFavorite nearestFavColor:loadedColor];
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     
@@ -299,6 +300,7 @@
     
     NSMutableArray *section = [NSMutableArray new];
     [section addObject:@{
+        @"header" : OALocalizedString(@"name_and_descr"),
         @"type" : kTextInputFloatingCellWithIcon,
         @"title" : self.name,
         @"hint" : OALocalizedString(@"fav_name"),
@@ -410,135 +412,10 @@
     [self.doneButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
-#pragma mark - Getters and setters
-
-- (NSString *) getItemName
-{
-    if (!self.favorite.favorite->getTitle().isNull())
-    {
-        return self.favorite.favorite->getTitle().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemName:(NSString *)name
-{
-    self.favorite.favorite->setTitle(QString::fromNSString(name));
-}
-
-- (NSString *) getItemDesc
-{
-    if (!self.favorite.favorite->getDescription().isNull())
-    {
-        return self.favorite.favorite->getDescription().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemDesc:(NSString *)desc
-{
-    self.favorite.favorite->setDescription(QString::fromNSString(desc));
-}
-
-- (NSString *) getItemAddress
-{
-    if (!self.favorite.favorite->getAddress().isNull())
-    {
-        return self.favorite.favorite->getAddress().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemAddress:(NSString *)address
-{
-    self.favorite.favorite->setAddress(QString::fromNSString(address));
-}
-
-- (NSString *) getItemIcon
-{
-    if (!self.favorite.favorite->getIcon().isNull())
-    {
-        return self.favorite.favorite->getIcon().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemIcon:(NSString *)icon
-{
-    self.favorite.favorite->setIcon(QString::fromNSString(icon));
-}
-
-- (NSString *) getItemBackground
-{
-    if (!self.favorite.favorite->getBackground().isNull())
-    {
-        return self.favorite.favorite->getBackground().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemBackground:(NSString *)background
-{
-    self.favorite.favorite->setBackground(QString::fromNSString(background));
-}
-
-- (UIColor *) getItemColor
-{
-    return [UIColor colorWithRed:self.favorite.favorite->getColor().r/255.0 green:self.favorite.favorite->getColor().g/255.0 blue:self.favorite.favorite->getColor().b/255.0 alpha:1.0];
-}
-
-- (void) setItemColor:(UIColor *)color
-{
-    CGFloat r,g,b,a;
-    [color getRed:&r
-            green:&g
-             blue:&b
-            alpha:&a];
-    
-    self.favorite.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
-}
-
-- (NSString *) getItemGroup
-{
-    if (!self.favorite.favorite->getGroup().isNull())
-    {
-        return self.favorite.favorite->getGroup().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemGroup:(NSString *)groupName
-{
-    self.favorite.favorite->setGroup(QString::fromNSString(groupName));
-}
-
 - (NSString *) getGroupTitle
 {
-    NSString *groupName = self.favorite.favorite->getGroup().toNSString();
+    NSString *groupName = [self.favorite getFavoriteGroup];
     return groupName.length == 0 ? OALocalizedString(@"favorite") : groupName;
-}
-
-- (NSArray *) getItemGroups
-{
-    return [[OANativeUtilities QListOfStringsToNSMutableArray:_app.favoritesCollection->getGroups().toList()] copy];
 }
 
 
@@ -554,17 +431,16 @@
 {
     if (_wasChanged)
     {
-        [self setItemName:self.name];
-        [self setItemDesc:self.desc ? self.desc : @""];
-        [self setItemAddress:self.address ? self.address : @""];
-        [self setItemIcon:_selectedIconName];
-        [self setItemColor:_selectedColor.color];
-        [self setItemBackground:_backgroundIconNames[_selectedBackgroundIndex]];
-                
         NSString *savingGroup = [self.groupTitle isEqualToString:OALocalizedString(@"favorites")] ? @"" : self.groupTitle;
-        [self setItemGroup:savingGroup];
+        [OAFavoritesHelper editFavorite:self.favorite name:self.name group:savingGroup];
         
-        [self saveItemToStorage];
+        [self.favorite setFavoriteDesc:self.desc ? self.desc : @""];
+        [self.favorite setFavoriteAddress:self.address ? self.address : @""];
+        [self.favorite setFavoriteIcon:_selectedIconName];
+        [self.favorite setFavoriteColor:_selectedColor.color];
+        [self.favorite setFavoriteBackground:_backgroundIconNames[_selectedBackgroundIndex]];
+                
+        [[OsmAndApp instance] saveFavoritesToPermamentStorage];
     }
 }
 
@@ -600,18 +476,12 @@
 
 - (void) deleteFavoriteItem:(OAFavoriteItem *)favoriteItem
 {
-    _app.favoritesCollection->removeFavoriteLocation(favoriteItem.favorite);
-    [_app saveFavoritesToPermamentStorage];
-}
-
-- (void) saveItemToStorage
-{
-    [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[favoriteItem]];
 }
 
 - (void) removeExistingItemFromCollection
 {
-    NSString *favoriteTitle = self.favorite.favorite->getTitle().toNSString();
+    NSString *favoriteTitle = [self.favorite getFavoriteName];
     for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
     {
         if ((localFavorite != self.favorite.favorite) &&
@@ -772,9 +642,6 @@
             cell.titleLabel.text = item[@"title"];
             cell.currentColor = _colors[_selectedColorIndex].intValue;
             cell.currentIcon = item[@"selectedIconName"];
-//            [cell layoutIfNeeded];
-//            [cell layoutSubviews];
-            
             [cell.collectionView reloadData];
             [cell.categoriesCollectionView reloadData];
         }
@@ -890,12 +757,9 @@
     }
     else if ([key isEqualToString:kSelectGroupKey])
     {
-        NSString *selectedGroup = self.groupTitle;
-        if ([selectedGroup isEqualToString:OALocalizedString(@"favorites")])
-            selectedGroup = @"";
-        _groupController = [[OAEditGroupViewController alloc] initWithGroupName:selectedGroup groups:[self getItemGroups]];
-        _groupController.delegate = self;
-        [self presentViewController:_groupController animated:YES completion:nil];
+        OASelectFavoriteGroupViewController *selectGroupConroller = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
+        selectGroupConroller.delegate = self;
+        [self presentViewController:selectGroupConroller animated:YES completion:nil];
     }
     else if ([key isEqualToString:kReplaceKey])
     {
@@ -942,6 +806,7 @@
 }
 
 #pragma mark - UITextViewDelegate
+
 - (void) textChanged:(UITextView * _Nonnull)textView userInput:(BOOL)userInput
 {
     _wasChanged = YES;
@@ -1004,10 +869,8 @@
     return YES;
 }
 
-
 #pragma mark - MDCMultilineTextInputLayoutDelegate
-- (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
-      didChangeContentSize:(CGSize)size
+- (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField didChangeContentSize:(CGSize)size
 {
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
@@ -1032,18 +895,6 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - OAColorsTableViewCellDelegate
-
-- (void)colorChanged:(NSInteger)tag
-{
-    _wasChanged = YES;
-    _selectedColorIndex = tag;
-    _selectedColor =  [OADefaultFavorite builtinColors][tag];
-    [self updateHeaderIcon];
-    [self generateData];
-    [self.tableView reloadData];
-}
-
 #pragma mark - OAIconsTableViewCellDelegate
 
 - (void)iconChanged:(NSInteger)tag
@@ -1055,24 +906,16 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - OAEditGroupViewControllerDelegate
+#pragma mark - OAColorsTableViewCellDelegate
 
-- (void) groupChanged
+- (void)colorChanged:(NSInteger)tag
 {
-    self.groupTitle = _groupController.groupName;
-    if ([self.groupTitle isEqualToString:@""])
-        self.groupTitle = OALocalizedString(@"favorites");
+    _wasChanged = YES;
+    _selectedColorIndex = tag;
+    _selectedColor = [OADefaultFavorite builtinColors][tag];
+    [self updateHeaderIcon];
     [self generateData];
     [self.tableView reloadData];
-}
-
-#pragma mark - OAReplaceFavoriteDelegate
-
-- (void) onReplaced:(OAFavoriteItem *)favoriteItem;
-{
-    [self deleteFavoriteItem:favoriteItem];
-    [self onDoneButtonPressed];
-    [self dismissViewController];
 }
 
 #pragma mark - OAFolderCardsCellDelegate
@@ -1089,7 +932,53 @@
 
 - (void) onAddFolderButtonPressed
 {
- 
+    OAAddFavoriteGroupViewController * addGroupVC = [[OAAddFavoriteGroupViewController alloc] init];
+    addGroupVC.delegate = self;
+    [self presentViewController:addGroupVC animated:YES completion:nil];
+}
+
+#pragma mark - OASelectFavoriteGroupDelegate
+
+- (void) onGroupSelected:(NSString *)selectedGroupName
+{
+    _wasChanged = YES;
+    self.groupTitle = selectedGroupName;
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+- (void) onNewGroupAdded:(NSString *)selectedGroupName
+{
+    [self addGroup:selectedGroupName];
+}
+
+- (void) addGroup:(NSString *)groupName
+{
+    _wasChanged = YES;
+    UIColor *defaultColor = ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
+    [OAFavoritesHelper addEmptyCategory:groupName color:defaultColor visible:YES];
+    self.groupTitle = groupName;
+    
+    [self setupGroups];
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+#pragma mark - OAAddFavoriteGroupDelegate
+
+- (void) onFavoriteGroupAdded:(NSString *)groupName
+{
+    [self addGroup:groupName];
+}
+
+#pragma mark - OAReplaceFavoriteDelegate
+
+- (void) onReplaced:(OAFavoriteItem *)favoriteItem;
+{
+    _wasChanged = YES;
+    [self deleteFavoriteItem:favoriteItem];
+    [self onDoneButtonPressed];
+    [self dismissViewController];
 }
 
 @end

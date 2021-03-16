@@ -244,7 +244,7 @@ static UIViewController *parentController;
                 {
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
 
-                    [c.titleView setText:item.favorite->getTitle().toNSString()];
+                    [c.titleView setText:[item getFavoriteName]];
                     c = [self setupPoiIconForCell:c withFavaoriteItem:item];
                     
                     [c.distanceView setText:item.distance];
@@ -311,16 +311,17 @@ static UIViewController *parentController;
 
 -(void)generateData
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray *allGroups = [[NSMutableArray alloc] init];
     self.menuItems = [[NSArray alloc] init];
     self.sortedFavoriteItems = [[NSMutableArray alloc] init];
     
     NSMutableArray *headerViews = [NSMutableArray array];
-    
-    const auto allFavorites = app.favoritesCollection->getFavoriteLocations();
     NSMutableArray *tableData = [NSMutableArray array];
-    NSArray *favorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
+    
+    if (![OAFavoritesHelper isFavoritesLoaded])
+        [OAFavoritesHelper loadFavorites];
+    
+    NSArray *favorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getFavoriteGroups]];
 
     for (OAFavoriteGroup *group in favorites)
     {
@@ -329,7 +330,7 @@ static UIViewController *parentController;
         
         // Sort items
         NSArray *sortedArrayItems = [itemData.favoriteGroup.points sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-            return [[obj1.favorite->getTitle().toNSString() lowercaseString] compare:[obj2.favorite->getTitle().toNSString() lowercaseString]];
+            return [[[obj1 getFavoriteName] lowercaseString] compare:[[obj2 getFavoriteName] lowercaseString]];
         }];
         [itemData.favoriteGroup.points setArray:sortedArrayItems];
         
@@ -534,13 +535,7 @@ static UIViewController *parentController;
             if (item)
             {
                 OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
-                CGFloat r,g,b,a;
-                [favCol.color getRed:&r
-                               green:&g
-                                blue:&b
-                               alpha:&a];
-                
-                item.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
+                [item setFavoriteColor:favCol.color];
             }
         }
         
@@ -558,6 +553,12 @@ static UIViewController *parentController;
     if (_groupController.saveChanges)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
+        NSMutableArray<NSIndexPath *> * sortedSelectedItems = [NSMutableArray arrayWithArray:_selectedItems];
+        [sortedSelectedItems sortUsingComparator:^NSComparisonResult(NSIndexPath* obj1, NSIndexPath* obj2) {
+            NSNumber *row1 = [NSNumber numberWithInteger:obj1.row];
+            NSNumber *row2 = [NSNumber numberWithInteger:obj2.row];
+            return [row2 compare:row1];
+        }];
         
         for (NSIndexPath *indexPath in _selectedItems)
         {
@@ -583,13 +584,7 @@ static UIViewController *parentController;
             
             if (item)
             {
-                QString group;
-                if (_groupController.groupName.length > 0)
-                    group = QString::fromNSString(_groupController.groupName);
-                else
-                    group = QString::null;
-                
-                item.favorite->setGroup(group);
+                [OAFavoritesHelper editFavorite:item name:[item getFavoriteName] group:_groupController.groupName];
             }
         }
         
@@ -848,7 +843,7 @@ static UIViewController *parentController;
         if (cell)
         {
             OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
-            [cell.titleView setText:item.favorite->getTitle().toNSString()];
+            [cell.titleView setText:[item getFavoriteName]];
             cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
             
             [cell.distanceView setText:item.distance];
@@ -955,7 +950,7 @@ static UIViewController *parentController;
     if (cell)
     {
         OAFavoriteItem* item = [groupData.favoriteGroup.points objectAtIndex:dataIndex];
-        [cell.titleView setText:item.favorite->getTitle().toNSString()];
+        [cell.titleView setText:[item getFavoriteName]];
         cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
 
         [cell.distanceView setText:item.distance];
@@ -968,10 +963,10 @@ static UIViewController *parentController;
 
 - (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavaoriteItem:(OAFavoriteItem*)item
 {
-    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+    UIColor* color = [item getFavoriteColor];
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
     
-    NSString *backgroundName = item.favorite->getBackground().toNSString();
+    NSString *backgroundName = [item getFavoriteBackground];
     if(!backgroundName || backgroundName.length == 0)
         backgroundName = @"circle";
     backgroundName = [NSString stringWithFormat:@"bg_point_%@", backgroundName];
@@ -979,7 +974,7 @@ static UIViewController *parentController;
     cell.titleIcon.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.titleIcon.tintColor = favCol.color;
     
-    NSString *iconName = item.favorite->getIcon().toNSString();
+    NSString *iconName = [item getFavoriteIcon];
     if(!iconName || iconName.length == 0)
         iconName = @"special_star";
     iconName = [NSString stringWithFormat:@"mm_%@", iconName];
@@ -1069,7 +1064,7 @@ static UIViewController *parentController;
     OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
     
     [self.favoriteTableView beginUpdates];
-    app.favoritesCollection->removeFavoriteLocation(item.favorite);
+    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[item]];
     [self.sortedFavoriteItems removeObjectAtIndex:indexPath.row];
     [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
     [self.favoriteTableView endUpdates];
@@ -1086,7 +1081,7 @@ static UIViewController *parentController;
     OAFavoriteItem* item = [group.favoriteGroup.points objectAtIndex:dataIndex];
     
     [self.favoriteTableView beginUpdates];
-    app.favoritesCollection->removeFavoriteLocation(item.favorite);
+    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[item]];
     [group.favoriteGroup.points removeObjectAtIndex:indexPath.row - 1];
     [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationLeft];
     [self.favoriteTableView endUpdates];
@@ -1122,7 +1117,13 @@ static UIViewController *parentController;
     if (numberOfRows == 1)
     {
         [self.favoriteTableView beginUpdates];
+        
+        NSDictionary *groupData = _data[indexPath.section][0];
+        FavoriteTableGroup* group = groupData[@"group"];
+        [OAFavoritesHelper deleteFavoriteGroups:@[group.favoriteGroup] andFavoritesItems:nil];
+        
         [_data removeObjectAtIndex:indexPath.section];
+        
         [self.favoriteTableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                               withRowAnimation:UITableViewRowAnimationFade];
         [self.favoriteTableView endUpdates];
@@ -1146,9 +1147,7 @@ static UIViewController *parentController;
             NSDictionary *groupData = _data[selectedItem.section][0];
             FavoriteTableGroup* group = groupData[@"group"];
             OAFavoriteItem* item = [group.favoriteGroup.points objectAtIndex:dataIndex];
-            
-            app.favoritesCollection->removeFavoriteLocation(item.favorite);
-            [group.favoriteGroup.points removeObjectAtIndex:dataIndex];
+            [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[item]];
             
             if (group.isOpen)
             {

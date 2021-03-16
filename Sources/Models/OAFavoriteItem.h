@@ -18,4 +18,28 @@
 @property NSString* distance;
 @property double distanceMeters;
 
+- (NSString *) getFavoriteName;
+- (void) setFavoriteName:(NSString *)name;
+
+- (NSString *) getFavoriteDesc;
+- (void) setFavoriteDesc:(NSString *)desc;
+
+- (NSString *) getFavoriteAddress;
+- (void) setFavoriteAddress:(NSString *)address;
+
+- (NSString *) getFavoriteIcon;
+- (void) setFavoriteIcon:(NSString *)icon;
+
+- (NSString *) getFavoriteBackground;
+- (void) setFavoriteBackground:(NSString *)background;
+
+- (UIColor *) getFavoriteColor;
+- (void) setFavoriteColor:(UIColor *)color;
+
+- (BOOL) getFavoriteHidden;
+- (void) setFavoriteHidden:(BOOL)isHidden;
+
+- (NSString *) getFavoriteGroup;
+- (void) setFavoriteGroup:(NSString *)groupName;
+
 @end

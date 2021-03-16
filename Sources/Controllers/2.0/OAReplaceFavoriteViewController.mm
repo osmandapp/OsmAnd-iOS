@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSArray *sortedFavorites = [self sortData:_allFavorites];
     for (OAFavoriteItem *favorite in sortedFavorites)
     {
-        NSString *name = favorite.favorite->getTitle().toNSString();
+        NSString *name = [favorite getFavoriteName];
         NSString *distance = favorite.distance;
         
         [favoritesSection addObject:@{
@@ -133,14 +133,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             }
             case EOANameAscending:
             {
-                NSString *title1 = obj1.favorite->getTitle().toNSString();
-                NSString *title2 = obj2.favorite->getTitle().toNSString();
+                NSString *title1 = [obj1 getFavoriteName];
+                NSString *title2 = [obj2 getFavoriteName];
                 return [title1 compare:title2 options:NSCaseInsensitiveSearch];
             }
             case EOANameDescending:
             {
-                NSString *title1 = obj1.favorite->getTitle().toNSString();
-                NSString *title2 = obj2.favorite->getTitle().toNSString();
+                NSString *title1 = [obj1 getFavoriteName];
+                NSString *title2 = [obj2 getFavoriteName];
                 return [title2 compare:title1 options:NSCaseInsensitiveSearch];
             }
             default:
@@ -272,10 +272,11 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavaoriteItem:(OAFavoriteItem*)item
 {
-    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+    [item getFavoriteColor];
+    UIColor* color = [item getFavoriteColor];;
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
     
-    NSString *backgroundName = item.favorite->getBackground().toNSString();
+    NSString *backgroundName = [item getFavoriteBackground];
     if(!backgroundName || backgroundName.length == 0)
         backgroundName = @"circle";
     backgroundName = [NSString stringWithFormat:@"bg_point_%@", backgroundName];
@@ -283,7 +284,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     cell.titleIcon.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.titleIcon.tintColor = favCol.color;
     
-    NSString *iconName = item.favorite->getIcon().toNSString();
+    NSString *iconName = [item getFavoriteIcon];
     if(!iconName || iconName.length == 0)
         iconName = @"special_star";
     iconName = [NSString stringWithFormat:@"mm_%@", iconName];

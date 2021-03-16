@@ -44,7 +44,7 @@
             [super setupCollapableViewsWithData:favorite lat:favorite.getLatitude lon:favorite.getLongitude];
         }
         
-        NSString *groupName = self.favorite.favorite->getGroup().toNSString();
+        NSString *groupName = [self.favorite getFavoriteGroup];
         self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorite") : groupName;
         self.groupColor = [self.favorite getColor];
 
@@ -110,7 +110,7 @@
             [super setupCollapableViewsWithData:fav lat:location.latitude lon:location.longitude];
         }
         
-        NSString *groupStr = self.favorite.favorite->getGroup().toNSString();
+        NSString *groupStr = [self.favorite getFavoriteGroup];
         self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorite") : groupStr;
         self.groupColor = [self.favorite getColor];
 
@@ -220,7 +220,7 @@
 
 - (void) removeExistingItemFromCollection
 {
-    NSString *favoriteTitle = self.favorite.favorite->getTitle().toNSString();
+    NSString *favoriteTitle = [self.favorite getFavoriteName];
     for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
     {
         if ((localFavorite != self.favorite.favorite) &&
@@ -238,115 +238,14 @@
     [_app saveFavoritesToPermamentStorage];
 }
 
-- (NSString *) getItemName
-{
-    if (!self.favorite.favorite->getTitle().isNull())
-    {
-        return self.favorite.favorite->getTitle().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemName:(NSString *)name
-{
-    self.favorite.favorite->setTitle(QString::fromNSString(name));
-}
-
-- (UIColor *) getItemColor
-{
-    return [UIColor colorWithRed:self.favorite.favorite->getColor().r/255.0 green:self.favorite.favorite->getColor().g/255.0 blue:self.favorite.favorite->getColor().b/255.0 alpha:1.0];
-}
-
-- (void) setItemColor:(UIColor *)color
-{
-    CGFloat r,g,b,a;
-    [color getRed:&r
-            green:&g
-             blue:&b
-            alpha:&a];
-    
-    self.favorite.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
-}
-
 - (NSString *) getItemGroup
 {
-    if (!self.favorite.favorite->getGroup().isNull())
-    {
-        return self.favorite.favorite->getGroup().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemGroup:(NSString *)groupName
-{
-    self.favorite.favorite->setGroup(QString::fromNSString(groupName));
-}
-
-- (NSArray *) getItemGroups
-{
-    return [[OANativeUtilities QListOfStringsToNSMutableArray:_app.favoritesCollection->getGroups().toList()] copy];
-}
-
-- (NSString *) getItemDesc
-{
-    if (!self.favorite.favorite->getDescription().isNull())
-    {
-        return self.favorite.favorite->getDescription().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemDesc:(NSString *)desc
-{
-    self.favorite.favorite->setDescription(QString::fromNSString(desc));
-}
-
-- (NSString *) getItemIcon
-{
-    if (!self.favorite.favorite->getIcon().isNull())
-    {
-        return self.favorite.favorite->getIcon().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemIcon:(NSString *)icon
-{
-    self.favorite.favorite->setIcon(QString::fromNSString(icon));
-}
-
-- (NSString *) getItemBackground
-{
-    if (!self.favorite.favorite->getBackground().isNull())
-    {
-        return self.favorite.favorite->getBackground().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemBackground:(NSString *)background
-{
-    self.favorite.favorite->setBackground(QString::fromNSString(background));
+    return [self.favorite getFavoriteGroup];
 }
 
 - (UIImage *) getIcon
 {
-    NSString *poiIconName = [self getItemIcon];
+    NSString *poiIconName = [self.favorite getFavoriteIcon];
     if (!poiIconName || [poiIconName isEqualToString:@""])
         poiIconName = @"mm_special_star";
     else
@@ -363,7 +262,7 @@
         @"square" : @"bg_point_square",
     };
     
-    NSString *selectedIcon = [self getItemBackground];
+    NSString *selectedIcon = [self.favorite getFavoriteBackground];
     if (!selectedIcon || [selectedIcon isEqualToString:@""])
         selectedIcon = @"circle";
     NSString *poiBackgroundIconName = icons[selectedIcon];

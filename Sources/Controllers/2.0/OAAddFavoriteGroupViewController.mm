@@ -1,28 +1,30 @@
 //
-//  OAAddTrackFolderViewController.m
-//  OsmAnd
+//  OAAddFavoriteGroupViewController.m
+//  OsmAnd Maps
 //
-//  Created by nnngrach on 07.02.2021.
+//  Created by nnngrach on 16.03.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OAAddTrackFolderViewController.h"
+#import "OAAddFavoriteGroupViewController.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OANativeUtilities.h"
 #import "OATextInputCell.h"
 #import "OsmAndApp.h"
 
 #define kCellTypeInput @"OATextInputCell"
 
-@interface OAAddTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@interface OAAddFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @end
 
-@implementation OAAddTrackFolderViewController
+@implementation OAAddFavoriteGroupViewController
 {
+    OsmAndAppInstance _app;
     NSArray<NSArray<NSDictionary *> *> *_data;
-    NSString *_newFolderName;
+    NSString *_newGropuName;
 }
 
 - (instancetype) init
@@ -30,6 +32,7 @@
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
+        _app = [OsmAndApp instance];
         [self generateData];
     }
     return self;
@@ -43,7 +46,7 @@
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.doneButton.hidden = NO;
     self.doneButton.enabled = NO;
-    _newFolderName = @"";
+    _newGropuName = @"";
 }
 
 - (void) generateData
@@ -61,12 +64,12 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"add_folder");
+    self.titleLabel.text = OALocalizedString(@"fav_add_new_group");
 }
 
 - (void)onDoneButtonPressed
 {
-    [self.delegate onTrackFolderAdded:_newFolderName];
+    [self.delegate onFavoriteGroupAdded:_newGropuName];
 }
 
 #pragma mark - UITableViewDataSource
@@ -86,7 +89,7 @@
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-            cell.inputField.placeholder = OALocalizedString(@"enter_name");
+            cell.inputField.placeholder = OALocalizedString(@"fav_enter_group_name");
         }
         cell.inputField.text = item[@"title"];
         cell.inputField.delegate = self;
@@ -108,7 +111,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return OALocalizedString(@"fav_name");
+    return OALocalizedString(@"group_name");
 }
 
 #pragma mark - UITextFieldDelegate
@@ -121,16 +124,17 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
+    NSArray<NSString *> *allGroupNames = [[OANativeUtilities QListOfStringsToNSMutableArray:_app.favoritesCollection->getGroups().toList()] copy];
+    
     if (textView.text.length == 0 ||
         [self isIncorrectFileName: textView.text] ||
-        [textView.text isEqualToString:OALocalizedString(@"tracks")] ||
-        [[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:textView.text]])
+        [textView.text isEqualToString:OALocalizedString(@"favorites")] || [allGroupNames containsObject:textView.text])
     {
         self.doneButton.enabled = NO;
     }
     else
     {
-        _newFolderName = textView.text;
+        _newGropuName = textView.text;
         self.doneButton.enabled = YES;
     }
 }
@@ -142,3 +146,4 @@
 }
 
 @end
+

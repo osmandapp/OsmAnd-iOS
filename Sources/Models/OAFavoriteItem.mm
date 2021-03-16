@@ -9,6 +9,10 @@
 #import "OAFavoriteItem.h"
 #import "OAPointDescription.h"
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/Utilities.h>
+
 @implementation OAFavoriteItem
 
 - (double) getLatitude
@@ -64,6 +68,112 @@
         return NO;
     }
     return YES;
+}
+
+#pragma mark - Getters and setters
+
+- (NSString *) getFavoriteName
+{
+    if (!self.favorite->getTitle().isNull())
+        return self.favorite->getTitle().toNSString();
+    else
+        return @"";
+}
+
+- (void) setFavoriteName:(NSString *)name
+{
+    self.favorite->setTitle(QString::fromNSString(name));
+}
+
+- (NSString *) getFavoriteDesc
+{
+    if (!self.favorite->getDescription().isNull())
+        return self.favorite->getDescription().toNSString();
+    else
+        return @"";
+}
+
+- (void) setFavoriteDesc:(NSString *)desc
+{
+    self.favorite->setDescription(QString::fromNSString(desc));
+}
+
+- (NSString *) getFavoriteAddress
+{
+    if (!self.favorite->getAddress().isNull())
+        return self.favorite->getAddress().toNSString();
+    else
+        return @"";
+}
+
+- (void) setFavoriteAddress:(NSString *)address
+{
+    self.favorite->setAddress(QString::fromNSString(address));
+}
+
+- (NSString *) getFavoriteIcon
+{
+    if (!self.favorite->getIcon().isNull())
+        return self.favorite->getIcon().toNSString();
+    else
+        return @"";
+}
+
+- (void) setFavoriteIcon:(NSString *)icon
+{
+    self.favorite->setIcon(QString::fromNSString(icon));
+}
+
+- (NSString *) getFavoriteBackground
+{
+    if (!self.favorite->getBackground().isNull())
+        return self.favorite->getBackground().toNSString();
+    else
+        return @"";
+}
+
+- (void) setFavoriteBackground:(NSString *)background
+{
+    self.favorite->setBackground(QString::fromNSString(background));
+}
+
+- (UIColor *) getFavoriteColor
+{
+    return [UIColor colorWithRed:self.favorite->getColor().r/255.0 green:self.favorite->getColor().g/255.0 blue:self.favorite->getColor().b/255.0 alpha:1.0];
+}
+
+- (void) setFavoriteColor:(UIColor *)color
+{
+    CGFloat r,g,b,a;
+    [color getRed:&r
+            green:&g
+             blue:&b
+            alpha:&a];
+    
+    self.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
+}
+
+- (BOOL) getFavoriteHidden
+{
+    return self.favorite->isHidden();
+}
+
+- (void) setFavoriteHidden:(BOOL)isHidden
+{
+    self.favorite->setIsHidden(isHidden);
+}
+
+- (NSString *) getFavoriteGroup
+{
+    if (!self.favorite->getGroup().isNull())
+        return self.favorite->getGroup().toNSString();
+    else
+        return @"";
+}
+
+- (void) setFavoriteGroup:(NSString *)groupName
+{
+    self.favorite->setGroup(QString::fromNSString(groupName));
 }
 
 @end

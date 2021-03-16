@@ -1725,7 +1725,6 @@ static const NSInteger _buttonsCount = 4;
             UIImage *backgroundIcon = [favoriteController getBackgroundIcon];
             _favoriteImageBackgroundView.image = [backgroundIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             _favoriteImageBackgroundView.tintColor = [favoriteController.favorite getColor];
-            
         }
         else
         {

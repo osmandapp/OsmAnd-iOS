@@ -13,9 +13,18 @@
 
 @interface OAFavoritesHelper : NSObject
 
++ (BOOL) isFavoritesLoaded;
++ (void) loadFavorites;
+
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems;
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
 + (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)allFavorites;
+
++ (void) editFavorite:(OAFavoriteItem *)item name:(NSString *)name group:(NSString *)group;
++ (NSMutableArray<OAFavoriteGroup *> *) getFavoriteGroups;
++ (void) addEmptyCategory:(NSString *)name color:(UIColor *)color visible:(BOOL)visible;
++ (OAFavoriteGroup *) getOrCreateGroup:(OAFavoriteItem *)item defColor:(UIColor *)defColor;
++ (void) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems;
 
 @end
 

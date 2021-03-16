@@ -2027,3 +2027,8 @@
 "map_during_navigation" = "Mapa durante a navegação";
 "voice_announces" = "Instruções de voz";
 "route_parameters" = "Parâmetros de rota";
+"some_of" = "%ld de %ld";
+"track_multiple_segments_select" = "%@ tem mais de um segmento. Selecione uma parte da trilha que deseja usar para navegação.";
+"select_segment" = "Selecione o segmento";
+"select_track_to_follow" = "Selecione o caminho a seguir";
+"map_widget_distance_by_tap" = "Distância por toque";

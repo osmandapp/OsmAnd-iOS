@@ -248,7 +248,7 @@
 "shared_string_yes" = "بله";
 "shared_string_save" = "ذخیره";
 "shared_string_done" = "تمام";
-"shared_string_update" = "به‌روزرسانی";
+"shared_string_update" = "روزآمدسازی";
 "shared_string_install" = "نصب";
 "shared_string_uninstall" = "حذف نصب";
 "shared_string_delete" = "حذف";
@@ -360,7 +360,7 @@
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_mode" = "Application mode";
+"map_mode" = "حالت نقشه";
 "map_settings_day" = "Day";
 "map_settings_night" = "Night";
 "map_settings_style" = "Map style";
@@ -401,7 +401,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterate names";
 "maps" = "Maps";
-"purchases" = "Purchases";
+"purchases" = "خریدها";
 // Purchases
 "prch_addons" = "Addons";
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
@@ -417,7 +417,7 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
 "res_mapsres" = "Maps & Resources";
-"download_tab_local" = "Installed";
+"download_tab_local" = "محلی";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -1387,7 +1387,6 @@
 "routing_attr_length_name" = "طول مجاز";
 "shared_string_next" = "بعدی";
 "gpx_parse_error" = "‏OsmAnd GPX قالب درستی ندارد. لطفاً برای بررسی بیشتر با گروه پشتیبانی تماس بگیرید.";
-
 "public_transport_menu" = "حمل‌ونقل";
 "profile_prefs_reset_successful" = "همهٔ تنظیمات افزونه به حالت پیشفرض بازگشت.";
 "meters" = "متر";
@@ -1506,3 +1505,19 @@
 "arrived_at_destination" = "رسیدید.";
 "public_transport_show" = "نمایش حمل‌ونقل عمومی";
 "shared_string_settings" = "تنظیمات";
+"none_point_error" = "لطفاً حداقل یک نقطه اضافه کنید.";
+"hide_compass_ruler" = "بدون درجه‌بندی قطب‌نما";
+"show_compass_ruler" = "با درجه‌بندی قطب‌نما";
+"map_during_navigation" = "نقشه در هنگام ناوبری";
+"osmand_settings" = "تنظیمات OsmAnd";
+"import_duplicates_description" = "چیزهایی در OsmAnd همنام با موارد درون‌بردی است.\n\nکنشی را برگزینید.";
+"plan_route_open_existing_track" = "بازکردن رد موجود";
+"plan_route_create_new_route" = "ساخت مسیر جدید";
+"street_level_imagery" = "تصاویر سطح خیابان";
+"follow_track" = "دنبال‌کردن رد";
+"select_another_track" = "انتخاب رد دیگر";
+"nearest_point" = "نزدیک‌ترین نقطه";
+"attach_to_the_roads" = "چسبیدن به راه‌ها";
+"simplified_track" = "ردِ ساده‌شده";
+"simplified_track_description" = "فقط خط مسیر ذخیره می‌شود. راه‌نشان‌ها حذف خواهند شد.";
+"open_saved_track" = "بازکردن رد ذخیره‌شده";

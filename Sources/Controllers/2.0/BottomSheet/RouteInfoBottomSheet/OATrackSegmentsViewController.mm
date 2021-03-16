@@ -124,7 +124,7 @@
         double segmentDist = [OAGPXUIHelper getSegmentDistance:seg];
         
         NSMutableDictionary *item = [NSMutableDictionary new];
-        item[@"title"] = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), idx];
+        item[@"title"] = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), (int) idx];
         item[@"type"] = kGPXTrackCell;
         item[@"img"] = @"ic_custom_join_segments";
         item[@"distance"] = [app getFormattedDistance:segmentDist];

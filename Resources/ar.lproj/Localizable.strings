@@ -2012,3 +2012,5 @@
 "plan_route_folder" = "المجلد";
 "street_level_imagery" = "صور للشارع";
 "map_widget_distance_by_tap" = "المسافة عن طريق الضغط";
+"select_segment" = "حدد الجزء";
+"select_track_to_follow" = "حدد المسار للمتابعة";

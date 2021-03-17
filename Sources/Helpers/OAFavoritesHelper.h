@@ -15,6 +15,7 @@
 
 + (BOOL) isFavoritesLoaded;
 + (void) loadFavorites;
++ (void) import:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)favorites;
 
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems;
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;

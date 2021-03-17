@@ -45,7 +45,7 @@
         }
         
         NSString *groupName = [self.favorite getFavoriteGroup];
-        self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorite") : groupName;
+        self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorites") : groupName;
         self.groupColor = [self.favorite getColor];
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
@@ -111,7 +111,7 @@
         }
         
         NSString *groupStr = [self.favorite getFavoriteGroup];
-        self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorite") : groupStr;
+        self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorites") : groupStr;
         self.groupColor = [self.favorite getColor];
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
@@ -137,14 +137,14 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"favorite");
+    return OALocalizedString(@"favorites");
 }
 
 - (void) applyLocalization
 {
     [super applyLocalization];
     
-    self.titleView.text = OALocalizedString(@"favorite");
+    self.titleView.text = OALocalizedString(@"favorites");
 }
 
 - (void) viewDidLoad

@@ -415,7 +415,7 @@
 - (NSString *) getGroupTitle
 {
     NSString *groupName = [self.favorite getFavoriteGroup];
-    return groupName.length == 0 ? OALocalizedString(@"favorite") : groupName;
+    return groupName.length == 0 ? OALocalizedString(@"favorites") : groupName;
 }
 
 

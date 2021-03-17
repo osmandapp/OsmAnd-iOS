@@ -63,6 +63,27 @@ static BOOL favoritesLoaded = NO;
     favoritesLoaded = YES;
 }
 
++ (void) import:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)favorites
+{
+    for (const auto& favorite : favorites)
+    {
+        OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
+        favData.favorite = favorite;
+        [cachedFavoritePoints addObject:favData];
+        
+        NSString *groupName = favData.favorite->getGroup().toNSString();
+        BOOL isHidden = favData.favorite->isHidden();
+        UIColor *color = favData.getColor;
+        OAFavoriteGroup *group = [flatGroups objectForKey:groupName];
+        if (!group)
+        {
+            group = [[OAFavoriteGroup alloc] initWithName:groupName isHidden:isHidden color:color];
+            [flatGroups setObject:group forKey:groupName];
+            [favoriteGroups addObject:group];
+        }
+        [group addPoint:favData];
+    }
+}
 
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems
 {

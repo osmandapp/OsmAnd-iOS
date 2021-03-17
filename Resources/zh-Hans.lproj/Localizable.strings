@@ -173,7 +173,7 @@
 "sett_lang_show_local" = "";
 "sett_lang_show_trans" = "音译名称";
 "maps" = "地图";
-"purchases" = "";
+"purchases" = "购买";
 // Purchases
 "prch_addons" = "";
 "prch_nau_q1" = "";
@@ -410,7 +410,7 @@
 "gpx_trip_groups" = "";
 "gpx_group_select" = "";
 "show_all" = "显示全部";
-"get_directions" = "";
+"get_directions" = "导航";
 "parking" = "";
 "est_travel_time" = "";
 "pedestrian" = "行人";
@@ -1364,7 +1364,7 @@
 "add_point" = "添加点";
 "personal_category_name" = "个人";
 "default_speed_dialog_msg" = "估计未知道路类型的到达时间，并限制所有道路的速度（可能会影响路线）";
-"quick_action_remove_next_destination_descr" = "路线上的当前目的地点将被删除。如果它是目的地，导航将会停止。";
+"quick_action_remove_next_destination_descr" = "删除路线上的下一个目的地。如果该目的地是最终目的地，导航将停止。";
 "configure_screen_quick_action" = "快捷操作";
 "select_icon" = "选择图标";
 "one" = "一";
@@ -1429,3 +1429,8 @@
 "downloading" = "正在下载";
 "osmand_settings" = "全局设置";
 "empty_filename" = "文件名不能为空";
+"select_another_track" = "选择另一轨迹";
+"nearest_point" = "最近的点";
+"attach_to_the_roads" = "依附于道路";
+"simplified_track" = "简化轨迹";
+"map_widget_distance_by_tap" = "点击距离";

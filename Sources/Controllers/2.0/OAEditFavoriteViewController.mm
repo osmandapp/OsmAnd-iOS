@@ -318,9 +318,9 @@
         @"hint" : OALocalizedString(@"shared_string_address"),
         @"key" : kAddressKey
     }];
-    
+
     [data addObject:[NSArray arrayWithArray:section]];
-    
+
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"group"),
@@ -329,7 +329,7 @@
         @"value" : self.groupTitle,
         @"key" : kSelectGroupKey
     }];
-    
+
     int selectedGroupIndex = [_groupNames indexOfObject:self.groupTitle];
     if (selectedGroupIndex < 0)
         selectedGroupIndex = 0;
@@ -340,7 +340,7 @@
         @"sizes" : _groupSizes,
         @"addButtonTitle" : OALocalizedString(@"fav_add_group")
     }];
-    
+
     [data addObject:[NSArray arrayWithArray:section]];
     
     section = [NSMutableArray new];
@@ -801,7 +801,10 @@
             return textBounds.height + kTextCellTopMargin + kTextCellBottomMargin + kVerticalMargin;
         }
     }
-    
+    else if ([cell isKindOfClass:OAFolderCardsCell.class])
+    {
+        return 77;
+    }
     return UITableViewAutomaticDimension;
 }
 

@@ -285,11 +285,6 @@
     {
         OAFavoriteItem* item = [groupData.points objectAtIndex:indexPath.row];
         [cell.titleView setText:item.favorite->getTitle().toNSString()];
-        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
-
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        cell.titleIcon.image = favCol.cellIcon;
-        cell.titleIcon.tintColor = favCol.color;
         
         cell.rightArrow.image = nil;
         cell.directionImageView.image = nil;
@@ -302,6 +297,27 @@
         cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+        
+        
+        UIColor* color = [item getFavoriteColor];
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        
+        NSString *backgroundName = [item getFavoriteBackground];
+        if(!backgroundName || backgroundName.length == 0)
+            backgroundName = @"circle";
+        backgroundName = [NSString stringWithFormat:@"bg_point_%@", backgroundName];
+        UIImage *backroundImage = [UIImage imageNamed:backgroundName];
+        cell.titleIcon.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.titleIcon.tintColor = favCol.color;
+        
+        NSString *iconName = [item getFavoriteIcon];
+        if(!iconName || iconName.length == 0)
+            iconName = @"special_star";
+        iconName = [NSString stringWithFormat:@"mm_%@", iconName];
+        UIImage *poiImage = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
+        cell.titlePoiIcon.image = [poiImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.titlePoiIcon.tintColor = UIColor.whiteColor;
+        cell.titlePoiIcon.hidden = NO;
     }
     return cell;
 }

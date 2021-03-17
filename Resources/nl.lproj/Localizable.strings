@@ -1537,3 +1537,10 @@
 "osmand_settings" = "OsmAnd instellingen";
 "plan_route_open_existing_track" = "Open een bestaande track";
 "plan_route_create_new_route" = "Maak een nieuwe route";
+"follow_track" = "Volg de track";
+"select_another_track" = "Selecteer een andere track";
+"nearest_point" = "Dichtstbijzijnde punt";
+"attach_to_the_roads" = "Aan wegen koppelen";
+"simplified_track" = "Vereenvoudigde track";
+"simplified_track_description" = "Alleen de routetrack wordt opgeslagen, de waypoints worden verwijderd.";
+"open_saved_track" = "Open opgeslagen track";

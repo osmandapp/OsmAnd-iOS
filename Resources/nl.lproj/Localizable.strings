@@ -1454,7 +1454,7 @@
 "reverse_route" = "Route omkeren";
 "layer_amenity_label" = "Extra laag met namen van POI’s";
 "shared_string_terrain" = "Terrein";
-"quick_action_remove_next_destination" = "Het volgende routepunt verwijderen";
+"quick_action_remove_next_destination" = "Het dichstbijzijnde routepunt verwijderen";
 "help_osmand_live" = "Abonnement - OsmAnd Live";
 "arrival_announcement_frequency" = "Wanneer melden dat de bestemming bereikt is?";
 "public_transport_menu" = "Openbaar Vervoer";
@@ -1506,7 +1506,7 @@
 "listed_exist" = "De getoonde %@ zijn in OsmAnd reeds beschikbaar.";
 "quick_action_mapillary_show" = "Mapillary tonen";
 "arrived_at_destination" = "De bestemming is bereikt.";
-"quick_action_remove_next_destination_descr" = "Het volgende routepunt wordt verwijderd. Als dit de eindbestemming was, stopt de navigatie.";
+"quick_action_remove_next_destination_descr" = "Verwijdert het volgende routepunt. Als dit de eindbestemming was stopt de navigatie.";
 "res_slope" = "Helling";
 "profile_prefs_reset_successful" = "Alle profielinstellingen zijn teruggezet naar de standaardwaarden.";
 "res_source_one_per_tile" = "Eén beeldbestand per rasterkaartsegment";

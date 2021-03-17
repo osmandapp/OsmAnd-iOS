@@ -94,7 +94,9 @@ static BOOL favoritesLoaded = NO;
         
         OAFavoriteGroup *newGroup = [OAFavoritesHelper getOrCreateGroup:item defColor:nil];
         [item setFavoriteHidden:newGroup.isHidden];
-        //[item setFavoriteColor:newGroup.color];
+        
+        //TODO: change icon color to group default color here
+        
         [newGroup.points addObject:item];
     }
 }

@@ -185,7 +185,6 @@
         OAAddFavoriteGroupViewController * addGroupVC = [[OAAddFavoriteGroupViewController alloc] init];
         addGroupVC.delegate = self;
         [self presentViewController:addGroupVC animated:YES completion:nil];
-        
     }
     else if (indexPath.section == kGroupsListSection)
     {

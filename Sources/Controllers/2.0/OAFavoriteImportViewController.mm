@@ -298,7 +298,6 @@
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         
-        
         UIColor* color = [item getFavoriteColor];
         OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
         

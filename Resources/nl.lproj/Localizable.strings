@@ -1544,3 +1544,5 @@
 "simplified_track" = "Vereenvoudigde track";
 "simplified_track_description" = "Alleen de routetrack wordt opgeslagen, de waypoints worden verwijderd.";
 "open_saved_track" = "Open opgeslagen track";
+"hide_compass_ruler" = "Verberg kompasliniaal";
+"show_compass_ruler" = "Toon kompasliniaal";

@@ -1984,3 +1984,4 @@
 "shared_a_z" = "А - Я";
 "search_preogress" = "Поиск…";
 "units_nm" = "мор. миля";
+"map_widget_distance_by_tap" = "Расстояние по нажатию";

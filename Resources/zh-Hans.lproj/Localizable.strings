@@ -132,7 +132,7 @@
 "map_settings_map" = "地图";
 "map_settings_show" = "在地图上显示";
 "map_settings_type" = "地图类型";
-"map_mode" = "程序应用模式";
+"map_mode" = "地图模式";
 "map_settings_day" = "白天";
 "map_settings_night" = "晚上";
 "map_settings_style" = "地图风格";
@@ -189,7 +189,7 @@
 "prch_items_failed" = "";
 // Resources
 "res_mapsres" = "";
-"download_tab_local" = "";
+"download_tab_local" = "本地";
 "res_banner_free_maps_title" = "";
 "res_banner_free_maps_desc" = "";
 "res_banner_no_free_maps_title" = "";
@@ -299,7 +299,7 @@
 "region_ausralia_and_oceania" = "大洋洲";
 "region_central_america" = "中美洲";
 "region_europe" = "欧洲";
-"region_north_america" = "";
+"region_north_america" = "北美";
 "region_russia" = "";
 "region_south_america" = "";
 // Help
@@ -426,7 +426,7 @@
 "plugin_popup_srtm_desc" = "要开始使用等高线功能，请先下载一个区域的等高线";
 "plugin_popup_srtm_ask" = "要下载等高线，你需要激活插件： <b>等高线</b>";
 "plugin_popup_nautical_title" = "下载航海地图";
-"plugin_popup_nautical_desc" = "请先下载航海地图。\n然后转到 {52}地图设置{67} > <b>地图类型{85}，然后打开 {102}航海</b> 样式";
+"plugin_popup_nautical_desc" = "请先下载航海地图。\n然后转到 <b>地图设置</b> <b>地图类型</b>，然后打开<b>航海</b> 样式";
 "plugin_popup_trip_planning_ask" = "要开始计划行程，你需要激活插件。<b>旅行计划</b>";
 "go_to_downloads" = "前往下载";
 "turn_on_plugin" = "开启插件";
@@ -1427,10 +1427,13 @@
 // Route planning
 "plan_route" = "规划路线";
 "downloading" = "正在下载";
-"osmand_settings" = "全局设置";
+"osmand_settings" = "OsmAnd 设置";
 "empty_filename" = "文件名不能为空";
 "select_another_track" = "选择另一轨迹";
 "nearest_point" = "最近的点";
 "attach_to_the_roads" = "依附于道路";
 "simplified_track" = "简化轨迹";
 "map_widget_distance_by_tap" = "点击距离";
+"street_level_imagery" = "街道等级图像";
+"download_wiki_data" = "为 %@ 下载维基百科数据";
+"download_size" = "下载大小";

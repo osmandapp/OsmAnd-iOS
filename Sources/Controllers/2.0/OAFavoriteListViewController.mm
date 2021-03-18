@@ -514,6 +514,7 @@ static UIViewController *parentController;
     if (_colorController.saveChanges)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
+        OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
 
         for (NSIndexPath *indexPath in _selectedItems)
         {
@@ -529,18 +530,23 @@ static UIViewController *parentController;
                 NSString *cellType = groupData[@"type"];
                 if ([cellType isEqualToString:@"group"])
                 {
+                    FavoriteTableGroup* tableGroup = groupData[@"group"];
                     if (indexPath.row != 0)
-                    {
-                        FavoriteTableGroup* group = groupData[@"group"];
-                        item = [group.favoriteGroup.points objectAtIndex:indexPath.row - 1];
-                    }
+                        item = [tableGroup.favoriteGroup.points objectAtIndex:indexPath.row - 1];
+                    else
+                        tableGroup.favoriteGroup.color = favCol.color;
                 }
             }
             
             if (item)
             {
-                OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
                 [item setFavoriteColor:favCol.color];
+                
+                if (indexPath.row == 1)
+                {
+                    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[item getFavoriteGroup]];
+                    group.color = favCol.color;
+                }
             }
         }
         
@@ -565,7 +571,7 @@ static UIViewController *parentController;
             return [row2 compare:row1];
         }];
         
-        for (NSIndexPath *indexPath in _selectedItems)
+        for (NSIndexPath *indexPath in sortedSelectedItems)
         {
             OAFavoriteItem* item;
             if (self.directionButton.tag == 1)

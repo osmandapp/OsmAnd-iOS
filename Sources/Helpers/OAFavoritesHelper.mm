@@ -58,6 +58,9 @@ static BOOL favoritesLoaded = NO;
     {
         OAFavoriteGroup *group = [OAFavoritesHelper getOrCreateGroup:favorite defColor:nil];
         [group addPoint:favorite];
+        
+        if (group.points.count == 1)
+            group.color = [favorite getFavoriteColor];
     }
     
     [OAFavoritesHelper sortAll];

@@ -91,7 +91,7 @@
     NSString *_unitsMph;
     
     BOOL _firstLaunch;
-    std::map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
+    UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
     
     BOOL _carPlayActive;
 }
@@ -550,6 +550,14 @@
     }
 }
 
+- (std::vector<std::shared_ptr<RoutingConfigurationBuilder>>) getAllRoutingConfigs
+{
+    std::vector<std::shared_ptr<RoutingConfigurationBuilder>> values(_customRoutingConfigs.size());
+    for (auto it = _customRoutingConfigs.begin(); it != _customRoutingConfigs.end(); ++it)
+        values.push_back(it->second);
+    return values;
+}
+
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
 {
     // TODO: sync with android
@@ -569,6 +577,16 @@
         if (te - tm > 30)
             NSLog(@"Defalt routing config init took %f ms", (te - tm));
     }
+}
+
+- (UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>>) getCustomRoutingConfigs
+{
+    return _customRoutingConfigs;
+}
+
+- (std::shared_ptr<RoutingConfigurationBuilder>) getCustomRoutingConfig:(std::string &)key
+{
+    return _customRoutingConfigs[key];
 }
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode

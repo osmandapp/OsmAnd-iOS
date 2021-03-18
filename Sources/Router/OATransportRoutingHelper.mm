@@ -786,12 +786,16 @@
         _walkingRouteSegments = nil;
         [OAWaypointHelper.sharedInstance setNewRoute:[[OARouteCalculationResult alloc] initWithErrorMessage:@""]];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            for (id<OARouteInformationListener> listener in _listeners)
-            {
-                [listener routeWasCancelled];
-            }
-        });
+        // Do not reset route twice (e.g. if not in the pulic transport mode)
+        if (OARoutingHelper.sharedInstance.isPublicTransportMode)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                for (id<OARouteInformationListener> listener in _listeners)
+                {
+                    [listener routeWasCancelled];
+                }
+            });
+        }
         
         
         _endLocation = newFinalLocation;

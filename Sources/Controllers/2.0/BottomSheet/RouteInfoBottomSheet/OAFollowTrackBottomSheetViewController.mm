@@ -33,6 +33,7 @@
 #import "OAGpxInfo.h"
 #import "OAGPXUIHelper.h"
 #import "OATargetPointsHelper.h"
+#import "OAMapActions.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
@@ -210,10 +211,7 @@
         BOOL shouldChange = (selectedValue == 0 && !_passWholeRoute.isSelected) || (selectedValue == 1 && _passWholeRoute.isSelected);
         if (shouldChange)
         {
-            [_passWholeRoute setSelected:!_passWholeRoute.isSelected];
-            [_passWholeRoute applyNewParameterValue:_passWholeRoute.isSelected];
-            [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
-            [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+            [_passWholeRoute applyNewParameterValue:!_passWholeRoute.isSelected];
         }
     }
     else if (segmentIndex == 1)
@@ -221,10 +219,7 @@
         BOOL shouldChange = (selectedValue == 0 && _navigationType.isSelected) || (selectedValue == 1 && !_navigationType.isSelected);
         if (shouldChange)
         {
-            [_navigationType setSelected:!_navigationType.isSelected];
-            [_navigationType applyNewParameterValue:_navigationType.isSelected];
-            [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
-            [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+            [_navigationType applyNewParameterValue:!_navigationType.isSelected];
         }
     }
 }
@@ -500,9 +495,17 @@
 {
 }
 
-- (void)onSegmentSelected:(NSInteger)position
+- (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
     OAAppSettings.sharedManager.gpxRouteSegment = position;
+    
+    if (gpx != _gpx)
+    {
+        _gpx = gpx;
+        [[OARootViewController instance].mapPanel.mapActions setGPXRouteParamsWithDocument:_gpx path:_gpx.path];
+        [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+        [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+    }
     
     OAGPXRouteParamsBuilder *paramsBuilder = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     if (paramsBuilder)

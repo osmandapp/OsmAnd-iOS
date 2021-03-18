@@ -386,10 +386,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:track];
                 [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
                 [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+                if (self.delegate)
+                    [self.delegate onFileSelected:filePath];
             }
-            
-            if (self.delegate)
-                [self.delegate onFileSelected:filePath];
             [self dismissViewControllerAnimated:YES completion:nil];
             break;
         }
@@ -420,7 +419,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
     if (self.delegate)
-        [self.delegate onSegmentSelected:position];
+        [self.delegate onSegmentSelected:position gpx:gpx];
 }
 
 #pragma mark - OAFoldersCellDelegate

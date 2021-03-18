@@ -24,6 +24,7 @@
 #import "OAAbstractCommandPlayer.h"
 #import "OAColors.h"
 #import "OAAvoidSpecificRoads.h"
+#import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 
 #include <generalRouter.h>
@@ -171,23 +172,36 @@
             NSArray<CLLocation *> *ps = [rp getPoints];
             if (ps.count > 0)
             {
-                CLLocation *first = ps[0];
-                CLLocation *end = ps[ps.count - 1];
-                OARTargetPoint *pn = [tg getPointToNavigate];
-                BOOL update = false;
-                if (!pn || [pn.point distanceFromLocation:first] < 10)
+                if (rp.file.getNonEmptySegmentsCount > 0)
                 {
-                    [tg navigateToPoint:end updateRoute:false intermediate:-1];
-                    update = true;
+                    OARTargetPoint *endPoint = selected ? [tg getPointToStart] : nil;
+                    CLLocation *endLocation = endPoint != nil ? endPoint.point : ps.lastObject;
+                    CLLocation *startLoc = selected ? ps.firstObject : ([tg getPointToNavigate] != nil ? [tg getPointToNavigate].point : ps.firstObject);
+                    [tg navigateToPoint:endLocation updateRoute:NO intermediate:-1];
+                    if ([tg getPointToStart])
+                        [tg setStartPoint:startLoc updateRoute:false name:nil];
+                    [tg updateRouteAndRefresh:YES];
                 }
-                if (![tg getPointToStart] || [[tg getPointToStart].point distanceFromLocation:end] < 10)
+                else
                 {
-                    [tg setStartPoint:first updateRoute:false name:nil];
-                    update = true;
-                }
-                if (update)
-                {
-                    [tg updateRouteAndRefresh:true];
+                    CLLocation *first = ps[0];
+                    CLLocation *end = ps[ps.count - 1];
+                    OARTargetPoint *pn = [tg getPointToNavigate];
+                    BOOL update = false;
+                    if (!pn || [pn.point distanceFromLocation:first] < 10)
+                    {
+                        [tg navigateToPoint:end updateRoute:false intermediate:-1];
+                        update = true;
+                    }
+                    if (![tg getPointToStart] || [[tg getPointToStart].point distanceFromLocation:end] < 10)
+                    {
+                        [tg setStartPoint:first updateRoute:false name:nil];
+                        update = true;
+                    }
+                    if (update)
+                    {
+                        [tg updateRouteAndRefresh:true];
+                    }
                 }
             }
         }
@@ -302,6 +316,12 @@
 - (void) setSelected:(BOOL)isChecked
 {
     _selected = isChecked;
+}
+
+- (BOOL) routeAware
+{
+    // Prevent the route from refreshing twice when "reverse route" setting is changed
+    return self.getId != gpx_option_reverse_route_id;
 }
 
 @end

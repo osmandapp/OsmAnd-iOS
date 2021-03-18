@@ -48,9 +48,10 @@
 - (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color;
 - (void) addPoint:(OAFavoriteItem *)point;
 
+- (BOOL) isPersonal;
+
++ (BOOL) isPersonalCategoryDisplayName:(NSString *)name;
 + (NSString *) getDisplayName:(NSString *)name;
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
-
-- (BOOL) isPersonal;
 
 @end

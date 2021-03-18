@@ -153,7 +153,7 @@
 "sort_by_name" = "ترتیب بر اساس نام";
 "map_markers_other" = "نشانه‌های دیگر";
 "directions_other" = "Other directions";
-"shared_string_turn" = "Turn";
+"shared_string_turn" = "پیچ";
 "stop_routing_confirm" = "آیا ناوبری را قطع می‌کنید؟";
 "cancel_route" = "حذف مسیر";
 "route_is_too_long_v2" = "این مسیر خیلی طولانی است. اگر در ۱۰ دقیقه مسیری پیدا نشد چند مقصد میانی اضافه کنید.";
@@ -638,7 +638,7 @@
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"get_directions" = "Directions";
+"get_directions" = "مسیریابی";
 "parking" = "Parking";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -1211,7 +1211,7 @@
 "routing_attr_allow_expert_name" = "مسیرهای حرفه‌ای مجاز باشد";
 "rendering_attr_streetLightingNight_name" = "فقط هنگام شب نشان بده";
 "rendering_attr_surface_concrete_name" = "بتن";
-"rendering_attr_piste_type_hike_name" = "";
+"rendering_attr_piste_type_hike_name" = "پیاده‌گردی";
 "rendering_attr_highway_class_road_name" = "جاده";
 "routing_attr_driving_style_name" = "سبک رانندگی";
 "rendering_value_translucent_yellow_name" = "زرد شفاف";
@@ -1270,7 +1270,7 @@
 "rendering_value_thick_name" = "ضخیم";
 "rendering_attr_smoothness_very_horrible_name" = "خیلی افتضاح";
 "routing_attr_allow_classic_only_description" = "مسیرهایی که فقط برای سبک کلاسیک آماده شده و مسیر اسکیت ندارند. مسیرهای سُست‌تر و آماده‌شده با برف‌روهای کوچک‌تر و مسیرهای دست‌ساز اسکی‌بازان را نیز شامل می‌شود.";
-"rendering_attr_contourWidth_description" = "عرض منحنی میزان";
+"rendering_attr_contourWidth_description" = "ضخامت منحنی میزان";
 "rendering_attr_piste_difficulty_freeride_name" = "آزادرانی";
 "rendering_value_fine_name" = "خوب";
 "rendering_attr_piste_difficulty_intermediate_name" = "متوسط";
@@ -1521,3 +1521,6 @@
 "simplified_track" = "ردِ ساده‌شده";
 "simplified_track_description" = "فقط خط مسیر ذخیره می‌شود. راه‌نشان‌ها حذف خواهند شد.";
 "open_saved_track" = "بازکردن رد ذخیره‌شده";
+"facebook" = "فیسبوک";
+"join_segments" = "اتصال پاره‌ها";
+"map_widget_distance_by_tap" = "فاصله با لمس دوانگشتی";

@@ -298,7 +298,7 @@ static BOOL _favoritesLoaded = NO;
     [point setFavoriteGroup:category];
     
     NSString *description;
-    if (![point getFavoriteDesc])
+    if ([point getFavoriteDesc])
         description = [OAFavoritesHelper checkEmoticons:[point getFavoriteDesc]];
     [point setFavoriteDesc:description];
     

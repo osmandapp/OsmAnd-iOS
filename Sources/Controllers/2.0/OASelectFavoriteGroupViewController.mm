@@ -213,6 +213,8 @@
     if (_delegate)
         [_delegate onNewGroupAdded:groupName color:color];
     
+    _selectedGroupName = groupName;
+    
     [self reloadData];
     [self generateData];
     [self.tableView reloadData];

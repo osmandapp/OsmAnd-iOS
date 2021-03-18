@@ -996,9 +996,12 @@
     _wasChanged = YES;
     [OAFavoritesHelper addEmptyCategory:groupName color:color visible:YES];
     self.groupTitle = groupName;
+    _selectedColor = [OADefaultFavorite nearestFavColor:color];
+    _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     
     [self setupGroups];
     [self generateData];
+    [self updateHeaderIcon];
     [self.tableView reloadData];
 }
 

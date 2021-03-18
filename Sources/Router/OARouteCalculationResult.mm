@@ -499,12 +499,17 @@
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex
 {
+    return [self getOriginalRoute:startIndex endIndex:(int)_segments.size()];
+}
+
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex
+{
     if (_segments.size() == 0)
         return std::vector<std::shared_ptr<RouteSegmentResult>>();
     
     std::vector<std::shared_ptr<RouteSegmentResult>> list;
     list.push_back(_segments[startIndex++]);
-    for (int i = startIndex; i < _segments.size(); i++)
+    for (int i = startIndex; i < endIndex; i++)
         if (_segments[i - 1] != _segments[i])
             list.push_back(_segments[i]);
     
@@ -1312,7 +1317,7 @@
     return self;
 }
 
-- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode
+- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint
 {
     self = [[OARouteCalculationResult alloc] init];
     if (self)
@@ -1327,7 +1332,8 @@
         NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
         NSMutableArray<OAAlarmInfo *> *alarms = [NSMutableArray array];
         std::vector<std::shared_ptr<RouteSegmentResult>> segments = [self.class convertVectorResult:computeDirections locations:locations list:list alarms:alarms];
-        [self.class introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
+        if (calculateFirstAndLastPoint)
+            [self.class introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
         
         _locations = locations;
         _segments = segments;

@@ -15,6 +15,8 @@
 #include <routeDataBundle.h>
 #include <routeDataResources.h>
 
+#define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
+
 @implementation OARouteExporter
 {
     NSString *_name;
@@ -38,6 +40,7 @@
 - (OAGPXDocument *) exportRoute
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
+    gpx.creator = OSMAND_ROUTER_V2;
     OAGpxTrk *track = [[OAGpxTrk alloc] init];
     track.name = _name;
     track.segments = @[[self generateRouteSegment]];
@@ -57,6 +60,7 @@
 + (OAGPXMutableDocument *) exportRoute:(NSString *)name trkSegments:(NSArray<OAGpxTrkSeg *> *)trkSegments points:(NSArray<OAGpxTrkPt *> *)points
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
+    gpx.creator = OSMAND_ROUTER_V2;
     OAGpxTrk *track = [[OAGpxTrk alloc] init];
     track.name = name;
     [gpx addTrack:track];

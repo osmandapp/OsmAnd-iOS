@@ -13,6 +13,7 @@
 #import "OALog.h"
 #import "OADefaultFavorite.h"
 #import "OANativeUtilities.h"
+#import "OAFavoritesHelper.h"
 #import "OAUtilities.h"
 #import "OACollapsableView.h"
 #import "OACollapsableWaypointsView.h"
@@ -46,7 +47,12 @@
         
         NSString *groupName = [self.favorite getFavoriteGroup];
         self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorites") : groupName;
-        self.groupColor = [self.favorite getColor];
+        
+        if (!OAFavoritesHelper.isFavoritesLoaded)
+            [OAFavoritesHelper loadFavorites];
+        
+        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getFavoriteGroup]];
+        self.groupColor = favoriteGroup.color;
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
@@ -112,7 +118,12 @@
         
         NSString *groupStr = [self.favorite getFavoriteGroup];
         self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorites") : groupStr;
-        self.groupColor = [self.favorite getColor];
+        
+        if (!OAFavoritesHelper.isFavoritesLoaded)
+            [OAFavoritesHelper loadFavorites];
+        
+        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getFavoriteGroup]];
+        self.groupColor = favoriteGroup.color;
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
@@ -236,6 +247,11 @@
 {
     _app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
     [_app saveFavoritesToPermamentStorage];
+}
+
+- (NSAttributedString *) getAttributedTypeStr:(NSString *)group
+{
+    return [self getAttributedTypeStr:group color:self.groupColor];
 }
 
 - (NSString *) getItemName

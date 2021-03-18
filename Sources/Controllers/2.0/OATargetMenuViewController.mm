@@ -444,12 +444,19 @@
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
+    return [self getAttributedTypeStr:group color:nil];
+}
+
+- (NSAttributedString *) getAttributedTypeStr:(NSString *)group color:(UIColor *)color
+{
+    UIColor *iconColor = color ? color : UIColorFromRGB(0x808080);
+    
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
     UIFont *font = [UIFont systemFontOfSize:15.0];
     
     NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
     NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];
-    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:UIColorFromRGB(0x808080)];
+    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:iconColor];
     
     NSAttributedString *groupStringWithImage = [NSAttributedString attributedStringWithAttachment:groupAttachment];
     [stringGroup replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:groupStringWithImage];

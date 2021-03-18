@@ -823,7 +823,6 @@
 {
     OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
     [self setItemColor:favCol.color];
-    self.groupColor = favCol.color;
     
     _wasEdited = YES;
     [self setupColor];

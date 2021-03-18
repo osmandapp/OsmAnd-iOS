@@ -686,9 +686,9 @@
 {
     _mapPosition = mapPosition;
     
-    if (mapPosition == BOTTOM_CONSTANT)
+    if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != 1.5f)
         _mapView.viewportYScale = 1.5f;
-    else
+    else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != 1.f)
         _mapView.viewportYScale = 1.f;
 }
 

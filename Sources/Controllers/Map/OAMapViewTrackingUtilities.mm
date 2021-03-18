@@ -45,7 +45,6 @@
     OAAutoObserverProxy *_locationServicesStatusObserver;
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     OAAutoObserverProxy *_mapModeObserver;
-    OAAutoObserverProxy *_applicaionModeObserver;
     
     OAMapMode _lastMapMode;
     bool _lastPositionTrackStateCaptured;
@@ -112,10 +111,6 @@
                                                                     withHandler:@selector(onLocationServicesUpdate)
                                                                      andObserve:_app.locationServices.updateObserver];
 
-        _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                            withHandler:@selector(onApplicationModeChanged:)
-                                                             andObserve:_app.data.applicationModeChangedObservable];
-
         //addTargetPointListener(app);
         //addMapMarkersListener(app);
         //[[OARoutingHelper sharedInstance] addListener:self];
@@ -125,13 +120,6 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
-}
-
-- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateSettings];
-    });
 }
 
 - (void) onMapModeChanged

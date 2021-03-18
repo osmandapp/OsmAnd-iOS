@@ -12,7 +12,6 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
-#import "OANativeUtilities.h"
 #import "OATitleRightIconCell.h"
 #import "OATextViewTableViewCell.h"
 #import "OATextInputFloatingCellWithIcon.h"
@@ -328,7 +327,7 @@
 
     section = [NSMutableArray new];
     [section addObject:@{
-        @"header" : OALocalizedString(@"group"),
+        @"header" : OALocalizedString(@"fav_group"),
         @"type" : kCellTypeTitle,
         @"title" : OALocalizedString(@"select_group"),
         @"value" : self.groupTitle,
@@ -451,7 +450,7 @@
         {
             NSString *newName = checkingResult[@"name"];
             NSString *message;
-            if ([checkingResult[@"status"] isEqualToString:@"emojy"])
+            if ([checkingResult[@"status"] isEqualToString:@"emoji"])
                 message = [NSString stringWithFormat:OALocalizedString(@"fav_point_emoticons_message"), newName];
             else
                 message = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), newName];

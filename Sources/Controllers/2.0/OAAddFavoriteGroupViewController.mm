@@ -11,13 +11,13 @@
 #import "OADefaultFavorite.h"
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OANativeUtilities.h"
+#import "OAFavoritesHelper.h"
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OsmAndApp.h"
 
 #define kCellTypeInput @"OATextInputCell"
-#define kCellTypeColorCollection @"colorCollectionCell"
+#define kCellTypeColorCollection @"OAColorsTableViewCell"
 
 @interface OAAddFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAColorsTableViewCellDelegate>
 
@@ -187,11 +187,9 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
-    NSArray<NSString *> *allGroupNames = [[OANativeUtilities QListOfStringsToNSMutableArray:_app.favoritesCollection->getGroups().toList()] copy];
-    
     if (textView.text.length == 0 ||
         [self isIncorrectFileName: textView.text] ||
-        [textView.text isEqualToString:OALocalizedString(@"favorites")] || [allGroupNames containsObject:textView.text])
+        [textView.text isEqualToString:OALocalizedString(@"favorites")] || [OAFavoritesHelper getGroupByName:textView.text])
     {
         self.doneButton.enabled = NO;
     }

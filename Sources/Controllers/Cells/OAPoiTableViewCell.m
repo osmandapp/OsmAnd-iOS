@@ -20,6 +20,7 @@
 #define kImageWidth 38
 #define kLabelOffsetsWidth 20
 #define kLabelMinimubWidth 50.0
+#define kCellHeightWithoutIcons 116
 
 @implementation OAPoiTableViewCell
 
@@ -43,7 +44,8 @@
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
-    self.contentView.frame = self.bounds;
+    int fullHeight = kCellHeightWithoutIcons + self.collectionView.contentSize.height;
+    self.contentView.frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, fullHeight);
     [self.contentView layoutIfNeeded];
     self.collectionViewHeight.constant = self.collectionView.contentSize.height;
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];

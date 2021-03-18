@@ -668,6 +668,7 @@
             cell.currentIcon = item[@"selectedIconName"];
             [cell.collectionView reloadData];
             [cell.categoriesCollectionView reloadData];
+            [cell layoutIfNeeded];
         }
         return cell;
     }

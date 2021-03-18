@@ -495,9 +495,14 @@ static UIViewController *parentController;
 
     _favAction = kFavoriteActionChangeGroup;
 
-    OsmAndAppInstance app = [OsmAndApp instance];
-    NSArray *groups = [[OANativeUtilities QListOfStringsToNSMutableArray:app.favoritesCollection->getGroups().toList()] copy];
-    _groupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:groups];
+    NSMutableArray *groupNames = [NSMutableArray new];
+    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    {
+        if (group.name.length > 0)
+            [groupNames addObject:group.name];
+    }
+        
+    _groupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:groupNames];
     [self.navigationController pushViewController:_groupController animated:YES];
 }
 
@@ -584,7 +589,7 @@ static UIViewController *parentController;
             
             if (item)
             {
-                [OAFavoritesHelper editFavorite:item name:[item getFavoriteName] group:_groupController.groupName];
+                [OAFavoritesHelper editFavoriteName:item newName:[item getFavoriteName] group:_groupController.groupName descr:[item getFavoriteDesc] address:[item getFavoriteAddress]];
             }
         }
         
@@ -906,7 +911,7 @@ static UIViewController *parentController;
     {
         OAFavoriteGroup* group = groupData.favoriteGroup;
         [cell.groupTitle setText:[OAFavoriteGroup getDisplayName:group.name]];
-        cell.folderIcon.tintColor = UIColorFromRGB(color_tint_gray);
+        cell.folderIcon.tintColor = groupData.favoriteGroup.color;
         
         cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
         [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];

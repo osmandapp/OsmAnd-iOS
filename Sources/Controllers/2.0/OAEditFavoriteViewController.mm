@@ -25,6 +25,7 @@
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFolderCardsCell.h"
 #import "OAFavoritesHelper.h"
+#import "OARootViewController.h"
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
 
@@ -78,6 +79,7 @@
     
     NSArray<NSString *> *_groupNames;
     NSArray<NSNumber *> *_groupSizes;
+    NSArray<UIColor *> *_groupColors;
     OAFavoriteColor *_selectedColor;
     NSString *_selectedIconCategoryName;
     NSString *_selectedIconName;
@@ -189,6 +191,7 @@
     
     NSMutableArray *names = [NSMutableArray new];
     NSMutableArray *sizes = [NSMutableArray new];
+    NSMutableArray *colors = [NSMutableArray new];
     NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
     
     for (OAFavoriteGroup *group in allGroups)
@@ -199,9 +202,11 @@
         
         [names addObject:name];
         [sizes addObject:[NSNumber numberWithInt:group.points.count]];
+        [colors addObject:group.color];
     }
     _groupNames = [NSArray arrayWithArray:names];
     _groupSizes = [NSArray arrayWithArray:sizes];
+    _groupColors = [NSArray arrayWithArray:colors];
 }
 
 - (void) setupIcons
@@ -338,6 +343,7 @@
         @"selectedValue" : [NSNumber numberWithInt:selectedGroupIndex],
         @"values" : _groupNames,
         @"sizes" : _groupSizes,
+        @"colors" : _groupColors,
         @"addButtonTitle" : OALocalizedString(@"fav_add_group")
     }];
 
@@ -431,16 +437,35 @@
 {
     if (_wasChanged)
     {
-        NSString *savingGroup = [self.groupTitle isEqualToString:OALocalizedString(@"favorites")] ? @"" : self.groupTitle;
-        [OAFavoritesHelper editFavorite:self.favorite name:self.name group:savingGroup];
-        
         [self.favorite setFavoriteDesc:self.desc ? self.desc : @""];
         [self.favorite setFavoriteAddress:self.address ? self.address : @""];
-        [self.favorite setFavoriteIcon:_selectedIconName];
         [self.favorite setFavoriteColor:_selectedColor.color];
         [self.favorite setFavoriteBackground:_backgroundIconNames[_selectedBackgroundIndex]];
-                
-        [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+        [self.favorite setFavoriteIcon:_selectedIconName];
+        [self.favorite setFavoriteName:self.name ? self.name : @""];
+        
+        NSString *savingGroup = [self.groupTitle isEqualToString:OALocalizedString(@"favorites")] ? @"" : self.groupTitle;
+        NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite];
+        
+        if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
+        {
+            NSString *newName = checkingResult[@"name"];
+            NSString *message;
+            if ([checkingResult[@"status"] isEqualToString:@"emojy"])
+                message = [NSString stringWithFormat:OALocalizedString(@"fav_point_emoticons_message"), newName];
+            else
+                message = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), newName];
+                        
+            [OAFavoritesHelper editFavoriteName:self.favorite newName:newName group:savingGroup descr:[self.favorite getFavoriteDesc] address:[self.favorite getFavoriteAddress]];
+            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_point_dublicate") message:message preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+            [OARootViewController.instance showNoInternetAlert];
+        }
+        else
+        {
+            [OAFavoritesHelper editFavoriteName:self.favorite newName:self.name group:savingGroup descr:[self.favorite getFavoriteDesc] address:[self.favorite getFavoriteAddress]];
+        }
     }
 }
 
@@ -730,7 +755,7 @@
         if (cell)
         {
             cell.delegate = self;
-            [cell setValues:item[@"values"] sizes:item[@"sizes"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [cell setValues:item[@"values"] sizes:item[@"sizes"] colors:item[@"colors"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;
     }
@@ -927,6 +952,12 @@
 {
     _wasChanged = YES;
     self.groupTitle = _groupNames[index];
+    
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:_groupNames[index]];
+    _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
+    [self updateHeaderIcon];
+    
     if ([self.groupTitle isEqualToString:@""])
         self.groupTitle = OALocalizedString(@"favorites");
     [self generateData];
@@ -946,20 +977,24 @@
 {
     _wasChanged = YES;
     self.groupTitle = selectedGroupName;
+    
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:selectedGroupName];
+    _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
+    
     [self generateData];
     [self.tableView reloadData];
 }
 
-- (void) onNewGroupAdded:(NSString *)selectedGroupName
+- (void) onNewGroupAdded:(NSString *)selectedGroupName  color:(UIColor *)color
 {
-    [self addGroup:selectedGroupName];
+    [self addGroup:selectedGroupName color:color];
 }
 
-- (void) addGroup:(NSString *)groupName
+- (void) addGroup:(NSString *)groupName color:(UIColor *)color
 {
     _wasChanged = YES;
-    UIColor *defaultColor = ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
-    [OAFavoritesHelper addEmptyCategory:groupName color:defaultColor visible:YES];
+    [OAFavoritesHelper addEmptyCategory:groupName color:color visible:YES];
     self.groupTitle = groupName;
     
     [self setupGroups];
@@ -969,9 +1004,9 @@
 
 #pragma mark - OAAddFavoriteGroupDelegate
 
-- (void) onFavoriteGroupAdded:(NSString *)groupName
+- (void) onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color
 {
-    [self addGroup:groupName];
+    [self addGroup:groupName color:color];
 }
 
 #pragma mark - OAReplaceFavoriteDelegate

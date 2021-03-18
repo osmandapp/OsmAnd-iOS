@@ -561,6 +561,16 @@
 "select_group" = "Select group";
 "icon" = "Icon";
 "shape" = "Shape";
+"fav_point_dublicate" = "Duplicate Favorite name specified";
+"fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
+"fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
+"default_color" = "Default color";
+"default_color_descr" = "This color wil be used for all new favorites added to the group.";
+
+"favorite_home_category" = "Home";
+"favorite_friends_category" = "Friends";
+"favorite_places_category" = "Places";
+"shared_string_others" = "Others";
 
 // Shapes
 "circle" = "Circle";

@@ -20,12 +20,20 @@
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems;
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
 + (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)allFavorites;
++ (OAFavoriteGroup *) getGroupByName:(NSString *)nameId;
++ (OAFavoriteGroup *) getGroupByPoint:(OAFavoriteItem *)favoriteItem;
 
-+ (void) editFavorite:(OAFavoriteItem *)item name:(NSString *)name group:(NSString *)group;
++ (void) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address;
 + (NSMutableArray<OAFavoriteGroup *> *) getFavoriteGroups;
++ (void) addEmptyCategory:(NSString *)name;
 + (void) addEmptyCategory:(NSString *)name color:(UIColor *)color visible:(BOOL)visible;
 + (OAFavoriteGroup *) getOrCreateGroup:(OAFavoriteItem *)item defColor:(UIColor *)defColor;
 + (void) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems;
+
++ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point;
++ (NSString *) checkEmoticons:(NSString *)text;
++ (void) sortAll;
++ (void) recalculateCachedFavPoints;
 
 @end
 
@@ -42,5 +50,7 @@
 
 + (NSString *) getDisplayName:(NSString *)name;
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
+
+- (BOOL) isPersonal;
 
 @end

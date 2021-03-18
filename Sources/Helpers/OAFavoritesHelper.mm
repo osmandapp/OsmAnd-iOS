@@ -39,6 +39,8 @@ static BOOL favoritesLoaded = NO;
         
     const auto& allFavorites = [OsmAndApp instance].favoritesCollection->getFavoriteLocations();
 
+    [OAFavoritesHelper createDefaultCategories];
+    
     for (const auto& favorite : allFavorites)
     {
         OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
@@ -57,10 +59,29 @@ static BOOL favoritesLoaded = NO;
         }
         [group addPoint:favData];
     }
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-    [favoriteGroups sortUsingDescriptors:[NSArray arrayWithObject:sort]];
+    
+    [OAFavoritesHelper sortAll];
+    [OAFavoritesHelper recalculateCachedFavPoints];
 
     favoritesLoaded = YES;
+}
+
++ (void) createDefaultCategories
+{
+    
+    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_home_category")];
+    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_friends_category")];
+    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_places_category")];
+    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"shared_string_others")];
+}
+
++ (void) recalculateCachedFavPoints
+{
+    NSMutableArray *allPoints = [NSMutableArray new];
+    for (OAFavoriteGroup *group in favoriteGroups)
+        [allPoints addObjectsFromArray:group.points];
+    
+    cachedFavoritePoints = allPoints;
 }
 
 + (void) import:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)favorites
@@ -90,6 +111,20 @@ static BOOL favoritesLoaded = NO;
     return cachedFavoritePoints;
 }
 
++ (OAFavoriteGroup *) getGroupByName:(NSString *)nameId
+{
+    return flatGroups[nameId];
+}
+
++ (OAFavoriteGroup *) getGroupByPoint:(OAFavoriteItem *)favoriteItem
+{
+    if (favoriteItem)
+    {
+        return flatGroups[[favoriteItem getFavoriteGroup]];
+    }
+    return nil;
+}
+
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems
 {
     NSMutableArray<OAFavoriteItem *> *res = [NSMutableArray array];
@@ -101,11 +136,13 @@ static BOOL favoritesLoaded = NO;
     return res;
 }
 
-+ (void) editFavorite:(OAFavoriteItem *)item name:(NSString *)name group:(NSString *)group
++ (void) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address
 {
     NSString *oldGroup = [item getFavoriteGroup];
-    [item setFavoriteName:name];
+    [item setFavoriteName:newName];
     [item setFavoriteGroup:group];
+    [item setFavoriteDesc:descr];
+    [item setFavoriteAddress:address];
     
     if (![oldGroup isEqualToString:group])
     {
@@ -116,9 +153,52 @@ static BOOL favoritesLoaded = NO;
         OAFavoriteGroup *newGroup = [OAFavoritesHelper getOrCreateGroup:item defColor:nil];
         [item setFavoriteHidden:newGroup.isHidden];
         
-        //TODO: change icon color to group default color here
-        
+        //TODO: change icon for parking points
+
+        UIColor *defaultColor = ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
+        if (![item getFavoriteColor] && [item getFavoriteColor] == defaultColor)
+            [item setFavoriteColor:newGroup.color];
+
         [newGroup.points addObject:item];
+    }
+    
+    [OAFavoritesHelper sortAll];
+    [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+}
+
++ (void) sortAll
+{
+    NSArray *sortedGroups = [favoriteGroups sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteGroup *obj1, OAFavoriteGroup *obj2) {
+        if ([obj1 isPersonal])
+            return NSOrderedAscending;
+        else if ([obj2 isPersonal])
+            return NSOrderedDescending;
+        else
+            return [obj1.name compare:obj2.name options:NSCaseInsensitiveSearch];
+    }];
+    favoriteGroups = [NSMutableArray arrayWithArray:sortedGroups];
+    
+    for (OAFavoriteGroup *group in favoriteGroups)
+    {
+        NSArray *sortedPoints = [group.points sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
+            NSString *title1 = [obj1 getFavoriteName];
+            NSString *title2 = [obj2 getFavoriteName];
+            return [title1 compare:title2 options:NSCaseInsensitiveSearch];
+        }];
+        group.points = [NSMutableArray arrayWithArray:sortedPoints];
+        
+        if (group.points.count > 0)
+            group.color = [group.points[0] getFavoriteColor];
+    }
+    
+    if (cachedFavoritePoints)
+    {
+        NSArray *sortedCachedPoints = [cachedFavoritePoints sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
+            NSString *title1 = [obj1 getFavoriteName];
+            NSString *title2 = [obj2 getFavoriteName];
+            return [title1 compare:title2 options:NSCaseInsensitiveSearch];
+        }];
+        cachedFavoritePoints = [NSMutableArray arrayWithArray:sortedCachedPoints];
     }
 }
 
@@ -143,6 +223,13 @@ static BOOL favoritesLoaded = NO;
 {
     return favoriteGroups;
 }
+
++ (void) addEmptyCategory:(NSString *)name
+{
+    UIColor *defaultColor = ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
+    [OAFavoritesHelper addEmptyCategory:name color:defaultColor visible:YES];
+}
+
 
 + (void) addEmptyCategory:(NSString *)name color:(UIColor *)color visible:(BOOL)visible
 {
@@ -201,6 +288,81 @@ static BOOL favoritesLoaded = NO;
     return favorites;
 }
 
++ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point
+{
+    BOOL emoticons = false;
+    NSString *index = @"";
+    int number = 0;
+    NSString *name = [OAFavoritesHelper checkEmoticons:[point getFavoriteName]];
+    NSString *category = [OAFavoritesHelper checkEmoticons:[point getFavoriteGroup]];
+    [point setFavoriteGroup:category];
+    
+    NSString *description;
+    if (![point getFavoriteDesc])
+        description = [OAFavoritesHelper checkEmoticons:[point getFavoriteDesc]];
+    [point setFavoriteDesc:description];
+    
+    if (name.length != [point getFavoriteName].length)
+        emoticons = YES;
+    
+    BOOL fl = YES;
+    while (fl)
+    {
+        fl = NO;
+        for (OAFavoriteItem *favoritePoint in cachedFavoritePoints)
+        {
+            if ([[favoritePoint getFavoriteName] isEqualToString:name] &&
+                //[favoritePoint getLatitude] != [point getLatitude] &&
+                //[favoritePoint getLongitude] != [point getLongitude] &&
+                [[favoritePoint getFavoriteGroup] isEqualToString:[point getFavoriteGroup]])
+            {
+                number++;
+                index = [NSString stringWithFormat:@" (%i)",number];
+                name = [[point getFavoriteName] stringByAppendingString:index];
+                fl = YES;
+                break;
+            }
+        }
+    }
+    
+    if (index.length > 0 || emoticons)
+    {
+        [point setFavoriteName:name];
+        if (emoticons)
+            return @{@"name" : name, @"status": @"emojy"};
+        else
+            return @{@"name" : name, @"status": @"duplicate"};
+    }
+    return nil;
+}
+
+
+
++ (NSString *) checkEmoticons:(NSString *)text
+{
+    __block NSMutableString* tempString = [NSMutableString string];
+    
+    [text enumerateSubstringsInRange: NSMakeRange(0, text.length) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
+     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop){
+         
+         const unichar hs = [substring characterAtIndex: 0];
+         
+         // surrogate pair
+         if (0xd800 <= hs && hs <= 0xdbff) {
+             const unichar ls = [substring characterAtIndex: 1];
+             const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+             
+             [tempString appendString: (0x1d000 <= uc && uc <= 0x1f77f)? @"": substring]; // U+1D000-1F77F
+             
+         // non surrogate
+         } else {
+             [tempString appendString: (0x2100 <= hs && hs <= 0x26ff)? @"": substring]; // U+2100-26FF
+         }
+     }];
+    
+    return [NSString stringWithString:tempString];
+}
+
 @end
 
 @implementation OAFavoriteGroup
@@ -239,6 +401,11 @@ static BOOL favoritesLoaded = NO;
 - (UIColor *) color
 {
     return [OAUtilities areColorsEqual:_color color2:UIColor.whiteColor] ? UIColorFromRGB(color_chart_orange) : _color;
+}
+
+- (BOOL) isPersonal
+{
+    return [self isPersonalCategoryDisplayName:self.name];
 }
 
 - (BOOL) isPersonalCategoryDisplayName:(NSString *)name

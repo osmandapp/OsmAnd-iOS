@@ -10,7 +10,7 @@
 
 @protocol OAAddFavoriteGroupDelegate <NSObject>
 
-- (void) onFavoriteGroupAdded:(NSString *)groupName;
+- (void) onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color;
 
 @end
 

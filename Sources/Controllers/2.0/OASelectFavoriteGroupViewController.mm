@@ -65,8 +65,7 @@
 
 - (void) reloadData
 {
-    const auto allFavorites = _app.favoritesCollection->getFavoriteLocations();
-    _groupedFavorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
+    _groupedFavorites = [OAFavoritesHelper getFavoriteGroups];
 }
 
 - (void) generateData
@@ -93,6 +92,7 @@
             @"title" : name,
             @"description" : [NSString stringWithFormat:@"%i", group.points.count],
             @"isSelected" : [NSNumber numberWithBool:[name isEqualToString: _selectedGroupName]],
+            @"color" : group.color,
             @"img" : @"ic_custom_folder"
         }];
     }
@@ -136,13 +136,14 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.numberOfLines = 3;
             cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
+            cell.separatorInset = UIEdgeInsetsMake(0, cell.textView.frame.origin.x, 0, 0);
         }
         if (cell)
         {
             [cell.textView setText:item[@"title"]];
             [cell.descView setText:item[@"description"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
-            cell.separatorInset = UIEdgeInsetsMake(0, cell.textView.frame.origin.x, 0, 0);
+            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            cell.iconView.tintColor = item[@"color"];
             
             if ([item[@"isSelected"] boolValue])
             {
@@ -207,13 +208,14 @@
 
 #pragma mark - OAAddFavoriteGroupDelegate
 
-- (void) onFavoriteGroupAdded:(NSString *)groupName
+- (void) onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color
 {
     if (_delegate)
-        [_delegate onNewGroupAdded:groupName];
+        [_delegate onNewGroupAdded:groupName color:color];
     
     [self reloadData];
     [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

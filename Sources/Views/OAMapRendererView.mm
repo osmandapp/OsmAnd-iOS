@@ -801,9 +801,18 @@
     return (_displayLink == nil);
 }
 
+- (void) didMoveToWindow
+{
+    // Resume rendering only if in foreground
+    if ([self isRenderingSuspended] && [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && self.window)
+    {
+        [self resumeRendering];
+    }
+}
+
 - (BOOL)resumeRendering
 {
-    if (_displayLink != nil)
+    if (_displayLink != nil || self.window == nil)
         return FALSE;
     
     if (![EAGLContext setCurrentContext:_glRenderContext])
@@ -814,7 +823,7 @@
     }
     
     // Setup display link
-    _displayLink = [CADisplayLink displayLinkWithTarget:self
+    _displayLink = [self.window.screen displayLinkWithTarget:self
                                                selector:@selector(render:)];
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
                        forMode:NSRunLoopCommonModes];

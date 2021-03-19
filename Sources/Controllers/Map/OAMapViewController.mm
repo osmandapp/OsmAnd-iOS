@@ -497,10 +497,6 @@
 {
     [super viewWillAppear:animated];
     
-    // Resume rendering only if in foreground
-    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-        [_mapView resumeRendering];
-    
     // Update map source (if needed)
     if (_mapSourceInvalidated)
     {
@@ -508,7 +504,6 @@
 
         _mapSourceInvalidated = NO;
     }
-    
     
     // IOS-208
     if (_app.resourcesManager->isRepositoryAvailable())

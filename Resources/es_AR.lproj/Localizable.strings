@@ -2029,3 +2029,8 @@
 "voice_announces" = "Indicaciones por voz";
 "route_parameters" = "Parámetros de ruta";
 "map_widget_distance_by_tap" = "Distancia al pulsar";
+"some_of" = "%ld de %ld";
+"segnet_num" = "Segmento %d";
+"track_multiple_segments_select" = "«%@» tiene más de un segmento. Marca la parte del recorrido que deseas usar para la navegación.";
+"select_segment" = "Elegir segmento";
+"select_track_to_follow" = "Elige la traza a seguir";

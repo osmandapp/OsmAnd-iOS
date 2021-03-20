@@ -152,7 +152,7 @@
 "sett_lang_show_local" = "Ammustra nùmenes locales";
 "sett_lang_show_trans" = "Nùmenes transliterados";
 "maps" = "Mapas";
-"purchases" = "Acuistos";
+"purchases" = "Còmporas";
 // Purchases
 "prch_addons" = "Estensiones";
 "prch_ski_q" = "Ativa s’istile \"Mapa de iscì\" in sas Impostaduras mapa";
@@ -263,7 +263,7 @@
 "ctx_mnu_edit_fav" = "Modìfica su preferidu";
 "ctx_mnu_add_fav" = "Annanghe unu preferidu";
 "ctx_mnu_share" = "Cumpartzi";
-"ctx_mnu_direction" = "Diretzione";
+"ctx_mnu_direction" = "Marcadore mapa";
 // Location Services
 "loc_access_denied" = "Atzessu denegadu";
 "loc_access_denied_desc" = "S’atzessu a su servìtziu de positzionamentu est istadu denegadu";
@@ -2012,3 +2012,24 @@
 "tracks_empty" = "Sa lista de rastas tua est bòida";
 "map_markers_empty" = "Non tenes perunu marcadore de mapa ativu";
 "address_search" = "Chirca de sos indiritzos";
+"download_tab_local" = "Installadas";
+"some_of" = "%ld de %ld";
+"segnet_num" = "Segmentu %d";
+"track_multiple_segments_select" = "%@ tenet prus de unu segmentu. Ischerta una parte de sa rasta chi cheres impreare pro sa navigatzione.";
+"select_segment" = "Ischerta segmentu";
+"add_folder" = "Annanghe cartella";
+"select_folder_descr" = "Ischerta una cartella o crea·nde una noa";
+"plan_route_select_folder" = "Ischerta sa cartella";
+"plan_route_change_folder" = "Càmbia sa cartella";
+"plan_route_folder" = "Cartella";
+"select_track_to_follow" = "Ischerta sa rasta de sighire";
+"osmand_settings" = "Impostatziones de OsmAnd";
+"shared_string_terrain" = "Terrinu";
+"street_level_imagery" = "Fotografias a livellu de sas carreras";
+"mapillary" = "Mapillary";
+"map_mode" = "Modalidade mapa";
+"get_directions" = "Indicatziones";
+"map_during_navigation" = "Mapa durante sa navigatzione";
+"voice_announces" = "Indicatziones vocales";
+"route_parameters" = "Paràmetros de s'àndala";
+"map_widget_distance_by_tap" = "Distàntzia pro tocu";

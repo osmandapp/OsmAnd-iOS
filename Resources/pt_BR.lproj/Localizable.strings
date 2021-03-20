@@ -2032,3 +2032,4 @@
 "select_segment" = "Selecione o segmento";
 "select_track_to_follow" = "Selecione o caminho a seguir";
 "map_widget_distance_by_tap" = "Distância por toque";
+"segnet_num" = "Segmento %d";

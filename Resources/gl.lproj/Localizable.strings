@@ -1382,7 +1382,7 @@
 "plugin_settings_reset" = "Restabelecer a configuración do plugin ós valores por defecto";
 "app_theme_light" = "Claro";
 "base_profile_descr_pedestrian" = "Andar, sendeirismo, correr";
-"quick_action_remove_next_destination_descr" = "O punto de destino actual na ruta será eliminado. Se fora o destino, a navegación sería interrompida.";
+"quick_action_remove_next_destination_descr" = "Elimina o seguinte destino da ruta. Se é o destino final, a navegación será detida.";
 "profile_alert_delete_title" = "Eliminar perfil";
 "maximum_speed" = "Velocidade máxima";
 "consider_limitations_param" = "Considerar limitacións temporais";

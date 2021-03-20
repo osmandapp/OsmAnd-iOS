@@ -1985,3 +1985,5 @@
 "search_preogress" = "Поиск…";
 "units_nm" = "мор. миля";
 "map_widget_distance_by_tap" = "Расстояние по нажатию";
+"simplified_track_description" = "Будет сохранена только линия маршрута, путевые точки будут удалены.";
+"open_saved_track" = "Открыть сохранённый трек";

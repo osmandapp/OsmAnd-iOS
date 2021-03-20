@@ -1168,7 +1168,7 @@
 "rendering_attr_buildings15zoom_name" = "15 级缩放建筑物";
 "rendering_value_thin_name" = "细";
 "routing_attr_avoid_stairs_name" = "无阶梯";
-"rendering_attr_showMtbRoutes_name" = "显示 MTB 路线";
+"rendering_attr_showMtbRoutes_name" = "显示山地自行车道";
 "rendering_attr_currentTrackColor_name" = "GPX 颜色";
 "rendering_attr_hideWoodScrubs_name" = "木材和磨砂";
 "rendering_attr_highway_class_service_name" = "服务站";
@@ -1437,3 +1437,18 @@
 "street_level_imagery" = "街道等级图像";
 "download_wiki_data" = "为 %@ 下载维基百科数据";
 "download_size" = "下载大小";
+"sett_wunderlinq_ext_input" = "WunderLINQ";
+"online_webpage_warning" = "页面仅在线提供。在网页浏览器中打开？";
+"purchase_dialog_travel_description" = "购买以下其中一项，即可获得离线旅游指南功能：";
+"unlock_all_features" = "解锁所有 OsmAnd 功能";
+"rendering_attr_highway_class_state_road_name" = "国道";
+"base_profile_descr_boat" = "船、划船、帆船";
+"base_profile_descr_pedestrian" = "散步、徒步、跑步";
+"base_profile_descr_bicycle" = "山地自行车、轻便摩托车、马";
+"base_profile_descr_car" = "汽车、卡车、摩托车";
+"show_compass_ruler" = "显示指南针标尺";
+"keep_both_desc" = "导入的项目将添加前缀";
+"replace_all" = "全部替换";
+"profile_type_custom_string" = "自定义配置文件";
+"shared_string_import_complete" = "导入完成";
+"quick_action_switch_profile_descr" = "操作按钮在选定的配置文件之间切换。";

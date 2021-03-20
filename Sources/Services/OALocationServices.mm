@@ -484,7 +484,7 @@
 
 - (BOOL) shouldBeRunningInBackground
 {
-    if (_settings.mapSettingTrackRecording || [_routingHelper isFollowingMode])
+    if (_settings.mapSettingTrackRecording || [_routingHelper isFollowingMode] || _app.carPlayActive)
         return YES;
 
     return NO;

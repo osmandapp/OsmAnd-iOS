@@ -113,10 +113,7 @@
 
 - (NSString *) getFavoriteIcon
 {
-    if (!self.favorite->getIcon().isNull())
-        return self.favorite->getIcon().toNSString();
-    else
-        return @"";
+    return self.favorite->getIcon().toNSString();
 }
 
 - (void) setFavoriteIcon:(NSString *)icon
@@ -126,10 +123,7 @@
 
 - (NSString *) getFavoriteBackground
 {
-    if (!self.favorite->getBackground().isNull())
-        return self.favorite->getBackground().toNSString();
-    else
-        return @"";
+    return self.favorite->getBackground().toNSString();
 }
 
 - (void) setFavoriteBackground:(NSString *)background

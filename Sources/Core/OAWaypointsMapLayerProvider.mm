@@ -45,7 +45,7 @@ int OAWaypointsMapLayerProvider::getPointsCount() const
     return _locationMarks.size();
 }
 
-std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getImageBitmap(const int index) const
+std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getImageBitmap(const int index)
 {
     const auto locationMark = _locationMarks[index];
     UIColor* color = nil;

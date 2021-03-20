@@ -42,7 +42,7 @@ public:
 
     virtual OsmAnd::PointI getPoint31(const int index) const override;
     virtual int getPointsCount() const override;
-    virtual std::shared_ptr<SkBitmap> getImageBitmap(const int index) const override;
+    virtual std::shared_ptr<SkBitmap> getImageBitmap(const int index) override;
     virtual QString getCaption(const int index) const override;
     
     virtual OsmAnd::ZoomLevel getMinZoom() const override;

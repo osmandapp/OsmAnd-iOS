@@ -1309,7 +1309,7 @@
 "routing_attr_avoid_stairs_name" = "Ingen trapper";
 "rendering_attr_horseRoutes_name" = "Hesteruter";
 "routing_attr_freeride_policy_name" = "Utenfor løypenett";
-"routing_attr_avoid_sett_description" = "Unngår rustikk brostein og brostein";
+"routing_attr_avoid_sett_description" = "Unngår kuppelstein og brostein";
 "rendering_value_disabled_name" = "Deaktivert";
 "routing_attr_avoid_tram_description" = "Unngår trikk";
 "routing_attr_avoid_motorway_description" = "Unngår motorveier";
@@ -1319,7 +1319,7 @@
 "rendering_attr_highway_class_track_grade4_name" = "Klasse 4";
 "routing_attr_avoid_tram_name" = "Ingen trikk";
 "rendering_attr_surface_mud_name" = "Gjørme";
-"rendering_attr_surface_pebblestone_name" = "Rullestein";
+"rendering_attr_surface_pebblestone_name" = "Rullestein (liten)";
 "rendering_attr_piste_difficulty_connection_name" = "Overgang";
 "rendering_attr_hidePOILabels_name" = "Interessepunktetiketter";
 "routing_attr_piste_type_downhill_name" = "Alpint/utfor";
@@ -1381,7 +1381,7 @@
 "rendering_value_car_name" = "Bil";
 "rendering_attr_piste_type_sled_name" = "Akebrett";
 "rendering_attr_piste_difficulty_expert_name" = "Ekspert";
-"rendering_attr_surface_cobblestone_name" = "Naturlig brostein";
+"rendering_attr_surface_cobblestone_name" = "Kuppelstein";
 "routing_attr_avoid_train_description" = "Unngår tog";
 "routing_attr_allow_motorway_description" = "Tillater motorveier.";
 "routing_attr_height_obstacles_description" = "Ta hensyn til terrenghøyde (data fra SRTM, ASTER og EU-DEM).";
@@ -1408,7 +1408,7 @@
 "routing_attr_piste_type_skitour_name" = "Skigåing";
 "rendering_attr_highway_class_track_grade2_name" = "Klasse 2";
 "routing_attr_avoid_share_taxi_description" = "Unngår delingsdrosje";
-"routeInfo_steepness_name" = "Stigning";
+"routeInfo_steepness_name" = "Bratthet";
 "rendering_attr_showLez_description" = "Vis lavutslippssoner på kartet. Har ikke innvirkning på ruting.";
 "rendering_attr_noPolygons_name" = "Polygoner";
 "rendering_attr_highway_class_track_name" = "Turvei";
@@ -1480,7 +1480,7 @@
 "routing_attr_short_way_description" = "Bruk drivstoffeffektiv vei (vanligvis kortere).";
 "routing_attr_driving_style_name" = "Kjørestil";
 "rendering_value_translucent_orange_name" = "Gjennomskinnelig orange";
-"rendering_attr_surface_paving_stones_name" = "Steinbelagt";
+"rendering_attr_surface_paving_stones_name" = "Belegningsstein";
 "rendering_attr_piste_difficulty_novice_name" = "Nybegynner";
 "routing_attr_width_name" = "Breddebegrensning";
 "routing_attr_driving_style_safety_name" = "Foretrekk sideveier";
@@ -1547,7 +1547,7 @@
 "rendering_attr_smoothness_good_name" = "God";
 "routing_attr_avoid_unpaved_name" = "Ingen veier uten fast dekke";
 "rendering_value_translucent_red_name" = "Gjennomskinnelig rød";
-"routing_attr_avoid_sett_name" = "Ingen rustikk brostein eller brostein";
+"routing_attr_avoid_sett_name" = "Ingen kuppelstein eller brostein";
 "rendering_value_boldOutline_name" = "Tykke omriss";
 "rendering_attr_currentTrackWidth_description" = "GPX-bredde";
 "rendering_attr_buildings15zoom_name" = "Bygninger på zoom 15";

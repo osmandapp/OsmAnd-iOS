@@ -27,6 +27,8 @@
 #import "OAIconTitleValueCell.h"
 #import "OATextViewTableViewCell.h"
 #import "OATextMultiViewCell.h"
+#import "OAGPXWptViewController.h"
+#import "OAFavoriteViewController.h"
 
 #include "Localization.h"
 
@@ -401,14 +403,28 @@
             @"placeholder" : OALocalizedString(@"enter_description"),
         }];
     }
-    
-    [_data addObject:@{
-        @"type" : kRowWaypointsCell,
-        @"label" : self.groupTitle,
-        @"description" : OALocalizedString(@"all_group_points"),
-        @"iconName" : @"ic_custom_folder",
-        @"iconColor" : self.groupColor
-    }];
+
+    if ([self isKindOfClass:OAFavoriteViewController.class])
+    {
+        [_data addObject:@{
+            @"type" : kRowWaypointsCell,
+            @"label" : self.groupTitle,
+            @"description" : OALocalizedString(@"all_group_points"),
+            @"iconName" : @"ic_custom_folder",
+            @"iconColor" : self.groupColor
+        }];
+    }
+    else if ([self isKindOfClass:OAGPXWptViewController.class])
+    {
+        NSString *groupName = self.groupTitle;
+        [_data addObject:@{
+            @"type" : kRowWaypointsCell,
+            @"label" : groupName,
+            @"description" : OALocalizedString(@"all_group_points"),
+            @"iconName" : @"ic_custom_folder",
+            @"iconColor" : [self getItemColor]
+        }];
+    }
     
     [_data addObject:@{
         @"type" : kRowCoordinatesCell,

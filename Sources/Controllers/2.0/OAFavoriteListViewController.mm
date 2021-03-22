@@ -20,6 +20,7 @@
 #import "OAEditColorViewController.h"
 #import "OAEditGroupViewController.h"
 #import "OARootViewController.h"
+#import "OATargetInfoViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 
@@ -979,18 +980,13 @@ static UIViewController *parentController;
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
     
     NSString *backgroundName = [item getFavoriteBackground];
-    if(!backgroundName || backgroundName.length == 0)
-        backgroundName = @"circle";
     backgroundName = [NSString stringWithFormat:@"bg_point_%@", backgroundName];
     UIImage *backroundImage = [UIImage imageNamed:backgroundName];
     cell.titleIcon.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.titleIcon.tintColor = favCol.color;
-    
     NSString *iconName = [item getFavoriteIcon];
-    if(!iconName || iconName.length == 0)
-        iconName = @"special_star";
-    iconName = [NSString stringWithFormat:@"mm_%@", iconName];
-    UIImage *poiImage = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
+    
+    UIImage *poiImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:iconName]];
     cell.titlePoiIcon.image = [poiImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.titlePoiIcon.tintColor = UIColor.whiteColor;
     cell.titlePoiIcon.hidden = NO;

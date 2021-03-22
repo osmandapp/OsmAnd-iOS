@@ -12,6 +12,7 @@
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OADefaultFavorite.h"
+#import "OATargetInfoViewController.h"
 #import "OAColors.h"
 
 #import "OsmAndApp.h"
@@ -313,8 +314,7 @@
         NSString *iconName = [item getFavoriteIcon];
         if(!iconName || iconName.length == 0)
             iconName = @"special_star";
-        iconName = [NSString stringWithFormat:@"mm_%@", iconName];
-        UIImage *poiImage = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
+        UIImage *poiImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:iconName]];
         cell.titlePoiIcon.image = [poiImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.titlePoiIcon.tintColor = UIColor.whiteColor;
         cell.titlePoiIcon.hidden = NO;

@@ -298,10 +298,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getFavoriteIcon
 {
-    if (!self.favorite->getIcon().isNull())
-        return self.favorite->getIcon().toNSString();
-    else
-        return @"";
+    return self.favorite->getIcon().toNSString();
 }
 
 - (void) setFavoriteIcon:(NSString *)icon
@@ -311,10 +308,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getFavoriteBackground
 {
-    if (!self.favorite->getBackground().isNull())
-        return self.favorite->getBackground().toNSString();
-    else
-        return @"";
+    return self.favorite->getBackground().toNSString();
 }
 
 - (void) setFavoriteBackground:(NSString *)background

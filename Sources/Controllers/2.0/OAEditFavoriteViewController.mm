@@ -25,6 +25,7 @@
 #import "OAFolderCardsCell.h"
 #import "OAFavoritesHelper.h"
 #import "OARootViewController.h"
+#import "OATargetInfoViewController.h"
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
 
@@ -291,8 +292,7 @@
     _headerIconBackground.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _headerIconBackground.tintColor = _selectedColor.color;
 
-    NSString *poiIconName = [NSString stringWithFormat:@"mm_%@", _selectedIconName];
-    UIImage *poiIcon = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:poiIconName]]];
+    UIImage *poiIcon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:_selectedIconName]];
     _headerIconPoi.image = [poiIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _headerIconPoi.tintColor = UIColor.whiteColor;
 }

@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OAFavoritesMapLayerProvider.h"
 #import "OAFavoritesHelper.h"
+#import "OATargetInfoViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -137,6 +138,31 @@
     });
 }
 
+- (UIImage *) getFavoriteImage:(const OsmAnd::IFavoriteLocation *)fav
+{
+    UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat innerImageSize = 27. * scale;
+    UIImage *finalImage;
+
+    UIImage *outerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:[@"bg_point_" stringByAppendingString:fav->getBackground().toNSString()]] color:color];
+    UIImage *innerImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]];
+    innerImage = [OAUtilities tintImageWithColor:innerImage color:UIColor.whiteColor];
+
+    CGSize outerImageSize = CGSizeMake(36 * scale, 36 * scale);
+    UIGraphicsBeginImageContext(outerImageSize);
+
+    //calculate areaSize for re-centered inner image
+    CGRect areSize = CGRectMake(((outerImageSize.width / 2) - (innerImageSize / 2)), ((outerImageSize.width / 2) - (innerImageSize / 2)), innerImageSize, innerImageSize);
+    [outerImage drawInRect:CGRectMake(0, 0, outerImageSize.width, outerImageSize.height)];
+    [innerImage drawInRect:areSize blendMode:kCGBlendModeNormal alpha:1.0];
+
+    finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return finalImage;
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -153,6 +179,7 @@
         double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
         double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
         targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
+      
         
         if (![OAFavoritesHelper isFavoritesLoaded])
             [OAFavoritesHelper loadFavorites];
@@ -160,10 +187,7 @@
         OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
         targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
         
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        
-        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+        targetPoint.icon = [self getFavoriteImage:favLoc];
         
         OAFavoriteItem *item;
         for (const auto& favLocPtr : self.app.favoritesCollection->getFavoriteLocations())

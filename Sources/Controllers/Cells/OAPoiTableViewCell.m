@@ -12,6 +12,7 @@
 #import "OAColors.h"
 #import "OAUtilities.h"
 #import "Localization.h"
+#import "OATargetInfoViewController.h"
 
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
@@ -122,10 +123,10 @@
         OAPoiCollectionViewCell* cell = nil;
         cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
         UIImage *img = nil;
-        NSString *imgName = [NSString stringWithFormat:@"mm_%@", _poiDataArray[indexPath.row]];
+        NSString *imgName = _poiDataArray[indexPath.row];
         img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];
         
-        cell.iconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconImageView.image = [[OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:imgName]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
         
         if ([_poiDataArray[indexPath.row] isEqualToString:_currentIcon])

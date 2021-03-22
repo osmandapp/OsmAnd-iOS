@@ -24,6 +24,7 @@
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFolderCardsCell.h"
 #import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
 #import "OARootViewController.h"
 #import "OATargetInfoViewController.h"
 #import <UIAlertView+Blocks.h>
@@ -69,6 +70,8 @@
     OsmAndAppInstance _app;
     BOOL _isNewItemAdding;
     BOOL _wasChanged;
+    NSString *_ininialName;
+    NSString *_ininialGroupName;
     
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<NSNumber *> *_colors;
@@ -180,6 +183,8 @@
 - (void) commonInit
 {
     _wasChanged = NO;
+    _ininialName = self.name;
+    _ininialGroupName = self.groupTitle;
     _editingTextFieldKey = @"";
     [self setupGroups];
     [self setupColors];
@@ -433,30 +438,43 @@
 {
     if (_wasChanged)
     {
+        NSString *savingGroup = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
+        
         [self.favorite setDescription:self.desc ? self.desc : @""];
         [self.favorite setAddress:self.address ? self.address : @""];
         [self.favorite setColor:_selectedColor.color];
         [self.favorite setBackgroundIcon:_backgroundIconNames[_selectedBackgroundIndex]];
         [self.favorite setIcon:_selectedIconName];
-        [self.favorite setName:self.name ? self.name : @""];
         
-        NSString *savingGroup = [self.groupTitle isEqualToString:OALocalizedString(@"favorites")] ? @"" : self.groupTitle;
-        NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite];
-        
-        if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
+        if (_isNewItemAdding || ![self.name isEqualToString:_ininialName] || ![self.groupTitle isEqualToString:_ininialGroupName])
         {
-            NSString *newName = checkingResult[@"name"];
-            NSString *message;
-            if ([checkingResult[@"status"] isEqualToString:@"emoji"])
-                message = [NSString stringWithFormat:OALocalizedString(@"fav_point_emoticons_message"), newName];
-            else
-                message = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), newName];
-                        
-            [OAFavoritesHelper editFavoriteName:self.favorite newName:newName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
+            NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite name:self.name];
+            NSString *savingName = self.name;;
             
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_point_dublicate") message:message preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-            [OARootViewController.instance showNoInternetAlert];
+            if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
+            {
+                savingName = checkingResult[@"name"];
+                NSString *message;
+                if ([checkingResult[@"status"] isEqualToString:@"emoji"])
+                    message = [NSString stringWithFormat:OALocalizedString(@"fav_point_emoticons_message"), savingName];
+                else
+                    message = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), savingName];
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_point_dublicate") message:message preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+                [OARootViewController.instance showNoInternetAlert];
+            }
+            
+            if (_isNewItemAdding)
+            {
+                [self.favorite setName:savingName];
+                [self.favorite setCategory:savingGroup];
+                [OAFavoritesHelper addFavorite:self.favorite];
+            }
+            else
+            {
+                [OAFavoritesHelper editFavoriteName:self.favorite newName:savingName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
+            }
         }
         else
         {

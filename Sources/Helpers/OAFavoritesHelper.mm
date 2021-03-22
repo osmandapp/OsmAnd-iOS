@@ -302,8 +302,8 @@ static BOOL _favoritesLoaded = NO;
     for (OAFavoriteGroup *group in _favoriteGroups)
     {
         NSArray *sortedPoints = [group.points sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
-            NSString *title1 = [obj1 getName];
-            NSString *title2 = [obj2 getName];
+            NSString *title1 = [obj1 getDisplayName];
+            NSString *title2 = [obj2 getDisplayName];
             return [title1 compare:title2 options:NSCaseInsensitiveSearch];
         }];
         group.points = [NSMutableArray arrayWithArray:sortedPoints];
@@ -313,8 +313,8 @@ static BOOL _favoritesLoaded = NO;
     if (_cachedFavoritePoints)
     {
         NSArray *sortedCachedPoints = [_cachedFavoritePoints sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
-            NSString *title1 = [obj1 getName];
-            NSString *title2 = [obj2 getName];
+            NSString *title1 = [obj1 getDisplayName];
+            NSString *title2 = [obj2 getDisplayName];
             return [title1 compare:title2 options:NSCaseInsensitiveSearch];
         }];
         _cachedFavoritePoints = [NSMutableArray arrayWithArray:sortedCachedPoints];
@@ -405,12 +405,13 @@ static BOOL _favoritesLoaded = NO;
     return favorites;
 }
 
-+ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point
++ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point name:(NSString *)name
 {
-    BOOL emoticons = false;
+    BOOL emoticons = NO;
     NSString *index = @"";
     int number = 0;
-    NSString *name = [OAFavoritesHelper checkEmoticons:[point getName]];
+    NSString *checkingName = name ? name : [point getName];
+    NSString *editedName = [OAFavoritesHelper checkEmoticons:checkingName];
     NSString *category = [OAFavoritesHelper checkEmoticons:[point getCategory]];
     [point setCategory:category];
     
@@ -419,7 +420,7 @@ static BOOL _favoritesLoaded = NO;
         description = [OAFavoritesHelper checkEmoticons:[point getDescription]];
     [point setDescription:description];
     
-    if (name.length != [point getName].length)
+    if (editedName.length != checkingName.length)
         emoticons = YES;
     
     BOOL fl = YES;
@@ -428,12 +429,12 @@ static BOOL _favoritesLoaded = NO;
         fl = NO;
         for (OAFavoriteItem *favoritePoint in _cachedFavoritePoints)
         {
-            if ([[favoritePoint getName] isEqualToString:name] &&
+            if ([[favoritePoint getName] isEqualToString:editedName] &&
                 [[favoritePoint getCategory] isEqualToString:[point getCategory]])
             {
                 number++;
                 index = [NSString stringWithFormat:@" (%i)",number];
-                name = [[point getName] stringByAppendingString:index];
+                editedName = [checkingName stringByAppendingString:index];
                 fl = YES;
                 break;
             }
@@ -442,11 +443,11 @@ static BOOL _favoritesLoaded = NO;
     
     if (index.length > 0 || emoticons)
     {
-        [point setName:name];
+        [point setName:editedName];
         if (emoticons)
-            return @{@"name" : name, @"status": @"emoji"};
+            return @{@"name" : editedName, @"status": @"emoji"};
         else
-            return @{@"name" : name, @"status": @"duplicate"};
+            return @{@"name" : editedName, @"status": @"duplicate"};
     }
     return nil;
 }
@@ -528,6 +529,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name
 {
+    NSLog(OALocalizedString(@"personal_category_name"));
     return [name isEqualToString:OALocalizedString(@"personal_category_name")];
 }
 

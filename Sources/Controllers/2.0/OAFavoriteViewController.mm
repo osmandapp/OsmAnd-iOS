@@ -45,8 +45,7 @@
             [super setupCollapableViewsWithData:favorite lat:favorite.getLatitude lon:favorite.getLongitude];
         }
         
-        NSString *groupName = [self.favorite getFavoriteGroup];
-        self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorites") : groupName;
+        self.groupTitle = [self.favorite getFavoriteGroupDisplayName];
         
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
@@ -99,8 +98,7 @@
         QString icon = QString::null;
         QString background = QString::null;
 
-        OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
-        fav.favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
+        auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                         title,
                                                                         description,
                                                                         address,
@@ -108,6 +106,9 @@
                                                                         icon,
                                                                         background,
                                                                         OsmAnd::FColorRGB(r,g,b));
+        
+        OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+        
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
         
@@ -116,8 +117,7 @@
             [super setupCollapableViewsWithData:fav lat:location.latitude lon:location.longitude];
         }
         
-        NSString *groupStr = [self.favorite getFavoriteGroup];
-        self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorites") : groupStr;
+        self.groupTitle = [self.favorite getFavoriteGroupDisplayName];
         
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
@@ -256,12 +256,12 @@
 
 - (NSString *) getItemName
 {
-    return [self.favorite getFavoriteName];
+    return [self.favorite getDisplayName];
 }
 
 - (NSString *) getItemGroup
 {
-    return [self.favorite getFavoriteGroup];
+    return [self.favorite getFavoriteGroupDisplayName];
 }
 
 - (NSString *) getItemDesc

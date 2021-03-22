@@ -164,8 +164,7 @@
             OsmAnd::LatLon latLon = point->getLatLon();
             if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude] && [item.name isEqualToString:point->getTitle().toNSString()])
             {
-                OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
-                fav.favorite = point;
+                OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:point];
                 [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO saveState:NO];
                 originFound = YES;
                 break;
@@ -301,8 +300,9 @@
             }
             case FAVORITE:
             {
-                OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
-                fav.favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
+                auto favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
+                OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+                
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
                     [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO saveState:NO];

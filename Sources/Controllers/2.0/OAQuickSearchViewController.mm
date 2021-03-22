@@ -1855,11 +1855,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         }
         else if (self.searchType == OAQuickSearchType::HOME)
         {
-            [OsmAndApp instance].data.homePoint = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:pointDescription];
+            [[OATargetPointsHelper sharedInstance] setHomePoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:pointDescription];
         }
         else if(self.searchType == OAQuickSearchType::WORK)
         {
-            [OsmAndApp instance].data.workPoint = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:pointDescription];
+            [[OATargetPointsHelper sharedInstance] setWorkPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:pointDescription];
         }
     }
     [self dismissViewControllerAnimated:YES completion:nil];

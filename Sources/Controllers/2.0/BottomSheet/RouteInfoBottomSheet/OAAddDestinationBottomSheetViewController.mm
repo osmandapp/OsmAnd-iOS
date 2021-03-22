@@ -84,9 +84,9 @@
         @"color" : UIColorFromRGB(color_primary_purple),
         @"img" : @"ic_custom_favorites"
     }];
-    if (_app.data.homePoint && _type != EOADestinationTypeHome)
+    if ([_pointsHelper getHomePoint] && _type != EOADestinationTypeHome)
     {
-        OARTargetPoint *home = _app.data.homePoint;
+        OARTargetPoint *home = [_pointsHelper getHomePoint];
         [arr addObject:@{
             @"title" : OALocalizedString(@"home_pt"),
             @"descr" : home.pointDescription.name,
@@ -96,9 +96,9 @@
         }];
     }
     
-    if (_app.data.workPoint && _type != EOADestinationTypeWork)
+    if ([_pointsHelper getWorkPoint] && _type != EOADestinationTypeWork)
     {
-        OARTargetPoint *work = _app.data.workPoint;
+        OARTargetPoint *work = [_pointsHelper getWorkPoint];
         [arr addObject:@{
             @"title" : OALocalizedString(@"work_pt"),
             @"descr" : work.pointDescription.name,
@@ -152,8 +152,7 @@
     
     for(const auto& favorite : allFavorites)
     {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-        favData.favorite = favorite;
+        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         [sortedFavoriteItems addObject:favData];
     }
     
@@ -591,11 +590,11 @@
         [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:NO intermediate:(_type != EOADestinationTypeIntermediate ? -1 : (int)[_pointsHelper getIntermediatePoints].count) historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_MAP_MARKER name:title]];
     else if (_type == EOADestinationTypeHome)
     {
-        _app.data.homePoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
+        [_pointsHelper setHomePoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     else if (_type == EOADestinationTypeWork)
     {
-        _app.data.workPoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
+        [_pointsHelper setWorkPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     
     [vwController dismiss];

@@ -80,7 +80,6 @@ static OAQuickActionType *TYPE;
 - (void) addFavoriteSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
     NSString *groupName = self.getParams[KEY_CATEGORY_NAME];
     UIColor* color;
     if (self.getParams[KEY_CATEGORY_COLOR])
@@ -109,7 +108,8 @@ static OAQuickActionType *TYPE;
     QString address = QString::null;
     QString icon = QString::null;
     QString background = QString::null;
-    fav.favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
+    auto favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
+    OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
     
     [app saveFavoritesToPermamentStorage];
 }

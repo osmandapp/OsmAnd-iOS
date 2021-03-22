@@ -82,9 +82,7 @@
     NSMutableArray *cellFoldersData = [NSMutableArray new];
     for (OAFavoriteGroup *group in _groupedFavorites)
     {
-        NSString *name = group.name;
-        if (!name || name.length == 0)
-            name = OALocalizedString(@"favorites");
+        NSString *name = [OAFavoriteGroup getDisplayName:group.name];
         
         [cellFoldersData addObject:@{
             @"type" : kMultiIconTextDescCell,

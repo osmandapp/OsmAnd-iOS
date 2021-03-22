@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 
@@ -42,17 +43,16 @@ static BOOL _favoritesLoaded = NO;
     NSMutableArray *loadedPoints = [NSMutableArray new];
     for (const auto& favorite : allFavorites)
     {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-        favData.favorite = favorite;
+        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         [loadedPoints addObject:favData];
     }
     NSArray *sortedLoadedPoints = [loadedPoints sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
-        NSString *title1 = [obj1 getFavoriteName];
-        NSString *title2 = [obj2 getFavoriteName];
+        NSString *title1 = [obj1 getDisplayName];
+        NSString *title2 = [obj2 getDisplayName];
         return [title1 compare:title2 options:NSCaseInsensitiveSearch];
     }];
     
-    [OAFavoritesHelper createDefaultCategories];
+    //[OAFavoritesHelper createDefaultCategories];
     
     for (OAFavoriteItem *favorite : sortedLoadedPoints)
     {
@@ -71,7 +71,6 @@ static BOOL _favoritesLoaded = NO;
 
 + (void) createDefaultCategories
 {
-    
     [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_home_category")];
     [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_friends_category")];
     [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_places_category")];
@@ -91,17 +90,15 @@ static BOOL _favoritesLoaded = NO;
 {
     for (const auto& favorite : favorites)
     {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-        favData.favorite = favorite;
+        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         [_cachedFavoritePoints addObject:favData];
         
-        NSString *groupName = favData.favorite->getGroup().toNSString();
-        BOOL isHidden = favData.favorite->isHidden();
-        UIColor *color = favData.getColor;
+        NSString *groupName = [favData getFavoriteGroup];
+        UIColor *color = [favData getFavoriteColor];
         OAFavoriteGroup *group = [_flatGroups objectForKey:groupName];
         if (!group)
         {
-            group = [[OAFavoriteGroup alloc] initWithName:groupName isHidden:isHidden color:color];
+            group = [[OAFavoriteGroup alloc] initWithName:groupName isVisible:[favData getFavoriteVisible] color:color];
             [_flatGroups setObject:group forKey:groupName];
             [_favoriteGroups addObject:group];
         }
@@ -109,9 +106,99 @@ static BOOL _favoritesLoaded = NO;
     }
 }
 
++ (OAFavoriteItem *) getSpecialPoint:(OASpecialPointType *)specialType
+{
+    for (OAFavoriteItem *item in _cachedFavoritePoints)
+    {
+        if (item.specialPointType == specialType)
+            return item;
+    }
+    return nil;
+}
+
++ (void) setSpecialPoint:(OASpecialPointType *)specialType lat:(double)lat lon:(double)lon address:(NSString *)address
+{
+    OAFavoriteItem *point = [OAFavoritesHelper getSpecialPoint:specialType];
+    if (point)
+    {
+        [point setFavoriteIcon:[specialType getIconName]];
+        [point setFavoriteAddress:address];
+        [OAFavoritesHelper editFavorite:point lat:lat lon:lon description:[point getFavoriteDesc]];
+    }
+    else
+    {
+        OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:[specialType getName] group:[specialType getCategory]];
+        [point setFavoriteAddress:address];
+        [point setFavoriteIcon:[specialType getIconName]];
+        [point setFavoriteColor:[specialType getIconColor]];
+        [self addFavorite:point];
+    }
+}
+
++ (BOOL) addFavorite:(OAFavoriteItem *)point
+{
+    return [self addFavorite:point saveImmediately:YES];
+}
+
++ (BOOL) addFavorite:(OAFavoriteItem *)point saveImmediately:(BOOL)saveImmediately
+{
+    //TODO:init alitude if empty
+    
+    if ([point getFavoriteName].length == 0 && _flatGroups[[point getFavoriteGroup]])
+        return YES;
+    
+    if (![point isAddressSpecified])
+        [OAFavoritesHelper lookupAddress:point];
+    
+    [[OAAppSettings sharedManager] setShowFavorites:YES];
+    
+    OAFavoriteGroup *group = [OAFavoritesHelper getOrCreateGroup:point defColor:nil];
+    
+    if ([point getFavoriteName].length > 0)
+    {
+        [point setFavoriteVisible:group.isVisible];
+        if (point.specialPointType == [OASpecialPointType PARKING])
+            [point setFavoriteColor:[point.specialPointType getIconColor]];
+        else if (![point getFavoriteColor])
+            [point setFavoriteColor:group.color];
+        
+        [group addPoint:point];
+        [_cachedFavoritePoints addObject:point];
+    }
+    if (saveImmediately)
+    {
+        [OAFavoritesHelper sortAll];
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
+    }
+    
+    return YES;
+}
+
++ (void) lookupAddress:(OAFavoriteItem *)point
+{
+    //TODO: implement
+}
+
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems
 {
     return _cachedFavoritePoints;
+}
+
++ (OAFavoriteItem *) getVisibleFavByLat:(double)lat lon:(double)lon
+{
+    for (OAFavoriteItem *item in _cachedFavoritePoints)
+    {
+        if ([item getFavoriteVisible] && [OAFavoritesHelper isEqualCoordinatesOne:[item getLatitude] coordinateTwo:lat] && [OAFavoritesHelper isEqualCoordinatesOne:[item getLongitude] coordinateTwo:lon])
+            return item;
+    }
+    return nil;
+}
+
++ (BOOL) isEqualCoordinatesOne:(double)coord1 coordinateTwo:(double)coord2
+{
+    int roundedValue1 = (int)coord1 * 10;
+    int roundedValue2 = (int)coord2 * 10;
+    return roundedValue1 == roundedValue2;
 }
 
 + (OAFavoriteGroup *) getGroupByName:(NSString *)nameId
@@ -139,7 +226,7 @@ static BOOL _favoritesLoaded = NO;
     return res;
 }
 
-+ (void) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address
++ (BOOL) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address
 {
     NSString *oldGroup = [item getFavoriteGroup];
     [item setFavoriteName:newName];
@@ -154,7 +241,7 @@ static BOOL _favoritesLoaded = NO;
             [old.points removeObject:item];
         
         OAFavoriteGroup *newGroup = [OAFavoritesHelper getOrCreateGroup:item defColor:nil];
-        [item setFavoriteHidden:newGroup.isHidden];
+        [item setFavoriteVisible:newGroup.isVisible];
         
         //TODO: change icon for parking points here
 
@@ -166,8 +253,38 @@ static BOOL _favoritesLoaded = NO;
     }
     
     [OAFavoritesHelper sortAll];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
+    return YES;
+}
+
++ (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon
+{
+    return [OAFavoritesHelper editFavorite:item lat:lat lon:lon description:nil];
+}
+
++ (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon description:(NSString *)description
+{
+    [item setLat:lat lon:lon];
+    
+    //TODO: set altitude here
+    
+    if (description)
+        [item setFavoriteDesc:description];
+    
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
+    return YES;
+}
+
++ (void) editFavoriteGroup:(OAFavoriteGroup *)group newName:(NSString *)newName color:(UIColor*)color visible:(BOOL)visible
+{
+    //TODO: implement
+}
+
++ (void) saveCurrentPointsIntoFile
+{
     [[OsmAndApp instance] saveFavoritesToPermamentStorage];
 }
+
 
 + (void) sortAll
 {
@@ -208,7 +325,7 @@ static BOOL _favoritesLoaded = NO;
     if (_flatGroups[[item getFavoriteGroup]])
         return _flatGroups[[item getFavoriteGroup]];
     
-    OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:[item getFavoriteGroup] isHidden:[item getFavoriteHidden] color:[item getColor]];
+    OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:[item getFavoriteGroup] isVisible:[item getFavoriteVisible] color:[item getColor]];
     
     [_favoriteGroups addObject:group];
     _flatGroups[[item getFavoriteGroup]] = group;
@@ -233,12 +350,12 @@ static BOOL _favoritesLoaded = NO;
 
 + (void) addEmptyCategory:(NSString *)name color:(UIColor *)color visible:(BOOL)visible
 {
-    OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:name isHidden:visible color:color];
+    OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:name isVisible:visible color:color];
     [_favoriteGroups addObject:group];
     _flatGroups[name] = group;
 }
 
-+ (void) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems
++ (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems
 {
     if (favoritesItems)
     {
@@ -260,7 +377,8 @@ static BOOL _favoritesLoaded = NO;
             [_favoriteGroups removeObject:group];
         }
     }
-    [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
+    return YES;
 }
 
 + (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)allFavorites
@@ -269,15 +387,13 @@ static BOOL _favoritesLoaded = NO;
     NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
     for (const auto& favorite : allFavorites)
     {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-        favData.favorite = favorite;
-        NSString *groupName = favData.favorite->getGroup().toNSString();
-        BOOL isHidden = favData.favorite->isHidden();
-        UIColor *color = favData.getColor;
+        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+        NSString *groupName = [favData getFavoriteGroup];
+        UIColor *color = [favData getFavoriteColor];
         OAFavoriteGroup *group = [flatGroups objectForKey:groupName];
         if (!group)
         {
-            group = [[OAFavoriteGroup alloc] initWithName:groupName isHidden:isHidden color:color];
+            group = [[OAFavoriteGroup alloc] initWithName:groupName isVisible:[favData getFavoriteVisible] color:color];
             [flatGroups setObject:group forKey:groupName];
             [favorites addObject:group];
         }
@@ -334,8 +450,6 @@ static BOOL _favoritesLoaded = NO;
     return nil;
 }
 
-
-
 + (NSString *) checkEmoticons:(NSString *)text
 {
     __block NSMutableString* tempString = [NSMutableString string];
@@ -365,26 +479,26 @@ static BOOL _favoritesLoaded = NO;
 
 @implementation OAFavoriteGroup
 
-- (instancetype) initWithName:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color
+- (instancetype) initWithName:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color
 {
     self = [super init];
     if (self)
     {
         _name = name;
-        _isHidden = isHidden;
+        _isVisible = isVisible;
         _color = color;
         _points = [NSMutableArray array];
     }
     return self;
 }
 
-- (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color
+- (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color
 {
     self = [super init];
     if (self)
     {
         _name = name;
-        _isHidden = isHidden;
+        _isVisible = isVisible;
         _color = color;
         _points = [NSMutableArray arrayWithArray:points];
     }

@@ -40,6 +40,7 @@
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 #import "OAFavoriteViewController.h"
+#import "OAFavoritesHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -1964,7 +1965,9 @@ static const NSInteger _buttonsCount = 4;
             UIColor* color = [UIColor colorWithRed:favoriteLocation->getColor().r/255.0 green:favoriteLocation->getColor().g/255.0 blue:favoriteLocation->getColor().b/255.0 alpha:1.0];
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
             
-            _targetPoint.title = favoriteLocation->getTitle().toNSString();
+            OAFavoriteItem *item = [OAFavoritesHelper getVisibleFavByLat:favoriteLocation->getLatLon().latitude lon:favoriteLocation->getLatLon().longitude];
+            _targetPoint.title = [item getDisplayName];
+            
             [_addressLabel setText:_targetPoint.title];
             [self updateAddressLabel];
             _targetPoint.icon = [UIImage imageNamed:favCol.iconName];

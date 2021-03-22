@@ -15,6 +15,7 @@
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
 #import "OAFavoritesMapLayerProvider.h"
+#import "OAFavoritesHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -153,18 +154,23 @@
         double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
         targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
         
+        if (![OAFavoritesHelper isFavoritesLoaded])
+            [OAFavoritesHelper loadFavorites];
+        
+        OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
+        targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
+        
         UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
         OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
         
-        targetPoint.title = favLoc->getTitle().toNSString();
         targetPoint.icon = [UIImage imageNamed:favCol.iconName];
         
-        OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+        OAFavoriteItem *item;
         for (const auto& favLocPtr : self.app.favoritesCollection->getFavoriteLocations())
         {
             if (favLoc->isEqual(favLocPtr.get()))
             {
-                item.favorite = favLocPtr;
+                item = [[OAFavoriteItem alloc] initWithFavorite:favLocPtr];
                 targetPoint.targetObj = item;
                 break;
             }

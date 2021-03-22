@@ -244,7 +244,7 @@ static UIViewController *parentController;
                 {
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
 
-                    [c.titleView setText:[item getFavoriteName]];
+                    [c.titleView setText:[item getDisplayName]];
                     c = [self setupPoiIconForCell:c withFavaoriteItem:item];
                     
                     [c.distanceView setText:item.distance];
@@ -330,7 +330,7 @@ static UIViewController *parentController;
         
         // Sort items
         NSArray *sortedArrayItems = [itemData.favoriteGroup.points sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-            return [[[obj1 getFavoriteName] lowercaseString] compare:[[obj2 getFavoriteName] lowercaseString]];
+            return [[[obj1 getDisplayName] lowercaseString] compare:[[obj2 getDisplayName] lowercaseString]];
         }];
         [itemData.favoriteGroup.points setArray:sortedArrayItems];
         
@@ -498,8 +498,9 @@ static UIViewController *parentController;
     NSMutableArray *groupNames = [NSMutableArray new];
     for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
     {
-        if (group.name.length > 0)
-            [groupNames addObject:group.name];
+        NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
+        if (groupName.length > 0)
+            [groupNames addObject:groupName];
     }
         
     _groupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:groupNames];
@@ -595,7 +596,7 @@ static UIViewController *parentController;
             
             if (item)
             {
-                [OAFavoritesHelper editFavoriteName:item newName:[item getFavoriteName] group:_groupController.groupName descr:[item getFavoriteDesc] address:[item getFavoriteAddress]];
+                [OAFavoritesHelper editFavoriteName:item newName:[item getDisplayName] group:_groupController.groupName descr:[item getFavoriteDesc] address:[item getFavoriteAddress]];
             }
         }
         
@@ -854,7 +855,7 @@ static UIViewController *parentController;
         if (cell)
         {
             OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
-            [cell.titleView setText:[item getFavoriteName]];
+            [cell.titleView setText:[item getDisplayName]];
             cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
             
             [cell.distanceView setText:item.distance];
@@ -961,7 +962,7 @@ static UIViewController *parentController;
     if (cell)
     {
         OAFavoriteItem* item = [groupData.favoriteGroup.points objectAtIndex:dataIndex];
-        [cell.titleView setText:[item getFavoriteName]];
+        [cell.titleView setText:[item getDisplayName]];
         cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
 
         [cell.distanceView setText:item.distance];

@@ -84,7 +84,7 @@
     {
         case OATargetFavorite:
         {
-            OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+            OAFavoriteItem *item;
             for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
             {
                 double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
@@ -92,7 +92,7 @@
                 
                 if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:favLat destLon:favLon])
                 {
-                    item.favorite = favLoc;
+                    item = [[OAFavoriteItem alloc] initWithFavorite:favLoc];
                     break;
                 }
             }

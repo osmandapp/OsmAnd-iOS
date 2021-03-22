@@ -10,6 +10,21 @@
 #import "OALocationPoint.h"
 #include <OsmAndCore/IFavoriteLocation.h>
 
+@interface OASpecialPointType : NSObject
+
+- (instancetype)initWithTypeName:(NSString *)typeName resId:(NSString *)resId iconName:(NSString *)iconName;
++ (OASpecialPointType *) HOME;
++ (OASpecialPointType *) WORK;
++ (OASpecialPointType *) PARKING;
++ (NSArray<OASpecialPointType *> *) VALUES;
+- (NSString *) getCategory;
+- (NSString *) getName;
+- (NSString *) getIconName;
+- (UIColor *) getIconColor;
+- (NSString *) getHumanString;
+
+@end
+
 
 @interface OAFavoriteItem : NSObject<OALocationPoint>
 
@@ -17,8 +32,19 @@
 @property CGFloat direction;
 @property NSString* distance;
 @property double distanceMeters;
+@property OASpecialPointType *specialPointType;
+
+- (instancetype)initWithFavorite:(std::shared_ptr<OsmAnd::IFavoriteLocation>)favorite;
+- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name group:(NSString *)group;
+
+- (BOOL) isSpecialPoint;
+- (BOOL) isAddressSpecified;
+
+- (NSString *) getOverlayIconName;
+- (void) setLat:(double)lat lon:(double)lon;
 
 - (NSString *) getFavoriteName;
+- (NSString *) getDisplayName;
 - (void) setFavoriteName:(NSString *)name;
 
 - (NSString *) getFavoriteDesc;
@@ -36,10 +62,18 @@
 - (UIColor *) getFavoriteColor;
 - (void) setFavoriteColor:(UIColor *)color;
 
-- (BOOL) getFavoriteHidden;
-- (void) setFavoriteHidden:(BOOL)isHidden;
+- (BOOL) getFavoriteVisible;
+- (void) setFavoriteVisible:(BOOL)isVisible;
 
 - (NSString *) getFavoriteGroup;
+- (NSString *) getFavoriteGroupDisplayName;
 - (void) setFavoriteGroup:(NSString *)groupName;
+
+- (void) initAltitude;
+- (double) getAltitude;
+- (void) setAltitude:(double)altitude;
+
+- (double) getTimestamp;
+- (long) setTimestamp:(long)timestamp;
 
 @end

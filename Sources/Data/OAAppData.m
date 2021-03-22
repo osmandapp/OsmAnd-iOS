@@ -765,8 +765,6 @@
 #define kPointToNavigateBackup @"pointToNavigateBackup"
 #define kIntermediatePointsBackup @"intermediatePointsBackup"
 
-#define kHomePoint @"homePoint"
-#define kWorkPoint @"workPoint"
 #define kMyLocationToStart @"myLocationToStart"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
@@ -781,8 +779,6 @@
     [aCoder encodeObject:_pointToStartBackup forKey:kPointToStartBackup];
     [aCoder encodeObject:_pointToNavigateBackup forKey:kPointToNavigateBackup];
     [aCoder encodeObject:_intermediatePointsBackup forKey:kIntermediatePointsBackup];
-    [aCoder encodeObject:_homePoint forKey:kHomePoint];
-    [aCoder encodeObject:_workPoint forKey:kWorkPoint];
     [aCoder encodeObject:_myLocationToStart forKey:kMyLocationToStart];
 }
 
@@ -801,8 +797,6 @@
         _pointToStartBackup = [aDecoder decodeObjectForKey:kPointToStartBackup];
         _pointToNavigateBackup = [aDecoder decodeObjectForKey:kPointToNavigateBackup];
         _intermediatePointsBackup = [aDecoder decodeObjectForKey:kIntermediatePointsBackup];
-        _homePoint = [aDecoder decodeObjectForKey:kHomePoint];
-        _workPoint = [aDecoder decodeObjectForKey:kWorkPoint];
         _myLocationToStart = [aDecoder decodeObjectForKey:kMyLocationToStart];
         
         [self safeInit];

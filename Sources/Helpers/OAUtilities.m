@@ -1332,7 +1332,6 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
         fileSize += [fileDictionary fileSize];
-        NSLog(@"file=%@ (%llu)", fileName, fileSize);
     }
     
     return fileSize;

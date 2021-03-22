@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSArray *sortedFavorites = [self sortData:_allFavorites];
     for (OAFavoriteItem *favorite in sortedFavorites)
     {
-        NSString *name = [favorite getFavoriteName];
+        NSString *name = [favorite getDisplayName];
         NSString *distance = favorite.distance;
         
         [favoritesSection addObject:@{
@@ -133,14 +133,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             }
             case EOANameAscending:
             {
-                NSString *title1 = [obj1 getFavoriteName];
-                NSString *title2 = [obj2 getFavoriteName];
+                NSString *title1 = [obj1 getDisplayName];
+                NSString *title2 = [obj2 getDisplayName];
                 return [title1 compare:title2 options:NSCaseInsensitiveSearch];
             }
             case EOANameDescending:
             {
-                NSString *title1 = [obj1 getFavoriteName];
-                NSString *title2 = [obj2 getFavoriteName];
+                NSString *title1 = [obj1 getDisplayName];
+                NSString *title2 = [obj2 getDisplayName];
                 return [title2 compare:title1 options:NSCaseInsensitiveSearch];
             }
             default:

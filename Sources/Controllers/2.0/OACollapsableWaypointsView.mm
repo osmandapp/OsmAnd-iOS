@@ -80,8 +80,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         {
             if (QString::compare(fav->getGroup(), _favorite.favorite->getGroup()) == 0)
             {
-                OAFavoriteItem *p = [[OAFavoriteItem alloc] init];
-                p.favorite = fav;
+                OAFavoriteItem *p = [[OAFavoriteItem alloc] initWithFavorite:fav];
                 [arr addObject:p];
             }
         }
@@ -123,7 +122,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }
         else if (_type == EOAWaypointFavorite)
         {
-            btn = [self createButton:((OAFavoriteItem *)_data[i]).favorite->getTitle().toNSString() tag:i];
+            btn = [self createButton:[((OAFavoriteItem *)_data[i]) getDisplayName] tag:i];
         }
         if ([_data[i] isEqual:_currentWpt] || [_data[i] isEqual:_favorite])
         {

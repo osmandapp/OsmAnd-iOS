@@ -189,7 +189,10 @@
 {
     if (textView.text.length == 0 ||
         [self isIncorrectFileName: textView.text] ||
-        [textView.text isEqualToString:OALocalizedString(@"favorites")] || [OAFavoritesHelper getGroupByName:textView.text])
+        [textView.text isEqualToString:OALocalizedString(@"favorites")] ||
+        [textView.text isEqualToString:OALocalizedString(@"personal_category_name")] ||
+        [textView.text isEqualToString:@"personal"] ||
+        [OAFavoritesHelper getGroupByName:textView.text])
     {
         self.doneButton.enabled = NO;
     }

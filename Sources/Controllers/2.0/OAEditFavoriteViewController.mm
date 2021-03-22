@@ -95,7 +95,7 @@
         _app = [OsmAndApp instance];
         _isNewItemAdding = NO;
         self.favorite = favorite;
-        self.name = [self.favorite getFavoriteName];
+        self.name = [self.favorite getDisplayName];
         self.desc = [self.favorite getFavoriteDesc];
         self.address = [self.favorite getFavoriteAddress];
         self.groupTitle = [self getGroupTitle];
@@ -144,9 +144,9 @@
         else
             group = QString::null;
 
-        OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
         
-        fav.favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
+        
+        auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                         title,
                                                                         description,
                                                                         address,
@@ -154,6 +154,9 @@
                                                                         icon,
                                                                         background,
                                                                         OsmAnd::FColorRGB(r,g,b));
+        
+        OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+        
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
         
@@ -194,12 +197,8 @@
     NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
     
     for (OAFavoriteGroup *group in allGroups)
-    {
-        NSString *name = group.name;
-        if ([name isEqualToString:@""])
-            name = OALocalizedString(@"favorites");
-        
-        [names addObject:name];
+    {        
+        [names addObject:[OAFavoriteGroup getDisplayName:group.name]];
         [sizes addObject:[NSNumber numberWithInt:group.points.count]];
         [colors addObject:group.color];
     }
@@ -419,8 +418,7 @@
 
 - (NSString *) getGroupTitle
 {
-    NSString *groupName = [self.favorite getFavoriteGroup];
-    return groupName.length == 0 ? OALocalizedString(@"favorites") : groupName;
+    return [self.favorite getFavoriteGroupDisplayName];
 }
 
 

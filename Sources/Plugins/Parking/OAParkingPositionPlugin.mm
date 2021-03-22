@@ -29,6 +29,7 @@
 #include <OsmAndCore/Utilities.h>
 
 #define PLUGIN_ID kInAppId_Addon_Parking
+#define PARKING_TYPE @"parking_type"
 
 @interface OAParkingPositionPlugin ()
 

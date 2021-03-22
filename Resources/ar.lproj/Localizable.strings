@@ -2014,3 +2014,5 @@
 "map_widget_distance_by_tap" = "المسافة عن طريق الضغط";
 "select_segment" = "حدد الجزء";
 "select_track_to_follow" = "حدد المسار للمتابعة";
+"segnet_num" = "الجزء %d";
+"track_multiple_segments_select" = "%@ يحتوي على أكثر من جزء. الرجاء تحديد جزء من المسار الذي تريد استخدامه للتنقل.";

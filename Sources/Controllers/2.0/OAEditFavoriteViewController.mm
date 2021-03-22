@@ -951,7 +951,8 @@
     _wasChanged = YES;
     self.groupTitle = _groupNames[index];
     
-    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:_groupNames[index]];
+    NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:_groupNames[index]];
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
     _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     [self updateHeaderIcon];
@@ -976,9 +977,10 @@
     _wasChanged = YES;
     self.groupTitle = selectedGroupName;
     
-    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:selectedGroupName];
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:selectedGroupName]];
     _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
+    [self updateHeaderIcon];
     
     [self generateData];
     [self.tableView reloadData];

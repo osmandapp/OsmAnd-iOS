@@ -97,8 +97,8 @@
         _isNewItemAdding = NO;
         self.favorite = favorite;
         self.name = [self.favorite getDisplayName];
-        self.desc = [self.favorite getFavoriteDesc];
-        self.address = [self.favorite getFavoriteAddress];
+        self.desc = [self.favorite getDescription];
+        self.address = [self.favorite getAddress];
         self.groupTitle = [self getGroupTitle];
         self.groupColor = [self.favorite getColor];
         [self commonInit];
@@ -210,7 +210,7 @@
 
 - (void) setupIcons
 {
-    NSString *loadedPoiIconName = [self.favorite getFavoriteIcon];
+    NSString *loadedPoiIconName = [self.favorite getIcon];
     
     NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
     NSData *data = [NSData dataWithContentsOfFile:path];
@@ -267,14 +267,14 @@
                          @"octagon",
                          @"square"];
     
-    _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getFavoriteBackground]];
+    _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getBackgroundIcon]];
     if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;
 }
 
 - (void) setupColors
 {
-    UIColor* loadedColor = [self.favorite getFavoriteColor];
+    UIColor* loadedColor = [self.favorite getColor];
     _selectedColor = [OADefaultFavorite nearestFavColor:loadedColor];
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     
@@ -418,7 +418,7 @@
 
 - (NSString *) getGroupTitle
 {
-    return [self.favorite getFavoriteGroupDisplayName];
+    return [self.favorite getCategoryDisplayName];
 }
 
 
@@ -434,12 +434,12 @@
 {
     if (_wasChanged)
     {
-        [self.favorite setFavoriteDesc:self.desc ? self.desc : @""];
-        [self.favorite setFavoriteAddress:self.address ? self.address : @""];
-        [self.favorite setFavoriteColor:_selectedColor.color];
-        [self.favorite setFavoriteBackground:_backgroundIconNames[_selectedBackgroundIndex]];
-        [self.favorite setFavoriteIcon:_selectedIconName];
-        [self.favorite setFavoriteName:self.name ? self.name : @""];
+        [self.favorite setDescription:self.desc ? self.desc : @""];
+        [self.favorite setAddress:self.address ? self.address : @""];
+        [self.favorite setColor:_selectedColor.color];
+        [self.favorite setBackgroundIcon:_backgroundIconNames[_selectedBackgroundIndex]];
+        [self.favorite setIcon:_selectedIconName];
+        [self.favorite setName:self.name ? self.name : @""];
         
         NSString *savingGroup = [self.groupTitle isEqualToString:OALocalizedString(@"favorites")] ? @"" : self.groupTitle;
         NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite];
@@ -453,7 +453,7 @@
             else
                 message = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), newName];
                         
-            [OAFavoritesHelper editFavoriteName:self.favorite newName:newName group:savingGroup descr:[self.favorite getFavoriteDesc] address:[self.favorite getFavoriteAddress]];
+            [OAFavoritesHelper editFavoriteName:self.favorite newName:newName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
             
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_point_dublicate") message:message preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
@@ -461,7 +461,7 @@
         }
         else
         {
-            [OAFavoritesHelper editFavoriteName:self.favorite newName:self.name group:savingGroup descr:[self.favorite getFavoriteDesc] address:[self.favorite getFavoriteAddress]];
+            [OAFavoritesHelper editFavoriteName:self.favorite newName:self.name group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
         }
     }
 }
@@ -503,7 +503,7 @@
 
 - (void) removeExistingItemFromCollection
 {
-    NSString *favoriteTitle = [self.favorite getFavoriteName];
+    NSString *favoriteTitle = [self.favorite getName];
     for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
     {
         if ((localFavorite != self.favorite.favorite) &&

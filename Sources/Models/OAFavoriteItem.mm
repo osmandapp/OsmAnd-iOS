@@ -123,7 +123,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         _favorite = [self createFavoritePointWithLat:lat lon:lon name:name description:nil address:nil group:group iconName:nil backgroundIconName:nil color:nil visible:YES];
         
         if (!name)
-            [self setFavoriteName:name];
+            [self setName:name];
         
         //TODO: setTimeStamp here
         
@@ -167,11 +167,11 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) initPersonalType
 {
-    if ([[self getFavoriteGroup] isEqualToString:kPersonalCategory])
+    if ([[self getCategory] isEqualToString:kPersonalCategory])
     {
         for (OASpecialPointType *pointType in [OASpecialPointType VALUES])
         {
-            if ([[pointType getName] isEqualToString:[self getFavoriteName]])
+            if ([[pointType getName] isEqualToString:[self getName]])
                 self.specialPointType = pointType;
         }
     }
@@ -189,7 +189,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setLat:(double)lat lon:(double)lon
 {
-    auto newFavorite = [self createFavoritePointWithLat:lat lon:lon name:[self getFavoriteName] description:[self getDisplayName] address:[self getFavoriteAddress] group:[self getFavoriteGroup] iconName:[self getFavoriteIcon] backgroundIconName:[self getFavoriteBackground] color:[self getColor] visible:[self getFavoriteVisible]];
+    auto newFavorite = [self createFavoritePointWithLat:lat lon:lon name:[self getName] description:[self getDisplayName] address:[self getAddress] group:[self getCategory] iconName:[self getIcon] backgroundIconName:[self getBackgroundIcon] color:[self getColor] visible:[self isVisible]];
     
     [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(self.favorite);
     self.favorite = newFavorite;
@@ -238,25 +238,25 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if ([self isSpecialPoint])
         return [self.specialPointType getIconName];
-    return [self getFavoriteIcon];
+    return [self getIcon];
 }
 
 - (NSString *) getDisplayName
 {
     if ([self isSpecialPoint])
         return [self.specialPointType getHumanString];
-    return [self getFavoriteName];
+    return [self getName];
 }
 
 - (BOOL) isAddressSpecified
 {
-    NSString *address = [self getFavoriteAddress];
+    NSString *address = [self getAddress];
     return address && address.length > 0;
 }
 
 #pragma mark - Getters and setters
 
-- (NSString *) getFavoriteName
+- (NSString *) getName
 {
     if (!self.favorite->getTitle().isNull())
         return self.favorite->getTitle().toNSString();
@@ -264,13 +264,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         return @"";
 }
 
-- (void) setFavoriteName:(NSString *)name
+- (void) setName:(NSString *)name
 {
     self.favorite->setTitle(QString::fromNSString(name));
     [self initPersonalType];
 }
 
-- (NSString *) getFavoriteDesc
+- (NSString *) getDescription
 {
     if (!self.favorite->getDescription().isNull())
         return self.favorite->getDescription().toNSString();
@@ -278,12 +278,12 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         return @"";
 }
 
-- (void) setFavoriteDesc:(NSString *)desc
+- (void) setDescription:(NSString *)description
 {
-    self.favorite->setDescription(QString::fromNSString(desc));
+    self.favorite->setDescription(QString::fromNSString(description));
 }
 
-- (NSString *) getFavoriteAddress
+- (NSString *) getAddress
 {
     if (!self.favorite->getAddress().isNull())
         return self.favorite->getAddress().toNSString();
@@ -291,42 +291,37 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         return @"";
 }
 
-- (void) setFavoriteAddress:(NSString *)address
+- (void) setAddress:(NSString *)address
 {
     self.favorite->setAddress(QString::fromNSString(address));
 }
 
-- (NSString *) getFavoriteIcon
+- (NSString *) getIcon
 {
     return self.favorite->getIcon().toNSString();
 }
 
-- (void) setFavoriteIcon:(NSString *)icon
+- (void) setIcon:(NSString *)icon
 {
     self.favorite->setIcon(QString::fromNSString(icon));
 }
 
-- (NSString *) getFavoriteBackground
+- (NSString *) getBackgroundIcon
 {
     return self.favorite->getBackground().toNSString();
 }
 
-- (void) setFavoriteBackground:(NSString *)background
+- (void) setBackgroundIcon:(NSString *)backgroundIcon
 {
-    self.favorite->setBackground(QString::fromNSString(background));
+    self.favorite->setBackground(QString::fromNSString(backgroundIcon));
 }
 
 - (UIColor *) getColor
 {
-    return [self getFavoriteColor];
-}
-
-- (UIColor *) getFavoriteColor
-{
     return [UIColor colorWithRed:self.favorite->getColor().r/255.0 green:self.favorite->getColor().g/255.0 blue:self.favorite->getColor().b/255.0 alpha:1.0];
 }
 
-- (void) setFavoriteColor:(UIColor *)color
+- (void) setColor:(UIColor *)color
 {
     CGFloat r,g,b,a;
     [color getRed:&r
@@ -337,17 +332,17 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
 }
 
-- (BOOL) getFavoriteVisible
+- (BOOL) isVisible
 {
     return !self.favorite->isHidden();
 }
 
-- (void) setFavoriteVisible:(BOOL)isVisible
+- (void) setVisible:(BOOL)isVisible
 {
     self.favorite->setIsHidden(!isVisible);
 }
 
-- (NSString *) getFavoriteGroup
+- (NSString *) getCategory
 {
     if (!self.favorite->getGroup().isNull())
         return self.favorite->getGroup().toNSString();
@@ -355,15 +350,15 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         return @"";
 }
 
-- (NSString *) getFavoriteGroupDisplayName
+- (NSString *) getCategoryDisplayName
 {
-    return [OAFavoriteGroup getDisplayName:[self getFavoriteGroup]];
+    return [OAFavoriteGroup getDisplayName:[self getCategory]];
 }
 
 
-- (void) setFavoriteGroup:(NSString *)groupName
+- (void) setCategory:(NSString *)category
 {
-    self.favorite->setGroup(QString::fromNSString(groupName));
+    self.favorite->setGroup(QString::fromNSString(category));
     [self initPersonalType];
 }
 

@@ -43,31 +43,31 @@
 - (NSString *) getOverlayIconName;
 - (void) setLat:(double)lat lon:(double)lon;
 
-- (NSString *) getFavoriteName;
+- (NSString *) getName;
 - (NSString *) getDisplayName;
-- (void) setFavoriteName:(NSString *)name;
+- (void) setName:(NSString *)name;
 
-- (NSString *) getFavoriteDesc;
-- (void) setFavoriteDesc:(NSString *)desc;
+- (NSString *) getDescription;
+- (void) setDescription:(NSString *)description;
 
-- (NSString *) getFavoriteAddress;
-- (void) setFavoriteAddress:(NSString *)address;
+- (NSString *) getAddress;
+- (void) setAddress:(NSString *)address;
 
-- (NSString *) getFavoriteIcon;
-- (void) setFavoriteIcon:(NSString *)icon;
+- (NSString *) getIcon;
+- (void) setIcon:(NSString *)icon;
 
-- (NSString *) getFavoriteBackground;
-- (void) setFavoriteBackground:(NSString *)background;
+- (NSString *) getBackgroundIcon;
+- (void) setBackgroundIcon:(NSString *)backgroundIcon;
 
-- (UIColor *) getFavoriteColor;
-- (void) setFavoriteColor:(UIColor *)color;
+- (UIColor *) getColor;
+- (void) setColor:(UIColor *)color;
 
-- (BOOL) getFavoriteVisible;
-- (void) setFavoriteVisible:(BOOL)isVisible;
+- (BOOL) isVisible;
+- (void) setVisible:(BOOL)isVisible;
 
-- (NSString *) getFavoriteGroup;
-- (NSString *) getFavoriteGroupDisplayName;
-- (void) setFavoriteGroup:(NSString *)groupName;
+- (NSString *) getCategory;
+- (NSString *) getCategoryDisplayName;
+- (void) setCategory:(NSString *)category;
 
 - (void) initAltitude;
 - (double) getAltitude;

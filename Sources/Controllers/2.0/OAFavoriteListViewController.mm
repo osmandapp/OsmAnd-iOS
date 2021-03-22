@@ -542,11 +542,11 @@ static UIViewController *parentController;
             
             if (item)
             {
-                [item setFavoriteColor:favCol.color];
+                [item setColor:favCol.color];
                 
                 if (indexPath.row == 1)
                 {
-                    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[item getFavoriteGroup]];
+                    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[item getCategory]];
                     group.color = favCol.color;
                 }
             }
@@ -597,7 +597,7 @@ static UIViewController *parentController;
             
             if (item)
             {
-                [OAFavoritesHelper editFavoriteName:item newName:[item getDisplayName] group:_groupController.groupName descr:[item getFavoriteDesc] address:[item getFavoriteAddress]];
+                [OAFavoritesHelper editFavoriteName:item newName:[item getDisplayName] group:_groupController.groupName descr:[item getDescription] address:[item getAddress]];
             }
         }
         
@@ -976,15 +976,15 @@ static UIViewController *parentController;
 
 - (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavaoriteItem:(OAFavoriteItem*)item
 {
-    UIColor* color = [item getFavoriteColor];
+    UIColor* color = [item getColor];
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
     
-    NSString *backgroundName = [item getFavoriteBackground];
+    NSString *backgroundName = [item getBackgroundIcon];
     backgroundName = [NSString stringWithFormat:@"bg_point_%@", backgroundName];
     UIImage *backroundImage = [UIImage imageNamed:backgroundName];
     cell.titleIcon.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.titleIcon.tintColor = favCol.color;
-    NSString *iconName = [item getFavoriteIcon];
+    NSString *iconName = [item getIcon];
     
     UIImage *poiImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:iconName]];
     cell.titlePoiIcon.image = [poiImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

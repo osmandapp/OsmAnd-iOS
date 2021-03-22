@@ -57,8 +57,8 @@
 @property (nonatomic) BOOL isVisible;
 @property (nonatomic) NSMutableArray<OAFavoriteItem*> *points;
 
-- (instancetype) initWithName:(NSString *)name isVisible:(BOOL)isHidden color:(UIColor *)color;
-- (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isVisible:(BOOL)isHidden color:(UIColor *)color;
+- (instancetype) initWithName:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color;
+- (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color;
 - (void) addPoint:(OAFavoriteItem *)point;
 
 - (BOOL) isPersonal;

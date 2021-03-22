@@ -45,12 +45,12 @@
             [super setupCollapableViewsWithData:favorite lat:favorite.getLatitude lon:favorite.getLongitude];
         }
         
-        self.groupTitle = [self.favorite getFavoriteGroupDisplayName];
+        self.groupTitle = [self.favorite getCategoryDisplayName];
         
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
         
-        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getFavoriteGroup]];
+        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
         self.groupColor = favoriteGroup.color;
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
@@ -117,12 +117,12 @@
             [super setupCollapableViewsWithData:fav lat:location.latitude lon:location.longitude];
         }
         
-        self.groupTitle = [self.favorite getFavoriteGroupDisplayName];
+        self.groupTitle = [self.favorite getCategoryDisplayName];
         
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
         
-        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getFavoriteGroup]];
+        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
         self.groupColor = favoriteGroup.color;
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
@@ -231,7 +231,7 @@
 
 - (void) removeExistingItemFromCollection
 {
-    NSString *favoriteTitle = [self.favorite getFavoriteName];
+    NSString *favoriteTitle = [self.favorite getName];
     for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
     {
         if ((localFavorite != self.favorite.favorite) &&
@@ -261,17 +261,17 @@
 
 - (NSString *) getItemGroup
 {
-    return [self.favorite getFavoriteGroupDisplayName];
+    return [self.favorite getCategoryDisplayName];
 }
 
 - (NSString *) getItemDesc
 {
-    return [self.favorite getFavoriteDesc];
+    return [self.favorite getDescription];
 }
 
 - (UIImage *) getIcon
 {
-    NSString *poiIconName = [self.favorite getFavoriteIcon];
+    NSString *poiIconName = [self.favorite getIcon];
     if (!poiIconName || [poiIconName isEqualToString:@""])
         poiIconName = @"mm_special_star";
     else
@@ -288,7 +288,7 @@
         @"square" : @"bg_point_square",
     };
     
-    NSString *selectedIcon = [self.favorite getFavoriteBackground];
+    NSString *selectedIcon = [self.favorite getBackgroundIcon];
     if (!selectedIcon || [selectedIcon isEqualToString:@""])
         selectedIcon = @"circle";
     NSString *poiBackgroundIconName = icons[selectedIcon];

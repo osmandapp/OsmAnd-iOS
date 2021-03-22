@@ -300,10 +300,10 @@
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         
-        UIColor* color = [item getFavoriteColor];
+        UIColor* color = [item getColor];
         OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
         
-        NSString *backgroundName = [item getFavoriteBackground];
+        NSString *backgroundName = [item getBackgroundIcon];
         if(!backgroundName || backgroundName.length == 0)
             backgroundName = @"circle";
         backgroundName = [NSString stringWithFormat:@"bg_point_%@", backgroundName];
@@ -311,7 +311,7 @@
         cell.titleIcon.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.titleIcon.tintColor = favCol.color;
         
-        NSString *iconName = [item getFavoriteIcon];
+        NSString *iconName = [item getIcon];
         if(!iconName || iconName.length == 0)
             iconName = @"special_star";
         UIImage *poiImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:iconName]];

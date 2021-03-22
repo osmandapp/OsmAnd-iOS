@@ -83,8 +83,8 @@
     OAFavoriteColor *_selectedColor;
     NSString *_selectedIconCategoryName;
     NSString *_selectedIconName;
-    int _selectedColorIndex;
-    int _selectedBackgroundIndex;
+    NSInteger _selectedColorIndex;
+    NSInteger _selectedBackgroundIndex;
     NSString *_editingTextFieldKey;;
 }
 
@@ -200,7 +200,7 @@
     for (OAFavoriteGroup *group in allGroups)
     {        
         [names addObject:[OAFavoriteGroup getDisplayName:group.name]];
-        [sizes addObject:[NSNumber numberWithInt:group.points.count]];
+        [sizes addObject:[NSNumber numberWithInteger:group.points.count]];
         [colors addObject:group.color];
     }
     _groupNames = [NSArray arrayWithArray:names];
@@ -215,8 +215,7 @@
     NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-    
-    NSMutableDictionary *parsedJson = [NSMutableDictionary new];
+
     _poiIcons = [NSMutableDictionary new];
     
     if (json)
@@ -333,12 +332,12 @@
         @"key" : kSelectGroupKey
     }];
 
-    int selectedGroupIndex = [_groupNames indexOfObject:self.groupTitle];
+    NSUInteger selectedGroupIndex = [_groupNames indexOfObject:self.groupTitle];
     if (selectedGroupIndex < 0)
         selectedGroupIndex = 0;
     [section addObject:@{
         @"type" : kFolderCardsCell,
-        @"selectedValue" : [NSNumber numberWithInt:selectedGroupIndex],
+        @"selectedValue" : [NSNumber numberWithInteger:selectedGroupIndex],
         @"values" : _groupNames,
         @"sizes" : _groupSizes,
         @"colors" : _groupColors,
@@ -363,13 +362,13 @@
         @"type" : kCellTypeColorCollection,
         @"title" : OALocalizedString(@"fav_color"),
         @"value" : _selectedColor.name,
-        @"index" : [NSNumber numberWithInt:_selectedColorIndex],
+        @"index" : [NSNumber numberWithInteger:_selectedColorIndex],
     }];
     [section addObject:@{
         @"type" : kCellTypeIconCollection,
         @"title" : OALocalizedString(@"shape"),
         @"value" : OALocalizedString(_backgroundIconNames[_selectedBackgroundIndex]),
-        @"index" : [NSNumber numberWithInt:_selectedBackgroundIndex],
+        @"index" : [NSNumber numberWithInteger:_selectedBackgroundIndex],
         @"data" : _backgroundIcons,
         @"key" : kBackgroundsKey
     }];
@@ -412,7 +411,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"add_favorite");
+    self.titleLabel.text = _isNewItemAdding ? OALocalizedString(@"add_favorite") : OALocalizedString(@"ctx_mnu_edit_fav");
     [self.doneButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -486,14 +485,16 @@
 
 - (void) deleteItemWithAlertView
 {
-    [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q")
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_yes")
-                                                             action:^{
-                                            [self deleteFavoriteItem:self.favorite];
-                                            [self dismissViewControllerAnimated:YES completion:nil];
-                                        }],
-      nil] show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"fav_remove_q") preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteFavoriteItem:self.favorite];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) deleteFavoriteItem:(OAFavoriteItem *)favoriteItem
@@ -763,7 +764,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+    NSDictionary *item = _data[section].firstObject;
     return item[@"header"];
 }
 

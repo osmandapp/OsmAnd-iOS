@@ -25,9 +25,8 @@
 
 @implementation OAAddFavoriteGroupViewController
 {
-    OsmAndAppInstance _app;
     NSArray<NSArray<NSDictionary *> *> *_data;
-    NSString *_newGropuName;
+    NSString *_newGroupName;
     OAFavoriteColor *_selectedColor;
     int _selectedColorIndex;
     NSArray<NSNumber *> *_colors;
@@ -38,7 +37,6 @@
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
-        _app = [OsmAndApp instance];
         [self setupColors];
         [self generateData];
     }
@@ -53,7 +51,7 @@
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.doneButton.hidden = NO;
     self.doneButton.enabled = NO;
-    _newGropuName = @"";
+    _newGroupName = @"";
 }
 
 - (void) setupColors
@@ -101,7 +99,7 @@
 
 - (void)onDoneButtonPressed
 {
-    [self.delegate onFavoriteGroupAdded:_newGropuName color:_selectedColor.color];
+    [self.delegate onFavoriteGroupAdded:_newGroupName color:_selectedColor.color];
 }
 
 #pragma mark - UITableViewDataSource
@@ -198,7 +196,7 @@
     }
     else
     {
-        _newGropuName = textView.text;
+        _newGroupName = textView.text;
         self.doneButton.enabled = YES;
     }
 }

@@ -524,7 +524,6 @@
 "fav_group" = "Group";
 "groups" = "Groups";
 "favorite" = "Favorite";
-"amenity" = "Amenity";
 "poi_overlay" = "POI Overlay";
 "poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
@@ -566,7 +565,6 @@
 "default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 
-"favorite_home_category" = "Home";
 "favorite_friends_category" = "Friends";
 "favorite_places_category" = "Places";
 "shared_string_others" = "Others";
@@ -1266,7 +1264,6 @@
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
-"public_transport_menu" = "Transport";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
@@ -2134,6 +2131,8 @@
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 
+
+//Poi catagories
 "amenity" = "Amenity";
 "emergency" = "Emergency";
 "service" = "Service";

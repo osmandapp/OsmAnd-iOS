@@ -88,7 +88,7 @@
             @"type" : kMultiIconTextDescCell,
             @"header" : OALocalizedString(@"available_groups"),
             @"title" : name,
-            @"description" : [NSString stringWithFormat:@"%i", group.points.count],
+            @"description" : [NSString stringWithFormat:@"%ld", (unsigned long)group.points.count],
             @"isSelected" : [NSNumber numberWithBool:[name isEqualToString: _selectedGroupName]],
             @"color" : group.color,
             @"img" : @"ic_custom_folder"
@@ -173,7 +173,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+    NSDictionary *item = _data[section].firstObject;
     return item[@"header"];
 }
 

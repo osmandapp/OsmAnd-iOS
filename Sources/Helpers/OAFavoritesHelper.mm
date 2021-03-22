@@ -71,7 +71,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (void) createDefaultCategories
 {
-    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_home_category")];
+    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"home_pt")];
     [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_friends_category")];
     [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_places_category")];
     [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"shared_string_others")];

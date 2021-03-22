@@ -29,7 +29,6 @@
 
 @implementation OASelectFavoriteGroupViewController
 {
-    OsmAndAppInstance _app;
     NSString *_selectedGroupName;
     NSArray<OAFavoriteGroup *> *_groupedFavorites;
     NSArray<NSArray<NSDictionary *> *> *_data;
@@ -41,7 +40,6 @@
     if (self)
     {
         _selectedGroupName = selectedGroupName;
-        _app = [OsmAndApp instance];
         [self reloadData];
         [self generateData];
     }

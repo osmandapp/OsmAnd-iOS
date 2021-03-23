@@ -172,9 +172,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         for (OASpecialPointType *pointType in [OASpecialPointType VALUES])
         {
             if ([[pointType getName] isEqualToString:[self getName]])
+            {
                 self.specialPointType = pointType;
+                return;
+            }
         }
     }
+    self.specialPointType = nil;
 }
 
 - (double) getLatitude

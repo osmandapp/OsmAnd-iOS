@@ -37,6 +37,7 @@
 - (instancetype)initWithFavorite:(std::shared_ptr<OsmAnd::IFavoriteLocation>)favorite;
 - (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name group:(NSString *)group;
 
+- (void) initPersonalType;
 - (BOOL) isSpecialPoint;
 - (BOOL) isAddressSpecified;
 

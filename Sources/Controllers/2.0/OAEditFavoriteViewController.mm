@@ -27,6 +27,7 @@
 #import "OAFavoriteItem.h"
 #import "OARootViewController.h"
 #import "OATargetInfoViewController.h"
+#import "OATargetPointsHelper.h"
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
 
@@ -88,7 +89,7 @@
     NSString *_selectedIconName;
     NSInteger _selectedColorIndex;
     NSInteger _selectedBackgroundIndex;
-    NSString *_editingTextFieldKey;;
+    NSString *_editingTextFieldKey;
 }
 
 - (id) initWithItem:(OAFavoriteItem *)favorite
@@ -311,18 +312,21 @@
         @"type" : kTextInputFloatingCellWithIcon,
         @"title" : self.name,
         @"hint" : OALocalizedString(@"fav_name"),
+        @"isEditable" : [NSNumber numberWithBool:![self.favorite isSpecialPoint]],
         @"key" : kNameKey
     }];
     [section addObject:@{
         @"type" : kTextInputFloatingCellWithIcon,
         @"title" : self.desc,
         @"hint" : OALocalizedString(@"description"),
+        @"isEditable" : @YES,
         @"key" : kDescKey
     }];
     [section addObject:@{
         @"type" : kTextInputFloatingCellWithIcon,
         @"title" : self.address,
         @"hint" : OALocalizedString(@"shared_string_address"),
+        @"isEditable" : @YES,
         @"key" : kAddressKey
     }];
 
@@ -497,7 +501,8 @@
         }
         else
         {
-            [OAFavoritesHelper editFavoriteName:self.favorite newName:self.name group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
+            NSString *savingName = [self.favorite isSpecialPoint] ? [self.favorite getName] : self.name;
+            [OAFavoritesHelper editFavoriteName:self.favorite newName:savingName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
         }
     }
 }
@@ -652,6 +657,17 @@
             resultCell.fieldLabel.hidden = NO;
             resultCell.textFieldTopConstraint.constant = kTextCellTopMargin;
             resultCell.textFieldBottomConstraint.constant = kTextCellBottomMargin;
+        }
+        
+        if ([item[@"isEditable"] boolValue])
+        {
+            textField.enabled = YES;
+            textField.textColor = UIColor.blackColor;
+        }
+        else
+        {
+            textField.enabled = NO;
+            textField.textColor = UIColor.darkGrayColor;
         }
         
         return resultCell;

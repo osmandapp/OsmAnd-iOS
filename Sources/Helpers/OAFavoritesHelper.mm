@@ -110,6 +110,7 @@ static BOOL _favoritesLoaded = NO;
 {
     for (OAFavoriteItem *item in _cachedFavoritePoints)
     {
+        [item initPersonalType];
         if (item.specialPointType == specialType)
             return item;
     }

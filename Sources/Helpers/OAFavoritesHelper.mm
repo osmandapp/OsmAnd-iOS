@@ -88,9 +88,9 @@ static BOOL _favoritesLoaded = NO;
 
 + (void) import:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)favorites
 {
-    for (const auto& favorite : favorites)
+    for (auto it = favorites.begin(); it != favorites.end(); ++it)
     {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:*it];
         [_cachedFavoritePoints addObject:favData];
         
         NSString *groupName = [favData getCategory];

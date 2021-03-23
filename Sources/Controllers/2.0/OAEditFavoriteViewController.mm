@@ -425,6 +425,19 @@
     return [self.favorite getCategoryDisplayName];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    if ([OAUtilities isLandscape])
+    {
+        self.titleLabel.hidden = YES;
+        self.navBarHeightConstraint.constant = 100 - 32;
+    }
+    else
+    {
+        self.titleLabel.hidden = NO;
+        self.navBarHeightConstraint.constant = 100;
+    }
+}
 
 #pragma mark - Actions
 

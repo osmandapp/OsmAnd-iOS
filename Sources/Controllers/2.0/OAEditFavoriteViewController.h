@@ -14,6 +14,8 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *headerIconPoi;
 @property (weak, nonatomic) IBOutlet UIImageView *headerIconBackground;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
+
 
 @property (nonatomic) OAFavoriteItem *favorite;
 @property (nonatomic, copy) NSString *name;

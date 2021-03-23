@@ -16,6 +16,7 @@
                 <outlet property="doneButton" destination="SjJ-8f-vqm" id="xcN-37-6Tk"/>
                 <outlet property="headerIconBackground" destination="m2u-Ip-S5r" id="iyd-tn-EBp"/>
                 <outlet property="headerIconPoi" destination="Whv-K0-SJi" id="Bf5-2Y-E7e"/>
+                <outlet property="navBarHeightConstraint" destination="xWC-3U-wP6" id="Ovd-9V-N2i"/>
                 <outlet property="navbarView" destination="Bs9-2L-ti4" id="ibU-c4-UdB"/>
                 <outlet property="tableView" destination="NrM-78-nBe" id="TGz-iw-9pj"/>
                 <outlet property="titleLabel" destination="krK-4A-igo" id="uhV-5C-3aD"/>
@@ -76,16 +77,16 @@
                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="m2u-Ip-S5r" firstAttribute="centerX" secondItem="Bs9-2L-ti4" secondAttribute="centerX" id="0xo-PQ-cfF"/>
+                        <constraint firstItem="krK-4A-igo" firstAttribute="top" secondItem="Bs9-2L-ti4" secondAttribute="top" constant="62" id="45U-C9-tiR"/>
                         <constraint firstItem="kiz-Fv-xhW" firstAttribute="leading" secondItem="Bs9-2L-ti4" secondAttribute="leading" id="5iD-6b-j0q"/>
                         <constraint firstItem="krK-4A-igo" firstAttribute="centerX" secondItem="Bs9-2L-ti4" secondAttribute="centerX" id="K8B-hV-g4s"/>
                         <constraint firstItem="Whv-K0-SJi" firstAttribute="centerX" secondItem="m2u-Ip-S5r" secondAttribute="centerX" id="Lgf-qI-oSc"/>
                         <constraint firstItem="Whv-K0-SJi" firstAttribute="centerY" secondItem="m2u-Ip-S5r" secondAttribute="centerY" id="Qn1-ta-SZx"/>
                         <constraint firstAttribute="trailing" secondItem="kiz-Fv-xhW" secondAttribute="trailing" id="TPn-m9-lbQ"/>
                         <constraint firstItem="SjJ-8f-vqm" firstAttribute="top" secondItem="Bs9-2L-ti4" secondAttribute="top" constant="13" id="Yho-c8-Jps"/>
-                        <constraint firstItem="krK-4A-igo" firstAttribute="top" secondItem="m2u-Ip-S5r" secondAttribute="bottom" constant="16" id="bZt-PN-Vm0"/>
-                        <constraint firstItem="kiz-Fv-xhW" firstAttribute="top" secondItem="krK-4A-igo" secondAttribute="bottom" constant="16" id="liF-an-tfR"/>
                         <constraint firstItem="m2u-Ip-S5r" firstAttribute="top" secondItem="Bs9-2L-ti4" secondAttribute="top" constant="16" id="oSI-02-TU1"/>
                         <constraint firstAttribute="bottom" secondItem="kiz-Fv-xhW" secondAttribute="bottom" id="qwC-N3-MSJ"/>
+                        <constraint firstAttribute="height" constant="100" id="xWC-3U-wP6"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="NrM-78-nBe">

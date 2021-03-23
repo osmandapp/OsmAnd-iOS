@@ -272,10 +272,9 @@
     if (object && [self isObjectMovable:object])
     {
         OAFavoriteItem *item = (OAFavoriteItem *)object;
-        const auto& favLoc = item.favorite;
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        return favCol.icon;
+        const auto favLoc = item.favorite;
+        UIImage *img = [self getFavoriteImage:favLoc.get()];
+        return [OAUtilities resizeImage:img newSize:CGSizeMake(30., 30.)];
     }
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }

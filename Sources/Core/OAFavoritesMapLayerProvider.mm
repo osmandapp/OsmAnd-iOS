@@ -98,7 +98,7 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
     
     origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName.toNSString() stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
     // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
-    CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.5 : 0.8;
+    CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.6 : 0.8;
     resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * scale, origImage.size.height * scale)];
     coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
     

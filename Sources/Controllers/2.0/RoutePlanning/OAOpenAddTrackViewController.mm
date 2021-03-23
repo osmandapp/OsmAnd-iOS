@@ -17,6 +17,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXTrackCell.h"
 #import "OASegmentTableViewCell.h"
+#import "OADividerCell.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OATrackSegmentsViewController.h"
@@ -30,6 +31,7 @@
 #import "OAFoldersCell.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
+#define kDividerCell @"OADividerCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
 #define kFoldersCell @"OAFoldersCell"
 #define kAllFoldersKey @"kAllFoldersKey"
@@ -90,7 +92,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
     if (_screenType == EOAAddToATrack)
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
@@ -143,6 +144,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         @"values" : [self getFoldersList]
     }];
     
+    [existingTracksSection addObject:@{ @"type" : kDividerCell }];
+    
     [existingTracksSection addObject:@{
         @"type" : kCellTypeSegment,
         @"title0" : OALocalizedString(@"osm_modified"),
@@ -177,6 +180,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 @"key" : @"gpx_route"
             }];
     }
+    [existingTracksSection addObject:@{ @"type" : kDividerCell }];
     [data addObject:existingTracksSection];
     _data = data;
 }
@@ -248,6 +252,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 #pragma mark - TableView
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:@"OADividerCell"])
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+    
+    return UITableViewAutomaticDimension;
+}
+
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
@@ -282,8 +295,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0, self.tableView.safeAreaInsets.left + kGPXCellTextLeftOffset, 0, 0);
-            cell.separatorView.hidden = YES;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
         {
@@ -291,11 +306,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
-            cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-            cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorView.hidden = indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 2;
         }
         return cell;
     }
@@ -315,6 +326,20 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             cell.delegate = self;
             [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kDividerCell])
+    {
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:kDividerCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDividerCell owner:self options:nil];
+            cell = (OADividerCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.dividerInsets = UIEdgeInsetsZero;
+            cell.dividerHight = 0.5;
         }
         return cell;
     }

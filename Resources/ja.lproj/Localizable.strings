@@ -1786,7 +1786,6 @@
 "nav_type_osmand" = "OsmAnd(オフラインルーティング)";
 "update_map" = "マップを更新";
 "import_from_files" = "ファイルからインポート";
-
 "import_complete_description" = "%@から全データがインポートされました。以下のボタンよりアプリの管理が可能になります。";
 "route_betw_points" = "地点間のルート";
 "importing_from" = "%@からデータをインポート";
@@ -1850,3 +1849,4 @@
 "shared_string_deselect_all" = "全て選択解除";
 "shared_string_importing" = "インポート中";
 "shared_string_nothing_selected" = "何も選択されていません";
+"map_widget_distance_by_tap" = "タップで距離";

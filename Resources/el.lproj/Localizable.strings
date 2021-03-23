@@ -166,7 +166,7 @@
 "filter_poi_hint" = "Φιλτράρισμα κατά όνομα";
 "map_widget_distance" = "Προορισμός";
 "access_arrival_time" = "Ώρα άφιξης";
-"shared_string_cancel" = "Ακύρωση";
+"shared_string_cancel" = "Άκυρο";
 "apply_filters" = "Εφαρμογή φίλτρων";
 "track_new_segment" = "Έναρξη νέου τμήματος";
 "units_mi" = "μλ";
@@ -1152,3 +1152,4 @@
 "shared_string_add_profile" = "Προσθήκη κατατομής (προφίλ)";
 "select_color" = "Επιλέξτε χρώμα";
 "appearance_on_map" = "Εμφάνιση στον χάρτη";
+"shared_string_buy_for" = "για";

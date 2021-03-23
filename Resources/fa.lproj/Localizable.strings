@@ -809,8 +809,8 @@
 "osm_live_hide_user_name" = "اسم من را در گزارش‌ها نشان نده";
 "shared_string_upload" = "آپلود";
 // OSM Editing actions
-"opening_changeset" = "بازکردن بستهٔ تغییرات…";
-"closing_changeset" = "بستن بستهٔ تغییرات…";
+"opening_changeset" = "بازکردن بستهٔ تغییر…";
+"closing_changeset" = "بستن بستهٔ تغییر…";
 "commiting_node" = "در حال ثبت نقطه…";
 "loading_poi_obj" = "در حال بارکردن POI‏…";
 "access_intermediate_arrival_time" = "زمان رسیدن به میانی";
@@ -1441,7 +1441,7 @@
 "shared_string_max" = "حداکثر";
 "nav_type_direct_to" = "مستقیم تا نقطه";
 "map_settings_add_online_source" = "افزودن منبع آنلاین";
-"shared_string_poi_types" = "انواع POI";
+"shared_string_poi_types" = "گونه‌های POI";
 "avoid_road" = "پرهیز از این راه";
 "next_seg" = "پارهٔ بعدی";
 "special_routing" = "مسیریابی ویژه";
@@ -1523,4 +1523,4 @@
 "open_saved_track" = "بازکردن رد ذخیره‌شده";
 "facebook" = "فیسبوک";
 "join_segments" = "اتصال پاره‌ها";
-"map_widget_distance_by_tap" = "فاصله با لمس دوانگشتی";
+"map_widget_distance_by_tap" = "مسافت با لمس";

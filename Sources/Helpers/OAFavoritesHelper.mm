@@ -189,18 +189,10 @@ static BOOL _favoritesLoaded = NO;
 {
     for (OAFavoriteItem *item in _cachedFavoritePoints)
     {
-        if ([item isVisible] && [OAFavoritesHelper isEqualCoordinatesOne:[item getLatitude] coordinateTwo:lat] && [OAFavoritesHelper isEqualCoordinatesOne:[item getLongitude] coordinateTwo:lon])
+        if ([item isVisible] && [OAUtilities isCoordEqual:[item getLatitude] srcLon:[item getLongitude] destLat:lat destLon:lon upToDigits:6])
             return item;
     }
     return nil;
-}
-
-+ (BOOL) isEqualCoordinatesOne:(double)coord1 coordinateTwo:(double)coord2
-{
-    double roundingCoefficient = 1000000;
-    long roundedValue1 = long(floor(coord1 * roundingCoefficient));
-    long roundedValue2 = long(floor(coord2 * roundingCoefficient));
-    return roundedValue1 == roundedValue2;
 }
 
 + (OAFavoriteGroup *) getGroupByName:(NSString *)nameId

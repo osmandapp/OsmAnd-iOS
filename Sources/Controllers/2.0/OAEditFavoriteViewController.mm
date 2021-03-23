@@ -90,6 +90,8 @@
     NSInteger _selectedColorIndex;
     NSInteger _selectedBackgroundIndex;
     NSString *_editingTextFieldKey;
+    
+    NSString *_renamedPointAlertMessage;
 }
 
 - (id) initWithItem:(OAFavoriteItem *)favorite
@@ -449,6 +451,18 @@
     } completion:nil];
 }
 
+- (void) dismissViewController
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (_renamedPointAlertMessage)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_point_dublicate") message:_renamedPointAlertMessage preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        }
+    }];
+}
+
 #pragma mark - Actions
 
 - (void)onCancelButtonPressed
@@ -477,15 +491,10 @@
             if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
             {
                 savingName = checkingResult[@"name"];
-                NSString *message;
                 if ([checkingResult[@"status"] isEqualToString:@"emoji"])
-                    message = [NSString stringWithFormat:OALocalizedString(@"fav_point_emoticons_message"), savingName];
+                    _renamedPointAlertMessage = [NSString stringWithFormat:OALocalizedString(@"fav_point_emoticons_message"), savingName];
                 else
-                    message = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), savingName];
-                
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_point_dublicate") message:message preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-                [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+                    _renamedPointAlertMessage = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), savingName];
             }
             
             if (_isNewItemAdding)

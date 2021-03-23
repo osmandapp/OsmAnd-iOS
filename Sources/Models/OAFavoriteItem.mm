@@ -265,8 +265,6 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getDisplayName
 {
-    NSLog(@"!!! %@ %f %@", [self getName], [self getAltitude], [self getTimestamp]);
-    
     if ([self isSpecialPoint])
         return [self.specialPointType getHumanString];
     return [self getName];

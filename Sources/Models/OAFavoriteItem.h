@@ -73,7 +73,7 @@
 - (double) getAltitude;
 - (void) setAltitude:(double)altitude;
 
-- (double) getTimestamp;
-- (long) setTimestamp:(long)timestamp;
+- (long) getTimestamp;
+- (void) setTimestamp:(long)timestamp;
 
 @end

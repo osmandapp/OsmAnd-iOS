@@ -384,7 +384,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     return 0;
 }
 
-- (long) setTimestamp:(long)timestamp
+- (void) setTimestamp:(long)timestamp
 {
     //TODO: implement
 }

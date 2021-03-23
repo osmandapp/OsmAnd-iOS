@@ -276,9 +276,10 @@ static BOOL _favoritesLoaded = NO;
     return YES;
 }
 
-+ (void) editFavoriteGroup:(OAFavoriteGroup *)group newName:(NSString *)newName color:(UIColor*)color visible:(BOOL)visible
++ (BOOL) editFavoriteGroup:(OAFavoriteGroup *)group newName:(NSString *)newName color:(UIColor*)color visible:(BOOL)visible
 {
     //TODO: implement
+    return NO;
 }
 
 + (void) saveCurrentPointsIntoFile

@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoriesCollectionView;
 
 @property (nonatomic) NSArray *poiDataArray;

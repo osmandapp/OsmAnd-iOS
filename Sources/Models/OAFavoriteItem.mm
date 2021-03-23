@@ -109,39 +109,55 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (self) {
         _favorite = favorite;
         
-        //TODO: setTimeStamp here
-        
         [self initPersonalType];
     }
     return self;
 }
 
-- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name group:(NSString *)group
+- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category
 {
     self = [super init];
     if (self) {
-        _favorite = [self createFavoritePointWithLat:lat lon:lon name:name description:nil address:nil group:group iconName:nil backgroundIconName:nil color:nil visible:YES];
+        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:0 timestamp:nil name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
         
         if (!name)
             [self setName:name];
         
-        //TODO: setTimeStamp here
-        
+        [self setTimestamp:[NSDate date]];
         [self initPersonalType];
     }
     return self;
 }
 
-- (std::shared_ptr<OsmAnd::IFavoriteLocation>) createFavoritePointWithLat:(double)lat lon:(double)lon name:(NSString *)name description:(NSString *)description address:(NSString *)address group:(NSString *)group iconName:(NSString *)iconName backgroundIconName:(NSString *)backgroundIconName color:(UIColor *)color visible:(BOOL)visible
+- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(NSDate *)timestamp
+{
+    self = [super init];
+    if (self) {
+        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:altitude timestamp:timestamp name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
+        
+        if (!name)
+            [self setName:name];
+        
+        [self setAltitude:altitude];
+        [self setTimestamp:timestamp ? timestamp : [NSDate date]];
+        [self initPersonalType];
+    }
+    return self;
+}
+
+- (std::shared_ptr<OsmAnd::IFavoriteLocation>) createFavoritePointWithLat:(double)lat lon:(double)lon altitude:(double)altitude timestamp:(NSDate *)timestamp name:(NSString *)name description:(NSString *)description address:(NSString *)address category:(NSString *)category iconName:(NSString *)iconName backgroundIconName:(NSString *)backgroundIconName color:(UIColor *)color visible:(BOOL)visible
 {
     OsmAnd::PointI locationPoint;
     locationPoint.x = OsmAnd::Utilities::get31TileNumberX(lon);
     locationPoint.y = OsmAnd::Utilities::get31TileNumberY(lat);
 
+    QString qElevation = altitude ? QString::fromNSString([self toStringAltitude:altitude]) : QString::null;
+    QString qTime = timestamp ? QString::fromNSString([self.class toStringDate:timestamp]) : QString::null;
+    
     QString qName = name ? QString::fromNSString(name) : QString::null;
     QString qDescription = description ? QString::fromNSString(description) : QString::null;
     QString qAddress = address ? QString::fromNSString(address) : QString::null;
-    QString qGroup = group ? QString::fromNSString(group) : QString::null;
+    QString qCategory = category ? QString::fromNSString(category) : QString::null;
     QString qIconName = iconName ? QString::fromNSString(iconName) : QString::null;
     QString qBackgroundIconName = backgroundIconName ? QString::fromNSString(backgroundIconName) : QString::null;
     
@@ -153,10 +169,12 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
                 alpha:&a];
 
     std::shared_ptr<OsmAnd::IFavoriteLocation> favorite = [OsmAndApp instance].favoritesCollection->createFavoriteLocation(locationPoint,
+                                                                     qElevation,
+                                                                     qTime,
                                                                      qName,
                                                                      qDescription,
                                                                      qAddress,
-                                                                     qGroup,
+                                                                     qCategory,
                                                                      qIconName,
                                                                      qBackgroundIconName,
                                                                      OsmAnd::FColorRGB(r,g,b));
@@ -193,7 +211,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setLat:(double)lat lon:(double)lon
 {
-    auto newFavorite = [self createFavoritePointWithLat:lat lon:lon name:[self getName] description:[self getDisplayName] address:[self getAddress] group:[self getCategory] iconName:[self getIcon] backgroundIconName:[self getBackgroundIcon] color:[self getColor] visible:[self isVisible]];
+    auto newFavorite = [self createFavoritePointWithLat:lat lon:lon altitude:[self getAltitude] timestamp:[self getTimestamp] name:[self getName] description:[self getDisplayName] address:[self getAddress] category:[self getCategory] iconName:[self getIcon] backgroundIconName:[self getBackgroundIcon] color:[self getColor] visible:[self isVisible]];
     
     [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(self.favorite);
     self.favorite = newFavorite;
@@ -247,6 +265,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getDisplayName
 {
+    NSLog(@"!!! %@ %f %@", [self getName], [self getAltitude], [self getTimestamp]);
+    
     if ([self isSpecialPoint])
         return [self.specialPointType getHumanString];
     return [self getName];
@@ -369,28 +389,64 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 - (void) initAltitude
 {
     //TODO: implement
+    [self setAltitude:0];
 }
 
 - (double) getAltitude
 {
-    //TODO: implement
-    return 0;
+    if (!self.favorite->getElevation().isNull())
+    {
+        NSString *storedString = self.favorite->getElevation().toNSString();
+        return [storedString doubleValue];
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 - (void) setAltitude:(double)altitude
 {
-    //TODO: implement
+    NSString *savingString = [self toStringAltitude:altitude];
+    self.favorite->setElevation(QString::fromNSString(savingString));
 }
 
-- (long) getTimestamp
+- (NSString *) toStringAltitude:(double)altitude
 {
-    //TODO: implement
-    return 0;
+    return [NSString stringWithFormat:@"%.1lf", altitude];
 }
 
-- (void) setTimestamp:(long)timestamp
+- (NSDate *) getTimestamp
 {
-    //TODO: implement
+    if (!self.favorite->getTime().isNull())
+    {
+        NSString *timeString = self.favorite->getTime().toNSString();
+        timeString = [timeString stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+        timeString = [timeString stringByReplacingOccurrencesOfString:@"Z" withString:@""];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        return [dateFormat dateFromString:timeString];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (void) setTimestamp:(NSDate *)timestamp
+{
+    NSString *savingString = [self.class toStringDate:timestamp];
+    self.favorite->setTime(QString::fromNSString(savingString));
+}
+
++ (NSString *) toStringDate:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *dateString = [dateFormatter stringFromDate:date];
+    [dateFormatter setDateFormat:@"hh:mm:ss"];
+    NSString *timeString = [dateFormatter stringFromDate:date];
+    return [NSString stringWithFormat:@"%@T%@Z",dateString, timeString];
 }
 
 @end

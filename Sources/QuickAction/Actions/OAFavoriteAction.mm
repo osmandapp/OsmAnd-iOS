@@ -102,13 +102,17 @@ static OAQuickActionType *TYPE;
     if ([self isItemExists:title])
         title = [self getNewItemName:title];
     
+    QString elevation = QString::null;
+    QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
+    
     QString titleStr = QString::fromNSString(title);
     QString group = QString::fromNSString(groupName ? groupName : @"");
     QString description = QString::null;
     QString address = QString::null;
     QString icon = QString::null;
     QString background = QString::null;
-    auto favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
+    
+    auto favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
     OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
     
     [app saveFavoritesToPermamentStorage];

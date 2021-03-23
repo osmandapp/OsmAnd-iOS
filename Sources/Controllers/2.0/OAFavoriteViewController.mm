@@ -70,6 +70,9 @@
         locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
         locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
         
+        QString elevation = QString::null;
+        QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
+        
         QString title = QString::fromNSString(formattedLocation);
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -99,6 +102,8 @@
         QString background = QString::null;
 
         auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
+                                                                        elevation,
+                                                                        time,
                                                                         title,
                                                                         description,
                                                                         address,

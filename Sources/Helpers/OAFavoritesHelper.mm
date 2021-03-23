@@ -128,7 +128,7 @@ static BOOL _favoritesLoaded = NO;
     }
     else
     {
-        OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:[specialType getName] group:[specialType getCategory]];
+        OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:[specialType getName] category:[specialType getCategory]];
         [point setAddress:address];
         [point setIcon:[specialType getIconName]];
         [point setColor:[specialType getIconColor]];
@@ -143,7 +143,8 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) addFavorite:(OAFavoriteItem *)point saveImmediately:(BOOL)saveImmediately
 {
-    //TODO:init alitude if empty
+    if ([point getAltitude] == 0)
+        [point initAltitude];
     
     if ([point getName].length == 0 && _flatGroups[[point getCategory]])
         return YES;
@@ -259,8 +260,7 @@ static BOOL _favoritesLoaded = NO;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon description:(NSString *)description
 {
     [item setLat:lat lon:lon];
-    
-    //TODO: set altitude here
+    [item initAltitude];
     
     if (description)
         [item setDescription:description];

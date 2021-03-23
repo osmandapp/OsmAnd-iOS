@@ -245,6 +245,8 @@
         const auto& favorite = item.favorite;
         if (favorite != nullptr)
         {
+            QString elevation = favorite->getElevation();
+            QString time = favorite->getTime();
             QString title = favorite->getTitle();
             QString description = favorite->getDescription();
             QString address = favorite->getAddress();
@@ -255,6 +257,8 @@
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
             self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
+                                                            elevation,
+                                                            time,
                                                             title,
                                                             description,
                                                             address,

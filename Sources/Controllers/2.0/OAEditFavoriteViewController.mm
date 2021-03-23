@@ -125,6 +125,9 @@
         locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
         locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
         
+        QString elevation = QString::null;
+        QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
+        
         QString title = QString::fromNSString(formattedTitle);
         QString address = QString::fromNSString(formattedLocation);
         QString description = QString::null;
@@ -150,10 +153,10 @@
             group = QString::fromNSString(groupName);
         else
             group = QString::null;
-
-        
         
         auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
+                                                                        elevation,
+                                                                        time,
                                                                         title,
                                                                         description,
                                                                         address,
@@ -473,7 +476,7 @@
 
 - (void)onDoneButtonPressed
 {
-    if (_wasChanged)
+    if (_wasChanged || _isNewItemAdding)
     {
         NSString *savingGroup = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
         

@@ -485,7 +485,7 @@
                 
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_point_dublicate") message:message preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-                [OARootViewController.instance showNoInternetAlert];
+                [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
             }
             
             if (_isNewItemAdding)

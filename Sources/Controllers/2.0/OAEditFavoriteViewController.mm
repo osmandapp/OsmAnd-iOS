@@ -659,11 +659,13 @@
         if ([item[@"isEditable"] boolValue])
         {
             textField.enabled = YES;
+            textField.userInteractionEnabled = YES;
             textField.textColor = UIColor.blackColor;
         }
         else
         {
             textField.enabled = NO;
+            textField.userInteractionEnabled = NO;
             textField.textColor = UIColor.darkGrayColor;
         }
         

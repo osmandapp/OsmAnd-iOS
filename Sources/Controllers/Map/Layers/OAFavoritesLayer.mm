@@ -146,7 +146,13 @@
     UIImage *finalImage;
 
     UIImage *outerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:[@"bg_point_" stringByAppendingString:fav->getBackground().toNSString()]] color:color];
+    if (!outerImage)
+        outerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"bg_point_circle"] color:color];
+    
     UIImage *innerImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]];
+    if (!innerImage)
+        innerImage = [OATargetInfoViewController getIcon:@"mx_special_star"];
+    
     innerImage = [OAUtilities tintImageWithColor:innerImage color:UIColor.whiteColor];
 
     CGSize outerImageSize = CGSizeMake(36 * scale, 36 * scale);

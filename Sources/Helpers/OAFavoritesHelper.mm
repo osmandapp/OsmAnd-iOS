@@ -25,6 +25,8 @@
 static NSMutableArray<OAFavoriteItem *> *_cachedFavoritePoints;
 static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
+static NSMutableDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
+static NSMutableArray<NSString  *> *_flatPoiIcons;
 static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isFavoritesLoaded
@@ -471,6 +473,52 @@ static BOOL _favoritesLoaded = NO;
     return [NSString stringWithString:tempString];
 }
 
++ (void) setupIcons
+{
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+
+    _poiIcons = [NSMutableDictionary new];
+    _flatPoiIcons = [NSMutableArray new];
+    
+    if (json)
+    {
+        NSDictionary *categories = json[@"categories"];
+        if (categories)
+        {
+            for (NSString *categoryName in categories.allKeys)
+            {
+                NSArray<NSString *> *icons = categories[categoryName][@"icons"];
+                if (icons)
+                {
+                    _poiIcons[categoryName] = icons;
+                    [_flatPoiIcons addObjectsFromArray:icons];
+                }
+            }
+        }
+    }
+}
+
++ (NSMutableDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames
+{
+    if (!_poiIcons)
+        [self.class setupIcons];
+    return _poiIcons;
+}
+
++ (NSArray<NSString *> *) getFlatIconNamesList
+{
+    if (!_flatPoiIcons)
+        [self.class setupIcons];
+    return _flatPoiIcons;
+}
+
++ (NSArray<NSString *> *) getFlatBackgroundIconNamesList
+{
+    return @[@"circle", @"octagon", @"square"];
+}
+
 @end
 
 @implementation OAFavoriteGroup
@@ -524,7 +572,7 @@ static BOOL _favoritesLoaded = NO;
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name
 {
     NSLog(OALocalizedString(@"personal_category_name"));
-    return [name isEqualToString:OALocalizedString(@"personal_category_name")];
+    return [name isEqualToString:OALocalizedString(@"personal_category_name")] || [name isEqualToString:kPersonalCategory];
 }
 
 + (NSString *) getDisplayName:(NSString *)name

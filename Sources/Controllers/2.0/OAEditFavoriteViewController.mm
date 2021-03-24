@@ -76,9 +76,9 @@
     
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<NSNumber *> *_colors;
-    NSMutableDictionary *_poiIcons;
+    NSMutableDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
     NSArray *_poiCategories;
-    NSArray<NSString *> *_backgroundIcons;
+    NSMutableArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
     
     NSArray<NSString *> *_groupNames;
@@ -222,31 +222,18 @@
 - (void) setupIcons
 {
     NSString *loadedPoiIconName = [self.favorite getIcon];
+    _poiIcons = [OAFavoritesHelper getCategirizedIconNames];
     
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-
-    _poiIcons = [NSMutableDictionary new];
-    
-    if (json)
+    for (NSString *categoryName in _poiIcons.allKeys)
     {
-        NSDictionary *categories = json[@"categories"];
-        if (categories)
+        NSArray<NSString *> *icons = _poiIcons[categoryName];
+        if (icons)
         {
-            for (NSString *categoryName in categories.allKeys)
+            int index = (int)[icons indexOfObject:loadedPoiIconName];
+            if (index != -1)
             {
-                NSArray<NSString *> *icons = categories[categoryName][@"icons"];
-                if (icons)
-                {
-                    _poiIcons[categoryName] = icons;
-                    int index = (int)[icons indexOfObject:loadedPoiIconName];
-                    if (index != -1)
-                    {
-                        _selectedIconName = loadedPoiIconName;
-                        _selectedIconCategoryName = categoryName;
-                    }
-                }
+                _selectedIconName = loadedPoiIconName;
+                _selectedIconCategoryName = categoryName;
             }
         }
     }
@@ -269,14 +256,12 @@
     if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
         _selectedIconCategoryName = @"special";
         
-    _backgroundIcons = @[@"bg_point_circle",
-                         @"bg_point_octagon",
-                         @"bg_point_square"];
+    _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     
-    _backgroundIconNames = @[@"circle",
-                         @"octagon",
-                         @"square"];
-    
+    _backgroundIcons = [NSMutableArray new];
+    for (NSString *iconName in _backgroundIconNames)
+        [_backgroundIcons addObject:[NSString stringWithFormat:@"bg_point_%@", iconName]];
+
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getBackgroundIcon]];
     if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;

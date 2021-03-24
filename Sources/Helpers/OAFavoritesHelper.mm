@@ -96,7 +96,7 @@ static BOOL _favoritesLoaded = NO;
         [_cachedFavoritePoints addObject:favData];
         
         NSString *groupName = [favData getCategory];
-        UIColor *color = [favData getColor];
+        UIColor *color = [OADefaultFavorite nearestFavColor:[favData getColor]].color;
         OAFavoriteGroup *group = [_flatGroups objectForKey:groupName];
         if (!group)
         {

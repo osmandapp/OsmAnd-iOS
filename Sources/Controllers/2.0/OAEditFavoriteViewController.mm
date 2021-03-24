@@ -481,7 +481,7 @@
         if (_isNewItemAdding || ![self.name isEqualToString:_ininialName] || ![self.groupTitle isEqualToString:_ininialGroupName])
         {
             NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite newName:self.name newCategory:savingGroup];
-            NSString *savingName = self.name;;
+            NSString *savingName = self.name;
             
             if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
             {
@@ -846,9 +846,18 @@
     }
     else if ([key isEqualToString:kReplaceKey])
     {
-        OAReplaceFavoriteViewController *replaceScreen = [[OAReplaceFavoriteViewController alloc] init];
-        replaceScreen.delegate = self;
-        [self presentViewController:replaceScreen animated:YES completion:nil];
+        if ([OAFavoritesHelper getFavoriteItems].count > 0)
+        {
+            OAReplaceFavoriteViewController *replaceScreen = [[OAReplaceFavoriteViewController alloc] init];
+            replaceScreen.delegate = self;
+            [self presentViewController:replaceScreen animated:YES completion:nil];
+        }
+        else
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"fav_points_not_exist") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     }
     else if ([key isEqualToString:kDeleteKey])
     {
@@ -1080,10 +1089,45 @@
 
 - (void) onReplaced:(OAFavoriteItem *)favoriteItem;
 {
-    _wasChanged = YES;
-    [self deleteFavoriteItem:favoriteItem];
-    [self onDoneButtonPressed];
-    [self dismissViewController];
+    NSString *message = [NSString stringWithFormat:OALocalizedString(@"replace_favorite_confirmation"), [favoriteItem getDisplayName]];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_replace") message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        NSString *description = [favoriteItem getDescription];
+        NSString *address = [favoriteItem getAddress];
+        UIColor *color = [favoriteItem getColor];
+        NSString *backgroundIcon = [favoriteItem getBackgroundIcon];
+        NSString *icon = [favoriteItem getIcon];
+        NSString *category = [favoriteItem getCategory];
+        NSString *name = [favoriteItem getName];
+        
+        [self.favorite setDescription:description];
+        [self.favorite setAddress:address];
+        [self.favorite setColor:color];
+        [self.favorite setBackgroundIcon:backgroundIcon];
+        [self.favorite setIcon:icon];
+        
+        [self deleteFavoriteItem:favoriteItem];
+
+        if (_isNewItemAdding)
+        {
+            [self.favorite setCategory:category];
+            [self.favorite setName:name];
+            [OAFavoritesHelper addFavorite:self.favorite];
+        }
+        else
+        {
+            [OAFavoritesHelper editFavoriteName:self.favorite newName:name group:category descr:description address:address];
+        }
+        
+        [self dismissViewController];
+    }]];
+    
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Keyboard Notifications

@@ -548,6 +548,8 @@
 "fav_rename" = "Rename";
 "fav_replace" = "Replace";
 "fav_replace_all" = "Replace all";
+"replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
+"fav_points_not_exist" = "No Favorite points exist";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 "fav_select" = "Please select favorites";

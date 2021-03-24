@@ -95,6 +95,11 @@
     return self;
 }
 
+- (NSString *) getGpxFileName
+{
+    return [[_gpxFileName lastPathComponent] stringByDeletingPathExtension];
+}
+
 - (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"gpx_waypoint");

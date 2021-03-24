@@ -417,9 +417,12 @@
     else if ([self isKindOfClass:OAGPXWptViewController.class])
     {
         NSString *groupName = self.groupTitle;
+        if (!groupName)
+            groupName = [((OAGPXWptViewController *)self) getGpxFileName];
+        
         [_data addObject:@{
             @"type" : kRowWaypointsCell,
-            @"label" : groupName,
+            @"label" : groupName ? groupName : @"",
             @"description" : OALocalizedString(@"all_group_points"),
             @"iconName" : @"ic_custom_folder",
             @"iconColor" : [self getItemColor]

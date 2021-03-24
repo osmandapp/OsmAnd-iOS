@@ -221,14 +221,11 @@
 
 - (void) onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color
 {
-    if (_delegate)
-        [_delegate onNewGroupAdded:groupName color:color];
-    
-    _selectedGroupName = groupName;
-    
-    [self reloadData];
-    [self generateData];
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_delegate)
+            [_delegate onNewGroupAdded:groupName color:color];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    });
 }
 
 @end

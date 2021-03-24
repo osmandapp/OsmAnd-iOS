@@ -1,58 +1,47 @@
 //
-//  OASelectTrackFolderViewController.m
-//  OsmAnd
+//  OASelectFavoriteGroupViewController.m
+//  OsmAnd Maps
 //
-//  Created by nnngrach on 05.02.2021.
+//  Created by nnngrach on 16.03.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OASelectTrackFolderViewController.h"
+#import "OASelectFavoriteGroupViewController.h"
+#import "OAFavoriteItem.h"
+#import "OAFavoritesHelper.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASettingsTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
-#import "OAAddTrackFolderViewController.h"
+#import "OAAddFavoriteGroupViewController.h"
 #import "OsmAndApp.h"
-#import "OALoadGpxTask.h"
 
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kMultiIconTextDescCell @"OAMultiIconTextDescCell"
-#define kAddNewFolderSection 0
-#define kFoldersListSection 1
+#define kAddNewGroupSection 0
+#define kGroupsListSection 1
 
-@interface OASelectTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, OAAddTrackFolderDelegate>
+@interface OASelectFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, OAAddFavoriteGroupDelegate>
 
 @end
 
-@implementation OASelectTrackFolderViewController
+@implementation OASelectFavoriteGroupViewController
 {
-    OAGPX *_gpx;
-    NSString *_selectedFolderName;
+    NSString *_selectedGroupName;
+    NSArray<OAFavoriteGroup *> *_groupedFavorites;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype) initWithGPX:(OAGPX *)gpx
+- (instancetype) initWithSelectedGroupName:(NSString *)selectedGroupName;
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
-        _selectedFolderName = [[gpx.gpxFilePath  stringByDeletingLastPathComponent] lastPathComponent];
-        if ([_selectedFolderName isEqualToString:@""])
-            _selectedFolderName = OALocalizedString(@"tracks");
+        _selectedGroupName = selectedGroupName;
         [self reloadData];
-    }
-    return self;
-}
-
-- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
-{
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
-    if (self)
-    {
-        _selectedFolderName = selectedFolderName;
-        [self reloadData];
+        [self generateData];
     }
     return self;
 }
@@ -63,53 +52,49 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_gropu_descr") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
 }
 
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"plan_route_select_folder");
+    self.titleLabel.text = OALocalizedString(@"select_group");
 }
 
-- (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
+- (void) reloadData
+{
+    _groupedFavorites = [OAFavoritesHelper getFavoriteGroups];
+}
+
+- (void) generateData
 {
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
             @"type" : kCellTypeAction,
-            @"title" : OALocalizedString(@"add_folder"),
+            @"title" : OALocalizedString(@"fav_add_new_group"),
             @"img" : @"ic_custom_add",
         },
     ]];
     
     NSMutableArray *cellFoldersData = [NSMutableArray new];
-    for (NSString *folderName in allFolderNames)
+    for (OAFavoriteGroup *group in _groupedFavorites)
     {
-        NSArray *folderItems = foldersData[folderName];
-        int tracksCount = folderItems ? folderItems.count : 0;
+        NSString *name = [OAFavoriteGroup getDisplayName:group.name];
+        
         [cellFoldersData addObject:@{
             @"type" : kMultiIconTextDescCell,
-            @"header" : OALocalizedString(@"plan_route_folder"),
-            @"title" : folderName,
-            @"description" : [NSString stringWithFormat:@"%i", tracksCount],
-            @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: _selectedFolderName]],
+            @"header" : OALocalizedString(@"available_groups"),
+            @"title" : name,
+            @"description" : [NSString stringWithFormat:@"%ld", (unsigned long)group.points.count],
+            @"isSelected" : [NSNumber numberWithBool:[name isEqualToString: _selectedGroupName]],
+            @"color" : group.color,
             @"img" : @"ic_custom_folder"
         }];
     }
     
     [data addObject: [NSArray arrayWithArray:cellFoldersData]];
     _data = data;
-}
-
-- (void) reloadData
-{
-    NSArray<NSString *> *allFoldersNames = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
-        
-    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
-    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
-        [self generateData:allFoldersNames foldersData:gpxFolders];
-        [self.tableView reloadData];
-    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -147,13 +132,14 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.numberOfLines = 3;
             cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
+            cell.separatorInset = UIEdgeInsetsMake(0, cell.textView.frame.origin.x, 0, 0);
         }
         if (cell)
         {
             [cell.textView setText:item[@"title"]];
             [cell.descView setText:item[@"description"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
-            cell.separatorInset = UIEdgeInsetsMake(0, cell.textView.frame.origin.x, 0, 0);
+            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            cell.iconView.tintColor = item[@"color"];
             
             if ([item[@"isSelected"] boolValue])
             {
@@ -191,18 +177,17 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == kAddNewFolderSection)
+    if (indexPath.section == kAddNewGroupSection)
     {
-        OAAddTrackFolderViewController * addFolderVC = [[OAAddTrackFolderViewController alloc] init];
-        addFolderVC.delegate = self;
-        [self presentViewController:addFolderVC animated:YES completion:nil];
-        
+        OAAddFavoriteGroupViewController * addGroupVC = [[OAAddFavoriteGroupViewController alloc] init];
+        addGroupVC.delegate = self;
+        [self presentViewController:addGroupVC animated:YES completion:nil];
     }
-    else if (indexPath.section == kFoldersListSection)
+    else if (indexPath.section == kGroupsListSection)
     {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         if (![item[@"isSelected"] boolValue] && _delegate)
-            [_delegate onFolderSelected:item[@"title"]];
+            [_delegate onGroupSelected:item[@"title"]];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -217,15 +202,19 @@
             return UITableViewAutomaticDimension;
 }
 
-#pragma mark - OAAddTrackFolderDelegate
+#pragma mark - OAAddFavoriteGroupDelegate
 
-- (void) onTrackFolderAdded:(NSString *)folderName
+- (void) onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color
 {
-    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:folderName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
-        [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
+    if (_delegate)
+        [_delegate onNewGroupAdded:groupName color:color];
+    
+    _selectedGroupName = groupName;
     
     [self reloadData];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end
+

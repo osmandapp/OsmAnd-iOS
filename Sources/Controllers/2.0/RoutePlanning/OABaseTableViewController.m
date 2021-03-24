@@ -36,6 +36,7 @@
 
 - (IBAction)cancelButtonPressed:(id)sender
 {
+    [self onCancelButtonPressed];
     [self dismissViewController];
 }
 
@@ -43,6 +44,10 @@
 {
     [self onDoneButtonPressed];
     [self dismissViewController];
+}
+
+- (void)onCancelButtonPressed
+{
 }
 
 - (void)onDoneButtonPressed

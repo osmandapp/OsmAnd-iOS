@@ -524,13 +524,16 @@
 "fav_group" = "Group";
 "groups" = "Groups";
 "favorite" = "Favorite";
-"amenity" = "Amenity";
 "poi_overlay" = "POI Overlay";
 "poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
 "my_places" = "My Places";
 "fav_no_group" = "No group";
 "fav_add_group" = "Add a group";
+"fav_add_new_group" = "Add new group";
+"select_gropu_descr" = "Select group or add a new one";
+"available_groups" = "Available groups";
+"group_name" = "Group name";
 "fav_remove_q" = "Remove favorite?";
 "fav_import" = "Import";
 "fav_import_title" = "Import favorite";
@@ -551,6 +554,25 @@
 "select_favorite" = "Select favorite";
 "group_properties" = "Group preoperties";
 "add_group" = "Add group";
+"add_favorite" = "Add favorite";
+"name_and_descr" = "Name & description";
+"select_group" = "Select group";
+"icon" = "Icon";
+"shape" = "Shape";
+"fav_point_dublicate" = "Duplicate Favorite name specified";
+"fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
+"fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
+"default_color" = "Default color";
+"default_color_descr" = "This color wil be used for all new favorites added to the group.";
+
+"favorite_friends_category" = "Friends";
+"favorite_places_category" = "Places";
+"shared_string_others" = "Others";
+
+// Shapes
+"circle" = "Circle";
+"octagon" = "Octagon";
+"square" = "Square";
 
 // POI
 "poi_insrease_radius" = "Increase search radius to";
@@ -1247,7 +1269,6 @@
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
-"public_transport_menu" = "Transport";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
@@ -2114,6 +2135,17 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+
+
+//Poi catagories
+"amenity" = "Amenity";
+"emergency" = "Emergency";
+"service" = "Service";
+"special" = "Special";
+"sport" = "Sport";
+"symbols" = "Symbols";
+"transport" = "Transport";
+"travel" = "Travel";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";

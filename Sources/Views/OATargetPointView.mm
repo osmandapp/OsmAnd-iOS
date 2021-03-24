@@ -40,6 +40,7 @@
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 #import "OAFavoriteViewController.h"
+#import "OAFavoritesHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -86,6 +87,8 @@
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIImageView *favoriteImagePoiView;
+@property (weak, nonatomic) IBOutlet UIImageView *favoriteImageBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonLeft;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
@@ -753,10 +756,15 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         if (_targetPoint.type == OATargetFavorite && ![self newItem])
+        {
             [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"ic_dialog_edit"] forState:UIControlStateNormal];
+        }
         else
+        {
             [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-        [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+        }
     }
     
     if (_targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXRoute)
@@ -1702,13 +1710,38 @@ static const NSInteger _buttonsCount = 4;
             [_controlButtonRight setTitle:self.customController.rightControlButton.title forState:UIControlStateNormal];
         if (self.customController.downloadControlButton)
             [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
-
-        UIImage *icon = [self.customController getIcon];
-        _imageView.image = icon ? icon : _targetPoint.icon;
+        
+        if ([self.customController isKindOfClass:OAFavoriteViewController.class])
+        {
+            _imageView.hidden = YES;
+            _favoriteImageBackgroundView.hidden = NO;
+            _favoriteImagePoiView.hidden = NO;
+            
+            OAFavoriteViewController *favoriteController = (OAFavoriteViewController *)self.customController;
+            UIImage *icon = [favoriteController getIcon];
+            icon = icon ? icon : _targetPoint.icon;
+            _favoriteImagePoiView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            _favoriteImagePoiView.tintColor = UIColor.whiteColor;
+            
+            UIImage *backgroundIcon = [favoriteController getBackgroundIcon];
+            _favoriteImageBackgroundView.image = [backgroundIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            _favoriteImageBackgroundView.tintColor = [favoriteController.favorite getColor];
+        }
+        else
+        {
+            UIImage *icon = [self.customController getIcon];
+            _imageView.image = icon ? icon : _targetPoint.icon;
+            _imageView.hidden = NO;
+            _favoriteImageBackgroundView.hidden = YES;
+            _favoriteImagePoiView.hidden = YES;
+        }
     }
     else
     {
         _imageView.image = _targetPoint.icon;
+        _imageView.hidden = NO;
+        _favoriteImageBackgroundView.hidden = YES;
+        _favoriteImagePoiView.hidden = YES;
     }
 }
 
@@ -1932,7 +1965,9 @@ static const NSInteger _buttonsCount = 4;
             UIColor* color = [UIColor colorWithRed:favoriteLocation->getColor().r/255.0 green:favoriteLocation->getColor().g/255.0 blue:favoriteLocation->getColor().b/255.0 alpha:1.0];
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
             
-            _targetPoint.title = favoriteLocation->getTitle().toNSString();
+            OAFavoriteItem *item = [OAFavoritesHelper getVisibleFavByLat:favoriteLocation->getLatLon().latitude lon:favoriteLocation->getLatLon().longitude];
+            _targetPoint.title = [item getDisplayName];
+            
             [_addressLabel setText:_targetPoint.title];
             [self updateAddressLabel];
             _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
@@ -1999,6 +2034,10 @@ static const NSInteger _buttonsCount = 4;
         self.customController.topToolbarType = ETopToolbarTypeFixed;
         [self showFullMenu];
         [self.customController activateEditing];
+        
+        OAFavoriteItem *item = ((OAFavoriteViewController *)self.customController).favorite;
+        
+        [self.menuViewDelegate targetPointEditFavorite:item];
         return;
     }
     

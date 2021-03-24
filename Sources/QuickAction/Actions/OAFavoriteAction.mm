@@ -80,7 +80,6 @@ static OAQuickActionType *TYPE;
 - (void) addFavoriteSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
     NSString *groupName = self.getParams[KEY_CATEGORY_NAME];
     UIColor* color;
     if (self.getParams[KEY_CATEGORY_COLOR])
@@ -103,10 +102,18 @@ static OAQuickActionType *TYPE;
     if ([self isItemExists:title])
         title = [self getNewItemName:title];
     
+    QString elevation = QString::null;
+    QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
+    
     QString titleStr = QString::fromNSString(title);
     QString group = QString::fromNSString(groupName ? groupName : @"");
     QString description = QString::null;
-    fav.favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), titleStr, description, group, OsmAnd::FColorRGB(r,g,b));
+    QString address = QString::null;
+    QString icon = QString::null;
+    QString background = QString::null;
+    
+    auto favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
+    OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
     
     [app saveFavoritesToPermamentStorage];
 }

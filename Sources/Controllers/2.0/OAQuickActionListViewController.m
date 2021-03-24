@@ -36,7 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteAction;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 @property (weak, nonatomic) IBOutlet UIButton *btnDone;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeight;
 
 @end
 

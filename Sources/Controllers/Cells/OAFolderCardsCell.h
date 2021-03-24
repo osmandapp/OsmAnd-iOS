@@ -23,7 +23,6 @@
 
 @property (weak, nonatomic) id<OAFolderCardsCellDelegate> delegate;
 
-- (void) setValues:(NSArray<NSString *> *)values withSelectedIndex:(int)index;
-
+- (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index;
 
 @end

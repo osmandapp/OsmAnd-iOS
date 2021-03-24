@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *separatorView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
 
 @property (nonatomic) UIColor *iconColorNormal;
 @property (nonatomic) UIColor *textColorNormal;

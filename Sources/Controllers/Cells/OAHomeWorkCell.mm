@@ -15,6 +15,7 @@
 #import "OAAppData.h"
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
+#import "OATargetPointsHelper.h"
 
 #define defaultCellHeight 60.0
 #define titleTextWidthDelta 50.0
@@ -62,8 +63,10 @@
 - (void) generateData
 {
     OAAppData *data = [OsmAndApp instance].data;
-    NSString *homeName = data.homePoint ? [data.homePoint.pointDescription getSimpleName:NO] : nil;
-    NSString *workName = data.workPoint ? [data.workPoint.pointDescription getSimpleName:NO] : nil;
+    OARTargetPoint *homePoint = [[OATargetPointsHelper sharedInstance] getHomePoint];
+    OARTargetPoint *workPoint = [[OATargetPointsHelper sharedInstance] getWorkPoint];
+    NSString *homeName = homePoint ? [homePoint.pointDescription getSimpleName:NO] : nil;
+    NSString *workName = workPoint ? [workPoint.pointDescription getSimpleName:NO] : nil;
     _data = @[
               @{
                     @"title" : OALocalizedString(@"home_pt"),

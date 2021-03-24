@@ -18,7 +18,7 @@
 #define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.75
 
-@class OATargetPoint;
+@class OATargetPoint, OAFavoriteItem;
 
 @protocol OATargetPointViewDelegate;
 
@@ -95,6 +95,7 @@
 @protocol OATargetPointViewDelegate <NSObject>
 
 - (void) targetPointAddFavorite;
+- (void) targetPointEditFavorite:(OAFavoriteItem *)item;
 - (void) targetPointShare;
 - (void) targetPointDirection;
 

@@ -24,7 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
 
 @property (weak, nonatomic) id<OASettingsDataDelegate> delegate;
 @property (nonatomic) OAApplicationMode *appMode;

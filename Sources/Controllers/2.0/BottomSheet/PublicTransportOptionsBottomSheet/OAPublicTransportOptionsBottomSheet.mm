@@ -56,7 +56,7 @@
     
     [arr addObject:@{
         @"type" : @"OABottomSheetHeaderIconCell",
-        @"title" : OALocalizedString(@"public_transport_menu"),
+        @"title" : OALocalizedString(@"transport"),
         @"description" : @""
         }];
     

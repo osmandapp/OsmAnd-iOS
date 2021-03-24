@@ -85,7 +85,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.inputField.placeholder = OALocalizedString(@"enter_name");
         }
         cell.inputField.text = item[@"title"];

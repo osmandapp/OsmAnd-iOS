@@ -716,6 +716,19 @@
     return [NSString stringWithFormat:@"#%.6x", (red << 16) + (green << 8) + blue];
 }
 
++ (int) colorToNumber:(UIColor *)color
+{
+    CGFloat r,g,b,a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    
+    uint32_t red = r * 255;
+    uint32_t green = g * 255;
+    uint32_t blue = b * 255;
+    
+    int result = (red << 16) + (green << 8) + blue;
+    return result;
+}
+
 + (NSString *) appendMeters:(float)value
 {
     NSString *formattedValue = [[OsmAndApp instance] getFormattedDistance:value];
@@ -1319,7 +1332,6 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
         fileSize += [fileDictionary fileSize];
-        NSLog(@"file=%@ (%llu)", fileName, fileSize);
     }
     
     return fileSize;

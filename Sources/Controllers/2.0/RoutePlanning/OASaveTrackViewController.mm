@@ -151,6 +151,7 @@
             @"type" : @"OAFolderCardsCell",
             @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
             @"values" : _allFolders,
+            @"addButtonTitle" : OALocalizedString(@"add_folder")
         },
     ]];
 
@@ -324,7 +325,7 @@
         if (cell)
         {
             cell.delegate = self;
-            [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [cell setValues:item[@"values"] sizes:nil colors:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;
     }
@@ -360,7 +361,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+    NSDictionary *item = _data[section].firstObject;
     
     return item[@"header"];
 }
@@ -369,7 +370,7 @@
 {
     if (section == 0)
         return _inputFieldError;
-    NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+    NSDictionary *item = _data[section].firstObject;
     
     return item[@"footer"];
 }

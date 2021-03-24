@@ -30,5 +30,6 @@
 
 - (id) initWithItem:(OAGpxWptItem *)wpt headerOnly:(BOOL)headerOnly;
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation gpxFileName:(NSString *)gpxFileName;
+- (NSString *) getGpxFileName;
 
 @end

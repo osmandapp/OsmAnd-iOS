@@ -131,7 +131,7 @@
     {
         number++;
         NSString *name = [NSString stringWithFormat:@"%@ (%d)", item.name, number];
-        OAFavoriteGroup *renamedItem = [[OAFavoriteGroup alloc] initWithPoints:item.points name:name isHidden:item.isHidden color:item.color];
+        OAFavoriteGroup *renamedItem = [[OAFavoriteGroup alloc] initWithPoints:item.points name:name isVisible:item.isVisible color:item.color];
         if (![self isDuplicate:renamedItem])
         {
             for (OAFavoriteItem *point in renamedItem.points)

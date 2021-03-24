@@ -2015,7 +2015,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) onItemSelected:(NSString *)key overrideExisting:(BOOL)overrideExisting
 {
     BOOL isHome = [key isEqualToString:@"home"];
-    OARTargetPoint *targetPoint = isHome ? _app.data.homePoint : _app.data.workPoint;
+    OARTargetPoint *targetPoint = isHome ? [_pointsHelper getHomePoint] : [_pointsHelper getWorkPoint];
     
     if (targetPoint && !overrideExisting)
     {

@@ -15,6 +15,8 @@
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
 #import "OAFavoritesMapLayerProvider.h"
+#import "OAFavoritesHelper.h"
+#import "OATargetInfoViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -136,6 +138,31 @@
     });
 }
 
+- (UIImage *) getFavoriteImage:(const OsmAnd::IFavoriteLocation *)fav
+{
+    UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat innerImageSize = 27. * scale;
+    UIImage *finalImage;
+
+    UIImage *outerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:[@"bg_point_" stringByAppendingString:fav->getBackground().toNSString()]] color:color];
+    UIImage *innerImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]];
+    innerImage = [OAUtilities tintImageWithColor:innerImage color:UIColor.whiteColor];
+
+    CGSize outerImageSize = CGSizeMake(36 * scale, 36 * scale);
+    UIGraphicsBeginImageContext(outerImageSize);
+
+    //calculate areaSize for re-centered inner image
+    CGRect areSize = CGRectMake(((outerImageSize.width / 2) - (innerImageSize / 2)), ((outerImageSize.width / 2) - (innerImageSize / 2)), innerImageSize, innerImageSize);
+    [outerImage drawInRect:CGRectMake(0, 0, outerImageSize.width, outerImageSize.height)];
+    [innerImage drawInRect:areSize blendMode:kCGBlendModeNormal alpha:1.0];
+
+    finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return finalImage;
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -152,19 +179,22 @@
         double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
         double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
         targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
+      
         
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        if (![OAFavoritesHelper isFavoritesLoaded])
+            [OAFavoritesHelper loadFavorites];
         
-        targetPoint.title = favLoc->getTitle().toNSString();
-        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+        OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
+        targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
         
-        OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+        targetPoint.icon = [self getFavoriteImage:favLoc];
+        
+        OAFavoriteItem *item;
         for (const auto& favLocPtr : self.app.favoritesCollection->getFavoriteLocations())
         {
             if (favLoc->isEqual(favLocPtr.get()))
             {
-                item.favorite = favLocPtr;
+                item = [[OAFavoriteItem alloc] initWithFavorite:favLocPtr];
                 targetPoint.targetObj = item;
                 break;
             }
@@ -215,16 +245,26 @@
         const auto& favorite = item.favorite;
         if (favorite != nullptr)
         {
+            QString elevation = favorite->getElevation();
+            QString time = favorite->getTime();
             QString title = favorite->getTitle();
             QString description = favorite->getDescription();
+            QString address = favorite->getAddress();
             QString group = favorite->getGroup();
+            QString icon = favorite->getIcon();
+            QString background = favorite->getBackground();
             OsmAnd::ColorRGB color = favorite->getColor();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
             self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
+                                                            elevation,
+                                                            time,
                                                             title,
                                                             description,
+                                                            address,
                                                             group,
+                                                            icon,
+                                                            background,
                                                             color);
             [self.app saveFavoritesToPermamentStorage];
         }
@@ -236,10 +276,9 @@
     if (object && [self isObjectMovable:object])
     {
         OAFavoriteItem *item = (OAFavoriteItem *)object;
-        const auto& favLoc = item.favorite;
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        return favCol.icon;
+        const auto favLoc = item.favorite;
+        UIImage *img = [self getFavoriteImage:favLoc.get()];
+        return [OAUtilities resizeImage:img newSize:CGSizeMake(30., 30.)];
     }
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }

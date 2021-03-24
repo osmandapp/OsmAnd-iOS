@@ -151,8 +151,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
             FavTableGroup* itemData = [[FavTableGroup alloc] init];
             itemData.groupName = groupName.toNSString();
             for(const auto& favorite : groupedFavorites[groupName]) {
-                OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-                favData.favorite = favorite;
+                OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
                 [itemData.groupItems addObject:favData];
                 [_sortedByNameFavoriteItems addObject:favData];
                 [_sortedByDistFavoriteItems addObject:favData];
@@ -183,8 +182,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         
         for (const auto& favorite : ungroupedFavorites)
         {
-            OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-            favData.favorite = favorite;
+            OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
             [itemData.groupItems addObject:favData];
             [_sortedByNameFavoriteItems addObject:favData];
             [_sortedByDistFavoriteItems addObject:favData];

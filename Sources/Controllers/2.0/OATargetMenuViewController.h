@@ -120,6 +120,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (NSAttributedString *) getAttributedCommonTypeStr;
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group;
+- (NSAttributedString *) getAttributedTypeStr:(NSString *)group color:(UIColor *)color;
 
 - (UIColor *) getAdditionalInfoColor;
 - (NSAttributedString *) getAdditionalInfoStr;

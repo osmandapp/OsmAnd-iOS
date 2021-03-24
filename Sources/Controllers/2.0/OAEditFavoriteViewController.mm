@@ -208,8 +208,15 @@
     NSMutableArray *colors = [NSMutableArray new];
     NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
     
+    if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
+    {
+        [names addObject:OALocalizedString(@"favorites")];
+        [sizes addObject:@0];
+        [colors addObject:[OADefaultFavorite getDefaultColor]];
+    }
+    
     for (OAFavoriteGroup *group in allGroups)
-    {        
+    {
         [names addObject:[OAFavoriteGroup getDisplayName:group.name]];
         [sizes addObject:[NSNumber numberWithInteger:group.points.count]];
         [colors addObject:group.color];
@@ -473,7 +480,7 @@
         
         if (_isNewItemAdding || ![self.name isEqualToString:_ininialName] || ![self.groupTitle isEqualToString:_ininialGroupName])
         {
-            NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite name:self.name];
+            NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite newName:self.name newCategory:savingGroup];
             NSString *savingName = self.name;;
             
             if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
@@ -1002,7 +1009,11 @@
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:_groupNames[index]];
     OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
-    _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    if (group)
+        _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    else
+        _selectedColor = [OADefaultFavorite builtinColors].firstObject;
+    
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     [self updateHeaderIcon];
     
@@ -1027,7 +1038,11 @@
     self.groupTitle = selectedGroupName;
     
     OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:selectedGroupName]];
-    _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    if (group)
+        _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    else
+        _selectedColor = [OADefaultFavorite builtinColors].firstObject;
+
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     [self updateHeaderIcon];
     

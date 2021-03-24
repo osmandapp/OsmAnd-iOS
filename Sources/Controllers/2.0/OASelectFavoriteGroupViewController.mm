@@ -12,6 +12,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OADefaultFavorite.h"
 #import "OASettingsTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
@@ -78,6 +79,20 @@
     ]];
     
     NSMutableArray *cellFoldersData = [NSMutableArray new];
+    
+    if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
+    {
+        [cellFoldersData addObject:@{
+            @"type" : kMultiIconTextDescCell,
+            @"header" : OALocalizedString(@"available_groups"),
+            @"title" : OALocalizedString(@"favorites"),
+            @"description" :@"0",
+            @"isSelected" : [NSNumber numberWithBool:[@"" isEqualToString: _selectedGroupName]],
+            @"color" : [OADefaultFavorite getDefaultColor],
+            @"img" : @"ic_custom_folder"
+        }];
+    }
+    
     for (OAFavoriteGroup *group in _groupedFavorites)
     {
         NSString *name = [OAFavoriteGroup getDisplayName:group.name];

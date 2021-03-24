@@ -24,6 +24,7 @@
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
 + (OAFavoriteItem *) getVisibleFavByLat:(double)lat lon:(double)lon;
 + (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)allFavorites;
++ (NSMutableDictionary<NSString *, OAFavoriteGroup *> *) getGroups;
 + (OAFavoriteGroup *) getGroupByName:(NSString *)nameId;
 + (OAFavoriteGroup *) getGroupByPoint:(OAFavoriteItem *)favoriteItem;
 
@@ -43,7 +44,7 @@
 + (OAFavoriteGroup *) getOrCreateGroup:(OAFavoriteItem *)item defColor:(UIColor *)defColor;
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems;
 
-+ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point name:(NSString *)name;
++ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point newName:(NSString *)newName newCategory:(NSString *)newCategory;
 + (NSString *) checkEmoticons:(NSString *)text;
 + (void) sortAll;
 + (void) recalculateCachedFavPoints;

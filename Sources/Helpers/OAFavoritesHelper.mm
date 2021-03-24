@@ -198,6 +198,11 @@ static BOOL _favoritesLoaded = NO;
     return nil;
 }
 
++ (NSMutableDictionary<NSString *, OAFavoriteGroup *> *) getGroups
+{
+    return _flatGroups;
+}
+
 + (OAFavoriteGroup *) getGroupByName:(NSString *)nameId
 {
     return _flatGroups[nameId];
@@ -401,15 +406,16 @@ static BOOL _favoritesLoaded = NO;
     return favorites;
 }
 
-+ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point name:(NSString *)name
++ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point newName:(NSString *)newName newCategory:(NSString *)newCategory
 {
     BOOL emoticons = NO;
     NSString *index = @"";
     int number = 0;
-    NSString *checkingName = name ? name : [point getName];
+    NSString *checkingName = newName ? newName : [point getName];
+    NSString *checkingCategory = newCategory ? newCategory : [point getCategory];
     NSString *editedName = [OAFavoritesHelper checkEmoticons:checkingName];
-    NSString *category = [OAFavoritesHelper checkEmoticons:[point getCategory]];
-    [point setCategory:category];
+    NSString *editedCategory = [OAFavoritesHelper checkEmoticons:checkingCategory];
+    [point setCategory:editedCategory];
     
     NSString *description;
     if ([point getDescription])

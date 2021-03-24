@@ -471,6 +471,7 @@
     if (_wasChanged || _isNewItemAdding)
     {
         NSString *savingGroup = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
+        savingGroup = [OAUtilities trimStartAndEndWhitespaces:savingGroup];
         
         [self.favorite setDescription:self.desc ? self.desc : @""];
         [self.favorite setAddress:self.address ? self.address : @""];
@@ -480,8 +481,9 @@
         
         if (_isNewItemAdding || ![self.name isEqualToString:_ininialName] || ![self.groupTitle isEqualToString:_ininialGroupName])
         {
-            NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite newName:self.name newCategory:savingGroup];
-            NSString *savingName = self.name;
+            NSString *savingName = [OAUtilities trimStartAndEndWhitespaces:self.name];
+            NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite newName:savingName newCategory:savingGroup];
+            
             
             if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
             {
@@ -506,6 +508,7 @@
         else
         {
             NSString *savingName = [self.favorite isSpecialPoint] ? [self.favorite getName] : self.name;
+            savingName = [OAUtilities trimStartAndEndWhitespaces:savingName];
             [OAFavoritesHelper editFavoriteName:self.favorite newName:savingName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
         }
     }
@@ -1067,8 +1070,11 @@
 - (void) addGroup:(NSString *)groupName color:(UIColor *)color
 {
     _wasChanged = YES;
-    [OAFavoritesHelper addEmptyCategory:groupName color:color visible:YES];
-    self.groupTitle = groupName;
+    NSString *editedGroupName = [OAFavoritesHelper checkEmoticons:groupName];
+    editedGroupName = [OAUtilities trimStartAndEndWhitespaces:editedGroupName];
+    
+    [OAFavoritesHelper addEmptyCategory:editedGroupName color:color visible:YES];
+    self.groupTitle = editedGroupName;
     _selectedColor = [OADefaultFavorite nearestFavColor:color];
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     

@@ -99,7 +99,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIButton *modeButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
 
 @end
 

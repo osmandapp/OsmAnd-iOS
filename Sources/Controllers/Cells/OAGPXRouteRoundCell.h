@@ -20,7 +20,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *timeImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *wptImageView;
 @property (strong, nonatomic) IBOutlet UIView *separatorView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
 

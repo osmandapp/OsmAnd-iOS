@@ -527,7 +527,7 @@ static BOOL _favoritesLoaded = NO;
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList
 {
     if (!_flatBackgroundIcons)
-        _flatBackgroundIcons =  @[@"circle", @"octagon", @"square"];
+        _flatBackgroundIcons = @[@"circle", @"octagon", @"square"];
     return _flatBackgroundIcons;
 }
 

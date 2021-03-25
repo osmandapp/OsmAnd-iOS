@@ -920,7 +920,7 @@ static BOOL _isDeviatedFromRoute = false;
         // proceed to the next point with min acceptable bearing
         double ANGLE_TO_DECLINE = _route.routeVisibleAngle;
         int nextPoint = _route.currentRoute;
-        for (; nextPoint < routeNodes.count - 1; nextPoint++)
+        for (; nextPoint < (NSInteger) routeNodes.count - 1; nextPoint++)
         {
             float bearingTo = [currentLocation bearingTo:routeNodes[nextPoint]];
             float bearingTo2 = [routeNodes[nextPoint] bearingTo:routeNodes[nextPoint + 1]];

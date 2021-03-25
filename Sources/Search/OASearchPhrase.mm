@@ -604,7 +604,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (BOOL) isLastWord:(EOAObjectType)p
 {
-    for (NSInteger i = self.words.count - 1; i >= 0; i--)
+    for (NSInteger i = (NSInteger) self.words.count - 1; i >= 0; i--)
     {
         OASearchWord *sw = self.words[i];
         if ([sw getType] == p)
@@ -748,7 +748,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (CLLocation *) getWordLocation
 {
-    for (NSInteger i = self.words.count - 1; i >= 0; i--)
+    for (NSInteger i = (NSInteger) self.words.count - 1; i >= 0; i--)
     {
         OASearchWord *sw = self.words[i];
         if ([sw getLocation])
@@ -759,7 +759,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (CLLocation *) getLastTokenLocation
 {
-    for (NSInteger i = self.words.count - 1; i >= 0; i--)
+    for (NSInteger i = (NSInteger) self.words.count - 1; i >= 0; i--)
     {
         OASearchWord *sw = self.words[i];
         if ([sw getLocation])

@@ -643,7 +643,7 @@
     }
 
     UIColor *lastUsedColor;
-    for (long i = _app.data.destinations.count - 1; i >= 0; i--)
+    for (long i = (long) _app.data.destinations.count - 1; i >= 0; i--)
     {
         OADestination *destination = _app.data.destinations[i];
         if (destination.color && !destination.parking && !destination.routePoint)

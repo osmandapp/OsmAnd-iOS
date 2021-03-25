@@ -62,6 +62,8 @@
     OALocalRoutingParameter *_reverseParam;
     
     UINavigationController *_navigationController;
+    
+    BOOL _openGpxSelection;
 }
 
 - (instancetype) initWithFile:(OAGPXDocument *)gpx
@@ -69,15 +71,17 @@
     self = [super init];
     if (self)
     {
-        _gpx = gpx;
-        
-        OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
-        _passWholeRoute = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_from_start_point_id text:OALocalizedString(@"gpx_option_from_start_point") selected:params.passWholeRoute];
-        _navigationType = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_calculate_first_last_segment_id text:OALocalizedString(@"gpx_option_calculate_first_last_segment") selected:params.calculateOsmAndRouteParts];
-        
-        _reverseParam = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_reverse_route_id text:OALocalizedString(@"gpx_option_reverse_route") selected:params.reverse];
+        if (gpx)
+            _gpx = gpx;
+        else
+            _openGpxSelection = YES;
     }
     return self;
+}
+
+- (BOOL) animateShow
+{
+    return _gpx != nil;
 }
 
 - (void)viewDidLoad
@@ -104,6 +108,25 @@
     self.leftIconView.userInteractionEnabled = YES;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (_openGpxSelection)
+    {
+        [self presentOpenTrackViewController:NO];
+        _openGpxSelection = NO;
+    }
+}
+
+- (void) setupGpxParmValues
+{
+    OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
+    _passWholeRoute = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_from_start_point_id text:OALocalizedString(@"gpx_option_from_start_point") selected:params.passWholeRoute];
+    _navigationType = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_calculate_first_last_segment_id text:OALocalizedString(@"gpx_option_calculate_first_last_segment") selected:params.calculateOsmAndRouteParts];
+    
+    _reverseParam = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_reverse_route_id text:OALocalizedString(@"gpx_option_reverse_route") selected:params.reverse];
+}
+
 - (void) applyLocalization
 {
     self.titleView.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
@@ -113,6 +136,8 @@
 
 - (void) generateData
 {
+    [self setupGpxParmValues];
+    
     NSMutableArray *data = [NSMutableArray new];
     NSString *fileName = nil;
     if (_gpx.path.length > 0)
@@ -243,6 +268,11 @@
             [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES]];
         }];
     }
+}
+
+- (UIColor *)getBackgroundColor
+{
+    return UIColor.clearColor;
 }
 
 #pragma mark - UITableViewDataSource
@@ -432,18 +462,23 @@
     return indexPath.section == 0 && indexPath.row == 1 ? indexPath : nil;
 }
 
+- (void)presentOpenTrackViewController:(BOOL)animated
+{
+    _navigationController = [[UINavigationController alloc] init];
+    _navigationController.navigationBarHidden = YES;
+    OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAFollowTrack];
+    saveTrackViewController.delegate = self;
+    [_navigationController setViewControllers:@[saveTrackViewController]];
+    [self presentViewController:_navigationController animated:animated completion:nil];
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *key = item[@"key"];
     if ([key isEqualToString:@"select_another"])
     {
-        _navigationController = [[UINavigationController alloc] init];
-        _navigationController.navigationBarHidden = YES;
-        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAFollowTrack];
-        saveTrackViewController.delegate = self;
-        [_navigationController setViewControllers:@[saveTrackViewController]];
-        [self presentViewController:_navigationController animated:YES completion:nil];
+        [self presentOpenTrackViewController:YES];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         return;
     }
@@ -485,7 +520,7 @@
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
     OAGPXDocument *document = OARoutingHelper.sharedInstance.getCurrentGPXRoute.file;
-    _gpx = document;
+    [self setGpxRouteIfNeeded:document];
     
     [self generateData];
     [self.tableView reloadData];
@@ -493,19 +528,28 @@
 
 - (void)closeBottomSheet
 {
+    if (!_gpx)
+        [OARootViewController.instance dismissViewControllerAnimated:YES completion:nil];
+    else if (self.presentedViewController)
+        [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+- (void)setGpxRouteIfNeeded:(OAGPXDocument *)gpx
 {
-    OAAppSettings.sharedManager.gpxRouteSegment = position;
-    
-    if (gpx != _gpx)
+    if (!_gpx || gpx != _gpx)
     {
         _gpx = gpx;
         [[OARootViewController instance].mapPanel.mapActions setGPXRouteParamsWithDocument:_gpx path:_gpx.path];
         [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
         [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
     }
+}
+
+- (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+{
+    OAAppSettings.sharedManager.gpxRouteSegment = position;
+    
+    [self setGpxRouteIfNeeded:gpx];
     
     OAGPXRouteParamsBuilder *paramsBuilder = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     if (paramsBuilder)

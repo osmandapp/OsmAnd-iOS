@@ -310,7 +310,7 @@
             {
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
-            cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
         }
         return cell;
     }

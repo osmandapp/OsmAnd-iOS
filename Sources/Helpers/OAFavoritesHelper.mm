@@ -27,6 +27,7 @@ static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
 static NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
 static NSArray<NSString  *> *_flatPoiIcons;
+static NSArray<NSString  *> *_flatBackgroundIcons;
 static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isFavoritesLoaded
@@ -525,7 +526,9 @@ static BOOL _favoritesLoaded = NO;
 
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList
 {
-    return @[@"circle", @"octagon", @"square"];
+    if (!_flatBackgroundIcons)
+        _flatBackgroundIcons =  @[@"circle", @"octagon", @"square"];
+    return _flatBackgroundIcons;
 }
 
 @end

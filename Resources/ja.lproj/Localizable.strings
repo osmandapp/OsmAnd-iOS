@@ -1850,3 +1850,5 @@
 "shared_string_importing" = "インポート中";
 "shared_string_nothing_selected" = "何も選択されていません";
 "map_widget_distance_by_tap" = "タップで距離";
+"profile_type_osmand_string" = "OsmAndプロファイル";
+"profile_type_user_string" = "ユーザープロファイル";

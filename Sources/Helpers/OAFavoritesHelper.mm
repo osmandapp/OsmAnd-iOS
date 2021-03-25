@@ -25,8 +25,8 @@
 static NSMutableArray<OAFavoriteItem *> *_cachedFavoritePoints;
 static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
-static NSMutableDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
-static NSMutableArray<NSString  *> *_flatPoiIcons;
+static NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
+static NSArray<NSString  *> *_flatPoiIcons;
 static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isFavoritesLoaded
@@ -485,7 +485,8 @@ static BOOL _favoritesLoaded = NO;
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 
-    _poiIcons = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSArray<NSString *> *> *tempIcons  = [NSMutableDictionary new];
+    NSMutableArray<NSString *> *tempFlatIcons  = [NSMutableArray new];
     _flatPoiIcons = [NSMutableArray new];
     
     if (json)
@@ -498,25 +499,27 @@ static BOOL _favoritesLoaded = NO;
                 NSArray<NSString *> *icons = categories[categoryName][@"icons"];
                 if (icons)
                 {
-                    _poiIcons[categoryName] = icons;
-                    [_flatPoiIcons addObjectsFromArray:icons];
+                    tempIcons[categoryName] = icons;
+                    [tempFlatIcons addObjectsFromArray:icons];
                 }
             }
         }
     }
+    _poiIcons = [NSDictionary dictionaryWithDictionary:tempIcons];
+    _flatPoiIcons = [NSArray arrayWithArray:tempFlatIcons];
 }
 
-+ (NSMutableDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames
++ (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames
 {
     if (!_poiIcons)
-        [self.class setupIcons];
+        [self setupIcons];
     return _poiIcons;
 }
 
 + (NSArray<NSString *> *) getFlatIconNamesList
 {
     if (!_flatPoiIcons)
-        [self.class setupIcons];
+        [self setupIcons];
     return _flatPoiIcons;
 }
 
@@ -593,7 +596,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name
 {
-    if ([self.class isPersonalCategoryDisplayName:name])
+    if ([self isPersonalCategoryDisplayName:name])
         return kPersonalCategory;
     else if ([name isEqualToString:OALocalizedString(@"favorites")])
         return @"";

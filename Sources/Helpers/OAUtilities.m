@@ -1569,14 +1569,4 @@ static const double d180PI = 180.0 / M_PI_2;
     }
 }
 
-+ (NSString *) trimStartAndEndWhitespaces:(NSString*)text
-{
-    NSString *result = text;
-    while ([result hasPrefix: @" "])
-        result = [result substringFromIndex:1];
-    while ([result hasSuffix: @" "])
-        result = [result substringToIndex:result.length - 1];
-    return result;
-}
-
 @end

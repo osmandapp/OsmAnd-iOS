@@ -49,7 +49,7 @@
 + (void) sortAll;
 + (void) recalculateCachedFavPoints;
 
-+ (NSMutableDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames;
++ (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames;
 + (NSArray<NSString *> *) getFlatIconNamesList;
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList;
 

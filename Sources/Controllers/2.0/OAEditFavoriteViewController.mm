@@ -76,9 +76,9 @@
     
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<NSNumber *> *_colors;
-    NSMutableDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
+    NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
     NSArray *_poiCategories;
-    NSMutableArray<NSString *> *_backgroundIcons;
+    NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
     
     NSArray<NSString *> *_groupNames;
@@ -265,10 +265,12 @@
         
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     
-    _backgroundIcons = [NSMutableArray new];
+    NSMutableArray * tempBackgroundIcons = [NSMutableArray new];
     for (NSString *iconName in _backgroundIconNames)
-        [_backgroundIcons addObject:[NSString stringWithFormat:@"bg_point_%@", iconName]];
+        [tempBackgroundIcons addObject:[NSString stringWithFormat:@"bg_point_%@", iconName]];
 
+    _backgroundIcons = [NSArray arrayWithArray:tempBackgroundIcons];
+    
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getBackgroundIcon]];
     if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;
@@ -470,8 +472,8 @@
 {
     if (_wasChanged || _isNewItemAdding)
     {
-        NSString *savingGroup = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
-        savingGroup = [OAUtilities trimStartAndEndWhitespaces:savingGroup];
+        
+        NSString *savingGroup = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle] trim];
         
         [self.favorite setDescription:self.desc ? self.desc : @""];
         [self.favorite setAddress:self.address ? self.address : @""];
@@ -481,7 +483,7 @@
         
         if (_isNewItemAdding || ![self.name isEqualToString:_ininialName] || ![self.groupTitle isEqualToString:_ininialGroupName])
         {
-            NSString *savingName = [OAUtilities trimStartAndEndWhitespaces:self.name];
+            NSString *savingName = [self.name trim];
             NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite newName:savingName newCategory:savingGroup];
             
             
@@ -508,7 +510,7 @@
         else
         {
             NSString *savingName = [self.favorite isSpecialPoint] ? [self.favorite getName] : self.name;
-            savingName = [OAUtilities trimStartAndEndWhitespaces:savingName];
+            savingName = [savingName trim];
             [OAFavoritesHelper editFavoriteName:self.favorite newName:savingName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
         }
     }
@@ -666,18 +668,10 @@
             resultCell.textFieldBottomConstraint.constant = kTextCellBottomMargin;
         }
         
-        if ([item[@"isEditable"] boolValue])
-        {
-            textField.enabled = YES;
-            textField.userInteractionEnabled = YES;
-            textField.textColor = UIColor.blackColor;
-        }
-        else
-        {
-            textField.enabled = NO;
-            textField.userInteractionEnabled = NO;
-            textField.textColor = UIColor.darkGrayColor;
-        }
+        BOOL isEditable = [item[@"isEditable"] boolValue];
+        textField.enabled = isEditable;
+        textField.userInteractionEnabled = isEditable;
+        textField.textColor = isEditable ? UIColor.blackColor : UIColor.darkGrayColor;
         
         return resultCell;
     }
@@ -1070,8 +1064,7 @@
 - (void) addGroup:(NSString *)groupName color:(UIColor *)color
 {
     _wasChanged = YES;
-    NSString *editedGroupName = [OAFavoritesHelper checkEmoticons:groupName];
-    editedGroupName = [OAUtilities trimStartAndEndWhitespaces:editedGroupName];
+    NSString *editedGroupName = [[OAFavoritesHelper checkEmoticons:groupName] trim];
     
     [OAFavoritesHelper addEmptyCategory:editedGroupName color:color visible:YES];
     self.groupTitle = editedGroupName;

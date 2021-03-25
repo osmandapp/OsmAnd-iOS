@@ -177,6 +177,4 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddTracksFolder:(BOOL)shouldAddTracksFolder;
 
-+ (NSString *) trimStartAndEndWhitespaces:(NSString*)text;
-
 @end

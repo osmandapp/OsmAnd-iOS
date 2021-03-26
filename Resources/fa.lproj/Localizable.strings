@@ -24,7 +24,7 @@
 "coords_format_descr" = "قالب نمایش مختصات جغرافیایی را مشخص کنید.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"save_global_track_interval" = "بازهٔ زمانی ثبت (سراسری)";
+"save_global_track_interval" = "تناوب ردنگاری عمومی";
 "save_global_track_interval_descr" = "بازهٔ زمانی برای ضبط رد را انتخاب کنید (که از طریق ابزار ضبط جی‌پی‌ایکس روی نقشه فعال می‌شود).";
 "rotate_map_to_bearing" = "جهت نقشه";
 "rotate_map_to_bearing_descr" = "نحوهٔ چرخش نقشه را انتخاب کنید.";

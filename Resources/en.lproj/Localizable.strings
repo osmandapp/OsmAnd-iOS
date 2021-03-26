@@ -531,7 +531,7 @@
 "fav_no_group" = "No group";
 "fav_add_group" = "Add a group";
 "fav_add_new_group" = "Add new group";
-"select_gropu_descr" = "Select group or add a new one";
+"select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
 "group_name" = "Group name";
 "fav_remove_q" = "Remove favorite?";
@@ -663,7 +663,6 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"rendering_value_browse_map_name" = "Browse map";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
@@ -819,7 +818,6 @@
 
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
-"reset_to_default" = "Reset to default";
 "profile_alert_delete_title" = "Delete profile";
 "profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";

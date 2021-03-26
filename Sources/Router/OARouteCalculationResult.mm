@@ -522,7 +522,7 @@
  */
 + (void) checkForDuplicatePoints:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
 {
-    for (int i = 0; i < locations.count - 1;)
+    for (int i = 0; i < (int) locations.count - 1;)
     {
         if ([locations[i] distanceFromLocation:locations[i + 1]] == 0)
         {
@@ -599,7 +599,7 @@
     double previousBearing = 0;
     int startTurnPoint = 0;
     
-    for (int i = 1; i < locations.count - 1; i++)
+    for (int i = 1; i < (int) locations.count - 1; i++)
     {
         CLLocation *next = locations[i + 1];
         CLLocation *current = locations[i];

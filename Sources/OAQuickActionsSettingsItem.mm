@@ -175,7 +175,7 @@
         NSMutableString *res = [NSMutableString new];
         if (styles)
         {
-            for (NSInteger i = 0; i < styles.count - 1; i++)
+            for (NSInteger i = 0; i < (NSInteger) styles.count - 1; i++)
             {
                 [res appendString:styles[i]];
                 [res appendString:@","];

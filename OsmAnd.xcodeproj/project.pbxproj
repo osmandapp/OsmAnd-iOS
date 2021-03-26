@@ -6389,8 +6389,6 @@
 		DAF3F551225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */; };
 		DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
 		DAF3F556225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
-		DAF6A8E323508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */; };
-		DAF6A8E423508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */; };
 		DAF7027823B64BC300E065F9 /* OARouteInfoLegendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAF7027723B64BC200E065F9 /* OARouteInfoLegendCell.xib */; };
 		DAF7027923B64BC300E065F9 /* OARouteInfoLegendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAF7027723B64BC200E065F9 /* OARouteInfoLegendCell.xib */; };
 		DAF7027C23B64C1A00E065F9 /* OARouteInfoLegendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7027B23B64C1900E065F9 /* OARouteInfoLegendCell.m */; };
@@ -10908,8 +10906,6 @@
 		DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmNotesMapLayerProvider.mm; path = Core/OAOsmNotesMapLayerProvider.mm; sourceTree = "<group>"; };
 		DAF3F553225E0A8600854DBC /* OAOnlineOsmNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOnlineOsmNote.h; path = Core/OAOnlineOsmNote.h; sourceTree = "<group>"; };
 		DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOnlineOsmNote.mm; path = Core/OAOnlineOsmNote.mm; sourceTree = "<group>"; };
-		DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteTripSettingsViewController.mm; sourceTree = "<group>"; };
-		DAF6A8E223508CB4007CD465 /* OARouteTripSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteTripSettingsViewController.h; sourceTree = "<group>"; };
 		DAF7027723B64BC200E065F9 /* OARouteInfoLegendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OARouteInfoLegendCell.xib; path = Resources/Controllers/Cells/OARouteInfoLegendCell.xib; sourceTree = "<group>"; };
 		DAF7027A23B64C1900E065F9 /* OARouteInfoLegendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARouteInfoLegendCell.h; path = Controllers/Cells/OARouteInfoLegendCell.h; sourceTree = "<group>"; };
 		DAF7027B23B64C1900E065F9 /* OARouteInfoLegendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARouteInfoLegendCell.m; path = Controllers/Cells/OARouteInfoLegendCell.m; sourceTree = "<group>"; };
@@ -14737,8 +14733,6 @@
 				DA71EAAD234624B100B9D7F3 /* OARouteSettingsBaseViewController.h */,
 				DA71EAAC234624B100B9D7F3 /* OARouteSettingsBaseViewController.mm */,
 				DA71EAAB234624B000B9D7F3 /* OARouteSettingsBaseViewController.xib */,
-				DAF6A8E223508CB4007CD465 /* OARouteTripSettingsViewController.h */,
-				DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */,
 				DAA021EC23A24791006C94FF /* OARouteSettingsParameterController.h */,
 				DAA021EB23A24791006C94FF /* OARouteSettingsParameterController.mm */,
 				DA446E6323A3AB2500178651 /* OARouteStatisticsHelper.h */,
@@ -22668,7 +22662,6 @@
 				DA9A061E2297EF47000A80F1 /* OAImageCardCell.mm in Sources */,
 				840B7D5D1F84250500477A3C /* OASettingSwitchCell.m in Sources */,
 				847A1D621DF94E9B003C1246 /* OATableViewCellWithSwitch.m in Sources */,
-				DAF6A8E423508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */,
 				847A1D631DF94E9B003C1246 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				8438B81A1EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
 				847A1D641DF94E9B003C1246 /* OAWebViewController.m in Sources */,
@@ -23149,7 +23142,6 @@
 				78A5C206240807B900312FC4 /* OAOnlineTilesSettingsViewController.mm in Sources */,
 				DAF7027C23B64C1A00E065F9 /* OARouteInfoLegendCell.m in Sources */,
 				DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */,
-				DAF6A8E323508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */,
 				1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */,
 				84E3704D2059254900959B94 /* OAWaypointsMainScreen.mm in Sources */,
 				846F036A1E12D54C00DB4772 /* OACustomPOIViewController.mm in Sources */,

@@ -1331,7 +1331,7 @@
     std::vector<std::shared_ptr<RouteSegmentResult>> newGpxRoute;
     
     NSInteger lastIndex = nearestGpxPointInd;
-    for (NSInteger i = 0; i < segmentEndpoints.count - 1; i++)
+    for (NSInteger i = 0; i < (NSInteger) segmentEndpoints.count - 1; i++)
     {
         CLLocation *prevSegmentPoint = segmentEndpoints[i];
         CLLocation *newSegmentPoint = segmentEndpoints[i + 1];
@@ -1365,7 +1365,7 @@
                    segmentEndpoints:(NSArray<CLLocation *> *)segmentEndpoints
           calculateOsmAndRouteParts:(BOOL)calculateOsmAndRouteParts
 {
-    for (NSInteger i = 0; i < segmentEndpoints.count - 1; i++)
+    for (NSInteger i = 0; i < (NSInteger) segmentEndpoints.count - 1 && segmentEndpoints.count != 0; i++)
     {
         CLLocation *prevSegmentPoint = segmentEndpoints[i];
         CLLocation *newSegmentPoint = segmentEndpoints[i + 1];

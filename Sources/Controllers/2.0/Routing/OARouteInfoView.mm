@@ -1263,11 +1263,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [self setupButtonLayout:cell.routingCellButton];
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.routingCellButton addTarget:self action:@selector(swapPressed:) forControlEvents:UIControlEventTouchUpInside];
-                if (cell.routingCellButton.isHidden)
-                {
-                    cell.routingCellButton.hidden = NO;
-                    cell.routingCellButton.userInteractionEnabled = YES;
-                }
+                cell.routingCellButton.hidden = self.isGpxTrackFollowingMode;
+                cell.routingCellButton.userInteractionEnabled = cell.routingCellButton.isHidden;
             }
             else if ([type isEqualToString:@"finish"])
             {
@@ -1287,11 +1284,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [cell setDividerVisibility:YES];
                 cell.routingCellButton.hidden = _routingHelper.isPublicTransportMode;
                 cell.routingCellButton.userInteractionEnabled = !cell.routingCellButton.isHidden;
-                [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+                UIImage *image = self.isGpxTrackFollowingMode ? [UIImage imageNamed:@"ic_navbar_close"] : [UIImage imageNamed:@"ic_custom_add"];
+                [cell.routingCellButton setImage:image forState:UIControlStateNormal];
                 [self setupButtonLayout:cell.routingCellButton];
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 if (self.isGpxTrackFollowingMode)
-                    [cell.routingCellButton addTarget:self action:@selector(addFinishDestination) forControlEvents:UIControlEventTouchUpInside];
+                    [cell.routingCellButton addTarget:self action:@selector(removeFinishDestination) forControlEvents:UIControlEventTouchUpInside];
                 else
                     [cell.routingCellButton addTarget:self action:@selector(addDestinationPressed:) forControlEvents:UIControlEventTouchUpInside];
             }
@@ -1636,6 +1634,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:EOADestinationTypeFinish];
     addDest.delegate = self;
     [addDest show];
+}
+
+- (void)removeFinishDestination
+{
+    if (_routingHelper.getCurrentGPXRoute != nil)
+    {
+        OAGPXRouteParamsBuilder *routeParams = _routingHelper.getCurrentGPXRoute;
+        CLLocation *finalPoint = routeParams.getPoints.lastObject;
+        
+        if (finalPoint)
+            [[OATargetPointsHelper sharedInstance] navigateToPoint:finalPoint updateRoute:YES intermediate:-1];
+    }
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

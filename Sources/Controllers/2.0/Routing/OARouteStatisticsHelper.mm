@@ -260,11 +260,11 @@ static NSArray<NSString *> *_boundariesClass;
     classFormattedStrings[0] = [self.class formatSlopeString:minSlope next:MIN_DIVIDED_INCLINE];
     classFormattedStrings[1] = [self.class formatSlopeString:minSlope next:MIN_DIVIDED_INCLINE];
     
-    for (int k = 2; k < _boundariesArray.count - 1; k++)
+    for (int k = 2; k < (NSInteger) _boundariesArray.count - 1; k++)
     {
         classFormattedStrings[k] = [self.class formatSlopeString:_boundariesArray[k - 1].intValue next:_boundariesArray[k].intValue];
     }
-    classFormattedStrings[_boundariesArray.count - 1] = [self.class formatSlopeString:MAX_DIVIDED_INCLINE next:maxSlope];
+    classFormattedStrings[(NSInteger) _boundariesArray.count - 1] = [self.class formatSlopeString:MAX_DIVIDED_INCLINE next:maxSlope];
     
     for(NSInteger i = 0; i < input.count; i ++)
     {

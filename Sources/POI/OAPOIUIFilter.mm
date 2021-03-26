@@ -261,7 +261,7 @@
 
 - (BOOL) isSearchFurtherAvailable
 {
-    return distanceInd < distanceToSearchValues.count - 1;
+    return distanceInd < (int) distanceToSearchValues.count - 1;
 }
 
 - (NSString *) getSearchArea:(BOOL)next

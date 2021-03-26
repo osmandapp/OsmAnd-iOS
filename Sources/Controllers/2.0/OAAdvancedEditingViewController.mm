@@ -440,7 +440,7 @@
 
 -(void) addTag:(UIButton *)sender
 {
-    NSInteger sectionNumber = _fieldPairs.count - 1;
+    NSInteger sectionNumber = (NSInteger) _fieldPairs.count - 1;
     [self.tableView beginUpdates];
     [self addTagPair:sectionNumber];
     [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionNumber] withRowAnimation:UITableViewRowAnimationFade];

@@ -496,7 +496,7 @@
         if (startInd != 0)
         {
             start.start = NO;
-            start.intermediate = startInd != allTargets.count - 1;
+            start.intermediate = startInd != (NSInteger) allTargets.count - 1;
             if (![_targetPointsHelper getPointToStart])
             {
                 [start.pointDescription setName:[OAPointDescription getLocationNamePlain:[start getLatitude] lon:[start getLongitude]]];

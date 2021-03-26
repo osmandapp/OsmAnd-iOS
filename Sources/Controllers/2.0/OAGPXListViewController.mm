@@ -70,6 +70,8 @@
 #define KML_EXT @"kml"
 #define KMZ_EXT @"kmz"
 
+#define kImportFolderName @"import"
+
 #define kRecordTrackRow 0
 #define kRecordTrackSection 0
 #define kGPXGroupHeaderRow 0
@@ -135,6 +137,8 @@
     NSArray *_visible;
     BOOL _isRouteActive;
     OAGPX* _routeItem;
+    
+    NSString *_importGpxPath;
     
     MBProgressHUD *_progressHUD;
     
@@ -205,7 +209,7 @@ static UIViewController *parentController;
                 NSString *newName;
                 for (int i = 2; i < 100000; i++) {
                     newName = [[NSString stringWithFormat:@"%@_%d", [[_importUrl.path lastPathComponent] stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
-                    if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
+                    if (![fileMan fileExistsAtPath:[_importGpxPath stringByAppendingPathComponent:newName]])
                         break;
                 }
                 
@@ -315,7 +319,7 @@ static UIViewController *parentController;
             }
             else
             {
-                [[NSFileManager defaultManager] removeItemAtPath:[_app.gpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
+                [[NSFileManager defaultManager] removeItemAtPath:[_importGpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
                 [self removeFromDB];
                 item = [self doImport:NO];
             }
@@ -368,6 +372,7 @@ static UIViewController *parentController;
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _importGpxPath = [_app.gpxPath stringByAppendingPathComponent:kImportFolderName];
     _iapHelper = [OAIAPHelper sharedInstance];
     _savingHelper = [OASavingTrackHelper sharedInstance];
     _settings = [OAAppSettings sharedManager];
@@ -376,23 +381,26 @@ static UIViewController *parentController;
 -(OAGPX *)doImport:(BOOL)doRefresh
 {
     OAGPX *item;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:_importGpxPath])
+        [fileManager createDirectoryAtPath:_importGpxPath withIntermediateDirectories:YES attributes:nil error:nil];
     if (_newGpxName) {
-        [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
+        [fileManager moveItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
     } else {
-        [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] error:nil];
+        [fileManager moveItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] error:nil];
     }
     
     OAGPXTrackAnalysis *analysis = [_doc getAnalysis:0];
     if (_newGpxName) {
-        NSString *storingPathInRootFolder = _newGpxName;
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:_newGpxName];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     } else {
         NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
-        NSString *storingPathInRootFolder = name;
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:name];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
-    [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
+    [fileManager removeItemAtPath:_importUrl.path error:nil];
     
     _doc = nil;
     _importUrl = nil;

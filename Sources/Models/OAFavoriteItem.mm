@@ -108,6 +108,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self = [super init];
     if (self) {
         _favorite = favorite;
+        UIColor *nearestColor = [OADefaultFavorite nearestFavColor:[self getColor]].color;
+        [self setColor:nearestColor];
         
         [self initPersonalType];
     }
@@ -320,7 +322,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getIcon
 {
-    return self.favorite->getIcon().toNSString();
+    if (!self.favorite->getIcon().isNull())
+    {
+        NSString *iconName = self.favorite->getIcon().toNSString();
+        if ([[OAFavoritesHelper getFlatIconNamesList] containsObject:iconName])
+            return iconName;
+    }
+    return @"special_star";
 }
 
 - (void) setIcon:(NSString *)icon
@@ -330,7 +338,14 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getBackgroundIcon
 {
-    return self.favorite->getBackground().toNSString();
+    
+    if (!self.favorite->getBackground().isNull())
+    {
+        NSString *iconName = self.favorite->getBackground().toNSString();
+        if ([[OAFavoritesHelper getFlatBackgroundIconNamesList] containsObject:iconName])
+            return iconName;
+    }
+    return @"circle";
 }
 
 - (void) setBackgroundIcon:(NSString *)backgroundIcon

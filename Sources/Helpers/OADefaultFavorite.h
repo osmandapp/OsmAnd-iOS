@@ -37,4 +37,6 @@
 
 + (NSInteger) getValidBuiltInColorNumber:(NSInteger)number;
 
++ (UIColor *) getDefaultColor;
+
 @end

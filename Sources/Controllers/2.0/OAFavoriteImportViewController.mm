@@ -221,8 +221,7 @@
             return;
         
         _app.favoritesCollection->mergeFrom(_favoritesCollection);
-        [OAFavoritesHelper import:_favoritesCollection->getFavoriteLocations()];
-        [_app saveFavoritesToPermamentStorage];
+        [OAFavoritesHelper loadFavorites];
         [self.ignoredNames removeAllObjects];
         self.conflictedName = @"";
         

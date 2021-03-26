@@ -25,6 +25,9 @@
 static NSMutableArray<OAFavoriteItem *> *_cachedFavoritePoints;
 static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
+static NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
+static NSArray<NSString *> *_flatPoiIcons;
+static NSArray<NSString *> *_flatBackgroundIcons;
 static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isFavoritesLoaded
@@ -94,7 +97,7 @@ static BOOL _favoritesLoaded = NO;
         [_cachedFavoritePoints addObject:favData];
         
         NSString *groupName = [favData getCategory];
-        UIColor *color = [favData getColor];
+        UIColor *color = [OADefaultFavorite nearestFavColor:[favData getColor]].color;
         OAFavoriteGroup *group = [_flatGroups objectForKey:groupName];
         if (!group)
         {
@@ -194,6 +197,11 @@ static BOOL _favoritesLoaded = NO;
             return item;
     }
     return nil;
+}
+
++ (NSMutableDictionary<NSString *, OAFavoriteGroup *> *) getGroups
+{
+    return _flatGroups;
 }
 
 + (OAFavoriteGroup *) getGroupByName:(NSString *)nameId
@@ -399,15 +407,16 @@ static BOOL _favoritesLoaded = NO;
     return favorites;
 }
 
-+ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point name:(NSString *)name
++ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point newName:(NSString *)newName newCategory:(NSString *)newCategory
 {
     BOOL emoticons = NO;
     NSString *index = @"";
     int number = 0;
-    NSString *checkingName = name ? name : [point getName];
+    NSString *checkingName = newName ? newName : [point getName];
+    NSString *checkingCategory = newCategory ? newCategory : [point getCategory];
     NSString *editedName = [OAFavoritesHelper checkEmoticons:checkingName];
-    NSString *category = [OAFavoritesHelper checkEmoticons:[point getCategory]];
-    [point setCategory:category];
+    NSString *editedCategory = [OAFavoritesHelper checkEmoticons:checkingCategory];
+    [point setCategory:editedCategory];
     
     NSString *description;
     if ([point getDescription])
@@ -471,6 +480,57 @@ static BOOL _favoritesLoaded = NO;
     return [NSString stringWithString:tempString];
 }
 
++ (void) setupIcons
+{
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+
+    NSMutableDictionary<NSString *, NSArray<NSString *> *> *tempIcons  = [NSMutableDictionary new];
+    NSMutableArray<NSString *> *tempFlatIcons  = [NSMutableArray new];
+    _flatPoiIcons = [NSMutableArray new];
+    
+    if (json)
+    {
+        NSDictionary *categories = json[@"categories"];
+        if (categories)
+        {
+            for (NSString *categoryName in categories.allKeys)
+            {
+                NSArray<NSString *> *icons = categories[categoryName][@"icons"];
+                if (icons)
+                {
+                    tempIcons[categoryName] = icons;
+                    [tempFlatIcons addObjectsFromArray:icons];
+                }
+            }
+        }
+    }
+    _poiIcons = [NSDictionary dictionaryWithDictionary:tempIcons];
+    _flatPoiIcons = [NSArray arrayWithArray:tempFlatIcons];
+}
+
++ (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames
+{
+    if (!_poiIcons)
+        [self setupIcons];
+    return _poiIcons;
+}
+
++ (NSArray<NSString *> *) getFlatIconNamesList
+{
+    if (!_flatPoiIcons)
+        [self setupIcons];
+    return _flatPoiIcons;
+}
+
++ (NSArray<NSString *> *) getFlatBackgroundIconNamesList
+{
+    if (!_flatBackgroundIcons)
+        _flatBackgroundIcons = @[@"circle", @"octagon", @"square"];
+    return _flatBackgroundIcons;
+}
+
 @end
 
 @implementation OAFavoriteGroup
@@ -524,7 +584,7 @@ static BOOL _favoritesLoaded = NO;
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name
 {
     NSLog(OALocalizedString(@"personal_category_name"));
-    return [name isEqualToString:OALocalizedString(@"personal_category_name")];
+    return [name isEqualToString:OALocalizedString(@"personal_category_name")] || [name isEqualToString:kPersonalCategory];
 }
 
 + (NSString *) getDisplayName:(NSString *)name
@@ -539,7 +599,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name
 {
-    if ([self.class isPersonalCategoryDisplayName:name])
+    if ([self isPersonalCategoryDisplayName:name])
         return kPersonalCategory;
     else if ([name isEqualToString:OALocalizedString(@"favorites")])
         return @"";

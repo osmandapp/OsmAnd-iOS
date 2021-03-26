@@ -64,6 +64,11 @@ static NSArray *colors;
     return colors;
 }
 
++ (UIColor *) getDefaultColor
+{
+    return ((OAFavoriteColor *)colors[0]).color;
+}
+
 + (OAFavoriteColor *)nearestFavColor:(UIColor *)sourceColor
 {
     CGFloat distance = FLT_MAX;

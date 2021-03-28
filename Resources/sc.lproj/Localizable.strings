@@ -2033,3 +2033,34 @@
 "voice_announces" = "Indicatziones vocales";
 "route_parameters" = "Paràmetros de s'àndala";
 "map_widget_distance_by_tap" = "Distàntzia pro tocu";
+"travel" = "Biàgiu";
+"transport" = "Trasportos pùblicos";
+"symbols" = "Sìmbulos";
+"sport" = "Isport";
+"special" = "Ispetziales";
+"service" = "Servìtziu";
+"emergency" = "Emergèntzia";
+"square" = "Cuadradu";
+"octagon" = "Otàgonu";
+
+// Shapes
+"circle" = "Tzìrculu";
+"shared_string_others" = "Àteros";
+"favorite_places_category" = "Logos";
+"favorite_friends_category" = "Amigos";
+"default_color_descr" = "Custu colore s'at a impreare pro totu sos preferidos noos annànghidos a su grupu.";
+"default_color" = "Colore predefinidu";
+"fav_point_emoticons_message" = "Preferidu mudadu de nùmene in '%@', pro sarvare s’istringa cun sas emòticons in unu documentu.";
+"fav_point_dublicate_message" = "Preferidu mudadu de nùmene in '%@' pro non tènnere duplicados.";
+"fav_point_dublicate" = "Nùmene dòpiu in sos preferidos";
+"shape" = "Forma";
+"icon" = "Icona";
+"select_group" = "Ischerta su grupu";
+"name_and_descr" = "Nùmene e descritzione";
+"add_favorite" = "Annanghe unu preferidu";
+"fav_points_not_exist" = "Non bi sunt preferidos";
+"replace_favorite_confirmation" = "Ses seguru de bòlere sostituire su preferidu %@?";
+"group_name" = "Nùmene de su grupu";
+"available_groups" = "Grupos a disponimentu";
+"select_gropu_descr" = "Ischerta unu grupu o annanghe·nde unu nou";
+"fav_add_new_group" = "Annanghe unu grupu nou";

@@ -809,8 +809,8 @@
 "osm_live_hide_user_name" = "اسم من را در گزارش‌ها نشان نده";
 "shared_string_upload" = "آپلود";
 // OSM Editing actions
-"opening_changeset" = "بازکردن بستهٔ تغییر…";
-"closing_changeset" = "بستن بستهٔ تغییر…";
+"opening_changeset" = "در حال بازکردن بستهٔ تغییر…";
+"closing_changeset" = "در حال بستن بستهٔ تغییر…";
 "commiting_node" = "در حال ثبت نقطه…";
 "loading_poi_obj" = "در حال بارکردن POI‏…";
 "access_intermediate_arrival_time" = "زمان رسیدن به میانی";

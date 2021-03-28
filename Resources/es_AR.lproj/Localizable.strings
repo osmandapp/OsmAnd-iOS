@@ -2034,3 +2034,34 @@
 "track_multiple_segments_select" = "«%@» tiene más de un segmento. Marca la parte del recorrido que deseas usar para la navegación.";
 "select_segment" = "Elegir segmento";
 "select_track_to_follow" = "Elige la traza a seguir";
+"travel" = "Viaje";
+"transport" = "Transporte";
+"symbols" = "Símbolos";
+"sport" = "Deporte";
+"special" = "Especial";
+"service" = "Servicio";
+"emergency" = "Emergencia";
+"square" = "Cuadrado";
+"octagon" = "Octágono";
+
+// Shapes
+"circle" = "Círculo";
+"shared_string_others" = "Otros";
+"favorite_places_category" = "Sitios";
+"favorite_friends_category" = "Amigos";
+"default_color_descr" = "Este color será utilizado para todos los favoritos nuevos añadidos al grupo.";
+"default_color" = "Color predefinido";
+"fav_point_emoticons_message" = "Favorito renombrado a «%1$s» para guardar la cadena que contiene emoticonos en un archivo.";
+"fav_point_dublicate_message" = "Favorito renombrado a «%1$s» para evitar la duplicación.";
+"fav_point_dublicate" = "Favorito especificado con nombre duplicado";
+"shape" = "Forma";
+"icon" = "Icono";
+"select_group" = "Elegir grupo";
+"name_and_descr" = "Nombre y descripción";
+"add_favorite" = "Añadir favorito";
+"fav_points_not_exist" = "No existen puntos favoritos";
+"replace_favorite_confirmation" = "¿Reemplazar el Favorito «%1$s»?";
+"group_name" = "Nombre del grupo";
+"available_groups" = "Grupos disponibles";
+"select_gropu_descr" = "Elegir grupo o añadir uno nuevo";
+"fav_add_new_group" = "Añadir nuevo grupo";

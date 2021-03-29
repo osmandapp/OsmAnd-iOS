@@ -2065,3 +2065,4 @@
 "available_groups" = "Grupos disponibles";
 "select_gropu_descr" = "Elegir grupo o añadir uno nuevo";
 "fav_add_new_group" = "Añadir nuevo grupo";
+"select_group_descr" = "Elige el grupo o añade uno nuevo";

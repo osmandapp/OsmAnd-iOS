@@ -393,7 +393,10 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == [[self getCardController:indexPath.section] rowsCount] - 1)
+    {
+        cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, DeviceScreenWidth - 2 * [OAUtilities getLeftMargin] - 16, cell.frame.size.height);
         [OAUtilities roundCornersOnView:cell onTopLeft:NO topRight:NO bottomLeft:YES bottomRight:YES radius:4.0];
+    }
     else
         cell.layer.mask = nil;
 }

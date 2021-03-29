@@ -122,6 +122,12 @@
                      @"cells" : controlsList,
                      } ];
     
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"coordinates_widget"),
+                               @"img" : @"ic_custom_coordinates",
+                               @"key" : @"coordinates_widget",
+                               @"selected" : @([_settings.showCoordinatesWidget get]),
+                               @"type" : @"OASettingSwitchCell"} ];
+    
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_distance_by_tap"),
                                @"img" : @"ic_action_ruler_line",
                                @"key" : @"map_widget_distance_by_tap",
@@ -201,6 +207,10 @@
         {
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
+        }
+        else if ([key isEqualToString:@"coordinates_widget"])
+        {
+            [_settings.showCoordinatesWidget set:visible];
         }
         else if ([key isEqualToString:@"map_widget_distance_by_tap"])
         {

@@ -318,6 +318,9 @@ typedef enum
     
     if (_shadowButton)
         _shadowButton.frame = [self shadowButtonRect];
+    
+    if (_shadeView)
+        _shadeView.frame = CGRectMake(0 - OAUtilities.getLeftMargin, 0, DeviceScreenWidth, DeviceScreenHeight);
 }
  
 @synthesize mapViewController = _mapViewController;
@@ -3274,6 +3277,31 @@ typedef enum
 
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
+        BOOL isCoordinatesVisible = [_settings.showCoordinatesWidget get];
+        
+        CGFloat coordinateWidgetHeight = 52;
+        CGFloat markersLandscapeWidth = DeviceScreenWidth / 2;
+        
+        CGFloat coordinateWidgetTopOffset;
+        CGFloat markersHeaderLeftOffset;
+        CGFloat markersHeaderWidth;
+        
+        if (isCoordinatesVisible)
+        {
+            coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : coordinateWidgetHeight;
+            markersHeaderLeftOffset = [OAUtilities isLandscape] ? DeviceScreenWidth / 2 : 0;
+            markersHeaderWidth = [OAUtilities isLandscape] ? (DeviceScreenWidth / 2 - OAUtilities.getLeftMargin) : DeviceScreenWidth;
+        }
+        else
+        {
+            coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : 0;
+            markersHeaderLeftOffset = [OAUtilities isLandscape] ? ((DeviceScreenWidth - markersLandscapeWidth) / 2) : 0;
+            markersHeaderWidth = [OAUtilities isLandscape] ? markersLandscapeWidth : DeviceScreenWidth;
+        }
+        
+        _destinationViewController.view.frame = CGRectMake( markersHeaderLeftOffset - OAUtilities.getLeftMargin, coordinateWidgetTopOffset + OAUtilities.getTopMargin, markersHeaderWidth, 50);
+        _destinationViewController.titleLabel.frame = CGRectMake( 0, 0, markersHeaderWidth, 44);
+        
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
         
         CGFloat bottomMargin = [OAUtilities getBottomMargin];
@@ -3282,7 +3310,7 @@ typedef enum
         cardsController.rightTableViewPadding.constant = 8 + OAUtilities.getLeftMargin;
         cardsController.leftToolbarPadding.constant = OAUtilities.getLeftMargin;
         cardsController.rightToolbarPadding.constant = OAUtilities.getLeftMargin;
-        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
         CGFloat h = DeviceScreenHeight - y;
         CGFloat w = DeviceScreenWidth;
         
@@ -3294,7 +3322,7 @@ typedef enum
             cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
                 cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
-                _shadeView.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
+                _shadeView.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, 0, DeviceScreenWidth, DeviceScreenHeight);
                 _shadeView.alpha = 1.0;
                 [cardsController.tableView reloadData];
             }];
@@ -3416,8 +3444,7 @@ typedef enum
     if (!cardsController.view.superview)
     {
         [self hideTargetPointMenu];
-
-        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
         CGFloat h = DeviceScreenHeight - y;
         CGFloat w = DeviceScreenWidth;
         CGFloat toolbarHeight = cardsController.toolBarHeight.constant;
@@ -3465,7 +3492,7 @@ typedef enum
     
     if (cardsController.view.superview)
     {
-        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
         CGFloat h = DeviceScreenHeight - y;
         CGFloat w = DeviceScreenWidth;
         CGFloat cardsTableHeight = h - cardsController.toolBarHeight.constant;

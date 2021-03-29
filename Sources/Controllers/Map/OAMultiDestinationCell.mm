@@ -12,6 +12,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OAColors.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -71,20 +72,23 @@
 - (void)updateLayout:(CGRect)frame
 {
     CGFloat h = frame.size.height;
-    CGFloat dirViewWidth = frame.size.width - 40.0 - (OAUtilities.getLeftMargin * 2);
-        
-    CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
-    
-    _contentView.frame = newFrame;
-    _directionsView.frame = CGRectMake(0.0 + OAUtilities.getLeftMargin, 0.0, dirViewWidth, h);
-    
-    _btnClose.frame = CGRectMake(_directionsView.frame.size.width + OAUtilities.getLeftMargin, 0.0, 40.0, h);
+    CGFloat closeBtnWidth = 48;
+    CGFloat dirViewWidth;
+
+    _btnClose.hidden = NO;
+    _closeBtnSeparator.hidden = NO;
+    dirViewWidth = frame.size.width - closeBtnWidth;
+    _btnClose.frame = CGRectMake(dirViewWidth, 0.0, closeBtnWidth , h);
+    _closeBtnSeparator.frame = CGRectMake(dirViewWidth - 1, 17, 1, 16);
+    _contentView.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
+    _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h);
     
     switch ([self destinationsCount])
     {
         case 1:
         {
             BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
+            _backgroundView2.hidden = YES;
 
             CGFloat textWidth = _directionsView.frame.size.width - 68.0 - (self.buttonOkVisible ? 40.0 : 0.0);
 
@@ -142,6 +146,10 @@
             BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
             BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled;
             
+            CGFloat buttonViewWidth = closeBtnWidth;
+            _backgroundView2.frame = CGRectMake(dirViewWidth / 2, 0.0, dirViewWidth / 2 + buttonViewWidth, h);
+            _backgroundView2.hidden = NO;
+            
             _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
             _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
             CGFloat textWidth = dirViewWidth / 2.0 - 62.0 - (self.buttonOkVisible ? 40.0 : 0.0);
@@ -191,7 +199,7 @@
             
             textWidth = dirViewWidth / 2.0 - 62.0 - (self.buttonOkVisible2 ? 40.0 : 0.0);
 
-            _colorView2.frame = CGRectMake(dirViewWidth / 2.0, 5.0, 40.0, 40.0);
+            _colorView2.frame = CGRectMake(dirViewWidth / 2.0 + 5, 5.0, 40.0, 40.0);
             _colorView2.hidden = NO;
             _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
             _markerView2.hidden = NO;
@@ -265,6 +273,9 @@
             BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled && width > 260.0;
             BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled && width > 260.0;
             BOOL isParking3 = ((OADestination *)self.destinations[2]).parking && ((OADestination *)self.destinations[2]).carPickupDateEnabled && width > 260.0;
+            
+            _backgroundView2.frame = CGRectMake(dirViewWidth / 3, 0.0, dirViewWidth / 3, h);
+            _backgroundView2.hidden = NO;
             
             if (width >= 160) {
                 CGFloat textWidth = width - 60.0;
@@ -393,14 +404,14 @@
     if (!self.contentView)
     {
         self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 50.0)];
-        _contentView.backgroundColor = UIColorFromRGB(0x044b7f);
+        _contentView.backgroundColor = UIColorFromRGB(markers_header_light_blue);
         _contentView.opaque = YES;
     }
     
     if (!self.directionsView)
     {
         self.directionsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth - 41.0, 50.0)];
-        _directionsView.backgroundColor = UIColorFromRGB(0x044b7f);
+        _directionsView.backgroundColor = UIColorFromRGB(markers_header_light_blue);
         _directionsView.opaque = YES;
         [_contentView addSubview:self.directionsView];
     }
@@ -409,7 +420,7 @@
     {
         self.btnClose = [UIButton buttonWithType:UIButtonTypeSystem];
         _btnClose.frame = CGRectMake(280.0, 0.0, 40.0, 50.0);
-        _btnClose.backgroundColor = UIColorFromRGB(0x044b7f);
+        _btnClose.backgroundColor = UIColor.clearColor;
         _btnClose.opaque = YES;
         _btnClose.tintColor = UIColorFromRGB(0x5081a6);
         [_btnClose setTitle:@"" forState:UIControlStateNormal];
@@ -419,11 +430,19 @@
         [_contentView addSubview:self.btnClose];
     }
     
+    if (!self.closeBtnSeparator)
+    {
+        self.closeBtnSeparator = [[UIView alloc] initWithFrame:CGRectMake(280.0, 0.0, 1, 50.0)];
+        _closeBtnSeparator.backgroundColor = UIColorFromRGB(0x5081a6);
+        _closeBtnSeparator.opaque = YES;
+        [_contentView addSubview:self.closeBtnSeparator];
+    }
+    
     if (!self.btnOK)
     {
         self.btnOK = [UIButton buttonWithType:UIButtonTypeSystem];
         _btnOK.frame = CGRectMake(DeviceScreenWidth - 40.0, 0.0, 40.0, 50.0);
-        _btnOK.backgroundColor = UIColorFromRGB(0x044b7f);
+        _btnOK.backgroundColor = UIColorFromRGB(markers_header_light_blue);
         _btnOK.opaque = YES;
         _btnOK.tintColor = UIColorFromRGB(0xffffff);
         [_btnOK setTitle:@"" forState:UIControlStateNormal];
@@ -484,11 +503,21 @@
     
     if ([self destinationsCount] > 1)
     {
+        if (!self.backgroundView2)
+        {
+            CGFloat halfWidth = (DeviceScreenWidth - 40) / 2;
+            self.backgroundView2 = [[UIView alloc] initWithFrame:CGRectMake(halfWidth, 0.0, halfWidth, 50.0)];
+            _backgroundView2.backgroundColor = UIColorFromRGB(markers_header_dark_blue);
+            _backgroundView2.opaque = YES;
+            _backgroundView2.hidden = NO;
+            [_directionsView addSubview:self.backgroundView2];
+        }
+    
         if (!self.btnOK2)
         {
             self.btnOK2 = [UIButton buttonWithType:UIButtonTypeSystem];
             _btnOK2.frame = CGRectMake(DeviceScreenWidth - 40.0, 0.0, 40.0, 50.0);
-            _btnOK2.backgroundColor = UIColorFromRGB(0x044b7f);
+            _btnOK2.backgroundColor = UIColorFromRGB(markers_header_light_blue);
             _btnOK2.opaque = YES;
             _btnOK2.tintColor = UIColorFromRGB(0xffffff);
             [_btnOK2 setTitle:@"" forState:UIControlStateNormal];
@@ -554,7 +583,7 @@
         {
             self.btnOK3 = [UIButton buttonWithType:UIButtonTypeSystem];
             _btnOK3.frame = CGRectMake(DeviceScreenWidth - 40.0, 0.0, 40.0, 50.0);
-            _btnOK3.backgroundColor = UIColorFromRGB(0x044b7f);
+            _btnOK3.backgroundColor = UIColorFromRGB(markers_header_light_blue);
             _btnOK3.opaque = YES;
             _btnOK3.tintColor = UIColorFromRGB(0xffffff);
             [_btnOK3 setTitle:@"" forState:UIControlStateNormal];

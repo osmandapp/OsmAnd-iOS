@@ -1,17 +1,32 @@
 #!/bin/bash
 
+sudo clear
 echo "iOS project reset and prepare - START."
 
 echo "    Updating all repositories:"
-git pull origin master && cd ../android && git pull origin master && cd ../resources && git pull origin master && cd ../core && git pull origin master && cd ../core-legacy && git pull origin legacy_core && cd ../help && git pull origin master
+cd `dirname $0`
+git pull
+# git checkout master && git pull origin master
+cd ../android && git checkout master && git pull origin master 
+cd ../build && git checkout master && git pull origin master 
+cd ../core && git checkout master && git pull origin master 
+cd ../core-legacy && git checkout legacy_core && git pull origin legacy_core 
+cd ../resources && git checkout master && git pull origin master 
+cd ../help && git checkout master && git pull origin master
 
+echo "    Deletiing build folders:"
+cd `dirname $0`
 cd ..
-echo "    Deledeing build folders:"
 sudo rm -R baked
 sudo rm -R binaries
 sudo rm -R ~/Library/Developer/Xcode/DerivedData/*
 
+echo "    Prepare environment:"
+cd `dirname $0`
+./delete_cmake_settings_lines.sh
+
 echo "    Redownloading dependencies:"
-./ios/prepare.sh
+cd `dirname $0`
+./prepare.sh
 
 echo "iOS project reset and prepare - DONE."

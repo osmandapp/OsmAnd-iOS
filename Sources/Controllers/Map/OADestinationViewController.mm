@@ -479,6 +479,8 @@
         {
             CGRect frame = CGRectMake(0.0, 0.0, width, 50.0);
             [_multiCell updateLayout:frame];
+            CGFloat cornerRadius = [OAUtilities isLandscape] ? 3 : 0;
+            [OAUtilities setMaskTo:_multiCell.contentView byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:cornerRadius];
         }
     }
     else
@@ -791,6 +793,12 @@
     
     if (_multiCell)
         [_multiCell updateCloseButton];
+}
+
+- (CGFloat) getHeight
+{
+    NSUInteger extraCellsCount = _destinationCells.count > 0 ? _destinationCells.count - 1 : 0;
+    return [OAUtilities isLandscape] ? 50.0 : 50.0 + 35.0 * extraCellsCount;
 }
 
 @end

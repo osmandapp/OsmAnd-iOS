@@ -113,6 +113,7 @@
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinate format";
+"coordinates" = "Coordinates";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
@@ -1153,6 +1154,11 @@
 "mapil_pano_only" = "Display only 360° images";
 "mapil_select_user" = "Select user";
 
+// Coordinate widget
+"coordinates_widget" = "Coordinates widget";
+"searching_gps" = "Searching GPS";
+"copied_to_clipboard" = "Copied to clipboard";
+
 // Quick action
 "quick_action_name" = "Quick action";
 "quick_action_no_overlay" = "No overlay";
@@ -1160,6 +1166,7 @@
 "quick_action_no_underlay" = "No underlay";
 "quick_action_add_underlay" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
+"quick_action_coordinates_widget_descr" = "A toggle to show or hide the Coordinates widget on the map.";
 "map_overlays" = "Map overlays";
 "map_underlays" = "Map underlays";
 "offline_vector_maps" = "Offline vector maps";

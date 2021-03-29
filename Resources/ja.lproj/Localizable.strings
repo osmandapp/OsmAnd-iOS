@@ -213,7 +213,7 @@
 "osm_live_routing_descr" = "OsmAnd Liveの更新情報を利用してナビゲーションをおこないます";
 "guidance_preferences_descr" = "ナビゲーション設定";
 "routing_preferences_descr" = "ルート検索などに関する設定をおこないます";
-"recording_preferences_descr" = "旅程記録の設定";
+"recording_preferences_descr" = "経路記録の設定";
 "routing_settings" = "ナビゲーション";
 "app_mode_bus" = "バス";
 "app_mode_train" = "鉄道";
@@ -228,7 +228,7 @@
 "use_points_as_intermediates" = "地点間でルート計算する";
 "calculate_osmand_route_without_internet" = "インターネットを使用せずにOsmAnd経路セグメントを計算する";
 "routing_settings_2" = "ナビゲーション設定";
-"gpx_navigation" = "GPXデータの旅程に従う";
+"gpx_navigation" = "経路に従う";
 "impassable_road" = "回避する道路";
 "impassable_road_desc" = "ナビゲーションの際に避けたい道路を選択してください";
 "interrupt_music_descr" = "音声案内中は再生中の音楽を一時停止します(音量を下げるだけではありません)";
@@ -383,8 +383,8 @@
 "download_map" = "マップダウンロード";
 "download_pending" = "ダウンロード保留中";
 // HUD
-"hud_heading" = "HUDの実行";
-"hud_no_movement" = "HUDを動かさない";
+"hud_heading" = "ヘッドアップディスプレイ";
+"hud_no_movement" = "動かさない";
 // Favorites
 "fav_color" = "色";
 "fav_colors" = "色";
@@ -393,7 +393,7 @@
 "groups" = "グループ";
 "favorite" = "お気に入り";
 "amenity" = "アメニティ";
-"poi_overlay" = "POIのオーバーレイ表示";
+"poi_overlay" = "POIのオーバーレイ";
 "poi_type" = "POIの種類";
 "my_favorites" = "お気に入り";
 "my_places" = "ブックマーク";
@@ -1832,7 +1832,7 @@
 "profile_prefs_reset_successful" = "すべてのプロファイル設定を初期状態に戻しました。";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "configure_screen_quick_action" = "クイックアクション";
-"quick_action_remove_next_destination_descr" = "ルート上の現在の目的地点が削除されます。目的地に着いた場合はナビは停止します。";
+"quick_action_remove_next_destination_descr" = "ルート上の次の目的地を削除します。それが最終目的地の場合は、ナビゲーションが停止します。";
 "save_changes" = "変更の保存";
 "osm_notes" = "OSMメモ";
 "import_duplicates_title" = "一部のアイテムは既に存在します";
@@ -1852,3 +1852,33 @@
 "map_widget_distance_by_tap" = "タップで距離";
 "profile_type_osmand_string" = "OsmAndプロファイル";
 "profile_type_user_string" = "ユーザープロファイル";
+"group_name" = "グループ名";
+"available_groups" = "利用可能なグループ";
+"fav_add_new_group" = "新規グループに追加";
+"select_group_descr" = "グループの選択または新規追加";
+"map_update_warning" = "タイルデータをインターネットから再読み込みしますか？";
+"use_of_downloaded_map" = "このマップをオフラインでメインのマップとして、またオーバーレイ/アンダーレイ表示にも使用できるようになりました";
+"size_of_downloaded_data" = "ズームレベルの差が大きいと、ダウンロードデータのサイズが大きくなるのでご注意下さい。";
+"online_sources" = "オンラインソース";
+"select_online_source" = "ソースを選択";
+"preview_of_selected_zoom_levels" = "選択されたズームレベルでプレビュー";
+"number_of_tiles" = "タイルの数";
+"move_map_to_select_area" = "マップを動かして目的のエリアを選択します。";
+"poi_categories" = "POIのカテゴリー";
+"route_calc_progress" = "ルート計算中: %d%%";
+"road_speeds" = "法定速度";
+"import_routing_file_descr" = "ルーティング用ファイルは任意のクラウドストレージアプリから、またはiTunesのOsmAndフォルダに入れてインポートすることができます。";
+"nav_type_brouter" = "BRouter";
+"nav_type_descr" = "このプロファイルのルートを計算方法を選択してください";
+"arrows_direction_to_markers" = "矢印は画面外にあるアクティブなマーカーへの方向を指します。方向線はアクティブなマーカーへ線を引きます。";
+"carplay_active_message" = "マップ画面はCarPlay経由で表示されます";
+"favorites_empty" = "お気に入り地点を保存していません";
+"tracks_empty" = "経路リストが空です";
+"map_markers_empty" = "アクティブなマップマーカーがありません";
+"hide_compass_ruler" = "コンパス定規を非表示";
+"show_compass_ruler" = "コンパス定規を表示";
+"road_max_speed_descr" = "ルート内のすべての道路の最大移動速度を設定します。最高速度よりも高速移動が可能な道路の優先度を下げます。";
+"road_min_speed_descr" = "ルート内のすべての道路の最低移動速度を設定します。推奨速度が最低速度を下回る道路の優先度を上げます。";
+"road_speeds_descr" = "これらのパラメータは、ルート計算に影響を与える可能性があります。";
+"max_speed" = "最高速度";
+"address_search" = "住所検索";

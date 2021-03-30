@@ -220,6 +220,7 @@
         else if ([key isEqualToString:@"coordinates_widget"])
         {
             [_settings.showCoordinatesWidget set:visible];
+            [[[OsmAndApp instance].data mapLayerChangeObservable] notifyEvent];
         }
         else if ([key isEqualToString:@"map_widget_distance_by_tap"])
         {

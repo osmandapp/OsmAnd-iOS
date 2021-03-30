@@ -3277,7 +3277,7 @@ typedef enum
 
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
-        BOOL isCoordinatesVisible = [_settings.showCoordinatesWidget get];
+        BOOL isCoordinatesVisible = [_settings.showCoordinatesWidget get] && ![[OADiscountHelper instance] isVisible];
         
         CGFloat coordinateWidgetHeight = 52;
         CGFloat markersLandscapeWidth = DeviceScreenWidth / 2;

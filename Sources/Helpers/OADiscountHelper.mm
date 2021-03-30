@@ -176,6 +176,11 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     return sharedInstance;
 }
 
+- (BOOL) isVisible
+{
+    return _bannerVisible;
+}
+
 - (void) checkAndDisplay
 {
     if (_bannerVisible)

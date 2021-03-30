@@ -53,5 +53,6 @@
 + (OADiscountHelper *)instance;
 
 - (void) checkAndDisplay;
+- (BOOL) isVisible;
 
 @end

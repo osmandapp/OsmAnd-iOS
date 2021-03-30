@@ -11,6 +11,7 @@
 #import "OAColors.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
+#import "OADiscountHelper.h"
 #import "OATextInfoWidget.h"
 #import "OALocationConvert.h"
 #import "Localization.h"
@@ -35,6 +36,7 @@
     OAAppSettings *_settings;
     NSTimeInterval _lastUpdatingTime;
     CLLocation* _lastKnownLocation;
+    BOOL _cachedVisibiliy;
     BOOL _isAnimated;
     UIButton *_shadowButton;
 }
@@ -104,12 +106,14 @@
 
 - (BOOL) updateInfo
 {
+    BOOL visible = [_settings.showCoordinatesWidget get] && ![[OADiscountHelper instance] isVisible];
+    self.hidden = !visible;
+    
     if ([self shouldUpdate])
     {
-        BOOL visible = [_settings.showCoordinatesWidget get];
         BOOL nightMode = [OAAppSettings sharedManager].nightMode;
-        
         [self updateVisibility:visible];
+        _cachedVisibiliy = [_settings.showCoordinatesWidget get];
         
         if (visible)
         {
@@ -206,6 +210,8 @@
 {
     BOOL isFirstLaunch = _lastUpdatingTime == 0;
     
+    BOOL isVisibilityChabged = !isFirstLaunch && _cachedVisibiliy != [_settings.showCoordinatesWidget get];
+    
     CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
     BOOL locationNotChanged = [OAUtilities isCoordEqual:currentLocation.coordinate.latitude srcLon:currentLocation.coordinate.longitude destLat:_lastKnownLocation.coordinate.latitude destLon:_lastKnownLocation.coordinate.latitude];
     
@@ -214,7 +220,7 @@
     NSTimeInterval difference = currentTimestamp - _lastUpdatingTime;
     BOOL notEnoughTimePassed = currentTimestamp - _lastUpdatingTime < updatingPeriond;
     
-    return isFirstLaunch || (!_isAnimated && !locationNotChanged && !notEnoughTimePassed);
+    return isFirstLaunch || isVisibilityChabged || (!_isAnimated && !locationNotChanged && !notEnoughTimePassed);
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

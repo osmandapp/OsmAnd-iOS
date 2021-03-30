@@ -81,21 +81,39 @@
 {
     BOOL isLandscape = [OAUtilities isLandscape];
     CGFloat middlePoint = self.frame.size.width / 2;
-
     _horisontalSeparator.frame = CGRectMake(0, 0, self.frame.size.width, 1);
     _verticalSeparator.frame = CGRectMake(middlePoint - 1, 14, 1, 24);
-    CGFloat latIconRightPoint = 2 * kHorisontalOffset + kIconWidth;
-    CGFloat lonIconRightPoint = middlePoint + 2 * kHorisontalOffset + kIconWidth;
-
-    if (_lonTextView.hidden)
+    
+    if (![self isDirectionRTL])
     {
-        _latTextView.frame = CGRectMake(latIconRightPoint, 15, self.frame.size.width - latIconRightPoint - 2 * kHorisontalOffset, 22);
+        CGFloat latIconRightPoint = 2 * kHorisontalOffset + kIconWidth;
+        CGFloat lonIconRightPoint = middlePoint + 2 * kHorisontalOffset + kIconWidth;
+        _latImageView.frame = CGRectMake(kHorisontalOffset, 10, kIconWidth, kIconWidth);
+        if (_lonTextView.hidden)
+        {
+            _latTextView.frame = CGRectMake(latIconRightPoint, 15, self.frame.size.width - latIconRightPoint - 2 * kHorisontalOffset, 22);
+        }
+        else
+        {
+            _latTextView.frame = CGRectMake(latIconRightPoint, 15, middlePoint - latIconRightPoint - kHorisontalOffset, 22);
+            _lonImageView.frame = CGRectMake(middlePoint + kHorisontalOffset, 10, kIconWidth, kIconWidth);
+            _lonTextView.frame = CGRectMake(lonIconRightPoint, 15, self.frame.size.width - lonIconRightPoint - kHorisontalOffset, 22);
+        }
     }
     else
     {
-        _latTextView.frame = CGRectMake(latIconRightPoint, 15, middlePoint - latIconRightPoint - kHorisontalOffset, 22);
-        _lonImageView.frame = CGRectMake(middlePoint + kHorisontalOffset, 10, kIconWidth, kIconWidth);
-        _lonTextView.frame = CGRectMake(lonIconRightPoint, 15, self.frame.size.width - lonIconRightPoint - kHorisontalOffset, 22);
+        if (_lonTextView.hidden)
+        {
+            _latTextView.frame = CGRectMake(kHorisontalOffset, 15, self.frame.size.width - kIconWidth - 3 * kHorisontalOffset, 22);
+            _latImageView.frame = CGRectMake(self.frame.size.width - kIconWidth - kHorisontalOffset, 10, kIconWidth, kIconWidth);
+        }
+        else
+        {
+            _latTextView.frame = CGRectMake(kHorisontalOffset, 15, middlePoint - 3 * kHorisontalOffset - kIconWidth, 22);
+            _latImageView.frame = CGRectMake(middlePoint - kIconWidth - kHorisontalOffset , 10, kIconWidth, kIconWidth);
+            _lonTextView.frame = CGRectMake(middlePoint + kHorisontalOffset, 15, _latTextView.frame.size.width, 22);
+            _lonImageView.frame = CGRectMake(self.frame.size.width - kIconWidth - kHorisontalOffset, 10, kIconWidth, kIconWidth);
+        }
     }
     
     _horisontalSeparator.hidden = isLandscape;

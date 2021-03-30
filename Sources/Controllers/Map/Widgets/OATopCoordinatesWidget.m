@@ -107,7 +107,7 @@
     if ([self shouldUpdate])
     {
         BOOL visible = [_settings.showCoordinatesWidget get];
-        BOOL nightMode = [_settings.appearanceMode get] == 1; //??
+        BOOL nightMode = [OAAppSettings sharedManager].nightMode;
         
         [self updateVisibility:visible];
         
@@ -151,16 +151,21 @@
                     _latImageView.hidden = NO;
                     _lonImageView.hidden = NO;
                     _verticalSeparator.hidden = NO;
-                    latText = [OALocationConvert convertLatitude:lat outputType:format addCardinalDirection:YES];
-                    lonText = [OALocationConvert convertLongitude:lon outputType:format addCardinalDirection:YES];
+                    
+                    NSString *coordinatesString = [OALocationConvert formatLocationCoordinates:lat lon:lon format:[self getConverterFormat:format]];
+                    NSArray<NSString *> *coordinates = [coordinatesString componentsSeparatedByString:@","];
+                    latText = coordinates[0];
+                    lonText = [coordinates[1] trim];
                     
                     NSString* latDayImg = lat >= 0 ? @"widget_coordinates_latitude_north_day" : @"widget_coordinates_latitude_south_day";
                     NSString* latNightImg = lat >= 0 ? @"widget_coordinates_latitude_north_night" : @"widget_coordinates_latitude_south_night";
                     NSString* lonDayImg = lon >= 0 ? @"widget_coordinates_longitude_east_day" : @"widget_coordinates_longitude_west_day";
-                    NSString* lonNightIm = lon >= 0 ? @"widget_coordinates_longitude_east_night" : @"widget_coordinates_longitude_west_night";
+                    NSString* lonNightImg = lon >= 0 ? @"widget_coordinates_longitude_east_night" : @"widget_coordinates_longitude_west_night";
                     
-                    [_latImageView setImage:[UIImage imageNamed:nightMode ? latNightImg : latDayImg]];
-                    [_lonImageView setImage:[UIImage imageNamed:nightMode ? lonNightIm : lonDayImg]];
+                    //not a bug: in android in Night mode in this case shows Day icons too.
+                    [_latImageView setImage:[UIImage imageNamed:nightMode ? latDayImg : latNightImg]];
+                    [_lonImageView setImage:[UIImage imageNamed:nightMode ? lonDayImg: lonNightImg]];
+                    
                     _latTextView.text = latText;
                     _lonTextView.text = lonText;
                 }
@@ -190,6 +195,11 @@
     {
         return NO;
     }
+}
+
+- (int) getConverterFormat:(int)format
+{
+    return format + 101;
 }
 
 - (BOOL) shouldUpdate
@@ -238,7 +248,7 @@
             _latImageView.hidden = NO;
             _lonImageView.hidden = YES;
             _verticalSeparator.hidden = YES;
-            [_latImageView setImage:[UIImage imageNamed:@"ic_custom_copy"]];
+            [_latImageView setImage:[UIImage imageNamed:@"ic_custom_clipboard"]];
             _latTextView.text = OALocalizedString(@"copied_to_clipboard");
             
             CGFloat latIconRightPoint = 2 * kHorisontalOffset + kIconWidth;

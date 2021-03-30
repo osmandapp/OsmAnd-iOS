@@ -541,6 +541,8 @@
 		32A001812610B43700ABE0D2 /* widget_coordinates_longitude_east_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001632610B43600ABE0D2 /* widget_coordinates_longitude_east_day@2x.png */; };
 		32A001822610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001642610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png */; };
 		32A00192261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A00191261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm */; };
+		32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */; };
+		32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */; };
 		32ADB41E25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */; };
 		32ADB41F25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */; };
 		32ADB42425D2E8AD00F5C634 /* OASelectTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB42225D2E8AC00F5C634 /* OASelectTrackFolderViewController.m */; };
@@ -7065,6 +7067,8 @@
 		32A001642610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_utm_day@2x.png"; path = "Resources/Icons/Widgets/widget_coordinates_utm_day@2x.png"; sourceTree = "<group>"; };
 		32A00190261295C000ABE0D2 /* OAShowHideCoordinatesAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideCoordinatesAction.h; sourceTree = "<group>"; };
 		32A00191261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideCoordinatesAction.mm; sourceTree = "<group>"; };
+		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
+		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
 		32ADB41C25D2E85100F5C634 /* OAAddTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddTrackFolderViewController.h; sourceTree = "<group>"; };
 		32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAddTrackFolderViewController.m; sourceTree = "<group>"; };
 		32ADB42225D2E8AC00F5C634 /* OASelectTrackFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASelectTrackFolderViewController.m; sourceTree = "<group>"; };
@@ -13506,6 +13510,8 @@
 				3219705225FA0DCC00C3FED6 /* bg_point_square@3x.png */,
 				3219705125FA0DCC00C3FED6 /* ic_custom_replace@2x.png */,
 				3219705525FA0DCD00C3FED6 /* ic_custom_replace@3x.png */,
+				32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */,
+				32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -20649,6 +20655,7 @@
 				157F3CD924A1F43C000A66F0 /* ic_custom_straight_line.png in Resources */,
 				84CC87DC1FAB630E00B4941F /* OANextTurnWidget.xib in Resources */,
 				DAF345C522F4482C009E2EB6 /* ic_custom_moon@2x.png in Resources */,
+				32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */,
 				8412225D1B39CC5200F80F9E /* my_location_marker_bicycle.png in Resources */,
 				84E2DBBE1AB720FB001A7FEC /* zoom_out_button@2x.png in Resources */,
 				84755A7D1B34640C005B95C1 /* my_location_marker_icon@2x.png in Resources */,
@@ -21339,6 +21346,7 @@
 				DA134204243DC5A90039D214 /* map_action_motorcycle_dark.png in Resources */,
 				8434BAAA1B149CE2003FD0FC /* HUD_compass_bg.png in Resources */,
 				DAA4EDED240E85B800F16073 /* ic_custom_online@2x.png in Resources */,
+				32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */,
 				DAF345A522F4482C009E2EB6 /* ic_custom_arrow_forward.png in Resources */,
 				DAB985AE2124235E0081F8F8 /* da_tts.js in Resources */,
 				DAF3457522F4482C009E2EB6 /* ic_custom_arrow_forward@3x.png in Resources */,

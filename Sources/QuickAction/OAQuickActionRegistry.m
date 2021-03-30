@@ -42,6 +42,7 @@
 #import "OAUnsupportedAction.h"
 #import "OAContourLinesAction.h"
 #import "OATerrainAction.h"
+#import "OAShowHideCoordinatesAction.h"
 
 #define kType @"type"
 #define kName @"name"
@@ -53,6 +54,7 @@
 static OAQuickActionType *TYPE_ADD_ITEMS;
 static OAQuickActionType *TYPE_CONFIGURE_MAP;
 static OAQuickActionType *TYPE_NAVIGATION;
+static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
 
 @implementation OAQuickActionRegistry
 {
@@ -72,6 +74,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
     TYPE_ADD_ITEMS = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"create_items") category:CREATE_CATEGORY iconName:nil];
     TYPE_CONFIGURE_MAP = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"configure_map") category:CONFIGURE_MAP iconName:nil];
     TYPE_NAVIGATION = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"routing_settings") category:NAVIGATION iconName:nil];
+    TYPE_CONFIGURE_SCREEN = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"layer_map_appearance") category:CONFIGURE_SCREEN iconName:nil];
 }
 
 + (OAQuickActionRegistry *)sharedInstance
@@ -97,6 +100,11 @@ static OAQuickActionType *TYPE_NAVIGATION;
 + (OAQuickActionType *) TYPE_NAVIGATION
 {
     return TYPE_NAVIGATION;
+}
+
++ (OAQuickActionType *) TYPE_CONFIGURE_SCREEN
+{
+    return TYPE_CONFIGURE_SCREEN;
 }
 
 - (instancetype)init
@@ -135,6 +143,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OAMapStyleAction.TYPE];
     [quickActionTypes addObject:OADayNightModeAction.TYPE];
     [quickActionTypes addObject:OAShowHideTransportLinesAction.TYPE];
+    
     // navigation
     [quickActionTypes addObject:OANavVoiceAction.TYPE];
     [quickActionTypes addObject:OANavDirectionsFromAction.TYPE];
@@ -146,6 +155,10 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OANavStartStopAction.TYPE];
     [quickActionTypes addObject:OANavResumePauseAction.TYPE];
     [quickActionTypes addObject:OASwitchProfileAction.TYPE];
+    
+    // configure screen
+    [quickActionTypes addObject:OAShowHideCoordinatesAction.TYPE];
+    
     [OAPlugin registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
     if ([OAIAPHelper.sharedInstance.srtm isActive])
         [quickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
@@ -251,6 +264,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [self filterQuickActions:TYPE_ADD_ITEMS result:result];
     [self filterQuickActions:TYPE_CONFIGURE_MAP result:result];
     [self filterQuickActions:TYPE_NAVIGATION result:result];
+    [self filterQuickActions:TYPE_CONFIGURE_SCREEN result:result];
     return result;
 }
 

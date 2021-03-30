@@ -199,7 +199,7 @@
     CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
     BOOL locationNotChanged = [OAUtilities isCoordEqual:currentLocation.coordinate.latitude srcLon:currentLocation.coordinate.longitude destLat:_lastKnownLocation.coordinate.latitude destLon:_lastKnownLocation.coordinate.latitude];
     
-    NSTimeInterval updatingPeriond = 1;
+    NSTimeInterval updatingPeriond = 0.5;
     NSTimeInterval currentTimestamp = [[NSDate new] timeIntervalSince1970];
     NSTimeInterval difference = currentTimestamp - _lastUpdatingTime;
     BOOL notEnoughTimePassed = currentTimestamp - _lastUpdatingTime < updatingPeriond;

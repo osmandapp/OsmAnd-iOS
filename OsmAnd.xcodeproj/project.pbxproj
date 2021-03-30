@@ -539,6 +539,7 @@
 		32A001802610B43700ABE0D2 /* widget_coordinates_longitude_east_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001622610B43600ABE0D2 /* widget_coordinates_longitude_east_day@3x.png */; };
 		32A001812610B43700ABE0D2 /* widget_coordinates_longitude_east_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001632610B43600ABE0D2 /* widget_coordinates_longitude_east_day@2x.png */; };
 		32A001822610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001642610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png */; };
+		32A00192261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A00191261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm */; };
 		32ADB41E25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */; };
 		32ADB41F25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */; };
 		32ADB42425D2E8AD00F5C634 /* OASelectTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB42225D2E8AC00F5C634 /* OASelectTrackFolderViewController.m */; };
@@ -7062,6 +7063,8 @@
 		32A001622610B43600ABE0D2 /* widget_coordinates_longitude_east_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_longitude_east_day@3x.png"; path = "Resources/Icons/Widgets/widget_coordinates_longitude_east_day@3x.png"; sourceTree = "<group>"; };
 		32A001632610B43600ABE0D2 /* widget_coordinates_longitude_east_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_longitude_east_day@2x.png"; path = "Resources/Icons/Widgets/widget_coordinates_longitude_east_day@2x.png"; sourceTree = "<group>"; };
 		32A001642610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_utm_day@2x.png"; path = "Resources/Icons/Widgets/widget_coordinates_utm_day@2x.png"; sourceTree = "<group>"; };
+		32A00190261295C000ABE0D2 /* OAShowHideCoordinatesAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideCoordinatesAction.h; sourceTree = "<group>"; };
+		32A00191261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideCoordinatesAction.mm; sourceTree = "<group>"; };
 		32ADB41C25D2E85100F5C634 /* OAAddTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddTrackFolderViewController.h; sourceTree = "<group>"; };
 		32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAddTrackFolderViewController.m; sourceTree = "<group>"; };
 		32ADB42225D2E8AC00F5C634 /* OASelectTrackFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASelectTrackFolderViewController.m; sourceTree = "<group>"; };
@@ -16241,14 +16244,12 @@
 		DA261E3422F972B800D0D441 /* Actions */ = {
 			isa = PBXGroup;
 			children = (
-				DA261E3522F972EC00D0D441 /* OAQuickAction.h */,
-				DA261E3622F972EC00D0D441 /* OAQuickAction.m */,
-				8A0F246F25949A3D0086ABB2 /* OAUnsupportedAction.h */,
-				8A0F247025949A3D0086ABB2 /* OAUnsupportedAction.m */,
 				DA261E3B22F9A67300D0D441 /* OAAddOSMBugAction.h */,
 				DA261E3C22F9A67300D0D441 /* OAAddOSMBugAction.mm */,
 				DAD1DF9422FA9780009C3D90 /* OAAddPOIAction.h */,
 				DAD1DF9522FA9780009C3D90 /* OAAddPOIAction.mm */,
+				78D57B91238D30540068CF48 /* OAContourLinesAction.h */,
+				78D57B90238D30540068CF48 /* OAContourLinesAction.mm */,
 				DAD1DF9822FAAF5B009C3D90 /* OADayNightModeAction.h */,
 				DAD1DF9922FAAF5B009C3D90 /* OADayNightModeAction.m */,
 				DAD1DF9C22FAB598009C3D90 /* OAFavoriteAction.h */,
@@ -16257,14 +16258,12 @@
 				DA9B27C522FC343F00C4DBB8 /* OAGPXAction.mm */,
 				DA1605AB22FEB7CA001E02AD /* OAMapOverlayAction.h */,
 				DA1605AC22FEB7CA001E02AD /* OAMapOverlayAction.mm */,
-				DA1605B322FEF022001E02AD /* OAMapUnderlayAction.h */,
-				DA1605B422FEF022001E02AD /* OAMapUnderlayAction.mm */,
-				DA1605AF22FEB971001E02AD /* OASwitchableAction.h */,
-				DA1605B022FEB971001E02AD /* OASwitchableAction.m */,
 				DA2FA6EE23029C47006DB2E5 /* OAMapSourceAction.h */,
 				DA2FA6EF23029C47006DB2E5 /* OAMapSourceAction.mm */,
 				DA2FA6F22302D3E1006DB2E5 /* OAMapStyleAction.h */,
 				DA2FA6F32302D3E1006DB2E5 /* OAMapStyleAction.mm */,
+				DA1605B322FEF022001E02AD /* OAMapUnderlayAction.h */,
+				DA1605B422FEF022001E02AD /* OAMapUnderlayAction.mm */,
 				DA2FA6F62302E409006DB2E5 /* OAMarkerAction.h */,
 				DA2FA6F72302E409006DB2E5 /* OAMarkerAction.mm */,
 				DA2FA6FA2302EBA3006DB2E5 /* OANavAddDestinationAction.h */,
@@ -16273,6 +16272,10 @@
 				DA2FA6FF2302F37E006DB2E5 /* OANavAddFirstIntermediateAction.mm */,
 				DA2FA7022302F707006DB2E5 /* OANavAutoZoomMapAction.h */,
 				DA2FA7032302F707006DB2E5 /* OANavAutoZoomMapAction.m */,
+				DA9730BE248289F600724329 /* OANavDirectionsFromAction.h */,
+				DA9730BF248289F700724329 /* OANavDirectionsFromAction.mm */,
+				32BD81662599061400A54BB5 /* OANavRemoveNextDestination.h */,
+				32BD81672599062600A54BB5 /* OANavRemoveNextDestination.m */,
 				DA2FA7062302F9B7006DB2E5 /* OANavReplaceDestinationAction.h */,
 				DA2FA7072302F9B7006DB2E5 /* OANavReplaceDestinationAction.mm */,
 				DAA864072303F70D000E1900 /* OANavResumePauseAction.h */,
@@ -16283,32 +16286,34 @@
 				DAA8641023040FE9000E1900 /* OANavVoiceAction.mm */,
 				DAA8641323041270000E1900 /* OANewAction.h */,
 				DAA8641423041270000E1900 /* OANewAction.m */,
+				DAB854BA23055895002566A6 /* OAParkingAction.h */,
+				DAB854BB23055895002566A6 /* OAParkingAction.mm */,
+				DA261E3522F972EC00D0D441 /* OAQuickAction.h */,
+				DA261E3622F972EC00D0D441 /* OAQuickAction.m */,
 				DAA864172304131C000E1900 /* OAShowHideFavoritesAction.h */,
 				DAA864182304131C000E1900 /* OAShowHideFavoritesAction.m */,
 				DAA8641B230415F3000E1900 /* OAShowHideGPXTracksAction.h */,
 				DAA8641C230415F3000E1900 /* OAShowHideGPXTracksAction.mm */,
-				DAA8641F230429F5000E1900 /* OAShowHideOSMBugAction.h */,
-				DAA86420230429F5000E1900 /* OAShowHideOSMBugAction.m */,
 				DAA864232304403D000E1900 /* OAShowHideLocalOSMChanges.h */,
 				DAA864242304403D000E1900 /* OAShowHideLocalOSMChanges.m */,
-				DAA86427230440C9000E1900 /* OAShowHidePoiAction.h */,
-				DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */,
-				DAB854BA23055895002566A6 /* OAParkingAction.h */,
-				DAB854BB23055895002566A6 /* OAParkingAction.mm */,
-				78D57B91238D30540068CF48 /* OAContourLinesAction.h */,
-				78D57B90238D30540068CF48 /* OAContourLinesAction.mm */,
-				78D57B92238D30550068CF48 /* OATerrainAction.h */,
-				78D57B8F238D30540068CF48 /* OATerrainAction.m */,
-				DA9730BE248289F600724329 /* OANavDirectionsFromAction.h */,
-				DA9730BF248289F700724329 /* OANavDirectionsFromAction.mm */,
-				33B14E1D249F954E000DC288 /* OAShowHideTransportLinesAction.h */,
-				33B14E1E249F9576000DC288 /* OAShowHideTransportLinesAction.mm */,
 				32BD815E2598F5B800A54BB5 /* OAShowHideMapillaryAction.h */,
 				32BD815F2598F5C900A54BB5 /* OAShowHideMapillaryAction.m */,
-				32BD81662599061400A54BB5 /* OANavRemoveNextDestination.h */,
-				32BD81672599062600A54BB5 /* OANavRemoveNextDestination.m */,
+				DAA8641F230429F5000E1900 /* OAShowHideOSMBugAction.h */,
+				DAA86420230429F5000E1900 /* OAShowHideOSMBugAction.m */,
+				DAA86427230440C9000E1900 /* OAShowHidePoiAction.h */,
+				DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */,
+				33B14E1D249F954E000DC288 /* OAShowHideTransportLinesAction.h */,
+				33B14E1E249F9576000DC288 /* OAShowHideTransportLinesAction.mm */,
+				32A00190261295C000ABE0D2 /* OAShowHideCoordinatesAction.h */,
+				32A00191261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm */,
+				DA1605AF22FEB971001E02AD /* OASwitchableAction.h */,
+				DA1605B022FEB971001E02AD /* OASwitchableAction.m */,
 				32BD816E2599154200A54BB5 /* OASwitchProfileAction.h */,
 				32BD816F2599155100A54BB5 /* OASwitchProfileAction.m */,
+				78D57B92238D30550068CF48 /* OATerrainAction.h */,
+				78D57B8F238D30540068CF48 /* OATerrainAction.m */,
+				8A0F246F25949A3D0086ABB2 /* OAUnsupportedAction.h */,
+				8A0F247025949A3D0086ABB2 /* OAUnsupportedAction.m */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -22993,6 +22998,7 @@
 				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
 				DAA86429230440C9000E1900 /* OAShowHidePoiAction.m in Sources */,
+				32A00192261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm in Sources */,
 				8A8128F320F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */,
 				8420C1D71B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
 				DA526A972539941200E489D3 /* OABaseScrollableHudViewController.mm in Sources */,

@@ -1166,6 +1166,9 @@
 "quick_action_no_underlay" = "No underlay";
 "quick_action_add_underlay" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
+"toggle_coordinates" = "Show/hide coordinates widget";
+"show_coordinates" = "Show coordinates";
+"hide_coordinates" = "Hide coordinates";
 "quick_action_coordinates_widget_descr" = "A toggle to show or hide the Coordinates widget on the map.";
 "map_overlays" = "Map overlays";
 "map_underlays" = "Map underlays";

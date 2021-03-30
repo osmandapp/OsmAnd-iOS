@@ -478,6 +478,7 @@
 		3219705E25FA0DCE00C3FED6 /* bg_point_octagon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */; };
 		3219705F25FA0DCE00C3FED6 /* bg_point_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */; };
 		3219706325FA0E3C00C3FED6 /* OAPoiCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3219706225FA0E3C00C3FED6 /* OAPoiCollectionViewCell.xib */; };
+		3225242B260E26C3002C9BB4 /* OAIconsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3225242A260E26C3002C9BB4 /* OAIconsTableViewCell.xib */; };
 		324B735B25653CB100B6EE52 /* OATextCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 324B735825653CB000B6EE52 /* OATextCardView.m */; };
 		324B735C25653CB100B6EE52 /* OATextCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 324B735825653CB000B6EE52 /* OATextCardView.m */; };
 		324B735D25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
@@ -6422,8 +6423,6 @@
 		DAF3F551225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */; };
 		DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
 		DAF3F556225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
-		DAF6A8E323508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */; };
-		DAF6A8E423508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */; };
 		DAF7027823B64BC300E065F9 /* OARouteInfoLegendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAF7027723B64BC200E065F9 /* OARouteInfoLegendCell.xib */; };
 		DAF7027923B64BC300E065F9 /* OARouteInfoLegendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAF7027723B64BC200E065F9 /* OARouteInfoLegendCell.xib */; };
 		DAF7027C23B64C1A00E065F9 /* OARouteInfoLegendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7027B23B64C1900E065F9 /* OARouteInfoLegendCell.m */; };
@@ -7002,6 +7001,7 @@
 		3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_octagon@3x.png"; path = "Resources/Icons/bg_point_octagon@3x.png"; sourceTree = "<group>"; };
 		3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle@3x.png"; path = "Resources/Icons/bg_point_circle@3x.png"; sourceTree = "<group>"; };
 		3219706225FA0E3C00C3FED6 /* OAPoiCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPoiCollectionViewCell.xib; path = Resources/Controllers/Cells/OAPoiCollectionViewCell.xib; sourceTree = "<group>"; };
+		3225242A260E26C3002C9BB4 /* OAIconsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconsTableViewCell.xib; path = Resources/Controllers/Cells/OAIconsTableViewCell.xib; sourceTree = "<group>"; };
 		324B735825653CB000B6EE52 /* OATextCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATextCardView.m; sourceTree = "<group>"; };
 		324B735925653CB000B6EE52 /* OATextCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATextCardView.xib; sourceTree = "<group>"; };
 		324B735A25653CB100B6EE52 /* OATextCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATextCardView.h; sourceTree = "<group>"; };
@@ -10976,8 +10976,6 @@
 		DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmNotesMapLayerProvider.mm; path = Core/OAOsmNotesMapLayerProvider.mm; sourceTree = "<group>"; };
 		DAF3F553225E0A8600854DBC /* OAOnlineOsmNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOnlineOsmNote.h; path = Core/OAOnlineOsmNote.h; sourceTree = "<group>"; };
 		DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOnlineOsmNote.mm; path = Core/OAOnlineOsmNote.mm; sourceTree = "<group>"; };
-		DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteTripSettingsViewController.mm; sourceTree = "<group>"; };
-		DAF6A8E223508CB4007CD465 /* OARouteTripSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteTripSettingsViewController.h; sourceTree = "<group>"; };
 		DAF7027723B64BC200E065F9 /* OARouteInfoLegendCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OARouteInfoLegendCell.xib; path = Resources/Controllers/Cells/OARouteInfoLegendCell.xib; sourceTree = "<group>"; };
 		DAF7027A23B64C1900E065F9 /* OARouteInfoLegendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARouteInfoLegendCell.h; path = Controllers/Cells/OARouteInfoLegendCell.h; sourceTree = "<group>"; };
 		DAF7027B23B64C1900E065F9 /* OARouteInfoLegendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARouteInfoLegendCell.m; path = Controllers/Cells/OARouteInfoLegendCell.m; sourceTree = "<group>"; };
@@ -11433,6 +11431,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				3225242A260E26C3002C9BB4 /* OAIconsTableViewCell.xib */,
 				DA758D8C258CF4A6003A2920 /* OATitleDescriptionIconRoundCell.xib */,
 				DA65CC1C256D42A100DC896F /* OASegmentedControllCell.xib */,
 				1582989E24DC042600323768 /* OAIconTitleIconRoundCell.xib */,
@@ -14838,8 +14837,6 @@
 				DA71EAAD234624B100B9D7F3 /* OARouteSettingsBaseViewController.h */,
 				DA71EAAC234624B100B9D7F3 /* OARouteSettingsBaseViewController.mm */,
 				DA71EAAB234624B000B9D7F3 /* OARouteSettingsBaseViewController.xib */,
-				DAF6A8E223508CB4007CD465 /* OARouteTripSettingsViewController.h */,
-				DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */,
 				DAA021EC23A24791006C94FF /* OARouteSettingsParameterController.h */,
 				DAA021EB23A24791006C94FF /* OARouteSettingsParameterController.mm */,
 				DA446E6323A3AB2500178651 /* OARouteStatisticsHelper.h */,
@@ -21248,6 +21245,7 @@
 				DA1340B0243DC5A70039D214 /* map_action_taxi@3x.png in Resources */,
 				84BEEE421DFEF69600750848 /* OATargetMultiView.xib in Resources */,
 				84185AAD1AAA11B600F70328 /* ic_favorite_1@2x.png in Resources */,
+				3225242B260E26C3002C9BB4 /* OAIconsTableViewCell.xib in Resources */,
 				DA94C73B224B65AE006C1116 /* OATextInputFloatingCellWithIcon.xib in Resources */,
 				0CEF2C4324B7237800BAAC4B /* ic_action_go_cart@3x.png in Resources */,
 				845E06471B5956E800DFC2A7 /* waypoint_map_enable@3x.png in Resources */,
@@ -22802,7 +22800,6 @@
 				DA9A061E2297EF47000A80F1 /* OAImageCardCell.mm in Sources */,
 				840B7D5D1F84250500477A3C /* OASettingSwitchCell.m in Sources */,
 				847A1D621DF94E9B003C1246 /* OATableViewCellWithSwitch.m in Sources */,
-				DAF6A8E423508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */,
 				847A1D631DF94E9B003C1246 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				8438B81A1EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
 				847A1D641DF94E9B003C1246 /* OAWebViewController.m in Sources */,
@@ -23285,7 +23282,6 @@
 				78A5C206240807B900312FC4 /* OAOnlineTilesSettingsViewController.mm in Sources */,
 				DAF7027C23B64C1A00E065F9 /* OARouteInfoLegendCell.m in Sources */,
 				DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */,
-				DAF6A8E323508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */,
 				1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */,
 				84E3704D2059254900959B94 /* OAWaypointsMainScreen.mm in Sources */,
 				846F036A1E12D54C00DB4772 /* OACustomPOIViewController.mm in Sources */,
@@ -23995,7 +23991,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3.90.8.3;
+				CURRENT_PROJECT_VERSION = 3.90.8.4;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -24050,7 +24046,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3.90.8.3;
+				CURRENT_PROJECT_VERSION = 3.90.8.4;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

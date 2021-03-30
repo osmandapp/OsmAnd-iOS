@@ -1052,7 +1052,7 @@
 "routing_attr_allow_private_name" = "Permetti l'accesso alle proprietà private";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "rendering_attr_piste_difficulty_intermediate_name" = "Intermedia";
-"rendering_attr_hideWaterPolygons_name" = "Non visualizzare l'acqua";
+"rendering_attr_hideWaterPolygons_name" = "Nascondi l'acqua";
 "rendering_value_translucent_purple_name" = "Viola traslucido";
 "rendering_attr_currentTrackWidth_description" = "Larghezza del GPX";
 "routing_attr_short_way_name" = "Percorso più efficiente rispetto ai consumi";
@@ -1799,3 +1799,7 @@
 "join_segments" = "Unisci i segmenti";
 "hide_compass_ruler" = "Nasconi il righello della bussola";
 "show_compass_ruler" = "Mostra il righello della bussola";
+"profile_type_osmand_string" = "Profilo OsmAnd";
+"profile_type_user_string" = "Profilo utente";
+"map_widget_distance_by_tap" = "Distanza dal tocco";
+"address_search" = "Cerca indirizzo";

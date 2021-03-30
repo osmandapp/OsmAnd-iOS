@@ -768,7 +768,7 @@
 // Shared Strings
 "shared_string_apply" = "Застосувати";
 "shared_string_previous" = "Назад";
-"route_stops_before" = "%d зупинок перед";
+"route_stops_before" = "%d зупинок до";
 "logging_interval_navigation" = "Інтервал запису при навігації";
 "logging_interval_navigation_descr" = "Виберіть інтервал запису треку під час навігації";
 "logging_min_distance" = "Найменше зміщення";
@@ -949,7 +949,7 @@
 "shared_string_unexpected_error" = "Непередбачена помилка";
 "osm_live_payment_desc" = "Ви можете керувати та скасовувати ваші передплати у налаштуваннях профілю App Store після покупки";
 "osm_live_ask_for_purchase" = "Будь ласка, спочатку передплатіть OsmAnd Live";
-"osm_live_enter_user_name" = "Будь ласка, введіть публічне ім'я";
+"osm_live_enter_user_name" = "Введіть загальнодоступне ім'я";
 "shared_string_io_error" = "Помилка вводу/виводу";
 "osm_live_hide_user_name" = "Не показувати моє ім’я у звітах";
 "shared_string_enabled" = "Увімкнено";
@@ -1096,7 +1096,7 @@
 "get_osmand_live" = "Придбайте OsmAnd Live, щоб розблокувати всі функції:";
 "monthly_map_updates" = "Оновлення мап: щомісячно";
 "daily_map_updates" = "Оновлення мап: щогодинно";
-"purchase_unlim_title" = "Купувати – %@";
+"purchase_unlim_title" = "Купити – %@";
 "shared_string_category" = "Категорія";
 "poi_category_and_type" = "Категорія і тип POI";
 "poi_select_category" = "Виберіть категорію";
@@ -1215,7 +1215,7 @@
 "add_start" = "Додати відправну точку";
 "home_pt" = "Домівка";
 "work_pt" = "Робота";
-"mapillary_descr" = "Вуличні фотографії в Інтернеті для всіх. Відкривайте місця, співпрацюйте, захоплюйте світ";
+"mapillary_descr" = "Вуличні світлини в Інтернеті для всіх. Відкривайте місця, співпрацюйте, захоплюйте світ";
 // Rendering attributes
 "quick_action_no_overlay" = "Без накладення";
 "quick_action_add_overlay" = "Додати накладення";
@@ -1360,7 +1360,7 @@
 "rendering_attr_smoothness_bad_name" = "Погана";
 "rendering_attr_hideAccess_name" = "Обмеження доступу";
 "routing_attr_avoid_train_description" = "Уникати потягів";
-"routing_attr_piste_type_downhill_name" = "Високогір'я / гірські лижі";
+"routing_attr_piste_type_downhill_name" = "Високогір'я/гірські лижі";
 "routing_attr_avoid_ice_roads_fords_description" = "Уникає льодових доріг і бродів.";
 "rendering_attr_hikingRoutesOSMC_description" = "Візуалізація шляху відповідно до треків OSMC.";
 "rendering_value_yellow_name" = "Жовтий";
@@ -1579,7 +1579,7 @@
 "rendering_attr_highway_class_cycleway_name" = "Велодоріжка";
 "routing_attr_avoid_toll_description" = "Уникати платних доріг";
 "rendering_attr_highway_class_track_grade5_name" = "5 клас";
-"routing_attr_piste_type_nordic_name" = "Бігові лижі / скандинавська ходьба";
+"routing_attr_piste_type_nordic_name" = "Бігові лижі/скандинавська ходьба";
 "routing_attr_avoid_unpaved_description" = "Уникати ґрунтових доріг";
 "routing_attr_max_num_changes_name" = "Кількість змін";
 "rendering_value_pedestrian_name" = "Пішки";
@@ -1882,7 +1882,7 @@
 "shared_string_finish" = "Фініш";
 "import_complete_description" = "Усі дані з %@ імпортовано, ви можете користуватися іншими кнопками, щоб відкрити потрібну частину програми для керування нею";
 "shared_string_import_complete" = "Імпорт завершено";
-"listed_exist" = "Перелічені %@ вже існують у OsmAnd.";
+"listed_exist" = "Перелічені %@ вже існують в OsmAnd.";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Пошук";
@@ -2018,3 +2018,34 @@
 "track_multiple_segments_select" = "%@ має кілька сегментів. Виберіть частину треку, яку слід використовувати для навігації.";
 "select_segment" = "Вибрати сегмент";
 "select_track_to_follow" = "Оберіть файл треку для слідування";
+"transport" = "Транспорт";
+"travel" = "Мандрівка";
+"symbols" = "Знаки";
+"sport" = "Спорт";
+"special" = "Спеціальні";
+"service" = "Послуги";
+"emergency" = "Екстрені служби";
+"square" = "Квадрат";
+"octagon" = "Восьмикутник";
+
+// Shapes
+"circle" = "Коло";
+"shared_string_others" = "Інші";
+"favorite_places_category" = "Місця";
+"favorite_friends_category" = "Друзі";
+"default_color_descr" = "Цей колір буде застосовано для всіх нових закладок, доданих до групи.";
+"default_color" = "Типовий колір";
+"fav_point_emoticons_message" = "Закладку перейменовано на «%@», щоб зберегти у файл рядок, що містить смайлики.";
+"fav_point_dublicate_message" = "Закладку перейменовано на «%@», щоб уникнути дублювання.";
+"fav_point_dublicate" = "Дублювання назви закладки";
+"shape" = "Форма";
+"icon" = "Піктограма";
+"select_group" = "Вибрати групу";
+"name_and_descr" = "Назва та опис";
+"add_favorite" = "Додати закладку";
+"fav_points_not_exist" = "Немає закладених точок";
+"replace_favorite_confirmation" = "Ви впевнені, що хочете замінити закладку %@?";
+"group_name" = "Назва групи";
+"available_groups" = "Доступні групи";
+"select_gropu_descr" = "Виберіть групу або додайте нову";
+"fav_add_new_group" = "Додати нову групу";

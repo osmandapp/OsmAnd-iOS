@@ -93,7 +93,7 @@
     if (interval < 0)
         interval = 0;
     else if (interval >= _settings.trackIntervalArray.count)
-        interval = _settings.trackIntervalArray.count - 1;
+        interval = (int) _settings.trackIntervalArray.count - 1;
     return interval;
 }
 

@@ -76,7 +76,7 @@
     
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<NSNumber *> *_colors;
-    NSMutableDictionary *_poiIcons;
+    NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
     NSArray *_poiCategories;
     NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
@@ -208,8 +208,15 @@
     NSMutableArray *colors = [NSMutableArray new];
     NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
     
+    if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
+    {
+        [names addObject:OALocalizedString(@"favorites")];
+        [sizes addObject:@0];
+        [colors addObject:[OADefaultFavorite getDefaultColor]];
+    }
+    
     for (OAFavoriteGroup *group in allGroups)
-    {        
+    {
         [names addObject:[OAFavoriteGroup getDisplayName:group.name]];
         [sizes addObject:[NSNumber numberWithInteger:group.points.count]];
         [colors addObject:group.color];
@@ -222,31 +229,18 @@
 - (void) setupIcons
 {
     NSString *loadedPoiIconName = [self.favorite getIcon];
+    _poiIcons = [OAFavoritesHelper getCategirizedIconNames];
     
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-
-    _poiIcons = [NSMutableDictionary new];
-    
-    if (json)
+    for (NSString *categoryName in _poiIcons.allKeys)
     {
-        NSDictionary *categories = json[@"categories"];
-        if (categories)
+        NSArray<NSString *> *icons = _poiIcons[categoryName];
+        if (icons)
         {
-            for (NSString *categoryName in categories.allKeys)
+            int index = (int)[icons indexOfObject:loadedPoiIconName];
+            if (index != -1)
             {
-                NSArray<NSString *> *icons = categories[categoryName][@"icons"];
-                if (icons)
-                {
-                    _poiIcons[categoryName] = icons;
-                    int index = (int)[icons indexOfObject:loadedPoiIconName];
-                    if (index != -1)
-                    {
-                        _selectedIconName = loadedPoiIconName;
-                        _selectedIconCategoryName = categoryName;
-                    }
-                }
+                _selectedIconName = loadedPoiIconName;
+                _selectedIconCategoryName = categoryName;
             }
         }
     }
@@ -269,13 +263,13 @@
     if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
         _selectedIconCategoryName = @"special";
         
-    _backgroundIcons = @[@"bg_point_circle",
-                         @"bg_point_octagon",
-                         @"bg_point_square"];
+    _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     
-    _backgroundIconNames = @[@"circle",
-                         @"octagon",
-                         @"square"];
+    NSMutableArray * tempBackgroundIcons = [NSMutableArray new];
+    for (NSString *iconName in _backgroundIconNames)
+        [tempBackgroundIcons addObject:[NSString stringWithFormat:@"bg_point_%@", iconName]];
+
+    _backgroundIcons = [NSArray arrayWithArray:tempBackgroundIcons];
     
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getBackgroundIcon]];
     if (_selectedBackgroundIndex == -1)
@@ -478,7 +472,8 @@
 {
     if (_wasChanged || _isNewItemAdding)
     {
-        NSString *savingGroup = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
+        
+        NSString *savingGroup = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle] trim];
         
         [self.favorite setDescription:self.desc ? self.desc : @""];
         [self.favorite setAddress:self.address ? self.address : @""];
@@ -488,8 +483,9 @@
         
         if (_isNewItemAdding || ![self.name isEqualToString:_ininialName] || ![self.groupTitle isEqualToString:_ininialGroupName])
         {
-            NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite name:self.name];
-            NSString *savingName = self.name;;
+            NSString *savingName = [self.name trim];
+            NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite newName:savingName newCategory:savingGroup];
+            
             
             if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
             {
@@ -514,6 +510,7 @@
         else
         {
             NSString *savingName = [self.favorite isSpecialPoint] ? [self.favorite getName] : self.name;
+            savingName = [savingName trim];
             [OAFavoritesHelper editFavoriteName:self.favorite newName:savingName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
         }
     }
@@ -671,16 +668,10 @@
             resultCell.textFieldBottomConstraint.constant = kTextCellBottomMargin;
         }
         
-        if ([item[@"isEditable"] boolValue])
-        {
-            textField.enabled = YES;
-            textField.textColor = UIColor.blackColor;
-        }
-        else
-        {
-            textField.enabled = NO;
-            textField.textColor = UIColor.darkGrayColor;
-        }
+        BOOL isEditable = [item[@"isEditable"] boolValue];
+        textField.enabled = isEditable;
+        textField.userInteractionEnabled = isEditable;
+        textField.textColor = isEditable ? UIColor.blackColor : UIColor.darkGrayColor;
         
         return resultCell;
     }
@@ -852,9 +843,18 @@
     }
     else if ([key isEqualToString:kReplaceKey])
     {
-        OAReplaceFavoriteViewController *replaceScreen = [[OAReplaceFavoriteViewController alloc] init];
-        replaceScreen.delegate = self;
-        [self presentViewController:replaceScreen animated:YES completion:nil];
+        if ([OAFavoritesHelper getFavoriteItems].count > 0)
+        {
+            OAReplaceFavoriteViewController *replaceScreen = [[OAReplaceFavoriteViewController alloc] init];
+            replaceScreen.delegate = self;
+            [self presentViewController:replaceScreen animated:YES completion:nil];
+        }
+        else
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"fav_points_not_exist") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     }
     else if ([key isEqualToString:kDeleteKey])
     {
@@ -1015,7 +1015,11 @@
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:_groupNames[index]];
     OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
-    _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    if (group)
+        _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    else
+        _selectedColor = [OADefaultFavorite builtinColors].firstObject;
+    
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     [self updateHeaderIcon];
     
@@ -1040,7 +1044,11 @@
     self.groupTitle = selectedGroupName;
     
     OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:selectedGroupName]];
-    _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    if (group)
+        _selectedColor = [OADefaultFavorite nearestFavColor:group.color];
+    else
+        _selectedColor = [OADefaultFavorite builtinColors].firstObject;
+
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     [self updateHeaderIcon];
     
@@ -1056,8 +1064,10 @@
 - (void) addGroup:(NSString *)groupName color:(UIColor *)color
 {
     _wasChanged = YES;
-    [OAFavoritesHelper addEmptyCategory:groupName color:color visible:YES];
-    self.groupTitle = groupName;
+    NSString *editedGroupName = [[OAFavoritesHelper checkEmoticons:groupName] trim];
+    
+    [OAFavoritesHelper addEmptyCategory:editedGroupName color:color visible:YES];
+    self.groupTitle = editedGroupName;
     _selectedColor = [OADefaultFavorite nearestFavColor:color];
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     
@@ -1078,10 +1088,45 @@
 
 - (void) onReplaced:(OAFavoriteItem *)favoriteItem;
 {
-    _wasChanged = YES;
-    [self deleteFavoriteItem:favoriteItem];
-    [self onDoneButtonPressed];
-    [self dismissViewController];
+    NSString *message = [NSString stringWithFormat:OALocalizedString(@"replace_favorite_confirmation"), [favoriteItem getDisplayName]];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_replace") message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        NSString *description = [favoriteItem getDescription];
+        NSString *address = [favoriteItem getAddress];
+        UIColor *color = [favoriteItem getColor];
+        NSString *backgroundIcon = [favoriteItem getBackgroundIcon];
+        NSString *icon = [favoriteItem getIcon];
+        NSString *category = [favoriteItem getCategory];
+        NSString *name = [favoriteItem getName];
+        
+        [self.favorite setDescription:description];
+        [self.favorite setAddress:address];
+        [self.favorite setColor:color];
+        [self.favorite setBackgroundIcon:backgroundIcon];
+        [self.favorite setIcon:icon];
+        
+        [self deleteFavoriteItem:favoriteItem];
+
+        if (_isNewItemAdding)
+        {
+            [self.favorite setCategory:category];
+            [self.favorite setName:name];
+            [OAFavoritesHelper addFavorite:self.favorite];
+        }
+        else
+        {
+            [OAFavoritesHelper editFavoriteName:self.favorite newName:name group:category descr:description address:address];
+        }
+        
+        [self dismissViewController];
+    }]];
+    
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Keyboard Notifications

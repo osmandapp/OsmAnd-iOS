@@ -1162,7 +1162,7 @@ static const double d180PI = 180.0 / M_PI_2;
     NSMutableArray<NSValue *> *secondControlPoints = [NSMutableArray array];
 
     //Number of Segments
-    NSInteger count = dataPoints.count - 1;
+    NSInteger count = (NSInteger) dataPoints.count - 1;
     
     //P0, P1, P2, P3 are the points for each segment, where P0 & P3 are the knots and P1, P2 are the control points.
     if (count == 1)

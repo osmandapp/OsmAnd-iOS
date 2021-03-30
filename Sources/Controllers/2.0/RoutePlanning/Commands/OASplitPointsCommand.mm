@@ -30,7 +30,7 @@
         if (_pointPosition == -1)
         {
             _after = YES;
-            _pointPosition = [editingCtx getPoints].count - 1;
+            _pointPosition = (NSInteger) [editingCtx getPoints].count - 1;
         }
     }
     return self;

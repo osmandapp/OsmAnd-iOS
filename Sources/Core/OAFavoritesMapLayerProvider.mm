@@ -90,6 +90,9 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
     
     UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
     UIImage *origImage = [UIImage imageNamed:backgroundIconName.toNSString()];
+    if (!origImage)
+        origImage = [UIImage imageNamed:@"bg_point_circle"];
+    
     UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * 0.8, origImage.size.height * 0.8)];
     UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:color];
     bool res = SkCreateBitmapFromCGImage(backgroundIcon.get(), coloredImage.CGImage);
@@ -97,6 +100,9 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
         return result;
     
     origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName.toNSString() stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
+    if (!origImage)
+        origImage = [UIImage imageNamed:[OAUtilities drawablePath:@"mm_special_star"]];
+    
     // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
     CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.6 : 0.8;
     resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * scale, origImage.size.height * scale)];

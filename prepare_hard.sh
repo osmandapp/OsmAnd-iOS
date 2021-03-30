@@ -5,6 +5,7 @@ echo "iOS project reset and prepare - START."
 
 echo "    Updating all repositories:"
 cd `dirname $0`
+
 git pull
 # git checkout master && git pull origin master
 cd ../android && git checkout master && git pull origin master 

@@ -250,6 +250,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     return _screenType == EOAAddToATrack;
 }
 
+- (void) dismissViewController
+{
+    if (self.delegate)
+        [self.delegate closeBottomSheet];
+    else
+        [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - TableView
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

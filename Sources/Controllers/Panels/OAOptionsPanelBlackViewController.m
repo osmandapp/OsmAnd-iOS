@@ -116,7 +116,7 @@
             btn.frame = CGRectMake(0, buttonHeight * i, width, buttonHeight);
             [self adjustButtonInsets:btn];
         }
-        CGFloat lastIndex = bottomButtons.count - 1;
+        CGFloat lastIndex = (CGFloat) bottomButtons.count - 1;
         CGFloat bottomMargin = [OAUtilities getBottomMargin];
         for (NSInteger i = 0; i <= lastIndex; i++)
         {

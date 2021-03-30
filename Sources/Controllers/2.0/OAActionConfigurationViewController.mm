@@ -800,7 +800,7 @@
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_data[key]];
         NSMutableArray *titles = [NSMutableArray new];
         NSMutableArray *oldtitles = [NSMutableArray new];
-        for (NSInteger i = 0; i < arr.count - 1; i++)
+        for (NSInteger i = 0; i < (NSInteger) arr.count - 1; i++)
         {
             NSDictionary *row = arr[i];
             NSString *title = row[@"title"];

@@ -109,7 +109,12 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self show:YES];
+    [self show:self.animateShow];
+}
+
+- (BOOL) animateShow
+{
+    return YES;
 }
 
 - (CGFloat)initialHeight
@@ -184,6 +189,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     view.layer.mask = maskLayer;
 }
 
+- (UIColor *)getBackgroundColor
+{
+    return [UIColor.blackColor colorWithAlphaComponent:0.2];
+}
+
 - (void) show:(BOOL)animated
 {
     [_tableView setContentOffset:CGPointZero];
@@ -211,7 +221,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         frame.origin.y = DeviceScreenHeight - _bottomSheetView.bounds.size.height;
         [UIView animateWithDuration:.3 animations:^{
             _bottomSheetView.frame = frame;
-            self.view.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0.2];
+            self.view.backgroundColor = [self getBackgroundColor];
         }];
     }
     else

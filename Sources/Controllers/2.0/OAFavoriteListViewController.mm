@@ -500,7 +500,7 @@ static UIViewController *parentController;
     for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
     {
         NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
-        if (groupName.length > 0)
+        if (groupName.length > 0 && group.name.length != 0)
             [groupNames addObject:groupName];
     }
         

@@ -478,7 +478,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (BOOL) isLastPointSelected
 {
-    return _selectedPointPosition == [self getPoints].count - 1;
+    return _selectedPointPosition == (NSInteger) [self getPoints].count - 1;
 }
 
 - (BOOL) isFirstPointSelected:(BOOL)outer
@@ -502,7 +502,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (BOOL) isLastPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer
 {
     if (outer)
-        return _selectedPointPosition == [self getPoints].count - 1;
+        return _selectedPointPosition == (NSInteger) [self getPoints].count - 1;
     else
         return [self isBorderPointSelected:selectedPointPosition first:NO];
 }
@@ -518,7 +518,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         if (i != -1)
         {
             NSInteger segmentPosition = selectedPointPosition - count;
-            return first ? segmentPosition == 0 : segmentPosition == segment.points.count - 1;
+            return first ? segmentPosition == 0 : segmentPosition == (NSInteger) segment.points.count - 1;
         }
         else
         {
@@ -554,7 +554,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     NSMutableArray<NSArray<OAGpxTrkPt *> *> *res = [NSMutableArray new];
     for (NSArray<OAGpxTrkPt *> *points in @[_before.points, _after.points])
     {
-        for (NSInteger i = 0; points.count > 0 && i < points.count - 1; i++)
+        for (NSInteger i = 0; i < (NSInteger) points.count - 1; i++)
         {
             OAGpxTrkPt *startPoint = points[i];
             OAGpxTrkPt *endPoint = points[i + 1];
@@ -644,7 +644,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         {
             OAGpxTrkSeg *segmentForSnap = [[OAGpxTrkSeg alloc] init];
             segmentForSnap.points = [NSArray new];
-            for (NSInteger i = 0; segment.points.count > 0 && i < segment.points.count - 1; i++)
+            for (NSInteger i = 0; i < (NSInteger) segment.points.count - 1; i++)
             {
                 NSArray<OAGpxTrkPt *> *pair = @[segment.points[i], segment.points[i + 1]];
                 OARoadSegmentData *data = _roadSegmentData[pair];
@@ -689,7 +689,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         [routePoints addObject:points[0]];
         [routePoints addObject:points[points.count - 1]];
     }
-    for (NSInteger i = 0; i < routePoints.count - 1; i++)
+    for (NSInteger i = 0; i < (NSInteger) routePoints.count - 1; i++)
     {
         NSArray<OAGpxTrkPt *> *pair = @[routePoints[i], routePoints[i + 1]];
         NSInteger startIndex = pair.firstObject.getTrkPtIndex;

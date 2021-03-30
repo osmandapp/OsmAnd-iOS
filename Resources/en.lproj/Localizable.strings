@@ -1169,7 +1169,7 @@
 "toggle_coordinates" = "Show/hide coordinates widget";
 "show_coordinates" = "Show coordinates";
 "hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "A toggle to show or hide the Coordinates widget on the map.";
+"quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "map_overlays" = "Map overlays";
 "map_underlays" = "Map underlays";
 "offline_vector_maps" = "Offline vector maps";

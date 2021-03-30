@@ -824,7 +824,7 @@
         if (isCoordinatesVisible && isMarkersWidgetVisible)
             return 0;
         else if (isMarkersWidgetVisible)
-            return -1 * markersWidgetHeaderHeight;
+            return -markersWidgetHeaderHeight;
         else
             return 0;
     }

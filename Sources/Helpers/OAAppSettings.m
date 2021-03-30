@@ -2021,7 +2021,7 @@
         _showIntermediateArrivalTime = [OAProfileBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
         _showRelativeBearing = [OAProfileBoolean withKey:showRelativeBearingKey defValue:YES];
         _showCompassControlRuler = [OAProfileBoolean withKey:showCompassControlRulerKey defValue:YES];
-        _showCoordinatesWidget = [OAProfileBoolean withKey:showCoordinatesWidgetKey defValue:YES];
+        _showCoordinatesWidget = [OAProfileBoolean withKey:showCoordinatesWidgetKey defValue:NO];
         
         [_registeredPreferences setObject:_showArrivalTime forKey:@"show_arrival_time"];
         [_registeredPreferences setObject:_showIntermediateArrivalTime forKey:@"show_intermediate_arrival_time"];

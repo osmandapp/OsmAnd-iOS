@@ -419,7 +419,6 @@
                 _multiCell.contentView.hidden = YES;
 
             for (OADestinationCell *cell in _destinationCells)
-            {
                 cell.contentView.hidden = NO;
         }
     }

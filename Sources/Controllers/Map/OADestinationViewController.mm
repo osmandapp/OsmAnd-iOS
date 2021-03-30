@@ -419,7 +419,21 @@
                 _multiCell.contentView.hidden = YES;
 
             for (OADestinationCell *cell in _destinationCells)
+            {
                 cell.contentView.hidden = NO;
+//                cell.contentView.backgroundColor = [cell isDirectionRTL];
+                
+//                if ([cell isDirectionRTL])
+//                {
+//                    cell.contentView.backgroundColor = UIColor.redColor;
+//                }
+//                else
+//                {
+//                    cell.contentView.backgroundColor = UIColor.greenColor;
+//                }
+            }
+            
+            
         }
     }
     else

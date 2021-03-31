@@ -239,11 +239,11 @@
 
 - (void) onTrackFolderAdded:(NSString *)folderName
 {
-    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:folderName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
-        [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
-    
-    [self reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:^{
+            [_delegate onFolderAdded:folderName];
+        }];
+    });
 }
 
 @end

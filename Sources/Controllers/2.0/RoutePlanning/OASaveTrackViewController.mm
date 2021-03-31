@@ -503,6 +503,11 @@
     [self.tableView reloadData];
 }
 
+- (void) onFolderAdded:(NSString *)addedFolderName
+{
+    [self onTrackFolderAdded:addedFolderName];
+}
+
 - (void) onNewFolderAdded
 {
     [self updateAllFoldersList];

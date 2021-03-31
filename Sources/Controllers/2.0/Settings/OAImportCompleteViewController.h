@@ -8,8 +8,10 @@
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
 
+@class OAExportSettingsType;
+
 @interface OAImportCompleteViewController : OABaseSettingsWithBottomButtonsViewController
 
-- (instancetype) initWithSettingsItems:(NSDictionary<NSString *, NSArray *> *)settingsItems fileName:(NSString *)fileName;
+- (instancetype) initWithSettingsItems:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsItems fileName:(NSString *)fileName;
 
 @end

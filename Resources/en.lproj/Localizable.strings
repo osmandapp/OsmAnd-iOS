@@ -183,6 +183,7 @@
 "layer_map_appearance" = "Configure screen";
 "configure_screen_descr" = "Select screen options for the profile";
 "map_markers" = "Map markers";
+"markers_history" = "Markers history";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
@@ -445,6 +446,7 @@
 "type_address" = "Type address";
 "search_poi_category_hint" = "Type to search all";
 "poi_categories" = "POI categories";
+"search_history" = "Search history";
 
 // Shared Strings
 "shared_string_apply" = "Apply";
@@ -779,8 +781,8 @@
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
 
-"export_profile" = "Export profile";
-"shared_string_import" = "Import profile";
+"export_profile" = "Export";
+"shared_string_import" = "Import";
 "create_profile" = "Create profile";
 "import_profile_select_descr" = "Select the data to be imported.";
 "selected_profiles" = "%d of %d";
@@ -948,9 +950,10 @@
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segment %d";
-"some_of" = "%ld of %ld";
+"some_of" = "%d of %d";
 
 // Resources
+"shared_string_resources" = "Resources";
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Local";
 "osmand_live_title" = "OsmAnd Live";

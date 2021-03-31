@@ -42,12 +42,17 @@ typedef NS_ENUM(NSInteger, EOAImportType) {
     EOAImportTypeImport
 };
 
+@class OAExportSettingsCategory, OASettingsCategoryItems, OAExportSettingsType, OASettingsItem;
+
 @interface OASettingsHelper : NSObject
 
 @property (nonatomic) OAImportAsyncTask* importTask;
 @property (nonatomic) NSMutableDictionary<NSString*, OAExportAsyncTask*>* exportTasks;
 
 + (OASettingsHelper *) sharedInstance;
+
++ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *) getSettingsToOperateByCategory:(NSArray<OASettingsItem *> *)items importComplete:(BOOL)importComplete;
++ (NSDictionary<OAExportSettingsType *, NSArray *> *) getSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version;
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;

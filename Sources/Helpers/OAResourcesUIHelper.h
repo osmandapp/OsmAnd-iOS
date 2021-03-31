@@ -121,4 +121,6 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 + (NSArray<OAResourceItem *> *) getSortedRasterMapSources:(BOOL)includeOffline;
 + (NSDictionary<OAMapSource *, OAResourceItem *> *) getOnlineRasterMapSourcesBySource;
 
++ (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles;
+
 @end

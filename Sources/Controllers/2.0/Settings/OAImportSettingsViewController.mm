@@ -18,7 +18,8 @@
 #import "OAMapSource.h"
 #import "OAResourcesUIHelper.h"
 #import "OAAvoidRoadInfo.h"
-#import "OATitleDescriptionCheckmarkCell.h"
+#import "OACustomSelectionCollapsableCell.h"
+#import "OAExportSettingsType.h"
 #import "OAMenuSimpleCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
@@ -41,6 +42,8 @@
 #import "OAFavoritesHelper.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAMarkersSettingsItem.h"
+#import "OASettingsCategoryItems.h"
+#import "OAExportSettingsCategory.h"
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
 #import "OAGPXDatabase.h"
@@ -52,7 +55,7 @@
 #define kTopPadding 6
 #define kBottomPadding 32
 #define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
-#define kCellTypeSectionHeader @"OATitleDescriptionCheckmarkCell"
+#define kCellTypeSectionHeader @"OACustomSelectionCollapsableCell"
 #define kCellTypeTitleDescription @"OAMenuSimpleCell"
 #define kCellTypeTitle @"OAIconTextCell"
 
@@ -65,7 +68,8 @@
 
 @implementation OATableGroupToImport
 
--(id) init {
+-(instancetype) init
+{
     self = [super init];
     if (self) {
         self.groupItems = [[NSMutableArray alloc] init];
@@ -82,12 +86,12 @@
 @implementation OAImportSettingsViewController
 {
     OASettingsHelper *_settingsHelper;
-    NSArray *_data;
+    NSArray<OATableGroupToImport *> *_data;
     NSArray<OASettingsItem *> *_settingsItems;
-    NSMutableDictionary<NSString *, NSArray *> *_itemsMap;
-    NSArray <NSString *>*_itemsType;
-    NSMutableArray<OASettingsItem *> *_selectedItems;
-    NSMutableArray<NSIndexPath *> *_selectedIndexPaths;
+    NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *_itemsMap;
+    NSArray<OAExportSettingsCategory *> *_itemTypes;
+    NSMutableDictionary<OAExportSettingsType *, NSArray *> *_selectedItemsMap;
+//    NSMutableArray<NSIndexPath *> *_selectedIndexPaths;
     NSString *_file;
     NSString *_descriptionText;
     NSString *_descriptionBoldText;
@@ -116,7 +120,7 @@
 
 - (void) updateNavigationBarItem
 {
-    [self.additionalNavBarButton setTitle:_selectedIndexPaths.count >= 2 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.additionalNavBarButton setTitle:_selectedItemsMap.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
 }
 
 - (void) setupButtonView
@@ -138,8 +142,7 @@
     self.secondaryBottomButton.hidden = YES;
     [self setupButtonView];
     self.backImageButton.hidden = YES;
-    _selectedIndexPaths = [[NSMutableArray alloc] init];
-    _selectedItems = [[NSMutableArray alloc] init];
+    _selectedItemsMap = [[NSMutableDictionary alloc] init];
     [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
     
     [super viewDidLoad];
@@ -180,8 +183,8 @@
     
     if (_settingsItems)
     {
-        _itemsMap = [NSMutableDictionary dictionaryWithDictionary:[importTask getSettingsToOperate:_settingsItems importComplete:NO]];
-        _itemsType = [NSArray arrayWithArray:[_itemsMap allKeys]];
+        _itemsMap = [OASettingsHelper getSettingsToOperateByCategory:_settingsItems importComplete:NO];
+        _itemTypes = _itemsMap.allKeys;
         [self generateData];
     }
     
@@ -200,17 +203,17 @@
     else
         [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
     
-    if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
-    {
-        OATableGroupToImport* groupData = [_data objectAtIndex:0];
-        groupData.isOpen = YES;
-    }
-    
-    if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
-    {
-        OATableGroupToImport* groupData = [_data objectAtIndex:0];
-        groupData.isOpen = YES;
-    }
+//    if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
+//    {
+//        OATableGroupToImport* groupData = [_data objectAtIndex:0];
+//        groupData.isOpen = YES;
+//    }
+//
+//    if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
+//    {
+//        OATableGroupToImport* groupData = [_data objectAtIndex:0];
+//        groupData.isOpen = YES;
+//    }
 }
 
 - (void) updateUI:(NSString *)toolbarTitleRes descriptionRes:(NSString *)descriptionRes activityLabel:(NSString *)activityLabel
@@ -227,290 +230,292 @@
     }
 }
 
-- (NSInteger) getSelectedItemsAmount:(NSArray *)listItems
+- (NSInteger) getSelectedItemsAmount:(OAExportSettingsType *)type
 {
-    NSInteger amount = 0;
-    for (OASettingsItem *item in listItems)
-        if ([_selectedItems containsObject:item])
-            amount++;
-    return amount;
+    return _selectedItemsMap[type].count;
 }
 
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray array];
-    OATableGroupToImport *profilesSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *quickActionsSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *poiTypesSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *mapSourcesSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *customRendererStyleSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *customRoutingSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *customObfMapSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *favoritesSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *notesPointStyleSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *editsPointStyleSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *activeMarkersStyleSection = [[OATableGroupToImport alloc] init];
-    for (NSString *type in [_itemsMap allKeys])
+    for (OAExportSettingsCategory *type in _itemTypes)
     {
-        EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
-        NSArray *settings = [NSArray arrayWithArray:[_itemsMap objectForKey:type]];
-        switch (itemType)
+        OASettingsCategoryItems *categoryItems = _itemsMap[type];
+        OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
+        group.groupName = type.title;
+        group.type = kCellTypeSectionHeader;
+        group.isOpen = NO;
+        for (OAExportSettingsType *type in categoryItems.getTypes)
         {
-            case EOAExportSettingsTypeProfile:
-            {
-                profilesSection.groupName = OALocalizedString(@"shared_string_profiles");
-                profilesSection.type = kCellTypeSectionHeader;
-                profilesSection.isOpen = NO;
-                for (OAApplicationModeBean *modeBean in settings)
-                {
-                    NSString *title = modeBean.userProfileName;
-                    if (!title || title.length == 0)
-                    {
-                        OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
-                        
-                        if (appMode)
-                            title = [appMode toHumanString];
-                        else
-                            title = modeBean.stringKey.capitalizedString;
-                    }
-
-                    NSString *routingProfile = @"";
-                    NSString *routingProfileValue = modeBean.routingProfile;
-                    if (routingProfileValue && routingProfileValue.length > 0)
-                    {
-                        try
-                        {
-                            routingProfile = [OARoutingProfileDataObject getLocalizedName: [OARoutingProfileDataObject getValueOf: [routingProfileValue upperCase]]];
-                            routingProfile = [NSString stringWithFormat: OALocalizedString(@"nav_type_hint"), [routingProfile capitalizedString]];
-
-                        } catch (NSException *e)
-                        {
-                            routingProfile = [routingProfileValue capitalizedString];
-                            NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
-                        }
-                    }
-
-                    [profilesSection.groupItems addObject:@{
-                        @"icon" :  [UIImage imageNamed:modeBean.iconName],
-                        @"color" : UIColorFromRGB(modeBean.iconColor),
-                        @"title" : title ? title : @"",
-                        @"description" : routingProfile,
-                        @"type" : kCellTypeTitleDescription,
-                    }];
-                }
-                [data addObject:profilesSection];
-                break;
-            }
-            case EOAExportSettingsTypeQuickActions:
-            {
-                quickActionsSection.groupName = OALocalizedString(@"shared_string_quick_actions");
-                quickActionsSection.type = kCellTypeSectionHeader;
-                quickActionsSection.isOpen = NO;
-                for (OAQuickAction *quickAction in [_itemsMap objectForKey:type])
-                {
-                    [quickActionsSection.groupItems addObject:@{
-                        @"icon" : [quickAction getIconResName],
-                        @"color" : UIColor.orangeColor,
-                        @"title" : quickAction.getName ? quickAction.getName : quickAction.actionType.name,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:quickActionsSection];
-                break;
-            }
-            case EOAExportSettingsTypePoiTypes:
-            {
-                poiTypesSection.groupName = OALocalizedString(@"poi_type");
-                poiTypesSection.type = kCellTypeSectionHeader;
-                poiTypesSection.isOpen = NO;
-                
-                [data addObject:poiTypesSection];
-                break;
-            }
-            case EOAExportSettingsTypeMapSources:
-            {
-                mapSourcesSection.groupName = OALocalizedString(@"map_sources");
-                mapSourcesSection.type = kCellTypeSectionHeader;
-                mapSourcesSection.isOpen = NO;
-                
-                for (NSDictionary *item in settings)
-                {
-                    NSString *caption = item[@"name"];
-                    [mapSourcesSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_map",
-                        @"title" : caption,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:mapSourcesSection];
-                break;
-            }
-            case EOAExportSettingsTypeCustomRendererStyles:
-            {
-                customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_style");
-                customRendererStyleSection.type = kCellTypeSectionHeader;
-                customRendererStyleSection.isOpen = NO;
-                for (NSString *rendererItem in settings)
-                {
-                    NSString *rendererName = [[[rendererItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                    [customRendererStyleSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_map_style",
-                        @"title" : [rendererName stringByDeletingPathExtension],
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:customRendererStyleSection];
-                break;
-            }
-            case EOAExportSettingsTypeMapFiles:
-            {
-                customObfMapSection.groupName = OALocalizedString(@"maps");
-                customObfMapSection.type = kCellTypeSectionHeader;
-                customObfMapSection.isOpen = NO;
-                for (OAFileSettingsItem *mapItem in settings)
-                {
-                    
-                    NSString *mapName = [OAFileNameTranslationHelper getMapName:mapItem.name];
-                    [customObfMapSection.groupItems addObject:@{
-                        @"icon" : mapItem.getIconName,
-                        @"title" : mapName,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:customObfMapSection];
-                break;
-            }
-            case EOAExportSettingsTypeCustomRouting:
-            {
-                customRoutingSection.groupName = OALocalizedString(@"shared_string_routing");
-                customRoutingSection.type = kCellTypeSectionHeader;
-                customRoutingSection.isOpen = NO;
-                for (NSString *routingItem in settings)
-                {
-                    NSString *routingName = [[[routingItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                    [customRoutingSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_route",
-                        @"title" : routingName,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:customRoutingSection];
-                break;
-            }
-            case EOAExportSettingsTypeGPX:
-            {
-                customGPXSection.groupName = OALocalizedString(@"tracks");
-                customGPXSection.type = kCellTypeSectionHeader;
-                customGPXSection.isOpen = NO;
-                for (OAGpxSettingsItem *gpxItem in settings)
-                {
-                    NSString *gpxName = [[gpxItem.name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                    [customGPXSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_trip",
-                        @"title" : gpxName,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:customGPXSection];
-                break;
-            }
-            case EOAExportSettingsTypeAvoidRoads:
-            {
-                avoidRoadsStyleSection.groupName = OALocalizedString(@"impassable_road");
-                avoidRoadsStyleSection.type = kCellTypeSectionHeader;
-                avoidRoadsStyleSection.isOpen = NO;
-                for (OAAvoidRoadsSettingsItem *avoidRoads in settings)
-                {
-                    [avoidRoadsStyleSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_alert",
-                        @"title" : [avoidRoads name],
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:avoidRoadsStyleSection];
-                break;
-            }
-            case EOAExportSettingsTypeFavorites:
-            {
-                favoritesSection.groupName = OALocalizedString(@"my_places");
-                favoritesSection.type = kCellTypeSectionHeader;
-                favoritesSection.isOpen = NO;
-                
-                for (OAFavoriteGroup *group in settings)
-                {
-                    NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
-                    NSString *groupDescription = [NSString stringWithFormat:@"%@ %ld", OALocalizedString(@"points_count"), group.points.count];
-                    UIImage *favoriteIcon = [UIImage imageNamed:@"ic_custom_folder"];
-                    [favoritesSection.groupItems addObject:@{
-                        @"icon" : favoriteIcon,
-                        @"color" : group.color,
-                        @"title" : groupName,
-                        @"description" : groupDescription,
-                        @"type" : kCellTypeTitleDescription,
-                    }];
-                }
-                [data addObject:favoritesSection];
-                break;
-            }
-            case EOAExportSettingsTypeOsmNotes:
-            {
-                notesPointStyleSection.groupName = OALocalizedString(@"osm_notes");
-                notesPointStyleSection.type = kCellTypeSectionHeader;
-                notesPointStyleSection.isOpen = NO;
-                
-                for (OAOsmNotePoint *item in settings)
-                {
-                    NSString *caption = [item getText];
-                    [notesPointStyleSection.groupItems addObject:@{
-                        @"icon" : @"ic_action_add_osm_note",
-                        @"title" : caption,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:notesPointStyleSection];
-                break;
-            }
-            case EOAExportSettingsTypeOsmEdits:
-            {
-                editsPointStyleSection.groupName = OALocalizedString(@"osm_edits_title");
-                editsPointStyleSection.type = kCellTypeSectionHeader;
-                editsPointStyleSection.isOpen = NO;
-                for (OAOsmPoint *item in settings)
-                {
-                    NSString *caption = [OAOsmEditingPlugin getTitle:item];
-                    [editsPointStyleSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_poi",
-                        @"title" : caption,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:editsPointStyleSection];
-                break;
-            }
-            case EOAExportSettingsTypeActiveMarkers:
-            {
-                activeMarkersStyleSection.groupName = OALocalizedString(@"map_markers");
-                activeMarkersStyleSection.type = kCellTypeSectionHeader;
-                activeMarkersStyleSection.isOpen = NO;
-                for (OADestination *item in settings)
-                {
-                    [activeMarkersStyleSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_marker",
-                        @"title" : item.desc,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                
-                [data addObject:activeMarkersStyleSection];
-                break;
-            }
-            default:
-                break;
+            [group.groupItems addObject:@{
+                @"icon" :  type.icon,
+                @"title" : type.title,
+                @"type" : kCellTypeTitleDescription
+            }];
         }
+        [data addObject:group];
     }
+    
     _data = [NSArray arrayWithArray:data];
+        
+        
+        //TODO: maybe reuse this code in the bottomsheet
+        
+//        NSArray *settings = [NSArray arrayWithArray:[_itemsMap objectForKey:type]];
+//        switch (itemType)
+//        {
+//            case EOAExportSettingsTypeProfile:
+//            {
+//                profilesSection.groupName = OALocalizedString(@"shared_string_profiles");
+//                profilesSection.type = kCellTypeSectionHeader;
+//                profilesSection.isOpen = NO;
+//                for (OAApplicationModeBean *modeBean in settings)
+//                {
+//                    NSString *title = modeBean.userProfileName;
+//                    if (!title || title.length == 0)
+//                    {
+//                        OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
+//
+//                        if (appMode)
+//                            title = [appMode toHumanString];
+//                        else
+//                            title = modeBean.stringKey.capitalizedString;
+//                    }
+//
+//                    NSString *routingProfile = @"";
+//                    NSString *routingProfileValue = modeBean.routingProfile;
+//                    if (routingProfileValue && routingProfileValue.length > 0)
+//                    {
+//                        try
+//                        {
+//                            routingProfile = [OARoutingProfileDataObject getLocalizedName: [OARoutingProfileDataObject getValueOf: [routingProfileValue upperCase]]];
+//                            routingProfile = [NSString stringWithFormat: OALocalizedString(@"nav_type_hint"), [routingProfile capitalizedString]];
+//
+//                        } catch (NSException *e)
+//                        {
+//                            routingProfile = [routingProfileValue capitalizedString];
+//                            NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
+//                        }
+//                    }
+//
+//                    [profilesSection.groupItems addObject:@{
+//                        @"icon" :  [UIImage imageNamed:modeBean.iconName],
+//                        @"color" : UIColorFromRGB(modeBean.iconColor),
+//                        @"title" : title ? title : @"",
+//                        @"description" : routingProfile,
+//                        @"type" : kCellTypeTitleDescription,
+//                    }];
+//                }
+//                [data addObject:profilesSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeQuickActions:
+//            {
+//                quickActionsSection.groupName = OALocalizedString(@"shared_string_quick_actions");
+//                quickActionsSection.type = kCellTypeSectionHeader;
+//                quickActionsSection.isOpen = NO;
+//                for (OAQuickAction *quickAction in [_itemsMap objectForKey:type])
+//                {
+//                    [quickActionsSection.groupItems addObject:@{
+//                        @"icon" : [quickAction getIconResName],
+//                        @"color" : UIColor.orangeColor,
+//                        @"title" : quickAction.getName ? quickAction.getName : quickAction.actionType.name,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:quickActionsSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypePoiTypes:
+//            {
+//                poiTypesSection.groupName = OALocalizedString(@"poi_type");
+//                poiTypesSection.type = kCellTypeSectionHeader;
+//                poiTypesSection.isOpen = NO;
+//
+//                [data addObject:poiTypesSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeMapSources:
+//            {
+//                mapSourcesSection.groupName = OALocalizedString(@"map_sources");
+//                mapSourcesSection.type = kCellTypeSectionHeader;
+//                mapSourcesSection.isOpen = NO;
+//
+//                for (NSDictionary *item in settings)
+//                {
+//                    NSString *caption = item[@"name"];
+//                    [mapSourcesSection.groupItems addObject:@{
+//                        @"icon" : @"ic_custom_map",
+//                        @"title" : caption,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:mapSourcesSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeCustomRendererStyles:
+//            {
+//                customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_style");
+//                customRendererStyleSection.type = kCellTypeSectionHeader;
+//                customRendererStyleSection.isOpen = NO;
+//                for (NSString *rendererItem in settings)
+//                {
+//                    NSString *rendererName = [[[rendererItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+//                    [customRendererStyleSection.groupItems addObject:@{
+//                        @"icon" : @"ic_custom_map_style",
+//                        @"title" : [rendererName stringByDeletingPathExtension],
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:customRendererStyleSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeMapFiles:
+//            {
+//                customObfMapSection.groupName = OALocalizedString(@"maps");
+//                customObfMapSection.type = kCellTypeSectionHeader;
+//                customObfMapSection.isOpen = NO;
+//                for (OAFileSettingsItem *mapItem in settings)
+//                {
+//
+//                    NSString *mapName = [OAFileNameTranslationHelper getMapName:mapItem.name];
+//                    [customObfMapSection.groupItems addObject:@{
+//                        @"icon" : mapItem.getIconName,
+//                        @"title" : mapName,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:customObfMapSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeCustomRouting:
+//            {
+//                customRoutingSection.groupName = OALocalizedString(@"shared_string_routing");
+//                customRoutingSection.type = kCellTypeSectionHeader;
+//                customRoutingSection.isOpen = NO;
+//                for (NSString *routingItem in settings)
+//                {
+//                    NSString *routingName = [[[routingItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+//                    [customRoutingSection.groupItems addObject:@{
+//                        @"icon" : @"ic_custom_route",
+//                        @"title" : routingName,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:customRoutingSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeGPX:
+//            {
+//                customGPXSection.groupName = OALocalizedString(@"tracks");
+//                customGPXSection.type = kCellTypeSectionHeader;
+//                customGPXSection.isOpen = NO;
+//                for (OAGpxSettingsItem *gpxItem in settings)
+//                {
+//                    NSString *gpxName = [[gpxItem.name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+//                    [customGPXSection.groupItems addObject:@{
+//                        @"icon" : @"ic_custom_trip",
+//                        @"title" : gpxName,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:customGPXSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeAvoidRoads:
+//            {
+//                avoidRoadsStyleSection.groupName = OALocalizedString(@"impassable_road");
+//                avoidRoadsStyleSection.type = kCellTypeSectionHeader;
+//                avoidRoadsStyleSection.isOpen = NO;
+//                for (OAAvoidRoadsSettingsItem *avoidRoads in settings)
+//                {
+//                    [avoidRoadsStyleSection.groupItems addObject:@{
+//                        @"icon" : @"ic_custom_alert",
+//                        @"title" : [avoidRoads name],
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:avoidRoadsStyleSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeFavorites:
+//            {
+//                favoritesSection.groupName = OALocalizedString(@"my_places");
+//                favoritesSection.type = kCellTypeSectionHeader;
+//                favoritesSection.isOpen = NO;
+//
+//                for (OAFavoriteGroup *group in settings)
+//                {
+//                    NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
+//                    NSString *groupDescription = [NSString stringWithFormat:@"%@ %ld", OALocalizedString(@"points_count"), group.points.count];
+//                    UIImage *favoriteIcon = [UIImage imageNamed:@"ic_custom_folder"];
+//                    [favoritesSection.groupItems addObject:@{
+//                        @"icon" : favoriteIcon,
+//                        @"color" : group.color,
+//                        @"title" : groupName,
+//                        @"description" : groupDescription,
+//                        @"type" : kCellTypeTitleDescription,
+//                    }];
+//                }
+//                [data addObject:favoritesSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeOsmNotes:
+//            {
+//                notesPointStyleSection.groupName = OALocalizedString(@"osm_notes");
+//                notesPointStyleSection.type = kCellTypeSectionHeader;
+//                notesPointStyleSection.isOpen = NO;
+//
+//                for (OAOsmNotePoint *item in settings)
+//                {
+//                    NSString *caption = [item getText];
+//                    [notesPointStyleSection.groupItems addObject:@{
+//                        @"icon" : @"ic_action_add_osm_note",
+//                        @"title" : caption,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:notesPointStyleSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeOsmEdits:
+//            {
+//                editsPointStyleSection.groupName = OALocalizedString(@"osm_edits_title");
+//                editsPointStyleSection.type = kCellTypeSectionHeader;
+//                editsPointStyleSection.isOpen = NO;
+//                for (OAOsmPoint *item in settings)
+//                {
+//                    NSString *caption = [OAOsmEditingPlugin getTitle:item];
+//                    [editsPointStyleSection.groupItems addObject:@{
+//                        @"icon" : @"ic_custom_poi",
+//                        @"title" : caption,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//                [data addObject:editsPointStyleSection];
+//                break;
+//            }
+//            case EOAExportSettingsTypeActiveMarkers:
+//            {
+//                activeMarkersStyleSection.groupName = OALocalizedString(@"map_markers");
+//                activeMarkersStyleSection.type = kCellTypeSectionHeader;
+//                activeMarkersStyleSection.isOpen = NO;
+//                for (OADestination *item in settings)
+//                {
+//                    [activeMarkersStyleSection.groupItems addObject:@{
+//                        @"icon" : @"ic_custom_marker",
+//                        @"title" : item.desc,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//
+//                [data addObject:activeMarkersStyleSection];
+//                break;
+//            }
+//            default:
+//                break;
+//        }
+//    }
 }
 
 - (void) showActivityIndicatorWithLabel:(NSString *)labelText
@@ -597,77 +602,77 @@
 
 - (NSArray <OASettingsItem *>*) getSettingsItemsFromData
 {
-    NSMutableArray<OASettingsItem *> *settingsItems = [NSMutableArray array];
-    NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
-    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
-    NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
-    NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
-    NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
-    NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
-    NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
-    NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
-    
-    for (NSObject *object in _selectedItems)
-    {
-        if ([object isKindOfClass:OAApplicationModeBean.class])
-            [appModeBeans addObject:(OAApplicationModeBean *)object];
-        else if ([object isKindOfClass:OAQuickAction.class])
-            [quickActions addObject:(OAQuickAction *)object];
-        else if ([object isKindOfClass:OAPOIUIFilter.class])
-            [poiUIFilters addObject:(OAPOIUIFilter *)object];
-        else if ([object isKindOfClass:NSDictionary.class])
-            [tileSourceTemplates addObject:(NSDictionary *)object];
-        else if ([object isKindOfClass:NSString.class])
-            [settingsItems addObject:[[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
-        else if ([object isKindOfClass:OAAvoidRoadInfo.class])
-            [avoidRoads addObject:(OAAvoidRoadInfo *)object];
-        else if ([object isKindOfClass:OAOsmNotePoint.class])
-            [osmNotesPointList addObject:(OAOsmNotePoint *)object];
-        else if ([object isKindOfClass:OAOsmPoint.class])
-            [osmEditsPointList addObject:(OAOsmPoint *)object];
-        else if ([object isKindOfClass:OAFileSettingsItem.class])
-            [settingsItems addObject:(OAFileSettingsItem *)object];
-        else if ([object isKindOfClass:OAFavoriteGroup.class])
-            [favoiriteItems addObject:(OAFavoriteGroup *)object];
-        else if ([object isKindOfClass:OADestination.class])
-            [activeMarkersList addObject:(OADestination *)object];
-    }
-    if (appModeBeans.count > 0)
-        for (OAApplicationModeBean *modeBean in appModeBeans)
-            [settingsItems addObject:[self getBaseProfileSettingsItem:modeBean]];
-    if (quickActions.count > 0)
-        [settingsItems addObject: [[OAQuickActionsSettingsItem alloc] initWithItems:quickActions]];
-    if (poiUIFilters.count > 0)
-        [settingsItems addObject:[self getBasePoiUiFiltersSettingsItem]];
-    if (tileSourceTemplates.count > 0)
-        [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
-    if (avoidRoads.count > 0)
-        [settingsItems addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
-    if (favoiriteItems.count > 0)
-        [settingsItems addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
-    if (osmNotesPointList.count > 0)
-    {
-        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class];
-        [settingsItems addObject:baseItem];
-    }
-    if (osmEditsPointList.count > 0)
-    {
-        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmEdits clazz:OAOsmEditsSettingsItem.class];
-        [settingsItems addObject:baseItem];
-    }
-    if (activeMarkersList.count > 0)
-    {
-        [settingsItems addObject:[[OAMarkersSettingsItem alloc] initWithItems:activeMarkersList]];
-    }
-    return settingsItems;
+//    NSMutableArray<OASettingsItem *> *settingsItems = [NSMutableArray array];
+//    NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
+//    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
+//    NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
+//    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
+//    NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+//    NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
+//    NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
+//    NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
+//    NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
+//
+//    for (NSObject *object in _selectedItems)
+//    {
+//        if ([object isKindOfClass:OAApplicationModeBean.class])
+//            [appModeBeans addObject:(OAApplicationModeBean *)object];
+//        else if ([object isKindOfClass:OAQuickAction.class])
+//            [quickActions addObject:(OAQuickAction *)object];
+//        else if ([object isKindOfClass:OAPOIUIFilter.class])
+//            [poiUIFilters addObject:(OAPOIUIFilter *)object];
+//        else if ([object isKindOfClass:NSDictionary.class])
+//            [tileSourceTemplates addObject:(NSDictionary *)object];
+//        else if ([object isKindOfClass:NSString.class])
+//            [settingsItems addObject:[[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
+//        else if ([object isKindOfClass:OAAvoidRoadInfo.class])
+//            [avoidRoads addObject:(OAAvoidRoadInfo *)object];
+//        else if ([object isKindOfClass:OAOsmNotePoint.class])
+//            [osmNotesPointList addObject:(OAOsmNotePoint *)object];
+//        else if ([object isKindOfClass:OAOsmPoint.class])
+//            [osmEditsPointList addObject:(OAOsmPoint *)object];
+//        else if ([object isKindOfClass:OAFileSettingsItem.class])
+//            [settingsItems addObject:(OAFileSettingsItem *)object];
+//        else if ([object isKindOfClass:OAFavoriteGroup.class])
+//            [favoiriteItems addObject:(OAFavoriteGroup *)object];
+//        else if ([object isKindOfClass:OADestination.class])
+//            [activeMarkersList addObject:(OADestination *)object];
+//    }
+//    if (appModeBeans.count > 0)
+//        for (OAApplicationModeBean *modeBean in appModeBeans)
+//            [settingsItems addObject:[self getBaseProfileSettingsItem:modeBean]];
+//    if (quickActions.count > 0)
+//        [settingsItems addObject: [[OAQuickActionsSettingsItem alloc] initWithItems:quickActions]];
+//    if (poiUIFilters.count > 0)
+//        [settingsItems addObject:[self getBasePoiUiFiltersSettingsItem]];
+//    if (tileSourceTemplates.count > 0)
+//        [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
+//    if (avoidRoads.count > 0)
+//        [settingsItems addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
+//    if (favoiriteItems.count > 0)
+//        [settingsItems addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
+//    if (osmNotesPointList.count > 0)
+//    {
+//        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class];
+//        [settingsItems addObject:baseItem];
+//    }
+//    if (osmEditsPointList.count > 0)
+//    {
+//        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmEdits clazz:OAOsmEditsSettingsItem.class];
+//        [settingsItems addObject:baseItem];
+//    }
+//    if (activeMarkersList.count > 0)
+//    {
+//        [settingsItems addObject:[[OAMarkersSettingsItem alloc] initWithItems:activeMarkersList]];
+//    }
+//    return settingsItems;
 }
 
 #pragma mark - Actions
 
 - (IBAction) primaryButtonPressed:(id)sender
 {
-    if (_selectedItems.count == 0)
+    if (_selectedItemsMap.count == 0)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"shared_string_nothing_selected") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
@@ -696,13 +701,13 @@
 
 - (void) selectDeselectAllItems:(id)sender
 {
-    if (_selectedIndexPaths.count > 1)
-        for (NSInteger section = 0; section < [self.tableView numberOfSections]; section++)
-            [self deselectAllGroup:[NSIndexPath indexPathForRow:0 inSection:section]];
-    else
-        for (NSInteger section = 0; section < [self.tableView numberOfSections]; section++)
-            [self selectAllGroup:[NSIndexPath indexPathForRow:0 inSection:section]];
-    [self updateNavigationBarItem];
+//    if (_selectedIndexPaths.count > 1)
+//        for (NSInteger section = 0; section < [self.tableView numberOfSections]; section++)
+//            [self deselectAllGroup:[NSIndexPath indexPathForRow:0 inSection:section]];
+//    else
+//        for (NSInteger section = 0; section < [self.tableView numberOfSections]; section++)
+//            [self selectAllGroup:[NSIndexPath indexPathForRow:0 inSection:section]];
+//    [self updateNavigationBarItem];
 }
 
 - (void) openCloseGroupButtonAction:(id)sender
@@ -713,6 +718,18 @@
     [self openCloseGroup:indexPath];
 }
 
+- (void) onGroupCheckmarkPressed:(UIButton *)sender
+{
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
+//    NSArray<NSString *> *itemTypes = _itemsMap[_itemTypes[indexPath.section]];
+//    NSInteger selectedAmount = [self getSelectedItemsAmount:itemTypes];
+//
+//    if (selectedAmount > 0)
+//        [self deselectAllGroup:indexPath];
+//    else
+//        [self selectAllGroup:indexPath];
+}
+
 - (void) openCloseGroup:(NSIndexPath *)indexPath
 {
     OATableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
@@ -720,8 +737,8 @@
     {
         groupData.isOpen = NO;
         [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-        if ([_selectedIndexPaths containsObject: [NSIndexPath indexPathForRow:0 inSection:indexPath.section]])
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+//        if ([_selectedIndexPaths containsObject: [NSIndexPath indexPathForRow:0 inSection:indexPath.section]])
+//            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     else
     {
@@ -740,62 +757,51 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
-    {
-        return 1;
-    }
-    else
-    {
         OATableGroupToImport* groupData = [_data objectAtIndex:section];
         if (groupData.isOpen)
             return [groupData.groupItems count] + 1;
         return 1;
-    }
 }
 
 - (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id sectionObject = [_data objectAtIndex:indexPath.section];
-    if ([sectionObject isKindOfClass:NSDictionary.class] && [sectionObject[@"cellType"] isEqualToString: kCellTypeWithActivity])
-    {
-        static NSString* const identifierCell = kCellTypeWithActivity;
-        OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAActivityViewWithTitleCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
-            cell.titleView.text = sectionObject[@"label"];
-            cell.activityIndicatorView.hidden = NO;
-            [cell.activityIndicatorView startAnimating];
-            
-        }
-        return cell;
-    }
-    
-    OATableGroupToImport* groupData = sectionObject;
+    OATableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
     if (indexPath.row == 0)
     {
-        static NSString* const identifierCell = @"OATitleDescriptionCheckmarkCell";
-        OATitleDescriptionCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OACustomSelectionCollapsableCell";
+        OACustomSelectionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OATitleDescriptionCheckmarkCell *)[nib objectAtIndex:0];
+            cell = (OACustomSelectionCollapsableCell *)[nib objectAtIndex:0];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.openCloseGroupButton.hidden = NO;
+            cell.separatorInset = UIEdgeInsetsZero;
         }
         if (cell)
         {
-            NSInteger selectedAmount = [self getSelectedItemsAmount:[_itemsMap objectForKey:_itemsType[indexPath.section]]];
+            OASettingsCategoryItems *itemTypes = _itemsMap[_itemTypes[indexPath.section]];
+            NSInteger selectedAmount = [self getSelectedItemsAmount:nil];
             cell.textView.text = groupData.groupName;
             cell.descriptionView.text = [NSString stringWithFormat: OALocalizedString(@"selected_profiles"), selectedAmount, groupData.groupItems.count];
             if (selectedAmount == groupData.groupItems.count)
                 [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
             cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            cell.selectionButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.selectionButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
+            
+            if (selectedAmount > 0)
+            {
+                UIImage *selectionImage = selectedAmount < itemTypes.getTypes.count ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
+                [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
+            }
+            else
+            {
+                [cell.selectionButton setImage:nil forState:UIControlStateNormal];
+            }
+            
             if (groupData.isOpen)
             {
                 cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_up"]
@@ -824,17 +830,20 @@
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-                cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+                cell.separatorInset = UIEdgeInsetsMake(0., 70., 0., 0.);
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
             if (cell)
             {
                 cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.imgView.tintColor = item[@"color"];
                 cell.textView.text = item[@"title"];
-                cell.descriptionView.text = item[@"description"];
-                cell.descriptionView.hidden = ((NSString *)item[@"description"]).length == 0;
-                if ([cell needsUpdateConstraints])
-                    [cell updateConstraints];
+                OASettingsCategoryItems *items = _itemsMap[_itemTypes[indexPath.section]];
+                OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
+                NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
+                NSInteger itemsTotal = [items getItemsForType:settingType].count;
+                NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"sett_no_ext_input") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"some_of"), selectedAmount, itemsTotal]);
+                cell.descriptionView.text = selectedStr;
             }
             return cell;
         }
@@ -923,10 +932,10 @@
 
 - (void) deselectAllGroup:(NSIndexPath *)indexPath
 {
-    NSMutableArray *tmp = [[NSMutableArray alloc] initWithArray:_selectedIndexPaths];
-    for (NSUInteger i = 0; i < tmp.count; i++)
-        [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
-    [self selectAllItemsInGroup:indexPath selectHeader: NO];
+//    NSMutableArray *tmp = [[NSMutableArray alloc] initWithArray:_selectedIndexPaths];
+//    for (NSUInteger i = 0; i < tmp.count; i++)
+//        [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+//    [self selectAllItemsInGroup:indexPath selectHeader: NO];
 }
 
 - (void) selectGroupItem:(NSIndexPath *)indexPath
@@ -977,33 +986,38 @@
 
 - (void) addIndexPathToSelectedCellsArray:(NSIndexPath *)indexPath
 {
-    NSArray* objects = [NSArray arrayWithArray:[_itemsMap objectForKey:_itemsType[indexPath.section]]];
-    if (![_selectedIndexPaths containsObject:indexPath])
-    {
-        [_selectedIndexPaths addObject:indexPath];
-        if (indexPath.row != 0)
-            [_selectedItems addObject:objects[indexPath.row - 1]];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
-    }
+//    NSArray* objects = [NSArray arrayWithArray:[_itemsMap objectForKey:_itemTypes[indexPath.section]]];
+//    if (![_selectedIndexPaths containsObject:indexPath])
+//    {
+//        [_selectedIndexPaths addObject:indexPath];
+//        if (indexPath.row != 0)
+//            [_selectedItems addObject:objects[indexPath.row - 1]];
+//        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+//    }
 }
 
 - (void) removeIndexPathFromSelectedCellsArray:(NSIndexPath *)indexPath
 {
-    NSArray* objects = [NSArray arrayWithArray:[_itemsMap objectForKey:_itemsType[indexPath.section]]];
-    if ([_selectedIndexPaths containsObject:indexPath])
-    {
-        [_selectedIndexPaths removeObject:indexPath];
-        if (indexPath.row != 0)
-            [_selectedItems removeObject:objects[indexPath.row - 1]];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
-    }
+//    NSArray* objects = [NSArray arrayWithArray:[_itemsMap objectForKey:_itemsType[indexPath.section]]];
+//    if ([_selectedIndexPaths containsObject:indexPath])
+//    {
+//        [_selectedIndexPaths removeObject:indexPath];
+//        if (indexPath.row != 0)
+//            [_selectedItems removeObject:objects[indexPath.row - 1]];
+//        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+//    }
 }
 
 - (void) selectPreselectedCells:(NSIndexPath *)indexPath
 {
-    for (NSIndexPath *itemPath in _selectedIndexPaths)
-        if (itemPath.section == indexPath.section)
-            [self.tableView selectRowAtIndexPath:itemPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+//    for (NSIndexPath *itemPath in _selectedIndexPaths)
+//        if (itemPath.section == indexPath.section)
+//            [self.tableView selectRowAtIndexPath:itemPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
 }
 
 #pragma mark - OASettingsImportExportDelegate
@@ -1012,7 +1026,7 @@
     if (succeed)
     {
         [self.tableView reloadData];
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[_settingsHelper.importTask getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }

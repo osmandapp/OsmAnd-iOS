@@ -161,4 +161,6 @@
 #define color_gpx_up 0x4CB237
 #define color_gpx_down 0xDB5364
 
+#define color_checkbox_outline 0xC4C4C7
+
 #endif /* OAColors_h */

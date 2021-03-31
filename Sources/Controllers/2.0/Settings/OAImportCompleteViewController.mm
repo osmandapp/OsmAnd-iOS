@@ -41,6 +41,7 @@
 #import "OAOsmEditsSettingsItem.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAMarkersSettingsItem.h"
+#import "OAExportSettingsType.h"
 #import "OADestination.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
@@ -69,7 +70,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 
 @implementation OAImportCompleteViewController
 {
-    NSDictionary<NSString *, NSArray *> *_itemsMap;
+    NSDictionary<OAExportSettingsType *, NSArray *> *_itemsMap;
     NSArray <NSString *>*_itemsType;
     NSString *_fileName;
     NSMutableArray<NSDictionary *> * _data;
@@ -85,7 +86,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     return self;
 }
 
-- (instancetype) initWithSettingsItems:(NSDictionary<NSString *, NSArray *> *)settingsItems fileName:(NSString *)fileName
+- (instancetype) initWithSettingsItems:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsItems fileName:(NSString *)fileName
 {
     self = [super init];
     if (self)
@@ -106,95 +107,48 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 - (void) generateData
 {
     _data = [NSMutableArray new];
-    NSInteger profilesCount = 0;
-    NSInteger actionsCount = 0;
-    NSInteger filtersCount = 0;
-    NSInteger tileSourcesCount = 0;
-    NSInteger renderFilesCount = 0;
-    NSInteger routingFilesCount = 0;
-    NSInteger gpxFilesCount = 0;
-    NSInteger avoidRoadsCount = 0;
-    NSInteger mapsCount = 0;
-    NSInteger favoritesCount = 0;
-    NSInteger osmNotesCount = 0;
-    NSInteger osmEditsCount = 0;
-    NSInteger markersCount = 0;
+    __block NSInteger profilesCount = 0;
+    __block NSInteger actionsCount = 0;
+    __block NSInteger filtersCount = 0;
+    __block NSInteger tileSourcesCount = 0;
+    __block NSInteger renderFilesCount = 0;
+    __block NSInteger routingFilesCount = 0;
+    __block NSInteger gpxFilesCount = 0;
+    __block NSInteger avoidRoadsCount = 0;
+    __block NSInteger mapsCount = 0;
+    __block NSInteger favoritesCount = 0;
+    __block NSInteger osmNotesCount = 0;
+    __block NSInteger osmEditsCount = 0;
+    __block NSInteger markersCount = 0;
     
-    for (NSString *type in [_itemsMap allKeys])
-    {
-        EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
-        NSArray *settings = [NSArray arrayWithArray:[_itemsMap objectForKey:type]];
-        switch (itemType)
-        {
-            case EOAExportSettingsTypeProfile:
-            {
-                profilesCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeQuickActions:
-            {
-                actionsCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypePoiTypes:
-            {
-                filtersCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeMapSources:
-            {
-                tileSourcesCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeCustomRendererStyles:
-            {
-                renderFilesCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeMapFiles:
-            {
-                mapsCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeCustomRouting:
-            {
-                routingFilesCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeGPX:
-            {
-                gpxFilesCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeAvoidRoads:
-            {
-                avoidRoadsCount = settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeFavorites:
-            {
-                favoritesCount = settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeOsmNotes:
-            {
-                osmNotesCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeOsmEdits:
-            {
-                osmEditsCount += settings.count;
-                break;
-            }
-            case EOAExportSettingsTypeActiveMarkers:
-            {
-                markersCount += settings.count;
-                break;
-            }
-            default:
-                break;
-        }
-    }
+    [_itemsMap enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull settings, BOOL * _Nonnull stop) {
+        if (type == OAExportSettingsType.PROFILE)
+            profilesCount += settings.count;
+        else if (type == OAExportSettingsType.QUICK_ACTIONS)
+            actionsCount += settings.count;
+        else if (type == OAExportSettingsType.POI_TYPES)
+            filtersCount += settings.count;
+        else if (type == OAExportSettingsType.MAP_SOURCES)
+            tileSourcesCount += settings.count;
+        else if (type == OAExportSettingsType.CUSTOM_RENDER_STYLE)
+            renderFilesCount += settings.count;
+        else if (type == OAExportSettingsType.OFFLINE_MAPS)
+            mapsCount += settings.count;
+        else if (type == OAExportSettingsType.CUSTOM_ROUTING)
+            routingFilesCount += settings.count;
+        else if (type == OAExportSettingsType.TRACKS)
+            gpxFilesCount += settings.count;
+        else if (type == OAExportSettingsType.AVOID_ROADS)
+            avoidRoadsCount += settings.count;
+        else if (type == OAExportSettingsType.FAVORITES)
+            favoritesCount += settings.count;
+        else if (type == OAExportSettingsType.OSM_NOTES)
+            osmNotesCount += settings.count;
+        else if (type == OAExportSettingsType.OSM_EDITS)
+            osmEditsCount += settings.count;
+        else if (type == OAExportSettingsType.ACTIVE_MARKERS)
+            markersCount += settings.count;
+    }];
     
     if (profilesCount > 0)
     {

@@ -63,7 +63,7 @@
         case EOASettingsItemFileSubtypeRenderingStyle:
             return documentsPath;
         case EOASettingsItemFileSubtypeTilesMap:
-            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];;
+            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];
         case EOASettingsItemFileSubtypeRoutingConfig:
             return [documentsPath stringByAppendingPathComponent:@"routing"];
         case EOASettingsItemFileSubtypeGpx:

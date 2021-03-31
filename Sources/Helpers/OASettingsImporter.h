@@ -43,7 +43,6 @@
 - (NSArray<id> *) getDuplicates;
 - (NSArray<OASettingsItem *> *) getSelectedItems;
 - (NSArray<id> *) getDuplicatesData:(NSArray<OASettingsItem *> *)items;
-- (NSDictionary *) getSettingsToOperate:(NSArray <OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete;
 
 @end
 

@@ -66,7 +66,7 @@
 
 - (void)onDoneButtonPressed
 {
-    [self.delegate onTrackFolderAdded:_newFolderName];
+    [self.delegate onTrackFolderAdded:[_newFolderName trim]];
 }
 
 #pragma mark - UITableViewDataSource
@@ -90,6 +90,7 @@
         }
         cell.inputField.text = item[@"title"];
         cell.inputField.delegate = self;
+        [cell.inputField becomeFirstResponder];
         return cell;
     }
     
@@ -137,8 +138,12 @@
 
 - (BOOL) isIncorrectFileName:(NSString *)fileName
 {
+    BOOL isFileNameEmpty = [fileName trim].length == 0;
+
     NSCharacterSet* illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:;.,"];
-    return [fileName rangeOfCharacterFromSet:illegalFileNameCharacters].length != 0;
+    BOOL hasIncorrectSymbols = [fileName rangeOfCharacterFromSet:illegalFileNameCharacters].length != 0;
+    
+    return isFileNameEmpty || hasIncorrectSymbols;
 }
 
 @end

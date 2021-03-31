@@ -425,7 +425,8 @@
         else
         {
             CGFloat widgetWidth = DeviceScreenWidth / 2 - [OAUtilities getLeftMargin];
-            CGFloat leftOffset = isMarkerVidgetVisible ? [OAUtilities getLeftMargin] : (DeviceScreenWidth - widgetWidth) / 2;
+            CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];
+            CGFloat leftOffset = isMarkerVidgetVisible ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
             _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], [OAUtilities getTopMargin] , widgetWidth, 50);
         }
     }

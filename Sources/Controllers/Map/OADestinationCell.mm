@@ -142,7 +142,7 @@
         }
         
         _colorView.frame = CGRectMake(frame.size.width - 85, 0.0, 40.0, h);
-        _markerView.frame = CGRectMake(32.0, h - 18.0, 14.0, 14.0);
+        _markerView.frame = CGRectMake(frame.size.width - 53.0, h - 18.0, 14.0, 14.0);
         
         if (_firstRow)
             _distanceLabel.frame = CGRectMake(5, 7.0, _directionsView.frame.size.width - 68.0, 21.0);
@@ -155,8 +155,7 @@
         _descLabel.hidden = !_firstRow;
         _descLabel.textAlignment = NSTextAlignmentRight;
         
-        _infoLabel.frame = CGRectMake(frame.size.
-                                      width - self.infoLabelWidth - rightMargin - 8.0, 7.0, self.infoLabelWidth, 21.0);
+        _infoLabel.frame = CGRectMake(frame.size.width - self.infoLabelWidth - rightMargin - 8.0, 7.0, self.infoLabelWidth, 21.0);
     }
 }
 

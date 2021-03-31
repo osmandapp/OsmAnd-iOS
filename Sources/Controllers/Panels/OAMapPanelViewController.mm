@@ -3289,7 +3289,8 @@ typedef enum
         if (isCoordinatesVisible)
         {
             coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : coordinateWidgetHeight;
-            markersHeaderLeftOffset = [OAUtilities isLandscape] ? DeviceScreenWidth / 2 : 0;
+            CGFloat horisontalLeftOffset = [toolbarController.view isDirectionRTL] ? OAUtilities.getLeftMargin : DeviceScreenWidth / 2;
+            markersHeaderLeftOffset = [OAUtilities isLandscape] ? horisontalLeftOffset : 0;
             markersHeaderWidth = [OAUtilities isLandscape] ? (DeviceScreenWidth / 2 - OAUtilities.getLeftMargin) : DeviceScreenWidth;
         }
         else

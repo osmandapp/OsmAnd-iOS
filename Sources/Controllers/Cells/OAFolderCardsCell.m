@@ -107,6 +107,7 @@
     if (cell && [cell isKindOfClass:OAFolderCardCollectionViewCell.class])
     {
         OAFolderCardCollectionViewCell *destCell = (OAFolderCardCollectionViewCell *) cell;
+        destCell.layer.cornerRadius = 9;
         destCell.titleLabel.text = item[@"title"];
         destCell.descLabel.text = item[@"size"];
         destCell.imageView.tintColor = item[@"color"];
@@ -122,7 +123,6 @@
             destCell.layer.borderWidth = 1;
             destCell.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
         }
-        destCell.layer.cornerRadius = 9;
     }
     return cell;
 }

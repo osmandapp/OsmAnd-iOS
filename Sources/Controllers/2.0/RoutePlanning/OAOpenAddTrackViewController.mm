@@ -254,8 +254,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     if (self.delegate)
         [self.delegate closeBottomSheet];
-    else
-        [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - TableView

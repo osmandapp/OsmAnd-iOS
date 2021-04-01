@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
 {
-    self = [super initWithNibName:@"OABaseTableViewController"
+    self = [super initWithNibName:@"OAOpenAddTrackViewController"
                            bundle:nil];
     if (self)
     {

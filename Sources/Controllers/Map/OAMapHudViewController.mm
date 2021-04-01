@@ -759,7 +759,6 @@
 
     if ([self topControlsVisible])
     {
-        _topCoordinatesWidget.alpha = 1.0;
         _topCoordinatesWidget.userInteractionEnabled = ![[OADiscountHelper instance] isVisible];
     }
 

@@ -262,6 +262,8 @@
             cell.inputField.text = item[@"fileName"];
             cell.inputField.delegate = self;
             cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
+            cell.inputField.returnKeyType = UIReturnKeyDone;
+            cell.inputField.enablesReturnKeyAutomatically = YES;
             cell.clearButton.tag = cell.inputField.tag;
             [cell.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -421,15 +423,30 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
-    [self updateFileNameFromEditText:textView.text];
-    
+    [self updateErrorMessage:textView.text];
     [textView sizeToFit];
+}
+
+- (void) updateErrorMessage:(NSString *)text
+{
+    [self updateFileNameFromEditText:text];
+    
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
     footer.textLabel.textColor = _inputFieldError != nil ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+    {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
 }
 
 - (void) updateFileNameFromEditText:(NSString *)name
@@ -439,6 +456,10 @@
     if (text.length == 0)
     {
         _inputFieldError = OALocalizedString(@"empty_filename");
+    }
+    else if ([self isIncorrectFileName:name])
+    {
+        _inputFieldError = OALocalizedString(@"incorrect_symbols");
     }
     else if ([self isFileExist:name])
     {
@@ -455,8 +476,22 @@
 
 - (BOOL) isFileExist:(NSString *)name
 {
-    NSString *filePath = [[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
+    NSString *folderPath = OsmAndApp.instance.gpxPath;
+    if (_selectedFolderName.length > 0 && ![_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+        folderPath = [folderPath stringByAppendingPathComponent:_selectedFolderName];
+        
+    NSString *filePath = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
     return [NSFileManager.defaultManager fileExistsAtPath:filePath];
+}
+
+- (BOOL) isIncorrectFileName:(NSString *)fileName
+{
+    BOOL isFileNameEmpty = [fileName trim].length == 0;
+
+    NSCharacterSet* illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:;.,"];
+    BOOL hasIncorrectSymbols = [fileName rangeOfCharacterFromSet:illegalFileNameCharacters].length != 0;
+    
+    return isFileNameEmpty || hasIncorrectSymbols;
 }
 
 #pragma mark - Keyboard Notifications
@@ -499,6 +534,7 @@
 {
     _selectedFolderName = selectedFolderName;
     _selectedFolderIndex = [_allFolders indexOfObject:selectedFolderName];
+    [self updateErrorMessage:_fileName];
     [self generateData];
     [self.tableView reloadData];
 }
@@ -533,6 +569,7 @@
 {
     _selectedFolderIndex = index;
     _selectedFolderName = _allFolders[index];
+    [self updateErrorMessage:_fileName];
     [self generateData];
     [self.tableView reloadData];
 }

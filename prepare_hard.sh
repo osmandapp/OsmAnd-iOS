@@ -11,7 +11,7 @@ git pull
 cd ../android && git checkout master && git pull origin master 
 cd ../build && git checkout master && git pull origin master 
 cd ../core && git checkout master && git pull origin master 
-cd ../core-legacy && git checkout legacy_core && git pull origin legacy_core 
+cd ../core-legacy && git checkout master && git pull origin master 
 cd ../resources && git checkout master && git pull origin master 
 cd ../help && git checkout master && git pull origin master
 

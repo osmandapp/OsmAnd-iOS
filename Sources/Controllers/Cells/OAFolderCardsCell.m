@@ -34,7 +34,7 @@
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.minimumInteritemSpacing = 0;
     layout.minimumLineSpacing = 16.;
-    layout.sectionInset = UIEdgeInsetsMake(0, 8, 8, 8);
+    layout.sectionInset = UIEdgeInsetsMake(0, 16, 8, 16);
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
@@ -71,7 +71,7 @@
         @"title" : addButtonTitle,
         @"size" : @"",
         @"color" : UIColorFromRGB(color_primary_purple),
-        @"img" : @"zoom_in_button",
+        @"img" : @"ic_custom_add",
         @"isSelected" : @NO,
         @"key" : @"work"}];
     
@@ -122,6 +122,7 @@
             destCell.layer.borderWidth = 1;
             destCell.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
         }
+        destCell.layer.cornerRadius = 9;
     }
     return cell;
 }

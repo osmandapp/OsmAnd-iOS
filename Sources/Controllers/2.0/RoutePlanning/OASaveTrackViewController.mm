@@ -311,6 +311,7 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
+            cell.textView.textColor = UIColor.blackColor;
             cell.descriptionView.text = item[@"value"];
         }
         return cell;

@@ -264,6 +264,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:@"OADividerCell"])
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+    else if ([item[@"type"] isEqualToString:kFoldersCell])
+        return 52;
     
     return UITableViewAutomaticDimension;
 }

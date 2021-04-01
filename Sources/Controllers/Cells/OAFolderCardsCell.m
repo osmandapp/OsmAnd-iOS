@@ -34,7 +34,7 @@
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.minimumInteritemSpacing = 0;
     layout.minimumLineSpacing = 16.;
-    layout.sectionInset = UIEdgeInsetsMake(0, 16, 8, 16);
+    layout.sectionInset = UIEdgeInsetsMake(0, 16, 16, 16);
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];

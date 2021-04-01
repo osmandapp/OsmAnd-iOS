@@ -562,6 +562,7 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
     
+    _selectedFolderName = folderName;
     [self onNewFolderAdded];
 }
 

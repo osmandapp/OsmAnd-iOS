@@ -1912,7 +1912,7 @@
 "ios_release_3_80" = "• Kynnt til sögunnar “Forritssnið\" með sjálfstæðum stillingum\n• Ný framsetning stillinga eftir sniðum og gerðum: leiðsögn, almennt, kort og skjár\n• Hægt að flytja stillingar inn/út\n• Bætt við gagnagjöfum fyrir myndir af netinu\n• Hægt að sækja nettengd kort í skyndiminni\n• Lagfærð reiknirit fyrir \"Leit\"\n";
 "road_max_speed_descr" = "Setur hámarksferðahraða fyrir alla vegi á leiðinni. Lækkar forgang vega sem merktir eru með hraðamörkum sem eru hærri en hámarkið.";
 "road_min_speed_descr" = "Setur lágmarksferðahraða fyrir alla vegi á leiðinni. Hækkar forgang vega sem merktir eru með hraðamörkum sem eru lægri en lágmarkið.";
-"ios_release_3_90" = "• Kynnt til sögunnar “Forritssnið\" með sjálfstæðum stillingum\n• Ný framsetning stillinga eftir sniðum og gerðum: leiðsögn, almennt, kort og skjár\n• Hægt að flytja stillingar inn/út\n• Bætt við gagnagjöfum fyrir myndir af netinu\n• Hægt að sækja nettengd kort í skyndiminni\n• Lagfærð reiknirit fyrir \"Leit\"\n";
+"ios_release_3_90" = "• Kynnt til sögunnar “Skipuleggja leið\" aðgerðin til að skipuleggja ferðir í framtíðinni, þar sem hægt er að útbúa leiðarhluta með mismunandi gerðum leiðsagnar\n• Bætt við valkosti til að bæta áttavita ofan á mælistiku út frá miðju hrings\n• Bætt við valkostinum \"Merkingar á þekju merkisstaða\" sem gerir kleift að birta nöfn merkisstaða, leiðarpunkta og kortamerkja á kortinu\n• Bætt við flýtiaðgerðum fyrir sýnileika hæðarlína og yfirborðs á kortinu, breytingar á notkunarsniðum og til að eyðanæsta millipunkti\n• Lagfærð vandamál með leitarflokka Wikipedia sem vantaði\n• Innflutningur stillinga: lagfærðir gallar, bættur stuðningur við allar gerðir gagna sem tiltækar eru í OsmAnd\n• Breytingar í OpenStreetMap: lagfært val á tíma og það að ekki var hægt að breyta athugasemdum við breytingasett\n";
 "vk" = "VK";
 "road_speeds_descr" = "Þessi viðföng geta haft áhrif á útreikning leiða.";
 "road_speeds" = "Hraði á vegum";
@@ -2016,3 +2016,34 @@
 "track_multiple_segments_select" = "%@ er með fleiri en einn bút. Veldu þann hluta ferilsins sem þú vilt nota við leiðsögn.";
 "select_segment" = "Veldu bút";
 "select_track_to_follow" = "Veldu feril til að fylgja";
+"travel" = "Ferðalög";
+"transport" = "Samgöngur";
+"symbols" = "Tákn";
+"sport" = "Íþrótt";
+"special" = "Sérstakt";
+"service" = "Þjónusta";
+"emergency" = "Neyðartilfelli";
+"square" = "Ferningur";
+"octagon" = "Átthyrningur";
+
+// Shapes
+"circle" = "Hringur";
+"shared_string_others" = "Annað";
+"favorite_places_category" = "Staðir";
+"favorite_friends_category" = "Vinir";
+"default_color_descr" = "Þessi litur verður notaður fyrir öll ný eftirlæti sem bætt er í hópinn.";
+"default_color" = "Sjálfgefinn litur";
+"fav_point_emoticons_message" = "Nafni eftirlætisins hefur verið breytt í %@ til að auðvelda rétta vistun strengsins ásamt tjáningartáknum yfir í skrá.";
+"fav_point_dublicate_message" = "Heiti eftirlætis var breytt í %@ til að koma í veg fyrir tvítekningu.";
+"fav_point_dublicate" = "Tvítekið heiti eftirlætis";
+"shape" = "Lögun";
+"icon" = "Táknmynd";
+"select_group" = "Veldu hóp";
+"name_and_descr" = "Nafn og lýsing";
+"add_favorite" = "Bæta við eftirlæti";
+"fav_points_not_exist" = "Enginn eftirlætisstaður er til";
+"replace_favorite_confirmation" = "Ertu viss að þú viljir skipta út eftirlætinu %@?";
+"group_name" = "Heiti hóps";
+"available_groups" = "Tiltækir hópar";
+"select_group_descr" = "Veldu hóp eða bættu við nýjum";
+"fav_add_new_group" = "Bæta við nýjum hópi";

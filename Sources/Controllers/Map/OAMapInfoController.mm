@@ -417,7 +417,7 @@
         if (_lastUpdateTime == 0)
             [[OARootViewController instance].mapPanel updateToolbar];
         
-        BOOL isMarkerVidgetVisible = [_mapHudViewController getControlsTopPosition] > 0;
+        BOOL hasTopWidgetsPanel = [_mapHudViewController getControlsTopPosition] > 0;
         if (portrait)
         {
             _topCoordinatesView.frame = CGRectMake(0, [OAUtilities getTopMargin] , DeviceScreenWidth, 52);
@@ -426,7 +426,7 @@
         {
             CGFloat widgetWidth = DeviceScreenWidth / 2 - [OAUtilities getLeftMargin];
             CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];
-            CGFloat leftOffset = isMarkerVidgetVisible ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
+            CGFloat leftOffset = hasTopWidgetsPanel ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
             _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], [OAUtilities getTopMargin] , widgetWidth, 50);
         }
     }

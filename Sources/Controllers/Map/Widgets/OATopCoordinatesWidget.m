@@ -227,18 +227,24 @@
 - (BOOL) shouldUpdate
 {
     BOOL isFirstLaunch = _lastUpdatingTime == 0;
-    
-    BOOL isVisibilityChabged = !isFirstLaunch && _cachedVisibiliy != [_settings.showCoordinatesWidget get];
-    
-    CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
-    BOOL locationNotChanged = [OAUtilities isCoordEqual:currentLocation.coordinate.latitude srcLon:currentLocation.coordinate.longitude destLat:_lastKnownLocation.coordinate.latitude destLon:_lastKnownLocation.coordinate.latitude];
-    
-    NSTimeInterval updatingPeriond = 0.5;
-    NSTimeInterval currentTimestamp = [[NSDate new] timeIntervalSince1970];
-    NSTimeInterval difference = currentTimestamp - _lastUpdatingTime;
-    BOOL notEnoughTimePassed = currentTimestamp - _lastUpdatingTime < updatingPeriond;
-    
-    return isFirstLaunch || isVisibilityChabged || (!_isAnimated && !locationNotChanged && !notEnoughTimePassed);
+    if (isFirstLaunch)
+    {
+        return YES;
+    }
+    else
+    {
+        BOOL isVisibilityChanged = _cachedVisibiliy != [_settings.showCoordinatesWidget get];
+        
+        CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
+        BOOL isLocationChanged = ![OAUtilities isCoordEqual:currentLocation.coordinate.latitude srcLon:currentLocation.coordinate.longitude destLat:_lastKnownLocation.coordinate.latitude destLon:_lastKnownLocation.coordinate.latitude];
+        
+        NSTimeInterval updatingPeriond = 0.5;
+        NSTimeInterval currentTimestamp = [[NSDate new] timeIntervalSince1970];
+        NSTimeInterval difference = currentTimestamp - _lastUpdatingTime;
+        BOOL hasUpdatingTimeLimitPassed = currentTimestamp - _lastUpdatingTime > updatingPeriond;
+        
+        return isVisibilityChanged || (!_isAnimated && isLocationChanged && hasUpdatingTimeLimitPassed);
+    }
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

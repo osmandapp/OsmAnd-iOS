@@ -21,6 +21,7 @@
 @implementation OAFolderCardsCell
 {
     NSMutableArray *_data;
+    int _selectedItemIndex;
 }
 
 - (void) awakeFromNib
@@ -40,8 +41,15 @@
     _data = [NSMutableArray new];
 }
 
+- (void)layoutSubviews
+{
+    self.frame = CGRectMake(0, self.frame.origin.y, DeviceScreenWidth, self.frame.size.height);
+    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedItemIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
+
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
 {
+    _selectedItemIndex = index;
     _data = [NSMutableArray new];
     for (int i = 0; i < values.count; i++)
     {

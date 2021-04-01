@@ -58,6 +58,7 @@
     {
         _settings = [OAAppSettings sharedManager];
         _fileName = fileName;
+        _filePath = filePath;
         _sourceFileName = fileName;
         _showSimplifiedButton = simplifiedTrack;
         _showOnMap = showOnMap;

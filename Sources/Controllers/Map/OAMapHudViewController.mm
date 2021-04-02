@@ -779,7 +779,7 @@
     [self updateButtonsLayoutY:y];
     
     if (_widgetsView)
-        _widgetsView.frame = CGRectMake(0.0, y + 2.0 + [self getCoordinateVigetTopOffset:y], DeviceScreenWidth - OAUtilities.getLeftMargin * 2, 10.0);
+        _widgetsView.frame = CGRectMake(0.0, y + 2.0 + [self getCoordinateWigetTopOffset:y], DeviceScreenWidth - OAUtilities.getLeftMargin * 2, 10.0);
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)
@@ -802,7 +802,7 @@
     CGFloat sX = _searchButton.frame.origin.x;
     CGSize sSize = _searchButton.frame.size;
     
-    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY] + [self getCoordinateVigetTopOffset:y];
+    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY] + [self getCoordinateWigetTopOffset:y];
     
     if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, buttonsY, size.width, size.height)))
     {
@@ -812,7 +812,7 @@
     }
 }
 
-- (CGFloat) getCoordinateVigetTopOffset:(CGFloat)yOffset
+- (CGFloat) getCoordinateWigetTopOffset:(CGFloat)yOffset
 {
     BOOL isCoordinatesVisible = [OAAppSettings.sharedManager.showCoordinatesWidget get] && [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
     BOOL isMarkersWidgetVisible = yOffset > 0;

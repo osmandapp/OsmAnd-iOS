@@ -3278,7 +3278,7 @@ typedef enum
 
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
-        BOOL isCoordinatesVisible = [_settings.showCoordinatesWidget get] && [toolbarController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
+        BOOL isCoordinatesVisible = [self.hudViewController.topCoordinatesWidget isVisible];
         
         CGFloat coordinateWidgetHeight = self.hudViewController.topCoordinatesWidget.frame.size.height;
         CGFloat markersLandscapeWidth = DeviceScreenWidth / 2;

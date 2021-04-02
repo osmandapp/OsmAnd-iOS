@@ -128,10 +128,15 @@
     [OAUtilities setMaskTo:self byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:cornerRadius];
 }
 
-- (BOOL) updateInfo
+- (BOOL) isVisible
 {
     OAToolbarViewController *topToolbar = [[OARootViewController instance].mapPanel.hudViewController toolbarViewController];
-    BOOL visible = [_settings.showCoordinatesWidget get] && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh;
+    return [_settings.showCoordinatesWidget get] && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh;
+}
+
+- (BOOL) updateInfo
+{
+    BOOL visible = [self isVisible];
     self.hidden = !visible;
     
     if ([self shouldUpdate])

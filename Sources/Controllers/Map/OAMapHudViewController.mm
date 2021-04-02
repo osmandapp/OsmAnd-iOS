@@ -809,7 +809,7 @@
 
 - (CGFloat) getCoordinateWigetTopOffset:(CGFloat)yOffset
 {
-    BOOL isCoordinatesVisible = [OAAppSettings.sharedManager.showCoordinatesWidget get] && [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
+    BOOL isCoordinatesVisible = [_topCoordinatesWidget isVisible];
     BOOL isMarkersWidgetVisible = _toolbarViewController.view.alpha != 0;
     CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
     CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height;
@@ -895,7 +895,7 @@
     UIColor *statusBarColor;
     if (self.contextMenuMode && !_toolbarViewController)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
-    else if ([OAAppSettings.sharedManager.showCoordinatesWidget get] && [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh)
+    else if ([_topCoordinatesWidget isVisible])
         return UIColorFromRGB(nav_bar_night);
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];

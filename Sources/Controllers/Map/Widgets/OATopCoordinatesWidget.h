@@ -15,5 +15,6 @@
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
 
 - (BOOL) updateInfo;
+- (BOOL) isVisible;
 
 @end

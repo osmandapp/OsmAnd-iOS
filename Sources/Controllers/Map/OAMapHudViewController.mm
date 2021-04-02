@@ -755,11 +755,7 @@
         [_topCoordinatesWidget removeFromSuperview];
 
     _topCoordinatesWidget = widget;
-
-    if ([self topControlsVisible])
-    {
-        _topCoordinatesWidget.userInteractionEnabled = [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
-    }
+    [_topCoordinatesWidget updateInfo];
 
     if (![self.view.subviews containsObject:_topCoordinatesWidget])
     {

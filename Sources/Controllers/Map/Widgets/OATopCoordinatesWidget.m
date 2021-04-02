@@ -82,6 +82,9 @@
 
 - (void) layoutSubviews
 {
+    if (_delegate)
+        [_delegate widgetChanged:nil];
+    
     BOOL isLandscape = [OAUtilities isLandscape];
     CGFloat middlePoint = self.frame.size.width / 2;
     _horisontalSeparator.frame = CGRectMake(0, 0, self.frame.size.width, 1);

@@ -33,6 +33,7 @@
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
 #import "OAUserInteractionPassThroughView.h"
+#import "OAToolbarViewController.h"
 
 @interface OATextState : NSObject
 
@@ -417,7 +418,7 @@
         if (_lastUpdateTime == 0)
             [[OARootViewController instance].mapPanel updateToolbar];
         
-        BOOL hasTopWidgetsPanel = [_mapHudViewController getControlsTopPosition] > 0;
+        BOOL hasTopWidgetsPanel = _mapHudViewController.toolbarViewController.view.alpha != 0;
         if (portrait)
         {
             _topCoordinatesView.frame = CGRectMake(0, [OAUtilities getTopMargin] , DeviceScreenWidth, 52);

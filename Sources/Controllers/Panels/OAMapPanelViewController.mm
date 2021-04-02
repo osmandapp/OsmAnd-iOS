@@ -51,6 +51,7 @@
 #import "OATransportRoutingHelper.h"
 #import "OAMainSettingsViewController.h"
 #import "OABaseScrollableHudViewController.h"
+#import "OATopCoordinatesWidget.h"
 
 #import <EventKit/EventKit.h>
 
@@ -3279,7 +3280,7 @@ typedef enum
     {
         BOOL isCoordinatesVisible = [_settings.showCoordinatesWidget get] && [toolbarController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
         
-        CGFloat coordinateWidgetHeight = 52;
+        CGFloat coordinateWidgetHeight = self.hudViewController.topCoordinatesWidget.frame.size.height;
         CGFloat markersLandscapeWidth = DeviceScreenWidth / 2;
         
         CGFloat coordinateWidgetTopOffset;

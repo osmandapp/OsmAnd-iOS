@@ -307,7 +307,6 @@
             _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame) - 16. - h, w, h);
         }
     }
-    [self recreateControls];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -811,7 +810,7 @@
 - (CGFloat) getCoordinateWigetTopOffset:(CGFloat)yOffset
 {
     BOOL isCoordinatesVisible = [OAAppSettings.sharedManager.showCoordinatesWidget get] && [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
-    BOOL isMarkersWidgetVisible = yOffset > 0;
+    BOOL isMarkersWidgetVisible = _toolbarViewController.view.alpha != 0;
     CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
     CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height;
     if ([OAUtilities isLandscape])

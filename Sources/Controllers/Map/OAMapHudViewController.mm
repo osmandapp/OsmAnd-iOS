@@ -812,8 +812,8 @@
 {
     BOOL isCoordinatesVisible = [OAAppSettings.sharedManager.showCoordinatesWidget get] && [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
     BOOL isMarkersWidgetVisible = yOffset > 0;
-    CGFloat markersWidgetHeaderHeight = 50;
-    CGFloat coordinateWidgetHeight = 52;
+    CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
+    CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height;
     if ([OAUtilities isLandscape])
     {
         if (isCoordinatesVisible && isMarkersWidgetVisible)

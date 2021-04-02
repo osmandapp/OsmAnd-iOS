@@ -130,7 +130,6 @@
     OAToolbarViewController *topToolbar = [[OARootViewController instance].mapPanel.hudViewController toolbarViewController];
     BOOL visible = [_settings.showCoordinatesWidget get] && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh;
     self.hidden = !visible;
-    self.userInteractionEnabled = visible;
     
     if ([self shouldUpdate])
     {

@@ -11,10 +11,13 @@
 #import "OAColors.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
-#import "OADiscountHelper.h"
 #import "OATextInfoWidget.h"
 #import "OALocationConvert.h"
 #import "Localization.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapHudViewController.h"
+#import "OAToolbarViewController.h"
 
 #define kHorisontalOffset 8
 #define kIconWidth 30
@@ -124,7 +127,8 @@
 
 - (BOOL) updateInfo
 {
-    BOOL visible = [_settings.showCoordinatesWidget get] && ![[OADiscountHelper instance] isVisible];
+    OAToolbarViewController *topToolbar = [[OARootViewController instance].mapPanel.hudViewController toolbarViewController];
+    BOOL visible = [_settings.showCoordinatesWidget get] && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh;
     self.hidden = !visible;
     
     if ([self shouldUpdate])

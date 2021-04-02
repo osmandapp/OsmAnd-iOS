@@ -16,7 +16,6 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
 #import "OATopCoordinatesWidget.h"
-#import "OADiscountHelper.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -759,7 +758,7 @@
 
     if ([self topControlsVisible])
     {
-        _topCoordinatesWidget.userInteractionEnabled = ![[OADiscountHelper instance] isVisible];
+        _topCoordinatesWidget.userInteractionEnabled = [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
     }
 
     if (![self.view.subviews containsObject:_topCoordinatesWidget])
@@ -815,7 +814,7 @@
 
 - (CGFloat) getCoordinateVigetTopOffset:(CGFloat)yOffset
 {
-    BOOL isCoordinatesVisible = [OAAppSettings.sharedManager.showCoordinatesWidget get] && ![[OADiscountHelper instance] isVisible];
+    BOOL isCoordinatesVisible = [OAAppSettings.sharedManager.showCoordinatesWidget get] && [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh;
     BOOL isMarkersWidgetVisible = yOffset > 0;
     CGFloat markersWidgetHeaderHeight = 50;
     CGFloat coordinateWidgetHeight = 52;
@@ -901,7 +900,7 @@
     UIColor *statusBarColor;
     if (self.contextMenuMode && !_toolbarViewController)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
-    else if ([OAAppSettings.sharedManager.showCoordinatesWidget get] && ![[OADiscountHelper instance] isVisible])
+    else if ([OAAppSettings.sharedManager.showCoordinatesWidget get] && [_toolbarViewController getAttentionLevel] != EOAToolbarAttentionLevelHigh)
         return UIColorFromRGB(nav_bar_night);
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];

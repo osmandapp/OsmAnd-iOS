@@ -19,6 +19,8 @@
 @property (nonatomic) UILabel *infoLabel2;
 @property (nonatomic) UIButton *btnOK2;
 @property (nonatomic, assign) BOOL buttonOkVisible2;
+@property (nonatomic) UIView *backgroundView2;
+@property (nonatomic) UIView *closeBtnSeparator;
 
 @property (nonatomic) UIView *colorView3;
 @property (nonatomic) UIImageView *compassImage3;

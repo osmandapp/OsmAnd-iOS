@@ -144,6 +144,7 @@
 #define showRelativeBearingKey @"showRelativeBearing"
 #define routeRecalculationDistanceKey @"routeRecalculationDistance"
 #define showCompassControlRulerKey @"showCompassRuler"
+#define showCoordinatesWidgetKey @"showCoordinatesWidget"
 
 #define showRoutingAlarmsKey @"showRoutingAlarms"
 #define showTrafficWarningsKey @"showTrafficWarnings"
@@ -2020,11 +2021,13 @@
         _showIntermediateArrivalTime = [OAProfileBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
         _showRelativeBearing = [OAProfileBoolean withKey:showRelativeBearingKey defValue:YES];
         _showCompassControlRuler = [OAProfileBoolean withKey:showCompassControlRulerKey defValue:YES];
+        _showCoordinatesWidget = [OAProfileBoolean withKey:showCoordinatesWidgetKey defValue:NO];
         
         [_registeredPreferences setObject:_showArrivalTime forKey:@"show_arrival_time"];
         [_registeredPreferences setObject:_showIntermediateArrivalTime forKey:@"show_intermediate_arrival_time"];
         [_registeredPreferences setObject:_showRelativeBearing forKey:@"show_relative_bearing"];
         [_registeredPreferences setObject:_showCompassControlRuler forKey:@"show_compass_ruler"];
+        [_registeredPreferences setObject:_showCoordinatesWidget forKey:@"show_coordinates_widget"];
 
         _centerPositionOnMap = [OAProfileBoolean withKey:centerPositionOnMapKey defValue:NO];
         [_registeredPreferences setObject:_centerPositionOnMap forKey:@"center_position_on_map"];

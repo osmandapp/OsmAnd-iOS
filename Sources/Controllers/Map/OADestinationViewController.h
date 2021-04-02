@@ -39,5 +39,6 @@
 - (void)updateDestinationsUsingMapCenter;
 - (void)updateCloseButton;
 - (void) refreshView;
+- (CGFloat) getHeight;
 
 @end

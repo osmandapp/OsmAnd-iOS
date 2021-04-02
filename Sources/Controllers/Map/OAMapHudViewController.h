@@ -13,6 +13,7 @@
 @class OAToolbarViewController;
 @class OAMapRulerView;
 @class OAMapInfoController;
+@class OATopCoordinatesWidget;
 
 @interface OAMapHudViewController : UIViewController
 
@@ -48,6 +49,7 @@
 
 @property (nonatomic) OAToolbarViewController *toolbarViewController;
 @property (nonatomic) OAMapInfoController *mapInfoController;
+@property (nonatomic) OATopCoordinatesWidget *topCoordinatesWidget;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
@@ -62,6 +64,8 @@
 - (void) updateToolbarLayout:(BOOL)animated;
 - (void) removeToolbar;
 
+- (void) setCoordinatesWidget:(OATopCoordinatesWidget *)widget;
+
 - (void) updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
 
 - (BOOL) isOverlayUnderlayViewVisible;
@@ -71,6 +75,7 @@
 - (void) hideTopControls;
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
+- (CGFloat) getControlsTopPosition;
 
 - (void) onRoutingProgressChanged:(int)progress;
 - (void) onRoutingProgressFinished;

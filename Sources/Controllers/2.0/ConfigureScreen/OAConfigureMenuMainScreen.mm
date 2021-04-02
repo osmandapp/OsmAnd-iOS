@@ -17,9 +17,11 @@
 #import "OARootViewController.h"
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
+#import "OASettingsTableViewCell.h"
 #import "OAMapHudViewController.h"
 #import "OAQuickActionHudViewController.h"
 #import "OAQuickActionListViewController.h"
+#import "OADirectionAppearanceViewController.h"
 #import "OAColors.h"
 #import "OAMapLayers.h"
 
@@ -122,11 +124,24 @@
                      @"cells" : controlsList,
                      } ];
     
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"coordinates_widget"),
+                               @"img" : @"ic_custom_coordinates",
+                               @"key" : @"coordinates_widget",
+                               @"selected" : @([_settings.showCoordinatesWidget get]),
+                               @"type" : @"OASettingSwitchCell"} ];
+    
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_distance_by_tap"),
                                @"img" : @"ic_action_ruler_line",
                                @"key" : @"map_widget_distance_by_tap",
                                @"selected" : @([_settings.showDistanceRuler get]),
                                @"type" : @"OASettingSwitchCell"} ];
+    
+    EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
+    NSString *markersAppeareance = distanceIndication == WIDGET_DISPLAY ? OALocalizedString(@"shared_string_widgets") : OALocalizedString(@"shared_string_topbar") ;
+    [controlsList addObject:@{ @"type" : @"OASettingsCell",
+                               @"title" : OALocalizedString(@"map_markers"),
+                               @"value" : markersAppeareance,
+                               @"key" : @"map_markers"}];
     
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
@@ -201,6 +216,11 @@
         {
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
+        }
+        else if ([key isEqualToString:@"coordinates_widget"])
+        {
+            [_settings.showCoordinatesWidget set:visible];
+            [[[OsmAndApp instance].data mapLayerChangeObservable] notifyEvent];
         }
         else if ([key isEqualToString:@"map_widget_distance_by_tap"])
         {
@@ -294,6 +314,26 @@
         }
         outCell = cell;
     }
+    else if ([data[@"type"] isEqualToString:@"OASettingsCell"])
+    {
+        static NSString* const identifierCell = @"OASettingsCell";
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+        }
+        if (cell)
+        {
+            cell.textView.text = data[@"title"];
+            cell.descriptionView.text = data[@"value"];
+        }
+        return cell;
+    }
     
     return outCell;
 }
@@ -335,6 +375,11 @@
     if ([data[@"key"] isEqualToString:@"quick_action"])
     {
         OAQuickActionListViewController *vc = [[OAQuickActionListViewController alloc] init];
+        [self.vwController.navigationController pushViewController:vc animated:YES];
+    }
+    if ([data[@"key"] isEqualToString:@"map_markers"])
+    {
+        OADirectionAppearanceViewController *vc = [[OADirectionAppearanceViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
     }
     else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])

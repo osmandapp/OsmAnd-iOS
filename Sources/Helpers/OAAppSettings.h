@@ -556,6 +556,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *showIntermediateArrivalTime;
 @property (nonatomic) OAProfileBoolean *showRelativeBearing;
 @property (nonatomic) OAProfileBoolean *showCompassControlRuler;
+@property (nonatomic) OAProfileBoolean *showCoordinatesWidget;
 @property (nonatomic) NSArray<OAAvoidRoadInfo *> *impassableRoads;
 
 @property (nonatomic) OAProfileBoolean *speakStreetNames;

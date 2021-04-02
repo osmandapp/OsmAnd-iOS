@@ -143,6 +143,10 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (void) adjustFrame
 {
+    CGFloat safeAreaOffset = [OAUtilities isLandscape] ? 16 : 20;
+    _buttonsViewLeftConstraint.constant = safeAreaOffset;
+    _buttonsViewRightConstraint.constant = safeAreaOffset;
+    
     CGRect f = _bottomSheetView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if (OAUtilities.isLandscapeIpadAware)

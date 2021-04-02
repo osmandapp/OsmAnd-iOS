@@ -158,6 +158,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextLineViewCell" owner:self options:nil];
             cell = (OATextLineViewCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {

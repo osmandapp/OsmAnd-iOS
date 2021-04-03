@@ -2054,3 +2054,13 @@
 "fav_add_new_group" = "Neue Gruppe hinzufügen";
 "service" = "Dienstleistung";
 "square" = "Platz";
+"quick_action_coordinates_widget_descr" = "Durch Antippen dieser Aktionsschaltfläche wird das Koordinaten-Widget ein- oder ausgeblendet.";
+"hide_coordinates" = "Koordinaten ausblenden";
+"show_coordinates" = "Koordinaten anzeigen";
+"toggle_coordinates" = "Koordinaten-Widget ein-/ausblenden";
+"copied_to_clipboard" = "In die Zwischenablage kopiert";
+"searching_gps" = "Suche GPS";
+
+// Coordinate widget
+"coordinates_widget" = "Koordinaten-Widget";
+"coordinates" = "Koordinaten";

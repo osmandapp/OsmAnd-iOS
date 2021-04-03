@@ -161,6 +161,13 @@
 #define color_gpx_up 0x4CB237
 #define color_gpx_down 0xDB5364
 
+
 #define color_checkbox_outline 0xC4C4C7
+
+#define markers_status_bar 0x021e33
+#define markers_header_light_blue 0x044b7f
+#define markers_header_dark_blue 0x03416e
+#define nav_bar_night 0x222526
+#define text_primary_night 0xE6E6E6
 
 #endif /* OAColors_h */

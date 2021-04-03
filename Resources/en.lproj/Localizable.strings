@@ -113,6 +113,7 @@
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinate format";
+"coordinates" = "Coordinates";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
@@ -533,7 +534,7 @@
 "fav_no_group" = "No group";
 "fav_add_group" = "Add a group";
 "fav_add_new_group" = "Add new group";
-"select_gropu_descr" = "Select group or add a new one";
+"select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
 "group_name" = "Group name";
 "fav_remove_q" = "Remove favorite?";
@@ -665,7 +666,6 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"rendering_value_browse_map_name" = "Browse map";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
@@ -822,7 +822,6 @@
 
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
-"reset_to_default" = "Reset to default";
 "profile_alert_delete_title" = "Delete profile";
 "profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
@@ -1160,6 +1159,11 @@
 "mapil_pano_only" = "Display only 360° images";
 "mapil_select_user" = "Select user";
 
+// Coordinate widget
+"coordinates_widget" = "Coordinates widget";
+"searching_gps" = "Searching GPS";
+"copied_to_clipboard" = "Copied to clipboard";
+
 // Quick action
 "quick_action_name" = "Quick action";
 "quick_action_no_overlay" = "No overlay";
@@ -1167,6 +1171,10 @@
 "quick_action_no_underlay" = "No underlay";
 "quick_action_add_underlay" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
+"toggle_coordinates" = "Show/hide coordinates widget";
+"show_coordinates" = "Show coordinates";
+"hide_coordinates" = "Hide coordinates";
+"quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "map_overlays" = "Map overlays";
 "map_underlays" = "Map underlays";
 "offline_vector_maps" = "Offline vector maps";

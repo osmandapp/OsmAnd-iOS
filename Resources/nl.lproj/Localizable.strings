@@ -1260,7 +1260,7 @@
 "rendering_attr_pisteRoutes_name" = "Ski-pistes";
 "rendering_attr_piste_difficulty_novice_name" = "Beginner";
 "routeInfo_tracktype_name" = "Stevigheid van het oppervlak";
-"routeInfo_steepness_name" = "Steilte";
+"routeInfo_steepness_name" = "Helling";
 "rendering_attr_showSurfaces_name" = "Wegoppervlak tonen";
 "routing_attr_avoid_share_taxi_description" = "Vermijd gedeelde taxi";
 "routeInfo_piste_type_name" = "Type piste";

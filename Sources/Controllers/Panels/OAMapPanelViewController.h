@@ -96,6 +96,7 @@
 - (BOOL) isTopControlsVisible;
 - (void) setTopControlsVisible:(BOOL)visible;
 - (void) setTopControlsVisible:(BOOL)visible customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle;
+- (void) updateToolbar;
 - (void) updateOverlayUnderlayView;
 - (BOOL) isOverlayUnderlayViewVisible;
 

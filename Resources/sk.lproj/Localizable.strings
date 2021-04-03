@@ -603,7 +603,7 @@
 "shared_string_sound" = "Zvuk";
 "map_markers" = "Mapové značky";
 "select_gpx" = "Vybrať GPX…";
-"confirm_usage_speed_cameras" = "Vo viacerých krajinách (ako Nemecko, Francúzsko, Taliansko) je použitie varovaní pred rýchlostnými radarmi/kamerami zakázané zákonom. OsmAnd nepreberá žiadnu zodpovednosť ak porušíte zákon. Povoľte funkciu oznamovania len ak ste na to oprávnený.";
+"confirm_usage_speed_cameras" = "Vo viacerých krajinách (ako Nemecko, Francúzsko, Taliansko) je použitie varovaní pred rýchlostnými radarmi/kamerami zakázané zákonom. OsmAnd nepreberá žiadnu zodpovednosť ak porušíte zákon. Stračte \"áno\" len ak ste oprávnený použiť túto funkciu.";
 "show_traffic_warnings" = "Dopravné varovania";
 "show_pedestrian_warnings" = "Priechody pre chodcov";
 "show_cameras" = "Rýchlostné radary";
@@ -717,7 +717,7 @@
 "driving_region_descr" = "Vyberte jazdnú oblasť: USA, Európa, Spojené kráľovstvo, Ázia a ostatné.";
 "driving_region_automatic" = "Automaticky";
 "auto_follow_location_enabled" = "Automatické nasledovanie je povolené.";
-"unknown_location" = "Umiestnenie zatiaľ nenájdené";
+"unknown_location" = "Poloha zatiaľ nezistená";
 "route_simulation" = "Simulácia trasy";
 "animate_routing_route_not_calculated" = "Prosím najprv vypočítajte trasu";
 "day_night_info_description" = "Východ slnka: %@\nZápad slnka: %@";
@@ -738,7 +738,7 @@
 "open_till" = "Otvorené do";
 "will_close_at" = "Zatvorí o";
 "will_open_at" = "Otvorí o";
-"will_open_on" = "Otvorí v";
+"will_open_on" = "Otvorí o";
 "will_open_tomorrow_at" = "Otvorí zajtra o";
 "shared_string_search" = "Hľadať";
 "search_radius" = "Polomer hľadania";
@@ -756,9 +756,9 @@
 "keep_and_add_destination_point" = "Pridať ako ďalší cieľ";
 "subsequent_dest_description" = "Posunúť cieľ nahor a vytvoriť cieľ";
 "add_as_first_destination_point" = "Pridať ako prvý prechodný bod";
-"first_intermediate_dest_description" = "Pridá prvú zastávku na ceste";
+"first_intermediate_dest_description" = "Pridá prvú zastávku na trase";
 "add_as_last_destination_point" = "Pridať ako posledný prechodný bod";
-"last_intermediate_dest_description" = "Pridá poslednú zastávku na ceste";
+"last_intermediate_dest_description" = "Pridá poslednú zastávku na trase";
 "intermediate_items_sort_by_distance" = "Zoptimalizuj od dverí k dverám";
 "switch_start_finish" = "Vymeniť východzí a cieľový bod";
 "clear_all_intermediates" = "Zmazať všetky prechodné body";

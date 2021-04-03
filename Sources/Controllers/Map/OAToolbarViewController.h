@@ -14,6 +14,12 @@
 #define SEARCH_TOOLBAR_PRIORITY 50
 #define DESTINATIONS_TOOLBAR_PRIORITY 100
 
+typedef NS_ENUM(NSInteger, EOAToolbarAttentionLevel)
+{
+    EOAToolbarAttentionLevelNormal = 0,
+    EOAToolbarAttentionLevelHigh,
+};
+
 @class OAToolbarViewController;
 
 @protocol OAToolbarViewControllerProtocol
@@ -32,6 +38,7 @@
 @property (nonatomic) BOOL showOnTop;
 
 - (int) getPriority;
+- (EOAToolbarAttentionLevel) getAttentionLevel;
 
 - (void) onViewWillAppear:(EOAMapHudType)mapHudType;
 - (void) onViewDidAppear:(EOAMapHudType)mapHudType;

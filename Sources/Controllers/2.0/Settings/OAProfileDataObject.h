@@ -10,6 +10,7 @@
 
 typedef NS_ENUM(NSInteger, EOARoutingProfilesResource)
 {
+    EOARoutingProfilesResourceUndefined = -1,
     EOARoutingProfilesResourceDirectTo = 0,
     EOARoutingProfilesResourceStraightLine,
     EOARoutingProfilesResourceBrouter,

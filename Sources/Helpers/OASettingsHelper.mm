@@ -59,6 +59,7 @@
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
+#import "OATileSource.h"
 
 NSString *const kSettingsHelperErrorDomain = @"SettingsHelper";
 
@@ -73,6 +74,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @end
 
 @implementation OASettingsHelper
+{
+    __weak OAImportSettingsViewController *_importDataVC;
+}
 
 + (OASettingsHelper *) sharedInstance
 {
@@ -91,6 +95,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
 {
+    OAImportSettingsViewController* incomingURLViewController = [[OAImportSettingsViewController alloc] init];
+    [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
+    _importDataVC = incomingURLViewController;
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
     task.delegate = delegate;
     [task execute];
@@ -156,8 +163,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         NSArray *settingsDataObjects = allSettingsMap[settingsType];
         if (settingsDataObjects != nil)
         {
-            // TODO: implement in export
-//            [filteredSettingsItems addObjectsFromArray:[self prepareSettingsItems:settingsDataObjects settingsItems:settingsItems doExport:doExport]];
+            [filteredSettingsItems addObjectsFromArray:[self prepareSettingsItems:settingsDataObjects settingsItems:settingsItems doExport:doExport]];
         }
     }
     return filteredSettingsItems;
@@ -372,13 +378,160 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return exportMap;
 }
 
+- (OAProfileSettingsItem *) getBaseProfileSettingsItem:(OAApplicationModeBean *)modeBean settingsItems:(NSArray<OASettingsItem *> *)settingsItems
+{
+    for (OASettingsItem *settingsItem in settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeProfile)
+        {
+            OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *)settingsItem;
+            OAApplicationModeBean *bean = [profileItem modeBean];
+            if ([bean.stringKey isEqualToString:modeBean.stringKey] && [bean.userProfileName isEqualToString:modeBean.userProfileName])
+                return profileItem;
+        }
+    }
+    return nil;
+}
+
+- (OAQuickActionsSettingsItem *) getBaseQuickActionsSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
+{
+    for (OASettingsItem * settingsItem in settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeQuickActions)
+            return (OAQuickActionsSettingsItem *)settingsItem;
+    }
+    return nil;
+}
+ 
+- (OAPoiUiFilterSettingsItem *) getBasePoiUiFiltersSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
+{
+    for (OASettingsItem * settingsItem in settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypePoiUIFilters)
+            return (OAPoiUiFilterSettingsItem *)settingsItem;
+    }
+    return nil;
+}
+
+- (OAMapSourcesSettingsItem *) getBaseMapSourcesSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
+{
+    for (OASettingsItem * settingsItem in settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeMapSources)
+            return (OAMapSourcesSettingsItem *)settingsItem;
+    }
+    return nil;
+}
+
+- (OAAvoidRoadsSettingsItem *) getBaseAvoidRoadsSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
+{
+    for (OASettingsItem * settingsItem in settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeAvoidRoads)
+            return (OAAvoidRoadsSettingsItem *)settingsItem;
+    }
+    return nil;
+}
+
+- (id) getBaseItem:(EOASettingsItemType)settingsItemType clazz:(id)clazz settingsItems:(NSArray<OASettingsItem *> *)settingsItems
+{
+    for (OASettingsItem * settingsItem in settingsItems)
+    {
+        if (settingsItem.type == settingsItemType && [settingsItem isKindOfClass:clazz])
+            return settingsItem;
+    }
+    return nil;
+}
+
+- (NSArray <OASettingsItem *>*) prepareSettingsItems:(NSArray *)data settingsItems:(NSArray<OASettingsItem *> *)settingsItems doExport:(BOOL)doExport
+{
+    NSMutableArray<OASettingsItem *> *result = [NSMutableArray array];
+    NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
+    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
+    NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
+    NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
+    NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
+    NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
+    NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
+
+    for (id object in data)
+    {
+        if ([object isKindOfClass:OAApplicationModeBean.class])
+            [appModeBeans addObject:object];
+        else if ([object isKindOfClass:OAQuickAction.class])
+            [quickActions addObject:object];
+        else if ([object isKindOfClass:OAPOIUIFilter.class])
+            [poiUIFilters addObject:object];
+        else if ([object isKindOfClass:OATileSource.class])
+            [tileSourceTemplates addObject:object];
+        else if ([object isKindOfClass:NSString.class])
+        {
+            NSString *filePath = object;
+            if ([filePath hasSuffix:GPX_FILE_EXT])
+                [result addObject:[[OAGpxSettingsItem alloc] initWithFilePath:filePath error:nil]];
+            else
+                [result addObject:[[OAFileSettingsItem alloc] initWithFilePath:filePath error:nil]];
+        }
+        else if ([object isKindOfClass:OAAvoidRoadInfo.class])
+            [avoidRoads addObject:object];
+        else if ([object isKindOfClass:OAOsmNotePoint.class])
+            [osmNotesPointList addObject:object];
+        else if ([object isKindOfClass:OAOsmPoint.class])
+            [osmEditsPointList addObject:object];
+        else if ([object isKindOfClass:OAFileSettingsItem.class])
+            [result addObject:object];
+        else if ([object isKindOfClass:OAFavoriteGroup.class])
+            [favoiriteItems addObject:object];
+        else if ([object isKindOfClass:OADestination.class])
+            [activeMarkersList addObject:object];
+    }
+    if (appModeBeans.count > 0)
+        for (OAApplicationModeBean *modeBean in appModeBeans)
+        {
+//            if (doExport) {
+//                                ApplicationMode mode = ApplicationMode.valueOfStringKey(modeBean.stringKey, null);
+//                                if (mode != null) {
+//                                    result.add(new ProfileSettingsItem(app, mode));
+//                                }
+//                            } else {
+            [result addObject:[self getBaseProfileSettingsItem:modeBean settingsItems:settingsItems]];
+        }
+    if (quickActions.count > 0)
+        [result addObject: [[OAQuickActionsSettingsItem alloc] initWithItems:quickActions]];
+    if (poiUIFilters.count > 0)
+        [result addObject:[self getBasePoiUiFiltersSettingsItem:settingsItems]];
+    if (tileSourceTemplates.count > 0)
+        [result addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
+    if (avoidRoads.count > 0)
+        [result addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
+    if (favoiriteItems.count > 0)
+        [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
+    if (osmNotesPointList.count > 0)
+    {
+        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class settingsItems:settingsItems];
+        [result addObject:baseItem];
+    }
+    if (osmEditsPointList.count > 0)
+    {
+        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmEdits clazz:OAOsmEditsSettingsItem.class settingsItems:settingsItems];
+        [result addObject:baseItem];
+    }
+    if (activeMarkersList.count > 0)
+    {
+        [result addObject:[[OAMarkersSettingsItem alloc] initWithItems:activeMarkersList]];
+    }
+    return result;
+}
+
 + (NSDictionary<OAExportSettingsType *, NSArray *> *) getSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete
 {
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [NSMutableDictionary new];
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *tracksFilesList = [NSMutableArray array];
@@ -545,8 +698,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        }
         if (pluginIndependentItems.count > 0)
         {
-            OAImportSettingsViewController* incomingURLViewController = [[OAImportSettingsViewController alloc] initWithItems:pluginIndependentItems];
-            [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
+            if (_importDataVC)
+                [_importDataVC onItemsCollected:items];
         }
     }
     else if (empty)

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "OASettingsHelper.h"
 
+#define kTmpProfileFolder @"tmpProfileData"
+
 #pragma mark - OASettingsImporter
 
 @class OASettingsItem;

@@ -786,6 +786,7 @@
 "create_profile" = "Create profile";
 "import_profile_select_descr" = "Select the data to be imported.";
 "selected_profiles" = "%d of %d";
+"selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type: %@";
 "shared_string_nothing_selected" = "Nothing selected";
 
@@ -812,7 +813,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 
-"listed_exist" = "Listed %@, already exist in OsmAnd.";
+"listed_exist" = "Listed %@ already exist in OsmAnd.";
 
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
@@ -852,6 +853,7 @@
 "after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
 "empty_profile_name_warning" = "Profile name cannot be empty.";
 "err_profile_import" = "Error reading item data: %@";
+"reading_file" = "Reading file";
 "profile_import_success" = "Application profile was imported successfully";
 "profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
@@ -1551,6 +1553,7 @@
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Slope";
+"res_standard" = "Standard map";
 
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1605,6 +1608,7 @@
 "gpx_rename_q" = "Rename track";
 "gpx_enter_new_name" = "Please enter new name for the track";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
+"shared_string_gpx_points" = "Points";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";

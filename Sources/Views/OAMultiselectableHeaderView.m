@@ -29,6 +29,16 @@ static UIFont *_btnFont;
     return self;
 }
 
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithReuseIdentifier:reuseIdentifier];
+    if (self)
+    {
+        [self commonInit];
+    }
+    return self;
+}
+
 - (void)commonInit
 {
     _btnFont = [UIFont systemFontOfSize:13.0];

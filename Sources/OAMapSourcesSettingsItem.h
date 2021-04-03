@@ -8,6 +8,8 @@
 
 #import "OACollectionSettingsItem.h"
 
-@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<NSDictionary *>
+@class OATileSource;
+
+@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<OATileSource *>
 
 @end

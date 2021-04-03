@@ -35,7 +35,6 @@
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
-#define kTmpProfileFolder @"tmpProfileData"
 #define kVersion 1
 
 #pragma mark - OASettingsImporter

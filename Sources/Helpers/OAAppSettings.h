@@ -326,9 +326,9 @@ typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
 + (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
 
 - (EOAActiveMarkerConstant) get;
-- (void) set:(EOAActiveMarkerConstant)angularConstant;
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant;
 - (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOAActiveMarkerConstant)angularConstant mode:(OAApplicationMode *)mode;
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -337,9 +337,9 @@ typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
 + (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
 
 - (EOADistanceIndicationConstant) get;
-- (void) set:(EOADistanceIndicationConstant)angularConstant;
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant;
 - (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOADistanceIndicationConstant)angularConstant mode:(OAApplicationMode *)mode;
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode;
 
 @end
 

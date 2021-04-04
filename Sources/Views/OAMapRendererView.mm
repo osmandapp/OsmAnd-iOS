@@ -193,14 +193,14 @@
     _renderer->addSymbolsProvider(provider);
 }
 
-- (void)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
+- (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
 {
-    _renderer->removeSymbolsProvider(provider);
+    return _renderer->removeSymbolsProvider(provider);
 }
 
-- (void)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
+- (bool)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
 {
-    _renderer->removeSymbolsProvider(provider);
+    return _renderer->removeSymbolsProvider(provider);
 }
 
 - (void)removeAllSymbolsProviders

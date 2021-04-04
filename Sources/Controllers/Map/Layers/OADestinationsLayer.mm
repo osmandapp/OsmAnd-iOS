@@ -25,6 +25,7 @@
 #import "OAReverseGeocoder.h"
 #import "OAPointDescription.h"
 #import "OAAppSettings.h"
+#import "OAMapLayers.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -53,6 +54,7 @@
 
     BOOL _showCaptionsCache;
     double _textSize;
+    int _myPositionLayerBaseOrder;
 }
 
 - (NSString *) layerId
@@ -86,8 +88,11 @@
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:self.app.locationServices.updateObserver];
     
-    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _myPositionLayerBaseOrder = self.mapViewController.mapLayers.myPositionLayer.baseOrder;
+    
     [self refreshDestinationsMarkersCollection];
     
     [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
@@ -110,6 +115,8 @@
 {
     [super deinitLayer];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+     
     [_targetPoints removeListener:self];
 
     if (_destinationShowObserver)
@@ -136,6 +143,21 @@
     {
         [_locationServicesUpdateObserver detach];
         _locationServicesUpdateObserver = nil;
+    }
+}
+
+- (void) onProfileSettingSet:(NSNotification *)notification
+{
+    OAProfileSetting *obj = notification.object;
+    OAProfileActiveMarkerConstant *activeMarkers = [OAAppSettings sharedManager].activeMarkers;
+    if (obj)
+    {
+        if (obj == activeMarkers)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self drawDestinationLines];
+            });
+        }
     }
 }
 
@@ -306,6 +328,9 @@
 
 - (void) drawDestinationLines
 {
+    bool show = [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {
         OAAppSettings *settings = OAAppSettings.sharedManager;
@@ -327,10 +352,8 @@
                     _linesCollection->removeLine([self getLine:2]);
             }
         }
-    }
-    else if (!_linesCollection->getLines().isEmpty())
-    {
-        _linesCollection->removeAllLines();
+        if (show)
+            [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }
 }
 
@@ -343,11 +366,15 @@
     const auto& line = [self getLine:lineId];
     if (line == nullptr)
     {
+        std::vector<double> linePattern;
+        linePattern.push_back(80);
+        linePattern.push_back(40);
         OsmAnd::VectorLineBuilder builder;
-        builder.setBaseOrder(self.baseOrder)
+        builder.setBaseOrder(_myPositionLayerBaseOrder + 10)
         .setIsHidden(false)
         .setLineId(lineId)
-        .setLineWidth(50)
+        .setLineWidth(30)
+        .setLineDash(linePattern)
         .setPoints(points)
         .setFillColor(color);
         

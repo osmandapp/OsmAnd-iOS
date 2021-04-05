@@ -189,7 +189,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSDictionary *item = _data[section].firstObject;
-    return item[@"header"] ? item[@"header"] : @" " ;
+    return item[@"header"] ? item[@"header"] : @" ";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

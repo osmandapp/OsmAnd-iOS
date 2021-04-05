@@ -235,9 +235,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 return [time2 compare:time1];
             }
             case EOANameAscending:
-                return [obj1.gpxTitle compare:obj2.gpxTitle options:NSCaseInsensitiveSearch];
+                return [obj1.gpxTitle compare:obj2.gpxTitle];
             case EOANameDescending:
-                return  [obj2.gpxTitle compare:obj1.gpxTitle options:NSCaseInsensitiveSearch];
+                return  [obj2.gpxTitle compare:obj1.gpxTitle];
             default:
                 break;
         }
@@ -443,7 +443,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         [self generateData];
         
         NSMutableArray *pathsToReload = [NSMutableArray arrayWithArray:self.tableView.indexPathsForVisibleRows];
-        [pathsToReload removeObjectAtIndex:0];
+        [pathsToReload removeObjectsInRange:NSMakeRange(0, 3)];
         [self.tableView reloadRowsAtIndexPaths:pathsToReload withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }

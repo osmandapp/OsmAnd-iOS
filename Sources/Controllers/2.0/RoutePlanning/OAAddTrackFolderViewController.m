@@ -25,6 +25,7 @@
     NSString *_newFolderName;
     NSString *_inputFieldError;
     BOOL _doneButtonEnabled;
+    BOOL _isFirstLaunch;
 }
 
 - (instancetype) init
@@ -46,6 +47,7 @@
     self.doneButton.hidden = NO;
     self.doneButton.enabled = NO;
     _newFolderName = @"";
+    _isFirstLaunch = YES;
 }
 
 - (void) generateData
@@ -105,7 +107,11 @@
         }
         if (cell)
         {
-            [cell.inputField becomeFirstResponder];
+            if (_isFirstLaunch)
+            {
+                [cell.inputField becomeFirstResponder];
+                _isFirstLaunch = NO;
+            }
             cell.inputField.text = item[@"title"];
             cell.inputField.delegate = self;
             cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;

@@ -32,7 +32,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add favorite" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="krK-4A-igo">
-                            <rect key="frame" x="158.66666666666666" y="62" width="97" height="21"/>
+                            <rect key="frame" x="8" y="62" width="398" height="21"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -81,6 +81,7 @@
                         <constraint firstItem="kiz-Fv-xhW" firstAttribute="leading" secondItem="Bs9-2L-ti4" secondAttribute="leading" id="5iD-6b-j0q"/>
                         <constraint firstItem="krK-4A-igo" firstAttribute="centerX" secondItem="Bs9-2L-ti4" secondAttribute="centerX" id="K8B-hV-g4s"/>
                         <constraint firstItem="Whv-K0-SJi" firstAttribute="centerX" secondItem="m2u-Ip-S5r" secondAttribute="centerX" id="Lgf-qI-oSc"/>
+                        <constraint firstItem="krK-4A-igo" firstAttribute="leading" secondItem="Bs9-2L-ti4" secondAttribute="leading" constant="8" id="MW5-aV-w5U"/>
                         <constraint firstItem="Whv-K0-SJi" firstAttribute="centerY" secondItem="m2u-Ip-S5r" secondAttribute="centerY" id="Qn1-ta-SZx"/>
                         <constraint firstAttribute="trailing" secondItem="kiz-Fv-xhW" secondAttribute="trailing" id="TPn-m9-lbQ"/>
                         <constraint firstItem="SjJ-8f-vqm" firstAttribute="top" secondItem="Bs9-2L-ti4" secondAttribute="top" constant="13" id="Yho-c8-Jps"/>

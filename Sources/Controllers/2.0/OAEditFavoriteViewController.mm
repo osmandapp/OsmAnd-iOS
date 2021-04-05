@@ -205,8 +205,6 @@
 
 - (void) setupHeaderName
 {
-    self.titleLabel.numberOfLines = 0;
-    
     if (self.name.length > 0)
         self.titleLabel.text = self.name;
     else

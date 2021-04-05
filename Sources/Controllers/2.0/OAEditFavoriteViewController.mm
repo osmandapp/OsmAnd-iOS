@@ -62,7 +62,7 @@
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
 
-@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate>
+@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
 
@@ -71,6 +71,7 @@
     OsmAndAppInstance _app;
     BOOL _isNewItemAdding;
     BOOL _wasChanged;
+    BOOL _isUnsaved;
     NSString *_ininialName;
     NSString *_ininialGroupName;
     
@@ -101,6 +102,7 @@
     {
         _app = [OsmAndApp instance];
         _isNewItemAdding = NO;
+        _isUnsaved = YES;
         self.favorite = favorite;
         self.name = [self.favorite getDisplayName];
         self.desc = [self.favorite getDescription];
@@ -118,6 +120,7 @@
     if (self)
     {
         _isNewItemAdding = YES;
+        _isUnsaved = YES;
         _app = [OsmAndApp instance];
         
         // Create favorite
@@ -409,6 +412,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.presentationController.delegate = self;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
@@ -450,6 +454,26 @@
 
 - (void) dismissViewController
 {
+    if (_isUnsaved)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_dismiss") message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            if (_isNewItemAdding )
+                [self deleteFavoriteItem:self.favorite];
+            [self doDismiss];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        [self doDismiss];
+    }
+}
+
+- (void) doDismiss
+{
     [self dismissViewControllerAnimated:YES completion:^{
         if (_renamedPointAlertMessage)
         {
@@ -464,12 +488,11 @@
 
 - (void)onCancelButtonPressed
 {
-    if (_isNewItemAdding)
-        [self deleteFavoriteItem:self.favorite];
 }
 
 - (void)onDoneButtonPressed
 {
+    _isUnsaved = NO;
     if (_wasChanged || _isNewItemAdding)
     {
         
@@ -598,11 +621,16 @@
     [self.tableView endUpdates];
 }
 
-- (NSIndexPath *)indexPathForCellContainingView:(UIView *)view inTableView:(UITableView *)tableView
+#pragma mark - UIAdaptivePresentationControllerDelegate
+
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController
 {
-    CGPoint viewCenterRelativeToTableview = [tableView convertPoint:CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds)) fromView:view];
-    NSIndexPath *cellIndexPath = [tableView indexPathForRowAtPoint:viewCenterRelativeToTableview];
-    return cellIndexPath;
+    return NO;
+}
+
+- (void)presentationControllerDidAttemptToDismiss:(UIPresentationController *)presentationController
+{
+    [self dismissViewController];
 }
 
 #pragma mark - UITableViewDataSource
@@ -891,6 +919,13 @@
         }
     }
     return UITableViewAutomaticDimension;
+}
+
+- (NSIndexPath *)indexPathForCellContainingView:(UIView *)view inTableView:(UITableView *)tableView
+{
+    CGPoint viewCenterRelativeToTableview = [tableView convertPoint:CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds)) fromView:view];
+    NSIndexPath *cellIndexPath = [tableView indexPathForRowAtPoint:viewCenterRelativeToTableview];
+    return cellIndexPath;
 }
 
 #pragma mark - UITextViewDelegate

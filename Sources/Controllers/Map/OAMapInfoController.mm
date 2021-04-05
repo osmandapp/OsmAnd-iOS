@@ -24,6 +24,7 @@
 #import "OARouteInfoWidgetsFactory.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OANextTurnWidget.h"
+#import "OATopCoordinatesWidget.h"
 #import "OALanesControl.h"
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
@@ -32,6 +33,7 @@
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
 #import "OAUserInteractionPassThroughView.h"
+#import "OAToolbarViewController.h"
 
 @interface OATextState : NSObject
 
@@ -66,6 +68,7 @@
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
     OATopTextView *_streetNameView;
+    OATopCoordinatesWidget *_topCoordinatesView;
     OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
@@ -188,6 +191,7 @@
     [_streetNameView updateInfo];
     [_lanesControl updateInfo];
     [_alarmControl updateInfo];
+    [_topCoordinatesView updateInfo];
 }
 
 - (void) updateInfo
@@ -408,6 +412,25 @@
         CGRect f = _rightWidgetsView.superview.frame;
         _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
     }
+    
+    if (_topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden)
+    {
+        if (_lastUpdateTime == 0)
+            [[OARootViewController instance].mapPanel updateToolbar];
+        
+        BOOL hasTopWidgetsPanel = _mapHudViewController.toolbarViewController.view.alpha != 0;
+        if (portrait)
+        {
+            _topCoordinatesView.frame = CGRectMake(0, [OAUtilities getTopMargin] , DeviceScreenWidth, 52);
+        }
+        else
+        {
+            CGFloat widgetWidth = DeviceScreenWidth / 2 - [OAUtilities getLeftMargin];
+            CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];
+            CGFloat leftOffset = hasTopWidgetsPanel ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
+            _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], [OAUtilities getTopMargin] , widgetWidth, 50);
+        }
+    }
 }
 
 - (CGFloat) getLeftBottomY
@@ -438,6 +461,8 @@
 
     [_alarmControl removeFromSuperview];
     [_mapHudViewController.view addSubview:_alarmControl];
+    
+    [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];
 
     for (UIView *widget in _leftWidgetsView.subviews)
         [widget removeFromSuperview];
@@ -561,6 +586,9 @@
     
     _alarmControl = [ric createAlarmInfoControl];
     _alarmControl.delegate = self;
+    
+    _topCoordinatesView = [[OATopCoordinatesWidget alloc] init];
+    _topCoordinatesView.delegate = self;
     
     _rulerControl = [ric createRulerControl];
   

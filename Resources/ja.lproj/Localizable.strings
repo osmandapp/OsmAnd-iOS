@@ -107,7 +107,7 @@
 "save_global_track_interval" = "ログの記録間隔";
 "save_global_track_interval_descr" = "旅程ログ全般の記録間隔を選択します(マップ上のGPXログウィジェットで有効化)";
 "logging_interval_navigation" = "ナビゲーション中のログ記録間隔";
-"logging_interval_navigation_descr" = "ナビゲーション中に行う旅程ログの記録間隔を選択します";
+"logging_interval_navigation_descr" = "ナビゲーション中に行う経路ログの記録間隔を選択します";
 "logging_min_distance" = "最小移動量";
 "logging_min_distance_descr" = "フィルター: ログに記録を許可する最後に記録した地点からの最低移動距離を設定します";
 "logging_min_accuracy" = "最小精度";
@@ -426,7 +426,7 @@
 "poi_hide" = "非表示";
 // My Places
 "favorites" = "お気に入り";
-"tracks" = "旅程";
+"tracks" = "経路";
 // GPX
 "gpx_point" = "地点";
 "gpx_waypoint" = "経由地点";
@@ -434,17 +434,17 @@
 "gpx_points" = "地点";
 "gpx_export" = "エクスポート";
 "import_export" = "インポート/エクスポート";
-"gpx_import_title" = "旅程ファイルのインポート";
-"gpx_import_already_exists" = "指定された旅程ファイルは既にリストに存在します。どのように処理するかを選択してください。";
+"gpx_import_title" = "経路のインポート";
+"gpx_import_already_exists" = "指定された経路ファイルは既にリストに存在します。どのように処理するかを選択してください。";
 "gpx_add_new" = "新しいファイルを追加";
 "gpx_overwrite" = "上書き";
 "gpx_cannot_import" = "指定されたGPXファイルはインポートできませんでした";
-"gpx_export_title" = "旅程ファイルのエクスポート";
-"gpx_export_select_track" = "エクスポートする旅程ファイルを選択してください";
+"gpx_export_title" = "経路のエクスポート";
+"gpx_export_select_track" = "エクスポートする旅程を選択してください";
 "gpx_import_desc" = "GPXファイル(汎用GPSデータ形式)をDropbox、電子メール、またはその他のアプリからインポートするには、\"OsmAnd Mapsにコピー\"オプションを使用します";
 "import_from_docs" = "ドキュメントからインポート";
-"gpx_no_tracks" = "旅程ファイルはありません";
-"gpx_remove" = "旅程を削除しますか？";
+"gpx_no_tracks" = "経路はありません";
+"gpx_remove" = "経路を削除しますか？";
 "gpx_stat" = "統計";
 "gpx_route" = "ルート";
 "gpx_route_time" = "所要時間";
@@ -460,13 +460,13 @@
 "track_recording_name" = "現在記録中の経路";
 "track_stop_rec" = "記録の停止";
 "track_new_segment" = "新セグメントの開始";
-"track_save" = "現在の旅程を保存";
-"track_save_descr" = "現在の旅程をGPXファイルとして保存します。";
+"track_save" = "現在の経路を保存";
+"track_save_descr" = "現在の経路をGPXファイルとして保存します。";
 "track_continue_rec" = "記録の続行";
 "track_continue_rec_q" = "記録を続行しますか？";
 "rec_interval" = "ログ記録間隔";
 "rec_interval_minimum" = "最小";
-"track_start_rec" = "旅程記録の開始";
+"track_start_rec" = "経路の記録開始";
 "track_rec_addon_q" = "旅程を記録保存するには、旅程記録アドオンを有効にしてください";
 "track_interval_remember" = "選択した項目を記憶する";
 "track_clear" = "現在の旅程を消去";
@@ -1577,7 +1577,7 @@
 "res_confirmation_delete" = "%@を消去してもよろしいですか ？";
 "res_confirmation_clear_cache" = "%@用キャッシュを消去してもよろしいですか？";
 "gpx_analyze" = "分析";
-"displayed_route_save" = "OsmAnd Tripsに保存";
+"displayed_route_save" = "OsmAnd Tracksに保存";
 "trip_name" = "旅程の名前";
 "trip_hint" = "旅程に名前を付けてください";
 "shared_string_maximum" = "最大";
@@ -1882,3 +1882,26 @@
 "road_speeds_descr" = "これらのパラメータは、ルート計算に影響を与える可能性があります。";
 "max_speed" = "最高速度";
 "address_search" = "住所検索";
+"gpx_export_failed" = "作成したルートを保存できませんでした";
+"tracks_on_map" = "マップ上の経路";
+"visible" = "可視化";
+"square" = "正方形";
+"octagon" = "八角形";
+
+// Shapes
+"circle" = "円";
+"shared_string_others" = "その他";
+"favorite_places_category" = "場所";
+"favorite_friends_category" = "友人";
+"default_color_descr" = "指定された色は、以降グループに追加される新しいお気に入りに適用されます。";
+"default_color" = "デフォルトの色";
+"fav_point_emoticons_message" = "お気に入りの名を'%@'に変更して、絵文字を含む文字列をファイルに保存します。";
+"fav_point_dublicate_message" = "重複を避けるため、お気に入り名を'%@'に変更しました。";
+"fav_point_dublicate" = "指定したお気に入り名は重複しています";
+"shape" = "形";
+"icon" = "アイコン";
+"select_group" = "グループを選択";
+"name_and_descr" = "名前＆説明";
+"add_favorite" = "お気に入りに追加";
+"fav_points_not_exist" = "お気に入りはありません";
+"replace_favorite_confirmation" = "お気に入り%@を置き換えてもよろしいですか？";

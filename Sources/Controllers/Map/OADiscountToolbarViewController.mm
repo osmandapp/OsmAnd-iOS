@@ -39,6 +39,11 @@
     [super didReceiveMemoryWarning];
 }
 
+- (EOAToolbarAttentionLevel) getAttentionLevel
+{
+    return EOAToolbarAttentionLevelHigh;
+}
+
 - (void) setTitle:(NSString *)title description:(NSString *)description icon:(UIImage *)icon buttonText:(NSString *)buttonText colors:(NSDictionary<NSString *, UIColor *> *) colorDictionary
 {
     _title = title;

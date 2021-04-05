@@ -141,6 +141,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     }
 }
 
+- (CGFloat) getLandscapeHeight
+{
+    return OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight;
+}
+
 - (void) adjustFrame
 {
     CGFloat safeAreaOffset = [OAUtilities isLandscape] ? 16 : 20;
@@ -151,7 +156,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if (OAUtilities.isLandscapeIpadAware)
     {
-        f.size.height = OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight;
+        f.size.height = [self getLandscapeHeight];
         f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
         f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, DeviceScreenHeight - f.size.height);
         

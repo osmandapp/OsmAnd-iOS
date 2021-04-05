@@ -74,16 +74,24 @@
 - (CGFloat) initialHeight
 {
     CGFloat width;
-    if ([OAUtilities isLandscape])
-        width = OAUtilities.isIPad && !OAUtilities.isWindowed ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
+    if (OAUtilities.isIPad)
+        width = kOABottomSheetWidthIPad;
+    else if ([OAUtilities isLandscape])
+        width = kOABottomSheetWidth;
     else
         width = DeviceScreenWidth;
+    
     width -= 2 * kHorizontalMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
     CGFloat textHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"plan_route_exit_message") width:width font:[UIFont systemFontOfSize:15.]].height + kLabelVerticalMargin * 2;
     CGFloat contentHeight = textHeight + 2 * kButtonHeight + 2 * kButtonsVerticalMargin;
     CGFloat buttonsHeight = [self buttonsViewHeight];
     return headerHeight + contentHeight + buttonsHeight;
+}
+
+- (CGFloat) getLandscapeHeight
+{
+    return [self initialHeight];
 }
 
 - (void) generateData

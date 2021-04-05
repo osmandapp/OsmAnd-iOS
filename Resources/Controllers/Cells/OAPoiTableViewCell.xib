@@ -48,7 +48,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Lv4-1f-YVk">
-                        <rect key="frame" x="12" y="48" width="296" height="36"/>
+                        <rect key="frame" x="0.0" y="48" width="320" height="36"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="36" id="fYy-8N-Dvz"/>
@@ -69,8 +69,8 @@
                     <constraint firstItem="Lv4-1f-YVk" firstAttribute="top" secondItem="hEo-Ng-Ewe" secondAttribute="bottom" constant="16" id="XUB-V8-BxH"/>
                     <constraint firstItem="hEo-Ng-Ewe" firstAttribute="leading" secondItem="OyU-Tj-OXE" secondAttribute="leadingMargin" id="aGH-sB-XfE"/>
                     <constraint firstItem="QPz-hS-JGO" firstAttribute="leading" secondItem="hEo-Ng-Ewe" secondAttribute="trailing" constant="8" id="c5l-rE-IbK"/>
-                    <constraint firstItem="Lv4-1f-YVk" firstAttribute="trailing" secondItem="OyU-Tj-OXE" secondAttribute="trailing" constant="-12" id="fDc-dD-Zg8"/>
-                    <constraint firstItem="Lv4-1f-YVk" firstAttribute="leading" secondItem="OyU-Tj-OXE" secondAttribute="leading" constant="12" id="gBT-em-rvp"/>
+                    <constraint firstItem="Lv4-1f-YVk" firstAttribute="trailing" secondItem="OyU-Tj-OXE" secondAttribute="trailing" id="fDc-dD-Zg8"/>
+                    <constraint firstItem="Lv4-1f-YVk" firstAttribute="leading" secondItem="OyU-Tj-OXE" secondAttribute="leading" id="gBT-em-rvp"/>
                     <constraint firstAttribute="bottom" secondItem="B9W-ie-Ile" secondAttribute="bottom" constant="16" id="pmF-KY-WB3"/>
                     <constraint firstItem="QPz-hS-JGO" firstAttribute="width" secondItem="hEo-Ng-Ewe" secondAttribute="width" id="u5H-gL-p8j"/>
                     <constraint firstItem="hEo-Ng-Ewe" firstAttribute="top" secondItem="OyU-Tj-OXE" secondAttribute="top" constant="11" id="xGi-q5-MDT"/>

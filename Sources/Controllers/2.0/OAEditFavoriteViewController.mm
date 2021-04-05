@@ -28,6 +28,7 @@
 #import "OARootViewController.h"
 #import "OATargetInfoViewController.h"
 #import "OATargetPointsHelper.h"
+#import "OATableViewCustomHeaderView.h"
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
 
@@ -44,6 +45,7 @@
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
 #define kFolderCardsCell @"OAFolderCardsCell"
+#define kHeaderId @"TableViewSectionHeader"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -201,6 +203,16 @@
     [self generateData];
 }
 
+- (void) setupHeaderName
+{
+    self.titleLabel.numberOfLines = 0;
+    
+    if (self.name.length > 0)
+        self.titleLabel.text = self.name;
+    else
+        self.titleLabel.text = _isNewItemAdding ? OALocalizedString(@"add_favorite") : OALocalizedString(@"ctx_mnu_edit_fav");
+}
+
 - (void) setupGroups
 {
     if (![OAFavoritesHelper isFavoritesLoaded])
@@ -306,6 +318,8 @@
 
 - (void) generateData
 {
+    [self setupHeaderName];
+    
     NSMutableArray *data = [NSMutableArray new];
     
     NSMutableArray *section = [NSMutableArray new];
@@ -416,8 +430,10 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     self.doneButton.hidden = NO;
     [self updateHeaderIcon];
+    [self setupHeaderName];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -426,7 +442,6 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = _isNewItemAdding ? OALocalizedString(@"add_favorite") : OALocalizedString(@"ctx_mnu_edit_fav");
     [self.doneButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -850,6 +865,19 @@
 {
     NSDictionary *item = _data[section].firstObject;
     return item[@"header"];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    vw.label.textColor = UIColorFromRGB(color_text_footer);
+    vw.label.text = [title upperCase];
+ 
+    int offset = section == 0 ? 32 : 16;
+    [vw setYOffset:offset];
+    
+    return vw;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

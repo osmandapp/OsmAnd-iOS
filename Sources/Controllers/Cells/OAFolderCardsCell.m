@@ -21,6 +21,7 @@
 @implementation OAFolderCardsCell
 {
     NSMutableArray *_data;
+    int _selectedItemIndex;
 }
 
 - (void) awakeFromNib
@@ -33,15 +34,22 @@
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.minimumInteritemSpacing = 0;
     layout.minimumLineSpacing = 16.;
-    layout.sectionInset = UIEdgeInsetsMake(0, 8, 8, 8);
+    layout.sectionInset = UIEdgeInsetsMake(0, 16, 16, 16);
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
     _data = [NSMutableArray new];
 }
 
+- (void)layoutSubviews
+{
+    self.frame = CGRectMake(0, self.frame.origin.y, DeviceScreenWidth, self.frame.size.height);
+    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedItemIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
+
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
 {
+    _selectedItemIndex = index;
     _data = [NSMutableArray new];
     for (int i = 0; i < values.count; i++)
     {
@@ -63,7 +71,7 @@
         @"title" : addButtonTitle,
         @"size" : @"",
         @"color" : UIColorFromRGB(color_primary_purple),
-        @"img" : @"zoom_in_button",
+        @"img" : @"ic_custom_add",
         @"isSelected" : @NO,
         @"key" : @"work"}];
     
@@ -99,6 +107,7 @@
     if (cell && [cell isKindOfClass:OAFolderCardCollectionViewCell.class])
     {
         OAFolderCardCollectionViewCell *destCell = (OAFolderCardCollectionViewCell *) cell;
+        destCell.layer.cornerRadius = 9;
         destCell.titleLabel.text = item[@"title"];
         destCell.descLabel.text = item[@"size"];
         destCell.imageView.tintColor = item[@"color"];

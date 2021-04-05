@@ -41,6 +41,8 @@
     [self.categoriesCollectionView setShowsHorizontalScrollIndicator:NO];
     [self.categoriesCollectionView setShowsVerticalScrollIndicator:NO];
     
+    layout.sectionInset = UIEdgeInsetsMake(0, 12, 0, 8);
+    
     _catagoryDataArray = [NSMutableArray new];
 }
 
@@ -84,6 +86,7 @@
         if (cell && [cell isKindOfClass:OAFoldersCollectionViewCell.class])
         {
             OAFoldersCollectionViewCell *destCell = (OAFoldersCollectionViewCell *) cell;
+            destCell.layer.cornerRadius = 9;
             destCell.titleLabel.text = item[@"title"];
             destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
             NSString *iconName = item[@"img"];

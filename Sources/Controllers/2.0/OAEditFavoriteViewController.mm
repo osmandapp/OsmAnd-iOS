@@ -17,7 +17,7 @@
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OASettingsTableViewCell.h"
 #import "OAColorsTableViewCell.h"
-#import "OAIconsTableViewCell.h"
+#import "OAShapesTableViewCell.h"
 #import "OAPoiTableViewCell.h"
 #import "OASelectFavoriteGroupViewController.h"
 #import "OAAddFavoriteGroupViewController.h"
@@ -64,7 +64,7 @@
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
 
-@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
+@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
 
@@ -83,6 +83,7 @@
     NSArray *_poiCategories;
     NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
+    NSArray<NSString *> *_backgroundContourIconNames;
     
     NSArray<NSString *> *_groupNames;
     NSArray<NSNumber *> *_groupSizes;
@@ -277,6 +278,7 @@
         _selectedIconCategoryName = @"special";
         
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
+    _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
     
     NSMutableArray * tempBackgroundIcons = [NSMutableArray new];
     for (NSString *iconName in _backgroundIconNames)
@@ -392,7 +394,8 @@
         @"title" : OALocalizedString(@"shape"),
         @"value" : OALocalizedString(_backgroundIconNames[_selectedBackgroundIndex]),
         @"index" : [NSNumber numberWithInteger:_selectedBackgroundIndex],
-        @"data" : _backgroundIcons,
+        @"icons" : _backgroundIcons,
+        @"contourIcons" : _backgroundContourIconNames,
         @"key" : kBackgroundsKey
     }];
     [data addObject:[NSArray arrayWithArray:section]];
@@ -796,13 +799,13 @@
     }
     else if ([cellType isEqualToString:kCellTypeIconCollection])
     {
-        static NSString* const identifierCell = @"OAIconsTableViewCell";
-        OAIconsTableViewCell *cell = nil;
-        cell = (OAIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OAShapesTableViewCell";
+        OAShapesTableViewCell *cell = nil;
+        cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconsTableViewCell" owner:self options:nil];
-            cell = (OAIconsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAShapesTableViewCell" owner:self options:nil];
+            cell = (OAShapesTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
@@ -810,7 +813,8 @@
         if (cell)
         {
             int selectedIndex = [item[@"index"] intValue];
-            cell.dataArray = item[@"data"];
+            cell.iconNames = item[@"icons"];
+            cell.contourIconNames = item[@"contourIcons"];
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             cell.valueLabel.hidden = NO;
@@ -1044,7 +1048,7 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - OAIconsTableViewCellDelegate
+#pragma mark - OAShapesTableViewCellDelegate
 
 - (void)iconChanged:(NSInteger)tag
 {

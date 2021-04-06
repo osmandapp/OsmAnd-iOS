@@ -22,11 +22,13 @@
 {
     NSMutableArray *_data;
     int _selectedItemIndex;
+    BOOL _isFirstLoad;
 }
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    _isFirstLoad = YES;
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     [_collectionView registerNib:[UINib nibWithNibName:kDestCell bundle:nil] forCellWithReuseIdentifier:kDestCell];
@@ -43,8 +45,11 @@
 
 - (void)layoutSubviews
 {
-    self.frame = CGRectMake(0, self.frame.origin.y, DeviceScreenWidth, self.frame.size.height);
-    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedItemIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    if (_isFirstLoad)
+    {
+        [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedItemIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        _isFirstLoad = NO;
+    }
 }
 
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index

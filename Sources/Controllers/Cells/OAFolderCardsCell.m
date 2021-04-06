@@ -45,7 +45,6 @@
 
 - (void)layoutSubviews
 {
-    self.frame = CGRectMake(0, self.frame.origin.y, DeviceScreenWidth, self.frame.size.height);
     if (_isFirstLoad)
     {
         [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedItemIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];

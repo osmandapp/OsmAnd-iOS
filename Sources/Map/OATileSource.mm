@@ -13,27 +13,6 @@
 
 
 @implementation OATileSource
-{
-//    BOOL _isSql;
-//
-//    NSString *_name;
-//    NSString *_title;
-//    int _minZoom;
-//    int _maxZoom;
-//    NSString *_url;
-//    NSString *_randoms;
-//    BOOL _ellipsoid;
-//    BOOL _invertedY;
-//    NSString *_referer;
-//    BOOL _timesupported;
-//    long _expire;
-//    BOOL _inversiveZoom;
-//    NSString *_ext;
-//    int _tileSize;
-//    int _bitDensity;
-//    int _avgSize;
-//    NSString *_rule;
-}
 
 + (instancetype) tileSourceWithParameters:(NSDictionary *)params
 {

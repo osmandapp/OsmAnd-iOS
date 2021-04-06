@@ -493,7 +493,7 @@
 "city_type_town" = "乡镇";
 "city_type_city" = "城市";
 "city_type_district" = "区";
-"city_type_neighbourhood" = "邻近";
+"city_type_neighbourhood" = "邻里";
 "postcode" = "邮政编码";
 "show_something_on_map" = "在地图上显示 %@";
 "search_POI_level_btn" = "扩大搜索半径";

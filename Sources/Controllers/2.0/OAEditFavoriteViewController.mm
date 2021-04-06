@@ -92,6 +92,7 @@
     NSArray<UIColor *> *_groupColors;
     OAFavoriteColor *_selectedColor;
     NSString *_selectedIconCategoryName;
+    NSInteger _selectedCategoryIndex;
     NSString *_selectedIconName;
     NSInteger _selectedColorIndex;
     NSInteger _selectedBackgroundIndex;
@@ -188,6 +189,7 @@
         _selectedIconName = @"special_star";
         _selectedColorIndex = 0;
         _selectedBackgroundIndex = 0;
+        _selectedCategoryIndex = 0;
         
         [self commonInit];
     }
@@ -272,6 +274,7 @@
         }];
     }
     _poiCategories = [NSArray arrayWithArray:categoriesData];
+    _selectedCategoryIndex = [categories indexOfObject:_selectedIconCategoryName];
     
     if (!_selectedIconName || _selectedIconName.length == 0)
         _selectedIconName = @"special_star";
@@ -380,6 +383,7 @@
         @"title" : OALocalizedString(@"icon"),
         @"value" : @"",
         @"selectedCategoryName" : _selectedIconCategoryName,
+        @"selectedCategoryIndex" : [NSNumber numberWithInteger:_selectedCategoryIndex],
         @"categotyData" : _poiCategories,
         @"selectedIconName" : _selectedIconName,
         @"poiData" : _poiIcons[_selectedIconCategoryName],
@@ -786,7 +790,8 @@
         {
             cell.categoriesCollectionView.tag = kCategoryCellIndex;
             cell.currentCategory = item[@"selectedCategoryName"];
-            cell.catagoryDataArray = item[@"categotyData"];
+            cell.currentCategoryIndex = [item[@"selectedCategoryIndex"] integerValue];
+            cell.categoryDataArray = item[@"categotyData"];
             
             cell.collectionView.tag = kPoiCellIndex;
             cell.poiDataArray = item[@"poiData"];

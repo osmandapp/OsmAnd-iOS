@@ -26,8 +26,9 @@
 @property (nonatomic) NSArray *poiDataArray;
 @property (nonatomic) NSInteger currentColor;
 @property (nonatomic) NSString *currentIcon;
-@property (nonatomic) NSArray *catagoryDataArray;
+@property (nonatomic) NSArray *categoryDataArray;
 @property (nonatomic) NSString *currentCategory;
+@property (nonatomic) NSInteger currentCategoryIndex;
 
 @property (nonatomic, weak) id<OAPoiTableViewCellDelegate> delegate;
 

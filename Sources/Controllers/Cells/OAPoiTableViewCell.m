@@ -24,10 +24,14 @@
 #define kCellHeightWithoutIcons 116
 
 @implementation OAPoiTableViewCell
+{
+    BOOL _isFirstLoad;
+}
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    _isFirstLoad = YES;
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:[UINib nibWithNibName:@"OAPoiCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAPoiCollectionViewCell"];
@@ -43,7 +47,7 @@
     
     layout.sectionInset = UIEdgeInsetsMake(0, 12, 0, 8);
     
-    _catagoryDataArray = [NSMutableArray new];
+    _categoryDataArray = [NSMutableArray new];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -67,7 +71,7 @@
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (collectionView.tag == kCategoryCellIndex)
-        return _catagoryDataArray.count;
+        return _categoryDataArray.count;
     else
         return _poiDataArray.count;
 }
@@ -76,7 +80,7 @@
 {
     if (collectionView.tag == kCategoryCellIndex)
     {
-        NSDictionary *item = _catagoryDataArray[indexPath.row];
+        NSDictionary *item = _categoryDataArray[indexPath.row];
         UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kDestCell forIndexPath:indexPath];
         if (cell == nil)
         {
@@ -152,11 +156,21 @@
     }
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if (_isFirstLoad)
+    {
+        [self.categoriesCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_currentCategoryIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        _isFirstLoad = NO;
+    }
+}
+
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag == kCategoryCellIndex)
     {
-        NSDictionary *item = _catagoryDataArray[indexPath.row];
+        NSDictionary *item = _categoryDataArray[indexPath.row];
         CGSize labelSize = [OAUtilities calculateTextBounds:item[@"title"] width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
         CGFloat labelWidth = labelSize.width;
         
@@ -179,7 +193,7 @@
 {
     if (collectionView.tag == kCategoryCellIndex)
     {
-        NSDictionary *item = _catagoryDataArray[indexPath.row];
+        NSDictionary *item = _categoryDataArray[indexPath.row];
         _currentCategory = item[@"categoryName"];
         [self.categoriesCollectionView reloadData];
         [self.collectionView reloadData];

@@ -22,7 +22,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 @interface OABaseBottomSheetViewController () <UIGestureRecognizerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
@@ -148,10 +147,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (void) adjustFrame
 {
-    CGFloat safeAreaOffset = [OAUtilities isLandscape] ? 16 : 20;
-    _buttonsViewLeftConstraint.constant = safeAreaOffset;
-    _buttonsViewRightConstraint.constant = safeAreaOffset;
-    
     CGRect f = _bottomSheetView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if (OAUtilities.isLandscapeIpadAware)

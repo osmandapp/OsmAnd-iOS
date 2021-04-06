@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIView *headerDividerView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsSectionDividerView;
+@property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewLeftConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewRightConstraint;
 

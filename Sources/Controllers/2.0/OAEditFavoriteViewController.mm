@@ -63,6 +63,8 @@
 #define kTextCellBottomMargin 17.
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
+#define kFullHeaderHeight 100
+#define kCompressedHeaderHeight 62
 
 @interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
@@ -433,8 +435,10 @@
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     self.doneButton.hidden = NO;
+    
     [self updateHeaderIcon];
     [self setupHeaderName];
+    [self scrollViewDidScroll:self.tableView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -451,21 +455,9 @@
     return [self.favorite getCategoryDisplayName];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)viewDidLayoutSubviews
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if ([OAUtilities isLandscape])
-        {
-            self.titleLabel.hidden = YES;
-            self.navBarHeightConstraint.constant = 68;
-        }
-        else
-        {
-            self.titleLabel.hidden = NO;
-            self.navBarHeightConstraint.constant = 100;
-        }
-    } completion:nil];
+    [self scrollViewDidScroll:self.tableView];
 }
 
 - (void) dismissViewController
@@ -647,6 +639,42 @@
 - (void)presentationControllerDidAttemptToDismiss:(UIPresentationController *)presentationController
 {
     [self dismissViewController];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat compressingHeight = kFullHeaderHeight - kCompressedHeaderHeight;
+    if (![OAUtilities isLandscape])
+    {
+        CGFloat multiplier;
+        
+        if (scrollView.contentOffset.y <= 0)
+        {
+            multiplier = 1;
+            _navBarHeightConstraint.constant = kFullHeaderHeight;
+        }
+        else if (scrollView.contentOffset.y > 0 && scrollView.contentOffset.y < compressingHeight)
+        {
+            multiplier = scrollView.contentOffset.y < 0 ? 0 : 1 - (scrollView.contentOffset.y / compressingHeight);
+            _navBarHeightConstraint.constant = kCompressedHeaderHeight + compressingHeight * multiplier;
+        }
+        else
+        {
+            multiplier = 0;
+            _navBarHeightConstraint.constant = kCompressedHeaderHeight;
+        }
+        
+        self.titleLabel.font = [UIFont systemFontOfSize:17 * multiplier weight:UIFontWeightSemibold];
+        self.titleLabel.alpha = multiplier;
+    }
+    else
+    {
+        _navBarHeightConstraint.constant = kCompressedHeaderHeight;
+        self.titleLabel.font = [UIFont systemFontOfSize:0 weight:UIFontWeightSemibold];
+        self.titleLabel.alpha = 0;
+    }
 }
 
 #pragma mark - UITableViewDataSource

@@ -54,6 +54,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 
+#include <OsmAndCore/ArchiveReader.h>
+
 #define kSidePadding 16
 #define kTopPadding 6
 #define kBottomPadding 32
@@ -99,6 +101,8 @@
     NSString *_descriptionText;
     NSString *_descriptionBoldText;
     CGFloat _heightForHeader;
+    
+    QList<OsmAnd::ArchiveReader::Item> _archiveItems;
 }
 
 - (instancetype) initWithItems:(NSArray<OASettingsItem *> *)items
@@ -198,7 +202,10 @@
     if (importTask && _settingsItems)
     {
         if (!_file)
+        {
             _file = importTask.getFile;
+            _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(_file)).getItems();
+        }
             
         NSArray *duplicates = [importTask getDuplicates];
         NSArray *selectedItems = [importTask getSelectedItems];
@@ -296,6 +303,37 @@
     self.bottomBarView.hidden = YES;
 }
 
+- (long)getItemSize:(NSString *)item
+{
+    NSString *fileName = item.lastPathComponent;
+    const auto fileNameStr = QString::fromNSString(fileName);
+    for (const auto& item : _archiveItems)
+    {
+        if (item.name.endsWith(fileNameStr))
+        {
+            return item.size;
+        }
+    }
+    return 0;
+}
+
+- (long) calculateItemsSize:(NSArray *)items
+{
+    long itemsSize = 0;
+    for (id item in items)
+    {
+        if ([item isKindOfClass:OAFileSettingsItem.class])
+        {
+            itemsSize += [self getItemSize:((OAFileSettingsItem *) item).filePath];
+        }
+        else if ([item isKindOfClass:NSString.class])
+        {
+            [self getItemSize:item];
+        }
+    }
+    return itemsSize;
+}
+
 #pragma mark - Actions
 
 - (IBAction) primaryButtonPressed:(id)sender
@@ -380,12 +418,6 @@
     for (OAExportSettingsType *type in categoryItems.getTypes)
     {
         _selectedItemsMap[type] = [categoryItems getItemsForType:type];
-    }
-    
-    NSInteger itemsCount = [self.tableView numberOfRowsInSection:section];
-    for (NSInteger i = 0; i < itemsCount; i++)
-    {
-        [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -484,16 +516,22 @@
                 NSInteger itemSelectionCount = 0;
                 NSInteger itemCount = itemTypes.getTypes.count;
                 BOOL partiallySelected = NO;
+                long size = 0;
                 for (OAExportSettingsType *type in itemTypes.getTypes)
                 {
                     NSInteger allItemsCount = [itemTypes getItemsForType:type].count;
                     NSInteger selectedItemsCount = _selectedItemsMap[type].count;
+                    size += [self calculateItemsSize:_selectedItemsMap[type]];
                     if (selectedItemsCount > 0)
                         itemSelectionCount++;
                     partiallySelected = partiallySelected || allItemsCount != selectedItemsCount;
                 }
                 cell.textView.text = groupData.groupName;
-                cell.descriptionView.text = [NSString stringWithFormat: OALocalizedString(@"selected_profiles"), itemSelectionCount, itemCount];
+                cell.descriptionView.text = [NSString stringWithFormat:OALocalizedString(@"selected_profiles"), itemSelectionCount, itemCount];
+                if (size > 0)
+                {
+                    cell.descriptionView.text = [cell.descriptionView.text stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
+                }
                 cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
                 [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
                 
@@ -541,17 +579,27 @@
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 70., 0., 0.);
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
             }
             if (cell)
             {
                 cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.imgView.tintColor = item[@"color"];
                 cell.textView.text = item[@"title"];
                 OASettingsCategoryItems *items = _itemsMap[_itemTypes[indexPath.section]];
                 OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
                 NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
                 NSInteger itemsTotal = [items getItemsForType:settingType].count;
                 NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"sett_no_ext_input") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"some_of"), selectedAmount, itemsTotal]);
+                
+                long size = [self calculateItemsSize:_selectedItemsMap[settingType]];
+                if (size > 0)
+                {
+                    selectedStr = [selectedStr stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
+                }
+                
+                UIColor *color = selectedAmount == 0 ? UIColorFromRGB(color_tint_gray) : item[@"color"];
+                cell.imgView.tintColor = color;
+                
                 cell.descriptionView.text = selectedStr;
             }
             return cell;

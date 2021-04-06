@@ -11484,13 +11484,10 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				DAB88FE02618A70F00093BE6 /* OAProgressTitleCell.xib */,
 				DAB88FA126149ED000093BE6 /* OACustomSelectionButtonCell.xib */,
 				DAE79D45260E1F9100E2EE11 /* OACustomSelectionCollapsableCell.xib */,
-=======
 				3225242A260E26C3002C9BB4 /* OAIconsTableViewCell.xib */,
->>>>>>> f9108ffd2036c860bbf5011c977ddd9230e85f54
 				DA758D8C258CF4A6003A2920 /* OATitleDescriptionIconRoundCell.xib */,
 				DA65CC1C256D42A100DC896F /* OASegmentedControllCell.xib */,
 				1582989E24DC042600323768 /* OAIconTitleIconRoundCell.xib */,

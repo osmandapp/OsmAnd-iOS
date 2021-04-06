@@ -362,6 +362,7 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (IBAction)onCancelPressed:(id)sender
@@ -377,6 +378,20 @@
 }
 
 // MARK: UITableViewDataSource
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row > 0)
+    {
+        NSDictionary *item = _data[indexPath.row];
+        BOOL selected = [_selectedItems containsObject:item[@"object"]];
+        [cell setSelected:selected animated:NO];
+        if (selected)
+            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        else
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
@@ -429,6 +444,9 @@
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
+            [cell setSelectedBackgroundView:bgColorView];
         }
         if (cell)
         {
@@ -463,43 +481,33 @@
     return indexPath.row != 0;
 }
 
-- (void)selectGroupItem:(NSIndexPath *)indexPath
+- (void)selectDeselectGroupItem:(NSIndexPath *)indexPath
 {
     if (indexPath.row < 1)
         return;
     [self.tableView beginUpdates];
     id item = _items[indexPath.row - 1];
-    if (item)
+    if ([_selectedItems containsObject:item])
+        [_selectedItems removeObject:item];
+    else
         [_selectedItems addObject:item];
     [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-}
-
-- (void)deselectGroupItem:(NSIndexPath *)indexPath
-{
-    if (indexPath.row < 1)
-        return;
-    [self.tableView beginUpdates];
-    id item = _items[indexPath.row - 1];
-    if (item)
-        [_selectedItems removeObject:item];
-    
-    [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
-    [self.tableView endUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row > 0)
-        [self selectGroupItem:indexPath];
+        [self selectDeselectGroupItem:indexPath];
+    else
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row > 0)
-        [self deselectGroupItem:indexPath];
+        [self selectDeselectGroupItem:indexPath];
 }
 
 @end

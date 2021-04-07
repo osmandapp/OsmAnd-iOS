@@ -383,7 +383,7 @@
         @"title" : OALocalizedString(@"icon"),
         @"value" : @"",
         @"selectedCategoryName" : _selectedIconCategoryName,
-        @"selectedCategoryIndex" : [NSNumber numberWithInteger:_selectedCategoryIndex],
+        @"selectedCategoryIndex" : @(_selectedCategoryIndex),
         @"categotyData" : _poiCategories,
         @"selectedIconName" : _selectedIconName,
         @"poiData" : _poiIcons[_selectedIconCategoryName],

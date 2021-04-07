@@ -33,6 +33,7 @@
 
 @implementation OASaveTrackViewController
 {
+    BOOL _isFirstLoad;
     NSArray<NSArray<NSDictionary *> *> *_data;
     OAAppSettings *_settings;
     
@@ -56,6 +57,7 @@
     self = [super init];
     if (self)
     {
+        _isFirstLoad = YES;
         _settings = [OAAppSettings sharedManager];
         _fileName = fileName;
         _filePath = filePath;
@@ -113,6 +115,19 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void) viewWillLayoutSubviews
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:1]];
+    if (_isFirstLoad && [cell isKindOfClass:OAFolderCardsCell.class])
+    {
+        OAFolderCardsCell *cardCell = cell;
+        [cardCell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedFolderIndex inSection:0]
+                                    atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                            animated:YES];
+        _isFirstLoad = NO;
+    }
 }
 
 - (void) commonInit

@@ -115,14 +115,17 @@
         return;
     
     OsmAnd::ColorARGB lineColor = _editingCtx.getLineColor;
-    
+    std::vector<double> linePattern;
+    linePattern.push_back(80);
+    linePattern.push_back(40);
+
     OsmAnd::VectorLineBuilder builder;
     builder.setBaseOrder(self.baseOrder)
     .setIsHidden(points.size() == 0)
     .setLineId(collection->getLines().size())
-    .setLineWidth(30);
-    
-    builder.setFillColor(lineColor);
+    .setLineWidth(16)
+    .setLineDash(linePattern)
+    .setFillColor(lineColor);
 
     [self buildLine:builder collection:collection linePoints:points];
 }

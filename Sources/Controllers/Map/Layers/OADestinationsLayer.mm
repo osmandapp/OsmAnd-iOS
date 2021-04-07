@@ -149,10 +149,12 @@
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
     OAProfileSetting *obj = notification.object;
-    OAProfileActiveMarkerConstant *activeMarkers = [OAAppSettings sharedManager].activeMarkers;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OAProfileActiveMarkerConstant *activeMarkers = settings.activeMarkers;
+    OAProfileBoolean *directionLines = settings.directionLines;
     if (obj)
     {
-        if (obj == activeMarkers)
+        if (obj == activeMarkers || obj == directionLines)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self drawDestinationLines];
@@ -328,7 +330,7 @@
 
 - (void) drawDestinationLines
 {
-    bool show = [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+    [self.mapView removeKeyedSymbolsProvider:_linesCollection];
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
@@ -351,9 +353,8 @@
                 else
                     _linesCollection->removeLine([self getLine:2]);
             }
-        }
-        if (show)
             [self.mapView addKeyedSymbolsProvider:_linesCollection];
+        }
     }
 }
 

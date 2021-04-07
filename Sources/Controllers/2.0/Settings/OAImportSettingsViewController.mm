@@ -646,9 +646,21 @@
     {
         OASettingsCategoryItems *items = _itemsMap[_itemTypes[indexPath.section]];
         OAExportSettingsType *type = [items getTypes][indexPath.row - 1];
-        OAExportItemsSelectionViewController *selectionVC = [[OAExportItemsSelectionViewController alloc] initWithItems:[items getItemsForType:type] type:type selectedItems:_selectedItemsMap[type]];
-        selectionVC.delegate = self;
-        [self presentViewController:selectionVC animated:YES completion:nil];
+        if (type != OAExportSettingsType.SEARCH_HISTORY)
+        {
+            OAExportItemsSelectionViewController *selectionVC = [[OAExportItemsSelectionViewController alloc] initWithItems:[items getItemsForType:type] type:type selectedItems:_selectedItemsMap[type]];
+            selectionVC.delegate = self;
+            [self presentViewController:selectionVC animated:YES completion:nil];
+        }
+        else
+        {
+            if (_selectedItemsMap[type].count == 0)
+                _selectedItemsMap[type] = [items getItemsForType:type];
+            else
+                [_selectedItemsMap removeObjectForKey:type];
+            
+            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self updateControls];

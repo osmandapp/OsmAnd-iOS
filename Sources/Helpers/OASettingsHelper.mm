@@ -38,6 +38,7 @@
 #import "OAFileSettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OASettingsItem.h"
+#import "OAHistoryHelper.h"
 #import "OsmAndApp.h"
 
 #import "OAOsmNotesSettingsItem.h"
@@ -59,6 +60,7 @@
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
+#import "OASearchHistorySettingsItem.h"
 #import "OATileSource.h"
 
 NSString *const kSettingsHelperErrorDomain = @"SettingsHelper";
@@ -455,6 +457,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
     NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
     NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *historyItems = [NSMutableArray array];
 
     for (id object in data)
     {
@@ -486,6 +489,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [favoiriteItems addObject:object];
         else if ([object isKindOfClass:OADestination.class])
             [activeMarkersList addObject:object];
+        else if ([object isKindOfClass:OAHistoryItem.class])
+            [historyItems addObject:object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)
@@ -522,6 +527,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         [result addObject:[[OAMarkersSettingsItem alloc] initWithItems:activeMarkersList]];
     }
+    if (historyItems.count > 0)
+    {
+        [result addObject:[[OASearchHistorySettingsItem alloc] initWithItems:historyItems]];
+    }
     return result;
 }
 
@@ -541,6 +550,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
     NSMutableArray<OADestination *> *markers = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *historyEntries = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)
@@ -635,6 +645,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     [markers addObjectsFromArray:markersItem.items];
                 break;
             }
+            case EOASettingsItemTypeSearchHistory:
+            {
+                OASearchHistorySettingsItem *searchHistorySettingsItem = (OASearchHistorySettingsItem *) item;
+                [historyEntries addObjectsFromArray:searchHistorySettingsItem.items];
+                break;
+            }
             default:
                 break;
         }
@@ -665,6 +681,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsToOperate[OAExportSettingsType.OSM_EDITS] = osmEditsPointList;
     if (markers.count > 0)
         settingsToOperate[OAExportSettingsType.ACTIVE_MARKERS] = markers;
+    if (historyEntries.count > 0)
+        settingsToOperate[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
     return settingsToOperate;
 }
 

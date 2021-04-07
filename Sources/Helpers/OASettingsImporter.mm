@@ -31,6 +31,7 @@
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
+#import "OASearchHistorySettingsItem.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -319,6 +320,9 @@
             break;
         case EOASettingsItemTypeGpx:
             item = [[OAGpxSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeSearchHistory:
+            item = [[OASearchHistorySettingsItem alloc] initWithJson:json error:&error];
             break;
         default:
             item = nil;

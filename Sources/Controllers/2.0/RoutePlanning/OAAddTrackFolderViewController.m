@@ -72,16 +72,10 @@
 -(void) clearButtonPressed:(UIButton *)sender
 {
     _newFolderName = @"";
+    _inputFieldError= @"";
+    [self generateData];
+    [self.tableView reloadData];
     self.doneButton.enabled = NO;
-
-    UIButton *btn = (UIButton *)sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:btn.tag & 0x3FF inSection:btn.tag >> 10];
-
-    [self.tableView beginUpdates];
-    UITableViewCell *cell = [self.  tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]];
-    if ([cell isKindOfClass:OATextViewResizingCell.class])
-        ((OATextViewResizingCell *) cell).inputField.text = @"";
-    [self.tableView endUpdates];
 }
 
 - (void)onDoneButtonPressed

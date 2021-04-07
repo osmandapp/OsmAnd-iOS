@@ -3301,7 +3301,7 @@ typedef enum
             markersHeaderWidth = [OAUtilities isLandscape] ? markersLandscapeWidth : DeviceScreenWidth;
         }
         
-        _destinationViewController.view.frame = CGRectMake( markersHeaderLeftOffset - OAUtilities.getLeftMargin, coordinateWidgetTopOffset + OAUtilities.getTopMargin, markersHeaderWidth, 50);
+        _destinationViewController.view.frame = CGRectMake( markersHeaderLeftOffset - OAUtilities.getLeftMargin, coordinateWidgetTopOffset + self.hudViewController.statusBarView.frame.size.height, markersHeaderWidth, 50);
         _destinationViewController.titleLabel.frame = CGRectMake( 0, 0, markersHeaderWidth, 44);
         
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];

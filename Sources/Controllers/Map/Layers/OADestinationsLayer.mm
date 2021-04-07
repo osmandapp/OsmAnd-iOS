@@ -374,7 +374,7 @@
         builder.setBaseOrder(_myPositionLayerBaseOrder + 10)
         .setIsHidden(false)
         .setLineId(lineId)
-        .setLineWidth(30)
+        .setLineWidth(16)
         .setLineDash(linePattern)
         .setPoints(points)
         .setFillColor(color);

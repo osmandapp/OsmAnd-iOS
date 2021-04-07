@@ -25,10 +25,14 @@
 #import "OAReverseGeocoder.h"
 #import "OAPointDescription.h"
 #import "OAAppSettings.h"
+#import "OAMapLayers.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/VectorLinesCollection.h>
+#include <OsmAndCore/Map/VectorLine.h>
+#include <OsmAndCore/Map/VectorLineBuilder.h>
 
 @interface OADestinationsLayer () <OAStateChangedListener>
 
@@ -37,17 +41,20 @@
 @implementation OADestinationsLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _destinationsMarkersCollection;
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
 
     OAAutoObserverProxy* _destinationAddObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _destinationShowObserver;
     OAAutoObserverProxy* _destinationHideObserver;
+    OAAutoObserverProxy* _locationServicesUpdateObserver;
     
     OATargetPointsHelper *_targetPoints;
     OADestinationsLineWidget *_destinationLayerWidget;
 
     BOOL _showCaptionsCache;
     double _textSize;
+    int _myPositionLayerBaseOrder;
 }
 
 - (NSString *) layerId
@@ -76,7 +83,16 @@
     _destinationHideObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onDestinationHide:withKey:)
                                                           andObserve:self.app.data.destinationHideObservable];
+    
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesUpdate)
+                                                                 andObserve:self.app.locationServices.updateObserver];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _myPositionLayerBaseOrder = self.mapViewController.mapLayers.myPositionLayer.baseOrder;
+    
     [self refreshDestinationsMarkersCollection];
     
     [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
@@ -99,6 +115,8 @@
 {
     [super deinitLayer];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+     
     [_targetPoints removeListener:self];
 
     if (_destinationShowObserver)
@@ -120,6 +138,28 @@
     {
         [_destinationRemoveObserver detach];
         _destinationRemoveObserver = nil;
+    }
+    if (_locationServicesUpdateObserver)
+    {
+        [_locationServicesUpdateObserver detach];
+        _locationServicesUpdateObserver = nil;
+    }
+}
+
+- (void) onProfileSettingSet:(NSNotification *)notification
+{
+    OAProfileSetting *obj = notification.object;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OAProfileActiveMarkerConstant *activeMarkers = settings.activeMarkers;
+    OAProfileBoolean *directionLines = settings.directionLines;
+    if (obj)
+    {
+        if (obj == activeMarkers || obj == directionLines)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self drawDestinationLines];
+            });
+        }
     }
 }
 
@@ -151,12 +191,15 @@
     _destinationsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
 
     for (OADestination *destination in self.app.data.destinations)
+    {
         if (!destination.routePoint && !destination.hidden)
         {
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
             [_destinationLayerWidget drawLineArrowWidget:destination];
         }
+    }
 
+    [self drawDestinationLines];
 }
 
 - (void) addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude description:(NSString *)description
@@ -201,11 +244,11 @@
     }
 }
 
-
 - (void) show
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView addKeyedSymbolsProvider:_destinationsMarkersCollection];
+        [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }];
 }
 
@@ -213,6 +256,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_destinationsMarkersCollection];
+        [self.mapView removeKeyedSymbolsProvider:_linesCollection];
     }];
 }
 
@@ -222,6 +266,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
         [_destinationLayerWidget drawLineArrowWidget:destination];
+        [self drawDestinationLines];
     });
 }
 
@@ -231,6 +276,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self removeDestinationPin:destination.latitude longitude:destination.longitude];
         [_destinationLayerWidget removeLineToDestinationPin:destination];
+        [self drawDestinationLines];
     });
 }
 
@@ -258,6 +304,7 @@
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
             [_destinationLayerWidget drawLineArrowWidget:destination];
         }
+        [self drawDestinationLines];
     }
 }
 
@@ -277,7 +324,86 @@
                 break;
             }
         }
+        [self drawDestinationLines];
     }
+}
+
+- (void) drawDestinationLines
+{
+    [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0)
+    {
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
+        OADestination *firstMarkerDestination = (destinations.count > 0 ? destinations[0] : nil);
+        OADestination *secondMarkerDestination = (destinations.count > 1 ? destinations[1] : nil);
+        
+        if ([settings.directionLines get])
+        {
+            CLLocation *currLoc = [self.app.locationServices lastKnownLocation];
+            if (currLoc)
+            {
+                if (firstMarkerDestination)
+                    [self drawLine:firstMarkerDestination fromLocation:currLoc lineId:1];
+                    
+                if (secondMarkerDestination && [settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
+                    [self drawLine:secondMarkerDestination fromLocation:currLoc lineId:2];
+                else
+                    _linesCollection->removeLine([self getLine:2]);
+            }
+            [self.mapView addKeyedSymbolsProvider:_linesCollection];
+        }
+    }
+}
+
+- (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc lineId:(int)lineId
+{
+    QVector<OsmAnd::PointI> points;
+    points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(destination.latitude, destination.longitude)));
+    points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currLoc.coordinate.latitude, currLoc.coordinate.longitude)));
+    const auto color = [self argbFromUIColor:destination.color];
+    const auto& line = [self getLine:lineId];
+    if (line == nullptr)
+    {
+        std::vector<double> linePattern;
+        linePattern.push_back(80);
+        linePattern.push_back(40);
+        OsmAnd::VectorLineBuilder builder;
+        builder.setBaseOrder(_myPositionLayerBaseOrder + 10)
+        .setIsHidden(false)
+        .setLineId(lineId)
+        .setLineWidth(30)
+        .setLineDash(linePattern)
+        .setPoints(points)
+        .setFillColor(color);
+        
+        builder.buildAndAddToCollection(_linesCollection);
+    }
+    else
+    {
+        line->setPoints(points);
+        line->setFillColor(color);
+    }
+}
+
+- (const std::shared_ptr<OsmAnd::VectorLine>) getLine:(int)lineId
+{
+    const auto& lines = _linesCollection->getLines();
+    for (auto it = lines.begin(); it != lines.end(); ++it)
+    {
+        if ((*it)->lineId == lineId)
+            return *it;
+    }
+    return nullptr;
+}
+
+- (OsmAnd::FColorARGB) argbFromUIColor:(UIColor *)color
+{
+    CGFloat red, green, blue, alpha;
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::ColorARGB(alpha * 255, red * 255, green * 255, blue * 255);
 }
 
 #pragma mark - OAStateChangedListener
@@ -308,6 +434,7 @@
             if (!hide && marker->isHidden())
                 marker->setIsHidden(false);
         }
+        [self drawDestinationLines];
     }];
 }
 
@@ -393,6 +520,7 @@
         destCopy.desc = address;
         [helper replaceDestination:dest withDestination:destCopy];
         [_destinationLayerWidget moveMarker:-1];
+        [self drawDestinationLines];
     }
 }
 
@@ -432,6 +560,15 @@
 - (EOAPinHorizontalAlignment) getPointIconHorizontalAlignment
 {
     return EOAPinAlignmentCenterHorizontal;
+}
+
+#pragma mark - LocationServicesUpdate
+
+- (void) onLocationServicesUpdate
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self drawDestinationLines];
+    });
 }
 
 @end

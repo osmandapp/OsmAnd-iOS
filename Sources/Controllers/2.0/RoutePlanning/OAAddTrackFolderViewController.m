@@ -15,7 +15,7 @@
 
 #define kTextInputCell @"OATextViewResizingCell"
 
-@interface OAAddTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@interface OAAddTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @end
 
@@ -142,13 +142,7 @@
     return (section == 0) ? _inputFieldError : nil;
 }
 
-#pragma mark - UITextFieldDelegate
-
-- (BOOL) textFieldShouldReturn:(UITextField *)sender
-{
-    [sender resignFirstResponder];
-    return YES;
-}
+#pragma mark - UITextViewDelegate
 
 - (void) textViewDidChange:(UITextView *)textView
 {

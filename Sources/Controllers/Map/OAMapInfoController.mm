@@ -421,14 +421,14 @@
         BOOL hasTopWidgetsPanel = _mapHudViewController.toolbarViewController.view.alpha != 0;
         if (portrait)
         {
-            _topCoordinatesView.frame = CGRectMake(0, [OAUtilities getTopMargin] , DeviceScreenWidth, 52);
+            _topCoordinatesView.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
         }
         else
         {
             CGFloat widgetWidth = DeviceScreenWidth / 2 - [OAUtilities getLeftMargin];
             CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];
             CGFloat leftOffset = hasTopWidgetsPanel ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
-            _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], [OAUtilities getTopMargin] , widgetWidth, 50);
+            _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
         }
     }
 }

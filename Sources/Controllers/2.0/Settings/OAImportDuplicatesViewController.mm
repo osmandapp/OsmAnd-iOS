@@ -23,7 +23,7 @@
 #import "OAProfileDataObject.h"
 #import "OAMenuSimpleCell.h"
 #import "OAMenuSimpleCellNoIcon.h"
-#import "OATitleTwoIconsRoundCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAMapSource.h"
 #import "OAIndexConstants.h"
@@ -37,10 +37,11 @@
 #import "OAOpenStreetMapPoint.h"
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
+#import "OATileSource.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
-#define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
+#define kCellTypeTitleDescription @"OAMenuSimpleCell"
 #define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
 
 @interface OAHeaderType : NSObject
@@ -164,7 +165,7 @@
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray new];
     NSMutableArray<OAQuickAction *> *actions = [NSMutableArray new];
     NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray new];
-    NSMutableArray<NSDictionary *> *tileSources = [NSMutableArray new];
+    NSMutableArray<OATileSource *> *tileSources = [NSMutableArray new];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray new];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray new];
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray new];
@@ -183,8 +184,8 @@
             [actions addObject: (OAQuickAction *)object];
         if ([object isKindOfClass:OAPOIUIFilter.class])
             [filters addObject: (OAPOIUIFilter *)object];
-        else if ([object isKindOfClass:NSDictionary.class])
-            [tileSources addObject: (NSDictionary *)object];
+        else if ([object isKindOfClass:OATileSource.class])
+            [tileSources addObject:object];
         else if ([object isKindOfClass:NSString.class])
         {
             NSString *file = (NSString *)object;
@@ -359,7 +360,7 @@
                 item[@"label"] = [action getName];
                 item[@"icon"] = [UIImage imageNamed:[action getIconResName]];
                 item[@"description"] = @"";
-                item[@"cellType"] = kTitleTwoIconsRoundCell;
+                item[@"cellType"] = kCellTypeTitleDescription;
             }
             else if ([currentItem isKindOfClass:OAPOIUIFilter.class])
             {
@@ -368,15 +369,17 @@
                 NSString *iconRes = [filter getIconId];
                 item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_custom_user")]; // check this
                 item[@"description"] = @"";
-                item[@"cellType"] = kTitleTwoIconsRoundCell;
+                item[@"cellType"] = kCellTypeTitleDescription;
             }
-            else if ([currentItem isKindOfClass:NSDictionary.class])
+            else if ([currentItem isKindOfClass:OATileSource.class])
             {
-                NSString *caption = currentItem[@"name"];
+                OATileSource *tileSource = currentItem;
+                NSString *caption = tileSource.name;
                 item[@"label"] = caption;
-                item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
+                item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_map"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kTitleTwoIconsRoundCell;
+                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
             }
             else if ([currentItem isKindOfClass:NSString.class])
             {
@@ -415,14 +418,14 @@
                 }
                 item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
                 item[@"description"] = @"";
-                item[@"cellType"] = kTitleTwoIconsRoundCell;
+                item[@"cellType"] = kCellTypeTitleDescription;
             }
             else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
             {
                 item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_alert"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kTitleTwoIconsRoundCell;
+                item[@"cellType"] = kCellTypeTitleDescription;
             }
             else if ([currentItem isKindOfClass:OAFavoriteGroup.class])
             {
@@ -430,7 +433,7 @@
                 item[@"label"] = [OAFavoriteGroup getDisplayName:group.name];
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kTitleTwoIconsRoundCell;
+                item[@"cellType"] = kCellTypeTitleDescription;
             }
             else if ([currentItem isKindOfClass:OADestination.class])
             {
@@ -438,7 +441,7 @@
                 item[@"label"] = marker.desc;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_marker"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kTitleTwoIconsRoundCell;
+                item[@"cellType"] = kCellTypeTitleDescription;
             }
             NSDictionary *newDict = [NSDictionary dictionaryWithDictionary:item];
             [sectionData addObject:newDict];
@@ -562,7 +565,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMenuSimpleCell owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 62., 0.0, 0.0);
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 70., 0.0, 0.0);
         }
         cell.textView.text = item[@"label"];
         
@@ -589,28 +592,29 @@
             [cell updateConstraints];
         return cell;
     }
-    else if ([type isEqualToString:kTitleTwoIconsRoundCell])
+    else if ([type isEqualToString:kCellTypeTitleDescription])
     {
-        static NSString* const identifierCell = kTitleTwoIconsRoundCell;
-        OATitleTwoIconsRoundCell* cell;
-        cell = (OATitleTwoIconsRoundCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = kCellTypeTitleDescription;
+        OAMenuSimpleCell* cell;
+        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleTwoIconsRoundCell owner:self options:nil];
-            cell = (OATitleTwoIconsRoundCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 62., 0.0, 0.0);
-            cell.rightIconView.hidden = YES;
-            cell.leftIconView.hidden = NO;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescription owner:self options:nil];
+            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 70., 0.0, 0.0);
+            cell.descriptionView.hidden = YES;
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
         }
-        cell.titleView.text = item[@"label"];
+        cell.textLabel.text = item[@"label"];
         if (item[@"icon"] && item[@"iconColor"])
         {
-            cell.leftIconView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = item[@"iconColor"];
+            cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.tintColor = item[@"iconColor"];
         }
         else if (item[@"icon"])
         {
-            cell.leftIconView.image = item[@"icon"];
+            cell.imgView.image = item[@"icon"];
         }
         return cell;
     }
@@ -653,7 +657,7 @@
 - (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
     if (succeed)
     {
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[_settingsHelper.importTask getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }

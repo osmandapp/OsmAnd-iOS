@@ -63,7 +63,7 @@
         case EOASettingsItemFileSubtypeRenderingStyle:
             return documentsPath;
         case EOASettingsItemFileSubtypeTilesMap:
-            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];;
+            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];
         case EOASettingsItemFileSubtypeRoutingConfig:
             return [documentsPath stringByAppendingPathComponent:@"routing"];
         case EOASettingsItemFileSubtypeGpx:
@@ -139,7 +139,7 @@
             }
             case EOASettingsItemFileSubtypeTilesMap:
             {
-                if ([name hasSuffix:@".sqlitedb"])
+                if ([name hasSuffix:@".sqlitedb"] || name.pathExtension.length == 0)
                     return subtype;
                 break;
             }
@@ -176,6 +176,34 @@
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type
 {
     return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap;
+}
+
++ (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype
+{
+    switch (subtype)
+    {
+        case EOASettingsItemFileSubtypeObfMap:
+        case EOASettingsItemFileSubtypeTilesMap:
+        case EOASettingsItemFileSubtypeRoadMap:
+            return @"ic_custom_map";
+        case EOASettingsItemFileSubtypeSrtmMap:
+            return @"ic_custom_contour_lines";
+        case EOASettingsItemFileSubtypeWikiMap:
+            return @"ic_custom_wikipedia";
+        case EOASettingsItemFileSubtypeGpx:
+            return @"ic_custom_trip";
+        case EOASettingsItemFileSubtypeVoice:
+            return @"ic_custom_sound";
+        case EOASettingsItemFileSubtypeTravel:
+            return @"ic_custom_wikipedia";
+        case EOASettingsItemFileSubtypeRoutingConfig:
+            return @"ic_custom_route";
+        case EOASettingsItemFileSubtypeRenderingStyle:
+            return @"ic_custom_map_style";
+            
+        default:
+            return @"ic_custom_save_as_new_file";
+    }
 }
 
 @end

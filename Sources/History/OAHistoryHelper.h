@@ -10,6 +10,8 @@
 #import "OAHistoryItem.h"
 #import "OAObservable.h"
 
+@class OAHistoryItem;
+
 @interface OAHistoryHelper : NSObject
 
 @property (readonly) OAObservable* historyPointAddObservable;
@@ -28,5 +30,6 @@
 - (NSArray *)getAllPoints;
 - (NSArray *)getSearchHistoryPoints:(int)limit;
 - (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
+- (OAHistoryItem *)getPointByName:(NSString *)name;
 
 @end

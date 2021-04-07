@@ -532,6 +532,11 @@ static OAApplicationMode *_SKI;
     return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"profile_type_custom_string");
 }
 
+- (OAApplicationModeBean *) toModeBean
+{
+    return [OAApplicationModeBean fromJson:self.toJson];
+}
+
 + (void) onApplicationStart
 {
     [self initCustomModes];

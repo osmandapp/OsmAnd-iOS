@@ -31,11 +31,11 @@
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
+#import "OASearchHistorySettingsItem.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
-#define kTmpProfileFolder @"tmpProfileData"
 #define kVersion 1
 
 #pragma mark - OASettingsImporter
@@ -321,6 +321,9 @@
         case EOASettingsItemTypeGpx:
             item = [[OAGpxSettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeSearchHistory:
+            item = [[OASearchHistorySettingsItem alloc] initWithJson:json error:&error];
+            break;
         default:
             item = nil;
             break;
@@ -522,149 +525,6 @@
         }
     }
     return duplicateItems;
-}
-
-- (NSDictionary *) getSettingsToOperate:(NSArray <OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete
-{
-    NSMutableDictionary *settingsToOperate = [NSMutableDictionary dictionary];
-    NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
-    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
-    NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
-    NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
-    NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
-    NSMutableArray<OAFileSettingsItem *> *tracksFilesList = [NSMutableArray array];
-    NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
-    NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
-    NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
-    NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
-    NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
-    NSMutableArray<OADestination *> *markers = [NSMutableArray array];
-    for (OASettingsItem *item in settingsItems)
-    {
-        switch (item.type)
-        {
-            case EOASettingsItemTypeProfile:
-            {
-                [profiles addObject:[(OAProfileSettingsItem *)item modeBean]];
-                break;
-            }
-            case EOASettingsItemTypeFile:
-            {
-                OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
-                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
-                    [renderFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
-                    [routingFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
-                    [tracksFilesList addObject:fileItem];
-                else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
-                    [mapFilesList addObject:fileItem];
-                break;
-            }
-            case EOASettingsItemTypeQuickActions:
-            {
-                OAQuickActionsSettingsItem *quickActionsItem = (OAQuickActionsSettingsItem *) item;
-                if (importComplete)
-                    [quickActions addObjectsFromArray:quickActionsItem.appliedItems];
-                else
-                    [quickActions addObjectsFromArray:quickActionsItem.items];
-                break;
-            }
-            case EOASettingsItemTypePoiUIFilters:
-            {
-                OAPoiUiFilterSettingsItem *poiUiFilterItem = (OAPoiUiFilterSettingsItem *) item;
-                if (importComplete)
-                    [poiUIFilters addObjectsFromArray:poiUiFilterItem.appliedItems];
-                else
-                    [poiUIFilters addObjectsFromArray:poiUiFilterItem.items];
-                break;
-            }
-            case EOASettingsItemTypeMapSources:
-            {
-                OAMapSourcesSettingsItem *mapSourcesItem = (OAMapSourcesSettingsItem *) item;
-                if (importComplete)
-                    [tileSourceTemplates addObjectsFromArray:mapSourcesItem.appliedItems];
-                else
-                    [tileSourceTemplates addObjectsFromArray:mapSourcesItem.items];
-                break;
-            }
-            case EOASettingsItemTypeAvoidRoads:
-            {
-                OAAvoidRoadsSettingsItem *avoidRoadsItem = (OAAvoidRoadsSettingsItem *) item;
-                if (importComplete)
-                    [avoidRoads addObjectsFromArray:avoidRoadsItem.appliedItems];
-                else
-                    [avoidRoads addObjectsFromArray:avoidRoadsItem.items];
-                break;
-            }
-            case EOASettingsItemTypeFavorites:
-            {
-                OAFavoritesSettingsItem *favoritesItem = (OAFavoritesSettingsItem *) item;
-                if (importComplete)
-                    [favorites addObjectsFromArray:favoritesItem.appliedItems];
-                else
-                    [favorites addObjectsFromArray:favoritesItem.items];
-                break;
-            }
-            case EOASettingsItemTypeOsmNotes:
-            {
-                OAOsmNotesSettingsItem *osmNotesItem = (OAOsmNotesSettingsItem *) item;
-                if (importComplete)
-                    [notesPointList addObjectsFromArray:osmNotesItem.appliedItems];
-                else
-                    [notesPointList addObjectsFromArray:osmNotesItem.items];
-                break;
-            }
-            case EOASettingsItemTypeOsmEdits:
-            {
-                OAOsmEditsSettingsItem *osmEditsItem = (OAOsmEditsSettingsItem *) item;
-                if (importComplete)
-                    [osmEditsPointList addObjectsFromArray:osmEditsItem.appliedItems];
-                else
-                    [osmEditsPointList addObjectsFromArray:osmEditsItem.items];
-                break;
-            }
-            case EOASettingsItemTypeActiveMarkers:
-            {
-                OAMarkersSettingsItem *markersItem = (OAMarkersSettingsItem *) item;
-                if (importComplete)
-                    [markers addObjectsFromArray:markersItem.appliedItems];
-                else
-                    [markers addObjectsFromArray:markersItem.items];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    if (profiles.count > 0)
-        [settingsToOperate setObject:profiles forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]];
-    if (quickActions.count > 0)
-        [settingsToOperate setObject:quickActions forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeQuickActions]];
-    if (poiUIFilters.count > 0)
-        [settingsToOperate setObject:poiUIFilters forKey:[OAExportSettingsType typeName:EOAExportSettingsTypePoiTypes]];
-    if (tileSourceTemplates.count > 0)
-        [settingsToOperate setObject:tileSourceTemplates forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapSources]];
-    if (renderFilesList.count > 0)
-        [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyles]];
-    if (routingFilesList.count > 0)
-        [settingsToOperate setObject:routingFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRouting]];
-    if (tracksFilesList.count > 0)
-        [settingsToOperate setObject:tracksFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeGPX]];
-    if (mapFilesList.count > 0)
-        [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
-    if (avoidRoads.count > 0)
-        [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
-    if (favorites.count > 0)
-        [settingsToOperate setObject:favorites forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeFavorites]];
-    if (notesPointList.count > 0)
-        [settingsToOperate setObject:notesPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmNotes]];
-    if (osmEditsPointList.count > 0)
-        [settingsToOperate setObject:osmEditsPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmEdits]];
-    if (markers.count > 0)
-        [settingsToOperate setObject:markers forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeActiveMarkers]];
-    return settingsToOperate;
 }
 
 @end

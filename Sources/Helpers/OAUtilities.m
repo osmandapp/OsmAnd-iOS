@@ -159,6 +159,15 @@
 
 @end
 
+@implementation UIImage (util)
+
++ (UIImage *) templateImageNamed:(NSString *)imageName
+{
+    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
+
+@end
+
 @implementation NSString (util)
 
 - (int) indexOf:(NSString *)text

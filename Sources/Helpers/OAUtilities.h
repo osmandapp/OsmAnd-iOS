@@ -58,6 +58,12 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface UIImage (util)
+
++ (UIImage *) templateImageNamed:(NSString *)imageName;
+
+@end
+
 @interface UIView (util)
 
 - (BOOL) setConstant:(NSString *)identifier constant:(CGFloat)constant;

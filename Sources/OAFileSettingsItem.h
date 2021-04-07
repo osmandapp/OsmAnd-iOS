@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 + (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name;
 + (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName;
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type;
++ (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype;
 
 @end
 

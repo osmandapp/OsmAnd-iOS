@@ -42,12 +42,17 @@ typedef NS_ENUM(NSInteger, EOAImportType) {
     EOAImportTypeImport
 };
 
+@class OAExportSettingsCategory, OASettingsCategoryItems, OAExportSettingsType, OASettingsItem;
+
 @interface OASettingsHelper : NSObject
 
 @property (nonatomic) OAImportAsyncTask* importTask;
 @property (nonatomic) NSMutableDictionary<NSString*, OAExportAsyncTask*>* exportTasks;
 
 + (OASettingsHelper *) sharedInstance;
+
++ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *) getSettingsToOperateByCategory:(NSArray<OASettingsItem *> *)items importComplete:(BOOL)importComplete;
++ (NSDictionary<OAExportSettingsType *, NSArray *> *) getSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version;
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;
@@ -57,5 +62,7 @@ typedef NS_ENUM(NSInteger, EOAImportType) {
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles;
+
+- (NSArray <OASettingsItem *>*) prepareSettingsItems:(NSArray *)data settingsItems:(NSArray<OASettingsItem *> *)settingsItems doExport:(BOOL)doExport;
 
 @end

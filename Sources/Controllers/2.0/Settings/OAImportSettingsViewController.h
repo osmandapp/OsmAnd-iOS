@@ -13,4 +13,6 @@
 
 - (instancetype) initWithItems:(NSArray<OASettingsItem *> *)items;
 
+- (void)onItemsCollected:(NSArray<OASettingsItem *> *)items;
+
 @end

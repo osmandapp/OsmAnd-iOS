@@ -1029,4 +1029,50 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return [NSDictionary dictionaryWithDictionary:res];
 }
 
++ (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles
+{
+    NSMutableArray<OAMapStyleResourceItem *> *res = [NSMutableArray new];
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto localResources = app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+    {
+        if (localResource->type == OsmAndResourceType::MapStyle && localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Builtin)
+            mapStylesResources.push_back(localResource);
+    }
+    
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    
+    // Process map styles
+    for(const auto& resource : mapStylesResources)
+    {
+        const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+        
+        NSString* resourceId = resource->id.toNSString();
+        
+        OAMapStyleResourceItem* item = [[OAMapStyleResourceItem alloc] init];
+        item.mapSource = [app.data lastMapSourceByResourceId:resourceId];
+        if (item.mapSource == nil)
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
+        
+        NSString *caption = mapStyle->title.toNSString();
+        
+        item.mapSource.name = caption;
+        item.resourceType = OsmAndResourceType::MapStyle;
+        item.resource = resource;
+        item.mapStyle = mapStyle;
+
+        [res addObject:item];
+    }
+
+    [res sortUsingComparator:^NSComparisonResult(OAMapStyleResourceItem* obj1, OAMapStyleResourceItem* obj2) {
+        if (obj1.sortIndex < obj2.sortIndex)
+            return NSOrderedAscending;
+        if (obj1.sortIndex > obj2.sortIndex)
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    return res;
+}
+
 @end

@@ -13,14 +13,15 @@
 #import "OAMapCreatorHelper.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMapStyleSettings.h"
+#import "OATileSource.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
 @interface OAMapSourcesSettingsItem()
 
-@property (nonatomic) NSArray<NSDictionary *> *items;
-@property (nonatomic) NSMutableArray<NSDictionary *> *appliedItems;
+@property (nonatomic) NSArray<OATileSource *> *items;
+@property (nonatomic) NSMutableArray<OATileSource *> *appliedItems;
 
 @end
 
@@ -54,7 +55,7 @@
     _existingItemNames = existingItemNames;
 }
 
-- (instancetype) initWithItems:(NSArray<NSDictionary *> *)items
+- (instancetype) initWithItems:(NSArray<OATileSource *> *)items
 {
     self = [super initWithItems:items];
     return self;
@@ -67,7 +68,7 @@
 
 - (void) apply
 {
-    NSArray<NSDictionary *> *newItems = [self getNewItems];
+    NSArray<OATileSource *> *newItems = [self getNewItems];
     if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
@@ -75,12 +76,12 @@
         if ([self shouldReplace])
         {
             OAMapCreatorHelper *helper = [OAMapCreatorHelper sharedInstance];
-            for (NSDictionary *item in self.duplicateItems)
+            for (OATileSource *item in self.duplicateItems)
             {
-                BOOL isSqlite = [item[@"sql"] boolValue];
+                BOOL isSqlite = item.isSql;
                 if (isSqlite)
                 {
-                    NSString *name = [item[@"name"] stringByAppendingPathExtension:@"sqlitedb"];
+                    NSString *name = [item.name stringByAppendingPathExtension:@"sqlitedb"];
                     if (name && helper.files[name])
                     {
                         [[OAMapCreatorHelper sharedInstance] removeFile:name];
@@ -89,7 +90,7 @@
                 }
                 else
                 {
-                    NSString *name = item[@"name"];
+                    NSString *name = item.name;
                     if (name)
                     {
                         NSString *path = [app.cachePath stringByAppendingPathComponent:name];
@@ -102,76 +103,24 @@
         }
         else
         {
-            for (NSDictionary *localItem in self.duplicateItems)
-                [self.appliedItems addObject:[self renameItem:localItem]];
+            for (OATileSource *localItem in self.duplicateItems)
+            {
+                NSString *newName = [self getNewName:localItem.name];
+                [self.appliedItems addObject:[[OATileSource alloc] initFromTileSource:localItem newName:newName]];
+            }
         }
-        for (NSDictionary *localItem in self.appliedItems)
+        for (OATileSource *localItem in self.appliedItems)
         {
-            // TODO: migrate localItem to a custom class while extracting items into separate files
-            BOOL isSql = [localItem[@"sql"] boolValue];
-            
-            NSString *name = localItem[@"name"];
-            NSString *title = localItem[@"title"];
-            if (title.length == 0)
-                title = name;
-
-            int minZoom = [localItem[@"minZoom"] intValue];
-            int maxZoom = [localItem[@"maxZoom"] intValue];
-            NSString *url = localItem[@"url"];
-            NSString *randoms = localItem[@"randoms"];
-            BOOL ellipsoid = localItem[@"ellipsoid"] ? [localItem[@"ellipsoid"] boolValue] : NO;
-            BOOL invertedY = localItem[@"inverted_y"] ? [localItem[@"inverted_y"] boolValue] : NO;
-            NSString *referer = localItem[@"referer"];
-            BOOL timesupported = localItem[@"timesupported"] ? [localItem[@"timesupported"] boolValue] : NO;
-            long expire = [localItem[@"expire"] longValue];
-            BOOL inversiveZoom = localItem[@"inversiveZoom"] ? [localItem[@"inversiveZoom"] boolValue] : NO;
-            NSString *ext = localItem[@"ext"];
-            int tileSize = [localItem[@"tileSize"] intValue];
-            int bitDensity = [localItem[@"bitDensity"] intValue];
-            int avgSize = [localItem[@"avgSize"] intValue];
-            NSString *rule = localItem[@"rule"];
-            
+            BOOL isSql = localItem.isSql;
             if (isSql)
             {
-                NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:localItem[@"name"]] stringByAppendingPathExtension:@"sqlitedb"];
-                NSMutableDictionary *params = [NSMutableDictionary new];
-                params[@"minzoom"] = [NSString stringWithFormat:@"%d", minZoom];
-                params[@"maxzoom"] = [NSString stringWithFormat:@"%d", maxZoom];
-                params[@"url"] = url;
-                params[@"title"] = title;
-                params[@"ellipsoid"] = ellipsoid ? @(1) : @(0);
-                params[@"inverted_y"] = invertedY ? @(1) : @(0);
-                params[@"expireminutes"] = expire != -1 ? [NSString stringWithFormat:@"%ld", expire] : @"";
-                params[@"timecolumn"] = timesupported ? @"yes" : @"no";
-                params[@"rule"] = rule;
-                params[@"randoms"] = randoms;
-                params[@"referer"] = referer;
-                params[@"inversiveZoom"] = inversiveZoom ? @(1) : @(0);
-                params[@"ext"] = ext;
-                params[@"tileSize"] = [NSString stringWithFormat:@"%d", tileSize];
-                params[@"bitDensity"] = [NSString stringWithFormat:@"%d", bitDensity];
-                if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
+                NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:localItem.name] stringByAppendingPathExtension:@"sqlitedb"];
+                if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:localItem.toSqlParams])
                     [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
             }
             else
             {
-                const auto result = std::make_shared<OsmAnd::IOnlineTileSources::Source>(QString::fromNSString(localItem[@"name"]));
-
-                result->urlToLoad = QString::fromNSString(url);
-                result->minZoom = OsmAnd::ZoomLevel(minZoom);
-                result->maxZoom = OsmAnd::ZoomLevel(maxZoom);
-                result->expirationTimeMillis = expire;
-                result->ellipticYTile = ellipsoid;
-                //result->priority = _tileSource->priority;
-                result->tileSize = tileSize;
-                result->ext = QString::fromNSString(ext);
-                result->avgSize = avgSize;
-                result->bitDensity = bitDensity;
-                result->invertedYTile = invertedY;
-                result->randoms = QString::fromNSString(randoms);
-                result->randomsArray = OsmAnd::OnlineTileSources::parseRandoms(result->randoms);
-                result->rule = QString::fromNSString(rule);
-
+                const auto result = localItem.toOnlineTileSource;
                 OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
                 app.resourcesManager->installTilesResource(result);
             }
@@ -179,35 +128,28 @@
     }
 }
 
-- (NSDictionary *) renameItem:(NSDictionary *)localItem
+- (NSString *) getNewName:(NSString *)oldName
 {
-    NSMutableDictionary *item = [NSMutableDictionary dictionaryWithDictionary:localItem];
-    NSString *name = item[@"name"];
-    if (name)
+    NSString *newName = @"";
+    if (oldName)
     {
         int number = 0;
         while (true)
         {
             number++;
             
-            NSString *newName = [NSString stringWithFormat:@"%@_%d", name, number];
-            NSMutableDictionary *newItem = [NSMutableDictionary dictionaryWithDictionary:item];
-            newItem[@"name"] = newName;
-            if (![self isDuplicate:newItem])
-            {
-                item = newItem;
-                break;
-            }
+            newName = [NSString stringWithFormat:@"%@_%d", oldName, number];
+            if (![self isDuplicateName:newName])
+                return newName;
         }
     }
-    return item;
+    return newName;
 }
 
-- (BOOL) isDuplicate:(NSDictionary *)item
+- (BOOL) isDuplicateName:(NSString *)name
 {
-    NSString *itemName = item[@"name"];
-    if (itemName)
-        return [_existingItemNames containsObject:itemName];
+    if (name)
+        return [_existingItemNames containsObject:name];
     return NO;
 }
 
@@ -221,6 +163,16 @@
     return YES;
 }
 
+- (BOOL)isDuplicate:(id)item
+{
+    for (NSString *name in _existingItemNames)
+    {
+        if ([name isEqualToString:((OATileSource *)item).name])
+            return YES;
+    }
+    return NO;
+}
+
 - (OASettingsItemReader *) getReader
 {
     return [self getJsonReader];
@@ -231,7 +183,13 @@
     NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
     if (itemsJson.count == 0)
         return;
-    self.items = itemsJson;
+    
+    NSMutableArray<OATileSource *> *tileSources = [NSMutableArray new];
+    for (NSDictionary *item in itemsJson)
+    {
+        [tileSources addObject:[OATileSource tileSourceWithParameters:item]];
+    }
+    self.items = tileSources;
 }
 
 - (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -240,34 +198,33 @@
     if (self.items.count > 0)
     {
         // TODO: fixme in export!
-        for (NSDictionary *localItem in self.items)
-        {
-            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
-            {
-                OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
-                NSDictionary *params = localItem;
-                // TODO: check if this writes true/false while implementing export
-                jsonObject[@"sql"] = @(YES);
-                jsonObject[@"name"] = item.title;
-                jsonObject[@"minZoom"] = params[@"minzoom"];
-                jsonObject[@"maxZoom"] = params[@"maxzoom"];
-                jsonObject[@"url"] = params[@"url"];
-                jsonObject[@"randoms"] = params[@"randoms"];
-                jsonObject[@"ellipsoid"] = [@(1) isEqual:params[@"ellipsoid"]] ? @"true" : @"false";
-                jsonObject[@"inverted_y"] = [@(1) isEqual:params[@"inverted_y"]] ? @"true" : @"false";
-                jsonObject[@"referer"] = params[@"referer"];
-                jsonObject[@"timesupported"] = params[@"timecolumn"];
-                NSString *expMinStr = params[@"expireminutes"];
-                jsonObject[@"expire"] = expMinStr ? [NSString stringWithFormat:@"%lld", expMinStr.longLongValue * 60000] : @"0";
-                jsonObject[@"inversiveZoom"] = [@(1) isEqual:params[@"inversiveZoom"]] ? @"true" : @"false";
-                jsonObject[@"ext"] = params[@"ext"];
-                jsonObject[@"tileSize"] = params[@"tileSize"];
-                jsonObject[@"bitDensity"] = params[@"bitDensity"];
-                jsonObject[@"rule"] = params[@"rule"];
-            }
-            else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
-            {
+//        for (OATileSource *localItem in self.items)
+//        {
+//            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+//            if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
+//            {
+//                OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
+//                NSDictionary *params = localItem;
+//                jsonObject[@"sql"] = @(YES);
+//                jsonObject[@"name"] = item.title;
+//                jsonObject[@"minZoom"] = params[@"minzoom"];
+//                jsonObject[@"maxZoom"] = params[@"maxzoom"];
+//                jsonObject[@"url"] = params[@"url"];
+//                jsonObject[@"randoms"] = params[@"randoms"];
+//                jsonObject[@"ellipsoid"] = [@(1) isEqual:params[@"ellipsoid"]] ? @"true" : @"false";
+//                jsonObject[@"inverted_y"] = [@(1) isEqual:params[@"inverted_y"]] ? @"true" : @"false";
+//                jsonObject[@"referer"] = params[@"referer"];
+//                jsonObject[@"timesupported"] = params[@"timecolumn"];
+//                NSString *expMinStr = params[@"expireminutes"];
+//                jsonObject[@"expire"] = expMinStr ? [NSString stringWithFormat:@"%lld", expMinStr.longLongValue * 60000] : @"0";
+//                jsonObject[@"inversiveZoom"] = [@(1) isEqual:params[@"inversiveZoom"]] ? @"true" : @"false";
+//                jsonObject[@"ext"] = params[@"ext"];
+//                jsonObject[@"tileSize"] = params[@"tileSize"];
+//                jsonObject[@"bitDensity"] = params[@"bitDensity"];
+//                jsonObject[@"rule"] = params[@"rule"];
+//            }
+//            else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
+//            {
 //                OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
 //                const auto& source = _newSources[QString::fromNSString(item.title)];
 //                if (source)
@@ -288,9 +245,9 @@
 //                    jsonObject[@"avgSize"] = [NSString stringWithFormat:@"%d", source->avgSize];
 //                    jsonObject[@"rule"] = source->rule.toNSString();
 //                }
-            }
-            [jsonArray addObject:jsonObject];
-        }
+//            }
+//            [jsonArray addObject:jsonObject];
+//        }
         json[@"items"] = jsonArray;
     }
 }

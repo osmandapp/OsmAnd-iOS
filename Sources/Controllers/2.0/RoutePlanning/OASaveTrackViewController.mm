@@ -57,7 +57,6 @@
     self = [super init];
     if (self)
     {
-        _isFirstLoad = YES;
         _settings = [OAAppSettings sharedManager];
         _fileName = fileName;
         _filePath = filePath;
@@ -84,6 +83,9 @@
     self.saveButton.layer.cornerRadius = 9.0;
     
     [self updateBottomButtons];
+    
+    _isFirstLoad = YES;
+    [self.tableView layoutSubviews];
 }
 
 - (void) applyLocalization
@@ -117,15 +119,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void) viewWillLayoutSubviews
+- (void) viewDidLayoutSubviews
 {
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:1]];
-    if (_isFirstLoad && [cell isKindOfClass:OAFolderCardsCell.class])
+    if (_isFirstLoad)
     {
-        OAFolderCardsCell *cardCell = cell;
-        [cardCell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedFolderIndex inSection:0]
-                                    atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                            animated:YES];
+        [self.tableView reloadData];
         _isFirstLoad = NO;
     }
 }
@@ -345,6 +343,9 @@
         {
             cell.delegate = self;
             [cell setValues:item[@"values"] sizes:nil colors:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [cell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedFolderIndex inSection:0]
+                                        atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                animated:YES];
         }
         return cell;
     }

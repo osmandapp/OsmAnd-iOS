@@ -2047,3 +2047,13 @@
 "available_groups" = "Tiltækir hópar";
 "select_group_descr" = "Veldu hóp eða bættu við nýjum";
 "fav_add_new_group" = "Bæta við nýjum hópi";
+"quick_action_coordinates_widget_descr" = "Ef ýtt er á þennan aðgerðahnapp verður viðmótshluti hnita sýnilegur eða falinn.";
+"hide_coordinates" = "Fela hnit";
+"show_coordinates" = "Birta hnit";
+"toggle_coordinates" = "Birta/fela viðmót hnita";
+"copied_to_clipboard" = "Afritað á klippispjald";
+"searching_gps" = "Leita að GPS";
+
+// Coordinate widget
+"coordinates_widget" = "Viðmótshluti fyrir hnit";
+"coordinates" = "Hnit";

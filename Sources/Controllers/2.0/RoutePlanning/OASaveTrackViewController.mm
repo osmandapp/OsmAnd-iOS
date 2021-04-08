@@ -33,7 +33,6 @@
 
 @implementation OASaveTrackViewController
 {
-    BOOL _isFirstLoad;
     NSArray<NSArray<NSDictionary *> *> *_data;
     OAAppSettings *_settings;
     
@@ -83,9 +82,6 @@
     self.saveButton.layer.cornerRadius = 9.0;
     
     [self updateBottomButtons];
-    
-    _isFirstLoad = YES;
-    [self.tableView layoutSubviews];
 }
 
 - (void) applyLocalization
@@ -117,15 +113,6 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
-
-- (void) viewDidLayoutSubviews
-{
-    if (_isFirstLoad)
-    {
-        [self.tableView reloadData];
-        _isFirstLoad = NO;
-    }
 }
 
 - (void) commonInit
@@ -343,6 +330,7 @@
         {
             cell.delegate = self;
             [cell setValues:item[@"values"] sizes:nil colors:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [cell.collectionView layoutIfNeeded];
             [cell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedFolderIndex inSection:0]
                                         atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
                                                 animated:YES];

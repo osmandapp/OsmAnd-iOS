@@ -74,7 +74,7 @@
     _newFolderName = @"";
     _inputFieldError= @"";
     [self generateData];
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     self.doneButton.enabled = NO;
 }
 

@@ -2047,3 +2047,8 @@
 "available_groups" = "المجموعات المتوفرة";
 "select_group_descr" = "اختيار أو إضافة مجموعة جديدة";
 "fav_add_new_group" = "إضافة مجموعة جديدة";
+"searching_gps" = "بحث عن جي بي اس";
+
+// Coordinate widget
+"coordinates_widget" = "عرض الإحداثيات";
+"coordinates" = "إحداثيات";

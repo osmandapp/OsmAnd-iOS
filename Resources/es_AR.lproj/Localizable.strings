@@ -2066,3 +2066,13 @@
 "select_gropu_descr" = "Elegir grupo o añadir uno nuevo";
 "fav_add_new_group" = "Añadir nuevo grupo";
 "select_group_descr" = "Elige el grupo o añade uno nuevo";
+"quick_action_coordinates_widget_descr" = "Pulsando este botón, muestra u oculta el widget de coordenadas.";
+"hide_coordinates" = "Ocultar coordenadas";
+"show_coordinates" = "Mostrar coordenadas";
+"toggle_coordinates" = "Mostrar u ocultar widget de coordenadas";
+"copied_to_clipboard" = "Copiado al portapapeles";
+"searching_gps" = "Buscando GPS";
+
+// Coordinate widget
+"coordinates_widget" = "Widget de coordenadas";
+"coordinates" = "Coordenadas";

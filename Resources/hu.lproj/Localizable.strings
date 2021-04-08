@@ -601,7 +601,7 @@
 "daynight_mode_auto" = "Napkelte/napnyugta";
 "auto_follow_location_enabled" = "Automatikus követés.";
 "unknown_location" = "A jelenlegi helyzet nem ismert";
-"animate_routing_route_not_calculated" = "Előbb tervezz útvonalat";
+"animate_routing_route_not_calculated" = "Kérjük, először számolja ki az útvonalat";
 "settings_preset" = "Alapértelmezett profil";
 "switch_start_finish" = "Kiindulási és célpont felcserélése";
 "clear_all_intermediates" = "Összes köztes pont törlése";
@@ -1340,7 +1340,7 @@
 "copy_from_other_profile" = "Másolás egy másik profilból";
 "profile_alert_delete_title" = "Profil törlése";
 "reset_to_default" = "Alapértelmezés visszaállítása";
-"gpx_parse_error" = "Az OsmAnd GPX formázása helytelen, további vizsgálatért kérem, lépjen kapcsolatba a támogató csapattal.";
+"gpx_parse_error" = "Az OsmAnd GPX formázása helytelen. További vizsgálatért kérjük, lépjen kapcsolatba a támogató csapattal.";
 "shared_string_finish" = "Befejezés";
 "shared_string_import_complete" = "Importálás kész";
 "search_activity" = "Keresés";
@@ -1494,3 +1494,4 @@
 "simplified_track" = "Egyszerűsített nyomvonal";
 "simplified_track_description" = "Csak az út vonala lesz elmentve, az útpontok törlődnek.";
 "open_saved_track" = "Elmentett nyomvonal megnyitása";
+"vk" = "VKontakte";

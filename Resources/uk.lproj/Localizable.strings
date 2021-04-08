@@ -2050,3 +2050,13 @@
 "select_gropu_descr" = "Виберіть групу або додайте нову";
 "fav_add_new_group" = "Додати нову групу";
 "select_group_descr" = "Виберіть групу або додайте нову";
+"quick_action_coordinates_widget_descr" = "Торкання цієї кнопки покаже або приховає віджет координат.";
+"hide_coordinates" = "Сховати координати";
+"show_coordinates" = "Показати координати";
+"toggle_coordinates" = "Показати/сховати віджет координат";
+"copied_to_clipboard" = "Скопійовано до буферу обміну";
+"searching_gps" = "Пошук GPS";
+
+// Coordinate widget
+"coordinates_widget" = "Віджет координат";
+"coordinates" = "Координати";

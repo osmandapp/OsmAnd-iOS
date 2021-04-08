@@ -19,6 +19,7 @@
 - (void) drawLineArrowWidget:(OADestination *)destination;
 - (void) removeLineToDestinationPin:(OADestination *)destination;
 - (BOOL) updateLayer;
+- (double) getStrokeWidth;
 
 - (void) moveMarker:(NSInteger)index;
 

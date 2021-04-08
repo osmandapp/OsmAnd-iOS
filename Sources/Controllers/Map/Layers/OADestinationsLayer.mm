@@ -92,9 +92,7 @@
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _myPositionLayerBaseOrder = self.mapViewController.mapLayers.myPositionLayer.baseOrder;
-    
-    [self refreshDestinationsMarkersCollection];
-    
+        
     [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
@@ -102,6 +100,8 @@
 
     _destinationLayerWidget = [[OADestinationsLineWidget alloc] init];
     [self.mapView addSubview:_destinationLayerWidget];
+
+    [self refreshDestinationsMarkersCollection];
 }
 
 - (void) onMapFrameRendered
@@ -346,10 +346,10 @@
             if (currLoc)
             {
                 if (firstMarkerDestination)
-                    [self drawLine:firstMarkerDestination fromLocation:currLoc lineId:1];
+                    [self drawLine:firstMarkerDestination fromLocation:currLoc lineId:10];
                     
                 if (secondMarkerDestination && [settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
-                    [self drawLine:secondMarkerDestination fromLocation:currLoc lineId:2];
+                    [self drawLine:secondMarkerDestination fromLocation:currLoc lineId:20];
                 else
                     _linesCollection->removeLine([self getLine:2]);
             }
@@ -367,19 +367,34 @@
     const auto& line = [self getLine:lineId];
     if (line == nullptr)
     {
-        std::vector<double> linePattern;
-        linePattern.push_back(80);
-        linePattern.push_back(40);
-        OsmAnd::VectorLineBuilder builder;
-        builder.setBaseOrder(_myPositionLayerBaseOrder + 10)
+        double strokeWidth = _destinationLayerWidget.getStrokeWidth * 10;
+        std::vector<double> outlinePattern;
+        outlinePattern.push_back(60);
+        outlinePattern.push_back(20);
+        OsmAnd::VectorLineBuilder outlineBuilder;
+        outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId + 1)
         .setIsHidden(false)
         .setLineId(lineId)
-        .setLineWidth(16)
-        .setLineDash(linePattern)
+        .setLineWidth(strokeWidth * 2)
+        .setLineDash(outlinePattern)
+        .setPoints(points)
+        .setFillColor(OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0));
+        outlineBuilder.buildAndAddToCollection(_linesCollection);
+        
+        std::vector<double> inlinePattern;
+        inlinePattern.push_back(-strokeWidth);
+        inlinePattern.push_back(60 - strokeWidth * 2);
+        inlinePattern.push_back(20 + strokeWidth * 2);
+
+        OsmAnd::VectorLineBuilder inlineBuilder;
+        inlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId)
+        .setIsHidden(false)
+        .setLineId(lineId + 1)
+        .setLineWidth(strokeWidth)
+        .setLineDash(inlinePattern)
         .setPoints(points)
         .setFillColor(color);
-        
-        builder.buildAndAddToCollection(_linesCollection);
+        inlineBuilder.buildAndAddToCollection(_linesCollection);
     }
     else
     {

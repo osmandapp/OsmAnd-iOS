@@ -1897,7 +1897,6 @@
 "layer_amenity_label" = "Etykiety punktów";
 "personal_category_name" = "Osobiste";
 "road_speeds_descr" = "Te parametry mogą mieć wpływ na obliczanie trasy.";
-
 "shared_string_add_profile" = "Dodaj profil";
 "whole_track" = "Cała trasa";
 "arrived_at_destination" = "Osiągnięto cel.";
@@ -1913,3 +1912,4 @@
 "quick_action_showhide_mapillary_title" = "Pokaż/ukryj Mapillary";
 "profile_type_osmand_string" = "Profil OsmAnd";
 "quick_action_remove_next_destination" = "Usuń najbliższy punkt docelowy";
+"map_widget_distance_by_tap" = "Odległość po dotknięciu";

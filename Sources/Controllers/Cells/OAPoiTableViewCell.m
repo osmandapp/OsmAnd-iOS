@@ -24,14 +24,10 @@
 #define kCellHeightWithoutIcons 116
 
 @implementation OAPoiTableViewCell
-{
-    BOOL _isFirstLoad;
-}
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    _isFirstLoad = YES;
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:[UINib nibWithNibName:@"OAPoiCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAPoiCollectionViewCell"];
@@ -153,16 +149,6 @@
         }
         
         return cell;
-    }
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    if (_isFirstLoad)
-    {
-        [self.categoriesCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_currentCategoryIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
-        _isFirstLoad = NO;
     }
 }
 

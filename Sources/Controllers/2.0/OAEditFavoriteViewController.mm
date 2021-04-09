@@ -792,6 +792,9 @@
             cell.currentCategory = item[@"selectedCategoryName"];
             cell.currentCategoryIndex = [item[@"selectedCategoryIndex"] integerValue];
             cell.categoryDataArray = item[@"categotyData"];
+            [cell.categoriesCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[item[@"selectedCategoryIndex"] integerValue] inSection:0]
+                                        atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                animated:YES];
             
             cell.collectionView.tag = kPoiCellIndex;
             cell.poiDataArray = item[@"poiData"];
@@ -889,6 +892,10 @@
         {
             cell.delegate = self;
             [cell setValues:item[@"values"] sizes:item[@"sizes"] colors:item[@"colors"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [cell.collectionView layoutIfNeeded];
+            [cell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[item[@"selectedValue"] intValue] inSection:0]
+                                        atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                animated:YES];
         }
         return cell;
     }

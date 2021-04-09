@@ -166,7 +166,11 @@
     {
         OAPOIUIFilter *poiUIFilter = object;
         item[@"title"] = poiUIFilter.getName ? poiUIFilter.getName : @"";
-        item[@"icon"] = [UIImage templateImageNamed:(poiUIFilter.getIconId ? poiUIFilter.getIconId : @"ic_custom_user")];
+        UIImage *poiIcon = [UIImage templateImageNamed:poiUIFilter.getIconId];
+        if (poiIcon)
+            item[@"icon"] = poiIcon;
+        else
+            item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_user"];
     }
     else if ([object isKindOfClass:OATileSource.class])
     {

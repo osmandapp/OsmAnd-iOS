@@ -107,7 +107,7 @@
 - (void) onMapFrameRendered
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_destinationLayerWidget updateLayer];
+        [_destinationLayerWidget drawLayer];
     });
 }
 
@@ -166,8 +166,9 @@
 - (BOOL) updateLayer
 {
     [super updateLayer];
+    BOOL widgetUpdated = [_destinationLayerWidget updateLayer];
     
-    if (self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get)
+    if (widgetUpdated || self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get)
     {
         _showCaptionsCache = self.showCaptions;
         _textSize = OAAppSettings.sharedManager.textSize.get;
@@ -367,10 +368,10 @@
     const auto& line = [self getLine:lineId];
     if (line == nullptr)
     {
-        double strokeWidth = _destinationLayerWidget.getStrokeWidth * 10;
+        double strokeWidth = _destinationLayerWidget.getStrokeWidth * 3.5;
         std::vector<double> outlinePattern;
-        outlinePattern.push_back(60);
-        outlinePattern.push_back(20);
+        outlinePattern.push_back(75);
+        outlinePattern.push_back(25);
         OsmAnd::VectorLineBuilder outlineBuilder;
         outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId + 1)
         .setIsHidden(false)
@@ -383,8 +384,8 @@
         
         std::vector<double> inlinePattern;
         inlinePattern.push_back(-strokeWidth);
-        inlinePattern.push_back(60 - strokeWidth * 2);
-        inlinePattern.push_back(20 + strokeWidth * 2);
+        inlinePattern.push_back(75 - strokeWidth * 2);
+        inlinePattern.push_back(25 + strokeWidth * 2);
 
         OsmAnd::VectorLineBuilder inlineBuilder;
         inlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId)

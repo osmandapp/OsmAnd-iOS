@@ -337,13 +337,11 @@
     return nil;
 }
 
-
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([cell isKindOfClass:OAFolderCardsCell.class])
         [((OAFolderCardsCell *)cell) scrollToItem:_selectedFolderIndex];
 }
-
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

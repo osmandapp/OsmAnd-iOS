@@ -74,7 +74,7 @@
 "product_title_wiki" = "Βικιπαίδεια";
 "shared_string_is_open_24_7" = "Ανοιχτά 24/7";
 "lightgreen" = "Ανοιχτό πράσινο";
-"osmand_live_hourly" = "Ανά ώρα";
+"osmand_live_hourly" = "Ωριαία";
 "osm_target_modified" = "Τροποποιημένο ΣΕ OSM";
 "shared_string_all" = "Όλα";
 "use_points_as_intermediates" = "Υπολογισμός διαδρομής μεταξύ σημείων";
@@ -385,7 +385,7 @@
 "brown" = "καφέ";
 "translucent_pink" = "Ημιδιαφανές ροζ";
 "gpx_ascent" = "Ανηφόρα";
-"osmand_live_weekly" = "Ανά εβδομάδα";
+"osmand_live_weekly" = "Εβδομαδιαία";
 "download_map" = "Λήψη χάρτη";
 "osm_website" = "Ιστότοπος";
 "units_ft" = "πδ";
@@ -455,7 +455,7 @@
 "region_asia" = "Ασία";
 "si_min_m" = "Λεπτά ανά μίλι";
 "sett_arr_loc" = "Τοποθεσία";
-"osmand_live_daily" = "Ανά ημέρα";
+"osmand_live_daily" = "Ημερήσια";
 "shared_string_building" = "Κτήριο";
 "osmand_live_updates" = "Ζωντανές ενημερώσεις";
 "create_items" = "Δημιουργία στοιχείων";
@@ -1153,3 +1153,8 @@
 "select_color" = "Επιλέξτε χρώμα";
 "appearance_on_map" = "Εμφάνιση στον χάρτη";
 "shared_string_buy_for" = "για";
+"osmand_live_donation_header" = "Ρυθμίσεις δωρεάς";
+"osmand_live_wifi_only" = "Ενημέρωση μόνο μέσω WiFi";
+"osmand_live_upd_frequency" = "Συχνότητα ενημέρωσης";
+"osmand_live_server_date" = "Τελευταία ενημέρωση διακομιστή: %@";
+"osmand_live_reports" = "Αναφορές";

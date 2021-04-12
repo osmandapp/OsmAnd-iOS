@@ -48,7 +48,7 @@
     BOOL _showOnMap;
     
     NSString *_inputFieldError;
-    int _selectedFolderIndex;
+    NSInteger _selectedFolderIndex;
 }
 
 - (instancetype) initWithFileName:(NSString *)fileName filePath:(NSString *)filePath showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
@@ -150,7 +150,7 @@
         },
         @{
             @"type" : @"OAFolderCardsCell",
-            @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
+            @"selectedValue" : [NSNumber numberWithInteger:_selectedFolderIndex],
             @"values" : _allFolders,
             @"addButtonTitle" : OALocalizedString(@"add_folder")
         },
@@ -330,16 +330,20 @@
         {
             cell.delegate = self;
             [cell setValues:item[@"values"] sizes:nil colors:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
-            [cell.collectionView layoutIfNeeded];
-            [cell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedFolderIndex inSection:0]
-                                        atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                animated:YES];
         }
         return cell;
     }
     
     return nil;
 }
+
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell isKindOfClass:OAFolderCardsCell.class])
+        [((OAFolderCardsCell *)cell) scrollToItem:_selectedFolderIndex];
+}
+
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -542,7 +546,8 @@
     _selectedFolderIndex = [_allFolders indexOfObject:selectedFolderName];
     [self updateErrorMessage:_fileName];
     [self generateData];
-    [self.tableView reloadData];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onFolderAdded:(NSString *)addedFolderName
@@ -555,7 +560,8 @@
     [self updateAllFoldersList];
     _selectedFolderIndex = [_allFolders indexOfObject:_selectedFolderName];
     [self generateData];
-    [self.tableView reloadData];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAAddTrackFolderDelegate
@@ -572,13 +578,13 @@
 
 #pragma mark - OAFolderCardsCellDelegate
 
-- (void) onItemSelected:(int)index
+- (void) onItemSelected:(NSInteger)index
 {
     _selectedFolderIndex = index;
     _selectedFolderName = _allFolders[index];
     [self updateErrorMessage:_fileName];
     [self generateData];
-    [self.tableView reloadData];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onAddFolderButtonPressed

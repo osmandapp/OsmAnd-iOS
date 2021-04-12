@@ -809,6 +809,7 @@
     }
     else if ([cellType isEqualToString:kCellTypeColorCollection])
     {
+        NSLog(@"!! kCellTypeColorCollection %li %li", (long)indexPath.section, indexPath.row);
         static NSString* const identifierCell = @"OAColorsTableViewCell";
         OAColorsTableViewCell *cell = nil;
         cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -835,6 +836,7 @@
     }
     else if ([cellType isEqualToString:kCellTypeIconCollection])
     {
+        NSLog(@"!! OAShapesTableViewCell %li %li", (long)indexPath.section, indexPath.row);
         static NSString* const identifierCell = @"OAShapesTableViewCell";
         OAShapesTableViewCell *cell = nil;
         cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -1075,7 +1077,7 @@
 {
     _selectedIconCategoryName = category;
     [self generateData];
-    [self.tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView layoutSubviews];
 }
 
@@ -1084,8 +1086,6 @@
     _wasChanged = YES;
     _selectedIconName = poiName;
     [self updateHeaderIcon];
-    [self generateData];
-    [self.tableView reloadData];
 }
 
 #pragma mark - OAShapesTableViewCellDelegate
@@ -1096,7 +1096,7 @@
     _selectedBackgroundIndex = (int)tag;
     [self updateHeaderIcon];
     [self generateData];
-    [self.tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAColorsTableViewCellDelegate
@@ -1108,12 +1108,14 @@
     _selectedColor = [OADefaultFavorite builtinColors][tag];
     [self updateHeaderIcon];
     [self generateData];
-    [self.tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAFolderCardsCellDelegate
 
-- (void) onItemSelected:(int)index
+- (void) onItemSelected:(NSInteger)index
 {
     _wasChanged = YES;
     self.groupTitle = _groupNames[index];
@@ -1131,7 +1133,9 @@
     if ([self.groupTitle isEqualToString:@""])
         self.groupTitle = OALocalizedString(@"favorites");
     [self generateData];
-    [self.tableView reloadData];
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onAddFolderButtonPressed
@@ -1158,7 +1162,8 @@
     [self updateHeaderIcon];
     
     [self generateData];
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onNewGroupAdded:(NSString *)selectedGroupName  color:(UIColor *)color
@@ -1179,7 +1184,8 @@
     [self setupGroups];
     [self generateData];
     [self updateHeaderIcon];
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAAddFavoriteGroupDelegate

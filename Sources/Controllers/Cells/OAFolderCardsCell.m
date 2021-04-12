@@ -21,7 +21,8 @@
 @implementation OAFolderCardsCell
 {
     NSMutableArray *_data;
-    int _selectedItemIndex;
+    NSInteger _selectedItemIndex;
+    NSInteger _cachedSelectedItemIndex;
 }
 
 - (void) awakeFromNib
@@ -39,13 +40,14 @@
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
     _data = [NSMutableArray new];
+    _cachedSelectedItemIndex = -1;
 }
 
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
 {
     _selectedItemIndex = index;
     _data = [NSMutableArray new];
-    for (int i = 0; i < values.count; i++)
+    for (NSInteger i = 0; i < values.count; i++)
     {
         NSString *sizeString;
         NSNumber *size = sizes[i];
@@ -69,6 +71,35 @@
         @"isSelected" : @NO,
         @"key" : @"work"}];
     
+    [self.collectionView reloadData];
+}
+
+- (void) scrollToItem:(NSInteger)selectedIndex
+{
+    if (_cachedSelectedItemIndex != selectedIndex)
+    {
+        [self.collectionView layoutIfNeeded];
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]
+                                    atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                            animated:YES];
+        _cachedSelectedItemIndex = selectedIndex;
+    }
+}
+
+- (void) updateVisibleItem:(NSInteger)index
+{
+    for (NSInteger i = 0; i < _data.count; i++)
+    {
+        NSDictionary *item = _data[i];
+        _data[i] = @{
+            @"title" : item[@"title"],
+            @"size" : item[@"size"],
+            @"color" : item[@"color"],
+            @"img" : item[@"img"],
+            @"isSelected" : [NSNumber numberWithBool:i == index],
+            @"key" : item[@"key"]
+        };
+    }
     [self.collectionView reloadData];
 }
 
@@ -155,7 +186,10 @@
     else
     {
         if (_delegate)
+        {
             [_delegate onItemSelected:indexPath.row];
+            [self updateVisibleItem:indexPath.row];
+        }
     }
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];

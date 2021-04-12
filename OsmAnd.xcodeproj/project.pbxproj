@@ -538,6 +538,8 @@
 		32A00192261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A00191261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm */; };
 		32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */; };
 		32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */; };
+		32A7EE962620941800F7A697 /* OAImageCardsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A7EE952620941800F7A697 /* OAImageCardsHelper.mm */; };
+		32A7EE972620941800F7A697 /* OAImageCardsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A7EE952620941800F7A697 /* OAImageCardsHelper.mm */; };
 		32ADB41E25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */; };
 		32ADB41F25D2E85200F5C634 /* OAAddTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */; };
 		32ADB42425D2E8AD00F5C634 /* OASelectTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB42225D2E8AC00F5C634 /* OASelectTrackFolderViewController.m */; };
@@ -7096,6 +7098,8 @@
 		32A00191261295DA00ABE0D2 /* OAShowHideCoordinatesAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideCoordinatesAction.mm; sourceTree = "<group>"; };
 		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
 		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
+		32A7EE94262093FA00F7A697 /* OAImageCardsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAImageCardsHelper.h; path = Sources/Controllers/2.0/OAImageCardsHelper.h; sourceTree = "<group>"; };
+		32A7EE952620941800F7A697 /* OAImageCardsHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAImageCardsHelper.mm; path = Sources/Controllers/2.0/OAImageCardsHelper.mm; sourceTree = "<group>"; };
 		32ADB41C25D2E85100F5C634 /* OAAddTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddTrackFolderViewController.h; sourceTree = "<group>"; };
 		32ADB41D25D2E85200F5C634 /* OAAddTrackFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAddTrackFolderViewController.m; sourceTree = "<group>"; };
 		32ADB42225D2E8AC00F5C634 /* OASelectTrackFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASelectTrackFolderViewController.m; sourceTree = "<group>"; };
@@ -14445,6 +14449,8 @@
 				DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */,
 				DAD2289F2410E6F600D4D9DC /* OACollapsableWaypointsView.h */,
 				DAD2289E2410E6F600D4D9DC /* OACollapsableWaypointsView.mm */,
+				32A7EE94262093FA00F7A697 /* OAImageCardsHelper.h */,
+				32A7EE952620941800F7A697 /* OAImageCardsHelper.mm */,
 			);
 			name = TargetMenu;
 			sourceTree = "<group>";
@@ -22950,6 +22956,7 @@
 				8AD63B6421CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm in Sources */,
 				DA2DC42223B2244400F40D1D /* OARouteInfoLegendItemView.m in Sources */,
 				78A5C1F223FBDF5F00312FC4 /* OACustomPickerTableViewCell.m in Sources */,
+				32A7EE972620941800F7A697 /* OAImageCardsHelper.mm in Sources */,
 				8490B1B020600231007694A5 /* OARadiusCellEx.m in Sources */,
 				847A1D6E1DF94E9B003C1246 /* OAGPXWptViewController.mm in Sources */,
 				DA457BE1222153AD00C55C69 /* OAPoiTypeSelectionViewController.mm in Sources */,
@@ -23618,6 +23625,7 @@
 				845E06F51B60D6D700DFC2A7 /* OAPluginPopupViewController.mm in Sources */,
 				84F989301B510212009C443C /* OADestinationCardsViewController.mm in Sources */,
 				845B0C031F0A9B4E00D38964 /* OARouteCalculationParams.mm in Sources */,
+				32A7EE962620941800F7A697 /* OAImageCardsHelper.mm in Sources */,
 				8A7D64E621CCE2A700118F88 /* OAPurchaseCardView.m in Sources */,
 				784B3E1423D9C22F003A22CB /* OAOnlineTilesEditingViewController.mm in Sources */,
 				844499B61AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,

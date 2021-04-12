@@ -29,6 +29,7 @@
 #import "OATextMultiViewCell.h"
 #import "OAGPXWptViewController.h"
 #import "OAFavoriteViewController.h"
+#import "OAImageCardsHelper.h"
 
 #include "Localization.h"
 
@@ -38,6 +39,7 @@
 #define kRowDescriptionCell @"OATextMultiViewCell"
 #define kRowWaypointsCell @"OATargetInfoCollapsableViewCell"
 #define kRowCoordinatesCell @"OATargetInfoCollapsableCoordinatesViewCell"
+#define kRowImagesCard @"kRowImagesCard"
 
 @interface OAEditTargetViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAEditDescriptionViewControllerDelegate, UITextFieldDelegate>
 
@@ -45,6 +47,7 @@
 
 @implementation OAEditTargetViewController
 {
+    OAImageCardsHelper *_cardsHelper;
     OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
     OAEditDescriptionViewController *_editDescController;
@@ -288,6 +291,13 @@
     {
         self.newItem = NO;
         self.savedColorIndex = -1;
+        _cardsHelper = [[OAImageCardsHelper alloc] init];
+        if ([item isKindOfClass:OAFavoriteItem.class])
+        {
+            OAFavoriteItem *favoriteItem = item;
+            CLLocationCoordinate2D location = CLLocationCoordinate2DMake([favoriteItem getLatitude], [favoriteItem getLongitude]);
+            _cardsHelper.location = location;
+        }
     }
     return self;
 }
@@ -301,7 +311,10 @@
         self.desc = @"";
         self.savedColorIndex = -1;
         self.location = location;
-        self.newItem = YES;        
+        self.newItem = YES;
+        
+        _cardsHelper = [[OAImageCardsHelper alloc] init];
+        _cardsHelper.location = location;
     }
     return self;
 }
@@ -433,6 +446,11 @@
         @"type" : kRowCoordinatesCell,
         @"lat" : [NSNumber numberWithFloat:self.location.latitude],
         @"lon" : [NSNumber numberWithFloat:self.location.longitude]
+    }];
+    
+    [_data addObject:@{
+        @"type" : kRowImagesCard,
+        @"rowInfo" : [_cardsHelper addNearbyImagesIfNeeded]
     }];
 }
 
@@ -755,10 +773,33 @@
         [cell setCollapsed:self.collapsableCoordinatesView.collapsed rawHeight:64.];
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:kRowImagesCard])
+    {
+        OARowInfo *info = item[@"rowInfo"];
+        OATargetInfoCollapsableViewCell* cell;
+        cell = (OATargetInfoCollapsableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OATargetInfoCollapsableViewCell"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoCollapsableViewCell" owner:self options:nil];
+            cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
+        }
+        if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
+            cell.iconView.contentMode = UIViewContentModeCenter;
+        else
+            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        [cell setImage:info.icon];
+        cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+        cell.textView.textColor = info.textColor;
+        cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
+
+        cell.collapsableView = info.collapsableView;
+        [cell setCollapsed:info.collapsed rawHeight:48];
+        return cell;
+    }
     
     return nil;
 }
-
 
 
 #pragma mark - UITableViewDelegate
@@ -783,9 +824,28 @@
         return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
     else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
         return 48. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height + 16.);
+    else if ([item[@"type"] isEqualToString:kRowImagesCard])
+    {
+        OARowInfo *info = item[@"rowInfo"];
+        return 48. + (info.collapsableView.collapsed ? 0. : info.collapsableView.frame.size.height + 16.);
+    }
     else
         return UITableViewAutomaticDimension;
 }
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.row];
+    OARowInfo *info = item[@"rowInfo"];
+    if ([item[@"type"] isEqualToString:kRowImagesCard] && info.collapsable)
+    {
+        [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
+        return 48. + (info.collapsableView.collapsed ? 0. : info.collapsableView.frame.size.height + 16.);
+    }
+    else
+        return UITableViewAutomaticDimension;
+}
+
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -832,6 +892,15 @@
                 [self.delegate contentHeightChanged];
             [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
+    }
+    else if ([item[@"type"] isEqualToString:kRowImagesCard])
+    {
+        OARowInfo *info = item[@"rowInfo"];
+        info.collapsed = !info.collapsed;
+        info.collapsableView.collapsed = !info.collapsableView.collapsed;
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (self.delegate)
+            [self.delegate contentHeightChanged:0];
     }
 }
 

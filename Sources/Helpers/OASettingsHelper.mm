@@ -21,7 +21,6 @@
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
 #import "OrderedDictionary.h"
-#import "OAGlobalSettingsItem.h"
 #import "OAQuickActionRegistry.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAAvoidSpecificRoads.h"
@@ -507,6 +506,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [activeMarkersList addObject:object];
         else if ([object isKindOfClass:OAHistoryItem.class])
             [historyItems addObject:object];
+        else if ([object isKindOfClass:OAGlobalSettingsItem.class])
+            [result addObject:(OAGlobalSettingsItem *)object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)

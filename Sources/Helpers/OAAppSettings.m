@@ -16,6 +16,7 @@
 #import "OALocationIcon.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
+#import "OAImportExportSettingsConverter.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -1277,7 +1278,7 @@
         case AUTO_ZOOM_MAP_CLOSE:
             return @"CLOSE";
         default:
-            @"FARTHEST";
+            return @"FARTHEST";
     }
 }
 
@@ -1793,6 +1794,7 @@
     NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
     NSMapTable<NSString *, OAProfileString *> *_customRoutingProps;
     NSMapTable<NSString *, OAProfileSetting *> *_registeredPreferences;
+    NSMapTable<NSString *, NSString *> *_globalPreferences;
     OADayNightHelper *_dayNightHelper;
 }
 
@@ -1819,6 +1821,7 @@
         _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
+        _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
@@ -1834,6 +1837,10 @@
         _settingPrefMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingPrefMapLanguageKey];
         _settingMapLanguageShowLocal = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageShowLocalKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageShowLocalKey] : NO;
         _settingMapLanguageTranslit = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageTranslitKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageTranslitKey] : NO;
+        
+//        [_globalPreferences setObject:_settingMapLanguage forKey:@"preferred_locale"];
+        [_globalPreferences setObject:_settingPrefMapLanguage forKey:@"map_preferred_locale"];
+        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_settingMapLanguageTranslit] forKey:@"map_transliterate_names"];
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _appearanceMode = [OAProfileInteger withKey:settingAppModeKey defValue:0];
@@ -1849,6 +1856,8 @@
         
         _liveUpdatesPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchasedKey] : NO;
         _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
+        
+        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_settingOsmAndLiveEnabled] forKey:@"is_live_updates_on"];
 
         _billingUserId = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserIdKey];
         _billingUserName = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserNameKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserNameKey] : @"";
@@ -1883,6 +1892,8 @@
         [_registeredPreferences setObject:_layerTransparencySeekbarMode forKey:@"layer_transparency_seekbar_mode"];
     
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
+        
+        [_globalPreferences setObject:[OAImportExportSettingsConverter arrayPreferenceToString:_mapSettingVisibleGpx] forKey:@"selected_gpx"];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
         
@@ -1891,6 +1902,8 @@
 
         // TODO: redesign alert as in android to show/hide recorded trip on map
         _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : NO;
+        
+        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_mapSettingShowRecordingTrack] forKey:@"show_saved_track_remember"];
         
         _mapSettingSaveTrackIntervalApproved = [OAProfileBoolean withKey:mapSettingSaveTrackIntervalApprovedKey defValue:NO];
         [_registeredPreferences setObject:_mapSettingSaveTrackIntervalApproved forKey:@"save_global_track_remember"];
@@ -1902,6 +1915,7 @@
         [_registeredPreferences setObject:_selectedPoiFilters forKey:@"selected_poi_filter_for_map"];
 
         _plugins = [[NSUserDefaults standardUserDefaults] objectForKey:pluginsKey] ? [NSSet setWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:pluginsKey]] : [NSSet set];
+        [_globalPreferences setObject:[OAImportExportSettingsConverter arrayPreferenceToString:self.getEnabledPlugins.allObjects] forKey:@"enabled_plugins"];
 
         _discountId = [[NSUserDefaults standardUserDefaults] objectForKey:discountIdKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountIdKey] : 0;
         _discountShowNumberOfStarts = [[NSUserDefaults standardUserDefaults] objectForKey:discountShowNumberOfStartsKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountShowNumberOfStartsKey] : 0;
@@ -1935,7 +1949,13 @@
         if (!_availableApplicationModes)
             self.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
         
+        [_globalPreferences setObject:_availableApplicationModes forKey:@"available_application_modes"];
+        NSString *defAppModeKey = [[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey];
+        [_globalPreferences setObject:defAppModeKey ? defAppModeKey : @"default" forKey:@"default_application_mode_string"];
+        
         _customAppModes = [NSUserDefaults.standardUserDefaults objectForKey:customAppModesKey] ? [NSUserDefaults.standardUserDefaults stringForKey:customAppModesKey] : @"";
+        
+        [_globalPreferences setObject:_customAppModes forKey:@"custom_app_modes_keys"];
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
         [_registeredPreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
@@ -2224,10 +2244,15 @@
         [_registeredPreferences setObject:_inactivePoiFilters forKey:@"inactive_poi_filters"];
         
         _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : RULER_MODE_DARK;
+        [_globalPreferences setObject:[OAImportExportSettingsConverter rulerWidgetModeToString:_rulerMode] forKey:@"ruler_mode"];
         
         _osmUserName = [[NSUserDefaults standardUserDefaults] objectForKey:osmUserNameKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmUserNameKey] : nil;
         _osmUserPassword = [[NSUserDefaults standardUserDefaults] objectForKey:osmPasswordKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmPasswordKey] : nil;
         _offlineEditing = [[NSUserDefaults standardUserDefaults] objectForKey:offlineEditingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:offlineEditingKey] : NO;
+        
+        [_globalPreferences setObject:_osmUserName forKey:@"user_name"];
+        [_globalPreferences setObject:_osmUserPassword forKey:@"user_password"];
+        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_offlineEditing] forKey:@"offline_osm_editing"];
         
         _onlinePhotosRowCollapsed = [[NSUserDefaults standardUserDefaults] objectForKey:onlinePhotosRowCollapsedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:onlinePhotosRowCollapsedKey] : NO;
         _mapillaryFirstDialogShown = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFirstDialogShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapillaryFirstDialogShownKey] : NO;
@@ -2238,9 +2263,19 @@
         _mapillaryFilterStartDate = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterStartDateKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:mapillaryFilterStartDateKey] : 0;
         _mapillaryFilterEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterEndDateKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:mapillaryFilterEndDateKey] : 0;
         _mapillaryFilterPano = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterPanoKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapillaryFilterPanoKey] : NO;
+        
+        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_useMapillaryFilter] forKey:@"use_mapillary_filters"];
+        [_globalPreferences setObject:_mapillaryFilterUserKey forKey:@"mapillary_filter_user_key"];
+        [_globalPreferences setObject:_mapillaryFilterUserName forKey:@"mapillary_filter_username"];
+        [_globalPreferences setObject:[NSString stringWithFormat:@"%ld", (long) _mapillaryFilterStartDate] forKey:@"mapillary_filter_from_date"];
+        [_globalPreferences setObject:[NSString stringWithFormat:@"%ld", (long) _mapillaryFilterEndDate] forKey:@"mapillary_filter_to_date"];
+        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_mapillaryFilterPano] forKey:@"mapillary_filter_pano"];
+        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_onlinePhotosRowCollapsed] forKey:@"mapillary_menu_collapsed"];
 
         _quickActionIsOn = [OAProfileBoolean withKey:quickActionIsOnKey defValue:NO];
         _quickActionsList = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionsListKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:quickActionsListKey] : nil;
+        
+        [_globalPreferences setObject:_quickActionsList forKey:@"quick_action_list"];
         
         [_registeredPreferences setObject:_quickActionIsOn forKey:@"quick_action_state"];
         
@@ -2281,6 +2316,11 @@
 - (NSMapTable<NSString *, OAProfileSetting *> *) getRegisteredSettings
 {
     return _registeredPreferences;
+}
+
+- (NSMapTable<NSString *, NSString *> *) getGlobalSettings
+{
+    return _globalPreferences;
 }
 
 - (OAProfileSetting *) getSettingById:(NSString *)stringId

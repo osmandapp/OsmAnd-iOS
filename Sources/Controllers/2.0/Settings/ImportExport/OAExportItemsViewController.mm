@@ -17,8 +17,6 @@
     NSString *_descriptionText;
     NSString *_descriptionBoldText;
     
-    NSString *_file;
-    
     OASettingsHelper *_settingsHelper;
     OAApplicationMode *_appMode;
     
@@ -80,7 +78,7 @@
     return _descriptionBoldText;
 }
 
-- (void)shareProfile:(NSString *)file
+- (void)shareProfile
 {
     _exportStarted = YES;
     [self setupView];
@@ -100,7 +98,7 @@
 
 - (IBAction) primaryButtonPressed:(id)sender
 {
-    [self shareProfile:_file];
+    [self shareProfile];
 }
 
 #pragma mark - OASettingsImportExportDelegate
@@ -108,7 +106,7 @@
 - (void)onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items {
     if (succeed)
     {
-        [self shareProfile:_file];
+        [self shareProfile];
     } else {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"export_failed") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

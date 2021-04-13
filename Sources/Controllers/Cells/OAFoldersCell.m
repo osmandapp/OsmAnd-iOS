@@ -16,7 +16,8 @@
 #define kCellHeight 36
 #define kImageWidth 38
 #define kLabelOffsetsWidth 20
-#define kLabelMinimubWidth 50.0
+#define kLabelMinWidth 50.0
+#define kLabelMaxWidth 120.0
 
 @interface OAFoldersCell() <UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -72,10 +73,14 @@
     NSString *iconName = item[@"img"];
     if (iconName && iconName.length > 0)
         labelWidth += kImageWidth;
-    else if (labelWidth < kLabelMinimubWidth)
-        labelWidth = kLabelMinimubWidth;
+    else if (labelWidth < kLabelMinWidth)
+        labelWidth = kLabelMinWidth;
     
     labelWidth += kLabelOffsetsWidth;
+    
+    if (labelWidth > kLabelMaxWidth)
+        labelWidth = kLabelMaxWidth;
+    
     return CGSizeMake(labelWidth, kCellHeight);
 }
 
@@ -151,7 +156,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0, 8, 8, 8);
+    return UIEdgeInsetsMake(0, 16, 16, 16);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section

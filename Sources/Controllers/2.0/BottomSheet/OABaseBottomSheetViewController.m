@@ -22,7 +22,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 @interface OABaseBottomSheetViewController () <UIGestureRecognizerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
@@ -141,13 +140,18 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     }
 }
 
+- (CGFloat) getLandscapeHeight
+{
+    return OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight;
+}
+
 - (void) adjustFrame
 {
     CGRect f = _bottomSheetView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if (OAUtilities.isLandscapeIpadAware)
     {
-        f.size.height = OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight;
+        f.size.height = [self getLandscapeHeight];
         f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
         f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, DeviceScreenHeight - f.size.height);
         

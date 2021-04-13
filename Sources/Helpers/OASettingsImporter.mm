@@ -279,9 +279,9 @@
     // TODO: import other item types later and clean up
     switch (type)
     {
-        case EOASettingsItemTypeGlobal:
-            item = [[OAGlobalSettingsItem alloc] initWithJson:json error:&error];
-            break;
+//        case EOASettingsItemTypeGlobal:
+//            item = [[OAGlobalSettingsItem alloc] initWithJson:json error:&error];
+//            break;
         case EOASettingsItemTypeProfile:
             item = [[OAProfileSettingsItem alloc] initWithJson:json error:&error];
             break;

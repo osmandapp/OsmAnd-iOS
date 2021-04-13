@@ -149,6 +149,13 @@
     return [[OAFavoritesSettingsItemReader alloc] initWithItem:self];
 }
 
+- (OASettingsItemWriter *)getWriter
+{
+    NSArray<OAFavoriteItem *> *favorites = [self getPointsFromGroups:self.items];
+    OAGPXDocument *doc = [OAFavoritesHelper asGpxFile:favorites];
+    return [self getGpxWriter:doc];
+}
+
 @end
 
 #pragma mark - OAFavoritesSettingsItemReader

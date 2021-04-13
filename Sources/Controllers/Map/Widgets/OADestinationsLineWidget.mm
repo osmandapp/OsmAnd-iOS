@@ -98,9 +98,12 @@
     }
 }
 
-- (void) updateAttributes
+- (BOOL) updateAttributes
 {
-    _lineAttrs = [_mapViewController getLineRenderingAttributes:@"measureDistanceLine"];
+    NSDictionary<NSString *, NSNumber *> *lineAttrs = [_mapViewController getLineRenderingAttributes:@"measureDistanceLine"];
+    BOOL changed = [_lineAttrs isEqualToDictionary:lineAttrs];
+    _lineAttrs = lineAttrs;
+    return changed;
 }
 
 #pragma mark - Layer
@@ -127,6 +130,11 @@
 }
 
 - (BOOL) updateLayer
+{
+    return [self updateAttributes];
+}
+
+- (BOOL) drawLayer
 {
     if (_destinationLineSublayer.superlayer != self.layer)
         [self.layer insertSublayer:_destinationLineSublayer above:self.layer];
@@ -281,10 +289,8 @@
     
 - (double) getStrokeWidth
 {
-    [self updateAttributes];
-    BOOL hasAttributes = _lineAttrs != nil;
     double scaleFactor = [_settings.mapDensity get:_settings.applicationMode];
-    float strokeWidth = hasAttributes && _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 2.0;
+    float strokeWidth = _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 6.0;
     return scaleFactor < 1.0 ? 1.0 : 2 * strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
 }
 

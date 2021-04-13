@@ -785,10 +785,12 @@
 "shared_string_import" = "Import";
 "create_profile" = "Create profile";
 "import_profile_select_descr" = "Select the data to be imported.";
+"export_profile_select_descr" = "Select the data to be exported.";
 "selected_profiles" = "%d of %d";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type: %@";
 "shared_string_nothing_selected" = "Nothing selected";
+"export_failed" = "Could not export profile";
 
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
@@ -853,6 +855,7 @@
 "empty_profile_name_warning" = "Profile name cannot be empty.";
 "err_profile_import" = "Error reading item data: %@";
 "reading_file" = "Reading file";
+"preparing_file" = "Preparing file";
 "profile_import_success" = "Application profile was imported successfully";
 "profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
@@ -931,7 +934,9 @@
 "gpx_saved_successfully" = "GPX file saved to %@";
 "none_point_error" = "Please add at least one point.";
 "empty_filename" = "Filename cannot be empty";
+"incorrect_symbols" = "Invalid characters entered";
 "gpx_already_exsists" = "File with this name already exists";
+"folder_already_exsists" = "Folder with this name already exists";
 "split_before" = "Split before";
 "split_after" = "Split after";
 "follow_track" = "Follow track";

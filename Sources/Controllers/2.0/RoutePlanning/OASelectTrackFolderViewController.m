@@ -16,9 +16,11 @@
 #import "OAAddTrackFolderViewController.h"
 #import "OsmAndApp.h"
 #import "OALoadGpxTask.h"
+#import "OATableViewCustomHeaderView.h"
 
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kMultiIconTextDescCell @"OAMultiIconTextDescCell"
+#define kHeaderId @"TableViewSectionHeader"
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
 
@@ -63,6 +65,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
 }
 
 - (void) applyLocalization
@@ -186,7 +189,22 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSDictionary *item = _data[section].firstObject;
-    return item[@"header"];
+    return item[@"header"] ? item[@"header"] : @" ";
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    vw.label.text = [title upperCase];
+    vw.label.textColor = UIColorFromRGB(color_text_footer);
+    return vw;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+    return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -221,11 +239,11 @@
 
 - (void) onTrackFolderAdded:(NSString *)folderName
 {
-    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:folderName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
-        [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
-    
-    [self reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:^{
+            [_delegate onFolderAdded:folderName];
+        }];
+    });
 }
 
 @end

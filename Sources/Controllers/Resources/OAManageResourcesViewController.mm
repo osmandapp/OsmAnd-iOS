@@ -186,6 +186,11 @@ static BOOL _lackOfResources;
     {
         [res addObject:resource->id.toNSString()];
     }
+    // Check if special Saudi Arabia Rahal map is installed
+    if ([region.regionId isEqualToString:@"asia_saudi-arabia"])
+    {
+        [res addObject:@"saudi-arabia_rahal_asia.obf"];
+    }
     return [NSArray arrayWithArray:res];
 }
 

@@ -132,7 +132,8 @@
 - (CGFloat) getHeightForHeaderWithFirstHeaderText:(NSString *)text boldFragment:(NSString *)boldFragment inSection:(NSInteger)section
 {
     if (section == 0)
-    {   NSString *descriptionText;
+    {
+        NSString *descriptionText;
         if (boldFragment && boldFragment.length > 0)
             descriptionText = [NSString stringWithFormat:text, boldFragment];
         else

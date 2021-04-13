@@ -1816,7 +1816,7 @@
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Lembre-se, se a ponte for móvel, usaremos sua altura no estado aberto.";
 "lenght_limit_description" = "Forneça o comprimento do seu veículo. Algumas restrições de rotas podem ser aplicadas a veículos longos.";
 "height_limit_description" = "Forneça a altura do veículo, algumas restrições de rota podem ser aplicadas para veículos altos.";
-"export_profile" = "Exportar perfil";
+"export_profile" = "Exportar";
 "profile_settings" = "Configurações de perfil";
 "configure_map_descr" = "Aparência do mapa";
 "export_profile_descr" = "Você pode exportar todas as configurações do perfil, copiar todas as configurações de outro perfil ou redefinir todas as configurações do perfil para o estado padrão.";
@@ -1912,7 +1912,7 @@
 "nav_type_hint" = "Tipo de navegação: %@";
 "selected_profiles" = "%d de %d";
 "import_profile_select_descr" = "Selecione os dados a serem importados.";
-"shared_string_import" = "Importar perfil";
+"shared_string_import" = "Importar";
 "shared_string_preparing" = "Preparando";
 "shared_string_deselect_all" = "Desmarcar tudo";
 "shared_string_continue" = "Continuar";
@@ -2027,7 +2027,7 @@
 "map_during_navigation" = "Mapa durante a navegação";
 "voice_announces" = "Instruções de voz";
 "route_parameters" = "Parâmetros de rota";
-"some_of" = "%ld de %ld";
+"some_of" = "%d de %d";
 "track_multiple_segments_select" = "%@ tem mais de um segmento. Selecione uma parte da trilha que deseja usar para navegação.";
 "select_segment" = "Selecione o segmento";
 "select_track_to_follow" = "Selecione o caminho a seguir";
@@ -2075,3 +2075,12 @@
 // Coordinate widget
 "coordinates_widget" = "Widget de coordenadas";
 "coordinates" = "Coordenadas";
+"shared_string_gpx_points" = "Pontos";
+"res_standard" = "Mapa padrão";
+
+// Resources
+"shared_string_resources" = "Recursos";
+"reading_file" = "Arquivo de leitura";
+"selected_of" = "Selecionado - %d/%d";
+"search_history" = "Histórico de busca";
+"markers_history" = "Histórico de marcadores";

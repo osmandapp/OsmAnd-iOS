@@ -61,7 +61,6 @@
 
 - (void)apply
 {
-    // TODO: check all items have coordinates!
     NSArray<OAHistoryItem *> *newItems = self.getNewItems;
     if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
@@ -88,6 +87,11 @@
 - (OASettingsItemReader *) getReader
 {
     return [self getJsonReader];
+}
+
+- (OASettingsItemWriter *)getWriter
+{
+    return [self getJsonWriter];
 }
 
 - (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -118,30 +122,6 @@
     }
 }
 
-- (void)writeToJson:(id)json
-{
-//    JSONArray jsonArray = new JSONArray();
-//    if (!items.isEmpty()) {
-//        try {
-//            for (HistoryEntry historyEntry : items) {
-//                JSONObject jsonObject = new JSONObject();
-//                jsonObject.put("latitude", historyEntry.getLat());
-//                jsonObject.put("longitude", historyEntry.getLon());
-//                jsonObject.put("pointDescription",
-//                               PointDescription.serializeToString(historyEntry.getName()));
-//                jsonObject.put("lastAccessedTime", historyEntry.getLastAccessTime());
-//                jsonObject.put("intervals", historyEntry.getIntervals());
-//                jsonObject.put("intervalValues", historyEntry.getIntervalsValues());
-//                jsonArray.put(jsonObject);
-//            }
-//            json.put("items", jsonArray);
-//        } catch (JSONException e) {
-//            warnings.add(app.getString(R.string.settings_item_write_error, String.valueOf(getType())));
-//            SettingsHelper.LOG.error("Failed write to json", e);
-//        }
-//    }
-}
-
 - (BOOL)isDuplicate:(id)item
 {
     OAHistoryItem *historyEntry = item;
@@ -163,6 +143,28 @@
 - (id)renameItem:(id)item
 {
     return item;
+}
+
+- (NSDictionary *) getSettingsJson
+{
+    NSMutableDictionary *json = [NSMutableDictionary new];
+    NSMutableArray *jsonArray = [NSMutableArray new];
+    if (self.items.count > 0)
+    {
+        for (OAHistoryItem *historyEntry in self.items)
+        {
+            NSMutableDictionary *item = [NSMutableDictionary new];
+            item[@"latitude"] = @(historyEntry.latitude);
+            item[@"longitude"] = @(historyEntry.longitude);
+            item[@"pointDescription"] = [OAPointDescription serializeToString:[[OAPointDescription alloc] initWithType:historyEntry.getPointDescriptionType typeName:historyEntry.typeName name:historyEntry.name]];
+            item[@"lastAccessedTime"] = @(historyEntry.date.timeIntervalSince1970 * 1000);
+            //                jsonObject.put("intervals", historyEntry.getIntervals());
+            //                jsonObject.put("intervalValues", historyEntry.getIntervalsValues());
+            [jsonArray addObject:item];
+        }
+        json[@"items"] = jsonArray;
+    }
+    return json;
 }
 
 @end

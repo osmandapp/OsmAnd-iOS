@@ -12,7 +12,7 @@
 
 @required
 
-- (void) onItemSelected:(int)index;
+- (void) onItemSelected:(NSInteger)index;
 - (void) onAddFolderButtonPressed;
 
 @end
@@ -24,5 +24,6 @@
 @property (weak, nonatomic) id<OAFolderCardsCellDelegate> delegate;
 
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index;
+- (void) scrollToItemIfNeeded:(NSInteger)selectedIndex;
 
 @end

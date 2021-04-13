@@ -21,6 +21,7 @@
 @implementation OAFolderCardsCell
 {
     NSMutableArray *_data;
+    NSInteger _selectedItemIndex;
 }
 
 - (void) awakeFromNib
@@ -33,7 +34,7 @@
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.minimumInteritemSpacing = 0;
     layout.minimumLineSpacing = 16.;
-    layout.sectionInset = UIEdgeInsetsMake(0, 8, 8, 8);
+    layout.sectionInset = UIEdgeInsetsMake(0, 16, 16, 16);
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
@@ -43,7 +44,7 @@
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
 {
     _data = [NSMutableArray new];
-    for (int i = 0; i < values.count; i++)
+    for (NSInteger i = 0; i < values.count; i++)
     {
         NSString *sizeString;
         NSNumber *size = sizes[i];
@@ -55,7 +56,6 @@
             @"size" : sizeString,
             @"color" : color,
             @"img" : @"ic_custom_folder",
-            @"isSelected" : [NSNumber numberWithBool:i == index],
             @"key" : @"home"}];
     }
     
@@ -63,11 +63,22 @@
         @"title" : addButtonTitle,
         @"size" : @"",
         @"color" : UIColorFromRGB(color_primary_purple),
-        @"img" : @"zoom_in_button",
-        @"isSelected" : @NO,
+        @"img" : @"ic_custom_add",
         @"key" : @"work"}];
-    
-    [self.collectionView reloadData];
+}
+
+- (void) scrollToItemIfNeeded:(NSInteger)selectedIndex
+{
+    if (_selectedItemIndex != selectedIndex)
+    {
+        _selectedItemIndex = selectedIndex;
+        [self.collectionView reloadData];
+        
+        [self.collectionView layoutIfNeeded];
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]
+                                    atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                            animated:YES];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -99,12 +110,13 @@
     if (cell && [cell isKindOfClass:OAFolderCardCollectionViewCell.class])
     {
         OAFolderCardCollectionViewCell *destCell = (OAFolderCardCollectionViewCell *) cell;
+        destCell.layer.cornerRadius = 9;
         destCell.titleLabel.text = item[@"title"];
         destCell.descLabel.text = item[@"size"];
         destCell.imageView.tintColor = item[@"color"];
         [destCell.imageView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         
-        if ([item[@"isSelected"] boolValue])
+        if (indexPath.row == _selectedItemIndex)
         {
             destCell.layer.borderWidth = 2;
             destCell.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
@@ -152,7 +164,11 @@
     else
     {
         if (_delegate)
+        {
             [_delegate onItemSelected:indexPath.row];
+            _selectedItemIndex = indexPath.row;
+            [self.collectionView reloadData];
+        }
     }
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];

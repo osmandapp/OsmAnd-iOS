@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
 {
-    self = [super initWithNibName:@"OABaseTableViewController"
+    self = [super initWithNibName:@"OAOpenAddTrackViewController"
                            bundle:nil];
     if (self)
     {
@@ -235,9 +235,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 return [time2 compare:time1];
             }
             case EOANameAscending:
-                return [obj1.gpxTitle compare:obj2.gpxTitle options:NSCaseInsensitiveSearch];
+                return [obj1.gpxTitle compare:obj2.gpxTitle];
             case EOANameDescending:
-                return  [obj2.gpxTitle compare:obj1.gpxTitle options:NSCaseInsensitiveSearch];
+                return  [obj2.gpxTitle compare:obj1.gpxTitle];
             default:
                 break;
         }
@@ -254,8 +254,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     if (self.delegate)
         [self.delegate closeBottomSheet];
-    else
-        [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - TableView
@@ -265,6 +264,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:@"OADividerCell"])
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+    else if ([item[@"type"] isEqualToString:kFoldersCell])
+        return 52;
     
     return UITableViewAutomaticDimension;
 }
@@ -442,7 +443,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         [self generateData];
         
         NSMutableArray *pathsToReload = [NSMutableArray arrayWithArray:self.tableView.indexPathsForVisibleRows];
-        [pathsToReload removeObjectAtIndex:0];
+        [pathsToReload removeObjectsInRange:NSMakeRange(0, 3)];
         [self.tableView reloadRowsAtIndexPaths:pathsToReload withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }

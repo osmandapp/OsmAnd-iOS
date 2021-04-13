@@ -16,6 +16,8 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OADestinationItem.h"
+#import "OAGPXMutableDocument.h"
+#import "OAGPXDocumentPrimitives.h"
 
 #import <EventKit/EventKit.h>
 
@@ -425,6 +427,31 @@
         h.hType = OAHistoryTypeRouteWpt;
     
     [[OAHistoryHelper sharedInstance] addPoint:h];
+}
+
+- (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
+{
+    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
+    [doc setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd",
+                     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+    for (OADestination *marker in markers)
+    {
+        OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+        wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
+        wpt.name = marker.desc;
+        wpt.color = marker.color.toHexString;
+//        if (completeBackup)
+//        {
+//            if (marker.creationDate != 0) {
+//                wpt.getExtensionsToWrite().put(CREATION_DATE, format.format(new Date(marker.creationDate)));
+//            }
+//            if (marker.visitedDate != 0) {
+//                wpt.getExtensionsToWrite().put(VISITED_DATE, format.format(new Date(marker.visitedDate)));
+//            }
+//        }
+        [doc addWpt:wpt];
+    }
+    return doc;
 }
 
 + (void) addParkingReminderToCalendar:(OADestination *)destination

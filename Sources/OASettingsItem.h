@@ -13,6 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OAGPXDocument;
+
 @interface OASettingsItem : NSObject
 
 @property (nonatomic, readonly) NSString *name;
@@ -49,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs;
 - (OASettingsItemReader *) getJsonReader;
 - (OASettingsItemWriter *) getJsonWriter;
+- (OASettingsItemWriter *) getGpxWriter:(OAGPXDocument *)gpxFile;
 
 @end
 
@@ -57,6 +60,12 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface OASettingsItemJsonWriter : OASettingsItemWriter<OASettingsItem *>
+
+@end
+
+@interface OASettingsItemGpxWriter : OASettingsItemWriter<OASettingsItem *>
+
+- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OAGPXDocument *)gpxFile;
 
 @end
 

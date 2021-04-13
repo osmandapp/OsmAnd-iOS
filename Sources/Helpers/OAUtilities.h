@@ -72,6 +72,12 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface UIColor (util)
+
+- (NSString *) toHexString;
+
+@end
+
 @interface OAUtilities : NSObject
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;

@@ -178,6 +178,11 @@
     return [self getJsonReader];
 }
 
+- (OASettingsItemWriter *)getWriter
+{
+    return [self getJsonWriter];
+}
+
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
@@ -192,64 +197,48 @@
     self.items = tileSources;
 }
 
-- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (NSDictionary *) getSettingsJson
 {
+    NSMutableDictionary *json = [NSMutableDictionary new];
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
     {
-        // TODO: fixme in export!
-//        for (OATileSource *localItem in self.items)
-//        {
-//            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-//            if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
-//            {
-//                OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
-//                NSDictionary *params = localItem;
-//                jsonObject[@"sql"] = @(YES);
-//                jsonObject[@"name"] = item.title;
-//                jsonObject[@"minZoom"] = params[@"minzoom"];
-//                jsonObject[@"maxZoom"] = params[@"maxzoom"];
-//                jsonObject[@"url"] = params[@"url"];
-//                jsonObject[@"randoms"] = params[@"randoms"];
-//                jsonObject[@"ellipsoid"] = [@(1) isEqual:params[@"ellipsoid"]] ? @"true" : @"false";
-//                jsonObject[@"inverted_y"] = [@(1) isEqual:params[@"inverted_y"]] ? @"true" : @"false";
-//                jsonObject[@"referer"] = params[@"referer"];
-//                jsonObject[@"timesupported"] = params[@"timecolumn"];
-//                NSString *expMinStr = params[@"expireminutes"];
-//                jsonObject[@"expire"] = expMinStr ? [NSString stringWithFormat:@"%lld", expMinStr.longLongValue * 60000] : @"0";
-//                jsonObject[@"inversiveZoom"] = [@(1) isEqual:params[@"inversiveZoom"]] ? @"true" : @"false";
-//                jsonObject[@"ext"] = params[@"ext"];
-//                jsonObject[@"tileSize"] = params[@"tileSize"];
-//                jsonObject[@"bitDensity"] = params[@"bitDensity"];
-//                jsonObject[@"rule"] = params[@"rule"];
-//            }
-//            else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
-//            {
-//                OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
-//                const auto& source = _newSources[QString::fromNSString(item.title)];
-//                if (source)
-//                {
-//                    jsonObject[@"sql"] = @(NO);
-//                    jsonObject[@"name"] = item.title;
-//                    jsonObject[@"minZoom"] = [NSString stringWithFormat:@"%d", source->minZoom];
-//                    jsonObject[@"maxZoom"] = [NSString stringWithFormat:@"%d", source->maxZoom];
-//                    jsonObject[@"url"] = source->urlToLoad.toNSString();
-//                    jsonObject[@"randoms"] = source->randoms.toNSString();
-//                    jsonObject[@"ellipsoid"] = source->ellipticYTile ? @"true" : @"false";
-//                    jsonObject[@"inverted_y"] = source->invertedYTile ? @"true" : @"false";
-//                    jsonObject[@"timesupported"] = source->expirationTimeMillis != -1 ? @"true" : @"false";
-//                    jsonObject[@"expire"] = [NSString stringWithFormat:@"%ld", source->expirationTimeMillis];
-//                    jsonObject[@"ext"] = source->ext.toNSString();
-//                    jsonObject[@"tileSize"] = [NSString stringWithFormat:@"%d", source->tileSize];
-//                    jsonObject[@"bitDensity"] = [NSString stringWithFormat:@"%d", source->bitDensity];
-//                    jsonObject[@"avgSize"] = [NSString stringWithFormat:@"%d", source->avgSize];
-//                    jsonObject[@"rule"] = source->rule.toNSString();
-//                }
-//            }
-//            [jsonArray addObject:jsonObject];
-//        }
+        for (OATileSource *item in self.items)
+        {
+            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+            
+            jsonObject[@"sql"] = @(item.isSql);
+            if (item.name && item.name.length > 0)
+                jsonObject[@"name"] = item.name;
+                
+            jsonObject[@"minZoom"] = @(item.minZoom);
+            jsonObject[@"maxZoom"] = @(item.maxZoom);
+            if (item.url)
+                jsonObject[@"url"] = item.url;
+            
+            if (item.randoms && item.randoms.length > 0)
+                jsonObject[@"randoms"] = item.randoms;
+            jsonObject[@"ellipsoid"] = @(item.ellipsoid);
+            jsonObject[@"inverted_y"] = @(item.invertedY);
+            jsonObject[@"inversiveZoom"] = @(item.inversiveZoom);
+            jsonObject[@"timesupported"] = @(item.timesupported);
+            jsonObject[@"expire"] = @(item.expire);
+            if (item.ext && item.ext.length > 0)
+                jsonObject[@"ext"] = item.ext;
+            
+            jsonObject[@"tileSize"] = @(item.tileSize);
+            jsonObject[@"bitDensity"] = @(item.bitDensity);
+            jsonObject[@"avgSize"] = @(item.avgSize);
+            if (item.rule && item.rule.length > 0)
+                jsonObject[@"rule"] = item.rule;
+            
+            if (item.isSql && item.referer && item.referer.length > 0)
+                jsonObject[@"referer"] = item.referer;
+            [jsonArray addObject:jsonObject];
+        }
         json[@"items"] = jsonArray;
     }
+    return json;
 }
 
 @end

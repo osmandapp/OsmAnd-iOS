@@ -123,4 +123,6 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 + (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles;
 
++ (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAnd::ResourcesManager::ResourceType>)resourceTypes;
+
 @end

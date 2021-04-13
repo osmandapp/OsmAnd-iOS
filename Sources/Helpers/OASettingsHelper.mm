@@ -21,7 +21,6 @@
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
 #import "OrderedDictionary.h"
-#import "OAGlobalSettingsItem.h"
 #import "OAQuickActionRegistry.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAAvoidSpecificRoads.h"
@@ -39,6 +38,9 @@
 #import "OAProfileSettingsItem.h"
 #import "OASettingsItem.h"
 #import "OAHistoryHelper.h"
+#import "OAResourcesUIHelper.h"
+#import "OASQLiteTileSource.h"
+#import "OAFileNameTranslationHelper.h"
 #import "OsmAndApp.h"
 
 #import "OAOsmNotesSettingsItem.h"
@@ -62,6 +64,9 @@
 #import "OAGpxSettingsItem.h"
 #import "OASearchHistorySettingsItem.h"
 #import "OATileSource.h"
+
+#include <OsmAndCore/Map/IOnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
 
 NSString *const kSettingsHelperErrorDomain = @"SettingsHelper";
 
@@ -129,19 +134,19 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [task execute];
 }
 
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles delegate:(id<OASettingsImportExportDelegate>)delegate
 {
     NSString *file = [fileDir stringByAppendingPathComponent:fileName];
     file = [file stringByAppendingPathExtension:@"osf"];
     OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file items:items exportItemFiles:exportItemFiles];
-    exportAsyncTask.settingsExportDelegate = self;
+    exportAsyncTask.settingsExportDelegate = delegate;
     [_exportTasks setObject:exportAsyncTask forKey:file];
     [exportAsyncTask execute];
 }
 
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles delegate:(id<OASettingsImportExportDelegate>)delegate
 {
-    [self exportSettings:fileDir fileName:fileName items:@[item] exportItemFiles:exportItemFiles];
+    [self exportSettings:fileDir fileName:fileName items:@[item] exportItemFiles:exportItemFiles delegate:delegate];
 }
 
 - (NSArray<OASettingsItem *> *) getFilteredSettingsItems:(NSArray<OAExportSettingsType *> *)settingsTypes addProfiles:(BOOL)addProfiles doExport:(BOOL)doExport
@@ -202,7 +207,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         settingsItems[OAExportSettingsType.PROFILE] = appModeBeans;
     }
-    settingsItems[OAExportSettingsType.GLOBAL] = @[[[OAGlobalSettingsItem alloc] init]];
+//    settingsItems[OAExportSettingsType.GLOBAL] = @[[[OAGlobalSettingsItem alloc] init]];
     
     OAQuickActionRegistry *registry = OAQuickActionRegistry.sharedInstance;
     NSArray<OAQuickAction *> *actionsList = registry.getQuickActions;
@@ -276,15 +281,15 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        markersGroup.setMarkers(mapMarkers);
         myPlacesItems[OAExportSettingsType.ACTIVE_MARKERS] = mapMarkers;
     }
-    NSArray<OAHistoryItem *> *markersHistory = [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0];
-    if (markersHistory.count > 0)
-    {
+//    NSArray<OAHistoryItem *> *markersHistory = [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0];
+//    if (markersHistory.count > 0)
+//    {
 //        String name = app.getString(R.string.shared_string_history);
 //        String groupId = ExportSettingsType.HISTORY_MARKERS.name();
 //        ItineraryGroup markersGroup = new ItineraryGroup(groupId, name, ItineraryGroup.ANY_TYPE);
 //        markersGroup.setMarkers(markersHistory);
-        myPlacesItems[OAExportSettingsType.HISTORY_MARKERS] = markersHistory;
-    }
+//        myPlacesItems[OAExportSettingsType.HISTORY_MARKERS] = markersHistory;
+//    }
     NSArray<OAHistoryItem *> *historyEntries = [historyHelper getPointsHavingTypes:historyHelper.searchTypes limit:0];
     if (historyEntries.count > 0)
         myPlacesItems[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
@@ -296,9 +301,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *resourcesItems = [MutableOrderedDictionary new];
     
-    NSArray<OAMapStyleResourceItem *> *mapStyles = [OAResourcesUIHelper getExternalMapStyles];
-    if (mapStyles.count > 0)
-        resourcesItems[OAExportSettingsType.CUSTOM_RENDER_STYLE] = mapStyles;
+    //TODO: refactor rendering styles to support multiple files
+//    NSArray<OAMapStyleResourceItem *> *mapStyles = [OAResourcesUIHelper getExternalMapStyles];
+//    if (mapStyles.count > 0)
+//        resourcesItems[OAExportSettingsType.CUSTOM_RENDER_STYLE] = mapStyles;
     
 //    File routingProfilesFolder = app.getAppPath(IndexConstants.ROUTING_PROFILES_DIR);
 //    if (routingProfilesFolder.exists() && routingProfilesFolder.isDirectory()) {
@@ -312,32 +318,41 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        resourcesItems.put(ExportSettingsType.ONLINE_ROUTING_ENGINES, onlineRoutingEngines);
 //    }
     // TODO: implement export!
-//    List<ITileSource> iTileSources = new ArrayList<>();
-//    Set<String> tileSourceNames = app.getSettings().getTileSourceEntries(true).keySet();
-//    for (String name : tileSourceNames) {
-//        File f = app.getAppPath(IndexConstants.TILES_INDEX_DIR + name);
-//        if (f != null) {
-//            ITileSource template;
-//            if (f.getName().endsWith(SQLiteTileSource.EXT)) {
-//                template = new SQLiteTileSource(app, f, TileSourceManager.getKnownSourceTemplates());
-//            } else {
-//                template = TileSourceManager.createTileSourceTemplate(f);
-//            }
-//            if (template.getUrlTemplate() != null) {
-//                iTileSources.add(template);
-//            }
-//        }
-//    }
-//    if (!iTileSources.isEmpty()) {
-//        resourcesItems.put(ExportSettingsType.MAP_SOURCES, iTileSources);
-//    }
-//    List<LocalIndexInfo> localIndexInfoList = getLocalIndexData();
-//    List<File> files = getFilesByType(localIndexInfoList, LocalIndexType.MAP_DATA, LocalIndexType.TILES_DATA,
-//                                      LocalIndexType.SRTM_DATA, LocalIndexType.WIKI_DATA);
-//    if (!files.isEmpty()) {
-//        sortLocalFiles(files);
-//        resourcesItems.put(ExportSettingsType.OFFLINE_MAPS, files);
-//    }
+    NSMutableArray<OATileSource *> *tileSources = [NSMutableArray new];
+    NSArray<OAResourceItem *> *tileResources = [OAResourcesUIHelper getSortedRasterMapSources:YES];
+    for (OAResourceItem *res in tileResources)
+    {
+        if ([res isKindOfClass:OAOnlineTilesResourceItem.class])
+        {
+            OAOnlineTilesResourceItem *tileSource = (OAOnlineTilesResourceItem *) res;
+            OATileSource *source = [OATileSource tileSourceFromOnlineSource:tileSource.onlineTileSource];
+            [tileSources addObject:source];
+        }
+        else if ([res isKindOfClass:OASqliteDbResourceItem.class])
+        {
+            OASqliteDbResourceItem *sqlSource = (OASqliteDbResourceItem *) res;
+            OASQLiteTileSource *sqlFile = [[OASQLiteTileSource alloc] initWithFilePath:sqlSource.path];
+            OATileSource *source = [OATileSource tileSourceFromSqlSource:sqlFile];
+            [tileSources addObject:source];
+        }
+    }
+    if (tileSources.count > 0)
+        resourcesItems[OAExportSettingsType.MAP_SOURCES] = tileSources;
+    
+    QSet<OsmAnd::ResourcesManager::ResourceType> types;
+    types << OsmAnd::ResourcesManager::ResourceType::MapRegion
+    << OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion
+    << OsmAnd::ResourcesManager::ResourceType::HillshadeRegion
+    << OsmAnd::ResourcesManager::ResourceType::SlopeRegion
+    << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion;
+    NSArray<NSString *> *localIndexFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:types];
+    if (localIndexFiles.count > 0)
+    {
+        NSArray<NSString *> *sortedFiles = [localIndexFiles sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [[OAFileNameTranslationHelper getMapName:obj1.lastPathComponent] compare:[OAFileNameTranslationHelper getMapName:obj2.lastPathComponent]];
+        }];
+        resourcesItems[OAExportSettingsType.OFFLINE_MAPS] = sortedFiles;
+    }
 //    files = getFilesByType(localIndexInfoList, LocalIndexType.TTS_VOICE_DATA);
 //    if (!files.isEmpty()) {
 //        resourcesItems.put(ExportSettingsType.TTS_VOICE, files);
@@ -455,7 +470,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
-    NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
+    NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList = [NSMutableArray array];
     NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyItems = [NSMutableArray array];
 
@@ -481,7 +496,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [avoidRoads addObject:object];
         else if ([object isKindOfClass:OAOsmNotePoint.class])
             [osmNotesPointList addObject:object];
-        else if ([object isKindOfClass:OAOsmPoint.class])
+        else if ([object isKindOfClass:OAOpenStreetMapPoint.class])
             [osmEditsPointList addObject:object];
         else if ([object isKindOfClass:OAFileSettingsItem.class])
             [result addObject:object];
@@ -491,17 +506,22 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [activeMarkersList addObject:object];
         else if ([object isKindOfClass:OAHistoryItem.class])
             [historyItems addObject:object];
+//        else if ([object isKindOfClass:OAGlobalSettingsItem.class])
+//            [result addObject:(OAGlobalSettingsItem *)object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)
         {
-//            if (doExport) {
-//                                ApplicationMode mode = ApplicationMode.valueOfStringKey(modeBean.stringKey, null);
-//                                if (mode != null) {
-//                                    result.add(new ProfileSettingsItem(app, mode));
-//                                }
-//                            } else {
-            [result addObject:[self getBaseProfileSettingsItem:modeBean settingsItems:settingsItems]];
+            if (doExport)
+            {
+                OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
+                if (mode)
+                    [result addObject:[[OAProfileSettingsItem alloc] initWithAppMode:mode]];
+            }
+            else
+            {
+                [result addObject:[self getBaseProfileSettingsItem:modeBean settingsItems:settingsItems]];
+            }
         }
     if (quickActions.count > 0)
         [result addObject: [[OAQuickActionsSettingsItem alloc] initWithItems:quickActions]];
@@ -515,13 +535,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
     if (osmNotesPointList.count > 0)
     {
-        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class settingsItems:settingsItems];
-        [result addObject:baseItem];
+        OAOsmNotesSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class settingsItems:settingsItems];
+        [result addObject:[[OAOsmNotesSettingsItem alloc] initWithItems:osmNotesPointList baseItem:baseItem]];
     }
     if (osmEditsPointList.count > 0)
     {
-        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmEdits clazz:OAOsmEditsSettingsItem.class settingsItems:settingsItems];
-        [result addObject:baseItem];
+        OAOsmEditsSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmEdits clazz:OAOsmEditsSettingsItem.class settingsItems:settingsItems];
+        [result addObject:[[OAOsmEditsSettingsItem alloc] initWithItems:osmEditsPointList baseItem:baseItem]];
     }
     if (activeMarkersList.count > 0)
     {

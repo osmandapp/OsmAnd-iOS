@@ -112,8 +112,7 @@
         NSString *filterId = object[kFILTER_ID_KEY];
         NSString *acceptedTypes = object[kACCEPTER_TYPES_KEY];
 
-        NSError *err = nil;
-        NSDictionary<NSString *, NSMutableSet<NSString *> *> *array = [NSJSONSerialization JSONObjectWithData:[acceptedTypes dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&err];
+        NSDictionary<NSString *, NSMutableSet<NSString *> *> *array = [NSJSONSerialization JSONObjectWithData:[acceptedTypes dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
         NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypesDone = [NSMapTable strongToStrongObjectsMapTable];
 
         for (NSString *key in array.allKeys)

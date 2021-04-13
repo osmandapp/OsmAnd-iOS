@@ -297,7 +297,7 @@ typedef enum
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:_filter.name
         message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    NSString *actionSaveTitle = @"";;
+    NSString *actionSaveTitle = @"";
 
     if (![_filter isStandardFilter])
     {
@@ -330,10 +330,7 @@ typedef enum
     [alert addAction:actionSave];
     [alert addAction:actionCancel];
 
-    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
-    popPresenter.sourceView = self.view;
-    popPresenter.sourceRect = _btnMore.frame;
-    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
+    [self setupPopover:alert];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -353,13 +350,16 @@ typedef enum
     [alert addAction:actionDelete];
     [alert addAction:actionCancel];
 
+    [self setupPopover:alert];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)setupPopover:(UIAlertController *)alert {
     UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
     popPresenter.sourceView = self.view;
     popPresenter.sourceRect = _btnMore.frame;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
-    [self presentViewController:alert animated:YES completion:nil];
 }
-
 - (void) editCategories
 {
     OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:_filter];

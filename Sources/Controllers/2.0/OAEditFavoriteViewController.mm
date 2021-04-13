@@ -809,7 +809,6 @@
     }
     else if ([cellType isEqualToString:kCellTypeColorCollection])
     {
-        NSLog(@"!! kCellTypeColorCollection %li %li", (long)indexPath.section, indexPath.row);
         static NSString* const identifierCell = @"OAColorsTableViewCell";
         OAColorsTableViewCell *cell = nil;
         cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -836,7 +835,6 @@
     }
     else if ([cellType isEqualToString:kCellTypeIconCollection])
     {
-        NSLog(@"!! OAShapesTableViewCell %li %li", (long)indexPath.section, indexPath.row);
         static NSString* const identifierCell = @"OAShapesTableViewCell";
         OAShapesTableViewCell *cell = nil;
         cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -894,16 +892,19 @@
         {
             cell.delegate = self;
             [cell setValues:item[@"values"] sizes:item[@"sizes"] colors:item[@"colors"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
-            [cell.collectionView layoutIfNeeded];
-            [cell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[item[@"selectedValue"] intValue] inSection:0]
-                                        atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                animated:YES];
         }
         return cell;
     }
     
     return nil;
 }
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+     NSDictionary *item = _data[indexPath.section][indexPath.row];
+     if ([cell isKindOfClass:OAFolderCardsCell.class])
+         [((OAFolderCardsCell *)cell) scrollToItemIfNeeded:(int)[item[@"selectedValue"] intValue]];
+ }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
@@ -1108,9 +1109,7 @@
     _selectedColor = [OADefaultFavorite builtinColors][tag];
     [self updateHeaderIcon];
     [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2], [NSIndexPath indexPathForRow:1 inSection:2], [NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAFolderCardsCellDelegate
@@ -1134,8 +1133,7 @@
         self.groupTitle = OALocalizedString(@"favorites");
     [self generateData];
     
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:0 inSection:2], [NSIndexPath indexPathForRow:1 inSection:2], [NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onAddFolderButtonPressed
@@ -1162,8 +1160,7 @@
     [self updateHeaderIcon];
     
     [self generateData];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onNewGroupAdded:(NSString *)selectedGroupName  color:(UIColor *)color
@@ -1184,8 +1181,7 @@
     [self setupGroups];
     [self generateData];
     [self updateHeaderIcon];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAAddFavoriteGroupDelegate

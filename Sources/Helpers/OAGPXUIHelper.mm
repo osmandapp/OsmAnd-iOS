@@ -176,15 +176,16 @@
         {
             for (NSString *f in files)
             {
+                NSString *fullPath = [dir stringByAppendingPathComponent:f];
                 if ([f.pathExtension.lowerCase isEqualToString:@"gpx"])
                 {
-                    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:f error:nil];
-                    [list addObject:[[OAGpxFileInfo alloc] initWithFileName:absolutePath ? f : [parent stringByAppendingPathComponent:f.lastPathComponent] lastModified:[attributes fileModificationDate].timeIntervalSince1970 fileSize:[attributes fileSize]]];
+                    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:fullPath error:nil];
+                    [list addObject:[[OAGpxFileInfo alloc] initWithFileName:absolutePath ? fullPath : [parent stringByAppendingPathComponent:f] lastModified:[attributes fileModificationDate].timeIntervalSince1970 * 1000 fileSize:[attributes fileSize]]];
                 }
                 BOOL isDir = NO;
-                [fileManager fileExistsAtPath:f isDirectory:&isDir];
+                [fileManager fileExistsAtPath:fullPath isDirectory:&isDir];
                 if (isDir)
-                    [self readGpxDirectory:f list:list parent:[parent stringByAppendingPathComponent:f.lastPathComponent] absolutePath:absolutePath];
+                    [self readGpxDirectory:fullPath list:list parent:[parent stringByAppendingPathComponent:f] absolutePath:absolutePath];
             }
         }
     }

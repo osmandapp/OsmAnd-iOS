@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 
-@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType;
+@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument;
 
 @interface OAFavoritesHelper : NSObject
 
@@ -52,6 +52,8 @@
 + (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames;
 + (NSArray<NSString *> *) getFlatIconNamesList;
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList;
+
++ (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints;
 
 @end
 

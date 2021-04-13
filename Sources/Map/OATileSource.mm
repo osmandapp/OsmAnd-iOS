@@ -19,6 +19,72 @@
     return [[self alloc] initWithParameters:params];
 }
 
++ (instancetype) tileSourceFromOnlineSource:(const std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> &)source
+{
+    return [[self alloc] initFromSource:source];
+}
+
++ (instancetype) tileSourceFromSqlSource:(OASQLiteTileSource *)source
+{
+    return [[self alloc] initFromSql:source];
+}
+
+- (instancetype) initFromSql:(OASQLiteTileSource *)source
+{
+    self = [super init];
+    if (self) {
+        _isSql = YES;
+        _name = source.name;
+        _title = source.title;
+        if (_title.length == 0)
+            _title = _name;
+        
+        _minZoom = source.minimumZoomSupported;
+        _maxZoom = source.maximumZoomSupported;
+        _url = source.urlTemplate;
+        _randoms = source.randoms;
+        _ellipsoid = source.isEllipticYTile;
+        _invertedY = source.isInvertedYTile;
+        _referer = source.referer;
+        _timesupported = source.isTimeSupported;
+        _expire = source.getExpirationTimeMillis;
+        _inversiveZoom = source.isInversiveZoom;
+        _ext = source.tileFormat;
+        _tileSize = source.tileSize;
+        _bitDensity = source.bitDensity;
+        _avgSize = 18000;
+        _rule = source.rule;
+    }
+    return self;
+}
+
+- (instancetype) initFromSource:(const std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> &)source
+{
+    self = [super init];
+    if (self) {
+        _isSql = NO;
+        _name = source->name.toNSString();
+        _title = _name;
+        
+        _minZoom = source->minZoom;
+        _maxZoom = source->maxZoom;
+        _url = source->urlToLoad.toNSString();
+        _randoms = source->randoms.toNSString();
+        _ellipsoid = source->ellipticYTile;
+        _invertedY = source->invertedYTile;
+        _referer = @"";
+        _timesupported = source->expirationTimeMillis > 0;
+        _expire = source->expirationTimeMillis;
+        _inversiveZoom = NO;
+        _ext = source->ext.toNSString();
+        _tileSize = source->tileSize;
+        _bitDensity = source->bitDensity;
+        _avgSize = source->avgSize;
+        _rule = source->rule.toNSString();
+    }
+    return self;
+}
+
 - (instancetype) initFromTileSource:(OATileSource *)other newName:(NSString *)newName
 {
     self = [super init];

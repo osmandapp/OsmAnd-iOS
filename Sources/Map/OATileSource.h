@@ -14,6 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OASQLiteTileSource;
 
 @interface OATileSource : NSObject
 
@@ -37,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *rule;
 
 + (instancetype) tileSourceWithParameters:(NSDictionary *)params;
++ (instancetype) tileSourceFromOnlineSource:(const std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> &)source;
++ (instancetype) tileSourceFromSqlSource:(OASQLiteTileSource *)source;
 
 - (instancetype) initFromTileSource:(OATileSource *)other newName:(NSString *)newName;
 

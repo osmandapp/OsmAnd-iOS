@@ -243,7 +243,7 @@
         }
             
         _filePath = filePath;
-        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath];
+        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
         if (self.subtype == EOASettingsItemFileSubtypeUnknown)
         {
             if (error)
@@ -522,7 +522,7 @@
 - (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
     NSError *copyError;
-    [[NSFileManager defaultManager] copyItemAtPath:self.item.fileName toPath:filePath error:&copyError];
+    [[NSFileManager defaultManager] copyItemAtPath:self.item.filePath toPath:filePath error:&copyError];
     if (error && copyError)
     {
         *error = copyError;

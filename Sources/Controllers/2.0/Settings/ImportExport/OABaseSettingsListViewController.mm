@@ -1,76 +1,31 @@
 //
-//  OAImportProfileViewController.mm
-//  OsmAnd Maps
+//  OABaseSettingsListViewController.m
+//  OsmAnd
 //
-//  Created by Anna Bibyk on 15.10.2020.
-//  Copyright © 2020 OsmAnd. All rights reserved.
+//  Created by Paul on 08.04.2021.
+//  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OAImportSettingsViewController.h"
-#import "OAImportDuplicatesViewController.h"
-#import "OAImportCompleteViewController.h"
-#import "OAAppSettings.h"
-#import "OASettingsImporter.h"
-#import "OsmAndApp.h"
-#import "OAQuickActionType.h"
-#import "OAQuickAction.h"
-#import "OAPOIUIFilter.h"
-#import "OAMapSource.h"
-#import "OAResourcesUIHelper.h"
-#import "OAAvoidRoadInfo.h"
+#import "OABaseSettingsListViewController.h"
+#import "OAExportItemsSelectionViewController.h"
+#import "OASettingsCategoryItems.h"
+#import "OAExportSettingsType.h"
+#import "OAProgressTitleCell.h"
 #import "OACustomSelectionCollapsableCell.h"
 #import "OAExportSettingsType.h"
 #import "OAMenuSimpleCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
-#import "OAProfileDataObject.h"
-#import "OAAvoidRoadInfo.h"
-#import "OASQLiteTileSource.h"
-#import "OAResourcesUIHelper.h"
-#import "OAOsmNotePoint.h"
-#import "OAOsmNotesSettingsItem.h"
-#import "OAOsmEditsSettingsItem.h"
-#import "OAExportSettingsType.h"
-#import "OAProfileSettingsItem.h"
 #import "OAFileSettingsItem.h"
-#import "OAQuickActionsSettingsItem.h"
-#import "OAPoiUiFilterSettingsItem.h"
-#import "OAMapSourcesSettingsItem.h"
-#import "OAAvoidRoadsSettingsItem.h"
-#import "OAFileNameTranslationHelper.h"
-#import "OAFavoritesSettingsItem.h"
-#import "OAFavoritesHelper.h"
-#import "OAOsmEditingPlugin.h"
-#import "OAMarkersSettingsItem.h"
-#import "OASettingsCategoryItems.h"
 #import "OAExportSettingsCategory.h"
-#import "OADestination.h"
-#import "OAGpxSettingsItem.h"
-#import "OAExportItemsSelectionViewController.h"
-#import "OAGPXDatabase.h"
-#import "OAProgressTitleCell.h"
-#import "OAPluginSettingsItem.h"
-
 #import "Localization.h"
 #import "OAColors.h"
 
-#include <OsmAndCore/ArchiveReader.h>
-
-#define kSidePadding 16
-#define kTopPadding 6
-#define kBottomPadding 32
 #define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
 #define kCellTypeSectionHeader @"OACustomSelectionCollapsableCell"
 #define kCellTypeTitleDescription @"OAMenuSimpleCell"
 #define kCellTypeTitle @"OAIconTextCell"
 #define kCellTypeProgress @"OAProgressTitleCell"
-
-@interface OATableGroupToImport : NSObject
-    @property NSString* type;
-    @property BOOL isOpen;
-    @property NSString* groupName;
-    @property NSMutableArray* groupItems;
-@end
 
 @implementation OATableGroupToImport
 
@@ -85,49 +40,74 @@
 
 @end
 
-@interface OAImportSettingsViewController () <UITableViewDelegate, UITableViewDataSource, OASettingsImportExportDelegate, OASettingItemsSelectionDelegate>
+@interface OABaseSettingsListViewController () <UITableViewDelegate, UITableViewDataSource, OASettingItemsSelectionDelegate>
 
 @end
 
-@implementation OAImportSettingsViewController
-{
-    OASettingsHelper *_settingsHelper;
-    NSArray<OATableGroupToImport *> *_data;
-    NSArray<OASettingsItem *> *_settingsItems;
-    NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *_itemsMap;
-    NSArray<OAExportSettingsCategory *> *_itemTypes;
-    NSMutableDictionary<OAExportSettingsType *, NSArray *> *_selectedItemsMap;
-    NSString *_file;
-    NSString *_descriptionText;
-    NSString *_descriptionBoldText;
-    CGFloat _heightForHeader;
-    
-    QList<OsmAnd::ArchiveReader::Item> _archiveItems;
-}
+@implementation OABaseSettingsListViewController
 
-- (instancetype) initWithItems:(NSArray<OASettingsItem *> *)items
-{
-    self = [super init];
-    if (self)
-    {
-        _settingsItems = [NSArray arrayWithArray:items];
-        [self commonInit];
-    }
-    return self;
-}
-
-- (instancetype) init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
+        _selectedItemsMap = [NSMutableDictionary new];
         [self commonInit];
     }
     return self;
 }
 
-- (void)commonInit
+- (void) commonInit
 {
-    _settingsHelper = OASettingsHelper.sharedInstance;
+}
+
+- (void)viewDidLoad
+{
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    
+    [self.additionalNavBarButton addTarget:self action:@selector(selectDeselectAllItems:) forControlEvents:UIControlEventTouchUpInside];
+    self.secondaryBottomButton.hidden = YES;
+    [self updateControls];
+    self.backImageButton.hidden = YES;
+    
+    [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setupView];
+    [self.tableView reloadData];
+    self.bottomBarView.hidden = NO;
+}
+
+- (void) setupView
+{
+}
+
+- (void) generateData
+{
+    NSMutableArray *data = [NSMutableArray array];
+    for (OAExportSettingsCategory *type in self.itemTypes)
+    {
+        OASettingsCategoryItems *categoryItems = self.itemsMap[type];
+        OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
+        group.groupName = type.title;
+        group.type = kCellTypeSectionHeader;
+        group.isOpen = NO;
+        for (OAExportSettingsType *type in categoryItems.getTypes)
+        {
+            [group.groupItems addObject:@{
+                @"icon" :  type.icon,
+                @"title" : type.title,
+                @"type" : kCellTypeTitleDescription
+            }];
+        }
+        [data addObject:group];
+    }
+    
+    self.data = [NSArray arrayWithArray:data];
 }
 
 - (void) applyLocalization
@@ -141,7 +121,7 @@
 
 - (BOOL) hasSelection
 {
-    for (NSArray *items in _selectedItemsMap.allValues)
+    for (NSArray *items in self.selectedItemsMap.allValues)
     {
         if (items.count > 0)
             return YES;
@@ -170,215 +150,29 @@
     [self setupButtonView];
 }
 
-- (void) viewDidLoad
-{
-    _descriptionText = OALocalizedString(@"import_profile_select_descr");
-    _descriptionBoldText = nil;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    
-    [self.additionalNavBarButton addTarget:self action:@selector(selectDeselectAllItems:) forControlEvents:UIControlEventTouchUpInside];
-    self.secondaryBottomButton.hidden = YES;
-    [self updateControls];
-    self.backImageButton.hidden = YES;
-    _selectedItemsMap = [[NSMutableDictionary alloc] init];
-    [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
-    
-    [super viewDidLoad];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self setupView];
-    [self.tableView reloadData];
-    self.bottomBarView.hidden = NO;
-}
-
-- (void) setupView
-{
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
-    if (importTask && _settingsItems)
-    {
-        if (!_file)
-        {
-            _file = importTask.getFile;
-            _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(_file)).getItems();
-        }
-            
-        NSArray *duplicates = [importTask getDuplicates];
-        NSArray *selectedItems = [importTask getSelectedItems];
-        
-        if (!duplicates)
-        {
-            importTask.delegate = self;
-        }
-        else if (duplicates.count == 0)
-        {
-            if (selectedItems && _file)
-                [_settingsHelper importSettings:_file items:selectedItems latestChanges:@"" version:1 delegate:self];
-        }
-    }
-    
-    if (_settingsItems)
-    {
-        _itemsMap = [OASettingsHelper getSettingsToOperateByCategory:_settingsItems importComplete:NO];
-        _itemTypes = _itemsMap.allKeys;
-        [self generateData];
-    }
-    else
-    {
-        OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
-        group.type = kCellTypeProgress;
-        group.groupName = OALocalizedString(@"reading_file");
-        _data = @[group];
-    }
-    
-    EOAImportType importTaskType = [importTask getImportType];
-    
-    if (importTaskType == EOAImportTypeCheckDuplicates)
-    {
-        [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
-    }
-    else if (importTaskType == EOAImportTypeImport)
-    {
-        [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
-    }
-    else
-        [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
-}
-
-- (void) updateUI:(NSString *)toolbarTitleRes descriptionRes:(NSString *)descriptionRes activityLabel:(NSString *)activityLabel
-{
-    if (_file)
-    {
-        NSString *filename = [_file lastPathComponent];
-        [self setTableHeaderView:toolbarTitleRes];
-        _descriptionText = [NSString stringWithFormat:descriptionRes, filename];
-        _descriptionBoldText = filename;
-        self.bottomBarView.hidden = YES;
-        [self showActivityIndicatorWithLabel:activityLabel];
-        [self.tableView reloadData];
-    }
-}
-
-- (NSInteger) getSelectedItemsAmount:(OAExportSettingsType *)type
-{
-    return _selectedItemsMap[type].count;
-}
-
-- (void) generateData
-{
-    NSMutableArray *data = [NSMutableArray array];
-    for (OAExportSettingsCategory *type in _itemTypes)
-    {
-        OASettingsCategoryItems *categoryItems = _itemsMap[type];
-        OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
-        group.groupName = type.title;
-        group.type = kCellTypeSectionHeader;
-        group.isOpen = NO;
-        for (OAExportSettingsType *type in categoryItems.getTypes)
-        {
-            [group.groupItems addObject:@{
-                @"icon" :  type.icon,
-                @"title" : type.title,
-                @"type" : kCellTypeTitleDescription
-            }];
-        }
-        [data addObject:group];
-    }
-    
-    _data = [NSArray arrayWithArray:data];
-}
-
-- (void) showActivityIndicatorWithLabel:(NSString *)labelText
-{
-    OATableGroupToImport *tableGroup = [[OATableGroupToImport alloc] init];
-    tableGroup.type = kCellTypeWithActivity;
-    tableGroup.groupName = labelText;
-    _data = @[tableGroup];
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [self.tableView reloadData];
-    self.bottomBarView.hidden = YES;
-}
-
-- (long)getItemSize:(NSString *)item
-{
-    NSString *fileName = item.lastPathComponent;
-    const auto fileNameStr = QString::fromNSString(fileName);
-    for (const auto& item : _archiveItems)
-    {
-        if (item.name.endsWith(fileNameStr))
-        {
-            return item.size;
-        }
-    }
-    return 0;
-}
-
-- (long) calculateItemsSize:(NSArray *)items
-{
-    long itemsSize = 0;
-    for (id item in items)
-    {
-        if ([item isKindOfClass:OAFileSettingsItem.class])
-        {
-            itemsSize += [self getItemSize:((OAFileSettingsItem *) item).filePath];
-        }
-        else if ([item isKindOfClass:NSString.class])
-        {
-            [self getItemSize:item];
-        }
-    }
-    return itemsSize;
-}
-
-#pragma mark - Actions
-
-- (IBAction) primaryButtonPressed:(id)sender
-{
-    [self importItems];
-}
-
-- (IBAction) backButtonPressed:(id)sender
-{
-    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (NSArray *)getSelectedItems
 {
     NSMutableArray *selectedItems = [NSMutableArray new];
-    for (NSArray *items in _selectedItemsMap.allValues)
+    for (NSArray *items in self.selectedItemsMap.allValues)
         [selectedItems addObjectsFromArray:items];
     
     return selectedItems;
 }
 
-- (void) importItems
-{
-    [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
-    NSArray <OASettingsItem *> *selectedItems = [_settingsHelper prepareSettingsItems:[self getSelectedItems] settingsItems:_settingsItems doExport:NO];
-    
-    if (_file && _settingsItems)
-        [_settingsHelper checkDuplicates:_file items:_settingsItems selectedItems:selectedItems delegate:self];
-}
-
 - (void) selectDeselectAllItems:(id)sender
 {
-    if (_selectedItemsMap.count > 0)
+    if (self.selectedItemsMap.count > 0)
     {
-        [_selectedItemsMap removeAllObjects];
+        [self.selectedItemsMap removeAllObjects];
     }
     else
     {
-        for (OAExportSettingsCategory *category in _itemsMap)
+        for (OAExportSettingsCategory *category in self.itemsMap)
         {
-            OASettingsCategoryItems *items = _itemsMap[category];
+            OASettingsCategoryItems *items = self.itemsMap[category];
             for (OAExportSettingsType *type in items.getTypes)
             {
-                _selectedItemsMap[type] = [items getItemsForType:type];
+                self.selectedItemsMap[type] = [items getItemsForType:type];
             }
         }
     }
@@ -398,9 +192,9 @@
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     OAExportSettingsCategory *settingsCategory = _itemTypes[indexPath.section];
-    OASettingsCategoryItems *items = _itemsMap[settingsCategory];
+    OASettingsCategoryItems *items = self.itemsMap[settingsCategory];
     OAExportSettingsType *type = items.getTypes[indexPath.row];
-    BOOL doSelect = _selectedItemsMap[type].count == 0;
+    BOOL doSelect = self.selectedItemsMap[type].count == 0;
     
     if (doSelect)
     {
@@ -417,7 +211,7 @@
 {
     for (OAExportSettingsType *type in categoryItems.getTypes)
     {
-        _selectedItemsMap[type] = [categoryItems getItemsForType:type];
+        self.selectedItemsMap[type] = [categoryItems getItemsForType:type];
     }
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -426,7 +220,7 @@
 {
     for (OAExportSettingsType *type in categoryItems.getTypes)
     {
-        [_selectedItemsMap removeObjectForKey:type];
+        [self.selectedItemsMap removeObjectForKey:type];
     }
     
     NSInteger itemsCount = [self.tableView numberOfRowsInSection:section];
@@ -439,21 +233,64 @@
 
 - (void) openCloseGroup:(NSIndexPath *)indexPath
 {
-    OATableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
+    OATableGroupToImport* groupData = [self.data objectAtIndex:indexPath.section];
     groupData.isOpen = !groupData.isOpen;
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) showActivityIndicatorWithLabel:(NSString *)labelText
+{
+    OATableGroupToImport *tableGroup = [[OATableGroupToImport alloc] init];
+    tableGroup.type = kCellTypeWithActivity;
+    tableGroup.groupName = labelText;
+    self.data = @[tableGroup];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView reloadData];
+    self.bottomBarView.hidden = YES;
+}
+
+- (long) calculateItemsSize:(NSArray *)items
+{
+    long itemsSize = 0;
+    for (id item in items)
+    {
+        if ([item isKindOfClass:OAFileSettingsItem.class])
+        {
+            itemsSize += [self getItemSize:((OAFileSettingsItem *) item).filePath];
+        }
+        else if ([item isKindOfClass:NSString.class])
+        {
+            itemsSize += [self getItemSize:item];
+        }
+    }
+    return itemsSize;
+}
+
+- (void) updateUI:(NSString *)toolbarTitleRes descriptionRes:(NSString *)descriptionRes activityLabel:(NSString *)activityLabel
+{
+    // override
+}
+
+- (long)getItemSize:(NSString *)item
+{
+    return 0; //override
+}
+
+- (NSInteger) getSelectedItemsAmount:(OAExportSettingsType *)type
+{
+    return self.selectedItemsMap[type].count;
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    return self.data.count;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    OATableGroupToImport* groupData = [_data objectAtIndex:section];
+    OATableGroupToImport* groupData = [self.data objectAtIndex:section];
     if (groupData.isOpen)
         return [groupData.groupItems count] + 1;
     return 1;
@@ -461,7 +298,7 @@
 
 - (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
+    OATableGroupToImport* groupData = [self.data objectAtIndex:indexPath.section];
     if (indexPath.row == 0)
     {
         if ([groupData.type isEqualToString:kCellTypeWithActivity])
@@ -512,7 +349,7 @@
             }
             if (cell)
             {
-                OASettingsCategoryItems *itemTypes = _itemsMap[_itemTypes[indexPath.section]];
+                OASettingsCategoryItems *itemTypes = self.itemsMap[_itemTypes[indexPath.section]];
                 NSInteger itemSelectionCount = 0;
                 NSInteger itemCount = itemTypes.getTypes.count;
                 BOOL partiallySelected = NO;
@@ -520,8 +357,8 @@
                 for (OAExportSettingsType *type in itemTypes.getTypes)
                 {
                     NSInteger allItemsCount = [itemTypes getItemsForType:type].count;
-                    NSInteger selectedItemsCount = _selectedItemsMap[type].count;
-                    size += [self calculateItemsSize:_selectedItemsMap[type]];
+                    NSInteger selectedItemsCount = self.selectedItemsMap[type].count;
+                    size += [self calculateItemsSize:self.selectedItemsMap[type]];
                     if (selectedItemsCount > 0)
                         itemSelectionCount++;
                     partiallySelected = partiallySelected || allItemsCount != selectedItemsCount;
@@ -585,13 +422,13 @@
             {
                 cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.textView.text = item[@"title"];
-                OASettingsCategoryItems *items = _itemsMap[_itemTypes[indexPath.section]];
+                OASettingsCategoryItems *items = self.itemsMap[_itemTypes[indexPath.section]];
                 OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
                 NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
                 NSInteger itemsTotal = [items getItemsForType:settingType].count;
                 NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"sett_no_ext_input") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"some_of"), selectedAmount, itemsTotal]);
                 
-                long size = [self calculateItemsSize:_selectedItemsMap[settingType]];
+                long size = [self calculateItemsSize:self.selectedItemsMap[settingType]];
                 if (size > 0)
                 {
                     selectedStr = [selectedStr stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
@@ -632,102 +469,64 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:_descriptionText boldFragment:_descriptionBoldText forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:self.descriptionText boldFragment:self.descriptionBoldText forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self getHeightForHeaderWithFirstHeaderText:_descriptionText boldFragment:_descriptionBoldText inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:self.descriptionText boldFragment:self.descriptionBoldText inSection:section];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row != 0)
     {
-        OASettingsCategoryItems *items = _itemsMap[_itemTypes[indexPath.section]];
+        OASettingsCategoryItems *items = self.itemsMap[_itemTypes[indexPath.section]];
         OAExportSettingsType *type = [items getTypes][indexPath.row - 1];
-        if (type != OAExportSettingsType.SEARCH_HISTORY)
+        if (type != OAExportSettingsType.SEARCH_HISTORY && type != OAExportSettingsType.GLOBAL)
         {
-            OAExportItemsSelectionViewController *selectionVC = [[OAExportItemsSelectionViewController alloc] initWithItems:[items getItemsForType:type] type:type selectedItems:_selectedItemsMap[type]];
+            OAExportItemsSelectionViewController *selectionVC = [[OAExportItemsSelectionViewController alloc] initWithItems:[items getItemsForType:type] type:type selectedItems:self.selectedItemsMap[type]];
             selectionVC.delegate = self;
             [self presentViewController:selectionVC animated:YES completion:nil];
         }
         else
         {
-            if (_selectedItemsMap[type].count == 0)
-                _selectedItemsMap[type] = [items getItemsForType:type];
+            if (self.selectedItemsMap[type].count == 0)
+                self.selectedItemsMap[type] = [items getItemsForType:type];
             else
-                [_selectedItemsMap removeObjectForKey:type];
+                [self.selectedItemsMap removeObjectForKey:type];
             
-            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tableView reloadRowsAtIndexPaths:@[indexPath, [NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self updateControls];
 }
 
-#pragma mark - OASettingsImportExportDelegate
-
-- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
-    if (succeed)
-    {
-        [self.tableView reloadData];
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
-        [self.navigationController pushViewController:importCompleteVC animated:YES];
-        _settingsHelper.importTask = nil;
-    }
-    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
-}
-
-- (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
-{
-    [self processDuplicates:duplicates items:items];
-}
-
-- (void)onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items
-{
-    
-}
-
-- (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed
-{
-    
-}
-
-- (void) processDuplicates:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
-{
-    if (_file)
-    {
-        if (duplicates.count == 0)
-        {
-            [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
-            [_settingsHelper importSettings:_file items:items latestChanges:@"" version:1 delegate:self];
-        }
-        else
-        {
-            OAImportDuplicatesViewController *dublicatesVC = [[OAImportDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:items file:_file];
-            [self.navigationController pushViewController:dublicatesVC animated:YES];
-        }
-    }
-}
-
 // MARK: OASettingItemsSelectionDelegate
 
 - (void)onItemsSelected:(NSArray *)items type:(OAExportSettingsType *)type
 {
-    _selectedItemsMap[type] = items;
+    self.selectedItemsMap[type] = items;
     [self.tableView reloadData];
     [self updateControls];
 }
 
-- (void)onItemsCollected:(NSArray<OASettingsItem *> *)items
+// MARK: OASettingsImportExportDelegate
+
+- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
+}
+
+- (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
 {
-    _settingsItems = items;
-    if (_settingsItems)
-    {
-        [self setupView];
-        [self.tableView reloadData];
-    }
+}
+
+- (void)onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items
+{
+}
+
+- (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed
+{
 }
 
 @end

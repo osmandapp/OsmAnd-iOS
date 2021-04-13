@@ -126,6 +126,12 @@
     return [[OAMarkersSettingsItemReader alloc] initWithItem:self];
 }
 
+- (OASettingsItemWriter *)getWriter
+{
+    OAGPXDocument *gpxFile = [_destinationsHelper generateGpx:self.items completeBackup:YES];
+    return [self getGpxWriter:gpxFile];
+}
+
 @end
 
 #pragma mark - OAMarkersSettingsItemReader

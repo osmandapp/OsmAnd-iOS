@@ -65,8 +65,6 @@
         @"color" : UIColorFromRGB(color_primary_purple),
         @"img" : @"ic_custom_add",
         @"key" : @"work"}];
-    
-//    [self.collectionView reloadData];
 }
 
 - (void) scrollToItemIfNeeded:(NSInteger)selectedIndex

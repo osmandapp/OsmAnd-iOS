@@ -48,7 +48,7 @@
     BOOL _showOnMap;
     
     NSString *_inputFieldError;
-    int _selectedFolderIndex;
+    NSInteger _selectedFolderIndex;
 }
 
 - (instancetype) initWithFileName:(NSString *)fileName filePath:(NSString *)filePath showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
@@ -58,6 +58,7 @@
     {
         _settings = [OAAppSettings sharedManager];
         _fileName = fileName;
+        _filePath = filePath;
         _sourceFileName = fileName;
         _showSimplifiedButton = simplifiedTrack;
         _showOnMap = showOnMap;
@@ -149,7 +150,7 @@
         },
         @{
             @"type" : @"OAFolderCardsCell",
-            @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
+            @"selectedValue" : @(_selectedFolderIndex),
             @"values" : _allFolders,
             @"addButtonTitle" : OALocalizedString(@"add_folder")
         },
@@ -262,6 +263,8 @@
             cell.inputField.text = item[@"fileName"];
             cell.inputField.delegate = self;
             cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
+            cell.inputField.returnKeyType = UIReturnKeyDone;
+            cell.inputField.enablesReturnKeyAutomatically = YES;
             cell.clearButton.tag = cell.inputField.tag;
             [cell.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -308,6 +311,7 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
+            cell.textView.textColor = UIColor.blackColor;
             cell.descriptionView.text = item[@"value"];
         }
         return cell;
@@ -331,6 +335,12 @@
     }
     
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell isKindOfClass:OAFolderCardsCell.class])
+        [((OAFolderCardsCell *)cell) scrollToItemIfNeeded:_selectedFolderIndex];
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -421,15 +431,30 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
-    [self updateFileNameFromEditText:textView.text];
-    
+    [self updateErrorMessage:textView.text];
     [textView sizeToFit];
+}
+
+- (void) updateErrorMessage:(NSString *)text
+{
+    [self updateFileNameFromEditText:text];
+    
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
     footer.textLabel.textColor = _inputFieldError != nil ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+    {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
 }
 
 - (void) updateFileNameFromEditText:(NSString *)name
@@ -439,6 +464,10 @@
     if (text.length == 0)
     {
         _inputFieldError = OALocalizedString(@"empty_filename");
+    }
+    else if ([self isIncorrectFileName:name])
+    {
+        _inputFieldError = OALocalizedString(@"incorrect_symbols");
     }
     else if ([self isFileExist:name])
     {
@@ -455,8 +484,22 @@
 
 - (BOOL) isFileExist:(NSString *)name
 {
-    NSString *filePath = [[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
+    NSString *folderPath = OsmAndApp.instance.gpxPath;
+    if (_selectedFolderName.length > 0 && ![_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+        folderPath = [folderPath stringByAppendingPathComponent:_selectedFolderName];
+        
+    NSString *filePath = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
     return [NSFileManager.defaultManager fileExistsAtPath:filePath];
+}
+
+- (BOOL) isIncorrectFileName:(NSString *)fileName
+{
+    BOOL isFileNameEmpty = [fileName trim].length == 0;
+
+    NSCharacterSet* illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:;.,"];
+    BOOL hasIncorrectSymbols = [fileName rangeOfCharacterFromSet:illegalFileNameCharacters].length != 0;
+    
+    return isFileNameEmpty || hasIncorrectSymbols;
 }
 
 #pragma mark - Keyboard Notifications
@@ -499,8 +542,14 @@
 {
     _selectedFolderName = selectedFolderName;
     _selectedFolderIndex = [_allFolders indexOfObject:selectedFolderName];
+    [self updateErrorMessage:_fileName];
     [self generateData];
-    [self.tableView reloadData];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) onFolderAdded:(NSString *)addedFolderName
+{
+    [self onTrackFolderAdded:addedFolderName];
 }
 
 - (void) onNewFolderAdded
@@ -508,7 +557,7 @@
     [self updateAllFoldersList];
     _selectedFolderIndex = [_allFolders indexOfObject:_selectedFolderName];
     [self generateData];
-    [self.tableView reloadData];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAAddTrackFolderDelegate
@@ -519,17 +568,19 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
     
+    _selectedFolderName = folderName;
     [self onNewFolderAdded];
 }
 
 #pragma mark - OAFolderCardsCellDelegate
 
-- (void) onItemSelected:(int)index
+- (void) onItemSelected:(NSInteger)index
 {
     _selectedFolderIndex = index;
     _selectedFolderName = _allFolders[index];
+    [self updateErrorMessage:_fileName];
     [self generateData];
-    [self.tableView reloadData];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onAddFolderButtonPressed

@@ -503,6 +503,7 @@
 		3270DBD42600A66300ADD4F7 /* OASelectFavoriteGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBD32600A66300ADD4F7 /* OASelectFavoriteGroupViewController.mm */; };
 		3270DBDB2600A77400ADD4F7 /* OAPoiCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBD92600A77300ADD4F7 /* OAPoiCollectionViewCell.m */; };
 		3270DBE22600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBE12600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm */; };
+		32A002142616666900ABE0D2 /* OAOpenAddTrackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32A002112616659800ABE0D2 /* OAOpenAddTrackViewController.xib */; };
 		32A0013A2610A2FB00ABE0D2 /* OATopCoordinatesWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A001392610A2FB00ABE0D2 /* OATopCoordinatesWidget.m */; };
 		32A001442610ACFE00ABE0D2 /* OATopCoordinatesWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32A001412610A7CE00ABE0D2 /* OATopCoordinatesWidget.xib */; };
 		32A001652610B43700ABE0D2 /* widget_coordinates_longitude_west_day.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001472610B42F00ABE0D2 /* widget_coordinates_longitude_west_day.png */; };
@@ -7065,6 +7066,7 @@
 		3270DBE02600BD4C00ADD4F7 /* OAAddFavoriteGroupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAAddFavoriteGroupViewController.h; path = Sources/Controllers/2.0/OAAddFavoriteGroupViewController.h; sourceTree = "<group>"; };
 		3270DBE12600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAAddFavoriteGroupViewController.mm; path = Sources/Controllers/2.0/OAAddFavoriteGroupViewController.mm; sourceTree = "<group>"; };
 		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
+		32A002112616659800ABE0D2 /* OAOpenAddTrackViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOpenAddTrackViewController.xib; sourceTree = "<group>"; };
 		32A001382610A2DA00ABE0D2 /* OATopCoordinatesWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopCoordinatesWidget.h; sourceTree = "<group>"; };
 		32A001392610A2FB00ABE0D2 /* OATopCoordinatesWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATopCoordinatesWidget.m; sourceTree = "<group>"; };
 		32A001412610A7CE00ABE0D2 /* OATopCoordinatesWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATopCoordinatesWidget.xib; sourceTree = "<group>"; };
@@ -16468,6 +16470,7 @@
 				1543B2F225B22E3F003E0FB1 /* OABaseTableViewController.m */,
 				1543B2F625B23107003E0FB1 /* OAOpenAddTrackViewController.h */,
 				1543B2F725B23112003E0FB1 /* OAOpenAddTrackViewController.mm */,
+				32A002112616659800ABE0D2 /* OAOpenAddTrackViewController.xib */,
 				15E3DD7225B6F6C900D22DC4 /* OAExitRoutePlanningBottomSheetViewController.h */,
 				15E3DD7325B6F6DD00D22DC4 /* OAExitRoutePlanningBottomSheetViewController.m */,
 				32ADB41C25D2E85100F5C634 /* OAAddTrackFolderViewController.h */,
@@ -19533,6 +19536,7 @@
 				DA13415A243DC5A80039D214 /* map_action_personal_transporter@3x.png in Resources */,
 				DA6D0782255173C5004FE017 /* ic_custom_trim_after@3x.png in Resources */,
 				DA83600223438512003374B5 /* ic_small_arrow_up@2x.png in Resources */,
+				32A002142616666900ABE0D2 /* OAOpenAddTrackViewController.xib in Resources */,
 				842034121FB5FC05002784EF /* ic_action_next_turn@2x.png in Resources */,
 				DA357C4D22A636CC00A1F82D /* ic_custom_coordinates@3x.png in Resources */,
 				DA5F21FC229551A300B0D7B6 /* ic_custom_user@2x.png in Resources */,

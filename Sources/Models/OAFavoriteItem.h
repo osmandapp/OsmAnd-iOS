@@ -10,6 +10,8 @@
 #import "OALocationPoint.h"
 #include <OsmAndCore/IFavoriteLocation.h>
 
+@class OAGpxWpt;
+
 @interface OASpecialPointType : NSObject
 
 - (instancetype)initWithTypeName:(NSString *)typeName resId:(NSString *)resId iconName:(NSString *)iconName;
@@ -78,5 +80,7 @@
 - (NSDate *) getTimestamp;
 - (void) setTimestamp:(NSDate *)timestamp;
 + (NSString *) toStringDate:(NSDate *)date;
+
+- (OAGpxWpt *) toWpt;
 
 @end

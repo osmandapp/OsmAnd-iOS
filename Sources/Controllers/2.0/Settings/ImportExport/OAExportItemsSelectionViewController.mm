@@ -51,6 +51,8 @@
     NSMutableArray *_selectedItems;
     NSArray<NSDictionary *> *_data;
     OAExportSettingsType *_type;
+    
+    QList<OsmAnd::ArchiveReader::Item> _archiveItems;
 }
 
 - (instancetype) initWithItems:(NSArray *)items type:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems
@@ -61,6 +63,10 @@
         _items = items;
         _selectedItems = selectedItems ? [NSMutableArray arrayWithArray:selectedItems] : [NSMutableArray new];
         _type = type;
+        
+        OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
+        if (settingsHelper.importTask)
+            _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(settingsHelper.importTask.getFile)).getItems();
     }
     return self;
 }
@@ -250,6 +256,29 @@
     return item;
 }
 
+- (NSString *) getFormattedSize:(NSString *)filePath
+{
+    NSString *formattedSize = @"";
+    if (_archiveItems.size() > 0)
+    {
+        NSString *fileName = filePath.lastPathComponent;
+        const auto fileNameStr = QString::fromNSString(fileName);
+        for (const auto& item : constOf(_archiveItems))
+        {
+            if (item.name.endsWith(fileNameStr))
+                formattedSize = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
+        }
+    }
+    
+    if (formattedSize.length == 0)
+    {
+        NSFileManager *fileManager = NSFileManager.defaultManager;
+        NSDictionary *attrs = [fileManager attributesOfItemAtPath:filePath error:nil];
+        formattedSize = [NSByteCountFormatter stringFromByteCount:attrs.fileSize countStyle:NSByteCountFormatterCountStyleFile];
+    }
+    return formattedSize;
+}
+
 - (void) setupItemFromFile:(NSMutableDictionary *)item filePath:(NSString *)filePath
 {
     EOASettingsItemFileSubtype fileSubtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
@@ -261,18 +290,8 @@
     }
     else if ([OAFileSettingsItemFileSubtype isMap:fileSubtype])
     {
-        OASettingsHelper *helper = OASettingsHelper.sharedInstance;
         NSString *fileName = filePath.lastPathComponent;
-        const auto fileNameStr = QString::fromNSString(fileName);
-        NSString *formattedSize = @"";
-        const auto archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(helper.importTask.getFile)).getItems();
-        for (const auto& item : archiveItems)
-        {
-            if (item.name.endsWith(fileNameStr))
-            {
-                formattedSize = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
-            }
-        }
+        NSString *formattedSize = [self getFormattedSize:filePath];
         item[@"title"] = [OAFileNameTranslationHelper getMapName:[fileName stringByDeletingPathExtension]];
         NSString *mapDescr = [self getMapDescription:filePath];
         

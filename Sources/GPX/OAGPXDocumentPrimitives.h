@@ -13,6 +13,9 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/GpxDocument.h>
 
+#define ICON_NAME_EXTENSION @"icon"
+#define BACKGROUND_TYPE_EXTENSION @"background"
+
 typedef enum
 {
     Unknown = -1,

@@ -15,6 +15,7 @@
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OAAppSettings.h"
+#import "OAGPXMutableDocument.h"
 
 #include <OsmAndCore.h>
 
@@ -529,6 +530,18 @@ static BOOL _favoritesLoaded = NO;
     if (!_flatBackgroundIcons)
         _flatBackgroundIcons = @[@"circle", @"octagon", @"square"];
     return _flatBackgroundIcons;
+}
+
++ (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints
+{
+    OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
+    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd",
+                     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+    for (OAFavoriteItem *p in favoritePoints)
+    {
+        [gpx addWpt:p.toWpt];
+    }
+    return gpx;
 }
 
 @end

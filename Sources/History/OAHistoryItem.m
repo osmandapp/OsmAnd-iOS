@@ -91,4 +91,26 @@
     return [UIImage imageNamed:@"ic_map_pin_small"];
 }
 
+- (NSString *) getPointDescriptionType
+{
+    switch (_hType) {
+        case OAHistoryTypeLocation:
+            return POINT_TYPE_LOCATION;
+        case OAHistoryTypePOI:
+            return POINT_TYPE_POI;
+        case OAHistoryTypeWpt:
+            return POINT_TYPE_WPT;
+        case OAHistoryTypeAddress:
+            return POINT_TYPE_ADDRESS;
+        case OAHistoryTypeParking:
+            return POINT_TYPE_PARKING_MARKER;
+        case OAHistoryTypeFavorite:
+            return POINT_TYPE_FAVORITE;
+        case OAHistoryTypeDirection:
+            return POINT_TYPE_TARGET;
+        default:
+            return POINT_TYPE_LOCATION;
+    }
+}
+
 @end

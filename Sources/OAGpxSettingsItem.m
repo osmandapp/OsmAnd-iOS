@@ -18,8 +18,6 @@
     OAGpxAppearanceInfo *_appearanceInfo;
 }
 
-@synthesize subtype;
-
 - (instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error
 {
     NSError *initError;
@@ -53,14 +51,18 @@
     return _appearanceInfo;
 }
 
-- (EOASettingsItemType) getType
+- (EOASettingsItemType)type
 {
     return EOASettingsItemTypeGpx;
+}
+
+- (EOASettingsItemFileSubtype)subtype
+{
+    return EOASettingsItemFileSubtypeGpx;
 }
  
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    subtype = EOASettingsItemFileSubtypeGpx;
     NSError *readError;
     [super readFromJson:json error:&readError];
     if (readError)
@@ -72,13 +74,36 @@
     _appearanceInfo = [OAGpxAppearanceInfo fromJson:json];
 }
 
+- (NSString *)fileNameWithFolder
+{
+    NSString *folderName = @"";
+    NSArray<NSString *> *pathComponents = self.filePath.pathComponents;
+    if (pathComponents.count > 1)
+        folderName = pathComponents[pathComponents.count - 2];
+    
+    NSString *tracksName = @"/tracks";
+    if ([folderName isEqualToString:@"GPX"])
+        folderName = tracksName;
+    else
+        folderName = [tracksName stringByAppendingPathComponent:folderName];
+    return [folderName stringByAppendingPathComponent:self.fileName];
+}
+
 - (void) writeToJson:(id)json
 {
-    [super writeToJson:json];
+    json[@"type"] = [OASettingsItemType typeName:self.type];
+    json[@"file"] = self.fileNameWithFolder;
+    if (self.subtype != EOASettingsItemFileSubtypeUnknown)
+        json[@"subtype"] = [OAFileSettingsItemFileSubtype getSubtypeName:self.subtype];
     if (_appearanceInfo)
     {
         [_appearanceInfo toJson:json];
     }
+}
+
+- (OASettingsItemWriter *) getWriter
+{
+    return [[OAFileSettingsItemWriter alloc] initWithItem:self];
 }
  
  /*

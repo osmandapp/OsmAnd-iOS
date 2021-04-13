@@ -45,5 +45,6 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 - (instancetype)initWithPointDescription:(OAPointDescription *)pointDescription;
 
 - (UIImage *)icon;
+- (NSString *) getPointDescriptionType;
 
 @end

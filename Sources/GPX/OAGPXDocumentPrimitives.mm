@@ -15,9 +15,7 @@
 #include <routeDataBundle.h>
 #include <routeDataResources.h>
 
-#define ICON_NAME_EXTENSION @"icon"
 #define DEFAULT_ICON_NAME @"special_star"
-#define BACKGROUND_TYPE_EXTENSION @"background"
 #define PROFILE_TYPE_EXTENSION @"profile"
 #define GAP_PROFILE_TYPE @"gap"
 #define TRKPT_INDEX_EXTENSION @"trkpt_idx"

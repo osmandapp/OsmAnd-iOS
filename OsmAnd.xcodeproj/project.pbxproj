@@ -508,6 +508,7 @@
 		3270DBD42600A66300ADD4F7 /* OASelectFavoriteGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBD32600A66300ADD4F7 /* OASelectFavoriteGroupViewController.mm */; };
 		3270DBDB2600A77400ADD4F7 /* OAPoiCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBD92600A77300ADD4F7 /* OAPoiCollectionViewCell.m */; };
 		3270DBE22600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBE12600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm */; };
+		3294346C2625C1A4007C8A5C /* OAPoiTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3219703525F8C45D00C3FED6 /* OAPoiTableViewCell.m */; };
 		32A0013A2610A2FB00ABE0D2 /* OATopCoordinatesWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A001392610A2FB00ABE0D2 /* OATopCoordinatesWidget.m */; };
 		32A001442610ACFE00ABE0D2 /* OATopCoordinatesWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32A001412610A7CE00ABE0D2 /* OATopCoordinatesWidget.xib */; };
 		32A001652610B43700ABE0D2 /* widget_coordinates_longitude_west_day.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001472610B42F00ABE0D2 /* widget_coordinates_longitude_west_day.png */; };
@@ -22309,6 +22310,7 @@
 				847A1CBA1DF94E9B003C1246 /* OATargetInfoViewCell.m in Sources */,
 				847A1CBB1DF94E9B003C1246 /* OASuperViewController.m in Sources */,
 				847A1CBC1DF94E9B003C1246 /* OAGPXItemViewController.mm in Sources */,
+				3294346C2625C1A4007C8A5C /* OAPoiTableViewCell.m in Sources */,
 				848EF44D1FB1C6C2000B7840 /* OALanesDrawable.mm in Sources */,
 				DAA8641E230415F3000E1900 /* OAShowHideGPXTracksAction.mm in Sources */,
 				336FFBB524CEE1840000AA88 /* OATargetInfoCollapsableCoordinatesViewCell.m in Sources */,

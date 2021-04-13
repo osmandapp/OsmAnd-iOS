@@ -18,7 +18,7 @@
                 <outlet property="headerIconPoi" destination="Whv-K0-SJi" id="Bf5-2Y-E7e"/>
                 <outlet property="navBarHeightConstraint" destination="xWC-3U-wP6" id="Ovd-9V-N2i"/>
                 <outlet property="navbarView" destination="Bs9-2L-ti4" id="ibU-c4-UdB"/>
-                <outlet property="tableView" destination="NrM-78-nBe" id="TGz-iw-9pj"/>
+                <outlet property="tableView" destination="NrM-78-nBe" id="KXz-Rt-SFn"/>
                 <outlet property="titleLabel" destination="krK-4A-igo" id="uhV-5C-3aD"/>
                 <outlet property="view" destination="Q3I-vz-wne" id="ypL-hP-jmO"/>
             </connections>

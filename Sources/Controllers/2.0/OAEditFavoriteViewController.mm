@@ -46,6 +46,7 @@
 #define kCellTypePoiCollection @"poiCollectionCell"
 #define kFolderCardsCell @"OAFolderCardsCell"
 #define kHeaderId @"TableViewSectionHeader"
+#define kPoiTableViewCell @"OAPoiTableViewCell"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -386,7 +387,7 @@
         @"selectedCategoryIndex" : @(_selectedCategoryIndex),
         @"categotyData" : _poiCategories,
         @"selectedIconName" : _selectedIconName,
-        @"poiData" : _poiIcons[_selectedIconCategoryName],
+        @"poiData" : _poiIcons,
         @"key" : kIconsKey
     }];
     [section addObject:@{
@@ -775,12 +776,12 @@
     }
     else if ([cellType isEqualToString:kCellTypePoiCollection])
     {
-        static NSString* const identifierCell = @"OAPoiTableViewCell";
+        static NSString* const identifierCell = kPoiTableViewCell;
         OAPoiTableViewCell *cell = nil;
-        cell = (OAPoiTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPoiTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kPoiTableViewCell owner:self options:nil];
             cell = (OAPoiTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -790,14 +791,10 @@
         {
             cell.categoriesCollectionView.tag = kCategoryCellIndex;
             cell.currentCategory = item[@"selectedCategoryName"];
-            cell.currentCategoryIndex = [item[@"selectedCategoryIndex"] integerValue];
             cell.categoryDataArray = item[@"categotyData"];
-            [cell.categoriesCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[item[@"selectedCategoryIndex"] integerValue] inSection:0]
-                                        atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                animated:YES];
             
             cell.collectionView.tag = kPoiCellIndex;
-            cell.poiDataArray = item[@"poiData"];
+            cell.poiData = item[@"poiData"];
             cell.titleLabel.text = item[@"title"];
             cell.currentColor = _colors[_selectedColorIndex].intValue;
             cell.currentIcon = item[@"selectedIconName"];
@@ -904,6 +901,8 @@
      NSDictionary *item = _data[indexPath.section][indexPath.row];
      if ([cell isKindOfClass:OAFolderCardsCell.class])
          [((OAFolderCardsCell *)cell) scrollToItemIfNeeded:(int)[item[@"selectedValue"] intValue]];
+     else if ([cell isKindOfClass:OAPoiTableViewCell.class])
+         [((OAPoiTableViewCell *)cell) scrollToItemIfNeeded:[item[@"selectedCategoryIndex"] integerValue]];
  }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -1074,12 +1073,14 @@
 
 #pragma mark - OAPoiTableViewCellDelegate
 
-- (void) onPoiCategorySelected:(NSString *)category
+- (void) onPoiCategorySelected:(NSString *)category index:(NSInteger)index
 {
     _selectedIconCategoryName = category;
+    _selectedCategoryIndex = index;
     [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView layoutSubviews];
+    OAPoiTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void) onPoiSelected:(NSString *)poiName;

@@ -44,6 +44,7 @@
     layout.sectionInset = UIEdgeInsetsMake(0, 12, 0, 8);
     
     _categoryDataArray = [NSMutableArray new];
+    _currentCategoryIndex = -1;
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -59,6 +60,20 @@
     [super setSelected:selected animated:animated];
 }
 
+- (void) scrollToItemIfNeeded:(NSInteger)selectedIndex
+{
+    if (_currentCategoryIndex != selectedIndex)
+    {
+        _currentCategoryIndex = selectedIndex;
+        [self.categoriesCollectionView reloadData];
+        
+        [self.categoriesCollectionView layoutIfNeeded];
+        [self.categoriesCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]
+                                    atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                            animated:NO];
+    }
+}
+
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
@@ -69,7 +84,7 @@
     if (collectionView.tag == kCategoryCellIndex)
         return _categoryDataArray.count;
     else
-        return _poiDataArray.count;
+        return _poiData[_currentCategory].count;
 }
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -126,13 +141,13 @@
         OAPoiCollectionViewCell* cell = nil;
         cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
         UIImage *img = nil;
-        NSString *imgName = _poiDataArray[indexPath.row];
+        NSString *imgName = _poiData[_currentCategory][indexPath.row];
         img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];
         
         cell.iconImageView.image = [[OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:imgName]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
         
-        if ([_poiDataArray[indexPath.row] isEqualToString:_currentIcon])
+        if ([_poiData[_currentCategory][indexPath.row] isEqualToString:_currentIcon])
         {
             cell.backView.layer.borderWidth = 2;
             cell.backView.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
@@ -180,18 +195,27 @@
     if (collectionView.tag == kCategoryCellIndex)
     {
         NSDictionary *item = _categoryDataArray[indexPath.row];
+        _currentCategoryIndex = indexPath.row;
         _currentCategory = item[@"categoryName"];
+        
+        [self.categoriesCollectionView layoutIfNeeded];
         [self.categoriesCollectionView reloadData];
+        
+        [self.collectionView layoutIfNeeded];
         [self.collectionView reloadData];
+        
+        [self layoutIfNeeded];
+        [self layoutSubviews];
+        
         if (self.delegate)
-            [self.delegate onPoiCategorySelected:item[@"categoryName"]];
+            [self.delegate onPoiCategorySelected:item[@"categoryName"] index:indexPath.row];
     }
     else
     {
-        _currentIcon = _poiDataArray[indexPath.row];
+        _currentIcon = _poiData[_currentCategory][indexPath.row];
         [self.collectionView reloadData];
         if (self.delegate)
-            [self.delegate onPoiSelected: _poiDataArray[indexPath.row]];
+            [self.delegate onPoiSelected: _poiData[_currentCategory][indexPath.row]];
     }
 }
 

@@ -5710,6 +5710,8 @@
 		DA92FFC7233E00C2001A14B7 /* OADestinationCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA92FFC6233E00C1001A14B7 /* OADestinationCollectionViewCell.xib */; };
 		DA92FFC8233E00C2001A14B7 /* OADestinationCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA92FFC6233E00C1001A14B7 /* OADestinationCollectionViewCell.xib */; };
 		DA93078225DE6A2C0074CD64 /* OASearchCategoriesListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA93078125DE6A2C0074CD64 /* OASearchCategoriesListController.mm */; };
+		DA93EFDE2625B80200017423 /* OAImportExportSettingsConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = DA93EFDD2625B80200017423 /* OAImportExportSettingsConverter.m */; };
+		DA93EFDF2625B80200017423 /* OAImportExportSettingsConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = DA93EFDD2625B80200017423 /* OAImportExportSettingsConverter.m */; };
 		DA94C736224B6222006C1116 /* OAAdvancedEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA94C734224B6222006C1116 /* OAAdvancedEditingViewController.mm */; };
 		DA94C737224B6222006C1116 /* OAAdvancedEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA94C734224B6222006C1116 /* OAAdvancedEditingViewController.mm */; };
 		DA94C738224B6222006C1116 /* OAAdvancedEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA94C735224B6222006C1116 /* OAAdvancedEditingViewController.xib */; };
@@ -10558,6 +10560,8 @@
 		DA92FFC6233E00C1001A14B7 /* OADestinationCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADestinationCollectionViewCell.xib; path = Resources/Controllers/Cells/OADestinationCollectionViewCell.xib; sourceTree = "<group>"; };
 		DA93078025DE6A2C0074CD64 /* OASearchCategoriesListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASearchCategoriesListController.h; sourceTree = "<group>"; };
 		DA93078125DE6A2C0074CD64 /* OASearchCategoriesListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchCategoriesListController.mm; sourceTree = "<group>"; };
+		DA93EFDC2625B80200017423 /* OAImportExportSettingsConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAImportExportSettingsConverter.h; sourceTree = "<group>"; };
+		DA93EFDD2625B80200017423 /* OAImportExportSettingsConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAImportExportSettingsConverter.m; sourceTree = "<group>"; };
 		DA94C733224B6222006C1116 /* OAAdvancedEditingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAAdvancedEditingViewController.h; path = Sources/Controllers/2.0/OAAdvancedEditingViewController.h; sourceTree = "<group>"; };
 		DA94C734224B6222006C1116 /* OAAdvancedEditingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAAdvancedEditingViewController.mm; path = Sources/Controllers/2.0/OAAdvancedEditingViewController.mm; sourceTree = "<group>"; };
 		DA94C735224B6222006C1116 /* OAAdvancedEditingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAAdvancedEditingViewController.xib; path = Sources/Controllers/2.0/OAAdvancedEditingViewController.xib; sourceTree = "<group>"; };
@@ -17032,6 +17036,8 @@
 				DAE79D5A260F38E700E2EE11 /* OAExportSettingsType.m */,
 				DAE79D5F260F5D3800E2EE11 /* OASettingsCategoryItems.h */,
 				DAE79D60260F5D3800E2EE11 /* OASettingsCategoryItems.m */,
+				DA93EFDC2625B80200017423 /* OAImportExportSettingsConverter.h */,
+				DA93EFDD2625B80200017423 /* OAImportExportSettingsConverter.m */,
 			);
 			path = ImportExportData;
 			sourceTree = "<group>";
@@ -22547,6 +22553,7 @@
 				844E08181E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,
 				848A65991F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,
 				8457F8211ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm in Sources */,
+				DA93EFDF2625B80200017423 /* OAImportExportSettingsConverter.m in Sources */,
 				DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm in Sources */,
 				847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */,
 				847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */,
@@ -23059,6 +23066,7 @@
 				843EC9C81F57FFBA009152D7 /* OARouteTargetViewController.mm in Sources */,
 				84C12C831FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */,
 				8A6CBCFE21CEBC3A004033C7 /* OAChoosePlanHelper.mm in Sources */,
+				DA93EFDE2625B80200017423 /* OAImportExportSettingsConverter.m in Sources */,
 				DA8A928D25DE981E00F5320A /* OACarPlayCategoryResultListController.mm in Sources */,
 				84B524161EF2B01000E580DC /* OAGPXRouter.mm in Sources */,
 				DAC0279E22A25AC500D1689E /* OAIconTitleValueCell.m in Sources */,

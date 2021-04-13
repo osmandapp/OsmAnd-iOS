@@ -15,7 +15,7 @@
 
 #define kNAME_KEY @"name"
 #define kFILTER_ID_KEY @"filterId"
-#define kACCEPTER_TYPES_KEY @"acceptedTypes"
+#define kACCEPTED_TYPES_KEY @"acceptedTypes"
 
 @interface OAPoiUiFilterSettingsItem()
 
@@ -110,14 +110,14 @@
     {
         NSString *name = object[kNAME_KEY];
         NSString *filterId = object[kFILTER_ID_KEY];
-        NSString *acceptedTypes = object[kACCEPTER_TYPES_KEY];
+        NSString *acceptedTypes = object[kACCEPTED_TYPES_KEY];
 
-        NSDictionary<NSString *, NSMutableSet<NSString *> *> *array = [NSJSONSerialization JSONObjectWithData:[acceptedTypes dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary<NSString *, NSMutableSet<NSString *> *> *acceptedTypesDictionary = [NSJSONSerialization JSONObjectWithData:[acceptedTypes dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
         NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypesDone = [NSMapTable strongToStrongObjectsMapTable];
 
-        for (NSString *key in array.allKeys)
+        for (NSString *key in acceptedTypesDictionary.allKeys)
         {
-            NSMutableSet<NSString *> *value = array[key];
+            NSMutableSet<NSString *> *value = acceptedTypesDictionary[key];
             OAPOICategory *a = [_helper getPoiCategoryByName:key];
             [acceptedTypesDone setObject:value forKey:a];
         }

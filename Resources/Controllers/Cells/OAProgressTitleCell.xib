@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="dep-4w-liH" customClass="OAProgressTitleCell">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dep-4w-liH" id="H0e-1h-kDC">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="NAJ-Qy-S8u">
+                        <rect key="frame" x="20" y="14" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="LwP-Qv-TxS"/>
+                            <constraint firstAttribute="width" constant="20" id="sUg-iK-BLo"/>
+                        </constraints>
+                    </activityIndicatorView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6AU-c1-vHF">
+                        <rect key="frame" x="60" y="13" width="334" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="Feu-3V-Q2o"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="NAJ-Qy-S8u" firstAttribute="centerY" secondItem="H0e-1h-kDC" secondAttribute="centerY" id="CgB-YC-Ezb"/>
+                    <constraint firstAttribute="bottom" secondItem="6AU-c1-vHF" secondAttribute="bottom" constant="13" id="S7a-fa-Sgv"/>
+                    <constraint firstItem="6AU-c1-vHF" firstAttribute="leading" secondItem="NAJ-Qy-S8u" secondAttribute="trailing" constant="20" id="TiA-VI-a7D"/>
+                    <constraint firstItem="6AU-c1-vHF" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" constant="13" id="Umv-Xk-SR4"/>
+                    <constraint firstItem="NAJ-Qy-S8u" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leadingMargin" id="g3k-cw-p3c"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="6AU-c1-vHF" secondAttribute="trailing" id="gCI-bf-df6"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="activityIndicator" destination="NAJ-Qy-S8u" id="id4-Yq-8gZ"/>
+                <outlet property="titleLabel" destination="6AU-c1-vHF" id="adr-mO-9ky"/>
+            </connections>
+            <point key="canvasLocation" x="100.00000000000001" y="116.51785714285714"/>
+        </tableViewCell>
+    </objects>
+</document>

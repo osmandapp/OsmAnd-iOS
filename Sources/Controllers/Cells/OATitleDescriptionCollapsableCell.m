@@ -1,14 +1,14 @@
 //
-//  OATitleDescriptionCheckmarkCell.m
+//  OATitleDescriptionCollapsableCell.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 02.07.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OATitleDescriptionCheckmarkCell.h"
+#import "OATitleDescriptionCollapsableCell.h"
 
-@implementation OATitleDescriptionCheckmarkCell
+@implementation OATitleDescriptionCollapsableCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

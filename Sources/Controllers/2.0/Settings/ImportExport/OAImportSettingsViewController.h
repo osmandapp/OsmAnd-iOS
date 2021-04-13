@@ -6,11 +6,13 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsWithBottomButtonsViewController.h"
+#import "OABaseSettingsListViewController.h"
 #import "OASettingsHelper.h"
 
-@interface OAImportSettingsViewController : OABaseSettingsWithBottomButtonsViewController
+@interface OAImportSettingsViewController : OABaseSettingsListViewController
 
 - (instancetype) initWithItems:(NSArray<OASettingsItem *> *)items;
+
+- (void)onItemsCollected:(NSArray<OASettingsItem *> *)items;
 
 @end

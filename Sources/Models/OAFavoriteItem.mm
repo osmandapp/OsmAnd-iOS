@@ -13,12 +13,16 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAFavoritesHelper.h"
+#import "OAGPXDocumentPrimitives.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 #include <OsmAndCore/Utilities.h>
 #define kPersonalCategory @"personal"
+
+#define EXTENSION_HIDDEN @"hidden"
+#define ADDRESS_EXTENSION @"address"
 
 @implementation OASpecialPointType
 {
@@ -449,6 +453,58 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     NSString *savingString = [self.class toStringDate:timestamp];
     self.favorite->setTime(QString::fromNSString(savingString));
+}
+
+- (OAGpxWpt *) toWpt
+{
+    OAGpxWpt *pt = [[OAGpxWpt alloc] init];
+    pt.position = CLLocationCoordinate2DMake(self.getLatitude, self.getLongitude);
+    pt.elevation = self.getAltitude;
+    pt.time = self.getTimestamp.timeIntervalSince1970 * 1000;
+    if (!pt.extraData)
+        pt.extraData = [[OAGpxExtensions alloc] init];
+    NSMutableArray<OAGpxExtension *> *exts = [NSMutableArray arrayWithArray:((OAGpxExtensions *)pt.extraData).extensions];
+    if (!self.isVisible)
+    {
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = EXTENSION_HIDDEN;
+        e.value = @"true";
+        [exts addObject:e];
+    }
+    if (self.isAddressSpecified)
+    {
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = ADDRESS_EXTENSION;
+        e.value = self.getAddress;
+        [exts addObject:e];
+    }
+    if (self.getIcon)
+    {
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = ICON_NAME_EXTENSION;
+        e.value = self.getIcon;
+        [exts addObject:e];
+    }
+    if (self.getBackgroundIcon)
+    {
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = BACKGROUND_TYPE_EXTENSION;
+        e.value = self.getBackgroundIcon;
+        [exts addObject:e];
+    }
+    if (self.getColor)
+    {
+        [pt setColor:self.getColor.toHexString];
+    }
+    pt.name = self.getName;
+    pt.desc = self.getDescription;
+    if (self.getCategory.length > 0)
+        pt.type = self.getCategory;
+    // TODO: sync with Android after editing!
+//    if (getOriginObjectName().length() > 0) {
+//        pt.comment = getOriginObjectName();
+//    }
+    return pt;
 }
 
 + (NSString *) toStringDate:(NSDate *)date

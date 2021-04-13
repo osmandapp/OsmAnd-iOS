@@ -78,12 +78,12 @@
      return [self.existingItems containsObject:item];
  }
 
-- (NSString *) getName
+- (NSString *) name
 {
     return @"osm_notes";
 }
 
-- (NSString *) getPublicName
+- (NSString *) publicName
 {
     return OALocalizedString(@"osm_notes");
 }
@@ -126,8 +126,19 @@
     }
 }
 
-- (void) writeItemsToJson:(id)json
+- (OASettingsItemReader *) getReader
+ {
+     return [self getJsonReader];
+ }
+
+  - (OASettingsItemWriter *) getWriter
+ {
+     return [self getJsonWriter];
+ }
+
+- (NSDictionary *)getSettingsJson
 {
+    NSMutableDictionary *json = [NSMutableDictionary new];
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
     {
@@ -135,24 +146,15 @@
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
             jsonObject[kTEXT_KEY] = [point getText];
-            jsonObject[kLAT_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
-            jsonObject[kLON_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];
+            jsonObject[kLAT_KEY] = @([point getLatitude]);
+            jsonObject[kLON_KEY] = @([point getLongitude]);
             jsonObject[kAUTHOR_KEY] = [point getAuthor];
-            jsonObject[kACTION_KEY] = [OAOsmPoint getStringAction][[NSNumber numberWithInteger:[point getAction]]];
+            jsonObject[kACTION_KEY] = [OAOsmPoint getStringAction][@([point getAction])];
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;
     }
+    return json;
 }
-
-- (OASettingsItemReader *) getReader
- {
-     return [[OASettingsItemReader alloc] initWithItem:self];
- }
-
-  - (OASettingsItemWriter *) getWriter
- {
-     return [[OASettingsItemJsonWriter alloc] initWithItem:self];
- }
 
 @end

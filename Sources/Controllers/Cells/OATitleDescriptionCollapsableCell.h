@@ -1,5 +1,5 @@
 //
-//  OATitleDescriptionCheckmarkCell.h
+//  OATitleDescriptionCollapsableCell.h
 //  OsmAnd
 //
 //  Created by Anna Bibyk on 02.07.2020.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OATitleDescriptionCheckmarkCell : UITableViewCell
+@interface OATitleDescriptionCollapsableCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;

@@ -101,6 +101,11 @@
     return [[OAQuickActionsSettingsItemReader alloc] initWithItem:self];
 }
 
+- (OASettingsItemWriter *)getWriter
+{
+    return self.getJsonWriter;
+}
+
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
@@ -149,8 +154,9 @@
     }
 }
 
-- (void) writeItemsToJson:(id)json
+- (NSDictionary *) getSettingsJson
 {
+    NSMutableDictionary *json = [NSMutableDictionary new];
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
     {
@@ -159,12 +165,16 @@
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
             jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
             jsonObject[@"actionType"] = action.getActionTypeId;
-            jsonObject[@"params"] = [self adjustParamsForExport:[action getParams] action:action];
+            NSDictionary *params = [self adjustParamsForExport:[action getParams] action:action];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
+            jsonObject[@"params"] = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;
     }
+    return json;
 }
+
 
 - (NSDictionary *) adjustParamsForExport:(NSDictionary *)params action:(OAQuickAction *)action
 {
@@ -191,7 +201,8 @@
         NSArray<NSArray<NSString *> *> *values = params[action.getListKey];
         if (values)
         {
-            paramsCopy[action.getListKey] = [self paramsToExportArray:values];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[self paramsToExportArray:values] options:0 error:nil];
+            paramsCopy[action.getListKey] = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         }
         return paramsCopy;
     }

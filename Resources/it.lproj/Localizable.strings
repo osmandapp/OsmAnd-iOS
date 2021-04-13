@@ -1774,7 +1774,7 @@
 "quick_action_switch_profile_descr" = "Il pulsante azione cambia fra i profili selezionati.";
 "save_changes" = "Salva le modifiche";
 "weight_limit_description" = "Indica il peso del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli pesanti.";
-"quick_action_remove_next_destination" = "Cancella il prossimo punto di destinazione";
+"quick_action_remove_next_destination" = "Cancella il punto di destinazione più vicino";
 "layer_amenity_label" = "Sovrapposizione etichette PDI";
 "num_stops" = "fermate";
 "enter_profile_name" = "Inserisci il nome del profilo";

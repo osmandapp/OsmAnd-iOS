@@ -130,7 +130,7 @@
         if (writer != nil)
         {
             NSString *fileName = item.fileName;
-            if (fileName.length > 0)
+            if (!fileName || fileName.length == 0)
                 fileName = item.defaultFileName;
             
             NSString *path = [_tmpFilesDir stringByAppendingPathComponent:fileName];

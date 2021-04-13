@@ -356,6 +356,23 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return nil;
 }
 
++ (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAnd::ResourcesManager::ResourceType>)resourceTypes
+{
+    NSMutableArray<NSString *> *items = [NSMutableArray new];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    for (const auto& localResource : app.resourcesManager->getLocalResources())
+    {
+        if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed)
+            continue;
+        const auto& installedResource = std::static_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
+        if (resourceTypes.contains(installedResource->type))
+        {
+            [items addObject:installedResource->localPath.toNSString()];
+        }
+    }
+    return items;
+}
+
 + (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
 {
     NSMutableArray<OAResourceItem *>* res;
@@ -389,6 +406,25 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                     for (NSString *resourceId in ids)
                     {
                         const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                        // Speacial case for Saudi Arabia Rahal map
+                        if (resource == nullptr)
+                        {
+                            const auto installedResource = app.resourcesManager->getResource(QString::fromNSString(resourceId));
+                            if (res != nullptr && installedResource->type == resourceType)
+                            {
+                                OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+                                item.resourceId = installedResource->id;
+                                item.resourceType = installedResource->type;
+                                item.title = [self.class titleOfResource:installedResource
+                                                                inRegion:region
+                                                          withRegionName:YES
+                                                        withResourceType:NO];
+                                item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+                                item.worldRegion = region;
+                                [res addObject:item];
+                                continue;
+                            }
+                        }
                         if (resource->type == resourceType)
                         {
                             if (app.resourcesManager->isResourceInstalled(resource->id))
@@ -1027,6 +1063,52 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [res setObject:i forKey:((OAMapSourceResourceItem *)i).mapSource];
     }
     return [NSDictionary dictionaryWithDictionary:res];
+}
+
++ (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles
+{
+    NSMutableArray<OAMapStyleResourceItem *> *res = [NSMutableArray new];
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto localResources = app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+    {
+        if (localResource->type == OsmAndResourceType::MapStyle && localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Builtin)
+            mapStylesResources.push_back(localResource);
+    }
+    
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    
+    // Process map styles
+    for(const auto& resource : mapStylesResources)
+    {
+        const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+        
+        NSString* resourceId = resource->id.toNSString();
+        
+        OAMapStyleResourceItem* item = [[OAMapStyleResourceItem alloc] init];
+        item.mapSource = [app.data lastMapSourceByResourceId:resourceId];
+        if (item.mapSource == nil)
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
+        
+        NSString *caption = mapStyle->title.toNSString();
+        
+        item.mapSource.name = caption;
+        item.resourceType = OsmAndResourceType::MapStyle;
+        item.resource = resource;
+        item.mapStyle = mapStyle;
+
+        [res addObject:item];
+    }
+
+    [res sortUsingComparator:^NSComparisonResult(OAMapStyleResourceItem* obj1, OAMapStyleResourceItem* obj2) {
+        if (obj1.sortIndex < obj2.sortIndex)
+            return NSOrderedAscending;
+        if (obj1.sortIndex > obj2.sortIndex)
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    return res;
 }
 
 @end

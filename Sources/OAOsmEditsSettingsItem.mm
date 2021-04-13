@@ -87,12 +87,12 @@
     return NO;
 }
 
-- (NSString *) getName
+- (NSString *) name
 {
     return @"osm_edits";
 }
 
-- (NSString *) getPublicName
+- (NSString *) publicName
 {
     return OALocalizedString(@"osm_edits");
 }
@@ -136,8 +136,19 @@
     }
 }
 
-- (void) writeItemsToJson:(id)json
+- (OASettingsItemReader *) getReader
+ {
+     return [self getJsonReader];
+ }
+
+  - (OASettingsItemWriter *) getWriter
+ {
+     return [self getJsonWriter];
+ }
+
+- (NSDictionary *)getSettingsJson
 {
+    NSMutableDictionary *json = [NSMutableDictionary new];
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
     {
@@ -145,30 +156,21 @@
         {
             NSMutableDictionary *jsonPoint = [NSMutableDictionary dictionary];
             NSMutableDictionary *jsonEntity = [NSMutableDictionary dictionary];
-            jsonEntity[kID_KEY] = [NSNumber numberWithLongLong:[point getId]];
+            jsonEntity[kID_KEY] = @([point getId]);
             jsonEntity[kTEXT_KEY] = [point getTagsString];
-            jsonEntity[kLAT_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
-            jsonEntity[kLON_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];
+            jsonEntity[kLAT_KEY] = @([point getLatitude]);
+            jsonEntity[kLON_KEY] = @([point getLongitude]);
             jsonEntity[kTYPE_KEY] = [OAEntity stringTypeOf:[point getEntity]];
             NSDictionary *jsonTags = [NSDictionary dictionaryWithDictionary:[[point getEntity] getTags]];
             jsonEntity[kTAGS_KEY] = jsonTags;
             jsonPoint[kCOMMENT_KEY] = [point getComment];
-            jsonEntity[kACTION_KEY] = [OAOsmPoint getStringAction][[NSNumber numberWithInteger:[point getAction]]];
+            jsonEntity[kACTION_KEY] = [OAOsmPoint getStringAction][@([point getAction])];
             jsonPoint[kENTITY_KEY] = jsonEntity;
             [jsonArray addObject:jsonPoint];
         }
         json[@"items"] = jsonArray;
     }
+    return json;
 }
-
-- (OASettingsItemReader *) getReader
- {
-     return [[OASettingsItemReader alloc] initWithItem:self];
- }
-
-  - (OASettingsItemWriter *) getWriter
- {
-     return [[OASettingsItemJsonWriter alloc] initWithItem:self];
- }
 
 @end

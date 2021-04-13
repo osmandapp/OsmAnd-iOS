@@ -74,7 +74,7 @@
 "gpx_add_new" = "Ajouter un nouveau fichier";
 "gpx_overwrite" = "Écraser";
 "gpx_cannot_import" = "Impossible d'importer le fichier GPX spécifié";
-"gpx_remove" = "Supprimer le voyage ?";
+"gpx_remove" = "Supprimer la trace ?";
 "gpx_stat" = "Statistiques";
 "gpx_distance" = "Distance";
 "gpx_average_speed" = "Vitesse moyenne";
@@ -86,7 +86,7 @@
 "rec_interval_minimum" = "Minimum";
 "track_interval_remember" = "Se souvenir de mon choix";
 "show_info" = "Afficher les infos";
-"record_trip" = "Enregistrer votre voyage";
+"record_trip" = "Enregistrer votre trace";
 "gpx_max_speed" = "Vitesse maximale";
 "gpx_speed" = "Vitesse";
 // Map settings
@@ -269,9 +269,9 @@
 "gpx_edit_mode" = "Mode édition";
 "show_region_on_map_title" = "Carte téléchargée";
 "tracks" = "Traces";
-"gpx_import_title" = "Importer un voyage";
-"gpx_export_title" = "Exporter le voyage";
-"gpx_export_select_track" = "Merci de sélectionner le voyage à exporter";
+"gpx_import_title" = "Importer des traces";
+"gpx_export_title" = "Exporter la trace";
+"gpx_export_select_track" = "Merci de sélectionner la trace à exporter";
 "gpx_route" = "Itinéraire";
 "gpx_route_time" = "Durée de l'itinéraire";
 "gpx_finish" = "Terminer";
@@ -295,13 +295,13 @@
 "plugins" = "Plugins";
 "open_map_settings" = "Ouvrez les paramètres de la carte";
 "plugin_popup_wiki_title" = "Télécharger Wikipédia";
-"gpx_no_tracks" = "Il n'y a aucun voyage";
+"gpx_no_tracks" = "Il n'y a aucunes traces";
 "gpx_elev_range" = "Gamme d'élévation";
 "device_memory" = "Mémoire de l'appareil";
 "free_memory" = "%@ libre";
 "fav_import_desc" = "Vous pouvez importer vos favoris en tant que points de passage au format GPX (format de données GPS usuel)\n\nPour partager le fichier favorites.gpx, vous pouvez l'ouvrir à partir de Dropbox, d'un courriel ou d'une autre source – utilisez la fonction « ouvrir ».";
 "gpx_waypoint" = "Point de passage";
-"gpx_import_already_exists" = "Le fichier de trajet spécifié existe déjà dans la liste. Choisissez une action.";
+"gpx_import_already_exists" = "Le fichier de trace spécifié existe déjà dans la liste. Choisissez une action.";
 "gpx_import_desc" = "Pour importer vos fichiers GPX (format d'enregistrement classique de données GPS) depuis Dropbox, un courriel ou toute autre source utilisez la fonction « Copier vers OsmAnd Maps »";
 "gpx_uphldownhl" = "Montées/Descentes";
 "gpx_start" = "Départ";
@@ -309,11 +309,11 @@
 "track_recording" = "Enregistrement du trajet";
 "track_recording_name" = "Enregistrement du trajet en cours";
 "track_new_segment" = "Commencer un nouveau segment";
-"track_save" = "Enregistrer le trajet actuel";
-"track_start_rec" = "Commencer l'enregistrement du trajet";
-"track_rec_addon_q" = "Veuillez activer le greffons d'enregistrement de trajet pour les enregistrer et les sauvegarder";
-"track_clear" = "Effacer le trajet actuel";
-"track_clear_q" = "Voulez-vous effacer le trajet actuel ?";
+"track_save" = "Enregistrer la trace actuelle";
+"track_start_rec" = "Commencer l'enregistrement du parcours";
+"track_rec_addon_q" = "Veuillez activer le greffons d'enregistrement de parcours pour les enregistrer et les sauvegarder";
+"track_clear" = "Effacer la trace actuelle";
+"track_clear_q" = "Voulez-vous effacer la trace actuelle ?";
 "m_style_walk" = "Marche";
 "map_settings_offline" = "Styles de cartes hors ligne";
 "map_settings_hillshade" = "Ombrage";
@@ -781,7 +781,7 @@
 "osm_live_routing_descr" = "Utiliser les mises à jour d'OsmAnd Live pour la navigation";
 "traffic_warning_tunnel" = "En approche d'un tunnel";
 "track_save_descr" = "Enregistrer la trace en cours comme fichier GPX.";
-"track_during_nav" = "Auto-enregistrement du trajet";
+"track_during_nav" = "Auto-enregistrement du parcours";
 "track_during_nav_descr" = "Activez pour enregistrer automatiquement un trajet durant la navigation";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Mises à jour en temps réel";
@@ -1589,7 +1589,7 @@
 "map_settings_zoom_level_description" = "Définissez le zoom minimal et maximal auquel la couche est visible";
 "map_settings_hillshade_description" = "Les cartes avec ombrage du relief mettent en évidence les pentes, sommets et plaines en utilisant des niveaux de gris";
 "m_style_pulic_transport" = "Transports en commun";
-"displayed_route_save" = "Enregistrer sur OsmAnd Trips";
+"displayed_route_save" = "Enregistrer dans OsmAnd Traces";
 "add_group" = "Ajouter un groupe";
 "shared_string_end_date" = "Date de fin";
 "shared_string_start_date" = "Date de début";
@@ -1886,3 +1886,30 @@
 "join_segments" = "Joindre les segments";
 "address_search" = "Rechercher une adresse";
 "map_widget_distance_by_tap" = "Distance par appui";
+"tracks_on_map" = "Traces affichées";
+"visible" = "Visible";
+"octagon" = "Octogone";
+
+// Shapes
+"circle" = "Cercle";
+"shared_string_others" = "Autres";
+"favorite_places_category" = "Lieux";
+"favorite_friends_category" = "Amis";
+"default_color_descr" = "Cette couleur va être utilisée pour tous les nouveaux favoris ajoutés à ce groupe.";
+"default_color" = "Couleur par défaut";
+"fav_point_emoticons_message" = "Favori renommé en '%@' pour enregistrer en tant que nom de dossier le nom contenant des émoticônes.";
+"fav_point_dublicate_message" = "Favori renommé en '%@' pour éviter un doublon.";
+"shape" = "Forme";
+"icon" = "Icône";
+"select_group" = "Sélectionnez un groupe";
+"name_and_descr" = "Nom & description";
+"add_favorite" = "Ajouter un favori";
+"fav_points_not_exist" = "Il n'existe aucun favori";
+"group_name" = "Nom du groupe";
+"available_groups" = "Groupes disponibles";
+"select_group_descr" = "Sélectionnez un groupe ou créez-en un nouveau";
+"fav_add_new_group" = "Ajouter un nouveau groupe";
+"route_calc_progress" = "Calcul en cours : %d%%";
+"favorites_empty" = "Vous n'avez pas encore enregistré de favoris";
+"map_markers_empty" = "Vous n'avez pas de marques actives sur la carte";
+"coordinates" = "Coordonnées";

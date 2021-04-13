@@ -172,7 +172,7 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
     else if ([key isEqualToString: @"GEOCODING"])
         return EOARoutingProfilesResourceGeocoding;
     else
-        return EOARoutingProfilesResourceDirectTo;
+        return EOARoutingProfilesResourceUndefined;
 }
 
 + (OARoutingProfileDataObject *) getRoutingProfileDataByName:(NSString *)key

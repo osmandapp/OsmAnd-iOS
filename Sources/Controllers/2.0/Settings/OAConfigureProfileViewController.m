@@ -35,6 +35,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OASettingsItem.h"
 #import "OAProfileSettingsItem.h"
+#import "OAExportItemsViewController.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -539,8 +540,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //    }
     else if ([key isEqualToString:@"export_profile"])
     {
-        OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
-        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:_appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:_appMode] exportItemFiles:YES];
+        OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] initWithAppMode:_appMode];
+        [self.navigationController pushViewController:exportController animated:YES];
     }
     else if ([key isEqualToString:@"copy_profile"])
     {

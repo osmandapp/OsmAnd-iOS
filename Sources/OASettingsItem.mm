@@ -7,6 +7,7 @@
 //
 
 #import "OASettingsItem.h"
+#import "OAGPXDocument.h"
 
 @interface OASettingsItem()
 
@@ -72,7 +73,7 @@
 
 - (NSString *) defaultFileName
 {
-    return [_name stringByAppendingString:self.defaultFileExtension];
+    return [self.name stringByAppendingString:self.defaultFileExtension];
 }
 
 - (NSString *) defaultFileExtension
@@ -184,6 +185,11 @@
 - (OASettingsItemWriter *) getJsonWriter
 {
     return [[OASettingsItemJsonWriter alloc] initWithItem:self];
+}
+
+- (OASettingsItemWriter *) getGpxWriter:(OAGPXDocument *)gpxFile
+{
+    return [[OASettingsItemGpxWriter alloc] initWithItem:self gpxDocument:gpxFile];
 }
 
 - (OASettingsItemReader *) getReader
@@ -307,6 +313,32 @@
     if (error)
         *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
     
+    return NO;
+}
+
+@end
+
+@implementation OASettingsItemGpxWriter
+{
+    OAGPXDocument *_gpxFile;
+}
+
+- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OAGPXDocument *)gpxFile
+{
+    self = [super initWithItem:item];
+    if (self) {
+        _gpxFile = gpxFile;
+    }
+    return self;
+}
+
+- (BOOL)writeToFile:(NSString *)filePath error:(NSError * _Nullable __autoreleasing *)error
+{
+    if (_gpxFile)
+    {
+        [_gpxFile saveTo:filePath];
+        return YES;
+    }
     return NO;
 }
 

@@ -12,14 +12,14 @@
 #import "OAAppSettings.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OATitleDescriptionCheckmarkCell.h"
+#import "OATitleDescriptionCollapsableCell.h"
 #import "OASettingsTitleTableViewCell.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kCellTypeCheck @"OAIconTextCell"
-#define kCellTypeTitleDescriptionCheck @"OATitleDescriptionCheckmarkCell"
+#define kCellTypeTitleDescriptionCheck @"OATitleDescriptionCollapsableCell"
 #define kCellTypeTitleCheck @"OASettingsTitleCell"
 
 @interface OAProfileGeneralSettingsParametersViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -329,11 +329,11 @@
     if ([cellType isEqualToString:kCellTypeTitleDescriptionCheck])
     {
         static NSString* const identifierCell = kCellTypeTitleDescriptionCheck;
-        OATitleDescriptionCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleDescriptionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OATitleDescriptionCheckmarkCell *)[nib objectAtIndex:0];
+            cell = (OATitleDescriptionCollapsableCell *)[nib objectAtIndex:0];
             cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }

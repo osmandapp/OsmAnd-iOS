@@ -172,6 +172,63 @@
     });
 }
 
+- (OAHistoryItem *)getPointByName:(NSString *)name
+{
+    __block OAHistoryItem *item = nil;
+
+    dispatch_sync(dbQueue, ^{
+        const char *dbpath = [databasePath UTF8String];
+        sqlite3_stmt *statement;
+        
+        if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
+        {
+            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@ FROM %@ WHERE %@ = %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, TABLE_NAME, POINT_COL_NAME, name]];
+            
+            const char *query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    item = [[OAHistoryItem alloc] init];
+                    int64_t hId = sqlite3_column_int64(statement, 0);
+                    int64_t hHash = sqlite3_column_int64(statement, 1);
+                    int64_t time = sqlite3_column_int64(statement, 2);
+                    
+                    double lat = sqlite3_column_double(statement, 3);
+                    double lon = sqlite3_column_double(statement, 4);
+                    
+                    OAHistoryType type = sqlite3_column_int(statement, 5);
+
+                    NSString *iconName;
+                    if (sqlite3_column_text(statement, 6) != nil)
+                        iconName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 6)];
+
+                    NSString *typeName;
+                    if (sqlite3_column_text(statement, 7) != nil)
+                        typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
+
+                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
+                    
+                    item.hId = hId;
+                    item.hHash = hHash;
+                    item.date = date;
+                    item.latitude = lat;
+                    item.longitude = lon;
+                    item.name = name;
+                    item.hType = type;
+                    item.iconName = iconName;
+                    item.typeName = typeName;
+                    break;
+                }
+                sqlite3_finalize(statement);
+            }
+            sqlite3_close(historyDB);
+        }
+    });
+    
+    return item;
+}
+
 - (NSArray *)getPoints:(NSString *)selectPostfix limit:(int)limit
 {
     NSMutableArray *arr = [NSMutableArray array];

@@ -42,6 +42,8 @@
             return @"ACTIVE_MARKERS";
         case EOASettingsItemTypeGpx:
             return @"GPX";
+        case EOASettingsItemTypeSearchHistory:
+            return @"SEARCH_HISTORY";
         default:
             return nil;
     }
@@ -77,6 +79,8 @@
         return EOASettingsItemTypeActiveMarkers;
     if ([typeName isEqualToString:@"GPX"])
         return EOASettingsItemTypeGpx;
+    if ([typeName isEqualToString:@"SEARCH_HISTORY"])
+        return EOASettingsItemTypeSearchHistory;
     
     return EOASettingsItemTypeUnknown;
 }

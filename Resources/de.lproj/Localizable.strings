@@ -1829,7 +1829,7 @@
 "ui_customization_descr" = "Schubladenelemente, Kontextmenü";
 "profile_appearance_descr" = "Symbol, Farbe und Name";
 "profile_appearance" = "Profildarstellung";
-"export_profile" = "Profil exportieren";
+"export_profile" = "Export";
 "global_settings_descr" = "Betreffen die ganze Anwendung.";
 "configure_screen_descr" = "Bildschirmoptionen für das Profil auswählen";
 "send_anonymous_data_desc" = "Karten-Download-Statistik an OsmAnd senden. Wir sammeln keine Standortdaten oder persönliche Informationen.";
@@ -1912,7 +1912,7 @@
 "nav_type_hint" = "Navigationsart: %@";
 "selected_profiles" = "%d von %d";
 "import_profile_select_descr" = "Wählen Sie die zu importierenden Daten.";
-"shared_string_import" = "Profil importieren";
+"shared_string_import" = "Import";
 "shared_string_preparing" = "Vorbereitung";
 "shared_string_deselect_all" = "Alle abwählen";
 "shared_string_continue" = "Fortfahren";
@@ -2018,7 +2018,7 @@
 "plan_route_folder" = "Ordner";
 "street_level_imagery" = "Bilder auf Straßenebene";
 "map_widget_distance_by_tap" = "Entfernung durch Antippen";
-"some_of" = "%ld von %ld";
+"some_of" = "%d von %d";
 "segnet_num" = "Segment %d";
 "track_multiple_segments_select" = "%@ hat mehr als ein Segment. Bitte wählen Sie einen Teil des Tracks aus, den Sie für die Navigation verwenden möchten.";
 "select_segment" = "Segment auswählen";
@@ -2054,3 +2054,22 @@
 "fav_add_new_group" = "Neue Gruppe hinzufügen";
 "service" = "Dienstleistung";
 "square" = "Platz";
+"quick_action_coordinates_widget_descr" = "Durch Antippen dieser Aktionsschaltfläche wird das Koordinaten-Widget ein- oder ausgeblendet.";
+"hide_coordinates" = "Koordinaten ausblenden";
+"show_coordinates" = "Koordinaten anzeigen";
+"toggle_coordinates" = "Koordinaten-Widget ein-/ausblenden";
+"copied_to_clipboard" = "In die Zwischenablage kopiert";
+"searching_gps" = "Suche GPS";
+
+// Coordinate widget
+"coordinates_widget" = "Koordinaten-Widget";
+"coordinates" = "Koordinaten";
+"shared_string_gpx_points" = "Punkte";
+"res_standard" = "Standardkarte";
+
+// Resources
+"shared_string_resources" = "Quellen";
+"reading_file" = "Lese Datei";
+"selected_of" = "Ausgewählt - %d/%d";
+"search_history" = "Suchverlauf";
+"markers_history" = "Historie der Marker";

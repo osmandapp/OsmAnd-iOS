@@ -1824,7 +1824,7 @@
 "height_limit_description" = "Вкажіть висоту автомобіля, для великих транспортних засобів можуть застосовуватися обмеження на деяких маршрутах.";
 "selected_profile" = "Вибраний профіль";
 "profile_appearance" = "Зовнішній вигляд профілю";
-"export_profile" = "Експорт профілю";
+"export_profile" = "Експорт";
 "vessel_height_limit_description" = "Встановіть висоту судна, щоб уникнути низьких мостів. Майте на увазі, якщо міст рухомий, використовуватиметься його висота у відкритому стані.";
 "shared_string_account_add" = "Додати обліковий запис";
 "shared_string_email" = "Електронна пошта";
@@ -1907,7 +1907,7 @@
 "nav_type_hint" = "Тип навігації: %@";
 "selected_profiles" = "%d з %d";
 "import_profile_select_descr" = "Виберіть дані, які потрібно імпортувати.";
-"shared_string_import" = "Імпорт профілю";
+"shared_string_import" = "Імпорт";
 "shared_string_preparing" = "Підготування";
 "shared_string_deselect_all" = "Зняти виділення для всіх";
 "shared_string_continue" = "Продовжити";
@@ -2013,7 +2013,7 @@
 "plan_route_folder" = "Тека";
 "street_level_imagery" = "Зображення вулиць";
 "map_widget_distance_by_tap" = "Відстань дотиком";
-"some_of" = "%ld з %ld";
+"some_of" = "%d з %d";
 "segnet_num" = "Сегмент %d";
 "track_multiple_segments_select" = "%@ має кілька сегментів. Виберіть частину треку, яку слід використовувати для навігації.";
 "select_segment" = "Вибрати сегмент";
@@ -2050,3 +2050,22 @@
 "select_gropu_descr" = "Виберіть групу або додайте нову";
 "fav_add_new_group" = "Додати нову групу";
 "select_group_descr" = "Виберіть групу або додайте нову";
+"quick_action_coordinates_widget_descr" = "Торкання цієї кнопки покаже або приховає віджет координат.";
+"hide_coordinates" = "Сховати координати";
+"show_coordinates" = "Показати координати";
+"toggle_coordinates" = "Показати/сховати віджет координат";
+"copied_to_clipboard" = "Скопійовано до буферу обміну";
+"searching_gps" = "Пошук GPS";
+
+// Coordinate widget
+"coordinates_widget" = "Віджет координат";
+"coordinates" = "Координати";
+"shared_string_gpx_points" = "Точки";
+"res_standard" = "Звичайна мапа";
+
+// Resources
+"shared_string_resources" = "Ресурси";
+"reading_file" = "Файл читання";
+"selected_of" = "Вибрані — %d/%d";
+"search_history" = "Журнал пошуку";
+"markers_history" = "Історія позначок";

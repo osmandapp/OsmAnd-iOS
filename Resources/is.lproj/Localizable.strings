@@ -1804,7 +1804,7 @@
 "public_transport_menu" = "Samgöngur";
 "shared_string_account" = "Notandaaðgangur";
 "avoid_routes_and_road" = "Forðast tilteknar leiðir og gerðir af vegum";
-"export_profile" = "Flytja út snið";
+"export_profile" = "Flytja út";
 "default_speed_descr" = "Notað til að áætla komutíma á óþekktum gerðum vega og til takmörkunar á hraða á öllum vegum (gæti breytt leiðarvali)";
 "base_profile_descr_pedestrian" = "Ganga, hlaup";
 "app_theme_light" = "Ljóst";
@@ -1861,7 +1861,7 @@
 "nav_type_hint" = "Gerð leiðsagnar: %@";
 "delete_point" = "Eyða punkti";
 "save_new_track" = "Vista sem nýjan feril";
-"listed_exist" = "Taldi upp %@, er þegar til staðar í OsmAnd.";
+"listed_exist" = "Taldi upp %@ sem er þegar til staðar í OsmAnd.";
 "change_route_type_before" = "Skipta um gerð leiðar á undan punkti";
 "point_num" = "Punktur %d";
 "shared_string_rendering_style" = "Myndgerðarstílar";
@@ -1875,7 +1875,7 @@
 "add_to_track" = "Bæta við feril";
 "points_count" = "Punktar:";
 "checking_for_duplicates" = "Athuga með tvítök...";
-"shared_string_import" = "Flytja inn snið";
+"shared_string_import" = "Flytja inn";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "trim_before" = "Klippa á undan þessum punkti";
 "selected_profiles" = "%d af %d";
@@ -2011,7 +2011,7 @@
 "carplay_active_message" = "Kortið er birt með CarPlay";
 "favorites_empty" = "Þú hefur ekki vistað neina eftirlætispunkta";
 "tracks_empty" = "Ferlalistinn þinn er tómur";
-"some_of" = "%ld af %ld";
+"some_of" = "%d af %d";
 "segnet_num" = "Bútur %d";
 "track_multiple_segments_select" = "%@ er með fleiri en einn bút. Veldu þann hluta ferilsins sem þú vilt nota við leiðsögn.";
 "select_segment" = "Veldu bút";
@@ -2047,3 +2047,22 @@
 "available_groups" = "Tiltækir hópar";
 "select_group_descr" = "Veldu hóp eða bættu við nýjum";
 "fav_add_new_group" = "Bæta við nýjum hópi";
+"quick_action_coordinates_widget_descr" = "Ef ýtt er á þennan aðgerðahnapp verður viðmótshluti hnita sýnilegur eða falinn.";
+"hide_coordinates" = "Fela hnit";
+"show_coordinates" = "Birta hnit";
+"toggle_coordinates" = "Birta/fela viðmót hnita";
+"copied_to_clipboard" = "Afritað á klippispjald";
+"searching_gps" = "Leita að GPS";
+
+// Coordinate widget
+"coordinates_widget" = "Viðmótshluti fyrir hnit";
+"coordinates" = "Hnit";
+"markers_history" = "Ferill kortamerkja";
+"shared_string_gpx_points" = "Punktar";
+"res_standard" = "Staðlað kort";
+
+// Resources
+"shared_string_resources" = "Tilföng";
+"reading_file" = "Les skrá";
+"selected_of" = "Valið - %d/%d";
+"search_history" = "Leitarferill";

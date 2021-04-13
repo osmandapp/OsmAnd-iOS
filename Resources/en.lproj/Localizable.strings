@@ -184,6 +184,7 @@
 "layer_map_appearance" = "Configure screen";
 "configure_screen_descr" = "Select screen options for the profile";
 "map_markers" = "Map markers";
+"markers_history" = "Markers history";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
@@ -446,6 +447,7 @@
 "type_address" = "Type address";
 "search_poi_category_hint" = "Type to search all";
 "poi_categories" = "POI categories";
+"search_history" = "Search history";
 
 // Shared Strings
 "shared_string_apply" = "Apply";
@@ -779,13 +781,16 @@
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
 
-"export_profile" = "Export profile";
-"shared_string_import" = "Import profile";
+"export_profile" = "Export";
+"shared_string_import" = "Import";
 "create_profile" = "Create profile";
 "import_profile_select_descr" = "Select the data to be imported.";
+"export_profile_select_descr" = "Select the data to be exported.";
 "selected_profiles" = "%d of %d";
+"selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type: %@";
 "shared_string_nothing_selected" = "Nothing selected";
+"export_failed" = "Could not export profile";
 
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
@@ -810,7 +815,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 
-"listed_exist" = "Listed %@, already exist in OsmAnd.";
+"listed_exist" = "Listed %@ already exist in OsmAnd.";
 
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
@@ -849,6 +854,8 @@
 "after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
 "empty_profile_name_warning" = "Profile name cannot be empty.";
 "err_profile_import" = "Error reading item data: %@";
+"reading_file" = "Reading file";
+"preparing_file" = "Preparing file";
 "profile_import_success" = "Application profile was imported successfully";
 "profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
@@ -947,9 +954,10 @@
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segment %d";
-"some_of" = "%ld of %ld";
+"some_of" = "%d of %d";
 
 // Resources
+"shared_string_resources" = "Resources";
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Local";
 "osmand_live_title" = "OsmAnd Live";
@@ -1556,6 +1564,7 @@
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Slope";
+"res_standard" = "Standard map";
 
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1610,6 +1619,7 @@
 "gpx_rename_q" = "Rename track";
 "gpx_enter_new_name" = "Please enter new name for the track";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
+"shared_string_gpx_points" = "Points";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";

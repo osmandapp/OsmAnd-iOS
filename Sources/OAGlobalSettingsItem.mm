@@ -7,6 +7,7 @@
 //
 
 #import "OAGlobalSettingsItem.h"
+#import "OAAppSettings.h"
 #import "Localization.h"
 
 @implementation OAGlobalSettingsItem
@@ -35,12 +36,35 @@
 
 - (OASettingsItemReader *)getReader
 {
-    return [[OASettingsItemReader alloc] initWithItem:self];
+    return self.getJsonReader;
 }
 
 - (OASettingsItemWriter *)getWriter
 {
-    return [[OASettingsItemWriter alloc] initWithItem:self];
+    return self.getJsonWriter;
+}
+
+// MARK: OASettingsItemReader
+
+- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
+{
+    // TODO: migrate all settings to a class and use the references for import
+    return YES;
+}
+
+// MARK: OASettingsItemWriter
+
+- (NSDictionary *) getSettingsJson
+{
+    NSMutableDictionary *json = [NSMutableDictionary new];
+    NSMapTable<NSString *, NSString *> *globalSettings = OAAppSettings.sharedManager.getGlobalSettings;
+    for (NSString *key in globalSettings.keyEnumerator)
+    {
+        NSString *val = [globalSettings objectForKey:key];
+        if (key && val)
+            json[key] = val;
+    }
+    return json;
 }
 
 @end

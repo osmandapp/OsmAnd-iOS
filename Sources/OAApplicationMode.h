@@ -110,6 +110,8 @@
 
 - (BOOL) isCustomProfile;
 
+- (OAApplicationModeBean *) toModeBean;
+
 + (void) reorderAppModes;
 + (void) deleteCustomModes:(NSArray<OAApplicationMode *> *) modes;
 + (NSSet<OAApplicationMode *> *) regWidgetAvailability:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;

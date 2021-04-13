@@ -22,7 +22,6 @@
 {
     NSMutableArray *_data;
     NSInteger _selectedItemIndex;
-    NSInteger _cachedSelectedItemIndex;
 }
 
 - (void) awakeFromNib
@@ -40,12 +39,10 @@
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
     _data = [NSMutableArray new];
-    _cachedSelectedItemIndex = -1;
 }
 
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
 {
-    _selectedItemIndex = index;
     _data = [NSMutableArray new];
     for (NSInteger i = 0; i < values.count; i++)
     {
@@ -59,7 +56,6 @@
             @"size" : sizeString,
             @"color" : color,
             @"img" : @"ic_custom_folder",
-            @"isSelected" : [NSNumber numberWithBool:i == index],
             @"key" : @"home"}];
     }
     
@@ -68,39 +64,23 @@
         @"size" : @"",
         @"color" : UIColorFromRGB(color_primary_purple),
         @"img" : @"ic_custom_add",
-        @"isSelected" : @NO,
         @"key" : @"work"}];
     
-    [self.collectionView reloadData];
+//    [self.collectionView reloadData];
 }
 
-- (void) scrollToItem:(NSInteger)selectedIndex
+- (void) scrollToItemIfNeeded:(NSInteger)selectedIndex
 {
-    if (_cachedSelectedItemIndex != selectedIndex)
+    if (_selectedItemIndex != selectedIndex)
     {
+        _selectedItemIndex = selectedIndex;
+        [self.collectionView reloadData];
+        
         [self.collectionView layoutIfNeeded];
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]
                                     atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
                                             animated:YES];
-        _cachedSelectedItemIndex = selectedIndex;
     }
-}
-
-- (void) updateVisibleItem:(NSInteger)index
-{
-    for (NSInteger i = 0; i < _data.count; i++)
-    {
-        NSDictionary *item = _data[i];
-        _data[i] = @{
-            @"title" : item[@"title"],
-            @"size" : item[@"size"],
-            @"color" : item[@"color"],
-            @"img" : item[@"img"],
-            @"isSelected" : [NSNumber numberWithBool:i == index],
-            @"key" : item[@"key"]
-        };
-    }
-    [self.collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -138,7 +118,7 @@
         destCell.imageView.tintColor = item[@"color"];
         [destCell.imageView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         
-        if ([item[@"isSelected"] boolValue])
+        if (indexPath.row == _selectedItemIndex)
         {
             destCell.layer.borderWidth = 2;
             destCell.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
@@ -188,7 +168,8 @@
         if (_delegate)
         {
             [_delegate onItemSelected:indexPath.row];
-            [self updateVisibleItem:indexPath.row];
+            _selectedItemIndex = indexPath.row;
+            [self.collectionView reloadData];
         }
     }
     

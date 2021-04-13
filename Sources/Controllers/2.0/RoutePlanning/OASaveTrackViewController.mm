@@ -150,7 +150,7 @@
         },
         @{
             @"type" : @"OAFolderCardsCell",
-            @"selectedValue" : [NSNumber numberWithInteger:_selectedFolderIndex],
+            @"selectedValue" : @(_selectedFolderIndex),
             @"values" : _allFolders,
             @"addButtonTitle" : OALocalizedString(@"add_folder")
         },
@@ -340,7 +340,7 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([cell isKindOfClass:OAFolderCardsCell.class])
-        [((OAFolderCardsCell *)cell) scrollToItem:_selectedFolderIndex];
+        [((OAFolderCardsCell *)cell) scrollToItemIfNeeded:_selectedFolderIndex];
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -544,8 +544,7 @@
     _selectedFolderIndex = [_allFolders indexOfObject:selectedFolderName];
     [self updateErrorMessage:_fileName];
     [self generateData];
-    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
-    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onFolderAdded:(NSString *)addedFolderName
@@ -558,8 +557,7 @@
     [self updateAllFoldersList];
     _selectedFolderIndex = [_allFolders indexOfObject:_selectedFolderName];
     [self generateData];
-    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
-    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAAddTrackFolderDelegate

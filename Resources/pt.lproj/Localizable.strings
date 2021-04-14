@@ -531,10 +531,10 @@
 "route_kr" = "Mantenha-se à direita e continue em";
 "route_tr" = "Vire à direita e continue em";
 "route_tshr" = "Vire fortemente à direita e continue em";
-"route_tslr" = "Vire levemente à direita e continue em";
+"route_tslr" = "Vire ligeiramente à direita e continue em";
 "route_tl" = "Vire à esquerda e continue em";
 "route_tshl" = "Vire fortemente à esquerda e continue em";
-"route_tsll" = "Vire levemente à esquerda e continue em";
+"route_tsll" = "Vire ligeiramente à esquerda e continue em";
 "route_tu" = "Inverta o sentido da marcha e continue em";
 "route_head" = "Comece em";
 "looking_up_address" = "A procurar o endereço";
@@ -724,7 +724,7 @@
 "osm_live_enter_email" = "Favor introduzir um endereço de e-mail válido";
 "osm_live_enter_user_name" = "Por favor introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
-"osm_live_payment_desc" = "Pode gerir e cancelar as suas assinaturas nas configurações da sua conta na App Store após a compra";
+"osm_live_payment_desc" = "Pode gerir e cancelar as suas subscrições nas configurações da sua conta na App Store após a compra";
 "osm_live_ask_for_purchase" = "Por favor primeiro compre a subscrição do OsmAnd Live";
 "shared_string_io_error" = "Erro de entrada/saída";
 "osm_live_hide_user_name" = "Não mostrar o meu nome nos relatórios";
@@ -733,7 +733,7 @@
 "angular_units_descr" = "Mudar as unidades de medida do azimute.";
 "access_intermediate_arrival_time" = "Hora de chegada intermédia";
 "map_widget_intermediate_time" = "Hora intermédia";
-"route_stops_before" = "%d paragens antes";
+"route_stops_before" = "%d paragens anteriores";
 "transport_routes" = "Rotas";
 "new_destination_point_dialog" = "Já tem o destino definido";
 "subsequent_dest_description" = "Mover destino para cima e criar destino";
@@ -804,8 +804,8 @@
 "destination_point" = "Destino %@";
 "intermediate_point" = "Destino intermédio %@";
 "intermediate_point_too_far" = "O destino intermédio %d está muito longe da estrada mais próxima.";
-"route_roundabout" = "Rotunda: saia na saída %d para";
-"route_roundabout_short" = "Use a saída %d e continue";
+"route_roundabout" = "Rotunda: saia na %d saída para";
+"route_roundabout_short" = "Saia na %d saída para";
 "traffic_warning_tunnel" = "Túnel à frente";
 "driving_region_europe_asia" = "Europa, Ásia, América Latina e similares";
 "driving_region_uk" = "Reino Unido, Índia e similares";
@@ -841,13 +841,13 @@
 "osmand_live_wifi_only" = "Atualizar apenas via WiFi";
 "osmand_live_donation_header" = "Configurações de doação";
 "osmand_live_donation_switch_title" = "Doação para a comunidade OpenStreetMap";
-"osmand_live_donation_switch_descr" = "Parte da sua doação é distribuída entre os utilizadores do OSM que enviam alterações para o OpenStreetMap. O custo da assinatura continua o mesmo";
+"osmand_live_donation_switch_descr" = "Parte do seu donativo é distribuído entre os utilizadores do OSM que enviam alterações para o OpenStreetMap. O custo da subscrição continua o mesmo";
 "osmand_live_donations_enter_email" = "Insira o seu endereço de email";
 "osmand_live_donations_email_descr" = "Por favor, forneça seu endereço de e-mail para obter os relatórios de doação";
 "osmand_live_support_reg_descr" = "Parte do seu donativo será enviado para utilizadores do OSM que editam o mapa nessa região";
 "osmand_live_public_name" = "Digite seu nome público";
-"osmand_live_subscription_canceled" = "Cancelou a assinatura OsmAnd Live";
-"osmand_live_cancel_descr" = "Renove a assinatura para continuar usando a funcionalidade completa:";
+"osmand_live_subscription_canceled" = "Cancelou a subscrição do OsmAnd Live";
+"osmand_live_cancel_descr" = "Renove a subscrição para continuar a usar todas as funcionalidades:";
 "menu_my_trips" = "Meus trilhos";
 "menu_my_directions" = "Minhas direções";
 "osm_upload_failed_descr" = "Por favor, verifique os seus detalhes de utilizador, palavra-passe e a ligação à Internet e tente novamente.";
@@ -1006,7 +1006,7 @@
 "osm_live_payment_month_cost_descr" = "%1$s / mês";
 "osm_live_payment_month_cost_descr_ex" = "%@ %@ / mês";
 "osm_live_payment_discount_descr" = "Poupe %@!";
-"osm_live_payment_current_subscription" = "A sua assinatura atual";
+"osm_live_payment_current_subscription" = "A sua subscrição atual";
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_contribute_descr" = "Parte dos donativos vão para os contribuidores do OpenStreetMap.";
 "free_version_message" = "Pode descarregar ou atualizar %d mapas";
@@ -1019,10 +1019,10 @@
 "osm_live_unlock_updates" = "Desbloquear atualizações de mapas por hora";
 "osm_live_banner_descr" = "Inscreva-se no OsmAnd Live e ganhe atualizações a cada <b>1 hora</b> ilimitadas e <b>todas as funcionalidades</b> incluídas a partir de %@";
 "osm_live_get_title" = "Obter OsmAnd Live";
-"subscriptions_public_info" = "O pagamento será cobrado na sua conta do iTunes na confirmação da compra. A assinatura será renovada automaticamente, a não ser que a renovação automática seja desativada pelo menos 24 horas antes do final do período atual. Será cobrado da sua conta de acordo com seu plano de renovação dentro de 24 horas antes do final do período atual. Pode gerir ou desativar a renovação automática nas configurações da conta após a compra. Se comprar uma assinatura durante um período de teste gratuito, a parte não utilizada desse período será perdida.";
+"subscriptions_public_info" = "O pagamento será cobrado na sua conta do iTunes na confirmação da compra. A subscrição será renovada automaticamente, a não ser que a renovação automática seja desativada pelo menos 24 horas antes do final do período atual. Será cobrado da sua conta de acordo com seu plano de renovação dentro de 24 horas antes do final do período atual. Pode gerir ou desativar a renovação automática nas configurações da conta após a compra. Se comprar uma subscrição durante um período de teste gratuito, a parte não utilizada desse período será perdida.";
 "terms_of_use" = "Termos de uso";
 "privacy_policy" = "Política de privacidade";
-"already_has_subscription" = "Você já se inscreveu no OsmAnd Live e tem todas as funcionalidades desbloqueadas.";
+"already_has_subscription" = "Já subscreveu o OsmAnd Live e tem todas as funcionalidades desbloqueadas.";
 "already_has_inapp" = "Você já se inscreveu em %@.";
 "inapp_not_found" = "O %@ não é encontrado no OsmAnd. Provavelmente foi cancelado.";
 "mapillary" = "Mapillary";
@@ -1134,7 +1134,7 @@
 "mapil_usernames" = "Nomes de utilizadores";
 "osmand_live_updates_size" = "Tamanho das atualizações descarregadas";
 "mapil_select_user" = "Selecionar utilizador";
-"get_discount_title" = "Obter %d %@ com %d%% de desconto.";
+"get_discount_title" = "Obtenha %d %@ com %d%% de desconto.";
 "get_free_trial_title" = "Inicie sua avaliação gratuita de %1$d %2$s.";
 "get_discount_short_descr" = "%@ por %d %@, depois %@";
 "osm_succsessful_uploads" = "Sucesso";
@@ -1658,7 +1658,7 @@
 "osm_notes" = "Notas do OSM";
 "personal_category_name" = "Pessoal";
 "tones" = "toneladas";
-"help_osmand_live" = "Assinatura - OsmAnd Live";
+"help_osmand_live" = "Subscrição - OsmAnd Live";
 "quick_action_mapillary_hide" = "Ocultar Mapillary";
 "res_source_one_per_tile" = "Um ficheiro de imagem por mosaico";
 "help_nav_profiles" = "Perfis de navegação";
@@ -1817,7 +1817,7 @@
 "unsupported_action" = "Ação não suportada";
 "select_application_profile" = "Selecione o perfil da aplicação";
 "change_application_profile" = "Alterar o perfil da aplicação";
-"quick_action_showhide_mapillary_descr" = "Se tocar neste botão de ação, mostra ou oculta a camada Mapillary no mapa.";
+"quick_action_showhide_mapillary_descr" = "Pressionando este botão de ação, mostra ou oculta a camada Mapillary no mapa.";
 "toggle_public_transport" = "Mostrar/ocultar transportes públicos";
 "quick_action_transport_descr" = "Toque nesta ação para mostrar ou ocultar rotas e paragens de transportes públicos no mapa.";
 "quick_action_dir_from_descr" = "Toque nesta ação para navegar a partir do ponto central do ecrã atual.";
@@ -2061,3 +2061,8 @@
 "selected_of" = "Selecionado - %d/%d";
 "search_history" = "Histórico de pesquisa";
 "markers_history" = "Histórico de marcadores";
+"folder_already_exsists" = "Já existe uma pasta com este nome";
+"incorrect_symbols" = "Foram introduzidos caracteres inválidos";
+"preparing_file" = "A preparar o ficheiro";
+"export_failed" = "Não foi possível exportar o perfil";
+"export_profile_select_descr" = "Selecione os dados a serem exportados.";

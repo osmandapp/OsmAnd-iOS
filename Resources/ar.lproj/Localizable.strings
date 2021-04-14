@@ -2052,3 +2052,17 @@
 // Coordinate widget
 "coordinates_widget" = "عرض الإحداثيات";
 "coordinates" = "إحداثيات";
+"shared_string_gpx_points" = "النقاط";
+"res_standard" = "الخرائط العادية";
+"quick_action_coordinates_widget_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى إظهار أو إخفاء أداة الإحداثيات.";
+"hide_coordinates" = "إخفاء الإحداثيات";
+"show_coordinates" = "إظهار الإحداثيات";
+"toggle_coordinates" = "إظهار/إخفاء الإحداثيات";
+"copied_to_clipboard" = "تم النسخ في الحافظة";
+
+// Resources
+"shared_string_resources" = "المصادر";
+"reading_file" = "قراءة الملف";
+"selected_of" = "تم تحديد - %d/%d";
+"search_history" = "سجل البحث";
+"markers_history" = "سجل التوجيه المباشر";

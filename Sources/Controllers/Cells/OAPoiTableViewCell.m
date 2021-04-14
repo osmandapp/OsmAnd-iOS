@@ -197,16 +197,9 @@
         NSDictionary *item = _categoryDataArray[indexPath.row];
         _currentCategoryIndex = indexPath.row;
         _currentCategory = item[@"categoryName"];
-        
-        [self.categoriesCollectionView layoutIfNeeded];
         [self.categoriesCollectionView reloadData];
-        
-        [self.collectionView layoutIfNeeded];
         [self.collectionView reloadData];
-        
-        [self layoutIfNeeded];
-        [self layoutSubviews];
-        
+
         if (self.delegate)
             [self.delegate onPoiCategorySelected:item[@"categoryName"] index:indexPath.row];
     }

@@ -296,6 +296,12 @@
     return [_settings.showDistanceRuler get];
 }
 
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    _fingerDistanceSublayer.frame = self.bounds;
+}
+
 - (void) drawFingerRulerLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
     UIGraphicsPushContext(ctx);

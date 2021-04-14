@@ -128,7 +128,7 @@
     }
 }
 
-- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (void) writeItemsToJson:(id)json
 {
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
@@ -136,9 +136,18 @@
         for (OAPOIUIFilter *filter in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            jsonObject[@"name"] = filter.name;
-            jsonObject[@"filterId"] = filter.filterId;
-            jsonObject[@"acceptedTypes"] = [filter getAcceptedTypes];
+            jsonObject[kNAME_KEY] = filter.name;
+            jsonObject[kFILTER_ID_KEY] = filter.filterId;
+            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
+            NSMutableDictionary<NSString *, NSArray *> *dictionary = [NSMutableDictionary dictionary];
+            for(OAPOICategory *key in acceptedTypes)
+            {
+                NSMutableSet<NSString *> *value = [acceptedTypes objectForKey:key];
+                dictionary[key.name] = value.allObjects;
+            }
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
+            NSString *acceptedTypesValue = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            jsonObject[kACCEPTED_TYPES_KEY] = acceptedTypesValue;
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

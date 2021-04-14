@@ -2073,3 +2073,8 @@
 "selected_of" = "Ausgewählt - %d/%d";
 "search_history" = "Suchverlauf";
 "markers_history" = "Historie der Marker";
+"folder_already_exsists" = "Ordner mit diesem Namen existiert bereits";
+"incorrect_symbols" = "Ungültige Zeichen eingegeben";
+"preparing_file" = "Datei vorbereiten";
+"export_failed" = "Profil konnte nicht exportiert werden";
+"export_profile_select_descr" = "Wählen Sie die Daten aus, die exportiert werden sollen.";

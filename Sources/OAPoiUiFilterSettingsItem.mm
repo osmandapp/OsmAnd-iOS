@@ -128,7 +128,7 @@
     }
 }
 
-- (void) writeItemsToJson:(id)json
+- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
@@ -136,26 +136,9 @@
         for (OAPOIUIFilter *filter in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            jsonObject[kNAME_KEY] = filter.name;
-            jsonObject[kFILTER_ID_KEY] = filter.filterId;
-
-            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> * acceptedTypes = [filter getAcceptedTypes];
-            NSMutableString *acceptedTypesJsonFormat = [@"{" mutableCopy];
-
-            NSUInteger acceptedTypesCount = 0;
-            for(OAPOICategory *key in acceptedTypes)
-            {
-                NSMutableSet<NSString *> *values = [acceptedTypes objectForKey:key];
-                [acceptedTypesJsonFormat appendString: [NSString stringWithFormat:@"%@%@%@", @"\"", key.name, @"\":"]];
-                [acceptedTypesJsonFormat appendString: [NSString stringWithFormat:@"%@%@%@", @"[\"", [[values allObjects] componentsJoinedByString:@"\",\""], @"\"]"]];
-                acceptedTypesCount++;
-                if (acceptedTypesCount != acceptedTypes.count)
-                {
-                    [acceptedTypesJsonFormat appendString:@","];
-                }
-            }
-            [acceptedTypesJsonFormat appendString:@"}"];
-            jsonObject[kACCEPTED_TYPES_KEY] = acceptedTypesJsonFormat;
+            jsonObject[@"name"] = filter.name;
+            jsonObject[@"filterId"] = filter.filterId;
+            jsonObject[@"acceptedTypes"] = [filter getAcceptedTypes];
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

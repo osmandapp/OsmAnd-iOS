@@ -525,17 +525,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
     if (quickActions.count > 0)
         [result addObject: [[OAQuickActionsSettingsItem alloc] initWithItems:quickActions]];
+    if (poiUIFilters.count > 0)
+        [result addObject:[self getBasePoiUiFiltersSettingsItem:settingsItems]];
     if (tileSourceTemplates.count > 0)
         [result addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [result addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
     if (favoiriteItems.count > 0)
         [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
-    if (poiUIFilters.count > 0)
-    {
-        OAPoiUiFilterSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypePoiUIFilters clazz:OAPoiUiFilterSettingsItem.class settingsItems:settingsItems];
-        [result addObject:[[OAPoiUiFilterSettingsItem alloc] initWithItems:poiUIFilters baseItem:baseItem]];
-    }
     if (osmNotesPointList.count > 0)
     {
         OAOsmNotesSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class settingsItems:settingsItems];

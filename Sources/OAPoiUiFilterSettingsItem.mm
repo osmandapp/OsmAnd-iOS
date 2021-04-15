@@ -13,6 +13,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OAPOICategory.h"
+#import "OAPOIType.h"
 
 #define kNAME_KEY @"name"
 #define kFILTER_ID_KEY @"filterId"
@@ -140,10 +141,18 @@
             jsonObject[kFILTER_ID_KEY] = filter.filterId;
             NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
             NSMutableDictionary<NSString *, NSArray *> *dictionary = [NSMutableDictionary dictionary];
-            for(OAPOICategory *key in acceptedTypes)
+            for(OAPOICategory *category in acceptedTypes)
             {
-                NSMutableSet<NSString *> *value = [acceptedTypes objectForKey:key];
-                dictionary[key.name] = value.allObjects;
+                NSMutableSet<NSString *> *poiTypes = [acceptedTypes objectForKey:category];
+                if (poiTypes.count == 0)
+                {
+                    poiTypes = [[NSMutableSet<NSString *> alloc] init];
+                    for(OAPOIType *poiType in category.poiTypes)
+                    {
+                        [poiTypes addObject:poiType.name];
+                    }
+                }
+                dictionary[category.name] = poiTypes.allObjects;
             }
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
             NSString *acceptedTypesValue = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];

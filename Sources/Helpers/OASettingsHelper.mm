@@ -587,10 +587,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     [renderFilesList addObject:fileItem.filePath];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
                     [routingFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
-                    [tracksFilesList addObject:fileItem];
                 else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
                     [mapFilesList addObject:fileItem];
+                break;
+            }
+            case EOASettingsItemTypeGpx:
+            {
+                [tracksFilesList addObject:(OAFileSettingsItem *) item];
                 break;
             }
             case EOASettingsItemTypeQuickActions:

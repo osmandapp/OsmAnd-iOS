@@ -75,4 +75,9 @@ jobs:
     - name: Prepare to build
       run: exec ios/prepare.sh
     - name: Testing iOS app
-      run: exec ios/.github/scripts/test_app.sh
+      run: xcodebuild -workspace OsmAnd.xcworkspace \
+            -scheme OsmAnd\ Maps\ Release \
+            -sdk iphoneos \
+            -configuration AppStoreDistribution \
+            -archivePath $PWD/build/OsmAnd\ Maps.xcarchive \
+            clean archive | xcpretty

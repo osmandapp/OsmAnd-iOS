@@ -15,11 +15,42 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    # Checks-out repository under $GITHUB_WORKSPACE, so job can access it
     - uses: actions/checkout@v2
+      with:
+        path: ios
+    - uses: actions/checkout@v2
+      with:
+        repository: osmandapp/OsmAnd
+        path: android
+    - uses: actions/checkout@v2
+      with:
+        repository: osmandapp/OsmAnd-build
+        path: build
+    - uses: actions/checkout@v2
+      with:
+        repository: osmandapp/OsmAnd-core-legacy
+        path: core-legacy
+    - uses: actions/checkout@v2
+      with:
+        repository: osmandapp/OsmAnd-core
+        path: core
+    - uses: actions/checkout@v2
+      with:
+        repository: osmandapp/osmandapp.github.io
+        path: help
+    - uses: actions/checkout@v2
+      with:
+        repository: osmandapp/OsmAnd-resources
+        path: resources
+
+    # Select xcode
     - name: Force XCode 11.3
       run: sudo xcode-select -switch /Applications/Xcode_11.3.app
 #      with:
 #        token: ${{ secrets.CHECKOUT_KEY }}
+    # Run build
+    - name: Prepare to build
+      run: exec ios/prepare.sh
     - name: Testing iOS app
-      run: exec ./.github/scripts/test_app.sh
+      run: exec ios/.github/scripts/test_app.sh

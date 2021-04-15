@@ -1,0 +1,18 @@
+name: Run XCode
+# on:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    - name: Force XCode 11.3
+      run: sudo xcode-select -switch /Applications/Xcode_11.3.app
+#      with:
+#        token: ${{ secrets.CHECKOUT_KEY }}
+    - name: Testing iOS app
+        run: exec ./.github/scripts/test_app.sh

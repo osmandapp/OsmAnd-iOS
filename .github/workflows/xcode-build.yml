@@ -67,10 +67,9 @@ jobs:
     # - name: Select XCode 11.3
     #   run: sudo xcode-select -switch /Applications/Xcode_11.3.app
 
-    # - name: Patch __bsfd
-    #   run: sudo patch /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/ia32intrin.h \
-    #           ios/.github/workflows/__bsfd.patch
-    
+    - name: Patch __bsfd
+       run: sudo patch /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/ia32intrin.h \
+             ios/.github/workflows/__bsfd.patch  
     - name: Prepare to build
       run: exec ios/prepare.sh
     - name: Testing iOS app

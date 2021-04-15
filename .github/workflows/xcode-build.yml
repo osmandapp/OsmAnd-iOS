@@ -46,6 +46,14 @@ jobs:
       with:
         repository: osmandapp/OsmAnd
         path: android
+    - name: Test iOS archive
+      run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
+            -scheme "OsmAnd Maps Release"
+            -sdk iphoneos
+            -configuration AppStoreDistribution
+            -archivePath OsmAndMaps.xcarchive
+            PROVISIONING_PROFILE_SPECIFIER="Github Build"
+            archive | xcpretty'    
     - name: Checkout build
       uses: actions/checkout@v2
       with:
@@ -82,10 +90,11 @@ jobs:
             -scheme "OsmAnd Maps Release"
             -sdk iphoneos
             -configuration AppStoreDistribution
-            -archivePath build/OsmAndMaps.xcarchive
-            clean archive | xcpretty'
+            -archivePath OsmAndMaps.xcarchive
+            PROVISIONING_PROFILE_SPECIFIER="Github Build"
+            archive | xcpretty' 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: OsmAndMaps.xcarchive
-        path: build/OsmAndMaps.xcarchive
+        path: OsmAndMaps.xcarchive

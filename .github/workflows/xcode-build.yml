@@ -38,7 +38,8 @@ jobs:
     - name: Setup provisioning profile
       env:
         IOS_KEYS: ${{ secrets.IOS_KEYS }}
-      run: ios/.github/secrets/decrypt_secrets.sh
+      run: .github/secrets/decrypt_secrets.sh
+      working-directory: ios
     - name: Checkout android
       uses: actions/checkout@v2
       with:

@@ -24,13 +24,10 @@ jobs:
     - name: Install cocoapods
       run:  gem install cocoapods
     ### https://github.com/Kitware/CMake/releases/download/v3.11.2/cmake-3.11.2-Darwin-x86_64.dmg
-    - name: Check cmake 
-      run: cmake --version
+    # - name: Check cmake 
+    #  run: cmake --version
     # - name: Check clang
     #  run: ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/
-    - name: Patch __bsfd
-      run: sudo patch /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/ia32intrin.h \
-              ios/.github/workflows/__bsfd.patch
     ### Checks-out repository under $GITHUB_WORKSPACE, so job can access it
     - name: Checkout ios
       uses: actions/checkout@v2
@@ -66,10 +63,14 @@ jobs:
       with:
         repository: osmandapp/OsmAnd-resources
         path: resources
-    # Select xcode
-#    - name: Select XCode 11.3
-#      run: sudo xcode-select -switch /Applications/Xcode_11.3.app
-    # Run build
+
+    # - name: Select XCode 11.3
+    #   run: sudo xcode-select -switch /Applications/Xcode_11.3.app
+
+    # - name: Patch __bsfd
+    #   run: sudo patch /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/ia32intrin.h \
+    #           ios/.github/workflows/__bsfd.patch
+    
     - name: Prepare to build
       run: exec ios/prepare.sh
     - name: Testing iOS app

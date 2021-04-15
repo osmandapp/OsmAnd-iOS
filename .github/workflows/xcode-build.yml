@@ -1,4 +1,4 @@
-name: Run XCode
+name: Create OsmAndMaps Archive
 # on:
 #  push:
 #    branches: [ master ]

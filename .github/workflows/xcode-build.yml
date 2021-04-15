@@ -69,15 +69,15 @@ jobs:
 
     - name: Patch __bsfd
       run: sudo patch /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/ia32intrin.h ios/.github/workflows/__bsfd.patch  
-    - name: Prepare to build
-      run: exec ios/prepare.sh
-    - name: Testing iOS app
-      run: xcodebuild -workspace ios/OsmAnd.xcworkspace \
-            -scheme OsmAnd\ Maps\ Release \
-            -sdk iphoneos \
-            -configuration AppStoreDistribution \
-            -archivePath build/OsmAndMaps.xcarchive \
-            clean archive | xcpretty
+    #- name: Prepare to build
+    #  run: exec ios/prepare.sh
+    - name: Creating iOS archive
+      run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
+            -scheme "OsmAnd Maps Release"
+            -sdk iphoneos
+            -configuration AppStoreDistribution
+            -archivePath build/OsmAndMaps.xcarchive
+            clean archive | xcpretty'
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:

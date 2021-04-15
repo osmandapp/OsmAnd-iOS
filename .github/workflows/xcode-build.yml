@@ -15,10 +15,10 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-    - name: Install xcode tools
-      run: sudo xcode-select --install
-    - name: Install brew
-      run:  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # - name: Install xcode tools
+    #   run: sudo xcode-select --install
+    # - name: Install brew
+    #   run:  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     # - name: Install svn
     #   run:  brew install svn
     - name: Install cocoapods
@@ -75,9 +75,9 @@ jobs:
     - name: Prepare to build
       run: exec ios/prepare.sh
     - name: Testing iOS app
-      run: xcodebuild -workspace OsmAnd.xcworkspace \
+      run: xcodebuild -workspace ios/OsmAnd.xcworkspace \
             -scheme OsmAnd\ Maps\ Release \
             -sdk iphoneos \
             -configuration AppStoreDistribution \
-            -archivePath $PWD/build/OsmAnd\ Maps.xcarchive \
+            -archivePath build/OsmAnd\ Maps.xcarchive \
             clean archive | xcpretty

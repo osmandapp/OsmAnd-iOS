@@ -79,5 +79,10 @@ jobs:
             -scheme OsmAnd\ Maps\ Release \
             -sdk iphoneos \
             -configuration AppStoreDistribution \
-            -archivePath build/OsmAnd\ Maps.xcarchive \
+            -archivePath build/OsmAndMaps.xcarchive \
             clean archive | xcpretty
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: OsmAndMaps.xcarchive
+        path: build/OsmAndMaps.xcarchive

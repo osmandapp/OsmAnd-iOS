@@ -15,31 +15,53 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-    # Checks-out repository under $GITHUB_WORKSPACE, so job can access it
-    - uses: actions/checkout@v2
+    - name: Install xcode tools
+      run: sudo xcode-select --install
+    - name: Install brew
+      run:  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # - name: Install svn
+    #   run:  brew install svn
+    - name: Install cocoapods
+      run:  gem install cocoapods
+    ### https://github.com/Kitware/CMake/releases/download/v3.11.2/cmake-3.11.2-Darwin-x86_64.dmg
+    - name: Check cmake 
+      run: cmake --version
+    - name: Check clang
+      run: ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/
+    - name: Patch __bsfd
+      run: cat /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/ia32intrin.h
+    ### Checks-out repository under $GITHUB_WORKSPACE, so job can access it
+    - name: Checkout ios
+      uses: actions/checkout@v2
       with:
         path: ios
-    - uses: actions/checkout@v2
+    - name: Checkout android
+      uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd
         path: android
-    - uses: actions/checkout@v2
+    - name: Checkout build
+      uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd-build
         path: build
-    - uses: actions/checkout@v2
+    - name: Checkout core legacy
+      uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
-    - uses: actions/checkout@v2
+    - name: Checkout core
+      uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd-core
         path: core
-    - uses: actions/checkout@v2
+    - name: Checkout help
+      uses: actions/checkout@v2
       with:
         repository: osmandapp/osmandapp.github.io
         path: help
-    - uses: actions/checkout@v2
+    - name: Checkout resources
+      uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd-resources
         path: resources

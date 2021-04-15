@@ -28,13 +28,17 @@ jobs:
     #  run: cmake --version
     # - name: Check clang
     #  run: ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/
-    - name: Install gpg
-      run: brew install gnupg
+    # - name: Install gpg
+    #   run: brew install gnupg
     ### Checks-out repository under $GITHUB_WORKSPACE, so job can access it
     - name: Checkout ios
       uses: actions/checkout@v2
       with:
         path: ios
+    - name: Setup provisioning profile
+      env:
+        IOS_KEYS: ${{ secrets.IOS_KEYS }}
+      run: ios/.github/secrets/decrypt_secrets.sh
     - name: Checkout android
       uses: actions/checkout@v2
       with:
@@ -65,11 +69,6 @@ jobs:
       with:
         repository: osmandapp/OsmAnd-resources
         path: resources
-
-    - name: Setup provisioning profile
-      env:
-        IOS_KEYS: ${{ secrets.IOS_KEYS }}
-      run: ios/.github/secrets/decrypt_secrets.sh  
     # - name: Select XCode 11.3
     #   run: sudo xcode-select -switch /Applications/Xcode_11.3.app
     - name: Patch __bsfd

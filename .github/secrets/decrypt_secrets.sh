@@ -2,7 +2,7 @@
 set -eo pipefail
 
 gpg --quiet --batch --yes --decrypt --passphrase="$IOS_KEYS" --output ./.github/secrets/Github_Build.mobileprovision.mobileprovision ./.github/secrets/Github_Build.mobileprovision.gpg
-gpg --quiet --batch --yes --decrypt --passphrase="$IOS_KEYS" --output ./.github/secrets/distribution.cer ./.github/secrets/distribution.cer.gpg
+gpg --quiet --batch --yes --decrypt --passphrase="$IOS_KEYS" --output ./.github/secrets/osmand_distribution.p12 ./.github/osmand_distribution.p12.gpg
 
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
@@ -10,7 +10,7 @@ cp ./.github/secrets/Github_Build.mobileprovision.mobileprovision ~/Library/Mobi
 
 
 security create-keychain -p "$PASSWORD_KEYCHAIN_EXPORT" build.keychain
-security import ./.github/secrets/distribution.cer -t agg -k ~/Library/Keychains/build.keychain -P "$PASSWORD_KEYCHAIN_EXPORT" -A
+security import ./.github/secrets/osmand_distribution.p12 -t agg -k ~/Library/Keychains/build.keychain -P "$PASSWORD_KEYCHAIN_EXPORT" -A
 
 security list-keychains -s ~/Library/Keychains/build.keychain
 security default-keychain -s ~/Library/Keychains/build.keychain

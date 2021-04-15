@@ -38,6 +38,7 @@ jobs:
     - name: Setup provisioning profile
       env:
         IOS_KEYS: ${{ secrets.IOS_KEYS }}
+        PASSWORD_KEYCHAIN_EXPORT: ${{ secrets.PASSWORD_KEYCHAIN_EXPORT }}
       run: .github/secrets/decrypt_secrets.sh
       working-directory: ios
     - name: Checkout android

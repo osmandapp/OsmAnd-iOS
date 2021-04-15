@@ -4,6 +4,13 @@ name: Run XCode
 #    branches: [ master ]
 #  pull_request:
 #    branches: [ master ]
+on: 
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Version'     
+        required: true
+        default: '4.0.1'
 jobs:
   build:
     runs-on: macOS-latest
@@ -15,4 +22,4 @@ jobs:
 #      with:
 #        token: ${{ secrets.CHECKOUT_KEY }}
     - name: Testing iOS app
-        run: exec ./.github/scripts/test_app.sh
+      run: exec ./.github/scripts/test_app.sh

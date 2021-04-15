@@ -2066,3 +2066,8 @@
 "reading_file" = "Les skrá";
 "selected_of" = "Valið - %d/%d";
 "search_history" = "Leitarferill";
+"folder_already_exsists" = "Mappa með þessu heiti er þegar til staðar";
+"incorrect_symbols" = "Ógildir stafir settir inn";
+"preparing_file" = "Undirbý skrá";
+"export_failed" = "Ekki var hægt að flytja út notkunarsnið";
+"export_profile_select_descr" = "Veldu gögnin sem á að flytja út.";

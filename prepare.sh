@@ -14,7 +14,7 @@ if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 fi
 
 # Bake or update core projects for XCode
-OSMAND_BUILD_TOOL=xcode "$SRCLOC/../build/fat-ios.sh"
+OSMAND_BUILD_TOOL=xcode NOT_BUILD_QT_IOS_IF_PRESENT=true "$SRCLOC/../build/fat-ios.sh"
 
 # Package built qt files as zip file
 if [ ! -z "$BUILT_QT_FILES_ZIPFILE" ] && [ ! "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ]; then

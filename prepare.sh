@@ -8,8 +8,8 @@ if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 	wget https://builder.osmand.net/binaries/ios/qt-ios-prebuilt.zip -O "$FILE_TO_DOWNLOAD"
 	TMPDIR=$(basename $FILE_TO_DOWNLOAD).dir
 	unzip -o -d $TMPDIR "$FILE_TO_DOWNLOAD"
-	mv $TMPDIR/upstream.patched* $SRCLOC/../core/externals/qtbase-ios/
-	mv $TMPDIR/.stamp $SRCLOC/../core/externals/qtbase-ios/
+	(cd $TMPDIR && mv upstream.patched* $SRCLOC/../core/externals/qtbase-ios/)
+	(cd $TMPDIR && mv .stamp $SRCLOC/../core/externals/qtbase-ios/)
 	rm -rf $TMPDIR
 fi
 

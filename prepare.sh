@@ -6,11 +6,11 @@ if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 	# FILE_TO_DOWNLOAD=${BUILT_QT_FILES_ZIPFILE:-qt-ios-prebuilt.zip}
 	FILE_TO_DOWNLOAD=qt_download.zip
 	wget https://builder.osmand.net/binaries/ios/qt-ios-prebuilt.zip -O "$FILE_TO_DOWNLOAD"
-	TMPDIR=$(basename $FILE_TO_DOWNLOAD).dir
-	unzip -o -d $TMPDIR "$FILE_TO_DOWNLOAD"
-	(cd $TMPDIR && mv upstream.patched* $SRCLOC/../core/externals/qtbase-ios/)
-	(cd $TMPDIR && mv .stamp $SRCLOC/../core/externals/qtbase-ios/)
-	rm -rf $TMPDIR
+	FILE_TO_DOWNLOADEDIR=$(basename $FILE_TO_DOWNLOAD).dir
+	unzip -o -d $FILE_TO_DOWNLOADEDIR "$FILE_TO_DOWNLOAD"
+	(cd $FILE_TO_DOWNLOADEDIR && mv upstream.patched* $SRCLOC/../core/externals/qtbase-ios/)
+	(cd $FILE_TO_DOWNLOADEDIR && mv .stamp $SRCLOC/../core/externals/qtbase-ios/)
+	rm -rf $FILE_TO_DOWNLOADEDIR
 fi
 
 # Bake or update core projects for XCode

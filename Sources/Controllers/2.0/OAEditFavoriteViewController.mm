@@ -371,6 +371,7 @@
 
     [data addObject:[NSArray arrayWithArray:section]];
 
+    
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"fav_group"),
@@ -379,6 +380,7 @@
         @"value" : self.groupTitle,
         @"key" : kSelectGroupKey
     }];
+    _selectCategoryLabelRowIndex = section.count -1;
 
     NSUInteger selectedGroupIndex = [_groupNames indexOfObject:self.groupTitle];
     if (selectedGroupIndex < 0)
@@ -391,11 +393,10 @@
         @"colors" : _groupColors,
         @"addButtonTitle" : OALocalizedString(@"fav_add_group")
     }];
-
+    _selectCategoryCardsRowIndex = section.count -1;
     [data addObject:[NSArray arrayWithArray:section]];
-    _selectCategorySectionIndex = 1;
-    _selectCategoryLabelRowIndex = 0;
-    _selectCategoryCardsRowIndex = 1;
+    _selectCategorySectionIndex = data.count - 1;
+    
     
     section = [NSMutableArray new];
     [section addObject:@{
@@ -410,12 +411,16 @@
         @"poiData" : _poiIcons,
         @"key" : kIconsKey
     }];
+    _poiIconRowIndex = section.count -1;
+    
     [section addObject:@{
         @"type" : kCellTypeColorCollection,
         @"title" : OALocalizedString(@"fav_color"),
         @"value" : _selectedColor.name,
         @"index" : [NSNumber numberWithInteger:_selectedColorIndex],
     }];
+    _colorRowIndex = section.count -1;
+    
     [section addObject:@{
         @"type" : kCellTypeIconCollection,
         @"title" : OALocalizedString(@"shape"),
@@ -425,11 +430,11 @@
         @"contourIcons" : _backgroundContourIconNames,
         @"key" : kBackgroundsKey
     }];
+    _shapeRowIndex = section.count -1;
+    
     [data addObject:[NSArray arrayWithArray:section]];
-    _appearenceSectionIndex = 2;
-    _poiIconRowIndex = 0;
-    _colorRowIndex = 1;
-    _shapeRowIndex = 2;
+    _appearenceSectionIndex = data.count - 1;
+    
     
     section = [NSMutableArray new];
     [section addObject:@{

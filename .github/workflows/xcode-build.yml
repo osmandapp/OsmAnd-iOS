@@ -12,7 +12,7 @@ on:
         required: true
         default: '4.0.1'
       built_qt_ios_library:
-        description: 'Build or download qt library for iOS(true/false)'
+        description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
         required: true
         default: true
 jobs:

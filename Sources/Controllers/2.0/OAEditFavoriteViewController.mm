@@ -99,6 +99,14 @@
     NSInteger _selectedBackgroundIndex;
     NSString *_editingTextFieldKey;
     
+    NSInteger _selectCategorySectionIndex;
+    NSInteger _selectCategoryLabelRowIndex;
+    NSInteger _selectCategoryCardsRowIndex;
+    NSInteger _appearenceSectionIndex;
+    NSInteger _poiIconRowIndex;
+    NSInteger _colorRowIndex;
+    NSInteger _shapeRowIndex;
+    
     NSString *_renamedPointAlertMessage;
 }
 
@@ -203,6 +211,15 @@
     _ininialName = self.name;
     _ininialGroupName = self.groupTitle;
     _editingTextFieldKey = @"";
+    
+    _selectCategorySectionIndex = -1;
+    _selectCategoryLabelRowIndex = -1;
+    _selectCategoryCardsRowIndex = -1;
+    _appearenceSectionIndex = -1;
+    _poiIconRowIndex = -1;
+    _colorRowIndex = -1;
+    _shapeRowIndex = -1;
+
     [self setupGroups];
     [self setupColors];
     [self setupIcons];
@@ -376,6 +393,9 @@
     }];
 
     [data addObject:[NSArray arrayWithArray:section]];
+    _selectCategorySectionIndex = 1;
+    _selectCategoryLabelRowIndex = 0;
+    _selectCategoryCardsRowIndex = 1;
     
     section = [NSMutableArray new];
     [section addObject:@{
@@ -406,6 +426,10 @@
         @"key" : kBackgroundsKey
     }];
     [data addObject:[NSArray arrayWithArray:section]];
+    _appearenceSectionIndex = 2;
+    _poiIconRowIndex = 0;
+    _colorRowIndex = 1;
+    _shapeRowIndex = 2;
     
     section = [NSMutableArray new];
     [section addObject:@{
@@ -1097,7 +1121,7 @@
     _selectedBackgroundIndex = (int)tag;
     [self updateHeaderIcon];
     [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAColorsTableViewCellDelegate
@@ -1109,7 +1133,7 @@
     _selectedColor = [OADefaultFavorite builtinColors][tag];
     [self updateHeaderIcon];
     [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2], [NSIndexPath indexPathForRow:1 inSection:2], [NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAFolderCardsCellDelegate
@@ -1133,7 +1157,7 @@
         self.groupTitle = OALocalizedString(@"favorites");
     [self generateData];
     
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:0 inSection:2], [NSIndexPath indexPathForRow:1 inSection:2], [NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onAddFolderButtonPressed
@@ -1160,7 +1184,7 @@
     [self updateHeaderIcon];
     
     [self generateData];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_selectCategoryCardsRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onNewGroupAdded:(NSString *)selectedGroupName  color:(UIColor *)color
@@ -1181,7 +1205,7 @@
     [self setupGroups];
     [self generateData];
     [self updateHeaderIcon];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_selectCategoryCardsRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAAddFavoriteGroupDelegate

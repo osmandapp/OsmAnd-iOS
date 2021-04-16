@@ -443,7 +443,6 @@
     
     [self updateHeaderIcon];
     [self setupHeaderName];
-    [self scrollViewDidScroll:self.tableView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -677,7 +676,7 @@
     else
     {
         _navBarHeightConstraint.constant = kCompressedHeaderHeight;
-        self.titleLabel.font = [UIFont systemFontOfSize:0 weight:UIFontWeightSemibold];
+        self.titleLabel.hidden = YES;
         self.titleLabel.alpha = 0;
     }
 }
@@ -964,10 +963,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class])
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *cellType = item[@"type"];
+    if ([cellType isEqualToString:kTextInputFloatingCellWithIcon])
     {
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
         NSString *key = item[@"key"];
         NSString *text;
         if ([key isEqualToString:kNameKey])

@@ -8,7 +8,7 @@ SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ "$DOWNLOAD_PREBUILT_QT_FILES" = true ] ; then
 	BUILT_QT_FILES_ZIPFILE=${BUILT_QT_FILES_ZIPFILE:-qt-ios-prebuilt.zip}
 	wget https://builder.osmand.net/binaries/ios/qt-ios-prebuilt.zip -O "$BUILT_QT_FILES_ZIPFILE"
-	unzip -d $SRCLOC/../core/externals/qtbase-ios/ "$BUILT_QT_FILES_ZIPFILE"
+	unzip -o -d $SRCLOC/../core/externals/qtbase-ios/ "$BUILT_QT_FILES_ZIPFILE"
 fi
 
 # Bake or update core projects for XCode

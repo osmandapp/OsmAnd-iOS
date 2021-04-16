@@ -7,10 +7,14 @@ name: Create OsmAndMaps Archive
 on: 
   workflow_dispatch:
     inputs:
-      logLevel:
+      version:
         description: 'Version'     
         required: true
         default: '4.0.1'
+      built_qt_ios_library:
+        description: 'Build or download qt library for iOS(true/false)'
+        required: true
+        default: true
 jobs:
   build:
     runs-on: macOS-latest
@@ -78,6 +82,7 @@ jobs:
     - name: Build QtCore & prepare build
       env:
         BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
+        DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.built_qt_ios_library }} 
       run: exec ios/prepare.sh
     - name: Upload qt-ios-prebuilt
       uses: actions/upload-artifact@v2

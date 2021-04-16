@@ -8,9 +8,9 @@ on:
         required: true
         default: 4
       num_2:
-        description: 'Number 2'
+        description: 'Sum'
         required: true
-        default: 4
+        default: true
 jobs:
   job_1:
     name: Add Version and 7
@@ -18,7 +18,11 @@ jobs:
     steps:
       - shell: bash
         run: |
-          expr ${{ github.event.inputs.num_1 }} + ${{ github.event.inputs.num_2 }} > math-homework.txt
+          if ${{ github.event.inputs.num_1 }}; then
+            expr ${{ github.event.inputs.num_1 }} + ${{ github.event.inputs.num_1 }} > math-homework.txt
+          else
+            expr ${{ github.event.inputs.num_1 }} - ${{ github.event.inputs.num_1 }} > math-homework.txt
+          fi
       - name: Upload math result for job 1
         uses: actions/upload-artifact@v2
         with:

@@ -11,7 +11,7 @@ on:
         description: 'Version'     
         required: true
         default: '4.0.1'
-      built_qt_ios_library:
+      download_qt_ios_library:
         description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
         required: true
         default: true
@@ -82,7 +82,7 @@ jobs:
     - name: Build QtCore & prepare build
       env:
         BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
-        DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.built_qt_ios_library }} 
+        DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
       run: exec ios/prepare.sh
     - name: Upload qt-ios-prebuilt
       uses: actions/upload-artifact@v2

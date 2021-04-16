@@ -2,9 +2,6 @@
 
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Prepare iOS dependencies via CocoaPods
-"$SRCLOC/Scripts/install_pods.sh"
-
 if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 	# FILE_TO_DOWNLOAD=${BUILT_QT_FILES_ZIPFILE:-qt-ios-prebuilt.zip}
 	FILE_TO_DOWNLOAD=qt_download.zip
@@ -12,6 +9,7 @@ if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 	TMPDIR=$(basename $FILE_TO_DOWNLOAD).dir
 	unzip -o -d $TMPDIR "$FILE_TO_DOWNLOAD"
 	mv $TMPDIR/upstream.patched* $SRCLOC/../core/externals/qtbase-ios/
+	mv $TMPDIR/.stamp $SRCLOC/../core/externals/qtbase-ios/
 	rm -rf $TMPDIR
 fi
 
@@ -24,6 +22,9 @@ if [ ! -z "$BUILT_QT_FILES_ZIPFILE" ] && [ ! "$DOWNLOAD_PREBUILT_QT_FILES" == "t
 	( cd $SRCLOC/../core/externals/qtbase-ios/ && zip --symlinks -r "$BNAME" . )
 	mv $SRCLOC/../core/externals/qtbase-ios/$BNAME $BUILT_QT_FILES_ZIPFILE
 fi
+
+# Prepare iOS dependencies via CocoaPods
+"$SRCLOC/Scripts/install_pods.sh"
 
 # Download all shipped resources
 "$SRCLOC/Scripts/download-shipped-resources.sh"

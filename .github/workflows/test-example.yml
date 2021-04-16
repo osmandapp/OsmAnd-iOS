@@ -18,10 +18,10 @@ jobs:
     steps:
       - shell: bash
         run: |
-          if [ "${{ github.event.inputs.sum }}" = "true" ]; then
-            expr ${{ github.event.inputs.num_1 }} + ${{ github.event.inputs.num_1 }} > math-homework.txt
+          if [ "${{ github.event.inputs.sum }}" == "true" ]; then
+            expr "${{ github.event.inputs.num_1 }} + ${{ github.event.inputs.num_1 }}" > math-homework.txt
           else
-            expr ${{ github.event.inputs.num_1 }} - ${{ github.event.inputs.num_1 }} > math-homework.txt
+            expr "${{ github.event.inputs.num_1 }} \* ${{ github.event.inputs.num_1 }}" > math-homework.txt
           fi
       - name: Upload math result for job 1
         uses: actions/upload-artifact@v2

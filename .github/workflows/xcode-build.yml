@@ -76,7 +76,14 @@ jobs:
       run: .github/secrets/decrypt_secrets.sh
       working-directory: ios  
     - name: Build QtCore & prepare build
+      env:
+        BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
       run: exec ios/prepare.sh
+    - name: Upload qt-ios-prebuilt
+      uses: actions/upload-artifact@v2
+      with:
+        name: qt-ios-prebuilt.zip
+        path: qt-ios-prebuilt.zip
     - name: Creating iOS archive
       run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
             -scheme "OsmAnd Maps Release"
@@ -86,7 +93,7 @@ jobs:
             CODE_SIGN_IDENTITY="iPhone Distribution"
             PROVISIONING_PROFILE_SPECIFIER="Github Build"
             archive | xcpretty' 
-    - name: Upload artifact
+    - name: Upload maps archive
       uses: actions/upload-artifact@v2
       with:
         name: OsmAndMaps.xcarchive

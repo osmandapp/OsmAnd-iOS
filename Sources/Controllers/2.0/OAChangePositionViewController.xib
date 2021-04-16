@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,6 +16,7 @@
                 <outlet property="coordinatesView" destination="5TK-Bk-mdO" id="BA5-r3-TbC"/>
                 <outlet property="doneButton" destination="RLc-dY-TOF" id="w1p-Rx-yFT"/>
                 <outlet property="iconView" destination="jna-eD-VrY" id="PTe-ut-DhX"/>
+                <outlet property="innerIconView" destination="4xG-c0-7gW" id="tzL-DF-K3y"/>
                 <outlet property="itemTitleView" destination="TqU-Hg-KlL" id="13b-LU-RbN"/>
                 <outlet property="mainTitleContainerView" destination="4xg-1f-ga1" id="rhP-ee-JSJ"/>
                 <outlet property="mainTitleView" destination="rNk-Uq-6Lf" id="y16-MC-92B"/>
@@ -63,6 +64,13 @@
                                 <constraint firstAttribute="width" constant="30" id="vy5-Gd-diN"/>
                             </constraints>
                         </imageView>
+                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4xG-c0-7gW">
+                            <rect key="frame" x="372" y="51.333333333333371" width="22" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="P3C-tE-YTb"/>
+                                <constraint firstAttribute="width" constant="22" id="r3W-g5-onq"/>
+                            </constraints>
+                        </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ftj-u1-BtG">
                             <rect key="frame" x="16" y="74.333333333333371" width="336" height="18"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -87,7 +95,9 @@
                         <constraint firstItem="TqU-Hg-KlL" firstAttribute="top" secondItem="4xg-1f-ga1" secondAttribute="bottom" constant="14" id="blU-jH-kYr"/>
                         <constraint firstItem="Ftj-u1-BtG" firstAttribute="top" secondItem="TqU-Hg-KlL" secondAttribute="bottom" constant="5" id="bud-95-b54"/>
                         <constraint firstItem="5TK-Bk-mdO" firstAttribute="leading" secondItem="nJ9-RW-X94" secondAttribute="leadingMargin" constant="8" id="hBW-os-pd9"/>
+                        <constraint firstItem="4xG-c0-7gW" firstAttribute="centerX" secondItem="jna-eD-VrY" secondAttribute="centerX" id="hvh-qb-8ml"/>
                         <constraint firstAttribute="trailing" secondItem="4xg-1f-ga1" secondAttribute="trailing" id="lRm-9p-NHl"/>
+                        <constraint firstItem="4xG-c0-7gW" firstAttribute="centerY" secondItem="jna-eD-VrY" secondAttribute="centerY" id="mFW-Gs-bDK"/>
                         <constraint firstItem="jna-eD-VrY" firstAttribute="top" secondItem="4xg-1f-ga1" secondAttribute="bottom" constant="13" id="oou-hq-Rmu"/>
                         <constraint firstItem="4xg-1f-ga1" firstAttribute="leading" secondItem="nJ9-RW-X94" secondAttribute="leading" id="ruV-Gk-IGj"/>
                         <constraint firstItem="4xg-1f-ga1" firstAttribute="top" secondItem="nJ9-RW-X94" secondAttribute="top" id="wAd-xU-dc7"/>

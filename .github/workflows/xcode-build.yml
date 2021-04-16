@@ -35,26 +35,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: ios
-    - name: Setup provisioning profile
-      env:
-        IOS_KEYS: ${{ secrets.IOS_KEYS }}
-        PASSWORD_KEYCHAIN_EXPORT: ${{ secrets.PASSWORD_KEYCHAIN_EXPORT }}
-      run: .github/secrets/decrypt_secrets.sh
-      working-directory: ios
     - name: Checkout android
       uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd
         path: android
-    - name: Test iOS archive
-      run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
-            -scheme "OsmAnd Maps Release"
-            -sdk iphoneos
-            -configuration AppStoreDistribution
-            -archivePath OsmAndMaps.xcarchive
-            CODE_SIGN_IDENTITY="iPhone Distribution"
-            PROVISIONING_PROFILE_SPECIFIER="Github Build"
-            archive | xcpretty'    
     - name: Checkout build
       uses: actions/checkout@v2
       with:
@@ -84,6 +69,12 @@ jobs:
     #   run: sudo xcode-select -switch /Applications/Xcode_11.3.app
     - name: Patch __bsfd
       run: sudo patch /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include/ia32intrin.h ios/.github/workflows/__bsfd.patch  
+    - name: Setup provisioning profile
+      env:
+        IOS_KEYS: ${{ secrets.IOS_KEYS }}
+        PASSWORD_KEYCHAIN_EXPORT: ${{ secrets.PASSWORD_KEYCHAIN_EXPORT }}
+      run: .github/secrets/decrypt_secrets.sh
+      working-directory: ios  
     - name: Build QtCore & prepare build
       run: exec ios/prepare.sh
     - name: Creating iOS archive

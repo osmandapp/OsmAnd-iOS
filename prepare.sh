@@ -5,11 +5,12 @@ SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Prepare iOS dependencies via CocoaPods
 "$SRCLOC/Scripts/install_pods.sh"
 
-if [ "$DOWNLOAD_PREBUILT_QT_FILES" = true ] ; then
-	BUILT_QT_FILES_ZIPFILE=${BUILT_QT_FILES_ZIPFILE:-qt-ios-prebuilt.zip}
-	wget https://builder.osmand.net/binaries/ios/qt-ios-prebuilt.zip -O "$BUILT_QT_FILES_ZIPFILE"
-	TMPDIR=$(basename $BUILT_QT_FILES_ZIPFILE).dir
-	unzip -o -d $TMPDIR "$BUILT_QT_FILES_ZIPFILE"
+if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
+	# FILE_TO_DOWNLOAD=${BUILT_QT_FILES_ZIPFILE:-qt-ios-prebuilt.zip}
+	FILE_TO_DOWNLOAD=qt_download.zip
+	wget https://builder.osmand.net/binaries/ios/qt-ios-prebuilt.zip -O "$FILE_TO_DOWNLOAD"
+	TMPDIR=$(basename $FILE_TO_DOWNLOAD).dir
+	unzip -o -d $TMPDIR "$FILE_TO_DOWNLOAD"
 	mv $TMPDIR/upstream.patched* $SRCLOC/../core/externals/qtbase-ios/
 	rm -rf $TMPDIR
 fi
@@ -18,7 +19,7 @@ fi
 OSMAND_BUILD_TOOL=xcode "$SRCLOC/../build/fat-ios.sh"
 
 # Package built qt files as zip file
-if [ ! -z "$BUILT_QT_FILES_ZIPFILE" ] && [ ! -f "$BUILT_QT_FILES_ZIPFILE" ]; then
+if [ ! -z "$BUILT_QT_FILES_ZIPFILE" ] && [ ! "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ]; then
 	BNAME=$(basename $BUILT_QT_FILES_ZIPFILE)
 	( cd $SRCLOC/../core/externals/qtbase-ios/ && zip --symlinks -r "$BNAME" . )
 	mv $SRCLOC/../core/externals/qtbase-ios/$BNAME $BUILT_QT_FILES_ZIPFILE

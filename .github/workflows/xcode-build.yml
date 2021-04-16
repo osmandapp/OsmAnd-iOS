@@ -89,6 +89,9 @@ jobs:
       with:
         name: qt-ios-prebuilt.zip
         path: qt-ios-prebuilt.zip
+    - name: Build iOS libraries
+      run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
+      working-directory: baked/fat-ios-clang.xcode
     - name: Creating iOS archive
       run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
             -scheme "OsmAnd Maps Release"

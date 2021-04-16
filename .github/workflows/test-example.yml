@@ -7,7 +7,7 @@ on:
         description: 'Number 1'
         required: true
         default: 4
-      num_2:
+      sum:
         description: 'Sum'
         required: true
         default: true
@@ -18,7 +18,7 @@ jobs:
     steps:
       - shell: bash
         run: |
-          if [ "${{ github.event.inputs.num_1 }}" = "true" ]; then
+          if [ "${{ github.event.inputs.sum }}" = "true" ]; then
             expr ${{ github.event.inputs.num_1 }} + ${{ github.event.inputs.num_1 }} > math-homework.txt
           else
             expr ${{ github.event.inputs.num_1 }} - ${{ github.event.inputs.num_1 }} > math-homework.txt

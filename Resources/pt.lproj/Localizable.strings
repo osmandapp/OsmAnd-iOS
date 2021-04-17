@@ -400,7 +400,7 @@
 "speak_poi" = "POIs nas redondezas";
 "keep_and_add_destination_point" = "Adicionar como destino posterior";
 "animate_routing_route_not_calculated" = "Por favor calcule primeiro a rota";
-"save_global_track_interval_descr" = "Especifique o intervalo de registo para a gravação geral do trilho (ligado através do widget de 'gravação de viagem' no mapa).";
+"save_global_track_interval_descr" = "Especifique o intervalo de registo para a gravação geral do trilho (ligado através do widget de 'Gravar viagem' no mapa).";
 "select_gpx" = "Selecione GPX …";
 "traffic_warning_pedestrian" = "Travessia de pedestres";
 "unit_of_length" = "Unidades de comprimento";
@@ -517,7 +517,7 @@
 "sort_by_name" = "Ordenar por nome";
 "map_markers_other" = "Outros marcadores";
 "stop_routing_confirm" = "Quer parar a navegação?";
-"cancel_route" = "Descartar rota";
+"cancel_route" = "Cancelar a rota";
 "navigation_over_track" = "Iniciar a navegação ao longo do trilho?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Selecionar no mapa";
@@ -908,7 +908,7 @@
 "product_desc_ext_nautical" = "OsmAnd Cartas Náuticas é um complemento para a aplicação OsmAnd Mapas e Navegação. É uma representação gráfica detalhada de oceanos, mares, rios e zonas costeiras. Os gráficos podem conter várias informações como rotas, luzes de navegação, áreas perigosas, áreas onde é permitido ou proibido velejar e atracar, etc.\n\nInstruções de utilização: é altamente recomendável descarregar o mapa náutico base para ver os mapas, independentemente da presença de mapa detalhado. Para ativar cartas náuticas, toque no botão do mapa e defina o tipo de mapa para náuticas.\n\nNota: todos os navegadores profissionais são obrigados a ter cartas náuticas oficiais nas suas embarcações.\n\nAs cartas náuticas OsmAnd baseiam-se nos dados do projeto OpenSeaMap. Apesar de cartas do OpenSeaMap no momento não poderem substituir as cartas náuticas oficiais, elas podem ser usadas por navegadores amadores para orientação ou planeamento de rota.";
 "product_desc_ext_parking" = "O complemento de posição de estacionamento memoriza onde seu carro está estacionado. É um complemento para a aplicação OsmAnd Mapas e Navegação.\nEscolha um marcador da posição de estacionamento no mapa ou defina o limite de tempo para ser lembrado (também inclui um marcador no mapa). Para usar o complemento, ative-o no menu de complementos.";
 "product_desc_ext_skimap" = "OsmAnd Mapas de esqui é um complemento para a aplicação OsmAnd Mapas e Navegação projetado para navegar em locais de desportos de inverno. Informa sobre as pistas de esqui, marcadores de teleférico e linhas coloridas indicando a complexidade de cada faixa. Pode-se informar sobre pistas de esqui propriamente ditas, bem como a infraestrutura ao redor.\n\nInstruções de uso: para ativar o complemento na aplicação OsmAnd, toque no botão do mapa e defina o tipo para Visão de mapas de esqui.";
-"product_desc_ext_track_recording" = "Grave os seus trilhos e guarde manualmente usando o complemento OsmAnd Gravação de viagem. Exporte o seu trilho como um ficheiro gpx, partilhe ou contribua para o projeto OpenStreetMap. Uma ferramenta útil para corredores, caminhantes e qualquer pessoa interessada na gravação das suas viagens.";
+"product_desc_ext_track_recording" = "Grave os seus trilhos e guarde manualmente usando o complemento OsmAnd Gravar viagem. Exporte o seu trilho como um ficheiro gpx, partilhe ou contribua para o projeto OpenStreetMap. Uma ferramenta útil para corredores, caminhantes e qualquer pessoa interessada na gravação das suas viagens.";
 "product_title_trip_planning" = "Planeamento de viagem";
 "product_desc_trip_planning" = "Planeie a sua viagem, adicione pontos de paragem, meça a distância para o seu destino usando este complemento";
 "product_desc_ext_trip_planning" = "O complemento de planeamento de viagem permite que crie a sua viagem no mapa, guarde, meça a distância entre os pontos ligados com linhas retas, etc. Criado por planeamento de viagem preliminar em vez de rota por endereço.";
@@ -1029,14 +1029,14 @@
 "mapillary_image" = "Imagem do Mapillary";
 "shared_string_retry" = "Repetir";
 // Mapillary
-"mapil_no_inet_descr" = "Tem de estar ligado à Internet para ver as fotos do Mapillary.";
+"mapil_no_inet_descr" = "Tem de estar ligado à Internet para ver as fotografias do Mapillary.";
 "mapil_images_nearby" = "Imagens nas proximidades";
-"mapil_no_images" = "Não temos fotos para esta localização.";
-"mapil_add_photos" = "Adicionar fotos";
+"mapil_no_images" = "Não temos fotografias para esta localização.";
+"mapil_add_photos" = "Adicionar fotografias";
 "mapillary_get_title" = "Melhorar cobertura fotográfica com Mapillary";
-"mapillary_get_descr" = "Obter o Mapillary para adicionar fotos a este local";
+"mapillary_get_descr" = "Obter o Mapillary para adicionar fotografias a este local";
 "mapil_contribute" = "Contribua com as suas próprias imagens de nível da rua";
-"mapillary_descr" = "Fotos online ao nível da rua para todos. Descubra locais, colabore, capture o mundo";
+"mapillary_descr" = "Fotografias online ao nível da rua para todos. Descubra locais, colabore, capture o mundo";
 "mapillary_turn_on_widget" = "Ativar o widget Mapillary";
 "mapillary_turn_on_widget_descr" = "Isto permite-lhe contribuir rapidamente para o Mapillary";
 "shared_string_enabled" = "Ativado";
@@ -1044,9 +1044,9 @@
 "shared_string_reload" = "Recarregar";
 "save_poi_too_many_uppercase" = "O nome contém demasiadas letras maiúsculas. Continuar?";
 "shared_string_read_more" = "Ler mais";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "GGG.GG";
+"navigate_point_format_DM" = "GGG MM.MM";
+"navigate_point_format_DMS" = "GGG MM SS.SS";
 "sett_no_ext_input" = "Nenhum";
 "sett_generic_ext_input" = "Teclado genérico";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
@@ -1633,7 +1633,7 @@
 "gpx_parse_error" = "OsmAnd GPX não está bem formado, por favor entre em contacto com a equipa de suporte para investigar mais.";
 "shared_string_next" = "Seguinte";
 "quick_action_map_source_title" = "Origens dos mapas";
-"configure_screen_quick_action" = "Ação rápida";
+"configure_screen_quick_action" = "Botão de ação rápida";
 "search_activity" = "Pesquisar";
 "shared_string_deselect_all" = "Desmarcar tudo";
 "shared_string_settings" = "Configurações";
@@ -1757,7 +1757,7 @@
 "map_settings_slopes_description" = "Os mapas de declives usam cores diferentes para visualizar o terreno";
 "map_settings_slopes_legend" = "Pode ler mais sobre declives na Wikipédia";
 "ios_release_3_90" = "- Introduzida a funcionalidade \"Planear uma rota\" para planear viagens futuras com a capacidade de criar segmentos de trilhos utilizando diferentes tipos de navegação\n- Adicionada uma opção para ativar um compasso sobre a ferramenta \"Raio da régua\"\n- Adicionada a opção \"Nomes dos POI\" que permite mostrar nomes de favoritos, pontos de passagem de trilhos e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia em falta\n- Importação de configurações: erros corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
-"ios_release_3_80" = "- Adicionados \"Perfis da Aplicação\" com configurações independentes\n- Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n- Capacidade de importar ou exportar configurações de perfil\n- Adicionadas origens de dados para fotos online\n- Adicionada a capacidade de descarregar mapas online para a cache\n- Algoritmos de \"Pesquisa\" melhorados\n";
+"ios_release_3_80" = "• Adicionados \"Perfis da Aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
 
 
 // Release Notes

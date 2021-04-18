@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>net.osmand.maps</key>
-		<string>match AppStore net.osmand.maps</string>
+		<string>Github Build</string>
 	</dict>
 </dict>
 </plist>

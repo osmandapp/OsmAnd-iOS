@@ -83,51 +83,55 @@ jobs:
         PASSWORD_KEYCHAIN_EXPORT: ${{ secrets.PASSWORD_KEYCHAIN_EXPORT }}
       run: .github/secrets/decrypt_secrets.sh
       working-directory: ios  
-    - name: Build QtCore & prepare build
-      env:
-        BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
-        DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
-      run: exec ios/prepare.sh
-    - name: Upload qt-ios-prebuilt
-      uses: actions/upload-artifact@v2
-      with:
-        name: qt-ios-prebuilt.zip
-        path: qt-ios-prebuilt.zip
-    - name: Configure iOS OsmAndCore
-      run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
-      working-directory: baked/fat-ios-clang.xcode
-    - name: Build iOS OsmAndCore
-      run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release'
-      working-directory: baked/fat-ios-clang.xcode
-    - name: Creating iOS archive
-      env:
-        BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }} 
-        RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }} 
-      run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
-            -scheme "OsmAnd Maps Release"
-            -sdk iphoneos
-            -configuration AppStoreDistribution
-            -archivePath OsmAndMaps.xcarchive
-            CURRENT_PROJECT_VERSION="${RELEASE_IOS_VERSION}.${BUILD_IOS_VERSION}"
-            MARKETING_VERSION="${RELEASE_IOS_VERSION}"
-            CODE_SIGN_IDENTITY="iPhone Distribution"
-            PROVISIONING_PROFILE_SPECIFIER="Github Build"
-            archive | xcpretty'
-    - name: Zip iOS archive
-      run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
-    - name: Upload maps archive zip
-      uses: actions/upload-artifact@v2
-      with:
-        name: OsmAndMaps.xcarchive.zip
-        path: OsmAndMaps.xcarchive.zip
-    # - name: Download iOS archive
-    #   run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive" -O OsmAndMaps.xcarchive'
+    # - name: Build QtCore & prepare build
+    #   env:
+    #     BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
+    #     DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
+    #   run: exec ios/prepare.sh
+    # - name: Upload qt-ios-prebuilt
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: qt-ios-prebuilt.zip
+    #     path: qt-ios-prebuilt.zip
+    # - name: Configure iOS OsmAndCore
+    #   run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
+    #   working-directory: baked/fat-ios-clang.xcode
+    # - name: Build iOS OsmAndCore
+    #   run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release'
+    #   working-directory: baked/fat-ios-clang.xcode
+    # - name: Creating iOS archive
+    #   env:
+    #     BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }} 
+    #     RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }} 
+    #   run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
+    #         -scheme "OsmAnd Maps Release"
+    #         -sdk iphoneos
+    #         -configuration AppStoreDistribution
+    #         -archivePath OsmAndMaps.xcarchive
+    #         CURRENT_PROJECT_VERSION="${RELEASE_IOS_VERSION}.${BUILD_IOS_VERSION}"
+    #         MARKETING_VERSION="${RELEASE_IOS_VERSION}"
+    #         CODE_SIGN_IDENTITY="iPhone Distribution"
+    #         PROVISIONING_PROFILE_SPECIFIER="Github Build"
+    #         archive | xcpretty'
+    # - name: Zip iOS archive
+    #   run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
+    # - name: Upload maps archive zip
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: OsmAndMaps.xcarchive.zip
+    #     path: OsmAndMaps.xcarchive.zip
+    - name: Download iOS archive
+      run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive.zip" -O OsmAndMaps.xcarchive.zip'
+    - name: Unzip iOS archive
+      run: 'unzip OsmAndMaps.xcarchive.zip'  
     - name: Export iOS archive
       run: 'xcodebuild -archivePath OsmAndMaps.xcarchive 
             -exportOptionsPlist ios/exportOptions.plist 
             -exportPath . 
             -allowProvisioningUpdates 
             -exportArchive' 
+    - name: LS
+      run: 'ls -larh . && (find . | grep OsmAnd)'
     - name: Upload maps archive
       uses: actions/upload-artifact@v2
       with:

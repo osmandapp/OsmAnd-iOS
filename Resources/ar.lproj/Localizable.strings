@@ -10,7 +10,7 @@
 "switch_start_finish" = "اعكس نقطة الانطلاق والوصول";
 "clear_all_intermediates" = "إزالة كافة النقاط الوسيطة";
 "shared_string_options" = "خيارات";
-"new_destination_point_dialog" = "لقد قمت بالفعل بتعيين وجهة";
+"new_destination_point_dialog" = "توجد وجهة سابقة تعمل حاليا";
 "replace_destination_point" = "استبدالها بهذه الوجهة";
 "shared_string_current" = "الحالي";
 "make_as_start_point" = "وضعها نقطة البداية";
@@ -53,7 +53,7 @@
 "settings_preset" = "الوضع الافتراضي";
 "settings_preset_descr" = "اختيار وضع افتراضي لعرض الخريطة: استعراض، سيارة، مشي .";
 "unit_of_length" = "وحدات الطول";
-"unit_of_length_descr" = "اختيار الوحدات: كم، ميل، ميل بحري.. إلخ.";
+"unit_of_length_descr" = "تغيير وحدات الطول.";
 "coords_format" = "نمط الإحداثيات";
 "coords_format_descr" = "نمط الإحداثيات الجغرافية.";
 "do_not_show_discount_desc" = "يمنع عرض خصومات التطبيق ورسائل الأحداث المحلية الخاصة.";
@@ -810,7 +810,7 @@
 "years_2_4" = "سنوات";
 "years_5" = "سنوات";
 "price_free" = "مجاناً";
-"get_discount_title" = "احصل على خصم بمقدار %d %@ at %d%% .";
+"get_discount_title" = "احصل على خصم بمقدار %d %@ عند %d%% .";
 "get_free_trial_title" = "إبدأ التجربة %d %@ .";
 "get_discount_short_descr" = "%@ إلى %d %@, ثم %@";
 "months_3" = "ثلاثة أشهر";

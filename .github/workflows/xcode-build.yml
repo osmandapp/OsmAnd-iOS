@@ -7,10 +7,14 @@ name: Build OsmAndMaps
 on: 
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version'     
+      buildversion:
+        description: 'Consequent Build Number (Testflight)'
         required: true
-        default: '4.0.1'
+        default: 'x'
+      releaseversion:
+        description: 'Release Version'
+        required: true
+        default: '3.91'
       download_qt_ios_library:
         description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
         required: true
@@ -98,13 +102,15 @@ jobs:
     #   working-directory: baked/fat-ios-clang.xcode
     # - name: Creating iOS archive
     #   env:
-    #     BUILD_IOS_VERSION: ${{ github.event.inputs.version }} 
+    #     BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }} 
+    #     RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }} 
     #   run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
     #         -scheme "OsmAnd Maps Release"
     #         -sdk iphoneos
     #         -configuration AppStoreDistribution
     #         -archivePath OsmAndMaps.xcarchive
-    #         CURRENT_PROJECT_VERSION="$BUILD_IOS_VERSION"
+    #         CURRENT_PROJECT_VERSION="${RELEASE_IOS_VERSION}.${BUILD_IOS_VERSION}"
+    #         MARKETING_VERSION="${RELEASE_IOS_VERSION}"
     #         CODE_SIGN_IDENTITY="iPhone Distribution"
     #         PROVISIONING_PROFILE_SPECIFIER="Github Build"
     #         archive | xcpretty' 

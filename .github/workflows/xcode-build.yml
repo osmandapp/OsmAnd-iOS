@@ -1,4 +1,4 @@
-name: Create OsmAndMaps Archive
+name: Build OsmAndMaps
 # on:
 #  push:
 #    branches: [ master ]
@@ -110,11 +110,12 @@ jobs:
     #   with:
     #     name: OsmAndMaps.xcarchive
     #     path: OsmAndMaps.xcarchive
-    - name: Export iOS archive
+    - name: Download iOS archive
       run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive" -O OsmAndMaps.xcarchive'
     - name: Export iOS archive
       run: 'xcodebuild -archivePath OsmAndMaps.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
+            -scheme "OsmAnd Maps Release" \
+            -exportOptionsPlist ios/exportOptions.plist \
             -exportPath . \
             -allowProvisioningUpdates \
             -exportArchive' 
@@ -123,4 +124,8 @@ jobs:
       with:
         name: OsmAndMaps.ipa
         path: OsmAndMaps.ipa
-        
+    - name: Publish TestFlight
+      env:
+        APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
+        APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
+      run: 'xcrun altool --upload-app -t ios -f OsmAndMaps.ipa -u "$APPLEID_USERNAME" -p "$APPLEID_PASSWORD" --verbose'

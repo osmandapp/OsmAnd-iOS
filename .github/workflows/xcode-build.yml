@@ -103,7 +103,7 @@ jobs:
             -archivePath OsmAndMaps.xcarchive
             CODE_SIGN_IDENTITY="iPhone Distribution"
             PROVISIONING_PROFILE_SPECIFIER="Github Build"
-            archive | xcpretty' 
+            archive' 
     - name: Upload maps archive
       uses: actions/upload-artifact@v2
       with:

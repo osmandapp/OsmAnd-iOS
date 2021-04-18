@@ -114,7 +114,6 @@ jobs:
       run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive" -O OsmAndMaps.xcarchive'
     - name: Export iOS archive
       run: 'xcodebuild -archivePath OsmAndMaps.xcarchive \
-            -scheme "OsmAnd Maps" \
             -exportOptionsPlist ios/exportOptions.plist \
             -exportPath . \
             -allowProvisioningUpdates \

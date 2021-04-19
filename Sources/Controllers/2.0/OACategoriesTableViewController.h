@@ -11,12 +11,15 @@
 #import "OAQuickSearchTableController.h"
 
 @class OAQuickSearchListItem;
+@class OAPOIUIFilter;
 
 @protocol OACategoryTableDelegate
 
 @required
 
-- (void) createPOIUIFIlter;
+- (void)createPOIUIFilter;
+- (void)showRemoveFiltersView:(NSArray<OAPOIUIFilter *> *)filters;
+- (NSArray<OAPOIUIFilter *> *)getCustomFilters;
 
 @end
 

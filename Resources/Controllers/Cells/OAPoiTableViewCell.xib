@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="B9W-ie-Ile">
-                        <rect key="frame" x="12" y="100" width="296" height="89"/>
+                        <rect key="frame" x="16" y="100" width="288" height="89"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="height" priority="750" constant="140" id="NOY-9q-kdM"/>
@@ -62,7 +62,7 @@
                     </collectionView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="B9W-ie-Ile" firstAttribute="leading" secondItem="OyU-Tj-OXE" secondAttribute="leading" constant="12" id="6ev-xV-d8J"/>
+                    <constraint firstItem="B9W-ie-Ile" firstAttribute="leading" secondItem="OyU-Tj-OXE" secondAttribute="leadingMargin" id="6ev-xV-d8J"/>
                     <constraint firstItem="QPz-hS-JGO" firstAttribute="top" secondItem="OyU-Tj-OXE" secondAttribute="top" constant="11" id="9a0-FA-Zce"/>
                     <constraint firstAttribute="trailingMargin" secondItem="QPz-hS-JGO" secondAttribute="trailing" id="AuZ-tW-GgK"/>
                     <constraint firstItem="B9W-ie-Ile" firstAttribute="top" secondItem="Lv4-1f-YVk" secondAttribute="bottom" constant="16" id="Kkf-hf-8gN"/>
@@ -74,7 +74,7 @@
                     <constraint firstAttribute="bottom" secondItem="B9W-ie-Ile" secondAttribute="bottom" constant="16" id="pmF-KY-WB3"/>
                     <constraint firstItem="QPz-hS-JGO" firstAttribute="width" secondItem="hEo-Ng-Ewe" secondAttribute="width" id="u5H-gL-p8j"/>
                     <constraint firstItem="hEo-Ng-Ewe" firstAttribute="top" secondItem="OyU-Tj-OXE" secondAttribute="top" constant="11" id="xGi-q5-MDT"/>
-                    <constraint firstAttribute="trailing" secondItem="B9W-ie-Ile" secondAttribute="trailing" constant="12" id="ymg-LJ-h1n"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="B9W-ie-Ile" secondAttribute="trailing" id="ymg-LJ-h1n"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="z9p-Vv-5PH"/>

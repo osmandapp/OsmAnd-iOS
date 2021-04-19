@@ -107,6 +107,8 @@
     NSInteger _colorRowIndex;
     NSInteger _shapeRowIndex;
     
+    OACollectionViewCellState *_poiCellState;
+    
     NSString *_renamedPointAlertMessage;
 }
 
@@ -219,7 +221,8 @@
     _poiIconRowIndex = -1;
     _colorRowIndex = -1;
     _shapeRowIndex = -1;
-
+    _poiCellState = [[OACollectionViewCellState alloc] init];
+    
     [self setupGroups];
     [self setupColors];
     [self setupIcons];
@@ -293,6 +296,7 @@
     }
     _poiCategories = [NSArray arrayWithArray:categoriesData];
     _selectedCategoryIndex = [categories indexOfObject:_selectedIconCategoryName];
+    _poiCellState.contenOffset = [OACollectionViewCellState calculateShowingOffset:_selectedCategoryIndex labels:categories];
     
     if (!_selectedIconName || _selectedIconName.length == 0)
         _selectedIconName = @"special_star";
@@ -820,7 +824,7 @@
             cell.categoriesCollectionView.tag = kCategoryCellIndex;
             cell.currentCategory = item[@"selectedCategoryName"];
             cell.categoryDataArray = item[@"categotyData"];
-            
+            cell.state = _poiCellState;
             cell.collectionView.tag = kPoiCellIndex;
             cell.poiData = item[@"poiData"];
             cell.titleLabel.text = item[@"title"];
@@ -930,7 +934,7 @@
      if ([cell isKindOfClass:OAFolderCardsCell.class])
          [((OAFolderCardsCell *)cell) scrollToItemIfNeeded:(int)[item[@"selectedValue"] intValue]];
      else if ([cell isKindOfClass:OAPoiTableViewCell.class])
-         [((OAPoiTableViewCell *)cell) scrollToItemIfNeeded:[item[@"selectedCategoryIndex"] integerValue]];
+         [((OAPoiTableViewCell *)cell) updateContentOffset];
  }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -1106,9 +1110,7 @@
     _selectedIconCategoryName = category;
     _selectedCategoryIndex = index;
     [self generateData];
-    OAPoiTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onPoiSelected:(NSString *)poiName;

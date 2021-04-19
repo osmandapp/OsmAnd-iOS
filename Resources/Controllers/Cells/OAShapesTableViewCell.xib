@@ -18,12 +18,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="wsy-HV-1Sf">
-                        <rect key="frame" x="12" y="52" width="296" height="140"/>
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="wsy-HV-1Sf">
+                        <rect key="frame" x="16" y="52" width="288" height="140"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="height" priority="750" constant="140" id="LB5-pK-a5G"/>
                         </constraints>
+                        <viewLayoutGuide key="contentLayoutGuide" id="Teg-hL-WuG"/>
+                        <viewLayoutGuide key="frameLayoutGuide" id="rlF-RQ-yKF"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="jkY-E1-Ejt">
                             <size key="itemSize" width="48" height="48"/>
                             <size key="estimatedItemSize" width="48" height="48"/>
@@ -49,13 +51,13 @@
                     <constraint firstItem="OF6-fQ-ieg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="1GG-4d-Lmo"/>
                     <constraint firstItem="OF6-fQ-ieg" firstAttribute="width" secondItem="RwZ-P1-H2W" secondAttribute="width" id="1zB-BF-frR"/>
                     <constraint firstItem="wsy-HV-1Sf" firstAttribute="top" secondItem="RwZ-P1-H2W" secondAttribute="bottom" constant="19" id="4Rs-X9-oar"/>
-                    <constraint firstAttribute="trailing" secondItem="wsy-HV-1Sf" secondAttribute="trailing" constant="12" id="6BN-St-5Iu"/>
-                    <constraint firstItem="wsy-HV-1Sf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="O2p-go-g4J"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="wsy-HV-1Sf" secondAttribute="trailing" id="6BN-St-5Iu"/>
+                    <constraint firstItem="wsy-HV-1Sf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="O2p-go-g4J"/>
                     <constraint firstAttribute="bottom" secondItem="wsy-HV-1Sf" secondAttribute="bottom" constant="8" id="RDe-CT-mgO"/>
                     <constraint firstItem="wsy-HV-1Sf" firstAttribute="top" secondItem="OF6-fQ-ieg" secondAttribute="bottom" constant="19" id="UNf-am-jHf"/>
-                    <constraint firstAttribute="trailing" secondItem="RwZ-P1-H2W" secondAttribute="trailing" constant="16" id="W2M-Pn-Zex"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="RwZ-P1-H2W" secondAttribute="trailing" id="W2M-Pn-Zex"/>
                     <constraint firstItem="RwZ-P1-H2W" firstAttribute="leading" secondItem="OF6-fQ-ieg" secondAttribute="trailing" constant="8" id="a5l-qm-nRP"/>
-                    <constraint firstItem="OF6-fQ-ieg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="bLa-7J-Pxa"/>
+                    <constraint firstItem="OF6-fQ-ieg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="bLa-7J-Pxa"/>
                     <constraint firstItem="RwZ-P1-H2W" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="oTw-Lc-dNe"/>
                 </constraints>
             </tableViewCellContentView>

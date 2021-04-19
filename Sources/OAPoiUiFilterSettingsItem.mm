@@ -12,6 +12,11 @@
 #import "OAPOIHelper.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAQuickSearchHelper.h"
+#import "OAPOICategory.h"
+
+#define kNAME_KEY @"name"
+#define kFILTER_ID_KEY @"filterId"
+#define kACCEPTED_TYPES_KEY @"acceptedTypes"
 
 @interface OAPoiUiFilterSettingsItem()
 
@@ -104,16 +109,20 @@
     
     for (id object in itemsJson)
     {
-        NSString *name = object[@"name"];
-        NSString *filterId = object[@"filterId"];
-        NSDictionary<NSString *, NSMutableSet<NSString *> *> *acceptedTypes = object[@"acceptedTypes"];
+        NSString *name = object[kNAME_KEY];
+        NSString *filterId = object[kFILTER_ID_KEY];
+        NSString *acceptedTypes = object[kACCEPTED_TYPES_KEY];
+
+        NSDictionary<NSString *, NSMutableSet<NSString *> *> *acceptedTypesDictionary = [NSJSONSerialization JSONObjectWithData:[acceptedTypes dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
         NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypesDone = [NSMapTable strongToStrongObjectsMapTable];
-        for (NSString *key in acceptedTypes.allKeys)
+
+        for (NSString *key in acceptedTypesDictionary.allKeys)
         {
-            NSMutableSet<NSString *> *value = acceptedTypes[key];
+            NSMutableSet<NSString *> *value = acceptedTypesDictionary[key];
             OAPOICategory *a = [_helper getPoiCategoryByName:key];
             [acceptedTypesDone setObject:value forKey:a];
         }
+
         OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:name filterId:filterId acceptedTypes:acceptedTypesDone];
         [self.items addObject:filter];
     }
@@ -137,4 +146,3 @@
 }
 
 @end
-

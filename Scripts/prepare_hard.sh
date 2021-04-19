@@ -3,7 +3,11 @@
 sudo clear
 echo "iOS project reset and prepare - START."
 
-echo "    Updating all repositories:"
+echo "Cleaning all pods"
+rm -rf Pods/ || true
+rm -rf Podfile.lock || true
+
+echo "Updating all repositories:"
 cd `dirname $0`
 
 git pull

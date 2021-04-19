@@ -14,19 +14,48 @@
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
+#import "OAMapLayers.h"
+#import "OAMyPositionLayer.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/MapMarker.h>
+#include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/VectorLinesCollection.h>
+#include <OsmAndCore/Map/VectorLine.h>
+#include <OsmAndCore/Map/VectorLineBuilder.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
 
 #define DRAW_TIME 2
 #define LABEL_OFFSET 15
 
-@interface OARulerByTapControlLayer() <UIGestureRecognizerDelegate>
+@protocol OALineDrawingDelegate <NSObject>
+
+- (void) onDrawNewLine:(OsmAnd::PointI)from to:(OsmAnd::PointI)to color:(OsmAnd::ColorARGB)color;
+- (void) onHideLine;
+
+@end
+
+@interface OARulerByTapView()
+
+@property (nonatomic, weak) id<OALineDrawingDelegate> lineDrawingDelegate;
+
+@end
+
+@interface OARulerByTapControlLayer() <UIGestureRecognizerDelegate, OALineDrawingDelegate>
 
 @end
 
 @implementation OARulerByTapControlLayer
 {
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _lineEndsMarkersCollection;
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
     OARulerByTapView *_rulerByTapView;
+    
+    BOOL _showingLine;
+    
+    std::shared_ptr<SkBitmap> _centerIconDay;
+    std::shared_ptr<SkBitmap> _centerIconNight;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
@@ -45,7 +74,14 @@
     [super initLayer];
 
     _rulerByTapView = [[OARulerByTapView alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight)];
+    _rulerByTapView.lineDrawingDelegate = self;
     _rulerByTapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    _linesCollection.reset(new OsmAnd::VectorLinesCollection());
+    _lineEndsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
+    
+    _centerIconDay = [OANativeUtilities skBitmapFromPngResource:@"ic_ruler_center"];
+    _centerIconNight = [OANativeUtilities skBitmapFromPngResource:@"ic_ruler_center_light"];
 }
 
 - (void) deinitLayer
@@ -80,9 +116,77 @@
     });
 }
 
-@end
+// MARK: OALineDrawingDelegate
 
-@interface OARulerByTapView()
+- (void)onDrawNewLine:(OsmAnd::PointI)from to:(OsmAnd::PointI)to color:(OsmAnd::ColorARGB)color
+{
+    if (!_showingLine)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+        [self.mapView removeKeyedSymbolsProvider:_lineEndsMarkersCollection];
+        _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+        [self drawLine:from to:to lineId:10 color:color];
+        
+        _lineEndsMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+        [self drawLineEnds:{from, to}];
+        
+        [self.mapView addKeyedSymbolsProvider:_linesCollection];
+        [self.mapView addKeyedSymbolsProvider:_lineEndsMarkersCollection];
+        _showingLine = YES;
+    }
+}
+
+- (void)onHideLine
+{
+    if (_showingLine)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+        [self.mapView removeKeyedSymbolsProvider:_lineEndsMarkersCollection];
+        _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+        _lineEndsMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+        _showingLine = NO;
+    }
+}
+
+- (void) drawLine:(OsmAnd::PointI)from to:(OsmAnd::PointI)to lineId:(int)lineId color:(OsmAnd::ColorARGB)color
+{
+    QVector<OsmAnd::PointI> points;
+    points.push_back(from);
+    points.push_back(to);
+    
+    double strokeWidth = 20.;
+    std::vector<double> inlinePattern;
+    inlinePattern.push_back(75);
+    inlinePattern.push_back(45);
+    
+    OsmAnd::VectorLineBuilder inlineBuilder;
+    inlineBuilder.setBaseOrder(self.mapViewController.mapLayers.myPositionLayer.baseOrder + lineId)
+    .setIsHidden(false)
+    .setLineId(lineId + 1)
+    .setLineWidth(strokeWidth)
+    .setLineDash(inlinePattern)
+    .setPoints(points)
+    .setFillColor(color);
+    inlineBuilder.buildAndAddToCollection(_linesCollection);
+}
+
+- (void) drawLineEnds:(QVector<OsmAnd::PointI>)points
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    for (const auto p : points)
+    {
+        OsmAnd::MapMarkerBuilder builder;
+        builder.setIsAccuracyCircleSupported(false)
+        .setBaseOrder(self.baseOrder)
+        .setIsHidden(false)
+        .setPinIcon(settings.nightMode ? _centerIconNight : _centerIconDay)
+        .setPosition(p)
+        .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
+        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+        
+        builder.buildAndAddToCollection(_lineEndsMarkersCollection);
+    }
+}
 
 @end
 
@@ -108,9 +212,6 @@
     UITapGestureRecognizer* _doubleGestureRecognizer;
     UILongPressGestureRecognizer *_longSingleGestureRecognizer;
     UILongPressGestureRecognizer *_longDoubleGestureRecognizer;
-    
-    UIImage *_centerIconDay;
-    UIImage *_centerIconNight;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -155,9 +256,7 @@
     self.multipleTouchEnabled = YES;
     
     [self initFingerLayer];
- 
-    _centerIconDay = [UIImage imageNamed:@"ic_ruler_center.png"];
-    _centerIconNight = [UIImage imageNamed:@"ic_ruler_center_light.png"];
+    [self updateAttributes];
 }
 
 - (void) initFingerLayer
@@ -171,19 +270,25 @@
     _fingerDistanceSublayer.delegate = _fingerRulerDelegate;
 }
 
-- (void) layoutSubviews
-{
-    // resize your layers based on the view's new bounds
-    [super layoutSubviews];
-    _fingerDistanceSublayer.frame = self.bounds;
-}
-
 - (BOOL) updateLayer
 {
-    if (_fingerDistanceSublayer.superlayer != self.layer)
-        [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
-    [_fingerDistanceSublayer setNeedsDisplay];
+    if (self.rulerModeOn)
+    {
+        if (_fingerDistanceSublayer.superlayer != self.layer)
+            [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
+        [_fingerDistanceSublayer setNeedsDisplay];
+        [self updateAttributes];
+    }
     return YES;
+}
+
+- (BOOL) updateAttributes
+{
+    NSDictionary<NSString *, NSNumber *> *lineAttrs = [_mapViewController getLineRenderingAttributes:@"rulerLine"];
+    _rulerLineFontAttrs = [_mapViewController getLineRenderingAttributes:@"rulerLineFont"];
+    BOOL changed = [_rulerLineAttrs isEqualToDictionary:lineAttrs];
+    _rulerLineAttrs = lineAttrs;
+    return changed;
 }
 
 - (BOOL) rulerModeOn
@@ -191,34 +296,10 @@
     return [_settings.showDistanceRuler get];
 }
 
-- (void) drawLineFrom:(CGPoint)startPoint stopPoint:(CGPoint)stopPoint color:(UIColor *)color strokeWidth:(CGFloat)strokeWidth inContext:(CGContextRef)ctx
+- (void) layoutSubviews
 {
-    [color set];
-    CGContextSetLineWidth(ctx, strokeWidth);
-    CGContextMoveToPoint(ctx, startPoint.x, startPoint.y);
-    CGContextAddLineToPoint(ctx, stopPoint.x, stopPoint.y);
-    CGContextStrokePath(ctx);
-}
-
-- (void) drawLineByPoints:(NSMutableArray<NSValue *> *)points color:(UIColor *)color strokeWidth:(CGFloat)strokeWidth inContext:(CGContextRef)ctx
-{
-    BOOL isEmpty = YES;
-    for (NSValue *pointValue in points)
-    {
-        CGPoint point = pointValue.CGPointValue;
-        if (isEmpty)
-        {
-            isEmpty = NO;
-            CGContextMoveToPoint(ctx, point.x, point.y);
-        }
-        else
-        {
-            CGContextAddLineToPoint(ctx, point.x, point.y);
-        }
-    }
-    [color set];
-    CGContextSetLineWidth(ctx, strokeWidth);
-    CGContextStrokePath(ctx);
+    [super layoutSubviews];
+    _fingerDistanceSublayer.frame = self.bounds;
 }
 
 - (void) drawFingerRulerLayer:(CALayer *)layer inContext:(CGContextRef)ctx
@@ -226,12 +307,17 @@
     UIGraphicsPushContext(ctx);
     if (layer == _fingerDistanceSublayer)
     {
+        NSNumber *colorAttr = _rulerLineAttrs ? [_rulerLineAttrs objectForKey:@"color"] : @(0xff000000);
         if (_oneFingerDist && !_twoFingersDist)
         {
             CLLocation *currLoc = [_app.locationServices lastKnownLocation];
             if (currLoc)
             {
                 const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude, currLoc.coordinate.longitude, currLoc.coordinate.latitude);
+                const OsmAnd::LatLon fromLatLon(currLoc.coordinate.latitude, currLoc.coordinate.longitude);
+                const auto fromI = OsmAnd::Utilities::convertLatLonTo31(fromLatLon);
+                const OsmAnd::LatLon toLatLon(_tapPointOne.latitude, _tapPointOne.longitude);
+                const auto toI = OsmAnd::Utilities::convertLatLonTo31(toLatLon);
                 NSArray<NSValue *> *linePoints = [_mapViewController.mapView getVisibleLineFromLat:currLoc.coordinate.latitude fromLon:currLoc.coordinate.longitude toLat:_tapPointOne.latitude toLon:_tapPointOne.longitude];
                 if (linePoints.count == 2)
                 {
@@ -240,19 +326,18 @@
                     double angle = [OAMapUtils getAngleBetween:a end:b];
                     NSString *distance = [_app getFormattedDistance:dist];
                     _rulerDistance = distance;
-                    [self drawLineBetweenPoints:a end:b context:ctx distance:distance];
+                    if (self.lineDrawingDelegate)
+                        [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue)];
                     [self drawDistance:ctx distance:distance angle:angle start:a end:b];
-                    if ([_mapViewController isLocationVisible:_tapPointOne.latitude longitude:_tapPointOne.longitude])
-                    {
-                        UIImage *iconToUse = _settings.nightMode ? _centerIconNight : _centerIconDay;
-                        CGRect pointRect = CGRectMake(b.x - iconToUse.size.width / 2, b.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
-                        [iconToUse drawInRect:pointRect];
-                    }
                 }
             }
         }
         if (_twoFingersDist && !_oneFingerDist)
         {
+            const OsmAnd::LatLon fromLatLon(_tapPointOne.latitude, _tapPointOne.longitude);
+            const auto fromI = OsmAnd::Utilities::convertLatLonTo31(fromLatLon);
+            const OsmAnd::LatLon toLatLon(_tapPointTwo.latitude, _tapPointTwo.longitude);
+            const auto toI = OsmAnd::Utilities::convertLatLonTo31(toLatLon);
             NSArray<NSValue *> *linePoints = [_mapViewController.mapView getVisibleLineFromLat:_tapPointOne.latitude fromLon:_tapPointOne.longitude toLat:_tapPointTwo.latitude toLon:_tapPointTwo.longitude];
             if (linePoints.count == 2)
             {
@@ -262,19 +347,9 @@
                 const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude, _tapPointTwo.longitude, _tapPointTwo.latitude);
                 NSString *distance = [_app getFormattedDistance:dist];
                 _rulerDistance = distance;
-                [self drawLineBetweenPoints:a end:b context:ctx distance:distance];
+                if (self.lineDrawingDelegate)
+                    [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue)];
                 [self drawDistance:ctx distance:distance angle:angle start:a end:b];
-                UIImage *iconToUse = _settings.nightMode ? _centerIconNight : _centerIconDay;
-                if ([_mapViewController isLocationVisible:_tapPointOne.latitude longitude:_tapPointOne.longitude])
-                {
-                    CGRect pointOneRect = CGRectMake(a.x - iconToUse.size.width / 2, a.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
-                    [iconToUse drawInRect:pointOneRect];
-                }
-                if ([_mapViewController isLocationVisible:_tapPointTwo.latitude longitude:_tapPointTwo.longitude])
-                {
-                    CGRect pointTwoRect = CGRectMake(b.x - iconToUse.size.width / 2, b.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
-                    [iconToUse drawInRect:pointTwoRect];
-                }
             }
         }
     }
@@ -323,23 +398,6 @@
     CGContextRestoreGState(ctx);
 }
 
-- (void) drawLineBetweenPoints:(CGPoint) start end:(CGPoint) end context:(CGContextRef) ctx distance:(NSString *) distance
-{
-    CGContextSaveGState(ctx);
-    {
-        NSNumber *colorAttr = _rulerLineAttrs ? [_rulerLineAttrs objectForKey:@"color"] : nil;
-        UIColor *color = colorAttr ? UIColorFromARGB(colorAttr.intValue) : [UIColor blackColor];
-        [color set];
-        CGContextSetLineWidth(ctx, 4.0);
-        CGFloat dashLengths[] = {10, 5};
-        CGContextSetLineDash(ctx, 0.0, dashLengths , 2);
-        CGContextMoveToPoint(ctx, start.x, start.y);
-        CGContextAddLineToPoint(ctx, end.x, end.y);
-        CGContextStrokePath(ctx);
-    }
-    CGContextRestoreGState(ctx);
-}
-
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     return [self rulerModeOn];
@@ -350,6 +408,9 @@
     // Handle gesture only when it is ended
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
+    
+    if (self.lineDrawingDelegate)
+        [self.lineDrawingDelegate onHideLine];
 
     if ([recognizer numberOfTouches] == 1 && !_twoFingersDist) {
         _oneFingerDist = YES;
@@ -372,8 +433,8 @@
         [_fingerDistanceSublayer setNeedsDisplay];
     }
     
-    [NSObject cancelPreviousPerformRequestsWithTarget: self selector:@selector(hideTouchRuler) object: self];
-    [self performSelector:@selector(hideTouchRuler) withObject: self afterDelay: DRAW_TIME];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideTouchRuler) object:self];
+    [self performSelector:@selector(hideTouchRuler) withObject:self afterDelay:DRAW_TIME];
 }
 
 - (void) hideTouchRuler
@@ -383,12 +444,18 @@
     _twoFingersDist = NO;
     if (_fingerDistanceSublayer.superlayer == self.layer)
         [_fingerDistanceSublayer removeFromSuperlayer];
+    
+    if (self.lineDrawingDelegate)
+        [self.lineDrawingDelegate onHideLine];
 }
 
 - (void) onMapSourceUpdated
 {
     if ([self rulerModeOn])
+    {
         [self setNeedsDisplay];
+        [self updateAttributes];
+    }
 }
 
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint

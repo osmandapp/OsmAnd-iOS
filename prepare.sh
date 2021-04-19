@@ -1,53 +1,31 @@
-#!/bin/bash
+#!/bin/bash -xe
 
-if [ -z "$BASH_VERSION" ]; then
-	echo "Invalid shell, re-running using bash..."
-	exec bash "$0" "$@"
-	exit $?
-fi
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-ROOT="$SRCLOC/.."
-
-# Prepare iOS dependencies via CocoaPods
-POD=`which pod`
-if [ -z "$POD" ]; then
-	echo "'pod' tool not found, run 'sudo gem install cocoapods'"
-	exit 1
-fi
-if [[ ! -f "$SRCLOC/Podfile.lock" ]]; then
-	echo "Installing dependencies via CocoaPods"
-	(cd "$SRCLOC" && $POD install)
-else
-	echo "Updating dependencies via CocoaPods"
-	(cd "$SRCLOC" && $POD update)
-fi
-retcode=$?
-if [ $retcode -ne 0 ]; then
-	echo "Failed to processing dependencies via CocoaPods, aborting..."
-	exit $retcode
+# it only works if absolute path of prebuilt / makefiles is the same
+if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
+	# FILE_TO_DOWNLOAD=${BUILT_QT_FILES_ZIPFILE:-qt-ios-prebuilt.zip}
+	FILE_TO_DOWNLOAD=qt_download.zip
+	wget https://builder.osmand.net/binaries/ios/qt-ios-prebuilt.zip -O "$FILE_TO_DOWNLOAD"
+	FILE_TO_DOWNLOADEDIR=$(basename $FILE_TO_DOWNLOAD).dir
+	unzip -o -d $FILE_TO_DOWNLOADEDIR "$FILE_TO_DOWNLOAD"
+	(cd $FILE_TO_DOWNLOADEDIR && mv upstream.patched* $SRCLOC/../core/externals/qtbase-ios/)
+	(cd $FILE_TO_DOWNLOADEDIR && mv .stamp $SRCLOC/../core/externals/qtbase-ios/)
+	rm -rf $FILE_TO_DOWNLOADEDIR
 fi
 
 # Bake or update core projects for XCode
-OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"
-retcode=$?
-if [ $retcode -ne 0 ]; then
-	echo "Failed to generate project for XCode, aborting..."
-	exit $retcode
+OSMAND_BUILD_TOOL=xcode "$SRCLOC/../build/fat-ios.sh"
+
+# Package built qt files as zip file
+if [ ! -z "$BUILT_QT_FILES_ZIPFILE" ] && [ ! "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ]; then
+	BNAME=$(basename $BUILT_QT_FILES_ZIPFILE)
+	( cd $SRCLOC/../core/externals/qtbase-ios/ && zip --symlinks -r "$BNAME" . )
+	mv $SRCLOC/../core/externals/qtbase-ios/$BNAME $BUILT_QT_FILES_ZIPFILE
 fi
+
+# Prepare iOS dependencies via CocoaPods
+"$SRCLOC/Scripts/install_pods.sh"
 
 # Download all shipped resources
-"$SRCLOC/download-shipped-resources.sh"
-retcode=$?
-if [ $retcode -ne 0 ]; then
-	echo "Failed to download shipped resources, aborting..."
-	exit $retcode
-fi
-
-# Generate resources from SVG
-#"$SRCLOC/rasterize-resources.sh"
-#retcode=$?
-#if [ $retcode -ne 0 ]; then
-#	echo "Failed to rasterize resources, aborting..."
-#	exit $retcode
-#fi
+"$SRCLOC/Scripts/download-shipped-resources.sh"

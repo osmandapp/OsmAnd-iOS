@@ -1816,7 +1816,7 @@
 "vessel_height_limit_description" = "Imposta s'artària de sa barca pro evitare sos pontes bassos. Ammenta·ti chi, si su ponte est mòbile, amus a impreare s'artària sua de cando est abertu.";
 "lenght_limit_description" = "Inserta sa longària de su veìculu tuo. Bi diant pòdere èssere unas cantas restritziones de sas àndalas pro sos veìculos longos.";
 "weight_limit_description" = "Inserta su pesu de su veìculu tuo, ca unas cantas restritziones si diat pòdere aplicare pro veìculos pesantes ebbia.";
-"export_profile" = "Esporta su profilu";
+"export_profile" = "Esporta";
 "configure_map_descr" = "Aparèntzia de sa mapa";
 "export_profile_descr" = "Podes esportare totu sas impostatziones de unu profilu, copiare totu sas impostatziones dae un'àteru profilu o torrare sas impostatziones de profilu a s'istadu predefinidu issoro.";
 "profile_sett_descr" = "Influentzat sos profilos de s'aplicatzione ischertados";
@@ -1912,7 +1912,7 @@
 "nav_type_hint" = "Casta de navigatzione: %@";
 "selected_profiles" = "%d de %d";
 "import_profile_select_descr" = "Ischerta sos datos de importare.";
-"shared_string_import" = "Importa unu profilu";
+"shared_string_import" = "Importa";
 "shared_string_preparing" = "Ammaniende";
 "shared_string_deselect_all" = "De-ischerta totu";
 "shared_string_continue" = "Sighi";
@@ -2013,7 +2013,7 @@
 "map_markers_empty" = "Non tenes perunu marcadore de mapa ativu";
 "address_search" = "Chirca de sos indiritzos";
 "download_tab_local" = "Installadas";
-"some_of" = "%ld de %ld";
+"some_of" = "%d de %d";
 "segnet_num" = "Segmentu %d";
 "track_multiple_segments_select" = "%@ tenet prus de unu segmentu. Ischerta una parte de sa rasta chi cheres impreare pro sa navigatzione.";
 "select_segment" = "Ischerta segmentu";
@@ -2064,3 +2064,28 @@
 "available_groups" = "Grupos a disponimentu";
 "select_gropu_descr" = "Ischerta unu grupu o annanghe·nde unu nou";
 "fav_add_new_group" = "Annanghe unu grupu nou";
+"shared_string_gpx_points" = "Puntos";
+"res_standard" = "Mapa regulare";
+"quick_action_coordinates_widget_descr" = "Tochende custu butone de atzione as a ammustrare o cuare su widget de sas coordinadas";
+"hide_coordinates" = "Cua sas coordinadas";
+"show_coordinates" = "Ammustra sas coordinadas";
+"toggle_coordinates" = "Ammustra/cua su widget de sas coordinadas";
+"copied_to_clipboard" = "Copiadu in punta de billete";
+"searching_gps" = "Chirchende su GPS";
+
+// Coordinate widget
+"coordinates_widget" = "Widget de sas coordinatas";
+
+// Resources
+"shared_string_resources" = "Risursas";
+"folder_already_exsists" = "Esistit giai una cartella cun custu nùmene";
+"incorrect_symbols" = "Caràteres invàlidos insertados";
+"preparing_file" = "Ammaniende su documentu";
+"reading_file" = "Leghende su documentu";
+"export_failed" = "Esportatzione de su profilu fallida";
+"selected_of" = "Ischertados - %d/%d";
+"export_profile_select_descr" = "Ischerta sos datos de esportare.";
+"select_group_descr" = "Ischerta unu grupu o crea·nde unu nou";
+"search_history" = "Cronologia de chirca";
+"markers_history" = "Cronologia de sos marcadores";
+"coordinates" = "Coordinadas";

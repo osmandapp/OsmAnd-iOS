@@ -32,9 +32,7 @@ private:
     
     std::shared_ptr<SkBitmap> getBitmapByFavorite(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav);
     std::shared_ptr<SkBitmap> createCompositeBitmap(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav) const;
-    QString shadowImageNameByType(const QString& type) const;
     QString backgroundImageNameByType(const QString& type) const;
-    QString highlightImageNameByType(const QString& type) const;
     UIImage *getIcon(NSString *iconName, NSString *defaultIconName) const;
 protected:
 public:

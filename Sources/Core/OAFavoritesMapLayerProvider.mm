@@ -77,16 +77,25 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getBitmapByFavorite(const
         bitmap = bitmapIt.value();
     }
     return bitmap;
-    
 }
 
 std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav) const
 {
     std::shared_ptr<SkBitmap> result;
     
+    UIColor *color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
+    if (!color)
+        color = [OADefaultFavorite getDefaultColor];
+    NSString *shapeName = fav->getBackground().toNSString();
+    if (!shapeName || shapeName.length == 0)
+        shapeName = @"circle";
+    NSString *iconName = fav->getIcon().toNSString();
+    if (!iconName || iconName.length == 0)
+        iconName = @"mm_special_star";
+    
     // shadow icon
     auto shadowIcon = std::make_shared<SkBitmap>();
-    NSString *shadowIconName = shadowImageNameByType(fav->getBackground()).toNSString();
+    NSString *shadowIconName = [NSString stringWithFormat:@"ic_bg_point_%@_bottom", shapeName];
     UIImage *img = getIcon(shadowIconName, @"ic_bg_point_circle_bottom");
     bool res = SkCreateBitmapFromCGImage(shadowIcon.get(), img.CGImage);
     if (!res)
@@ -94,8 +103,7 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
     
     // color filled background icon
     auto backgroundIcon = std::make_shared<SkBitmap>();
-    NSString *backgroundIconName = backgroundImageNameByType(fav->getBackground()).toNSString();
-    UIColor *color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
+    NSString *backgroundIconName = [NSString stringWithFormat:@"ic_bg_point_%@_center", shapeName];
     img = getIcon(backgroundIconName, @"ic_bg_point_circle_center");
     img = [OAUtilities tintImageWithColor:img color:color];
     res = SkCreateBitmapFromCGImage(backgroundIcon.get(), img.CGImage);
@@ -104,23 +112,22 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
     
     // poi image icon
     auto icon = std::make_shared<SkBitmap>();
-    QString iconName = fav->getIcon();
-    UIImage *origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName.toNSString() stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
+    UIImage *origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
     if (!origImage)
         origImage = [UIImage imageNamed:[OAUtilities drawablePath:@"mm_special_star"]];
-    
+
     // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
     CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.5 : 0.75;
     UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * scale, origImage.size.height * scale)];
     UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
-    
+
     res = SkCreateBitmapFromCGImage(icon.get(), coloredImage.CGImage);
     if (!res)
         return result;
     
     // highlight icon
     auto highlightIcon = std::make_shared<SkBitmap>();
-    NSString *highlightIconName = highlightImageNameByType(fav->getBackground()).toNSString();
+    NSString *highlightIconName = [NSString stringWithFormat:@"ic_bg_point_%@_top", shapeName];
     img = getIcon(highlightIconName, @"ic_bg_point_circle_top");
     res = SkCreateBitmapFromCGImage(highlightIcon.get(), img.CGImage);
     if (!res)
@@ -144,19 +151,9 @@ UIImage *OAFavoritesMapLayerProvider::getIcon(NSString *iconName, NSString *defa
     return resizedImage;
 }
 
-QString OAFavoritesMapLayerProvider::shadowImageNameByType(const QString& type) const
-{
-    return QStringLiteral("ic_bg_point_") + type + QStringLiteral("_bottom");
-}
-
 QString OAFavoritesMapLayerProvider::backgroundImageNameByType(const QString& type) const
 {
     return QStringLiteral("ic_bg_point_") + type + QStringLiteral("_center");
-}
-
-QString OAFavoritesMapLayerProvider::highlightImageNameByType(const QString& type) const
-{
-    return QStringLiteral("ic_bg_point_") + type + QStringLiteral("_top");
 }
 
 OsmAnd::ZoomLevel OAFavoritesMapLayerProvider::getMinZoom() const

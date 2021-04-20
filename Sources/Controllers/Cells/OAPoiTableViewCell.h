@@ -40,7 +40,7 @@
 @property (nonatomic) NSInteger currentCategoryIndex;
 
 @property (nonatomic, weak) id<OAPoiTableViewCellDelegate> delegate;
-@property (nonatomic) OACollectionViewCellState *state;
+@property (weak, nonatomic) OACollectionViewCellState *state;
 
 - (void) updateContentOffset;
 

@@ -66,6 +66,7 @@
 #define kPoiCellIndex 1
 #define kFullHeaderHeight 100
 #define kCompressedHeaderHeight 62
+#define kInitialisationValue -1
 
 @interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
@@ -214,13 +215,13 @@
     _ininialGroupName = self.groupTitle;
     _editingTextFieldKey = @"";
     
-    _selectCategorySectionIndex = -1;
-    _selectCategoryLabelRowIndex = -1;
-    _selectCategoryCardsRowIndex = -1;
-    _appearenceSectionIndex = -1;
-    _poiIconRowIndex = -1;
-    _colorRowIndex = -1;
-    _shapeRowIndex = -1;
+    _selectCategorySectionIndex = kInitialisationValue;
+    _selectCategoryLabelRowIndex = kInitialisationValue;
+    _selectCategoryCardsRowIndex = kInitialisationValue;
+    _appearenceSectionIndex = kInitialisationValue;
+    _poiIconRowIndex = kInitialisationValue;
+    _colorRowIndex = kInitialisationValue;
+    _shapeRowIndex = kInitialisationValue;
     _poiCellState = [[OACollectionViewCellState alloc] init];
     
     [self setupGroups];
@@ -276,7 +277,7 @@
         if (icons)
         {
             int index = (int)[icons indexOfObject:loadedPoiIconName];
-            if (index != -1)
+            if (index != kInitialisationValue)
             {
                 _selectedIconName = loadedPoiIconName;
                 _selectedIconCategoryName = categoryName;
@@ -314,7 +315,7 @@
     _backgroundIcons = [NSArray arrayWithArray:tempBackgroundIcons];
     
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getBackgroundIcon]];
-    if (_selectedBackgroundIndex == -1)
+    if (_selectedBackgroundIndex == kInitialisationValue)
         _selectedBackgroundIndex = 0;
 }
 
@@ -372,9 +373,7 @@
         @"isEditable" : @YES,
         @"key" : kAddressKey
     }];
-
     [data addObject:[NSArray arrayWithArray:section]];
-
     
     section = [NSMutableArray new];
     [section addObject:@{
@@ -401,7 +400,6 @@
     [data addObject:[NSArray arrayWithArray:section]];
     _selectCategorySectionIndex = data.count - 1;
     
-    
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"map_settings_appearance"),
@@ -415,7 +413,7 @@
         @"poiData" : _poiIcons,
         @"key" : kIconsKey
     }];
-    _poiIconRowIndex = section.count -1;
+    _poiIconRowIndex = section.count - 1;
     
     [section addObject:@{
         @"type" : kCellTypeColorCollection,
@@ -423,7 +421,7 @@
         @"value" : _selectedColor.name,
         @"index" : [NSNumber numberWithInteger:_selectedColorIndex],
     }];
-    _colorRowIndex = section.count -1;
+    _colorRowIndex = section.count - 1;
     
     [section addObject:@{
         @"type" : kCellTypeIconCollection,
@@ -434,11 +432,10 @@
         @"contourIcons" : _backgroundContourIconNames,
         @"key" : kBackgroundsKey
     }];
-    _shapeRowIndex = section.count -1;
+    _shapeRowIndex = section.count - 1;
     
     [data addObject:[NSArray arrayWithArray:section]];
     _appearenceSectionIndex = data.count - 1;
-    
     
     section = [NSMutableArray new];
     [section addObject:@{

@@ -7,15 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface OACollectionViewCellState : NSObject
-
-@property (nonatomic) CGPoint contenOffset;
-
-+ (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels;
-
-@end
-
+#import "OACollectionViewCellState.h"
 
 @protocol OAPoiTableViewCellDelegate <NSObject>
 
@@ -38,10 +30,12 @@
 @property (nonatomic) NSArray *categoryDataArray;
 @property (nonatomic) NSString *currentCategory;
 @property (nonatomic) NSInteger currentCategoryIndex;
+@property (nonatomic) NSString *cellTag;
 
 @property (nonatomic, weak) id<OAPoiTableViewCellDelegate> delegate;
 @property (weak, nonatomic) OACollectionViewCellState *state;
 
 - (void) updateContentOffset;
+- (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels;
 
 @end

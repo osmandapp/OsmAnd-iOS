@@ -29,6 +29,7 @@
 #import "OATargetInfoViewController.h"
 #import "OATargetPointsHelper.h"
 #import "OATableViewCustomHeaderView.h"
+#import "OACollectionViewCellState.h"
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
 
@@ -66,7 +67,6 @@
 #define kPoiCellIndex 1
 #define kFullHeaderHeight 100
 #define kCompressedHeaderHeight 62
-#define kInitialisationValue -1
 
 @interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
@@ -108,8 +108,7 @@
     NSInteger _colorRowIndex;
     NSInteger _shapeRowIndex;
     
-    OACollectionViewCellState *_poiCellState;
-    
+    OACollectionViewCellState *_scrollCellsState;
     NSString *_renamedPointAlertMessage;
 }
 
@@ -215,14 +214,14 @@
     _ininialGroupName = self.groupTitle;
     _editingTextFieldKey = @"";
     
-    _selectCategorySectionIndex = kInitialisationValue;
-    _selectCategoryLabelRowIndex = kInitialisationValue;
-    _selectCategoryCardsRowIndex = kInitialisationValue;
-    _appearenceSectionIndex = kInitialisationValue;
-    _poiIconRowIndex = kInitialisationValue;
-    _colorRowIndex = kInitialisationValue;
-    _shapeRowIndex = kInitialisationValue;
-    _poiCellState = [[OACollectionViewCellState alloc] init];
+    _selectCategorySectionIndex = -1;
+    _selectCategoryLabelRowIndex = -1;
+    _selectCategoryCardsRowIndex = -1;
+    _appearenceSectionIndex = -1;
+    _poiIconRowIndex = -1;
+    _colorRowIndex = -1;
+    _shapeRowIndex = -1;
+    _scrollCellsState = [[OACollectionViewCellState alloc] init];
     
     [self setupGroups];
     [self setupColors];
@@ -277,7 +276,7 @@
         if (icons)
         {
             int index = (int)[icons indexOfObject:loadedPoiIconName];
-            if (index != kInitialisationValue)
+            if (index != -1)
             {
                 _selectedIconName = loadedPoiIconName;
                 _selectedIconCategoryName = categoryName;
@@ -297,7 +296,6 @@
     }
     _poiCategories = [NSArray arrayWithArray:categoriesData];
     _selectedCategoryIndex = [categories indexOfObject:_selectedIconCategoryName];
-    _poiCellState.contenOffset = [OACollectionViewCellState calculateShowingOffset:_selectedCategoryIndex labels:categories];
     
     if (!_selectedIconName || _selectedIconName.length == 0)
         _selectedIconName = @"special_star";
@@ -315,7 +313,7 @@
     _backgroundIcons = [NSArray arrayWithArray:tempBackgroundIcons];
     
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getBackgroundIcon]];
-    if (_selectedBackgroundIndex == kInitialisationValue)
+    if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;
 }
 
@@ -821,7 +819,6 @@
             cell.categoriesCollectionView.tag = kCategoryCellIndex;
             cell.currentCategory = item[@"selectedCategoryName"];
             cell.categoryDataArray = item[@"categotyData"];
-            cell.state = _poiCellState;
             cell.collectionView.tag = kPoiCellIndex;
             cell.poiData = item[@"poiData"];
             cell.titleLabel.text = item[@"title"];
@@ -928,10 +925,30 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
  {
      NSDictionary *item = _data[indexPath.section][indexPath.row];
-     if ([cell isKindOfClass:OAFolderCardsCell.class])
-         [((OAFolderCardsCell *)cell) scrollToItemIfNeeded:(int)[item[@"selectedValue"] intValue]];
-     else if ([cell isKindOfClass:OAPoiTableViewCell.class])
-         [((OAPoiTableViewCell *)cell) updateContentOffset];
+     NSString *type = item[@"type"];
+     if ([type isEqualToString:kFolderCardsCell])
+     {
+         OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
+         if (!_scrollCellsState.values[kFolderCardsCell])
+         {
+             _scrollCellsState.values[kFolderCardsCell] = [NSValue valueWithCGPoint:[folderCell calculateOffset:(NSInteger)[item[@"selectedValue"] integerValue]]];
+         }
+         folderCell.cellTag = kFolderCardsCell;
+         folderCell.state = _scrollCellsState;
+         [folderCell updateContentOffset];
+     }
+     else if ([type isEqualToString:kCellTypePoiCollection])
+     {
+         OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
+         if (!_scrollCellsState.values[kCellTypePoiCollection])
+         {
+             NSArray<NSString *> *categories = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
+             _scrollCellsState.values[kCellTypePoiCollection] = [NSValue valueWithCGPoint:[poiCell calculateShowingOffset:_selectedCategoryIndex labels:categories]];
+         }
+         poiCell.cellTag = kCellTypePoiCollection;
+         poiCell.state = _scrollCellsState;
+         [poiCell updateContentOffset];
+     }
  }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

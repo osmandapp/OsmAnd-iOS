@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OACollectionViewCellState.h"
 
 @protocol OAFoldersCellDelegate <NSObject>
 
@@ -21,8 +22,11 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @property (nonatomic) id<OAFoldersCellDelegate> delegate;
+@property (weak, nonatomic) OACollectionViewCellState *state;
+@property (nonatomic) NSString *cellTag;
 
 - (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(int)index;
-
+- (CGPoint) calculateShowingOffset:(NSInteger)index;
+- (void) updateContentOffset;
 
 @end

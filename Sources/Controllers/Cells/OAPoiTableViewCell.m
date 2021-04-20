@@ -24,48 +24,6 @@
 #define kCellHeightWithoutIcons 116
 #define kCategoriesCellsSpacing 12
 
-@implementation OACollectionViewCellState
-
-+ (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels
-{
-    CGPoint selectedOffset = [self.class calculateOffset:index labels:labels];
-    CGPoint fullLength = [self.class calculateOffset:labels.count labels:labels];
-    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
-    if (selectedOffset.x > maxOffset)
-        selectedOffset.x = maxOffset;
-    if ([OAUtilities getLeftMargin] > 0)
-        selectedOffset.x += [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
-
-    return selectedOffset;
-}
-
-+ (CGPoint) calculateOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels
-{
-    CGFloat offset = 0;
-    for (NSInteger i = 0; i < index; i++)
-    {
-        offset += [self.class calculateCellWidth:labels[i] iconName:nil];
-        offset += kCategoriesCellsSpacing;
-    }
-    return CGPointMake(offset, 0);
-}
-
-+ (CGFloat) calculateCellWidth:(NSString *)lablel iconName:(NSString *)iconName
-{
-    CGSize labelSize = [OAUtilities calculateTextBounds:lablel width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
-    CGFloat labelWidth = labelSize.width;
-    if (iconName && iconName.length > 0)
-        labelWidth += kImageWidth;
-    else if (labelWidth < kLabelMinimumWidth)
-        labelWidth = kLabelMinimumWidth;
-    
-    labelWidth += kLabelOffsetsWidth;
-    return labelWidth;
-}
-
-@end
-
-
 @implementation OAPoiTableViewCell
 {
     OACollectionViewCellState *state;
@@ -108,7 +66,53 @@
 
 - (void) updateContentOffset
 {
-    self.categoriesCollectionView.contentOffset = _state.contenOffset;
+    CGPoint offset = _state.values[_cellTag].CGPointValue;
+    if ([OAUtilities getLeftMargin] > 0)
+        offset.x += [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
+    self.categoriesCollectionView.contentOffset = offset;
+}
+
+- (void) saveOffset
+{
+    CGPoint offset = self.categoriesCollectionView.contentOffset;
+    if ([OAUtilities getLeftMargin] > 0)
+        offset.x -= [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
+    _state.values[_cellTag] = [NSValue valueWithCGPoint:offset];
+}
+
+- (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels
+{
+    CGPoint selectedOffset = [self calculateOffset:index labels:labels];
+    CGPoint fullLength = [self calculateOffset:labels.count labels:labels];
+    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
+    if (selectedOffset.x > maxOffset)
+        selectedOffset.x = maxOffset;
+
+    return selectedOffset;
+}
+
+- (CGPoint) calculateOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels
+{
+    CGFloat offset = 0;
+    for (NSInteger i = 0; i < index; i++)
+    {
+        offset += [self calculateCellWidth:labels[i] iconName:nil];
+        offset += kCategoriesCellsSpacing;
+    }
+    return CGPointMake(offset, 0);
+}
+
+- (CGFloat) calculateCellWidth:(NSString *)lablel iconName:(NSString *)iconName
+{
+    CGSize labelSize = [OAUtilities calculateTextBounds:lablel width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
+    CGFloat labelWidth = labelSize.width;
+    if (iconName && iconName.length > 0)
+        labelWidth += kImageWidth;
+    else if (labelWidth < kLabelMinimumWidth)
+        labelWidth = kLabelMinimumWidth;
+    
+    labelWidth += kLabelOffsetsWidth;
+    return labelWidth;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -209,7 +213,7 @@
     if (collectionView.tag == kCategoryCellIndex)
     {
         NSDictionary *item = _categoryDataArray[indexPath.row];
-        CGFloat labelWidth = [OACollectionViewCellState calculateCellWidth:item[@"title"] iconName:item[@"img"]];
+        CGFloat labelWidth = [self calculateCellWidth:item[@"title"] iconName:item[@"img"]];
         return CGSizeMake(labelWidth, kCellHeight);
     }
     else
@@ -220,7 +224,7 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    _state.contenOffset = self.categoriesCollectionView.contentOffset;
+    [self saveOffset];
     if (collectionView.tag == kCategoryCellIndex)
     {
         NSDictionary *item = _categoryDataArray[indexPath.row];
@@ -243,7 +247,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    _state.contenOffset = self.categoriesCollectionView.contentOffset;
+    [self saveOffset];
 }
 
 @end

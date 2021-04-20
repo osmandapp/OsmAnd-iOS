@@ -13,6 +13,9 @@
 #import "Localization.h"
 
 #define kDestCell @"OAFolderCardCollectionViewCell"
+#define kMargin 16
+#define kCellWidth 120
+#define kCellHeight 69
 
 @interface OAFolderCardsCell() <UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -33,8 +36,8 @@
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.minimumInteritemSpacing = 0;
-    layout.minimumLineSpacing = 16.;
-    layout.sectionInset = UIEdgeInsetsMake(0, 16, 16, 16);
+    layout.minimumLineSpacing = kMargin;
+    layout.sectionInset = UIEdgeInsetsMake(0, kMargin, kMargin, kMargin);
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
@@ -44,6 +47,7 @@
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
 {
     _data = [NSMutableArray new];
+    _selectedItemIndex = index;
     for (NSInteger i = 0; i < values.count; i++)
     {
         NSString *sizeString;
@@ -67,18 +71,30 @@
         @"key" : @"work"}];
 }
 
-- (void) scrollToItemIfNeeded:(NSInteger)selectedIndex
+- (void) updateContentOffset
 {
-    if (_selectedItemIndex != selectedIndex)
-    {
-        _selectedItemIndex = selectedIndex;
-        [self.collectionView reloadData];
-        
-        [self.collectionView layoutIfNeeded];
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]
-                                    atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                            animated:YES];
-    }
+    CGPoint offset = _state.values[_cellTag].CGPointValue;
+    if ([OAUtilities getLeftMargin] > 0)
+        offset.x -= [OAUtilities getLeftMargin] - kMargin;
+    self.collectionView.contentOffset = offset;
+}
+
+- (void) saveOffset
+{
+    CGPoint offset = self.collectionView.contentOffset;
+    if ([OAUtilities getLeftMargin] > 0)
+        offset.x += [OAUtilities getLeftMargin] - kMargin;
+    _state.values[_cellTag] = [NSValue valueWithCGPoint:offset];
+}
+
+- (CGPoint) calculateOffset:(NSInteger)index;
+{
+    CGFloat selectedOffset = index * (kCellWidth + kMargin);
+    CGFloat fullLength = _data.count * (kCellWidth + kMargin);
+    CGFloat maxOffset = fullLength - DeviceScreenWidth + kMargin * 3;
+    if (selectedOffset > maxOffset)
+        selectedOffset = maxOffset;
+    return CGPointMake(selectedOffset, 0);
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -95,7 +111,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(120,69);
+    return CGSizeMake(kCellWidth,kCellHeight);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -156,6 +172,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self saveOffset];
     if (indexPath.row == _data.count - 1)
     {
         if (_delegate)
@@ -172,6 +189,11 @@
     }
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self saveOffset];
 }
 
 @end

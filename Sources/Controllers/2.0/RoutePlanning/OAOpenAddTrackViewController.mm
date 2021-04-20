@@ -29,6 +29,7 @@
 #import "OAMapActions.h"
 #import "OASelectedGPXHelper.h"
 #import "OAFoldersCell.h"
+#import "OACollectionViewCellState.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
 #define kDividerCell @"OADividerCell"
@@ -58,6 +59,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOAPlanningTrackScreenType _screenType;
     int _selectedFolderIndex;
     NSArray<NSString *> *_allFolders;
+    OACollectionViewCellState *_scrollCellsState;
 }
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
@@ -76,6 +78,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) commonInit
 {
     _selectedFolderIndex = kAllFoldersIndex;
+    _scrollCellsState = [[OACollectionViewCellState alloc] init];
     [self updateAllFoldersList];
 }
 
@@ -354,6 +357,23 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
     return nil;
 }
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+     NSDictionary *item = _data[indexPath.section][indexPath.row];
+     NSString *type = item[@"type"];
+     if ([type isEqualToString:kFoldersCell])
+     {
+         OAFoldersCell *folderCell = (OAFoldersCell *)cell;
+         if (!_scrollCellsState.values[kFoldersCell])
+         {
+             _scrollCellsState.values[kFoldersCell] = [NSValue valueWithCGPoint:[folderCell calculateShowingOffset:(NSInteger)[item[@"selectedValue"] integerValue]]];
+         }
+         folderCell.cellTag = kFoldersCell;
+         folderCell.state = _scrollCellsState;
+         [folderCell updateContentOffset];
+     }
+ }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

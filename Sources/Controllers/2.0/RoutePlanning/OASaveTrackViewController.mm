@@ -20,6 +20,7 @@
 #import "OAFolderCardsCell.h"
 #import "OASelectTrackFolderViewController.h"
 #import "OAAddTrackFolderViewController.h"
+#import "OACollectionViewCellState.h"
 
 #define kTextInputCell @"OATextViewResizingCell"
 #define kRouteGroupsCell @""
@@ -49,6 +50,7 @@
     
     NSString *_inputFieldError;
     NSInteger _selectedFolderIndex;
+    OACollectionViewCellState *_scrollCellsState;
 }
 
 - (instancetype) initWithFileName:(NSString *)fileName filePath:(NSString *)filePath showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
@@ -120,6 +122,7 @@
     [self updateAllFoldersList];
     _selectedFolderName = [self getDisplayingFolderName:_filePath];
     _selectedFolderIndex = (int)[_allFolders indexOfObject:_selectedFolderName];
+    _scrollCellsState = [[OACollectionViewCellState alloc] init];
     [self generateData];
 }
 
@@ -339,8 +342,19 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([cell isKindOfClass:OAFolderCardsCell.class])
-        [((OAFolderCardsCell *)cell) scrollToItemIfNeeded:_selectedFolderIndex];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:kFolderCardsCell])
+    {
+        OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
+        if (!_scrollCellsState.values[kFolderCardsCell])
+        {
+            _scrollCellsState.values[kFolderCardsCell] = [NSValue valueWithCGPoint:[folderCell calculateOffset:_selectedFolderIndex]];
+        }
+        folderCell.cellTag = kFolderCardsCell;
+        folderCell.state = _scrollCellsState;
+        [folderCell updateContentOffset];
+    }
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section

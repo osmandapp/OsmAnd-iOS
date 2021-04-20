@@ -248,7 +248,8 @@
             cell.descriptionView.hidden = NO;
             cell.switchView.on = YES;
             NSSet<NSString *> *subtypes = [_filter getAcceptedSubtypes:item];
-            if (subtypes == [OAPOIBaseType nullSet])
+            NSMutableSet<NSString *> *poiTypes = [[_filter getAcceptedTypes] objectForKey:item];
+            if (subtypes == [OAPOIBaseType nullSet] || item.poiTypes.count == poiTypes.count)
             {
                 cell.descriptionView.text = OALocalizedString(@"shared_string_all");
             }

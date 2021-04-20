@@ -82,47 +82,81 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getBitmapByFavorite(const
 
 std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav) const
 {
-    QString iconName = fav->getIcon();
-    QString backgroundIconName = backgroundImageNameByType(fav->getBackground());
     std::shared_ptr<SkBitmap> result;
-    auto backgroundIcon = std::make_shared<SkBitmap>();
-    auto icon = std::make_shared<SkBitmap>();
     
-    UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
-    UIImage *origImage = [UIImage imageNamed:backgroundIconName.toNSString()];
-    if (!origImage)
-        origImage = [UIImage imageNamed:@"bg_point_circle"];
-    
-    UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * 0.8, origImage.size.height * 0.8)];
-    UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:color];
-    bool res = SkCreateBitmapFromCGImage(backgroundIcon.get(), coloredImage.CGImage);
+    // shadow icon
+    auto shadowIcon = std::make_shared<SkBitmap>();
+    NSString *shadowIconName = shadowImageNameByType(fav->getBackground()).toNSString();
+    UIImage *img = getIcon(shadowIconName, @"ic_bg_point_circle_bottom");
+    bool res = SkCreateBitmapFromCGImage(shadowIcon.get(), img.CGImage);
     if (!res)
         return result;
     
-    origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName.toNSString() stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
+    // color filled background icon
+    auto backgroundIcon = std::make_shared<SkBitmap>();
+    NSString *backgroundIconName = backgroundImageNameByType(fav->getBackground()).toNSString();
+    UIColor *color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
+    img = getIcon(backgroundIconName, @"ic_bg_point_circle_center");
+    img = [OAUtilities tintImageWithColor:img color:color];
+    res = SkCreateBitmapFromCGImage(backgroundIcon.get(), img.CGImage);
+    if (!res)
+        return result;
+    
+    // poi image icon
+    auto icon = std::make_shared<SkBitmap>();
+    QString iconName = fav->getIcon();
+    UIImage *origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName.toNSString() stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
     if (!origImage)
         origImage = [UIImage imageNamed:[OAUtilities drawablePath:@"mm_special_star"]];
     
     // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
-    CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.6 : 0.8;
-    resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * scale, origImage.size.height * scale)];
-    coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
+    CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.5 : 0.75;
+    UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * scale, origImage.size.height * scale)];
+    UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
     
     res = SkCreateBitmapFromCGImage(icon.get(), coloredImage.CGImage);
     if (!res)
         return result;
     
-    if (backgroundIcon && icon)
+    // highlight icon
+    auto highlightIcon = std::make_shared<SkBitmap>();
+    NSString *highlightIconName = highlightImageNameByType(fav->getBackground()).toNSString();
+    img = getIcon(highlightIconName, @"ic_bg_point_circle_top");
+    res = SkCreateBitmapFromCGImage(highlightIcon.get(), img.CGImage);
+    if (!res)
+        return result;
+    
+    if (shadowIcon && backgroundIcon && icon && highlightIcon)
     {
-        QList<std::shared_ptr<const SkBitmap>> toMerge({backgroundIcon, icon});
+        QList<std::shared_ptr<const SkBitmap>> toMerge({shadowIcon, backgroundIcon, icon, highlightIcon});
         result = OsmAnd::SkiaUtilities::mergeBitmaps(toMerge);
     }
     return result;
 }
 
+UIImage *OAFavoritesMapLayerProvider::getIcon(NSString *iconName, NSString *defaultIconName) const
+{
+    UIImage *origImage = [UIImage imageNamed:iconName];
+    if (!origImage)
+        origImage = [UIImage imageNamed:defaultIconName];
+    
+    UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width, origImage.size.height)];
+    return resizedImage;
+}
+
+QString OAFavoritesMapLayerProvider::shadowImageNameByType(const QString& type) const
+{
+    return QStringLiteral("ic_bg_point_") + type + QStringLiteral("_bottom");
+}
+
 QString OAFavoritesMapLayerProvider::backgroundImageNameByType(const QString& type) const
 {
-    return QStringLiteral("bg_point_") + type;
+    return QStringLiteral("ic_bg_point_") + type + QStringLiteral("_center");
+}
+
+QString OAFavoritesMapLayerProvider::highlightImageNameByType(const QString& type) const
+{
+    return QStringLiteral("ic_bg_point_") + type + QStringLiteral("_top");
 }
 
 OsmAnd::ZoomLevel OAFavoritesMapLayerProvider::getMinZoom() const

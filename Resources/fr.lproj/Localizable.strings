@@ -1307,7 +1307,7 @@
 "rendering_attr_surface_fine_gravel_name" = "Gravier fin";
 "rendering_attr_hmRendered_name" = "Afficher plus de détail";
 "rendering_value_medium_name" = "Moyen";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher le réseau de nœuds de pistes cyclables";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher les itinéraires cyclables du réseau de nœuds";
 "rendering_attr_highway_class_track_name" = "Piste";
 "routing_attr_avoid_ferries_description" = "Éviter les traversées en ferries";
 "routing_attr_weight_description" = "Indiquez le poids du véhicule à respecter sur les routes.";

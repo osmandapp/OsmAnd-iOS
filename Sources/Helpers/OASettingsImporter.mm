@@ -209,47 +209,47 @@
         return;
     }
 
+    NSMutableDictionary<NSString *, NSMutableArray<OASettingsItem *> *> *pluginItems = [NSMutableDictionary new];
     for (NSDictionary* itemJSON in itemsJson)
-//    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
-    
     {
         //TODO: Remove after complete implementation of the classes
-        if (![itemJSON[@"type"] isEqualToString:@"POI_UI_FILTERS"] && ![itemJSON[@"type"] isEqualToString:@"PLUGIN"] && ![itemJSON[@"type"] isEqualToString:@"DATA"])
+        if (![itemJSON[@"type"] isEqualToString:@"POI_UI_FILTERS"] && ![itemJSON[@"type"] isEqualToString:@"DATA"])
         {
             OASettingsItem *item = [self createItem:itemJSON];
             if (item)
                 [_items addObject:item];
+
+            NSString *pluginId = item.pluginId;
+            if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
+            {
+                NSMutableArray<OASettingsItem *> *items = pluginItems[pluginId];
+                if (items != nil)
+                {
+                    [items addObject:item];
+                }
+                else {
+                    items = [NSMutableArray new];
+                    [items addObject:item];
+                    pluginItems[pluginId] = items;
+                }
+            }
         }
-        
-        // TODO: implement custom plugins
-//        NSString *pluginId = item.pluginId;
-//        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
-//        {
-//            List<SettingsItem> items = pluginItems.get(pluginId);
-//            if (items != null) {
-//                items.add(item);
-//            } else {
-//                items = new ArrayList<>();
-//                items.add(item);
-//                pluginItems.put(pluginId, items);
-//            }
-//        }
     }
     if ([_items count] == 0)
     {
         NSLog(@"No items");
         return;
     }
-    //    for (OASettingsItem *item in self.items)
-    //    {
-    //        if (item instanceof PluginSettingsItem) {
-    //            PluginSettingsItem pluginSettingsItem = ((PluginSettingsItem) item);
-    //            List<SettingsItem> pluginDependentItems = pluginItems.get(pluginSettingsItem.getName());
-    //            if (!Algorithms.isEmpty(pluginDependentItems)) {
-    //                pluginSettingsItem.getPluginDependentItems().addAll(pluginDependentItems);
-    //            }
-    //        }
-    //    }
+    for (OASettingsItem *item in _items)
+    {
+        if ([item isKindOfClass:OAPluginSettingsItem.class])
+        {
+            OAPluginSettingsItem *pluginSettingsItem = (OAPluginSettingsItem *) item;
+            NSMutableArray<OASettingsItem *> *pluginDependentItems = pluginItems[pluginSettingsItem.name];
+            if (pluginDependentItems.count > 0)
+                pluginSettingsItem.pluginDependentItems = [pluginSettingsItem.pluginDependentItems arrayByAddingObjectsFromArray:pluginDependentItems];
+        }
+    }
 }
 
 - (NSArray<OASettingsItem *> *) getItems
@@ -405,11 +405,18 @@
 
 - (void) execute
 {
+    [self executeWithCompletionBlock:nil];
+}
+
+- (void) executeWithCompletionBlock:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
+{
     [self onPreExecute];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray<OASettingsItem *> *items = [self doInBackground];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self onPostExecute:items];
+            if (onComplete)
+                onComplete(YES, _items);
         });
     });
 }

@@ -10,4 +10,19 @@
 
 @implementation OAJsonHelper
 
++ (NSString *) getLocalizedResFromMap:(NSDictionary<NSString *, NSString *> *)localizedMap defValue:(NSString *)defValule
+{
+    if (localizedMap.count > 0)
+    {
+        NSString *currLang = NSLocale.currentLocale.languageCode;
+        NSString *name = localizedMap[currLang];
+        if (!name || name.length == 0)
+            name = localizedMap[@""];
+        
+        if (name && name.length > 0)
+            return name;
+    }
+    return defValule;
+}
+
 @end

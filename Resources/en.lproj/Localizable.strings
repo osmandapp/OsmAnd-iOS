@@ -791,6 +791,7 @@
 "nav_type_hint" = "Navigation type: %@";
 "shared_string_nothing_selected" = "Nothing selected";
 "export_failed" = "Could not export profile";
+"custom_osmand_plugin_name" = "Custom OsmAnd plugin";
 
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";

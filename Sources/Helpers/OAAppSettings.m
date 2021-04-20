@@ -221,6 +221,8 @@
 #define poiFiltersOrderKey @"poi_filters_order"
 #define inactivePoiFiltersKey @"inactive_poi_filters"
 
+#define customPluginsJsonKey @"customPluginsJson"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -2291,7 +2293,10 @@
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         [_registeredPreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
         
-        // riirection Appearance
+        // Custom plugins
+        _customPluginsJson = [[NSUserDefaults standardUserDefaults] objectForKey:customPluginsJsonKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:customPluginsJsonKey] : @"";
+        
+        // Direction Appearance
         _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
         [_registeredPreferences setObject:_activeMarkers forKey:@"displayed_markers_widgets_count"];
         _distanceIndicationVisibility = [OAProfileBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
@@ -3037,6 +3042,12 @@
 {
     _mapillaryFilterPano = mapillaryFilterPano;
     [[NSUserDefaults standardUserDefaults] setBool:_mapillaryFilterPano forKey:mapillaryFilterPanoKey];
+}
+
+- (void)setCustomPluginsJson:(NSString *)customPluginsJson
+{
+    _customPluginsJson = customPluginsJson;
+    [[NSUserDefaults standardUserDefaults] setObject:_customPluginsJson forKey:customPluginsJsonKey];
 }
 
 - (void) setQuickActionsList:(NSString *)quickActionsList

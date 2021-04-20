@@ -10,4 +10,6 @@
 
 @interface OAPluginSettingsItem : OASettingsItem
 
+@property (nonatomic) NSArray<OASettingsItem *> *pluginDependentItems;
+
 @end

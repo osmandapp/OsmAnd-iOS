@@ -16,6 +16,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAQuickActionType.h"
 #import "OAQuickActionRegistry.h"
+#import "OACustomPlugin.h"
 
 #import "OAMonitoringPlugin.h"
 #import "OAParkingPositionPlugin.h"
@@ -59,7 +60,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
 {
     NSString *productIdentifier = key;
-    if ([productIdentifier isEqualToString:[self.class getId]])
+    if ([productIdentifier isEqualToString:[self getId]])
     {
         BOOL active = [value boolValue];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -83,14 +84,14 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return [self getMapPanelViewController].hudViewController.mapInfoController;
 }
 
-+ (NSString *) getId
+- (NSString *) getId
 {
     return nil;
 }
 
 - (void) processNames
 {
-    NSString *pluginId = [self.class getId];
+    NSString *pluginId = [self getId];
     NSString *postfix = [[pluginId componentsSeparatedByString:@"."] lastObject];
     _titleId = [@"product_title_" stringByAppendingString:postfix];
     _shortDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
@@ -112,19 +113,29 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return OALocalizedString(_titleId);
 }
 
+- (UIImage *) getLogoResource
+{
+    return [UIImage imageNamed:self.getLogoResourceId];
+}
+
 - (NSString *) getLogoResourceId
 {
-    NSString *identifier = [self.class getId];
+    NSString *identifier = [self getId];
     OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
     if (product)
         return [product productIconName];
     else
-        return nil;
+        return @"ic_custom_puzzle_piece";
+}
+
+- (UIImage *) getAssetResourceImage
+{
+    return [UIImage imageNamed:self.getAssetResourceName];
 }
 
 - (NSString *) getAssetResourceName
 {
-    NSString *identifier = [self.class getId];
+    NSString *identifier = [self getId];
     OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
     if (product)
         return [product productScreenshotName];
@@ -167,6 +178,15 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 - (void) disable
 {
+    for (OAApplicationMode *appMode in self.getAddedAppModes)
+    {
+        [OAApplicationMode changeProfileAvailability:appMode isSelected:NO];
+    }
+}
+
+- (NSArray<OAApplicationMode *> *) getAddedAppModes
+{
+    return @[];
 }
 
 - (NSString *) getHelpFileName
@@ -206,10 +226,9 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 + (void) initPlugins
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSSet<NSString *> *enabledPlugins = [settings getEnabledPlugins];
+    NSMutableSet<NSString *> *enabledPlugins = [NSMutableSet setWithSet:[settings getEnabledPlugins]];
     
-    [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
-    enabledPlugins = [enabledPlugins setByAddingObject:[OAMapillaryPlugin getId]];
+    [self.class enablePluginByDefault:enabledPlugins plugin:[[OAMapillaryPlugin alloc] init]];
     
     /*
     allPlugins.add(new OsmandRasterMapsPlugin(app));
@@ -230,7 +249,34 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     
+    [self.class loadCustomPlugins];
     [self activatePlugins:enabledPlugins];
+}
+
++ (void) loadCustomPlugins
+{
+    NSString *customPluginsJson = OAAppSettings.sharedManager.customPluginsJson;
+    if (customPluginsJson.length > 0)
+    {
+        NSData* data = [customPluginsJson dataUsingEncoding:NSUTF8StringEncoding];
+        NSArray *plugins = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        for (NSDictionary *pluginJson in plugins)
+        {
+            OACustomPlugin *plugin = [[OACustomPlugin alloc] initWithJson:pluginJson];
+            if (plugin)
+                [allPlugins addObject:plugin];
+        }
+    }
+}
+
++ (void) enablePluginByDefault:(NSMutableSet<NSString *> *)enabledPlugins plugin:(OAPlugin *)plugin
+{
+    [allPlugins addObject:plugin];
+    if (![enabledPlugins containsObject:plugin.getId] && ![OAAppSettings.sharedManager.getPlugins containsObject:[@"-" stringByAppendingString:plugin.getId]])
+    {
+        [enabledPlugins addObject:plugin.getId];
+        [OAAppSettings.sharedManager enablePlugin:plugin.getId enable:YES];
+    }
 }
 
 + (void) activatePlugins:(NSSet<NSString *> *)enabledPlugins

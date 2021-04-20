@@ -38,6 +38,7 @@
 - (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
 - (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems;
 - (void) execute;
+- (void) executeWithCompletionBlock:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete;
 - (NSArray<OASettingsItem *> *) getItems;
 - (NSString *) getFile;
 - (EOAImportType) getImportType;

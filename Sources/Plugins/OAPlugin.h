@@ -17,11 +17,13 @@
 - (OAMapViewController *) getMapViewController;
 - (OAMapInfoController *) getMapInfoController;
 
-+ (NSString *) getId;
+- (NSString *) getId;
 - (NSString *) getDescription;
 - (NSString *) getName;
 - (NSString *) getLogoResourceId;
 - (NSString *) getAssetResourceName;
+- (UIImage *) getAssetResourceImage;
+- (UIImage *) getLogoResource;
 
 - (UIViewController *) getSettingsController;
 - (NSString *) getVersion;

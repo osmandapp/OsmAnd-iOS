@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAJsonHelper : NSObject
 
++ (NSString *) getLocalizedResFromMap:(NSDictionary<NSString *, NSString *> *)localizedMap defValue:(NSString * _Nullable)defValule;
+
 @end
 
 NS_ASSUME_NONNULL_END

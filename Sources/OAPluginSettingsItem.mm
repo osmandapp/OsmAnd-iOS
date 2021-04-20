@@ -12,7 +12,6 @@
 @implementation OAPluginSettingsItem
 {
     OAPlugin *_plugin;
-    NSArray<OASettingsItem *> *_pluginDependentItems;
 }
 
 @dynamic type, name, fileName;
@@ -35,6 +34,13 @@
 - (BOOL)exists
 {
     return [OAPlugin getPlugin:_plugin.class] != nil;
+}
+
+- (NSArray<OASettingsItem *> *)pluginDependentItems
+{
+    if (!_pluginDependentItems)
+        _pluginDependentItems = [NSArray new];
+    return _pluginDependentItems;
 }
 
 - (void)apply

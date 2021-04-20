@@ -100,14 +100,19 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self];
 }
 
-- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
+{
+    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:nil onComplete:onComplete];
+}
+
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
 {
     OAImportSettingsViewController* incomingURLViewController = [[OAImportSettingsViewController alloc] init];
     [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
     _importDataVC = incomingURLViewController;
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
     task.delegate = delegate;
-    [task execute];
+    [task executeWithCompletionBlock:onComplete];
 }
  
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems

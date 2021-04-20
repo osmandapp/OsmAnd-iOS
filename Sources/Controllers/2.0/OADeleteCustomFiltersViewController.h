@@ -1,5 +1,5 @@
 //
-//  OADeleteCustomFiltersTableViewController.h
+//  OADeleteCustomFiltersViewController.h
 //  OsmAnd
 //
 // Created by Skalii Dmitrii on 15.04.2021.
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface OADeleteCustomFiltersTableViewController : OACompoundViewController
+@interface OADeleteCustomFiltersViewController : OACompoundViewController
 
 @property(weak, nonatomic) id <OAPOIFiltersRemoveDelegate> delegate;
 

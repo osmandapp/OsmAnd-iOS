@@ -29,7 +29,6 @@
 #import "OACategoriesTableViewController.h"
 #import "OAHistoryTableViewController.h"
 #import "OACustomPOIViewController.h"
-#import "OACompoundViewController.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFilterViewController.h"
@@ -50,7 +49,7 @@
 #import "OASearchSettings.h"
 #import "OAQuickSearchTableController.h"
 #import "OASearchToolbarViewController.h"
-#import "OADeleteCustomFiltersTableViewController.h"
+#import "OADeleteCustomFiltersViewController.h"
 #import "QuadRect.h"
 
 #import "OARootViewController.h"
@@ -1835,9 +1834,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.navigationController pushViewController:customPOI animated:YES];
 }
 
-- (void)showRemoveFiltersView:(NSArray<OAPOIUIFilter *> *)filters
+- (void)showRemoveFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
-    OADeleteCustomFiltersTableViewController *removeFiltersView = [[OADeleteCustomFiltersTableViewController alloc] initWithFilters:filters];
+    OADeleteCustomFiltersViewController *removeFiltersView = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
     removeFiltersView.delegate = self;
     [self.navigationController pushViewController:removeFiltersView animated:YES];
 }

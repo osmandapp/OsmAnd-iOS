@@ -1742,6 +1742,9 @@
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
+"rearrange_categories" = "Rearrange categories";
+"visible_categories" = "Visible categories";
+"hidden_categories" = "Hidden categories";
 
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";

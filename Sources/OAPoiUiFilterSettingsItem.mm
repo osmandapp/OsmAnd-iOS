@@ -140,22 +140,22 @@
             jsonObject[kNAME_KEY] = filter.name;
             jsonObject[kFILTER_ID_KEY] = filter.filterId;
             NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
-            NSMutableDictionary<NSString *, NSArray *> *dictionary = [NSMutableDictionary dictionary];
+            NSMutableDictionary<NSString *, NSArray *> *acceptedTypesDictionary = [NSMutableDictionary dictionary];
             for(OAPOICategory *category in acceptedTypes)
             {
                 NSMutableSet<NSString *> *poiTypes = [acceptedTypes objectForKey:category];
                 if (poiTypes.count == 0)
                 {
-                    poiTypes = [[NSMutableSet<NSString *> alloc] init];
+                    poiTypes = [NSMutableSet<NSString *> new];
                     for(OAPOIType *poiType in category.poiTypes)
                     {
                         [poiTypes addObject:poiType.name];
                     }
                 }
-                dictionary[category.name] = poiTypes.allObjects;
+                acceptedTypesDictionary[category.name] = poiTypes.allObjects;
             }
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
-            NSString *acceptedTypesValue = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            NSData *acceptedTypesData = [NSJSONSerialization dataWithJSONObject:acceptedTypesDictionary options:0 error:nil];
+            NSString *acceptedTypesValue = [[NSString alloc] initWithData:acceptedTypesData encoding:NSUTF8StringEncoding];
             jsonObject[kACCEPTED_TYPES_KEY] = acceptedTypesValue;
             [jsonArray addObject:jsonObject];
         }

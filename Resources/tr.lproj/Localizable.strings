@@ -2066,3 +2066,8 @@
 "markers_history" = "İşaretleyiciler geçmişi";
 "coordinates" = "Koordinatlar";
 "map_widget_distance_by_tap" = "Dokunma mesafesi";
+"folder_already_exsists" = "Bu ada sahip klasör zaten var";
+"incorrect_symbols" = "Geçersiz karakterler girildi";
+"preparing_file" = "Dosya hazırlanıyor";
+"export_failed" = "Profil dışa aktarılamadı";
+"export_profile_select_descr" = "Dışa aktarılacak verileri seçin.";

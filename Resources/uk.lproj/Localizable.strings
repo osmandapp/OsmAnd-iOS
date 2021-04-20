@@ -2069,3 +2069,8 @@
 "selected_of" = "Вибрані — %d/%d";
 "search_history" = "Журнал пошуку";
 "markers_history" = "Історія позначок";
+"folder_already_exsists" = "Каталог з цією назвою вже існує";
+"incorrect_symbols" = "Уведено неприпустимі символи";
+"preparing_file" = "Підготування файлу";
+"export_failed" = "Не вдалося експортувати профіль";
+"export_profile_select_descr" = "Виберіть дані для експорту.";

@@ -603,7 +603,7 @@
 "shared_string_sound" = "Zvuk";
 "map_markers" = "Mapové značky";
 "select_gpx" = "Vybrať GPX…";
-"confirm_usage_speed_cameras" = "Vo viacerých krajinách (ako Nemecko, Francúzsko, Taliansko) je použitie varovaní pred rýchlostnými radarmi/kamerami zakázané zákonom. OsmAnd nepreberá žiadnu zodpovednosť ak porušíte zákon. Stračte \"áno\" len ak ste oprávnený použiť túto funkciu.";
+"confirm_usage_speed_cameras" = "Vo viacerých krajinách (ako Nemecko, Francúzsko, Taliansko) je použitie varovaní pred rýchlostnými radarmi/kamerami zakázané zákonom. OsmAnd nepreberá žiadnu zodpovednosť ak porušíte zákon. Stlačte \"áno\" len ak ste oprávnený použiť túto funkciu.";
 "show_traffic_warnings" = "Dopravné varovania";
 "show_pedestrian_warnings" = "Priechody pre chodcov";
 "show_cameras" = "Rýchlostné radary";
@@ -631,9 +631,9 @@
 "arrival_distance_factor_late" = "Neskoro";
 "arrival_distance_factor_at_last" = "V posledných metroch";
 "map_orientation_change_in_accordance_with_speed" = "Citlivosť zmeny orientácie mapy";
-"map_orientation_change_in_accordance_with_speed_descr" = "Zvoľte pod akou rýchlosťou sa orientácia mapy zmení zo \"v smere pohybu\" na \"podľa kompasu\"";
+"map_orientation_change_in_accordance_with_speed_descr" = "Zvoľte pod akou rýchlosťou sa orientácia mapy zmení zo \"V smere pohybu\" na \"Smer kompasu\"";
 "fast_route_mode" = "Najrýchlejšia trasa";
-"fast_route_mode_descr" = "Zapnite na výpočet najrýchlejšej trasy alebo vypnite pre ekonomickú trasu";
+"fast_route_mode_descr" = "Zapnite pre výpočet najrýchlejšej trasy alebo vypnite pre ekonomickú trasu";
 "avoid_in_routing_title" = "Vyhnúť sa…";
 "avoid_in_routing_descr" = "Obídenie spoplatnených ciest, nespevnených ciest, trajektov";
 "prefer_in_routing_title" = "Uprednostniť…";
@@ -711,7 +711,7 @@
 "map_widget_bearing" = "Relatívne smerovanie";
 "map_widget_transparent" = "Priehľadné nástroje";
 "shared_string_near" = "Blízko";
-"rotate_map_compass_opt" = "Podľa kompasu";
+"rotate_map_compass_opt" = "Smer kompasu";
 "rotate_map_bearing_opt" = "Podľa smeru pohybu";
 "rotate_map_none_opt" = "Neotáčať (sever je hore)";
 "driving_region_descr" = "Vyberte jazdnú oblasť: USA, Európa, Spojené kráľovstvo, Ázia a ostatné.";
@@ -1575,7 +1575,7 @@
 "default_speed_dialog_msg" = "Odhaduje čas na cestách neznámeho typu a obmedzuje rýchlosť na všetkých cestách (môže ovplyvniť trasu)";
 "width_limit_description" = "Zadajte šírku vášho vozidla, pretože na trase môžu byť obmedzenia pre široké vozidlá.";
 "height_limit_description" = "Zadajte výšku vášho vozidla, pretože na trase môžu byť obmedzenia pre vysoké vozidlá.";
-"export_profile" = "Exportovať profil";
+"export_profile" = "Exportovať";
 "profile_appearance" = "Vzhľad profilu";
 "selected_profile" = "Zvolený profil";
 "configure_profile" = "Nastaviť profil";
@@ -1729,3 +1729,5 @@
 "osmand_settings" = "Nastavenia OsmAnd";
 "street_level_imagery" = "Snímky z úrovne ulice";
 "map_during_navigation" = "Mapa počas navigácie";
+"markers_history" = "História značiek";
+"coordinates" = "Súradnice";

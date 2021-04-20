@@ -10,7 +10,7 @@
 "switch_start_finish" = "اعكس نقطة الانطلاق والوصول";
 "clear_all_intermediates" = "إزالة كافة النقاط الوسيطة";
 "shared_string_options" = "خيارات";
-"new_destination_point_dialog" = "لقد قمت بالفعل بتعيين وجهة";
+"new_destination_point_dialog" = "توجد وجهة سابقة تعمل حاليا";
 "replace_destination_point" = "استبدالها بهذه الوجهة";
 "shared_string_current" = "الحالي";
 "make_as_start_point" = "وضعها نقطة البداية";
@@ -53,7 +53,7 @@
 "settings_preset" = "الوضع الافتراضي";
 "settings_preset_descr" = "اختيار وضع افتراضي لعرض الخريطة: استعراض، سيارة، مشي .";
 "unit_of_length" = "وحدات الطول";
-"unit_of_length_descr" = "اختيار الوحدات: كم، ميل، ميل بحري.. إلخ.";
+"unit_of_length_descr" = "تغيير وحدات الطول.";
 "coords_format" = "نمط الإحداثيات";
 "coords_format_descr" = "نمط الإحداثيات الجغرافية.";
 "do_not_show_discount_desc" = "يمنع عرض خصومات التطبيق ورسائل الأحداث المحلية الخاصة.";
@@ -810,7 +810,7 @@
 "years_2_4" = "سنوات";
 "years_5" = "سنوات";
 "price_free" = "مجاناً";
-"get_discount_title" = "احصل على خصم بمقدار %d %@ at %d%% .";
+"get_discount_title" = "احصل على خصم بمقدار %d %@ عند %d%% .";
 "get_free_trial_title" = "إبدأ التجربة %d %@ .";
 "get_discount_short_descr" = "%@ إلى %d %@, ثم %@";
 "months_3" = "ثلاثة أشهر";
@@ -1812,7 +1812,7 @@
 "lenght_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
 "height_limit_description" = "أدل بارتفاع مركبتك ،قد يتم تطبيق بعض القيود على المركبات المرتفعة.";
 "weight_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
-"export_profile" = "تصدير الوضع";
+"export_profile" = "تصدير";
 "configure_map_descr" = "مظهر الخريطة";
 "export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد نسخ إلى أوسماند.";
 "profile_sett_descr" = "تؤثر على ملف التعريف المحدد";
@@ -1906,7 +1906,7 @@
 "nav_type_hint" = "نوع الملاحة";
 "selected_profiles" = "%d من %d";
 "import_profile_select_descr" = "حدد البيانات المراد استيرادها.";
-"shared_string_import" = "استيراد ملف التعريف";
+"shared_string_import" = "استيراد";
 "shared_string_preparing" = "تحضير";
 "shared_string_deselect_all" = "إلغاء تحديد الكل";
 "shared_string_continue" = "استمرار";
@@ -2066,3 +2066,9 @@
 "selected_of" = "تم تحديد - %d/%d";
 "search_history" = "سجل البحث";
 "markers_history" = "سجل التوجيه المباشر";
+"some_of" = "%d of %d";
+"folder_already_exsists" = "يوجد مجلد بهذا الاسم";
+"incorrect_symbols" = "تم إدخال أحرف غير صالحة";
+"preparing_file" = "إعداد الملف";
+"export_failed" = "تعذر تصدير ملف التعريف";
+"export_profile_select_descr" = "حدد البيانات المطلوب تصديرها.";

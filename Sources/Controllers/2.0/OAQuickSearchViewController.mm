@@ -49,6 +49,7 @@
 #import "OASearchSettings.h"
 #import "OAQuickSearchTableController.h"
 #import "OASearchToolbarViewController.h"
+#import "OARearrangeCustomFiltersViewController.h"
 #import "QuadRect.h"
 
 #import "OARootViewController.h"
@@ -1831,6 +1832,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:filter];
     customPOI.delegate = self;
     [self.navigationController pushViewController:customPOI animated:YES];    
+}
+
+- (void)showRearrangeCategoriesView:(NSArray<OAPOIUIFilter *> *)filters
+{
+    OARearrangeCustomFiltersViewController *rearrangeCategoriesView = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
+    [self.navigationController pushViewController:rearrangeCategoriesView animated:YES];
+}
+
+- (NSArray *)getCustomFilters
+{
+    return [[OAPOIFiltersHelper sharedInstance] getUserDefinedPoiFilters:NO];
 }
 
 #pragma mark - OAHistoryTableDelegate

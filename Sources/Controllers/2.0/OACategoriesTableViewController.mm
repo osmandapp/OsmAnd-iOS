@@ -14,6 +14,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
 #import "OASearchCoreFactory.h"
+#import "OAPOIUIFilter.h"
 #import "OAQuickSearchButtonListItem.h"
 
 @interface OACategoriesTableViewController ()
@@ -67,6 +68,17 @@
             if (self.delegate)
                 [self.delegate createPOIUIFIlter];
         }]];
+
+        if (self.delegate)
+        {
+            NSArray<OAPOIUIFilter *> *customFilters = [self.delegate getCustomFilters];
+            if (customFilters.count > 0) {
+                [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_edit.png"] text:OALocalizedString(@"rearrange_categories") onClickFunction:^(id sender) {
+                    if (self.delegate)
+                        [self.delegate showRearrangeCategoriesView:customFilters];
+                }]];
+            }
+        }
     }
     [_tableController updateData:@[[NSArray arrayWithArray:rows]] append:NO];
 }

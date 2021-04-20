@@ -107,16 +107,51 @@
 
 - (void) actionButtonPressed:(UIButton *)sender
 {
-//    _hasChangesBeenMade = YES;
+    _hasChangesBeenMade = YES;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     if (indexPath.section == kAllFiltersSection)
     {
-//        [self deleteMode:indexPath];
+        [self deleteMode:indexPath];
     }
     else
     {
-//        [self restoreMode:indexPath];
+        [self restoreMode:indexPath];
     }
+}
+
+- (void) deleteMode:(NSIndexPath *)indexPath
+{
+    OAEditFilterItem *filterItem = _filters[indexPath.row];
+    [_filters removeObject:filterItem];
+    [_deletedFilters addObject:filterItem];
+    [self updateFiltersIndexes];
+    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:_deletedFilters.count - 1 inSection:1];
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [_tableView reloadData];
+    }];
+    [_tableView beginUpdates];
+    [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
+    [_tableView endUpdates];
+    [CATransaction commit];
+}
+
+- (void) restoreMode:(NSIndexPath *)indexPath
+{
+    OAEditFilterItem *filterItem = _deletedFilters[indexPath.row];
+    int order = filterItem.order;
+    order = order > _filters.count ? (int) _filters.count : order;
+    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:order inSection:kAllFiltersSection];
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [_tableView reloadData];
+    }];
+    [_deletedFilters removeObjectAtIndex:indexPath.row];
+    [_filters insertObject:filterItem atIndex:order];
+    [_tableView beginUpdates];
+    [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
+    [_tableView endUpdates];
+    [CATransaction commit];
 }
 
 - (void)showChangesAlert
@@ -203,14 +238,14 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
     _hasChangesBeenMade = YES;
-    OAEditFilterItem *item = [self getItem:sourceIndexPath];
+    OAEditFilterItem *filterItem = [self getItem:sourceIndexPath];
     // Deferr the data update until the animation is complete
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         [_tableView reloadData];
     }];
     [_filters removeObjectAtIndex:sourceIndexPath.row];
-    [_filters insertObject:item atIndex:destinationIndexPath.row];
+    [_filters insertObject:filterItem atIndex:destinationIndexPath.row];
     [self updateFiltersIndexes];
     [CATransaction commit];
 }
@@ -244,6 +279,23 @@
         UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
         headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
     }
+}
+
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL) tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    if (proposedDestinationIndexPath.section != kAllFiltersSection)
+        return sourceIndexPath;
+    return proposedDestinationIndexPath;
 }
 
 @end

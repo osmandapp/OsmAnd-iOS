@@ -132,16 +132,14 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::createCompositeBitmap(con
         return result;
 
     // color filled background icon
-    auto backgroundIcon = std::make_shared<SkBitmap>();
     NSString *backgroundIconName = [NSString stringWithFormat:@"ic_bg_point_%@_center", shapeName];
     UIImage *img = getIcon(backgroundIconName, @"ic_bg_point_circle_center");
     img = [OAUtilities tintImageWithColor:img color:color];
-    BOOL res = SkCreateBitmapFromCGImage(backgroundIcon.get(), img.CGImage);
-    if (!res)
+    auto backgroundIcon = [OANativeUtilities skBitmapFromCGImage:img.CGImage];
+    if (!backgroundIcon)
         return result;
 
     // poi image icon
-    auto icon = std::make_shared<SkBitmap>();
     UIImage *origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
     if (!origImage)
         origImage = [UIImage imageNamed:[OAUtilities drawablePath:@"mm_special_star"]];
@@ -150,9 +148,8 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::createCompositeBitmap(con
     CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.5 : 0.75;
     UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * scale, origImage.size.height * scale)];
     UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
-
-    res = SkCreateBitmapFromCGImage(icon.get(), coloredImage.CGImage);
-    if (!res)
+    auto icon = [OANativeUtilities skBitmapFromCGImage:coloredImage.CGImage];
+    if (!icon)
         return result;
 
     // highlight icon

@@ -272,27 +272,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavaoriteItem:(OAFavoriteItem*)item
 {
-    [item getColor];
-    UIColor* color = [item getColor];;
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    
-    NSString *backgroundName = [item getBackgroundIcon];
-    if(!backgroundName || backgroundName.length == 0)
-        backgroundName = @"circle";
-    backgroundName = [NSString stringWithFormat:@"bg_point_%@", backgroundName];
-    UIImage *backroundImage = [UIImage imageNamed:backgroundName];
-    cell.titleIcon.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.titleIcon.tintColor = favCol.color;
-    
-    NSString *iconName = [item getIcon];
-    if(!iconName || iconName.length == 0)
-        iconName = @"special_star";
-    iconName = [NSString stringWithFormat:@"mm_%@", iconName];
-    UIImage *poiImage = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
-    cell.titlePoiIcon.image = [poiImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.titlePoiIcon.tintColor = UIColor.whiteColor;
-    cell.titlePoiIcon.hidden = NO;
-    
+    cell.titleIcon.image = [item getCompositeIcon];
     return cell;
 }
 

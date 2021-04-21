@@ -41,6 +41,7 @@
 #import "OATransportRouteController.h"
 #import "OAFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -87,8 +88,6 @@
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UIImageView *favoriteImagePoiView;
-@property (weak, nonatomic) IBOutlet UIImageView *favoriteImageBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonLeft;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
@@ -1713,35 +1712,20 @@ static const NSInteger _buttonsCount = 4;
         
         if ([self.customController isKindOfClass:OAFavoriteViewController.class])
         {
-            _imageView.hidden = YES;
-            _favoriteImageBackgroundView.hidden = NO;
-            _favoriteImagePoiView.hidden = NO;
-            
             OAFavoriteViewController *favoriteController = (OAFavoriteViewController *)self.customController;
-            UIImage *icon = [favoriteController getIcon];
-            icon = icon ? icon : _targetPoint.icon;
-            _favoriteImagePoiView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            _favoriteImagePoiView.tintColor = UIColor.whiteColor;
-            
-            UIImage *backgroundIcon = [favoriteController getBackgroundIcon];
-            _favoriteImageBackgroundView.image = [backgroundIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            _favoriteImageBackgroundView.tintColor = [favoriteController.favorite getColor];
+            _imageView.image = [favoriteController getIcon];
         }
         else
         {
             UIImage *icon = [self.customController getIcon];
             _imageView.image = icon ? icon : _targetPoint.icon;
             _imageView.hidden = NO;
-            _favoriteImageBackgroundView.hidden = YES;
-            _favoriteImagePoiView.hidden = YES;
         }
     }
     else
     {
         _imageView.image = _targetPoint.icon;
         _imageView.hidden = NO;
-        _favoriteImageBackgroundView.hidden = YES;
-        _favoriteImagePoiView.hidden = YES;
     }
 }
 
@@ -1971,7 +1955,7 @@ static const NSInteger _buttonsCount = 4;
             [_addressLabel setText:_targetPoint.title];
             [self updateAddressLabel];
             _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-            _imageView.image = _targetPoint.icon;
+            _imageView.image = [item getCompositeIcon];
         });
     }
 }

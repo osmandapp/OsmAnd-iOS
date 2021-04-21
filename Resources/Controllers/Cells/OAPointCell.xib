@@ -44,9 +44,6 @@
                                     <constraint firstAttribute="height" constant="30" id="mY5-so-hJK"/>
                                 </constraints>
                             </imageView>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nGL-Id-1Jx">
-                                <rect key="frame" x="4" y="19" width="22.5" height="22.5"/>
-                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_direction.png" translatesAutoresizingMaskIntoConstraints="NO" id="VrJ-ig-6T6">
                                 <rect key="frame" x="46" y="33" width="20" height="20"/>
                                 <constraints>
@@ -58,17 +55,13 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="o8c-dn-1dR" secondAttribute="trailing" id="2av-6d-dcv"/>
                             <constraint firstItem="SGv-NM-IvK" firstAttribute="centerY" secondItem="v7M-wb-9kc" secondAttribute="centerY" id="3hl-cV-7CP"/>
-                            <constraint firstItem="nGL-Id-1Jx" firstAttribute="centerY" secondItem="SGv-NM-IvK" secondAttribute="centerY" id="9We-de-kJF"/>
                             <constraint firstItem="AEu-zA-LLm" firstAttribute="leading" secondItem="VrJ-ig-6T6" secondAttribute="trailing" constant="3" id="Agg-Au-OsL"/>
-                            <constraint firstItem="nGL-Id-1Jx" firstAttribute="centerX" secondItem="SGv-NM-IvK" secondAttribute="centerX" id="ItQ-Jx-Tw0"/>
                             <constraint firstAttribute="trailing" secondItem="AEu-zA-LLm" secondAttribute="trailing" id="L1b-Xz-rjq"/>
                             <constraint firstItem="SGv-NM-IvK" firstAttribute="leading" secondItem="v7M-wb-9kc" secondAttribute="leading" id="ScQ-KH-dRX"/>
                             <constraint firstItem="AEu-zA-LLm" firstAttribute="top" secondItem="o8c-dn-1dR" secondAttribute="bottom" constant="5" id="UCW-ib-kxl"/>
                             <constraint firstItem="VrJ-ig-6T6" firstAttribute="leading" secondItem="SGv-NM-IvK" secondAttribute="trailing" constant="16" id="VMi-gr-Uno"/>
                             <constraint firstItem="VrJ-ig-6T6" firstAttribute="top" secondItem="o8c-dn-1dR" secondAttribute="bottom" constant="3" id="YHC-6n-oCW"/>
                             <constraint firstAttribute="bottom" secondItem="AEu-zA-LLm" secondAttribute="bottom" constant="9" id="aOz-sT-kBa"/>
-                            <constraint firstItem="nGL-Id-1Jx" firstAttribute="width" secondItem="SGv-NM-IvK" secondAttribute="width" multiplier="0.75" id="aZK-gR-sRb"/>
-                            <constraint firstItem="nGL-Id-1Jx" firstAttribute="height" secondItem="SGv-NM-IvK" secondAttribute="height" multiplier="0.75" id="hSf-zR-FqF"/>
                             <constraint firstItem="o8c-dn-1dR" firstAttribute="leading" secondItem="SGv-NM-IvK" secondAttribute="trailing" constant="16" id="jT7-8u-Jdp"/>
                             <constraint firstItem="o8c-dn-1dR" firstAttribute="top" secondItem="v7M-wb-9kc" secondAttribute="top" constant="9" id="llh-y9-oQq"/>
                             <constraint firstItem="VrJ-ig-6T6" firstAttribute="leading" secondItem="v7M-wb-9kc" secondAttribute="leading" priority="999" id="mkL-oZ-nHd"/>
@@ -91,7 +84,6 @@
                 <outlet property="imageViewMarginNoIcon" destination="mkL-oZ-nHd" id="epN-cU-q5r"/>
                 <outlet property="imageViewMarginWithIcon" destination="VMi-gr-Uno" id="m59-jB-xNu"/>
                 <outlet property="titleIcon" destination="SGv-NM-IvK" id="Olz-x7-8ig"/>
-                <outlet property="titlePoiIcon" destination="nGL-Id-1Jx" id="6DU-b8-bBk"/>
                 <outlet property="titleView" destination="o8c-dn-1dR" id="E5l-Pm-tMN"/>
                 <outlet property="titleViewMarginNoIcon" destination="vfG-sR-5U0" id="8ES-ow-2RS"/>
                 <outlet property="titleViewMarginWithIcon" destination="jT7-8u-Jdp" id="aSe-gj-tHy"/>

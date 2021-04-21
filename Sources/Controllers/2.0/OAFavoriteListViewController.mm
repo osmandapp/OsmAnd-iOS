@@ -976,21 +976,7 @@ static UIViewController *parentController;
 
 - (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavaoriteItem:(OAFavoriteItem*)item
 {
-    UIColor* color = [item getColor];
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    
-    NSString *backgroundName = [item getBackgroundIcon];
-    backgroundName = [NSString stringWithFormat:@"bg_point_%@", backgroundName];
-    UIImage *backroundImage = [UIImage imageNamed:backgroundName];
-    cell.titleIcon.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.titleIcon.tintColor = favCol.color;
-    NSString *iconName = [item getIcon];
-    
-    UIImage *poiImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:iconName]];
-    cell.titlePoiIcon.image = [poiImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.titlePoiIcon.tintColor = UIColor.whiteColor;
-    cell.titlePoiIcon.hidden = NO;
-    
+    cell.titleIcon.image = [item getCompositeIcon];
     return cell;
 }
 

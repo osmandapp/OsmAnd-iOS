@@ -965,6 +965,7 @@
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
     vw.label.textColor = UIColorFromRGB(color_text_footer);
     vw.label.text = [title upperCase];
+    vw.label.userInteractionEnabled = NO;
  
     int offset = section == 0 ? 32 : 16;
     [vw setYOffset:offset];

@@ -55,7 +55,7 @@
     _label.font = self.class.font;
     _label.editable = NO;
     _label.scrollEnabled = NO;
-    _label.userInteractionEnabled = NO;
+    _label.userInteractionEnabled = YES;
     _label.selectable = YES;
     _label.textColor = UIColorFromRGB(color_text_footer);
     _label.dataDetectorTypes = UIDataDetectorTypeLink;

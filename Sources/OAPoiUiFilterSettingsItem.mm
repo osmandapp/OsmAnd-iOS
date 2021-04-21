@@ -13,6 +13,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OAPOICategory.h"
+#import "OAPOIType.h"
 
 #define kNAME_KEY @"name"
 #define kFILTER_ID_KEY @"filterId"
@@ -128,7 +129,7 @@
     }
 }
 
-- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (void) writeItemsToJson:(id)json
 {
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
@@ -136,9 +137,26 @@
         for (OAPOIUIFilter *filter in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            jsonObject[@"name"] = filter.name;
-            jsonObject[@"filterId"] = filter.filterId;
-            jsonObject[@"acceptedTypes"] = [filter getAcceptedTypes];
+            jsonObject[kNAME_KEY] = filter.name;
+            jsonObject[kFILTER_ID_KEY] = filter.filterId;
+            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
+            NSMutableDictionary<NSString *, NSArray *> *acceptedTypesDictionary = [NSMutableDictionary dictionary];
+            for(OAPOICategory *category in acceptedTypes)
+            {
+                NSMutableSet<NSString *> *poiTypes = [acceptedTypes objectForKey:category];
+                if (poiTypes.count == 0)
+                {
+                    poiTypes = [NSMutableSet<NSString *> new];
+                    for(OAPOIType *poiType in category.poiTypes)
+                    {
+                        [poiTypes addObject:poiType.name];
+                    }
+                }
+                acceptedTypesDictionary[category.name] = poiTypes.allObjects;
+            }
+            NSData *acceptedTypesData = [NSJSONSerialization dataWithJSONObject:acceptedTypesDictionary options:0 error:nil];
+            NSString *acceptedTypesValue = [[NSString alloc] initWithData:acceptedTypesData encoding:NSUTF8StringEncoding];
+            jsonObject[kACCEPTED_TYPES_KEY] = acceptedTypesValue;
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

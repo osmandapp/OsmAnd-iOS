@@ -17,7 +17,8 @@
 
 @required
 
-- (void) createPOIUIFIlter;
+- (void)createPOIUIFilter;
+- (void)showRemoveFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters;
 - (void)showRearrangeCategoriesScreen:(NSArray<OAPOIUIFilter *> *)filters;
 - (NSArray<OAPOIUIFilter *> *)getCustomFilters;
 

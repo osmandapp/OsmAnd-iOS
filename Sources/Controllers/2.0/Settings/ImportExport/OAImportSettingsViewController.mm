@@ -30,6 +30,7 @@
     NSString *_descriptionText;
     NSString *_descriptionBoldText;
     QList<OsmAnd::ArchiveReader::Item> _archiveItems;
+    NSString *_headerLabel;
 }
 
 - (instancetype) initWithItems:(NSArray<OASettingsItem *> *)items
@@ -119,6 +120,17 @@
         [self showActivityIndicatorWithLabel:activityLabel];
         [self.tableView reloadData];
     }
+}
+
+- (void) setTableHeaderView:(NSString *)label
+{
+    _headerLabel = label;
+    [super setTableHeaderView:label];
+}
+
+- (NSString *) getTableHeaderTitle
+{
+    return _headerLabel;
 }
 
 - (NSString *) descriptionText

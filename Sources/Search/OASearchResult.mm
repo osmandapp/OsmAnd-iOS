@@ -45,7 +45,8 @@
 - (double) getSumPhraseMatchWeight
 {
     // if result is a complete match in the search we prioritize it higher
-    BOOL match = [_requiredSearchPhrase countWords:_localeName] <= [self getSelfWordCount];
+    int localWordsMatched = _alternateName != nil ? [_requiredSearchPhrase countWords:_alternateName] : [_requiredSearchPhrase countWords:_localeName];
+    BOOL match = localWordsMatched <= [self getSelfWordCount];
     double res = [OAObjectType getTypeWeight:match ? _objectType : UNDEFINED];
     if (_parentSearchResult != nil)
         res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;

@@ -94,19 +94,17 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
         iconName = @"mm_special_star";
     
     // shadow icon
-    auto shadowIcon = std::make_shared<SkBitmap>();
     NSString *shadowIconName = [NSString stringWithFormat:@"ic_bg_point_%@_bottom", shapeName];
-    UIImage *img = getIcon(shadowIconName, @"ic_bg_point_circle_bottom");
-    bool res = SkCreateBitmapFromCGImage(shadowIcon.get(), img.CGImage);
-    if (!res)
+    auto shadowIcon = [OANativeUtilities skBitmapFromPngResource:shadowIconName];
+    if (!shadowIcon)
         return result;
     
     // color filled background icon
     auto backgroundIcon = std::make_shared<SkBitmap>();
     NSString *backgroundIconName = [NSString stringWithFormat:@"ic_bg_point_%@_center", shapeName];
-    img = getIcon(backgroundIconName, @"ic_bg_point_circle_center");
+    UIImage *img = getIcon(backgroundIconName, @"ic_bg_point_circle_center");
     img = [OAUtilities tintImageWithColor:img color:color];
-    res = SkCreateBitmapFromCGImage(backgroundIcon.get(), img.CGImage);
+    BOOL res = SkCreateBitmapFromCGImage(backgroundIcon.get(), img.CGImage);
     if (!res)
         return result;
     
@@ -126,11 +124,9 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
         return result;
     
     // highlight icon
-    auto highlightIcon = std::make_shared<SkBitmap>();
     NSString *highlightIconName = [NSString stringWithFormat:@"ic_bg_point_%@_top", shapeName];
-    img = getIcon(highlightIconName, @"ic_bg_point_circle_top");
-    res = SkCreateBitmapFromCGImage(highlightIcon.get(), img.CGImage);
-    if (!res)
+    auto highlightIcon = [OANativeUtilities skBitmapFromPngResource:highlightIconName];
+    if (!highlightIcon)
         return result;
     
     if (shadowIcon && backgroundIcon && icon && highlightIcon)
@@ -141,7 +137,7 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
     return result;
 }
 
-UIImage *OAFavoritesMapLayerProvider::getIcon(NSString *iconName, NSString *defaultIconName) const
+UIImage* OAFavoritesMapLayerProvider::getIcon(NSString* iconName, NSString* defaultIconName) const
 {
     UIImage *origImage = [UIImage imageNamed:iconName];
     if (!origImage)

@@ -333,12 +333,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.collectionView.backgroundColor = UIColor.clearColor;
-        }
-        if (cell)
-        {
             cell.delegate = self;
             cell.cellTag = kFoldersCell;
             cell.state = _scrollCellsState;
+        }
+        if (cell)
+        {
             [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;

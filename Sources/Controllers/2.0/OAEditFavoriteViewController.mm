@@ -811,13 +811,13 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kPoiTableViewCell owner:self options:nil];
             cell = (OAPoiTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
+            cell.cellTag = kCellTypePoiCollection;
+            cell.state = _scrollCellsState;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
         }
         if (cell)
         {
-            cell.cellTag = kCellTypePoiCollection;
-            cell.state = _scrollCellsState;
             cell.categoriesCollectionView.tag = kCategoryCellIndex;
             cell.currentCategory = item[@"selectedCategoryName"];
             cell.categoryDataArray = item[@"categotyData"];
@@ -912,12 +912,12 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
             cell.delegate = self;
             cell.cellTag = kFolderCardsCell;
             cell.state = _scrollCellsState;
+        }
+        if (cell)
+        {
             [cell setValues:item[@"values"] sizes:item[@"sizes"] colors:item[@"colors"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;

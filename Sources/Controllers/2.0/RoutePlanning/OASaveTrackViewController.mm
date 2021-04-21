@@ -328,12 +328,12 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
             cell.delegate = self;
             cell.cellTag = kFolderCardsCell;
             cell.state = _scrollCellsState;
+        }
+        if (cell)
+        {
             [cell setValues:item[@"values"] sizes:nil colors:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;

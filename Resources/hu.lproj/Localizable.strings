@@ -625,7 +625,7 @@
 "shared_string_never" = "Soha";
 "general_settings_2" = "Általános beállítások";
 "default_speed_system" = "Sebesség mértékegysége";
-"speed_limit_exceed" = "Sebességkorlátozás-tolerancia";
+"speed_limit_exceed" = "Sebességkorlátozás túllépésének tűréshatára";
 "speed_limit_exceed_message" = "Válaszd ki a sebességkorlátozás toleranciájának határát, amely fölött hangos figyelmeztetést fogsz kapni.";
 "wake_on_voice" = "Képernyő bekapcsolása";
 "app_mode_bus" = "Busz";
@@ -789,7 +789,7 @@
 "add_home" = "Otthon hozzáadása";
 "add_work" = "Munkahely hozzáadása";
 "shared_string_clear_all" = "Összes törlése";
-"shared_string_on" = "Be";
+"shared_string_on" = "Bekapcsolva";
 "online_map" = "Online térkép";
 "day_short" = "N";
 "week_short" = "Hé";
@@ -808,7 +808,7 @@
 "quick_action_pause_nav_descr" = "A navigáció szüneteltetéséhez vagy folytatásához koppintson erre a gombra.";
 "translucent_lightgreen" = "Átlátszó világoszöld";
 "osm_poi_delete_title" = "POI törlése";
-"shared_string_off" = "Kikapcsolás";
+"shared_string_off" = "Kikapcsolva";
 "osmand_live_support_reg_title" = "Támogatott régió";
 "poi_list" = "POI lista";
 "shared_string_filter" = "Szűrő";

@@ -1,0 +1,68 @@
+name: Share data between jobs
+
+on: 
+  workflow_dispatch:
+    inputs:
+      num_1:
+        description: 'Number 1'
+        required: true
+        default: 4
+      sum:
+        description: 'Sum'
+        required: true
+        default: true
+jobs:
+  job_1:
+    name: Add Version and 7
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        run: |
+          if [ "${{ github.event.inputs.sum }}" == "true" ]; then
+            expr "${{ github.event.inputs.num_1 }} + ${{ github.event.inputs.num_1 }}" > math-homework.txt
+          else
+            expr "${{ github.event.inputs.num_1 }} \* ${{ github.event.inputs.num_1 }}" > math-homework.txt
+          fi
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v2
+        with:
+          name: homework
+          path: math-homework.txt
+
+  job_2:
+    name: Multiply by 9
+    needs: job_1
+    runs-on: windows-latest
+    steps:
+      - name: Download math result for job 1
+        uses: actions/download-artifact@v2
+        with:
+          name: homework
+      - shell: bash
+        run: |
+          sleep 5
+          value=`cat math-homework.txt`
+          sleep 5
+          expr $value \* 9 > math-homework.txt
+      - name: Upload math result for job 2
+        uses: actions/upload-artifact@v2
+        with:
+          name: homework
+          path: math-homework.txt
+
+  job_3:
+    name: Display results
+    needs: job_2
+    runs-on: macOS-latest
+    steps:
+      - name: Download math result for job 2
+        uses: actions/download-artifact@v2
+        with:
+          name: homework
+      - name: Print the final result
+        shell: bash
+        run: |
+          sleep 5
+          value=`cat math-homework.txt`
+          sleep 5
+          echo The result is $value

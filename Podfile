@@ -31,9 +31,6 @@ target 'OsmAnd Maps' do
     defaultPods
 end
 
-target 'OsmAnd Maps DEV' do
-    defaultPods
-end
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

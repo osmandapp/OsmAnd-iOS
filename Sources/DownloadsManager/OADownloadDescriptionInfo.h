@@ -10,7 +10,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define DOWNLOAD_BUTTON_ACTION @"download"
+
+@interface OADownloadActionButton : NSObject
+
+@property (nonatomic, readonly) NSString *actionType;
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *url;
+
+@end
+
 @interface OADownloadDescriptionInfo : NSObject
+
+@property (nonatomic, readonly) NSArray<NSString *> *imageUrls;
+
++ (instancetype) fromJson:(NSDictionary *)json;
+- (NSDictionary *) toJson;
+
+- (NSString *) getLocalizedDescription;
+- (NSArray<OADownloadActionButton *> *) getActionButtons;
 
 @end
 

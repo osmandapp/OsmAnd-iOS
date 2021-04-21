@@ -1158,3 +1158,4 @@
 "osmand_live_upd_frequency" = "Συχνότητα ενημέρωσης";
 "osmand_live_server_date" = "Τελευταία ενημέρωση διακομιστή: %@";
 "osmand_live_reports" = "Αναφορές";
+"sort_by" = "Ταξινόμηση";

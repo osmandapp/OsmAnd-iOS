@@ -26,6 +26,7 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OrderedDictionary.h"
+#import "OACustomRegion.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
@@ -351,7 +352,7 @@
     NSArray *regionsJson = json[@"regionsJson"];
     if (regionsJson != nil)
     {
-        _customRegions = [_customRegions arrayByAddingObjectsFromArray:[self collectRefionsFromJson:regionsJson]];
+        _customRegions = [_customRegions arrayByAddingObjectsFromArray:[self.class collectRegionsFromJson:regionsJson]];
     }
 }
 
@@ -464,9 +465,9 @@
         {
             NSString *path = [pluginResDir stringByAppendingPathComponent:resFile];
             if (!_icon)
-                _icon = [self getIconForFile:path iconNames:_iconNames];
+                _icon = [self getIconForFile:path fileNames:_iconNames];
             if (!_image)
-                _image = [self getIconForFile:path imageNames:_imageNames];
+                _image = [self getIconForFile:path fileNames:_imageNames];
         }
     }
     for (OAWorldRegion *region in _customRegions)
@@ -496,7 +497,7 @@
     _customRegions = [NSArray arrayWithArray:items];
 }
 
-// TODO: figure out how to port this to our download system + implement OACustomRegion!
+// TODO: figure out how to port this to our download system
 
 //private List<IndexItem> getMapsForType(LatLon latLon, DownloadActivityType type) {
 //    try {

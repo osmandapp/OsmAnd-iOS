@@ -34,6 +34,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) initWithScopeId:(NSString *)scopeId path:(NSString *)path type:(NSString *)type;
 
++ (instancetype) fromJson:(NSDictionary *)json;
+- (NSDictionary *) toJson;
+
+- (void) loadDynamicIndexItems;
+
 @end
 
 NS_ASSUME_NONNULL_END

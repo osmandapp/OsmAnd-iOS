@@ -22,6 +22,7 @@
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OAChoosePlanHelper.h"
+#import "OADownloadDescriptionInfo.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -77,6 +78,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 @end
 
 @implementation OAMapStyleResourceItem
+@end
+
+@implementation OACustomResourceItem
+
+
+
 @end
 
 @implementation OAResourcesUIHelper

@@ -2085,3 +2085,8 @@
 "selected_of" = "Elegido - %d/%d";
 "search_history" = "Historial de búsqueda";
 "markers_history" = "Historial de marcadores";
+"folder_already_exsists" = "Ya existe una carpeta con ese nombre";
+"incorrect_symbols" = "Se ingresaron caracteres inválidos";
+"preparing_file" = "Preparando archivo";
+"export_failed" = "No se pudo exportar el perfil";
+"export_profile_select_descr" = "Marca los datos a exportar.";

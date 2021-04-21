@@ -146,7 +146,7 @@
 "sett_pref_lang" = "Tercih edilen dil";
 "sett_lang_show_local" = "Yerel isimleri göster";
 "maps" = "Haritalar";
-"purchases" = "Satın alma";
+"purchases" = "Satın almalar";
 // Purchases
 "prch_addons" = "Eklentileri";
 "prch_nau_q1" = "Lütfen Harita Ayarlarında \"Deniz\" tarzını açın ve dünya deniz işaretleri temel haritasını yükleyin.";
@@ -190,13 +190,13 @@
 "res_no_space_free" = "gereklidir. Lütfen biraz yer boşaltın.";
 "res_free_exp" = "Tüm ücretsiz indirme geçirdi. Mutlu etmek download / güncelleme haritalar için kıtaya satın almak.";
 "res_upd_avail_q" = "Bir güncelleştirme kullanılabilir";
-"res_inst_avail_cell_q" = "Yükleme %@ %@ hücresel şebeke üzerinden indirilebilir gerekiyor.";
-"res_inst_avail_wifi_q" = "Yükleme %@ %@ WiFi ağ üzerinden karşıdan yüklenmesi gerekiyor.";
-"res_cancel_upd_q" = "%@ Doğru güncelleştirmeyi iptal olacak.";
-"data_will_be_lost" = "Tüm indirilen veri kaybı olur.";
-"res_cancel_inst_q" = "%@ Doğru yükleme iptal olacak.";
-"res_uninst_managed_q" = "% Kaldırmak olacak @. Kataloğu'ndan daha sonra yeniden yükleyebilirsiniz.";
-"res_uninst_unmanaged_q" = "% Silmek olacak @. Katalogdan, yani değil lütfen gerekirse bir yedekleme olduğundan emin olun.";
+"res_inst_avail_cell_q" = "%@ kurulumunun hücresel ağ üzerinden indirilmesi için %@ gerekiyor.";
+"res_inst_avail_wifi_q" = "%@ kurulumunun WiFi ağı üzerinden indirilmesi için %@ gerekiyor.";
+"res_cancel_upd_q" = "%@ güncellemesini iptal edeceksiniz.";
+"data_will_be_lost" = "İndirilen tüm veriler kaybolacak.";
+"res_cancel_inst_q" = "%@ kurulumunu iptal edeceksiniz.";
+"res_uninst_managed_q" = "%@ ögesini kaldıracaksınız. Daha sonra katalogdan yeniden kurabilirsiniz.";
+"res_uninst_unmanaged_q" = "%@ ögesini sileceksiniz. Bu katalogdan değil, bu yüzden gerekmesi halinde bir yedeğiniz olduğundan emin olun.";
 "res_details" = "Ayrıntılar";
 "res_type" = "Tür";
 "res_unknown" = "Bilinmiyor";
@@ -586,7 +586,7 @@
 "speed_limit_exceed_message" = "Üzerine çıktığınızda sesli uyarı alacağınız hız sınırı payı seçin.";
 "wake_on_voice" = "Ekranı aç";
 "voice_pref_title" = "Ses";
-"choose_audio_stream" = "Sesli yönlendirme çıktısı";
+"choose_audio_stream" = "Sesli yönlendirme çıkışı";
 "guidance_preferences_descr" = "Navigasyon tercihleri";
 "routing_preferences_descr" = "Yönlendirme tercihleri";
 "routing_settings" = "Navigasyon";
@@ -810,7 +810,7 @@
 "transport_routes" = "Rotalar";
 "transport_stop" = "Durak";
 "route_stops_before" = "%d durak önce";
-"logging_interval_navigation" = "Navigasyon sırasında loglama aralığı";
+"logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
 "logging_min_distance" = "Asgari yer değiştirme";
 "logging_min_distance_descr" = "Filtre: yeni bir nokta kaydetmek için asgari mesafe";
@@ -1811,7 +1811,7 @@
 "weight_limit_description" = "Aracınızın ağırlığını belirtin, ağır araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
 "lenght_limit_description" = "Aracınızın uzunluğunu belirtin, uzun araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
 "height_limit_description" = "Aracınızın yüksekliğini belirtin, yüksek araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
-"export_profile" = "Profili dışa aktar";
+"export_profile" = "Dışa aktar";
 "profile_settings" = "Profil ayarları";
 "configure_map_descr" = "Harita görünümü";
 "export_profile_descr" = "Tüm profil ayarlarını dışa aktarabilir, başka bir profilden kopyalayabilir veya öntanımlı durumlarına sıfırlayabilirsiniz.";
@@ -1886,7 +1886,7 @@
 "nav_type_hint" = "Navigasyon türü: %@";
 "selected_profiles" = "%d / %d";
 "import_profile_select_descr" = "İçe aktarılacak verileri seçin.";
-"shared_string_import" = "Profili içe aktar";
+"shared_string_import" = "İçe aktar";
 "shared_string_finish" = "Bitir";
 "shared_string_import_complete" = "İçe aktarma tamamlandı";
 "search_activity" = "Ara";
@@ -2010,3 +2010,64 @@
 "plan_route_change_folder" = "Klasörü değiştir";
 "plan_route_folder" = "Klasör";
 "street_level_imagery" = "Sokak seviyesi görüntüleri";
+"travel" = "Seyahat";
+"transport" = "Ulaşım";
+"symbols" = "Semboller";
+"sport" = "Spor";
+"special" = "Özel";
+"service" = "Hizmet";
+"emergency" = "Acil";
+"shared_string_gpx_points" = "Noktalar";
+"res_standard" = "Standart harita";
+"quick_action_coordinates_widget_descr" = "Bu eylem düğmesine dokunmak, koordinatlar widget'ını gösterir veya gizler.";
+"hide_coordinates" = "Koordinatları gizle";
+"show_coordinates" = "Koordinatları göster";
+"toggle_coordinates" = "Koordinatlar widget'ını göster/gizle";
+"copied_to_clipboard" = "Panoya kopyalandı";
+"searching_gps" = "GPS aranıyor";
+
+// Coordinate widget
+"coordinates_widget" = "Koordinatlar widget'ı";
+
+// Resources
+"shared_string_resources" = "Kaynaklar";
+"some_of" = "%d / %d";
+"segnet_num" = "Bölüm %d";
+"track_multiple_segments_select" = "%@ birden fazla bölüme sahip. Lütfen navigasyon için kullanmak istediğiniz yolun bir bölümünü seçin.";
+"select_segment" = "Bölüm seç";
+"select_track_to_follow" = "İzlenecek yolu seç";
+"reading_file" = "Dosya okunuyor";
+"selected_of" = "Seçildi - %d/%d";
+"square" = "Kare";
+"octagon" = "Sekizgen";
+
+// Shapes
+"circle" = "Daire";
+"shared_string_others" = "Diğerleri";
+"favorite_places_category" = "Yerler";
+"favorite_friends_category" = "Arkadaşlar";
+"default_color_descr" = "Bu renk, gruba eklenen tüm yeni sık kullanılanlar için kullanılacak.";
+"default_color" = "Öntanımlı renk";
+"fav_point_emoticons_message" = "Sık Kullanılan adı, emoticon içeren metni dosyaya kaydetmek için '%@' olarak değiştirildi.";
+"fav_point_dublicate_message" = "Sık Kullanılan, yinelemeyi önlemek için '%@' olarak yeniden adlandırıldı.";
+"fav_point_dublicate" = "Yinelenen Sık Kullanılan adı belirtildi";
+"shape" = "Şekil";
+"icon" = "Simge";
+"select_group" = "Grup seç";
+"name_and_descr" = "Ad ve açıklama";
+"add_favorite" = "Sık kullanılan ekle";
+"fav_points_not_exist" = "Sık kullanılanlara eklenen nokta yok";
+"replace_favorite_confirmation" = "Sık kullanılanlardan %@'ı yenisiyle değiştirmek istediğinizden emin misiniz?";
+"group_name" = "Grup adı";
+"available_groups" = "Kullanılabilir gruplar";
+"select_group_descr" = "Grup seçin veya yeni bir tane ekleyin";
+"fav_add_new_group" = "Yeni grup ekle";
+"search_history" = "Arama geçmişi";
+"markers_history" = "İşaretleyiciler geçmişi";
+"coordinates" = "Koordinatlar";
+"map_widget_distance_by_tap" = "Dokunma mesafesi";
+"folder_already_exsists" = "Bu ada sahip klasör zaten var";
+"incorrect_symbols" = "Geçersiz karakterler girildi";
+"preparing_file" = "Dosya hazırlanıyor";
+"export_failed" = "Profil dışa aktarılamadı";
+"export_profile_select_descr" = "Dışa aktarılacak verileri seçin.";

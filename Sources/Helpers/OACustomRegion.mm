@@ -10,6 +10,10 @@
 #import "OAJsonHelper.h"
 #import "OAColors.h"
 #import "OAResourcesUIHelper.h"
+#import "OADownloadDescriptionInfo.h"
+#import "OAOcbfHelper.h"
+#import "OsmAndApp.h"
+#import "Reachability.h"
 
 #import <TTTColorFormatter.h>
 
@@ -77,8 +81,6 @@
     
     NSArray *_downloadItemsJson;
     NSArray *_dynamicItemsJson;
-    
-
 }
 
 + (instancetype) fromJson:(NSDictionary *)json
@@ -96,14 +98,15 @@
     region.names = json[@"name"];
     if (region.names.count > 0)
     {
-        region.name = region.names[@""];
-        region.nativeName = region.names[@"en"];
-        region.regionId = region.names[@""];
-        region.regionNameLocale = [OAJsonHelper getLocalizedResFromMap:region.names defValue:region.name];
+        // TODO: refactor world region when testing custom downloads
+//        region.name = region.names[@""];
+//        region.nativeName = region.names[@"en"];
+//        region.regionId = region.names[@""];
+//        region.regionNameLocale = [OAJsonHelper getLocalizedResFromMap:region.names defValue:region.name];
     }
     
     region.icons = json[@"icon"];
-    region.headers = jsom[@"header"];
+    region.headers = json[@"header"];
     
     region.downloadItemsJson = json[@"items"];
     region.dynamicItemsJson = json[@"dynamic-items"];
@@ -172,7 +175,7 @@
 {
     NSMutableArray<OAResourceItem *> *items = [NSMutableArray new];
     [items addObjectsFromArray:[self loadIndexItems:self.downloadItemsJson]];
-    [items addObjectsFromArray:[self laodIndexItems:self.dynamicItemsJson]];
+    [items addObjectsFromArray:[self loadIndexItems:self.dynamicItemsJson]];
     return items;
 }
 
@@ -185,7 +188,7 @@
         {
             NSDictionary *itemJson = itemsJson[i];
             
-            long timestamp = [itemJson[@"timestamp"] longValue] * 1000;
+//            long timestamp = [itemJson[@"timestamp"] longValue] * 1000;
             long contentSize = [itemJson[@"contentSize"] longValue];
             long containerSize = [itemJson[@"containerSize"] longValue];
             
@@ -193,114 +196,130 @@
             indexType = indexType ? : self.type;
             NSString *fileName = itemJson[@"filename"];
             NSString *downloadUrl = itemJson[@"downloadurl"];
-            NSString size = [NSString stringWithFormat:@"%f", containerSize / (1024. * 1024.)];
+//            long size = containerSize / (1024. * 1024.);
             
-            NSDictionary<NSString *, NSString *> *indexNames = itemsJson[@"name"];
-            NSDictionary<NSString *, NSString *> *firstSubNames = itemsJson[@"firstsubname"];
-            NSDictionary<NSString *, NSString *> *secondSubNames = jsonItems[@"secondsubname"];
+            NSDictionary<NSString *, NSString *> *indexNames = itemJson[@"name"];
+            NSDictionary<NSString *, NSString *> *firstSubNames = itemJson[@"firstsubname"];
+            NSDictionary<NSString *, NSString *> *secondSubNames = itemJson[@"secondsubname"];
             
             OADownloadDescriptionInfo *descriptionInfo = [OADownloadDescriptionInfo fromJson:itemJson[@"description"]];
             
-            DownloadActivityType type = DownloadActivityType.getIndexType(indexType);
-            if (type != null) {
-                IndexItem indexItem = new CustomIndexItem.CustomIndexItemBuilder()
-                .setFileName(fileName)
-                .setSubfolder(subfolder)
-                .setDownloadUrl(downloadUrl)
-                .setNames(indexNames)
-                .setFirstSubNames(firstSubNames)
-                .setSecondSubNames(secondSubNames)
-                .setDescriptionInfo(descriptionInfo)
-                .setTimestamp(timestamp)
-                .setSize(size)
-                .setContentSize(contentSize)
-                .setContainerSize(containerSize)
-                .setType(type)
-                .create();
+            const auto typeStr = QString::fromNSString(indexType);
+            const QStringRef typeRef(&typeStr);
+            OsmAnd::ResourcesManager::ResourceType type = OsmAnd::ResourcesManager::getIndexType(typeRef);
+            if (type != OsmAnd::ResourcesManager::ResourceType::Unknown)
+            {
+                OACustomResourceItem *indexItem = [[OACustomResourceItem alloc] init];
+                indexItem.resourceId = QString::fromNSString(fileName.lowerCase);
+                indexItem.title = fileName;
+                indexItem.subfolder = _subfolder;
+                indexItem.downloadUrl = downloadUrl;
+                indexItem.names = indexNames;
+                indexItem.firstSubNames = firstSubNames;
+                indexItem.secondSubNames = secondSubNames;
+                indexItem.descriptionInfo = descriptionInfo;
+//                indexItem.timestamp = timestamp;
+                indexItem.size = contentSize;
+                indexItem.sizePkg = containerSize;
+                indexItem.resourceType = type;
                 
-                items.add(indexItem);
+                [items addObject:indexItem];
             }
         }
-        return items;
+    }
+    return items;
 }
 
-void loadDynamicIndexItems(final OsmandApplication app) {
-    if (dynamicItemsJson == null && dynamicDownloadItems != null
-            && !Algorithms.isEmpty(dynamicDownloadItems.url)
-            && app.getSettings().isInternetConnectionAvailable()) {
-        OnRequestResultListener resultListener = new OnRequestResultListener() {
-            @Override
-            public void onResult(String result) {
-                if (!Algorithms.isEmpty(result)) {
-                    if ("json".equalsIgnoreCase(dynamicDownloadItems.format)) {
-                        dynamicItemsJson = mapJsonItems(result);
+- (void) loadDynamicIndexItems
+{
+    if (!_dynamicItemsJson && _dynamicDownloadItems
+        && _dynamicDownloadItems.url.length > 0
+        && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        NSURL *urlObj = [[NSURL alloc] initWithString:_dynamicDownloadItems.url];
+        NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (((NSHTTPURLResponse *)response).statusCode == 200)
+            {
+                if (data && !error)
+                {
+                    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                    if (jsonDict)
+                    {
+                        if ([_dynamicDownloadItems.format.lowerCase isEqualToString:@"json"])
+                        {
+                            _dynamicItemsJson = [self mapJsonItems:jsonDict];
+                        }
+                        OsmAndAppInstance app = OsmAndApp.instance;
+                        [OAOcbfHelper downloadOcbfIfUpdated];
+                        [app loadWorldRegions];
+                        [app startRepositoryUpdateAsync:NO];
                     }
-                    app.getDownloadThread().runReloadIndexFilesSilent();
                 }
             }
-        };
-
-        AndroidNetworkUtils.sendRequestAsync(app, dynamicDownloadItems.getUrl(), null,
-                null, false, false, resultListener);
+        }] resume];
     }
 }
 
-private JSONArray mapJsonItems(String jsonStr) {
-    try {
-        JSONObject json = new JSONObject(jsonStr);
-        JSONArray jsonArray = json.optJSONArray(dynamicDownloadItems.itemsPath);
-        if (jsonArray != null) {
-            JSONArray itemsJson = new JSONArray();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                JSONObject itemJson = mapDynamicJsonItem(jsonObject, dynamicDownloadItems.mapping);
-
-                itemsJson.put(itemJson);
-            }
-            return itemsJson;
+- (NSArray *) mapJsonItems:(NSDictionary *)json
+{
+    NSArray *jsonArray = json[_dynamicDownloadItems.itemsPath];
+    if (jsonArray)
+    {
+        NSMutableArray *itemsJson = [NSMutableArray array];
+        for (NSDictionary *jsonObject in jsonArray)
+        {
+            NSDictionary *itemJson = [self mapDynamicJsonItem:jsonObject mapping:_dynamicDownloadItems.mapping];
+            
+            if (itemsJson)
+                [itemsJson addObject:itemJson];
         }
-    } catch (JSONException e) {
-        LOG.error(e);
+        return itemsJson;
     }
-    return null;
+    return nil;
 }
 
-private JSONObject mapDynamicJsonItem(JSONObject jsonObject, JSONObject mapping) throws JSONException {
-    JSONObject itemJson = new JSONObject();
-    for (Iterator<String> it = mapping.keys(); it.hasNext(); ) {
-        String key = it.next();
-        Object value = checkMappingValue(mapping.opt(key), jsonObject);
-        itemJson.put(key, value);
-    }
+- (NSDictionary *) mapDynamicJsonItem:(NSDictionary *)jsonObject mapping:(NSDictionary *)mapping
+{
+    NSMutableDictionary *itemJson = [NSMutableDictionary dictionary];
+    [mapping enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        id value = [self checkMappingValue:key json:jsonObject];
+        if (value)
+            itemJson[key] = value;
+    }];
     return itemJson;
 }
 
-private Object checkMappingValue(Object value, JSONObject json) throws JSONException {
-    if (value instanceof String) {
-        String key = (String) value;
-        int index = key.indexOf("@");
-        if (index != INVALID_ID) {
-            key = key.substring(index + 1);
-        }
-        return json.opt(key);
-    } else if (value instanceof JSONObject) {
-        JSONObject checkedJsonObject = (JSONObject) value;
-        JSONObject objectJson = new JSONObject();
+- (id) checkMappingValue:(id)value json:(NSDictionary *)json
+{
+    if ([value isKindOfClass:NSString.class])
+    {
+        NSString *key = value;
+        NSInteger index = [key indexOf:@"@"];
+        if (index != -1)
+            key = [key substringFromIndex:index + 1];
+        return json[key];
+    }
+    else if ([value isKindOfClass:NSDictionary.class])
+    {
+        NSMutableDictionary *checkedJsonObject = [NSMutableDictionary dictionary];
+        NSDictionary *objectJson = value;
+        
+        [objectJson enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            id checkedValue = [self checkMappingValue:value json:json];
+            checkedJsonObject[key] = checkedValue;
+        }];
+        return checkedJsonObject;
+    }
+    else if ([value isKindOfClass:NSArray.class])
+    {
+        NSMutableArray *checkedJsonArray = [NSMutableArray array];
+        NSArray *jsonArray = value;
 
-        for (Iterator<String> iterator = checkedJsonObject.keys(); iterator.hasNext(); ) {
-            String key = iterator.next();
-            Object checkedValue = checkMappingValue(checkedJsonObject.opt(key), json);
-            objectJson.put(key, checkedValue);
-        }
-        return objectJson;
-    } else if (value instanceof JSONArray) {
-        JSONArray checkedJsonArray = new JSONArray();
-        JSONArray jsonArray = (JSONArray) value;
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            Object checkedValue = checkMappingValue(jsonArray.opt(i), json);
-            checkedJsonArray.put(i, checkedValue);
-        }
+        [jsonArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            id checkedValue = [self checkMappingValue:obj json:json];
+            [checkedJsonArray addObject:checkedValue];
+        }];
         return checkedJsonArray;
     }
     return value;

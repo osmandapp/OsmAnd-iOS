@@ -15,6 +15,8 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/IncrementalChangesManager.h>
 
+@class OADownloadDescriptionInfo;
+
 @interface OAResourceItem : NSObject
 @property NSString* title;
 @property QString resourceId;
@@ -60,6 +62,17 @@
 @property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
 @property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
 @property int sortIndex;
+@end
+
+@interface OACustomResourceItem : OAResourceItem
+@property NSString *subfolder;
+@property NSString *downloadUrl;
+
+@property NSDictionary<NSString *, NSString *> *names;
+@property NSDictionary<NSString *, NSString *> *firstSubNames;
+@property NSDictionary<NSString *, NSString *> *secondSubNames;
+
+@property OADownloadDescriptionInfo *descriptionInfo;
 @end
 
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);

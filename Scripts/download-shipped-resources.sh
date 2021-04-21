@@ -7,8 +7,6 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-ROOT="$SRCLOC/.."
-
 if [[ "$(uname -a)" =~ Linux ]]; then
 	GET_FILE_MODIFICATION="stat -c %Y"
 elif [[ "$(uname -a)" =~ Darwin ]]; then
@@ -23,7 +21,7 @@ else
 fi
 
 # Prepare destination
-DEST="$SRCLOC/Resources/Shipped"
+DEST="$SRCLOC/../Resources/Shipped"
 mkdir -p "$DEST"
 
 # Function downloadShippedResource(name, url)

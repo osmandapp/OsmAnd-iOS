@@ -213,7 +213,7 @@
     for (NSDictionary* itemJSON in itemsJson)
     {
         //TODO: Remove after complete implementation of the classes
-        if (![itemJSON[@"type"] isEqualToString:@"POI_UI_FILTERS"] && ![itemJSON[@"type"] isEqualToString:@"DATA"])
+        if (![itemJSON[@"type"] isEqualToString:@"DATA"])
         {
             OASettingsItem *item = [self createItem:itemJSON];
             if (item)

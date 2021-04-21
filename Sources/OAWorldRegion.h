@@ -55,6 +55,8 @@
 - (OAWorldRegion *) getPrimarySuperregion;
 - (OAProduct *) getProduct;
 
+- (void) addSubregion:(OAWorldRegion *)subregion;
+
 + (OAWorldRegion *) loadFrom:(NSString *)ocbfFilename;
 
 @end

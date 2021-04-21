@@ -1524,3 +1524,8 @@
 "facebook" = "فیسبوک";
 "join_segments" = "اتصال پاره‌ها";
 "map_widget_distance_by_tap" = "مسافت با لمس";
+"select_group" = "انتخاب گروه";
+"markers_history" = "تاریخچهٔ نشانه‌ها";
+
+// Resources
+"shared_string_resources" = "منابع";

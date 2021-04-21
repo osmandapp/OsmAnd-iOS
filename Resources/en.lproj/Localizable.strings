@@ -1734,6 +1734,7 @@
 
 "custom_search" = "Custom search";
 "poi_filter_custom_filter" = "Custom filter";
+"delete_custom_categories" = "Delete custom categories";
 "poi_filter_closest_poi" = "Nearest POIs";
 "shared_string_is_open_24_7" = "Open 24/7";
 "shared_string_is_open" = "Open now";

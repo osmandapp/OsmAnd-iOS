@@ -3632,8 +3632,6 @@
 		DAFE4D4322169B4D009731CA /* map_osm_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3222169B4D009731CA /* map_osm_edit.png */; };
 		DAFE4D492216A472009731CA /* OAOsmEditTargetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4D462216A471009731CA /* OAOsmEditTargetViewController.mm */; };
 		DAFE4D4B2216A472009731CA /* OAOsmEditTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D472216A471009731CA /* OAOsmEditTargetViewController.xib */; };
-		B0D6143A4EEB3410F47A53B8 /* OADeleteCustomFiltersTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D611965D0A6A725E8CBDB1 /* OADeleteCustomFiltersTableViewController.mm */; };
-		0A2A7C6F262B7F120005F1BF /* OADeleteCustomFiltersTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2A7C6E262B7F120005F1BF /* OADeleteCustomFiltersTableViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8178,9 +8176,6 @@
 		DAFE4D472216A471009731CA /* OAOsmEditTargetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOsmEditTargetViewController.xib; path = Sources/Controllers/2.0/OAOsmEditTargetViewController.xib; sourceTree = "<group>"; };
 		DAFE4D482216A472009731CA /* OAOsmEditTargetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmEditTargetViewController.h; path = Sources/Controllers/2.0/OAOsmEditTargetViewController.h; sourceTree = "<group>"; };
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
-		B0D61EDDE57A964C19CF59E1 /* OADeleteCustomFiltersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADeleteCustomFiltersTableViewController.h; path = Sources/Controllers/2.0/OADeleteCustomFiltersTableViewController.h; sourceTree = "<group>"; };
-		B0D611965D0A6A725E8CBDB1 /* OADeleteCustomFiltersTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADeleteCustomFiltersTableViewController.mm; path = Sources/Controllers/2.0/OADeleteCustomFiltersTableViewController.mm; sourceTree = "<group>"; };
-		0A2A7C6E262B7F120005F1BF /* OADeleteCustomFiltersTableViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OADeleteCustomFiltersTableViewController.xib; path = Sources/Controllers/2.0/OADeleteCustomFiltersTableViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

@@ -38,7 +38,7 @@
     if (self)
     {
         _selectedItems = [NSMutableArray new];
-        _items = [[NSArray arrayWithArray:filters] mutableCopy];
+        _items = [NSMutableArray arrayWithArray:filters];
         [_items insertObject:[[OACustomSelectionButtonCell alloc] init] atIndex:0];
     }
     return self;

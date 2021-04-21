@@ -1566,8 +1566,16 @@
             bool interpolation = b->belongsToInterpolation(lw);
             if ((![buildingMatch matches:b->nativeName.toNSString()] && !interpolation) || ![phrase isSearchTypeAllowed:HOUSE])
                 continue;
-            
-            res.localeName = b->getName(lang, transliterate).toNSString();
+            if (interpolation)
+            {
+                res.localeName = lw.toNSString();
+                res.location = [OASearchCoreFactory getLocation:b hno:lw];
+            }
+            else
+            {
+                res.localeName = b->getName(lang, transliterate).toNSString();
+                res.location = [OASearchCoreFactory getLocation:b->position31];
+            }
             res.otherNames = [OASearchCoreFactory getAllNames:b->localizedNames nativeName:b->nativeName];
             res.object = [[OABuilding alloc] initWithBuilding:b];
             res.resourceId = resId;
@@ -1577,15 +1585,6 @@
             res.relatedObject = [[OAStreet alloc] initWithStreet:s];
             res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
             res.objectType = HOUSE;
-            if (interpolation)
-            {
-                res.location = [OASearchCoreFactory getLocation:b hno:lw];
-                res.localeName = lw.toNSString();
-            }
-            else
-            {
-                res.location = [OASearchCoreFactory getLocation:b->position31];
-            }
             res.preferredZoom = 17;
             
             [resultMatcher publish:res];

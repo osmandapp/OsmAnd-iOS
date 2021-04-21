@@ -8,12 +8,13 @@
 
 #import "OARearrangeCustomFiltersViewController.h"
 #import "OAPOIFiltersHelper.h"
-#import "OAPOIUIFilter.h"
 #import "Localization.h"
 #import "OADeleteButtonTableViewCell.h"
 #import "OAColors.h"
+#import "OAQuickSearchHelper.h"
 
 #define kAllFiltersSection 0
+#define kCellTypeDeleteButton @"OADeleteButtonTableViewCell"
 
 @interface OAEditFilterItem : NSObject
 
@@ -50,10 +51,13 @@
 
 @implementation OARearrangeCustomFiltersViewController
 {
+    OAPOIFiltersHelper *_helper;
+    BOOL _hasChangesBeenMade;
+
     NSMutableArray<OAEditFilterItem *> *_filters;
     NSMutableArray<OAEditFilterItem *> *_deletedFilters;
-
-    BOOL _hasChangesBeenMade;
+    NSMapTable<NSString *, NSNumber *> *_filtersOrders;
+    NSMutableArray<NSString *> *_availableFiltersKeys;
 }
 
 -(instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters
@@ -61,6 +65,7 @@
     self = [super init];
     if (self)
     {
+        _helper = [OAPOIFiltersHelper sharedInstance];
         [self generateData:filters];
     }
     return self;
@@ -90,12 +95,20 @@
 
 - (void) generateData:(NSArray<OAPOIUIFilter *> *)filters
 {
-    _filters = [[NSMutableArray alloc] init];
-    _deletedFilters = [[NSMutableArray alloc] init];
+    _filters = [NSMutableArray new];
+    _deletedFilters = [NSMutableArray new];
+    _filtersOrders = [NSMapTable new];
+    _availableFiltersKeys = [NSMutableArray new];
 
-    for (OAPOIUIFilter *filter in filters)
-    {
+    for (NSInteger i = 0; i < filters.count; i++) {
+        OAPOIUIFilter *filter = filters[i];
+        NSString *filterId = filter.filterId;
         [_filters addObject:[[OAEditFilterItem alloc] initWithFilter:filter]];
+        [_filtersOrders setObject:@(i) forKey:filterId];
+        if (!filter.isActive)
+        {
+            [_availableFiltersKeys addObject:filter.filterId];
+        }
     }
 }
 
@@ -188,7 +201,27 @@
 
 - (IBAction) onDoneButtonClicked:(id)sender
 {
-
+    NSMutableArray<NSString *> *filterIds = [NSMutableArray new];
+    for (OAEditFilterItem *filterItem in _filters)
+    {
+        OAPOIUIFilter *filter = filterItem.filter;
+        NSString *filterId = filter.filterId;
+        NSNumber *order = [_filtersOrders objectForKey:filterId];
+        if (!order)
+        {
+            order = @(filter.order);
+        }
+        BOOL isActive = ![_availableFiltersKeys containsObject:filterId];
+        filter.isActive = isActive;
+        filter.order = [order intValue];
+        if (isActive)
+        {
+            [filterIds addObject: filter.filterId];
+        }
+    }
+    [_helper saveFiltersOrder:filterIds];
+    [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)updateFiltersIndexes
@@ -206,13 +239,12 @@
     BOOL isAllFilters = indexPath.section == kAllFiltersSection;
     OAPOIUIFilter *filter = isAllFilters ? _filters[indexPath.row].filter : _deletedFilters[indexPath.row].filter;
 
-    static NSString* const identifierCell = @"OADeleteButtonTableViewCell";
-    OADeleteButtonTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    static NSString* const identifierCell = kCellTypeDeleteButton;
+    OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADeleteButtonTableViewCell" owner:self options:nil];
-        cell = (OADeleteButtonTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeDeleteButton owner:self options:nil];
+        cell = (OADeleteButtonTableViewCell *) nib[0];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
     }
@@ -221,7 +253,7 @@
         cell.titleLabel.text = filter.name;
         UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
         cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
-        NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_undo_button";
+        NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
         [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         [cell.deleteButton setUserInteractionEnabled:YES];
         cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;

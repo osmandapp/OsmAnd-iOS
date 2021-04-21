@@ -1834,7 +1834,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.navigationController pushViewController:customPOI animated:YES];    
 }
 
-- (void)showRearrangeCategoriesView:(NSArray<OAPOIUIFilter *> *)filters
+- (void)showRearrangeCategoriesScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
     OARearrangeCustomFiltersViewController *rearrangeCategoriesView = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
     [self.navigationController pushViewController:rearrangeCategoriesView animated:YES];

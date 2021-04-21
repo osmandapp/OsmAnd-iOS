@@ -19,6 +19,7 @@
 #import "OAAppSettings.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
+#import "OAApplicationMode.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -699,7 +700,13 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     }
 }
 
-- (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIdes:(NSArray<NSString *> *)filterIds
+- (void) saveFiltersOrder:(NSArray<NSString *> *)filterIds
+{
+    OAApplicationMode *selectedAppMode = OAAppSettings.sharedManager.applicationMode;
+    [self saveFiltersOrder:selectedAppMode filterIds:filterIds];
+}
+
+- (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds
 {
     [OAAppSettings.sharedManager.poiFiltersOrder set:filterIds mode:appMode];
 }

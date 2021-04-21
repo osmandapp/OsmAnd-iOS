@@ -18,7 +18,7 @@
 @required
 
 - (void) createPOIUIFIlter;
-- (void)showRearrangeCategoriesView:(NSArray<OAPOIUIFilter *> *)filters;
+- (void)showRearrangeCategoriesScreen:(NSArray<OAPOIUIFilter *> *)filters;
 - (NSArray<OAPOIUIFilter *> *)getCustomFilters;
 
 @end

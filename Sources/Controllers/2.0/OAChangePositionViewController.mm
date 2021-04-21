@@ -100,18 +100,11 @@
     if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
     {
         OAFavoriteItem *favorite = (OAFavoriteItem *)_targetPoint.targetObj;
-        
-        NSString *backgroundCconName = [@"bg_point_" stringByAppendingString:[favorite getBackgroundIcon]];
-        _iconView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:backgroundCconName] color:[favorite getColor]];
-        
-        NSString *iconName = [@"mx_" stringByAppendingString:[favorite getIcon]];
-        _innerIconView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:[OAUtilities drawablePath:iconName]] color:UIColor.whiteColor];
-        _innerIconView.hidden = NO;
+        _iconView.image = [favorite getCompositeIcon];   
     }
     else
     {
         _iconView.image = _targetPoint.icon;
-        _innerIconView.hidden = YES;
     }
     
     if (![OAUtilities isLandscapeIpadAware])

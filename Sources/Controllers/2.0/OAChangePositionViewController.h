@@ -19,7 +19,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *mainTitleView;
 @property (weak, nonatomic) IBOutlet UILabel *itemTitleView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
-@property (weak, nonatomic) IBOutlet UIImageView *innerIconView;
 @property (weak, nonatomic) IBOutlet UILabel *typeView;
 @property (weak, nonatomic) IBOutlet UILabel *coordinatesView;
 

@@ -63,10 +63,19 @@
         for (OASearchResult *sr in [res getCurrentSearchResults])
             [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
         
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"search_icon.png"] text:OALocalizedString(@"custom_search") onClickFunction:^(id sender) {
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"search_icon"] text:OALocalizedString(@"custom_search") onClickFunction:^(id sender) {
             if (self.delegate)
-                [self.delegate createPOIUIFIlter];
+                [self.delegate createPOIUIFilter];
         }]];
+
+        if (self.delegate) {
+            NSArray<OAPOIUIFilter *> *customFilters = [self.delegate getCustomFilters];
+            if (customFilters.count > 0) {
+                [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_remove"] text:OALocalizedString(@"delete_custom_categories") onClickFunction:^(id sender) {
+                    [self.delegate showRemoveFiltersScreen:customFilters];
+                }]];
+            }
+        }
     }
     [_tableController updateData:@[[NSArray arrayWithArray:rows]] append:NO];
 }

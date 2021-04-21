@@ -78,7 +78,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setEditing:YES];
-    [self.navigationController.interactivePopGestureRecognizer addTarget:self action:@selector(swipeToCloseRecognized:)];
 }
 
 - (void)applyLocalization
@@ -175,16 +174,6 @@
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void) swipeToCloseRecognized:(UIGestureRecognizer *)recognizer
-{
-    if (_hasChangesBeenMade)
-    {
-        recognizer.enabled = NO;
-        recognizer.enabled = YES;
-        [self showChangesAlert];
-    }
 }
 
 - (IBAction)onCancelButtonClicked:(id)sender

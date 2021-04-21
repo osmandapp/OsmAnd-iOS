@@ -1826,7 +1826,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - OACategoryTableDelegate
 
-- (void)createPOIUIFilter
+- (void)showCreateFilterScreen
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     [filter clearFilter];
@@ -1835,7 +1835,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.navigationController pushViewController:customPOI animated:YES];
 }
 
-- (void)showRemoveFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
+- (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
     OADeleteCustomFiltersViewController *removeFiltersView = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
     removeFiltersView.delegate = self;

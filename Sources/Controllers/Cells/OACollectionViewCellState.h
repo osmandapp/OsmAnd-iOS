@@ -10,6 +10,8 @@
 
 @interface OACollectionViewCellState : NSObject
 
-@property (nonatomic) NSMutableDictionary<NSString *, NSValue *> *values;
+- (BOOL) containsValueForKey:(NSString *)key;
+- (CGPoint) getOffsetForKey:(NSString *)key;
+- (void) setOffset:(CGPoint)offset forKey:(NSString *)key;
 
 @end

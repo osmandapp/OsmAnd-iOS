@@ -66,7 +66,7 @@
 
 - (void) updateContentOffset
 {
-    CGPoint offset = _state.values[_cellTag].CGPointValue;
+    CGPoint offset = [_state getOffsetForKey:_cellTag];
     if ([OAUtilities getLeftMargin] > 0)
         offset.x += [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
     self.categoriesCollectionView.contentOffset = offset;
@@ -77,7 +77,7 @@
     CGPoint offset = self.categoriesCollectionView.contentOffset;
     if ([OAUtilities getLeftMargin] > 0)
         offset.x -= [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
-    _state.values[_cellTag] = [NSValue valueWithCGPoint:offset];
+    [_state setOffset:offset forKey:_cellTag];
 }
 
 - (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels

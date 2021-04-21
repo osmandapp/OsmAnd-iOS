@@ -9,6 +9,9 @@
 #import "OACollectionViewCellState.h"
 
 @implementation OACollectionViewCellState
+{
+    NSMutableDictionary<NSString *, NSValue *> *_values;
+}
 
 - (instancetype)init
 {
@@ -17,6 +20,21 @@
         _values = [NSMutableDictionary new];
     }
     return self;
+}
+
+- (BOOL) containsValueForKey:(NSString *)key
+{
+    return _values[key] != nil;
+}
+
+- (CGPoint) getOffsetForKey:(NSString *)key
+{
+    return _values[key].CGPointValue;
+}
+
+- (void) setOffset:(CGPoint)offset forKey:(NSString *)key
+{
+    _values[key] = [NSValue valueWithCGPoint:offset];
 }
 
 @end

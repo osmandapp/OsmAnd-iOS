@@ -337,6 +337,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if (cell)
         {
             cell.delegate = self;
+            cell.cellTag = kFoldersCell;
+            cell.state = _scrollCellsState;
             [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;
@@ -365,12 +367,11 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
      if ([type isEqualToString:kFoldersCell])
      {
          OAFoldersCell *folderCell = (OAFoldersCell *)cell;
-         if (!_scrollCellsState.values[kFoldersCell])
+         if (![_scrollCellsState containsValueForKey:kFoldersCell])
          {
-             _scrollCellsState.values[kFoldersCell] = [NSValue valueWithCGPoint:[folderCell calculateShowingOffset:(NSInteger)[item[@"selectedValue"] integerValue]]];
+             CGPoint offset = [folderCell calculateShowingOffset:(NSInteger)[item[@"selectedValue"] integerValue]];
+             [_scrollCellsState setOffset:offset forKey:kFoldersCell];
          }
-         folderCell.cellTag = kFoldersCell;
-         folderCell.state = _scrollCellsState;
          [folderCell updateContentOffset];
      }
  }

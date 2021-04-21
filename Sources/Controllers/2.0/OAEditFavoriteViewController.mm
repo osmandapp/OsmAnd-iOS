@@ -816,6 +816,8 @@
         }
         if (cell)
         {
+            cell.cellTag = kCellTypePoiCollection;
+            cell.state = _scrollCellsState;
             cell.categoriesCollectionView.tag = kCategoryCellIndex;
             cell.currentCategory = item[@"selectedCategoryName"];
             cell.categoryDataArray = item[@"categotyData"];
@@ -914,6 +916,8 @@
         if (cell)
         {
             cell.delegate = self;
+            cell.cellTag = kFolderCardsCell;
+            cell.state = _scrollCellsState;
             [cell setValues:item[@"values"] sizes:item[@"sizes"] colors:item[@"colors"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;
@@ -929,24 +933,22 @@
      if ([type isEqualToString:kFolderCardsCell])
      {
          OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
-         if (!_scrollCellsState.values[kFolderCardsCell])
+         if (![_scrollCellsState containsValueForKey:kFolderCardsCell])
          {
-             _scrollCellsState.values[kFolderCardsCell] = [NSValue valueWithCGPoint:[folderCell calculateOffset:(NSInteger)[item[@"selectedValue"] integerValue]]];
+             CGPoint offset = [folderCell calculateOffset:(NSInteger)[item[@"selectedValue"] integerValue]];
+             [_scrollCellsState setOffset:offset forKey:kFolderCardsCell];
          }
-         folderCell.cellTag = kFolderCardsCell;
-         folderCell.state = _scrollCellsState;
          [folderCell updateContentOffset];
      }
      else if ([type isEqualToString:kCellTypePoiCollection])
      {
          OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
-         if (!_scrollCellsState.values[kCellTypePoiCollection])
+         if (![_scrollCellsState containsValueForKey:kCellTypePoiCollection])
          {
              NSArray<NSString *> *categories = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
-             _scrollCellsState.values[kCellTypePoiCollection] = [NSValue valueWithCGPoint:[poiCell calculateShowingOffset:_selectedCategoryIndex labels:categories]];
+             CGPoint offset = [poiCell calculateShowingOffset:_selectedCategoryIndex labels:categories];
+             [_scrollCellsState setOffset:offset forKey:kCellTypePoiCollection];
          }
-         poiCell.cellTag = kCellTypePoiCollection;
-         poiCell.state = _scrollCellsState;
          [poiCell updateContentOffset];
      }
  }

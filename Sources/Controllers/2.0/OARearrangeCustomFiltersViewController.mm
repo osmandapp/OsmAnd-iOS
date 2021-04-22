@@ -356,7 +356,8 @@ typedef void(^OAActionButtonOnClick)(id sender);
         if (cell) {
             OAActionItem *actionItem = _actionsItems[indexPath.row];
             cell.userInteractionEnabled = YES;
-            cell.iconView.image = actionItem.icon;
+            cell.iconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
             [cell.button addTarget:actionItem action:@selector(onClick) forControlEvents:UIControlEventTouchDown];
             return cell;

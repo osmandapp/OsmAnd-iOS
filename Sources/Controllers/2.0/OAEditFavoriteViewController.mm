@@ -821,6 +821,7 @@
             cell.state = _scrollCellsState;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
+            cell.allLabels = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
         }
         if (cell)
         {
@@ -949,12 +950,7 @@
      else if ([type isEqualToString:kCellTypePoiCollection])
      {
          OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
-         if (![_scrollCellsState containsValueForIndex:indexPath])
-         {
-             NSArray<NSString *> *categories = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
-             CGPoint offset = [poiCell calculateShowingOffset:_selectedCategoryIndex labels:categories];
-             [_scrollCellsState setOffset:offset forIndex:indexPath];
-         }
+         [poiCell setupInitialOffsetForSelectedIndex:_selectedCategoryIndex];
          [poiCell updateContentOffset];
      }
  }
@@ -1151,7 +1147,6 @@
     _selectedBackgroundIndex = (int)tag;
     [self updateHeaderIcon];
     [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAColorsTableViewCellDelegate

@@ -367,11 +367,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
      if ([type isEqualToString:kFoldersCell])
      {
          OAFoldersCell *folderCell = (OAFoldersCell *)cell;
-         if (![_scrollCellsState containsValueForIndex:indexPath])
-         {
-             CGPoint offset = [folderCell calculateShowingOffset:(NSInteger)[item[@"selectedValue"] integerValue]];
-             [_scrollCellsState setOffset:offset forIndex:indexPath];
-         }
+         [folderCell setupInitialOffsetForSelectedIndex:(NSInteger)[item[@"selectedValue"] integerValue]];
          [folderCell updateContentOffset];
      }
  }

@@ -26,7 +26,7 @@
 @property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(int)index;
-- (CGPoint) calculateShowingOffset:(NSInteger)index;
+- (void) setupInitialOffsetForSelectedIndex:(NSInteger)selectedIndex;
 - (void) updateContentOffset;
 
 @end

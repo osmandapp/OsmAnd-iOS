@@ -77,10 +77,19 @@
     [_state setOffset:offset forIndex:_cellIndex];
 }
 
-- (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels
+- (void) setupInitialOffsetForSelectedIndex:(NSInteger)selectedIndex
 {
-    CGPoint selectedOffset = [self calculateOffset:index labels:labels];
-    CGPoint fullLength = [self calculateOffset:labels.count labels:labels];
+    if (![_state containsValueForIndex:_cellIndex])
+    {
+        CGPoint offset = [self calculateShowingOffset:selectedIndex];
+        [_state setOffset:offset forIndex:_cellIndex];
+    }
+}
+
+- (CGPoint) calculateShowingOffset:(NSInteger)index
+{
+    CGPoint selectedOffset = [self calculateOffset:index labels:_allLabels];
+    CGPoint fullLength = [self calculateOffset:_allLabels.count labels:_allLabels];
     CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
     if (selectedOffset.x > maxOffset)
         selectedOffset.x = maxOffset;

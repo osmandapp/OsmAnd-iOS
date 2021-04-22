@@ -27,6 +27,7 @@
 @property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index;
+- (void) setupInitialOffsetForSelectedIndex:(NSInteger)selectedIndex;
 - (CGPoint) calculateOffset:(NSInteger)index;
 - (void) updateContentOffset;
 

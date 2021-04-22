@@ -87,6 +87,15 @@
     [_state setOffset:offset forIndex:_cellIndex];
 }
 
+- (void) setupInitialOffsetForSelectedIndex:(NSInteger)selectedIndex
+{
+    if (![_state containsValueForIndex:_cellIndex])
+    {
+        CGPoint offset = [self calculateOffset:selectedIndex];
+        [_state setOffset:offset forIndex:_cellIndex];
+    }
+}
+
 - (CGPoint) calculateOffset:(NSInteger)index;
 {
     CGFloat selectedOffset = index * (kCellWidth + kMargin);

@@ -77,6 +77,8 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    _currentIcon = indexPath.row;
+    [self.collectionView reloadData];
     if (self.delegate)
         [self.delegate iconChanged:indexPath.row];
 }

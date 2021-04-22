@@ -70,6 +70,15 @@
     [_state setOffset:offset forIndex:_cellIndex];
 }
 
+- (void) setupInitialOffsetForSelectedIndex:(NSInteger)selectedIndex
+{
+    if (![_state containsValueForIndex:_cellIndex])
+    {
+        CGPoint offset = [self calculateShowingOffset:selectedIndex];
+        [_state setOffset:offset forIndex:_cellIndex];
+    }
+}
+
 - (CGPoint) calculateShowingOffset:(NSInteger)index
 {
     CGPoint selectedOffset = [self calculateOffset:index];

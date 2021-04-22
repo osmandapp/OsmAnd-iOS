@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *categoriesCollectionView;
 
 @property (nonatomic) NSDictionary<NSString *, NSArray<NSString *> *> *poiData;
+@property (nonatomic) NSArray<NSString *> *allLabels;
 @property (nonatomic) NSInteger currentColor;
 @property (nonatomic) NSString *currentIcon;
 @property (nonatomic) NSArray *categoryDataArray;
@@ -36,6 +37,6 @@
 @property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) updateContentOffset;
-- (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels;
+- (void) setupInitialOffsetForSelectedIndex:(NSInteger)selectedIndex;
 
 @end

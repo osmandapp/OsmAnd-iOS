@@ -136,12 +136,10 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
 
 UIImage* OAFavoritesMapLayerProvider::getIcon(NSString* iconName, NSString* defaultIconName) const
 {
-    UIImage *origImage = [UIImage imageNamed:iconName];
-    if (!origImage)
-        origImage = [UIImage imageNamed:defaultIconName];
-    
-    UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width, origImage.size.height)];
-    return resizedImage;
+    UIImage *iconImage = [UIImage imageNamed:iconName];
+    if (!iconImage)
+        iconImage = [UIImage imageNamed:defaultIconName];
+    return iconImage;
 }
 
 QString OAFavoritesMapLayerProvider::backgroundImageNameByType(const QString& type) const

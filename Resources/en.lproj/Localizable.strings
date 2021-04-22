@@ -1746,6 +1746,8 @@
 "rearrange_categories" = "Rearrange categories";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
+"rearrange_categories_descr" = "You can add custom categories hide categories that you don’t find necessary and change the sort order of the list. The list can be imported and exported with profiles.";
+"rearrange_categories_reset" = "Reset to default will reset sort order to the default state after installation.";
 
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";

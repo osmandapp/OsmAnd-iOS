@@ -30,10 +30,10 @@
 @property (nonatomic) NSArray *categoryDataArray;
 @property (nonatomic) NSString *currentCategory;
 @property (nonatomic) NSInteger currentCategoryIndex;
-@property (nonatomic) NSString *cellTag;
 
 @property (nonatomic, weak) id<OAPoiTableViewCellDelegate> delegate;
 @property (weak, nonatomic) OACollectionViewCellState *state;
+@property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) updateContentOffset;
 - (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels;

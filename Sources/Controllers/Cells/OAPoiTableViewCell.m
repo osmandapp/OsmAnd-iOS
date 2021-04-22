@@ -25,9 +25,6 @@
 #define kCategoriesCellsSpacing 12
 
 @implementation OAPoiTableViewCell
-{
-    OACollectionViewCellState *state;
-}
 
 - (void)awakeFromNib
 {
@@ -66,7 +63,7 @@
 
 - (void) updateContentOffset
 {
-    CGPoint offset = [_state getOffsetForKey:_cellTag];
+    CGPoint offset = [_state getOffsetForIndex:_cellIndex];
     if ([OAUtilities getLeftMargin] > 0)
         offset.x += [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
     self.categoriesCollectionView.contentOffset = offset;
@@ -77,7 +74,7 @@
     CGPoint offset = self.categoriesCollectionView.contentOffset;
     if ([OAUtilities getLeftMargin] > 0)
         offset.x -= [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
-    [_state setOffset:offset forKey:_cellTag];
+    [_state setOffset:offset forIndex:_cellIndex];
 }
 
 - (CGPoint) calculateShowingOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels
@@ -224,7 +221,6 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self saveOffset];
     if (collectionView.tag == kCategoryCellIndex)
     {
         NSDictionary *item = _categoryDataArray[indexPath.row];
@@ -245,7 +241,7 @@
     }
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self saveOffset];
 }

@@ -10,7 +10,7 @@
 
 @implementation OACollectionViewCellState
 {
-    NSMutableDictionary<NSString *, NSValue *> *_values;
+    NSMutableDictionary<NSIndexPath *, NSValue *> *_values;
 }
 
 - (instancetype)init
@@ -22,19 +22,19 @@
     return self;
 }
 
-- (BOOL) containsValueForKey:(NSString *)key
+- (BOOL) containsValueForIndex:(NSIndexPath *)index
 {
-    return _values[key] != nil;
+    return _values[index] != nil;
 }
 
-- (CGPoint) getOffsetForKey:(NSString *)key
+- (CGPoint) getOffsetForIndex:(NSIndexPath *)index
 {
-    return _values[key].CGPointValue;
+    return _values[index].CGPointValue;
 }
 
-- (void) setOffset:(CGPoint)offset forKey:(NSString *)key
+- (void) setOffset:(CGPoint)offset forIndex:(NSIndexPath *)index
 {
-    _values[key] = [NSValue valueWithCGPoint:offset];
+    _values[index] = [NSValue valueWithCGPoint:offset];
 }
 
 @end

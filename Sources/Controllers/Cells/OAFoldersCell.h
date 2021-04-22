@@ -23,7 +23,7 @@
 
 @property (nonatomic) id<OAFoldersCellDelegate> delegate;
 @property (weak, nonatomic) OACollectionViewCellState *state;
-@property (nonatomic) NSString *cellTag;
+@property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(int)index;
 - (CGPoint) calculateShowingOffset:(NSInteger)index;

@@ -73,7 +73,7 @@
 
 - (void) updateContentOffset
 {
-    CGPoint offset = [_state getOffsetForKey:_cellTag];
+    CGPoint offset = [_state getOffsetForIndex:_cellIndex];
     if ([OAUtilities getLeftMargin] > 0)
         offset.x -= [OAUtilities getLeftMargin] - kMargin;
     self.collectionView.contentOffset = offset;
@@ -84,7 +84,7 @@
     CGPoint offset = self.collectionView.contentOffset;
     if ([OAUtilities getLeftMargin] > 0)
         offset.x += [OAUtilities getLeftMargin] - kMargin;
-    [_state setOffset:offset forKey:_cellTag];
+    [_state setOffset:offset forIndex:_cellIndex];
 }
 
 - (CGPoint) calculateOffset:(NSInteger)index;
@@ -172,7 +172,6 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self saveOffset];
     if (indexPath.row == _data.count - 1)
     {
         if (_delegate)
@@ -191,7 +190,7 @@
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self saveOffset];
 }

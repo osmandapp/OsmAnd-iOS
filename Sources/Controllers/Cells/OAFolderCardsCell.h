@@ -24,7 +24,7 @@
 
 @property (weak, nonatomic) id<OAFolderCardsCellDelegate> delegate;
 @property (weak, nonatomic) OACollectionViewCellState *state;
-@property (nonatomic) NSString *cellTag;
+@property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index;
 - (CGPoint) calculateOffset:(NSInteger)index;

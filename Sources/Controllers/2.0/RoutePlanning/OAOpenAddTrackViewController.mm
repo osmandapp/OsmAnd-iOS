@@ -334,7 +334,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.backgroundColor = UIColor.clearColor;
             cell.collectionView.backgroundColor = UIColor.clearColor;
             cell.delegate = self;
-            cell.cellTag = kFoldersCell;
+            cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
         }
         if (cell)
@@ -367,10 +367,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
      if ([type isEqualToString:kFoldersCell])
      {
          OAFoldersCell *folderCell = (OAFoldersCell *)cell;
-         if (![_scrollCellsState containsValueForKey:kFoldersCell])
+         if (![_scrollCellsState containsValueForIndex:indexPath])
          {
              CGPoint offset = [folderCell calculateShowingOffset:(NSInteger)[item[@"selectedValue"] integerValue]];
-             [_scrollCellsState setOffset:offset forKey:kFoldersCell];
+             [_scrollCellsState setOffset:offset forIndex:indexPath];
          }
          [folderCell updateContentOffset];
      }

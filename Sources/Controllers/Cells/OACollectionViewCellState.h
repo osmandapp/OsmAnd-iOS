@@ -10,8 +10,8 @@
 
 @interface OACollectionViewCellState : NSObject
 
-- (BOOL) containsValueForKey:(NSString *)key;
-- (CGPoint) getOffsetForKey:(NSString *)key;
-- (void) setOffset:(CGPoint)offset forKey:(NSString *)key;
+- (BOOL) containsValueForIndex:(NSIndexPath *)index;
+- (CGPoint) getOffsetForIndex:(NSIndexPath *)index;
+- (void) setOffset:(CGPoint)offset forIndex:(NSIndexPath *)index;
 
 @end

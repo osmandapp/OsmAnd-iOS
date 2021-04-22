@@ -329,7 +329,7 @@
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
-            cell.cellTag = kFolderCardsCell;
+            cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
         }
         if (cell)
@@ -349,10 +349,10 @@
     if ([type isEqualToString:kFolderCardsCell])
     {
         OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
-        if (![_scrollCellsState containsValueForKey:kFolderCardsCell])
+        if (![_scrollCellsState containsValueForIndex:indexPath])
         {
             CGPoint offset = [folderCell calculateOffset:(NSInteger)[item[@"selectedValue"] integerValue]];
-            [_scrollCellsState setOffset:offset forKey:kFolderCardsCell];
+            [_scrollCellsState setOffset:offset forIndex:indexPath];
         }
         [folderCell updateContentOffset];
     }

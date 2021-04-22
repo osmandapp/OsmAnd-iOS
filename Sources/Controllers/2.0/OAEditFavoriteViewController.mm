@@ -489,7 +489,42 @@
 
 - (void)viewDidLayoutSubviews
 {
-    [self scrollViewDidScroll:self.tableView];
+    [self setupHeaderWithVerticalOffset:self.tableView.contentOffset.y];
+}
+
+- (void) setupHeaderWithVerticalOffset:(CGFloat)offset
+{
+    CGFloat compressingHeight = kFullHeaderHeight - kCompressedHeaderHeight;
+    if (![OAUtilities isLandscape])
+    {
+        CGFloat multiplier;
+        
+        if (offset <= 0)
+        {
+            multiplier = 1;
+            _navBarHeightConstraint.constant = kFullHeaderHeight;
+        }
+        else if (offset > 0 && offset < compressingHeight)
+        {
+            multiplier = offset < 0 ? 0 : 1 - (offset / compressingHeight);
+            _navBarHeightConstraint.constant = kCompressedHeaderHeight + compressingHeight * multiplier;
+        }
+        else
+        {
+            multiplier = 0;
+            _navBarHeightConstraint.constant = kCompressedHeaderHeight;
+        }
+        
+        self.titleLabel.font = [UIFont systemFontOfSize:17 * multiplier weight:UIFontWeightSemibold];
+        self.titleLabel.alpha = multiplier;
+        self.titleLabel.hidden = NO;
+    }
+    else
+    {
+        _navBarHeightConstraint.constant = kCompressedHeaderHeight;
+        self.titleLabel.hidden = YES;
+        self.titleLabel.alpha = 0;
+    }
 }
 
 - (void) dismissViewController
@@ -677,36 +712,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGFloat compressingHeight = kFullHeaderHeight - kCompressedHeaderHeight;
-    if (![OAUtilities isLandscape])
-    {
-        CGFloat multiplier;
-        
-        if (scrollView.contentOffset.y <= 0)
-        {
-            multiplier = 1;
-            _navBarHeightConstraint.constant = kFullHeaderHeight;
-        }
-        else if (scrollView.contentOffset.y > 0 && scrollView.contentOffset.y < compressingHeight)
-        {
-            multiplier = scrollView.contentOffset.y < 0 ? 0 : 1 - (scrollView.contentOffset.y / compressingHeight);
-            _navBarHeightConstraint.constant = kCompressedHeaderHeight + compressingHeight * multiplier;
-        }
-        else
-        {
-            multiplier = 0;
-            _navBarHeightConstraint.constant = kCompressedHeaderHeight;
-        }
-        
-        self.titleLabel.font = [UIFont systemFontOfSize:17 * multiplier weight:UIFontWeightSemibold];
-        self.titleLabel.alpha = multiplier;
-    }
-    else
-    {
-        _navBarHeightConstraint.constant = kCompressedHeaderHeight;
-        self.titleLabel.hidden = YES;
-        self.titleLabel.alpha = 0;
-    }
+    [self setupHeaderWithVerticalOffset:scrollView.contentOffset.y];
 }
 
 #pragma mark - UITableViewDataSource
@@ -811,7 +817,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kPoiTableViewCell owner:self options:nil];
             cell = (OAPoiTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
-            cell.cellTag = kCellTypePoiCollection;
+            cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
@@ -913,7 +919,7 @@
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
-            cell.cellTag = kFolderCardsCell;
+            cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
         }
         if (cell)
@@ -933,21 +939,21 @@
      if ([type isEqualToString:kFolderCardsCell])
      {
          OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
-         if (![_scrollCellsState containsValueForKey:kFolderCardsCell])
+         if (![_scrollCellsState containsValueForIndex:indexPath])
          {
              CGPoint offset = [folderCell calculateOffset:(NSInteger)[item[@"selectedValue"] integerValue]];
-             [_scrollCellsState setOffset:offset forKey:kFolderCardsCell];
+             [_scrollCellsState setOffset:offset forIndex:indexPath];
          }
          [folderCell updateContentOffset];
      }
      else if ([type isEqualToString:kCellTypePoiCollection])
      {
          OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
-         if (![_scrollCellsState containsValueForKey:kCellTypePoiCollection])
+         if (![_scrollCellsState containsValueForIndex:indexPath])
          {
              NSArray<NSString *> *categories = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
              CGPoint offset = [poiCell calculateShowingOffset:_selectedCategoryIndex labels:categories];
-             [_scrollCellsState setOffset:offset forKey:kCellTypePoiCollection];
+             [_scrollCellsState setOffset:offset forIndex:indexPath];
          }
          [poiCell updateContentOffset];
      }

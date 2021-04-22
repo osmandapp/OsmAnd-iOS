@@ -25,6 +25,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewRightConstraint;
 
 - (void) presentInViewController:(UIViewController *)viewController;
+- (void) presentInViewController:(UIViewController *)viewController animated:(BOOL)animated;
 
 @property (nonatomic, readonly) CGFloat initialHeight;
 @property (nonatomic, readonly) CGFloat buttonsViewHeight;

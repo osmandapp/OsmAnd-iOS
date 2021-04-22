@@ -113,7 +113,7 @@
     [super viewDidAppear:animated];
     if (_openGpxSelection)
     {
-        [self presentOpenTrackViewController:NO];
+        [self presentOpenTrackViewController:YES];
         _openGpxSelection = NO;
     }
 }
@@ -469,7 +469,7 @@
     OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAFollowTrack];
     saveTrackViewController.delegate = self;
     [_navigationController setViewControllers:@[saveTrackViewController]];
-    [self presentViewController:_navigationController animated:animated completion:nil];
+    [self presentViewController:_navigationController animated:YES completion:nil];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -255,4 +255,9 @@
     [self saveOffset];
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self saveOffset];
+}
+
 @end

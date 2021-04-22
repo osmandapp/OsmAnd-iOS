@@ -72,7 +72,7 @@
 
         if (self.delegate)
         {
-            NSArray <OAPOIUIFilter *> *allFilters = [[OAPOIFiltersHelper sharedInstance] getSortedPoiFilters:false];
+            NSArray<OAPOIUIFilter *> *allFilters = [self.delegate getSortedFiltersIncludeInactive];
             if (allFilters.count > 0) {
                 [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_edit"] text:OALocalizedString(@"rearrange_categories") onClickFunction:^(id sender)
                 {

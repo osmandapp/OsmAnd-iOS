@@ -21,6 +21,7 @@
 - (void)showRearrangeCategoriesScreen:(NSArray<OAPOIUIFilter *> *)filters;
 - (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters;
 - (NSArray<OAPOIUIFilter *> *)getCustomFilters;
+- (NSArray<OAPOIUIFilter *> *)getSortedFiltersIncludeInactive;
 
 @end
 

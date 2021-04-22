@@ -12,9 +12,17 @@
 #import "OADeleteButtonTableViewCell.h"
 #import "OAColors.h"
 #import "OAQuickSearchHelper.h"
+#import "OAButtonRightIconCell.h"
+#import "OAAppSettings.h"
 
 #define kAllFiltersSection 0
-#define kCellTypeDeleteButton @"OADeleteButtonTableViewCell"
+#define kHiddenFiltersSection 1
+#define kActionsSection 2
+#define kHideButtonCell @"OADeleteButtonTableViewCell"
+#define kButtonRightIconCell @"OAButtonRightIconCell"
+#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+
+typedef void(^OAActionButtonOnClick)(id sender);
 
 @interface OAEditFilterItem : NSObject
 
@@ -39,11 +47,42 @@
 
 @end
 
+@interface OAActionItem : NSObject
+
+@property (nonatomic) NSString *title;
+@property (nonatomic) UIImage *icon;
+@property (nonatomic) OAActionButtonOnClick onClickFunction;
+
+- (instancetype)initWithIcon:(UIImage *)icon title:(NSString *)title onClickFunction:(OAActionButtonOnClick)onClickFunction;
+- (void)onClick;
+
+@end
+
+@implementation OAActionItem
+
+- (instancetype)initWithIcon:(UIImage *)icon title:(NSString *)title onClickFunction:(OAActionButtonOnClick)onClickFunction
+{
+    self = [super init];
+    if (self) {
+        _title = title;
+        _icon = icon;
+        _onClickFunction = onClickFunction;
+    }
+    return self;
+}
+
+- (void)onClick
+{
+    self.onClickFunction(self);
+}
+
+@end
+
 @interface OARearrangeCustomFiltersViewController() <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
@@ -51,27 +90,35 @@
 
 @implementation OARearrangeCustomFiltersViewController
 {
-    OAPOIFiltersHelper *_helper;
-    BOOL _hasChangesBeenMade;
+    OAAppSettings *_settings;
+    OAPOIFiltersHelper *_filtersHelper;
+    BOOL _isChanged;
+    BOOL _orderModified;
+    BOOL _hiddenModified;
+    BOOL _wasReset;
 
-    NSMutableArray<OAEditFilterItem *> *_filters;
-    NSMutableArray<OAEditFilterItem *> *_deletedFilters;
+    NSMutableArray<OAActionItem *> *_actionsItems;
+    NSMutableArray<OAEditFilterItem *> *_filtersItems;
+    NSMutableArray<OAEditFilterItem *> *_hiddenFiltersItems;
     NSMapTable<NSString *, NSNumber *> *_filtersOrders;
-    NSMutableArray<NSString *> *_availableFiltersKeys;
+    NSMutableArray<NSString *> *_hiddenFiltersKeys;
 }
 
--(instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters
+- (instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
     self = [super init];
     if (self)
     {
-        _helper = [OAPOIFiltersHelper sharedInstance];
+        _settings = [OAAppSettings sharedManager];
+        _filtersHelper = [OAPOIFiltersHelper sharedInstance];
+        _orderModified = [_settings poiFiltersOrder] != nil;
+        _hiddenModified = [_settings inactivePoiFilters] != nil;
         [self generateData:filters];
     }
     return self;
 }
 
--(void)viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
 
@@ -82,62 +129,143 @@
 
 - (void)applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"rearrange_categories");
+    self.titleLabel.text = OALocalizedString(@"rearrange_categories");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
-- (UIView *) getTopView
+- (UIView *)getTopView
 {
     return _navBar;
 }
 
-- (void) generateData:(NSArray<OAPOIUIFilter *> *)filters
+- (void)viewDidLayoutSubviews
 {
-    _filters = [NSMutableArray new];
-    _deletedFilters = [NSMutableArray new];
-    _filtersOrders = [NSMapTable new];
-    _availableFiltersKeys = [NSMutableArray new];
+    [super viewDidLayoutSubviews];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_categories_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+}
 
-    for (NSInteger i = 0; i < filters.count; i++) {
+- (void)generateData:(NSArray<OAPOIUIFilter *> *)filters
+{
+    _filtersItems = [NSMutableArray new];
+    _hiddenFiltersItems = [NSMutableArray new];
+    _filtersOrders = [NSMapTable new];
+    _hiddenFiltersKeys = [NSMutableArray new];
+
+    for (int i = 0; i < filters.count; i++)
+    {
         OAPOIUIFilter *filter = filters[i];
-        NSString *filterId = filter.filterId;
-        [_filters addObject:[[OAEditFilterItem alloc] initWithFilter:filter]];
-        [_filtersOrders setObject:@(i) forKey:filterId];
+        OAEditFilterItem *filterItem = [[OAEditFilterItem alloc] initWithFilter:filter];
+        [_filtersOrders setObject:@(i) forKey:filter.filterId];
         if (!filter.isActive)
         {
-            [_availableFiltersKeys addObject:filter.filterId];
+            [_hiddenFiltersKeys addObject:filter.filterId];
+            [_hiddenFiltersItems addObject:filterItem];
         }
+        else
+            [_filtersItems addObject:filterItem];
     }
+    [self setupActionItems];
 }
 
-- (OAEditFilterItem *) getItem:(NSIndexPath *)indexPath
+- (void)setupActionItems
 {
-    BOOL isAllFilters = indexPath.section == kAllFiltersSection;
-    return isAllFilters ? _filters[indexPath.row] : _deletedFilters[indexPath.row];
+    _actionsItems = [NSMutableArray new];
+    [_actionsItems addObject:[[OAActionItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_reset"] title:OALocalizedString(@"reset_to_default") onClickFunction:^(id sender) {
+        _isChanged = YES;
+        _wasReset = YES;
+        NSInteger countHiddenCells = [self.tableView numberOfRowsInSection:kHiddenFiltersSection];
+        if (countHiddenCells > 0) {
+            while (countHiddenCells != 0) {
+                CGRect rectInSection = [self.tableView rectForSection:kHiddenFiltersSection];
+                NSArray<NSIndexPath *> *indexPathsInSection = [self.tableView indexPathsForRowsInRect:rectInSection];
+                [self restoreMode:indexPathsInSection[0]];
+                countHiddenCells -= 1; //[self.tableView numberOfRowsInSection:kHiddenFiltersSection];
+            }
+        }
+        [_filtersItems setArray:[_filtersItems sortedArrayUsingComparator:^(OAEditFilterItem *obj1, OAEditFilterItem *obj2) {
+            if ([obj1.filter.filterId isEqualToString:obj2.filter.filterId]) {
+                NSString *filterByName1 = obj1.filter.filterByName == nil ? @"" : obj1.filter.filterByName;
+                NSString *filterByName2 = obj2.filter.filterByName == nil ? @"" : obj2.filter.filterByName;
+                return [filterByName1 localizedCaseInsensitiveCompare:filterByName2];
+            } else
+                return [obj1.filter.name localizedCaseInsensitiveCompare:obj2.filter.name];
+        }]];
+        [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
+    }]];
 }
 
-- (void) actionButtonPressed:(UIButton *)sender
+- (OAEditFilterItem *)getItem:(NSIndexPath *)indexPath
 {
-    _hasChangesBeenMade = YES;
+    OAEditFilterItem *filterItem;
+    if (indexPath.section == kAllFiltersSection)
+        filterItem = _filtersItems[indexPath.row];
+    else if (indexPath.section == kHiddenFiltersSection)
+        filterItem = _hiddenFiltersItems[indexPath.row];
+    return filterItem;
+}
+
+- (IBAction)onCancelButtonClicked:(id)sender
+{
+    if (_isChanged)
+        [self showChangesAlert];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)onDoneButtonClicked:(id)sender
+{
+    if (_isChanged)
+    {
+        OAApplicationMode *appMode = _settings.applicationMode;
+        if (_hiddenModified)
+            [_filtersHelper saveInactiveFilters:appMode filterIds:_hiddenFiltersKeys];
+        else if (_wasReset)
+            [_filtersHelper saveInactiveFilters:appMode filterIds:nil];
+        if (_orderModified)
+        {
+            NSMutableArray<NSString *> *filterIds = [NSMutableArray new];
+            for (OAEditFilterItem *filterItem in _filtersItems) {
+                OAPOIUIFilter *filter = filterItem.filter;
+                NSString *filterId = filter.filterId;
+                NSNumber *order = [_filtersOrders objectForKey:filterId];
+                if (order == nil)
+                    order = @(filter.order);
+                BOOL isActive = ![_hiddenFiltersKeys containsObject:filterId];
+                filter.isActive = isActive;
+                filter.order = [order intValue];
+                if (isActive)
+                    [filterIds addObject:filter.filterId];
+            }
+            [_filtersHelper saveFiltersOrder:appMode filterIds:filterIds];
+        }
+        else if (_wasReset)
+            [_filtersHelper saveFiltersOrder:appMode filterIds:nil];
+    }
+    [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)onRowButtonClicked:(UIButton *)sender
+{
+    _isChanged = YES;
+    _hiddenModified = YES;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     if (indexPath.section == kAllFiltersSection)
-    {
-        [self deleteMode:indexPath];
-    }
-    else
-    {
+        [self hideMode:indexPath];
+    else if (indexPath.section == kHiddenFiltersSection)
         [self restoreMode:indexPath];
-    }
 }
 
-- (void) deleteMode:(NSIndexPath *)indexPath
+- (void)hideMode:(NSIndexPath *)indexPath
 {
-    OAEditFilterItem *filterItem = _filters[indexPath.row];
-    [_filters removeObject:filterItem];
-    [_deletedFilters addObject:filterItem];
+    OAEditFilterItem *filterItem = _filtersItems[indexPath.row];
+    [_filtersItems removeObject:filterItem];
+    [_hiddenFiltersItems addObject:filterItem];
+    [_hiddenFiltersKeys addObject:filterItem.filter.filterId];
+    filterItem.filter.isActive = NO;
     [self updateFiltersIndexes];
-    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:_deletedFilters.count - 1 inSection:1];
+    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:_hiddenFiltersItems.count - 1 inSection:kHiddenFiltersSection];
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         [_tableView reloadData];
@@ -148,22 +276,30 @@
     [CATransaction commit];
 }
 
-- (void) restoreMode:(NSIndexPath *)indexPath
+- (void)restoreMode:(NSIndexPath *)indexPath
 {
-    OAEditFilterItem *filterItem = _deletedFilters[indexPath.row];
+    OAEditFilterItem *filterItem = _hiddenFiltersItems[indexPath.row];
     int order = filterItem.order;
-    order = order > _filters.count ? (int) _filters.count : order;
+    order = order > _filtersItems.count ? (int) _filtersItems.count : order;
     NSIndexPath *targetPath = [NSIndexPath indexPathForRow:order inSection:kAllFiltersSection];
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         [_tableView reloadData];
     }];
-    [_deletedFilters removeObjectAtIndex:indexPath.row];
-    [_filters insertObject:filterItem atIndex:order];
+    [_hiddenFiltersItems removeObjectAtIndex:indexPath.row];
+    [_filtersItems insertObject:filterItem atIndex:order];
+    [_hiddenFiltersKeys removeObject:filterItem.filter.filterId];
+    filterItem.filter.isActive = YES;
     [_tableView beginUpdates];
     [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
     [_tableView endUpdates];
     [CATransaction commit];
+}
+
+- (void)updateFiltersIndexes
+{
+    for (int i = 0; i < _filtersItems.count; i++)
+        _filtersItems[i].order = i;
 }
 
 - (void)showChangesAlert
@@ -176,79 +312,57 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (IBAction)onCancelButtonClicked:(id)sender
-{
-    if (_hasChangesBeenMade)
-    {
-        [self showChangesAlert];
-    }
-    else
-    {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (IBAction) onDoneButtonClicked:(id)sender
-{
-    NSMutableArray<NSString *> *filterIds = [NSMutableArray new];
-    for (OAEditFilterItem *filterItem in _filters)
-    {
-        OAPOIUIFilter *filter = filterItem.filter;
-        NSString *filterId = filter.filterId;
-        NSNumber *order = [_filtersOrders objectForKey:filterId];
-        if (!order)
-        {
-            order = @(filter.order);
-        }
-        BOOL isActive = ![_availableFiltersKeys containsObject:filterId];
-        filter.isActive = isActive;
-        filter.order = [order intValue];
-        if (isActive)
-        {
-            [filterIds addObject: filter.filterId];
-        }
-    }
-    [_helper saveFiltersOrder:filterIds];
-    [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)updateFiltersIndexes
-{
-    for (int i = 0; i < _filters.count; i++)
-    {
-        _filters[i].order = i;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    BOOL isAllFilters = indexPath.section == kAllFiltersSection;
-    OAPOIUIFilter *filter = isAllFilters ? _filters[indexPath.row].filter : _deletedFilters[indexPath.row].filter;
-
-    static NSString* const identifierCell = kCellTypeDeleteButton;
-    OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-    if (cell == nil)
+    NSString *cellType = indexPath.section == kActionsSection ? kButtonRightIconCell : kHideButtonCell;
+    if ([cellType isEqualToString:kHideButtonCell])
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeDeleteButton owner:self options:nil];
-        cell = (OADeleteButtonTableViewCell *) nib[0];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
+        static NSString* const identifierCell = kHideButtonCell;
+        BOOL isAllFilters = indexPath.section == kAllFiltersSection;
+        OAPOIUIFilter *filter = isAllFilters ? _filtersItems[indexPath.row].filter : _hiddenFiltersItems[indexPath.row].filter;
+        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kHideButtonCell owner:self options:nil];
+            cell = (OADeleteButtonTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = filter.name;
+            UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
+            cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
+            NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
+            [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+            [cell.deleteButton setUserInteractionEnabled:YES];
+            cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.deleteButton addTarget:self action:@selector(onRowButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        return cell;
     }
-    if (cell)
+    else if ([cellType isEqualToString:kButtonRightIconCell])
     {
-        cell.titleLabel.text = filter.name;
-        UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
-        cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
-        NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
-        [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-        [cell.deleteButton setUserInteractionEnabled:YES];
-        cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
-        [cell.deleteButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        static NSString * const identifierCell = kButtonRightIconCell;
+        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+        }
+        if (cell) {
+            OAActionItem *actionItem = _actionsItems[indexPath.row];
+            cell.userInteractionEnabled = YES;
+            cell.iconView.image = actionItem.icon;
+            [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
+            [cell.button addTarget:actionItem action:@selector(onClick) forControlEvents:UIControlEventTouchDown];
+            return cell;
+        }
     }
-    return cell;
+    return nil;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -258,35 +372,50 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    _hasChangesBeenMade = YES;
+    _isChanged = YES;
+    _orderModified = YES;
     OAEditFilterItem *filterItem = [self getItem:sourceIndexPath];
-    // Deferr the data update until the animation is complete
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         [_tableView reloadData];
     }];
-    [_filters removeObjectAtIndex:sourceIndexPath.row];
-    [_filters insertObject:filterItem atIndex:destinationIndexPath.row];
+    [_filtersItems removeObjectAtIndex:sourceIndexPath.row];
+    [_filtersItems insertObject:filterItem atIndex:destinationIndexPath.row];
+    [_filtersOrders removeObjectForKey:filterItem.filter.filterId];
+    [_filtersOrders setObject:@(destinationIndexPath.row) forKey:filterItem.filter.filterId];
     [self updateFiltersIndexes];
     [CATransaction commit];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == kAllFiltersSection ? OALocalizedString(@"visible_categories") : OALocalizedString(@"hidden_categories");
+    NSString *title;
+    if (section == kAllFiltersSection)
+        title = OALocalizedString(@"visible_categories");
+    else if (section == kHiddenFiltersSection)
+        title = OALocalizedString(@"hidden_categories");
+    else
+        title = OALocalizedString(@"actions");
+    return title;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    return section == kActionsSection ? OALocalizedString(@"rearrange_categories_reset") : @"";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kAllFiltersSection)
-        return _filters.count;
-    else
-        return _deletedFilters.count;
+        return _filtersItems.count;
+    else if (section == kHiddenFiltersSection)
+        return _hiddenFiltersItems.count;
+    else return _actionsItems.count;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -296,18 +425,19 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+    if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
+    {
         UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
         headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
     }
 }
 
-- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return UITableViewCellEditingStyleNone;
 }
 
-- (BOOL) tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return NO;
 }

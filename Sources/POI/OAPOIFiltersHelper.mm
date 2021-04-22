@@ -366,7 +366,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     OAPOIUIFilter *_topWikiPoiFilter;
     NSMutableArray<OAPOIUIFilter *> *_cacheTopStandardFilters;
     NSMutableSet<OAPOIUIFilter *> *_selectedPoiFilters;
-    
+
     OAPOIFilterDbHelper *_helper;
     OAPOIHelper *_poiHelper;
     
@@ -698,12 +698,6 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             filter.isActive = YES;
         }
     }
-}
-
-- (void) saveFiltersOrder:(NSArray<NSString *> *)filterIds
-{
-    OAApplicationMode *selectedAppMode = OAAppSettings.sharedManager.applicationMode;
-    [self saveFiltersOrder:selectedAppMode filterIds:filterIds];
 }
 
 - (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds

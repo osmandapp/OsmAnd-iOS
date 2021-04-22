@@ -529,24 +529,22 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
 - (void) clearCustomSearchPoiFilters
 {
     for (OASearchCoreAPI *capi in _apis)
-        if ([capi isKindOfClass:[OASearchAmenityTypesAPI class]])
-            [((OASearchAmenityTypesAPI *) capi) clearCustomFilters];
+        if ([capi isKindOfClass:OASearchAmenityTypesAPI.class])
+            [(OASearchAmenityTypesAPI *) capi clearCustomFilters];
 }
 
 - (void) addCustomSearchPoiFilter:(OACustomSearchPoiFilter *)poiFilter  priority:(int)priority
 {
     for (OASearchCoreAPI *capi in _apis)
-        if ([capi isKindOfClass:[OASearchAmenityTypesAPI class]])
-            [((OASearchAmenityTypesAPI *) capi) addCustomFilter:poiFilter priority:priority];
+        if ([capi isKindOfClass:OASearchAmenityTypesAPI.class])
+            [(OASearchAmenityTypesAPI *) capi addCustomFilter:poiFilter priority:priority];
 }
 
 - (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrders
 {
-    for (OASearchCoreAPI *capi : _apis)
-    {
-        if ([capi isKindOfClass:[OASearchAmenityTypesAPI class]])
-            [((OASearchAmenityTypesAPI *) capi) setActivePoiFiltersByOrder:filterOrders];
-    }
+    for (OASearchCoreAPI *capi in _apis)
+        if ([capi isKindOfClass:OASearchAmenityTypesAPI.class])
+            [(OASearchAmenityTypesAPI *) capi setActivePoiFiltersByOrder:filterOrders];
 }
 
 - (void) registerAPI:(OASearchCoreAPI *)api

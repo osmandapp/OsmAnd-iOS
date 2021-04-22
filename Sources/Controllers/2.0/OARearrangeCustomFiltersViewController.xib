@@ -15,7 +15,7 @@
                 <outlet property="doneButton" destination="7Pi-lW-WzC" id="LfJ-Ws-DgA"/>
                 <outlet property="navBar" destination="tTv-fb-Ygd" id="6YP-cQ-rQb"/>
                 <outlet property="tableView" destination="OoE-bw-UtS" id="cA6-Ma-24W"/>
-                <outlet property="titleView" destination="3xR-w7-ZwS" id="igk-zr-C8h"/>
+                <outlet property="titleLabel" destination="3xR-w7-ZwS" id="igk-zr-C8h"/>
                 <outlet property="view" destination="gcm-X9-SiY" id="l4Z-gD-WLj"/>
             </connections>
         </placeholder>

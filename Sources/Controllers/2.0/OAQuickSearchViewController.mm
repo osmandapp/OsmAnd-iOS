@@ -509,6 +509,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         }
         case 1:
         {
+            [self.searchHelper refreshCustomPoiFilters];
             [_pageController setViewControllers:@[_categoriesViewController] direction: (_pageController.viewControllers[0] == _historyViewController ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse) animated:YES completion:nil];
             break;
         }
@@ -1830,9 +1831,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     [filter clearFilter];
-    OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:filter];
-    customPOI.delegate = self;
-    [self.navigationController pushViewController:customPOI animated:YES];
+    OACustomPOIViewController *customPOIView = [[OACustomPOIViewController alloc] initWithFilter:filter];
+    customPOIView.delegate = self;
+    [self.navigationController pushViewController:customPOIView animated:YES];
 }
 
 - (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
@@ -1848,9 +1849,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.navigationController pushViewController:rearrangeCategoriesView animated:YES];
 }
 
-- (NSArray *)getCustomFilters
+- (NSArray<OAPOIUIFilter *> *)getCustomFilters
 {
     return [[OAPOIFiltersHelper sharedInstance] getUserDefinedPoiFilters:NO];
+}
+
+- (NSArray<OAPOIUIFilter *> *)getSortedFiltersIncludeInactive
+{
+    return [[OAPOIFiltersHelper sharedInstance] getSortedPoiFilters:NO];
 }
 
 #pragma mark - OAHistoryTableDelegate
@@ -2011,17 +2017,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - OAPOIFiltersRemoveDelegate
 
-- (BOOL) removeFilters:(NSArray<OAPOIUIFilter *> *)filters
+- (BOOL)removeFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
-    OAPOIFiltersHelper *filtersHelper = [OAPOIFiltersHelper sharedInstance];
     BOOL removed = YES;
     for (OAPOIUIFilter *filter in filters)
-    {
-        if (![filtersHelper removePoiFilter:filter])
-        {
+        if (![[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
             removed = NO;
-        }
-    }
     [self.searchHelper refreshCustomPoiFilters];
     [self reloadCategories];
     return removed;

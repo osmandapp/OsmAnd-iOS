@@ -44,7 +44,6 @@
 - (NSArray<NSString *> *) getPoiFilterOrders:(BOOL)onlyActive;
 - (NSArray<OAPOIUIFilter *> *) getSortedPoiFilters:(BOOL) onlyActive;
 - (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds;
-- (void) saveFiltersOrder:(NSArray<NSString *> *)filterIds;
-
+- (void) saveInactiveFilters:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds;
 
 @end

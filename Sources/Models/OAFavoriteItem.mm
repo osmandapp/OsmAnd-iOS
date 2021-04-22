@@ -518,4 +518,27 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     return [NSString stringWithFormat:@"%@T%@Z",dateString, timeString];
 }
 
+- (UIImage *) getCompositeIcon
+{
+    UIImage *resultImg;
+    NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:[self getBackgroundIcon]];
+    UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
+    backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:[self getColor]];
+    
+    NSString *iconName = [@"mx_" stringByAppendingString:[self getIcon]];
+    UIImage *iconImg = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
+    iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
+    CGFloat smallIconSize = 26;
+    iconImg  = [OAUtilities resizeImage:iconImg newSize:CGSizeMake(smallIconSize, smallIconSize)];
+    CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2;
+    
+    UIGraphicsBeginImageContext(backgroundImg.size);
+    [backgroundImg drawInRect:CGRectMake(0, 0, backgroundImg.size.width, backgroundImg.size.height)];
+    [iconImg drawInRect:CGRectMake(centredIconOffset, centredIconOffset, iconImg.size.width, iconImg.size.height)];
+    resultImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return resultImg;
+}
+
 @end

@@ -97,7 +97,7 @@ typedef void(^OAActionButtonOnClick)(id sender);
     BOOL _hiddenModified;
     BOOL _wasReset;
 
-    NSMutableArray<OAActionItem *> *_actionsItems;
+    NSArray<OAActionItem *> *_actionsItems;
     NSMutableArray<OAEditFilterItem *> *_filtersItems;
     NSMutableArray<OAEditFilterItem *> *_hiddenFiltersItems;
     NSMapTable<NSString *, NSNumber *> *_filtersOrders;
@@ -134,11 +134,6 @@ typedef void(^OAActionButtonOnClick)(id sender);
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
-- (UIView *)getTopView
-{
-    return _navBar;
-}
-
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
@@ -170,8 +165,7 @@ typedef void(^OAActionButtonOnClick)(id sender);
 
 - (void)setupActionItems
 {
-    _actionsItems = [NSMutableArray new];
-    [_actionsItems addObject:[[OAActionItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_reset"] title:OALocalizedString(@"reset_to_default") onClickFunction:^(id sender) {
+    OAActionItem *actionResetToDefault = [[OAActionItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_reset"] title:OALocalizedString(@"reset_to_default") onClickFunction:^(id sender) {
         _isChanged = YES;
         _wasReset = YES;
         NSInteger countHiddenCells = [self.tableView numberOfRowsInSection:kHiddenFiltersSection];
@@ -192,7 +186,8 @@ typedef void(^OAActionButtonOnClick)(id sender);
                 return [obj1.filter.name localizedCaseInsensitiveCompare:obj2.filter.name];
         }]];
         [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
-    }]];
+    }];
+    _actionsItems = @[actionResetToDefault];
 }
 
 - (OAEditFilterItem *)getItem:(NSIndexPath *)indexPath
@@ -240,7 +235,9 @@ typedef void(^OAActionButtonOnClick)(id sender);
             [_filtersHelper saveFiltersOrder:appMode filterIds:filterIds];
         }
         else if (_wasReset)
+        {
             [_filtersHelper saveFiltersOrder:appMode filterIds:nil];
+        }
     }
     [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
     [self.navigationController popViewControllerAnimated:YES];
@@ -319,10 +316,9 @@ typedef void(^OAActionButtonOnClick)(id sender);
     NSString *cellType = indexPath.section == kActionsSection ? kButtonRightIconCell : kHideButtonCell;
     if ([cellType isEqualToString:kHideButtonCell])
     {
-        static NSString* const identifierCell = kHideButtonCell;
         BOOL isAllFilters = indexPath.section == kAllFiltersSection;
         OAPOIUIFilter *filter = isAllFilters ? _filtersItems[indexPath.row].filter : _hiddenFiltersItems[indexPath.row].filter;
-        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kHideButtonCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kHideButtonCell owner:self options:nil];
@@ -345,11 +341,10 @@ typedef void(^OAActionButtonOnClick)(id sender);
     }
     else if ([cellType isEqualToString:kButtonRightIconCell])
     {
-        static NSString * const identifierCell = kButtonRightIconCell;
-        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:kButtonRightIconCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonRightIconCell owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
         }
@@ -400,7 +395,7 @@ typedef void(^OAActionButtonOnClick)(id sender);
     return title;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == kActionsSection ? OALocalizedString(@"rearrange_categories_reset") : @"";
 }
@@ -413,10 +408,17 @@ typedef void(^OAActionButtonOnClick)(id sender);
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kAllFiltersSection)
+    {
         return _filtersItems.count;
+    }
     else if (section == kHiddenFiltersSection)
+    {
         return _hiddenFiltersItems.count;
-    else return _actionsItems.count;
+    }
+    else
+    {
+        return _actionsItems.count;
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

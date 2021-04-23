@@ -1831,22 +1831,22 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     [filter clearFilter];
-    OACustomPOIViewController *customPOIView = [[OACustomPOIViewController alloc] initWithFilter:filter];
-    customPOIView.delegate = self;
-    [self.navigationController pushViewController:customPOIView animated:YES];
+    OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:filter];
+    customPOIScreen.delegate = self;
+    [self.navigationController pushViewController:customPOIScreen animated:YES];
 }
 
 - (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
-    OADeleteCustomFiltersViewController *removeFiltersView = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
-    removeFiltersView.delegate = self;
-    [self.navigationController pushViewController:removeFiltersView animated:YES];
+    OADeleteCustomFiltersViewController *removeFiltersScreen = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
+    removeFiltersScreen.delegate = self;
+    [self.navigationController pushViewController:removeFiltersScreen animated:YES];
 }
 
-- (void)showRearrangeCategoriesScreen:(NSArray<OAPOIUIFilter *> *)filters
+- (void)showRearrangeFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
-    OARearrangeCustomFiltersViewController *rearrangeCategoriesView = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
-    [self.navigationController pushViewController:rearrangeCategoriesView animated:YES];
+    OARearrangeCustomFiltersViewController *rearrangeCategoriesScreen = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
+    [self.navigationController pushViewController:rearrangeCategoriesScreen animated:YES];
 }
 
 - (NSArray<OAPOIUIFilter *> *)getCustomFilters

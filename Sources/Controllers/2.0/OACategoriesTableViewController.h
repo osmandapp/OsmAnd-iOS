@@ -18,7 +18,7 @@
 @required
 
 - (void)showCreateFilterScreen;
-- (void)showRearrangeCategoriesScreen:(NSArray<OAPOIUIFilter *> *)filters;
+- (void)showRearrangeFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters;
 - (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters;
 - (NSArray<OAPOIUIFilter *> *)getCustomFilters;
 - (NSArray<OAPOIUIFilter *> *)getSortedFiltersIncludeInactive;

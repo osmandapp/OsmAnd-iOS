@@ -156,7 +156,9 @@
                 [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
             }
             else
+            {
                 [cell.selectionButton setImage:nil forState:UIControlStateNormal];
+            }
             return cell;
         }
     }

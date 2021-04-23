@@ -40,14 +40,6 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <color key="tintColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </imageView>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hJG-jN-LCv">
-                                    <rect key="frame" x="274" y="17" width="30" height="30"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                </imageView>
-                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FXf-oR-bKx">
-                                    <rect key="frame" x="279" y="22" width="20" height="20"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                </imageView>
                                 <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Vs-Qf-khd" userLabel="Left">
                                     <rect key="frame" x="268" y="12" width="44" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -331,8 +323,6 @@
                 <outlet property="downloadCancelButton" destination="zl6-eq-Uwa" id="8Ii-Q4-1cY"/>
                 <outlet property="downloadProgressBar" destination="wu2-kv-d3e" id="9j4-pN-R5j"/>
                 <outlet property="downloadProgressLabel" destination="SWi-rH-lbh" id="6na-w1-kKR"/>
-                <outlet property="favoriteImageBackgroundView" destination="hJG-jN-LCv" id="REo-0Y-vDj"/>
-                <outlet property="favoriteImagePoiView" destination="FXf-oR-bKx" id="J9q-Uy-ncH"/>
                 <outlet property="imageView" destination="50C-PP-spm" id="8bc-8f-hxn"/>
                 <outlet property="nearbyLabel" destination="Iew-x1-PUf" id="sCR-hO-HOD"/>
                 <outlet property="sliderView" destination="Fmg-B6-MZH" id="oHu-ff-0MD"/>

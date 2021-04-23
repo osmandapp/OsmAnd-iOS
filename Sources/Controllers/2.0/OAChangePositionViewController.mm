@@ -36,6 +36,7 @@
 #import "OASavingTrackHelper.h"
 #import "OAGPXDocument.h"
 #import "OAPointDescription.h"
+#import "OAFavoriteItem.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -96,7 +97,15 @@
     bottomDividerFrame.size.height = 0.5;
     _bottomToolBarDividerView.frame = bottomDividerFrame;
     
-    _iconView.image = _targetPoint.icon;
+    if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
+    {
+        OAFavoriteItem *favorite = (OAFavoriteItem *)_targetPoint.targetObj;
+        _iconView.image = [favorite getCompositeIcon];   
+    }
+    else
+    {
+        _iconView.image = _targetPoint.icon;
+    }
     
     if (![OAUtilities isLandscapeIpadAware])
     {

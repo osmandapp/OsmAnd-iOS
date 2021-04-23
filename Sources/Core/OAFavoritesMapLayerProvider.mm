@@ -77,52 +77,74 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getBitmapByFavorite(const
         bitmap = bitmapIt.value();
     }
     return bitmap;
-    
 }
 
 std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav) const
 {
-    QString iconName = fav->getIcon();
-    QString backgroundIconName = backgroundImageNameByType(fav->getBackground());
     std::shared_ptr<SkBitmap> result;
-    auto backgroundIcon = std::make_shared<SkBitmap>();
-    auto icon = std::make_shared<SkBitmap>();
     
-    UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
-    UIImage *origImage = [UIImage imageNamed:backgroundIconName.toNSString()];
-    if (!origImage)
-        origImage = [UIImage imageNamed:@"bg_point_circle"];
+    UIColor *color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
+    if (!color)
+        color = [OADefaultFavorite getDefaultColor];
+    NSString *shapeName = fav->getBackground().toNSString();
+    if (!shapeName || shapeName.length == 0)
+        shapeName = @"circle";
+    NSString *iconName = fav->getIcon().toNSString();
+    if (!iconName || iconName.length == 0)
+        iconName = @"mm_special_star";
     
-    UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * 0.8, origImage.size.height * 0.8)];
-    UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:color];
-    bool res = SkCreateBitmapFromCGImage(backgroundIcon.get(), coloredImage.CGImage);
-    if (!res)
+    // shadow icon
+    NSString *shadowIconName = [NSString stringWithFormat:@"ic_bg_point_%@_bottom", shapeName];
+    auto shadowIcon = [OANativeUtilities skBitmapFromPngResource:shadowIconName];
+    if (!shadowIcon)
         return result;
     
-    origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName.toNSString() stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
+    // color filled background icon
+    NSString *backgroundIconName = [NSString stringWithFormat:@"ic_bg_point_%@_center", shapeName];
+    UIImage *img = getIcon(backgroundIconName, @"ic_bg_point_circle_center");
+    img = [OAUtilities tintImageWithColor:img color:color];
+    auto backgroundIcon = [OANativeUtilities skBitmapFromCGImage:img.CGImage];
+    if (!backgroundIcon)
+        return result;
+    
+    // poi image icon
+    UIImage *origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
     if (!origImage)
         origImage = [UIImage imageNamed:[OAUtilities drawablePath:@"mm_special_star"]];
-    
+
     // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
-    CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.6 : 0.8;
-    resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * scale, origImage.size.height * scale)];
-    coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
-    
-    res = SkCreateBitmapFromCGImage(icon.get(), coloredImage.CGImage);
-    if (!res)
+    CGFloat scale = UIScreen.mainScreen.scale == 3 ? 0.5 : 0.75;
+    UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(origImage.size.width * scale, origImage.size.height * scale)];
+    UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
+    auto icon = [OANativeUtilities skBitmapFromCGImage:coloredImage.CGImage];
+    if (!icon)
         return result;
     
-    if (backgroundIcon && icon)
+    // highlight icon
+    NSString *highlightIconName = [NSString stringWithFormat:@"ic_bg_point_%@_top", shapeName];
+    auto highlightIcon = [OANativeUtilities skBitmapFromPngResource:highlightIconName];
+    if (!highlightIcon)
+        return result;
+    
+    if (shadowIcon && backgroundIcon && icon && highlightIcon)
     {
-        QList<std::shared_ptr<const SkBitmap>> toMerge({backgroundIcon, icon});
+        QList<std::shared_ptr<const SkBitmap>> toMerge({shadowIcon, backgroundIcon, icon, highlightIcon});
         result = OsmAnd::SkiaUtilities::mergeBitmaps(toMerge);
     }
     return result;
 }
 
+UIImage* OAFavoritesMapLayerProvider::getIcon(NSString* iconName, NSString* defaultIconName) const
+{
+    UIImage *iconImage = [UIImage imageNamed:iconName];
+    if (!iconImage)
+        iconImage = [UIImage imageNamed:defaultIconName];
+    return iconImage;
+}
+
 QString OAFavoritesMapLayerProvider::backgroundImageNameByType(const QString& type) const
 {
-    return QStringLiteral("bg_point_") + type;
+    return QStringLiteral("ic_bg_point_") + type + QStringLiteral("_center");
 }
 
 OsmAnd::ZoomLevel OAFavoritesMapLayerProvider::getMinZoom() const

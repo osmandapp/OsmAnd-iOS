@@ -112,9 +112,6 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self = [super init];
     if (self) {
         _favorite = favorite;
-        UIColor *nearestColor = [OADefaultFavorite nearestFavColor:[self getColor]].color;
-        [self setColor:nearestColor];
-        
         [self initPersonalType];
     }
     return self;
@@ -359,7 +356,9 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (UIColor *) getColor
 {
-    return [UIColor colorWithRed:self.favorite->getColor().r/255.0 green:self.favorite->getColor().g/255.0 blue:self.favorite->getColor().b/255.0 alpha:1.0];
+    UIColor *storedColor = [UIColor colorWithRed:self.favorite->getColor().r/255.0 green:self.favorite->getColor().g/255.0 blue:self.favorite->getColor().b/255.0 alpha:1.0];
+    UIColor *nearestColor = [OADefaultFavorite nearestFavColor:storedColor].color;
+    return nearestColor;
 }
 
 - (void) setColor:(UIColor *)color
@@ -516,6 +515,29 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     [dateFormatter setDateFormat:@"hh:mm:ss"];
     NSString *timeString = [dateFormatter stringFromDate:date];
     return [NSString stringWithFormat:@"%@T%@Z",dateString, timeString];
+}
+
+- (UIImage *) getCompositeIcon
+{
+    UIImage *resultImg;
+    NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:[self getBackgroundIcon]];
+    UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
+    backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:[self getColor]];
+    
+    NSString *iconName = [@"mx_" stringByAppendingString:[self getIcon]];
+    UIImage *iconImg = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
+    iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
+    CGFloat smallIconSize = 26;
+    iconImg  = [OAUtilities resizeImage:iconImg newSize:CGSizeMake(smallIconSize, smallIconSize)];
+    CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2;
+    
+    UIGraphicsBeginImageContext(backgroundImg.size);
+    [backgroundImg drawInRect:CGRectMake(0, 0, backgroundImg.size.width, backgroundImg.size.height)];
+    [iconImg drawInRect:CGRectMake(centredIconOffset, centredIconOffset, iconImg.size.width, iconImg.size.height)];
+    resultImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return resultImg;
 }
 
 @end

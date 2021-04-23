@@ -52,6 +52,7 @@
 + (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames;
 + (NSArray<NSString *> *) getFlatIconNamesList;
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList;
++ (NSArray<NSString *> *) getFlatBackgroundContourIconNamesList;
 
 + (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints;
 

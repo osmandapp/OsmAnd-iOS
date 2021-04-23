@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OACollectionViewCellState.h"
 
 @protocol OAFolderCardsCellDelegate <NSObject>
 
@@ -22,8 +23,10 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @property (weak, nonatomic) id<OAFolderCardsCellDelegate> delegate;
+@property (weak, nonatomic) OACollectionViewCellState *state;
+@property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index;
-- (void) scrollToItemIfNeeded:(NSInteger)selectedIndex;
+- (void) updateContentOffset;
 
 @end

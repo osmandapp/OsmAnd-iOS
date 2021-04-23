@@ -276,29 +276,7 @@
 
 - (UIImage *) getIcon
 {
-    NSString *poiIconName = [self.favorite getIcon];
-    if (!poiIconName || [poiIconName isEqualToString:@""])
-        poiIconName = @"mm_special_star";
-    else
-        poiIconName = [NSString stringWithFormat:@"mm_%@", poiIconName];
-    UIImage *poiIcon = [UIImage imageNamed:[OAUtilities drawablePath:poiIconName]];
-    return poiIcon;
-}
-
-- (UIImage *) getBackgroundIcon
-{
-    NSDictionary *icons = @{
-        @"circle" : @"bg_point_circle",
-        @"octagon" : @"bg_point_octagon",
-        @"square" : @"bg_point_square",
-    };
-    
-    NSString *selectedIcon = [self.favorite getBackgroundIcon];
-    if (!selectedIcon || [selectedIcon isEqualToString:@""])
-        selectedIcon = @"circle";
-    NSString *poiBackgroundIconName = icons[selectedIcon];
-    UIImage *backroundImage = [UIImage imageNamed:poiBackgroundIconName];
-    return backroundImage;
+    return [self.favorite getCompositeIcon];
 }
 
 @end

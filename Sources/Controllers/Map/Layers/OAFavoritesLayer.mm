@@ -141,29 +141,43 @@
 - (UIImage *) getFavoriteImage:(const OsmAnd::IFavoriteLocation *)fav
 {
     UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGFloat innerImageSize = 27. * scale;
-    UIImage *finalImage;
+    return [self getImageWithColor:color
+                        background:fav->getBackground().toNSString()
+                 defaultBackground:@"circle"
+                              icon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]
+                       defaultIcon:@"mx_special_star"];
+}
 
-    UIImage *outerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:[@"bg_point_" stringByAppendingString:fav->getBackground().toNSString()]] color:color];
-    if (!outerImage)
-        outerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"bg_point_circle"] color:color];
+- (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background defaultBackground:(NSString *)defaultBackground icon:(NSString *)icon defaultIcon:(NSString *)defaultIcon
+{
+    UIImage *shadowImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_bottom", background]];
+    if (!shadowImage)
+        shadowImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:defaultBackground] color:color];
     
-    UIImage *innerImage = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]];
+    UIImage *colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:[NSString stringWithFormat:@"ic_bg_point_%@_center", background]] color:color];
+    if (!colorFilledImage)
+        colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:defaultBackground] color:color];
+    
+    UIImage *innerImage = [OAUtilities tintImageWithColor:[OATargetInfoViewController getIcon:icon] color:UIColor.whiteColor];
     if (!innerImage)
-        innerImage = [OATargetInfoViewController getIcon:@"mx_special_star"];
+        innerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:defaultIcon] color:UIColor.whiteColor];
     
-    innerImage = [OAUtilities tintImageWithColor:innerImage color:UIColor.whiteColor];
-
-    CGSize outerImageSize = CGSizeMake(36 * scale, 36 * scale);
-    UIGraphicsBeginImageContext(outerImageSize);
-
-    //calculate areaSize for re-centered inner image
-    CGRect areSize = CGRectMake(((outerImageSize.width / 2) - (innerImageSize / 2)), ((outerImageSize.width / 2) - (innerImageSize / 2)), innerImageSize, innerImageSize);
-    [outerImage drawInRect:CGRectMake(0, 0, outerImageSize.width, outerImageSize.height)];
-    [innerImage drawInRect:areSize blendMode:kCGBlendModeNormal alpha:1.0];
-
-    finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *topImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_top", background]];
+    if (!topImage)
+        topImage = [OATargetInfoViewController getIcon:defaultIcon];
+    
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat outerImageSide = 36 * scale;
+    CGFloat innerImageSide = 27. / 2 * scale;
+    CGRect outerImageRect = CGRectMake(0, 0, outerImageSide, outerImageSide);
+    CGRect innerImageCenterRect = CGRectMake(((outerImageSide / 2) - (innerImageSide / 2)), ((outerImageSide / 2) - (innerImageSide / 2)), innerImageSide, innerImageSide);
+    
+    UIGraphicsBeginImageContext(outerImageRect.size);
+    [shadowImage drawInRect:outerImageRect];
+    [colorFilledImage drawInRect:outerImageRect];
+    [innerImage drawInRect:innerImageCenterRect blendMode:kCGBlendModeNormal alpha:1.0];
+    [topImage drawInRect:outerImageRect];
+    UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
     return finalImage;
@@ -284,7 +298,7 @@
         OAFavoriteItem *item = (OAFavoriteItem *)object;
         const auto favLoc = item.favorite;
         UIImage *img = [self getFavoriteImage:favLoc.get()];
-        return [OAUtilities resizeImage:img newSize:CGSizeMake(30., 30.)];
+        return [OAUtilities resizeImage:img newSize:CGSizeMake(60., 60.)];
     }
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }

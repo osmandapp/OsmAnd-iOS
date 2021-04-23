@@ -29,6 +29,7 @@ static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
 static NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
 static NSArray<NSString *> *_flatPoiIcons;
 static NSArray<NSString *> *_flatBackgroundIcons;
+static NSArray<NSString *> *_flatBackgroundContourIcons;
 static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isFavoritesLoaded
@@ -530,6 +531,13 @@ static BOOL _favoritesLoaded = NO;
     if (!_flatBackgroundIcons)
         _flatBackgroundIcons = @[@"circle", @"octagon", @"square"];
     return _flatBackgroundIcons;
+}
+
++ (NSArray<NSString *> *) getFlatBackgroundContourIconNamesList
+{
+    if (!_flatBackgroundContourIcons)
+        _flatBackgroundContourIcons = @[@"bg_point_circle_contour", @"bg_point_octagon_contour", @"bg_point_square_contour"];
+    return _flatBackgroundContourIcons;
 }
 
 + (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints

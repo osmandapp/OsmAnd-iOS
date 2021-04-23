@@ -45,7 +45,6 @@
     [self.categoriesCollectionView setShowsVerticalScrollIndicator:NO];
     
     _categoryDataArray = [NSMutableArray new];
-    _currentCategoryIndex = -1;
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -67,7 +66,9 @@
 {
     if (![_state containsValueForIndex:_cellIndex])
     {
-        CGPoint initialOffset = [self calculateOffset:_currentCategoryIndex];
+        NSArray<NSString *> * categoryLabels = [_poiData.allKeys sortedArrayUsingSelector:@selector(compare:)];
+        NSInteger selectedIndex = [categoryLabels indexOfObject:_currentCategory];
+        CGPoint initialOffset = [self calculateOffset:selectedIndex];
         [_state setOffset:initialOffset forIndex:_cellIndex];
         self.categoriesCollectionView.contentOffset = initialOffset;
     }
@@ -238,7 +239,6 @@
     if (collectionView.tag == kCategoryCellIndex)
     {
         NSDictionary *item = _categoryDataArray[indexPath.row];
-        _currentCategoryIndex = indexPath.row;
         _currentCategory = item[@"categoryName"];
         [self.categoriesCollectionView reloadData];
         [self.collectionView reloadData];

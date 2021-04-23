@@ -73,10 +73,19 @@
 
 - (void) updateContentOffset
 {
-    CGPoint offset = [_state getOffsetForIndex:_cellIndex];
-    if ([OAUtilities getLeftMargin] > 0)
-        offset.x -= [OAUtilities getLeftMargin] - kMargin;
-    self.collectionView.contentOffset = offset;
+    if (![_state containsValueForIndex:_cellIndex])
+    {
+        CGPoint initialOffset = [self calculateOffset:_selectedItemIndex];
+        [_state setOffset:initialOffset forIndex:_cellIndex];
+        self.collectionView.contentOffset = initialOffset;
+    }
+    else
+    {
+        CGPoint loadedOffset = [_state getOffsetForIndex:_cellIndex];
+        if ([OAUtilities getLeftMargin] > 0)
+            loadedOffset.x -= [OAUtilities getLeftMargin] - kMargin;
+        self.collectionView.contentOffset = loadedOffset;
+    }
 }
 
 - (void) saveOffset
@@ -85,15 +94,6 @@
     if ([OAUtilities getLeftMargin] > 0)
         offset.x += [OAUtilities getLeftMargin] - kMargin;
     [_state setOffset:offset forIndex:_cellIndex];
-}
-
-- (void) setupInitialOffsetForSelectedIndex:(NSInteger)selectedIndex
-{
-    if (![_state containsValueForIndex:_cellIndex])
-    {
-        CGPoint offset = [self calculateOffset:selectedIndex];
-        [_state setOffset:offset forIndex:_cellIndex];
-    }
 }
 
 - (CGPoint) calculateOffset:(NSInteger)index;

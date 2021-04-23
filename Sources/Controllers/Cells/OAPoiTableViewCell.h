@@ -37,6 +37,5 @@
 @property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) updateContentOffset;
-- (void) setupInitialOffsetForSelectedIndex:(NSInteger)selectedIndex;
 
 @end

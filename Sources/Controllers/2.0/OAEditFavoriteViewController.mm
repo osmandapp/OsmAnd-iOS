@@ -827,6 +827,7 @@
         {
             cell.categoriesCollectionView.tag = kCategoryCellIndex;
             cell.currentCategory = item[@"selectedCategoryName"];
+            cell.currentCategoryIndex = [item[@"selectedCategoryIndex"] integerValue];
             cell.categoryDataArray = item[@"categotyData"];
             cell.collectionView.tag = kPoiCellIndex;
             cell.poiData = item[@"poiData"];
@@ -940,13 +941,11 @@
      if ([type isEqualToString:kFolderCardsCell])
      {
          OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
-         [folderCell setupInitialOffsetForSelectedIndex:(NSInteger)[item[@"selectedValue"] integerValue]];
          [folderCell updateContentOffset];
      }
      else if ([type isEqualToString:kCellTypePoiCollection])
      {
          OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
-         [poiCell setupInitialOffsetForSelectedIndex:_selectedCategoryIndex];
          [poiCell updateContentOffset];
      }
  }

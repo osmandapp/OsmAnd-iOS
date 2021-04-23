@@ -367,7 +367,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
      if ([type isEqualToString:kFoldersCell])
      {
          OAFoldersCell *folderCell = (OAFoldersCell *)cell;
-         [folderCell setupInitialOffsetForSelectedIndex:(NSInteger)[item[@"selectedValue"] integerValue]];
          [folderCell updateContentOffset];
      }
  }

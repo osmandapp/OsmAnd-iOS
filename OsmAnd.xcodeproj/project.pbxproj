@@ -9049,8 +9049,8 @@
 				3270DBD92600A77300ADD4F7 /* OAPoiCollectionViewCell.m */,
 				32DB230D262EFDDF00696A95 /* OACollectionViewCellState.h */,
 				32DB230E262EFDFF00696A95 /* OACollectionViewCellState.m */,
-				B0D6144AB393D93052E96B7A /* OAButtonRightIconCell.mm */,
-				B0D61CC88F241D2C5C44DBFD /* OAButtonRightIconCell.h */,
+				B0D61C20325EF11A0F4C9E62 /* OAButtonRightIconCell.h */,
+				B0D61877A39AA30845581A65 /* OAButtonRightIconCell.mm */,
 			);
 			name = Cells;
 			sourceTree = "<group>";

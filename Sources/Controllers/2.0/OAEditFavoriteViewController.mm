@@ -940,11 +940,7 @@
      if ([type isEqualToString:kFolderCardsCell])
      {
          OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
-         if (![_scrollCellsState containsValueForIndex:indexPath])
-         {
-             CGPoint offset = [folderCell calculateOffset:(NSInteger)[item[@"selectedValue"] integerValue]];
-             [_scrollCellsState setOffset:offset forIndex:indexPath];
-         }
+         [folderCell setupInitialOffsetForSelectedIndex:(NSInteger)[item[@"selectedValue"] integerValue]];
          [folderCell updateContentOffset];
      }
      else if ([type isEqualToString:kCellTypePoiCollection])

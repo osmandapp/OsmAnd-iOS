@@ -174,7 +174,7 @@ typedef void(^OAActionButtonOnClick)(id sender);
                 CGRect rectInSection = [self.tableView rectForSection:kHiddenFiltersSection];
                 NSArray<NSIndexPath *> *indexPathsInSection = [self.tableView indexPathsForRowsInRect:rectInSection];
                 [self restoreMode:indexPathsInSection[0]];
-                countHiddenCells -= 1; //[self.tableView numberOfRowsInSection:kHiddenFiltersSection];
+                countHiddenCells -= 1;
             }
         }
         [_filtersItems setArray:[_filtersItems sortedArrayUsingComparator:^(OAEditFilterItem *obj1, OAEditFilterItem *obj2) {

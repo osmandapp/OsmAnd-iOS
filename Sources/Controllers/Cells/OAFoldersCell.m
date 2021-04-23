@@ -11,6 +11,7 @@
 #import "OAColors.h"
 #import "OAUtilities.h"
 #import "Localization.h"
+#import "OACollectionViewCellState.h"
 
 #define kDestCell @"OAFoldersCollectionViewCell"
 #define kCellHeight 36
@@ -18,6 +19,7 @@
 #define kLabelOffsetsWidth 20
 #define kLabelMinWidth 50.0
 #define kLabelMaxWidth 120.0
+#define kMargin 16
 
 @interface OAFoldersCell() <UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -27,6 +29,7 @@
 {
     NSMutableArray *_data;
     int _selectionIndex;
+    BOOL _isFirstLoad;
 }
 
 - (void) awakeFromNib
@@ -41,13 +44,82 @@
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
     _data = [NSMutableArray new];
-    int _selectionIndex = 0;
+    _selectionIndex = 0;
+    _isFirstLoad = YES;
 }
 
 - (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(int)index
 {
     _data = values;
     _selectionIndex = index;
+}
+
+#pragma mark - Scroll offset calculations
+
+- (void) updateContentOffset
+{
+    if (![_state containsValueForIndex:_cellIndex])
+    {
+        CGPoint initialOffset = [self calculateOffset:_selectionIndex];
+        [_state setOffset:initialOffset forIndex:_cellIndex];
+        self.collectionView.contentOffset = initialOffset;
+    }
+    else
+    {
+        CGPoint loadedOffset = [_state getOffsetForIndex:_cellIndex];
+        if ([OAUtilities getLeftMargin] > 0)
+            loadedOffset.x -= [OAUtilities getLeftMargin] - kMargin;
+        self.collectionView.contentOffset = loadedOffset;
+    }
+}
+
+- (void) saveOffset
+{
+    CGPoint offset = self.collectionView.contentOffset;
+    if ([OAUtilities getLeftMargin] > 0)
+        offset.x += [OAUtilities getLeftMargin] - kMargin;
+    [_state setOffset:offset forIndex:_cellIndex];
+}
+
+- (CGPoint) calculateOffset:(NSInteger)index
+{
+    CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index];
+    CGPoint fullLength = [self calculateOffsetToSelectedIndex:_data.count];
+    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kMargin;
+    if (selectedOffset.x > maxOffset)
+        selectedOffset.x = maxOffset;
+
+    return selectedOffset;
+}
+
+- (CGPoint) calculateOffsetToSelectedIndex:(NSInteger)index
+{
+    CGFloat offset = 0;
+    for (NSInteger i = 0; i < index; i++)
+    {
+        offset += [self calculateCellWidth:i] + kMargin;
+    }
+    return CGPointMake(offset, 0);
+}
+
+- (CGFloat) calculateCellWidth:(NSInteger)index
+{
+    NSDictionary *item = _data[index];
+    CGSize labelSize = [OAUtilities calculateTextBounds:item[@"title"] width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
+    CGFloat labelWidth = labelSize.width;
+    
+    NSString *iconName = item[@"img"];
+    if (iconName && iconName.length > 0)
+        labelWidth += kImageWidth;
+    else if (labelWidth < kLabelMinWidth)
+        labelWidth = kLabelMinWidth;
+    
+    labelWidth += kLabelOffsetsWidth;
+    
+    if (labelWidth > kLabelMaxWidth)
+        labelWidth = kLabelMaxWidth;
+    
+    return labelWidth;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -64,21 +136,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
-    CGSize labelSize = [OAUtilities calculateTextBounds:item[@"title"] width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
-    CGFloat labelWidth = labelSize.width;
-    
-    NSString *iconName = item[@"img"];
-    if (iconName && iconName.length > 0)
-        labelWidth += kImageWidth;
-    else if (labelWidth < kLabelMinWidth)
-        labelWidth = kLabelMinWidth;
-    
-    labelWidth += kLabelOffsetsWidth;
-    
-    if (labelWidth > kLabelMaxWidth)
-        labelWidth = kLabelMaxWidth;
-    
+    CGFloat labelWidth = [self calculateCellWidth:indexPath.row];    
     return CGSizeMake(labelWidth, kCellHeight);
 }
 
@@ -154,7 +212,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0, 16, 16, 16);
+    return UIEdgeInsetsMake(0, kMargin, kMargin, kMargin);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
@@ -170,6 +228,11 @@
         [_delegate onItemSelected:(int)indexPath.row type:_data[indexPath.row][@"type"]];
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self saveOffset];
 }
 
 @end

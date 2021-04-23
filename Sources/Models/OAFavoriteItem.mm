@@ -112,9 +112,6 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self = [super init];
     if (self) {
         _favorite = favorite;
-        UIColor *nearestColor = [OADefaultFavorite nearestFavColor:[self getColor]].color;
-        [self setColor:nearestColor];
-        
         [self initPersonalType];
     }
     return self;
@@ -359,7 +356,9 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (UIColor *) getColor
 {
-    return [UIColor colorWithRed:self.favorite->getColor().r/255.0 green:self.favorite->getColor().g/255.0 blue:self.favorite->getColor().b/255.0 alpha:1.0];
+    UIColor *storedColor = [UIColor colorWithRed:self.favorite->getColor().r/255.0 green:self.favorite->getColor().g/255.0 blue:self.favorite->getColor().b/255.0 alpha:1.0];
+    UIColor *nearestColor = [OADefaultFavorite nearestFavColor:storedColor].color;
+    return nearestColor;
 }
 
 - (void) setColor:(UIColor *)color

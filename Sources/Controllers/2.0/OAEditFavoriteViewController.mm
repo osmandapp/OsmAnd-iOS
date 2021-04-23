@@ -17,7 +17,7 @@
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OASettingsTableViewCell.h"
 #import "OAColorsTableViewCell.h"
-#import "OAIconsTableViewCell.h"
+#import "OAShapesTableViewCell.h"
 #import "OAPoiTableViewCell.h"
 #import "OASelectFavoriteGroupViewController.h"
 #import "OAAddFavoriteGroupViewController.h"
@@ -28,6 +28,8 @@
 #import "OARootViewController.h"
 #import "OATargetInfoViewController.h"
 #import "OATargetPointsHelper.h"
+#import "OATableViewCustomHeaderView.h"
+#import "OACollectionViewCellState.h"
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
 
@@ -44,6 +46,8 @@
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
 #define kFolderCardsCell @"OAFolderCardsCell"
+#define kHeaderId @"TableViewSectionHeader"
+#define kPoiTableViewCell @"OAPoiTableViewCell"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -61,8 +65,10 @@
 #define kTextCellBottomMargin 17.
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
+#define kFullHeaderHeight 100
+#define kCompressedHeaderHeight 62
 
-@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAIconsTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate>
+@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
 
@@ -71,6 +77,7 @@
     OsmAndAppInstance _app;
     BOOL _isNewItemAdding;
     BOOL _wasChanged;
+    BOOL _isUnsaved;
     NSString *_ininialName;
     NSString *_ininialGroupName;
     
@@ -80,6 +87,7 @@
     NSArray *_poiCategories;
     NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
+    NSArray<NSString *> *_backgroundContourIconNames;
     
     NSArray<NSString *> *_groupNames;
     NSArray<NSNumber *> *_groupSizes;
@@ -91,6 +99,15 @@
     NSInteger _selectedBackgroundIndex;
     NSString *_editingTextFieldKey;
     
+    NSInteger _selectCategorySectionIndex;
+    NSInteger _selectCategoryLabelRowIndex;
+    NSInteger _selectCategoryCardsRowIndex;
+    NSInteger _appearenceSectionIndex;
+    NSInteger _poiIconRowIndex;
+    NSInteger _colorRowIndex;
+    NSInteger _shapeRowIndex;
+    
+    OACollectionViewCellState *_scrollCellsState;
     NSString *_renamedPointAlertMessage;
 }
 
@@ -101,6 +118,7 @@
     {
         _app = [OsmAndApp instance];
         _isNewItemAdding = NO;
+        _isUnsaved = YES;
         self.favorite = favorite;
         self.name = [self.favorite getDisplayName];
         self.desc = [self.favorite getDescription];
@@ -118,6 +136,7 @@
     if (self)
     {
         _isNewItemAdding = YES;
+        _isUnsaved = YES;
         _app = [OsmAndApp instance];
         
         // Create favorite
@@ -192,10 +211,28 @@
     _ininialName = self.name;
     _ininialGroupName = self.groupTitle;
     _editingTextFieldKey = @"";
+    
+    _selectCategorySectionIndex = -1;
+    _selectCategoryLabelRowIndex = -1;
+    _selectCategoryCardsRowIndex = -1;
+    _appearenceSectionIndex = -1;
+    _poiIconRowIndex = -1;
+    _colorRowIndex = -1;
+    _shapeRowIndex = -1;
+    _scrollCellsState = [[OACollectionViewCellState alloc] init];
+    
     [self setupGroups];
     [self setupColors];
     [self setupIcons];
     [self generateData];
+}
+
+- (void) setupHeaderName
+{
+    if (self.name.length > 0)
+        self.titleLabel.text = self.name;
+    else
+        self.titleLabel.text = _isNewItemAdding ? OALocalizedString(@"add_favorite") : OALocalizedString(@"ctx_mnu_edit_fav");
 }
 
 - (void) setupGroups
@@ -264,6 +301,7 @@
         _selectedIconCategoryName = @"special";
         
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
+    _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
     
     NSMutableArray * tempBackgroundIcons = [NSMutableArray new];
     for (NSString *iconName in _backgroundIconNames)
@@ -303,6 +341,8 @@
 
 - (void) generateData
 {
+    [self setupHeaderName];
+    
     NSMutableArray *data = [NSMutableArray new];
     
     NSMutableArray *section = [NSMutableArray new];
@@ -328,9 +368,8 @@
         @"isEditable" : @YES,
         @"key" : kAddressKey
     }];
-
     [data addObject:[NSArray arrayWithArray:section]];
-
+    
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"fav_group"),
@@ -339,6 +378,7 @@
         @"value" : self.groupTitle,
         @"key" : kSelectGroupKey
     }];
+    _selectCategoryLabelRowIndex = section.count -1;
 
     NSUInteger selectedGroupIndex = [_groupNames indexOfObject:self.groupTitle];
     if (selectedGroupIndex < 0)
@@ -351,8 +391,9 @@
         @"colors" : _groupColors,
         @"addButtonTitle" : OALocalizedString(@"fav_add_group")
     }];
-
+    _selectCategoryCardsRowIndex = section.count -1;
     [data addObject:[NSArray arrayWithArray:section]];
+    _selectCategorySectionIndex = data.count - 1;
     
     section = [NSMutableArray new];
     [section addObject:@{
@@ -363,24 +404,32 @@
         @"selectedCategoryName" : _selectedIconCategoryName,
         @"categotyData" : _poiCategories,
         @"selectedIconName" : _selectedIconName,
-        @"poiData" : _poiIcons[_selectedIconCategoryName],
+        @"poiData" : _poiIcons,
         @"key" : kIconsKey
     }];
+    _poiIconRowIndex = section.count - 1;
+    
     [section addObject:@{
         @"type" : kCellTypeColorCollection,
         @"title" : OALocalizedString(@"fav_color"),
         @"value" : _selectedColor.name,
         @"index" : [NSNumber numberWithInteger:_selectedColorIndex],
     }];
+    _colorRowIndex = section.count - 1;
+    
     [section addObject:@{
         @"type" : kCellTypeIconCollection,
         @"title" : OALocalizedString(@"shape"),
         @"value" : OALocalizedString(_backgroundIconNames[_selectedBackgroundIndex]),
         @"index" : [NSNumber numberWithInteger:_selectedBackgroundIndex],
-        @"data" : _backgroundIcons,
+        @"icons" : _backgroundIcons,
+        @"contourIcons" : _backgroundContourIconNames,
         @"key" : kBackgroundsKey
     }];
+    _shapeRowIndex = section.count - 1;
+    
     [data addObject:[NSArray arrayWithArray:section]];
+    _appearenceSectionIndex = data.count - 1;
     
     section = [NSMutableArray new];
     [section addObject:@{
@@ -409,11 +458,15 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.presentationController.delegate = self;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     self.doneButton.hidden = NO;
+    
     [self updateHeaderIcon];
+    [self setupHeaderName];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -422,7 +475,6 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = _isNewItemAdding ? OALocalizedString(@"add_favorite") : OALocalizedString(@"ctx_mnu_edit_fav");
     [self.doneButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -431,24 +483,67 @@
     return [self.favorite getCategoryDisplayName];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)viewDidLayoutSubviews
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if ([OAUtilities isLandscape])
+    [self setupHeaderWithVerticalOffset:self.tableView.contentOffset.y];
+}
+
+- (void) setupHeaderWithVerticalOffset:(CGFloat)offset
+{
+    CGFloat compressingHeight = kFullHeaderHeight - kCompressedHeaderHeight;
+    if (![OAUtilities isLandscape])
+    {
+        CGFloat multiplier;
+        
+        if (offset <= 0)
         {
-            self.titleLabel.hidden = YES;
-            self.navBarHeightConstraint.constant = 68;
+            multiplier = 1;
+            _navBarHeightConstraint.constant = kFullHeaderHeight;
+        }
+        else if (offset > 0 && offset < compressingHeight)
+        {
+            multiplier = offset < 0 ? 0 : 1 - (offset / compressingHeight);
+            _navBarHeightConstraint.constant = kCompressedHeaderHeight + compressingHeight * multiplier;
         }
         else
         {
-            self.titleLabel.hidden = NO;
-            self.navBarHeightConstraint.constant = 100;
+            multiplier = 0;
+            _navBarHeightConstraint.constant = kCompressedHeaderHeight;
         }
-    } completion:nil];
+        
+        self.titleLabel.font = [UIFont systemFontOfSize:17 * multiplier weight:UIFontWeightSemibold];
+        self.titleLabel.alpha = multiplier;
+        self.titleLabel.hidden = NO;
+    }
+    else
+    {
+        _navBarHeightConstraint.constant = kCompressedHeaderHeight;
+        self.titleLabel.hidden = YES;
+        self.titleLabel.alpha = 0;
+    }
 }
 
 - (void) dismissViewController
+{
+    if (_isUnsaved)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_dismiss") message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            if (_isNewItemAdding )
+                [self deleteFavoriteItem:self.favorite];
+            [self doDismiss];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        [self doDismiss];
+    }
+}
+
+- (void) doDismiss
 {
     [self dismissViewControllerAnimated:YES completion:^{
         if (_renamedPointAlertMessage)
@@ -464,12 +559,11 @@
 
 - (void)onCancelButtonPressed
 {
-    if (_isNewItemAdding)
-        [self deleteFavoriteItem:self.favorite];
 }
 
 - (void)onDoneButtonPressed
 {
+    _isUnsaved = NO;
     if (_wasChanged || _isNewItemAdding)
     {
         
@@ -598,11 +692,23 @@
     [self.tableView endUpdates];
 }
 
-- (NSIndexPath *)indexPathForCellContainingView:(UIView *)view inTableView:(UITableView *)tableView
+#pragma mark - UIAdaptivePresentationControllerDelegate
+
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController
 {
-    CGPoint viewCenterRelativeToTableview = [tableView convertPoint:CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds)) fromView:view];
-    NSIndexPath *cellIndexPath = [tableView indexPathForRowAtPoint:viewCenterRelativeToTableview];
-    return cellIndexPath;
+    return NO;
+}
+
+- (void)presentationControllerDidAttemptToDismiss:(UIPresentationController *)presentationController
+{
+    [self dismissViewController];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self setupHeaderWithVerticalOffset:scrollView.contentOffset.y];
 }
 
 #pragma mark - UITableViewDataSource
@@ -699,14 +805,16 @@
     }
     else if ([cellType isEqualToString:kCellTypePoiCollection])
     {
-        static NSString* const identifierCell = @"OAPoiTableViewCell";
+        static NSString* const identifierCell = kPoiTableViewCell;
         OAPoiTableViewCell *cell = nil;
-        cell = (OAPoiTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPoiTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kPoiTableViewCell owner:self options:nil];
             cell = (OAPoiTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
+            cell.cellIndex = indexPath;
+            cell.state = _scrollCellsState;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
         }
@@ -714,10 +822,9 @@
         {
             cell.categoriesCollectionView.tag = kCategoryCellIndex;
             cell.currentCategory = item[@"selectedCategoryName"];
-            cell.catagoryDataArray = item[@"categotyData"];
-            
+            cell.categoryDataArray = item[@"categotyData"];
             cell.collectionView.tag = kPoiCellIndex;
-            cell.poiDataArray = item[@"poiData"];
+            cell.poiData = item[@"poiData"];
             cell.titleLabel.text = item[@"title"];
             cell.currentColor = _colors[_selectedColorIndex].intValue;
             cell.currentIcon = item[@"selectedIconName"];
@@ -755,13 +862,13 @@
     }
     else if ([cellType isEqualToString:kCellTypeIconCollection])
     {
-        static NSString* const identifierCell = @"OAIconsTableViewCell";
-        OAIconsTableViewCell *cell = nil;
-        cell = (OAIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OAShapesTableViewCell";
+        OAShapesTableViewCell *cell = nil;
+        cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconsTableViewCell" owner:self options:nil];
-            cell = (OAIconsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAShapesTableViewCell" owner:self options:nil];
+            cell = (OAShapesTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
@@ -769,7 +876,8 @@
         if (cell)
         {
             int selectedIndex = [item[@"index"] intValue];
-            cell.dataArray = item[@"data"];
+            cell.iconNames = item[@"icons"];
+            cell.contourIconNames = item[@"contourIcons"];
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             cell.valueLabel.hidden = NO;
@@ -806,10 +914,12 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            cell.cellIndex = indexPath;
+            cell.state = _scrollCellsState;
         }
         if (cell)
         {
-            cell.delegate = self;
             [cell setValues:item[@"values"] sizes:item[@"sizes"] colors:item[@"colors"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;
@@ -818,10 +928,40 @@
     return nil;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+     NSDictionary *item = _data[indexPath.section][indexPath.row];
+     NSString *type = item[@"type"];
+     if ([type isEqualToString:kFolderCardsCell])
+     {
+         OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
+         [folderCell updateContentOffset];
+     }
+     else if ([type isEqualToString:kCellTypePoiCollection])
+     {
+         OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
+         [poiCell updateContentOffset];
+     }
+ }
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSDictionary *item = _data[section].firstObject;
     return item[@"header"];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    vw.label.textColor = UIColorFromRGB(color_text_footer);
+    vw.label.text = [title upperCase];
+    vw.label.userInteractionEnabled = NO;
+ 
+    int offset = section == 0 ? 32 : 16;
+    [vw setYOffset:offset];
+    
+    return vw;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -864,10 +1004,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class])
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *cellType = item[@"type"];
+    if ([cellType isEqualToString:kTextInputFloatingCellWithIcon])
     {
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
         NSString *key = item[@"key"];
         NSString *text;
         if ([key isEqualToString:kNameKey])
@@ -891,6 +1031,13 @@
         }
     }
     return UITableViewAutomaticDimension;
+}
+
+- (NSIndexPath *)indexPathForCellContainingView:(UIView *)view inTableView:(UITableView *)tableView
+{
+    CGPoint viewCenterRelativeToTableview = [tableView convertPoint:CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds)) fromView:view];
+    NSIndexPath *cellIndexPath = [tableView indexPathForRowAtPoint:viewCenterRelativeToTableview];
+    return cellIndexPath;
 }
 
 #pragma mark - UITextViewDelegate
@@ -966,12 +1113,12 @@
 
 #pragma mark - OAPoiTableViewCellDelegate
 
-- (void) onPoiCategorySelected:(NSString *)category
+- (void) onPoiCategorySelected:(NSString *)category index:(NSInteger)index
 {
     _selectedIconCategoryName = category;
     [self generateData];
-    [self.tableView reloadData];
-    [self.tableView layoutSubviews];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void) onPoiSelected:(NSString *)poiName;
@@ -979,11 +1126,9 @@
     _wasChanged = YES;
     _selectedIconName = poiName;
     [self updateHeaderIcon];
-    [self generateData];
-    [self.tableView reloadData];
 }
 
-#pragma mark - OAIconsTableViewCellDelegate
+#pragma mark - OAShapesTableViewCellDelegate
 
 - (void)iconChanged:(NSInteger)tag
 {
@@ -991,7 +1136,6 @@
     _selectedBackgroundIndex = (int)tag;
     [self updateHeaderIcon];
     [self generateData];
-    [self.tableView reloadData];
 }
 
 #pragma mark - OAColorsTableViewCellDelegate
@@ -1003,12 +1147,12 @@
     _selectedColor = [OADefaultFavorite builtinColors][tag];
     [self updateHeaderIcon];
     [self generateData];
-    [self.tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAFolderCardsCellDelegate
 
-- (void) onItemSelected:(int)index
+- (void) onItemSelected:(NSInteger)index
 {
     _wasChanged = YES;
     self.groupTitle = _groupNames[index];
@@ -1026,7 +1170,8 @@
     if ([self.groupTitle isEqualToString:@""])
         self.groupTitle = OALocalizedString(@"favorites");
     [self generateData];
-    [self.tableView reloadData];
+    
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onAddFolderButtonPressed
@@ -1053,7 +1198,7 @@
     [self updateHeaderIcon];
     
     [self generateData];
-    [self.tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_selectCategoryCardsRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) onNewGroupAdded:(NSString *)selectedGroupName  color:(UIColor *)color
@@ -1074,7 +1219,7 @@
     [self setupGroups];
     [self generateData];
     [self updateHeaderIcon];
-    [self.tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_selectCategoryCardsRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAAddFavoriteGroupDelegate

@@ -1117,7 +1117,8 @@
 {
     _selectedIconCategoryName = category;
     [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void) onPoiSelected:(NSString *)poiName;

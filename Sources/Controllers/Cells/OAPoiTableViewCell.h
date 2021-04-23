@@ -25,7 +25,6 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *categoriesCollectionView;
 
 @property (nonatomic) NSDictionary<NSString *, NSArray<NSString *> *> *poiData;
-@property (nonatomic) NSArray<NSString *> *allLabels;
 @property (nonatomic) NSInteger currentColor;
 @property (nonatomic) NSString *currentIcon;
 @property (nonatomic) NSArray *categoryDataArray;

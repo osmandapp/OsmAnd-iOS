@@ -61,11 +61,13 @@
     [super setSelected:selected animated:animated];
 }
 
+#pragma mark - Scroll offset calculations
+
 - (void) updateContentOffset
 {
     if (![_state containsValueForIndex:_cellIndex])
     {
-        CGPoint initialOffset = [self calculateShowingOffset:_currentCategoryIndex];
+        CGPoint initialOffset = [self calculateOffset:_currentCategoryIndex];
         [_state setOffset:initialOffset forIndex:_cellIndex];
         self.categoriesCollectionView.contentOffset = initialOffset;
     }
@@ -86,10 +88,11 @@
     [_state setOffset:offset forIndex:_cellIndex];
 }
 
-- (CGPoint) calculateShowingOffset:(NSInteger)index
+- (CGPoint) calculateOffset:(NSInteger)index
 {
-    CGPoint selectedOffset = [self calculateOffset:index labels:_allLabels];
-    CGPoint fullLength = [self calculateOffset:_allLabels.count labels:_allLabels];
+    NSArray<NSString *> * categoryLabels = [_poiData.allKeys sortedArrayUsingSelector:@selector(compare:)];
+    CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index labels:categoryLabels];
+    CGPoint fullLength = [self calculateOffsetToSelectedIndex:categoryLabels.count labels:categoryLabels];
     CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
     if (selectedOffset.x > maxOffset)
         selectedOffset.x = maxOffset;
@@ -97,7 +100,7 @@
     return selectedOffset;
 }
 
-- (CGPoint) calculateOffset:(NSInteger)index labels:(NSArray<NSString *> *)labels
+- (CGPoint) calculateOffsetToSelectedIndex:(NSInteger)index labels:(NSArray<NSString *> *)labels
 {
     CGFloat offset = 0;
     for (NSInteger i = 0; i < index; i++)
@@ -120,6 +123,8 @@
     labelWidth += kLabelOffsetsWidth;
     return labelWidth;
 }
+
+#pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -249,6 +254,8 @@
             [self.delegate onPoiSelected: _poiData[_currentCategory][indexPath.row]];
     }
 }
+
+#pragma mark - UICollectionViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {

@@ -821,7 +821,6 @@
             cell.state = _scrollCellsState;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
-            cell.allLabels = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
         }
         if (cell)
         {

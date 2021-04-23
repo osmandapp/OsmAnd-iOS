@@ -54,6 +54,8 @@
     _selectionIndex = index;
 }
 
+#pragma mark - Scroll offset calculations
+
 - (void) updateContentOffset
 {
     if (![_state containsValueForIndex:_cellIndex])
@@ -79,10 +81,10 @@
     [_state setOffset:offset forIndex:_cellIndex];
 }
 
-- (CGPoint) calculateShowingOffset:(NSInteger)index
+- (CGPoint) calculateOffset:(NSInteger)index
 {
-    CGPoint selectedOffset = [self calculateOffset:index];
-    CGPoint fullLength = [self calculateOffset:_data.count];
+    CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index];
+    CGPoint fullLength = [self calculateOffsetToSelectedIndex:_data.count];
     CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kMargin;
     if (selectedOffset.x > maxOffset)
         selectedOffset.x = maxOffset;
@@ -90,7 +92,7 @@
     return selectedOffset;
 }
 
-- (CGPoint) calculateOffset:(NSInteger)index
+- (CGPoint) calculateOffsetToSelectedIndex:(NSInteger)index
 {
     CGFloat offset = 0;
     for (NSInteger i = 0; i < index; i++)

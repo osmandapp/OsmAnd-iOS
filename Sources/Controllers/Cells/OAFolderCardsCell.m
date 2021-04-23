@@ -71,6 +71,8 @@
         @"key" : @"work"}];
 }
 
+#pragma mark - Scroll offset calculations
+
 - (void) updateContentOffset
 {
     if (![_state containsValueForIndex:_cellIndex])

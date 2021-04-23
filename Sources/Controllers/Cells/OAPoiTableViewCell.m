@@ -25,6 +25,9 @@
 #define kCategoriesCellsSpacing 12
 
 @implementation OAPoiTableViewCell
+{
+    NSArray<NSString *> *_categoryNames;
+}
 
 - (void)awakeFromNib
 {
@@ -60,14 +63,29 @@
     [super setSelected:selected animated:animated];
 }
 
+- (void) setCategoryDataArray:(NSArray *)categoryDataArray
+{
+    _categoryDataArray = categoryDataArray;
+    [self updateCategoryNames];
+}
+
+- (void) updateCategoryNames
+{
+    NSMutableArray *names = [NSMutableArray new];
+    for (NSDictionary *category in _categoryDataArray)
+    {
+        [names addObject:category[@"categoryName"]];
+    }
+    _categoryNames = [NSArray arrayWithArray:names];
+}
+
 #pragma mark - Scroll offset calculations
 
 - (void) updateContentOffset
 {
     if (![_state containsValueForIndex:_cellIndex])
     {
-        NSArray<NSString *> * categoryLabels = [_poiData.allKeys sortedArrayUsingSelector:@selector(compare:)];
-        NSInteger selectedIndex = [categoryLabels indexOfObject:_currentCategory];
+        NSInteger selectedIndex = [_categoryNames indexOfObject:_currentCategory];
         CGPoint initialOffset = [self calculateOffset:selectedIndex];
         [_state setOffset:initialOffset forIndex:_cellIndex];
         self.categoriesCollectionView.contentOffset = initialOffset;
@@ -91,9 +109,8 @@
 
 - (CGPoint) calculateOffset:(NSInteger)index
 {
-    NSArray<NSString *> * categoryLabels = [_poiData.allKeys sortedArrayUsingSelector:@selector(compare:)];
-    CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index labels:categoryLabels];
-    CGPoint fullLength = [self calculateOffsetToSelectedIndex:categoryLabels.count labels:categoryLabels];
+    CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index labels:_categoryNames];
+    CGPoint fullLength = [self calculateOffsetToSelectedIndex:_categoryNames.count labels:_categoryNames];
     CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
     if (selectedOffset.x > maxOffset)
         selectedOffset.x = maxOffset;

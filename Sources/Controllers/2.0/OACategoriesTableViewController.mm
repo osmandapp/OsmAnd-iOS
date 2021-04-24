@@ -64,28 +64,28 @@
     {
         for (OASearchResult *sr in [res getCurrentSearchResults])
             [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
-        
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"search_icon"] text:OALocalizedString(@"custom_search") onClickFunction:^(id sender) {
+
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"search_icon"] text:OALocalizedString(@"custom_search") actionButton:YES onClickFunction:^(id sender) {
             if (self.delegate)
                 [self.delegate showCreateFilterScreen];
         }]];
 
-            NSArray<OAPOIUIFilter *> *allFilters = [self.delegate getSortedFiltersIncludeInactive];
-            if (allFilters.count > 0)
-            {
-                [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_edit"] text:OALocalizedString(@"rearrange_categories") onClickFunction:^(id sender) {
-                    if (self.delegate)
-                        [self.delegate showRearrangeFiltersScreen:allFilters];
-                }]];
-            }
-            NSArray<OAPOIUIFilter *> *customFilters = [self.delegate getCustomFilters];
-            if (customFilters.count > 0)
-            {
-                [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_remove"] text:OALocalizedString(@"delete_custom_categories") onClickFunction:^(id sender) {
-                    if (self.delegate)
-                        [self.delegate showDeleteFiltersScreen:customFilters];
-                }]];
-            }
+        NSArray<OAPOIUIFilter *> *allFilters = [self.delegate getSortedFiltersIncludeInactive];
+        if (allFilters.count > 0)
+        {
+            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_edit"] text:OALocalizedString(@"rearrange_categories") actionButton:YES onClickFunction:^(id sender) {
+                if (self.delegate)
+                    [self.delegate showRearrangeFiltersScreen:allFilters];
+            }]];
+        }
+        NSArray<OAPOIUIFilter *> *customFilters = [self.delegate getCustomFilters];
+        if (customFilters.count > 0)
+        {
+            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_remove"] text:OALocalizedString(@"delete_custom_categories") actionButton:YES onClickFunction:^(id sender) {
+                if (self.delegate)
+                    [self.delegate showDeleteFiltersScreen:customFilters];
+            }]];
+        }
     }
     [_tableController updateData:@[[NSArray arrayWithArray:rows]] append:NO];
 }

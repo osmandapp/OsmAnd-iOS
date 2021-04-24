@@ -1732,6 +1732,7 @@
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 
 "custom_search" = "Custom search";
+"add_custom_category" = "Add custom category";
 "poi_filter_custom_filter" = "Custom filter";
 "delete_custom_categories" = "Delete custom categories";
 "poi_filter_closest_poi" = "Nearest POIs";

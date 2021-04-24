@@ -65,7 +65,7 @@
         for (OASearchResult *sr in [res getCurrentSearchResults])
             [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
 
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"search_icon"] text:OALocalizedString(@"custom_search") actionButton:YES onClickFunction:^(id sender) {
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_add"] text:OALocalizedString(@"add_custom_category") actionButton:YES onClickFunction:^(id sender) {
             if (self.delegate)
                 [self.delegate showCreateFilterScreen];
         }]];

@@ -1506,7 +1506,7 @@
 "rendering_value_green_name" = "Зелёный";
 "rendering_attr_highway_class_track_grade3_name" = "Класс 3";
 "routing_attr_avoid_share_taxi_name" = "Без маршрутных такси";
-"rendering_value_thick_name" = "Толсто";
+"rendering_value_thick_name" = "Толстая";
 "rendering_attr_noAdminboundaries_name" = "Границы";
 "routing_attr_allow_skating_only_name" = "Разрешить только маршруты для катания на коньках";
 "routing_attr_avoid_ferries_name" = "Без паромов";

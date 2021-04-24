@@ -39,6 +39,7 @@
 #import "OAQuickSearchEmptyResultListItem.h"
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
+#import "OAColors.h"
 
 #import "OASearchUICore.h"
 #import "OASearchCoreFactory.h"
@@ -242,29 +243,31 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _historyViewController.searchType = self.searchType;
     
     [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-    
+
+    _tabs.backgroundColor = [UIColor colorWithDisplayP3Red:.118 green:.118 blue:.128 alpha:.05];
     [_tabs setTitle:OALocalizedString(@"history") forSegmentAtIndex:0];
     [_tabs setTitle:OALocalizedString(@"categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
     [_tabs setSelectedSegmentIndex:0];
     
-    _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                       action:@selector(moveGestureDetected:)];
+    _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveGestureDetected:)];
     _tblMove.delegate = self;
-    
-    _textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(4.0, 0.0, 24.0, _textField.bounds.size.height)];
-    _textField.leftViewMode = UITextFieldViewModeAlways;
-    
-    _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:_textField.leftView.frame];
-    _activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    
-    _leftImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_icon"]];
+
+    _leftImgView = [[UIImageView alloc] initWithFrame:CGRectMake(6.0, 0.0, 24.0, 24.0)];
+    _leftImgView.image = [UIImage imageNamed:@"search_icon"];
     _leftImgView.contentMode = UIViewContentModeCenter;
-    _leftImgView.frame = _textField.leftView.frame;
-    
-    [_textField.leftView addSubview:_leftImgView];
-    [_textField.leftView addSubview:_activityIndicatorView];
-    
+    UIView *viewLeft = [[UIView alloc] initWithFrame:CGRectMake(6.0, 8.0, 30, 24.0)];
+    [viewLeft addSubview:_leftImgView];
+
+    _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:_leftImgView.frame];
+    _activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [viewLeft addSubview:_activityIndicatorView];
+
+    _textField.leftView = viewLeft;
+    _textField.leftViewMode = UITextFieldViewModeAlways;
+    _textField.borderStyle = UITextBorderStyleNone;
+    _textField.layer.cornerRadius = 10;
+
     [self setupSearch];
     [self updateHint];
 
@@ -505,17 +508,26 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case 0:
         {
             [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionReverse animated:YES completion:nil];
+            self.topView.backgroundColor = UIColorFromRGB(color_chart_orange);
+            [self.btnCancel setTitleColor:[UIColor colorWithDisplayP3Red:1 green:1 blue:1 alpha:1] forState:UIControlStateNormal];
+            self.textField.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
             break;
         }
         case 1:
         {
             [self.searchHelper refreshCustomPoiFilters];
             [_pageController setViewControllers:@[_categoriesViewController] direction: (_pageController.viewControllers[0] == _historyViewController ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse) animated:YES completion:nil];
+            self.topView.backgroundColor = [UIColor whiteColor];
+            [self.btnCancel setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+            self.textField.backgroundColor = [UIColor colorWithDisplayP3Red:.118 green:.118 blue:.128 alpha:.12];
             break;
         }
         case 2:
         {
             [_pageController setViewControllers:@[_addressViewController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+            self.topView.backgroundColor = UIColorFromRGB(color_chart_orange);
+            [self.btnCancel setTitleColor:[UIColor colorWithDisplayP3Red:1 green:1 blue:1 alpha:1] forState:UIControlStateNormal];
+            self.textField.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
             break;
         }
     }
@@ -977,7 +989,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (self.addressSearch)
         self.textField.placeholder = OALocalizedString(@"type_address");
     else
-        self.textField.placeholder = OALocalizedString(@"search_poi_category_hint");
+        self.textField.placeholder = OALocalizedString(@"shared_string_search");
 }
 
 - (void)didReceiveMemoryWarning

@@ -25,10 +25,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tTv-fb-Ygd" userLabel="NavBarView">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="90"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" id="OWK-uS-BcS">
-                            <rect key="frame" x="10" y="15" width="388" height="30"/>
+                            <rect key="frame" x="10" y="55" width="388" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" id="Cuh-AS-u1V">
@@ -92,19 +92,19 @@
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="1" green="0.53333333333333333" blue="0.0" alpha="0.81999999999999995" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="56" id="YiG-YX-CfA"/>
+                        <constraint firstAttribute="height" constant="90" id="YiG-YX-CfA"/>
                         <constraint firstAttribute="trailing" secondItem="OWK-uS-BcS" secondAttribute="trailing" constant="16" id="hmj-db-few"/>
                         <constraint firstAttribute="bottom" secondItem="OWK-uS-BcS" secondAttribute="bottom" constant="11" id="rsD-3m-FAL"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="OoE-bw-UtS">
-                    <rect key="frame" x="0.0" y="56" width="414" height="840"/>
+                    <rect key="frame" x="0.0" y="90" width="414" height="806"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CA1-7s-Fdq">
-                    <rect key="frame" x="0.0" y="55" width="414" height="1"/>
+                    <rect key="frame" x="0.0" y="89" width="414" height="1"/>
                     <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="2iB-iF-F0B"/>

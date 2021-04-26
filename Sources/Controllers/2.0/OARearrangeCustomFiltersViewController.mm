@@ -119,17 +119,17 @@
     [self.tableView setEditing:YES];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_categories_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+}
+
 - (void)applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"rearrange_categories");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_categories_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
 }
 
 - (void)generateData:(NSArray<OAPOIUIFilter *> *)filters
@@ -197,7 +197,7 @@
     if (_isChanged)
         [self showChangesAlert];
     else
-        [self.navigationController popViewControllerAnimated:YES];
+        [self dismissViewController];
 }
 
 - (IBAction)onDoneButtonClicked:(id)sender
@@ -232,7 +232,7 @@
         }
     }
     [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (void)onRowButtonClicked:(UIButton *)sender
@@ -295,7 +295,7 @@
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.navigationController popViewControllerAnimated:YES];
+        [self dismissViewController];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
@@ -421,8 +421,8 @@
 {
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
-        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
+        UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
     }
 }
 

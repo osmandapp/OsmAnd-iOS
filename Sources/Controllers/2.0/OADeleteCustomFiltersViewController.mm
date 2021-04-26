@@ -65,14 +65,14 @@
 
 - (IBAction)onCancelButtonClicked:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (IBAction)onDeleteButtonClicked:(id)sender
 {
     if (self.delegate)
         [self.delegate removeFilters:_selectedItems];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (void)selectDeselectGroup:(id)sender

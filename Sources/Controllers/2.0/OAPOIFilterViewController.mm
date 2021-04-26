@@ -304,11 +304,11 @@ typedef enum
         actionSaveTitle = OALocalizedString(@"shared_string_save_as");
         UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:OALocalizedString(@"delete_filter")
             style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            [self deleteFilter];
+                    [self showDeleteFilterScreen];
         }];
         UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:OALocalizedString(@"edit_filter")
             style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self editCategories];
+                    [self showEditCategoriesScreen];
           }];
         [alert addAction:actionDelete];
         [alert addAction:actionEdit];
@@ -334,7 +334,7 @@ typedef enum
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) deleteFilter
+- (void)showDeleteFilterScreen
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"edit_filter_delete_dialog_title")
         message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -360,10 +360,11 @@ typedef enum
     popPresenter.sourceRect = _btnMore.frame;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
 }
-- (void) editCategories
+- (void)showEditCategoriesScreen
 {
-    OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:_filter];
-    [self.navigationController pushViewController:customPOI animated:YES];
+    OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:_filter];
+    customPOIScreen.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self showViewController:customPOIScreen];
 }
 
 - (void) applyFilterFields

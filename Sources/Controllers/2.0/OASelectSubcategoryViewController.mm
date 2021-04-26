@@ -135,8 +135,8 @@
 {
     if (_delegate)
         [_delegate selectSubcategoryCancel];
-    
-    [self.navigationController popViewControllerAnimated:YES];
+
+    [self dismissViewController];
 }
 
 - (IBAction)donePress:(id)sender
@@ -151,7 +151,7 @@
         [_delegate selectSubcategoryDone:_category keys:selectedKeys allSelected:_keys.count == selectedKeys.count];
     }
 
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 #pragma mark - OAMultiselectableHeaderDelegate

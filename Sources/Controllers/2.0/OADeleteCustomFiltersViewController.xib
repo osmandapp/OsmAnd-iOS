@@ -24,10 +24,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tTv-fb-Ygd" userLabel="NavBarView">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="90"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="16" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OWK-uS-BcS">
-                            <rect key="frame" x="16" y="12" width="382" height="33"/>
+                            <rect key="frame" x="16" y="55" width="382" height="33"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MUr-gc-JYf">
                                     <rect key="frame" x="0.0" y="0.0" width="53" height="33"/>
@@ -49,16 +49,16 @@
                                 </label>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="height" constant="30" id="LSf-6e-MnO"/>
+                                <constraint firstAttribute="height" constant="33" id="LSf-6e-MnO"/>
                                 <constraint firstAttribute="width" constant="382" id="mqW-4h-roW"/>
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="1" green="0.53333333333333333" blue="0.0" alpha="0.81999999999999995" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="56" id="YiG-YX-CfA"/>
+                        <constraint firstAttribute="height" constant="90" id="YiG-YX-CfA"/>
                         <constraint firstAttribute="trailing" secondItem="OWK-uS-BcS" secondAttribute="trailing" constant="16" id="hmj-db-few"/>
-                        <constraint firstAttribute="bottom" secondItem="OWK-uS-BcS" secondAttribute="bottom" constant="11" id="rsD-3m-FAL"/>
+                        <constraint firstAttribute="bottom" secondItem="OWK-uS-BcS" secondAttribute="bottom" constant="2" id="rsD-3m-FAL"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lh9-fF-Ev6">
@@ -80,11 +80,11 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="49" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="OoE-bw-UtS">
-                    <rect key="frame" x="0.0" y="56" width="414" height="746"/>
+                    <rect key="frame" x="0.0" y="90" width="414" height="712"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CA1-7s-Fdq">
-                    <rect key="frame" x="0.0" y="55" width="414" height="1"/>
+                    <rect key="frame" x="0.0" y="89" width="414" height="1"/>
                     <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="2iB-iF-F0B"/>

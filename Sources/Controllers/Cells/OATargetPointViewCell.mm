@@ -15,6 +15,7 @@
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OAFavoriteItem.h"
 
 @implementation OATargetPointViewCell
 
@@ -58,6 +59,11 @@
     else
     {
         _iconView.image = _targetPoint.icon;
+        if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
+            _iconView.image = [((OAFavoriteItem *)_targetPoint.targetObj) getCompositeIcon];
+        else
+            _iconView.image = _targetPoint.icon;
+        
         NSString *t;
         if (_targetPoint.titleSecond)
         {

@@ -133,6 +133,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    if (self.delegate)
+        [self.delegate closeBottomSheet];
+}
+
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray new];
@@ -255,8 +261,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (void) dismissViewController
 {
-    if (self.delegate)
-        [self.delegate closeBottomSheet];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -252,6 +252,9 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         else if ([key isEqualToString:@"opening_hours"])
         {
             iconId = @"ic_working_time.png";
+            collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            collapsable = YES;
+            collapsed = YES;
             
             auto parser = OpeningHoursParser::parseOpenedHours([value UTF8String]);
             if (parser != nullptr)
@@ -260,9 +263,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                 textColor = isOpened ? UIColorFromRGB(0x2BBE31) : UIColorFromRGB(0xDA3A3A);
             }
 
-            collapsable = YES;
-            collapsed = YES;            
-            collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             ((OACollapsableLabelView *)collapsableView).label.text = value;
         }
         else if ([kContactPhoneTags containsObject:key])

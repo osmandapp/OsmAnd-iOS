@@ -22,8 +22,6 @@
 #define kButtonRightIconCell @"OAButtonRightIconCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
-typedef void(^OAActionButtonOnClick)(id sender);
-
 @interface OAEditFilterItem : NSObject
 
 @property (nonatomic) int order;
@@ -51,16 +49,16 @@ typedef void(^OAActionButtonOnClick)(id sender);
 
 @property (nonatomic) NSString *title;
 @property (nonatomic) UIImage *icon;
-@property (nonatomic) OAActionButtonOnClick onClickFunction;
+@property (nonatomic) OACustomSearchButtonOnClick onClickFunction;
 
-- (instancetype)initWithIcon:(UIImage *)icon title:(NSString *)title onClickFunction:(OAActionButtonOnClick)onClickFunction;
-- (void)onClick;
+- (instancetype)initWithIcon:(UIImage *)icon title:(NSString *)title onClickFunction:(OACustomSearchButtonOnClick)onClickFunction;
+
 
 @end
 
 @implementation OAActionItem
 
-- (instancetype)initWithIcon:(UIImage *)icon title:(NSString *)title onClickFunction:(OAActionButtonOnClick)onClickFunction
+- (instancetype)initWithIcon:(UIImage *)icon title:(NSString *)title onClickFunction:(OACustomSearchButtonOnClick)onClickFunction
 {
     self = [super init];
     if (self) {
@@ -333,7 +331,6 @@ typedef void(^OAActionButtonOnClick)(id sender);
             cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-            [cell.deleteButton setUserInteractionEnabled:YES];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.deleteButton addTarget:self action:@selector(onRowButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -350,11 +347,10 @@ typedef void(^OAActionButtonOnClick)(id sender);
         }
         if (cell) {
             OAActionItem *actionItem = _actionsItems[indexPath.row];
-            cell.userInteractionEnabled = YES;
             cell.iconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
-            [cell.button addTarget:actionItem action:@selector(onClick) forControlEvents:UIControlEventTouchDown];
+            cell.onClickFunction = actionItem.onClickFunction;
             return cell;
         }
     }
@@ -408,17 +404,11 @@ typedef void(^OAActionButtonOnClick)(id sender);
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kAllFiltersSection)
-    {
         return _filtersItems.count;
-    }
     else if (section == kHiddenFiltersSection)
-    {
         return _hiddenFiltersItems.count;
-    }
     else
-    {
         return _actionsItems.count;
-    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

@@ -524,12 +524,13 @@
     
     [self generateData];
     [self.tableView reloadData];
+    self.view.hidden = NO;
 }
 
 - (void)closeBottomSheet
 {
     if (!_gpx)
-        [OARootViewController.instance dismissViewControllerAnimated:YES completion:nil];
+        [OARootViewController.instance dismissViewControllerAnimated:NO completion:nil];
     else if (self.presentedViewController)
         [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }

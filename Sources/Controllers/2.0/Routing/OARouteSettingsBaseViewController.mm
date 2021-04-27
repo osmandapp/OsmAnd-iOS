@@ -352,7 +352,18 @@
         OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
         OAGPXDocument *gpx = gpxParams ? gpxParams.file : nil;
         OAFollowTrackBottomSheetViewController *followTrack = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:gpx];
-        [followTrack presentInViewController:OARootViewController.instance animated:YES];
+        
+        if (gpx)
+        {
+            followTrack.view.hidden = NO;
+            [followTrack presentInViewController:OARootViewController.instance animated:YES];
+            
+        }
+        else
+        {
+            followTrack.view.hidden = YES;
+            [followTrack presentInViewController:OARootViewController.instance animated:NO];
+        }
     }];
 }
 

@@ -734,7 +734,7 @@
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
                 NSString *title = [buttonItem getName];
                 [cell.button setTitle:title ? title : @"" forState:UIControlStateNormal];
-                cell.onClickFunction = buttonItem.onClickFunction;
+                cell.button.enabled = NO;
                 return cell;
             }
         }
@@ -873,11 +873,11 @@
             {
                 ((OAQuickSearchMoreListItem *) item).onClickFunction(item);
             }
-            else if ([item getType] == BUTTON)
+            else if ([item getType] == BUTTON || [item getType] == ACTION_BUTTON)
             {
                 ((OAQuickSearchButtonListItem *) item).onClickFunction(item);
             }
-            else if ([item getType] != ACTION_BUTTON)
+            else
             {
                 OASearchResult *sr = [item getSearchResult];
                 

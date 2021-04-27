@@ -2071,3 +2071,4 @@
 "preparing_file" = "Dosya hazırlanıyor";
 "export_failed" = "Profil dışa aktarılamadı";
 "export_profile_select_descr" = "Dışa aktarılacak verileri seçin.";
+"delete_custom_categories" = "Özel kategorileri sil";

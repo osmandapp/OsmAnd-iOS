@@ -2078,3 +2078,4 @@
 "preparing_file" = "Datei vorbereiten";
 "export_failed" = "Profil konnte nicht exportiert werden";
 "export_profile_select_descr" = "Wählen Sie die Daten aus, die exportiert werden sollen.";
+"delete_custom_categories" = "Benutzerdefinierte Kategorien löschen";

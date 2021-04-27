@@ -2074,3 +2074,4 @@
 "preparing_file" = "Підготування файлу";
 "export_failed" = "Не вдалося експортувати профіль";
 "export_profile_select_descr" = "Виберіть дані для експорту.";
+"delete_custom_categories" = "Видалити власні категорії";

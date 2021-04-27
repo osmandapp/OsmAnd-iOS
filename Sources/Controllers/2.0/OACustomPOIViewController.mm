@@ -28,9 +28,9 @@
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *btnCancel;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-@property (weak, nonatomic) IBOutlet UIButton *buttonShow;
+@property (weak, nonatomic) IBOutlet UIButton *showButton;
 
 @end
 
@@ -119,7 +119,7 @@
     [style setAlignment:NSTextAlignmentCenter];
     [attrShow addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attrShow.string.length)];
 
-    [_buttonShow setAttributedTitle:attrShow forState:UIControlStateNormal];
+    [_showButton setAttributedTitle:attrShow forState:UIControlStateNormal];
 }
 
 - (void)viewWillAppear:(BOOL)animated

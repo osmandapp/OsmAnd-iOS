@@ -9,11 +9,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OASelectSubcategoryViewController">
             <connections>
-                <outlet property="btnCancel" destination="Oyf-wm-3cV" id="ttO-eC-lny"/>
-                <outlet property="btnDone" destination="b9j-Qu-RpC" id="OtN-gF-jM8"/>
-                <outlet property="descView" destination="sJT-vu-cA0" id="a3p-0e-gTd"/>
+                <outlet property="cancelButton" destination="Oyf-wm-3cV" id="ttO-eC-lny"/>
+                <outlet property="doneButton" destination="b9j-Qu-RpC" id="OtN-gF-jM8"/>
+                <outlet property="descriptionLabel" destination="sJT-vu-cA0" id="a3p-0e-gTd"/>
                 <outlet property="tableView" destination="LRr-Nt-GlY" id="sFy-yr-ffj"/>
-                <outlet property="textView" destination="fhq-hF-Gdv" id="QXd-gK-K9X"/>
+                <outlet property="textLabel" destination="fhq-hF-Gdv" id="QXd-gK-K9X"/>
                 <outlet property="topView" destination="jW5-8O-BIp" id="n3O-Ow-IAJ"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

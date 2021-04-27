@@ -254,8 +254,11 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             iconId = @"ic_working_time.png";
             
             auto parser = OpeningHoursParser::parseOpenedHours([value UTF8String]);
-            bool isOpened = parser->isOpened();
-            textColor = isOpened ? UIColorFromRGB(0x2BBE31) : UIColorFromRGB(0xDA3A3A);
+            if (parser != nullptr)
+            {
+                bool isOpened = parser->isOpened();
+                textColor = isOpened ? UIColorFromRGB(0x2BBE31) : UIColorFromRGB(0xDA3A3A);
+            }
 
             collapsable = YES;
             collapsed = YES;            

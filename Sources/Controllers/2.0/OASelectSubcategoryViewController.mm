@@ -7,12 +7,10 @@
 //
 
 #import "OASelectSubcategoryViewController.h"
-#import "OAPOISearchHelper.h"
 #import "Localization.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
-#import "OAPOIHelper.h"
 #import "OACustomSelectionButtonCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OAColors.h"
@@ -83,8 +81,8 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.tableView.editing = YES;
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
 
     [self.tableView beginUpdates];
     for (int i = 1; i < _items.count; i++)
@@ -205,7 +203,10 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIColor colorWithWhite:1. alpha:0.];
+            [cell setSelectedBackgroundView:bgColorView];
         }
         if (cell)
         {
@@ -214,9 +215,10 @@
 
             UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];
-            cell.imgView.image = poiIcon ? poiIcon : [[UIImage imageNamed:@"ic_custom_search_categories"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
             cell.imgView.tintColor = selectedColor;
-            [cell.imgView setFrame:CGRectMake(cell.imgView.frame.origin.x,cell.imgView.frame.origin.y,24,24)];
+            CGRect imgPrevFrame = cell.imgView.frame;
+            [cell.imgView setFrame:CGRectMake(imgPrevFrame.origin.x, imgPrevFrame.origin.y, 24., 24.)];
             cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
 
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";

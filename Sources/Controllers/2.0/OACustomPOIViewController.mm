@@ -9,18 +9,16 @@
 #import "OACustomPOIViewController.h"
 #import "OAPOIHelper.h"
 #import "OAPOICategory.h"
-#import "OASettingSwitchCell.h"
 #import "OAPOISearchHelper.h"
 #import "OASelectSubcategoryViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
-#import "OAUtilities.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OATitleDescrDraggableCell.h"
 
-#define kTitleDescCollapseCell @"OATitleDescrDraggableCell"
+#define kCellTypeTitleDescCollapse @"OATitleDescrDraggableCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
@@ -189,27 +187,12 @@
 
 #pragma mark - UITableViewDataSource
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
-{
-    return 66.0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForFooter];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForHeader];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATitleDescrDraggableCell* cell = [tableView dequeueReusableCellWithIdentifier:kTitleDescCollapseCell];
+    OATitleDescrDraggableCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleDescCollapseCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
         cell = (OATitleDescrDraggableCell *) nib[0];
     }
     
@@ -252,12 +235,6 @@
     return cell;
 }
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _dataArray.count;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -267,6 +244,26 @@
     subcategoryScreen.delegate = self;
     subcategoryScreen.modalPresentationStyle = UIModalPresentationFullScreen;
     [self showViewController:subcategoryScreen];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _dataArray.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    return 66.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return [OAPOISearchHelper getHeightForFooter];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [OAPOISearchHelper getHeightForHeader];
 }
 
 @end

@@ -14,6 +14,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAButtonRightIconCell.h"
 #import "OAAppSettings.h"
+#import "OAQuickSearchButtonListItem.h"
 
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
@@ -52,7 +53,7 @@
 @property (nonatomic) OACustomSearchButtonOnClick onClickFunction;
 
 - (instancetype)initWithIcon:(UIImage *)icon title:(NSString *)title onClickFunction:(OACustomSearchButtonOnClick)onClickFunction;
-
+- (void)onClick;
 
 @end
 
@@ -123,6 +124,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setEditing:YES];
+    self.tableView.allowsSelectionDuringEditing = YES;
 }
 
 - (void)applyLocalization
@@ -350,11 +352,28 @@
             cell.iconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
-            cell.onClickFunction = actionItem.onClickFunction;
+            cell.button.enabled = NO;
             return cell;
         }
     }
     return nil;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == kActionsSection)
+        return indexPath;
+    else
+        return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section == kActionsSection) {
+        OAActionItem *actionItem = _actionsItems[indexPath.row];
+        [actionItem onClick];
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath

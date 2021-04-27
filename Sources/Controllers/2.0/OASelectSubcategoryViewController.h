@@ -9,6 +9,7 @@
 #import "OACompoundViewController.h"
 
 @class OAPOICategory;
+@class OAPOIUIFilter;
 
 @protocol OASelectSubcategoryDelegate
 
@@ -23,6 +24,6 @@
 
 @property (nonatomic, weak) id<OASelectSubcategoryDelegate> delegate;
 
-- (instancetype)initWithCategory:(OAPOICategory *)category subcategories:(NSSet<NSString *> *)subcategories selectAll:(BOOL)selectAll;
+- (instancetype)initWithCategory:(OAPOICategory *)category filter:(OAPOIUIFilter *)filter;
 
 @end

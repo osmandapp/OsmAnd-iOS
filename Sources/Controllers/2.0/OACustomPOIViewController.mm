@@ -28,7 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *showButton;
 
@@ -133,7 +133,7 @@
     return customSearchToolBarHeight;
 }
 
-- (IBAction)onCancelButtonClicked:(id)sender
+- (IBAction)onBackButtonClicked:(id)sender
 {
     [self dismissViewController];
 }
@@ -263,7 +263,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     OAPOICategory* item = _dataArray[indexPath.row];
-    OASelectSubcategoryViewController *subcategoryScreen = [[OASelectSubcategoryViewController alloc] initWithCategory:item subcategories:[_filter getAcceptedSubtypes:item] selectAll:[_filter getAcceptedSubtypes:item] == [OAPOIBaseType nullSet]];
+    OASelectSubcategoryViewController *subcategoryScreen = [[OASelectSubcategoryViewController alloc] initWithCategory:item filter:_filter];
     subcategoryScreen.delegate = self;
     subcategoryScreen.modalPresentationStyle = UIModalPresentationFullScreen;
     [self showViewController:subcategoryScreen];

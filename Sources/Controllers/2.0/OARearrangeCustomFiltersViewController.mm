@@ -14,6 +14,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAButtonRightIconCell.h"
 #import "OAAppSettings.h"
+#import "OAQuickSearchButtonListItem.h"
 
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
@@ -52,6 +53,7 @@
 @property (nonatomic) OACustomSearchButtonOnClick onClickFunction;
 
 - (instancetype)initWithIcon:(UIImage *)icon title:(NSString *)title onClickFunction:(OACustomSearchButtonOnClick)onClickFunction;
+- (void)onClick;
 
 @end
 
@@ -66,6 +68,11 @@
         _onClickFunction = onClickFunction;
     }
     return self;
+}
+
+- (void)onClick
+{
+    self.onClickFunction(self);
 }
 
 @end
@@ -117,6 +124,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setEditing:YES];
+    self.tableView.allowsSelectionDuringEditing = YES;
 }
 
 - (void)viewDidLayoutSubviews
@@ -325,7 +333,6 @@
             cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-            [cell.deleteButton setUserInteractionEnabled:YES];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.deleteButton addTarget:self action:@selector(onRowButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -345,11 +352,28 @@
             cell.iconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
-            cell.onClickFunction = actionItem.onClickFunction;
+            cell.button.enabled = NO;
             return cell;
         }
     }
     return nil;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == kActionsSection)
+        return indexPath;
+    else
+        return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section == kActionsSection) {
+        OAActionItem *actionItem = _actionsItems[indexPath.row];
+        [actionItem onClick];
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -399,17 +423,11 @@
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kAllFiltersSection)
-    {
         return _filtersItems.count;
-    }
     else if (section == kHiddenFiltersSection)
-    {
         return _hiddenFiltersItems.count;
-    }
     else
-    {
         return _actionsItems.count;
-    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

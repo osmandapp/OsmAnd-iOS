@@ -188,7 +188,7 @@
 "track_rec_addon_q" = "Увімкніть додаток „Запис треків“ для запису ваших треків";
 "track_clear" = "Очистити поточний трек";
 "track_clear_q" = "Дійсно бажаєте очистити поточний трек?";
-"record_trip" = "Записувати вашу трек";
+"record_trip" = "Записувати ваш трек";
 "gpx_max_speed" = "Макс. швидкість";
 "map_mode" = "Режим мапи";
 "map_settings_style" = "Стиль мапи";
@@ -697,7 +697,7 @@
 "map_widget_next_next_turn" = "Другий наступний поворот";
 "auto_follow_location_enabled" = "Використовується режим автоматичного осереднення мапи.";
 "unknown_location" = "Розташування ще не визначено";
-"settings_preset" = "Усталений профіль";
+"settings_preset" = "Типовий профіль";
 "settings_preset_descr" = "Вид мапи й налаштування навігації зберігаються для кожного окремого профілю. Установіть ваш типовий профіль.";
 "animate_routing_route_not_calculated" = "Будь ласка, розрахуйте маршрут спершу";
 "unit_of_length" = "Одиниці вимірювання довжини";
@@ -1492,12 +1492,12 @@
 "routing_attr_weight_description" = "Вказати дозволений ліміт ваги автомобіля на маршрутах.";
 "routing_attr_driving_style_name" = "Стиль водіння";
 "routing_attr_difficulty_preference_name" = "Бажана складність";
-"rendering_value__name" = "Усталено";
+"rendering_value__name" = "Типово";
 "rendering_attr_roadColors_description" = "Виберіть кольорову схему доріг:";
 "rendering_attr_hikingRoutesOSMC_name" = "Шар символів для пішого туризму";
 "rendering_attr_OSMMapperAssistant_name" = "Помічник мапера OSM";
 "rendering_attr_publicTransportMode_name" = "Маршрути автобусів, тролейбусів та шатлів";
-"rendering_value_default13_name" = "Усталено (13)";
+"rendering_value_default13_name" = "Типово (13)";
 "rendering_attr_piste_type_nordic_name" = "Скандинавський";
 "rendering_value_low_name" = "Низька";
 "routing_attr_prefer_motorway_name" = "Надавати перевагу автомагістралям";
@@ -1509,7 +1509,7 @@
 "rendering_value_disabled_name" = "Вимкнено";
 "routeInfo_tracktype_name" = "Твердість поверхні дороги";
 "routing_attr_height_obstacles_description" = "Фактор висоти рельєфу земної поверхні (дані від SRTM, ASTER та EU-DEM).";
-"rendering_value_default_name" = "Усталено";
+"rendering_value_default_name" = "Типово";
 "routeInfo_piste_difficulty_name" = "Складність траси";
 "routing_attr_allow_classic_only_name" = "Дозволити тільки класичні маршрути";
 "rendering_attr_contourWidth_name" = "Товщина горизонталей";
@@ -1600,7 +1600,7 @@
 "rendering_attr_highway_class_track_grade1_name" = "1 клас";
 "rendering_attr_hmRendered_description" = "Відображати більше деталей на мапі.";
 "rendering_attr_trainLightrailRoutes_name" = "Маршрути поїздів";
-"rendering_value_defaultTranslucentCyan_name" = "Усталено (напівпрозорий блакитний)";
+"rendering_value_defaultTranslucentCyan_name" = "Типово (напівпрозорий блакитний)";
 "routing_attr_avoid_shuttle_train_description" = "Уникати приміських поїздів";
 "routing_attr_allow_motorway_description" = "Дозволяє автомагістралі.";
 "rendering_attr_moreDetailed_name" = "Докладніше";
@@ -1736,7 +1736,7 @@
 "empty_profile_name_warning" = "Назва профіля не може бути порожньою.";
 "after_tapping_done" = "Після натискання кнопки Готово видалені профілі повністю втратяться.";
 "all_application_profiles" = "Усі профілі застосунку";
-"rearrange_profile_descr" = "Усталені профілі OsmAnd неможливо видалити, але ви можете вимкнути їх на попередньому екрані або перетягнути їх донизу списку.";
+"rearrange_profile_descr" = "Типові профілі OsmAnd неможливо видалити, але ви можете вимкнути їх на попередньому екрані або перетягнути їх донизу списку.";
 "rearrange_profiles" = "Перевпорядкувати профілі";
 "will_be_show_while_moving" = "Це буде показуватися під час руху";
 "position_icon_while_moving" = "Напрям піктограми під час руху";

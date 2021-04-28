@@ -1743,6 +1743,11 @@
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
+"rearrange_categories" = "Rearrange categories";
+"visible_categories" = "Visible categories";
+"hidden_categories" = "Hidden categories";
+"create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
+"reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";

@@ -50,6 +50,7 @@
 #import "OAQuickSearchTableController.h"
 #import "OASearchToolbarViewController.h"
 #import "OADeleteCustomFiltersViewController.h"
+#import "OARearrangeCustomFiltersViewController.h"
 #import "QuadRect.h"
 
 #import "OARootViewController.h"
@@ -508,6 +509,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         }
         case 1:
         {
+            [self.searchHelper refreshCustomPoiFilters];
             [_pageController setViewControllers:@[_categoriesViewController] direction: (_pageController.viewControllers[0] == _historyViewController ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse) animated:YES completion:nil];
             break;
         }
@@ -1825,25 +1827,36 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - OACategoryTableDelegate
 
-- (void)createPOIUIFilter
+- (void)showCreateFilterScreen
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     [filter clearFilter];
-    OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:filter];
-    customPOI.delegate = self;
-    [self.navigationController pushViewController:customPOI animated:YES];
+    OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:filter];
+    customPOIScreen.delegate = self;
+    [self.navigationController pushViewController:customPOIScreen animated:YES];
 }
 
-- (void)showRemoveFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
+- (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
-    OADeleteCustomFiltersViewController *removeFiltersView = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
-    removeFiltersView.delegate = self;
-    [self.navigationController pushViewController:removeFiltersView animated:YES];
+    OADeleteCustomFiltersViewController *removeFiltersScreen = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
+    removeFiltersScreen.delegate = self;
+    [self.navigationController pushViewController:removeFiltersScreen animated:YES];
 }
 
-- (NSArray *)getCustomFilters
+- (void)showRearrangeFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
+{
+    OARearrangeCustomFiltersViewController *rearrangeCategoriesScreen = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
+    [self.navigationController pushViewController:rearrangeCategoriesScreen animated:YES];
+}
+
+- (NSArray<OAPOIUIFilter *> *)getCustomFilters
 {
     return [[OAPOIFiltersHelper sharedInstance] getUserDefinedPoiFilters:NO];
+}
+
+- (NSArray<OAPOIUIFilter *> *)getSortedFiltersIncludeInactive
+{
+    return [[OAPOIFiltersHelper sharedInstance] getSortedPoiFilters:NO];
 }
 
 #pragma mark - OAHistoryTableDelegate
@@ -2004,17 +2017,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - OAPOIFiltersRemoveDelegate
 
-- (BOOL) removeFilters:(NSArray<OAPOIUIFilter *> *)filters
+- (BOOL)removeFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
-    OAPOIFiltersHelper *filtersHelper = [OAPOIFiltersHelper sharedInstance];
     BOOL removed = YES;
     for (OAPOIUIFilter *filter in filters)
-    {
-        if (![filtersHelper removePoiFilter:filter])
-        {
+        if (![[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
             removed = NO;
-        }
-    }
     [self.searchHelper refreshCustomPoiFilters];
     [self reloadCategories];
     return removed;

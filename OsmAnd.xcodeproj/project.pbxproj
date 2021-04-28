@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A2A7C6F262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2A7C6E262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib */; };
+		0A86D5DF262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A86D5DE262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib */; };
 		0CBDD08D245038EB00C94BC2 /* map_marker_direction_arrow_p1_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD078245038C800C94BC2 /* map_marker_direction_arrow_p1_light.png */; };
 		0CBDD08F245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD079245038CA00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4.png */; };
 		0CBDD091245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD07A245038CB00C94BC2 /* map_marker_direction_arrow_p2_color_pin_1@2x.png */; };
@@ -2322,6 +2323,9 @@
 		8AFD2DA1210E1D2E007AA07D /* OATransportRouteToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AFD2D9E210E1D2E007AA07D /* OATransportRouteToolbarViewController.xib */; };
 		A166C762BD53085527F42840 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4812C702BBB164A7AE849D7E /* libPods-OsmAnd Maps.a */; };
 		B0D6143A4EEB3410F47A53B8 /* OADeleteCustomFiltersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D611965D0A6A725E8CBDB1 /* OADeleteCustomFiltersViewController.mm */; };
+		B0D619F2CDE86225BEBC83FB /* OARearrangeCustomFiltersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61C17B82A2A45EA763869 /* OARearrangeCustomFiltersViewController.mm */; };
+		B0D61BE10DA62CC3244272FE /* OAButtonRightIconCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */; };
+		B0D61C744384818EFE0EFC65 /* OAButtonRightIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */; };
 		BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
@@ -3733,6 +3737,7 @@
 
 /* Begin PBXFileReference section */
 		0A2A7C6E262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OADeleteCustomFiltersViewController.xib; path = Sources/Controllers/2.0/OADeleteCustomFiltersViewController.xib; sourceTree = "<group>"; };
+		0A86D5DE262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OARearrangeCustomFiltersViewController.xib; path = Sources/Controllers/2.0/OARearrangeCustomFiltersViewController.xib; sourceTree = "<group>"; };
 		0CBDD078245038C800C94BC2 /* map_marker_direction_arrow_p1_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_marker_direction_arrow_p1_light.png; path = Resources/Icons/map_marker_direction_arrow_p1_light.png; sourceTree = "<group>"; };
 		0CBDD079245038CA00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_marker_direction_arrow_p2_color_pin_4.png; path = Resources/Icons/map_marker_direction_arrow_p2_color_pin_4.png; sourceTree = "<group>"; };
 		0CBDD07A245038CB00C94BC2 /* map_marker_direction_arrow_p2_color_pin_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_marker_direction_arrow_p2_color_pin_1@2x.png"; path = "Resources/Icons/map_marker_direction_arrow_p2_color_pin_1@2x.png"; sourceTree = "<group>"; };
@@ -6560,8 +6565,13 @@
 		8AFD2D9C210E1D2E007AA07D /* OATransportRouteToolbarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATransportRouteToolbarViewController.h; path = Sources/Controllers/2.0/OATransportRouteToolbarViewController.h; sourceTree = "<group>"; };
 		8AFD2D9D210E1D2E007AA07D /* OATransportRouteToolbarViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportRouteToolbarViewController.mm; path = Sources/Controllers/2.0/OATransportRouteToolbarViewController.mm; sourceTree = "<group>"; };
 		8AFD2D9E210E1D2E007AA07D /* OATransportRouteToolbarViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportRouteToolbarViewController.xib; path = Sources/Controllers/2.0/OATransportRouteToolbarViewController.xib; sourceTree = "<group>"; };
+		B0D6110893459B1D4D26BC18 /* OARearrangeCustomFiltersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARearrangeCustomFiltersViewController.h; path = Sources/Controllers/2.0/OARearrangeCustomFiltersViewController.h; sourceTree = "<group>"; };
 		B0D611965D0A6A725E8CBDB1 /* OADeleteCustomFiltersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADeleteCustomFiltersViewController.mm; path = Sources/Controllers/2.0/OADeleteCustomFiltersViewController.mm; sourceTree = "<group>"; };
+		B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAButtonRightIconCell.xib; path = Resources/Controllers/Cells/OAButtonRightIconCell.xib; sourceTree = "<group>"; };
+		B0D61C17B82A2A45EA763869 /* OARearrangeCustomFiltersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARearrangeCustomFiltersViewController.mm; path = Sources/Controllers/2.0/OARearrangeCustomFiltersViewController.mm; sourceTree = "<group>"; };
+		B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAButtonRightIconCell.mm; path = Controllers/Cells/OAButtonRightIconCell.mm; sourceTree = "<group>"; };
 		B0D61EDDE57A964C19CF59E1 /* OADeleteCustomFiltersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADeleteCustomFiltersViewController.h; path = Sources/Controllers/2.0/OADeleteCustomFiltersViewController.h; sourceTree = "<group>"; };
+		B0D61F4B4148554FA324AABA /* OAButtonRightIconCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAButtonRightIconCell.h; path = Controllers/Cells/OAButtonRightIconCell.h; sourceTree = "<group>"; };
 		BB0275D119D2EA5E009AFBA8 /* OAQFlatAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQFlatAppearance.h; path = PodsExtensions/OAQFlatAppearance.h; sourceTree = "<group>"; };
 		BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQFlatAppearance.m; path = PodsExtensions/OAQFlatAppearance.m; sourceTree = "<group>"; };
 		BB0275D619D2EEC5009AFBA8 /* OACommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACommon.h; sourceTree = "<group>"; };
@@ -8775,6 +8785,7 @@
 				32196FF725F0CE1300C3FED6 /* OAFolderCardsCell.xib */,
 				32196FF425F0CE1200C3FED6 /* OAFoldersCell.xib */,
 				32196FF625F0CE1200C3FED6 /* OAFoldersCollectionViewCell.xib */,
+				B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -9038,6 +9049,8 @@
 				3270DBD92600A77300ADD4F7 /* OAPoiCollectionViewCell.m */,
 				32DB230D262EFDDF00696A95 /* OACollectionViewCellState.h */,
 				32DB230E262EFDFF00696A95 /* OACollectionViewCellState.m */,
+				B0D61F4B4148554FA324AABA /* OAButtonRightIconCell.h */,
+				B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -11102,6 +11115,9 @@
 				B0D61EDDE57A964C19CF59E1 /* OADeleteCustomFiltersViewController.h */,
 				B0D611965D0A6A725E8CBDB1 /* OADeleteCustomFiltersViewController.mm */,
 				0A2A7C6E262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib */,
+				0A86D5DE262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib */,
+				B0D61C17B82A2A45EA763869 /* OARearrangeCustomFiltersViewController.mm */,
+				B0D6110893459B1D4D26BC18 /* OARearrangeCustomFiltersViewController.h */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -16382,6 +16398,7 @@
 				849E81931AFA5D6700549953 /* btn_map_type_icon_car_selected@3x.png in Resources */,
 				DA45D9DD230E64340083DFA2 /* OAActionAddCategoryViewController.xib in Resources */,
 				DA52CE0324AE087F00CC309D /* ic_custom_direction_movement@2x.png in Resources */,
+				0A86D5DF262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib in Resources */,
 				8A76721A2281A4EF0098DE84 /* list_warnings_tunnel_us@3x.png in Resources */,
 				8AFC2BED24334A4E0095BA9F /* map_navigation_car_center@3x.png in Resources */,
 				84E2DBA91AB720FB001A7FEC /* zoom_button_bg.png in Resources */,
@@ -17248,6 +17265,7 @@
 				DAEC05F52296C6C500045298 /* ic_custom_mapillary_symbol.png in Resources */,
 				DADBC61E2426489B008B7423 /* OAPublicTransportShieldCell.xib in Resources */,
 				0A2A7C6F262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib in Resources */,
+				B0D61C744384818EFE0EFC65 /* OAButtonRightIconCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -18105,6 +18123,8 @@
 				8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */,
 				DA68628A22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */,
 				B0D6143A4EEB3410F47A53B8 /* OADeleteCustomFiltersViewController.mm in Sources */,
+				B0D619F2CDE86225BEBC83FB /* OARearrangeCustomFiltersViewController.mm in Sources */,
+				B0D61BE10DA62CC3244272FE /* OAButtonRightIconCell.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -352,7 +352,7 @@
             cell.iconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
-            cell.button.enabled = NO;
+            [cell.button addTarget:actionItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
             return cell;
         }
     }

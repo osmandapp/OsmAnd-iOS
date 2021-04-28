@@ -20,6 +20,7 @@
 #import "OAFolderCardsCell.h"
 #import "OASelectTrackFolderViewController.h"
 #import "OAAddTrackFolderViewController.h"
+#import "OACollectionViewCellState.h"
 
 #define kTextInputCell @"OATextViewResizingCell"
 #define kRouteGroupsCell @""
@@ -49,6 +50,7 @@
     
     NSString *_inputFieldError;
     NSInteger _selectedFolderIndex;
+    OACollectionViewCellState *_scrollCellsState;
 }
 
 - (instancetype) initWithFileName:(NSString *)fileName filePath:(NSString *)filePath showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
@@ -120,6 +122,7 @@
     [self updateAllFoldersList];
     _selectedFolderName = [self getDisplayingFolderName:_filePath];
     _selectedFolderIndex = (int)[_allFolders indexOfObject:_selectedFolderName];
+    _scrollCellsState = [[OACollectionViewCellState alloc] init];
     [self generateData];
 }
 
@@ -325,10 +328,12 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            cell.cellIndex = indexPath;
+            cell.state = _scrollCellsState;
         }
         if (cell)
         {
-            cell.delegate = self;
             [cell setValues:item[@"values"] sizes:nil colors:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         return cell;
@@ -339,8 +344,13 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([cell isKindOfClass:OAFolderCardsCell.class])
-        [((OAFolderCardsCell *)cell) scrollToItemIfNeeded:_selectedFolderIndex];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:kFolderCardsCell])
+    {
+        OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
+        [folderCell updateContentOffset];
+    }
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section

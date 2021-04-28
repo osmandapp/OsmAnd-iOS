@@ -1436,7 +1436,7 @@
 "help_purchases" = "خریدهای OsmAnd";
 "help_mapillary" = "OsmAnd + Mapillary";
 "num_stops" = "ایستگاه";
-"replace_all_desc" = "موارد موجود در فایل، جانشین موارد کنونی می‌شود";
+"replace_all_desc" = "موارد موجود در پرونده، جانشین موارد کنونی می‌شود";
 "update_map" = "به‌روزرسانی نقشه";
 "shared_string_max" = "حداکثر";
 "nav_type_direct_to" = "مستقیم تا نقطه";

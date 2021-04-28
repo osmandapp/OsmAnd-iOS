@@ -14,7 +14,7 @@
                 <outlet property="cancelButton" destination="MUr-gc-JYf" id="dlB-W0-vu1"/>
                 <outlet property="deleteButton" destination="TbO-zt-jpp" id="bDd-5p-F62"/>
                 <outlet property="tableView" destination="OoE-bw-UtS" id="yAP-6x-fka"/>
-                <outlet property="titleView" destination="OQ3-na-kDn" id="dYG-G8-fNa"/>
+                <outlet property="titleLabel" destination="OQ3-na-kDn" id="dYG-G8-fNa"/>
                 <outlet property="view" destination="gcm-X9-SiY" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

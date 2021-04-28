@@ -14,7 +14,9 @@
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
 #import "OASearchCoreFactory.h"
+#import "OAPOIUIFilter.h"
 #import "OAQuickSearchButtonListItem.h"
+#import "OAPOIFiltersHelper.h"
 
 @interface OACategoriesTableViewController ()
 
@@ -65,17 +67,25 @@
         
         [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"search_icon"] text:OALocalizedString(@"custom_search") onClickFunction:^(id sender) {
             if (self.delegate)
-                [self.delegate createPOIUIFilter];
+                [self.delegate showCreateFilterScreen];
         }]];
 
-        if (self.delegate) {
-            NSArray<OAPOIUIFilter *> *customFilters = [self.delegate getCustomFilters];
-            if (customFilters.count > 0) {
-                [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_remove"] text:OALocalizedString(@"delete_custom_categories") onClickFunction:^(id sender) {
-                    [self.delegate showRemoveFiltersScreen:customFilters];
+            NSArray<OAPOIUIFilter *> *allFilters = [self.delegate getSortedFiltersIncludeInactive];
+            if (allFilters.count > 0)
+            {
+                [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_edit"] text:OALocalizedString(@"rearrange_categories") onClickFunction:^(id sender) {
+                    if (self.delegate)
+                        [self.delegate showRearrangeFiltersScreen:allFilters];
                 }]];
             }
-        }
+            NSArray<OAPOIUIFilter *> *customFilters = [self.delegate getCustomFilters];
+            if (customFilters.count > 0)
+            {
+                [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_remove"] text:OALocalizedString(@"delete_custom_categories") onClickFunction:^(id sender) {
+                    if (self.delegate)
+                        [self.delegate showDeleteFiltersScreen:customFilters];
+                }]];
+            }
     }
     [_tableController updateData:@[[NSArray arrayWithArray:rows]] append:NO];
 }

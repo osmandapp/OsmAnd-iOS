@@ -19,6 +19,7 @@
 #import "OAAppSettings.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
+#import "OAApplicationMode.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -365,7 +366,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     OAPOIUIFilter *_topWikiPoiFilter;
     NSMutableArray<OAPOIUIFilter *> *_cacheTopStandardFilters;
     NSMutableSet<OAPOIUIFilter *> *_selectedPoiFilters;
-    
+
     OAPOIFilterDbHelper *_helper;
     OAPOIHelper *_poiHelper;
     
@@ -699,7 +700,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     }
 }
 
-- (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIdes:(NSArray<NSString *> *)filterIds
+- (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds
 {
     [OAAppSettings.sharedManager.poiFiltersOrder set:filterIds mode:appMode];
 }
@@ -869,12 +870,16 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) loadSelectedPoiFilters
 {
-    NSArray<NSString *> *filters = [[[OAAppSettings sharedManager].selectedPoiFilters get] componentsSeparatedByString:@","];
-    for (NSString *f in filters)
+    NSString *storedString = [[OAAppSettings sharedManager].selectedPoiFilters get];
+    if (storedString.length > 0)
     {
-        OAPOIUIFilter *filter = [self getFilterById:f];
-        if (filter)
-            [_selectedPoiFilters addObject:filter];
+        NSArray<NSString *> *filters = [storedString componentsSeparatedByString:@","];
+        for (NSString *f in filters)
+        {
+            OAPOIUIFilter *filter = [self getFilterById:f];
+            if (filter)
+                [_selectedPoiFilters addObject:filter];
+        }
     }
 }
 

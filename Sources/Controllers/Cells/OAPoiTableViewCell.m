@@ -20,10 +20,14 @@
 #define kCellHeight 36
 #define kImageWidth 38
 #define kLabelOffsetsWidth 20
-#define kLabelMinimubWidth 50.0
+#define kLabelMinimumWidth 50.0
 #define kCellHeightWithoutIcons 116
+#define kCategoriesCellsSpacing 12
 
 @implementation OAPoiTableViewCell
+{
+    NSArray<NSString *> *_categoryNames;
+}
 
 - (void)awakeFromNib
 {
@@ -36,12 +40,14 @@
     self.categoriesCollectionView.dataSource = self;
     [self.categoriesCollectionView registerNib:[UINib nibWithNibName:kDestCell bundle:nil] forCellWithReuseIdentifier:kDestCell];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    
+    layout.sectionInset = UIEdgeInsetsMake(0, kCategoriesCellsSpacing, 0, 8);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     [self.categoriesCollectionView setCollectionViewLayout:layout];
     [self.categoriesCollectionView setShowsHorizontalScrollIndicator:NO];
     [self.categoriesCollectionView setShowsVerticalScrollIndicator:NO];
     
-    _catagoryDataArray = [NSMutableArray new];
+    _categoryDataArray = [NSMutableArray new];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -57,6 +63,87 @@
     [super setSelected:selected animated:animated];
 }
 
+- (void) setCategoryDataArray:(NSArray *)categoryDataArray
+{
+    _categoryDataArray = categoryDataArray;
+    [self updateCategoryNames];
+}
+
+- (void) updateCategoryNames
+{
+    NSMutableArray *names = [NSMutableArray new];
+    for (NSDictionary *category in _categoryDataArray)
+    {
+        [names addObject:category[@"categoryName"]];
+    }
+    _categoryNames = [NSArray arrayWithArray:names];
+}
+
+#pragma mark - Scroll offset calculations
+
+- (void) updateContentOffset
+{
+    if (![_state containsValueForIndex:_cellIndex])
+    {
+        NSInteger selectedIndex = [_categoryNames indexOfObject:_currentCategory];
+        CGPoint initialOffset = [self calculateOffset:selectedIndex];
+        [_state setOffset:initialOffset forIndex:_cellIndex];
+        self.categoriesCollectionView.contentOffset = initialOffset;
+    }
+    else
+    {
+        CGPoint loadedOffset = [_state getOffsetForIndex:_cellIndex];
+        if ([OAUtilities getLeftMargin] > 0)
+            loadedOffset.x += [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
+        self.categoriesCollectionView.contentOffset = loadedOffset;
+    }
+}
+
+- (void) saveOffset
+{
+    CGPoint offset = self.categoriesCollectionView.contentOffset;
+    if ([OAUtilities getLeftMargin] > 0)
+        offset.x -= [OAUtilities getLeftMargin] - kCategoriesCellsSpacing;
+    [_state setOffset:offset forIndex:_cellIndex];
+}
+
+- (CGPoint) calculateOffset:(NSInteger)index
+{
+    CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index labels:_categoryNames];
+    CGPoint fullLength = [self calculateOffsetToSelectedIndex:_categoryNames.count labels:_categoryNames];
+    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
+    if (selectedOffset.x > maxOffset)
+        selectedOffset.x = maxOffset;
+
+    return selectedOffset;
+}
+
+- (CGPoint) calculateOffsetToSelectedIndex:(NSInteger)index labels:(NSArray<NSString *> *)labels
+{
+    CGFloat offset = 0;
+    for (NSInteger i = 0; i < index; i++)
+    {
+        offset += [self calculateCellWidth:labels[i] iconName:nil];
+        offset += kCategoriesCellsSpacing;
+    }
+    return CGPointMake(offset, 0);
+}
+
+- (CGFloat) calculateCellWidth:(NSString *)lablel iconName:(NSString *)iconName
+{
+    CGSize labelSize = [OAUtilities calculateTextBounds:lablel width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
+    CGFloat labelWidth = labelSize.width;
+    if (iconName && iconName.length > 0)
+        labelWidth += kImageWidth;
+    else if (labelWidth < kLabelMinimumWidth)
+        labelWidth = kLabelMinimumWidth;
+    
+    labelWidth += kLabelOffsetsWidth;
+    return labelWidth;
+}
+
+#pragma mark - UICollectionViewDataSource
+
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
@@ -65,16 +152,16 @@
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (collectionView.tag == kCategoryCellIndex)
-        return _catagoryDataArray.count;
+        return _categoryDataArray.count;
     else
-        return _poiDataArray.count;
+        return _poiData[_currentCategory].count;
 }
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag == kCategoryCellIndex)
     {
-        NSDictionary *item = _catagoryDataArray[indexPath.row];
+        NSDictionary *item = _categoryDataArray[indexPath.row];
         UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kDestCell forIndexPath:indexPath];
         if (cell == nil)
         {
@@ -84,6 +171,7 @@
         if (cell && [cell isKindOfClass:OAFoldersCollectionViewCell.class])
         {
             OAFoldersCollectionViewCell *destCell = (OAFoldersCollectionViewCell *) cell;
+            destCell.layer.cornerRadius = 9;
             destCell.titleLabel.text = item[@"title"];
             destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
             NSString *iconName = item[@"img"];
@@ -123,13 +211,13 @@
         OAPoiCollectionViewCell* cell = nil;
         cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
         UIImage *img = nil;
-        NSString *imgName = _poiDataArray[indexPath.row];
+        NSString *imgName = _poiData[_currentCategory][indexPath.row];
         img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];
         
         cell.iconImageView.image = [[OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:imgName]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
         
-        if ([_poiDataArray[indexPath.row] isEqualToString:_currentIcon])
+        if ([_poiData[_currentCategory][indexPath.row] isEqualToString:_currentIcon])
         {
             cell.backView.layer.borderWidth = 2;
             cell.backView.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
@@ -153,17 +241,8 @@
 {
     if (collectionView.tag == kCategoryCellIndex)
     {
-        NSDictionary *item = _catagoryDataArray[indexPath.row];
-        CGSize labelSize = [OAUtilities calculateTextBounds:item[@"title"] width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
-        CGFloat labelWidth = labelSize.width;
-        
-        NSString *iconName = item[@"img"];
-        if (iconName && iconName.length > 0)
-            labelWidth += kImageWidth;
-        else if (labelWidth < kLabelMinimubWidth)
-            labelWidth = kLabelMinimubWidth;
-        
-        labelWidth += kLabelOffsetsWidth;
+        NSDictionary *item = _categoryDataArray[indexPath.row];
+        CGFloat labelWidth = [self calculateCellWidth:item[@"title"] iconName:item[@"img"]];
         return CGSizeMake(labelWidth, kCellHeight);
     }
     else
@@ -176,20 +255,33 @@
 {
     if (collectionView.tag == kCategoryCellIndex)
     {
-        NSDictionary *item = _catagoryDataArray[indexPath.row];
+        NSDictionary *item = _categoryDataArray[indexPath.row];
         _currentCategory = item[@"categoryName"];
         [self.categoriesCollectionView reloadData];
         [self.collectionView reloadData];
+
         if (self.delegate)
-            [self.delegate onPoiCategorySelected:item[@"categoryName"]];
+            [self.delegate onPoiCategorySelected:item[@"categoryName"] index:indexPath.row];
     }
     else
     {
-        _currentIcon = _poiDataArray[indexPath.row];
+        _currentIcon = _poiData[_currentCategory][indexPath.row];
         [self.collectionView reloadData];
         if (self.delegate)
-            [self.delegate onPoiSelected: _poiDataArray[indexPath.row]];
+            [self.delegate onPoiSelected: _poiData[_currentCategory][indexPath.row]];
     }
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self saveOffset];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self saveOffset];
 }
 
 @end

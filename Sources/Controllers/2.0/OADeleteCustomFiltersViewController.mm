@@ -20,7 +20,7 @@
 @interface OADeleteCustomFiltersViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
@@ -32,7 +32,7 @@
     NSMutableArray *_selectedItems;
 }
 
--(instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters
+- (instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
     self = [super init];
     if (self)
@@ -44,7 +44,7 @@
     return self;
 }
 
--(void)viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
 
@@ -58,7 +58,7 @@
 
 - (void)applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"delete_custom_categories");
+    self.titleLabel.text = OALocalizedString(@"delete_custom_categories");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.deleteButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
 }
@@ -117,7 +117,7 @@
     [self setupDeleteButtonView];
 }
 
-- (void) setupDeleteButtonView
+- (void)setupDeleteButtonView
 {
     BOOL hasSelection = _selectedItems.count != 0;
     self.deleteButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
@@ -150,10 +150,13 @@
             [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
 
             NSInteger selectedAmount = _selectedItems.count;
-            if (selectedAmount > 0) {
+            if (selectedAmount > 0)
+            {
                 UIImage *selectionImage = selectedAmount < _items.count - 1 ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
                 [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
-            } else {
+            }
+            else
+            {
                 [cell.selectionButton setImage:nil forState:UIControlStateNormal];
             }
             return cell;
@@ -173,7 +176,8 @@
             bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
             [cell setSelectedBackgroundView:bgColorView];
         }
-        if (cell) {
+        if (cell)
+        {
             OAPOIUIFilter *filter = (OAPOIUIFilter *) item;
             UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
             cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
@@ -204,7 +208,7 @@
     }
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row > 0)
         [self selectDeselectItem:indexPath];
@@ -225,7 +229,7 @@
     return nil;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }

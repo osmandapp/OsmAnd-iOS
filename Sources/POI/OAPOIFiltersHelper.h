@@ -10,6 +10,8 @@
 #import <Foundation/Foundation.h>
 #import "OAPOIUIFilter.h"
 
+@class OAApplicationMode;
+
 @interface OAPOIFiltersHelper : NSObject
 
 + (OAPOIFiltersHelper *)sharedInstance;
@@ -40,6 +42,8 @@
 - (void) saveSelectedPoiFilters;
 - (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters;
 - (NSArray<NSString *> *) getPoiFilterOrders:(BOOL)onlyActive;
-
+- (NSArray<OAPOIUIFilter *> *) getSortedPoiFilters:(BOOL) onlyActive;
+- (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds;
+- (void) saveInactiveFilters:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds;
 
 @end

@@ -83,4 +83,6 @@
 
 - (OAGpxWpt *) toWpt;
 
+- (UIImage *) getCompositeIcon;
+
 @end

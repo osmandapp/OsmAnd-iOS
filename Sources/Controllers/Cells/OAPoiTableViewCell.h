@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OACollectionViewCellState.h"
 
 @protocol OAPoiTableViewCellDelegate <NSObject>
 
-- (void) onPoiCategorySelected:(NSString *)category;
+- (void) onPoiCategorySelected:(NSString *)category index:(NSInteger)index;
 - (void) onPoiSelected:(NSString *)poiName;
 
 @end
@@ -23,12 +24,16 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoriesCollectionView;
 
-@property (nonatomic) NSArray *poiDataArray;
+@property (nonatomic) NSDictionary<NSString *, NSArray<NSString *> *> *poiData;
 @property (nonatomic) NSInteger currentColor;
 @property (nonatomic) NSString *currentIcon;
-@property (nonatomic) NSArray *catagoryDataArray;
+@property (nonatomic) NSArray *categoryDataArray;
 @property (nonatomic) NSString *currentCategory;
 
 @property (nonatomic, weak) id<OAPoiTableViewCellDelegate> delegate;
+@property (weak, nonatomic) OACollectionViewCellState *state;
+@property (nonatomic) NSIndexPath *cellIndex;
+
+- (void) updateContentOffset;
 
 @end

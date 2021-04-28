@@ -451,12 +451,6 @@
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];
     
-    [OAPOIHelper sharedInstance];
-    [OAQuickSearchHelper instance];
-    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-    [helper reloadAllPoiFilters];
-    [helper loadSelectedPoiFilters];
-    
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
     _updateGpxTracksOnMapObservable = [[OAObservable alloc] init];
@@ -513,6 +507,12 @@
     [OAPlugin initPlugins];
     
     [OAApplicationMode onApplicationStart];
+    
+    [OAPOIHelper sharedInstance];
+    [OAQuickSearchHelper instance];
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+    [helper reloadAllPoiFilters];
+    [helper loadSelectedPoiFilters];
     
     [[Reachability reachabilityForInternetConnection] startNotifier];
     [self askReview];

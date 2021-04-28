@@ -13,5 +13,6 @@
 @interface OAFollowTrackBottomSheetViewController : OABaseBottomSheetViewController
 
 - (instancetype) initWithFile:(OAGPXDocument *)gpx;
+- (void)presentOpenTrackViewController:(BOOL)animated;
 
 @end

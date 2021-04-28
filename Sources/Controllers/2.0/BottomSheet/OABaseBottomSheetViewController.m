@@ -54,8 +54,13 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (void) presentInViewController:(UIViewController *)viewController
 {
+    [self presentInViewController:viewController animated:NO];
+}
+
+- (void) presentInViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
     self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [viewController presentViewController:self animated:NO completion:nil];
+    [viewController presentViewController:self animated:animated completion:nil];
 }
 
 - (void) generateData

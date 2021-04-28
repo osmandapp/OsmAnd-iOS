@@ -3140,15 +3140,25 @@ typedef enum
 
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset
 {
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom bottomInset:bottomInset leftInset:leftInset animated:YES];
+}
+
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset animated:(BOOL)animated
+{
     OAToolbarViewController *toolbar = [self getTopToolbar];
     CGFloat topInset = 0.0;
     if (toolbar && [toolbar.navBarView superview])
         topInset = toolbar.navBarView.frame.size.height;
     CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset];
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset animated:animated];
 }
 
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset
+{
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset animated:YES];
+}
+
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset animated:(BOOL)animated
 {
     OAGpxBounds bounds;
     bounds.topLeft = topLeft;
@@ -3182,15 +3192,15 @@ typedef enum
     targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     if (bottomInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
     }
     else if (topInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
     }
     else if (leftInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:0 centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:0 centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
     }
 }
 
@@ -3595,8 +3605,13 @@ typedef enum
 
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
+    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight animated:YES];
+}
+
+- (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight animated:(BOOL)animated
+{
     BOOL landscape = [self.targetMenuView isLandscape];
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0];
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0 animated:NO];
 }
 
 - (void) onNavigationClick:(BOOL)hasTargets

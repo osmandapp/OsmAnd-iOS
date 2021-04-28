@@ -2072,3 +2072,4 @@
 "preparing_file" = "إعداد الملف";
 "export_failed" = "تعذر تصدير ملف التعريف";
 "export_profile_select_descr" = "حدد البيانات المطلوب تصديرها.";
+"delete_custom_categories" = "حذف الفئات المخصصة";

@@ -193,6 +193,12 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                         OAMapCreatorHelper *mapCreatorHelper = OAMapCreatorHelper.sharedInstance;
                         [mapCreatorHelper installFile:localPath newFileName:[task.name stringByAppendingPathExtension:@"sqlitedb"]];
                     }
+                    else if ([nsResourceId hasSuffix:@"obf.zip"])
+                    {
+                        NSString *newPath = [[task.targetPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:nsResourceId];
+                        [NSFileManager.defaultManager moveItemAtPath:task.targetPath toPath:newPath error:nil];
+                        _app.resourcesManager->installFromFile(QString::fromNSString(newPath), OsmAnd::ResourcesManager::ResourceType::MapRegion);
+                    }
                     else
                     {
                         task.installResourceRetry++;

@@ -8,7 +8,7 @@
 
 #import "OACompoundViewController.h"
 
-@class OAProduct;
+@class OAProduct, OAPlugin;
 
 @interface OAPluginDetailsViewController : OACompoundViewController
 
@@ -33,6 +33,7 @@
 @property (nonatomic, readonly) OAProduct *product;
 
 - (instancetype)initWithProduct:(OAProduct *)product;
+- (instancetype)initWithCustomPlugin:(OAPlugin *)plugin;
 
 @property (nonatomic, assign) BOOL openFromSplash;
 @property (nonatomic, assign) BOOL openFromCustomPlace;

@@ -42,6 +42,7 @@
 #import "OASQLiteTileSource.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OsmAndApp.h"
+#import "OACustomPlugin.h"
 
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"
@@ -97,7 +98,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
-    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self];
+    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self onComplete:nil];
+}
+
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
+{
+    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:delegate onComplete:nil];
 }
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
@@ -127,6 +133,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [task execute];
 }
 
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems onComplete:(OAOnDuplicatesChecked)onComplete
+{
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
+    task.onDuplicatesChecked = onComplete;
+    [task execute];
+}
+
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
     [self importSettings:settingsFile items:items latestChanges:latestChanges version:version delegate:self];
@@ -136,6 +149,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
     task.delegate = delegate;
+    [task execute];
+}
+
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version onComplete:(OAOnImportComplete)onComplete
+{
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+    task.onImportComplete = onComplete;
     [task execute];
 }
 
@@ -717,14 +737,57 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return settingsToOperate;
 }
 
+- (void) handlePluginImport:(OAPluginSettingsItem *)pluginItem file:(NSString *)file
+{
+    OAOnImportComplete onImportComplete = ^(BOOL succeed, NSArray<OASettingsItem *> *items) {
+//        AudioVideoNotesPlugin pluginAudioVideo = OsmandPlugin.getPlugin(AudioVideoNotesPlugin.class);
+//        if (pluginAudioVideo != null) {
+//            pluginAudioVideo.indexingFiles(null, true, true);
+//        }
+        OACustomPlugin *plugin = pluginItem.plugin;
+        [plugin loadResources];
+        
+//        if (!Algorithms.isEmpty(plugin.getDownloadMaps())) {
+//            app.getDownloadThread().runReloadIndexFilesSilent();
+//        }
+//        if (!Algorithms.isEmpty(plugin.getRendererNames())) {
+//            app.getRendererRegistry().updateExternalRenderers();
+//        }
+//        if (!Algorithms.isEmpty(plugin.getRouterNames())) {
+//            loadRoutingFiles(app, null);
+//        }
+        [plugin onInstall];
+        NSString *pluginId = [plugin getId];
+        NSString *pluginDir = [PLUGINS_DIR stringByAppendingPathComponent:pluginId];
+        NSString *fullPath = [OsmAndApp.instance.dataPath stringByAppendingPathComponent:pluginDir];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        if (![fileManager fileExistsAtPath:fullPath])
+            [fileManager createDirectoryAtPath:fullPath withIntermediateDirectories:YES attributes:nil error:nil];
+        
+        [self exportSettings:fullPath fileName:@"items" items:items exportItemFiles:NO delegate:nil];
+    };
+    
+    NSMutableArray<OASettingsItem *> *pluginItems = [NSMutableArray arrayWithArray:pluginItem.pluginDependentItems];
+    [pluginItems insertObject:pluginItem atIndex:0];
+    
+    [self checkDuplicates:file items:pluginItems selectedItems:pluginItems onComplete:^(NSArray<OASettingsItem *> *duplicates, NSArray<OASettingsItem *> *items) {
+        for (OASettingsItem *item in items)
+            item.shouldReplace = YES;
+        [self importSettings:file items:items latestChanges:@"" version:1 onComplete:onImportComplete];
+    }];
+}
+
 #pragma mark - OASettingsImportExportDelegate
 
 - (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(OALocalizedString(@"profile_import_success")) preferredStyle:UIAlertControllerStyleAlert];
-    [NSFileManager.defaultManager removeItemAtPath:_importTask.getFile error:nil];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    if (succeed)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(OALocalizedString(@"profile_import_success")) preferredStyle:UIAlertControllerStyleAlert];
+        [NSFileManager.defaultManager removeItemAtPath:_importTask.getFile error:nil];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    }
     _importTask = nil;
 }
 
@@ -741,14 +804,21 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             else if (item.pluginId.length == 0)
                 [pluginIndependentItems addObject:item];
         }
-//        for (OAPluginSettingsItem *pluginItem in pluginSettingsItems)
-//        {
-//            handlePluginImport(pluginItem, file);
-//        }
+        for (OAPluginSettingsItem *pluginItem in pluginSettingsItems)
+        {
+            [self handlePluginImport:pluginItem file:_importTask.getFile];
+        }
         if (pluginIndependentItems.count > 0)
         {
             if (_importDataVC)
                 [_importDataVC onItemsCollected:items];
+        }
+        else if (pluginSettingsItems.count > 0)
+        {
+            if (_importDataVC)
+            {
+                [_importDataVC.navigationController popViewControllerAnimated:NO];
+            }
         }
     }
     else if (empty)

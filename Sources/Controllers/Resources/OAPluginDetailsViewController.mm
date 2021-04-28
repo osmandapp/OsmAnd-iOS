@@ -16,11 +16,17 @@
 #import "OASizes.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
+#import "OAPlugin.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
 #define kPriceButtonMinTextHeight 40.0
 #define kPriceButtonRectBorder 15.0
+
+typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
+    EOAPluginScreenTypeProduct = 0,
+    EOAPluginScreenTypeCustomPlugin
+};
 
 @interface OAPluginDetailsViewController ()
 
@@ -29,6 +35,9 @@
 @implementation OAPluginDetailsViewController
 {
     OAIAPHelper *_iapHelper;
+    OAPlugin *_plugin;
+    
+    EOAPluginScreenType _screenType;
 
     CALayer *_horizontalLineDesc;
     CALayer *_horizontalLine;
@@ -40,6 +49,18 @@
     if (self)
     {
         _product = product;
+        _screenType = EOAPluginScreenTypeProduct;
+    }
+    return self;
+}
+
+- (instancetype) initWithCustomPlugin:(OAPlugin *)plugin
+{
+    self = [super init];
+    if (self)
+    {
+        _plugin = plugin;
+        _screenType = EOAPluginScreenTypeCustomPlugin;
     }
     return self;
 }
@@ -74,13 +95,31 @@
     self.priceButton.layer.cornerRadius = 4;
     self.priceButton.layer.masksToBounds = YES;
 
-    NSString *screenshotName = [_product productScreenshotName];
-    if (screenshotName)
-        self.screenshot.image = [UIImage imageNamed:screenshotName];
+    UIImage *screenshotImage;
+    if (_screenType == EOAPluginScreenTypeProduct)
+    {
+        NSString *screenshotName = [_product productScreenshotName];
+        if (screenshotName)
+            screenshotImage = [UIImage imageNamed:screenshotName];
+    }
+    else if (_screenType == EOAPluginScreenTypeCustomPlugin)
+    {
+        screenshotImage = _plugin.getAssetResourceImage;
+    }
+    self.screenshot.image = screenshotImage;
     
-    NSString *iconName = [_product productIconName];
-    if (iconName)
-        self.icon.image = [UIImage imageNamed:iconName];
+    UIImage *logo;
+    if (_screenType == EOAPluginScreenTypeProduct)
+    {
+        NSString *iconName = [_product productIconName];
+        if (iconName)
+            logo = [UIImage imageNamed:iconName];
+    }
+    else if (_screenType == EOAPluginScreenTypeCustomPlugin)
+    {
+        logo = [_plugin getLogoResource];
+    }
+    self.icon.image = logo;
     
     if (self.openFromCustomPlace)
     {
@@ -177,19 +216,39 @@
     NSString *desc;
     NSString *price;
     
-    title = _product.localizedTitle;
-    desc = _product.localizedDescriptionExt;
-    if (_product.price)
-        price = _product.formattedPrice;
-    else
-        price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+    if (_screenType == EOAPluginScreenTypeProduct)
+    {
+        title = _product.localizedTitle;
+        desc = _product.localizedDescriptionExt;
+        if (_product.price)
+            price = _product.formattedPrice;
+        else
+            price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+    }
+    else if (_screenType == EOAPluginScreenTypeCustomPlugin)
+    {
+        title = _plugin.getName;
+        desc = _plugin.getDescription;
+    }
     
     self.titleLabel.text = title;
     self.descTextView.text = desc;
     self.descTextView.selectable = NO;
     
-    BOOL purchased = [_product isPurchased];
-    BOOL disabled = _product.disabled;
+    BOOL purchased = NO;
+    BOOL disabled = YES;
+    
+    if (_screenType == EOAPluginScreenTypeProduct)
+    {
+        purchased = [_product isPurchased];
+        disabled = _product.disabled;
+    }
+    else if (_screenType == EOAPluginScreenTypeCustomPlugin)
+    {
+        purchased = YES;
+        disabled = !_plugin.isActive;
+    }
+    
     if (purchased)
     {
         [self.priceButton setTitle:@"" forState:UIControlStateNormal];
@@ -227,26 +286,34 @@
 
 - (IBAction) priceButtonClicked:(id)sender
 {
-    BOOL purchased = [_product isPurchased];
-    BOOL disabled = _product.disabled;
-    if (purchased)
+    if (_screenType == EOAPluginScreenTypeProduct)
     {
-        if (disabled)
+        BOOL purchased = [_product isPurchased];
+        BOOL disabled = _product.disabled;
+        if (purchased)
         {
-            [_iapHelper enableProduct:_product.productIdentifier];
-            [OAPluginPopupViewController showProductAlert:_product afterPurchase:NO];
+            if (disabled)
+            {
+                [_iapHelper enableProduct:_product.productIdentifier];
+                [OAPluginPopupViewController showProductAlert:_product afterPurchase:NO];
+            }
+            else
+            {
+                [_iapHelper disableProduct:_product.productIdentifier];
+            }
+            [self updatePurchaseButton];
+            
+            return;
         }
-        else
-        {
-            [_iapHelper disableProduct:_product.productIdentifier];
-        }
-        [self updatePurchaseButton];
         
-        return;
+    //    [[OARootViewController instance] buyProduct:_product showProgress:YES];
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:_product navController:self.navigationController];
     }
-    
-//    [[OARootViewController instance] buyProduct:_product showProgress:YES];
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:_product navController:self.navigationController];
+    else
+    {
+        [OAPlugin enablePlugin:_plugin enable:!_plugin.isActive];
+        [self updatePurchaseButton];
+    }
 }
 
 - (void) productPurchased:(NSNotification *)notification

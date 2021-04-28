@@ -11,6 +11,10 @@
 
 #define kTmpProfileFolder @"tmpProfileData"
 
+typedef void(^ OAOnImportComplete)(BOOL succeed, NSArray<OASettingsItem *> *items);
+typedef void(^ OAOnSettingsCollected)(BOOL succeed, BOOL empty, NSArray<OASettingsItem *> *items);
+typedef void(^ OAOnDuplicatesChecked)(NSArray<OASettingsItem *> *duplicates, NSArray<OASettingsItem *> *items);
+
 #pragma mark - OASettingsImporter
 
 @class OASettingsItem;
@@ -33,6 +37,9 @@
 @interface OAImportAsyncTask : NSObject
 
 @property (nonatomic, weak) id<OASettingsImportExportDelegate> delegate;
+@property (nonatomic, copy) OAOnImportComplete onImportComplete;
+@property (nonatomic, copy) OAOnSettingsCollected onSettingsCollected;
+@property (nonatomic, copy) OAOnDuplicatesChecked onDuplicatesChecked;
 
 - (instancetype) initWithFile:(NSString *)filePath latestChanges:(NSString *)latestChanges version:(NSInteger)version;
 - (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
@@ -52,8 +59,6 @@
 #pragma mark - OAImportItemsAsyncTask
 
 @interface OAImportItemsAsyncTask : NSObject
-
-@property (nonatomic, weak) id<OASettingsImportExportDelegate> delegate;
 
 - (instancetype) initWithFile:(NSString *)file items:(NSArray<OASettingsItem *> *)items;
 - (void) execute;

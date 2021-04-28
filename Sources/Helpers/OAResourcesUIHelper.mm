@@ -23,6 +23,8 @@
 #import "OASQLiteTileSource.h"
 #import "OAChoosePlanHelper.h"
 #import "OADownloadDescriptionInfo.h"
+#import "OAJsonHelper.h"
+#import "OAIndexConstants.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -82,7 +84,50 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 @implementation OACustomResourceItem
 
+- (NSString *) getTargetFilePath
+{
+    NSString *fileName = self.title;
+    if (self.subfolder && self.subfolder.length > 0)
+    {
+        fileName = [self.subfolder stringByAppendingPathComponent:fileName];
+    }
+    fileName = [self.getSubfolderByExtension stringByAppendingPathComponent:fileName];
+    return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:fileName];
+}
 
+- (NSString *) getSubfolderByExtension
+{
+    // TODO: handle zip, other custom resources
+    if ([self.title hasSuffix:SQLITE_EXT])
+        return MAP_CREATOR_DIR;
+    else
+        return RESOURCES_DIR;
+}
+
+- (NSString *) getSubName
+{
+    NSString *subName = [self getFirstSubName];
+    
+    NSString *secondSubName = [self getSecondSubName];
+    if (secondSubName)
+        subName = subName == nil ? secondSubName : [NSString stringWithFormat:@"%@ • %@", subName, secondSubName];
+    return subName;
+}
+
+- (NSString *) getFirstSubName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_firstSubNames defValue:nil];
+}
+
+- (NSString *) getSecondSubName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_secondSubNames defValue:nil];
+}
+
+- (BOOL) isInstalled
+{
+    return [NSFileManager.defaultManager fileExistsAtPath:self.getTargetFilePath];
+}
 
 @end
 
@@ -105,6 +150,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"res_hillshade");
         case OsmAnd::ResourcesManager::ResourceType::SlopeRegion:
             return OALocalizedString(@"res_slope");
+        case OsmAnd::ResourcesManager::ResourceType::SqliteFile:
+            return OALocalizedString(@"online_map");
             
         default:
             return OALocalizedString(@"res_unknown");
@@ -530,6 +577,32 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
         return NO;
+    }
+}
+
++ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    // Create download task
+    NSURL* url = [NSURL URLWithString:item.downloadUrl];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url];
+    
+    NSLog(@"%@", url);
+    
+    NSString* name = [item.title stringByDeletingPathExtension];
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
+                                                                     andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
+                                                                    andName:name];
+    if (onTaskCreated)
+        onTaskCreated(task);
+    
+    // Resume task only if it's other resource download tasks are not running
+    if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+    {
+        [task resume];
+        if (onTaskResumed)
+            onTaskResumed(task);
     }
 }
 

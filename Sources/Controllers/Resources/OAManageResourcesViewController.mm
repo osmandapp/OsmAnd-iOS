@@ -37,6 +37,9 @@
 #import "OANetworkUtilities.h"
 #import "OASQLiteTileSource.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OAPlugin.h"
+#import "OACustomRegion.h"
+#import "OADownloadDescriptionInfo.h"
 
 #include "Localization.h"
 
@@ -105,6 +108,7 @@ struct RegionResources
     NSMutableArray* _regionMapItems;
     NSMutableArray* _localRegionMapItems;
     
+    NSInteger _extraMapsSection;
     NSInteger _regionMapSection;
     NSInteger _osmAndLiveSection;
     NSInteger _otherMapsSection;
@@ -163,6 +167,8 @@ struct RegionResources
 
     NSString *_otherRegionId;
     NSString *_nauticalRegionId;
+    
+    NSArray<OAWorldRegion *> *_customRegions;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -279,6 +285,8 @@ static BOOL _lackOfResources;
     
     _displayBanner = ![self shouldHideBanner];
     _displaySubscribeEmailView = ![self shouldHideEmailSubscription];
+    
+    _customRegions = [OAPlugin getCustomDownloadRegions];
 
     [self obtainDataAndItems];
     [self prepareContent];
@@ -430,7 +438,7 @@ static BOOL _lackOfResources;
 
 - (BOOL) shouldHideBanner
 {
-    return _currentScope == kLocalResourcesScope || _iapHelper.subscribedToLiveUpdates || (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId];
+    return _currentScope == kLocalResourcesScope || _iapHelper.subscribedToLiveUpdates || (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId] || [self.region isKindOfClass:OACustomRegion.class];
 }
 
 - (BOOL) shouldHideEmailSubscription
@@ -484,6 +492,9 @@ static BOOL _lackOfResources;
     
     OAProduct *product;
     NSString *regionId;
+    
+    if ([self.region isKindOfClass:OACustomRegion.class])
+        return;
 
     if (self.region == _app.worldRegion)
     {
@@ -801,10 +812,19 @@ static BOOL _lackOfResources;
                 [self collectSubregionItems:subregion];
         }
     }
-    
 }
 
-- (void) collectSubregionItems:(OAWorldRegion *) region
+- (void) collectCustomItems
+{
+    _customRegions = self.region.flattenedSubregions;
+    for (OAResourceItem *item in ((OACustomRegion *) self.region).loadIndexItems)
+    {
+        item.downloadTask = [self getDownloadTaskFor:item.resourceId.toNSString()];
+        [_regionMapItems addObject:item];
+    }
+}
+
+- (void)colloectSubregionItemsFromRegularRegion:(OAWorldRegion *)region
 {
     const auto citRegionResources = _resourcesByRegions.constFind(region);
     if (citRegionResources == _resourcesByRegions.cend())
@@ -855,6 +875,14 @@ static BOOL _lackOfResources;
     {
         [_allResourceItems addObjectsFromArray:allResourcesArray];
     }
+}
+
+- (void) collectSubregionItems:(OAWorldRegion *) region
+{
+    if ([region isKindOfClass:OACustomRegion.class])
+        [self collectCustomItems];
+    else
+        [self colloectSubregionItemsFromRegularRegion:region];
 }
 
 - (OAResourceItem *) collectSubregionItem:(OAWorldRegion *) region regionResources:(const RegionResources &)regionResources resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource
@@ -1123,6 +1151,7 @@ static BOOL _lackOfResources;
     @synchronized(_dataLock)
     {
         _lastUnusedSectionIndex = 0;
+        _extraMapsSection = -1;
         _osmAndLiveSection = -1;
         _otherMapsSection = -1;
         _nauticalMapsSection = -1;
@@ -1148,6 +1177,9 @@ static BOOL _lackOfResources;
         
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion)
             _osmAndLiveSection = _lastUnusedSectionIndex++;
+        
+        if (_currentScope == kAllResourcesScope && _customRegions.count > 0 && (self.region == _app.worldRegion || [self.region isKindOfClass:OACustomRegion.class]))
+            _extraMapsSection = _lastUnusedSectionIndex++;
 
         if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0) && self.region == _app.worldRegion)
             _localResourcesSection = _lastUnusedSectionIndex++;
@@ -1567,6 +1599,8 @@ static BOOL _lackOfResources;
         sectionsCount++;
     if (_osmAndLiveSection >= 0)
         sectionsCount++;
+    if (_extraMapsSection >= 0)
+        sectionsCount++;
     if (_localResourcesSection >= 0)
         sectionsCount++;
     if (_outdatedResourcesSection >= 0)
@@ -1596,6 +1630,8 @@ static BOOL _lackOfResources;
         return 1;
     if (section == _osmAndLiveSection)
         return 1;
+    if (section == _extraMapsSection)
+        return _customRegions.count;
     if (section == _resourcesSection)
         return [[self getResourceItems] count];
     if (section == _localResourcesSection)
@@ -1637,6 +1673,8 @@ static BOOL _lackOfResources;
             return OALocalizedString(@"res_updates");
         if (section == _osmAndLiveSection)
             return OALocalizedString(@"osmand_live_title");
+        if (section == _extraMapsSection)
+            return OALocalizedString(@"extra_maps");
         if (section == _resourcesSection)
             return OALocalizedString(@"res_worldwide");
         if (section == _localResourcesSection)
@@ -1655,6 +1693,8 @@ static BOOL _lackOfResources;
         return OALocalizedString(@"res_updates");
     if (section == _osmAndLiveSection)
         return OALocalizedString(@"osmand_live_title");
+    if (section == _extraMapsSection)
+        return OALocalizedString(@"extra_maps");
     if (section == _resourcesSection)
         return OALocalizedString(@"res_mapsres");
     if (section == _localResourcesSection)
@@ -1817,6 +1857,11 @@ static BOOL _lackOfResources;
             cellTypeId = osmAndLiveCell;
             title = OALocalizedString(@"osmand_live_title");
         }
+        else if (indexPath.section == _extraMapsSection)
+        {
+            cellTypeId = subregionCell;
+            title = _customRegions[indexPath.row].localizedName;
+        }
         else if (indexPath.section == _otherMapsSection)
         {
             cellTypeId = subregionCell;
@@ -1927,12 +1972,12 @@ static BOOL _lackOfResources;
                 cellTypeId = downloadingResourceCell;
             else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
                 cellTypeId = outdatedResourceCell;
-            else if ([item isKindOfClass:[OALocalResourceItem class]])
+            else if ([item isKindOfClass:[OALocalResourceItem class]] || ([item isKindOfClass:OACustomResourceItem.class] && ((OACustomResourceItem *) item).isInstalled))
             {
                 cellTypeId = localResourceCell;
                 _sizePkg = item.size;
             }
-            else if ([item isKindOfClass:[OARepositoryResourceItem class]])
+            else if ([item isKindOfClass:[OARepositoryResourceItem class]] || [item isKindOfClass:OACustomResourceItem.class])
                 cellTypeId = repositoryResourceCell;
             
             BOOL mapDownloaded = NO;
@@ -1971,6 +2016,12 @@ static BOOL _lackOfResources;
                 if (_sizePkg > 0)
                     subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
 
+            }
+            else if ([item isKindOfClass:OACustomResourceItem.class])
+            {
+                title = [item.title stringByDeletingPathExtension];
+                
+                subtitle = ((OACustomResourceItem *) item).getSubName;
             }
             else if (self.region != _app.worldRegion)
             {
@@ -2222,6 +2273,8 @@ static BOOL _lackOfResources;
         item = [_app.worldRegion getSubregion:_otherRegionId];
     else if (indexPath.section == _nauticalMapsSection)
         item = [_app.worldRegion getSubregion:_nauticalRegionId];
+    else if (indexPath.section == _extraMapsSection)
+        item = _customRegions[indexPath.row];
 
     return item;
 }
@@ -2448,6 +2501,8 @@ static BOOL _lackOfResources;
             OAWorldRegion* subregion = nil;
             if ([self isFiltering])
                 subregion = [_searchResults objectAtIndex:cellPath.row];
+            else if ([self.region isKindOfClass:OACustomRegion.class])
+                subregion = _customRegions[cellPath.row];
             else if (tableView == _tableView)
                 subregion = [[self getResourceItems] objectAtIndex:cellPath.row];
 
@@ -2523,6 +2578,10 @@ static BOOL _lackOfResources;
         else if (cellPath.section == _nauticalMapsSection)
         {
             subregion = [_app.worldRegion getSubregion:_nauticalRegionId];
+        }
+        else if (cellPath.section == _extraMapsSection)
+        {
+            subregion = _customRegions[cellPath.row];
         }
         else if (tableView == _tableView)
         {

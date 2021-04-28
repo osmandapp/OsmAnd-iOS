@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OAResourceItem;
 
 @interface OADynamicDownloadItems : NSObject
 
@@ -38,6 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSDictionary *) toJson;
 
 - (void) loadDynamicIndexItems;
+
+- (NSArray<OAResourceItem *> *) loadIndexItems;
 
 @end
 

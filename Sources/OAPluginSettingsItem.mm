@@ -7,11 +7,12 @@
 //
 
 #import "OAPluginSettingsItem.h"
-#import "OAPlugin.h"
+#import "OACustomPlugin.h"
+#import "OADownloadsItem.h"
 
 @implementation OAPluginSettingsItem
 {
-    OAPlugin *_plugin;
+    NSArray<OASettingsItem *> *_pluginDependentItems;
 }
 
 @dynamic type, name, fileName;
@@ -23,17 +24,17 @@
 
 - (NSString *) name
 {
-    return [_plugin.class getId];
+    return [self.plugin getId];
 }
 
 - (NSString *) publicName
 {
-    return _plugin.getName;
+    return self.plugin.getName;
 }
 
 - (BOOL)exists
 {
-    return [OAPlugin getPlugin:_plugin.class] != nil;
+    return [OAPlugin getPlugin:self.plugin.class] != nil;
 }
 
 - (NSArray<OASettingsItem *> *)pluginDependentItems
@@ -43,13 +44,17 @@
     return _pluginDependentItems;
 }
 
+- (void)setPluginDependentItems:(NSArray<OASettingsItem *> *)pluginDependentItems
+{
+    _pluginDependentItems = pluginDependentItems;
+}
+
 - (void)apply
 {
     if (self.shouldReplace || ![self exists])
     {
-        // TODO: implement custom plugins
-//        for (OASettingsItem *item : _pluginDependentItems)
-//        {
+        for (OASettingsItem *item : _pluginDependentItems)
+        {
 //            if ([item isKindOfClass:OAFileSettingsItem.class])
 //            {
 //                OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
@@ -70,27 +75,26 @@
 //            {
 //                [plugin updateSuggestedDownloads:((OASuggestedDownloadsItem *) item).items];
 //            }
-//            else if ([item isKindOfClass:OADownloadsItem.class])
-//            {
-//                [plugin updateDownloadItems:((OADownloadsItem *) item).items];
-//            }
-//        }
-//        [OAPlugin addCusomPlugin:_plugin];
+            if ([item isKindOfClass:OADownloadsItem.class])
+            {
+                [_plugin updateDownloadItems:((OADownloadsItem *) item).items];
+            }
+        }
+        [OAPlugin addCustomPlugin:_plugin];
     }
 }
 
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     [super readFromJson:json error:error];
-//    _plugin = [[OAPlugin alloc] initWithJson:json];
-//    new CustomOsmandPlugin(app, json);
+    _plugin = [[OACustomPlugin alloc] initWithJson:json];
 }
 
 - (void) writeToJson:(id)json
 {
-    // TODO: Finish later
     [super writeToJson:json];
-//    _plugin.writeAdditionalDataToJson(json);
+    json[@"version"] = _plugin.getVersion;
+    [_plugin writeAdditionalDataToJson:json];
 }
 
 @end

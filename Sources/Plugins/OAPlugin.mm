@@ -17,6 +17,8 @@
 #import "OAQuickActionType.h"
 #import "OAQuickActionRegistry.h"
 #import "OACustomPlugin.h"
+#import "OAPluginInstalledViewController.h"
+#import "OARootViewController.h"
 
 #import "OAMonitoringPlugin.h"
 #import "OAParkingPositionPlugin.h"
@@ -92,10 +94,13 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (void) processNames
 {
     NSString *pluginId = [self getId];
-    NSString *postfix = [[pluginId componentsSeparatedByString:@"."] lastObject];
-    _titleId = [@"product_title_" stringByAppendingString:postfix];
-    _shortDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
-    _descriptionId = [@"product_desc_ext_" stringByAppendingString:postfix];
+    if (pluginId)
+    {
+        NSString *postfix = [[pluginId componentsSeparatedByString:@"."] lastObject];
+        _titleId = [@"product_title_" stringByAppendingString:postfix];
+        _shortDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
+        _descriptionId = [@"product_desc_ext_" stringByAppendingString:postfix];
+    }
 }
 
 - (NSString *) getShortDescription
@@ -154,6 +159,24 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 }
 
 /**
+ * Plugin was installed
+ */
+- (void)onInstall
+{
+    for (OAApplicationMode *appMode in self.getAddedAppModes)
+    {
+        [OAApplicationMode changeProfileAvailability:appMode isSelected:YES];
+    }
+    [self showInstalledScreen];
+}
+
+- (void) showInstalledScreen
+{
+    OAPluginInstalledViewController *pluginInstalled = [[OAPluginInstalledViewController alloc] initWithPluginId:self.getId];
+    [OARootViewController.instance presentViewController:pluginInstalled animated:YES completion:nil];
+}
+
+/**
  * Initialize plugin runs just after creation
  */
 - (BOOL) initPlugin
@@ -195,6 +218,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 }
 
 - (NSArray<OAQuickActionType *> *) getQuickActionTypes
+{
+    return @[];
+}
+
+- (NSArray<OAWorldRegion *> *) getDownloadMaps
 {
     return @[];
 }
@@ -249,7 +277,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     
-    [self.class loadCustomPlugins];
+    [self loadCustomPlugins];
     [self activatePlugins:enabledPlugins];
 }
 
@@ -283,7 +311,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 {
     for (OAPlugin *plugin in allPlugins)
     {
-        if ([enabledPlugins containsObject:[plugin.class getId]] || [plugin isActive])
+        if ([enabledPlugins containsObject:[plugin getId]] || [plugin isActive])
         {
             @try
             {
@@ -292,11 +320,19 @@ static NSMutableArray<OAPlugin *> *allPlugins;
             }
             @catch (NSException *e)
             {
-                NSLog(@"Plugin initialization failed %@ reason=%@", [plugin.class getId], e.reason);
+                NSLog(@"Plugin initialization failed %@ reason=%@", [plugin getId], e.reason);
             }
         }
     }
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
+}
+
++ (NSArray<OAWorldRegion *> *) getCustomDownloadRegions
+{
+    NSMutableArray<OAWorldRegion *> *list = [NSMutableArray array];
+    for (OAPlugin *plugin in self.getEnabledPlugins)
+        [list addObjectsFromArray:plugin.getDownloadMaps];
+    return list;
 }
 
 /*
@@ -341,7 +377,7 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
         [plugin disable];
         [plugin setActive:NO];
     }
-    [[OAAppSettings sharedManager] enablePlugin:[plugin.class getId] enable:enable];
+    [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
     [plugin updateLayers];
     return true;
@@ -496,6 +532,16 @@ public List<String> indexingFiles(IProgress progress) {
     return nil;
 }
 
++ (OAPlugin *) getPluginById:(NSString *)pluginId
+{
+    for (OAPlugin *plugin in [self getAvailablePlugins])
+    {
+        if ([plugin.getId isEqualToString:pluginId])
+            return plugin;
+    }
+    return nil;
+}
+
 /*
 public static List<String> onIndexingFiles(IProgress progress) {
     List<String> l = new ArrayList<String>();
@@ -637,6 +683,49 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
     else
         for (OAPlugin *p in [self.class getNotEnabledPlugins])
             [types addObjectsFromArray:p.getQuickActionTypes];
+}
+
++ (void) addCustomPlugin:(OACustomPlugin *)plugin
+{
+    OAPlugin *oldPlugin = [OAPlugin getPluginById:plugin.getId];
+    if (oldPlugin != nil)
+        [allPlugins removeObject:oldPlugin];
+    
+    [allPlugins addObject:plugin];
+    [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:YES];
+    [self saveCustomPlugins];
+}
+
++ (void) saveCustomPlugins
+{
+    NSArray<OACustomPlugin *> *customOsmandPlugins = [self getCustomPlugins];
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    NSString *customPlugins = settings.customPluginsJson;
+    NSMutableArray<NSDictionary *> *itemsJson = [NSMutableArray array];
+    for (OACustomPlugin *plugin in customOsmandPlugins)
+    {
+        NSMutableDictionary *json = [NSMutableDictionary dictionary];
+        json[@"pluginId"] = plugin.getId;
+        json[@"version"] = plugin.getVersion;
+        [plugin writeAdditionalDataToJson:json];
+        [plugin writeDependentFilesJson:json];
+        [itemsJson addObject:json];
+    }
+    NSData *data = [NSJSONSerialization dataWithJSONObject:itemsJson options:0 error:nil];
+    NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if (![jsonStr isEqualToString:customPlugins])
+        [settings setCustomPluginsJson:jsonStr];
+}
+
++ (NSArray<OACustomPlugin *> *) getCustomPlugins
+{
+    NSMutableArray<OACustomPlugin *> *lst = [NSMutableArray arrayWithCapacity:allPlugins.count];
+    for (OAPlugin *plugin in allPlugins)
+    {
+        if ([plugin isKindOfClass:OACustomPlugin.class])
+            [lst addObject:(OACustomPlugin *)plugin];
+    }
+    return lst;
 }
 
 /*

@@ -25,6 +25,11 @@
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAQuickActionRegistry.h"
+#import "OAPlugin.h"
+#import "OACustomPlugin.h"
+
+#define kDefaultPluginsSection 0
+#define kCustomPluginsSection 1
 
 @interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, OAOsmLiveBannerViewDelegate>
 
@@ -42,6 +47,8 @@
     OAIAPHelper *_iapHelper;
     NSNumberFormatter *_numberFormatter;
     OAOsmLiveBannerView *_osmLiveBanner;
+    
+    NSArray<OACustomPlugin *> *_customPlugins;
     
     CALayer *_horizontalLine;
 }
@@ -73,6 +80,8 @@
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.toolbarView.layer addSublayer:_horizontalLine];
+    
+    _customPlugins = [OAPlugin getCustomPlugins];
     
     if (self.openFromSplash)
     {
@@ -115,7 +124,6 @@
 {
     return defaultToolBarHeight;
 }
-
 
 - (void) didReceiveMemoryWarning
 {
@@ -166,16 +174,22 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _iapHelper.inAppAddons.count;
+    if (section == kDefaultPluginsSection)
+        return _iapHelper.inAppAddons.count;
+    else if (section == kCustomPluginsSection)
+        return _customPlugins.count;
+    return 0;
 }
 
 - (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    if (section == kCustomPluginsSection)
+        return OALocalizedString(@"custom_plugins");
     return @"";
 }
 
@@ -195,32 +209,55 @@
     {
         [UIView performWithoutAnimation:^{
             [cell.btnPrice removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            cell.btnPrice.tag = indexPath.row;
+            cell.btnPrice.tag = indexPath.section << 10 | indexPath.row;;
             [cell.btnPrice addTarget:self action:@selector(buttonPurchaseClicked:) forControlEvents:UIControlEventTouchUpInside];
             
-            OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
-
-            BOOL purchased = [product isPurchased];
-            BOOL disabled = product.disabled;
+            BOOL purchased = NO;
+            BOOL disabled = YES;
             
-            UIImage *imgTitle = [UIImage imageNamed:[product productIconName]];
-            if (!imgTitle)
-                imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
-            
+            UIImage *imgTitle = nil;
             cell.imgIconBackground.hidden = NO;
             
-            NSString *title = product.localizedTitle;
-            NSString *desc = product.localizedDescription;
-            NSString *price;
-            if (product.price)
+            NSString *title = nil;
+            NSString *desc = nil;
+            NSString *price = nil;
+            
+            if (indexPath.section == kDefaultPluginsSection)
             {
-                [_numberFormatter setLocale:product.priceLocale];
-                price = [_numberFormatter stringFromNumber:product.price];
+                OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
+
+                purchased = [product isPurchased];
+                disabled = product.disabled;
+                
+                imgTitle = [UIImage imageNamed:[product productIconName]];
+                
+                title = product.localizedTitle;
+                desc = product.localizedDescription;
+                if (product.price)
+                {
+                    [_numberFormatter setLocale:product.priceLocale];
+                    price = [_numberFormatter stringFromNumber:product.price];
+                }
+                else
+                {
+                    price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                }
+                
             }
-            else
+            else if (indexPath.section == kCustomPluginsSection)
             {
-                price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                OACustomPlugin *plugin = _customPlugins[indexPath.row];
+                purchased = YES;
+                disabled = !plugin.isActive;
+                
+                imgTitle = plugin.getLogoResource;
+                
+                title = plugin.getName;
+                desc = plugin.getDescription;
             }
+             
+            if (!imgTitle)
+                imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
             
             [cell.imgIcon setImage:imgTitle];
             [cell.lbTitle setText:title];
@@ -241,48 +278,71 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
-    if (product)
+    OAPluginDetailsViewController *pluginDetails = nil;
+    if (indexPath.section == kDefaultPluginsSection)
     {
-        OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProduct:product];
+        OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
+        if (product)
+            pluginDetails = [[OAPluginDetailsViewController alloc] initWithProduct:product];
+    }
+    else if (indexPath.section == kCustomPluginsSection)
+    {
+        OACustomPlugin *plugin = _customPlugins[indexPath.row];
+        if (plugin)
+            pluginDetails = [[OAPluginDetailsViewController alloc] initWithCustomPlugin:plugin];
+    }
+    if (pluginDetails)
+    {
         pluginDetails.openFromSplash = self.openFromSplash;
         pluginDetails.openFromCustomPlace = self.openFromCustomPlace;
-        [self.navigationController pushViewController:pluginDetails animated:YES];
     }
+    [self.navigationController pushViewController:pluginDetails animated:YES];
+}
+
+- (void)refreshProduct:(NSIndexPath *)indexPath {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [OAQuickActionRegistry.sharedInstance updateActionTypes];
+        [OAQuickActionRegistry.sharedInstance.quickActionListChangedObservable notifyEvent];
+    });
 }
 
 - (IBAction) buttonPurchaseClicked:(id)sender
 {
     UIButton *btn = sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:btn.tag inSection:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:btn.tag & 0x3FF inSection:btn.tag >> 10];
     
-    OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
-    
-    BOOL purchased = [product isPurchased];
-    BOOL disabled = product.disabled;
-    
-    if (purchased)
+    if (indexPath.section == kDefaultPluginsSection)
     {
-        if (disabled)
-        {
-            [_iapHelper enableProduct:product.productIdentifier];
-            [OAPluginPopupViewController showProductAlert:product afterPurchase:NO];
-        }
-        else
-        {
-            [_iapHelper disableProduct:product.productIdentifier];
-        }
+        OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            [OAQuickActionRegistry.sharedInstance updateActionTypes];
-            [OAQuickActionRegistry.sharedInstance.quickActionListChangedObservable notifyEvent];
-        });
-        return;
+        BOOL purchased = [product isPurchased];
+        BOOL disabled = product.disabled;
+        
+        if (purchased)
+        {
+            if (disabled)
+            {
+                [_iapHelper enableProduct:product.productIdentifier];
+                [OAPluginPopupViewController showProductAlert:product afterPurchase:NO];
+            }
+            else
+            {
+                [_iapHelper disableProduct:product.productIdentifier];
+            }
+            
+            [self refreshProduct:indexPath];
+            return;
+        }
+        //    [[OARootViewController instance] buyProduct:product showProgress:YES];
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
     }
-    
-//    [[OARootViewController instance] buyProduct:product showProgress:YES];
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
+    else if (indexPath.section == kCustomPluginsSection)
+    {
+        OACustomPlugin *plugin = _customPlugins[indexPath.row];
+        [OAPlugin enablePlugin:plugin enable:!plugin.isActive];
+        [self refreshProduct:indexPath];
+    }
 }
 
 - (void) productsRequested:(NSNotification *)notification

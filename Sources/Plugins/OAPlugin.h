@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType;
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion;
 
 @interface OAPlugin : NSObject
 
@@ -27,6 +27,8 @@
 
 - (UIViewController *) getSettingsController;
 - (NSString *) getVersion;
+
+- (NSArray<OAWorldRegion *> *) getDownloadMaps;
 
 - (BOOL) initPlugin;
 - (void) setActive:(BOOL)active;
@@ -47,11 +49,17 @@
 + (NSArray<OAPlugin *> *) getNotEnabledVisiblePlugins;
 + (OAPlugin *) getEnabledPlugin:(Class) cl;
 + (OAPlugin *) getPlugin:(Class) cl;
++ (OAPlugin *) getPluginById:(NSString *)pluginId;
 + (BOOL) onDestinationReached;
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
 + (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
 
++ (NSArray<OACustomPlugin *> *) getCustomPlugins;
++ (void) addCustomPlugin:(OACustomPlugin *)plugin;
++ (NSArray<OAWorldRegion *> *) getCustomDownloadRegions;
+
+- (void) onInstall;
 - (void) updateLayers;
 - (void) registerLayers;
 - (BOOL) destinationReached;

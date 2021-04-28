@@ -54,7 +54,8 @@
 - (NSString *) getLocalizedDescription
 {
     NSString *description = [OAJsonHelper getLocalizedResFromMap:_localizedDescription defValue:nil];
-    return description ? [[NSAttributedString alloc] initWithData:[description dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: [NSNumber numberWithInt:NSUTF8StringEncoding]} documentAttributes:nil error:nil].string : nil;
+//    [[NSAttributedString alloc] initWithData:[description dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: [NSNumber numberWithInt:NSUTF8StringEncoding]} documentAttributes:nil error:nil].string
+    return description ? description : @"";
 }
 
 - (NSArray<OADownloadActionButton *> *) getActionButtons

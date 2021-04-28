@@ -16,6 +16,9 @@
 #ifndef OAIndexConstants_h
 #define OAIndexConstants_h
 
+#define MAP_CREATOR_DIR @"MapCreator"
+#define RESOURCES_DIR @"Resources"
+
 #define SQLITE_EXT @".sqlitedb"
 #define TEMP_SOURCE_TO_LOAD @"temp"
 

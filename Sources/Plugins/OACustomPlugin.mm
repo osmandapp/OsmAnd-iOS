@@ -80,6 +80,7 @@
     self = [super init];
     if (self)
     {
+        _customRegions = [NSArray array];
         _pluginId = json[@"pluginId"];
         _version = json[@"version"] ? [json[@"version"] integerValue] : -1;
         [self readAdditionalDataFromJson:json];
@@ -107,7 +108,12 @@
 - (NSString *)getDescription
 {
     NSString *descr = [OAJsonHelper getLocalizedResFromMap:_descriptions defValue:nil];
-    return descr != nil ? [[NSAttributedString alloc] initWithData:[descr dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: [NSNumber numberWithInt:NSUTF8StringEncoding]} documentAttributes:nil error:nil].string : nil;
+    return descr != nil ? descr : @"";
+}
+
+- (NSArray<OAWorldRegion *> *)getDownloadMaps
+{
+    return _customRegions;
 }
 
 - (BOOL)initPlugin
@@ -127,7 +133,7 @@
 
 - (NSString *) getPluginDir
 {
-    return [[OsmAndApp.instance.documentsPath stringByAppendingPathComponent:PLUGINS_DIR] stringByAppendingPathComponent:_pluginId];
+    return [[OsmAndApp.instance.dataPath stringByAppendingPathComponent:PLUGINS_DIR] stringByAppendingPathComponent:_pluginId];
 }
 
 - (NSString *) getPluginItemsFile
@@ -169,11 +175,6 @@
 - (UIImage *)getAssetResourceImage
 {
     return _image ? : super.getAssetResourceImage;
-}
-
-- (NSArray<OAWorldRegion *> *)getDownloadMaps
-{
-    return _customRegions;
 }
 
 - (NSArray<OAResourceItem *> *) getSuggestedMaps
@@ -363,9 +364,9 @@
     if (_imageNames)
         json[@"image"] = _imageNames;
     if (_names)
-        json[@"names"] = _names;
+        json[@"name"] = _names;
     if (_descriptions)
-        json[@"descriptions"] = _descriptions;
+        json[@"description"] = _descriptions;
     
     NSMutableArray *regionsJson = [NSMutableArray new];
     for (OAWorldRegion *region in self.getFlatCustomRegions)

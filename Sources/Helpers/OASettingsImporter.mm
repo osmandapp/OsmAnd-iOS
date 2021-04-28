@@ -32,11 +32,22 @@
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
 #import "OASearchHistorySettingsItem.h"
+#import "OADownloadsItem.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
 #define kVersion 1
+
+@interface OAImportItemsAsyncTask()
+
+@property (nonatomic) NSString *file;
+@property (nonatomic) NSArray<OASettingsItem *> *items;
+
+@property (nonatomic, copy) OAOnImportComplete onImportComplete;
+@property (nonatomic, weak) id<OASettingsImportExportDelegate> delegate;
+
+@end
 
 #pragma mark - OASettingsImporter
 
@@ -324,6 +335,9 @@
         case EOASettingsItemTypeSearchHistory:
             item = [[OASearchHistorySettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeDownloads:
+            item = [[OADownloadsItem alloc] initWithJson:json error:&error];
+            break;
         default:
             item = nil;
             break;
@@ -424,8 +438,13 @@
 - (void) onPreExecute
 {
     OAImportAsyncTask* importTask = _settingsHelper.importTask;
-    if (importTask != nil && ![importTask isImportDone] && self.delegate)
-        [self.delegate onSettingsImportFinished:NO items:_items];
+    if (importTask != nil && ![importTask isImportDone] && (self.delegate || self.onImportComplete))
+    {
+        if (self.delegate)
+            [self.delegate onSettingsImportFinished:NO items:_items];
+        if (self.onImportComplete)
+            self.onImportComplete(NO, _items);
+    }
     
     _settingsHelper.importTask = self;
 }
@@ -460,11 +479,15 @@
             _importDone = YES;
             if (_delegate)
                 [_delegate onSettingsCollectFinished:YES empty:NO items:_items];
+            if (self.onSettingsCollected)
+                self.onSettingsCollected(YES, NO, _items);
             break;
         case EOAImportTypeCheckDuplicates:
             _importDone = YES;
             if (_delegate)
                 [_delegate onDuplicatesChecked:_duplicates items:_selectedItems];
+            if (self.onDuplicatesChecked)
+                self.onDuplicatesChecked(_duplicates, _selectedItems);
             break;
         case EOAImportTypeImport:
             if (items != nil && items.count > 0)
@@ -473,6 +496,7 @@
                     [item apply];
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
+                task.onImportComplete = self.onImportComplete;
                 [task execute];
             }
             break;
@@ -538,13 +562,6 @@
 
 #pragma mark - OAImportItemsAsyncTask
 
-@interface OAImportItemsAsyncTask()
-
-@property (nonatomic) NSString *file;
-@property (nonatomic) NSArray<OASettingsItem *> *items;
-
-@end
-
 @implementation OAImportItemsAsyncTask
 {
     OASettingsHelper *_settingsHelper;
@@ -598,6 +615,8 @@
 {
     if (_delegate)
         [_delegate onSettingsImportFinished:success items:_items];
+    if (self.onImportComplete)
+        self.onImportComplete(success, _items);
 }
 
 @end

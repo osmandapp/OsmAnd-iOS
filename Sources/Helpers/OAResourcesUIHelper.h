@@ -73,6 +73,12 @@
 @property NSDictionary<NSString *, NSString *> *secondSubNames;
 
 @property OADownloadDescriptionInfo *descriptionInfo;
+
+- (NSString *) getSubName;
+- (NSString *) getTargetFilePath;
+
+- (BOOL) isInstalled;
+
 @end
 
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
@@ -108,6 +114,7 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 + (void) startDownloadOfItem:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 + (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop;
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_;

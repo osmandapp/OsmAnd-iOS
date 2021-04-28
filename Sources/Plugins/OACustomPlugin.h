@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OACustomRegion, OAWorldRegion;
+
 @interface OASuggestedDownloadItem : NSObject
 
 @property (nonatomic, readonly) NSString *scopeId;
@@ -26,6 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSArray<NSString *> *routerNames;
 
 - (instancetype) initWithJson:(NSDictionary *)json;
+
+- (void) loadResources;
+- (void) updateDownloadItems:(NSArray<OAWorldRegion *> *)items;
+
+- (void) writeAdditionalDataToJson:(NSMutableDictionary *)json;
+- (void) writeDependentFilesJson:(NSMutableDictionary *)json;
+
++ (NSArray<OACustomRegion *> *)collectRegionsFromJson:(NSArray *)jsonArray;
 
 @end
 

@@ -7,6 +7,7 @@
 //
 
 #import "OACustomRegion.h"
+#import "OAWorldRegion+Protected.h"
 #import "OAJsonHelper.h"
 #import "OAColors.h"
 #import "OAResourcesUIHelper.h"
@@ -98,11 +99,8 @@
     region.names = json[@"name"];
     if (region.names.count > 0)
     {
-        // TODO: refactor world region when testing custom downloads
-//        region.name = region.names[@""];
-//        region.nativeName = region.names[@"en"];
-//        region.regionId = region.names[@""];
-//        region.regionNameLocale = [OAJsonHelper getLocalizedResFromMap:region.names defValue:region.name];
+        region.localizedName = [OAJsonHelper getLocalizedResFromMap:region.names defValue:region.name];
+        region.nativeName = region.names[@""];
     }
     
     region.icons = json[@"icon"];

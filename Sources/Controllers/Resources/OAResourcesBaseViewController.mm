@@ -263,6 +263,15 @@ static BOOL dataInvalidated = NO;
 {
 }
 
+- (void) downloadCustomItem:(OACustomResourceItem *)item
+{
+    [OAResourcesUIHelper startDownloadOfCustomItem:item onTaskCreated:^(id<OADownloadTask> task) {
+        [self updateContent];
+    } onTaskResumed:^(id<OADownloadTask> task) {
+        [self showDownloadViewForTask:task];
+    }];
+}
+
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
@@ -361,6 +370,10 @@ static BOOL dataInvalidated = NO;
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
             else
                 [self offerDownloadAndInstallOf:item];
+        }
+        else if ([item_ isKindOfClass:OACustomResourceItem.class])
+        {
+            [self downloadCustomItem:(OACustomResourceItem *) item_];
         }
     }
 }

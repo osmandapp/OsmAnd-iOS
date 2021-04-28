@@ -734,6 +734,7 @@
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
                 NSString *title = [buttonItem getName];
                 [cell.button setTitle:title ? title : @"" forState:UIControlStateNormal];
+                [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.button addTarget:buttonItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
                 return cell;
             }

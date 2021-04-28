@@ -334,6 +334,7 @@
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.deleteButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.deleteButton addTarget:self action:@selector(onRowButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
@@ -352,6 +353,7 @@
             cell.iconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:actionItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
             return cell;
         }

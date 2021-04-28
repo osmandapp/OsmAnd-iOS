@@ -130,7 +130,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_categories_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_custom_categories_list_promo") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
 }
 
 - (void)applyLocalization
@@ -330,7 +330,7 @@
         {
             cell.titleLabel.text = filter.name;
             UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
-            cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
+            cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
@@ -412,7 +412,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == kActionsSection ? OALocalizedString(@"rearrange_categories_reset") : @"";
+    return section == kActionsSection ? OALocalizedString(@"reset_to_default_category_button_promo") : @"";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

@@ -180,7 +180,7 @@
         {
             OAPOIUIFilter *filter = (OAPOIUIFilter *) item;
             UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
-            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
+            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             cell.textView.text = filter.getName ? filter.getName : @"";
             cell.descriptionView.hidden = true;
             BOOL selected = [_selectedItems containsObject:filter];

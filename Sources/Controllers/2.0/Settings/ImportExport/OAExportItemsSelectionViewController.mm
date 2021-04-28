@@ -176,7 +176,7 @@
         if (poiIcon)
             item[@"icon"] = poiIcon;
         else
-            item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_user"];
+            item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_search_categories"];
     }
     else if ([object isKindOfClass:OATileSource.class])
     {

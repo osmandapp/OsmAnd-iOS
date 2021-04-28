@@ -1747,9 +1747,9 @@
 "rearrange_categories" = "Rearrange categories";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
-"rearrange_categories_descr" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
-"rearrange_categories_reset" = "Resetting to default will restore the sort order to its initial state.";
-"create_custom_filter_descr" = "You can combine POI types from different categories.";
+"create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
+"reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
+"search_poi_types_descr" = "You can combine POI types from different categories.";
 
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";

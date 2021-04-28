@@ -367,7 +367,7 @@
                 OAPOIUIFilter *filter = (OAPOIUIFilter *)currentItem;
                 item[@"label"] = [filter getName];
                 NSString *iconRes = [filter getIconId];
-                item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_custom_user")]; // check this
+                item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_custom_search_categories")]; // check this
                 item[@"description"] = @"";
                 item[@"cellType"] = kCellTypeTitleDescription;
             }

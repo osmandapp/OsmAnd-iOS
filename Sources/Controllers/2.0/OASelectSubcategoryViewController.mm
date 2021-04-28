@@ -219,7 +219,7 @@
 
             UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];
-            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
+            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             cell.imgView.tintColor = selectedColor;
             CGRect imgPrevFrame = cell.imgView.frame;
             [cell.imgView setFrame:CGRectMake(imgPrevFrame.origin.x, imgPrevFrame.origin.y, 24., 24.)];

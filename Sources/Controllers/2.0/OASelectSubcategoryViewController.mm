@@ -56,10 +56,14 @@
     {
         NSSet<NSString *> *acceptedTypes = [[_filter getAcceptedTypes] objectForKey:_category];
         NSSet<NSString *> *acceptedSubtypes = [_filter getAcceptedSubtypes:_category];
+        NSArray<OAPOIType *> *types = _category.poiTypes;
 
         _selectedItems = [NSMutableArray new];
-        _items = [NSMutableArray arrayWithArray:_category.poiTypes];
-        if (acceptedSubtypes == [OAPOIBaseType nullSet] || acceptedTypes.count == _category.poiTypes.count)
+        _items = [NSMutableArray arrayWithArray:[types sortedArrayUsingComparator:^NSComparisonResult(OAPOIType * _Nonnull t1, OAPOIType * _Nonnull t2) {
+            return [t1.nameLocalized localizedCaseInsensitiveCompare:t2.nameLocalized];
+        }]];
+
+        if (acceptedSubtypes == [OAPOIBaseType nullSet] || acceptedTypes.count == types.count)
             _selectedItems = [NSMutableArray arrayWithArray:_items];
         else
             for (OAPOIType *poiType in _items)

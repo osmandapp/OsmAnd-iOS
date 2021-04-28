@@ -644,6 +644,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
                     OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:model filterByName:filterByName];
                     filterViewController.delegate = self;
+                    filterViewController.customPOIDelegate = self;
                     [self.navigationController pushViewController:filterViewController animated:YES];
                 }
                 else if ([object isKindOfClass:[OAPOIBaseType class]])
@@ -658,6 +659,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
                         OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:filterByName];
                         filterViewController.delegate = self;
+                        filterViewController.customPOIDelegate = self;
                         [self.navigationController pushViewController:filterViewController animated:YES];
                     }
                 }
@@ -678,7 +680,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     OAPOIUIFilter *customFilter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     if (customFilter)
-        [self doSaveFilter:customFilter];
+        [self doSaveFilter:customFilter alertDelegate:self];
 }
 
 - (IBAction)bottomImageButtonPress:(id)sender
@@ -734,9 +736,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
-- (void) doSaveFilter:(OAPOIUIFilter *)filter
+- (void)doSaveFilter:(OAPOIUIFilter *)filter alertDelegate:(id<UIAlertViewDelegate>)alertDelegate
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_save"), nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") delegate:alertDelegate cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_save"), nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [alert textFieldAtIndex:0].text = filter.name;
     _filterToSave = filter;
@@ -1927,7 +1929,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - OACustomPOIViewDelegate
 
-- (void) searchByUIFilter:(OAPOIUIFilter *)filter
+- (void)searchByUIFilter:(OAPOIUIFilter *)filter wasSaved:(BOOL)wasSaved
 {
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:[_searchUICore getPhrase]];
     sr.localeName = [filter getName];
@@ -1945,7 +1947,33 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [self runCoreSearch:txt updateResult:NO searchMore:NO];
 
-    [self setBottomViewVisible:YES];
+    [self setBottomViewVisible:!wasSaved];
+}
+
+- (BOOL)saveFilter:(OAPOIUIFilter *)filter alertDelegate:(id<UIAlertViewDelegate>)alertDelegate
+{
+    [self doSaveFilter:filter alertDelegate:alertDelegate];
+    return YES;
+}
+
+- (void)updateRootScreen:(UIAlertView *)alertView
+{
+    NSString* newName = [[alertView textFieldAtIndex:0].text trim];
+    if (newName.length > 0)
+    {
+        OAPOIUIFilter *nFilter = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[_filterToSave getAcceptedTypes]];
+        if (_filterToSave.filterByName.length > 0)
+            [nFilter setSavedFilterByName:_filterToSave.filterByName];
+
+        if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
+        {
+            [self.searchHelper refreshCustomPoiFilters];
+            [self replaceQueryWithUiFilter:nFilter nameFilter:@""];
+            [self reloadCategories];
+            [self setBottomViewVisible:NO];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+    }
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -1954,41 +1982,26 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     if (buttonIndex != alertView.cancelButtonIndex)
     {
-        NSString* newName = [[alertView textFieldAtIndex:0].text trim];
-        if (newName.length > 0)
-        {
-            OAPOIUIFilter *nFilter = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[_filterToSave getAcceptedTypes]];
-            if (_filterToSave.filterByName.length > 0)
-                [nFilter setSavedFilterByName:_filterToSave.filterByName];
-
-            if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
-            {
-                [self.searchHelper refreshCustomPoiFilters];
-                [self replaceQueryWithUiFilter:nFilter nameFilter:@""];
-                [self reloadCategories];
-                [self setBottomViewVisible:NO];
-                [self.navigationController popToRootViewControllerAnimated:YES];
-            }
-        }
+        [self updateRootScreen:alertView];
     }
 }
 
 #pragma mark - OAPOIFilterViewDelegate
 
-- (BOOL) updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
+- (BOOL)updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
 {
     [self.searchHelper refreshCustomPoiFilters];
     [self replaceQueryWithUiFilter:filter nameFilter:nameFilter];
     return YES;
 }
 
-- (BOOL) saveFilter:(OAPOIUIFilter *)filter
+- (BOOL)saveFilter:(OAPOIUIFilter *)filter
 {
-    [self doSaveFilter:filter];
-    return NO;
+    [self doSaveFilter:filter alertDelegate:self];
+    return YES;
 }
 
-- (BOOL) removeFilter:(OAPOIUIFilter *)filter
+- (BOOL)removeFilter:(OAPOIUIFilter *)filter
 {
     if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
     {

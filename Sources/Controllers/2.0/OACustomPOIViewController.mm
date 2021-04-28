@@ -21,7 +21,7 @@
 #define kCellTypeTitleDescCollapse @"OATitleDescrDraggableCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
-@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
+@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -36,7 +36,7 @@
 {
     OAPOIFiltersHelper *_filterHelper;
     OAPOIUIFilter *_filter;
-    NSArray<OAPOICategory *> *_dataArray;
+    NSArray<OAPOICategory *> *_categories;
     BOOL _editMode;
     NSInteger _countShowCategories;
 }
@@ -56,8 +56,8 @@
 
 - (void)initData
 {
-    _dataArray = [OAPOIHelper sharedInstance].poiCategoriesNoOther;
-    _dataArray = [_dataArray sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory * _Nonnull c1, OAPOICategory * _Nonnull c2) {
+    NSArray<OAPOICategory *> *poiCategoriesNoOther = [OAPOIHelper sharedInstance].poiCategoriesNoOther;
+    _categories = [poiCategoriesNoOther sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory * _Nonnull c1, OAPOICategory * _Nonnull c2) {
         return [c1.nameLocalized localizedCaseInsensitiveCompare:c2.nameLocalized];
     }];
 }
@@ -81,24 +81,20 @@
 - (void)applyLocalization
 {
     if (_editMode)
-    {
         self.titleLabel.text = _filter.name;
-    }
     else
-    {
         self.titleLabel.text = OALocalizedString(@"create_custom_poi");
-        [self updateTextShowButton];
-    }
+
+    self.saveButton.titleLabel.text = OALocalizedString(@"shared_string_save");
+    [self updateTextShowButton];
 }
 
 - (void)updateTextShowButton
 {
     _countShowCategories = 0;
-    for (OAPOICategory* item in _dataArray)
-    {
+    for (OAPOICategory* item in _categories)
         if ([_filter isTypeAccepted:item])
             _countShowCategories += 1;
-    }
 
     NSString *textShow = OALocalizedString(@"sett_show");
     UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
@@ -138,23 +134,16 @@
 
 - (IBAction)onSaveButtonClicked:(id)sender
 {
-    if (_delegate)
-        [_delegate searchByUIFilter:_filter];
-
-    [self dismissViewController];
+    if (self.delegate)
+        [self.delegate saveFilter:_filter alertDelegate:self];
 }
 
 - (IBAction)onShowButtonClicked:(id)sender
 {
-    if (_delegate)
-        [_delegate searchByUIFilter:_filter];
+    if (self.delegate)
+        [self.delegate searchByUIFilter:_filter wasSaved:NO];
 
     [self dismissViewController];
-}
-
-- (void)saveFilter
-{
-    [_filterHelper editPoiFilter:_filter];
 }
 
 #pragma mark - OASelectSubcategoryDelegate
@@ -167,19 +156,13 @@
 - (void)selectSubcategoryDone:(OAPOICategory *)category keys:(NSMutableSet<NSString *> *)keys allSelected:(BOOL)allSelected;
 {
     if (allSelected)
-    {
         [_filter selectSubTypesToAccept:category accept:[OAPOIBaseType nullSet]];
-    }
     else if (keys.count == 0)
-    {
         [_filter setTypeToAccept:category b:NO];
-    }
     else
-    {
         [_filter selectSubTypesToAccept:category accept:keys];
-    }
-    
-    [self saveFilter];
+
+    [_filterHelper editPoiFilter:_filter];
     [self.tableView reloadData];
     [self updateTextShowButton];
 }
@@ -198,7 +181,7 @@
     
     if (cell)
     {
-        OAPOICategory* item = _dataArray[indexPath.row];
+        OAPOICategory* item = _categories[indexPath.row];
         BOOL isSelected = [_filter isTypeAccepted:item];
         NSInteger countAllTypes = item.poiTypes.count;
         NSInteger countAcceptedTypes = [[_filter getAcceptedTypes] objectForKey:item].count;
@@ -221,12 +204,9 @@
 
         NSString *descText;
         if (subtypes == [OAPOIBaseType nullSet] || countAllTypes == countAcceptedTypes)
-        {
             descText = [NSString stringWithFormat:@"%@ - %lu", OALocalizedString(@"shared_string_all"), countAllTypes];
-        }
-        else {
+        else
             descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
-        }
         cell.descView.text = descText;
         cell.descView.textColor = UIColorFromRGB(color_text_footer);
 
@@ -239,7 +219,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    OAPOICategory* item = _dataArray[indexPath.row];
+    OAPOICategory* item = _categories[indexPath.row];
     OASelectSubcategoryViewController *subcategoryScreen = [[OASelectSubcategoryViewController alloc] initWithCategory:item filter:_filter];
     subcategoryScreen.delegate = self;
     subcategoryScreen.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -248,7 +228,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _dataArray.count;
+    return _categories.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -264,6 +244,22 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return [OAPOISearchHelper getHeightForHeader];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        if (self.delegate)
+        {
+            [self.delegate searchByUIFilter:_filter wasSaved:YES];
+            [self.delegate updateRootScreen:alertView];
+        }
+
+        [self dismissViewController];
+    }
 }
 
 @end

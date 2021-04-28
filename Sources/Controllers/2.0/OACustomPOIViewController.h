@@ -14,7 +14,9 @@
 
 @required
 
-- (void) searchByUIFilter:(OAPOIUIFilter *)filter;
+- (void)searchByUIFilter:(OAPOIUIFilter *)filter wasSaved:(BOOL)wasSaved;
+- (BOOL)saveFilter:(OAPOIUIFilter *)filter alertDelegate:(id<UIAlertViewDelegate>)alertDelegate;
+- (void)updateRootScreen:(UIAlertView *)alertView;
 
 @end
 

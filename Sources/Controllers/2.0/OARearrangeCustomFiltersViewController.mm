@@ -329,9 +329,12 @@
         if (cell)
         {
             cell.titleLabel.text = filter.name;
+
             UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
             cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            cell.iconImageView.tintColor = UIColorFromRGB(color_tint_gray);
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
+
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.deleteButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

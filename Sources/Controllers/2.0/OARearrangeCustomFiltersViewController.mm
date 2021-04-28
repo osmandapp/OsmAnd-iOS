@@ -137,7 +137,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_categories_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_custom_categories_list_promo") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
 }
 
 - (void)generateData:(NSArray<OAPOIUIFilter *> *)filters
@@ -334,6 +334,7 @@
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.deleteButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.deleteButton addTarget:self action:@selector(onRowButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
@@ -352,6 +353,7 @@
             cell.iconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:actionItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
             return cell;
         }
@@ -412,7 +414,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == kActionsSection ? OALocalizedString(@"rearrange_categories_reset") : @"";
+    return section == kActionsSection ? OALocalizedString(@"reset_to_default_category_button_promo") : @"";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

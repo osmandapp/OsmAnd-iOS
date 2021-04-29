@@ -63,6 +63,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 @property (nonatomic) QuadRect *cache1kmRect;
 
+@property (nonatomic) OAPOIBaseType *unselectedPoiType;
+
 @end
 
 @implementation OASearchPhrase
@@ -280,6 +282,18 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return cnt;
 }
 
+- (void) splitWords:(NSString *)w
+                 ws:(NSMutableArray<NSString *> *)ws
+{
+    if(w && w.length > 0){
+        NSArray *wrs = [w componentsSeparatedByRegex:ALLDELIMITERS];
+        for(int i = 0; i < [wrs count]; i++){
+            NSString *wd = ws[i].trim;
+            [ws addObject:wd];
+        }
+    }
+}
+
 - (OASearchPhrase *) selectWord:(OASearchResult *) res unknownWords:(NSArray<NSString *> *)unknownWords lastComplete:(BOOL)lastComplete
 {
     OASearchPhrase *sp = [[OASearchPhrase alloc] initWithSettings:_settings];
@@ -403,6 +417,16 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 - (NSString *) getFirstUnknownSearchWord
 {
     return _firstUnknownSearchWord;
+}
+
+- (OAPOIBaseType *) getUnselectedPoiType
+{
+    return _unselectedPoiType;
+}
+
+- (void) setUnselectedPoiType:(OAPOIBaseType *) unselectedPoiType
+{
+    _unselectedPoiType = unselectedPoiType;
 }
 
 - (OANameStringMatcher *) getFullUnknownNameMatcher

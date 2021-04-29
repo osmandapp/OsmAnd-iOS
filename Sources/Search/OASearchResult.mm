@@ -45,9 +45,49 @@
 - (double) getSumPhraseMatchWeight
 {
     // if result is a complete match in the search we prioritize it higher
-    int localWordsMatched = _alternateName != nil ? [_requiredSearchPhrase countWords:_alternateName] : [_requiredSearchPhrase countWords:_localeName];
-    BOOL match = localWordsMatched <= [self getSelfWordCount];
-    double res = [OAObjectType getTypeWeight:match ? _objectType : UNDEFINED];
+    NSString *name = _alternateName != nil ? _alternateName : _localeName;
+    NSMutableArray<NSString *> *localResultNames = [NSMutableArray array];
+    NSMutableArray<NSString *> *searchPhraseNames = [NSMutableArray array];
+    [_requiredSearchPhrase splitWords:_name ws:_localResultNames];
+    
+    NSString *fw = [_requiredSearchPhrase getFirstUnknownSearchWord];
+    NSMutableArray<NSString *> *ow = [_requiredSearchPhrase getUnknownSearchWords];
+    
+    if(fw != nil){
+        [searchPhraseNames addObject:fw];
+    }
+    if(ow != nil){
+        [searchPhraseNames addObjectsFromArray:ow];
+    }
+    
+    int idxMatchedWord = -1;
+    BOOL allWordsMatched = true;
+     
+    for(NSString *searchPhraseName : searchPhraseNames){
+        BOOL wordMatched = false;
+        for(int i = idxMatchedWord + 1; i < [localResultNames count]; i++){
+            int r = _requiredSearchPhrase.getCollator().compare(searchPhraseName, [localResultNames objectAtIndex: i]);
+            if (r == 0) {
+                wordMatched = true;
+                idxMatchedWord = i;
+                break;
+            }
+        }
+        if (!wordMatched) {
+            allWordsMatched = false;
+            break;
+        }
+    }
+    if (_objectType == POI_TYPE) {
+        allWordsMatched = false;
+    }
+    double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType]*10 : [OAObjectType getTypeWeight: UNDEFINED];
+    
+    if ([_requiredSearchPhrase getUnselectedPoiType] != nil) {
+        // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
+        res = [OAObjectType getTypeWeight:_objectType];
+    }
+    
     if (_parentSearchResult != nil)
         res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;
     

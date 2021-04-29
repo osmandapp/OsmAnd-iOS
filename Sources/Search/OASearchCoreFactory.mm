@@ -1320,6 +1320,12 @@
                     }
                     poiTypeFilter = [self getPoiTypeFilter:poiTypeResult.pt poiAdditionals:poiAdditionals];
                     _unselectedPoiType = poiTypeResult.pt;
+                    int wordsInPoiType = [phrase countWords:foundName];
+                    int wordsInUnknownPart = [phrase countWords:phrase.getUnknownSearchPhrase];
+                    if (wordsInPoiType == wordsInUnknownPart) {
+                        // store only perfect match
+                        [phrase setUnselectedPoiType:_unselectedPoiType];
+                    }
                 }
             }
         }

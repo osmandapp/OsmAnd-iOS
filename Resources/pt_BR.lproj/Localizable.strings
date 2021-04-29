@@ -2090,3 +2090,8 @@
 "export_failed" = "Não foi possível exportar o perfil";
 "export_profile_select_descr" = "Selecione os dados a serem exportados.";
 "delete_custom_categories" = "Excluir categorias personalizadas";
+"reset_to_default_category_button_promo" = "A redefinição para o padrão irá restaurar a ordem de classificação ao seu estado inicial.";
+"create_custom_categories_list_promo" = "Você pode adicionar categorias personalizadas, ocultar categorias que você não encontra necessário e altera a ordem de classificação da lista. As categorias personalizadas podem ser importadas e exportadas com perfis.";
+"hidden_categories" = "Categorias ocultas";
+"visible_categories" = "Categorias visíveis";
+"rearrange_categories" = "Reorganizar categorias";

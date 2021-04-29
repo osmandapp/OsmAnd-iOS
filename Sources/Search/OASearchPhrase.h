@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchPhrase.java
-//  git revision 3c9d940fbbb0be194b3f06d75e4151ab8a0b9913
+//  git revision 35cc4a981a4dcdb2d5e16ec7c6e9346ba75b6a5b
 
 #import <Foundation/Foundation.h>
 #import "OANameStringMatcher.h"

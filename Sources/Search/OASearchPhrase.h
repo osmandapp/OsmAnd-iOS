@@ -107,7 +107,8 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 + (NSComparisonResult) icompare:(int)x y:(int)y;
 
 + (OAPOIBaseType*) unselectedPoiType;
-- (void) splitWords(NSString *)w ws:(NSMutableArray<NSString *> *)ws;
+- (void) splitWords:(NSString *)w ws:(NSMutableArray<NSString *> *)ws;
+- (OACollatorStringMatcher *) getCollator;
 
 - (OAPOIBaseType *) getUnselectedPoiType;
 - (void) setUnselectedPoiType:(OAPOIBaseType *) unselectedPoiType;

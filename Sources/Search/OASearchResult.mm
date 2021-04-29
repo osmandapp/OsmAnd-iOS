@@ -48,7 +48,7 @@
     NSString *name = _alternateName != nil ? _alternateName : _localeName;
     NSMutableArray<NSString *> *localResultNames = [NSMutableArray array];
     NSMutableArray<NSString *> *searchPhraseNames = [NSMutableArray array];
-    [_requiredSearchPhrase splitWords:_name ws:_localResultNames];
+    [_requiredSearchPhrase splitWords:name ws:localResultNames];
     
     NSString *fw = [_requiredSearchPhrase getFirstUnknownSearchWord];
     NSMutableArray<NSString *> *ow = [_requiredSearchPhrase getUnknownSearchWords];
@@ -66,7 +66,7 @@
     for(NSString *searchPhraseName : searchPhraseNames){
         BOOL wordMatched = false;
         for(int i = idxMatchedWord + 1; i < [localResultNames count]; i++){
-            int r = _requiredSearchPhrase.getCollator().compare(searchPhraseName, [localResultNames objectAtIndex: i]);
+            NSInteger r = [[_requiredSearchPhrase getCollator] compare:searchPhraseName target:[localResultNames objectAtIndex: i]];
             if (r == 0) {
                 wordMatched = true;
                 idxMatchedWord = i;

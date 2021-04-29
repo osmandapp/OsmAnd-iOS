@@ -39,6 +39,7 @@ typedef enum
 + (BOOL) ccontains:(NSString *)fullTextP part:(NSString *)part;
 + (BOOL) cstartsWith:(NSString *)fullText theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals;
 
+- (NSInteger)compare:(NSString *)source target:(NSString *)target;
 
 
 @end

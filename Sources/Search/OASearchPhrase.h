@@ -111,6 +111,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 
 - (OAPOIBaseType *) getUnselectedPoiType;
 - (void) setUnselectedPoiType:(OAPOIBaseType *)unselectedPoiType;
++ (NSString *) getDelimiter;
 
 
 @end

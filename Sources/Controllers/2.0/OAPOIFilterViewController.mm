@@ -374,17 +374,20 @@ typedef enum
 - (void)searchByUIFilter:(OAPOIUIFilter *)filter wasSaved:(BOOL)wasSaved
 {
     [self.navigationController popViewControllerAnimated:YES];
-    [self.customPOIDelegate searchByUIFilter:filter wasSaved:wasSaved];
+    if (self.customPOIDelegate)
+        [self.customPOIDelegate searchByUIFilter:filter wasSaved:wasSaved];
 }
 
 - (BOOL)saveFilter:(OAPOIUIFilter *)filter alertDelegate:(id<UIAlertViewDelegate>)alertDelegate
 {
-    return [self.customPOIDelegate saveFilter:filter alertDelegate:alertDelegate];
+    if (self.customPOIDelegate)
+        return [self.customPOIDelegate saveFilter:filter alertDelegate:alertDelegate];
 }
 
 - (void)updateRootScreen:(UIAlertView *)alertView
 {
-    [self.customPOIDelegate updateRootScreen:alertView];
+    if (self.customPOIDelegate)
+        [self.customPOIDelegate updateRootScreen:alertView];
 }
 
 - (void) applyFilterFields

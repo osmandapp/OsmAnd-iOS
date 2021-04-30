@@ -18,7 +18,6 @@
 
 #define kCellTypeSelectionButton @"OACustomSelectionButtonCell"
 #define kCellTypeTitle @"OAMenuSimpleCell"
-#define kDataTypePoi @"OAPOIType"
 
 @interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, OAMultiselectableHeaderDelegate>
 
@@ -69,8 +68,6 @@
             for (OAPOIType *poiType in _items)
                 if ([acceptedTypes containsObject:poiType.name])
                     [_selectedItems addObject:poiType];
-
-        [_items insertObject:[[OACustomSelectionButtonCell alloc] init] atIndex:0];
     }
 }
 
@@ -89,7 +86,7 @@
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
 
     [self.tableView beginUpdates];
-    for (int i = 1; i < _items.count; i++)
+    for (NSInteger i = 0; i < _items.count; i++)
         if ([_selectedItems containsObject:_items[i]])
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
     [self.tableView endUpdates];
@@ -128,12 +125,9 @@
     if (!shouldSelect)
         [_selectedItems removeAllObjects];
     else
-    {
         [_selectedItems addObjectsFromArray:_items];
-        [_selectedItems removeObjectAtIndex:0];
-    }
 
-    for (NSInteger i = 1; i < _items.count; i++)
+    for (NSInteger i = 0; i < _items.count; i++)
     {
         if (shouldSelect)
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -141,7 +135,7 @@
             [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO];
     }
     [self.tableView beginUpdates];
-    [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count - 1] upperCase];
+    [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -151,12 +145,12 @@
     if (indexPath.row > 0)
     {
         [self.tableView beginUpdates];
-        OAPOIUIFilter *filter = _items[indexPath.row];
+        OAPOIUIFilter *filter = _items[indexPath.row - 1];
         if ([_selectedItems containsObject:filter])
             [_selectedItems removeObject:filter];
         else
             [_selectedItems addObject:filter];
-        [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count - 1] upperCase];
+        [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count] upperCase];
         [self.tableView endUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
@@ -166,17 +160,19 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSObject *item = _items[indexPath.row];
-    NSString *cellType = NSStringFromClass(item.class);
+    NSString *cellType = indexPath.row == 0 ? kCellTypeSelectionButton : kCellTypeTitle;
     if ([cellType isEqualToString:kCellTypeSelectionButton])
     {
-        static NSString * const identifierCell = kCellTypeSelectionButton;
-        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeSelectionButton];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeSelectionButton owner:self options:nil];
             cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
+            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            [cell setSelectedBackgroundView:bgColorView];
         }
         if (cell)
         {
@@ -190,7 +186,7 @@
             NSInteger selectedAmount = _selectedItems.count;
             if (selectedAmount > 0)
             {
-                UIImage *selectionImage = selectedAmount < _items.count - 1 ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
+                UIImage *selectionImage = selectedAmount < _items.count ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
                 [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
             }
             else
@@ -200,23 +196,22 @@
             return cell;
         }
     }
-    else if ([cellType isEqualToString:kDataTypePoi])
+    else if ([cellType isEqualToString:kCellTypeTitle])
     {
-        static NSString * const identifierCell = kCellTypeTitle;
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitle];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitle owner:self options:nil];
             cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
             cell.tintColor = UIColorFromRGB(color_primary_purple);
             UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColor colorWithWhite:1. alpha:0.];
+            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             [cell setSelectedBackgroundView:bgColorView];
         }
         if (cell)
         {
-            OAPOIType *poiType = (OAPOIType *) item;
+            OAPOIType *poiType = _items[indexPath.row - 1];
             BOOL selected = [_selectedItems containsObject:poiType];
 
             UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
@@ -242,7 +237,7 @@
 {
     if (indexPath.row > 0)
     {
-        OAPOIType *item = _items[indexPath.row];
+        OAPOIType *item = _items[indexPath.row - 1];
         BOOL selected = [_selectedItems containsObject:item];
         [cell setSelected:selected animated:NO];
         if (selected)
@@ -269,7 +264,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count - 1];
+        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count];
     return nil;
 }
 
@@ -280,7 +275,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _items.count;
+    return _items.count + 1;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

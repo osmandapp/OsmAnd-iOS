@@ -19,6 +19,7 @@
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
+#include <OsmAndCore/ICU.h>
 
 #define MAX_TYPE_WEIGHT 10.0
 
@@ -45,10 +46,51 @@
 - (double) getSumPhraseMatchWeight
 {
     // if result is a complete match in the search we prioritize it higher
-    int localWordsMatched = _alternateName != nil ? [_requiredSearchPhrase countWords:_alternateName] : [_requiredSearchPhrase countWords:_localeName];
-    BOOL match = localWordsMatched <= [self getSelfWordCount];
-    double res = [OAObjectType getTypeWeight:match ? _objectType : UNDEFINED];
-    if (_parentSearchResult != nil)
+    NSString *name = _alternateName ? _alternateName : _localeName;
+    NSMutableArray<NSString *> *localResultNames = [NSMutableArray array];
+    NSMutableArray<NSString *> *searchPhraseNames = [NSMutableArray array];
+    [_requiredSearchPhrase splitWords:name ws:localResultNames];
+    
+    NSString *fw = [_requiredSearchPhrase getFirstUnknownSearchWord];
+    NSMutableArray<NSString *> *ow = [_requiredSearchPhrase getUnknownSearchWords];
+    
+    if (fw)
+        [searchPhraseNames addObject:fw];
+    if (ow)
+        [searchPhraseNames addObjectsFromArray:ow];
+    
+    int idxMatchedWord = -1;
+    BOOL allWordsMatched = YES;
+    
+    for (NSString *searchPhraseName : searchPhraseNames)
+    {
+        BOOL wordMatched = NO;
+        for (int i = idxMatchedWord + 1; i < [localResultNames count]; i++)
+        {
+            int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString(localResultNames[i]));
+            if (r == 0)
+            {
+                wordMatched = YES;
+                idxMatchedWord = i;
+                break;
+            }
+        }
+        if (!wordMatched)
+        {
+            allWordsMatched = NO;
+            break;
+        }
+    }
+    if (_objectType == POI_TYPE)
+        allWordsMatched = NO;
+    
+    double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType] * 10 : [OAObjectType getTypeWeight: UNDEFINED];
+    
+    if ([_requiredSearchPhrase getUnselectedPoiType])
+        // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
+        res = [OAObjectType getTypeWeight:_objectType];
+    
+    if (_parentSearchResult)
         res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;
     
     return res;

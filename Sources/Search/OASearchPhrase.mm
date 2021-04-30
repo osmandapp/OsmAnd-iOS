@@ -426,7 +426,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return _unselectedPoiType;
 }
 
-- (void) setUnselectedPoiType:(OAPOIBaseType *) unselectedPoiType
+- (void) setUnselectedPoiType:(OAPOIBaseType *)unselectedPoiType
 {
     _unselectedPoiType = unselectedPoiType;
 }

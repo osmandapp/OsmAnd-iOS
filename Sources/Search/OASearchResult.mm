@@ -67,7 +67,7 @@
         BOOL wordMatched = NO;
         for (int i = idxMatchedWord + 1; i < [localResultNames count]; i++)
         {
-            int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString([localResultNames objectAtIndex: i]));
+            int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString(localResultNames[i]));
             if (r == 0)
             {
                 wordMatched = YES;

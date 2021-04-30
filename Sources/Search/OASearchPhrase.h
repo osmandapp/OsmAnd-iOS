@@ -110,7 +110,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (void) splitWords:(NSString *)w ws:(NSMutableArray<NSString *> *)ws;
 
 - (OAPOIBaseType *) getUnselectedPoiType;
-- (void) setUnselectedPoiType:(OAPOIBaseType *) unselectedPoiType;
+- (void) setUnselectedPoiType:(OAPOIBaseType *)unselectedPoiType;
 
 
 @end

@@ -55,17 +55,13 @@
     NSMutableArray<NSString *> *ow = [_requiredSearchPhrase getUnknownSearchWords];
     
     if (fw)
-    {
         [searchPhraseNames addObject:fw];
-    }
     if (ow)
-    {
         [searchPhraseNames addObjectsFromArray:ow];
-    }
     
     int idxMatchedWord = -1;
     BOOL allWordsMatched = YES;
-     
+    
     for (NSString *searchPhraseName : searchPhraseNames)
     {
         BOOL wordMatched = NO;
@@ -86,16 +82,13 @@
         }
     }
     if (_objectType == POI_TYPE)
-    {
         allWordsMatched = NO;
-    }
+    
     double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType]*10 : [OAObjectType getTypeWeight: UNDEFINED];
     
     if ([_requiredSearchPhrase getUnselectedPoiType])
-    {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
         res = [OAObjectType getTypeWeight:_objectType];
-    }
     
     if (_parentSearchResult)
         res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;
@@ -105,7 +98,7 @@
 
 - (int) getDepth
 {
-    if (_parentSearchResult)
+    if (_parentSearchResult != nil)
         return 1 + [_parentSearchResult getDepth];
     return 1;
 }

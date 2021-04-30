@@ -288,7 +288,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     if (w && w.length > 0)
     {
         NSArray<NSString *> *wrs = [w componentsSeparatedByRegex:ALLDELIMITERS];
-        for (int i = 0; i < [wrs count]; i++){
+        for (int i = 0; i < [wrs count]; i++)
+        {
             NSString *wd = wrs[i].trim;
             [ws addObject:wd];
         }

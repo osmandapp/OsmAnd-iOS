@@ -12,6 +12,7 @@
 #import "OAColors.h"
 #import "OACustomSelectionButtonCell.h"
 #import "OAMenuSimpleCell.h"
+#import "OAPOIHelper.h"
 
 #define kCellTypeSelectionButton @"OACustomSelectionButtonCell"
 #define kCellTypeTitle @"OAMenuSimpleCell"
@@ -176,15 +177,7 @@
             OAPOIUIFilter *filter = _items[indexPath.row - 1];
             BOOL selected = [_selectedItems containsObject:filter];
 
-            UIImage *icon;
-            NSObject *res = [filter getIconResource];
-            if ([res isKindOfClass:[NSString class]])
-            {
-                NSString *iconName = (NSString *)res;
-                icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            }
-            if (!icon)
-                icon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            UIImage *icon = [[OAPOIHelper getCustomFilterIcon:filter] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [cell.imgView setImage:icon ];
             UIColor *selectedColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             cell.imgView.tintColor = selectedColor;

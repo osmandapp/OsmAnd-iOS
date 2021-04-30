@@ -15,6 +15,7 @@
 #import "OAButtonRightIconCell.h"
 #import "OAAppSettings.h"
 #import "OAQuickSearchButtonListItem.h"
+#import "OAPOIHelper.h"
 
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
@@ -335,11 +336,11 @@
             if ([res isKindOfClass:[NSString class]])
             {
                 NSString *iconName = (NSString *)res;
-                icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                icon = [OAUtilities getMxIcon:iconName];
             }
             if (!icon)
-                icon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
-            [cell.iconImageView setImage:icon ];
+                icon = [OAPOIHelper getCustomFilterIcon:filter];
+            [cell.iconImageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             cell.iconImageView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.iconHeightPrimary.constant = 24.0;
             cell.iconWidthPrimary.constant = 24.0;

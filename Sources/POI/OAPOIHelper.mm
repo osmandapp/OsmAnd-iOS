@@ -1129,6 +1129,36 @@
     return poi;
 }
 
++ (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter
+{
+    UIImage *customFilterIcon = nil;
+    if (filter != nil)
+    {
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
+        NSArray<OAPOICategory *> *categories = [NSArray arrayWithArray:acceptedTypes.keyEnumerator.allObjects];
+        if (categories.count == 1)
+        {
+            OAPOICategory *category = categories[0];
+            NSMutableSet<NSString *> *filters = [acceptedTypes objectForKey:category];
+            if (filters != nil && filters.count == 1)
+            {
+                NSString *filterName = filters.allObjects[0];
+                OAPOIBaseType *customFilter = [[OAPOIHelper sharedInstance] getAnyPoiTypeByName:filterName];
+                customFilterIcon = customFilter.icon;
+            }
+            else
+            {
+                customFilterIcon = category.icon;
+            }
+        }
+        else
+        {
+            customFilterIcon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+        }
+    }
+    return customFilterIcon;
+}
+
 - (BOOL) breakSearch
 {
     _breakSearch = !_isSearchDone;

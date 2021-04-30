@@ -679,8 +679,8 @@
                         NSString *iconName = (NSString *)res;
                         icon = [OAUtilities getMxIcon:iconName];
                     }
-                    if (!icon)
-                        icon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+                    if (!icon && [filter isKindOfClass:[OAPOIUIFilter class]])
+                        icon = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *) filter];
                     OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
                     cell.iconView.tintColor = UIColorFromRGB(color_osmand_orange);
                     return cell;

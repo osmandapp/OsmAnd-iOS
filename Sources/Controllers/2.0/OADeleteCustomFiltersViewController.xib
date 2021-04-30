@@ -54,7 +54,7 @@
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" red="1" green="0.53333333333333333" blue="0.0" alpha="0.81999999999999995" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="90" id="YiG-YX-CfA"/>
                         <constraint firstAttribute="trailing" secondItem="OWK-uS-BcS" secondAttribute="trailing" constant="16" id="hmj-db-few"/>

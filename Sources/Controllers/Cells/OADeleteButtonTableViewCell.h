@@ -13,5 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconHeightPrimary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconWidthPrimary;
 
 @end

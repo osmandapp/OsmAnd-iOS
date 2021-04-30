@@ -680,9 +680,10 @@
                         icon = [OAUtilities getMxIcon:iconName];
                     }
                     if (!icon)
-                        icon = [OAUtilities getMxIcon:@"user_defined"];
-                    
-                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
+                        icon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+                    OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
+                    cell.iconView.tintColor = UIColorFromRGB(color_osmand_orange);
+                    return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOIBaseType class]])
                 {

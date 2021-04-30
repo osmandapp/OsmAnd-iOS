@@ -201,6 +201,8 @@
         UIImage *img = [[item icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconView.image = img;
         cell.iconView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+        cell.iconHeightPrimary.constant = 24.0;
+        cell.iconWidthPrimary.constant = 24.0;
 
         NSString *descText;
         if (subtypes == [OAPOIBaseType nullSet] || countAllTypes == countAcceptedTypes)

@@ -330,11 +330,21 @@
         {
             cell.titleLabel.text = filter.name;
 
-            UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
-            cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            UIImage *icon;
+            NSObject *res = [filter getIconResource];
+            if ([res isKindOfClass:[NSString class]])
+            {
+                NSString *iconName = (NSString *)res;
+                icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            }
+            if (!icon)
+                icon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            [cell.iconImageView setImage:icon ];
             cell.iconImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
+            cell.iconHeightPrimary.constant = 24.0;
+            cell.iconWidthPrimary.constant = 24.0;
 
+            NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.deleteButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

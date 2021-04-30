@@ -181,13 +181,26 @@
         if (cell)
         {
             OAPOIUIFilter *filter = (OAPOIUIFilter *) item;
-            UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
-            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
-            cell.textView.text = filter.getName ? filter.getName : @"";
-            cell.descriptionView.hidden = true;
             BOOL selected = [_selectedItems containsObject:filter];
+
+            UIImage *icon;
+            NSObject *res = [filter getIconResource];
+            if ([res isKindOfClass:[NSString class]])
+            {
+                NSString *iconName = (NSString *)res;
+                icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            }
+            if (!icon)
+                icon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            [cell.imgView setImage:icon ];
             UIColor *selectedColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             cell.imgView.tintColor = selectedColor;
+            cell.imgHeightPrimary.constant = 24.0;
+            cell.imgWidthPrimary.constant = 24.0;
+
+            cell.textView.text = filter.getName ? filter.getName : @"";
+            cell.descriptionView.hidden = true;
+
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];
             return cell;

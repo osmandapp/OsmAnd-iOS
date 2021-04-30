@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -59,7 +59,9 @@
             <connections>
                 <outlet property="descrTopMargin" destination="Nxa-NC-rEt" id="0VR-hL-oPW"/>
                 <outlet property="descriptionView" destination="w3O-3E-SaM" id="gSC-nk-iRH"/>
+                <outlet property="imgHeightPrimary" destination="E00-YL-YUN" id="sr8-o4-eux"/>
                 <outlet property="imgView" destination="law-Oa-FEW" id="wZy-eK-bit"/>
+                <outlet property="imgWidthPrimary" destination="go7-aJ-1PM" id="2ax-c5-SLu"/>
                 <outlet property="textBottomMargin" destination="3jB-hu-Udu" id="0au-kc-1ry"/>
                 <outlet property="textHeightPrimary" destination="lO1-Le-no6" id="IU7-Is-4JW"/>
                 <outlet property="textHeightSecondary" destination="vIO-Ub-ALl" id="rK3-pC-bNj"/>

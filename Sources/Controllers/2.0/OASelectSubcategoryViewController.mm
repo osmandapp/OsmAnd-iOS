@@ -223,9 +223,9 @@
             UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];
             cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             cell.imgView.tintColor = selectedColor;
-            CGRect imgPrevFrame = cell.imgView.frame;
-            [cell.imgView setFrame:CGRectMake(imgPrevFrame.origin.x, imgPrevFrame.origin.y, 24., 24.)];
             cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
+            cell.imgHeightPrimary.constant = 24.0;
+            cell.imgWidthPrimary.constant = 24.0;
 
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
             cell.descriptionView.hidden = true;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -74,14 +74,16 @@
                 <outlet property="descrBottomConstraint" destination="Mwi-FF-U2m" id="pGX-xW-Keg"/>
                 <outlet property="descrToIconConstraint" destination="Kef-WK-RUv" id="RN1-zQ-RF8"/>
                 <outlet property="descrToMarginConstraint" destination="3gS-jt-c0A" id="jAF-ah-oy7"/>
+                <outlet property="iconHeightPrimary" destination="CrO-Lt-VqU" id="zNc-FM-cvG"/>
                 <outlet property="iconView" destination="8j3-TG-nwo" id="aRW-Lo-ruw"/>
+                <outlet property="iconWidthPrimary" destination="tHE-Y9-lny" id="zUl-BO-tNq"/>
                 <outlet property="overflowButton" destination="kvn-zS-5Ae" id="70F-Y5-9o8"/>
                 <outlet property="textHeightPrimary" destination="g8C-x8-xPb" id="yJm-y3-o8j"/>
                 <outlet property="textHeightSecondary" destination="b67-wW-D5K" id="RXy-yn-swt"/>
                 <outlet property="textView" destination="6QZ-eh-lvr" id="jK3-p0-izy"/>
                 <outlet property="titleBottomToCenter" destination="1u0-Mg-goA" id="ECa-kO-M44"/>
                 <outlet property="titleToDescrConstraint" destination="LR5-qU-agL" id="z1p-eM-kwk"/>
-                <outlet property="titleToIconCostraint" destination="9zz-RJ-8o5" id="MaU-Ne-Cpv"/>
+                <outlet property="titleToIconConstraint" destination="9zz-RJ-8o5" id="MaU-Ne-Cpv"/>
                 <outlet property="titleToMarginConstraint" destination="3po-6t-nbo" id="5q0-Uy-tud"/>
             </connections>
             <point key="canvasLocation" x="299.19999999999999" y="193.85307346326837"/>

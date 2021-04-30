@@ -2066,7 +2066,7 @@
 "fav_add_new_group" = "Annanghe unu grupu nou";
 "shared_string_gpx_points" = "Puntos";
 "res_standard" = "Mapa regulare";
-"quick_action_coordinates_widget_descr" = "Tochende custu butone de atzione as a ammustrare o cuare su widget de sas coordinadas";
+"quick_action_coordinates_widget_descr" = "Tochende custu butone de atzione as a ammustrare o cuare su widget de sas coordinadas.";
 "hide_coordinates" = "Cua sas coordinadas";
 "show_coordinates" = "Ammustra sas coordinadas";
 "toggle_coordinates" = "Ammustra/cua su widget de sas coordinadas";
@@ -2090,3 +2090,8 @@
 "markers_history" = "Cronologia de sos marcadores";
 "coordinates" = "Coordinadas";
 "delete_custom_categories" = "Iscantzella categorias personalizadas";
+"reset_to_default_category_button_promo" = "Resetende a su valore predefinidu as a ripristinare s'òrdine initziale.";
+"create_custom_categories_list_promo" = "Podes annànghere categorias personalizadas, cuare categorias chi pensas chi non ti serbant, e mudare s'òrdine de sa lista. Podes importare o esportare sas categorias personalizadas cun sos profilos.";
+"hidden_categories" = "Categorias cuadas";
+"visible_categories" = "Categorias visìbiles";
+"rearrange_categories" = "Torra a ordinare sas categorias";

@@ -295,11 +295,6 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     }
 }
 
-- (OACollatorStringMatcher *) getCollator
-{
-    return _clt;
-}
-
 - (OASearchPhrase *) selectWord:(OASearchResult *) res unknownWords:(NSArray<NSString *> *)unknownWords lastComplete:(BOOL)lastComplete
 {
     OASearchPhrase *sp = [[OASearchPhrase alloc] initWithSettings:_settings];

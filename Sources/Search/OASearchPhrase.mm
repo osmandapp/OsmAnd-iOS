@@ -285,10 +285,11 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 - (void) splitWords:(NSString *)w
                  ws:(NSMutableArray<NSString *> *)ws
 {
-    if(w && w.length > 0){
-        NSArray *wrs = [w componentsSeparatedByRegex:ALLDELIMITERS];
-        for(int i = 0; i < [wrs count]; i++){
-            NSString *wd = ws[i].trim;
+    if (w && w.length > 0)
+    {
+        NSArray<NSString *> *wrs = [w componentsSeparatedByRegex:ALLDELIMITERS];
+        for (int i = 0; i < [wrs count]; i++){
+            NSString *wd = wrs[i].trim;
             [ws addObject:wd];
         }
     }

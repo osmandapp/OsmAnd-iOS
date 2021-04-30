@@ -19,6 +19,7 @@
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
+#include <OsmAndCore/ICU.h>
 
 #define MAX_TYPE_WEIGHT 10.0
 
@@ -45,7 +46,7 @@
 - (double) getSumPhraseMatchWeight
 {
     // if result is a complete match in the search we prioritize it higher
-    NSString *name = _alternateName != nil ? _alternateName : _localeName;
+    NSString *name = _alternateName ? _alternateName : _localeName;
     NSMutableArray<NSString *> *localResultNames = [NSMutableArray array];
     NSMutableArray<NSString *> *searchPhraseNames = [NSMutableArray array];
     [_requiredSearchPhrase splitWords:name ws:localResultNames];
@@ -53,42 +54,50 @@
     NSString *fw = [_requiredSearchPhrase getFirstUnknownSearchWord];
     NSMutableArray<NSString *> *ow = [_requiredSearchPhrase getUnknownSearchWords];
     
-    if(fw != nil){
+    if (fw)
+    {
         [searchPhraseNames addObject:fw];
     }
-    if(ow != nil){
+    if (ow)
+    {
         [searchPhraseNames addObjectsFromArray:ow];
     }
     
     int idxMatchedWord = -1;
-    BOOL allWordsMatched = true;
+    BOOL allWordsMatched = YES;
      
-    for(NSString *searchPhraseName : searchPhraseNames){
-        BOOL wordMatched = false;
-        for(int i = idxMatchedWord + 1; i < [localResultNames count]; i++){
-            NSInteger r = [[_requiredSearchPhrase getCollator] compare:searchPhraseName target:[localResultNames objectAtIndex: i]];
-            if (r == 0) {
-                wordMatched = true;
+    for (NSString *searchPhraseName : searchPhraseNames)
+    {
+        BOOL wordMatched = NO;
+        for (int i = idxMatchedWord + 1; i < [localResultNames count]; i++)
+        {
+            int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString([localResultNames objectAtIndex: i]));
+            if (r == 0)
+            {
+                wordMatched = YES;
                 idxMatchedWord = i;
                 break;
             }
         }
-        if (!wordMatched) {
-            allWordsMatched = false;
+        if (!wordMatched)
+        {
+            allWordsMatched = NO;
             break;
         }
     }
-    if (_objectType == POI_TYPE) {
-        allWordsMatched = false;
+    if (_objectType == POI_TYPE)
+    {
+        allWordsMatched = NO;
     }
     double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType]*10 : [OAObjectType getTypeWeight: UNDEFINED];
     
-    if ([_requiredSearchPhrase getUnselectedPoiType] != nil) {
+    if ([_requiredSearchPhrase getUnselectedPoiType])
+    {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
         res = [OAObjectType getTypeWeight:_objectType];
     }
     
-    if (_parentSearchResult != nil)
+    if (_parentSearchResult)
         res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;
     
     return res;
@@ -96,7 +105,7 @@
 
 - (int) getDepth
 {
-    if (_parentSearchResult != nil)
+    if (_parentSearchResult)
         return 1 + [_parentSearchResult getDepth];
     return 1;
 }

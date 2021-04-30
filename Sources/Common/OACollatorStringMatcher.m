@@ -195,10 +195,4 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     return fullText;
 }
 
-- (NSInteger)compare:(NSString *)source target:(NSString *)target
-{
-    return [source compare: target];
-}
-
-
 @end

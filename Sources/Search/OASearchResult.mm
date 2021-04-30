@@ -84,7 +84,7 @@
     if (_objectType == POI_TYPE)
         allWordsMatched = NO;
     
-    double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType]*10 : [OAObjectType getTypeWeight: UNDEFINED];
+    double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType] * 10 : [OAObjectType getTypeWeight: UNDEFINED];
     
     if ([_requiredSearchPhrase getUnselectedPoiType])
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched

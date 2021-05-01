@@ -90,9 +90,12 @@
 - (void)updateTextShowButton
 {
     _countShowCategories = 0;
-    for (OAPOICategory* item in _categories)
-        if ([_filter isTypeAccepted:item])
-            _countShowCategories += 1;
+    for (OAPOICategory *category in _categories)
+        if ([_filter isTypeAccepted:category]) {
+            NSSet<NSString *> *acceptedSubtypes = [_filter getAcceptedSubtypes:category];
+            NSInteger count = acceptedSubtypes != [OAPOIBaseType nullSet] ? acceptedSubtypes.count : category.poiTypes.count;
+            _countShowCategories += count;
+        }
 
     NSString *textShow = OALocalizedString(@"sett_show");
     UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];

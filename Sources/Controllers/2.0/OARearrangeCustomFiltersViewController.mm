@@ -83,7 +83,7 @@
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 @end
@@ -137,7 +137,6 @@
 - (void)applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"rearrange_categories");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 

@@ -56,7 +56,7 @@
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <state key="normal" image="ic_navbar_chevron.png"/>
                     <connections>
-                        <action selector="onBackButtonClicked:" destination="-1" eventType="touchUpInside" id="JBE-B8-vv4"/>
+                        <action selector="onCancelButtonClicked:" destination="-1" eventType="touchUpInside" id="JBE-B8-vv4"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rearrange categories" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3qR-w7-ZwS">

@@ -71,11 +71,6 @@
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
 }
 
-- (CGFloat)getToolBarHeight
-{
-    return customSearchToolBarHeight;
-}
-
 - (void)applyLocalization
 {
     if (_editMode)
@@ -115,11 +110,6 @@
     [attrShow addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attrShow.string.length)];
 
     [_showButton setAttributedTitle:attrShow forState:UIControlStateNormal];
-}
-
-- (CGFloat)getToolBarHeight
-{
-    return customSearchToolBarHeight;
 }
 
 - (IBAction)onBackButtonClicked:(id)sender

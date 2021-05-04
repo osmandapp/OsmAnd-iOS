@@ -23,9 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OACustomPlugin : OAPlugin
 
-@property (nonatomic, readonly) NSString *resourceDirName;
-@property (nonatomic, readonly) NSArray<NSString *> *rendererNames;
-@property (nonatomic, readonly) NSArray<NSString *> *routerNames;
+@property (nonatomic) NSString *resourceDirName;
+@property (nonatomic, readonly) NSMutableArray<NSString *> *rendererNames;
+@property (nonatomic, readonly) NSMutableArray<NSString *> *routerNames;
 
 - (instancetype) initWithJson:(NSDictionary *)json;
 
@@ -34,6 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) writeAdditionalDataToJson:(NSMutableDictionary *)json;
 - (void) writeDependentFilesJson:(NSMutableDictionary *)json;
+
+- (void) addRouter:(NSString *)fileName;
+- (void) addRenderer:(NSString *)fileName;
 
 + (NSArray<OACustomRegion *> *)collectRegionsFromJson:(NSArray *)jsonArray;
 

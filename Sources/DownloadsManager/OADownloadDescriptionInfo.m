@@ -11,7 +11,7 @@
 
 @implementation OADownloadActionButton
 
-- (instancetype) initWithActionType:(NSString *)actionType name:(NSString *)name url:(NSString *)url
+- (instancetype) initWithActionType:(NSString *)actionType name:(NSString *)name url:(NSString  * _Nullable )url
 {
     self = [super init];
     if (self) {

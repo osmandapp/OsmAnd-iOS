@@ -26,6 +26,7 @@
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OATargetMenuViewController.h"
+#import "OACustomSourceDetailsViewController.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -373,9 +374,19 @@ static BOOL dataInvalidated = NO;
         }
         else if ([item_ isKindOfClass:OACustomResourceItem.class])
         {
-            [self downloadCustomItem:(OACustomResourceItem *) item_];
+            OACustomResourceItem *customItem = (OACustomResourceItem *) item_;
+            if (!customItem.isInstalled)
+                [self downloadCustomItem:customItem];
+            else
+                [self showDetailsOfCustomItem:customItem];
         }
     }
+}
+    
+- (void) showDetailsOfCustomItem:(OACustomResourceItem *)item
+{
+    OACustomSourceDetailsViewController *customSourceDetails = [[OACustomSourceDetailsViewController alloc] initWithCustomItem:item region:(OACustomRegion *)self.region];
+    [self.navigationController pushViewController:customSourceDetails animated:YES];
 }
 
 - (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId

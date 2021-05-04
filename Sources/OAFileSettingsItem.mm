@@ -222,6 +222,7 @@
 }
 
 @dynamic name;
+@synthesize filePath = _filePath;
 
 - (void) commonInit
 {
@@ -416,6 +417,16 @@
     }
 }
 
+- (void) setFilePath:(NSString *)filePath
+{
+    _filePath = filePath;
+}
+
+- (NSString *)filePath
+{
+    return _filePath;
+}
+
 - (NSString *) getIconName
 {
     switch (_subtype)
@@ -432,7 +443,7 @@
 - (NSString *) getPluginPath
 {
     if (self.pluginId.length > 0)
-        return [[_libPath stringByAppendingPathComponent:@"Plugins"] stringByAppendingPathComponent:self.pluginId];
+        return [[_libPath stringByAppendingPathComponent:PLUGINS_DIR] stringByAppendingPathComponent:self.pluginId];
     
     return @"";
 }
@@ -499,14 +510,36 @@
         destFilePath = [self.item renameFile:destFilePath];
     
     NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *directory = [destFilePath stringByDeletingLastPathComponent];
-    if (![fileManager fileExistsAtPath:directory])
+    BOOL isDir = destFilePath.pathExtension.length == 0;
+    BOOL exists = [fileManager fileExistsAtPath:destFilePath];
+    if (isDir && !exists)
+    {
+        [fileManager createDirectoryAtPath:destFilePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    else if (!exists)
+    {
+        NSString *directory = [destFilePath stringByDeletingLastPathComponent];
         [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
-
-    NSError *copyError;
-    BOOL res = [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destFilePath error:&copyError];
-    if (error && copyError)
-        *error = copyError;
+    }
+    
+    BOOL res = NO;
+    if (!isDir)
+    {
+        NSError *copyError;
+        res = [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destFilePath error:&copyError];
+        if (error && copyError)
+            *error = copyError;
+    }
+    else
+    {
+        NSArray<NSString *> *files = [fileManager contentsOfDirectoryAtPath:filePath error:error];
+        for (NSString *file in files)
+        {
+            [fileManager moveItemAtPath:[filePath stringByAppendingPathComponent:file]
+                                 toPath:[destFilePath stringByAppendingPathComponent:file]
+                                  error:error];
+        }
+    }
     
     [self.item installItem:destFilePath];
     

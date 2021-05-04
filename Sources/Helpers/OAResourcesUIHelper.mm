@@ -91,17 +91,24 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         fileName = [self.subfolder stringByAppendingPathComponent:fileName];
     }
-    fileName = [self.getSubfolderByExtension stringByAppendingPathComponent:fileName];
-    return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:fileName];
+    return [self.getBasePathByExtension stringByAppendingPathComponent:fileName];
 }
 
-- (NSString *) getSubfolderByExtension
+- (NSString *) getBasePathByExtension
 {
     // TODO: handle zip, other custom resources
     if ([self.title hasSuffix:SQLITE_EXT])
-        return MAP_CREATOR_DIR;
-    else
-        return RESOURCES_DIR;
+        return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR];
+    else if ([self.title hasSuffix:GPX_FILE_EXT])
+        return OsmAndApp.instance.gpxPath;
+    else if ([self.title hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
+        return OsmAndApp.instance.documentsPath;
+    return OsmAndApp.instance.documentsPath;
+}
+
+- (NSString *) getVisibleName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_names defValue:@""];
 }
 
 - (NSString *) getSubName
@@ -126,7 +133,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (BOOL) isInstalled
 {
-    return [NSFileManager.defaultManager fileExistsAtPath:self.getTargetFilePath];
+    NSString *pathForUnzippedResource = self.getTargetFilePath;
+    if ([self.getTargetFilePath hasSuffix:@".zip"])
+        pathForUnzippedResource = pathForUnzippedResource.stringByDeletingPathExtension;
+    return [NSFileManager.defaultManager fileExistsAtPath:pathForUnzippedResource];
 }
 
 @end
@@ -588,7 +598,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     
     NSLog(@"%@", url);
     
-    NSString* name = [item.title stringByDeletingPathExtension];
+    NSString* name = item.title;
+    if (item.subfolder && item.subfolder.length > 0)
+        name = [item.subfolder stringByAppendingPathComponent:name];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request

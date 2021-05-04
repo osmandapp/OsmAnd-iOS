@@ -74,6 +74,7 @@
 
 @property OADownloadDescriptionInfo *descriptionInfo;
 
+- (NSString *) getVisibleName;
 - (NSString *) getSubName;
 - (NSString *) getTargetFilePath;
 

@@ -114,10 +114,12 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         NSString *iconName = [_product productIconName];
         if (iconName)
             logo = [UIImage imageNamed:iconName];
+        self.icon.contentMode = UIViewContentModeCenter;
     }
     else if (_screenType == EOAPluginScreenTypeCustomPlugin)
     {
         logo = [_plugin getLogoResource];
+        self.icon.contentMode = UIViewContentModeScaleAspectFit;
     }
     self.icon.image = logo;
     
@@ -213,7 +215,8 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 - (void) updatePurchaseButton
 {
     NSString *title;
-    NSString *desc;
+    NSString *desc = nil;
+    NSAttributedString *attrDesc = nil;
     NSString *price;
     
     if (_screenType == EOAPluginScreenTypeProduct)
@@ -228,12 +231,16 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     else if (_screenType == EOAPluginScreenTypeCustomPlugin)
     {
         title = _plugin.getName;
-        desc = _plugin.getDescription;
+        attrDesc = [OAUtilities attributedStringFromHtmlString:_plugin.getDescription fontSize:17];
     }
     
     self.titleLabel.text = title;
-    self.descTextView.text = desc;
     self.descTextView.selectable = NO;
+    
+    if (desc)
+        self.descTextView.text = desc;
+    else if (attrDesc)
+        self.descTextView.attributedText = attrDesc;
     
     BOOL purchased = NO;
     BOOL disabled = YES;

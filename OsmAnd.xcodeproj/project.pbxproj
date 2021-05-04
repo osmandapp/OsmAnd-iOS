@@ -3344,6 +3344,8 @@
 		DAAB0B4F2452FF9B002AA2F3 /* OAPublicTransportCollapsableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAB0B4E2452FF9B002AA2F3 /* OAPublicTransportCollapsableCell.m */; };
 		DAAB2F4021A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAAB2F3F21A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm */; };
 		DAADA2E723B5EF1E00A5E414 /* OARouteInfoLegendItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAADA2E623B5EF1E00A5E414 /* OARouteInfoLegendItemView.xib */; };
+		DAADDFA4263C26770021E42E /* OACustomSourceDetailsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAADDFA2263C26770021E42E /* OACustomSourceDetailsViewController.mm */; };
+		DAADDFA5263C26770021E42E /* OACustomSourceDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAADDFA3263C26770021E42E /* OACustomSourceDetailsViewController.xib */; };
 		DAAE21E42269D6010006E016 /* ic_custom_my_places.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21E12269D6000006E016 /* ic_custom_my_places.png */; };
 		DAAE21E62269D6010006E016 /* ic_custom_my_places@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21E22269D6000006E016 /* ic_custom_my_places@3x.png */; };
 		DAAE21E82269D6010006E016 /* ic_custom_my_places@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21E32269D6010006E016 /* ic_custom_my_places@2x.png */; };
@@ -7883,6 +7885,9 @@
 		DAAB2F3E21A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAImportGPXBottomSheetViewController.h; sourceTree = "<group>"; };
 		DAAB2F3F21A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAImportGPXBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DAADA2E623B5EF1E00A5E414 /* OARouteInfoLegendItemView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OARouteInfoLegendItemView.xib; path = Views/OARouteInfoLegendItemView.xib; sourceTree = "<group>"; };
+		DAADDFA1263C26770021E42E /* OACustomSourceDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OACustomSourceDetailsViewController.h; path = Controllers/2.0/OACustomSourceDetailsViewController.h; sourceTree = "<group>"; };
+		DAADDFA2263C26770021E42E /* OACustomSourceDetailsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OACustomSourceDetailsViewController.mm; path = Controllers/2.0/OACustomSourceDetailsViewController.mm; sourceTree = "<group>"; };
+		DAADDFA3263C26770021E42E /* OACustomSourceDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OACustomSourceDetailsViewController.xib; path = Controllers/2.0/OACustomSourceDetailsViewController.xib; sourceTree = "<group>"; };
 		DAAE21E12269D6000006E016 /* ic_custom_my_places.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_my_places.png; path = Resources/Icons/ic_custom_my_places.png; sourceTree = "<group>"; };
 		DAAE21E22269D6000006E016 /* ic_custom_my_places@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_my_places@3x.png"; path = "Resources/Icons/ic_custom_my_places@3x.png"; sourceTree = "<group>"; };
 		DAAE21E32269D6010006E016 /* ic_custom_my_places@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_my_places@2x.png"; path = "Resources/Icons/ic_custom_my_places@2x.png"; sourceTree = "<group>"; };
@@ -13036,6 +13041,9 @@
 				DA3305BF21D391BC0081BA1D /* OADonationSettingsViewController.h */,
 				DA3305C021D391BC0081BA1D /* OADonationSettingsViewController.mm */,
 				DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */,
+				DAADDFA1263C26770021E42E /* OACustomSourceDetailsViewController.h */,
+				DAADDFA2263C26770021E42E /* OACustomSourceDetailsViewController.mm */,
+				DAADDFA3263C26770021E42E /* OACustomSourceDetailsViewController.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -15517,6 +15525,7 @@
 				32A0017F2610B43700ABE0D2 /* widget_coordinates_latitude_south_day.png in Resources */,
 				78AC698A23AB7BE1006C3DDE /* left_menu_configure_screen.png in Resources */,
 				8476E1C71F6AA01000EC274F /* ic_action_home_dark@3x.png in Resources */,
+				DAADDFA5263C26770021E42E /* OACustomSourceDetailsViewController.xib in Resources */,
 				84451A311AA050B3003F4D8D /* ic_close.png in Resources */,
 				84770B911FA313CF00CCE930 /* ic_action_speed_limit.png in Resources */,
 				DAF3456B22F4482C009E2EB6 /* ic_custom_osm_note_unresolved.png in Resources */,
@@ -17843,6 +17852,7 @@
 				8AE0658D2291426500D3CB56 /* OAMapillaryLayer.mm in Sources */,
 				DA303D4F24210AF9006F8BC7 /* OATransportRouteCalculationParams.mm in Sources */,
 				1571CE4224AE191E00083F92 /* OATitleDescriptionCollapsableCell.m in Sources */,
+				DAADDFA4263C26770021E42E /* OACustomSourceDetailsViewController.mm in Sources */,
 				32BD81682599062600A54BB5 /* OANavRemoveNextDestination.m in Sources */,
 				8438B8151EEDC43F007AEF77 /* OAGPXLayer.mm in Sources */,
 				DAD49D8A229D597A0050751B /* OAAbstractCard.m in Sources */,

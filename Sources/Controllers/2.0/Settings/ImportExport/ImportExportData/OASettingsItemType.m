@@ -24,6 +24,8 @@
             return @"DATA";
         case EOASettingsItemTypeFile:
             return @"FILE";
+        case EOASettingsItemTypeResources:
+            return @"RESOURCES";
         case EOASettingsItemTypeQuickActions:
             return @"QUICK_ACTIONS";
         case EOASettingsItemTypePoiUIFilters:
@@ -63,6 +65,8 @@
         return EOASettingsItemTypeData;
     if ([typeName isEqualToString:@"FILE"])
         return EOASettingsItemTypeFile;
+    if ([typeName isEqualToString:@"RESOURCES"])
+        return EOASettingsItemTypeResources;
     if ([typeName isEqualToString:@"QUICK_ACTIONS"])
         return EOASettingsItemTypeQuickActions;
     if ([typeName isEqualToString:@"POI_UI_FILTERS"])

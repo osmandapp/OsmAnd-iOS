@@ -103,14 +103,15 @@
 - (IBAction)onDisablePressed:(UIButton *)sender
 {
     if (_plugin)
-    {
         [OAPlugin enablePlugin:_plugin enable:NO];
-    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)onEnablePressed:(id)sender
 {
+    if (_plugin)
+        [OAPlugin enablePlugin:_plugin enable:YES];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -129,8 +130,7 @@
         }
         if (cell)
         {
-            NSString *modifiedFontHtml = [NSString stringWithFormat:@"<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: %d\">%@</span>", 17, item[@"text"]];
-            NSAttributedString *attrString = [[NSAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
+            NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:17];
             cell.textView.attributedText = attrString;
             [cell.textView sizeToFit];
         }
@@ -166,7 +166,7 @@
         [style setLineSpacing:6];
         attrString = [[NSAttributedString alloc] initWithString:descriptionText attributes:@{NSParagraphStyleAttributeName : style}];
     }
-    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:UIColorFromRGB(color_primary_purple)];
+    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:UIColorFromRGB(color_primary_purple) iconContentMode:UIViewContentModeScaleAspectFit];
 }
 
 @end

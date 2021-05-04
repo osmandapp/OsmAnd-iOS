@@ -12,6 +12,8 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    [self.textView setTextContainerInset:UIEdgeInsetsZero];
+    self.textView.textContainer.lineFragmentPadding = 0;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

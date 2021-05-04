@@ -18,6 +18,7 @@
 #import "OAQuickActionRegistry.h"
 #import "OACustomPlugin.h"
 #import "OAPluginInstalledViewController.h"
+#import "OAResourcesBaseViewController.h"
 #import "OARootViewController.h"
 
 #import "OAMonitoringPlugin.h"

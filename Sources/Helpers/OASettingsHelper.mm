@@ -108,7 +108,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
 {
-    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:nil onComplete:onComplete];
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
+    [task executeWithCompletionBlock:onComplete];
 }
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete

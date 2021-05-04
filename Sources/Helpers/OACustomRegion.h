@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAResourceItem;
+@class OAResourceItem, OADownloadDescriptionInfo;
 
 @interface OADynamicDownloadItems : NSObject
 
@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly) NSString *parentPath;
 @property (nonatomic, readonly) NSString *type;
 @property (nonatomic, readonly) NSString *subfolder;
+
+@property (nonatomic) UIColor *headerColor;
+@property (nonatomic) OADownloadDescriptionInfo *descriptionInfo;
 
 - (instancetype) initWithScopeId:(NSString *)scopeId path:(NSString *)path type:(NSString *)type;
 

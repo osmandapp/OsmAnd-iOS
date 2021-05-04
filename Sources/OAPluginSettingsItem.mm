@@ -9,6 +9,7 @@
 #import "OAPluginSettingsItem.h"
 #import "OACustomPlugin.h"
 #import "OADownloadsItem.h"
+#import "OAFileSettingsItem.h"
 
 @implementation OAPluginSettingsItem
 {
@@ -34,7 +35,7 @@
 
 - (BOOL)exists
 {
-    return [OAPlugin getPlugin:self.plugin.class] != nil;
+    return [OAPlugin getPluginById:self.pluginId] != nil;
 }
 
 - (NSArray<OASettingsItem *> *)pluginDependentItems
@@ -55,27 +56,21 @@
     {
         for (OASettingsItem *item : _pluginDependentItems)
         {
-//            if ([item isKindOfClass:OAFileSettingsItem.class])
-//            {
-//                OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-//                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
-//                {
-//                    [_plugin addRenderer:fileItem.name];
-//                }
-//                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
-//                {
-//                    [plugin addRouter:fileItem.name];
-//                }
-//                else if (fileItem.subtype == EOASettingsItemFileSubtypeOther)
-//                {
-//                    [plugin setResourceDirName:item.fileName];
-//                }
-//            }
+            if ([item isKindOfClass:OAFileSettingsItem.class])
+            {
+                OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
+                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
+                    [_plugin addRenderer:fileItem.name];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
+                    [_plugin addRouter:fileItem.name];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeOther)
+                    _plugin.resourceDirName = item.fileName;
+            }
 //            else if ([item isKindOfClass:OASuggestedDownloadsItem.class])
 //            {
 //                [plugin updateSuggestedDownloads:((OASuggestedDownloadsItem *) item).items];
 //            }
-            if ([item isKindOfClass:OADownloadsItem.class])
+            else if ([item isKindOfClass:OADownloadsItem.class])
             {
                 [_plugin updateDownloadItems:((OADownloadsItem *) item).items];
             }

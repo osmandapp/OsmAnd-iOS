@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *url;
 
+- (instancetype) initWithActionType:(NSString *)actionType name:(NSString *)name url:(NSString  * _Nullable )url;
+
 @end
 
 @interface OADownloadDescriptionInfo : NSObject

@@ -85,7 +85,7 @@
 #define SETTINGS_DIR @"settings/"
 #define TEMP_DIR @"temp/"
 #define ROUTING_PROFILES_DIR @"routing/"
-#define PLUGINS_DIR @"plugins/"
+#define PLUGINS_DIR @"Plugins/"
 
 #define VOICE_PROVIDER_SUFFIX @"-tts"
 

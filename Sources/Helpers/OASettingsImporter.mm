@@ -33,6 +33,7 @@
 #import "OAGpxSettingsItem.h"
 #import "OASearchHistorySettingsItem.h"
 #import "OADownloadsItem.h"
+#import "OAResourcesSettingsItem.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -122,12 +123,32 @@
             NSError *err = nil;
             if (reader)
             {
-                NSString *tmpFileName = [_tmpFilesDir stringByAppendingPathComponent:archiveItem.name.toNSString()];
-                if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
+                NSString *fileName = archiveItem.name.toNSString();
+                NSString *tmpFileName = [_tmpFilesDir stringByAppendingString:[@"/" stringByAppendingString:fileName]];
+                BOOL isDir = [fileName hasSuffix:@"/"];
+                if (isDir)
                 {
-                    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-                    NSLog(@"Error processing items");
-                    continue;
+                    // Collect all items for this directory
+                    for (const auto& archiveItem : constOf(archiveItems))
+                    {
+                        NSString *itemName = archiveItem.name.toNSString();
+                        if ([itemName hasPrefix:fileName] && ![itemName isEqualToString:fileName])
+                        {
+                            if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString([_tmpFilesDir stringByAppendingPathComponent:itemName])))
+                            {
+                                NSLog(@"Error processing directory item");
+                                continue;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
+                    {
+                        NSLog(@"Error processing items");
+                        continue;
+                    }
                 }
                 [reader readFromFile:tmpFileName error:&err];
             }
@@ -337,6 +358,9 @@
             break;
         case EOASettingsItemTypeDownloads:
             item = [[OADownloadsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeResources:
+            item = [[OAResourcesSettingsItem alloc] initWithJson:json error:&error];
             break;
         default:
             item = nil;

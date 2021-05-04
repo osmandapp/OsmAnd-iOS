@@ -70,9 +70,6 @@
 @property (nonatomic) NSArray *dynamicItemsJson;
 
 @property (nonatomic) OADynamicDownloadItems *dynamicDownloadItems;
-@property (nonatomic) OADownloadDescriptionInfo *descriptionInfo;
-
-@property (nonatomic) UIColor *headerColor;
 
 @end
 
@@ -115,9 +112,18 @@
     
     NSString *headerColor = json[@"header-color"];
     if (headerColor.length > 0)
-        region.headerColor = UIColorFromRGB([headerColor substringFromIndex:1].integerValue);
+    {
+        NSScanner *scanner = [NSScanner scannerWithString:headerColor];
+        [scanner setScanLocation:1];
+        unsigned int res = 0;
+        [scanner scanHexInt:&res];
+        region.headerColor = UIColorFromRGB(res);
+    }
     else
+    {
         region.headerColor = UIColorFromRGB(color_osmand_orange);
+    }
+        
     
     region.descriptionInfo = [OADownloadDescriptionInfo fromJson:json[@"description"]];
     
@@ -248,10 +254,6 @@
                         {
                             _dynamicItemsJson = [self mapJsonItems:jsonDict];
                         }
-                        OsmAndAppInstance app = OsmAndApp.instance;
-                        [OAOcbfHelper downloadOcbfIfUpdated];
-                        [app loadWorldRegions];
-                        [app startRepositoryUpdateAsync:NO];
                     }
                 }
             }
@@ -281,7 +283,7 @@
 {
     NSMutableDictionary *itemJson = [NSMutableDictionary dictionary];
     [mapping enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        id value = [self checkMappingValue:key json:jsonObject];
+        id value = [self checkMappingValue:obj json:jsonObject];
         if (value)
             itemJson[key] = value;
     }];
@@ -304,7 +306,7 @@
         NSDictionary *objectJson = value;
         
         [objectJson enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            id checkedValue = [self checkMappingValue:value json:json];
+            id checkedValue = [self checkMappingValue:obj json:json];
             checkedJsonObject[key] = checkedValue;
         }];
         return checkedJsonObject;

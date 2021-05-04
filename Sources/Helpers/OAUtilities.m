@@ -1493,7 +1493,7 @@ static const double d180PI = 180.0 / M_PI_2;
     return tableHeaderView;
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode
 {
     CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
@@ -1513,7 +1513,7 @@ static const double d180PI = 180.0 / M_PI_2;
     
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.frame = CGRectMake(iconFrameSize / 2 - 15., iconFrameSize / 2 - 15., 30, 30);
-    imageView.contentMode = UIViewContentModeCenter;
+    imageView.contentMode = contentMode;
     [imageView setTintColor:tintColor];
     [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     
@@ -1636,6 +1636,12 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         return [NSArray arrayWithArray:allFoldersNames];
     }
+}
+
++ (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize
+{
+    NSString *modifiedFontHtml = [NSString stringWithFormat:@"<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: %ld\">%@</span>", fontSize, html];
+    return [[NSAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
 }
 
 @end

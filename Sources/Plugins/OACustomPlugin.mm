@@ -15,6 +15,7 @@
 #import "OAIndexConstants.h"
 #import "OAResourcesUIHelper.h"
 #import "OAProfileSettingsItem.h"
+#import "OAPoiUiFilterSettingsItem.h"
 #import "OASettingsItem.h"
 #import "OAPluginSettingsItem.h"
 #import "OAQuickActionsSettingsItem.h"
@@ -27,6 +28,8 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OrderedDictionary.h"
 #import "OACustomRegion.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAQuickSearchHelper.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
@@ -138,7 +141,7 @@
 
 - (NSString *) getPluginItemsFile
 {
-    return [self.getPluginDir stringByAppendingPathComponent:[@"items" stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT]];
+    return [self.getPluginDir stringByAppendingPathComponent:[@"items" stringByAppendingPathExtension:@"osf"]];
 }
 
 - (NSString *) getPluginResDir
@@ -232,7 +235,7 @@
                         [OAApplicationMode changeProfileAvailability:savedMode isSelected:YES];
                     [toRemove addObject:item];
                 }
-                else if ([item isKindOfClass:OAPluginSettingsItem.class])
+                else if (![item isKindOfClass:OAPluginSettingsItem.class])
                 {
                     item.shouldReplace = YES;
                 }
@@ -307,18 +310,19 @@
                             }
                         }
                     }
-                    // TODO: implement after adding customPoifilters import
-//                    else if (item instanceof PoiUiFiltersSettingsItem)
-//                    {
-//                        PoiUiFiltersSettingsItem poiUiFiltersSettingsItem = (PoiUiFiltersSettingsItem) item;
-//                        List<PoiUIFilter> poiUIFilters = poiUiFiltersSettingsItem.getItems();
-//                        for (PoiUIFilter filter : poiUIFilters) {
-//                            app.getPoiFilters().removePoiFilter(filter);
-//                        }
-//                        app.getPoiFilters().reloadAllPoiFilters();
-//                        app.getPoiFilters().loadSelectedPoiFilters();
-//                        app.getSearchUICore().refreshCustomPoiFilters();
-//                    }
+                    else if ([item isKindOfClass:OAPoiUiFilterSettingsItem.class])
+                    {
+                        OAPoiUiFilterSettingsItem *poiUiFiltersSettingsItem = (OAPoiUiFilterSettingsItem *) item;
+                        NSArray<OAPOIUIFilter *> *poiUIFilters = poiUiFiltersSettingsItem.items;
+                        OAPOIFiltersHelper *poiHelper = OAPOIFiltersHelper.sharedInstance;
+                        for (OAPOIUIFilter *filter in poiUIFilters)
+                        {
+                            [poiHelper removePoiFilter:filter];
+                        }
+                        [poiHelper reloadAllPoiFilters];
+                        [poiHelper loadSelectedPoiFilters];
+                        [OAQuickSearchHelper.instance refreshCustomPoiFilters];
+                    }
                     else if ([item isKindOfClass:OAAvoidRoadsSettingsItem.class])
                     {
                         OAAvoidRoadsSettingsItem *avoidRoadsSettingsItem = (OAAvoidRoadsSettingsItem *) item;
@@ -441,16 +445,20 @@
 
 - (void) addRouter:(NSString *)fileName
 {
+    if (!_routerNames)
+        _routerNames = [NSMutableArray array];
     NSString *routerName = fileName.lastPathComponent;
     if (![_routerNames containsObject:routerName])
-        _routerNames = [_routerNames arrayByAddingObject:routerName];
+        [_routerNames addObject:routerName];
 }
 
 - (void) addRenderer:(NSString *)fileName
 {
+    if (!_rendererNames)
+        _rendererNames = [NSMutableArray array];
     NSString *rendererName = fileName.lastPathComponent;
     if (![_rendererNames containsObject:rendererName])
-        _rendererNames = [_rendererNames arrayByAddingObject:rendererName];
+        [_rendererNames addObject:rendererName];
 }
 
 - (void) loadResources

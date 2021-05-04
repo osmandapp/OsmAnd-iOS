@@ -49,6 +49,7 @@
 - (void) offerClearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
 
 - (void) showDetailsOf:(OALocalResourceItem *)item;
+- (void) showDetailsOfCustomItem:(OACustomResourceItem *)item;
 
 - (UITableView *) getTableView;
 

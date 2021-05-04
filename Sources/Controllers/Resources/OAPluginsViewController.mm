@@ -256,8 +256,11 @@
                 desc = plugin.getDescription;
             }
              
+            cell.imgIcon.contentMode = UIViewContentModeCenter;
             if (!imgTitle)
                 imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
+            else if (indexPath.section == kCustomPluginsSection)
+                cell.imgIcon.contentMode = UIViewContentModeScaleAspectFit;
             
             [cell.imgIcon setImage:imgTitle];
             [cell.lbTitle setText:title];
@@ -342,6 +345,7 @@
         OACustomPlugin *plugin = _customPlugins[indexPath.row];
         [OAPlugin enablePlugin:plugin enable:!plugin.isActive];
         [self refreshProduct:indexPath];
+        [OAResourcesBaseViewController setDataInvalidated];
     }
 }
 

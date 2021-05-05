@@ -376,6 +376,8 @@
     {
         OAQuickActionListViewController *vc = [[OAQuickActionListViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        return;
     }
     if ([data[@"key"] isEqualToString:@"map_markers"])
     {

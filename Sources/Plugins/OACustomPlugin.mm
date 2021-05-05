@@ -235,6 +235,11 @@
                         [OAApplicationMode changeProfileAvailability:savedMode isSelected:YES];
                     [toRemove addObject:item];
                 }
+                else if ([item isKindOfClass:OAQuickActionsSettingsItem.class])
+                {
+                    [((OACollectionSettingsItem *)item) processDuplicateItems];
+                    item.shouldReplace = YES;
+                }
                 else if (![item isKindOfClass:OAPluginSettingsItem.class])
                 {
                     item.shouldReplace = YES;
@@ -272,6 +277,7 @@
                             OAQuickAction *savedAction = [actionRegistry getQuickAction:action.getType name:action.getName params:action.getParams];
                             if (savedAction)
                                 [actionRegistry deleteQuickAction:savedAction];
+                            [actionRegistry.quickActionListChangedObservable notifyEvent];
                         }
                     }
                     else if ([item isKindOfClass:OAMapSourcesSettingsItem.class])
@@ -287,9 +293,9 @@
                             
                             NSArray<OAResourceItem *> *installedSources = [OAResourcesUIHelper getSortedRasterMapSources:YES];
                             OAResourceItem *savedTileSource = nil;
-                            for (OAResourceItem *res in installedSources)
+                            for (OAMapSourceResourceItem *res in installedSources)
                             {
-                                if ([res.title isEqualToString:tileSourceName])
+                                if ([res.mapSource.name isEqualToString:tileSourceName])
                                 {
                                     savedTileSource = res;
                                     break;

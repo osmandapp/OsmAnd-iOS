@@ -160,14 +160,19 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [task execute];
 }
 
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles delegate:(id<OASettingsImportExportDelegate>)delegate
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles extensionsFilter:(NSString *)extensionsFilter delegate:(id<OASettingsImportExportDelegate>)delegate
 {
     NSString *file = [fileDir stringByAppendingPathComponent:fileName];
     file = [file stringByAppendingPathExtension:@"osf"];
-    OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file items:items exportItemFiles:exportItemFiles];
+    OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file items:items exportItemFiles:exportItemFiles extensionsFilter:extensionsFilter];
     exportAsyncTask.settingsExportDelegate = delegate;
     [_exportTasks setObject:exportAsyncTask forKey:file];
     [exportAsyncTask execute];
+}
+
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles delegate:(id<OASettingsImportExportDelegate>)delegate
+{
+    [self exportSettings:fileDir fileName:fileName items:items exportItemFiles:exportItemFiles extensionsFilter:nil delegate:delegate];
 }
 
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles delegate:(id<OASettingsImportExportDelegate>)delegate
@@ -550,7 +555,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             }
         }
     if (quickActions.count > 0)
-        [result addObject: [[OAQuickActionsSettingsItem alloc] initWithItems:quickActions]];
+    {
+        OAQuickActionsSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypeQuickActions clazz:OAQuickActionsSettingsItem.class settingsItems:settingsItems];
+        [result addObject:[[OAQuickActionsSettingsItem alloc] initWithItems:quickActions baseItem:baseItem]];
+    }
     if (tileSourceTemplates.count > 0)
         [result addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
@@ -765,7 +773,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (![fileManager fileExistsAtPath:fullPath])
             [fileManager createDirectoryAtPath:fullPath withIntermediateDirectories:YES attributes:nil error:nil];
         
-        [self exportSettings:fullPath fileName:@"items" items:items exportItemFiles:NO delegate:nil];
+        [self exportSettings:fullPath fileName:@"items" items:items exportItemFiles:YES extensionsFilter:@"json" delegate:nil];
     };
     
     NSMutableArray<OASettingsItem *> *pluginItems = [NSMutableArray arrayWithArray:pluginItem.pluginDependentItems];

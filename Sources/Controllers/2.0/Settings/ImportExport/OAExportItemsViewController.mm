@@ -10,16 +10,18 @@
 #import "OARootViewController.h"
 #import "OAExportSettingsType.h"
 #import "Localization.h"
+#import "OAColors.h"
 
 @implementation OAExportItemsViewController
 {
     NSString *_descriptionText;
     NSString *_descriptionBoldText;
-    
+
     OASettingsHelper *_settingsHelper;
     OAApplicationMode *_appMode;
-    
+
     BOOL _exportStarted;
+    long _itemsSize;
     NSString *_fileSize;
 }
 
@@ -37,7 +39,8 @@
 - (void)commonInit
 {
     _settingsHelper = OASettingsHelper.sharedInstance;
-    _fileSize = [NSByteCountFormatter stringFromByteCount:0 countStyle:NSByteCountFormatterCountStyleFile];
+    _itemsSize = 0;
+    [self updateFileSize];
 }
 
 - (void)applyLocalization
@@ -55,7 +58,7 @@
 - (void)setupView
 {
     [self setTableHeaderView:OALocalizedString(@"export_profile")];
-    
+
     if (_exportStarted)
     {
         OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
@@ -79,10 +82,9 @@
     return _descriptionBoldText;
 }
 
-- (NSString *)getDescriptionTextWithFormat:(NSString *)argument;
+- (NSString *)getDescriptionTextWithSize
 {
-    NSString *approximateFileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), argument];
-    return [NSString stringWithFormat: @"%@\n%@", _descriptionText, approximateFileSize];
+    return [NSString stringWithFormat: @"%@\n%@", _descriptionText, _fileSize];
 }
 
 - (void)onGroupCheckmarkPressed:(UIButton *)sender
@@ -97,7 +99,7 @@
     _exportStarted = YES;
     [self setupView];
     [self.tableView reloadData];
-    
+
     OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
     NSArray<OASettingsItem *> *settingsItems = [settingsHelper prepareSettingsItems:self.getSelectedItems settingsItems:@[] doExport:YES];
     [settingsHelper exportSettings:NSTemporaryDirectory() fileName:_appMode.toHumanString items:settingsItems exportItemFiles:YES delegate:self];
@@ -112,8 +114,35 @@
 
 - (void)updateFileSize
 {
-    long itemsSize = [self calculateItemsSize:self.getSelectedItems];
-    _fileSize = [NSByteCountFormatter stringFromByteCount:itemsSize countStyle:NSByteCountFormatterCountStyleFile];
+    _itemsSize = [self calculateItemsSize:self.getSelectedItems];
+    NSString *byteCount = [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile];
+    NSString *approximateFileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), byteCount];
+    _fileSize = approximateFileSize;
+}
+
+- (UIView *)getHeaderForTableView:(UITableView *)tableView withFirstSectionText:(NSString *)text boldFragment:(NSString *)boldFragment forSection:(NSInteger)section
+{
+    if (section == 0)
+    {
+        UIView *headerView = [super getHeaderForTableView:tableView withFirstSectionText:text boldFragment:boldFragment forSection:section];
+        UILabel *headerLabel = headerView.subviews[0];
+        if (headerLabel)
+        {
+            NSAttributedString *oldHeaderText = headerLabel.attributedText;
+            NSInteger baseHeaderLength = [oldHeaderText.string stringByReplacingOccurrencesOfString:_fileSize withString:@""].length;
+            NSMutableAttributedString *newHeaderText = [[NSMutableAttributedString alloc] initWithAttributedString:[oldHeaderText attributedSubstringFromRange:NSMakeRange(0, baseHeaderLength)]];
+            UIFont *fontFileSize = [UIFont systemFontOfSize:15];
+            UIColor *colorFileSize = _itemsSize == 0 ? UIColorFromRGB(color_text_footer) : [UIColor blackColor];
+            NSMutableAttributedString *headerFileSizeText = [[NSMutableAttributedString alloc] initWithString:_fileSize attributes:@{NSFontAttributeName:fontFileSize, NSForegroundColorAttributeName:colorFileSize}];
+            [newHeaderText appendAttributedString:headerFileSizeText];
+            headerLabel.attributedText = newHeaderText;
+        }
+        return headerView;
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 - (IBAction)primaryButtonPressed:(id)sender
@@ -125,12 +154,12 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:[self getDescriptionTextWithFormat:_fileSize] boldFragment:self.descriptionBoldText forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:[self getDescriptionTextWithSize] boldFragment:self.descriptionBoldText forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self getHeightForHeaderWithFirstHeaderText:[self getDescriptionTextWithFormat:_fileSize] boldFragment:self.descriptionBoldText inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:[self getDescriptionTextWithSize] boldFragment:self.descriptionBoldText inSection:section];
 }
 
 #pragma mark - OASettingItemsSelectionDelegate

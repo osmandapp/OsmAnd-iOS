@@ -59,6 +59,8 @@
 
 #define kDefaultMapRulerMarginBottom -17.0
 #define kDefaultMapRulerMarginLeft 120.0
+#define toolbarHeight 60.0
+#define headerSectionHeigh 60.0
 
 #define PLAN_ROUTE_MODE 0x1
 #define DIRECTION_MODE 0x2
@@ -100,6 +102,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewTailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *landskapeHeaderLeftContainerConstraint;
+@property (weak, nonatomic) IBOutlet UIView *landscapeHeaderContainerView;
+@property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderTitleView;
+@property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderDescriptionView;
+@property (weak, nonatomic) IBOutlet UIButton *landscapeExpandButton;
 
 @end
 
@@ -205,6 +213,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
     _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
     [_expandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    _landscapeExpandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
+    [_landscapeExpandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     
     [_undoButton setImage:[[UIImage imageNamed:@"ic_custom_undo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [_redoButton setImage:[[UIImage imageNamed:@"ic_custom_redo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
@@ -261,6 +271,32 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 //        enterApproximationMode(mapActivity);
 }
 
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    CGFloat buttonViewY = self.toolBarView.frame.origin.y;
+    CGFloat buttonViewHeight = self.toolBarView.frame.size.height;
+
+    if ([self isLeftSidePresentation])
+    {
+        self.topHeaderContainerView.hidden = YES;
+        self.toolBarView.hidden = YES;
+        self.landscapeHeaderContainerView.hidden = NO;
+        _landscapeHeaderContainerView.frame = CGRectMake(0, buttonViewY, DeviceScreenWidth, buttonViewHeight);
+        _landskapeHeaderLeftContainerConstraint.constant = self.scrollableView.frame.size.width;
+        CGFloat offset = self.currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight : 0;
+        self.tableView.frame = CGRectMake(0, offset, self.scrollableView.frame.size.width, DeviceScreenHeight - buttonViewHeight);
+        self.scrollableView.frame = CGRectMake(self.scrollableView.frame.origin.x, offset, self.scrollableView.frame.size.width, self.scrollableView.frame.size.height);
+        [self adjustActionButtonsPosition:self.getViewHeight];
+    }
+    else
+    {
+        self.topHeaderContainerView.hidden = NO;
+        self.toolBarView.hidden = NO;
+        self.landscapeHeaderContainerView.hidden = YES;
+    }
+}
+
 - (BOOL)supportsFullScreen
 {
     return NO;
@@ -273,7 +309,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CGFloat)initialMenuHeight
 {
-    return _hudMode == EOAHudModeRoutePlanning ? 62. + self.toolBarView.frame.size.height : _infoView.getViewHeight;
+    CGFloat fullToolbarHeight = toolbarHeight +  [OAUtilities getBottomMargin];
+    return _hudMode == EOAHudModeRoutePlanning ? headerSectionHeigh + fullToolbarHeight : _infoView.getViewHeight;
 }
 
 - (CGFloat)expandedMenuHeight
@@ -306,7 +343,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     CGRect buttonsFrame = _actionButtonsContainer.frame;
     if ([self isLeftSidePresentation])
-        buttonsFrame.origin = CGPointMake(self.scrollableView.frame.size.width, DeviceScreenHeight - buttonsFrame.size.height - 15. - OAUtilities.getBottomMargin);
+        buttonsFrame.origin = CGPointMake(self.scrollableView.frame.size.width, DeviceScreenHeight - buttonsFrame.size.height - 15. - self.toolBarView.frame.size.height);
     else
         buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
     _actionButtonsContainer.frame = buttonsFrame;
@@ -367,7 +404,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_layer != nil)
     {
         NSString *distanceStr = [_app getFormattedDistance:_editingContext.getRouteDistance];
-        self.titleLabel.text = [NSString stringWithFormat:@"%@, %@ %ld", distanceStr, OALocalizedString(@"points_count"), _editingContext.getPointsCount];
+        NSString *titleStr = [NSString stringWithFormat:@"%@, %@ %ld", distanceStr, OALocalizedString(@"points_count"), _editingContext.getPointsCount];
+        self.titleLabel.text = titleStr;
+        self.landscapeHeaderTitleView.text = titleStr;
     }
 }
 
@@ -972,7 +1011,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? 0. : (height - ([OAUtilities isIPad] ? 0. : 30.)) animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? 0 : ( height - ([OAUtilities isIPad] ? 0. : 30.)) animated:YES];
+    
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];
     [self adjustMapViewPort];
@@ -1112,7 +1152,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onMeasure:(double)distance bearing:(double)bearing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
+        NSString *description = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
+        self.descriptionLabel.text = description;
+        self.landscapeHeaderDescriptionView.text = description;
     });
 }
 

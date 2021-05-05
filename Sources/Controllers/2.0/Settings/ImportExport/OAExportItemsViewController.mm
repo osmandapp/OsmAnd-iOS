@@ -8,7 +8,6 @@
 
 #import "OAExportItemsViewController.h"
 #import "OARootViewController.h"
-#import "OASettingsHelper.h"
 #import "OAExportSettingsType.h"
 #import "Localization.h"
 
@@ -21,9 +20,10 @@
     OAApplicationMode *_appMode;
     
     BOOL _exportStarted;
+    NSString *_fileSize;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
     self = [super init];
     if (self)
@@ -37,6 +37,7 @@
 - (void)commonInit
 {
     _settingsHelper = OASettingsHelper.sharedInstance;
+    _fileSize = [NSByteCountFormatter stringFromByteCount:0 countStyle:NSByteCountFormatterCountStyleFile];
 }
 
 - (void)applyLocalization
@@ -51,7 +52,7 @@
     // Do any additional setup after loading the view.
 }
 
-- (void) setupView
+- (void)setupView
 {
     [self setTableHeaderView:OALocalizedString(@"export_profile")];
     
@@ -68,14 +69,27 @@
     [self generateData];
 }
 
-- (NSString *) descriptionText
+- (NSString *)descriptionText
 {
     return _descriptionText;
 }
 
-- (NSString *) descriptionBoldText
+- (NSString *)descriptionBoldText
 {
     return _descriptionBoldText;
+}
+
+- (NSString *)getDescriptionTextWithFormat:(NSString *)argument;
+{
+    NSString *approximateFileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), argument];
+    return [NSString stringWithFormat: @"%@\n%@", _descriptionText, approximateFileSize];
+}
+
+- (void)onGroupCheckmarkPressed:(UIButton *)sender
+{
+    [super onGroupCheckmarkPressed:sender];
+    [self updateFileSize];
+    [self.tableView reloadData];
 }
 
 - (void)shareProfile
@@ -96,9 +110,37 @@
     return attrs.fileSize;
 }
 
-- (IBAction) primaryButtonPressed:(id)sender
+- (void)updateFileSize
+{
+    long itemsSize = [self calculateItemsSize:self.getSelectedItems];
+    _fileSize = [NSByteCountFormatter stringFromByteCount:itemsSize countStyle:NSByteCountFormatterCountStyleFile];
+}
+
+- (IBAction)primaryButtonPressed:(id)sender
 {
     [self shareProfile];
+}
+
+#pragma mark - UITableViewDelegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self getHeaderForTableView:tableView withFirstSectionText:[self getDescriptionTextWithFormat:_fileSize] boldFragment:self.descriptionBoldText forSection:section];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [self getHeightForHeaderWithFirstHeaderText:[self getDescriptionTextWithFormat:_fileSize] boldFragment:self.descriptionBoldText inSection:section];
+}
+
+#pragma mark - OASettingItemsSelectionDelegate
+
+- (void)onItemsSelected:(NSArray *)items type:(OAExportSettingsType *)type
+{
+    self.selectedItemsMap[type] = items;
+    [self updateFileSize];
+    [self.tableView reloadData];
+    [self updateControls];
 }
 
 #pragma mark - OASettingsImportExportDelegate
@@ -116,6 +158,7 @@
     }
 }
 
+#pragma mark - OASettingsImportExportDelegate
 
 - (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed {
     [self.navigationController popViewControllerAnimated:YES];

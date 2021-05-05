@@ -36,9 +36,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSArray<OATableGroupToImport *> *data;
 
 - (NSArray *)getSelectedItems;
-- (void) showActivityIndicatorWithLabel:(NSString *)labelText;
+- (void)showActivityIndicatorWithLabel:(NSString *)labelText;
 
-- (void) generateData;
+- (void)generateData;
+
+- (void)updateControls;
+- (long)calculateItemsSize:(NSArray *)items;
+- (void)onGroupCheckmarkPressed:(UIButton *)sender;
 
 @end
 

@@ -144,7 +144,7 @@
     }];
     
     [profilesSection addObject:@{
-        @"title" : OALocalizedString(@"export"),
+        @"title" : OALocalizedString(@"shared_string_export"),
         @"img" : @"ic_custom_export",
         @"type" : kCellTypeAction,
         @"name" : @"export_settings"

@@ -1815,7 +1815,7 @@
 "default_speed_dialog_msg" = "Estima a hora de chegada de tipos de estradas desconhecidas e limita a velocidade de todas as estradas (pode afetar o roteamento)";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Lembre-se, se a ponte for móvel, usaremos sua altura no estado aberto.";
 "lenght_limit_description" = "Forneça o comprimento do seu veículo. Algumas restrições de rotas podem ser aplicadas a veículos longos.";
-"height_limit_description" = "Forneça a altura do veículo, algumas restrições de rota podem ser aplicadas para veículos altos.";
+"height_limit_description" = "Forneça a altura do veículo. Algumas restrições de rota podem ser aplicadas para veículos altos.";
 "export_profile" = "Exportar";
 "profile_settings" = "Configurações de perfil";
 "configure_map_descr" = "Aparência do mapa";

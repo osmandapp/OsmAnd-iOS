@@ -11,6 +11,8 @@
 #import "OAExportSettingsType.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAExportSettingsCategory.h"
+#import "OASettingsCategoryItems.h"
 
 @implementation OAExportItemsViewController
 {
@@ -31,7 +33,6 @@
     if (self)
     {
         _appMode = appMode;
-        self.selectedItemsMap[OAExportSettingsType.PROFILE] = @[appMode.toModeBean];
     }
     return self;
 }
@@ -70,6 +71,7 @@
     self.itemsMap = [_settingsHelper getSettingsByCategory:YES];
     self.itemTypes = self.itemsMap.allKeys;
     [self generateData];
+    [self updateSelectedProfile];
 }
 
 - (NSString *)descriptionText
@@ -92,6 +94,20 @@
     [super onGroupCheckmarkPressed:sender];
     [self updateFileSize];
     [self.tableView reloadData];
+}
+
+- (void) updateSelectedProfile {
+
+    OASettingsCategoryItems *items = self.itemsMap[OAExportSettingsCategory.SETTINGS];
+    NSArray<OAApplicationModeBean *> *profileItems = [items getItemsForType:OAExportSettingsType.PROFILE];
+
+    for (OAApplicationModeBean *item in profileItems) {
+        if ([_appMode.stringKey isEqualToString:(item.stringKey)]) {
+            NSArray<id> *selectedProfiles = @[item];
+            self.selectedItemsMap[OAExportSettingsType.PROFILE] = selectedProfiles;
+            break;
+        }
+    }
 }
 
 - (void)shareProfile

@@ -353,7 +353,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin = [self isLeftSidePresentation] ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
+    CGFloat bottomMargin;
+    if ([self isLeftSidePresentation])
+        bottomMargin = -OAUtilities.getBottomMargin - kToolbarHeight - 25.;
+    else
+        bottomMargin = (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
+    
     CGFloat leftMargin = [self isLeftSidePresentation] ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
@@ -1013,7 +1018,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? 0 : ( height - ([OAUtilities isIPad] ? 30. : 30.)) animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? kToolbarHeight : ( height - ([OAUtilities isIPad] ? 0. : 30.)) animated:YES];
     
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];

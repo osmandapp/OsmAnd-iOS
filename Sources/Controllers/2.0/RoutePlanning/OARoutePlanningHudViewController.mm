@@ -59,8 +59,8 @@
 
 #define kDefaultMapRulerMarginBottom -17.0
 #define kDefaultMapRulerMarginLeft 120.0
-#define toolbarHeight 60.0
-#define headerSectionHeigh 60.0
+#define kToolbarHeight 60.0
+#define kHeaderSectionHeigh 60.0
 
 #define PLAN_ROUTE_MODE 0x1
 #define DIRECTION_MODE 0x2
@@ -274,18 +274,20 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    CGFloat buttonViewY = self.toolBarView.frame.origin.y;
-    CGFloat buttonViewHeight = self.toolBarView.frame.size.height;
-
+    
     if ([self isLeftSidePresentation])
     {
         self.topHeaderContainerView.hidden = YES;
         self.toolBarView.hidden = YES;
         self.landscapeHeaderContainerView.hidden = NO;
-        _landscapeHeaderContainerView.frame = CGRectMake(0, buttonViewY, DeviceScreenWidth, buttonViewHeight);
+        
+        CGFloat buttonsViewHeight = kToolbarHeight + OAUtilities.getBottomMargin;
+        CGFloat buttonsViewY = DeviceScreenHeight - buttonsViewHeight;
+        
+        _landscapeHeaderContainerView.frame = CGRectMake(0, buttonsViewY, DeviceScreenWidth, buttonsViewHeight);
         _landskapeHeaderLeftContainerConstraint.constant = self.scrollableView.frame.size.width;
         CGFloat offset = self.currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight : 0;
-        self.tableView.frame = CGRectMake(0, offset, self.scrollableView.frame.size.width, DeviceScreenHeight - buttonViewHeight);
+        self.tableView.frame = CGRectMake(0, offset, self.scrollableView.frame.size.width, buttonsViewY);
         self.scrollableView.frame = CGRectMake(self.scrollableView.frame.origin.x, offset, self.scrollableView.frame.size.width, self.scrollableView.frame.size.height);
         [self adjustActionButtonsPosition:self.getViewHeight];
     }
@@ -309,8 +311,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CGFloat)initialMenuHeight
 {
-    CGFloat fullToolbarHeight = toolbarHeight +  [OAUtilities getBottomMargin];
-    return _hudMode == EOAHudModeRoutePlanning ? headerSectionHeigh + fullToolbarHeight : _infoView.getViewHeight;
+    CGFloat fullToolbarHeight = kToolbarHeight +  [OAUtilities getBottomMargin];
+    return _hudMode == EOAHudModeRoutePlanning ? kHeaderSectionHeigh + fullToolbarHeight : _infoView.getViewHeight;
 }
 
 - (CGFloat)expandedMenuHeight
@@ -1011,7 +1013,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? 0 : ( height - ([OAUtilities isIPad] ? 0. : 30.)) animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? 0 : ( height - ([OAUtilities isIPad] ? 30. : 30.)) animated:YES];
     
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];

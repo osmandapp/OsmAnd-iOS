@@ -57,7 +57,7 @@
 
 - (void)setupView
 {
-    [self setTableHeaderView:OALocalizedString(@"export_profile")];
+    [self setTableHeaderView:_appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export")];
 
     if (_exportStarted)
     {

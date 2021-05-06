@@ -236,6 +236,7 @@
         OADestination *marker = object;
         item[@"title"] = marker.desc ? marker.desc : @"";
         item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_marker"];
+        item[@"color"] = marker.color;
     }
 //        if (ExportSettingsType.ACTIVE_MARKERS.name().equals(markersGroup.getId())) {
 //            item.setTitle(getString(R.string.map_markers));

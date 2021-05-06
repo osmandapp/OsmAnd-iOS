@@ -173,6 +173,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     }
     else
     {
+        if (self.initialHeight > 0.75 * DeviceScreenHeight)
+            _currentState = EOAScrollableMenuStateFullScreen;
+        
         f.size.height = [self getViewHeight];
         f.size.width = OAUtilities.isIPad && !OAUtilities.isWindowed ? kOABottomSheetWidthIPad : DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);

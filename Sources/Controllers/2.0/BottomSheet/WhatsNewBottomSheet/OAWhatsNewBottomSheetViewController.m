@@ -85,10 +85,7 @@
     CGFloat headerHeight = self.headerView.frame.size.height;
     CGFloat contentHeight = [OAUtilities calculateTextBounds:[self getAttributedContentText] width:width].height;
     CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];
-    
-    CGFloat estimatedHeight = headerHeight + contentHeight + buttonsHeight + 2 * kVerticalMargin;
-    CGFloat maxHeight = 0.75 * DeviceScreenHeight;
-    return estimatedHeight > maxHeight ? maxHeight : estimatedHeight;
+    return headerHeight + contentHeight + buttonsHeight + 2 * kVerticalMargin;
 }
 
 - (void) onRightButtonPressed

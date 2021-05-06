@@ -297,6 +297,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         self.toolBarView.hidden = NO;
         self.landscapeHeaderContainerView.hidden = YES;
     }
+    [self adjustNavbarPosition];
 }
 
 - (BOOL)supportsFullScreen
@@ -345,21 +346,36 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     CGRect buttonsFrame = _actionButtonsContainer.frame;
     if ([self isLeftSidePresentation])
-        buttonsFrame.origin = CGPointMake(self.scrollableView.frame.size.width, DeviceScreenHeight - buttonsFrame.size.height - 15. - self.toolBarView.frame.size.height);
+    {
+        CGFloat leftMargin = self.currentState == EOADraggableMenuStateInitial ? 0 : self.scrollableView.frame.size.width;
+        buttonsFrame.origin = CGPointMake(leftMargin, DeviceScreenHeight - buttonsFrame.size.height - 15. - self.toolBarView.frame.size.height);
+    }
     else
+    {
         buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
+    }
     _actionButtonsContainer.frame = buttonsFrame;
 }
 
 - (void) changeMapRulerPosition
 {
     CGFloat bottomMargin;
+    CGFloat leftMargin;
     if ([self isLeftSidePresentation])
-        bottomMargin = -OAUtilities.getBottomMargin - kToolbarHeight - 25.;
+    {
+        bottomMargin = -kToolbarHeight - 25.;
+        if (self.currentState == EOADraggableMenuStateInitial)
+            leftMargin = 80.;
+        else
+        {
+            leftMargin = self.scrollableView.frame.size.width + 80.;
+        }
+    }
     else
+    {
         bottomMargin = (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    
-    CGFloat leftMargin = [self isLeftSidePresentation] ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
+        leftMargin = 80.;
+    }
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
@@ -403,7 +419,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) adjustNavbarPosition
 {
-    _navbarLeadingConstraint.constant = [self isLeftSidePresentation] ? self.scrollableView.frame.size.width : 0.;
+    _navbarLeadingConstraint.constant = [self isLeftSidePresentation] && self.currentState != EOADraggableMenuStateInitial ? self.scrollableView.frame.size.width : 0.;
 }
 
 - (void) updateDistancePointsText
@@ -1018,7 +1034,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? kToolbarHeight : ( height - ([OAUtilities isIPad] ? 0. : 30.)) animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? kToolbarHeight : ( height - ([OAUtilities isIPad] ? 0. : OAUtilities.getBottomMargin)) animated:YES];
     
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];

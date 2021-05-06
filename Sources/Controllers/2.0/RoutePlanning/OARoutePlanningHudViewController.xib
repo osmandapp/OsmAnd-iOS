@@ -69,6 +69,28 @@
                         <constraint firstAttribute="height" constant="100" id="zvX-uQ-FwK"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" id="8b4-dc-g4J" userLabel="action button">
+                    <rect key="frame" x="0.0" y="344" width="71" height="55"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTM-Ht-rdV">
+                            <rect key="frame" x="10.5" y="2.5" width="50" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="50" id="oBJ-eC-M4w"/>
+                                <constraint firstAttribute="height" constant="50" id="und-VO-fgZ"/>
+                            </constraints>
+                            <state key="normal" image="ic_custom_straight_line.png" backgroundImage="ic_control_knob"/>
+                            <connections>
+                                <action selector="modeButtonPressed:" destination="-1" eventType="touchUpInside" id="2rF-Dj-IpU"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="oTM-Ht-rdV" firstAttribute="centerY" secondItem="8b4-dc-g4J" secondAttribute="centerY" id="Rh1-au-rS9"/>
+                        <constraint firstItem="oTM-Ht-rdV" firstAttribute="centerX" secondItem="8b4-dc-g4J" secondAttribute="centerX" id="cGd-Yp-4ci"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7MD-Wz-F5G" userLabel="navbar">
                     <rect key="frame" x="0.0" y="44" width="414" height="58"/>
                     <subviews>
@@ -316,28 +338,6 @@
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="eW6-l7-OW4"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </view>
-                <view contentMode="scaleToFill" id="8b4-dc-g4J" userLabel="action button">
-                    <rect key="frame" x="0.0" y="344" width="71" height="55"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTM-Ht-rdV">
-                            <rect key="frame" x="10.5" y="2.5" width="50" height="50"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="50" id="oBJ-eC-M4w"/>
-                                <constraint firstAttribute="height" constant="50" id="und-VO-fgZ"/>
-                            </constraints>
-                            <state key="normal" image="ic_custom_straight_line.png" backgroundImage="ic_control_knob"/>
-                            <connections>
-                                <action selector="modeButtonPressed:" destination="-1" eventType="touchUpInside" id="2rF-Dj-IpU"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstItem="oTM-Ht-rdV" firstAttribute="centerY" secondItem="8b4-dc-g4J" secondAttribute="centerY" id="Rh1-au-rS9"/>
-                        <constraint firstItem="oTM-Ht-rdV" firstAttribute="centerX" secondItem="8b4-dc-g4J" secondAttribute="centerX" id="cGd-Yp-4ci"/>
-                    </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="rgr-DA-wDw" userLabel="Landscape track info view">
                     <rect key="frame" x="0.0" y="228" width="416" height="74"/>

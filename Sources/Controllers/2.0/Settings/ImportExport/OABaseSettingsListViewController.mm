@@ -236,6 +236,8 @@
     OATableGroupToImport* groupData = [self.data objectAtIndex:indexPath.section];
     groupData.isOpen = !groupData.isOpen;
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+    UITableViewScrollPosition scrollPosition = !groupData.isOpen ? UITableViewScrollPositionNone : UITableViewScrollPositionTop;
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
 }
 
 - (void) showActivityIndicatorWithLabel:(NSString *)labelText

@@ -72,6 +72,7 @@
     self.itemTypes = self.itemsMap.allKeys;
     [self generateData];
     [self updateSelectedProfile];
+    [self updateControls];
 }
 
 - (NSString *)descriptionText
@@ -97,7 +98,6 @@
 }
 
 - (void) updateSelectedProfile {
-
     OASettingsCategoryItems *items = self.itemsMap[OAExportSettingsCategory.SETTINGS];
     NSArray<OAApplicationModeBean *> *profileItems = [items getItemsForType:OAExportSettingsType.PROFILE];
 

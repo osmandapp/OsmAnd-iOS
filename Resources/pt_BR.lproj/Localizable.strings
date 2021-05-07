@@ -1815,7 +1815,7 @@
 "default_speed_dialog_msg" = "Estima a hora de chegada de tipos de estradas desconhecidas e limita a velocidade de todas as estradas (pode afetar o roteamento)";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Lembre-se, se a ponte for móvel, usaremos sua altura no estado aberto.";
 "lenght_limit_description" = "Forneça o comprimento do seu veículo. Algumas restrições de rotas podem ser aplicadas a veículos longos.";
-"height_limit_description" = "Forneça a altura do veículo, algumas restrições de rota podem ser aplicadas para veículos altos.";
+"height_limit_description" = "Forneça a altura do veículo. Algumas restrições de rota podem ser aplicadas para veículos altos.";
 "export_profile" = "Exportar";
 "profile_settings" = "Configurações de perfil";
 "configure_map_descr" = "Aparência do mapa";
@@ -2090,3 +2090,8 @@
 "export_failed" = "Não foi possível exportar o perfil";
 "export_profile_select_descr" = "Selecione os dados a serem exportados.";
 "delete_custom_categories" = "Excluir categorias personalizadas";
+"reset_to_default_category_button_promo" = "A redefinição para o padrão irá restaurar a ordem de classificação ao seu estado inicial.";
+"create_custom_categories_list_promo" = "Você pode adicionar categorias personalizadas, ocultar categorias que você não encontra necessário e altera a ordem de classificação da lista. As categorias personalizadas podem ser importadas e exportadas com perfis.";
+"hidden_categories" = "Categorias ocultas";
+"visible_categories" = "Categorias visíveis";
+"rearrange_categories" = "Reorganizar categorias";

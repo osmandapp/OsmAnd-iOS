@@ -339,7 +339,7 @@
 "type_postcode" = "Escreva código postal";
 "coords_search" = "Pesquisa de coordenadas";
 "nearest_cities" = "Cidades próximas";
-"type_address" = "Escreva morada";
+"type_address" = "Morada a pesquisar";
 "change_color" = "Mudar cor";
 "first_usage_greeting" = "Obtenha direções e descubra novos lugares sem ser necessário estar ligado à Internet";
 "get_started" = "Começar";
@@ -366,8 +366,8 @@
 "replace_destination_point" = "Substituir o ponto de destino";
 "shared_string_current" = "Atual";
 "make_as_start_point" = "Usar como ponto de partida";
-"add_as_first_destination_point" = "Adicionar como primeiro destino intermédio";
-"add_as_last_destination_point" = "Adicionar como último destino intermédio";
+"add_as_first_destination_point" = "Adicionar primeiro destino intermédio";
+"add_as_last_destination_point" = "Adicionar último destino intermédio";
 "open_from" = "Abre às";
 "open_till" = "Fecha às";
 "driving_region_automatic" = "Automático";
@@ -386,7 +386,7 @@
 "search_another_country" = "Selecionar outra região";
 "skip_map_downloading" = "Ignorar o descarregamento de mapas";
 "shared_string_previous" = "Anterior";
-"show_pedestrian_warnings" = "Travessia pedestre";
+"show_pedestrian_warnings" = "Passadeiras";
 "shared_string_road" = "Estrada";
 "layer_map_appearance" = "Configurar ecrã";
 "wake_on_voice" = "Ligar o ecrã";
@@ -395,14 +395,14 @@
 "city_type_district" = "Distrito";
 "city_type_neighbourhood" = "Bairro";
 "postcode" = "Código postal";
-"search_radius_proximity" = "Dentro";
+"search_radius_proximity" = "A menos de";
 "speak_favorites" = "Favoritos nas redondezas";
 "speak_poi" = "POIs nas redondezas";
-"keep_and_add_destination_point" = "Adicionar como destino posterior";
-"animate_routing_route_not_calculated" = "Por favor calcule primeiro a rota";
+"keep_and_add_destination_point" = "Adicionar destino posterior";
+"animate_routing_route_not_calculated" = "Calcule primeiro a rota";
 "save_global_track_interval_descr" = "Especifique o intervalo de registo para a gravação geral do trilho (ligado através do widget de 'Gravar viagem' no mapa).";
 "select_gpx" = "Selecione GPX …";
-"traffic_warning_pedestrian" = "Travessia de pedestres";
+"traffic_warning_pedestrian" = "Passadeira";
 "unit_of_length" = "Unidades de comprimento";
 "driving_region" = "Região de condução";
 "show_traffic_warnings" = "Informações de circulação";
@@ -472,7 +472,7 @@
 "general_settings_2" = "Configurações gerais";
 "auto_zoom_none" = "Sem ampliação automática";
 "auto_zoom_close" = "Aproximar";
-"auto_zoom_far" = "Visão intermédia";
+"auto_zoom_far" = "Intermédia";
 "auto_zoom_farthest" = "Mais abrangente";
 "keep_informing_never" = "Nunca";
 "arrival_distance_factor_early" = "Adiantado";
@@ -1488,7 +1488,7 @@
 "routing_attr_piste_type_sled_description" = "Pistas para trenó.";
 "rendering_attr_roadColors_description" = "Selecione um esquema de cores de estrada:";
 "rendering_attr_surface_ground_name" = "Terra";
-"rendering_attr_hideProposed_name" = "Elementos com construção planeada";
+"rendering_attr_hideProposed_name" = "Construções planeadas";
 "rendering_attr_streetLighting_name" = "Iluminação pública";
 "rendering_value_lightblue_name" = "Azul claro";
 "routeInfo_piste_difficulty_name" = "Dificuldade da pista";
@@ -1520,7 +1520,7 @@
 "routing_attr_piste_type_sled_name" = "Trenó";
 "routing_attr_allow_skating_only_description" = "Rotas preparadas para o estilo livre ou patinagem apenas sem trilhos clássicos.";
 "rendering_value_medium_w_name" = "Médio";
-"rendering_attr_contourLines_description" = "Mostrar desde o nível de ampliação (requer dados de contorno):";
+"rendering_attr_contourLines_description" = "Mostrar desde o zoom (requer dados de contorno):";
 "rendering_attr_hideWaterPolygons_description" = "Água";
 "rendering_value_fine_name" = "Mais fino";
 "rendering_attr_trolleybusRoutes_name" = "Rotas de troleicarros";
@@ -1630,7 +1630,7 @@
 "profile_type_base_string" = "Perfil de base";
 "copy_from_other_profile" = "Copiar de outro perfil";
 "profile_type_custom_string" = "Perfil personalizado";
-"gpx_parse_error" = "OsmAnd GPX não está bem formado, por favor entre em contacto com a equipa de suporte para investigar mais.";
+"gpx_parse_error" = "OsmAnd GPX não está correto, por favor contacte a nossa equipa de suporte para podermos investigar o problema.";
 "shared_string_next" = "Seguinte";
 "quick_action_map_source_title" = "Origens dos mapas";
 "configure_screen_quick_action" = "Botão de ação rápida";
@@ -1876,7 +1876,7 @@
 "split_before" = "Dividir antes";
 "gpx_already_exsists" = "Já existe um ficheiro com este nome";
 "empty_filename" = "O nome do ficheiro não pode estar vazio";
-"none_point_error" = "Por favor, acrescente pelo menos um ponto.";
+"none_point_error" = "Acrescente pelo menos um ponto.";
 "gpx_saved_successfully" = "Ficheiro GPX guardado em %@";
 "plan_route_exit_message" = "Tens a certeza que quer fechar a rota do Plano sem o guardar? Vai perder todas as alterações.";
 "route_between_points_add_track_desc" = "Selecione um ficheiro de trilho no qual será adicionado um novo segmento.";
@@ -1961,7 +1961,7 @@
 "map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo";
 "map_settings_zoom_level_description" = "Definir o nível mínimo e máximo de zoom para mostrar a camada";
 "map_settings_layer_transparency" = "Transparência da camada";
-"street_level_imagery" = "Imagens ao nível das ruas";
+"street_level_imagery" = "Imagens das ruas";
 "map_settings_install_more" = "Instalar mais...";
 "map_settings_install_maps" = "Escolher mapas para instalar ou atualizar";
 "stats_select_graph_data" = "Selecionar dados do gráfico";
@@ -2067,3 +2067,8 @@
 "export_failed" = "Não foi possível exportar o perfil";
 "export_profile_select_descr" = "Selecione os dados a serem exportados.";
 "delete_custom_categories" = "Eliminar categorias personalizadas";
+"reset_to_default_category_button_promo" = "Restaurar valores predefinidos irá repor a ordenação de origem.";
+"create_custom_categories_list_promo" = "Pode adicionar categorias personalizadas, ocultar categorias que não achar necessárias e alterar a ordenação da lista. As categorias personalizadas podem ser importadas e exportadas com perfis.";
+"hidden_categories" = "Categorias ocultas";
+"visible_categories" = "Categorias visíveis";
+"rearrange_categories" = "Reorganizar categorias";

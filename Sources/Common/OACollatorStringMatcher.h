@@ -40,5 +40,4 @@ typedef enum
 + (BOOL) cstartsWith:(NSString *)fullText theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals;
 
 
-
 @end

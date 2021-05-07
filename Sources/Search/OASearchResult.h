@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
-//  git revision 08baaf7004e4c743734ab7ddb0ac915d80d8fd57
+//  git revision 35cc4a981a4dcdb2d5e16ec7c6e9346ba75b6a5b
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>

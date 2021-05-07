@@ -1846,7 +1846,7 @@
 "shared_string_copy" = "Kopyala";
 "profile_alert_delete_msg" = "\"%@\" profilini tamamen silmek istediğinizden emin misiniz?";
 "profile_alert_delete_title" = "Profili sil";
-"reset_to_default" = "Öntanımlılara sıfırla";
+"reset_to_default" = "Öntanımlı değerlere sıfırla";
 "help_nav_profiles" = "Navigasyon profilleri";
 "reset_profile_action_descr" = "Tüm profil ayarlarını kurulum öntanımlı değerlerine sıfırlayın. Sıfırla düğmesine dokunduğunuzda tüm değişiklikleriniz atılacaktır, bu işlem geri alınamaz.";
 "import_profile_descr" = "Bir profili içe aktarmak için, herhangi bir uygulamada gerekli dosyanın üzerine (*.osf) dokunun ve \"OsmAnd Haritalara Kopyala\" seçeneğini seçin";
@@ -2072,3 +2072,8 @@
 "export_failed" = "Profil dışa aktarılamadı";
 "export_profile_select_descr" = "Dışa aktarılacak verileri seçin.";
 "delete_custom_categories" = "Özel kategorileri sil";
+"reset_to_default_category_button_promo" = "Öntanımlı değerlere sıfırlamak, sıralama düzenini başlangıç durumuna geri yükleyecektir.";
+"create_custom_categories_list_promo" = "Özel kategoriler ekleyebilir, gerekli bulmadığınız kategorileri gizleyebilir ve listenin sıralama düzenini değiştirebilirsiniz. Profillerle özel kategoriler içe ve dışa aktarılabilir.";
+"hidden_categories" = "Gizli kategoriler";
+"visible_categories" = "Görünür kategoriler";
+"rearrange_categories" = "Kategorileri yeniden düzenle";

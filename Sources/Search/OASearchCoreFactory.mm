@@ -1311,7 +1311,8 @@
                     if (countExtraWords - 1 < otherSearchWords.count)
                     {
                         nameFilter = @"";
-                        for(NSInteger k = countExtraWords - 1; k < otherSearchWords.count; k++) {
+                        for(NSInteger k = countExtraWords - 1; k < otherSearchWords.count; k++)
+                        {
                             if (nameFilter.length > 0)
                                 nameFilter = [nameFilter stringByAppendingString:@" "];
                             
@@ -1320,6 +1321,13 @@
                     }
                     poiTypeFilter = [self getPoiTypeFilter:poiTypeResult.pt poiAdditionals:poiAdditionals];
                     _unselectedPoiType = poiTypeResult.pt;
+                    int wordsInPoiType = [phrase countWords:foundName];
+                    int wordsInUnknownPart = [phrase countWords:phrase.getUnknownSearchPhrase];
+                    if (wordsInPoiType == wordsInUnknownPart)
+                    {
+                        // store only perfect match
+                        [phrase setUnselectedPoiType:_unselectedPoiType];
+                    }
                 }
             }
         }

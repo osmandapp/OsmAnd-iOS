@@ -36,6 +36,7 @@
 #include <OsmAndCore/ArchiveReader.h>
 
 #define kCellTypeTitleDescription @"OAMenuSimpleCell"
+#define titleWithDescrCellHeight 60.0
 
 @interface OAExportItemsSelectionViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -79,8 +80,7 @@
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     [self.tableView setEditing:YES];
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 57.;
+    self.tableView.estimatedRowHeight = 0;
     
     self.cancelButton.layer.cornerRadius = 9.0;
     self.saveButton.layer.cornerRadius = 9.0;
@@ -106,7 +106,7 @@
     [self.saveButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
 }
 
-- (void) generateData
+- (void)generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray new];
     [data addObject:@{
@@ -120,7 +120,7 @@
     _data = data;
 }
 
-- (NSDictionary *) setupCellDataFromObject:(id)object
+- (NSDictionary *)setupCellDataFromObject:(id)object
 {
     if (!object)
         return nil;
@@ -284,7 +284,7 @@
     return formattedSize;
 }
 
-- (void) setupItemFromFile:(NSMutableDictionary *)item filePath:(NSString *)filePath
+- (void)setupItemFromFile:(NSMutableDictionary *)item filePath:(NSString *)filePath
 {
     EOASettingsItemFileSubtype fileSubtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
     item[@"title"] = [filePath.lastPathComponent stringByDeletingPathExtension];
@@ -307,7 +307,7 @@
     }
 }
 
-- (void) setupItemFromGpx:(NSMutableDictionary *)item filePath:(NSString *)filePath appearanceInfo:(OAGpxAppearanceInfo *)appearanceInfo
+- (void)setupItemFromGpx:(NSMutableDictionary *)item filePath:(NSString *)filePath appearanceInfo:(OAGpxAppearanceInfo *)appearanceInfo
 {
     item[@"title"] = [filePath.lastPathComponent.stringByDeletingPathExtension stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     item[@"descr"] = [self getTrackDescr:filePath appearanceInfo:appearanceInfo];
@@ -350,7 +350,7 @@
     return @"";
 }
 
-- (NSString *) getMapDescription:(NSString *)filePath
+- (NSString *)getMapDescription:(NSString *)filePath
 {
     BOOL isDir = NO;
     [NSFileManager.defaultManager fileExistsAtPath:filePath isDirectory:&isDir];
@@ -367,7 +367,7 @@
     return @"";
 }
 
-- (void) selectDeselectPressed:(id)sender
+- (void)selectDeselectPressed:(id)sender
 {
     BOOL shouldSelect = _selectedItems.count == 0;
     if (!shouldSelect)
@@ -387,6 +387,21 @@
     [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)selectDeselectGroupItem:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < 1)
+        return;
+    [self.tableView beginUpdates];
+    id item = _items[indexPath.row - 1];
+    if ([_selectedItems containsObject:item])
+        [_selectedItems removeObject:item];
+    else
+        [_selectedItems addObject:item];
+    [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
+    [self.tableView endUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (IBAction)onCancelPressed:(id)sender
@@ -490,6 +505,15 @@
     return nil;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.row];
+    if (item[@"descr"])
+        return titleWithDescrCellHeight;
+    else
+        return kEstimatedRowHeight;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -503,21 +527,6 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return indexPath.row != 0;
-}
-
-- (void)selectDeselectGroupItem:(NSIndexPath *)indexPath
-{
-    if (indexPath.row < 1)
-        return;
-    [self.tableView beginUpdates];
-    id item = _items[indexPath.row - 1];
-    if ([_selectedItems containsObject:item])
-        [_selectedItems removeObject:item];
-    else
-        [_selectedItems addObject:item];
-    [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
-    [self.tableView endUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

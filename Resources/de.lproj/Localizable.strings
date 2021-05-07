@@ -1228,7 +1228,7 @@
 "day_mode" = "Tag-Modus";
 "mute_voice" = "Sprachausgabe stummschalten";
 "unmute_voice" = "Sprachausgabe aktivieren";
-"show_gpx" = "Tracks anzeigen";
+"show_gpx" = "Track anzeigen";
 "hide_gpx" = "Tracks ausblenden";
 "show_notes" = "OSM-Hinweise einblenden";
 "hide_notes" = "OSM-Hinweise ausblenden";
@@ -2079,3 +2079,8 @@
 "export_failed" = "Profil konnte nicht exportiert werden";
 "export_profile_select_descr" = "Wählen Sie die Daten aus, die exportiert werden sollen.";
 "delete_custom_categories" = "Benutzerdefinierte Kategorien löschen";
+"reset_to_default_category_button_promo" = "Durch das Zurücksetzen auf die Standardeinstellung wird die Sortierreihenfolge auf den Ausgangszustand zurückgesetzt.";
+"create_custom_categories_list_promo" = "Sie können benutzerdefinierte Kategorien hinzufügen, Kategorien ausblenden und die Sortierreihenfolge der Liste ändern. Benutzerdefinierte Kategorien können mit Profilen importiert und exportiert werden.";
+"hidden_categories" = "Ausgeblendete Kategorien";
+"visible_categories" = "Sichtbare Kategorien";
+"rearrange_categories" = "Kategorien neu ordnen";

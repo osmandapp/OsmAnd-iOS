@@ -63,7 +63,7 @@
 "gpx_point" = "Önemli Nota";
 "gpx_waypoints" = "Yol işaretleri";
 "gpx_points" = "Noktalarının";
-"gpx_export" = "Dışa aktarma";
+"shared_string_export" = "Dışa aktarma";
 "import_export" = "Alma/verme";
 "gpx_import_title" = "Yolları içe aktar";
 "gpx_import_already_exists" = "Belirtilen yol dosyası listede zaten var. Lütfen eylem seçin.";

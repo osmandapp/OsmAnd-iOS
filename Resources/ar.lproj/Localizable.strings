@@ -344,7 +344,7 @@
 "gpx_waypoint" = "إحداثية";
 "gpx_waypoints" = "إحداثيات";
 "gpx_points" = "نقاط";
-"gpx_export" = "تصدير";
+"shared_string_export" = "تصدير";
 "import_export" = "استيراد/تصدير";
 "gpx_import_title" = "استيراد المسارات";
 "gpx_import_already_exists" = "ملف المسار بهذا الاسم موجود مسبقا. الرجاء تحديد إجراء.";

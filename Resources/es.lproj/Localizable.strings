@@ -55,7 +55,7 @@
 "gpx_point" = "Punto";
 "gpx_waypoints" = "Puntos de ruta";
 "gpx_points" = "Punto(s)";
-"gpx_export" = "Exportar";
+"shared_string_export" = "Exportar";
 "import_export" = "Importar/Exportar";
 "gpx_import_title" = "Importar traza";
 "gpx_import_already_exists" = "Ya existe el archivo de la traza indicada. Elija una acción.";

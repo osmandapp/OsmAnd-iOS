@@ -67,7 +67,7 @@
 "gpx_waypoint" = "Ferilpunktur";
 "gpx_waypoints" = "Ferilpunktar";
 "gpx_points" = "Punkt(ur/ar)";
-"gpx_export" = "Flytja út";
+"shared_string_export" = "Flytja út";
 "import_export" = "Flytja inn/út";
 "gpx_import_title" = "Flytja inn ferla";
 "gpx_import_already_exists" = "Tiltekna ferlaskráin er þegar á listanum. Veldu einhverja aðgerð.";

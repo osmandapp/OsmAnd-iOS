@@ -459,7 +459,7 @@
 "product_title_wikivoyage" = "Ghiduri de călătorie";
 "traffic_warning_speed_camera" = "Cameră trafic";
 "si_mi_feet" = "Mile/picioare";
-"gpx_export" = "Export";
+"shared_string_export" = "Export";
 "get_directions" = "Navigare";
 "destination_point" = "Destinație %@";
 "green" = "Verde";

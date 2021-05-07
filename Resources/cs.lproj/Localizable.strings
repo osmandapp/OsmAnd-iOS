@@ -344,7 +344,7 @@
 "gpx_waypoint" = "Bod na trase";
 "gpx_waypoints" = "Body na trase";
 "gpx_points" = "Point(s)";
-"gpx_export" = "Export";
+"shared_string_export" = "Export";
 "import_export" = "Import/Export";
 "gpx_import_title" = "Importovat stopy";
 "gpx_import_already_exists" = "Vybraný soubor stopy již v seznamu je. Zvolte prosím akci.";

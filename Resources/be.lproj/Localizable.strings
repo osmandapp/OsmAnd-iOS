@@ -27,7 +27,7 @@
 // My Places
 "favorites" = "Улюбёнае";
 "gpx_waypoints" = "Пункты шляху";
-"gpx_export" = "Экспартаваць";
+"shared_string_export" = "Экспартаваць";
 "gpx_stat" = "Статыстыка";
 "rec_interval" = "Інтэрвал запісу";
 // Map settings

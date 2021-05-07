@@ -61,7 +61,7 @@
 "tracks" = "旅程";
 "gpx_waypoints" = "航點";
 "gpx_points" = "點";
-"gpx_export" = "匯出";
+"shared_string_export" = "匯出";
 "import_export" = "匯入 / 匯出";
 "gpx_import_title" = "匯入旅程";
 "gpx_import_already_exists" = "在清單裡已有指定的旅程檔案。請選擇操作。";

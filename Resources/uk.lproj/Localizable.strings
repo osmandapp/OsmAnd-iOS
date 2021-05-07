@@ -57,7 +57,7 @@
 "poi_hide" = "Приховати";
 // GPX
 "gpx_point" = "Точка";
-"gpx_export" = "Експорт";
+"shared_string_export" = "Експорт";
 "import_export" = "Імпорт/експорт";
 "gpx_add_new" = "Додати новий файл";
 "gpx_overwrite" = "Перезаписати";

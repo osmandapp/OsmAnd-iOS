@@ -61,7 +61,7 @@
 "gpx_point" = "Puntu";
 "gpx_waypoints" = "Puntos mesanos";
 "gpx_points" = "Puntu(os)";
-"gpx_export" = "Esporta";
+"shared_string_export" = "Esporta";
 "import_export" = "Importa/Esporta";
 "gpx_import_title" = "Importa rastas";
 "gpx_import_already_exists" = "Su documentu de sa rasta indicadu est giai presente in sa lista. Pro praghere issèbera s'atzione.";

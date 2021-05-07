@@ -344,7 +344,7 @@
 "gpx_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
-"gpx_export" = "Export";
+"shared_string_export" = "Export";
 "import_export" = "Import/Export";
 "gpx_import_title" = "Import trip";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";

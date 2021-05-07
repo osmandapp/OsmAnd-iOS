@@ -63,7 +63,7 @@
 "gpx_point" = "Punkt";
 "gpx_waypoints" = "Punkty trasy";
 "gpx_points" = "Punkt(y)";
-"gpx_export" = "Eksportuj";
+"shared_string_export" = "Eksportuj";
 "import_export" = "Importuj/Eksportuj";
 "gpx_import_title" = "Importuj wycieczkę";
 "shared_string_edit" = "Edytuj";

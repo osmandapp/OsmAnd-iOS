@@ -230,7 +230,7 @@
 "alert_inet_needed" = "Internetverbindung notwendig für diese Aktion. Bitte überprüfe deine Internetverbindung.";
 "ctx_mnu_direction" = "Kartenmarkierung";
 "loc_access_denied_desc" = "Zugriff zum Ortungsdienst wurde abgelehnt";
-"gpx_export" = "Export";
+"shared_string_export" = "Export";
 "gpx_import_already_exists" = "Die angegebene Trackdatei existiert bereits in der Liste. Bitte Aktion auswählen.";
 "shared_string_buy" = "Kaufen";
 "poi_search_near_center" = "Ausgangspunkt der Suche ist die Kartenmitte";

@@ -442,7 +442,7 @@
 - (void) applyLocalization
 {
     self.titleView.text = OALocalizedString(@"gpx_route");
-    [self.doneButton setTitle:OALocalizedString(@"gpx_export") forState:UIControlStateNormal];
+    [self.doneButton setTitle:OALocalizedString(@"shared_string_export") forState:UIControlStateNormal];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.startButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
 }

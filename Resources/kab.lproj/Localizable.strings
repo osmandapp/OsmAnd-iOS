@@ -439,7 +439,7 @@
 "tile_cache" = "Tuffirt";
 "day_off_label" = "off";
 "rendering_value_orange_name" = "Ačinawi";
-"gpx_export" = "Sifeḍ";
+"shared_string_export" = "Sifeḍ";
 "transport_nearby_routes" = "Deg";
 "units_mi" = "Maori";
 "rendering_attr_tracktype_grade5_name" = "Fessus";

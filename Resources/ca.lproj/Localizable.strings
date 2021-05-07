@@ -53,7 +53,7 @@
 "gpx_point" = "Punt";
 "gpx_waypoints" = "Fites";
 "gpx_points" = "Punt(s)";
-"gpx_export" = "Exporta";
+"shared_string_export" = "Exporta";
 "import_export" = "Importa/exporta";
 "gpx_import_title" = "Importa un trajecte";
 "gpx_import_already_exists" = "El fitxer del trajecte indicat ja existeix a la llista. Trieu una acció.";

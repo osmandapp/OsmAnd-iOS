@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAIconTextTableViewCell : UITableViewCell
+@interface OAIconTextTableViewCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;

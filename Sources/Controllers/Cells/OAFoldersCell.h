@@ -6,7 +6,7 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 #import "OACollectionViewCellState.h"
 
 @protocol OAFoldersCellDelegate <NSObject>
@@ -17,7 +17,7 @@
 
 @end
 
-@interface OAFoldersCell : UITableViewCell
+@interface OAFoldersCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 

@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAWaypointHeaderCell : UITableViewCell
+@interface OAWaypointHeaderCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

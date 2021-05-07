@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCell.h"
+#import "OABaseCell.h"
 
-@interface OATitleSliderTableViewCell : OATableViewCell
+@interface OATitleSliderTableViewCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;

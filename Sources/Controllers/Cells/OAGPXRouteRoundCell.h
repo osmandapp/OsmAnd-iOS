@@ -6,9 +6,9 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAGPXRouteRoundCell : UITableViewCell
+@interface OAGPXRouteRoundCell : OABaseCell
 
 @property (strong, nonatomic) IBOutlet UIView *contentContainer;
 @property (strong, nonatomic) IBOutlet UILabel *fileName;

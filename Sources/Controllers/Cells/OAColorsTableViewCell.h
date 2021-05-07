@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
 @protocol OAColorsTableViewCellDelegate <NSObject>
 
@@ -14,7 +14,7 @@
 
 @end
 
-@interface OAColorsTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OAColorsTableViewCell : OABaseCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;

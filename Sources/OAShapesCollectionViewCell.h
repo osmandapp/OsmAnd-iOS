@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCollectionCell.h"
 
-@interface OAShapesCollectionViewCell : UICollectionViewCell
+@interface OAShapesCollectionViewCell : OABaseCollectionCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;

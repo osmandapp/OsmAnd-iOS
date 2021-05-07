@@ -6,9 +6,9 @@
 //  Copyright (c) 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAPublicTransportPointCell : UITableViewCell
+@interface OAPublicTransportPointCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;

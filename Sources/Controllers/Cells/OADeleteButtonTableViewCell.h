@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OADeleteButtonTableViewCell : UITableViewCell
+@interface OADeleteButtonTableViewCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;

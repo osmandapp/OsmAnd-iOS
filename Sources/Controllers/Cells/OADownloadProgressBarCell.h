@@ -6,7 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-@interface OADownloadProgressBarCell : UITableViewCell
+#import "OABaseCell.h"
+
+@interface OADownloadProgressBarCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBarView;
 @property (weak, nonatomic) IBOutlet UILabel *progressStatusLabel;

@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAIconTextDescSwitchCell : UITableViewCell
+@interface OAIconTextDescSwitchCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *leftIconView;
 @property (weak, nonatomic) IBOutlet UIButton *checkButton;

@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAOnlyImageViewCell : UITableViewCell
+@interface OAOnlyImageViewCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 

@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAFilledButtonCell : UITableViewCell
+@interface OAFilledButtonCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topMarginConstraint;

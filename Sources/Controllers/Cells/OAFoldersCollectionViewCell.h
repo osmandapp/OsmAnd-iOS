@@ -6,9 +6,9 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCollectionCell.h"
 
-@interface OAFoldersCollectionViewCell : UICollectionViewCell
+@interface OAFoldersCollectionViewCell : OABaseCollectionCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;

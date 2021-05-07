@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OABottomSheetHeaderDescrButtonCell : UITableViewCell
+@interface OABottomSheetHeaderDescrButtonCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;

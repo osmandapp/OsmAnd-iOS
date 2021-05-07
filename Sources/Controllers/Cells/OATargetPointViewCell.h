@@ -6,11 +6,11 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
 @class OATargetPoint;
 
-@interface OATargetPointViewCell : UITableViewCell
+@interface OATargetPointViewCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

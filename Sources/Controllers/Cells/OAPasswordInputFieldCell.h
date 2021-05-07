@@ -6,10 +6,10 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 #import "MaterialTextFields.h"
 
-@interface OAPasswordInputFieldCell : UITableViewCell
+@interface OAPasswordInputFieldCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet MDCTextField *inputField;
 @property (weak, nonatomic) IBOutlet UIButton *togglePasswordButton;

@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
 #import "OATransportDetailsTableViewController.h"
 
@@ -16,7 +16,7 @@
 
 @class OATransportRouteResult;
 
-@interface OAPublicTransportShieldCell : UITableViewCell
+@interface OAPublicTransportShieldCell : OABaseCell
 
 @property (nonatomic) id<OATransportDetailsControllerDelegate> delegate;
 

@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MGSwipeTableCell.h"
+#import "OABaseMGSwipeCell.h"
 
-@interface OAGPXRouteWaypointTableViewCell : MGSwipeTableCell
+@interface OAGPXRouteWaypointTableViewCell : OABaseMGSwipeCell
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descLabel;

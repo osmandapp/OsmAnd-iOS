@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
 typedef NS_ENUM(NSInteger, EOALocationType)
 {
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, EOALocationType)
 
 @end
 
-@interface OALocationIconsTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OALocationIconsTableViewCell : OABaseCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;

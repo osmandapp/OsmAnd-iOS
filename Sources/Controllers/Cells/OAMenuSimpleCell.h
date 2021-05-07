@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAMenuSimpleCell : UITableViewCell
+@interface OAMenuSimpleCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;

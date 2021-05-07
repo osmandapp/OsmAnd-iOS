@@ -6,9 +6,9 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCollectionCell.h"
 
-@interface OAQuickActionCell : UICollectionViewCell
+@interface OAQuickActionCell : OABaseCollectionCell
 
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;

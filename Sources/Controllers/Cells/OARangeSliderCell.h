@@ -6,10 +6,10 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 #import "OARangeSlider.h"
 
-@interface OARangeSliderCell : UITableViewCell
+@interface OARangeSliderCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UILabel *minLabel;
 @property (weak, nonatomic) IBOutlet UILabel *maxLabel;

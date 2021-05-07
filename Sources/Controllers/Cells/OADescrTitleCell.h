@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OADescrTitleCell : UITableViewCell
+@interface OADescrTitleCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;

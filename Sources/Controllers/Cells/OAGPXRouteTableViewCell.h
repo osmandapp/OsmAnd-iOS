@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OAGPXRouteTableViewCell : UITableViewCell
+@interface OAGPXRouteTableViewCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UILabel *detailsView;

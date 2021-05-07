@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OASegmentedControllCell : UITableViewCell
+@interface OASegmentedControllCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 

@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MGSwipeTableCell.h"
+#import "OABaseMGSwipeCell.h"
 
-@interface OAWaypointCell : MGSwipeTableCell
+@interface OAWaypointCell : OABaseMGSwipeCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *leftIcon;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;

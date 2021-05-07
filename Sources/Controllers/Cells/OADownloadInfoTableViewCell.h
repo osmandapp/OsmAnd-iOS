@@ -6,7 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-@interface OADownloadInfoTableViewCell : UITableViewCell
+#import "OABaseCell.h"
+
+@interface OADownloadInfoTableViewCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *doneLabel;

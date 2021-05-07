@@ -6,9 +6,9 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OATitleDescriptionIconRoundCell : UITableViewCell
+@interface OATitleDescriptionIconRoundCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

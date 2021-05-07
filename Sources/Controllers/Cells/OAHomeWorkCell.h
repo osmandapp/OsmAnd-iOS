@@ -6,7 +6,7 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 #import "MaterialTextFields.h"
 
 @protocol OAHomeWorkCellDelegate <NSObject>
@@ -18,7 +18,7 @@
 
 @end
 
-@interface OAHomeWorkCell : UITableViewCell
+@interface OAHomeWorkCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 

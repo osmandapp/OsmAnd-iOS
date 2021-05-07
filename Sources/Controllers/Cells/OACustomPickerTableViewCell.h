@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
 @protocol OACustomPickerTableViewCellDelegate <NSObject>
 
@@ -14,7 +14,7 @@
 
 @end
 
-@interface OACustomPickerTableViewCell : UITableViewCell <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface OACustomPickerTableViewCell : OABaseCell <UIPickerViewDataSource, UIPickerViewDelegate>
 @property (strong, nonatomic) IBOutlet UIPickerView *picker;
 @property (nonatomic) NSArray<NSString *> *dataArray;
 

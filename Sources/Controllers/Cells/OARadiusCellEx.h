@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OARadiusCellEx : UITableViewCell
+@interface OARadiusCellEx : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonLeft;
 @property (weak, nonatomic) IBOutlet UIButton *buttonRight;

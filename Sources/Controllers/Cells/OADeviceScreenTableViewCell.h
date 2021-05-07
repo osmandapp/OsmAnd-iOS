@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OADeviceScreenTableViewCell : UITableViewCell
+@interface OADeviceScreenTableViewCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *foregroundImageView;

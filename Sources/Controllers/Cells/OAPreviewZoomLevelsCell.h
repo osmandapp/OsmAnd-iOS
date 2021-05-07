@@ -6,6 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
+#import "OABaseCell.h"
 #import "OADownloadMapViewController.h"
 
 @protocol OAPreviewZoomLevelsCellDelegate <NSObject>
@@ -16,7 +17,7 @@
 @end
 
 
-@interface OAPreviewZoomLevelsCell : UITableViewCell
+@interface OAPreviewZoomLevelsCell : OABaseCell
 
 @property (nonatomic, weak) id<OAPreviewZoomLevelsCellDelegate> delegate;
 

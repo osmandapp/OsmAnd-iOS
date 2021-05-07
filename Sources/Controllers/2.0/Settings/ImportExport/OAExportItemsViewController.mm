@@ -56,6 +56,14 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self setTableHeaderView:_appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export")];
+    } completion:nil];
+}
+
 - (void)setupView
 {
     [self setTableHeaderView:_appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export")];

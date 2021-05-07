@@ -393,8 +393,7 @@
             UIImage *img = [[category icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.image = img;
             cell.iconView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
-            cell.iconHeightPrimary.constant = 24.0;
-            cell.iconWidthPrimary.constant = 24.0;
+            cell.iconView.contentMode = UIViewContentModeCenter;
 
             NSString *descText;
             if (subtypes == [OAPOIBaseType nullSet] || countAllTypes == countAcceptedTypes)
@@ -429,9 +428,11 @@
             UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];
             cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             cell.imgView.tintColor = selectedColor;
-            cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
-            cell.imgHeightPrimary.constant = 24.0;
-            cell.imgWidthPrimary.constant = 24.0;
+
+            if (poiIcon.size.width < cell.imgView.frame.size.width && poiIcon.size.height < cell.imgView.frame.size.height)
+                cell.imgView.contentMode = UIViewContentModeCenter;
+            else
+                cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
 
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
             cell.descriptionView.hidden = true;

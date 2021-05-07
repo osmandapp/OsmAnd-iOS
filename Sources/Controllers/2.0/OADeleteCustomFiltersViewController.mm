@@ -19,7 +19,6 @@
 
 @interface OADeleteCustomFiltersViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
@@ -182,8 +181,7 @@
             [cell.imgView setImage:icon ];
             UIColor *selectedColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             cell.imgView.tintColor = selectedColor;
-            cell.imgHeightPrimary.constant = 24.0;
-            cell.imgWidthPrimary.constant = 24.0;
+            cell.imgView.contentMode = UIViewContentModeCenter;
 
             cell.textView.text = filter.getName ? filter.getName : @"";
             cell.descriptionView.hidden = true;

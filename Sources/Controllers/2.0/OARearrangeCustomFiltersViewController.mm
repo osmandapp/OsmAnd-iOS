@@ -341,8 +341,7 @@
                 icon = [OAPOIHelper getCustomFilterIcon:filter];
             [cell.iconImageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             cell.iconImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.iconHeightPrimary.constant = 24.0;
-            cell.iconWidthPrimary.constant = 24.0;
+            cell.iconImageView.contentMode = UIViewContentModeCenter;
 
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];

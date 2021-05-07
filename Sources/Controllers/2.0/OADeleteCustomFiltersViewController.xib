@@ -13,7 +13,6 @@
             <connections>
                 <outlet property="cancelButton" destination="MNL-k6-ler" id="no0-9u-qfR"/>
                 <outlet property="deleteButton" destination="TbO-zt-jpp" id="jrz-aV-j8p"/>
-                <outlet property="navBar" destination="tTv-fb-Ygd" id="n2n-by-O97"/>
                 <outlet property="tableView" destination="OoE-bw-UtS" id="EBA-PX-4OJ"/>
                 <outlet property="titleLabel" destination="3qR-w7-ZwS" id="3IW-9J-8yZ"/>
                 <outlet property="view" destination="gcm-X9-SiY" id="2lk-24-uRH"/>

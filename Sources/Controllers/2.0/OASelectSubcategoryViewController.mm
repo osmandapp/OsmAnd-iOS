@@ -168,7 +168,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeSelectionButton owner:self options:nil];
             cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
+            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
@@ -218,9 +218,11 @@
             UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];
             cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             cell.imgView.tintColor = selectedColor;
-            cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
-            cell.imgHeightPrimary.constant = 24.0;
-            cell.imgWidthPrimary.constant = 24.0;
+
+            if (poiIcon.size.width < cell.imgView.frame.size.width && poiIcon.size.height < cell.imgView.frame.size.height)
+                cell.imgView.contentMode = UIViewContentModeCenter;
+            else
+                cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
 
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
             cell.descriptionView.hidden = true;

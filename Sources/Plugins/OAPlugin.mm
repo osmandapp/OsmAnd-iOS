@@ -697,6 +697,23 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
     [self saveCustomPlugins];
 }
 
++ (void) removeCustomPlugin:(OACustomPlugin *)plugin
+{
+    [allPlugins removeObject:plugin];
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (plugin.isActive)
+    {
+        [plugin removePluginItems:^{
+            [fileManager removeItemAtPath:plugin.getPluginDir error:nil];
+        }];
+    }
+    else
+    {
+        [fileManager removeItemAtPath:plugin.getPluginDir error:nil];
+    }
+    [self saveCustomPlugins];
+}
+
 + (void) saveCustomPlugins
 {
     NSArray<OACustomPlugin *> *customOsmandPlugins = [self getCustomPlugins];

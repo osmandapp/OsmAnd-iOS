@@ -94,6 +94,9 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     
     self.priceButton.layer.cornerRadius = 4;
     self.priceButton.layer.masksToBounds = YES;
+    
+    self.buttonDeleteCustomPlugin.hidden = _screenType != EOAPluginScreenTypeCustomPlugin;
+    self.buttonDeleteCustomPlugin.userInteractionEnabled = !self.buttonDeleteCustomPlugin.hidden;
 
     UIImage *screenshotImage;
     if (_screenType == EOAPluginScreenTypeProduct)
@@ -182,6 +185,8 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     _gradient.frame = _toolbarView.bounds;
 
     _priceButton.frame = CGRectMake(_detailsView.frame.size.width - _priceButton.frame.size.width - 15.0, 15.0, _priceButton.frame.size.width, _priceButton.frame.size.height);
+    
+    _buttonDeleteCustomPlugin.frame = CGRectMake(CGRectGetMinX(_priceButton.frame) - 16. - 30., CGRectGetMinY(_priceButton.frame) + 5.0, 30., 30.);
 
     _descLabel.frame = CGRectMake(15.0, 85.0, w - 30.0, _descLabel.frame.size.height);
     _descTextView.frame = CGRectMake(10.0, 105.0, w - 20.0, _detailsView.frame.size.height - 105.0);
@@ -289,6 +294,12 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     priceFrame.origin = CGPointMake(_detailsView.frame.size.width - priceSize.width - kPriceButtonRectBorder, 15.0);
     priceFrame.size = priceSize;
     self.priceButton.frame = priceFrame;
+}
+
+- (IBAction)deleteButtonClicked:(id)sender
+{
+    [OAPlugin removeCustomPlugin:(OACustomPlugin *)_plugin];
+    [self backButtonClicked:nil];
 }
 
 - (IBAction) priceButtonClicked:(id)sender

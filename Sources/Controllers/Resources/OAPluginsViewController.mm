@@ -81,8 +81,6 @@
     self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.toolbarView.layer addSublayer:_horizontalLine];
     
-    _customPlugins = [OAPlugin getCustomPlugins];
-    
     if (self.openFromSplash)
     {
         self.backButton.hidden = YES;
@@ -138,6 +136,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
 
+    _customPlugins = [OAPlugin getCustomPlugins];
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
     [self updateOsmLiveBanner];
@@ -174,7 +173,7 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return _customPlugins.count > 0 ? 2 : 1;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

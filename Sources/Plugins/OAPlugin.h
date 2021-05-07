@@ -57,6 +57,7 @@
 
 + (NSArray<OACustomPlugin *> *) getCustomPlugins;
 + (void) addCustomPlugin:(OACustomPlugin *)plugin;
++ (void) removeCustomPlugin:(OACustomPlugin *)plugin;
 + (NSArray<OAWorldRegion *> *) getCustomDownloadRegions;
 
 - (void) onInstall;

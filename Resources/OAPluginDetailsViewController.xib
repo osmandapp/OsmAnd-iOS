@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,6 +14,7 @@
                 <outlet property="btnToolbarMaps" destination="GIj-ae-fVr" id="y6x-Pc-tRs"/>
                 <outlet property="btnToolbarPlugins" destination="UWD-H9-ano" id="nKr-iT-miN"/>
                 <outlet property="btnToolbarPurchases" destination="Fa0-NB-ttG" id="cVe-K0-VMZ"/>
+                <outlet property="buttonDeleteCustomPlugin" destination="RxQ-RG-ANF" id="NCf-Ez-Bl8"/>
                 <outlet property="descLabel" destination="jYf-Nz-ubj" id="9Sp-3M-IOk"/>
                 <outlet property="descTextView" destination="nkq-Xw-j8P" id="xjF-Wh-uVM"/>
                 <outlet property="detailsView" destination="gdU-bL-CTA" id="3GQ-gh-6xd"/>
@@ -55,7 +56,6 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <inset key="imageEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" image="ic_navbar_chevron.png">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
@@ -100,6 +100,14 @@
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
+                        <button hidden="YES" opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RxQ-RG-ANF">
+                            <rect key="frame" x="179" y="19" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="ic_custom_remove_outlined.png"/>
+                            <connections>
+                                <action selector="deleteButtonClicked:" destination="-1" eventType="touchUpInside" id="vl9-uu-Erx"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
@@ -156,6 +164,7 @@
     </objects>
     <resources>
         <image name="bg_title.png" width="320" height="64"/>
+        <image name="ic_custom_remove_outlined.png" width="30" height="30"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
         <image name="ic_plugin_nautical.png" width="25" height="25"/>
         <image name="ic_tabbar_addons_active.png" width="25" height="25"/>

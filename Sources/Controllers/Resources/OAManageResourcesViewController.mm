@@ -2769,15 +2769,6 @@ static BOOL _lackOfResources;
 {
 }
 
-- (IBAction)btnToolbarPluginsClicked:(id)sender
-{
-    [OAAnalyticsHelper logEvent:@"plugins_open"];
-
-    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-    pluginsViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:pluginsViewController animated:NO];
-}
-
 - (IBAction)btnToolbarPurchasesClicked:(id)sender
 {
     [OAAnalyticsHelper logEvent:@"purchases_open"];

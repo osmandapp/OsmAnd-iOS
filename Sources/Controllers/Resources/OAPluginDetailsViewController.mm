@@ -40,7 +40,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     EOAPluginScreenType _screenType;
 
     CALayer *_horizontalLineDesc;
-    CALayer *_horizontalLine;
 }
 
 - (instancetype) initWithProduct:(OAProduct *)product
@@ -68,13 +67,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 - (void) applyLocalization
 {
     self.descLabel.text = OALocalizedStringUp(@"description");
-
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void) viewDidLoad
@@ -82,11 +74,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     [super viewDidLoad];
 
     _iapHelper = [OAIAPHelper sharedInstance];
-    
-    _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.bottomToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.bottomToolbarView.layer addSublayer:_horizontalLine];
 
     _horizontalLineDesc = [CALayer layer];
     _horizontalLineDesc.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
@@ -126,10 +113,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     }
     self.icon.image = logo;
     
-    if (self.openFromCustomPlace)
-    {
-        [_bottomToolbarView removeFromSuperview];
-    }
     [self applySafeAreaMargins];
     [self updatePurchaseButton];
 }
@@ -168,15 +151,15 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         w = DeviceScreenWidth;
         _screenshot.frame = CGRectMake(0.0, 0.0, w, 220.0);
         
-        _detailsView.frame = CGRectMake(0.0, _screenshot.frame.size.height, w, DeviceScreenHeight - _screenshot.frame.size.height - (self.openFromCustomPlace ? 0.0 :  _bottomToolbarView.frame.size.height));
+        _detailsView.frame = CGRectMake(0.0, _screenshot.frame.size.height, w, DeviceScreenHeight - _screenshot.frame.size.height);
     }
     else
     {
         w = DeviceScreenWidth / 2.0;
         
-        _screenshot.frame = CGRectMake(0.0, 0.0, w, DeviceScreenHeight - _bottomToolbarView.frame.size.height);
+        _screenshot.frame = CGRectMake(0.0, 0.0, w, DeviceScreenHeight);
         
-        _detailsView.frame = CGRectMake(w, 0.0, DeviceScreenWidth - w, DeviceScreenHeight - (self.openFromCustomPlace ? 0.0 :  _bottomToolbarView.frame.size.height));
+        _detailsView.frame = CGRectMake(w, 0.0, DeviceScreenWidth - w, DeviceScreenHeight);
         
     }
 
@@ -192,7 +175,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     _descTextView.frame = CGRectMake(10.0, 105.0, w - 20.0, _detailsView.frame.size.height - 105.0);
     
     _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, _detailsView.frame.size.width - 30.0, 0.5);
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 
 }
 
@@ -205,11 +187,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 - (UIView *) getMiddleView
 {
     return self.detailsView;
-}
-
-- (UIView *) getBottomView
-{
-    return self.bottomToolbarView;
 }
 
 - (CGFloat) getToolBarHeight
@@ -347,26 +324,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updatePurchaseButton];
     });
-}
-
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-    NSMutableArray *controllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
-    [controllers removeLastObject];
-    [controllers removeLastObject];
-    [self.navigationController setViewControllers:controllers];
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = self.openFromSplash;
-    
-    NSMutableArray *controllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
-    [controllers removeLastObject];
-    [controllers removeLastObject];
-    [controllers addObject:purchasesViewController];
-    [self.navigationController setViewControllers:controllers];
 }
 
 @end

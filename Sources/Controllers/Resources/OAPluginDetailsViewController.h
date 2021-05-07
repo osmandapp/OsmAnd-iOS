@@ -26,17 +26,9 @@
 @property (weak, nonatomic) IBOutlet UITextView *descTextView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDeleteCustomPlugin;
 
-@property (weak, nonatomic) IBOutlet UIView *bottomToolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPlugins;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
-
 @property (nonatomic, readonly) OAProduct *product;
 
 - (instancetype)initWithProduct:(OAProduct *)product;
 - (instancetype)initWithCustomPlugin:(OAPlugin *)plugin;
-
-@property (nonatomic, assign) BOOL openFromSplash;
-@property (nonatomic, assign) BOOL openFromCustomPlace;
 
 @end

@@ -139,9 +139,7 @@
 - (void)updateFileSize
 {
     _itemsSize = [self calculateItemsSize:self.getSelectedItems];
-    NSString *byteCount = [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile];
-    NSString *approximateFileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), byteCount];
-    _fileSize = approximateFileSize;
+    _fileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
 }
 
 - (UIView *)getHeaderForTableView:(UITableView *)tableView withFirstSectionText:(NSString *)text boldFragment:(NSString *)boldFragment forSection:(NSInteger)section

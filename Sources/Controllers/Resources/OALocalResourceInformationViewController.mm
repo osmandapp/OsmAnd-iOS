@@ -46,10 +46,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     _titleView.text = OALocalizedString(@"res_details");
     
     [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
     [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
     [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 

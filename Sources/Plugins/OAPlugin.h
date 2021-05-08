@@ -60,6 +60,8 @@
 + (void) removeCustomPlugin:(OACustomPlugin *)plugin;
 + (NSArray<OAWorldRegion *> *) getCustomDownloadRegions;
 
++ (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
+
 - (void) onInstall;
 - (void) updateLayers;
 - (void) registerLayers;

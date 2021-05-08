@@ -746,6 +746,36 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
     return lst;
 }
 
++ (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region
+{
+    for (OACustomPlugin *plugin in self.getCustomPlugins)
+    {
+        for (OAWorldRegion *reg in plugin.getDownloadMaps)
+        {
+            if ([self regionContainsRegion:region toSearch:reg])
+                return plugin.getPluginDir;
+        }
+    }
+    return @"";
+}
+
++ (BOOL) regionContainsRegion:(OAWorldRegion *)target toSearch:(OAWorldRegion *)toSearch
+{
+    if ([target.regionId isEqualToString:toSearch.regionId])
+        return YES;
+    else
+    {
+        BOOL match = NO;
+        for (OAWorldRegion *reg in toSearch.subregions)
+        {
+            match = [self regionContainsRegion:target toSearch:reg];
+            if (match)
+                break;
+        }
+        return match;
+    }
+}
+
 /*
 public static boolean isDevelopment() {
     return getEnabledPlugin(OsmandDevelopmentPlugin.class) != null;

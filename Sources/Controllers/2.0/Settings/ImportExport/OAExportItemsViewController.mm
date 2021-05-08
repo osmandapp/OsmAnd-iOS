@@ -13,6 +13,9 @@
 #import "OAColors.h"
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
+#import "OATableViewCustomHeaderView.h"
+
+#define kHeaderId @"TableViewSectionHeader"
 
 @implementation OAExportItemsViewController
 {
@@ -48,25 +51,25 @@
 {
     [super applyLocalization];
     _descriptionText = OALocalizedString(@"export_profile_select_descr");
-    _descriptionBoldText = OALocalizedString(@"export_profile");
+    _descriptionBoldText = _appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export");
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
 }
 
 -(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self setTableHeaderView:_appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export")];
+        [self setTableHeaderView:_descriptionBoldText];
     } completion:nil];
 }
 
 - (void)setupView
 {
-    [self setTableHeaderView:_appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export")];
+    [self setTableHeaderView:_descriptionBoldText];
 
     if (_exportStarted)
     {
@@ -93,7 +96,7 @@
     return _descriptionBoldText;
 }
 
-- (NSString *)getDescriptionTextWithSize
+- (NSString *)getTitleForSection
 {
     return [NSString stringWithFormat: @"%@\n%@", _descriptionText, _fileSize];
 }
@@ -142,31 +145,6 @@
     _fileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
 }
 
-- (UIView *)getHeaderForTableView:(UITableView *)tableView withFirstSectionText:(NSString *)text boldFragment:(NSString *)boldFragment forSection:(NSInteger)section
-{
-    if (section == 0)
-    {
-        UIView *headerView = [super getHeaderForTableView:tableView withFirstSectionText:text boldFragment:boldFragment forSection:section];
-        UILabel *headerLabel = headerView.subviews[0];
-        if (headerLabel)
-        {
-            NSAttributedString *oldHeaderText = headerLabel.attributedText;
-            NSInteger baseHeaderLength = [oldHeaderText.string stringByReplacingOccurrencesOfString:_fileSize withString:@""].length;
-            NSMutableAttributedString *newHeaderText = [[NSMutableAttributedString alloc] initWithAttributedString:[oldHeaderText attributedSubstringFromRange:NSMakeRange(0, baseHeaderLength)]];
-            UIFont *fontFileSize = [UIFont systemFontOfSize:15];
-            UIColor *colorFileSize = _itemsSize == 0 ? UIColorFromRGB(color_text_footer) : [UIColor blackColor];
-            NSMutableAttributedString *headerFileSizeText = [[NSMutableAttributedString alloc] initWithString:_fileSize attributes:@{NSFontAttributeName:fontFileSize, NSForegroundColorAttributeName:colorFileSize}];
-            [newHeaderText appendAttributedString:headerFileSizeText];
-            headerLabel.attributedText = newHeaderText;
-        }
-        return headerView;
-    }
-    else
-    {
-        return nil;
-    }
-}
-
 - (IBAction)primaryButtonPressed:(id)sender
 {
     [self shareProfile];
@@ -176,12 +154,29 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:[self getDescriptionTextWithSize] boldFragment:self.descriptionBoldText forSection:section];
+    if (section == 0) {
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+        [customHeader setYOffset:8];
+        UITextView *headerLabel = customHeader.label;
+        NSMutableAttributedString *newHeaderText = [[NSMutableAttributedString alloc] initWithString:_descriptionText attributes:@{NSForegroundColorAttributeName:UIColorFromRGB(color_text_footer)}];
+        UIColor *colorFileSize = _itemsSize == 0 ? UIColorFromRGB(color_text_footer) : [UIColor blackColor];
+        NSMutableAttributedString *headerFileSizeText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", _fileSize] attributes:@{NSForegroundColorAttributeName: colorFileSize}];
+        [newHeaderText appendAttributedString:headerFileSizeText];
+        headerLabel.attributedText = newHeaderText;
+        headerLabel.font = [UIFont systemFontOfSize:15];
+        return customHeader;
+    }
+    return nil;
+
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self getHeightForHeaderWithFirstHeaderText:[self getDescriptionTextWithSize] boldFragment:self.descriptionBoldText inSection:section];
+    if (section == 0) {
+        NSString *title = [self getTitleForSection];
+        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + 8;
+    }
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - OASettingItemsSelectionDelegate

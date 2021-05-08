@@ -72,7 +72,7 @@ typedef enum
 @end
 
 
-@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, OACustomPOIViewDelegate>
+@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, OAPOIFilterRefreshDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
@@ -321,8 +321,15 @@ typedef enum
         style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if ([self hasChanges])
             [self applyFilterFields];
-        if (self.delegate)
-            [self.delegate saveFilter:_filter];
+        if (self.delegate) {
+            UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
+            UIAlertAction *actionSaveDialog = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+                [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
+                [self dismissViewController];
+            }];
+            [saveDialog addAction:actionSaveDialog];
+            [self presentViewController:saveDialog animated:YES completion:nil];
+        }
     }];
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
         style:UIAlertActionStyleCancel handler:nil];
@@ -364,30 +371,10 @@ typedef enum
 - (void)showEditCategoriesScreen
 {
     OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:_filter];
-    customPOIScreen.delegate = self;
+    customPOIScreen.delegate = self.delegate;
+    customPOIScreen.refreshDelegate = self;
     customPOIScreen.modalPresentationStyle = UIModalPresentationFullScreen;
     [self showViewController:customPOIScreen];
-}
-
-#pragma mark - OACustomPOIViewDelegate
-
-- (void)searchByUIFilter:(OAPOIUIFilter *)filter wasSaved:(BOOL)wasSaved
-{
-    [self.navigationController popViewControllerAnimated:YES];
-    if (self.customPOIDelegate)
-        [self.customPOIDelegate searchByUIFilter:filter wasSaved:wasSaved];
-}
-
-- (BOOL)saveFilter:(OAPOIUIFilter *)filter alertDelegate:(id<UIAlertViewDelegate>)alertDelegate
-{
-    if (self.customPOIDelegate)
-        return [self.customPOIDelegate saveFilter:filter alertDelegate:alertDelegate];
-}
-
-- (void)updateRootScreen:(UIAlertView *)alertView
-{
-    if (self.customPOIDelegate)
-        [self.customPOIDelegate updateRootScreen:alertView];
 }
 
 - (void) applyFilterFields
@@ -559,6 +546,13 @@ typedef enum
     NSArray<NSString *> *categories = abstractPoiType.excludedPoiAdditionalCategories;
     if (categories)
         [excludedPoiAdditionalCategories addObjectsFromArray:categories];
+}
+
+- (void)refreshList
+{
+    [self initListItems];
+    [self updateGroups];
+    [self.tableView reloadData];
 }
 
 - (void) initListItems

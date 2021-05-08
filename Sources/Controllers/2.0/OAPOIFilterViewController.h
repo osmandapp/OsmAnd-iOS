@@ -9,22 +9,29 @@
 #import "OACompoundViewController.h"
 
 @class OAPOIUIFilter;
-@protocol OACustomPOIViewDelegate;
 
 @protocol OAPOIFilterViewDelegate
 
 @required
 
 - (BOOL)updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter;
-- (BOOL)saveFilter:(OAPOIUIFilter *)filter;
 - (BOOL)removeFilter:(OAPOIUIFilter *)filter;
+- (UIAlertController *)createSaveFilterDialog:(OAPOIUIFilter *)filter customSaveAction:(BOOL)customSaveAction;
+- (void)searchByUIFilter:(OAPOIUIFilter *)filter newName:(NSString *)newName willSaved:(BOOL)willSave;
+
+@end
+
+@protocol OAPOIFilterRefreshDelegate
+
+@required
+
+- (void)refreshList;
 
 @end
 
 @interface OAPOIFilterViewController : OACompoundViewController
 
 @property (weak, nonatomic) id<OAPOIFilterViewDelegate> _Nullable delegate;
-@property (weak, nonatomic) id<OACustomPOIViewDelegate> _Nullable customPOIDelegate;
 
 - (instancetype _Nullable)initWithFilter:( OAPOIUIFilter * _Nonnull)filter filterByName:(NSString * _Nullable)filterByName;
 

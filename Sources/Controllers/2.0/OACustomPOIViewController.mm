@@ -15,13 +15,14 @@
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
 #import "OASizes.h"
+#import "OAPOIFilterViewController.h"
 #import "OAColors.h"
 #import "OATitleDescrDraggableCell.h"
 
 #define kCellTypeTitleDescCollapse @"OATitleDescrDraggableCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
-@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UIAlertViewDelegate>
+@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -115,18 +116,31 @@
 - (IBAction)onBackButtonClicked:(id)sender
 {
     [self dismissViewController];
+
+    if (_editMode && self.refreshDelegate)
+        [self.refreshDelegate refreshList];
 }
 
 - (IBAction)onSaveButtonClicked:(id)sender
 {
-    if (self.delegate)
-        [self.delegate saveFilter:_filter alertDelegate:self];
+    if (self.delegate) {
+        UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
+        UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+            [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
+            [self dismissViewController];
+        }];
+        [saveDialog addAction:actionSave];
+        [self presentViewController:saveDialog animated:YES completion:nil];
+    }
 }
 
 - (IBAction)onShowButtonClicked:(id)sender
 {
     if (self.delegate)
-        [self.delegate searchByUIFilter:_filter wasSaved:NO];
+        [self.delegate searchByUIFilter:_filter newName:nil willSaved:NO];
+
+    if (_editMode && self.refreshDelegate)
+        [self.refreshDelegate refreshList];
 
     [self dismissViewController];
 }
@@ -225,22 +239,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return [OAPOISearchHelper getHeightForHeader];
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        if (self.delegate)
-        {
-            [self.delegate searchByUIFilter:_filter wasSaved:YES];
-            [self.delegate updateRootScreen:alertView];
-        }
-
-        [self dismissViewController];
-    }
 }
 
 @end

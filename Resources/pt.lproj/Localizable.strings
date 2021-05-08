@@ -319,7 +319,7 @@
 "shared_string_edit" = "Editar";
 "shared_string_dismiss" = "Cancelar";
 "shared_string_remove" = "Remover";
-"device_memory" = "Memória do dispositivo";
+"device_memory" = "Memória do aparelho";
 "free_memory" = "%@ livre";
 "map_orientation_change_in_accordance_with_speed" = "Limiar de orientação do mapa";
 "map_orientation_change_in_accordance_with_speed_descr" = "Selecione abaixo em qual velocidade a orientação do mapa alterna de 'Na direção do movimento' para 'Na direção da bússola'";
@@ -781,7 +781,7 @@
 "speak_descr" = "Configure as indicações sobre nomes de ruas, avisos de trânsito (portagens, lombas, passadeiras), radares e limites de velocidade";
 "keep_informing_descr" = "Repetir as instruções de navegação em intervalos regulares";
 "default_speed_system_descr" = "Definir unidade de velocidade";
-"wake_on_voice_descr" = "Ligar o ecrã do dispositivo (se estiver desligado) ao fazer a aproximação à próxima viragem";
+"wake_on_voice_descr" = "Ligar o ecrã do aparelho (se estiver desligado) ao fazer a aproximação à próxima viragem";
 "voice_provider_descr" = "Selecione a orientação por voz para navegação";
 "choose_audio_stream_descr" = "Selecione o altifalante para orientação por voz";
 "osm_live_routing_descr" = "Usar as atualizações do OsmAnd Live para navegação";
@@ -1944,7 +1944,7 @@
 "plugin_settings_descr" = "Configurações de plugin para o perfil selecionado.";
 "global_settings_descr" = "Afetam toda a aplicação.";
 "osmand_settings" = "Configurações do OsmAnd";
-"device_settings" = "Configurações do dispositivo";
+"device_settings" = "Configurações do aparelho";
 "angular_measurment_units" = "Unidades de medição angular";
 "units_of_speed" = "Unidades de velocidade";
 "allow_3D_view" = "Vista 2.5D";

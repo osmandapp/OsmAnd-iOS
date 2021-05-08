@@ -205,6 +205,7 @@
             NSDictionary<NSString *, NSString *> *indexNames = itemJson[@"name"];
             NSDictionary<NSString *, NSString *> *firstSubNames = itemJson[@"firstsubname"];
             NSDictionary<NSString *, NSString *> *secondSubNames = itemJson[@"secondsubname"];
+            NSDictionary *downloadContent = itemJson[@"downloadcontent"];
             
             OADownloadDescriptionInfo *descriptionInfo = [OADownloadDescriptionInfo fromJson:itemJson[@"description"]];
             
@@ -214,10 +215,12 @@
             if (type != OsmAnd::ResourcesManager::ResourceType::Unknown)
             {
                 OACustomResourceItem *indexItem = [[OACustomResourceItem alloc] init];
+                indexItem.worldRegion = self;
                 indexItem.resourceId = QString::fromNSString(fileName.lowerCase);
                 indexItem.title = fileName;
                 indexItem.subfolder = _subfolder;
                 indexItem.downloadUrl = downloadUrl;
+                indexItem.downloadContent = downloadContent;
                 indexItem.names = indexNames;
                 indexItem.firstSubNames = firstSubNames;
                 indexItem.secondSubNames = secondSubNames;

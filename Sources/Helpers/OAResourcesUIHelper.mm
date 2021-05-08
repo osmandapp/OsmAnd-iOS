@@ -24,7 +24,10 @@
 #import "OAChoosePlanHelper.h"
 #import "OADownloadDescriptionInfo.h"
 #import "OAJsonHelper.h"
+#import "OATileSource.h"
 #import "OAIndexConstants.h"
+#import "OAResourcesInstaller.h"
+#import "OAPlugin.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -86,6 +89,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (NSString *) getTargetFilePath
 {
+    if (self.downloadContent && ![self.downloadContent[@"sql"] boolValue])
+        return self.getBasePathByExtension;
+    
     NSString *fileName = self.title;
     if (self.subfolder && self.subfolder.length > 0)
     {
@@ -96,12 +102,26 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (NSString *) getBasePathByExtension
 {
-    // TODO: handle zip, other custom resources
-    if ([self.title hasSuffix:SQLITE_EXT])
-        return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR];
-    else if ([self.title hasSuffix:GPX_FILE_EXT])
+    NSString *titleWithoutExt = self.title;
+    if ([titleWithoutExt.pathExtension isEqualToString:@"gz"] ||
+        ([titleWithoutExt.pathExtension isEqualToString:@"zip"] && ![self.title hasSuffix:BINARY_MAP_INDEX_EXT_ZIP]))
+    {
+        titleWithoutExt = [titleWithoutExt stringByDeletingPathExtension];
+    }
+    if ([titleWithoutExt hasSuffix:SQLITE_EXT])
+    {
+        BOOL isSqlSource = YES;
+        if (self.downloadContent)
+            isSqlSource = [self.downloadContent[@"sql"] boolValue];
+        
+        if (isSqlSource)
+            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR];
+        else
+            return [OsmAndApp.instance.cachePath stringByAppendingPathComponent:self.downloadContent[@"name"]];
+    }
+    else if ([titleWithoutExt hasSuffix:GPX_FILE_EXT])
         return OsmAndApp.instance.gpxPath;
-    else if ([self.title hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
+    else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
         return OsmAndApp.instance.documentsPath;
     return OsmAndApp.instance.documentsPath;
 }
@@ -134,7 +154,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 - (BOOL) isInstalled
 {
     NSString *pathForUnzippedResource = self.getTargetFilePath;
-    if ([self.getTargetFilePath hasSuffix:@".zip"])
+    if ([self.getTargetFilePath hasSuffix:@".zip"] || [self.getTargetFilePath hasSuffix:@".gz"])
         pathForUnzippedResource = pathForUnzippedResource.stringByDeletingPathExtension;
     return [NSFileManager.defaultManager fileExistsAtPath:pathForUnzippedResource];
 }
@@ -574,9 +594,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (BOOL) checkIfUpdateEnabled:(OAWorldRegion *)region
 {
-#if defined(OSMAND_IOS_DEV)
-    return YES;
-#endif
     if (region.regionId == nil || [region isInPurchasedArea])
     {
         return YES;
@@ -592,29 +609,65 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
-    // Create download task
-    NSURL* url = [NSURL URLWithString:item.downloadUrl];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url];
-    
-    NSLog(@"%@", url);
-    
-    NSString* name = item.title;
-    if (item.subfolder && item.subfolder.length > 0)
-        name = [item.subfolder stringByAppendingPathComponent:name];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
-                                                                     andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
-                                                                    andName:name];
-    if (onTaskCreated)
-        onTaskCreated(task);
-    
-    // Resume task only if it's other resource download tasks are not running
-    if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+    if (item.downloadUrl)
     {
-        [task resume];
-        if (onTaskResumed)
-            onTaskResumed(task);
+        NSString* name = item.title;
+        if (item.subfolder && item.subfolder.length > 0)
+            name = [item.subfolder stringByAppendingPathComponent:name];
+        
+        if ([item.downloadUrl hasPrefix:@"@"])
+        {
+            NSString *relPath = [item.downloadUrl substringFromIndex:1];
+            NSString *pluginPath = [OAPlugin getAbsoulutePluginPathByRegion:item.worldRegion];
+            if (pluginPath.length > 0 && relPath.length > 0)
+            {
+                NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath nsResourceId:srcFilePath.lastPathComponent.lowerCase fileName:name];
+                if (!failed)
+                    [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
+            }
+        }
+        else
+        {
+            // Create download task
+            NSURL* url = [NSURL URLWithString:item.downloadUrl];
+            NSURLRequest* request = [NSURLRequest requestWithURL:url];
+            
+            NSLog(@"%@", url);
+            
+            OsmAndAppInstance app = [OsmAndApp instance];
+            id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
+                                                                             andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
+                                                                            andName:name];
+            if (onTaskCreated)
+                onTaskCreated(task);
+            
+            // Resume task only if it's other resource download tasks are not running
+            if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+            {
+                [task resume];
+                if (onTaskResumed)
+                    onTaskResumed(task);
+            }
+        }
+    }
+    else if (item.downloadContent)
+    {
+        OATileSource *tileSource = [OATileSource tileSourceWithParameters:item.downloadContent];
+        if (tileSource.isSql)
+        {
+            NSString *path = item.getTargetFilePath;
+            if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:tileSource.toSqlParams])
+                [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
+        }
+        else
+        {
+            OsmAndAppInstance app = OsmAndApp.instance;
+            const auto result = tileSource.toOnlineTileSource;
+            OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
+            app.resourcesManager->installTilesResource(result);
+        }
+        [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
     }
 }
 

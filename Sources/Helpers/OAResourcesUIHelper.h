@@ -68,6 +68,8 @@
 @property NSString *subfolder;
 @property NSString *downloadUrl;
 
+@property NSDictionary *downloadContent;
+
 @property NSDictionary<NSString *, NSString *> *names;
 @property NSDictionary<NSString *, NSString *> *firstSubNames;
 @property NSDictionary<NSString *, NSString *> *secondSubNames;

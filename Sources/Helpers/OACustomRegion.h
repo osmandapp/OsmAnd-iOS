@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAResourceItem, OADownloadDescriptionInfo;
+@class OAResourceItem, OADownloadDescriptionInfo, OACustomPlugin;
 
 @interface OADynamicDownloadItems : NSObject
 

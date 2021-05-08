@@ -102,7 +102,7 @@
 {
     [super onGroupCheckmarkPressed:sender];
     [self updateFileSize];
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) updateSelectedProfile {
@@ -190,7 +190,7 @@
 {
     self.selectedItemsMap[type] = items;
     [self updateFileSize];
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
     [self updateControls];
 }
 

@@ -16,6 +16,10 @@
 #import "OAAutoObserverProxy.h"
 #import "OAQuickActionType.h"
 #import "OAQuickActionRegistry.h"
+#import "OACustomPlugin.h"
+#import "OAPluginInstalledViewController.h"
+#import "OAResourcesBaseViewController.h"
+#import "OARootViewController.h"
 
 #import "OAMonitoringPlugin.h"
 #import "OAParkingPositionPlugin.h"
@@ -59,7 +63,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
 {
     NSString *productIdentifier = key;
-    if ([productIdentifier isEqualToString:[self.class getId]])
+    if ([productIdentifier isEqualToString:[self getId]])
     {
         BOOL active = [value boolValue];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -83,18 +87,21 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return [self getMapPanelViewController].hudViewController.mapInfoController;
 }
 
-+ (NSString *) getId
+- (NSString *) getId
 {
     return nil;
 }
 
 - (void) processNames
 {
-    NSString *pluginId = [self.class getId];
-    NSString *postfix = [[pluginId componentsSeparatedByString:@"."] lastObject];
-    _titleId = [@"product_title_" stringByAppendingString:postfix];
-    _shortDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
-    _descriptionId = [@"product_desc_ext_" stringByAppendingString:postfix];
+    NSString *pluginId = [self getId];
+    if (pluginId)
+    {
+        NSString *postfix = [[pluginId componentsSeparatedByString:@"."] lastObject];
+        _titleId = [@"product_title_" stringByAppendingString:postfix];
+        _shortDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
+        _descriptionId = [@"product_desc_ext_" stringByAppendingString:postfix];
+    }
 }
 
 - (NSString *) getShortDescription
@@ -112,19 +119,29 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return OALocalizedString(_titleId);
 }
 
+- (UIImage *) getLogoResource
+{
+    return [UIImage imageNamed:self.getLogoResourceId];
+}
+
 - (NSString *) getLogoResourceId
 {
-    NSString *identifier = [self.class getId];
+    NSString *identifier = [self getId];
     OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
     if (product)
         return [product productIconName];
     else
-        return nil;
+        return @"ic_custom_puzzle_piece";
+}
+
+- (UIImage *) getAssetResourceImage
+{
+    return [UIImage imageNamed:self.getAssetResourceName];
 }
 
 - (NSString *) getAssetResourceName
 {
-    NSString *identifier = [self.class getId];
+    NSString *identifier = [self getId];
     OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
     if (product)
         return [product productScreenshotName];
@@ -140,6 +157,24 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (NSString *) getVersion
 {
     return @"";
+}
+
+/**
+ * Plugin was installed
+ */
+- (void)onInstall
+{
+    for (OAApplicationMode *appMode in self.getAddedAppModes)
+    {
+        [OAApplicationMode changeProfileAvailability:appMode isSelected:YES];
+    }
+    [self showInstalledScreen];
+}
+
+- (void) showInstalledScreen
+{
+    OAPluginInstalledViewController *pluginInstalled = [[OAPluginInstalledViewController alloc] initWithPluginId:self.getId];
+    [OARootViewController.instance presentViewController:pluginInstalled animated:YES completion:nil];
 }
 
 /**
@@ -167,6 +202,15 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 - (void) disable
 {
+    for (OAApplicationMode *appMode in self.getAddedAppModes)
+    {
+        [OAApplicationMode changeProfileAvailability:appMode isSelected:NO];
+    }
+}
+
+- (NSArray<OAApplicationMode *> *) getAddedAppModes
+{
+    return @[];
 }
 
 - (NSString *) getHelpFileName
@@ -175,6 +219,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 }
 
 - (NSArray<OAQuickActionType *> *) getQuickActionTypes
+{
+    return @[];
+}
+
+- (NSArray<OAWorldRegion *> *) getDownloadMaps
 {
     return @[];
 }
@@ -206,10 +255,9 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 + (void) initPlugins
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSSet<NSString *> *enabledPlugins = [settings getEnabledPlugins];
+    NSMutableSet<NSString *> *enabledPlugins = [NSMutableSet setWithSet:[settings getEnabledPlugins]];
     
-    [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
-    enabledPlugins = [enabledPlugins setByAddingObject:[OAMapillaryPlugin getId]];
+    [self.class enablePluginByDefault:enabledPlugins plugin:[[OAMapillaryPlugin alloc] init]];
     
     /*
     allPlugins.add(new OsmandRasterMapsPlugin(app));
@@ -230,14 +278,41 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     
+    [self loadCustomPlugins];
     [self activatePlugins:enabledPlugins];
+}
+
++ (void) loadCustomPlugins
+{
+    NSString *customPluginsJson = OAAppSettings.sharedManager.customPluginsJson;
+    if (customPluginsJson.length > 0)
+    {
+        NSData* data = [customPluginsJson dataUsingEncoding:NSUTF8StringEncoding];
+        NSArray *plugins = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        for (NSDictionary *pluginJson in plugins)
+        {
+            OACustomPlugin *plugin = [[OACustomPlugin alloc] initWithJson:pluginJson];
+            if (plugin)
+                [allPlugins addObject:plugin];
+        }
+    }
+}
+
++ (void) enablePluginByDefault:(NSMutableSet<NSString *> *)enabledPlugins plugin:(OAPlugin *)plugin
+{
+    [allPlugins addObject:plugin];
+    if (![enabledPlugins containsObject:plugin.getId] && ![OAAppSettings.sharedManager.getPlugins containsObject:[@"-" stringByAppendingString:plugin.getId]])
+    {
+        [enabledPlugins addObject:plugin.getId];
+        [OAAppSettings.sharedManager enablePlugin:plugin.getId enable:YES];
+    }
 }
 
 + (void) activatePlugins:(NSSet<NSString *> *)enabledPlugins
 {
     for (OAPlugin *plugin in allPlugins)
     {
-        if ([enabledPlugins containsObject:[plugin.class getId]] || [plugin isActive])
+        if ([enabledPlugins containsObject:[plugin getId]] || [plugin isActive])
         {
             @try
             {
@@ -246,11 +321,19 @@ static NSMutableArray<OAPlugin *> *allPlugins;
             }
             @catch (NSException *e)
             {
-                NSLog(@"Plugin initialization failed %@ reason=%@", [plugin.class getId], e.reason);
+                NSLog(@"Plugin initialization failed %@ reason=%@", [plugin getId], e.reason);
             }
         }
     }
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
+}
+
++ (NSArray<OAWorldRegion *> *) getCustomDownloadRegions
+{
+    NSMutableArray<OAWorldRegion *> *list = [NSMutableArray array];
+    for (OAPlugin *plugin in self.getEnabledPlugins)
+        [list addObjectsFromArray:plugin.getDownloadMaps];
+    return list;
 }
 
 /*
@@ -295,7 +378,7 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
         [plugin disable];
         [plugin setActive:NO];
     }
-    [[OAAppSettings sharedManager] enablePlugin:[plugin.class getId] enable:enable];
+    [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
     [plugin updateLayers];
     return true;
@@ -450,6 +533,16 @@ public List<String> indexingFiles(IProgress progress) {
     return nil;
 }
 
++ (OAPlugin *) getPluginById:(NSString *)pluginId
+{
+    for (OAPlugin *plugin in [self getAvailablePlugins])
+    {
+        if ([plugin.getId isEqualToString:pluginId])
+            return plugin;
+    }
+    return nil;
+}
+
 /*
 public static List<String> onIndexingFiles(IProgress progress) {
     List<String> l = new ArrayList<String>();
@@ -591,6 +684,66 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
     else
         for (OAPlugin *p in [self.class getNotEnabledPlugins])
             [types addObjectsFromArray:p.getQuickActionTypes];
+}
+
++ (void) addCustomPlugin:(OACustomPlugin *)plugin
+{
+    OAPlugin *oldPlugin = [OAPlugin getPluginById:plugin.getId];
+    if (oldPlugin != nil)
+        [allPlugins removeObject:oldPlugin];
+    
+    [allPlugins addObject:plugin];
+    [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:YES];
+    [self saveCustomPlugins];
+}
+
++ (void) removeCustomPlugin:(OACustomPlugin *)plugin
+{
+    [allPlugins removeObject:plugin];
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (plugin.isActive)
+    {
+        [plugin removePluginItems:^{
+            [fileManager removeItemAtPath:plugin.getPluginDir error:nil];
+        }];
+    }
+    else
+    {
+        [fileManager removeItemAtPath:plugin.getPluginDir error:nil];
+    }
+    [self saveCustomPlugins];
+}
+
++ (void) saveCustomPlugins
+{
+    NSArray<OACustomPlugin *> *customOsmandPlugins = [self getCustomPlugins];
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    NSString *customPlugins = settings.customPluginsJson;
+    NSMutableArray<NSDictionary *> *itemsJson = [NSMutableArray array];
+    for (OACustomPlugin *plugin in customOsmandPlugins)
+    {
+        NSMutableDictionary *json = [NSMutableDictionary dictionary];
+        json[@"pluginId"] = plugin.getId;
+        json[@"version"] = plugin.getVersion;
+        [plugin writeAdditionalDataToJson:json];
+        [plugin writeDependentFilesJson:json];
+        [itemsJson addObject:json];
+    }
+    NSData *data = [NSJSONSerialization dataWithJSONObject:itemsJson options:0 error:nil];
+    NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if (![jsonStr isEqualToString:customPlugins])
+        [settings setCustomPluginsJson:jsonStr];
+}
+
++ (NSArray<OACustomPlugin *> *) getCustomPlugins
+{
+    NSMutableArray<OACustomPlugin *> *lst = [NSMutableArray arrayWithCapacity:allPlugins.count];
+    for (OAPlugin *plugin in allPlugins)
+    {
+        if ([plugin isKindOfClass:OACustomPlugin.class])
+            [lst addObject:(OACustomPlugin *)plugin];
+    }
+    return lst;
 }
 
 /*

@@ -14,7 +14,6 @@
 
 @property (nonatomic) NSString *filePath;
 @property (nonatomic) NSString *fileName;
-@property (nonatomic) EOASettingsItemFileSubtype subtype;
 
 @end
 
@@ -35,10 +34,6 @@
     if (self)
     {
         self.shouldReplace = YES;
-        //[self commonInit]; // shouldn't be commented! Error occurs - No visible @interface for 'OAResourcesSettingsItem' declares the selector 'commonInit'
-        NSString *fileName = self.fileName;
-        if (fileName.length > 0 && ![fileName hasSuffix:@"/"])
-            self.fileName = [fileName stringByAppendingString:@"/"];
     }
     return self;
 }
@@ -48,9 +43,13 @@
     return EOASettingsItemTypeResources;
 }
 
+- (EOASettingsItemFileSubtype)subtype
+{
+    return EOASettingsItemFileSubtypeOther;
+}
+
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    self.subtype = EOASettingsItemFileSubtypeOther;
     NSError *readError;
     [super readFromJson:json error:&readError];
     if (readError)
@@ -77,31 +76,19 @@
 
 - (BOOL) applyFileName:(NSString *)fileName
 {
-    if ([fileName hasSuffix:@"/"])
-        return NO;
-
     NSString *itemFileName = self.fileName;
-    if ([itemFileName hasSuffix:@"/"])
+    if ([fileName hasSuffix:@"/"])
+        fileName = [fileName substringToIndex:fileName.length - 1];
+    
+    if ([fileName isEqualToString:itemFileName])
     {
-        if ([fileName hasPrefix:itemFileName])
-        {
-            self.filePath = [[self getPluginPath] stringByAppendingString:fileName];
-            return YES;
-        }
-        else
-        {
-            return NO;
-        }
+        self.filePath = [[self getPluginPath] stringByAppendingPathComponent:fileName];
+        return YES;
     }
     else
     {
-        return [super applyFileName:fileName];
+        return NO;
     }
-}
-
-- (OASettingsItemWriter *) getWriter
-{
-    return nil;
 }
 
 @end

@@ -22,6 +22,9 @@
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OAChoosePlanHelper.h"
+#import "OADownloadDescriptionInfo.h"
+#import "OAJsonHelper.h"
+#import "OAIndexConstants.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -79,6 +82,65 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 @implementation OAMapStyleResourceItem
 @end
 
+@implementation OACustomResourceItem
+
+- (NSString *) getTargetFilePath
+{
+    NSString *fileName = self.title;
+    if (self.subfolder && self.subfolder.length > 0)
+    {
+        fileName = [self.subfolder stringByAppendingPathComponent:fileName];
+    }
+    return [self.getBasePathByExtension stringByAppendingPathComponent:fileName];
+}
+
+- (NSString *) getBasePathByExtension
+{
+    // TODO: handle zip, other custom resources
+    if ([self.title hasSuffix:SQLITE_EXT])
+        return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR];
+    else if ([self.title hasSuffix:GPX_FILE_EXT])
+        return OsmAndApp.instance.gpxPath;
+    else if ([self.title hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
+        return OsmAndApp.instance.documentsPath;
+    return OsmAndApp.instance.documentsPath;
+}
+
+- (NSString *) getVisibleName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_names defValue:@""];
+}
+
+- (NSString *) getSubName
+{
+    NSString *subName = [self getFirstSubName];
+    
+    NSString *secondSubName = [self getSecondSubName];
+    if (secondSubName)
+        subName = subName == nil ? secondSubName : [NSString stringWithFormat:@"%@ • %@", subName, secondSubName];
+    return subName;
+}
+
+- (NSString *) getFirstSubName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_firstSubNames defValue:nil];
+}
+
+- (NSString *) getSecondSubName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_secondSubNames defValue:nil];
+}
+
+- (BOOL) isInstalled
+{
+    NSString *pathForUnzippedResource = self.getTargetFilePath;
+    if ([self.getTargetFilePath hasSuffix:@".zip"])
+        pathForUnzippedResource = pathForUnzippedResource.stringByDeletingPathExtension;
+    return [NSFileManager.defaultManager fileExistsAtPath:pathForUnzippedResource];
+}
+
+@end
+
 @implementation OAResourcesUIHelper
 
 + (NSString *) resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
@@ -98,6 +160,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"res_hillshade");
         case OsmAnd::ResourcesManager::ResourceType::SlopeRegion:
             return OALocalizedString(@"res_slope");
+        case OsmAnd::ResourcesManager::ResourceType::SqliteFile:
+            return OALocalizedString(@"online_map");
             
         default:
             return OALocalizedString(@"res_unknown");
@@ -523,6 +587,34 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
         return NO;
+    }
+}
+
++ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    // Create download task
+    NSURL* url = [NSURL URLWithString:item.downloadUrl];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url];
+    
+    NSLog(@"%@", url);
+    
+    NSString* name = item.title;
+    if (item.subfolder && item.subfolder.length > 0)
+        name = [item.subfolder stringByAppendingPathComponent:name];
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
+                                                                     andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
+                                                                    andName:name];
+    if (onTaskCreated)
+        onTaskCreated(task);
+    
+    // Resume task only if it's other resource download tasks are not running
+    if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+    {
+        [task resume];
+        if (onTaskResumed)
+            onTaskResumed(task);
     }
 }
 

@@ -281,7 +281,6 @@
     if (![helper.wiki isPurchased])
     {
         OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProduct:helper.wiki];
-        pluginDetails.openFromCustomPlace = YES;
         [[OARootViewController instance].navigationController pushViewController:pluginDetails animated:YES];
     }
     else if (_worldRegion && _resourceItem)

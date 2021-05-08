@@ -435,13 +435,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
 }
 
-- (IBAction)btnToolbarPluginsClicked:(id)sender
-{
-    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-    pluginsViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:pluginsViewController animated:NO];
-}
-
 - (IBAction)btnToolbarPurchasesClicked:(id)sender
 {
     OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];

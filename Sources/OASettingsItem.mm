@@ -204,7 +204,7 @@
 
 - (NSUInteger) hash
 {
-    NSInteger result = _type;
+    NSUInteger result = _type;
     result = 31 * result + (_name != nil ? [_name hash] : 0);
     result = 31 * result + (self.fileName != nil ? [self.fileName hash] : 0);
     result = 31 * result + (self.pluginId != nil ? [self.pluginId hash] : 0);

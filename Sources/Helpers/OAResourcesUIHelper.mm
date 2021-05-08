@@ -494,7 +494,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                         if (resource == nullptr)
                         {
                             const auto installedResource = app.resourcesManager->getResource(QString::fromNSString(resourceId));
-                            if (res != nullptr && installedResource->type == resourceType)
+                            if (installedResource && installedResource->type == resourceType)
                             {
                                 OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
                                 item.resourceId = installedResource->id;
@@ -509,7 +509,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                                 continue;
                             }
                         }
-                        if (resource->type == resourceType)
+                        else if (resource->type == resourceType)
                         {
                             if (app.resourcesManager->isResourceInstalled(resource->id))
                             {

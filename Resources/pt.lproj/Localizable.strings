@@ -353,7 +353,7 @@
 "subcategories" = "Subcategorias";
 "create_custom_poi" = "Criar filtro personalizado";
 "selected_categories" = "Categorias selecionadas";
-"new_filter_desc" = "Por favor introduza o nome do novo filtro, este vai ser adicionado ao separador Categorias.";
+"new_filter_desc" = "Introduza o nome do novo filtro, este vai ser adicionado ao separador Categorias.";
 "shared_string_filters" = "Filtros";
 "edit_filter" = "Editar categorias";
 "delete_filter" = "Eliminar filtro";
@@ -722,7 +722,7 @@
 "osm_live_subscribe_btn" = "Subscrever";
 "shared_string_email_address" = "Endereço de e-mail";
 "osm_live_enter_email" = "Favor introduzir um endereço de e-mail válido";
-"osm_live_enter_user_name" = "Por favor introduza um nome público";
+"osm_live_enter_user_name" = "Introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
 "osm_live_payment_desc" = "Pode gerir e cancelar as suas subscrições nas configurações da sua conta na App Store após a compra";
 "osm_live_ask_for_purchase" = "Por favor primeiro compre a subscrição do OsmAnd Live";
@@ -993,7 +993,7 @@
 "shared_string_password" = "Palavra-passe";
 "poi_category_and_type" = "Categoria e tipo de POI";
 "poi_select_type" = "Selecionar o tipo";
-"show_something_on_map" = "Mostrar %@ no mapa";
+"show_something_on_map" = "Ver %@ no mapa";
 "shared_string_street_intersection" = "Cruzamento de rua";
 "do_not_show_discount" = "Não mostrar promoções";
 "do_not_send_anonymous_data" = "Não enviar dados anônimos";

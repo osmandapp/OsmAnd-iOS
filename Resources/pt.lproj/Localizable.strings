@@ -353,7 +353,7 @@
 "subcategories" = "Subcategorias";
 "create_custom_poi" = "Criar filtro personalizado";
 "selected_categories" = "Categorias selecionadas";
-"new_filter_desc" = "Introduza o nome do novo filtro, este vai ser adicionado ao separador Categorias.";
+"new_filter_desc" = "Introduza o nome do novo filtro que vai ser adicionado ao separador Categorias.";
 "shared_string_filters" = "Filtros";
 "edit_filter" = "Editar categorias";
 "delete_filter" = "Eliminar filtro";
@@ -2072,3 +2072,11 @@
 "hidden_categories" = "Categorias ocultas";
 "visible_categories" = "Categorias visíveis";
 "rearrange_categories" = "Reorganizar categorias";
+"extra_maps" = "Mapas adicionais";
+"custom_plugins" = "Extensões personalizadas";
+"custom_osmand_plugin_name" = "Extensão OsmAnd personalizada";
+"shared_string_disable" = "Desativar";
+
+// Shared Strings
+"shared_string_enable" = "Ativar";
+"new_plugin_added" = "Nova extensão adicionada";

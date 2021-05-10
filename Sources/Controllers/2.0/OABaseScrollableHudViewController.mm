@@ -17,10 +17,6 @@
 
 @interface OABaseScrollableHudViewController () <UIScrollViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
-@property (weak, nonatomic) IBOutlet UIView *contentContainer;
-@property (weak, nonatomic) IBOutlet UIView *sliderView;
-
 @end
 
 @implementation OABaseScrollableHudViewController
@@ -28,9 +24,6 @@
     OAAppSettings *_settings;
     
     UIPanGestureRecognizer *_panGesture;
-    
-    BOOL _isDragging;
-    BOOL _isHiding;
     BOOL _topOverScroll;
     CGFloat _initialTouchPoint;
 }
@@ -99,8 +92,6 @@
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    _currentState = EOADraggableMenuStateInitial;
-    
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self layoutSubviews];
@@ -113,11 +104,8 @@
         return;
     
     BOOL isLandscape = [self isLeftSidePresentation];
-    if (isLandscape)
-        _currentState = _currentState == EOADraggableMenuStateInitial ? EOADraggableMenuStateInitial : EOADraggableMenuStateFullScreen;
-    else
-        _currentState = _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateInitial : _currentState;
-
+    _currentState = isLandscape ? EOADraggableMenuStateFullScreen : (!self.supportsFullScreen && _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateExpanded : _currentState);
+    
     [_tableView setScrollEnabled:_currentState == EOADraggableMenuStateFullScreen || (!self.supportsFullScreen && EOADraggableMenuStateExpanded)];
     
     [self adjustFrame];
@@ -179,8 +167,7 @@
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if ([self isLeftSidePresentation])
     {
-        CGFloat offset = _currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight - self.additionalLandscapeOffset : self.additionalLandscapeOffset;
-        f.origin = CGPointMake(0., offset);
+        f.origin = CGPointMake(0., self.additionalLandscapeOffset);
         f.size.height = DeviceScreenHeight - self.additionalLandscapeOffset;
         f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
         
@@ -280,7 +267,6 @@
 {
     [_tableView setContentOffset:CGPointZero];
     _currentState = self.isLeftSidePresentation ? EOADraggableMenuStateFullScreen : state;
-    _currentState = EOADraggableMenuStateInitial;
     [_tableView setScrollEnabled:YES];
     
     [self adjustFrame];
@@ -292,7 +278,7 @@
         if ([self isLeftSidePresentation])
         {
             frame.origin.x = -_scrollableView.bounds.size.width;
-            frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
+            frame.origin.y = self.additionalLandscapeOffset;
             frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
             _scrollableView.frame = frame;
             

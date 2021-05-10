@@ -21,16 +21,22 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 @property (weak, nonatomic) IBOutlet UIView *toolBarView;
 @property (weak, nonatomic) IBOutlet UIView *scrollableView;
 @property (weak, nonatomic) IBOutlet UIView *topHeaderContainerView;
+@property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
+@property (weak, nonatomic) IBOutlet UIView *contentContainer;
+@property (weak, nonatomic) IBOutlet UIView *sliderView;
 
 @property (nonatomic, readonly) CGFloat initialMenuHeight;
 @property (nonatomic, readonly) CGFloat expandedMenuHeight;
 
-@property (nonatomic, readonly) EOADraggableMenuState currentState;
+@property (nonatomic) EOADraggableMenuState currentState;
 
-@property (nonatomic, readonly) BOOL supportsFullScreen;
+@property (nonatomic) BOOL supportsFullScreen;
+@property (nonatomic) BOOL isDragging;
+@property (nonatomic) BOOL isHiding;
 
 - (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
+- (void) applyCornerRadius:(BOOL)enable;
 
 - (void) goExpanded;
 - (void) goMinimized;
@@ -38,7 +44,7 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 
 - (CGFloat) getViewHeight:(EOADraggableMenuState)state;
 - (CGFloat) getViewHeight;
-
-- (void) layoutSubviews;
+- (CGFloat) getViewWidthForPad;
+- (CGFloat) additionalLandscapeOffset;
 
 @end

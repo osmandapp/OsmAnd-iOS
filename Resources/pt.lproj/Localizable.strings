@@ -319,7 +319,7 @@
 "shared_string_edit" = "Editar";
 "shared_string_dismiss" = "Cancelar";
 "shared_string_remove" = "Remover";
-"device_memory" = "Memória do dispositivo";
+"device_memory" = "Memória do aparelho";
 "free_memory" = "%@ livre";
 "map_orientation_change_in_accordance_with_speed" = "Limiar de orientação do mapa";
 "map_orientation_change_in_accordance_with_speed_descr" = "Selecione abaixo em qual velocidade a orientação do mapa alterna de 'Na direção do movimento' para 'Na direção da bússola'";
@@ -353,7 +353,7 @@
 "subcategories" = "Subcategorias";
 "create_custom_poi" = "Criar filtro personalizado";
 "selected_categories" = "Categorias selecionadas";
-"new_filter_desc" = "Por favor introduza o nome do novo filtro, este vai ser adicionado ao separador Categorias.";
+"new_filter_desc" = "Introduza o nome do novo filtro, este vai ser adicionado ao separador Categorias.";
 "shared_string_filters" = "Filtros";
 "edit_filter" = "Editar categorias";
 "delete_filter" = "Eliminar filtro";
@@ -722,7 +722,7 @@
 "osm_live_subscribe_btn" = "Subscrever";
 "shared_string_email_address" = "Endereço de e-mail";
 "osm_live_enter_email" = "Favor introduzir um endereço de e-mail válido";
-"osm_live_enter_user_name" = "Por favor introduza um nome público";
+"osm_live_enter_user_name" = "Introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
 "osm_live_payment_desc" = "Pode gerir e cancelar as suas subscrições nas configurações da sua conta na App Store após a compra";
 "osm_live_ask_for_purchase" = "Por favor primeiro compre a subscrição do OsmAnd Live";
@@ -781,7 +781,7 @@
 "speak_descr" = "Configure as indicações sobre nomes de ruas, avisos de trânsito (portagens, lombas, passadeiras), radares e limites de velocidade";
 "keep_informing_descr" = "Repetir as instruções de navegação em intervalos regulares";
 "default_speed_system_descr" = "Definir unidade de velocidade";
-"wake_on_voice_descr" = "Ligar o ecrã do dispositivo (se estiver desligado) ao fazer a aproximação à próxima viragem";
+"wake_on_voice_descr" = "Ligar o ecrã do aparelho (se estiver desligado) ao fazer a aproximação à próxima viragem";
 "voice_provider_descr" = "Selecione a orientação por voz para navegação";
 "choose_audio_stream_descr" = "Selecione o altifalante para orientação por voz";
 "osm_live_routing_descr" = "Usar as atualizações do OsmAnd Live para navegação";
@@ -993,7 +993,7 @@
 "shared_string_password" = "Palavra-passe";
 "poi_category_and_type" = "Categoria e tipo de POI";
 "poi_select_type" = "Selecionar o tipo";
-"show_something_on_map" = "Mostrar %@ no mapa";
+"show_something_on_map" = "Ver %@ no mapa";
 "shared_string_street_intersection" = "Cruzamento de rua";
 "do_not_show_discount" = "Não mostrar promoções";
 "do_not_send_anonymous_data" = "Não enviar dados anônimos";
@@ -1944,7 +1944,7 @@
 "plugin_settings_descr" = "Configurações de plugin para o perfil selecionado.";
 "global_settings_descr" = "Afetam toda a aplicação.";
 "osmand_settings" = "Configurações do OsmAnd";
-"device_settings" = "Configurações do dispositivo";
+"device_settings" = "Configurações do aparelho";
 "angular_measurment_units" = "Unidades de medição angular";
 "units_of_speed" = "Unidades de velocidade";
 "allow_3D_view" = "Vista 2.5D";

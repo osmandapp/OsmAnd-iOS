@@ -351,7 +351,7 @@ static const NSInteger timeSectionIndex = 1;
     }
     else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
     {
-        static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
+        static NSString* const reusableIdentifierTimePicker = [OADateTimePickerTableViewCell getCellIdentifier];
         OADateTimePickerTableViewCell* cell;
         cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
         if (cell == nil)

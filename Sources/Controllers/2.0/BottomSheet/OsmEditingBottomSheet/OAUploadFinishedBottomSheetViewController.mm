@@ -23,7 +23,6 @@
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OASettingSwitchCell.h"
-#import "OADescrTitleCell.h"
 #import "OAOsmEditingPlugin.h"
 #import "OADividerCell.h"
 #import "MaterialTextFields.h"
@@ -124,7 +123,7 @@
         if (names.length > 0)
             value = [NSString stringWithFormat:@"%@ (%@)", value, names];
         [arr addObject:@{
-                         @"type" : @"OADescrTitleCell",
+                         @"type" : [OADescrTitleCell getCellIdentifier],
                          @"title" : value,
                          @"description" : @""
                          }];
@@ -132,7 +131,7 @@
         [arr addObject:@{ @"type" : @"OADividerCell" } ];
         
         [arr addObject:@{
-                         @"type" : @"OADescrTitleCell",
+                         @"type" : [OADescrTitleCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_upload_no_internet"),
                          @"description" : @""
                          }];
@@ -140,7 +139,7 @@
     else
     {
         [arr addObject:@{
-                         @"type" : @"OADescrTitleCell",
+                         @"type" : [OADescrTitleCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_upload_failed_descr"),
                          @"description" : @""
                          }];
@@ -269,13 +268,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
+    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:@"OADescrTitleCell"];
+        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADescrTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
         }
         

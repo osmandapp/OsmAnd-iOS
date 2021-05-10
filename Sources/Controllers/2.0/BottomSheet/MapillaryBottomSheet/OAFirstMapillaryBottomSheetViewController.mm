@@ -76,7 +76,7 @@
                      }];
     
     [arr addObject:@{
-                     @"type" : @"OADescrTitleCell",
+                     @"type" : [OADescrTitleCell getCellIdentifier],
                      @"title" : OALocalizedString(@"mapillary_descr"),
                      @"description" : @""
                      }];
@@ -102,7 +102,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:@"OADescrTitleCell"] || [item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]] || [item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
         return UITableViewAutomaticDimension;
     }
@@ -173,13 +173,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
+    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:@"OADescrTitleCell"];
+        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADescrTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
         }
         

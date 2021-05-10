@@ -167,7 +167,7 @@
     }
     else if ([cellType isEqualToString:kCellTypePicker])
     {
-        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
+        static NSString* const identifierCell = [OACustomPickerTableViewCell getCellIdentifier];
         OACustomPickerTableViewCell* cell;
         cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)

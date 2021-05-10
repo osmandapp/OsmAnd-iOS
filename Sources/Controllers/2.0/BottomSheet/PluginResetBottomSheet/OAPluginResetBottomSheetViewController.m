@@ -32,7 +32,6 @@
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
 #define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
-#define kDescrTitleCell @"OADescrTitleCell"
 #define kDividerCell @"OADividerCell"
 
 @interface OAPluginResetBottomSheetScreen ()
@@ -98,7 +97,7 @@
     
     [arr removeAllObjects];
     [arr addObject:@{
-                     @"type" : kDescrTitleCell,
+                     @"type" : [OADescrTitleCell getCellIdentifier],
                      @"title" : OALocalizedString(@"reset_profile_action_descr"),
                      @"description" : @""
                      }];
@@ -121,7 +120,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]] || [type isEqualToString:kDescrTitleCell])
+    if ([type isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]] || [type isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -210,13 +209,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kDescrTitleCell])
+    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:kDescrTitleCell];
+        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDescrTitleCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;

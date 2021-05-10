@@ -48,4 +48,9 @@
     return res;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADescrTitleIconCell";
+}
+
 @end

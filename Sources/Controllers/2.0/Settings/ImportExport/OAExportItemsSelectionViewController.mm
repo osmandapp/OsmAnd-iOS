@@ -110,7 +110,7 @@
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray new];
     [data addObject:@{
-        @"type" : @"OACustomSelectionButtonCell"
+        @"type" : [OACustomSelectionButtonCell getCellIdentifier]
     }];
     
     for (id obj in _items)
@@ -426,9 +426,9 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OACustomSelectionButtonCell"])
+    if ([item[@"type"] isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OACustomSelectionButtonCell";
+        static NSString* const identifierCell = [OACustomSelectionButtonCell getCellIdentifier];
         OACustomSelectionButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {

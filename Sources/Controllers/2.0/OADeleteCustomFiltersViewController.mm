@@ -13,7 +13,6 @@
 #import "OACustomSelectionButtonCell.h"
 #import "OAMenuSimpleCell.h"
 
-#define kCellTypeSelectionButton @"OACustomSelectionButtonCell"
 #define kCellTypeTitle @"OAMenuSimpleCell"
 #define kDataTypeFilter @"OAPOIUIFilter"
 
@@ -132,9 +131,9 @@
 {
     NSObject *item = _items[indexPath.row];
     NSString *cellType = NSStringFromClass(item.class);
-    if ([cellType isEqualToString:kCellTypeSelectionButton])
+    if ([cellType isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
     {
-        static NSString * const identifierCell = kCellTypeSelectionButton;
+        static NSString * const identifierCell = [OACustomSelectionButtonCell getCellIdentifier];
         OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {

@@ -47,5 +47,9 @@
         }
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADeleteButtonTableViewCell";
+}
 
 @end

@@ -21,7 +21,12 @@
     
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OAColorsCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAColorsCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OAColorsCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]];
+}
+
++ (NSString *) getCellIdentifier
+{
+    return @"OAColorsTableViewCell";
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -44,7 +49,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAColorsCollectionViewCell";
+    NSString* const identifierCell = [OAColorsCollectionViewCell getCellIdentifier];
     OAColorsCollectionViewCell* cell = nil;
     cell = (OAColorsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
     

@@ -15,7 +15,6 @@
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OATitleIconRoundCell.h"
-#import "OACollectionViewCell.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OAFavoriteItem.h"
@@ -33,7 +32,6 @@
 #define kMessageFieldIndex 1
 
 #define kTitleIconRoundCell @"OATitleIconRoundCell"
-#define kCollectionViewCell @"OACollectionViewCell"
 
 @interface OAStatisticsSelectionBottomSheetScreen ()
 

@@ -467,7 +467,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypePicker])
     {
-        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
+        static NSString* const identifierCell = [OACustomPickerTableViewCell getCellIdentifier];
         OACustomPickerTableViewCell* cell;
         cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
@@ -488,12 +488,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeCollection])
     {
-        static NSString* const identifierCell = @"OAColorsTableViewCell";
+        static NSString* const identifierCell = [OAColorsTableViewCell getCellIdentifier];
         OAColorsTableViewCell *cell = nil;
         cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorsTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAColorsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _colors;
             cell.delegate = self;

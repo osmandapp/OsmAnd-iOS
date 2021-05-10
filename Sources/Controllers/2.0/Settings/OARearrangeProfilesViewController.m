@@ -195,12 +195,12 @@
     BOOL isAllProfiles = indexPath.section == kAllApplicationProfilesSection;
     OAApplicationMode *mode = isAllProfiles ? _appProfiles[indexPath.row].appMode : _deletedProfiles[indexPath.row].appMode;
     
-    static NSString* const identifierCell = @"OADeleteButtonTableViewCell";
+    NSString* const identifierCell = [OADeleteButtonTableViewCell getCellIdentifier];
     OADeleteButtonTableViewCell* cell = nil;
     cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADeleteButtonTableViewCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeleteButtonTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OADeleteButtonTableViewCell *)[nib objectAtIndex:0];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);

@@ -33,7 +33,6 @@
 #define kMessageFieldIndex 1
 
 #define kTitleIconRoundCell @"OATitleIconRoundCell"
-#define kCollectionViewCell @"OACollectionViewCell"
 
 @interface OAAddDestinationBottomSheetScreen () <OACollectionViewCellDelegate, OADestinationPointListDelegate>
 
@@ -251,7 +250,7 @@
     [arr removeAllObjects];
     
     [arr addObject:@{
-        @"type" : kCollectionViewCell,
+        @"type" : [OACollectionViewCell getCellIdentifier],
         @"key" : @"favorites"
     }];
     [model setObject:[NSArray arrayWithArray:arr] forKey:@(2)];
@@ -259,7 +258,7 @@
     [arr removeAllObjects];
     
     [arr addObject:@{
-        @"type" : kCollectionViewCell,
+        @"type" : [OACollectionViewCell getCellIdentifier],
         @"key" : @"markers"
     }];
     [model setObject:[NSArray arrayWithArray:arr] forKey:@(3)];
@@ -290,7 +289,7 @@
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:kCollectionViewCell])
+    else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
         return 60.0;
     }
@@ -368,15 +367,15 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCollectionViewCell])
+    else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCollectionViewCell;
+        static NSString* const identifierCell = [OACollectionViewCell getCellIdentifier];
         OACollectionViewCell* cell = nil;
         
         cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCollectionViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionViewCell getCellIdentifier] owner:self options:nil];
             cell = (OACollectionViewCell *)[nib objectAtIndex:0];
         }
         

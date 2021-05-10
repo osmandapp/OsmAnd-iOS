@@ -33,7 +33,6 @@
 #include "Localization.h"
 
 #define kRowNameCell @"OATextViewTableViewCell"
-#define kRowColorCell @"OAColorViewCell"
 #define kRowGroupCell @"OAIconTitleValueCell"
 #define kRowDescriptionCell @"OATextMultiViewCell"
 #define kRowWaypointsCell @"OATargetInfoCollapsableViewCell"
@@ -646,13 +645,13 @@
             return cell;
         }
     }
-    else if ([item[@"type"] isEqualToString:kRowColorCell])
+    else if ([item[@"type"] isEqualToString:[OAColorViewCell getCellIdentifier]])
     {
         OAColorViewCell* cell;
-        cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowColorCell];
+        cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAColorViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAColorViewCell *)[nib objectAtIndex:0];
         }
         OAFavoriteColor *favCol = item[@"color"];
@@ -795,7 +794,7 @@
     if ([item[@"type"] isEqualToString:kRowNameCell])
     {
     }
-    else if ([item[@"type"] isEqualToString:kRowColorCell])
+    else if ([item[@"type"] isEqualToString:[OAColorViewCell getCellIdentifier]])
     {
         if ([self supportEditing])
             [self changeColorClicked];

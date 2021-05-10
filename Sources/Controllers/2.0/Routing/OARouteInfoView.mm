@@ -358,7 +358,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADescrTitleIconCell",
+            @"cell" : [OADescrTitleIconCell getCellIdentifier],
             @"title" : destinationBackup.pointDescription.name,
             @"descr" : startBackup ? startBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location"),
             @"img" : @"ic_custom_point_to_point",
@@ -511,7 +511,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [str setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]} range:range];
         
         [section addObject:@{
-            @"cell" : @"OADescrTitleIconCell",
+            @"cell" : [OADescrTitleIconCell getCellIdentifier],
             @"title" : str,
             @"img" : @"ic_profile_pedestrian",
             @"key" : @"pedestrian_short"
@@ -1488,7 +1488,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OADescrTitleIconCell"])
+    else if ([item[@"cell"] isEqualToString:[OADescrTitleIconCell getCellIdentifier]])
     {
         static NSString* const reusableIdentifierPoint = item[@"cell"];
         

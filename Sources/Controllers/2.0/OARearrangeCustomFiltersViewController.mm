@@ -19,7 +19,6 @@
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
 #define kActionsSection 2
-#define kHideButtonCell @"OADeleteButtonTableViewCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAEditFilterItem : NSObject
@@ -312,15 +311,15 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSString *cellType = indexPath.section == kActionsSection ? [OAButtonRightIconCell getCellIdentifier] : kHideButtonCell;
-    if ([cellType isEqualToString:kHideButtonCell])
+    NSString *cellType = indexPath.section == kActionsSection ? [OAButtonRightIconCell getCellIdentifier] : [OADeleteButtonTableViewCell getCellIdentifier];
+    if ([cellType isEqualToString:[OADeleteButtonTableViewCell getCellIdentifier]])
     {
         BOOL isAllFilters = indexPath.section == kAllFiltersSection;
         OAPOIUIFilter *filter = isAllFilters ? _filtersItems[indexPath.row].filter : _hiddenFiltersItems[indexPath.row].filter;
-        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kHideButtonCell];
+        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeleteButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kHideButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeleteButtonTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADeleteButtonTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);

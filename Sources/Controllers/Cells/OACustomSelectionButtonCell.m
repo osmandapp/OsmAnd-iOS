@@ -23,4 +23,9 @@
     _checkboxWidthContainer.constant = 21.5;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OACustomSelectionButtonCell";
+}
+
 @end

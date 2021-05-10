@@ -236,7 +236,7 @@
     
     static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
     static NSString* const reusableIdentifierSwitch = @"OASwitchTableViewCell";
-    static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
+    static NSString* const reusableIdentifierTimePicker = [OADateTimePickerTableViewCell getCellIdentifier];
     static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
     
     NSInteger index = indexPath.row;

@@ -1136,11 +1136,11 @@
             case 1:
             {
                 OAColorViewCell* cell;
-                static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
+                static NSString* const reusableIdentifierColorCell = [OAColorViewCell getCellIdentifier];
                 cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierColorCell];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorViewCell" owner:self options:nil];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorViewCell getCellIdentifier] owner:self options:nil];
                     cell = (OAColorViewCell *)[nib objectAtIndex:0];
                 }
 

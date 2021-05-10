@@ -21,7 +21,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeSectionHeader @"OACustomSelectionCollapsableCell"
 #define kCellTypeTitleDescription @"OAMenuSimpleCell"
 #define kCellTypeTitle @"OAIconTextCell"
 #define kCellTypeProgress @"OAProgressTitleCell"
@@ -93,7 +92,7 @@
         OASettingsCategoryItems *categoryItems = self.itemsMap[type];
         OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
         group.groupName = type.title;
-        group.type = kCellTypeSectionHeader;
+        group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
         group.isOpen = NO;
         for (OAExportSettingsType *type in categoryItems.getTypes)
         {
@@ -334,9 +333,9 @@
             }
             return cell;
         }
-        else if ([groupData.type isEqualToString:@"OACustomSelectionCollapsableCell"])
+        else if ([groupData.type isEqualToString:[OACustomSelectionCollapsableCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = @"OACustomSelectionCollapsableCell";
+            static NSString* const identifierCell = [OACustomSelectionCollapsableCell getCellIdentifier];
             OACustomSelectionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
             if (cell == nil)
             {

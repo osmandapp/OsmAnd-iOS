@@ -15,7 +15,6 @@
 #import "OARootViewController.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-#define kDescrTitleCell @"OADescrTitleCell"
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
 
@@ -49,7 +48,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-             @"type" : kDescrTitleCell,
+             @"type" : [OADescrTitleCell getCellIdentifier],
              @"attributedText" : [self getAttributedContentText]
         }]];
     _data = data;
@@ -99,13 +98,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kDescrTitleCell])
+    if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tableView dequeueReusableCellWithIdentifier:kDescrTitleCell];
+        cell = (OADescrTitleCell *)[self.tableView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDescrTitleCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;

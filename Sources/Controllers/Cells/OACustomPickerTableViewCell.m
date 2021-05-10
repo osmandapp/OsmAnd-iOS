@@ -43,4 +43,9 @@
         [self.delegate zoomChanged:self.dataArray[row] tag:pickerView.tag];
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OACustomPickerTableViewCell";
+}
+
 @end

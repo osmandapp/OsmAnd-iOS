@@ -16,4 +16,9 @@
     self.backView.layer.cornerRadius = self.backView.frame.size.height/2;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAColorsCollectionViewCell";
+}
+
 @end

@@ -9,7 +9,6 @@
 #import "OAUploadProgressBottomSheetViewController.h"
 #import "Localization.h"
 #import "OABottomSheetHeaderCell.h"
-#import "OABottomSheetHeaderIconCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAMapPanelViewController.h"

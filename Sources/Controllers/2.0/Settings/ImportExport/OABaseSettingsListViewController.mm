@@ -21,7 +21,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
 #define kCellTypeSectionHeader @"OACustomSelectionCollapsableCell"
 #define kCellTypeTitleDescription @"OAMenuSimpleCell"
 #define kCellTypeTitle @"OAIconTextCell"
@@ -241,7 +240,7 @@
 - (void) showActivityIndicatorWithLabel:(NSString *)labelText
 {
     OATableGroupToImport *tableGroup = [[OATableGroupToImport alloc] init];
-    tableGroup.type = kCellTypeWithActivity;
+    tableGroup.type = [OAActivityViewWithTitleCell getCellIdentifier];
     tableGroup.groupName = labelText;
     self.data = @[tableGroup];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -301,9 +300,9 @@
     OATableGroupToImport* groupData = [self.data objectAtIndex:indexPath.section];
     if (indexPath.row == 0)
     {
-        if ([groupData.type isEqualToString:kCellTypeWithActivity])
+        if ([groupData.type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = kCellTypeWithActivity;
+            static NSString* const identifierCell = [OAActivityViewWithTitleCell getCellIdentifier];
             OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
             if (cell == nil)
             {

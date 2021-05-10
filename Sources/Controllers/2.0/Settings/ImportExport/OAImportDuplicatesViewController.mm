@@ -42,7 +42,6 @@
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
 #define kCellTypeTitleDescription @"OAMenuSimpleCell"
-#define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
 
 @interface OAHeaderType : NSObject
 
@@ -152,7 +151,7 @@
 
 - (void) turnOnLoadingIndicator
 {
-    NSDictionary * loadingItem = @{@"cellType": kCellTypeWithActivity,
+    NSDictionary * loadingItem = @{@"cellType": [OAActivityViewWithTitleCell getCellIdentifier],
                                    @"label": OALocalizedString(@"shared_string_importing")};
     NSMutableArray *firstSection = [NSMutableArray arrayWithObject:loadingItem];
     _data = [NSArray arrayWithObject:firstSection];
@@ -618,9 +617,9 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeWithActivity])
+    else if ([type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeWithActivity;
+        static NSString* const identifierCell = [OAActivityViewWithTitleCell getCellIdentifier];
         OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {

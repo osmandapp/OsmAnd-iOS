@@ -12,6 +12,6 @@
 
 @interface OABaseHeaderFooterCell : UITableViewHeaderFooterView
 
-- (NSString *) getCellIdentifier;
++ (NSString *) getCellIdentifier;
 
 @end

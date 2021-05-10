@@ -12,6 +12,6 @@
 
 @interface OABaseCollectionCell : UICollectionViewCell
 
-- (NSString *) getCellIdentifier;
++ (NSString *) getCellIdentifier;
 
 @end

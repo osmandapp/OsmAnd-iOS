@@ -12,6 +12,6 @@
 
 @interface OABaseCell : UITableViewCell
 
-- (NSString *) getCellIdentifier;
++ (NSString *) getCellIdentifier;
 
 @end

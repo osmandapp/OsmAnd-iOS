@@ -13,6 +13,6 @@
 
 @interface OABaseMGSwipeCell : MGSwipeTableCell
 
-- (NSString *) getCellIdentifier;
++ (NSString *) getCellIdentifier;
 
 @end

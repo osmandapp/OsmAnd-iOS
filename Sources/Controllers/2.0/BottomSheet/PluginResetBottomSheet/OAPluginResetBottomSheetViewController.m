@@ -31,7 +31,6 @@
 
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
-#define kBottomSheetHeaderButtonCell @"OABottomSheetHeaderButtonCell"
 #define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
 #define kDescrTitleCell @"OADescrTitleCell"
 #define kDividerCell @"OADividerCell"
@@ -78,7 +77,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-                     @"type" : kBottomSheetHeaderButtonCell,
+                     @"type" : [OABottomSheetHeaderButtonCell getCellIdentifier],
                      @"title" : OALocalizedString(@"reset_to_default"),
                      @"description" : @"",
                      @"img" : @"ic_custom_reset.png"
@@ -122,7 +121,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kBottomSheetHeaderButtonCell] || [type isEqualToString:kDescrTitleCell])
+    if ([type isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]] || [type isEqualToString:kDescrTitleCell])
     {
         return UITableViewAutomaticDimension;
     }
@@ -157,13 +156,13 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:kBottomSheetHeaderButtonCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetHeaderButtonCell;
+        NSString* const identifierCell = [OABottomSheetHeaderButtonCell getCellIdentifier];
         OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetHeaderButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

@@ -188,7 +188,7 @@
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderCell",
+                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : [self getTitle],
                      @"description" : @""
                      }];
@@ -286,7 +286,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
     {
         return UITableViewAutomaticDimension;
     }
@@ -317,9 +317,9 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderCell";
+        static NSString* const identifierCell = [OABottomSheetHeaderCell getCellIdentifier];
         OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
@@ -435,7 +435,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if (![item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if (![item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

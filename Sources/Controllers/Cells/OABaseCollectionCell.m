@@ -10,7 +10,7 @@
 
 @implementation OABaseCollectionCell
 
-- (NSString *) getCellIdentifier
++ (NSString *) getCellIdentifier
 {
     @throw [NSException exceptionWithName:@"OABaseCollectionCell error" reason:@"Cell identifier is not defined in cell class" userInfo:nil];
 }

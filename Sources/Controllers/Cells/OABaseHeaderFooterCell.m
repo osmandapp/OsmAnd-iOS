@@ -10,7 +10,7 @@
 
 @implementation OABaseHeaderFooterCell
 
-- (NSString *) getCellIdentifier
++ (NSString *) getCellIdentifier
 {
     @throw [NSException exceptionWithName:@"OABaseHeaderFooterCell error" reason:@"Cell identifier is not defined in cell class" userInfo:nil];
 }

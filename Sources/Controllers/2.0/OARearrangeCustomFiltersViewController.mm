@@ -20,7 +20,6 @@
 #define kHiddenFiltersSection 1
 #define kActionsSection 2
 #define kHideButtonCell @"OADeleteButtonTableViewCell"
-#define kButtonRightIconCell @"OAButtonRightIconCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAEditFilterItem : NSObject
@@ -313,7 +312,7 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSString *cellType = indexPath.section == kActionsSection ? kButtonRightIconCell : kHideButtonCell;
+    NSString *cellType = indexPath.section == kActionsSection ? [OAButtonRightIconCell getCellIdentifier] : kHideButtonCell;
     if ([cellType isEqualToString:kHideButtonCell])
     {
         BOOL isAllFilters = indexPath.section == kAllFiltersSection;
@@ -339,12 +338,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kButtonRightIconCell])
+    else if ([cellType isEqualToString:[OAButtonRightIconCell getCellIdentifier]])
     {
-        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:kButtonRightIconCell];
+        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonRightIconCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
         }

@@ -16,6 +16,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAMapStyleTitles.h"
 #import "OAQuickActionType.h"
+#import "OAButtonCell.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -196,7 +197,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"add_map_style"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addMapStyle"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_styles")];

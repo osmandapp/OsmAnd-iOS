@@ -52,7 +52,6 @@
 #define kTextInputIconCell @"OATextInputIconCell"
 #define kIconTitleValueCell @"OAIconTitleValueCell"
 #define kBottomSheetActionCell @"OAMenuSimpleCell"
-#define kButtonCell @"OAButtonCell"
 #define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
 #define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
 #define kMultilineTextViewCell @"OAMultilineTextViewCell"
@@ -354,7 +353,7 @@
     NSMutableArray *arr = [NSMutableArray new];
     for (NSDictionary *item in _data[_data.allKeys.lastObject])
     {
-        if (![item[@"type"] isEqualToString:kButtonCell])
+        if (![item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
             [arr addObject:item[@"title"]];
     }
     return arr;
@@ -619,15 +618,15 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kButtonCell])
+    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kButtonCell;
+        static NSString* const identifierCell = [OAButtonCell getCellIdentifier];
         OAButtonCell* cell = nil;
         
         cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)

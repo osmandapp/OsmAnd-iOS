@@ -20,4 +20,9 @@
     [super setSelected:selected animated:animated];
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAButtonRightIconCell";
+}
+
 @end

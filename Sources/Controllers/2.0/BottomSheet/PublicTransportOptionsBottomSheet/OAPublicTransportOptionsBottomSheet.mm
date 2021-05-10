@@ -55,7 +55,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-        @"type" : @"OABottomSheetHeaderIconCell",
+        @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
         @"title" : OALocalizedString(@"transport"),
         @"description" : @""
         }];
@@ -130,13 +130,13 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderIconCell";
+        static NSString* const identifierCell = [OABottomSheetHeaderIconCell getCellIdentifier];
         OABottomSheetHeaderIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderIconCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OABottomSheetHeaderIconCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

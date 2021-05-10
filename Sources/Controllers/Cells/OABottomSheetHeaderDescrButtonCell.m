@@ -27,7 +27,7 @@
 
 + (NSString *) getCellIdentifier
 {
-    return @"";
+    return @"OABottomSheetHeaderDescrButtonCell";
 }
 
 @end

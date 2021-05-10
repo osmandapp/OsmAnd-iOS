@@ -80,7 +80,7 @@
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary<NSNumber *, NSArray *> *dict = [NSMutableDictionary new];
     [dict setObject:@[@{
-                         @"type" : @"OABottomSheetHeaderDescrButtonCell",
+                         @"type" : [OABottomSheetHeaderDescrButtonCell getCellIdentifier],
                          @"title" : OALocalizedString(@"wiki_sheet_title"),
                          @"description" : _url,
                          @"img" : @"ic_custom_wikipedia"
@@ -132,9 +132,9 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderDescrButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderDescrButtonCell";
+        static NSString* const identifierCell = [OABottomSheetHeaderDescrButtonCell getCellIdentifier];
         OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {

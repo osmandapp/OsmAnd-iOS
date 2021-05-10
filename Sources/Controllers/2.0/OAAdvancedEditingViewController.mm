@@ -22,7 +22,6 @@
 
 #define kDescrText @"OADescrTitleCell"
 #define kInputImage @"OATextInputFloatingCellWithIcon"
-#define kButtonCell @"OAButtonCell"
 #define kVerticalMargin 8.
 
 @interface OAAdvancedEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
@@ -116,13 +115,13 @@
 
 - (OAButtonCell *) getAddTagButtonCell
 {
-    static NSString* const identifierCell = @"OAButtonCell";
+    static NSString* const identifierCell = [OAButtonCell getCellIdentifier];
     OAButtonCell* cell = nil;
     
     cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
     }
     if (cell)
@@ -210,7 +209,7 @@
     }];
     [_fieldPairs addObject:@[
                              @{
-                                 @"type" : kButtonCell
+                                 @"type" : [OAButtonCell getCellIdentifier]
                                  }
                              ]];
     [self.tableView reloadData];
@@ -247,7 +246,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
-    if ([item[@"type"] isEqualToString:kButtonCell])
+    if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
         [self addTag:nil];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell canBecomeFirstResponder])
@@ -261,7 +260,7 @@
         return [self getTextCellWithDescr:indexPath];
     else if ([item[@"type"] isEqualToString:kInputImage])
         return [self getInputCellWithHint:indexPath];
-    else if ([item[@"type"] isEqualToString:kButtonCell])
+    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
         return [self getAddTagButtonCell];
     return nil;
 }

@@ -15,6 +15,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
+#import "OAButtonCell.h"
 
 #define LAYER_OSM_VECTOR @"type_default"
 #define KEY_SOURCE @"source"
@@ -157,7 +158,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"add_map_source"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addMapSource"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_sources")];

@@ -15,6 +15,7 @@
 #import "OAMapStyleSettings.h"
 #import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
+#import "OAButtonCell.h"
 
 #define KEY_UNDERLAYS @"underlays"
 #define KEY_NO_UNDERLAY @"no_underlay"
@@ -170,7 +171,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"quick_action_add_underlay"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addMapUnderlay"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_underlays")];

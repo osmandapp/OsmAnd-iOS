@@ -30,4 +30,9 @@
         self.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAButtonCell";
+}
+
 @end

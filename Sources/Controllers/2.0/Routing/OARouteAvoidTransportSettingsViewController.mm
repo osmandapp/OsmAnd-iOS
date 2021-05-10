@@ -31,7 +31,6 @@
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
 #import "OAAvoidSpecificRoads.h"
-#import "OAButtonCell.h"
 
 #include <OsmAndCore/Utilities.h>
 

@@ -13,6 +13,7 @@
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
 #import "OAProfileSelectionBottomSheetViewController.h"
+#import "OAButtonCell.h"
 
 #define kNames @"names"
 #define kStringKeys @"stringKeys"
@@ -138,7 +139,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"shared_string_add_profile"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addProfile"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"app_profiles")];

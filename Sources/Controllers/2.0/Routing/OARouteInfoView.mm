@@ -437,7 +437,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (allItems.count == _historyItemsLimit)
         {
             [section addObject:@{
-                @"cell" : @"OAButtonCell",
+                @"cell" : [OAButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_show_more")
             }];
         }
@@ -1530,7 +1530,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
         static NSString* const identifierCell = item[@"cell"];
         OAButtonCell* cell = nil;

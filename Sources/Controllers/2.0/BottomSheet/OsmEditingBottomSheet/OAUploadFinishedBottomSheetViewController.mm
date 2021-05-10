@@ -86,7 +86,7 @@
     if (_hasFailedPoints)
     {
         [arr addObject:@{
-                         @"type" : @"OABottomSheetHeaderIconCell",
+                         @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_upload_failed_title"),
                          @"description" : @"",
                          @"img" : @"ic_custom_failure"
@@ -226,13 +226,13 @@
             cell.titleView.text = item[@"title"];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
+    else if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderIconCell";
+        static NSString* const identifierCell = [OABottomSheetHeaderIconCell getCellIdentifier];
         OABottomSheetHeaderIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderIconCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OABottomSheetHeaderIconCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

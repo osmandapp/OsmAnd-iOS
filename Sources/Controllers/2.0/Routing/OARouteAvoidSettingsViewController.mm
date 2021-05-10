@@ -107,7 +107,7 @@
     
     [sectionData addObject:@{
         @"title" : OALocalizedString(@"shared_string_select_on_map"),
-        @"type" : @"OAButtonCell",
+        @"type" : [OAButtonCell getCellIdentifier],
         @"key" : @"select_on_map"
     }];
     
@@ -272,9 +272,9 @@
             }
             return cell;
         }
-        else if ([item[@"type"] isEqualToString:@"OAButtonCell"])
+        else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = @"OAButtonCell";
+            static NSString* const identifierCell = [OAButtonCell getCellIdentifier];
             OAButtonCell* cell = nil;
             
             cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];

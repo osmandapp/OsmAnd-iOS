@@ -340,13 +340,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (OAButtonCell *) getButtonCell:(NSString *)type
 {
-    static NSString* const identifierCell = @"OAButtonCell";
+    static NSString* const identifierCell = [OAButtonCell getCellIdentifier];
     OAButtonCell* cell = nil;
     
     cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
         [cell showImage:NO];
         [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];

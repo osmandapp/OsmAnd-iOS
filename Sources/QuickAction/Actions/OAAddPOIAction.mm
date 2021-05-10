@@ -22,6 +22,7 @@
 #import "OAOsmEditingViewController.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAQuickActionType.h"
+#import "OAButtonCell.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -116,7 +117,7 @@ static OAQuickActionType *ACTION_TYPE;
     }];
     [arr addObject:@{
                      @"title" : OALocalizedString(@"quick_action_add_tag"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addTagValue:"
                      }];
     [data setObject:arr forKey:OALocalizedString(@"quick_action_tags")];

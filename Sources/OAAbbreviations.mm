@@ -12,25 +12,20 @@
 
 @implementation OAAbbreviations
 
-static NSMutableDictionary<NSString *, NSString *> *_ABBREVIATIONS;
-
-+ (void) initialize
-{
-    _ABBREVIATIONS = [NSMutableDictionary new];
-    _ABBREVIATIONS[@"e"] = @"East";
-    _ABBREVIATIONS[@"w"] = @"West";
-    _ABBREVIATIONS[@"s"] = @"South";
-    _ABBREVIATIONS[@"n"] = @"North";
-    _ABBREVIATIONS[@"sw"] = @"Southwest";
-    _ABBREVIATIONS[@"se"] = @"Southeast";
-    _ABBREVIATIONS[@"nw"] = @"Northwest";
-    _ABBREVIATIONS[@"ne"] = @"Northeast";
-    _ABBREVIATIONS[@"ln"] = @"Lane";
-}
+static NSDictionary *ABBREVIATIONS = @{ @"e" : @"East",
+                                 @"w" : @"West",
+                                 @"s" : @"South",
+                                 @"n" : @"North",
+                                 @"sw" : @"Southwest",
+                                 @"se" : @"Southeast",
+                                 @"nw" : @"Northwest",
+                                 @"ne" : @"Northeast",
+                                 @"ln" : @"Lane"
+};
 
 + (NSString *) replace:(NSString *)word
 {
-    NSString *value = _ABBREVIATIONS[[word lowercaseString]];
+    NSString *value = ABBREVIATIONS[[word lowercaseString]];
     return value ? value : word;
 }
 
@@ -44,7 +39,7 @@ static NSMutableDictionary<NSString *, NSString *> *_ABBREVIATIONS;
         if ([r length] > 0)
             [r appendString:[OASearchPhrase getDelimiter]];
         
-        NSString *abbrRes = [_ABBREVIATIONS objectForKey:[word lowercaseString]];
+        NSString *abbrRes = [ABBREVIATIONS objectForKey:[word lowercaseString]];
         if (abbrRes == nil)
         {
             [r appendString:word];

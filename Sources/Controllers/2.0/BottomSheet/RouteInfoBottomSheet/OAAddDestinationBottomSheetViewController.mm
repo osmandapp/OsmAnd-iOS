@@ -318,8 +318,7 @@
     
     if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = [OABottomSheetHeaderCell getCellIdentifier];
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderCell" owner:self options:nil];
@@ -369,10 +368,7 @@
     }
     else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = [OACollectionViewCell getCellIdentifier];
-        OACollectionViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OACollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionViewCell getCellIdentifier] owner:self options:nil];

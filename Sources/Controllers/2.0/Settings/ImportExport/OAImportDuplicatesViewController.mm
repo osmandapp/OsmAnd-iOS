@@ -619,11 +619,10 @@
     }
     else if ([type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = [OAActivityViewWithTitleCell getCellIdentifier];
-        OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAActivityViewWithTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAActivityViewWithTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OAActivityViewWithTitleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;

@@ -311,7 +311,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return;
     
     [section addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(NO)
     }];
     
@@ -333,13 +333,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (i != visibleGpx.count - 1)
         {
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(YES)
             }];
         }
     }
     [section addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(NO)
     }];
     _gpxTripSection = sectionIndex;
@@ -353,7 +353,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (destinationBackup != nil)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
@@ -366,7 +366,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _prevRouteSection = sectionIndex;
@@ -380,7 +380,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (markers.count > 0)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         for (NSInteger i = 0; i < markers.count; i++)
@@ -395,13 +395,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if (i != markers.count - 1)
             {
                 [section addObject:@{
-                    @"cell" : @"OADividerCell",
+                    @"cell" : [OADividerCell getCellIdentifier],
                     @"custom_insets" : @(YES)
                 }];
             }
         }
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _mapMarkerSection = sectionIndex;
@@ -416,7 +416,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (allItems.count > 0)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         for (OAHistoryItem *item in allItems)
@@ -429,7 +429,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }];
             
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(YES)
             }];
             
@@ -446,7 +446,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [section removeObjectAtIndex:section.count - 1];
         }
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _historySection = sectionIndex;
@@ -463,7 +463,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     for (NSInteger i = 0; i < _transportHelper.getRoutes.size(); i++)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
@@ -477,7 +477,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -499,7 +499,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (showPedestrianCard)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
@@ -524,7 +524,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
@@ -597,7 +597,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         else
         {
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(NO)
             }];
             [section addObject:@{
@@ -612,7 +612,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 @"key" : @"route_details"
             }];
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(NO)
             }];
             [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -629,14 +629,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if (!_routingHelper.isRouteBeingCalculated && !_transportHelper.isRouteBeingCalculated)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [section addObject:@{
             @"cell" : @"OAHomeWorkCell"
         }];
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -1468,13 +1468,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell updateConstraints];
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1750,7 +1749,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return 60.0;
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
         return 50.0;
-    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
         return 2.0;

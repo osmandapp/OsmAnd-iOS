@@ -114,13 +114,10 @@
 
 - (OAButtonCell *) getAddTagButtonCell
 {
-    static NSString* const identifierCell = [OAButtonCell getCellIdentifier];
-    OAButtonCell* cell = nil;
-    
-    cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
     }
     if (cell)

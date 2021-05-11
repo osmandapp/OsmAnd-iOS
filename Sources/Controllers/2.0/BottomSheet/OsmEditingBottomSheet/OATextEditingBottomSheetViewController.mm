@@ -10,7 +10,6 @@
 #import "Localization.h"
 #import "OATextInputFloatingCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAIAPHelper.h"

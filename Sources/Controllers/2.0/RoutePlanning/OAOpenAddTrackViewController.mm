@@ -32,7 +32,6 @@
 #import "OACollectionViewCellState.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
-#define kDividerCell @"OADividerCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
 #define kFoldersCell @"OAFoldersCell"
 #define kAllFoldersKey @"kAllFoldersKey"
@@ -153,7 +152,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         @"values" : [self getFoldersList]
     }];
     
-    [existingTracksSection addObject:@{ @"type" : kDividerCell }];
+    [existingTracksSection addObject:@{ @"type" : [OADividerCell getCellIdentifier] }];
     
     [existingTracksSection addObject:@{
         @"type" : kCellTypeSegment,
@@ -189,7 +188,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 @"key" : @"gpx_route"
             }];
     }
-    [existingTracksSection addObject:@{ @"type" : kDividerCell }];
+    [existingTracksSection addObject:@{ @"type" : [OADividerCell getCellIdentifier] }];
     [data addObject:existingTracksSection];
     _data = data;
 }
@@ -269,7 +268,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
     else if ([item[@"type"] isEqualToString:kFoldersCell])
         return 52;
@@ -347,12 +346,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kDividerCell])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:kDividerCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDividerCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);

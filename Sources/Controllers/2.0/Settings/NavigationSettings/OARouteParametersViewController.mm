@@ -27,7 +27,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeScreenImage @"OADeviceScreenTableViewCell"
 #define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeIconTitle @"OAIconTextCell"
 #define kCellTypeSwitch @"OASettingSwitchCell"
@@ -103,7 +102,7 @@
     NSMutableArray *parametersArr = [NSMutableArray array];
     OAAppSettings *settings = [OAAppSettings sharedManager];
     [otherArr addObject:@{
-        @"type" : kCellTypeScreenImage,
+        @"type" : [OADeviceScreenTableViewCell getCellIdentifier],
         @"foregroundImage" : @"img_settings_sreen_route_parameters@3x.png",
         @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
     }];
@@ -325,13 +324,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeScreenImage])
+    if ([cellType isEqualToString:[OADeviceScreenTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeScreenImage;
-        OADeviceScreenTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADeviceScreenTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeviceScreenTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeviceScreenTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADeviceScreenTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

@@ -94,7 +94,7 @@
     [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
     
     [arr addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(YES)
     }];
 }
@@ -117,7 +117,7 @@
     [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
     
     [arr addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(YES)
     }];
     
@@ -140,7 +140,7 @@
     }];
     
     [arr addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(NO)
     }];
 }
@@ -254,7 +254,7 @@
     }];
     
     [arr addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(YES)
     }];
 }
@@ -265,7 +265,7 @@
     NSMutableArray *arr = [NSMutableArray arrayWithArray:@[@{@"cell" : @"OAPublicTransportShieldCell"},
                                                            @{@"cell" : @"OAPublicTransportRouteCell"},
                                                            @{
-                                                               @"cell" : @"OADividerCell",
+                                                               @"cell" : [OADividerCell getCellIdentifier],
                                                                @"custom_insets" : @(NO)
                                                            }]];
     NSInteger section  = 0;
@@ -312,7 +312,7 @@
                     [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
                     
                     [arr addObject:@{
-                        @"cell" : @"OADividerCell",
+                        @"cell" : [OADividerCell getCellIdentifier],
                         @"custom_insets" : @(YES)
                     }];
                 }
@@ -606,13 +606,12 @@
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -660,7 +659,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     return UITableViewAutomaticDimension;
 }

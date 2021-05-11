@@ -351,9 +351,8 @@ static const NSInteger timeSectionIndex = 1;
     }
     else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
     {
-        static NSString* const reusableIdentifierTimePicker = [OADateTimePickerTableViewCell getCellIdentifier];
         OADateTimePickerTableViewCell* cell;
-        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
+        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];

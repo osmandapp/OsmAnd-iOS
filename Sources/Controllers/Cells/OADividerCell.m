@@ -30,6 +30,11 @@
     [self.layer addSublayer:_divider];
 }
 
++ (NSString *) getCellIdentifier
+{
+    return [OADividerCell getCellIdentifier];
+}
+
 - (void) layoutSubviews
 {
     [super layoutSubviews];

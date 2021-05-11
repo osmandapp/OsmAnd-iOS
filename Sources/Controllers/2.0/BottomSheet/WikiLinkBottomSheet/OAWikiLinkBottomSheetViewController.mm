@@ -134,11 +134,10 @@
     
     if ([item[@"type"] isEqualToString:[OABottomSheetHeaderDescrButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = [OABottomSheetHeaderDescrButtonCell getCellIdentifier];
-        OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderDescrButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderDescrButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderDescrButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }

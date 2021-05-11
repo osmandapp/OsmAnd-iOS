@@ -32,7 +32,6 @@
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
 #define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
-#define kDividerCell @"OADividerCell"
 
 @interface OAPluginResetBottomSheetScreen ()
 
@@ -101,7 +100,7 @@
                      @"title" : OALocalizedString(@"reset_profile_action_descr"),
                      @"description" : @""
                      }];
-    [arr addObject:@{ @"type" : kDividerCell } ];
+    [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     [model addObject:[NSArray arrayWithArray:arr]];
 
     _data = [NSArray arrayWithArray:model];
@@ -128,7 +127,7 @@
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([type isEqualToString:kDividerCell])
+    else if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(0, 0, 8, 0)];
     }
@@ -230,13 +229,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kDividerCell])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kDividerCell;
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDividerCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);

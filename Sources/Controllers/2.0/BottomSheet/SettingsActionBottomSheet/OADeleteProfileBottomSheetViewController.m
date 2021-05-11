@@ -106,11 +106,10 @@
     
     if ([item[@"type"] isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]])
     {
-        NSString* const identifierCell = [OABottomSheetHeaderButtonCell getCellIdentifier];
-        OABottomSheetHeaderButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);

@@ -1136,8 +1136,7 @@
             case 1:
             {
                 OAColorViewCell* cell;
-                static NSString* const reusableIdentifierColorCell = [OAColorViewCell getCellIdentifier];
-                cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierColorCell];
+                cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAColorViewCell getCellIdentifier]];
                 if (cell == nil)
                 {
                     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorViewCell getCellIdentifier] owner:self options:nil];

@@ -49,9 +49,8 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString* const identifierCell = [OAColorsCollectionViewCell getCellIdentifier];
     OAColorsCollectionViewCell* cell = nil;
-    cell = (OAColorsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+    cell = (OAColorsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     
     int color = [_dataArray[indexPath.row] intValue];
     cell.colorView.backgroundColor = UIColorFromRGB(color);

@@ -129,7 +129,7 @@ static const NSInteger panoImageFilterSection = 3;
     // Visibility/cache section
     
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell"},
+                         @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
                              @"type" : @"OASettingSwitchCell",
                              @"title" : @"",
@@ -144,22 +144,22 @@ static const NSInteger panoImageFilterSection = 3;
                              @"description" : @"",
                              @"img" : @"ic_custom_overlay_map.png"
                              },
-                         @{ @"type" : @"OADividerCell"}
+                         @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
     
     // Users filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell"},
+                         @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
                              @"type" : @"OAIconTitleValueCell",
                              @"img" : @"ic_custom_user.png",
                              @"key" : @"users_filter",
                              @"title" : OALocalizedString(@"mapil_usernames")
                              },
-                         @{ @"type" : @"OADividerCell"}]];
+                         @{ @"type" : [OADividerCell getCellIdentifier]}]];
     // Date filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell"},
+                         @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
                              @"type" : @"OATimeTableViewCell",
                              @"title" : OALocalizedString(@"shared_string_start_date"),
@@ -172,12 +172,12 @@ static const NSInteger panoImageFilterSection = 3;
                              @"key" : @"end_date_filter",
                              @"img" : @"ic_custom_date.png"
                              },
-                         @{ @"type" : @"OADividerCell"}
+                         @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
     
     // Pano filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell"},
+                         @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
                              @"type" : @"OASettingSwitchCell",
                              @"title" : OALocalizedString(@"mapil_pano_only"),
@@ -185,7 +185,7 @@ static const NSInteger panoImageFilterSection = 3;
                              @"img" : @"ic_custom_coordinates.png",
                              @"key" : @"pano_only"
                              },
-                         @{ @"type" : @"OADividerCell"}
+                         @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
     
     _data = [NSArray arrayWithArray:dataArr];
@@ -422,13 +422,12 @@ static const NSInteger panoImageFilterSection = 3;
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);
@@ -473,9 +472,8 @@ static const NSInteger panoImageFilterSection = 3;
     }
     else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
     {
-        static NSString* const reusableIdentifierTimePicker = [OADateTimePickerTableViewCell getCellIdentifier];
         OADateTimePickerTableViewCell* cell;
-        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
+        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
@@ -626,7 +624,7 @@ static const NSInteger panoImageFilterSection = 3;
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
     }

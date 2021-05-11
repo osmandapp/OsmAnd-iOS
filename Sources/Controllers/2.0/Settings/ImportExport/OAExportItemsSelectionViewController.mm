@@ -428,11 +428,10 @@
     NSDictionary *item = _data[indexPath.row];
     if ([item[@"type"] isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = [OACustomSelectionButtonCell getCellIdentifier];
-        OACustomSelectionButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OACustomSelectionButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OACustomSelectionButtonCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
         }

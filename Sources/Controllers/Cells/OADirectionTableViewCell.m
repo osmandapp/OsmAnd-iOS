@@ -18,4 +18,9 @@
 }
 */
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADirectionTableViewCell";
+}
+
 @end

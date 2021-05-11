@@ -195,9 +195,8 @@
     BOOL isAllProfiles = indexPath.section == kAllApplicationProfilesSection;
     OAApplicationMode *mode = isAllProfiles ? _appProfiles[indexPath.row].appMode : _deletedProfiles[indexPath.row].appMode;
     
-    NSString* const identifierCell = [OADeleteButtonTableViewCell getCellIdentifier];
     OADeleteButtonTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = [tableView dequeueReusableCellWithIdentifier:[OADeleteButtonTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeleteButtonTableViewCell getCellIdentifier] owner:self options:nil];

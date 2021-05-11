@@ -301,11 +301,10 @@
     {
         if ([groupData.type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = [OAActivityViewWithTitleCell getCellIdentifier];
-            OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAActivityViewWithTitleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAActivityViewWithTitleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAActivityViewWithTitleCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -335,11 +334,10 @@
         }
         else if ([groupData.type isEqualToString:[OACustomSelectionCollapsableCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = [OACustomSelectionCollapsableCell getCellIdentifier];
-            OACustomSelectionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OACustomSelectionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionCollapsableCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionCollapsableCell getCellIdentifier] owner:self options:nil];
                 cell = (OACustomSelectionCollapsableCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
                 cell.openCloseGroupButton.hidden = NO;

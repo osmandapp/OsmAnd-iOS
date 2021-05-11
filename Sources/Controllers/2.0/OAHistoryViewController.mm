@@ -554,10 +554,8 @@
 {
     HistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
     
-    static NSString* const reusableIdentifierPoint = @"OADirectionTableViewCell";
-    
     OADirectionTableViewCell* cell;
-    cell = (OADirectionTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OADirectionTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OADirectionTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADirectionCell" owner:self options:nil];

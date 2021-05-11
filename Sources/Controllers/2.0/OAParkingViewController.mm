@@ -236,7 +236,6 @@
     
     static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
     static NSString* const reusableIdentifierSwitch = @"OASwitchTableViewCell";
-    static NSString* const reusableIdentifierTimePicker = [OADateTimePickerTableViewCell getCellIdentifier];
     static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
     
     NSInteger index = indexPath.row;
@@ -294,7 +293,7 @@
         case 2:
         {
             OADateTimePickerTableViewCell* cell;
-            cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
+            cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];

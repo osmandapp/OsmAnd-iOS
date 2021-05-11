@@ -2084,3 +2084,11 @@
 "hidden_categories" = "Ausgeblendete Kategorien";
 "visible_categories" = "Sichtbare Kategorien";
 "rearrange_categories" = "Kategorien neu ordnen";
+"new_plugin_added" = "Neues Plugin hinzugefügt";
+"extra_maps" = "Zusätzliche Karten";
+"custom_plugins" = "Benutzerdefinierte Erweiterungen";
+"custom_osmand_plugin_name" = "Benutzerdefinierte OsmAnd Erweiterung";
+"shared_string_disable" = "Deaktivieren";
+
+// Shared Strings
+"shared_string_enable" = "Aktivieren";

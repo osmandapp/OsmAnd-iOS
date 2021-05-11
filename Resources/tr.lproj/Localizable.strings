@@ -2077,3 +2077,11 @@
 "hidden_categories" = "Gizli kategoriler";
 "visible_categories" = "Görünür kategoriler";
 "rearrange_categories" = "Kategorileri yeniden düzenle";
+"new_plugin_added" = "Yeni eklenti eklendi";
+"extra_maps" = "Ek haritalar";
+"custom_plugins" = "Özel eklentiler";
+"custom_osmand_plugin_name" = "Özel OsmAnd eklentisi";
+"shared_string_disable" = "Devre dışı bırak";
+
+// Shared Strings
+"shared_string_enable" = "Etkinleştir";

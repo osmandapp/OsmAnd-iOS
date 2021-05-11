@@ -10,6 +10,11 @@
 
 @implementation OALineChartCell
 
++ (NSString *)getCellIdentifier
+{
+    return @"OALineChartCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

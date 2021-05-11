@@ -166,7 +166,7 @@
         @"icon" : [self getParameterImage:parameter],
     }];
     [parametersArr addObject:@{
-        @"type" : @"OAInputCellWithTitle",
+        @"type" : [OAInputCellWithTitle getCellIdentifier],
         @"title" : [self getMeasurementUnit:parameter],
         @"value" : [_measurementValue isEqualToString:OALocalizedString(@"sett_no_ext_input")] ? @"0" : _measurementValue,
     }];
@@ -228,13 +228,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OAInputCellWithTitle"])
+    else if ([cellType isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAInputCellWithTitle";
-        OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:[OAInputCellWithTitle getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputCellWithTitle getCellIdentifier] owner:self options:nil];
             cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
@@ -341,7 +340,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OAInputCellWithTitle"])
+    if ([item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
     {
         OAInputCellWithTitle *cell = (OAInputCellWithTitle *) [tableView cellForRowAtIndexPath:indexPath];
         if (cell.inputField.isFirstResponder)

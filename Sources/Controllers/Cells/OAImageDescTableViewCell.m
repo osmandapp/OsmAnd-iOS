@@ -10,6 +10,11 @@
 
 @implementation OAImageDescTableViewCell
 
++ (NSString *)getCellIdentifier
+{
+    return @"OAImageDescTableViewCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     

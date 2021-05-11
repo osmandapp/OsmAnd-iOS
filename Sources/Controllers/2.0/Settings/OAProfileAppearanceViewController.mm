@@ -572,12 +572,12 @@
     }
     else if ([cellType isEqualToString:kCellTypePositionIconCollection])
     {
-        static NSString* const identifierCell = @"OALocationIconsTableViewCell";
+        static NSString* const identifierCell = [OALocationIconsTableViewCell getCellIdentifier];
         OALocationIconsTableViewCell *cell = nil;
         cell = (OALocationIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALocationIconsTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALocationIconsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OALocationIconsTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;

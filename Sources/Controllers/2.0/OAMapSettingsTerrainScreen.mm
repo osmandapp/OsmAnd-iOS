@@ -41,8 +41,6 @@
 #define kCellTypeSlider @"sliderCell"
 #define kCellTypeMap @"mapCell"
 #define kCellTypeSegment @"segmentCell"
-#define kCellTypeImageDesc @"imageDescCell"
-#define kCellTypeImageTextView @"imageTextViewCell"
 #define kCellTypeButton @"buttonIconCell"
 
 #define kZoomSection 2
@@ -185,7 +183,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (_app.data.terrainType == EOATerrainTypeSlope)
     {
         [slopeLegendArr addObject:@{
-            @"type" : kCellTypeImageTextView,
+            @"type" : [OAImageTextViewCell getCellIdentifier],
             @"descr" : OALocalizedString(@"map_settings_slopes_legend"),
             @"img" : @"img_legend_slope",
             @"url" : @"https://en.wikipedia.org/wiki/Grade_(slope)",
@@ -242,7 +240,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSMutableArray *imageArr = [NSMutableArray array];
     [imageArr addObject:@{
-        @"type" : kCellTypeImageDesc,
+        @"type" : [OAImageDescTableViewCell getCellIdentifier],
         @"desc" : OALocalizedString(@"enable_hillshade"),
         @"img" : @"img_empty_state_terrain"
     }];
@@ -630,13 +628,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeImageDesc])
+    else if ([item[@"type"] isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAImageDescTableViewCell";
-        OAImageDescTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAImageDescTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAImageDescTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageDescTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageDescTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -651,13 +648,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeImageTextView])
+    else if ([item[@"type"] isEqualToString:[OAImageTextViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAImageTextViewCell";
-        OAImageTextViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAImageTextViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageTextViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAImageTextViewCell *)[nib objectAtIndex:0];
         }
         if (cell)

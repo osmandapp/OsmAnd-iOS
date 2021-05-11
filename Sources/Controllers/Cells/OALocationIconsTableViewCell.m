@@ -12,6 +12,11 @@
 
 @implementation OALocationIconsTableViewCell
 
++ (NSString *)getCellIdentifier
+{
+    return @"OALocationIconsTableViewCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

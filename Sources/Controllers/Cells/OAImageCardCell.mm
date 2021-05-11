@@ -13,7 +13,10 @@
 #define urlTextMargin 32
 
 @implementation OAImageCardCell
+
++ (NSString *)getCellIdentifier
 {
+    return @"OAImageCardCell";
 }
 
 - (void) awakeFromNib

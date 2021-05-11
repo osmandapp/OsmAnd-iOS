@@ -183,7 +183,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_tableView setShowsHorizontalScrollIndicator:NO];
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
     _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
     
     self.sliderView.layer.cornerRadius = 2.;

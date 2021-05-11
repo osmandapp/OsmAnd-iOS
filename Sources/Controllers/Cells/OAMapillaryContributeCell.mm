@@ -9,7 +9,10 @@
 #import "OAMapillaryContributeCell.h"
 
 @implementation OAMapillaryContributeCell
+
++ (NSString *)getCellIdentifier
 {
+    return @"OAMapillaryContributeCell";
 }
 
 - (void) awakeFromNib

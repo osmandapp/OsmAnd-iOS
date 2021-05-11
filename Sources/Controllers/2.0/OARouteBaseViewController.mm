@@ -15,7 +15,6 @@
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
-#import "OALineChartCell.h"
 #import "OARouteInfoCell.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocument.h"

@@ -10,6 +10,11 @@
 
 @implementation OAInAppCell
 
++ (NSString *)getCellIdentifier
+{
+    return @"OAInAppCell";
+}
+
 - (void)awakeFromNib {
 
     self.imgIconBackground.layer.cornerRadius = 3;

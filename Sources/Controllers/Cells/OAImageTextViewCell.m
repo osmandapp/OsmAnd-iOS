@@ -11,6 +11,11 @@
 
 @implementation OAImageTextViewCell
 
++ (NSString *)getCellIdentifier
+{
+    return @"OAImageTextViewCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     _descView.textContainerInset = UIEdgeInsetsZero;

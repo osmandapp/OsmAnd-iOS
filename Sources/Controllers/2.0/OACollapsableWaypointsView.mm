@@ -11,7 +11,6 @@
 #import "OACommonTypes.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
-#import "OAInAppCell.h"
 #import "OAColors.h"
 #import "OALocationConvert.h"
 #import "OAGpxWptItem.h"

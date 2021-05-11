@@ -23,7 +23,6 @@
 #import "OAColors.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-#define kHeaderRoundCell @"OAHeaderRoundCell"
 
 #define kVerticalMargin 18.
 #define kHorizontalMargin 20.
@@ -119,7 +118,7 @@
     if (gpxTopList.count > 0)
     {
         [existingTracksSection addObject:@{
-            @"type" : kHeaderRoundCell,
+            @"type" : [OAHeaderRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_last_modified"),
             @"key" : @"header"
         }];
@@ -188,15 +187,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kHeaderRoundCell])
+    else if ([type isEqualToString:[OAHeaderRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kHeaderRoundCell;
         OAHeaderRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAHeaderRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kHeaderRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHeaderRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OAHeaderRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

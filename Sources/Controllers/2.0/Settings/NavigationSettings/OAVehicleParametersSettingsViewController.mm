@@ -171,7 +171,7 @@
         @"value" : [_measurementValue isEqualToString:OALocalizedString(@"sett_no_ext_input")] ? @"0" : _measurementValue,
     }];
     [parametersArr addObject:@{
-        @"type" : @"OAHorizontalCollectionViewCell",
+        @"type" : [OAHorizontalCollectionViewCell getCellIdentifier],
         @"selectedValue" : _selectedParameter,
         @"values" : _measurementRangeStringArr,
     }];
@@ -249,13 +249,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OAHorizontalCollectionViewCell"])
+    else if ([cellType isEqualToString:[OAHorizontalCollectionViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAHorizontalCollectionViewCell";
-        OAHorizontalCollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAHorizontalCollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAHorizontalCollectionViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHorizontalCollectionViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAHorizontalCollectionViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

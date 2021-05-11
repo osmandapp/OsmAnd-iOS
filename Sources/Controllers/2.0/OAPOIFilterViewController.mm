@@ -931,10 +931,10 @@ typedef enum
         case BUTTON_ITEM:
         {
             OAIconButtonCell* cell;
-            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconButtonCell"];
+            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconButtonCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.arrowIconView.hidden = YES;

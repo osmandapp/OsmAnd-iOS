@@ -10,6 +10,11 @@
 
 @implementation OAHomeWorkCollectionViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAHomeWorkCollectionViewCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

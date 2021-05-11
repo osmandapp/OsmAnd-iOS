@@ -633,7 +633,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             @"custom_insets" : @(NO)
         }];
         [section addObject:@{
-            @"cell" : @"OAHomeWorkCell"
+            @"cell" : [OAHomeWorkCell getCellIdentifier]
         }];
         [section addObject:@{
             @"cell" : [OADividerCell getCellIdentifier],
@@ -1424,15 +1424,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    else if ([item[@"cell"] isEqualToString:[OAHomeWorkCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAHomeWorkCell *cell;
-        cell = (OAHomeWorkCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAHomeWorkCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAHomeWorkCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHomeWorkCell getCellIdentifier] owner:self options:nil];
             cell = (OAHomeWorkCell *)[nib objectAtIndex:0];
         }
         
@@ -1743,7 +1741,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    if ([item[@"cell"] isEqualToString:[OAHomeWorkCell getCellIdentifier]])
         return 60.0;
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
         return 50.0;

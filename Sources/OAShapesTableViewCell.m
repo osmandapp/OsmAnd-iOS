@@ -1,5 +1,5 @@
 //
-//  OAIconsTableViewCell.m
+//  OAShapesTableViewCell.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 18.06.2020.

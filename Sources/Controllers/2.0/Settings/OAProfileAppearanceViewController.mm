@@ -549,12 +549,11 @@
     }
     else if ([cellType isEqualToString:kCellTypeIconCollection])
     {
-        static NSString* const identifierCell = @"OAIconsTableViewCell";
         OAIconsTableViewCell *cell = nil;
-        cell = (OAIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAIconsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconsTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _icons;
             cell.delegate = self;

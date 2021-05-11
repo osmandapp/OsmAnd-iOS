@@ -10,6 +10,11 @@
 
 @implementation OAIconBackgroundCollectionViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAIconBackgroundCollectionViewCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.iconView.layer.cornerRadius = 6;

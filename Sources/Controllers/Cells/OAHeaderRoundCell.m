@@ -12,6 +12,11 @@
 
 @implementation OAHeaderRoundCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAHeaderRoundCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -18,7 +18,7 @@
     
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OAIconBackgroundCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAIconBackgroundCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OAIconBackgroundCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAIconBackgroundCollectionViewCell getCellIdentifier]];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -40,9 +40,8 @@
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAIconBackgroundCollectionViewCell";
     OAIconBackgroundCollectionViewCell* cell = nil;
-    cell = (OAIconBackgroundCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+    cell = (OAIconBackgroundCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAIconBackgroundCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     UIImage *img = _dataArray[indexPath.row];
     cell.iconImageView.image = img;
     if (_locationType == EOALocationTypeMoving)

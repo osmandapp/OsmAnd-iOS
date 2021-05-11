@@ -12,12 +12,17 @@
 
 @implementation OAIconsTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAIconsTableViewCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OAIconsCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAIconsCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OAIconsCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAIconsCollectionViewCell getCellIdentifier]];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -44,9 +49,8 @@
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAIconsCollectionViewCell";
     OAIconsCollectionViewCell* cell = nil;
-    cell = (OAIconsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+    cell = (OAIconsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAIconsCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     UIImage *img = nil;
     NSString *imgName = _dataArray[indexPath.row];
     img = [UIImage imageNamed:imgName];

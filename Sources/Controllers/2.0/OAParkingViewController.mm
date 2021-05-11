@@ -234,7 +234,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
     static NSString* const reusableIdentifierSwitch = @"OASwitchTableViewCell";
     static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
     
@@ -242,10 +241,10 @@
     if (indexPath.row == [tableView numberOfRowsInSection:0] - 1)
     {
         OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
             cell.iconView.hidden = YES;

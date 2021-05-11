@@ -458,10 +458,10 @@ static const NSInteger sectionCount = 2;
     NSDictionary *item = [self getItem:indexPath];
     
     OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
         
         cell.textView.numberOfLines = 0;

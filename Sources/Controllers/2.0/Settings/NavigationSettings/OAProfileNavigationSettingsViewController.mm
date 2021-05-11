@@ -27,7 +27,6 @@
 
 #define kOsmAndNavigation @"osmand_navigation"
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeIconText @"OAIconTextCell"
 #define kCellTypeTitle @"OASettingsTitleCell"
 
@@ -80,7 +79,7 @@
     NSMutableArray *navigationArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"nav_type_title"),
         @"value" : routingData ? routingData.name : @"",
         @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
@@ -258,13 +257,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeIconTitleValue])
+    if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;

@@ -10,6 +10,11 @@
 
 @implementation OAIconTextDescButtonCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAIconTextDescButtonCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

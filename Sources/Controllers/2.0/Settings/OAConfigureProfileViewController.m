@@ -43,7 +43,6 @@
 
 #define kHeaderId @"TableViewSectionHeader"
 #define kSwitchCell @"OASettingSwitchCell"
-#define kIconTitleDescrCell @"OAIconTextDescCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kTitleRightIconCell @"OATitleRightIconCell"
 
@@ -102,7 +101,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
     NSMutableArray<NSDictionary *> *profileSettings = [NSMutableArray new];
     [profileSettings addObject:@{
-        @"type" : kIconTitleDescrCell,
+        @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"general_settings_2"),
         @"descr" : OALocalizedString(@"general_settings_descr"),
         @"img" : @"left_menu_icon_settings",
@@ -111,7 +110,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (_appMode != OAApplicationMode.DEFAULT)
     {
         [profileSettings addObject:@{
-            @"type" : kIconTitleDescrCell,
+            @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : OALocalizedString(@"routing_settings_2"),
             @"descr" : OALocalizedString(@"routing_settings_descr"),
             @"img" : @"left_menu_icon_navigation",
@@ -119,21 +118,21 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }];
     }
     [profileSettings addObject:@{
-        @"type" : kIconTitleDescrCell,
+        @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"configure_map"),
         @"descr" : OALocalizedString(@"configure_map_descr"),
         @"img" : @"left_menu_icon_map",
         @"key" : @"configure_map"
     }];
     [profileSettings addObject:@{
-        @"type" : kIconTitleDescrCell,
+        @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"layer_map_appearance"),
         @"descr" : OALocalizedString(@"configure_screen_descr"),
         @"img" : @"left_menu_configure_screen",
         @"key" : @"configure_screen"
     }];
     [profileSettings addObject:@{
-        @"type" : kIconTitleDescrCell,
+        @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"profile_appearance"),
         @"descr" : OALocalizedString(@"profile_appearance_descr"),
         @"img" : _appMode.getIconName,
@@ -142,7 +141,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
         // TODO: add ui customization
 //        @{
-//            @"type" : kIconTitleDescrCell,
+//            @"type" : [OAIconTextDescCell getCellIdentifier],
 //            @"title" : OALocalizedString(@"ui_customization"),
 //            @"descr" : OALocalizedString(@"ui_customization_descr"),
 //            @"img" : todo,
@@ -158,7 +157,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (tripRec)
     {
         [plugins addObject:@{
-            @"type" : kIconTitleDescrCell,
+            @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : tripRec.getName,
             @"img" : @"ic_custom_trip",
             @"key" : @"trip_rec"
@@ -169,7 +168,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (osmEdit)
     {
         [plugins addObject:@{
-            @"type" : kIconTitleDescrCell,
+            @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : osmEdit.getName,
             @"img" : @"ic_custom_osm_edits",
             @"key" : @"osm_edits"
@@ -438,13 +437,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kIconTitleDescrCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTextDescCell getCellIdentifier]])
     {
         OAIconTextDescCell* cell;
-        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
             cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];

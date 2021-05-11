@@ -17,7 +17,6 @@
 #import "OAGPXTrackCell.h"
 #import "OAGPXDatabase.h"
 #import "OASegmentTableViewCell.h"
-#import "OAIconTextDescCell.h"
 #import "OASettingSwitchCell.h"
 #import "OATitleRightIconCell.h"
 #import "OsmAndApp.h"
@@ -36,7 +35,6 @@
 
 #define kGPXTrackCell @"OAGPXTrackCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
-#define kIconTitleDescrCell @"OAIconTextDescCell"
 #define kCellTypeProfileSwitch @"OASettingSwitchCell"
 #define kCellTypeTitleRightIcon @"OATitleRightIconCell"
 

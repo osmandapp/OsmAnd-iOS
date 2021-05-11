@@ -8,7 +8,6 @@
 
 #import "OATripRecordingSettingsViewController.h"
 #import "OAGPXListViewController.h"
-#import "OAIconTextDescSwitchCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
@@ -27,10 +26,8 @@
 
 #include <generalRouter.h>
 
-#define kCellTypeProfileSwitch @"OAIconTextDescSwitchCell"
 #define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeSettingSwitch @"OASettingSwitchCell"
-#define kCellTypeTitle @"OAIconTextCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -205,7 +202,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:@[
                 @{
-                    @"type" : kCellTypeTitle,
+                    @"type" : [OAIconTextTableViewCell getCellIdentifier],
                     @"title" : str,
                     @"header" : OALocalizedString(@"actions")
                 },
@@ -505,13 +502,13 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeTitle])
+    else if ([type isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = [OAIconTextTableViewCell getCellIdentifier];
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.arrowIconView.hidden = YES;
             cell.iconView.hidden = YES;

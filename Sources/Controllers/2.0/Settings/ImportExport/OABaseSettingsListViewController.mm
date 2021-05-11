@@ -22,7 +22,6 @@
 #import "OAColors.h"
 
 #define kCellTypeTitleDescription @"OAMenuSimpleCell"
-#define kCellTypeTitle @"OAIconTextCell"
 #define kCellTypeProgress @"OAProgressTitleCell"
 
 @implementation OATableGroupToImport
@@ -437,14 +436,13 @@
             }
             return cell;
         }
-        else if ([cellType isEqualToString:kCellTypeTitle])
+        else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
         {
             
-            static NSString* const identifierCell = kCellTypeTitle;
-            OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
                 cell.arrowIconView.hidden = YES;

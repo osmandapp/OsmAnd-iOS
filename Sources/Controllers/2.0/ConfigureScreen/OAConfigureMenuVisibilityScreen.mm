@@ -91,7 +91,7 @@
                                    @"selected" : @(showSelected),
                                    @"color" : showSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : showSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : @"OAIconTextTableViewCell"} ];
+                                   @"type" : [OAIconTextTableViewCell getCellIdentifier]} ];
 
         [standardList addObject:@{ @"title" : OALocalizedString(@"poi_hide"),
                                    @"key" : @"action_hide",
@@ -99,7 +99,7 @@
                                    @"selected" : @(hideSelected),
                                    @"color" : hideSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : hideSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : @"OAIconTextTableViewCell"} ];
+                                   @"type" : [OAIconTextTableViewCell getCellIdentifier]} ];
         
         [standardList addObject:@{ @"title" : OALocalizedString(@"shared_string_collapse"),
                                    @"key" : @"action_collapse",
@@ -107,7 +107,7 @@
                                    @"selected" : @(collapsedSelected),
                                    @"color" : collapsedSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : collapsedSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : @"OAIconTextTableViewCell"} ];
+                                   @"type" : [OAIconTextTableViewCell getCellIdentifier]} ];
         
         NSMutableArray *additionalList = [NSMutableArray array];
         if ([_r getItemIds])
@@ -124,7 +124,7 @@
                                            @"selected" : @(selected),
                                            @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                            @"secondaryImg" : selected ? @"menu_cell_selected" : [NSNull null],
-                                           @"type" : @"OAIconTextTableViewCell"} ];
+                                           @"type" : [OAIconTextTableViewCell getCellIdentifier]} ];
             }
         }
         
@@ -162,10 +162,10 @@
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
           
     OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+    cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
         cell.textView.numberOfLines = 0;
     }

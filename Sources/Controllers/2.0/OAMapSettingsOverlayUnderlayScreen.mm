@@ -316,7 +316,7 @@ static NSInteger kButtonsSection;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        static NSString* const identifierCell = @"OAIconTextDescButtonCell";
+        static NSString* const identifierCell = [OAIconTextDescButtonCell getCellIdentifier];
         OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {

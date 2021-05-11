@@ -19,6 +19,11 @@ static UIFont *_valueTextFont;
 
 @implementation OAIconTextDescCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAIconTextDescCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

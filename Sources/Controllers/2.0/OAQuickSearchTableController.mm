@@ -44,7 +44,6 @@
 #import "OAReverseGeocoder.h"
 
 #import "OAIconTextTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextDescCell.h"
@@ -482,10 +481,10 @@
 + (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
 {
     OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
         cell.textView.numberOfLines = 0;
     }
@@ -693,10 +692,10 @@
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
                     OAIconTextTableViewCell* cell;
-                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
                     if (cell == nil)
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
                         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                     }
                     if (cell)

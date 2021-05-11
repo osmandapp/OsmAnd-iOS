@@ -2265,7 +2265,7 @@
 		8AE1C8B421D6224B00434F07 /* ic_action_message@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AF21D6224A00434F07 /* ic_action_message@3x.png */; };
 		8AE4E33121BFED24000CBE16 /* OAProducts.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE4E33021BFED24000CBE16 /* OAProducts.mm */; };
 		8AF219811A7FC1860091071B /* OAPointCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF2197D1A7FAE400091071B /* OAPointCell.xib */; };
-		8AF219881A7FD2790091071B /* OAIconTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF219841A7FCD380091071B /* OAIconTextCell.xib */; };
+		8AF219881A7FD2790091071B /* OAIconTextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF219841A7FCD380091071B /* OAIconTextTableViewCell.xib */; };
 		8AF3C81E20F656F3006C86AA /* OATransportStopType.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C81D20F656F3006C86AA /* OATransportStopType.m */; };
 		8AF3C82220F65BD0006C86AA /* OATransportStopRoute.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C82120F65BD0006C86AA /* OATransportStopRoute.mm */; };
 		8AF61CF424B21EEC00D23B84 /* OAAvoidRoadInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF61CF324B21EEC00D23B84 /* OAAvoidRoadInfo.m */; };
@@ -6513,7 +6513,7 @@
 		8AE4E32F21BFED24000CBE16 /* OAProducts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProducts.h; sourceTree = "<group>"; };
 		8AE4E33021BFED24000CBE16 /* OAProducts.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProducts.mm; sourceTree = "<group>"; };
 		8AF2197D1A7FAE400091071B /* OAPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointCell.xib; path = Resources/Controllers/Cells/OAPointCell.xib; sourceTree = "<group>"; };
-		8AF219841A7FCD380091071B /* OAIconTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconTextCell.xib; path = Resources/Controllers/Cells/OAIconTextCell.xib; sourceTree = "<group>"; };
+		8AF219841A7FCD380091071B /* OAIconTextTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconTextTableViewCell.xib; path = Resources/Controllers/Cells/OAIconTextTableViewCell.xib; sourceTree = "<group>"; };
 		8AF3C81C20F656F3006C86AA /* OATransportStopType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopType.h; sourceTree = "<group>"; };
 		8AF3C81D20F656F3006C86AA /* OATransportStopType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATransportStopType.m; sourceTree = "<group>"; };
 		8AF3C82020F65BD0006C86AA /* OATransportStopRoute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopRoute.h; sourceTree = "<group>"; };
@@ -8762,7 +8762,7 @@
 				847B2DB11F7A6B5E008C7AD9 /* OASettingsTitleCell.xib */,
 				840B7D551F8424CE00477A3C /* OASettingSwitchCell.xib */,
 				8AF2197D1A7FAE400091071B /* OAPointCell.xib */,
-				8AF219841A7FCD380091071B /* OAIconTextCell.xib */,
+				8AF219841A7FCD380091071B /* OAIconTextTableViewCell.xib */,
 				8A7077141A83C25A005E019B /* OATextViewCell.xib */,
 				84387B2F1ABCAB6F00504DA7 /* OAIconTextDescCell.xib */,
 				8440E2E51ABEB2450088856A /* OAPointDescCell.xib */,
@@ -15316,7 +15316,7 @@
 				DAE0835A253F19C2009B5A11 /* ic_custom_routes@2x.png in Resources */,
 				8476E2E61F6C1EEC00EC274F /* map_start_point@2x.png in Resources */,
 				841AD0201F54048B00E3191E /* ic_collapse@2x.png in Resources */,
-				8AF219881A7FD2790091071B /* OAIconTextCell.xib in Resources */,
+				8AF219881A7FD2790091071B /* OAIconTextTableViewCell.xib in Resources */,
 				BBA3AFA1197FC4BB0039D991 /* menu_item_install_icon@2x.png in Resources */,
 				DA6471B722CF5433008F937F /* ic_custom_wikipedia@2x.png in Resources */,
 				32A001752610B43700ABE0D2 /* widget_coordinates_longitude_west_day@3x.png in Resources */,

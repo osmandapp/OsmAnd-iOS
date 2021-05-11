@@ -28,7 +28,6 @@
 
 #define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeCheck @"OAMultiIconTextDescCell"
-#define kCellTypeProfileSwitch @"OAIconTextDescSwitchCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kFooterId @"TableViewSectionFooter"
 
@@ -130,7 +129,7 @@
         [profilesSection addObject:@{
             @"name" : @"profile_val",
             @"app_mode" : OAApplicationMode.allPossibleValues[i],
-            @"type" : i == 0 ? kCellTypeCheck : kCellTypeProfileSwitch,
+            @"type" : i == 0 ? kCellTypeCheck : [OAIconTextDescSwitchCell getCellIdentifier],
             @"isColored" : @NO
         }];
     }
@@ -244,13 +243,12 @@
             cell.backgroundColor = UIColor.whiteColor;
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeProfileSwitch])
+    else if ([type isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeProfileSwitch;
-        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDescSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeProfileSwitch owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
         }
         OAApplicationMode *am = item[@"app_mode"];

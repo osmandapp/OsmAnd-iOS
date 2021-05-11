@@ -14,7 +14,6 @@
 #import "Localization.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
-#import "OAIconTextDescCell.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"

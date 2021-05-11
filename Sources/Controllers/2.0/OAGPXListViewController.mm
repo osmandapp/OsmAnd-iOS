@@ -59,7 +59,6 @@
 #define kIconTitleValueCell @"OAIconTitleValueCell"
 #define kCellTypeSwitch @"OASettingSwitchCell"
 #define kCellTypeTrackRecordMessage @"OAMenuSimpleCellNoIcon"
-#define kCellMenu @"OAIconTextTableViewCell"
 #define kGPXTrackCell @"OAGPXTrackCell"
 
 #define GPX_EXT @"gpx"
@@ -629,7 +628,7 @@ static UIViewController *parentController;
     
     OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
     trackRecordingGroup.isMenu = YES;
-    trackRecordingGroup.type = kCellMenu;
+    trackRecordingGroup.type = [OAIconTextTableViewCell getCellIdentifier];
     trackRecordingGroup.header = OALocalizedString(@"record_trip");
     
     if ([_iapHelper.trackRecording isActive])
@@ -728,14 +727,14 @@ static UIViewController *parentController;
     // Generate menu items
     OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
     actionsGroup.isMenu = YES;
-    actionsGroup.type = kCellMenu;
+    actionsGroup.type = [OAIconTextTableViewCell getCellIdentifier];
     actionsGroup.header = OALocalizedString(@"actions");
-    self.menuItems = @[@{@"type" : kCellMenu,
+    self.menuItems = @[@{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"import_track",
                          @"title": OALocalizedString(@"gpx_import_title"),
                          @"icon": @"ic_custom_import",
                          @"header" : OALocalizedString(@"actions")},
-                       @{@"type" : kCellMenu,
+                       @{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"create_new_trip",
                          @"title": OALocalizedString(@"create_new_trip"),
                          @"icon": @"ic_custom_trip.png"}];
@@ -1147,14 +1146,13 @@ static UIViewController *parentController;
                 [cell.textView setText:OALocalizedString(@"track_rec_addon_q")];
             return cell;
         }
-        else if ([menuCellType isEqualToString:kCellMenu])
+        else if ([menuCellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
         {
-            static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
             OAIconTextTableViewCell* cell;
-            cell = (OAIconTextTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+            cell = (OAIconTextTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             }

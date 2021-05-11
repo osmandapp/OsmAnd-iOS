@@ -19,7 +19,6 @@
 #import "OASettingSwitchCell.h"
 #import "OAColors.h"
 #import "OAColorsTableViewCell.h"
-#import "OAIconTextDescButtonTableViewCell.h"
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
 #import "OAUtilities.h"

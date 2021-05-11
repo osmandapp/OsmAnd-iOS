@@ -18,7 +18,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeCheck @"OAIconTextCell"
 #define kCellTypeTitleDescriptionCheck @"OATitleDescriptionCollapsableCell"
 #define kCellTypeTitleCheck @"OASettingsTitleCell"
 
@@ -106,21 +105,21 @@
                 @"title" : OALocalizedString(@"rotate_map_none_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_NONE),
                 @"icon" : @"ic_custom_direction_north",
-                @"type" : kCellTypeCheck,
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bearing",
                 @"title" : OALocalizedString(@"rotate_map_bearing_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_BEARING),
                 @"icon" : @"ic_custom_direction_movement",
-                @"type" : kCellTypeCheck,
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                @"name" : @"compass",
                @"title" : OALocalizedString(@"rotate_map_compass_opt"),
                @"selected" : @(rotateMap == ROTATE_MAP_COMPASS),
                @"icon" : @"ic_custom_direction_compass",
-               @"type" : kCellTypeCheck,
+               @"type" : [OAIconTextTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -305,13 +304,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeCheck])
+    if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeCheck;
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.arrowIconView.image = [[UIImage imageNamed:@"ic_checkmark_default"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

@@ -14,6 +14,11 @@
     UIImage *_expandIcon;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAIconTextCollapseCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

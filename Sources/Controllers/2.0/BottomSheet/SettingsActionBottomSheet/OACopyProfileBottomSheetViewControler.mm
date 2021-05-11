@@ -8,7 +8,6 @@
 
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OAAppSettings.h"
-#import "OAIconTextTableViewCell.h"
 #import "OAIconTitleIconRoundCell.h"
 #import "OAUtilities.h"
 #import "OASettingsHelper.h"

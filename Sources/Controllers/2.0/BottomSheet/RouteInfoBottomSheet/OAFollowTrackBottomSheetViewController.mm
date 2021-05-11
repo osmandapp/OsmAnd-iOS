@@ -37,7 +37,6 @@
 
 #define kGPXTrackCell @"OAGPXTrackCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
-#define kIconTitleDescrCell @"OAIconTextDescCell"
 #define kCellTypeProfileSwitch @"OASettingSwitchCell"
 #define kCellTypeTitleRightIcon @"OATitleRightIconCell"
 
@@ -182,7 +181,7 @@
             @"key" : @"gpx_route"
         },
         @{
-            @"type" : kIconTitleDescrCell,
+            @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : OALocalizedString(@"select_another_track"),
             @"img" : @"ic_custom_folder",
             @"key" : @"select_another"
@@ -194,7 +193,7 @@
             @"key" : @"reverse_track"
         },
         /*@{
-            @"type" : kIconTitleDescrCell,
+            @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : OALocalizedString(@"attach_to_the_roads"),
             @"img" : @"ic_custom_attach_track",
             @"key" : @"attach_to_roads"
@@ -353,13 +352,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kIconTitleDescrCell])
+    else if ([type isEqualToString:[OAIconTextDescCell getCellIdentifier]])
     {
         OAIconTextDescCell* cell;
-        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
             cell.textView.lineBreakMode = NSLineBreakByWordWrapping;

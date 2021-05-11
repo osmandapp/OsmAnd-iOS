@@ -189,12 +189,11 @@ typedef enum
     const auto& item = _onlineMapSources[(int) indexPath.row];
     NSString* caption = item->name.toNSString();
     
-    static NSString* const identifierCell = @"OAMenuSimpleCell";
     OAMenuSimpleCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
         cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
     }
     

@@ -20,7 +20,6 @@
 #import "OAColors.h"
 #import "OAMenuSimpleCellNoIcon.h"
 
-#define kCellTypeTitle @"OAMenuSimpleCellNoIcon"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSwitch @"switch"
 #define kCellTypeButton @"button"
@@ -120,7 +119,7 @@ static const NSInteger actionsSectionIndex = 2;
     
     [dataArr addObject:
      @{
-         @"type" : kCellTypeTitle,
+         @"type" : [OAMenuSimpleCellNoIcon getCellIdentifier],
          @"title" : str
      }];
     
@@ -209,13 +208,12 @@ static const NSInteger actionsSectionIndex = 2;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeTitle])
+    else if ([type isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
             cell.descriptionView.hidden = YES;

@@ -10,6 +10,11 @@
 
 @implementation OAMenuSimpleCellNoIcon
 
++ (NSString *)getCellIdentifier
+{
+    return @"OAMenuSimpleCellNoIcon";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

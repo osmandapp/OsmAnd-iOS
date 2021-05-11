@@ -1014,11 +1014,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAMenuSimpleCellNoIcon";
-    OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
         cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
     }
     cell.textView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];

@@ -34,8 +34,6 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kBottomSheetActionCell @"OAMenuSimpleCell"
-
 @interface OAOsmEditActionsBottomSheetScreen ()
 
 @end
@@ -87,23 +85,23 @@
     [arr addObject:@{ @"title" : OALocalizedString(@"upload_to_osm"),
                       @"key" : @"upload_to_osm",
                       @"img" : @"ic_custom_upload",
-                      @"type" : kBottomSheetActionCell } ];
+                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
 
     [arr addObject:@{ @"title" : OALocalizedString(@"osm_edit_show_on_map"),
                       @"key" : @"osm_edit_show_on_map",
                       @"descr" : OALocalizedString(@"osm_edit_show_on_map_descr"),
                       @"img" : @"ic_custom_show_on_map",
-                      @"type" : kBottomSheetActionCell } ];
+                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"modify_edit_short"),
                       @"key" : @"poi_modify",
                       @"img" : @"ic_custom_edit",
-                      @"type" : kBottomSheetActionCell }];
+                      @"type" : [OAMenuSimpleCell getCellIdentifier] }];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"shared_string_delete"),
                       @"key" : @"edit_delete",
                       @"img" : @"ic_custom_remove",
-                      @"type" : kBottomSheetActionCell }];
+                      @"type" : [OAMenuSimpleCell getCellIdentifier] }];
     
     _data = [NSArray arrayWithArray:arr];
 }
@@ -146,15 +144,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
+    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetActionCell;
         OAMenuSimpleCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }

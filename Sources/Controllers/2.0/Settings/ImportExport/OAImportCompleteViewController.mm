@@ -44,9 +44,6 @@
 #import "OAExportSettingsType.h"
 #import "OADestination.h"
 
-#define kMenuSimpleCell @"OAMenuSimpleCell"
-#define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
-
 typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeProfiles = 0,
     EOAImportDataTypeQuickActions,

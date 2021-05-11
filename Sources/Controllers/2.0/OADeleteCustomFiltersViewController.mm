@@ -13,7 +13,6 @@
 #import "OACustomSelectionButtonCell.h"
 #import "OAMenuSimpleCell.h"
 
-#define kCellTypeTitle @"OAMenuSimpleCell"
 #define kDataTypeFilter @"OAPOIUIFilter"
 
 @interface OADeleteCustomFiltersViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -162,11 +161,10 @@
     }
     else if ([cellType isEqualToString:kDataTypeFilter])
     {
-        static NSString * const identifierCell = kCellTypeTitle;
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);

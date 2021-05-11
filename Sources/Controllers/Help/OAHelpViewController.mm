@@ -416,10 +416,10 @@ static const NSInteger groupCount = 5;
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCellNoIcon"];
+    OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCellNoIcon" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
         cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
     }
     

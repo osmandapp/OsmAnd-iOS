@@ -98,7 +98,7 @@
                                    @"roadId" : @((unsigned long long)r.roadId),
                                    @"descr"  : [self.class getDescr:r],
                                    @"header" : @"",
-                                   @"type"   : @"OAMenuSimpleCell"} ];
+                                   @"type"   : [OAMenuSimpleCell getCellIdentifier]} ];
         }
         
         [sectionData addObjectsFromArray:roadList];
@@ -249,13 +249,12 @@
     {
         NSString *text = item[@"title"];
         NSString *value = item[@"descr"];
-        if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
+        if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = @"OAMenuSimpleCell";
-            OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             }
             

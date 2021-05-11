@@ -23,7 +23,6 @@
 #import "OAProfileDataObject.h"
 #import "OAMenuSimpleCell.h"
 #import "OAMenuSimpleCellNoIcon.h"
-#import "OAMenuSimpleCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAMapSource.h"
 #import "OAIndexConstants.h"
@@ -39,9 +38,8 @@
 #import "OADestination.h"
 #import "OATileSource.h"
 
-#define kMenuSimpleCell @"OAMenuSimpleCell"
-#define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
-#define kCellTypeTitleDescription @"OAMenuSimpleCell"
+#define kMenuSimpleCell @"kMenuSimpleCell"
+#define kCellTypeTitleDescription @"kCellTypeTitleDescription"
 
 @interface OAHeaderType : NSObject
 
@@ -314,7 +312,7 @@
                 OAHeaderType *header = (OAHeaderType *)currentItem;
                 item[@"label"] = header.title;
                 item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [header.title lowerCase]];
-                item[@"cellType"] = kMenuSimpleCellNoIcon;
+                item[@"cellType"] = [OAMenuSimpleCellNoIcon getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAApplicationModeBean.class])
             {
@@ -539,14 +537,13 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"cellType"];
 
-    if ([type isEqualToString:kMenuSimpleCellNoIcon])
+    if ([type isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
     {
-        static NSString* const identifierCell = kMenuSimpleCellNoIcon;
         OAMenuSimpleCellNoIcon* cell;
-        cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMenuSimpleCellNoIcon owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
         }
@@ -557,12 +554,11 @@
     }
     else if ([type isEqualToString:kMenuSimpleCell])
     {
-        static NSString* const identifierCell = kMenuSimpleCell;
         OAMenuSimpleCell* cell;
-        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMenuSimpleCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 70., 0.0, 0.0);
         }
@@ -593,12 +589,11 @@
     }
     else if ([type isEqualToString:kCellTypeTitleDescription])
     {
-        static NSString* const identifierCell = kCellTypeTitleDescription;
         OAMenuSimpleCell* cell;
-        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescription owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 70., 0.0, 0.0);
             cell.descriptionView.hidden = YES;

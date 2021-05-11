@@ -21,8 +21,6 @@
 #import "OAMapStyleAction.h"
 
 #define kButtonsDividerTag 150
-#define kBottomSheetActionCell @"OAMenuSimpleCell"
-
 
 @implementation OAProfileSelectionBottomSheetScreen
 {
@@ -75,7 +73,7 @@
     for (int i = 0; i < stringKeys.count; i++)
     {
         [arr addObject:@{
-                         @"type" : kBottomSheetActionCell,
+                         @"type" : [OAMenuSimpleCell getCellIdentifier],
                          @"title" : names[i],
                          @"value" : stringKeys[i],
                          @"param" : stringKeys[i],
@@ -124,22 +122,20 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
+    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetActionCell;
         OAMenuSimpleCell* cell = nil;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }
         
         if (cell)
         {
-            UIImage *img = nil;
             NSString *imgName = item[@"img"];
             NSString *imgColor = item[@"iconColor"];
             if (imgName && imgColor)

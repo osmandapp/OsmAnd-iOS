@@ -21,7 +21,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeTitleDescription @"OAMenuSimpleCell"
 #define kCellTypeProgress @"OAProgressTitleCell"
 
 @implementation OATableGroupToImport
@@ -98,7 +97,7 @@
             [group.groupItems addObject:@{
                 @"icon" :  type.icon,
                 @"title" : type.title,
-                @"type" : kCellTypeTitleDescription
+                @"type" : [OAMenuSimpleCell getCellIdentifier]
             }];
         }
         [data addObject:group];
@@ -401,13 +400,12 @@
         NSInteger dataIndex = indexPath.row - 1;
         NSDictionary* item = [groupData.groupItems objectAtIndex:dataIndex];
         NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:kCellTypeTitleDescription])
+        if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = kCellTypeTitleDescription;
-            OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 70., 0., 0.);
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

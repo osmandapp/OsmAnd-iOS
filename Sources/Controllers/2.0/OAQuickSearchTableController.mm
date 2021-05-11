@@ -773,10 +773,10 @@
         else if ([item getType] == HEADER)
         {
             OAMenuSimpleCell *cell;
-            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCell"];
+            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             }
             

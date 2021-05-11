@@ -35,8 +35,6 @@
 
 #include <OsmAndCore/ArchiveReader.h>
 
-#define kCellTypeTitleDescription @"OAMenuSimpleCell"
-
 @interface OAExportItemsSelectionViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -126,7 +124,7 @@
         return nil;
     
     NSMutableDictionary *item = [NSMutableDictionary new];
-    item[@"type"] = kCellTypeTitleDescription;
+    item[@"type"] = [OAMenuSimpleCell getCellIdentifier];
     item[@"object"] = object;
     if ([object isKindOfClass:OAApplicationModeBean.class])
     {
@@ -455,14 +453,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeTitleDescription])
+    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        
-        static NSString* const identifierCell = kCellTypeTitleDescription;
-        OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);

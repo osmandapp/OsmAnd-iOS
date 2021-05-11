@@ -56,7 +56,6 @@
 #define kAlertViewCancelButtonIndex -1
 #define kMaxCancelButtonWidth 100
 #define kCellTypeSwitch @"OASettingSwitchCell"
-#define kCellTypeTrackRecordMessage @"OAMenuSimpleCellNoIcon"
 #define kGPXTrackCell @"OAGPXTrackCell"
 
 #define GPX_EXT @"gpx"
@@ -639,7 +638,7 @@ static UIViewController *parentController;
     else
         [trackRecordingGroup.groupItems addObject:@{
             @"title" : OALocalizedString(@"track_rec_addon_q"),
-            @"type" : kCellTypeTrackRecordMessage,
+            @"type" : [OAMenuSimpleCellNoIcon getCellIdentifier],
             @"key" : @"track_recording"}
         ];
     [tableData addObject:trackRecordingGroup];
@@ -1129,12 +1128,12 @@ static UIViewController *parentController;
             }
             return _recCell;
         }
-        else if ([menuCellType isEqualToString:kCellTypeTrackRecordMessage])
+        else if ([menuCellType isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
         {
-            OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:kCellTypeTrackRecordMessage];
+            OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTrackRecordMessage owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
                 cell.descriptionView.hidden = YES;
                 cell.textView.font = [UIFont systemFontOfSize:14.0];

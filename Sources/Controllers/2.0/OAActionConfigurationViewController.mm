@@ -50,7 +50,6 @@
 #define kTextInputCell @"OATextInputCell"
 #define kCellTypeSwitch @"OASwitchTableViewCell"
 #define kTextInputIconCell @"OATextInputIconCell"
-#define kBottomSheetActionCell @"OAMenuSimpleCell"
 #define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
 #define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
 #define kMultilineTextViewCell @"OAMultilineTextViewCell"
@@ -585,15 +584,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
+    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetActionCell;
         OAMenuSimpleCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         }
         
@@ -780,7 +777,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kBottomSheetActionCell] || [item[@"type"] isEqualToString:kTitleDescrDraggableCell])
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]] || [item[@"type"] isEqualToString:kTitleDescrDraggableCell])
         return YES;
     return NO;
 }
@@ -1009,7 +1006,7 @@
             [newItems addObject:@{
                                   @"title" : filter.getName,
                                   @"value" : filter.filterId,
-                                  @"type" : @"OAMenuSimpleCell",
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier],
                                   @"img" : iconId
                                   }];
             [titles addObject:filter.getName];
@@ -1020,7 +1017,7 @@
             [newItems addObject:@{
                                   @"title" : filter.nameLocalized,
                                   @"value" : [STD_PREFIX stringByAppendingString:filter.name],
-                                  @"type" : @"OAMenuSimpleCell",
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier],
                                   @"img" : filter.name
                                   }];
             [titles addObject:filter.nameLocalized];

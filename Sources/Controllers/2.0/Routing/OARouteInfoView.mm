@@ -518,7 +518,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : @"OAFilledButtonCell",
+            @"cell" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"calc_pedestrian_route"),
             @"key": @"calc_pedestrian"
         }];
@@ -607,7 +607,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 @"cell" : kCellReuseIdentifier
             }];
             [section addObject:@{
-                @"cell" : @"OAFilledButtonCell",
+                @"cell" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"res_details"),
                 @"key" : @"route_details"
             }];
@@ -1387,15 +1387,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         return _routeStatsCell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAFilledButtonCell* cell;
-        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
         }
         
@@ -1763,7 +1761,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
         return 118.;
-    else if ([item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
         return 58.;
     
     return kEstimatedRowHeight;

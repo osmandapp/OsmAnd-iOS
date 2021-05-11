@@ -14,7 +14,6 @@
 #import "OAGpxInfo.h"
 #import "OALoadGpxTask.h"
 
-#import "OAGPXTableViewCell.h"
 #import "OAGPXRecTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingSwitchCell.h"
@@ -31,7 +30,6 @@
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
-#import "OAGPXRouteTableViewCell.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAKml2Gpx.h"
@@ -60,8 +58,6 @@
 #define kMaxCancelButtonWidth 100
 #define kIconTitleValueCell @"OAIconTitleValueCell"
 #define kCellTypeSwitch @"OASettingSwitchCell"
-#define kCellTypeGPX @"OAGPXTableViewCell"
-#define kCellTypeTrackRecord @"OAIconTitleButtonCell"
 #define kCellTypeTrackRecordMessage @"OAMenuSimpleCellNoIcon"
 #define kCellMenu @"OAIconTextTableViewCell"
 #define kGPXTrackCell @"OAGPXTrackCell"
@@ -640,7 +636,7 @@ static UIViewController *parentController;
         [trackRecordingGroup.groupItems addObject:@{
             @"title" : OALocalizedString(@"track_recording_name"),
             @"icon" : @"ic_custom_reverse_direction.png",
-            @"type" : kCellTypeTrackRecord,
+            @"type" : [OAGPXRecTableViewCell getCellIdentifier],
             @"key" : @"track_recording"}
         ];
     else
@@ -1114,7 +1110,7 @@ static UIViewController *parentController;
     {
         NSDictionary *menuItem = item.groupItems[indexPath.row];
         NSString *menuCellType = menuItem[@"type"];
-        if ([menuCellType isEqualToString:kCellTypeTrackRecord])
+        if ([menuCellType isEqualToString:[OAGPXRecTableViewCell getCellIdentifier]])
         {
             if (!_recCell)
             {

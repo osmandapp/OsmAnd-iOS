@@ -25,4 +25,9 @@
     // Configure the view for the selected state
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAFilledButtonCell";
+}
+
 @end

@@ -73,7 +73,7 @@
 
 - (UITableViewCell *) getAnalyzeButtonCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAFilledButtonCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
     OAFilledButtonCell* cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
     
     if (cell)

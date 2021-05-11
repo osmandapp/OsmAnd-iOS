@@ -91,9 +91,7 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableViewCell* cell;
-    static NSString* const reusableIdentifierPoint = @"OAGPXTableViewCell";
-    
-    cell = (OAGPXTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAGPXTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAGPXTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXCell" owner:self options:nil];

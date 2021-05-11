@@ -20,7 +20,6 @@
 #define kButtonsVerticalMargin 32.
 #define kHorizontalMargin 20.
 #define kLabelCell @"OATextLineViewCell"
-#define kButtonCell @"OAFilledButtonCell"
 
 @interface OAExitRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -106,7 +105,7 @@
     }];
     
     [_data addObject: @{
-        @"type" : kButtonCell,
+        @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_exit"),
         @"buttonColor" : UIColorFromRGB(color_route_button_inactive),
         @"textColor" : UIColorFromRGB(color_primary_purple),
@@ -114,7 +113,7 @@
     }];
 
     [_data addObject: @{
-        @"type" : kButtonCell,
+        @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_save"),
         @"buttonColor" : UIColorFromRGB(color_primary_purple),
         @"textColor" : UIColor.whiteColor,
@@ -178,13 +177,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kButtonCell])
+    else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {
         OAFilledButtonCell* cell;
-        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:kButtonCell];
+        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)

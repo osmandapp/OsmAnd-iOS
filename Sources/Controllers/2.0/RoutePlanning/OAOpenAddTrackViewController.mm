@@ -33,7 +33,6 @@
 
 #define kGPXTrackCell @"OAGPXTrackCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
-#define kFoldersCell @"OAFoldersCell"
 #define kAllFoldersKey @"kAllFoldersKey"
 #define kFolderKey @"kFolderKey"
 #define kAllFoldersIndex 0
@@ -147,7 +146,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSArray *gpxList = [NSMutableArray arrayWithArray:[self sortData:filteredData]];
     
     [existingTracksSection addObject:@{
-        @"type" : kFoldersCell,
+        @"type" : [OAFoldersCell getCellIdentifier],
         @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
         @"values" : [self getFoldersList]
     }];
@@ -270,7 +269,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
-    else if ([item[@"type"] isEqualToString:kFoldersCell])
+    else if ([item[@"type"] isEqualToString:[OAFoldersCell getCellIdentifier]])
         return 52;
     
     return UITableViewAutomaticDimension;
@@ -325,13 +324,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         return cell;
     }
-    else if ([type isEqualToString:kFoldersCell])
+    else if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kFoldersCell;
-        OAFoldersCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAFoldersCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFoldersCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCell getCellIdentifier] owner:self options:nil];
             cell = (OAFoldersCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
@@ -367,7 +365,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
  {
      NSDictionary *item = _data[indexPath.section][indexPath.row];
      NSString *type = item[@"type"];
-     if ([type isEqualToString:kFoldersCell])
+     if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
      {
          OAFoldersCell *folderCell = (OAFoldersCell *)cell;
          [folderCell updateContentOffset];

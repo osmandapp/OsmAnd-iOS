@@ -23,7 +23,6 @@
 #import "OAColors.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-#define kGPXRouteRoundCell @"OAGPXRouteRoundCell"
 #define kHeaderRoundCell @"OAHeaderRoundCell"
 
 #define kVerticalMargin 18.
@@ -129,7 +128,7 @@
         for (OAGPX *gpx in gpxTopList)
         {
             [existingTracksSection addObject:@{
-                    @"type" : kGPXRouteRoundCell,
+                    @"type" : [OAGPXRouteRoundCell getCellIdentifier],
                     @"track" : gpx,
                     @"title" : [gpx getNiceTitle],
                     @"distance" : [app getFormattedDistance:gpx.totalDistance],
@@ -208,15 +207,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kGPXRouteRoundCell])
+    else if ([type isEqualToString:[OAGPXRouteRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kGPXRouteRoundCell;
         OAGPXRouteRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXRouteRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXRouteRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXRouteRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXRouteRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

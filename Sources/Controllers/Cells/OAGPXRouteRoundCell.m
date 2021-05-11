@@ -16,6 +16,11 @@
     BOOL _topCorners;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAGPXRouteRoundCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

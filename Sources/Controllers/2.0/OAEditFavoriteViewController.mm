@@ -45,7 +45,6 @@
 #define kCellTypeColorCollection @"colorCollectionCell"
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
-#define kFolderCardsCell @"OAFolderCardsCell"
 #define kHeaderId @"TableViewSectionHeader"
 #define kPoiTableViewCell @"OAPoiTableViewCell"
 
@@ -384,7 +383,7 @@
     if (selectedGroupIndex < 0)
         selectedGroupIndex = 0;
     [section addObject:@{
-        @"type" : kFolderCardsCell,
+        @"type" : [OAFolderCardsCell getCellIdentifier],
         @"selectedValue" : [NSNumber numberWithInteger:selectedGroupIndex],
         @"values" : _groupNames,
         @"sizes" : _groupSizes,
@@ -905,13 +904,12 @@
         [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         return cell;
     }
-    else if ([cellType isEqualToString:kFolderCardsCell])
+    else if ([cellType isEqualToString:[OAFolderCardsCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kFolderCardsCell;
-        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFolderCardsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFolderCardsCell getCellIdentifier] owner:self options:nil];
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
@@ -932,7 +930,7 @@
  {
      NSDictionary *item = _data[indexPath.section][indexPath.row];
      NSString *type = item[@"type"];
-     if ([type isEqualToString:kFolderCardsCell])
+     if ([type isEqualToString:[OAFolderCardsCell getCellIdentifier]])
      {
          OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
          [folderCell updateContentOffset];

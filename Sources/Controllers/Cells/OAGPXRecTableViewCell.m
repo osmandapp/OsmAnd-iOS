@@ -10,6 +10,11 @@
 
 @implementation OAGPXRecTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAGPXRecTableViewCell";
+}
+
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];

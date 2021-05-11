@@ -15,4 +15,9 @@
     [super awakeFromNib];
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAFolderCardCollectionViewCell";
+}
+
 @end

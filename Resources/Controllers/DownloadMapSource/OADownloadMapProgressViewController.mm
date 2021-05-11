@@ -18,7 +18,6 @@
 #include "OASizes.h"
 #include "OAColors.h"
 
-#define kDownloadProgressCell @"OADownloadProgressBarCell"
 #define kGeneralInfoCell @"time_cell"
 
 @interface OADownloadMapProgressViewController() <UITableViewDelegate, UITableViewDataSource, OATileDownloadDelegate>
@@ -159,14 +158,13 @@
     NSDictionary *item = _data[indexPath.row];
     
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kDownloadProgressCell])
+    if ([cellType isEqualToString:[OADownloadProgressBarCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADownloadProgressBarCell";
         OADownloadProgressBarCell* cell;
-        cell = (OADownloadProgressBarCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OADownloadProgressBarCell *)[tableView dequeueReusableCellWithIdentifier:[OADownloadProgressBarCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADownloadProgressBarCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADownloadProgressBarCell getCellIdentifier] owner:self options:nil];
             cell = (OADownloadProgressBarCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -184,7 +182,7 @@
         cell = (OADownloadInfoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADownloadInfoTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADownloadInfoTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADownloadInfoTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

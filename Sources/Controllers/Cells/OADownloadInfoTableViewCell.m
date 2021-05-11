@@ -18,4 +18,9 @@
     [super setSelected:selected animated:animated];
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADownloadInfoTableViewCell";
+}
+
 @end

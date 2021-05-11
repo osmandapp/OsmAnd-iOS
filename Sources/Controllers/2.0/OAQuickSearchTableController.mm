@@ -757,10 +757,10 @@
         else if ([item getType] == EMPTY_SEARCH)
         {
             OAEmptySearchCell* cell;
-            cell = (OAEmptySearchCell *)[tableView dequeueReusableCellWithIdentifier:@"OAEmptySearchCell"];
+            cell = (OAEmptySearchCell *)[tableView dequeueReusableCellWithIdentifier:[OAEmptySearchCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAEmptySearchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAEmptySearchCell getCellIdentifier] owner:self options:nil];
                 cell = (OAEmptySearchCell *)[nib objectAtIndex:0];
             }
             if (cell)

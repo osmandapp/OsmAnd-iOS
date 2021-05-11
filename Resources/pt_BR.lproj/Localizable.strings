@@ -2095,3 +2095,11 @@
 "hidden_categories" = "Categorias ocultas";
 "visible_categories" = "Categorias visíveis";
 "rearrange_categories" = "Reorganizar categorias";
+"new_plugin_added" = "Novo plugin adicionado";
+"extra_maps" = "Mapas extras";
+"custom_plugins" = "Plugins personalizados";
+"custom_osmand_plugin_name" = "Plug-in OsmAnd personalizado";
+"shared_string_disable" = "Desabilitar";
+
+// Shared Strings
+"shared_string_enable" = "Ativar";

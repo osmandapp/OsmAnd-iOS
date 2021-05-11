@@ -10,17 +10,17 @@
 
 @implementation OABottomSheetHeaderButtonCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OABottomSheetHeaderButtonCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OABottomSheetHeaderButtonCell";
 }
 
 @end

@@ -35,7 +35,6 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAFollowTrackBottomSheetViewController.h"
 

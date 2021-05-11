@@ -15,6 +15,11 @@
     CALayer *_divider;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADividerCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];
@@ -28,11 +33,6 @@
     _divider = [[CALayer alloc] init];
     _divider.backgroundColor = _dividerColor.CGColor;
     [self.layer addSublayer:_divider];
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return [OADividerCell getCellIdentifier];
 }
 
 - (void) layoutSubviews

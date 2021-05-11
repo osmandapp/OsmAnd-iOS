@@ -94,7 +94,7 @@
     cell = (OAGPXTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAGPXTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAGPXTableViewCell *)[nib objectAtIndex:0];
     }
 

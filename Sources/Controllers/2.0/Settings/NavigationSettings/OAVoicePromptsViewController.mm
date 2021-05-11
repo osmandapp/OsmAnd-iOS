@@ -26,7 +26,6 @@
 #include <OsmAndCore/Utilities.h>
 
 #define kCellTypeIconSwitch @"OASettingSwitchCell"
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeSwitch @"OASwitchCell"
 #define kCellTypeTitleValue @"OASettingsCell"
 
@@ -111,7 +110,7 @@
         @"key" : @"voiceGuidance",
     }];
     [firstSection addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"language"),
         @"value" : selectedLanguage,
         @"icon" : @"ic_custom_map_languge",
@@ -259,9 +258,9 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconTitleValue])
+    else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
+        static NSString* const identifierCell = [OAIconTitleValueCell getCellIdentifier];
         OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {

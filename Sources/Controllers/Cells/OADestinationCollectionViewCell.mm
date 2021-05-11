@@ -10,14 +10,14 @@
 
 @implementation OADestinationCollectionViewCell
 
-- (void) awakeFromNib
-{
-    [super awakeFromNib];
-}
-
 + (NSString *) getCellIdentifier
 {
     return @"OADestinationCollectionViewCell";
+}
+
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
 }
 
 @end

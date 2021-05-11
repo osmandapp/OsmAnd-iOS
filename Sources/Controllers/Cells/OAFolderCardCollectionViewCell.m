@@ -10,14 +10,14 @@
 
 @implementation OAFolderCardCollectionViewCell
 
-- (void) awakeFromNib
-{
-    [super awakeFromNib];
-}
-
 + (NSString *) getCellIdentifier
 {
     return @"OAFolderCardCollectionViewCell";
+}
+
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
 }
 
 @end

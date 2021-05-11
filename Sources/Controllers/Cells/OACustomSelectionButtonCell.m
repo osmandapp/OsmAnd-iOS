@@ -11,6 +11,11 @@
 
 @implementation OACustomSelectionButtonCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OACustomSelectionButtonCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -21,11 +26,6 @@
     
     _checkboxHeightContainer.constant = 21.5;
     _checkboxWidthContainer.constant = 21.5;
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OACustomSelectionButtonCell";
 }
 
 @end

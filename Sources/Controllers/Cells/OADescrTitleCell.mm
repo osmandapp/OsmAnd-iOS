@@ -11,6 +11,11 @@
 
 @implementation OADescrTitleCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADescrTitleCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];
@@ -22,11 +27,6 @@
     [super setSelected:selected animated:animated];
     
     // Configure the view for the selected state
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OADescrTitleCell";
 }
 
 @end

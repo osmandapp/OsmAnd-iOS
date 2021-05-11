@@ -16,6 +16,11 @@
     BOOL _topCorners;
 }
 
++ (NSString *)getCellIdentifier
+{
+    return @"OAIconTitleIconRoundCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -10,17 +10,17 @@
 
 @implementation OADownloadInfoTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADownloadInfoTableViewCell";
+}
+
 - (void) awakeFromNib {
     [super awakeFromNib];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OADownloadInfoTableViewCell";
 }
 
 @end

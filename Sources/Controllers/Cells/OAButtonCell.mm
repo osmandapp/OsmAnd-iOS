@@ -11,6 +11,11 @@
 
 @implementation OAButtonCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAButtonCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];
@@ -28,11 +33,6 @@
     self.buttonLeadingToIcon.active = show;
     if ([self isDirectionRTL])
         self.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OAButtonCell";
 }
 
 @end

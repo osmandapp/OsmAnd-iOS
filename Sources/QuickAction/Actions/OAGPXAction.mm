@@ -21,6 +21,7 @@
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAQuickActionType.h"
+#import "OAIconTitleValueCell.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -164,7 +165,7 @@ static OAQuickActionType *TYPE;
     OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
     
     [data setObject:@[@{
-                          @"type" : @"OAIconTitleValueCell",
+                          @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_NAME,
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites"),
@@ -172,7 +173,7 @@ static OAQuickActionType *TYPE;
                           @"img" : @"ic_custom_folder"
                           },
                       @{
-                          @"type" : @"OAIconTitleValueCell",
+                          @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_COLOR,
                           @"title" : OALocalizedString(@"fav_color"),
                           @"value" : color ? color.name : @"",

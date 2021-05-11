@@ -10,6 +10,11 @@
 
 @implementation OADateTimePickerTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADateTimePickerTableViewCell";
+}
+
 - (void)awakeFromNib {
     // Initialization code
 }
@@ -18,11 +23,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OADateTimePickerTableViewCell";
 }
 
 @end

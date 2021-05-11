@@ -355,7 +355,7 @@ static const NSInteger timeSectionIndex = 1;
         cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADateTimePickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dateTimePicker.datePickerMode = UIDatePickerModeTime;

@@ -10,6 +10,11 @@
 
 @implementation OACustomPickerTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OACustomPickerTableViewCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -41,11 +46,6 @@
 {
     if (self.delegate)
         [self.delegate zoomChanged:self.dataArray[row] tag:pickerView.tag];
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OACustomPickerTableViewCell";
 }
 
 @end

@@ -11,6 +11,11 @@
 
 @implementation OAEmptySearchCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAEmptySearchCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -21,11 +26,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OAEmptySearchCell";
 }
 
 @end

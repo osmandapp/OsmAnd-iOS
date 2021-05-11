@@ -26,8 +26,6 @@
 #import "OAColors.h"
 
 #define kOsmAndNavigation @"osmand_navigation"
-
-#define kCellTypeIconText @"OAIconTextCell"
 #define kCellTypeTitle @"OASettingsTitleCell"
 
 @interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -79,32 +77,32 @@
     NSMutableArray *navigationArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
-        @"type" : [OAIconTextTableViewCell getCellIdentifier],
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"nav_type_title"),
         @"value" : routingData ? routingData.name : @"",
         @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
         @"key" : @"navigationType",
     }];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"route_parameters"),
         @"icon" : @"ic_custom_route",
         @"key" : @"routeParams",
     }];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"voice_announces"),
         @"icon" : @"ic_custom_sound",
         @"key" : @"voicePrompts",
     }];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"screen_alerts"),
         @"icon" : @"ic_custom_alert",
         @"key" : @"screenAlerts",
     }];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"vehicle_parameters"),
         @"icon" : self.appMode.getIconName,
         @"key" : @"vehicleParams",
@@ -257,12 +255,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
@@ -278,13 +276,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconText])
+    else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconText;
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
         }

@@ -26,6 +26,7 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
+#import "OAIconTitleValueCell.h"
 
 #include <generalRouter.h>
 
@@ -391,7 +392,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (OALocalRoutingParameter *) getSelected
@@ -569,7 +570,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -624,7 +625,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -680,7 +681,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -818,7 +819,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath

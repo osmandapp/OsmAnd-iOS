@@ -1485,13 +1485,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     else if ([item[@"cell"] isEqualToString:[OADescrTitleIconCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OADescrTitleIconCell* cell;
-        cell = (OADescrTitleIconCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OADescrTitleIconCell *)[tableView dequeueReusableCellWithIdentifier:[OADescrTitleIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleIconCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleIconCell *)[nib objectAtIndex:0];
         }
         
@@ -1527,13 +1525,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     else if ([item[@"cell"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAButtonCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)

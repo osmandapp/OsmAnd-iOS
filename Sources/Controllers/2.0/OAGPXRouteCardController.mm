@@ -82,7 +82,7 @@
     cell = (OAGPXRouteWaypointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAGPXRouteWaypointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXRouteWaypointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXRouteWaypointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAGPXRouteWaypointTableViewCell *)[nib objectAtIndex:0];
     }
     

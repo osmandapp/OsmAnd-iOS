@@ -25,6 +25,11 @@
     NSArray *_data;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OACollectionViewCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];
@@ -55,11 +60,6 @@
 {
     _data = data;
     [_collectionView reloadData];
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OACollectionViewCell";
 }
 
 #pragma mark - UICollectionViewDataSource

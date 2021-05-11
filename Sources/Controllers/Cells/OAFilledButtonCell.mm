@@ -10,6 +10,10 @@
 
 @implementation OAFilledButtonCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAFilledButtonCell";
+}
 
 - (void) awakeFromNib
 {
@@ -23,11 +27,6 @@
     [super setSelected:selected animated:animated];
     
     // Configure the view for the selected state
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OAFilledButtonCell";
 }
 
 @end

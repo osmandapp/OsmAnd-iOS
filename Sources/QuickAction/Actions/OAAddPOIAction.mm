@@ -23,6 +23,7 @@
 #import "OAOsmEditsDBHelper.h"
 #import "OAQuickActionType.h"
 #import "OAButtonCell.h"
+#import "OAIconTitleValueCell.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -87,7 +88,7 @@ static OAQuickActionType *ACTION_TYPE;
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
     [data setObject:@[@{
-                          @"type" : @"OAIconTitleValueCell",
+                          @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"title" : OALocalizedString(@"poi_type"),
                           @"key" : KEY_CATEGORY,
                           @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"key_hint_select"),

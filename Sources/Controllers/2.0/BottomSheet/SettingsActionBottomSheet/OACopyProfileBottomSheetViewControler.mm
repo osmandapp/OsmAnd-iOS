@@ -23,9 +23,6 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-#define kIconTitleIconRoundCell @"OAIconTitleIconRoundCell"
-
-
 @interface OACopyProfileBottomSheetViewControler()
 
 @end
@@ -84,7 +81,7 @@
         if ([am.stringKey isEqualToString:_targetAppMode.stringKey])
             continue;
         [dataArr addObject:@{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OAIconTitleIconRoundCell getCellIdentifier],
             @"app_mode" : am,
             @"selected" : @(_sourceAppMode == am),
         }];
@@ -225,16 +222,15 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OAIconTitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
         OAIconTitleIconRoundCell* cell = nil;
         OAApplicationMode *am = item[@"app_mode"];
         
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.secondaryImageView.image = [[UIImage imageNamed:@"ic_checkmark_default"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

@@ -15,6 +15,11 @@
 
 @implementation OAColorsTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAColorsTableViewCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -22,11 +27,6 @@
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:[UINib nibWithNibName:[OAColorsCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]];
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OAColorsTableViewCell";
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {

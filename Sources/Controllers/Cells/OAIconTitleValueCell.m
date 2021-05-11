@@ -14,6 +14,11 @@
     BOOL _isImageShown;
 }
 
++ (NSString *)getCellIdentifier
+{
+    return @"OAIconTitleValueCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

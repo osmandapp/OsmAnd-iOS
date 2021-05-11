@@ -11,6 +11,11 @@
 
 @implementation OADescrTitleIconCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADescrTitleIconCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -46,11 +51,6 @@
         res = res || self.textTopConstraint.active != self.descView.hidden;
     }
     return res;
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OADescrTitleIconCell";
 }
 
 @end

@@ -11,6 +11,11 @@
 
 @implementation OAIconTitleButtonCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAIconTitleButtonCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

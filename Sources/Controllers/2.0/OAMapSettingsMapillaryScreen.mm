@@ -137,7 +137,7 @@ static const NSInteger panoImageFilterSection = 3;
                              @"key" : @"mapillary_enabled"
                              },
                          @{
-                             @"type" : @"OAIconTitleButtonCell",
+                             @"type" : [OAIconTitleButtonCell getCellIdentifier],
                              @"title" : OALocalizedString(@"tile_cache"),
                              @"btnTitle" : OALocalizedString(@"shared_string_reload"),
                              @"description" : @"",
@@ -150,7 +150,7 @@ static const NSInteger panoImageFilterSection = 3;
     [dataArr addObject:@[
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : @"OAIconTitleValueCell",
+                             @"type" : [OAIconTitleValueCell getCellIdentifier],
                              @"img" : @"ic_custom_user.png",
                              @"key" : @"users_filter",
                              @"title" : OALocalizedString(@"mapil_usernames")
@@ -378,13 +378,12 @@ static const NSInteger panoImageFilterSection = 3;
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleButtonCell"])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAIconTitleButtonCell";
-        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleButtonCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
         }
         
@@ -399,13 +398,12 @@ static const NSInteger panoImageFilterSection = 3;
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAIconTitleValueCell";
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleValueCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -475,7 +473,7 @@ static const NSInteger panoImageFilterSection = 3;
         cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADateTimePickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dateTimePicker.datePickerMode = UIDatePickerModeDate;
@@ -619,7 +617,7 @@ static const NSInteger panoImageFilterSection = 3;
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"] || [item[@"type"] isEqualToString:@"OAIconTitleButtonCell"] || [item[@"type"] isEqualToString:@"OAIconTitleValueCell"] || [indexPath isEqual:_datePickerIndexPath])
+    if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"] || [item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
     }
@@ -634,7 +632,7 @@ static const NSInteger panoImageFilterSection = 3;
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:@"OAIconTitleButtonCell"] || [type isEqualToString:@"OASettingSwitchCell"])
+    if ([type isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [type isEqualToString:@"OASettingSwitchCell"])
         return nil;
     return indexPath;
 }
@@ -663,7 +661,7 @@ static const NSInteger panoImageFilterSection = 3;
         [self.tblView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         [self.tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         OAUsernameFilterViewController *controller = [[OAUsernameFilterViewController alloc] initWithData:@[_userNames, _userKeys]];
         controller.delegate = self;

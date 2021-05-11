@@ -33,7 +33,6 @@
 #include "Localization.h"
 
 #define kRowNameCell @"OATextViewTableViewCell"
-#define kRowGroupCell @"OAIconTitleValueCell"
 #define kRowDescriptionCell @"OATextMultiViewCell"
 #define kRowWaypointsCell @"OATargetInfoCollapsableViewCell"
 #define kRowCoordinatesCell @"OATargetInfoCollapsableCoordinatesViewCell"
@@ -662,13 +661,13 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kRowGroupCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         OAIconTitleValueCell* cell;
-        cell = (OAIconTitleValueCell *)[tableView dequeueReusableCellWithIdentifier:kRowGroupCell];
+        cell = (OAIconTitleValueCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleValueCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         
@@ -799,7 +798,7 @@
         if ([self supportEditing])
             [self changeColorClicked];
     }
-    else if ([item[@"type"] isEqualToString:kRowGroupCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         if ([self supportEditing])
             [self changeGroupClicked];

@@ -26,7 +26,6 @@
 
 #include <generalRouter.h>
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeSettingSwitch @"OASettingSwitchCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSwitch @"switch"
@@ -136,7 +135,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"save_global_track_interval"),
                    @"description" : OALocalizedString(@"save_global_track_interval_descr"),
                    @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"shared_setting_always_ask") : recIntervalValue,
-                   @"type" : kCellTypeIconTitleValue }
+                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -145,7 +144,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"logging_min_distance"),
                    @"description" : OALocalizedString(@"logging_min_distance_descr"),
                    @"value" : minDistValue,
-                   @"type" : kCellTypeIconTitleValue }
+                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -154,7 +153,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"logging_min_accuracy"),
                    @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
                    @"value" : minPrecision,
-                   @"type" : kCellTypeIconTitleValue }
+                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -163,7 +162,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"logging_min_speed"),
                    @"description" : OALocalizedString(@"logging_min_speed_descr"),
                    @"value" : minSpeed,
-                   @"type" : kCellTypeIconTitleValue }
+                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -180,7 +179,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"logging_interval_navigation"),
                    @"value" : navIntervalValue,
                    @"img" : @"ic_custom_timer",
-                   @"type" : kCellTypeIconTitleValue,
+                   @"type" : [OAIconTitleValueCell getCellIdentifier],
                    @"key" : @"nav_interval"
                }
              ]];
@@ -426,13 +425,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeIconTitleValue])
+    else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
@@ -504,7 +502,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([type isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = [OAIconTextTableViewCell getCellIdentifier];
         OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {

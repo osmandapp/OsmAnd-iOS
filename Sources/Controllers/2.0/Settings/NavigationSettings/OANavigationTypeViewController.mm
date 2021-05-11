@@ -67,7 +67,7 @@
         if ((lastFileName == nil && profile.fileName == nil) || [lastFileName isEqualToString:profile.fileName])
         {
             [sectionData addObject:@{
-                @"type" : @"OAIconTextCell",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
                 @"title" : profile.name,
                 @"profile_ind" : @(i),
                 @"icon" : profile.iconName,
@@ -80,7 +80,7 @@
             lastFileName = profile.fileName;
             [fileNames addObject:lastFileName];
             [sectionData addObject:@{
-                @"type" : @"OAIconTextCell",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
                 @"title" : profile.name,
                 @"profile_ind" : @(i),
                 @"icon" : profile.iconName,

@@ -30,7 +30,6 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAMenuSimpleCell.h"
 #import "OAButtonCell.h"

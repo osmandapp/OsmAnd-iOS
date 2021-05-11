@@ -10,17 +10,17 @@
 
 @implementation OADeviceScreenTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADeviceScreenTableViewCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OADeviceScreenTableViewCell";
 }
 
 @end

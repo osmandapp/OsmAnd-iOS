@@ -18,7 +18,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeIconTextSwitch @"OASettingSwitchCell"
 #define kCellTypeTitle @"OASettingsCell"
 
@@ -196,14 +195,14 @@
     NSMutableArray *unitsAndFormatsArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
 //    [appearanceArr addObject:@{
-//        @"type" : kCellTypeIconTitleValue,
+//        @"type" : [OAIconTitleValueCell getCellIdentifier],
 //        @"title" : OALocalizedString(@"settings_app_theme"),
 //        @"value" : OALocalizedString(@"app_theme_light"),
 //        @"icon" : @"ic_custom_contrast",
 //        @"key" : @"app_theme",
 //    }];
     [appearanceArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"rotate_map_to_bearing"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
@@ -227,35 +226,35 @@
         @"key" : @"center_position",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"driving_region"),
         @"value" : drivingRegionValue,
         @"icon" : @"ic_profile_car",
         @"key" : @"drivingRegion",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"unit_of_length"),
         @"value" : metricSystemValue,
         @"icon" : @"ic_custom_ruler",
         @"key" : @"lengthUnits",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"units_of_speed"),
         @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
         @"key" : @"speedUnits",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : geoFormatValue,
         @"icon" : @"ic_custom_coordinates",
         @"key" : @"coordsFormat",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
         @"icon" : @"ic_custom_angular_unit",
@@ -284,13 +283,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeIconTitleValue])
+    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;

@@ -12,6 +12,11 @@
 
 @implementation OABottomSheetHeaderDescrButtonCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OABottomSheetHeaderDescrButtonCell";
+}
+
 - (void) awakeFromNib
 {
     self.sliderView.layer.cornerRadius = 3.;
@@ -23,11 +28,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OABottomSheetHeaderDescrButtonCell";
 }
 
 @end

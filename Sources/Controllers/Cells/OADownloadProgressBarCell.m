@@ -10,17 +10,17 @@
 
 @implementation OADownloadProgressBarCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OADownloadProgressBarCell";
+}
+
 - (void) awakeFromNib {
     [super awakeFromNib];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OADownloadProgressBarCell";
 }
 
 @end

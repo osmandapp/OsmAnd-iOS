@@ -50,7 +50,6 @@
 #define kTextInputCell @"OATextInputCell"
 #define kCellTypeSwitch @"OASwitchTableViewCell"
 #define kTextInputIconCell @"OATextInputIconCell"
-#define kIconTitleValueCell @"OAIconTitleValueCell"
 #define kBottomSheetActionCell @"OAMenuSimpleCell"
 #define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
 #define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
@@ -552,13 +551,12 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kIconTitleValueCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleValueCell;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleValueCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         if (cell)

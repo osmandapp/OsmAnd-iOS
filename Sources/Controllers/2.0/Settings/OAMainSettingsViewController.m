@@ -26,7 +26,6 @@
 #import "OAGlobalSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeCheck @"OAMultiIconTextDescCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kFooterId @"TableViewSectionFooter"
@@ -111,7 +110,7 @@
         @"title" : OALocalizedString(@"osmand_settings"),
         @"description" : OALocalizedString(@"global_settings_descr"),
         @"img" : @"left_menu_icon_settings",
-        @"type" : kCellTypeIconTitleValue }
+        @"type" : [OAIconTitleValueCell getCellIdentifier] }
     ]];
     
     [data addObject:@[
@@ -196,13 +195,12 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kCellTypeIconTitleValue])
+    if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;

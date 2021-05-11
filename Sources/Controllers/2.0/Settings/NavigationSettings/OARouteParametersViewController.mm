@@ -27,7 +27,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeSwitch @"OASettingSwitchCell"
 
 @interface OARouteParametersViewController () <UITableViewDelegate, UITableViewDataSource, OARoutePreferencesParametersDelegate>
@@ -84,7 +83,7 @@
     if (group && group.getText && group.getValue)
     {
         [parametersArr addObject:@{
-            @"type" : kCellTypeIconTitleValue,
+            @"type" : [OAIconTitleValueCell getCellIdentifier],
             @"title" : [group getText],
             @"icon" : iconName,
             @"value" : [group getValue],
@@ -110,7 +109,7 @@
     recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
     NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OsmAndApp.instance getFormattedDistance:recalcDist];
     [parametersArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"recalculate_route"),
         @"value" : descr,
         @"icon" : @"ic_custom_minimal_distance",
@@ -209,7 +208,7 @@
                 OAProfileString *setting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
                 NSString *value = [NSString stringWithUTF8String:p.possibleValueDescriptions[[setting get:self.appMode].intValue].c_str()];
                 [parametersArr addObject:@{
-                    @"type" : kCellTypeIconTitleValue,
+                    @"type" : [OAIconTitleValueCell getCellIdentifier],
                     @"title" : [NSString stringWithUTF8String:p.name.c_str()],
                     @"icon" : @"",
                     @"value" : value,
@@ -223,7 +222,7 @@
             if ([p isKindOfClass:OALocalRoutingParameterGroup.class])
             {
                 [parametersArr addObject:@{
-                    @"type" : kCellTypeIconTitleValue,
+                    @"type" : [OAIconTitleValueCell getCellIdentifier],
                     @"title" : [p getText],
                     @"icon" : [self getParameterIcon:[NSString stringWithUTF8String:p.routingParameter.id.c_str()] isSelected:[p isSelected]],
                     @"value" : [p getValue],
@@ -339,13 +338,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconTitleValue])
+    else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;

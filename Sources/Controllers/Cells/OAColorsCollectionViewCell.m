@@ -10,15 +10,15 @@
 
 @implementation OAColorsCollectionViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAColorsCollectionViewCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.colorView.layer.cornerRadius = self.colorView.frame.size.height/2;
     self.backView.layer.cornerRadius = self.backView.frame.size.height/2;
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OAColorsCollectionViewCell";
 }
 
 @end

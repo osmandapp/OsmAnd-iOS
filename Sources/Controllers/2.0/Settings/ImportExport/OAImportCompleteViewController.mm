@@ -46,7 +46,6 @@
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
-#define kIconTitleButtonCell @"OAIconTitleButtonCell"
 
 typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeProfiles = 0,

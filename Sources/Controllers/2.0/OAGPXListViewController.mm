@@ -17,7 +17,6 @@
 #import "OAGPXRecTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingSwitchCell.h"
-#import "OAIconTitleButtonCell.h"
 #import "OAGPXTrackCell.h"
 
 #import "OsmAndApp.h"
@@ -56,7 +55,6 @@
 #define kAlertViewShareId -4
 #define kAlertViewCancelButtonIndex -1
 #define kMaxCancelButtonWidth 100
-#define kIconTitleValueCell @"OAIconTitleValueCell"
 #define kCellTypeSwitch @"OASettingSwitchCell"
 #define kCellTypeTrackRecordMessage @"OAMenuSimpleCellNoIcon"
 #define kGPXTrackCell @"OAGPXTrackCell"
@@ -1113,7 +1111,7 @@ static UIViewController *parentController;
         {
             if (!_recCell)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXRecCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXRecTableViewCell getCellIdentifier] owner:self options:nil];
                 _recCell = (OAGPXRecTableViewCell *)[nib objectAtIndex:0];
             }
             if (_recCell)
@@ -1193,11 +1191,10 @@ static UIViewController *parentController;
     else {
         if (indexPath.row == kGPXGroupHeaderRow)
         {
-            static NSString* const identifierCell = kIconTitleValueCell;
-            OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleValueCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             }
             if (cell)

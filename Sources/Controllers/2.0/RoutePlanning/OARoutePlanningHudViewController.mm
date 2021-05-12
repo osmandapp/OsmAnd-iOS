@@ -278,10 +278,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
-- (void) layoutSubviews
+- (void) doAdditionalLayout
 {
-    [super layoutSubviews];
-    
     if ([self isLeftSidePresentation])
     {
         self.topHeaderContainerView.hidden = YES;
@@ -305,6 +303,33 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         self.landscapeHeaderContainerView.hidden = YES;
     }
     [self adjustNavbarPosition];
+}
+
+- (void) updateLayoutCurrentState
+{
+    BOOL isLandscape = [self isLeftSidePresentation];
+    if (isLandscape)
+    {
+        if (self.currentState == EOADraggableMenuStateInitial)
+            [self goMinimizedAnimated:NO];
+        else
+            [self goFullScreenAnimated:NO];
+    }
+    else
+    {
+        if (self.currentState == EOADraggableMenuStateFullScreen)
+            [self goMinimizedAnimated:NO];
+    }
+}
+
+- (CGFloat) getLandscapeYOffset
+{
+    return self.currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight - self.additionalLandscapeOffset : self.additionalLandscapeOffset;
+}
+
+- (void) updateShowingState:(EOADraggableMenuState)state
+{
+    [self goMinimizedAnimated:NO];
 }
 
 - (BOOL)supportsFullScreen

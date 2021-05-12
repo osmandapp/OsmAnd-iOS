@@ -742,10 +742,10 @@
         else if ([item getType] == SEARCH_MORE)
         {
             OASearchMoreCell* cell;
-            cell = (OASearchMoreCell *)[tableView dequeueReusableCellWithIdentifier:@"OASearchMoreCell"];
+            cell = (OASearchMoreCell *)[tableView dequeueReusableCellWithIdentifier:[OASearchMoreCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASearchMoreCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASearchMoreCell getCellIdentifier] owner:self options:nil];
                 cell = (OASearchMoreCell *)[nib objectAtIndex:0];
             }
             cell.textView.text = [item getName];

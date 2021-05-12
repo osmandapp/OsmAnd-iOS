@@ -138,7 +138,7 @@
     
     EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
     NSString *markersAppeareance = distanceIndication == WIDGET_DISPLAY ? OALocalizedString(@"shared_string_widgets") : OALocalizedString(@"shared_string_topbar") ;
-    [controlsList addObject:@{ @"type" : @"OASettingsCell",
+    [controlsList addObject:@{ @"type" : [OASettingsTableViewCell getCellIdentifier],
                                @"title" : OALocalizedString(@"map_markers"),
                                @"value" : markersAppeareance,
                                @"key" : @"map_markers"}];
@@ -314,13 +314,12 @@
         }
         outCell = cell;
     }
-    else if ([data[@"type"] isEqualToString:@"OASettingsCell"])
+    else if ([data[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;

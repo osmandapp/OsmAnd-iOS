@@ -27,7 +27,6 @@
 
 #define kCellTypeIconSwitch @"OASettingSwitchCell"
 #define kCellTypeSwitch @"OASwitchCell"
-#define kCellTypeTitleValue @"OASettingsCell"
 
 @interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -156,7 +155,7 @@
             value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
     }
     [thirdSection addObject:@{
-        @"type" : kCellTypeTitleValue,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speed_limit_exceed"),
         @"value" : value,
         @"key" : @"speedLimitTolerance",
@@ -200,13 +199,13 @@
         val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"units_min")];
     
     [fifthSection addObject:@{
-        @"type" : kCellTypeTitleValue,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"keep_informing"),
         @"value" : val,
         @"key" : @"repeatInstructions",
     }];
     [fifthSection addObject:@{
-        @"type" : kCellTypeTitleValue,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"arrival_distance"),
         @"value" : arrivalAnnouncementValue,
         @"key" : @"arrivalAnnouncement",
@@ -307,10 +306,10 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitleValue])
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitleValue;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = [OASettingsTableViewCell getCellIdentifier];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];

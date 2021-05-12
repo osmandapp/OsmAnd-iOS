@@ -121,7 +121,7 @@
     EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
 
     [activeMarkersArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kOneActiveMarker,
                         @"value" : activeMarkers == ONE_ACTIVE_MARKER ? @YES : @NO,
@@ -133,7 +133,7 @@
                         }];
     
     [activeMarkersArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kTwoActiveMarkers,
                         @"value" : activeMarkers == TWO_ACTIVE_MARKERS ? @YES : @NO,
@@ -152,7 +152,7 @@
                         }];
     
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kDistanceIndication,
                         @"key" : kTopBarDisplay,
                         @"value" : distanceIndication == TOP_BAR_DISPLAY ? @YES : @NO,
@@ -165,7 +165,7 @@
                         }];
     
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kDistanceIndication,
                         @"key" : kWidgetDisplay,
                         @"value" : distanceIndication == WIDGET_DISPLAY ? @YES : @NO,
@@ -241,13 +241,12 @@
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OASettingsCheckmarkCell"])
+    if ([item[@"type"] isEqualToString:[OASettingsCheckmarkCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsCheckmarkCell";
-        OASettingsCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsCheckmarkCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCheckmarkCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsCheckmarkCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
         }

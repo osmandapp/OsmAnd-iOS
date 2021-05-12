@@ -15,7 +15,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeTitle @"OASettingsCell"
 #define kCellTypeSwitch @"OASwitchCell"
 
 @interface OAGlobalSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -96,7 +95,7 @@
                 @"value" : _settings.defaultApplicationMode.toHumanString,
                 @"description" : OALocalizedString(@"default_profile_descr"),
                 @"img" : @"menu_cell_pointer.png",
-                @"type" : kCellTypeTitle },
+                @"type" : [OASettingsTableViewCell getCellIdentifier] },
                 @{
                 @"name" : @"do_not_show_discount",
                 @"title" : OALocalizedString(@"do_not_show_discount"),
@@ -152,13 +151,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = [self getItem:indexPath];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeTitle])
+    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;

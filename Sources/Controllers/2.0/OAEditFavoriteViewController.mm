@@ -41,7 +41,6 @@
 #define kTextFieldCell @"OATextViewTableViewCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
-#define kCellTypeTitle @"OASettingsCell"
 #define kCellTypeColorCollection @"colorCollectionCell"
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
@@ -371,7 +370,7 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"fav_group"),
-        @"type" : kCellTypeTitle,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"select_group"),
         @"value" : self.groupTitle,
         @"key" : kSelectGroupKey
@@ -779,13 +778,12 @@
         
         return resultCell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;

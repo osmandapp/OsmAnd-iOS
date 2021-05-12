@@ -148,7 +148,7 @@
     [section0poi setObject:OALocalizedString(@"poi_overlay") forKey:@"name"];
     NSString *description = [self getPOIDescription];
     [section0poi setObject:description forKey:@"value"];
-    [section0poi setObject:@"OASettingsCell" forKey:@"type"];
+    [section0poi setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];
     
     NSMutableDictionary *section0labels = [NSMutableDictionary dictionary];
     [section0labels setObject:OALocalizedString(@"layer_amenity_label") forKey:@"name"];
@@ -183,7 +183,7 @@
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
     [section0tracks setObject:OALocalizedString(@"tracks") forKey:@"name"];
     [section0tracks setObject:@"" forKey:@"value"];
-    [section0tracks setObject:@"OASettingsCell" forKey:@"type"];
+    [section0tracks setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];
 
     NSMutableArray *section0 = [NSMutableArray array];
     [section0 addObject:section0fav];
@@ -212,7 +212,7 @@
                           @"cells": @[
                                   @{@"name": OALocalizedString(@"map_settings_type"),
                                     @"value": _app.data.lastMapSource.name,
-                                    @"type": @"OASettingsCell"}
+                                    @"type": [OASettingsTableViewCell getCellIdentifier]}
                                   ],
                           }
                         ];
@@ -245,15 +245,15 @@
 
         [categoriesList addObject:@{@"name": OALocalizedString(@"map_mode"),
                                     @"value": modeStr,
-                                    @"type": @"OASettingsCell"}];
+                                    @"type": [OASettingsTableViewCell getCellIdentifier]}];
         
         [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_map_magnifier"),
                                     @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode]],
-                                    @"type": @"OASettingsCell"}];
+                                    @"type": [OASettingsTableViewCell getCellIdentifier]}];
         
         [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_text_size"),
                                     @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode]],
-                                    @"type": @"OASettingsCell"}];
+                                    @"type": [OASettingsTableViewCell getCellIdentifier]}];
         
         for (NSString *cName in categories)
         {
@@ -272,7 +272,7 @@
                 {
                     [categoriesList addObject:@{@"name": t,
                                                 @"value": @"",
-                                                @"type": @"OASettingsCell"}];
+                                                @"type": [OASettingsTableViewCell getCellIdentifier]}];
                 }
             }
         }
@@ -281,7 +281,7 @@
         {
             [categoriesList addObject:@{@"name": p.title,
                                         @"value": [p getValueTitle],
-                                        @"type": @"OASettingsCell"}];
+                                        @"type": [OASettingsTableViewCell getCellIdentifier]}];
         }
         
         if ([[OAIAPHelper sharedInstance].srtm isActive])
@@ -348,7 +348,7 @@
                                  @"cells": @[
                                          @{@"name": OALocalizedString(@"sett_lang"),
                                            @"value": languageValue,
-                                           @"type": @"OASettingsCell"}
+                                           @"type": [OASettingsTableViewCell getCellIdentifier]}
                                          ]}];
     
     tableData = [tableData arrayByAddingObjectsFromArray:arrayLanguage];
@@ -430,14 +430,12 @@
         outCell = _appModeCell;
         
     }
-    else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"])
+    else if ([[data objectForKey:@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         

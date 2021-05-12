@@ -10,6 +10,11 @@
 
 @implementation OASettingsCheckmarkCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OASettingsCheckmarkCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
 }

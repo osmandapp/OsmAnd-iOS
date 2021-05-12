@@ -19,6 +19,11 @@ static UIFont *_valueTextFont;
 
 @implementation OASettingsTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OASettingsTableViewCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

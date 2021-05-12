@@ -25,7 +25,6 @@
 #define kTextInputCell @"OATextViewResizingCell"
 #define kRouteGroupsCell @""
 #define kSwitchCell @"OASwitchTableViewCell"
-#define kCellTypeTitle @"OASettingsCell"
 
 @interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
@@ -145,7 +144,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kCellTypeTitle,
+            @"type" : [OASettingsTableViewCell getCellIdentifier],
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : @"Select folder",
             @"value" : _selectedFolderName,
@@ -295,13 +294,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
@@ -397,7 +395,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeTitle])
+    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
         [self showSelectFolderScreen];
     }

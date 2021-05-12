@@ -10,6 +10,11 @@
 
 @implementation OASegmentedControllCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OASegmentedControllCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

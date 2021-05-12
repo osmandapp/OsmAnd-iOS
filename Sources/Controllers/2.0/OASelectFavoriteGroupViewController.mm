@@ -13,7 +13,6 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
-#import "OASettingsTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAAddFavoriteGroupViewController.h"

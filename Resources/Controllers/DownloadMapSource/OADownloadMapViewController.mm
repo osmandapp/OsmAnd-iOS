@@ -34,7 +34,6 @@
 
 #define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
-#define kCellTypeMapType @"OASettingsTableViewCell"
 #define kMapTypeSection 0
 #define kZoomSection 1
 #define kZoomTilesRow 0
@@ -288,7 +287,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString *mapSourceName;
     mapSourceName = _app.data.lastMapSource.name;
     [mapTypeArr addObject:@{
-        @"type" : kCellTypeMapType,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_settings_type"),
         @"value" : mapSourceName,
     }];
@@ -486,13 +485,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeMapType])
+    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)

@@ -10,6 +10,11 @@
 
 @implementation OASearchMoreCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OASearchMoreCell";
+}
+
 - (void)awakeFromNib {
     // Initialization code
 }

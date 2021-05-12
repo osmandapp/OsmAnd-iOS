@@ -509,12 +509,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeSlider])
     {
-        static NSString* const identifierCell = @"OASegmentSliderTableViewCell";
         OASegmentSliderTableViewCell* cell = nil;
-        cell = (OASegmentSliderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OASegmentSliderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentSliderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

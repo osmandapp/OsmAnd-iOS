@@ -7,7 +7,6 @@
 //
 
 #import "OABaseCell.h"
-#import "OASegmentSliderTableViewCell.h"
 
 @interface OASliderWithValuesCell : OABaseCell
 

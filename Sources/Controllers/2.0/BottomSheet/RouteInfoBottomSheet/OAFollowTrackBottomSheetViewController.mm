@@ -36,7 +36,6 @@
 #import "OAMapActions.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
-#define kCellTypeSegment @"OASegmentTableViewCell"
 #define kCellTypeProfileSwitch @"OASettingSwitchCell"
 #define kCellTypeTitleRightIcon @"OATitleRightIconCell"
 
@@ -206,7 +205,7 @@
             @"title" : OALocalizedString(@"point_to_navigate")
         },
         @{
-            @"type" : kCellTypeSegment,
+            @"type" : [OASegmentTableViewCell getCellIdentifier],
             @"title0" : OALocalizedString(@"start_of_track"),
             @"title1" : OALocalizedString(@"nearest_point"),
             @"key" : @"point_to_start"
@@ -216,7 +215,7 @@
             @"title" : OALocalizedString(@"nav_type_title")
         },
         @{
-            @"type" : kCellTypeSegment,
+            @"type" : [OASegmentTableViewCell getCellIdentifier],
             @"title0" : OALocalizedString(@"nav_type_straight_line"),
             @"title1" : OARoutingHelper.sharedInstance.getAppMode.toHumanString,
             @"key" : @"nav_type"
@@ -280,14 +279,13 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kCellTypeSegment])
+    if ([type isEqualToString:[OASegmentTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASegmentTableViewCell";
         OASegmentTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASegmentTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0, 20., 0, 0);

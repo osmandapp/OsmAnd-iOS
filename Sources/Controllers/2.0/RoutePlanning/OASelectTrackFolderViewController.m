@@ -10,7 +10,6 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OASettingsTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAAddTrackFolderViewController.h"

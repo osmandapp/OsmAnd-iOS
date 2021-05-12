@@ -19,7 +19,6 @@
 #import "OAColors.h"
 
 #define kCellTypeIconTextSwitch @"OASettingSwitchCell"
-#define kCellTypeTitle @"OASettingsCell"
 
 @interface OAProfileGeneralSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -261,7 +260,7 @@
         @"key" : @"angulerMeasurmentUnits",
     }];
     [otherArr addObject:@{
-        @"type" : kCellTypeTitle,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"sett_ext_input"),
         @"value" : externalInputDeviceValue,
         @"key" : @"externalImputDevice",
@@ -327,13 +326,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;

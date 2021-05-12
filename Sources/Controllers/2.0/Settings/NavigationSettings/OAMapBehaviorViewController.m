@@ -86,18 +86,18 @@
         mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_mph")];
 
     NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:@{
-                                    @"type" : @"OASettingsCell",
+                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"choose_auto_follow_route"),
                                     @"value" : autoCenterValue,
                                     @"key" : @"autoCenter"},
                                 @{
-                                    @"type" : @"OASettingsCell",
+                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"auto_zoom_map"),
                                     @"value" : autoZoomValue,
                                     @"key" : @"autoZoom",
                                },
                                @{
-                                    @"type" : @"OASettingsCell",
+                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"map_orientation_change_in_accordance_with_speed"),
                                     @"value" : mapOrientationValue,
                                     @"key" : @"mapOrientation",
@@ -115,13 +115,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASettingsCell"])
+    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;

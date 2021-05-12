@@ -24,8 +24,8 @@
                 <outlet property="landscapeExpandButton" destination="V78-cH-ojd" id="JGk-mx-5XT"/>
                 <outlet property="landscapeHeaderContainerView" destination="rgr-DA-wDw" id="Gol-Fd-dfA"/>
                 <outlet property="landscapeHeaderDescriptionView" destination="ECv-Po-Jy3" id="mD6-Sb-C8Q"/>
+                <outlet property="landscapeHeaderLeftContainerConstraint" destination="Aje-d2-X66" id="iGF-dH-1mR"/>
                 <outlet property="landscapeHeaderTitleView" destination="yyL-Uz-qJh" id="UKT-Hl-tJ2"/>
-                <outlet property="landskapeHeaderLeftContainerConstraint" destination="Aje-d2-X66" id="Gbf-fc-wLy"/>
                 <outlet property="leftImageVIew" destination="Aod-ON-ikl" id="hEe-Rf-FRm"/>
                 <outlet property="modeButton" destination="oTM-Ht-rdV" id="FkB-ug-cZZ"/>
                 <outlet property="navbarLeadingConstraint" destination="1gI-y2-IBh" id="kvc-d3-gnf"/>

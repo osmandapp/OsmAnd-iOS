@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewTailingConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *landskapeHeaderLeftContainerConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *landscapeHeaderLeftContainerConstraint;
 @property (weak, nonatomic) IBOutlet UIView *landscapeHeaderContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderTitleView;
 @property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderDescriptionView;
@@ -274,65 +274,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    self.currentState = EOADraggableMenuStateInitial;
+    [self goMinimized];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 - (void) layoutSubviews
 {
-    if (self.isDragging || self.isHiding)
-        return;
-    
-    BOOL isLandscape = [self isLeftSidePresentation];
-    if (isLandscape)
-        self.currentState = self.currentState == EOADraggableMenuStateInitial ? EOADraggableMenuStateInitial : EOADraggableMenuStateFullScreen;
-    else
-        self.currentState = self.currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateInitial : self.currentState;
-
-    [self.tableView setScrollEnabled:self.currentState == EOADraggableMenuStateFullScreen || (!self.supportsFullScreen && EOADraggableMenuStateExpanded)];
-    
-    [self adjustFrame];
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    if (isLandscape)
-    {
-        if (mapPanel.mapViewController.mapPositionX != 1)
-        {
-            mapPanel.mapViewController.mapPositionX = 1;
-            [mapPanel refreshMap];
-        }
-    }
-    else
-    {
-        if (mapPanel.mapViewController.mapPositionX != 0)
-        {
-            mapPanel.mapViewController.mapPositionX = 0;
-            [mapPanel refreshMap];
-        }
-    }
-    
-    BOOL isFullScreen = self.currentState == EOADraggableMenuStateFullScreen;
-    self.statusBarBackgroundView.frame = isFullScreen && [self showStatusBarWhenFullScreen] ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
-    
-    CGRect sliderFrame = self.sliderView.frame;
-    sliderFrame.origin.x = self.scrollableView.bounds.size.width / 2 - sliderFrame.size.width / 2;
-    self.sliderView.frame = sliderFrame;
-    
-    CGRect buttonsFrame = self.toolBarView.frame;
-    buttonsFrame.size.width = self.scrollableView.bounds.size.width;
-    self.toolBarView.frame = buttonsFrame;
-    
-    CGRect contentFrame = self.contentContainer.frame;
-    contentFrame.size.width = self.scrollableView.bounds.size.width;
-    contentFrame.origin.y = CGRectGetMaxY(self.statusBarBackgroundView.frame);
-    contentFrame.size.height -= contentFrame.origin.y;
-    self.contentContainer.frame = contentFrame;
-    
-    self.sliderView.hidden = isLandscape;
-    
-    CGFloat tableViewY = CGRectGetMaxY(self.topHeaderContainerView.frame);
-    self.tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
-    
-    self.topHeaderContainerView.frame = CGRectMake(OAUtilities.getLeftMargin, self.topHeaderContainerView.frame.origin.y, contentFrame.size.width - OAUtilities.getLeftMargin, self.topHeaderContainerView.frame.size.height);
+    [super layoutSubviews];
     
     if ([self isLeftSidePresentation])
     {
@@ -344,7 +292,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         CGFloat buttonsViewY = DeviceScreenHeight - buttonsViewHeight;
         
         _landscapeHeaderContainerView.frame = CGRectMake(0, buttonsViewY, DeviceScreenWidth, buttonsViewHeight);
-        _landskapeHeaderLeftContainerConstraint.constant = self.scrollableView.frame.size.width;
+        _landscapeHeaderLeftContainerConstraint.constant = self.scrollableView.frame.size.width;
         CGFloat offset = self.currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight : 0;
         self.tableView.frame = CGRectMake(0, offset, self.scrollableView.frame.size.width, buttonsViewY);
         self.scrollableView.frame = CGRectMake(self.scrollableView.frame.origin.x, offset, self.scrollableView.frame.size.width, self.scrollableView.frame.size.height);
@@ -357,103 +305,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         self.landscapeHeaderContainerView.hidden = YES;
     }
     [self adjustNavbarPosition];
-    
-    [self applyCornerRadius:!isLandscape && self.currentState != EOADraggableMenuStateFullScreen];
-    
-    [self onViewHeightChanged:self.getViewHeight];
-}
-
-- (void) adjustFrame
-{
-    CGRect f = self.scrollableView.frame;
-    CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if ([self isLeftSidePresentation])
-    {
-        CGFloat offset = self.currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight - self.additionalLandscapeOffset : self.additionalLandscapeOffset;
-        f.origin = CGPointMake(0., offset);
-        f.size.height = DeviceScreenHeight - [super additionalLandscapeOffset];
-        f.size.width = OAUtilities.isIPad ? [super getViewWidthForPad] : DeviceScreenWidth * 0.45;
-        
-        CGRect buttonsFrame = self.toolBarView.frame;
-        buttonsFrame.origin.y = f.size.height - 60. - bottomMargin;
-        buttonsFrame.size.height = 60. + bottomMargin;
-        self.toolBarView.frame = buttonsFrame;
-        
-        CGRect contentFrame = self.contentContainer.frame;
-        contentFrame.size.height = f.size.height - buttonsFrame.size.height;
-        self.contentContainer.frame = contentFrame;
-    }
-    else
-    {
-        CGRect buttonsFrame = self.toolBarView.frame;
-        buttonsFrame.size.height = 60. + bottomMargin;
-        f.size.height = [self getViewHeight];
-        f.size.width = DeviceScreenWidth;
-        f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
-        
-        buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
-        self.toolBarView.frame = buttonsFrame;
-        
-        CGRect contentFrame = self.contentContainer.frame;
-        contentFrame.size.height = f.size.height - buttonsFrame.size.height;
-        contentFrame.origin = CGPointZero;
-        self.contentContainer.frame = contentFrame;
-    }
-    self.scrollableView.frame = f;
-}
-
-- (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete
-{
-    [self.tableView setContentOffset:CGPointZero];
-    self.currentState = self.isLeftSidePresentation ? EOADraggableMenuStateFullScreen : state;
-    self.currentState = EOADraggableMenuStateInitial;
-    [self.tableView setScrollEnabled:YES];
-    
-    [self adjustFrame];
-    [self.tableView reloadData];
-
-    if (animated)
-    {
-        CGRect frame = self.scrollableView.frame;
-        if ([self isLeftSidePresentation])
-        {
-            frame.origin.x = -self.scrollableView.bounds.size.width;
-            frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
-            frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
-            self.scrollableView.frame = frame;
-            
-            frame.origin.x = 0.0;
-        }
-        else
-        {
-            frame.origin.x = 0.0;
-            frame.origin.y = DeviceScreenHeight + 10.0;
-            frame.size.width = DeviceScreenWidth;
-            self.scrollableView.frame = frame;
-            
-            frame.origin.y = DeviceScreenHeight - self.scrollableView.bounds.size.height;
-        }
-        
-        [UIView animateWithDuration:0.3 animations:^{
-            self.scrollableView.frame = frame;
-        } completion:^(BOOL finished) {
-            if (onComplete)
-                onComplete();
-        }];
-    }
-    else
-    {
-        CGRect frame = self.scrollableView.frame;
-        if ([self isLeftSidePresentation])
-            frame.origin.y = 0.0;
-        else
-            frame.origin.y = DeviceScreenHeight - self.scrollableView.bounds.size.height;
-        
-        self.scrollableView.frame = frame;
-        
-        if (onComplete)
-            onComplete();
-    }
 }
 
 - (BOOL)supportsFullScreen
@@ -503,7 +354,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     CGRect buttonsFrame = _actionButtonsContainer.frame;
     if ([self isLeftSidePresentation])
     {
-        CGFloat leftMargin = self.currentState == EOADraggableMenuStateInitial ? 0 : self.scrollableView.frame.size.width;
+        CGFloat leftMargin = self.currentState == EOADraggableMenuStateInitial ? OAUtilities.getLeftMargin : self.scrollableView.frame.size.width;
         buttonsFrame.origin = CGPointMake(leftMargin, DeviceScreenHeight - buttonsFrame.size.height - 15. - self.toolBarView.frame.size.height);
     }
     else
@@ -523,7 +374,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         if (self.currentState == EOADraggableMenuStateInitial)
             leftMargin = kPlanRouteMapRulerMarginLeft;
         else
-            leftMargin = self.scrollableView.frame.size.width + kPlanRouteMapRulerMarginLeft;
+            leftMargin = self.scrollableView.frame.size.width + 40;
     }
     else
     {
@@ -573,7 +424,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) adjustNavbarPosition
 {
-    _navbarLeadingConstraint.constant = [self isLeftSidePresentation] && self.currentState != EOADraggableMenuStateInitial ? self.scrollableView.frame.size.width : 0.;
+    _navbarLeadingConstraint.constant = [self isLeftSidePresentation] && self.currentState != EOADraggableMenuStateInitial ? self.scrollableView.frame.size.width  : OAUtilities.getLeftMargin;
 }
 
 - (void) updateDistancePointsText

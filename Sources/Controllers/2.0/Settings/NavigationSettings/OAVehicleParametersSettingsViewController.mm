@@ -162,7 +162,7 @@
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [otherArr addObject:@{
-        @"type" : @"OAOnlyImageViewCell",
+        @"type" : [OAOnlyImageViewCell getCellIdentifier],
         @"icon" : [self getParameterImage:parameter],
     }];
     [parametersArr addObject:@{
@@ -212,13 +212,12 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OAOnlyImageViewCell"])
+    if ([cellType isEqualToString:[OAOnlyImageViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAOnlyImageViewCell";
-        OAOnlyImageViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAOnlyImageViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAOnlyImageViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAOnlyImageViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAOnlyImageViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

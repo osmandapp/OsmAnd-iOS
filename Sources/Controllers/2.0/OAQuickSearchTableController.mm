@@ -449,13 +449,11 @@
 
 - (OAPointDescCell *) getPointDescCell
 {
-    static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-    
     OAPointDescCell* cell;
-    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointDescCell *)[nib objectAtIndex:0];
     }
     return cell;

@@ -18,6 +18,11 @@
 
 @implementation OAPublicTransportPointCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAPublicTransportPointCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

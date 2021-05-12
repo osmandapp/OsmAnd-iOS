@@ -46,7 +46,6 @@
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
 #define kHeaderId @"TableViewSectionHeader"
-#define kPoiTableViewCell @"OAPoiTableViewCell"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -804,12 +803,11 @@
     }
     else if ([cellType isEqualToString:kCellTypePoiCollection])
     {
-        static NSString* const identifierCell = kPoiTableViewCell;
         OAPoiTableViewCell *cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAPoiTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kPoiTableViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPoiTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAPoiTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.cellIndex = indexPath;

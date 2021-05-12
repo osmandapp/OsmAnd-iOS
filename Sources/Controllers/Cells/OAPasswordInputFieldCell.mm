@@ -23,6 +23,11 @@ static UIFont *_descFont;
     BOOL _shouldShowPassword;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAPasswordInputFieldCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

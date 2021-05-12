@@ -35,7 +35,6 @@
 #define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
 #define kCellTypeMapType @"OASettingsTableViewCell"
-#define kCellTypePreviewCell @"OAPreviewZoomLevelsCell"
 #define kMapTypeSection 0
 #define kZoomSection 1
 #define kZoomTilesRow 0
@@ -294,7 +293,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"value" : mapSourceName,
     }];
     [zoomLevelArr addObject:@{
-        @"type" : kCellTypePreviewCell,
+        @"type" : [OAPreviewZoomLevelsCell getCellIdentifier],
         @"value" : OALocalizedString(@"preview_of_selected_zoom_levels"),
     }];
     [zoomLevelArr addObject:@{
@@ -503,13 +502,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePreviewCell])
+    else if ([cellType isEqualToString:[OAPreviewZoomLevelsCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAPreviewZoomLevelsCell";
-        OAPreviewZoomLevelsCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAPreviewZoomLevelsCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAPreviewZoomLevelsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPreviewZoomLevelsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPreviewZoomLevelsCell getCellIdentifier] owner:self options:nil];
             cell = (OAPreviewZoomLevelsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

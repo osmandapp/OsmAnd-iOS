@@ -52,7 +52,6 @@
 #define kTextInputIconCell @"OATextInputIconCell"
 #define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
 #define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
-#define kMultilineTextViewCell @"OAMultilineTextViewCell"
 
 #define KEY_MESSAGE @"message"
 
@@ -664,12 +663,12 @@
     {
         return [self getInputCellWithHint:indexPath];
     }
-    else if ([item[@"type"] isEqualToString:kMultilineTextViewCell])
+    else if ([item[@"type"] isEqualToString:[OAMultilineTextViewCell getCellIdentifier]])
     {
-        OAMultilineTextViewCell* cell = (OAMultilineTextViewCell *)[tableView dequeueReusableCellWithIdentifier:kMultilineTextViewCell];
+        OAMultilineTextViewCell* cell = (OAMultilineTextViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultilineTextViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMultilineTextViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultilineTextViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultilineTextViewCell *)[nib objectAtIndex:0];
         }
         

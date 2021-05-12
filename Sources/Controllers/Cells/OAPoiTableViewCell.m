@@ -28,12 +28,17 @@
     NSArray<NSString *> *_categoryNames;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAPoiTableViewCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OAPoiCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAPoiCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OAPoiCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAPoiCollectionViewCell getCellIdentifier]];
     
     self.categoriesCollectionView.delegate = self;
     self.categoriesCollectionView.dataSource = self;
@@ -206,9 +211,8 @@
     }
     else
     {
-        static NSString* const identifierCell = @"OAPoiCollectionViewCell";
         OAPoiCollectionViewCell* cell = nil;
-        cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+        cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAPoiCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
         UIImage *img = nil;
         NSString *imgName = _poiData[_currentCategory][indexPath.row];
         img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];

@@ -11,6 +11,11 @@
 
 @implementation OAPublicTransportCollapsableCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAPublicTransportCollapsableCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

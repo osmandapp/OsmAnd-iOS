@@ -209,10 +209,10 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     NSDictionary *translatedNames = [_poiHelper getAllTranslatedNames:NO];
     OAPOIType *poiType = translatedNames[item[@"poi_type"]];
     OAMultiIconTextDescCell* cell;
-    cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMultiIconTextDescCell"];
+    cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
     }
     

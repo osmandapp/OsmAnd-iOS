@@ -24,7 +24,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-#define kPointCell @"OAPointTableViewCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
 
 #define kVerticalMargin 16.
@@ -109,7 +108,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         NSString *distance = favorite.distance;
         
         [favoritesSection addObject:@{
-                @"type" : kPointCell,
+                @"type" : [OAPointTableViewCell getCellIdentifier],
                 @"title" : name ? name : @"",
                 @"distance" : distance ? distance : @"",
                 @"direction" : [NSNumber numberWithFloat:favorite.direction],
@@ -238,15 +237,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         return cell;
     }
-    else if ([type isEqualToString:kPointCell])
+    else if ([type isEqualToString:[OAPointTableViewCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-
         OAPointTableViewCell* cell;
-        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
         }
         

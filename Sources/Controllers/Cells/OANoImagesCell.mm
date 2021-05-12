@@ -9,7 +9,10 @@
 #import "OANoImagesCell.h"
 
 @implementation OANoImagesCell
+
++ (NSString *)getCellIdentifier
 {
+    return @"OANoImagesCell";
 }
 
 - (void) awakeFromNib

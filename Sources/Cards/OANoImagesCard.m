@@ -12,8 +12,6 @@
 #import "OAMapillaryPlugin.h"
 #import "OAColors.h"
 
-#define kNoImagesCard @"OANoImagesCell"
-
 @implementation OANoImagesCard
 
 - (void) build:(UICollectionViewCell *) cell
@@ -47,7 +45,7 @@
 
 + (NSString *) getCellNibId
 {
-    return kNoImagesCard;
+    return [OANoImagesCell getCellIdentifier];
 }
 
 @end

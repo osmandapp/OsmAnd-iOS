@@ -21,8 +21,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeProgress @"OAProgressTitleCell"
-
 @implementation OATableGroupToImport
 
 -(instancetype) init
@@ -314,13 +312,12 @@
             }
             return cell;
         }
-        else if ([groupData.type isEqualToString:kCellTypeProgress])
+        else if ([groupData.type isEqualToString:[OAProgressTitleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = kCellTypeProgress;
-            OAProgressTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAProgressTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAProgressTitleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressTitleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAProgressTitleCell *)[nib objectAtIndex:0];
             }
             if (cell)

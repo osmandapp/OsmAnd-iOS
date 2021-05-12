@@ -10,6 +10,11 @@
 
 @implementation OAProgressBarCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAProgressBarCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

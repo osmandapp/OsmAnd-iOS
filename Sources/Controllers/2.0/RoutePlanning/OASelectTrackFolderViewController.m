@@ -19,7 +19,6 @@
 #import "OATableViewCustomHeaderView.h"
 
 #define kCellTypeAction @"OATitleRightIconCell"
-#define kMultiIconTextDescCell @"OAMultiIconTextDescCell"
 #define kHeaderId @"TableViewSectionHeader"
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
@@ -91,7 +90,7 @@
         NSArray *folderItems = foldersData[folderName];
         int tracksCount = folderItems ? folderItems.count : 0;
         [cellFoldersData addObject:@{
-            @"type" : kMultiIconTextDescCell,
+            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : folderName,
             @"description" : [NSString stringWithFormat:@"%i", tracksCount],
@@ -140,12 +139,12 @@
         return cell;
     }
    
-    else if ([cellType isEqualToString:kMultiIconTextDescCell])
+    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:kMultiIconTextDescCell];
+        OAMultiIconTextDescCell* cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMultiIconTextDescCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.numberOfLines = 3;
@@ -229,7 +228,7 @@
 {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:kMultiIconTextDescCell])
+        if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
             return 60;
         else
             return UITableViewAutomaticDimension;

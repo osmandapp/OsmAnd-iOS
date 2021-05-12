@@ -843,13 +843,11 @@ static UIViewController *parentController;
 {
     if (indexPath.section == 0)
     {
-        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-
         OAPointTableViewCell* cell;
-        cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -906,12 +904,11 @@ static UIViewController *parentController;
     NSDictionary *item = _data[indexPath.section][0];
     FavoriteTableGroup* groupData = item[@"group"];
     
-    static NSString* const reusableIdentifierPoint = @"OAPointHeaderTableViewCell";
     OAPointHeaderTableViewCell* cell;
-    cell = (OAPointHeaderTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointHeaderTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointHeaderTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointHeaderCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
         cell.folderIcon.image = [[UIImage imageNamed:@"ic_custom_folder"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
@@ -951,12 +948,11 @@ static UIViewController *parentController;
     FavoriteTableGroup* groupData = item[@"group"];
     
     NSInteger dataIndex = indexPath.row - 1;
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
         cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }

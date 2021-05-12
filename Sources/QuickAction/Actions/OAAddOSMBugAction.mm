@@ -13,6 +13,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAQuickActionType.h"
+#import "OAMultilineTextViewCell.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -56,7 +57,7 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     [data setObject:@[@{
-                          @"type" : @"OAMultilineTextViewCell",
+                          @"type" : [OAMultilineTextViewCell getCellIdentifier],
                           @"hint" : OALocalizedString(@"quick_action_enter_message"),
                           @"title" : self.getParams[KEY_MESSAGE] ? self.getParams[KEY_MESSAGE] : @"",
                           @"key" : KEY_MESSAGE

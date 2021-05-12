@@ -12,6 +12,11 @@
 
 static UIFont *_titleFont;
 
++ (NSString *)getCellIdentifier
+{
+    return @"OAMultilineTextViewCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

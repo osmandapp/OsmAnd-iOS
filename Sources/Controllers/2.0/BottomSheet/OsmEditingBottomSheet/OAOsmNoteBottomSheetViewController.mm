@@ -541,7 +541,7 @@
 
 + (OAPasswordInputFieldCell *)getPasswordCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide floatingTextFieldControllers:(NSMutableArray *)floatingControllers
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPasswordInputFieldCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPasswordInputFieldCell getCellIdentifier] owner:self options:nil];
     OAPasswordInputFieldCell *resultCell = (OAPasswordInputFieldCell *)[nib objectAtIndex:0];
     resultCell.backgroundColor = [UIColor clearColor];
     MDCTextField *textField = resultCell.inputField;

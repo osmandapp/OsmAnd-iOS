@@ -12,6 +12,11 @@
 
 @implementation OAPublicTransportRouteCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAPublicTransportRouteCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -17,6 +17,11 @@
     UIColor *_color;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAPublicTransportRouteShieldCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

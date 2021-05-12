@@ -26,7 +26,6 @@
 #import "OAGlobalSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 
-#define kCellTypeCheck @"OAMultiIconTextDescCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kFooterId @"TableViewSectionFooter"
 
@@ -117,7 +116,7 @@
         @{
             @"name" : @"current_profile",
             @"app_mode" : appMode,
-            @"type" : kCellTypeCheck,
+            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
             @"isColored" : @YES
         }
     ]];
@@ -128,7 +127,7 @@
         [profilesSection addObject:@{
             @"name" : @"profile_val",
             @"app_mode" : OAApplicationMode.allPossibleValues[i],
-            @"type" : i == 0 ? kCellTypeCheck : [OAIconTextDescSwitchCell getCellIdentifier],
+            @"type" : i == 0 ? [OAMultiIconTextDescCell getCellIdentifier] : [OAIconTextDescSwitchCell getCellIdentifier],
             @"isColored" : @NO
         }];
     }
@@ -215,13 +214,12 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeCheck])
+    else if ([type isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeCheck;
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
             [cell setOverflowVisibility:YES];

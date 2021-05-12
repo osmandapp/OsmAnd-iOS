@@ -68,7 +68,7 @@
     }
     
     [arr addObject:@{
-        @"cell" : @"OAPublicTransportPointCell",
+        @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : start ? @"ic_custom_start_point" : @"ic_action_location_color",
         @"title" : title,
         @"top_route_line" : @(NO),
@@ -84,7 +84,7 @@
         time = 60;
     
     [arr addObject:@{
-        @"cell" : @"OAPublicTransportPointCell",
+        @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_profile_pedestrian",
         @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
@@ -107,7 +107,7 @@
         time = 60;
     
     [arr addObject:@{
-        @"cell" : @"OAPublicTransportPointCell",
+        @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_profile_pedestrian",
         @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
@@ -129,7 +129,7 @@
     }
     
     [arr addObject:@{
-        @"cell" : @"OAPublicTransportPointCell",
+        @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_custom_destination",
         @"title" : title,
         @"descr" : OALocalizedString(@"map_widget_distance"),
@@ -151,7 +151,7 @@
     NSMutableDictionary *collapsableCell = [NSMutableDictionary new];
     NSMutableArray *subItems = [NSMutableArray new];
     NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
-    [collapsableCell setObject:@"OAPublicTransportCollapsableCell" forKey:@"cell"];
+    [collapsableCell setObject:[OAPublicTransportCollapsableCell getCellIdentifier] forKey:@"cell"];
     [collapsableCell setObject:[NSString stringWithFormat:OALocalizedString(@"by_type"), [r getTypeStr]] forKey:@"descr"];
     [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size(), OALocalizedString(@"num_stops"), [_app getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
     [collapsableCell setObject:@(YES) forKey:@"collapsed"];
@@ -161,7 +161,7 @@
     {
         const auto& stop = stops[i];
         [subItems addObject:@{
-            @"cell" : @"OAPublicTransportPointCell",
+            @"cell" : [OAPublicTransportPointCell getCellIdentifier],
             @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
             @"title" : [NSString stringWithUTF8String:stop->name.c_str()],
             @"top_route_line" : @(YES),
@@ -205,7 +205,7 @@
     UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
     
     [arr addObject:@{
-        @"cell" : @"OAPublicTransportPointCell",
+        @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
         @"title" : [NSString stringWithUTF8String:startStop.name.c_str()],
         @"descr" : OALocalizedString(@"board_at"),
@@ -223,7 +223,7 @@
     NSMutableArray<CLLocation *> * locations = [self generateLocationsFor:segment];
     
     [arr addObject:@{
-        @"cell" : @"OAPublicTransportRouteShieldCell",
+        @"cell" : [OAPublicTransportRouteShieldCell getCellIdentifier],
         @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
         @"title" : [NSString stringWithUTF8String:route->name.c_str()],
         @"line_color" : color,
@@ -241,7 +241,7 @@
     
     const auto &endStop = segment->getEnd();
     [arr addObject:@{
-        @"cell" : @"OAPublicTransportPointCell",
+        @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
         @"title" : [NSString stringWithUTF8String:endStop.name.c_str()],
         @"descr" : OALocalizedString(@"exit_at"),
@@ -263,7 +263,7 @@
 {
     NSMutableDictionary *resData = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:@[@{@"cell" : @"OAPublicTransportShieldCell"},
-                                                           @{@"cell" : @"OAPublicTransportRouteCell"},
+                                                           @{@"cell" : [OAPublicTransportRouteCell getCellIdentifier]},
                                                            @{
                                                                @"cell" : [OADividerCell getCellIdentifier],
                                                                @"custom_insets" : @(NO)
@@ -302,7 +302,7 @@
                         time = 60;
                     OARouteCalculationResult *seg = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nextSegment]];
                     [arr addObject:@{
-                        @"cell" : @"OAPublicTransportPointCell",
+                        @"cell" : [OAPublicTransportPointCell getCellIdentifier],
                         @"img" : @"ic_profile_pedestrian",
                         @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
                         @"top_route_line" : @(NO),
@@ -435,15 +435,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+    if ([item[@"cell"] isEqualToString:[OAPublicTransportRouteCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportRouteCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportRouteCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportRouteCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportRouteCell *)[nib objectAtIndex:0];
         }
         
@@ -487,15 +485,13 @@
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportPointCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportPointCell getCellIdentifier]])
     {
-        NSString* identifierCell = item[@"cell"];
         OAPublicTransportPointCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportPointCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportPointCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportPointCell *)[nib objectAtIndex:0];
         }
         
@@ -546,15 +542,13 @@
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportCollapsableCell getCellIdentifier]])
     {
-        NSString* identifierCell = item[@"cell"];
         OAPublicTransportCollapsableCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportCollapsableCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportCollapsableCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportCollapsableCell *)[nib objectAtIndex:0];
         }
         
@@ -575,15 +569,13 @@
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteShieldCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportRouteShieldCell getCellIdentifier]])
     {
-        NSString* identifierCell = item[@"cell"];
         OAPublicTransportRouteShieldCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportRouteShieldCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportRouteShieldCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportRouteShieldCell *)[nib objectAtIndex:0];
         }
         
@@ -638,7 +630,7 @@
     NSArray *sectionData = _data[@(section)];
     NSDictionary *item = sectionData.firstObject;
     
-    if ([item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"])
+    if ([item[@"cell"] isEqualToString:[OAPublicTransportCollapsableCell getCellIdentifier]])
     {
         return [item[@"collapsed"] boolValue] ? 1 : sectionData.count;
     }
@@ -676,7 +668,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"])
+    if ([item[@"cell"] isEqualToString:[OAPublicTransportCollapsableCell getCellIdentifier]])
     {
         NSMutableDictionary *mutableItem = (NSMutableDictionary *) item;
         [tableView beginUpdates];
@@ -694,7 +686,7 @@
         [tableView endUpdates];
         [self.delegate onContentHeightChanged];
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportPointCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportPointCell getCellIdentifier]])
     {
         NSArray<CLLocation *> *locations = item[@"coords"];
         [self.delegate showSegmentOnMap:locations];

@@ -17,7 +17,6 @@
 
 #define kCellTypeTitle @"OASettingsCell"
 #define kCellTypeSwitch @"OASwitchCell"
-#define kCellTypeCheck @"OAMultiIconTextDescCell"
 
 @interface OAGlobalSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -125,7 +124,7 @@
                     @"name" : mode.toHumanString,
                     @"descr" : mode.stringKey,
                     @"isSelected" : @(_settings.defaultApplicationMode == mode),
-                    @"type" : kCellTypeCheck }];
+                    @"type" : [OAMultiIconTextDescCell getCellIdentifier] }];
             }
             _data = [NSArray arrayWithArray:arr];
             break;
@@ -193,13 +192,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeCheck])
+    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeCheck;
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
             [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_checkmark_default"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];

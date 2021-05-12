@@ -10,6 +10,11 @@
 
 @implementation OAOnlyImageViewCell
 
++ (NSString *)getCellIdentifier
+{
+    return @"OAOnlyImageViewCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

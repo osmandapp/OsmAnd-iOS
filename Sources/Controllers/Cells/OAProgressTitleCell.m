@@ -11,6 +11,11 @@
 
 @implementation OAProgressTitleCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAProgressTitleCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

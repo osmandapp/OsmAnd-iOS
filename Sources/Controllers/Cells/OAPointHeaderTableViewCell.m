@@ -10,6 +10,11 @@
 
 @implementation OAPointHeaderTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAPointHeaderTableViewCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
 }

@@ -83,7 +83,7 @@
                      }];
     
     [arr addObject:@{
-                     @"type" : @"OAProgressBarCell",
+                     @"type" : [OAProgressBarCell getCellIdentifier],
                      }];
     
     _data = [NSArray arrayWithArray:arr];
@@ -96,7 +96,7 @@
 
 - (OAProgressBarCell *) getProgressBarCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAProgressBarCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressBarCell getCellIdentifier] owner:self options:nil];
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
     [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
@@ -148,7 +148,7 @@
             cell.titleView.text = item[@"title"];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OAProgressBarCell"])
+    else if ([item[@"type"] isEqualToString:[OAProgressBarCell getCellIdentifier]])
     {
         return _pbCell;
     }

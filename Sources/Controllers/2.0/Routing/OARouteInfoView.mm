@@ -322,7 +322,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (gpx && doc)
         {
             [section addObject:@{
-                @"cell" : @"OAMultiIconTextDescCell",
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : gpx.getNiceTitle,
                 @"descr" : [OAGPXUIHelper getDescription:gpx],
                 @"img" : @"ic_custom_trip",
@@ -387,7 +387,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             OADestination *item = markers[i];
             [section addObject:@{
-                @"cell" : @"OAMultiIconTextDescCell",
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : item.desc,
                 @"img" : [item.markerResourceName ? item.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"],
                 @"item" : item
@@ -422,7 +422,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         for (OAHistoryItem *item in allItems)
         {
             [section addObject:@{
-                @"cell" : @"OAMultiIconTextDescCell",
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : item.name,
                 @"img" : @"ic_custom_history",
                 @"item" : item
@@ -472,7 +472,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             @"route_index" : @(i)
         }];
         [section addObject:@{
-            @"cell" : @"OAPublicTransportRouteCell",
+            @"cell" : [OAPublicTransportRouteCell getCellIdentifier],
             @"route_index" : @(i)
         }];
         
@@ -1441,15 +1441,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
+    else if ([item[@"cell"] isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAMultiIconTextDescCell* cell;
-        cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             [cell setOverflowVisibility:YES];
         }
@@ -1557,15 +1555,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportRouteCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportRouteCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportRouteCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportRouteCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportRouteCell *)[nib objectAtIndex:0];
         }
         
@@ -1753,7 +1749,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+    if ([item[@"cell"] isEqualToString:[OAPublicTransportRouteCell getCellIdentifier]])
         return 118.;
     else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
         return 58.;

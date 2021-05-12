@@ -274,7 +274,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [self goMinimized];
+    [self goMinimizedAnimated:NO];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
@@ -391,21 +391,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin;
-    CGFloat leftMargin;
-    if ([self isLeftSidePresentation])
-    {
-        bottomMargin = -kToolbarHeight - 25.;
-        if (self.currentState == EOADraggableMenuStateInitial)
-            leftMargin = kPlanRouteMapRulerMarginLeft;
-        else
-            leftMargin = self.scrollableView.frame.size.width + 40;
-    }
-    else
-    {
-        bottomMargin = (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-        leftMargin = kPlanRouteMapRulerMarginLeft;
-    }
+    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-kToolbarHeight - 25.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
+    CGFloat leftMargin = _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width + 16;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 

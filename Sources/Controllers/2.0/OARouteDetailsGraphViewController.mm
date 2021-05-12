@@ -16,7 +16,6 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
 #import "OALineChartCell.h"
-#import "OARouteInfoCell.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
@@ -27,11 +26,9 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OARouteStatistics.h"
-#import "OARouteInfoAltitudeCell.h"
 #import "OATargetPointsHelper.h"
 #import "OAMapRendererView.h"
 #import "OARouteInfoLegendItemView.h"
-#import "OARouteInfoLegendCell.h"
 #import "OARouteStatisticsModeCell.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 
@@ -82,7 +79,7 @@
     
     if (hasSlope)
     {
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteStatisticsModeCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
         OARouteStatisticsModeCell *modeCell = (OARouteStatisticsModeCell *)[nib objectAtIndex:0];
         modeCell.selectionStyle = UITableViewCellSelectionStyleNone;
         [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")] forState:UIControlStateNormal];

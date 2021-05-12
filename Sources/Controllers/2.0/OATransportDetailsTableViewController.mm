@@ -262,7 +262,7 @@
 - (void) generateData
 {
     NSMutableDictionary *resData = [NSMutableDictionary new];
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:@[@{@"cell" : @"OAPublicTransportShieldCell"},
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:@[@{@"cell" : [OAPublicTransportShieldCell getCellIdentifier]},
                                                            @{@"cell" : [OAPublicTransportRouteCell getCellIdentifier]},
                                                            @{
                                                                @"cell" : [OADividerCell getCellIdentifier],
@@ -462,15 +462,13 @@
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportShieldCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportShieldCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportShieldCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportShieldCell *)[nib objectAtIndex:0];
         }
         

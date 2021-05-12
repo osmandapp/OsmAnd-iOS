@@ -967,11 +967,10 @@
         int type = radiusItem.type;
         if (type == LPW_POI)
         {
-            static NSString* const identifierCell = @"OARadiusCellEx";
-            OARadiusCellEx* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OARadiusCellEx* cell = [tableView dequeueReusableCellWithIdentifier:[OARadiusCellEx getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARadiusCellEx" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCellEx getCellIdentifier] owner:self options:nil];
                 cell = (OARadiusCellEx *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -982,11 +981,10 @@
         }
         else
         {
-            static NSString* const identifierCell = @"OARadiusCell";
-            OARadiusCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OARadiusCell* cell = [tableView dequeueReusableCellWithIdentifier:[OARadiusCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARadiusCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCell getCellIdentifier] owner:self options:nil];
                 cell = (OARadiusCell *)[nib objectAtIndex:0];
             }
             if (cell)

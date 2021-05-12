@@ -468,7 +468,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : @"OAPublicTransportShieldCell",
+            @"cell" : [OAPublicTransportShieldCell getCellIdentifier],
             @"route_index" : @(i)
         }];
         [section addObject:@{
@@ -581,7 +581,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ((![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated]) || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
     {
         [section addObject:@{
-            @"cell" : @"OARouteProgressBarCell"
+            @"cell" : [OARouteProgressBarCell getCellIdentifier]
         }];
     }
     [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -1539,15 +1539,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
+    else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OARouteProgressBarCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteProgressBarCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteProgressBarCell getCellIdentifier] owner:self options:nil];
             cell = (OARouteProgressBarCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1583,15 +1581,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportShieldCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportShieldCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportShieldCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportShieldCell *)[nib objectAtIndex:0];
         }
         
@@ -1739,9 +1735,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return 50.0;
     else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
-    else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
+    else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
         return 2.0;
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])
         return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
     return UITableViewAutomaticDimension;
 }

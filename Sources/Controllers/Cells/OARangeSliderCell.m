@@ -11,6 +11,11 @@
 
 @implementation OARangeSliderCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OARangeSliderCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

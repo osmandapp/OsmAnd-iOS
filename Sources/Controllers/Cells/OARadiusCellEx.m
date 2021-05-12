@@ -16,6 +16,11 @@
     UIFont *_fontBold;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OARadiusCellEx";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -51,6 +51,11 @@ static UIFont *_shieldFont;
     BOOL _needsSafeAreaInset;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAPublicTransportShieldCell";
+}
+
 -(void) setData:(SHARED_PTR<TransportRouteResult>)data
 {
     _transportHelper = OATransportRoutingHelper.sharedInstance;

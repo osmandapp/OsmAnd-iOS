@@ -202,12 +202,11 @@
     }
     else if ([cellType isEqualToString:kCellTypeSlider])
     {
-        static NSString* const identifierCell = @"OARangeSliderCell";
         OARangeSliderCell* cell = nil;
-        cell = (OARangeSliderCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OARangeSliderCell *)[tableView dequeueReusableCellWithIdentifier:[OARangeSliderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARangeSliderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARangeSliderCell getCellIdentifier] owner:self options:nil];
             cell = (OARangeSliderCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.minLabel.text = OALocalizedString(@"shared_string_min");

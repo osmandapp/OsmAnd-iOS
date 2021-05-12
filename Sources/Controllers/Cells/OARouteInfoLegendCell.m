@@ -11,7 +11,10 @@
 #import <Charts/Charts-Swift.h>
 
 @implementation OARouteInfoLegendCell
+
++ (NSString *) getCellIdentifier
 {
+    return @"OARouteInfoLegendCell";
 }
 
 - (void)awakeFromNib {

@@ -12,6 +12,11 @@
 
 @implementation OARouteStatisticsModeCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OARouteStatisticsModeCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

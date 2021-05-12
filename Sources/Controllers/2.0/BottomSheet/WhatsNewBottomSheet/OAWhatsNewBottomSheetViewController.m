@@ -40,8 +40,8 @@
 - (void) adjustFrame
 {
     if (!OAUtilities.isLandscapeIpadAware && [self screenHeight] > 0.75 * DeviceScreenHeight)
-        self.currentState = EOAScrollableMenuStateFullScreen;
-    
+        [self goFullScreen];
+
     [super adjustFrame];
 }
 

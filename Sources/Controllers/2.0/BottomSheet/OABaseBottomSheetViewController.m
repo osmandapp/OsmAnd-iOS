@@ -14,6 +14,12 @@
 #define kButtonsHeightWithoutBottomPadding 51.0
 #define kButtonsNoSafeAreaBottomPadding 9.0
 
+typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
+{
+    EOAScrollableMenuStateInitial = 0,
+    EOAScrollableMenuStateFullScreen
+};
+
 @interface OABaseBottomSheetViewController () <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
@@ -25,6 +31,7 @@
 @implementation OABaseBottomSheetViewController
 {
     UIPanGestureRecognizer *_panGesture;
+    EOAScrollableMenuState _currentState;
     CGFloat _initialTouchPoint;
     BOOL _isDragging;
     BOOL _isHiding;
@@ -182,6 +189,16 @@
         _contentContainer.frame = contentFrame;
     }
     _bottomSheetView.frame = f;
+}
+
+- (void) goFullScreen
+{
+    _currentState = EOAScrollableMenuStateFullScreen;
+}
+
+- (void) goMinimized
+{
+    _currentState = EOAScrollableMenuStateInitial;
 }
 
 - (void) applyCornerRadius:(UIView *)view

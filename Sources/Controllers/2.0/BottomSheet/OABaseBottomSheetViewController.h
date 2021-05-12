@@ -8,12 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
-{
-    EOAScrollableMenuStateInitial = 0,
-    EOAScrollableMenuStateFullScreen
-};
-
 @interface OABaseBottomSheetViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIButton *leftButton;
@@ -37,10 +31,12 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 @property (nonatomic, readonly) CGFloat buttonsViewHeight;
 @property (nonatomic) BOOL isFullScreenAvailable;
 @property (nonatomic, readonly) BOOL isDraggingUpAvailable;
-@property (nonatomic) EOAScrollableMenuState currentState;
 
 - (void) adjustFrame;
 - (void) onRightButtonPressed;
+
+- (void) goFullScreen;
+- (void) goMinimized;
 
 @end
 

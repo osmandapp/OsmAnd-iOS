@@ -32,7 +32,11 @@
 @property (nonatomic) BOOL isFullScreenAvailable;
 @property (nonatomic, readonly) BOOL isDraggingUpAvailable;
 
+- (void) adjustFrame;
 - (void) onRightButtonPressed;
+
+- (void) goFullScreen;
+- (void) goMinimized;
 
 @end
 

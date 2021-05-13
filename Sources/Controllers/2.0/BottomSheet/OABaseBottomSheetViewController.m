@@ -191,6 +191,16 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     _bottomSheetView.frame = f;
 }
 
+- (void) goFullScreen
+{
+    _currentState = EOAScrollableMenuStateFullScreen;
+}
+
+- (void) goMinimized
+{
+    _currentState = EOAScrollableMenuStateInitial;
+}
+
 - (void) applyCornerRadius:(UIView *)view
 {
     CAShapeLayer * maskLayer = [CAShapeLayer layer];

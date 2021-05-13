@@ -22,7 +22,6 @@
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
 
-#define kCellTypeInput @"OATextInputCell"
 #define kCellTypeColorCollection @"colorCollectionCell"
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePositionIconCollection @"positionIconCollection"
@@ -271,7 +270,7 @@
     NSMutableArray *profileMapAppearanceArr = [NSMutableArray array];
     NSString* profileColor = OALocalizedString(_colorNames[@(_changedProfile.color)]);
     [profileNameArr addObject:@{
-        @"type" : kCellTypeInput,
+        @"type" : [OATextInputCell getCellIdentifier],
         @"title" : _changedProfile.name,
     }];
     [profileAppearanceArr addObject:@{
@@ -508,13 +507,12 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath { 
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = [[NSString alloc] initWithString:item[@"type"]];
-    if ([cellType isEqualToString:kCellTypeInput])
+    if ([cellType isEqualToString:[OATextInputCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATextInputCell";
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeSentences;

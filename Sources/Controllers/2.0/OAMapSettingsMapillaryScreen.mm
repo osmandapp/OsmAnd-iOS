@@ -34,8 +34,6 @@
 #define resetButtonTag 500
 #define applyButtonTag 600
 
-#define kFooterId @"TableViewSectionFooter"
-
 static const NSInteger visibilitySection = 0;
 static const NSInteger nameFilterSection = 1;
 static const NSInteger dateFilterSection = 2;
@@ -106,7 +104,7 @@ static const NSInteger panoImageFilterSection = 3;
 {
     [self.tblView.tableFooterView removeFromSuperview];
     self.tblView.tableFooterView = nil;
-    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self buildFooterView];
     tblView.estimatedRowHeight = kEstimatedRowHeight;
 }
@@ -574,7 +572,7 @@ static const NSInteger panoImageFilterSection = 3;
     }
     else
     {
-        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
         NSString * text = [self getText:section];
         vw.label.text = text;
         return vw;

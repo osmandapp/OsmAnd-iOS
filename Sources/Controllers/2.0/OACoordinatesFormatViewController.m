@@ -18,8 +18,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kFooterId @"TableViewSectionFooter"
-
 @interface OACoordinatesFormatViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -51,7 +49,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self setupView];
 }
 
@@ -153,7 +151,7 @@
     NSDictionary *item = [self getItem:section];
     NSString *text = item[@"description"];
     NSString *url = item[@"url"];
-    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     if (url)
     {
         NSURL *URL = [NSURL URLWithString:url];

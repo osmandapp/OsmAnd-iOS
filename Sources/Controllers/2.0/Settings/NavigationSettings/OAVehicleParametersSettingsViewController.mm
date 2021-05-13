@@ -17,7 +17,6 @@
 #import "OASizes.h"
 #import "OAUtilities.h"
 
-#define kHeaderId @"TableViewSectionHeader"
 #define kSidePadding 16
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 #define kDescriptionStringSection 1

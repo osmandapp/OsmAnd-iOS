@@ -13,6 +13,11 @@
 
 @implementation OATargetInfoCollapsableCoordinatesViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATargetInfoCollapsableCoordinatesViewCell";
+}
+
 -(void) setupCellWithLat:(double)lat lon:(double)lon
 {
     self.textView.text = [OAPointDescription getLocationName:lat lon:lon sh:YES];

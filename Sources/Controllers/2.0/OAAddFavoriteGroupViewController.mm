@@ -16,7 +16,6 @@
 #import "OAColorsTableViewCell.h"
 #import "OsmAndApp.h"
 
-#define kCellTypeInput @"OATextInputCell"
 #define kCellTypeColorCollection @"OAColorsTableViewCell"
 
 @interface OAAddFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAColorsTableViewCellDelegate>
@@ -74,7 +73,7 @@
         @{
             @"header" : OALocalizedString(@"group_name"),
             @"footer" : @"",
-            @"type" : kCellTypeInput,
+            @"type" : [OATextInputCell getCellIdentifier],
             @"title" : @""
         }
     ]];
@@ -109,13 +108,12 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:kCellTypeInput])
+    if ([cellType isEqualToString:[OATextInputCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATextInputCell";
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;

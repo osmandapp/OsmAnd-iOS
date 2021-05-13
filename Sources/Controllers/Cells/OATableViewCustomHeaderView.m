@@ -18,6 +18,11 @@
     CGFloat _yOffset;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATableViewCustomHeaderView";
+}
+
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithReuseIdentifier:reuseIdentifier];

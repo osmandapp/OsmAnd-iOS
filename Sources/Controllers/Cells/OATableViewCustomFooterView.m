@@ -18,6 +18,11 @@
     UIImageView *_iconView;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATableViewCustomFooterView";
+}
+
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithReuseIdentifier:reuseIdentifier];

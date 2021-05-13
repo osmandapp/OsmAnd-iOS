@@ -44,7 +44,6 @@
 #define kCellTypeColorCollection @"colorCollectionCell"
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
-#define kHeaderId @"TableViewSectionHeader"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -459,7 +458,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.doneButton.hidden = NO;
     
     [self updateHeaderIcon];
@@ -946,7 +945,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.textColor = UIColorFromRGB(color_text_footer);
     vw.label.text = [title upperCase];
     vw.label.userInteractionEnabled = NO;

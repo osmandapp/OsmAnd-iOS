@@ -774,11 +774,10 @@
     }
     else if ([item[@"type"] isEqualToString:kCellTypeTextInput])
     {
-        static NSString* const identifierCell = @"OATextInputCell";
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
         }
         cell.inputField.text = _expireTimeMinutes;

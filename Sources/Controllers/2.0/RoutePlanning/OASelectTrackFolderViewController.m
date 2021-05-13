@@ -18,7 +18,6 @@
 #import "OATableViewCustomHeaderView.h"
 
 #define kCellTypeAction @"OATitleRightIconCell"
-#define kHeaderId @"TableViewSectionHeader"
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
 
@@ -63,7 +62,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (void) applyLocalization
@@ -193,7 +192,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = [title upperCase];
     vw.label.textColor = UIColorFromRGB(color_text_footer);
     return vw;

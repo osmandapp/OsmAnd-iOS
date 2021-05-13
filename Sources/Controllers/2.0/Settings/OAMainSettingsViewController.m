@@ -27,7 +27,6 @@
 #import "OAConfigureProfileViewController.h"
 
 #define kCellTypeAction @"OATitleRightIconCell"
-#define kFooterId @"TableViewSectionFooter"
 
 #define kAppModesSection 2
 

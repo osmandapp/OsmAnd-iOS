@@ -34,8 +34,6 @@
 
 #define kRowNameCell @"OATextViewTableViewCell"
 #define kRowDescriptionCell @"OATextMultiViewCell"
-#define kRowWaypointsCell @"OATargetInfoCollapsableViewCell"
-#define kRowCoordinatesCell @"OATargetInfoCollapsableCoordinatesViewCell"
 
 @interface OAEditTargetViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAEditDescriptionViewControllerDelegate, UITextFieldDelegate>
 
@@ -405,7 +403,7 @@
     if ([self isKindOfClass:OAFavoriteViewController.class])
     {
         [_data addObject:@{
-            @"type" : kRowWaypointsCell,
+            @"type" : [OATargetInfoCollapsableViewCell getCellIdentifier],
             @"label" : self.groupTitle,
             @"description" : OALocalizedString(@"all_group_points"),
             @"iconName" : @"ic_custom_folder",
@@ -419,7 +417,7 @@
             groupName = [((OAGPXWptViewController *)self) getGpxFileName];
         
         [_data addObject:@{
-            @"type" : kRowWaypointsCell,
+            @"type" : [OATargetInfoCollapsableViewCell getCellIdentifier],
             @"label" : groupName ? groupName : @"",
             @"description" : OALocalizedString(@"all_group_points"),
             @"iconName" : @"ic_custom_folder",
@@ -428,7 +426,7 @@
     }
     
     [_data addObject:@{
-        @"type" : kRowCoordinatesCell,
+        @"type" : [OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier],
         @"lat" : [NSNumber numberWithFloat:self.location.latitude],
         @"lon" : [NSNumber numberWithFloat:self.location.longitude]
     }];
@@ -715,13 +713,13 @@
         cell.backgroundColor = UIColorFromRGB(0xffffff);
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableViewCell getCellIdentifier]])
     {
         OATargetInfoCollapsableViewCell* cell;
-        cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:kRowWaypointsCell];
+        cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATargetInfoCollapsableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kRowWaypointsCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoCollapsableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
         }
         cell.iconView.contentMode = UIViewContentModeCenter;
@@ -737,14 +735,14 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]])
     {
         OATargetInfoCollapsableCoordinatesViewCell* cell;
-        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:kRowCoordinatesCell];
+        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]];
         
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kRowCoordinatesCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
         }
         
@@ -777,9 +775,9 @@
     NSDictionary *item = _data[indexPath.row];
     if ([item[@"type"] isEqualToString:kRowDescriptionCell])
         return _descHeight;
-    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableViewCell getCellIdentifier]])
         return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
-    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]])
         return 48. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height + 16.);
     else
         return UITableViewAutomaticDimension;
@@ -807,7 +805,7 @@
     {
         [self changeDescriptionClicked];
     }
-    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableViewCell getCellIdentifier]])
     {
         UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
         if ([cell isKindOfClass:OATargetInfoCollapsableViewCell.class])
@@ -819,7 +817,7 @@
             [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
-    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]])
     {
         UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
         if ([cell isKindOfClass:OATargetInfoCollapsableCoordinatesViewCell.class])

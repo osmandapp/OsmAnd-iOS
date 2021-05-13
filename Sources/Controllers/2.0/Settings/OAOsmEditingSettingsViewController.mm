@@ -15,7 +15,6 @@
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "OAOsmEditsListViewController.h"
-#import "OATextInputCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
 #import "OAMenuSimpleCellNoIcon.h"

@@ -697,10 +697,7 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString* const reusableIdentifierText = @"OATargetInfoViewCell";
-    static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
     static NSString* const reusableIdentifierWeb = @"OAWebViewCell";
-    static NSString* const reusableIdentifierCollapsableСoordinates = @"OATargetInfoCollapsableCoordinatesViewCell";
     
     OARowInfo *info = _rows[indexPath.row];
     
@@ -709,11 +706,11 @@
         if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
         {
             OATargetInfoCollapsableCoordinatesViewCell *cell;
-            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsableСoordinates];
+            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]];
             
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsableСoordinates owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
             }
             
@@ -728,10 +725,10 @@
         else if (info.collapsable)
         {
             OATargetInfoCollapsableViewCell* cell;
-            cell = (OATargetInfoCollapsableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
+            cell = (OATargetInfoCollapsableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATargetInfoCollapsableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoCollapsableViewCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoCollapsableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
             }
             if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
@@ -753,10 +750,10 @@
         else
         {
             OATargetInfoViewCell* cell;
-            cell = (OATargetInfoViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+            cell = (OATargetInfoViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATargetInfoViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoViewCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OATargetInfoViewCell *)[nib objectAtIndex:0];
             }
             if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)

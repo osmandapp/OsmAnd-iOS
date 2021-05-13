@@ -41,7 +41,6 @@
 #define BACKUP_INDEX_DIR @"backup"
 #define OSMAND_SETTINGS_FILE_EXT @"osf"
 
-#define kHeaderId @"TableViewSectionHeader"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kTitleRightIconCell @"OATitleRightIconCell"
 
@@ -262,7 +261,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type
@@ -352,7 +351,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = nil;
     vw.label.attributedText = nil;
     

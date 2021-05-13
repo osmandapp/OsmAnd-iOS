@@ -47,15 +47,11 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-#define kTextInputCell @"OATextInputCell"
 #define kTextInputIconCell @"OATextInputIconCell"
 #define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
 #define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
 
 #define KEY_MESSAGE @"message"
-
-#define kFooterId @"TableViewSectionFooter"
-#define kHeaderId @"TableViewSectionHeader"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
@@ -109,8 +105,8 @@
     [self.tableView setEditing:YES];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     self.tableView.allowsSelectionDuringEditing = YES;
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
@@ -140,7 +136,7 @@
 {
     MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
     [dataModel setObject:@[@{
-                           @"type" : kTextInputCell,
+                           @"type" : [OATextInputCell getCellIdentifier],
                            @"title" : _action.getName
                            }] forKey:OALocalizedString(@"quick_action_name_str")];
     
@@ -476,12 +472,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kTextInputCell])
+    if ([item[@"type"] isEqualToString:[OATextInputCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:kTextInputCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
         }
         
@@ -711,7 +707,7 @@
     else if (!text)
         text = @"";
     
-    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     if (url)
     {
         NSURL *URL = [NSURL URLWithString:url];
@@ -737,7 +733,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = _data.allKeys[section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = nil;
     
     if ([title hasPrefix:kSectionNoName])

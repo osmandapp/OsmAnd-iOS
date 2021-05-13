@@ -131,14 +131,14 @@
         _hideNameSwitch.textView.text = OALocalizedString(@"osm_live_hide_user_name");
         _hideNameSwitch.switchView.on = _settings.billingHideUserName;
         
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
         _emailCell = (OATextInputCell *)[nib objectAtIndex:0];
         _emailCell.inputField.text = _settings.billingUserEmail;
         _emailCell.inputField.placeholder = OALocalizedString(@"osmand_live_donations_enter_email");
         _emailCell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
         _emailCell.inputField.delegate = self;
 
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
         _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
         _userNameCell.inputField.text = _settings.billingUserName;
         _userNameCell.inputField.placeholder = OALocalizedString(@"osmand_live_public_name");

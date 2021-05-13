@@ -18,7 +18,6 @@
 
 #include <generalRouter.h>
 
-#define kHeaderId @"TableViewSectionHeader"
 #define kSidePadding 16
 #define kTopPadding 6
 
@@ -64,7 +63,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (NSString *) getTableHeaderTitle

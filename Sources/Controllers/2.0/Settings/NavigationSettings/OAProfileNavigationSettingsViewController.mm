@@ -26,7 +26,6 @@
 #import "OAColors.h"
 
 #define kOsmAndNavigation @"osmand_navigation"
-#define kCellTypeTitle @"OASettingsTitleCell"
 
 @interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -108,7 +107,7 @@
         @"key" : @"vehicleParams",
     }];
     [otherArr addObject:@{
-        @"type" : kCellTypeTitle,
+        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_during_navigation"),
         @"key" : @"mapBehavior",
     }];
@@ -295,13 +294,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;

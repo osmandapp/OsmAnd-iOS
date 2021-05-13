@@ -19,7 +19,6 @@
 #import "OAColors.h"
 
 #define kCellTypeTitleDescriptionCheck @"OATitleDescriptionCollapsableCell"
-#define kCellTypeTitleCheck @"OASettingsTitleCell"
 
 @interface OAProfileGeneralSettingsParametersViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -184,31 +183,31 @@
                 @"name" : @"KILOMETERS_AND_METERS",
                 @"title" : OALocalizedString(@"si_km_m"),
                 @"selected" : @(metricSystem == KILOMETERS_AND_METERS),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_FEET",
                 @"title" : OALocalizedString(@"si_mi_feet"),
                 @"selected" : @(metricSystem == MILES_AND_FEET),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_YARDS",
                 @"title" : OALocalizedString(@"si_mi_yard"),
                 @"selected" : @(metricSystem == MILES_AND_YARDS),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_METERS",
                 @"title" : OALocalizedString(@"si_mi_meters"),
                 @"selected" : @(metricSystem == MILES_AND_METERS),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"NAUTICAL_MILES",
                 @"title" : OALocalizedString(@"si_nm"),
                 @"selected" : @(metricSystem == NAUTICAL_MILES),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -217,37 +216,37 @@
                 @"name" : @"KILOMETERS_PER_HOUR",
                 @"title" : OALocalizedString(@"si_kmh"),
                 @"selected" : @(speedSystem == KILOMETERS_PER_HOUR),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_PER_HOUR",
                 @"title" : OALocalizedString(@"si_mph"),
                 @"selected" : @(speedSystem == MILES_PER_HOUR),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"METERS_PER_SECOND",
                 @"title" : OALocalizedString(@"si_m_s"),
                 @"selected" : @(speedSystem == METERS_PER_SECOND),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MINUTES_PER_MILE",
                 @"title" : OALocalizedString(@"si_min_m"),
                 @"selected" : @(speedSystem == MINUTES_PER_MILE),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MINUTES_PER_KILOMETER",
                 @"title" : OALocalizedString(@"si_min_km"),
                 @"selected" : @(speedSystem == MINUTES_PER_KILOMETER),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"NAUTICALMILES_PER_HOUR",
                 @"title" : OALocalizedString(@"si_nm_h"),
                 @"selected" : @(speedSystem == NAUTICALMILES_PER_HOUR),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -256,19 +255,19 @@
                 @"name" : @"degrees_180",
                 @"title" : OALocalizedString(@"sett_deg180"),
                 @"selected" : @(angularUnits == DEGREES),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"degrees_360",
                 @"title" : OALocalizedString(@"sett_deg360"),
                 @"selected" : @(angularUnits == DEGREES360),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"milliradians",
                 @"title" : OALocalizedString(@"shared_string_milliradians"),
                 @"selected" : @(angularUnits == MILLIRADS),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -277,19 +276,19 @@
                 @"name" : @"sett_no_ext_input",
                 @"title" : OALocalizedString(@"sett_no_ext_input"),
                 @"selected" : @(externamlInputDevices == NO_EXTERNAL_DEVICE),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"sett_generic_ext_input",
                 @"title" : OALocalizedString(@"sett_generic_ext_input"),
                 @"selected" : @(externamlInputDevices == GENERIC_EXTERNAL_DEVICE),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"sett_wunderlinq_ext_input",
                 @"title" : OALocalizedString(@"sett_wunderlinq_ext_input"),
                 @"selected" : @(externamlInputDevices == WUNDERLINQ_EXTERNAL_DEVICE),
-                @"type" : kCellTypeTitleCheck,
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -343,13 +342,12 @@
         }
         return cell;
     }
-    if ([cellType isEqualToString:kCellTypeTitleCheck])
+    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitleCheck;
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
             cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);

@@ -33,7 +33,6 @@
 #import "OAGPXDatabase.h"
 #import "OAMapActions.h"
 #import "OAUtilities.h"
-#import "OASettingSwitchCell.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAFollowTrackBottomSheetViewController.h"
 

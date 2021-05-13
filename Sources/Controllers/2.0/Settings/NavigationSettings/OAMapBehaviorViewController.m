@@ -103,7 +103,7 @@
                                     @"key" : @"mapOrientation",
                                },
                                @{
-                                    @"type" : @"OASettingSwitchCell",
+                                    @"type" : [OASettingSwitchCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"snap_to_road"),
                                     @"value" : _settings.snapToRoad
                                }, nil];
@@ -133,13 +133,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OASettingSwitchCell"])
+    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);

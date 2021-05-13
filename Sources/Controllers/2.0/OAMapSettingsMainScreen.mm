@@ -177,7 +177,7 @@
     [section0mapillary setObject:OALocalizedString(@"street_level_imagery") forKey:@"name"];
     [section0mapillary setObject:@"" forKey:@"description"];
     [section0mapillary setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
-    [section0mapillary setObject:@"OASettingSwitchCell" forKey:@"type"];
+    [section0mapillary setObject:[OASettingSwitchCell getCellIdentifier] forKey:@"type"];
     [section0mapillary setObject:@"mapillary_layer" forKey:@"key"];
     
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
@@ -265,7 +265,7 @@
                     [categoriesList addObject:@{@"name": t,
                                                 @"value": @"",
                                                 @"key": @"transport_layer",
-                                                @"type": @"OASettingSwitchCell",
+                                                @"type": [OASettingSwitchCell getCellIdentifier],
                                                 @"secondaryImg": @"ic_action_additional_option"}];
                 }
                 else
@@ -290,7 +290,7 @@
             [section1contourLines setObject:OALocalizedString(@"product_title_srtm") forKey:@"name"];
             [section1contourLines setObject:@"" forKey:@"description"];
             [section1contourLines setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
-            [section1contourLines setObject:@"OASettingSwitchCell" forKey:@"type"];
+            [section1contourLines setObject:[OASettingSwitchCell getCellIdentifier] forKey:@"type"];
             [section1contourLines setObject:@"contour_lines_layer" forKey:@"key"];
             [categoriesList addObject:section1contourLines];
             contourLinesRow = categoriesList.count - 1;
@@ -314,7 +314,7 @@
         [terrain setObject:OALocalizedString(@"shared_string_terrain") forKey:@"name"];
         [terrain setObject:@"" forKey:@"description"];
         [terrain setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
-        [terrain setObject:@"OASettingSwitchCell" forKey:@"type"];
+        [terrain setObject:[OASettingSwitchCell getCellIdentifier] forKey:@"type"];
         [terrain setObject:@"terrain_layer" forKey:@"key"];
         [arrOverlayUnderlay addObject: terrain];
     }
@@ -323,7 +323,7 @@
     [overlay setObject:OALocalizedString(@"map_settings_over") forKey:@"name"];
     [overlay setObject:@"" forKey:@"description"];
     [overlay setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
-    [overlay setObject:@"OASettingSwitchCell" forKey:@"type"];
+    [overlay setObject:[OASettingSwitchCell getCellIdentifier] forKey:@"type"];
     [overlay setObject:@"overlay_layer" forKey:@"key"];
     [arrOverlayUnderlay addObject: overlay];
 
@@ -331,7 +331,7 @@
     [underlay setObject:OALocalizedString(@"map_settings_under") forKey:@"name"];
     [underlay setObject:@"" forKey:@"description"];
     [underlay setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
-    [underlay setObject:@"OASettingSwitchCell" forKey:@"type"];
+    [underlay setObject:[OASettingSwitchCell getCellIdentifier] forKey:@"type"];
     [underlay setObject:@"underlay_layer" forKey:@"key"];
     [arrOverlayUnderlay addObject: underlay];
 
@@ -486,13 +486,12 @@
         }
         outCell = cell;
     }
-    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([data[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         

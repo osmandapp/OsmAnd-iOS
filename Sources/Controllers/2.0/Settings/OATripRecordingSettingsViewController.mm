@@ -26,7 +26,6 @@
 
 #include <generalRouter.h>
 
-#define kCellTypeSettingSwitch @"OASettingSwitchCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -173,7 +172,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"track_during_nav_descr"), OALocalizedString(@"logging_interval_navigation_descr")],
                    @"value" : _settings.saveTrackToGPX,
                    @"img" : @"ic_custom_navigation",
-                   @"type" : kCellTypeSettingSwitch },
+                   @"type" : [OASettingSwitchCell getCellIdentifier] },
                @{
                    @"name" : @"logging_interval_navigation",
                    @"title" : OALocalizedString(@"logging_interval_navigation"),
@@ -464,14 +463,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSettingSwitch])
+    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSettingSwitch;
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeSettingSwitch owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
@@ -557,13 +554,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([type isEqualToString:kCellTypeCheck])
     {
-        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
         OASettingsTitleTableViewCell* cell = nil;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
         }
         

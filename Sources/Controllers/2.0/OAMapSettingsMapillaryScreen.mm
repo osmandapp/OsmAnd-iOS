@@ -130,7 +130,7 @@ static const NSInteger panoImageFilterSection = 3;
     [dataArr addObject:@[
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : @"OASettingSwitchCell",
+                             @"type" : [OASettingSwitchCell getCellIdentifier],
                              @"title" : @"",
                              @"description" : @"",
                              @"img" : @"",
@@ -178,7 +178,7 @@ static const NSInteger panoImageFilterSection = 3;
     [dataArr addObject:@[
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : @"OASettingSwitchCell",
+                             @"type" : [OASettingSwitchCell getCellIdentifier],
                              @"title" : OALocalizedString(@"mapil_pano_only"),
                              @"description" : @"",
                              @"img" : @"ic_custom_coordinates.png",
@@ -340,13 +340,12 @@ static const NSInteger panoImageFilterSection = 3;
     UITableViewCell *outCell;
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         
@@ -617,7 +616,7 @@ static const NSInteger panoImageFilterSection = 3;
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"] || [item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
+    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
     }
@@ -632,7 +631,7 @@ static const NSInteger panoImageFilterSection = 3;
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [type isEqualToString:@"OASettingSwitchCell"])
+    if ([type isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
         return nil;
     return indexPath;
 }

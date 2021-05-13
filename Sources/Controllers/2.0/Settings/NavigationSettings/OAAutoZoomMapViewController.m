@@ -14,8 +14,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeSettingsTitle @"OASettingsTitleCell"
-
 @interface OAAutoZoomMapViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -45,7 +43,7 @@
      @{
        @"title" : OALocalizedString(@"auto_zoom_none"),
        @"isSelected" : @(![_settings.autoZoomMap get:self.appMode]),
-       @"type" : kCellTypeSettingsTitle
+       @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
      }];
 
     EOAAutoZoomMap autoZoomMap = [_settings.autoZoomMapScale get:self.appMode];
@@ -57,7 +55,7 @@
            @"name" : @(v.autoZoomMap),
            @"title" : v.name,
            @"isSelected" : @([_settings.autoZoomMap get:self.appMode] && v.autoZoomMap == autoZoomMap),
-           @"type" : kCellTypeSettingsTitle
+           @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
          }];
     }
     _data = [NSArray arrayWithObject:dataArr];
@@ -81,13 +79,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASettingsTitleCell"])
+    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTitleCell";
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)

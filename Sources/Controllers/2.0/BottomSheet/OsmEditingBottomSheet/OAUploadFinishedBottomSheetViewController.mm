@@ -94,7 +94,7 @@
     if (!_hasFailedPoints)
     {
         [arr addObject:@{
-                         @"type" : @"OASettingSwitchCell",
+                         @"type" : [OASettingSwitchCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_upload_complete"),
                          @"description" : @"",
                          @"img" : @"ic_custom_success"
@@ -241,13 +241,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         

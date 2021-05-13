@@ -36,7 +36,6 @@
 #import "OAMapActions.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
-#define kCellTypeProfileSwitch @"OASettingSwitchCell"
 #define kCellTypeTitleRightIcon @"OATitleRightIconCell"
 
 
@@ -186,7 +185,7 @@
             @"key" : @"select_another"
         },
         @{
-            @"type" : kCellTypeProfileSwitch,
+            @"type" : [OASettingSwitchCell getCellIdentifier],
             @"title" : OALocalizedString(@"reverse_track_dir"),
             @"img" : @"ic_custom_swap",
             @"key" : @"reverse_track"
@@ -376,12 +375,12 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeProfileSwitch])
+    else if ([type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:type];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:type owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             

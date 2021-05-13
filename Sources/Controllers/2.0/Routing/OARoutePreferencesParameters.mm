@@ -27,6 +27,7 @@
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 #import "OAIconTitleValueCell.h"
+#import "OASettingSwitchCell.h"
 
 #include <generalRouter.h>
 
@@ -254,7 +255,7 @@
 
 - (NSString *)getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (UIImage *)getIcon
@@ -471,7 +472,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -716,7 +717,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (BOOL) isSelected
@@ -767,7 +768,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (BOOL) isSelected

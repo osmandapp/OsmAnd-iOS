@@ -11,6 +11,11 @@
 
 @implementation OASettingsTitleTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OASettingsTitleTableViewCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

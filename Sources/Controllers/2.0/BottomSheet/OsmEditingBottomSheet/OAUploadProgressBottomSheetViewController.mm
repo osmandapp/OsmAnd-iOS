@@ -19,7 +19,6 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
-#import "OASettingSwitchCell.h"
 #import "OAOsmEditingPlugin.h"
 #import "MaterialTextFields.h"
 #import "OATextInputFloatingCell.h"

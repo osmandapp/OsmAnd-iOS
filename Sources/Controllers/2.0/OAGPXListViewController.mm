@@ -55,7 +55,6 @@
 #define kAlertViewShareId -4
 #define kAlertViewCancelButtonIndex -1
 #define kMaxCancelButtonWidth 100
-#define kCellTypeSwitch @"OASettingSwitchCell"
 #define kGPXTrackCell @"OAGPXTrackCell"
 
 #define GPX_EXT @"gpx"
@@ -685,7 +684,7 @@ static UIViewController *parentController;
                  @"title" : [item getNiceTitle],
                  @"icon" : @"ic_custom_trip.png",
                  @"track" : item,
-                 @"type" : kCellTypeSwitch,
+                 @"type" : [OASettingSwitchCell getCellIdentifier],
                  @"key" : @"track_group"}];
         }
     }
@@ -1234,13 +1233,12 @@ static UIViewController *parentController;
             NSDictionary *groupItem = item.groupItems[dataIndex];
             NSString *cellType = groupItem[@"type"];
             OAGPX *gpx = groupItem[@"track"];
-            if ([cellType isEqualToString:kCellTypeSwitch])
+            if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
             {
-                static NSString* const identifierCell = kCellTypeSwitch;
-                OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+                OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
                     cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
                     cell.descriptionView.hidden = YES;
                     cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);

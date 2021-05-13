@@ -15,7 +15,6 @@
 #import "OAColors.h"
 
 #define kSidePadding 16
-#define kCellTypeTitle @"OASettingsTitleCell"
 
 @interface OAArrivalAnnouncementViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -54,7 +53,7 @@
            @"name" : arrivalValues[i],
            @"title" : arrivalNames[i],
            @"isSelected" : @(arrivalValues[i].doubleValue == selectedValue),
-           @"type" : kCellTypeTitle
+           @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
          }];
     }
     _data = [NSArray arrayWithObject:dataArr];
@@ -88,13 +87,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeTitle])
+    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
             cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);

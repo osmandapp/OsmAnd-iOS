@@ -895,10 +895,10 @@ typedef enum
         case SWITCH_ITEM:
         {
             OASettingSwitchCell* cell;
-            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OASettingSwitchCell"];
+            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
                 cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
                 cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.descriptionView.hidden = YES;

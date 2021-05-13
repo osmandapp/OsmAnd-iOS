@@ -145,7 +145,7 @@
                         }];
 
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kDistanceIndication,
                         @"value" : @([_settings.distanceIndicationVisibility get]),
                         @"title" : OALocalizedString(@"distance_indication"),
@@ -178,14 +178,14 @@
                         }];
    
     [appearanceOnMapArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kArrowsOnMap,
                         @"value" : @([_settings.arrowsOnMap get]),
                         @"title" : OALocalizedString(@"arrows_on_map"),
                         }];
     
     [appearanceOnMapArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kLinesOnMap,
                         @"value" : @([_settings.directionLines get]),
                         @"title" : OALocalizedString(@"direction_lines"),
@@ -250,8 +250,8 @@
             cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
         }
-        UIImage *fgImage = [[UIImage imageNamed:item[@"fg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        UIImage *bgImage = [[UIImage imageNamed:item[@"bg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage *fgImage = [UIImage templateImageNamed:item[@"fg_img"]];
+        UIImage *bgImage = [UIImage templateImageNamed:item[@"bg_img"]];
         cell.iconImageView.image = [self drawImage:fgImage inImage:bgImage bgColor:item[@"bg_color"] fgColor:item[@"fg_color"]];
         cell.titleLabel.text = item[@"title"];
         cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];
@@ -259,11 +259,10 @@
     }
     else
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

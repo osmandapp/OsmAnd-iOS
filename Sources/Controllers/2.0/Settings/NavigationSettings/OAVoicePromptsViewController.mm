@@ -25,7 +25,6 @@
 
 #include <OsmAndCore/Utilities.h>
 
-#define kCellTypeIconSwitch @"OASettingSwitchCell"
 #define kCellTypeSwitch @"OASwitchCell"
 
 @interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -102,7 +101,7 @@
     NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
     
     [firstSection addObject:@{
-        @"type" : kCellTypeIconSwitch,
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"voice_provider"),
         @"icon" : @"ic_custom_sound",
         @"value" : _settings.voiceMute,
@@ -223,13 +222,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeIconSwitch])
+    if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconSwitch;
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);

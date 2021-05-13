@@ -18,7 +18,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeTitleCheck @"OASettingsTitleCell"
 #define kFooterId @"TableViewSectionFooter"
 
 @interface OACoordinatesFormatViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -70,21 +69,21 @@
         @"title" : OALocalizedString(@"navigate_point_format_D"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_DEGREES),
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_DEGREES]],
-        @"type" : kCellTypeTitleCheck,
+        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
     @{
         @"name" : @"navigate_point_format_DM",
         @"title" : OALocalizedString(@"navigate_point_format_DM"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_MINUTES),
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_MINUTES]],
-        @"type" : kCellTypeTitleCheck,
+        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
     @{
        @"name" : @"navigate_point_format_DMS",
        @"title" : OALocalizedString(@"navigate_point_format_DMS"),
        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_SECONDS),
        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_SECONDS]],
-       @"type" : kCellTypeTitleCheck,
+       @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
     @{
         @"name" : @"utm_format",
@@ -92,7 +91,7 @@
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_UTM_FORMAT),
         @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"coordinates_example"), [OALocationConvert getUTMCoordinateString:lat lon:lon], OALocalizedString(@"utm_description"), OALocalizedString(@"shared_string_read_more")],
         @"url" : @"https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system",
-        @"type" : kCellTypeTitleCheck,
+        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
     @{
        @"name" : @"olc_format",
@@ -101,7 +100,7 @@
        @"description" : [NSString stringWithFormat:@"%@: %@. %@\n", OALocalizedString(@"coordinates_example"), [OALocationConvert getLocationOlcName:lat lon:lon], OALocalizedString(@"shared_string_read_more")],
        @"url" : @"https://en.wikipedia.org/wiki/Open_Location_Code",
        @"icon" : @"ic_custom_direction_compass",
-       @"type" : kCellTypeTitleCheck,
+       @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     }];
 }
 
@@ -115,13 +114,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = [self getItem:indexPath.section];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeTitleCheck])
+    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitleCheck;
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)

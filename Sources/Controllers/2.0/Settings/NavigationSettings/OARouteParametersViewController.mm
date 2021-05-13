@@ -27,8 +27,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeSwitch @"OASettingSwitchCell"
-
 @interface OARouteParametersViewController () <UITableViewDelegate, UITableViewDataSource, OARoutePreferencesParametersDelegate>
 
 @end
@@ -122,7 +120,7 @@
          @"title" : OALocalizedString(@"recalculate_wrong_dir"),
          @"icon" : @"ic_custom_reverse_direction",
          @"value" : @([settings.disableWrongDirectionRecalc get:self.appMode]),
-         @"type" : kCellTypeSwitch }
+         @"type" : [OASettingSwitchCell getCellIdentifier] }
      ];
     
     auto router = [OARouteProvider getRouter:self.appMode];
@@ -199,7 +197,7 @@
                          @"title" : title,
                          @"icon" : [self getParameterIcon:paramId isSelected:rp.isSelected],
                          @"value" : rp,
-                         @"type" : kCellTypeSwitch }
+                         @"type" : [OASettingSwitchCell getCellIdentifier] }
                      ];
                 }
             }
@@ -247,7 +245,7 @@
             @"title" : OALocalizedString(@"consider_limitations_param"),
             @"icon" : @"ic_custom_alert",
             @"value" : @([settings.enableTimeConditionalRouting get:self.appMode]),
-            @"type" : kCellTypeSwitch }
+            @"type" : [OASettingSwitchCell getCellIdentifier] }
         ];
         [parametersArr addObject:@{
             @"type" : [OAIconTextTableViewCell getCellIdentifier],
@@ -381,13 +379,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeSwitch])
+    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSwitch;
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);

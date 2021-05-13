@@ -10,6 +10,11 @@
 
 @implementation OASettingSwitchCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OASettingSwitchCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

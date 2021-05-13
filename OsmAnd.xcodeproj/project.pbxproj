@@ -1536,7 +1536,7 @@
 		847AF5A81F8A3D4A00FC7F90 /* widget_battery_day.png in Resources */ = {isa = PBXBuildFile; fileRef = 847AF5691F8A3D4900FC7F90 /* widget_battery_day.png */; };
 		847AF5AA1F8A3D4A00FC7F90 /* widget_max_speed_day.png in Resources */ = {isa = PBXBuildFile; fileRef = 847AF56B1F8A3D4900FC7F90 /* widget_max_speed_day.png */; };
 		847AF5AB1F8A3D4A00FC7F90 /* ic_action_hide.png in Resources */ = {isa = PBXBuildFile; fileRef = 847AF56C1F8A3D4900FC7F90 /* ic_action_hide.png */; };
-		847B2DB41F7A6B5E008C7AD9 /* OASettingsTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 847B2DB11F7A6B5E008C7AD9 /* OASettingsTitleCell.xib */; };
+		847B2DB41F7A6B5E008C7AD9 /* OASettingsTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 847B2DB11F7A6B5E008C7AD9 /* OASettingsTitleTableViewCell.xib */; };
 		847B2DB81F7A6BBE008C7AD9 /* OASettingsTitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847B2DB61F7A6BBC008C7AD9 /* OASettingsTitleTableViewCell.m */; };
 		847C0F961FC5D6F4003891F3 /* bt_round_big_blue_night.png in Resources */ = {isa = PBXBuildFile; fileRef = 847C0F691FC5D6E6003891F3 /* bt_round_big_blue_night.png */; };
 		847C0F971FC5D6F4003891F3 /* free_map_mode_button_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 847C0F6A1FC5D6E7003891F3 /* free_map_mode_button_night@3x.png */; };
@@ -5579,7 +5579,7 @@
 		847AF5691F8A3D4900FC7F90 /* widget_battery_day.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_battery_day.png; sourceTree = "<group>"; };
 		847AF56B1F8A3D4900FC7F90 /* widget_max_speed_day.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_max_speed_day.png; sourceTree = "<group>"; };
 		847AF56C1F8A3D4900FC7F90 /* ic_action_hide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_action_hide.png; sourceTree = "<group>"; };
-		847B2DB11F7A6B5E008C7AD9 /* OASettingsTitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OASettingsTitleCell.xib; path = Resources/Controllers/Cells/OASettingsTitleCell.xib; sourceTree = "<group>"; };
+		847B2DB11F7A6B5E008C7AD9 /* OASettingsTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OASettingsTitleTableViewCell.xib; path = Resources/Controllers/Cells/OASettingsTitleTableViewCell.xib; sourceTree = "<group>"; };
 		847B2DB61F7A6BBC008C7AD9 /* OASettingsTitleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASettingsTitleTableViewCell.m; path = Controllers/Cells/OASettingsTitleTableViewCell.m; sourceTree = "<group>"; };
 		847B2DB71F7A6BBE008C7AD9 /* OASettingsTitleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASettingsTitleTableViewCell.h; path = Controllers/Cells/OASettingsTitleTableViewCell.h; sourceTree = "<group>"; };
 		847C0F691FC5D6E6003891F3 /* bt_round_big_blue_night.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bt_round_big_blue_night.png; path = Resources/Icons/bt_round_big_blue_night.png; sourceTree = "<group>"; };
@@ -8757,7 +8757,7 @@
 				84B4FD6C1A91E01900A147BA /* OAGPXTableViewCell.xib */,
 				3A426F401A18E1FC00DE5B1D /* OASwitchCell.xib */,
 				3ACA4AC21A0BA6BF00ECC792 /* OASettingsTableViewCell.xib */,
-				847B2DB11F7A6B5E008C7AD9 /* OASettingsTitleCell.xib */,
+				847B2DB11F7A6B5E008C7AD9 /* OASettingsTitleTableViewCell.xib */,
 				840B7D551F8424CE00477A3C /* OASettingSwitchCell.xib */,
 				8AF2197D1A7FAE400091071B /* OAPointTableViewCell.xib */,
 				8AF219841A7FCD380091071B /* OAIconTextTableViewCell.xib */,
@@ -15326,7 +15326,7 @@
 				323BD8E42628850400D255ED /* ic_bg_point_circle_center@2x.png in Resources */,
 				DABA3DDD22686E72005BB777 /* ic_tabbar_osm_edits@2x.png in Resources */,
 				158A381E257E65CD0038056A /* img_text_openstreetmap@3x.png in Resources */,
-				847B2DB41F7A6B5E008C7AD9 /* OASettingsTitleCell.xib in Resources */,
+				847B2DB41F7A6B5E008C7AD9 /* OASettingsTitleTableViewCell.xib in Resources */,
 				DAF3459122F4482C009E2EB6 /* ic_action_osm_note@3x.png in Resources */,
 				DAE79D41260E1E7300E2EE11 /* OATitleDescriptionCollapsableCell.xib in Resources */,
 				DA22DC5425C05F130070FFCA /* ic_custom_split_after.png in Resources */,

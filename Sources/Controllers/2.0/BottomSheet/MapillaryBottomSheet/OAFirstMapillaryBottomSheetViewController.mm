@@ -84,7 +84,7 @@
     [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     
     [arr addObject:@{
-                     @"type" : @"OASettingSwitchCell",
+                     @"type" : [OASettingSwitchCell getCellIdentifier],
                      @"name" : @"enable_mapil_widget",
                      @"title" : OALocalizedString(@"mapillary_turn_on_widget"),
                      @"description" : OALocalizedString(@"mapillary_turn_on_widget_descr"),
@@ -102,7 +102,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]] || [item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -205,15 +205,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
         OASettingSwitchCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }

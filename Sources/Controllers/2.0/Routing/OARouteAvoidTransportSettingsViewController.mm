@@ -29,7 +29,6 @@
 #import "OAGPXDatabase.h"
 #import "OAMapActions.h"
 #import "OAUtilities.h"
-#import "OASettingSwitchCell.h"
 #import "OAAvoidSpecificRoads.h"
 
 #include <OsmAndCore/Utilities.h>

@@ -18,8 +18,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeIconTextSwitch @"OASettingSwitchCell"
-
 @interface OAProfileGeneralSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -209,7 +207,7 @@
     }];
     [appearanceArr addObject:@{
         @"name" : @"allow_3d",
-        @"type" : kCellTypeIconTextSwitch,
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"allow_3D_view"),
         @"isOn" : allow3DValue,
         @"icon" : @"ic_custom_2_5d_view",
@@ -217,7 +215,7 @@
     }];
     [appearanceArr addObject:@{
         @"name" : @"center_position",
-        @"type" : kCellTypeIconTextSwitch,
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"always_center_position_on_map"),
         @"key" : @"always_center_position_on_map",
         @"isOn" : positionInCenter,
@@ -302,13 +300,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconTextSwitch])
+    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);

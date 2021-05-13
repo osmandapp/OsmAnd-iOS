@@ -216,6 +216,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_expandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     _landscapeExpandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
     [_landscapeExpandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_landscapeExpandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
     
     [_undoButton setImage:[[UIImage imageNamed:@"ic_custom_undo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [_redoButton setImage:[[UIImage imageNamed:@"ic_custom_redo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
@@ -274,7 +275,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [self goMinimizedAnimated:NO];
+    [self goMinimized:NO];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
@@ -311,14 +312,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (isLandscape)
     {
         if (self.currentState == EOADraggableMenuStateInitial)
-            [self goMinimizedAnimated:NO];
+            [self goMinimized:NO];
         else
-            [self goFullScreenAnimated:NO];
+            [self goFullScreen:NO];
     }
     else
     {
         if (self.currentState == EOADraggableMenuStateFullScreen)
-            [self goMinimizedAnimated:NO];
+            [self goMinimized:NO];
     }
 }
 
@@ -329,7 +330,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) updateShowingState:(EOADraggableMenuState)state
 {
-    [self goMinimizedAnimated:NO];
+    [self goMinimized:NO];
 }
 
 - (BOOL)supportsFullScreen

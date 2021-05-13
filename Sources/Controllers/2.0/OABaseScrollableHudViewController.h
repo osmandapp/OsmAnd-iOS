@@ -35,9 +35,9 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 - (void) goExpanded;
 - (void) goMinimized;
 - (void) goFullScreen;
-- (void) goExpandedAnimated:(BOOL)animated;
-- (void) goMinimizedAnimated:(BOOL)animated;
-- (void) goFullScreenAnimated:(BOOL)animated;
+- (void) goExpanded:(BOOL)animated;
+- (void) goMinimized:(BOOL)animated;
+- (void) goFullScreen:(BOOL)animated;
 
 - (CGFloat) getViewHeight:(EOADraggableMenuState)state;
 - (CGFloat) getViewHeight;

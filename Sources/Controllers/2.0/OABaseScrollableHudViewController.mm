@@ -503,34 +503,34 @@
 
 - (void) goExpanded
 {
-    [self goExpandedAnimated:YES];
+    [self goExpanded:YES];
 }
 
 - (void) goMinimized
 {
-    [self goMinimizedAnimated:YES];
+    [self goMinimized:YES];
 }
 
 - (void) goFullScreen
 {
-    [self goFullScreenAnimated:YES];
+    [self goFullScreen:YES];
 }
 
-- (void) goExpandedAnimated:(BOOL)animated
+- (void) goExpanded:(BOOL)animated
 {
     _currentState = EOADraggableMenuStateExpanded;
     if (animated)
         [self updateViewAnimated];
 }
 
-- (void) goMinimizedAnimated:(BOOL)animated
+- (void) goMinimized:(BOOL)animated
 {
     _currentState = EOADraggableMenuStateInitial;
     if (animated)
         [self updateViewAnimated];
 }
 
-- (void) goFullScreenAnimated:(BOOL)animated
+- (void) goFullScreen:(BOOL)animated
 {
     _currentState = EOADraggableMenuStateFullScreen;
     if (animated)

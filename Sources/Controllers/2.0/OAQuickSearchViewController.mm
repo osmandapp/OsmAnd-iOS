@@ -676,7 +676,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     OAPOIUIFilter *customFilter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     if (customFilter)
-            [self presentViewController:[self createSaveFilterDialog:customFilter customSaveAction:NO] animated:YES completion:nil];
+        [self presentViewController:[self createSaveFilterDialog:customFilter customSaveAction:NO] animated:YES completion:nil];
 }
 
 - (IBAction)bottomImageButtonPress:(id)sender
@@ -1840,23 +1840,23 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [filter clearFilter];
     OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:filter];
     customPOIScreen.delegate = self;
-    customPOIScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self showViewController:customPOIScreen];
+    [self.navigationController pushViewController:customPOIScreen animated:YES];
+
 }
 
 - (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
     OADeleteCustomFiltersViewController *removeFiltersScreen = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
     removeFiltersScreen.delegate = self;
-    removeFiltersScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self showViewController:removeFiltersScreen];
+    [self.navigationController pushViewController:removeFiltersScreen animated:YES];
+
 }
 
 - (void)showRearrangeFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
     OARearrangeCustomFiltersViewController *rearrangeCategoriesScreen = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
-    rearrangeCategoriesScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self showViewController:rearrangeCategoriesScreen];
+    [self.navigationController pushViewController:rearrangeCategoriesScreen animated:YES];
+
 }
 
 - (NSArray<OAPOIUIFilter *> *)getCustomFilters

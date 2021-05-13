@@ -373,8 +373,7 @@ typedef enum
     OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:_filter];
     customPOIScreen.delegate = self.delegate;
     customPOIScreen.refreshDelegate = self;
-    customPOIScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self showViewController:customPOIScreen];
+    [self.navigationController pushViewController:customPOIScreen animated:YES];
 }
 
 - (void) applyFilterFields

@@ -1018,7 +1018,7 @@ typedef enum
     navController.automaticallyAdjustsScrollViewInsets = NO;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
     
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription

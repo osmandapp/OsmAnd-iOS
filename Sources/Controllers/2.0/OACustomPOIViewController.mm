@@ -115,7 +115,7 @@
 
 - (IBAction)onBackButtonClicked:(id)sender
 {
-    [self dismissViewController];
+    [self.navigationController popViewControllerAnimated:YES];
 
     if (_editMode && self.refreshDelegate)
         [self.refreshDelegate refreshList];
@@ -127,7 +127,7 @@
         UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
         UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
             [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
-            [self dismissViewController];
+            [self.navigationController popViewControllerAnimated:YES];
         }];
         [saveDialog addAction:actionSave];
         [self presentViewController:saveDialog animated:YES completion:nil];
@@ -142,7 +142,7 @@
     if (_editMode && self.refreshDelegate)
         [self.refreshDelegate refreshList];
 
-    [self dismissViewController];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - OASelectSubcategoryDelegate
@@ -222,8 +222,7 @@
     OAPOICategory* item = _categories[indexPath.row];
     OASelectSubcategoryViewController *subcategoryScreen = [[OASelectSubcategoryViewController alloc] initWithCategory:item filter:_filter];
     subcategoryScreen.delegate = self;
-    subcategoryScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self showViewController:subcategoryScreen];
+    [self.navigationController pushViewController:subcategoryScreen animated:YES];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

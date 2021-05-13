@@ -11,7 +11,7 @@
 "shared_string_update" = "Actualizar";
 "shared_string_install" = "Instalar";
 "shared_string_uninstall" = "Desinstalar";
-"shared_string_delete" = "Borrar.";
+"shared_string_delete" = "Borrar";
 "shared_string_add" = "Añadir";
 "shared_string_buy" = "Comprar";
 "shared_string_or" = "o";
@@ -2096,3 +2096,11 @@
 "visible_categories" = "Categorías visibles";
 "rearrange_categories" = "Reordenar categorías";
 "delete_custom_categories" = "Borrar categorías personalizadas";
+"new_plugin_added" = "Nuevo complemento añadido";
+"extra_maps" = "Mapas adicionales";
+"custom_plugins" = "Complementos personalizados";
+"custom_osmand_plugin_name" = "Complemento personalizado de OsmAnd";
+"shared_string_disable" = "Desactivar";
+
+// Shared Strings
+"shared_string_enable" = "Activar";

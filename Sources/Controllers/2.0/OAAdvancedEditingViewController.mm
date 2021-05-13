@@ -20,7 +20,6 @@
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 
-#define kInputImage @"OATextInputFloatingCellWithIcon"
 #define kVerticalMargin 8.
 
 @interface OAAdvancedEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
@@ -79,10 +78,10 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     OATextInputFloatingCellWithIcon *resultCell = nil;
-    resultCell = [self.tableView dequeueReusableCellWithIdentifier:kInputImage];
+    resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OATextInputFloatingCellWithIcon getCellIdentifier]];
     if (resultCell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kInputImage owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCellWithIcon getCellIdentifier] owner:self options:nil];
         resultCell = (OATextInputFloatingCellWithIcon *)[nib objectAtIndex:0];
     }
     if (item[@"img"] && ![item[@"img"] isEqualToString:@""])
@@ -189,13 +188,13 @@
             && ![key isEqualToString:currentPoiTypeKey]) {
             [_fieldPairs addObject:@[
                                      @{
-                                         @"type" : kInputImage,
+                                         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                                          @"hint" : OALocalizedString(@"osm_tag"),
                                          @"value" : key,
                                          @"img" : @"ic_custom_delete"
                                          },
                                      @{
-                                         @"type" : kInputImage,
+                                         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                                          @"hint" : OALocalizedString(@"osm_value"),
                                          @"value" : value,
                                          @"img" : @""
@@ -227,8 +226,8 @@
 - (void) addTagPair:(NSInteger)index
 {
     [_fieldPairs insertObject:@[
-                                [self getDictionary:kInputImage hint:OALocalizedString(@"osm_tag") value:nil image:@"ic_custom_delete"],
-                                [self getDictionary:kInputImage hint:OALocalizedString(@"osm_value") value:nil image:nil]
+                                [self getDictionary:[OATextInputFloatingCellWithIcon getCellIdentifier] hint:OALocalizedString(@"osm_tag") value:nil image:@"ic_custom_delete"],
+                                [self getDictionary:[OATextInputFloatingCellWithIcon getCellIdentifier] hint:OALocalizedString(@"osm_value") value:nil image:nil]
                                 ] atIndex:index];
 }
 
@@ -254,7 +253,7 @@
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
         return [self getTextCellWithDescr:indexPath];
-    else if ([item[@"type"] isEqualToString:kInputImage])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
         return [self getInputCellWithHint:indexPath];
     else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
         return [self getAddTagButtonCell];

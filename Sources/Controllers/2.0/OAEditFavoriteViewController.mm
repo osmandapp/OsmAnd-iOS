@@ -40,7 +40,6 @@
 
 #define kTextFieldCell @"OATextViewTableViewCell"
 #define kCellTypeAction @"OATitleRightIconCell"
-#define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
 #define kCellTypeColorCollection @"colorCollectionCell"
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
@@ -344,21 +343,21 @@
     NSMutableArray *section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"name_and_descr"),
-        @"type" : kTextInputFloatingCellWithIcon,
+        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
         @"title" : self.name,
         @"hint" : OALocalizedString(@"fav_name"),
         @"isEditable" : [NSNumber numberWithBool:![self.favorite isSpecialPoint]],
         @"key" : kNameKey
     }];
     [section addObject:@{
-        @"type" : kTextInputFloatingCellWithIcon,
+        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
         @"title" : self.desc,
         @"hint" : OALocalizedString(@"description"),
         @"isEditable" : @YES,
         @"key" : kDescKey
     }];
     [section addObject:@{
-        @"type" : kTextInputFloatingCellWithIcon,
+        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
         @"title" : self.address,
         @"hint" : OALocalizedString(@"shared_string_address"),
         @"isEditable" : @YES,
@@ -724,13 +723,13 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:kTextInputFloatingCellWithIcon])
+    if ([cellType isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         OATextInputFloatingCellWithIcon *resultCell = nil;
-        resultCell = [self.tableView dequeueReusableCellWithIdentifier:kTextInputFloatingCellWithIcon];
+        resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OATextInputFloatingCellWithIcon getCellIdentifier]];
         if (resultCell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputFloatingCellWithIcon owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCellWithIcon getCellIdentifier] owner:self options:nil];
             resultCell = (OATextInputFloatingCellWithIcon *)[nib objectAtIndex:0];
             resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -998,7 +997,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kTextInputFloatingCellWithIcon])
+    if ([cellType isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         NSString *key = item[@"key"];
         NSString *text;

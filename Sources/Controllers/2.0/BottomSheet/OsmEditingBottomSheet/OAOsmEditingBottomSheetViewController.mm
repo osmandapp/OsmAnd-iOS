@@ -111,7 +111,7 @@
                      }];
     NSString *message = !_messageText || _messageText.length == 0 ? [self generateMessage] : _messageText;
     [arr addObject:@{
-                     @"type" : @"OATextInputFloatingCell",
+                     @"type" : [OATextInputFloatingCell getCellIdentifier],
                      @"name" : @"osm_message",
                      @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:message roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                      }];
@@ -129,13 +129,13 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     
     [arr addObject:@{
-                     @"type" : @"OATextInputFloatingCell",
+                     @"type" : [OATextInputFloatingCell getCellIdentifier],
                      @"name" : @"osm_user",
                      @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_name") text:settings.osmUserName roundedCorners:UIRectCornerTopLeft | UIRectCornerTopRight hideUnderline:NO floatingTextFieldControllers:_floatingTextFieldControllers]
                      }];
     
     [arr addObject:@{
-                     @"type" : @"OATextInputFloatingCell",
+                     @"type" : [OATextInputFloatingCell getCellIdentifier],
                      @"name" : @"osm_pass",
                      @"cell" : [OAOsmNoteBottomSheetViewController getPasswordCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                      }];
@@ -277,7 +277,7 @@
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 16.0, 0.0)];
     }
-    else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
@@ -361,7 +361,7 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         return item[@"cell"];
     }
@@ -433,7 +433,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         OATextInputFloatingCell *cell = item[@"cell"];
         EOATextInputBottomSheetType type = [item[@"name"] isEqualToString:@"osm_message"] ?

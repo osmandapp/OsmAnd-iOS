@@ -25,6 +25,7 @@
 #import "OAButtonCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OATextInputFloatingCellWithIcon.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -104,13 +105,13 @@ static OAQuickActionType *ACTION_TYPE;
         if (![key isEqualToString:POI_TYPE_TAG]
             && ![key hasPrefix:REMOVE_TAG_PREFIX]) {
             [arr addObject:@{
-                             @"type" : @"OATextInputFloatingCellWithIcon",
+                             @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                              @"hint" : OALocalizedString(@"osm_tag"),
                              @"title" : key,
                              @"img" : @"ic_custom_delete"
                              }];
             [arr addObject:@{
-                             @"type" : @"OATextInputFloatingCellWithIcon",
+                             @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                              @"hint" : OALocalizedString(@"osm_value"),
                              @"title" : value,
                              @"img" : @""

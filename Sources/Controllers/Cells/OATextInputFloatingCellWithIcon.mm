@@ -11,6 +11,11 @@
 
 @implementation OATextInputFloatingCellWithIcon
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATextInputFloatingCellWithIcon";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

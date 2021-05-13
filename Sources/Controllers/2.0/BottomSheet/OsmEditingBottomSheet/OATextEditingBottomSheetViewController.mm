@@ -71,14 +71,14 @@
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     _data = [NSArray arrayWithObject:@{
-                                       @"type" : @"OATextInputFloatingCell",
+                                       @"type" : [OATextInputFloatingCell getCellIdentifier],
                                        @"cell" : [self getInputCellWithHint:_selectedCellData[@"placeholder"] text:_selectedCellData[@"title"]]
                                        }];
 }
 
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCell getCellIdentifier] owner:self options:nil];
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     resultCell.backgroundColor = [UIColor clearColor];
     MDCMultilineTextField *textField = resultCell.inputField;
@@ -143,7 +143,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
@@ -168,7 +168,7 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
         return item[@"cell"];
     else
         return nil;

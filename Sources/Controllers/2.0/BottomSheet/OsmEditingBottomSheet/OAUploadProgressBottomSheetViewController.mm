@@ -21,7 +21,6 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OAOsmEditingPlugin.h"
 #import "MaterialTextFields.h"
-#import "OATextInputFloatingCell.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OATextEditingBottomSheetViewController.h"
 #import "OAAppSettings.h"

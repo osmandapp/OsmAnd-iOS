@@ -47,9 +47,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-#define kTextInputIconCell @"OATextInputIconCell"
 #define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
-#define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
 
 #define KEY_MESSAGE @"message"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
@@ -212,10 +210,10 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     OATextInputFloatingCellWithIcon *resultCell = nil;
-    resultCell = [self.tableView dequeueReusableCellWithIdentifier:kTextInputFloatingCellWithIcon];
+    resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OATextInputFloatingCellWithIcon getCellIdentifier]];
     if (resultCell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputFloatingCellWithIcon owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCellWithIcon getCellIdentifier] owner:self options:nil];
         resultCell = (OATextInputFloatingCellWithIcon *)[nib objectAtIndex:0];
     }
     if (item[@"img"] && ![item[@"img"] isEqualToString:@""]) {
@@ -411,13 +409,13 @@
         NSDictionary *buttonModel = arr.lastObject;
         [arr removeLastObject];
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCellWithIcon",
+                         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                          @"hint" : OALocalizedString(@"osm_tag"),
                          @"title" : @"",
                          @"img" : @"ic_custom_delete"
                          }];
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCellWithIcon",
+                         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                          @"hint" : OALocalizedString(@"osm_value"),
                          @"title" : @"",
                          @"img" : @""
@@ -458,7 +456,7 @@
         poiTypeSelection.delegate = self;
         [self.navigationController pushViewController:poiTypeSelection animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:kTextInputFloatingCellWithIcon])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         if ([cell canBecomeFirstResponder])
@@ -517,12 +515,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTextInputIconCell])
+    else if ([item[@"type"] isEqualToString:[OATextInputIconCell getCellIdentifier]])
     {
-        OATextInputIconCell* cell = [tableView dequeueReusableCellWithIdentifier:kTextInputIconCell];
+        OATextInputIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputIconCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputIconCell *)[nib objectAtIndex:0];
         }
         
@@ -652,7 +650,7 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTextInputFloatingCellWithIcon])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         return [self getInputCellWithHint:indexPath];
     }

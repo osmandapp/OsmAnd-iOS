@@ -138,7 +138,7 @@
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
 {
     button.layer.cornerRadius = 6.;
-    [button setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [button setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
     [button setTintColor:color];
 }
 

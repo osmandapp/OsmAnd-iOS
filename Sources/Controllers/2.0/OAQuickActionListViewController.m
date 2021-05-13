@@ -59,9 +59,9 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 48.0;
     [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [self.btnAdd setImage:[[UIImage imageNamed:@"ic_custom_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.btnAdd setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
     [self.btnAdd setTintColor:UIColor.whiteColor];
-    [self.btnEdit setImage:[[UIImage imageNamed:@"ic_custom_edit"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.btnEdit setImage:[UIImage templateImageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];
     self.tableView.tableHeaderView = _tableHeaderView;
     _bottomViewHeight.constant = 0;
@@ -331,7 +331,7 @@
         if (action.hasSecondaryIcon)
         {
             CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
-            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             [background setTintColor:UIColor.whiteColor];
             [cell.iconView addSubview:background];
@@ -342,7 +342,7 @@
         }
         cell.delegate = self;
         cell.allowsSwipeWhenEditing = NO;
-        [cell.overflowButton setImage:[[UIImage imageNamed:@"menu_cell_pointer.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [cell.overflowButton setImage:[UIImage templateImageNamed:@"menu_cell_pointer"] forState:UIControlStateNormal];
         [cell.overflowButton setTintColor:UIColorFromRGB(color_tint_gray)];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);

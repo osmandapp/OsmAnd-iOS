@@ -172,7 +172,7 @@
         if (cell)
         {
             cell.titleView.text = item[@"title"];
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             cell.iconView.hidden = !cell.iconView.image;
             [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.closeButton addTarget:self action:@selector(onCloseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -198,7 +198,7 @@
             cell.titleView.text = item[@"title"];
             if (![item[@"skip_tint"] boolValue])
             {
-                [cell.leftIconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                [cell.leftIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
                 cell.leftIconView.tintColor = item[@"color"];
                 cell.rightIconView.hidden = YES;
             }

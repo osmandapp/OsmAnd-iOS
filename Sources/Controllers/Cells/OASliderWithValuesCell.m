@@ -10,6 +10,11 @@
 
 @implementation OASliderWithValuesCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OASliderWithValuesCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

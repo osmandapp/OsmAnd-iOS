@@ -81,7 +81,7 @@
     NSMutableArray *distanceArr = [NSMutableArray array];
     BOOL isManualAnnunce = [_settings.keepInforming get:self.appMode] == 0;
     [statusArr addObject:@{
-        @"type" : @"OASwitchCell",
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"only_manually"),
         @"isOn" : @(isManualAnnunce),
     }];
@@ -106,13 +106,13 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASwitchCell"])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchCell";
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

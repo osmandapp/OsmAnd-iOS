@@ -17,7 +17,6 @@
 #import "OAColors.h"
 
 #define kSidePadding 16
-#define kCellTypeSwitch @"OASwitchCell"
 
 @interface OAAvoidPreferParametersViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -81,7 +80,7 @@
                    @"name" : param,
                    @"title" : title,
                    @"value" : value,
-                   @"type" : kCellTypeSwitch }
+                   @"type" : [OASwitchTableViewCell getCellIdentifier] }
                  ];
             }
         }
@@ -133,13 +132,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeSwitch])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSwitch;
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

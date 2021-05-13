@@ -42,7 +42,6 @@
 #define OSMAND_SETTINGS_FILE_EXT @"osf"
 
 #define kHeaderId @"TableViewSectionHeader"
-#define kSwitchCell @"OASettingSwitchCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kTitleRightIconCell @"OATitleRightIconCell"
 
@@ -91,7 +90,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         [data addObject:@[
             @{
-                @"type" : kSwitchCell,
+                @"type" : [OASwitchTableViewCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_enabled")
             }
         ]];
@@ -415,15 +414,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kSwitchCell])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }

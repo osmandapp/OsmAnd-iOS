@@ -23,6 +23,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OASwitchTableViewCell.h"
 
 #define kButtonsDividerTag 150
 
@@ -286,7 +287,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:@"OASwitchCell"])
+    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

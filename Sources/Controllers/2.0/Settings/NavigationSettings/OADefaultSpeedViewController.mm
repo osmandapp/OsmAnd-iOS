@@ -18,7 +18,6 @@
 #import "OARouteProvider.h"
 
 #define kCellTypeSpeed @"time_cell"
-#define kCellTypeSlider @"OASliderWithValuesCell"
 
 @interface OADefaultSpeedViewController()
 
@@ -125,7 +124,7 @@
         @"value" : [NSString stringWithFormat:@"%ld %@", _selectedValue, _units],
     }];
     [tableData addObject:@{
-        @"type" : kCellTypeSlider,
+        @"type" : [OASliderWithValuesCell getCellIdentifier],
         @"minValue" : [NSString stringWithFormat:@"%ld %@", (long)_minValue, _units],
         @"maxValue" : [NSString stringWithFormat:@"%ld %@", (long)_maxValue, _units],
     }];
@@ -161,14 +160,13 @@
         cell.lbTime.text = item[@"value"];
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeSlider])
+    else if ([cellType isEqualToString:[OASliderWithValuesCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASliderWithValuesCell";
         OASliderWithValuesCell* cell = nil;
-        cell = (OASliderWithValuesCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OASliderWithValuesCell *)[tableView dequeueReusableCellWithIdentifier:[OASliderWithValuesCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASliderWithValuesCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASliderWithValuesCell getCellIdentifier] owner:self options:nil];
             cell = (OASliderWithValuesCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.sliderView.continuous = YES;

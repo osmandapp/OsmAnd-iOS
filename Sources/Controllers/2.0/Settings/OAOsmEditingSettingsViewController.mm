@@ -21,7 +21,6 @@
 #import "OAMenuSimpleCellNoIcon.h"
 
 #define kCellTypeAction @"OATitleRightIconCell"
-#define kCellTypeSwitch @"switch"
 #define kCellTypeButton @"button"
 
 @interface OAOsmEditingSettingsViewController () <OAAccontSettingDelegate>
@@ -103,7 +102,7 @@ static const NSInteger actionsSectionIndex = 2;
     [dataArr addObject:
      @{
          @"name" : @"offline_editing",
-         @"type" : kCellTypeSwitch,
+         @"type" : [OASwitchTableViewCell getCellIdentifier],
          @"title" : OALocalizedString(@"osm_offline_editing"),
          @"value" : @(_settings.offlineEditing)
      }];
@@ -184,15 +183,13 @@ static const NSInteger actionsSectionIndex = 2;
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kCellTypeSwitch])
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }

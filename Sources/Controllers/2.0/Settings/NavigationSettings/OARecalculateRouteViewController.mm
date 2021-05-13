@@ -102,7 +102,7 @@
     NSMutableArray *distanceArr = [NSMutableArray array];
     BOOL disabled = [_settings.routeRecalculationDistance get:self.appMode] == kDisableMode;
     [statusArr addObject:@{
-        @"type" : @"OASwitchCell",
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : disabled ? OALocalizedString(@"rendering_value_disabled_name") : OALocalizedString(@"shared_string_enabled"),
         @"isOn" : @(!disabled),
     }];
@@ -129,13 +129,12 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASwitchCell"])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchCell";
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

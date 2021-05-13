@@ -25,8 +25,6 @@
 
 #include <OsmAndCore/Utilities.h>
 
-#define kCellTypeSwitch @"OASwitchCell"
-
 @interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -117,26 +115,26 @@
     }];
     
     [secondSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_street_names"),
         @"value" : _settings.speakStreetNames,
         @"key" : @"streetNames",
     }];
     [secondSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_traffic_warnings"),
         @"value" : _settings.speakTrafficWarnings,
         @"key" : @"trafficWarnings",
     }];
     [secondSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_pedestrian_warnings"),
         @"value" : _settings.speakPedestrian,
         @"key" : @"pedestrianCrosswalks",
     }];
     
     [thirdSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_speed_limit"),
         @"value" : _settings.speakSpeedLimit,
         @"key" : @"speedLimit",
@@ -161,31 +159,31 @@
     }];
     
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_cameras"),
         @"value" : _settings.speakCameras,
         @"key" : @"speedCameras",
     }];
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_tunnels"),
         @"value" : _settings.speakTunnels,
         @"key" : @"tunnels",
     }];
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"announce_gpx_waypoints"),
         @"value" : _settings.announceWpt,
         @"key" : @"GPXWaypoints",
     }];
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_favorites"),
         @"value" : _settings.announceNearbyFavorites,
         @"key" : @"nearbyFavorites",
     }];
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_poi"),
         @"value" : _settings.announceNearbyPoi,
         @"key" : @"nearbyPOI",
@@ -275,13 +273,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeSwitch])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSwitch;
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

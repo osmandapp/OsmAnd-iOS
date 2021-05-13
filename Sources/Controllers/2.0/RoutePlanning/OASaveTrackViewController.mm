@@ -24,7 +24,6 @@
 
 #define kTextInputCell @"OATextViewResizingCell"
 #define kRouteGroupsCell @""
-#define kSwitchCell @"OASwitchTableViewCell"
 
 @interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
@@ -161,7 +160,7 @@
     {
         [data addObject:@[
             @{
-                @"type" : kSwitchCell,
+                @"type" : [OASwitchTableViewCell getCellIdentifier],
                 @"title" : OALocalizedString(@"simplified_track"),
                 @"key" : @"simplified_track",
                 @"footer" : OALocalizedString(@"simplified_track_description")
@@ -171,7 +170,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kSwitchCell,
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"map_settings_show"),
             @"key" : @"map_settings_show"
         }
@@ -273,12 +272,12 @@
         
         return cell;
     }
-    else if ([cellType isEqualToString:kSwitchCell])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kSwitchCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

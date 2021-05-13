@@ -8,12 +8,14 @@
 
 #import "OATableViewCell.h"
 
-#define _(name) OATableViewCell__##name
-#define inflate _(inflate)
-
 @implementation OATableViewCell
 {
     UITableView* __weak _tableView;
+}
+
++ (NSString *) getCellIdentifier
+{
+    return @"OATableViewCell";
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

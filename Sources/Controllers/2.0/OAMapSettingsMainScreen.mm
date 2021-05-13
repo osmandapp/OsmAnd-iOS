@@ -142,7 +142,7 @@
     NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
     [section0fav setObject:OALocalizedString(@"favorites") forKey:@"name"];
     [section0fav setObject:@"" forKey:@"value"];
-    [section0fav setObject:@"OASwitchCell" forKey:@"type"];
+    [section0fav setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
     
     NSMutableDictionary *section0poi = [NSMutableDictionary dictionary];
     [section0poi setObject:OALocalizedString(@"poi_overlay") forKey:@"name"];
@@ -153,7 +153,7 @@
     NSMutableDictionary *section0labels = [NSMutableDictionary dictionary];
     [section0labels setObject:OALocalizedString(@"layer_amenity_label") forKey:@"name"];
     [section0labels setObject:@"" forKey:@"value"];
-    [section0labels setObject:@"OASwitchCell" forKey:@"type"];
+    [section0labels setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
     [section0labels setObject:@"layer_amenity_label" forKey:@"key"];
     
     BOOL hasOsmEditing = [_iapHelper.osmEditing isActive];
@@ -164,12 +164,12 @@
         
         [section0edits setObject:OALocalizedString(@"osm_edits_offline_layer") forKey:@"name"];
         [section0edits setObject:@"" forKey:@"value"];
-        [section0edits setObject:@"OASwitchCell" forKey:@"type"];
+        [section0edits setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
         [section0edits setObject:@"osm_edits_offline_layer" forKey:@"key"];
         
         [section0notes setObject:OALocalizedString(@"osm_notes_online_layer") forKey:@"name"];
         [section0notes setObject:@"" forKey:@"value"];
-        [section0notes setObject:@"OASwitchCell" forKey:@"type"];
+        [section0notes setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
         [section0notes setObject:@"osm_notes_online_layer" forKey:@"key"];
     }
     
@@ -447,14 +447,12 @@
         outCell = cell;
         
     }
-    else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"])
+    else if ([[data objectForKey:@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         }
         

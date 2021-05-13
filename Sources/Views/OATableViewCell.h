@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OATableViewCell : UITableViewCell
+@interface OATableViewCell : OABaseCell
 
 @property(readonly) UITableView* tableView;
 

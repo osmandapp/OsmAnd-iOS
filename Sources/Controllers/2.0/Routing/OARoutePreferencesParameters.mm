@@ -28,6 +28,7 @@
 #import "OsmAndApp.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 
 #include <generalRouter.h>
 
@@ -125,7 +126,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASwitchCell";
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -532,7 +533,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASwitchCell";
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control

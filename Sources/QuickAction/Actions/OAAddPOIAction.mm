@@ -24,6 +24,7 @@
 #import "OAQuickActionType.h"
 #import "OAButtonCell.h"
 #import "OAIconTitleValueCell.h"
+#import "OASwitchTableViewCell.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -78,7 +79,7 @@ static OAQuickActionType *ACTION_TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),

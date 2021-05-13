@@ -7,9 +7,6 @@
 //
 
 #import "OADashboardViewController.h"
-
-#import "OASwitchTableViewCell.h"
-
 #import "OAAutoObserverProxy.h"
 #import "OANativeUtilities.h"
 #import "OAMapRendererView.h"

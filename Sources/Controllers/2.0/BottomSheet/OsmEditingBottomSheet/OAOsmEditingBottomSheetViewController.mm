@@ -117,7 +117,7 @@
                      }];
     
     [arr addObject:@{
-                     @"type" : @"OASwitchCell",
+                     @"type" : [OASwitchTableViewCell getCellIdentifier],
                      @"name" : @"close_changeset",
                      @"title" : OALocalizedString(@"osm_close_changeset"),
                      @"value" : @(_closeChangeset)
@@ -281,7 +281,7 @@
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
-    else if ([item[@"type"] isEqualToString:@"OASwitchCell"] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -339,15 +339,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OASwitchCell"])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -426,7 +424,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:@"OASwitchCell"])
+    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

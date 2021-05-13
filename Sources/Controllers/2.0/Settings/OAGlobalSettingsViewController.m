@@ -15,8 +15,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeSwitch @"OASwitchCell"
-
 @interface OAGlobalSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -102,14 +100,14 @@
                 @"description" : OALocalizedString(@"do_not_show_discount_desc"),
                 @"value" : @(_settings.settingDoNotShowPromotions),
                 @"img" : @"menu_cell_pointer.png",
-                @"type" : kCellTypeSwitch },
+                @"type" : [OASwitchTableViewCell getCellIdentifier] },
                 @{
                 @"name" : @"do_not_send_anonymous_data",
                 @"title" : OALocalizedString(@"send_anonymous_data"),
                 @"description" : OALocalizedString(@"send_anonymous_data_desc"),
                 @"value" : @(_settings.settingUseAnalytics),
                 @"img" : @"menu_cell_pointer.png",
-                @"type" : kCellTypeSwitch, }, nil
+                @"type" : [OASwitchTableViewCell getCellIdentifier], }, nil
             ];
             _data = [NSArray arrayWithArray:arr];
             break;
@@ -170,13 +168,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeSwitch])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSwitch;
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

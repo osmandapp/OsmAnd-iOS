@@ -48,7 +48,6 @@
 #include <OsmAndCore/Utilities.h>
 
 #define kTextInputCell @"OATextInputCell"
-#define kCellTypeSwitch @"OASwitchTableViewCell"
 #define kTextInputIconCell @"OATextInputIconCell"
 #define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
 #define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
@@ -502,15 +501,13 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }

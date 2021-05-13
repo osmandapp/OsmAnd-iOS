@@ -17,6 +17,7 @@
 #import "OAMapStyleTitles.h"
 #import "OAQuickActionType.h"
 #import "OAButtonCell.h"
+#import "OASwitchTableViewCell.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -173,7 +174,7 @@ static OAQuickActionType *TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),

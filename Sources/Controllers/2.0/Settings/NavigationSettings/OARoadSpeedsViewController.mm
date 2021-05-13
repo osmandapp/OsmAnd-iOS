@@ -20,7 +20,6 @@
 #import "OARangeSliderCell.h"
 
 #define kCellTypeSpeed @"time_cell"
-#define kCellTypeSlider @"OASliderWithValuesCell"
 #define kSidePadding 16
 #define kTopPadding 16
 
@@ -161,7 +160,7 @@
         @"value" : [NSString stringWithFormat:@"%ld %@", _maxValue, _units],
     }];
     [tableData addObject:@{
-        @"type" : kCellTypeSlider,
+        @"type" : [OASliderWithValuesCell getCellIdentifier],
         @"minValue" : [NSString stringWithFormat:@"%ld %@", _baseMinSpeed, _units],
         @"maxValue" : [NSString stringWithFormat:@"%ld %@", _baseMaxSpeed, _units],
     }];
@@ -200,7 +199,7 @@
         cell.lbTime.text = item[@"value"];
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeSlider])
+    else if ([cellType isEqualToString:[OASliderWithValuesCell getCellIdentifier]])
     {
         OARangeSliderCell* cell = nil;
         cell = (OARangeSliderCell *)[tableView dequeueReusableCellWithIdentifier:[OARangeSliderCell getCellIdentifier]];

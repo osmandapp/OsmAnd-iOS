@@ -109,7 +109,7 @@
     OALocalRoutingParameter *param = _data[indexPath.row];
     NSString *type = [param getCellType];
     
-    if ([type isEqualToString:@"OASwitchCell"])
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -167,13 +167,12 @@
 {
     NSString *text = [param getText];
     NSString *type = [param getCellType];
-    if ([type isEqualToString:@"OASwitchCell"])
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
-        OASwitchTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         }
         

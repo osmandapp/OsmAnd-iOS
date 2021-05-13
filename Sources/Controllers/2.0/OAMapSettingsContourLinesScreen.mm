@@ -9,7 +9,6 @@
 #import "OAMapSettingsContourLinesScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OASwitchTableViewCell.h"
 #import "Localization.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"

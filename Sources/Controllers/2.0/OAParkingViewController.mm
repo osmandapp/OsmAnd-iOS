@@ -234,7 +234,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString* const reusableIdentifierSwitch = @"OASwitchTableViewCell";
     static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
     
     NSInteger index = indexPath.row;
@@ -260,10 +259,10 @@
         case 0:
         {
             OASwitchTableViewCell* cell;
-            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierSwitch];
+            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             }
             [cell.switchView setOn:_timeLimitActive];
@@ -308,10 +307,10 @@
         case 3:
         {
             OASwitchTableViewCell* cell;
-            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierSwitch];
+            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             }
             

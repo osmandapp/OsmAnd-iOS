@@ -15,6 +15,7 @@
 #import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
 #import "OAButtonCell.h"
+#import "OASwitchTableViewCell.h"
 
 #define KEY_OVERLAYS @"overlays"
 #define KEY_NO_OVERLAY @"no_overlay"
@@ -131,7 +132,7 @@ static OAQuickActionType *TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),

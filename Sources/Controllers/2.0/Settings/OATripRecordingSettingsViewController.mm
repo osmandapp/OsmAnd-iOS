@@ -27,7 +27,6 @@
 #include <generalRouter.h>
 
 #define kCellTypeAction @"OATitleRightIconCell"
-#define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeCheck @"check"
@@ -191,7 +190,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"img" : @"menu_cell_pointer.png",
-                 @"type" : kCellTypeSwitch }]];
+                 @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
             
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
@@ -392,15 +391,13 @@ static NSArray<NSString *> *minTrackSpeedNames;
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kCellTypeSwitch])
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }

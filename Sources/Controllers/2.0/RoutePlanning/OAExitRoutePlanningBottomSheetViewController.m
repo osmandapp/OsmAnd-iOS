@@ -19,7 +19,6 @@
 #define kButtonHeight 42.
 #define kButtonsVerticalMargin 32.
 #define kHorizontalMargin 20.
-#define kLabelCell @"OATextLineViewCell"
 
 @interface OAExitRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -100,7 +99,7 @@
     _data = [NSMutableArray new];
     
     [_data addObject: @{
-        @"type" : kLabelCell,
+        @"type" : [OATextLineViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"plan_route_exit_message"),
     }];
     
@@ -159,13 +158,13 @@
     NSDictionary *item = _data[indexPath.section];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kLabelCell])
+    if ([type isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {
         OATextLineViewCell* cell;
-        cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OATextLineViewCell"];
+        cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextLineViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextLineViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

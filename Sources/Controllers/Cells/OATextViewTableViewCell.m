@@ -10,6 +10,11 @@
 
 @implementation OATextViewTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATextViewTableViewCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -10,6 +10,11 @@
 
 @implementation OATextMultiViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATextMultiViewCell";
+}
+
 - (void)awakeFromNib
 {
     // Initialization code

@@ -13,7 +13,6 @@
 #import "OsmAndApp.h"
 #include "Localization.h"
 
-
 @implementation OAEditGroupViewController
 {
     NSArray* _groups;
@@ -127,13 +126,11 @@
     }
     else
     {
-        static NSString* const reusableIdentifierPoint = @"OATextViewTableViewCell";
-        
         OATextViewTableViewCell* cell;
-        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextViewTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
         }
         

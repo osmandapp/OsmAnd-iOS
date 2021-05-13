@@ -2166,7 +2166,7 @@
 		8A6CBCC421CE25F0004033C7 /* img_logo_38dp_sea_depth.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBCA621CE25F0004033C7 /* img_logo_38dp_sea_depth.png */; };
 		8A6CBCC621CE25F0004033C7 /* img_logo_38dp_sea_depth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBCA721CE25F0004033C7 /* img_logo_38dp_sea_depth@2x.png */; };
 		8A6CBCFE21CEBC3A004033C7 /* OAChoosePlanHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A6CBCFD21CEBC3A004033C7 /* OAChoosePlanHelper.mm */; };
-		8A70771A1A83C25A005E019B /* OATextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewCell.xib */; };
+		8A70771A1A83C25A005E019B /* OATextViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewTableViewCell.xib */; };
 		8A7077201A84A7BF005E019B /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */; };
 		8A7077231A84A7BF005E019B /* OAFavoriteImportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A70771D1A84A7BF005E019B /* OAFavoriteImportViewController.xib */; };
 		8A70772C1A84F0F9005E019B /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077261A84F0F9005E019B /* OptionsPanel.xib */; };
@@ -6392,7 +6392,7 @@
 		8A6CBCFC21CEBC3A004033C7 /* OAChoosePlanHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAChoosePlanHelper.h; sourceTree = "<group>"; };
 		8A6CBCFD21CEBC3A004033C7 /* OAChoosePlanHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChoosePlanHelper.mm; sourceTree = "<group>"; };
 		8A6E582023F003BD001C9A04 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
-		8A7077141A83C25A005E019B /* OATextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewCell.xib; path = Resources/Controllers/Cells/OATextViewCell.xib; sourceTree = "<group>"; };
+		8A7077141A83C25A005E019B /* OATextViewTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewTableViewCell.xib; path = Resources/Controllers/Cells/OATextViewTableViewCell.xib; sourceTree = "<group>"; };
 		8A70771B1A84A7BF005E019B /* OAFavoriteImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFavoriteImportViewController.h; path = Sources/Controllers/2.0/OAFavoriteImportViewController.h; sourceTree = "<group>"; };
 		8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAFavoriteImportViewController.mm; path = Sources/Controllers/2.0/OAFavoriteImportViewController.mm; sourceTree = "<group>"; };
 		8A70771D1A84A7BF005E019B /* OAFavoriteImportViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAFavoriteImportViewController.xib; path = Sources/Controllers/2.0/OAFavoriteImportViewController.xib; sourceTree = "<group>"; };
@@ -8761,7 +8761,7 @@
 				840B7D551F8424CE00477A3C /* OASettingSwitchCell.xib */,
 				8AF2197D1A7FAE400091071B /* OAPointTableViewCell.xib */,
 				8AF219841A7FCD380091071B /* OAIconTextTableViewCell.xib */,
-				8A7077141A83C25A005E019B /* OATextViewCell.xib */,
+				8A7077141A83C25A005E019B /* OATextViewTableViewCell.xib */,
 				84387B2F1ABCAB6F00504DA7 /* OAIconTextDescCell.xib */,
 				8440E2E51ABEB2450088856A /* OAPointDescCell.xib */,
 				8432E2681AC068880082CFC6 /* OASearchMoreCell.xib */,
@@ -15412,7 +15412,7 @@
 				DA13420A243DC5A90039D214 /* map_action_shuttle_bus@3x.png in Resources */,
 				DA71B7F4214B9F4A00FE8B7E /* contour-lines-plugin.html in Resources */,
 				DA5F6A15245844A100C7DF71 /* map_public_transport_stop_shield.png in Resources */,
-				8A70771A1A83C25A005E019B /* OATextViewCell.xib in Resources */,
+				8A70771A1A83C25A005E019B /* OATextViewTableViewCell.xib in Resources */,
 				84E1DEC41B0DFDE9002A6946 /* bt_round_big_blue.png in Resources */,
 				8AFC2BC324334A4E0095BA9F /* map_location_bicycle_top@3x.png in Resources */,
 				84E2DB5B1AB720FA001A7FEC /* left_menu_icon_about@2x.png in Resources */,

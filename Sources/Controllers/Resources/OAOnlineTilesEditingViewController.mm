@@ -736,8 +736,8 @@
     
     if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput])
     {
-        static NSString* const identifierCell = @"OATextViewResizingCell";
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = [OATextViewResizingCell getCellIdentifier];
+        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];

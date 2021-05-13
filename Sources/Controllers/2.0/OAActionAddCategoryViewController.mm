@@ -179,10 +179,10 @@
 {
     id category = [self getItem:indexPath];
     OATextLineViewCell* cell;
-    cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OATextLineViewCell"];
+    cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextLineViewCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
         cell = (OATextLineViewCell *)[nib objectAtIndex:0];
     }
     

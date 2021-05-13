@@ -13,7 +13,6 @@
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OATitleRightIconCell.h"
-#import "OATextViewTableViewCell.h"
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OASettingsTableViewCell.h"
 #import "OAColorsTableViewCell.h"
@@ -38,7 +37,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-#define kTextFieldCell @"OATextViewTableViewCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeColorCollection @"colorCollectionCell"
 #define kCellTypeIconCollection @"iconCollectionCell"

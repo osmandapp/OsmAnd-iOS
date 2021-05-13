@@ -18,6 +18,11 @@ static UIFont *_textFont;
 
 @implementation OATextLineViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATextLineViewCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

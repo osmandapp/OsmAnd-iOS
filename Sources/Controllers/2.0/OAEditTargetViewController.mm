@@ -32,9 +32,6 @@
 
 #include "Localization.h"
 
-#define kRowNameCell @"OATextViewTableViewCell"
-#define kRowDescriptionCell @"OATextMultiViewCell"
-
 @interface OAEditTargetViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAEditDescriptionViewControllerDelegate, UITextFieldDelegate>
 
 @end
@@ -394,7 +391,7 @@
     if ([self hasDescription])
     {
         [_data addObject:@{
-            @"type" : kRowDescriptionCell,
+            @"type" : [OATextMultiViewCell getCellIdentifier],
             @"label" : self.desc,
             @"placeholder" : OALocalizedString(@"enter_description"),
         }];
@@ -619,13 +616,13 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kRowNameCell])
+    if ([item[@"type"] isEqualToString:[OATextViewTableViewCell getCellIdentifier]])
     {
         OATextViewTableViewCell* cell;
-        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowNameCell];
+        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextViewTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -675,13 +672,13 @@
         cell.backgroundColor = UIColorFromRGB(0xffffff);
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+    else if ([item[@"type"] isEqualToString:[OATextMultiViewCell getCellIdentifier]])
     {
         OATextMultiViewCell* cell;
-        cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowDescriptionCell];
+        cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextMultiViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextMultiViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultiViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
         }
         
@@ -773,7 +770,7 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+    if ([item[@"type"] isEqualToString:[OATextMultiViewCell getCellIdentifier]])
         return _descHeight;
     else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableViewCell getCellIdentifier]])
         return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
@@ -788,7 +785,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:kRowNameCell])
+    if ([item[@"type"] isEqualToString:[OATextViewTableViewCell getCellIdentifier]])
     {
     }
     else if ([item[@"type"] isEqualToString:[OAColorViewCell getCellIdentifier]])
@@ -801,7 +798,7 @@
         if ([self supportEditing])
             [self changeGroupClicked];
     }
-    else if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+    else if ([item[@"type"] isEqualToString:[OATextMultiViewCell getCellIdentifier]])
     {
         [self changeDescriptionClicked];
     }

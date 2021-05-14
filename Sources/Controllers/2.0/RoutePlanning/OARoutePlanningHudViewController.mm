@@ -213,14 +213,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
     _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
-    [_expandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_expandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
     _landscapeExpandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
-    [_landscapeExpandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [_landscapeExpandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
-    
-    [_undoButton setImage:[[UIImage imageNamed:@"ic_custom_undo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_redoButton setImage:[[UIImage imageNamed:@"ic_custom_redo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    
+  
+    [_undoButton setImage:[UIImage templateImageNamed:@"ic_custom_undo"] forState:UIControlStateNormal];
+    [_redoButton setImage:[UIImage templateImageNamed:@"ic_custom_redo"] forState:UIControlStateNormal];
     _undoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     _redoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     
@@ -240,7 +238,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _closeButtonContainerView.layer.cornerRadius = 12.;
     _doneButtonContainerView.layer.cornerRadius = 12.;
     
-    [_closeButton setImage:[[UIImage imageNamed:@"ic_navbar_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_closeButton setImage:[UIImage templateImageNamed:@"ic_navbar_close"] forState:UIControlStateNormal];
     _closeButton.imageView.tintColor = UIColor.whiteColor;
     
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
@@ -462,7 +460,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-        img = [[UIImage imageNamed:@"ic_custom_straight_line"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        img = [UIImage templateImageNamed:@"ic_custom_straight_line"];
         tint = UIColorFromRGB(color_chart_orange);
     }
     [_modeButton setImage:img forState:UIControlStateNormal];
@@ -710,12 +708,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         if (self.currentState == EOADraggableMenuStateInitial)
         {
             [self goExpanded];
-            [button setImage:[[UIImage imageNamed:@"ic_custom_arrow_down"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+            [button setImage:[UIImage templateImageNamed:@"ic_custom_arrow_down"] forState:UIControlStateNormal];
         }
         else
         {
             [self goMinimized];
-            [button setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+            [button setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
         }
     }
 }

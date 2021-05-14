@@ -16,10 +16,10 @@
 {
     [super awakeFromNib];
     
-    _leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_trip"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _distanceImageView.image = [[UIImage imageNamed:@"ic_small_distance"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _timeImageView.image = [[UIImage imageNamed:@"ic_small_time_start"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _wptImageView.image = [[UIImage imageNamed:@"ic_small_waypoints"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _leftIconImageView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+    _distanceImageView.image = [UIImage templateImageNamed:@"ic_small_distance"];
+    _timeImageView.image = [UIImage templateImageNamed:@"ic_small_time_start"];
+    _wptImageView.image = [UIImage templateImageNamed:@"ic_small_waypoints"];
     
     _leftIconImageView.tintColor = UIColorFromRGB(color_chart_orange);
     _distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);

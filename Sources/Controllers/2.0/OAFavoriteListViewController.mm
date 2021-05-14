@@ -860,7 +860,7 @@ static UIViewController *parentController;
             cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
             
             [cell.distanceView setText:item.distance];
-            cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         }
@@ -913,7 +913,7 @@ static UIViewController *parentController;
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointHeaderCell" owner:self options:nil];
         cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
-        cell.folderIcon.image = [[UIImage imageNamed:@"ic_custom_folder"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder"];
     }
     if (cell)
     {
@@ -930,13 +930,11 @@ static UIViewController *parentController;
         
         if (groupData.isOpen)
         {
-            cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
-            imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
         }
         else
         {
-            cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_right"]
-            imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             if ([cell isDirectionRTL])
                 [cell.arrowImage setImage:cell.arrowImage.image.imageFlippedForRightToLeftLayoutDirection];
         }
@@ -958,7 +956,7 @@ static UIViewController *parentController;
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
-        cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
     }
     if (cell)
     {

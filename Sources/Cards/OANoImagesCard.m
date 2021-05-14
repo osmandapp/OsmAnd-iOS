@@ -28,11 +28,10 @@
     if (noImagesCell)
     {
         noImagesCell.noImagesLabel.text = OALocalizedString(@"mapil_no_images");
-        [noImagesCell.imageView setImage:[[UIImage imageNamed:@"ic_custom_trouble.png"]
-                                  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [noImagesCell.imageView setImage:[UIImage templateImageNamed:@"ic_custom_trouble.png"]];
         noImagesCell.imageView.tintColor = UIColorFromRGB(color_icon_color);
         [noImagesCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0x007AFF)] forState:UIControlStateNormal];
-        [noImagesCell.addPhotosButton setImage:[[UIImage imageNamed:@"ic_custom_add.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [noImagesCell.addPhotosButton setImage:[UIImage templateImageNamed:@"ic_custom_add.png"] forState:UIControlStateNormal];
         noImagesCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
         [noImagesCell.addPhotosButton setTitle:OALocalizedString(@"mapil_add_photos") forState:UIControlStateNormal];
         

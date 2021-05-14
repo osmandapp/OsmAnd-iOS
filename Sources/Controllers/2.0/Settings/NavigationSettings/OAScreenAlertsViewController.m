@@ -139,7 +139,7 @@
             cell.textView.text = item[@"title"];
             if ([item[@"key"] isEqualToString:@"screenAlerts"])
             {
-                cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
                 cell.imgView.tintColor = _showAlerts ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else

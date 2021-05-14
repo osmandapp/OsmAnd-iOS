@@ -42,6 +42,7 @@
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
 #import "OAReverseGeocoder.h"
+#import "OAColors.h"
 
 #import "OAIconTextTableViewCell.h"
 #import "OAIconTextTableViewCell.h"
@@ -51,6 +52,7 @@
 #import "OAIconButtonCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
+#import "OAButtonRightIconCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -677,10 +679,11 @@
                         NSString *iconName = (NSString *)res;
                         icon = [OAUtilities getMxIcon:iconName];
                     }
-                    if (!icon)
-                        icon = [OAUtilities getMxIcon:@"user_defined"];
-                    
-                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
+                    if (!icon && [filter isKindOfClass:[OAPOIUIFilter class]])
+                        icon = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *) filter];
+                    OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
+                    cell.iconView.tintColor = UIColorFromRGB(color_osmand_orange);
+                    return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOIBaseType class]])
                 {
@@ -717,6 +720,26 @@
     }
     else
     {
+        if ([item getType] == ACTION_BUTTON)
+        {
+            OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OAButtonRightIconCell"];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonRightIconCell" owner:self options:nil];
+                cell = nib[0];
+                cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            }
+            if (cell) {
+                OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
+                cell.iconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+                NSString *title = [buttonItem getName];
+                [cell.button setTitle:title ? title : @"" forState:UIControlStateNormal];
+                [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                [cell.button addTarget:buttonItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
+                return cell;
+            }
+        }
         if ([item getType] == BUTTON)
         {
             OAIconButtonCell* cell;
@@ -852,7 +875,7 @@
             {
                 ((OAQuickSearchMoreListItem *) item).onClickFunction(item);
             }
-            else if ([item getType] == BUTTON)
+            else if ([item getType] == BUTTON || [item getType] == ACTION_BUTTON)
             {
                 ((OAQuickSearchButtonListItem *) item).onClickFunction(item);
             }

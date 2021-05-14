@@ -32,6 +32,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAGlobalSettingsItem.h"
 #import "OADestination.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -172,11 +173,8 @@
     {
         OAPOIUIFilter *poiUIFilter = object;
         item[@"title"] = poiUIFilter.getName ? poiUIFilter.getName : @"";
-        UIImage *poiIcon = [UIImage templateImageNamed:poiUIFilter.getIconId];
-        if (poiIcon)
-            item[@"icon"] = poiIcon;
-        else
-            item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_user"];
+        UIImage *poiIcon = [OAPOIHelper getCustomFilterIcon:poiUIFilter];
+        item[@"icon"] = poiIcon;
     }
     else if ([object isKindOfClass:OATileSource.class])
     {

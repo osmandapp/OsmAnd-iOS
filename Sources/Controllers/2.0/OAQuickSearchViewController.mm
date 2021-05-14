@@ -92,7 +92,7 @@ typedef void(^OAPublishCallback)(OASearchResultCollection *res, BOOL append);
 typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 
-@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
+@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -147,11 +147,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 @implementation OAQuickSearchViewController
 {
     UIPanGestureRecognizer *_tblMove;
-    
+
     UIImageView *_leftImgView;
     UIActivityIndicatorView *_activityIndicatorView;
-    
-    OAPOIUIFilter *_filterToSave;
 
     OAQuickSearchTableController *_tableController;
 
@@ -159,12 +157,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OAAddressTableViewController *_addressViewController;
     OACategoriesTableViewController *_categoriesViewController;
     OAHistoryTableViewController *_historyViewController;
-    
+
     OASearchToolbarViewController *_searchToolbarViewController;
-    
+
     BarActionType _barActionType;
     BOOL _historyEditing;
-    
+
     BOOL _bottomViewVisible;
 }
 
@@ -194,7 +192,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
     _tableController.delegate = self;
     _tableController.searchType = self.searchType;
@@ -202,21 +200,21 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [_tableController setMapCenterCoordinate:_searchLocation];
     else
         [_tableController resetMapCenterSearch];
-    
+
     // drop shadow
     [_bottomView.layer setShadowColor:[UIColor blackColor].CGColor];
     [_bottomView.layer setShadowOpacity:0.3];
     [_bottomView.layer setShadowRadius:3.0];
     [_bottomView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-    
+
     _bottomView.hidden = YES;
-    
+
     _pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     _pageController.dataSource = self;
     _pageController.delegate = self;
     _pageController.view.frame = _tableView.frame;
     _pageController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
+
     _addressViewController = [[OAAddressTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _addressViewController.delegate = self;
     _addressViewController.tableDelegate = self;
@@ -234,37 +232,37 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [_categoriesViewController setMapCenterCoordinate:_searchLocation];
     else
         [_categoriesViewController resetMapCenterSearch];
-    
+
     _historyViewController = [[OAHistoryTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _historyViewController.delegate = self;
     _historyViewController.searchNearMapCenter = _searchNearMapCenter;
     _historyViewController.myLocation = _myLocation;
     _historyViewController.searchType = self.searchType;
-    
+
     [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-    
+
     [_tabs setTitle:OALocalizedString(@"history") forSegmentAtIndex:0];
     [_tabs setTitle:OALocalizedString(@"categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
     [_tabs setSelectedSegmentIndex:0];
-    
+
     _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                        action:@selector(moveGestureDetected:)];
     _tblMove.delegate = self;
-    
+
     _textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(4.0, 0.0, 24.0, _textField.bounds.size.height)];
     _textField.leftViewMode = UITextFieldViewModeAlways;
-    
+
     _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:_textField.leftView.frame];
     _activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    
+
     _leftImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_icon"]];
     _leftImgView.contentMode = UIViewContentModeCenter;
     _leftImgView.frame = _textField.leftView.frame;
-    
+
     [_textField.leftView addSubview:_leftImgView];
     [_textField.leftView addSubview:_activityIndicatorView];
-    
+
     [self setupSearch];
     [self updateHint];
 
@@ -278,18 +276,18 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 -(void)viewWillAppear:(BOOL)animated
 {
     self.paused = NO;
-    
+
     [self setupView];
-    
+
     OsmAndAppInstance app = [OsmAndApp instance];
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
-    
+
     [self registerForKeyboardNotifications];
-    
+
     [super viewWillAppear:animated];
-    
+
     if ([self getResultCollection])
     {
         [self updateSearchResult:[self getResultCollection] append:false];
@@ -303,7 +301,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
     [self showSearchIcon];
     [self.textField becomeFirstResponder];
 }
@@ -311,15 +309,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     self.paused = YES;
- 
+
     if (self.locationServicesUpdateObserver)
     {
         [self.locationServicesUpdateObserver detach];
         self.locationServicesUpdateObserver = nil;
     }
-    
+
     [self unregisterKeyboardNotifications];
 }
 
@@ -339,11 +337,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self stopAddressSearch];
     [self setResultCollection:nil];
     [self.searchUICore resetPhrase];
-    
+
     OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
     settings = [settings setLang:locale ? locale : @"" transliterateIfMissing:transliterate];
     [self.searchUICore updateSettings:settings];
-    
+
     __weak OAQuickSearchViewController *weakSelf = self;
     self.searchUICore.onSearchStart = ^void() {
         _cancelPrev = false;
@@ -373,7 +371,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             UIImage *mapImage = [UIImage templateImageNamed:@"ic_action_marker"];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
-            
+
             OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
             [UIView performWithoutAnimation:^{
                 if (title)
@@ -391,13 +389,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 {
                     [_barActionTextButton setTitle:OALocalizedString(@"shared_string_select") forState:UIControlStateNormal];
                 }
-                
+
                 [_barActionTextButton layoutIfNeeded];
             }];
             _barActionTextButton.hidden = NO;
             _barActionTextButton.userInteractionEnabled = YES;
             _barActionImageButton.hidden = YES;
-            
+
             break;
         }
         case BarActionShowOnMap:
@@ -406,7 +404,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             UIImage *mapImage = [UIImage templateImageNamed:@"waypoint_map_disable.png"];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
-            
+
             OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
             [UIView performWithoutAnimation:^{
                 if (title)
@@ -424,36 +422,36 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 {
                     [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
                 }
-                
+
                 [_barActionTextButton layoutIfNeeded];
             }];
             _barActionTextButton.hidden = NO;
             _barActionTextButton.userInteractionEnabled = YES;
-            
+
 
             [_barActionImageButton setImage:[UIImage imageNamed:@"ic_search_filter.png"] forState:UIControlStateNormal];
             BOOL filterButtonVisible = word && word.getType == POI_TYPE;
             _barActionImageButton.hidden = !filterButtonVisible;
-            
+
             break;
         }
-            
+
         case BarActionEditHistory:
         {
             _barActionImageView.hidden = YES;
             [_barActionLeftImageButton setImage:[UIImage imageNamed:@"ic_close.png"] forState:UIControlStateNormal];
             _barActionLeftImageButton.hidden = NO;
-            
+
             [UIView performWithoutAnimation:^{
                 [_barActionTextButton setTitle:title forState:UIControlStateNormal];
                 [_barActionTextButton layoutIfNeeded];
             }];
             _barActionTextButton.hidden = NO;
             _barActionTextButton.userInteractionEnabled = NO;
-            
+
             [_barActionImageButton setImage:[UIImage imageNamed:@"icon_remove.png"] forState:UIControlStateNormal];
             _barActionImageButton.hidden = NO;
-            
+
             break;
         }
         default:
@@ -587,7 +585,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 }
                 [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
                 [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:filter];
-                
+
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [mapVC updatePoiLayer];
                 [self showToolbar];
@@ -617,7 +615,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [_historyViewController editDone];
             [self finishHistoryEditing];
             break;
-            
+
         default:
             break;
     }
@@ -639,7 +637,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     OAPOIUIFilter *model = (OAPOIUIFilter *) object;
                     if (model.savedFilterByName.length > 0)
                         [model setFilterByName:model.savedFilterByName];
-                    
+
                     OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:model filterByName:filterByName];
                     filterViewController.delegate = self;
                     [self.navigationController pushViewController:filterViewController animated:YES];
@@ -676,7 +674,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     OAPOIUIFilter *customFilter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     if (customFilter)
-        [self doSaveFilter:customFilter];
+        [self presentViewController:[self createSaveFilterDialog:customFilter customSaveAction:NO] animated:YES completion:nil];
 }
 
 - (IBAction)bottomImageButtonPress:(id)sender
@@ -727,18 +725,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         {
             [self setupBarActionView:BarActionNone title:nil];
         }
-        
+
         [self.view setNeedsLayout];
     }
-}
-
-- (void) doSaveFilter:(OAPOIUIFilter *)filter
-{
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_save"), nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert textFieldAtIndex:0].text = filter.name;
-    _filterToSave = filter;
-    [alert show];
 }
 
 - (void)setBottomViewVisible:(BOOL)visible
@@ -785,7 +774,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 -(void)setSearchNearMapCenter:(BOOL)searchNearMapCenter
 {
     _searchNearMapCenter = searchNearMapCenter;
-    
+
     if (self.isViewLoaded)
     {
         if (searchNearMapCenter)
@@ -804,7 +793,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [_tableController resetMapCenterSearch];
         }
         [self updateSearchNearMapCenterLabel];
-        
+
         [self.view setNeedsLayout];
     }
 }
@@ -812,12 +801,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 -(void)setSearchType:(OAQuickSearchType)searchType
 {
     _searchType = searchType;
-    
+
     _historyViewController.searchType = searchType;
     _addressViewController.searchType = searchType;
     _categoriesViewController.searchType = searchType;
     _tableController.searchType = searchType;
-    
+
     [self updateBarActionView];
 }
 
@@ -838,7 +827,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
     [self.searchUICore updateSettings:settings];
-    
+
     if (self.isViewLoaded)
         [self.view setNeedsLayout];
 }
@@ -853,19 +842,19 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
     statusBarHeight = statusBarHeight == 0 ? 10.0 : statusBarHeight;
     frame.size.height = (showInputView ? kInitialSearchToolbarHeight + statusBarHeight : statusBarHeight) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
-    
+
     _textField.hidden = !showInputView;
     _btnCancel.hidden = !showInputView || _modalInput;
     _barActionView.hidden = !showBarActionView;
     _searchNearCenterView.hidden = !showMapCenterSearch;
     _tabs.hidden = !showTabs;
-    
+
     _barActionView.frame = CGRectMake(0.0, showInputView ? 40.0 + statusBarHeight : statusBarHeight, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
     [self adjustViewPosition:_searchNearCenterView byHeight:showInputView ? 40.0 : 0.0];
-    
+
     [self adjustViewPosition:_btnCancel byHeight:kCancelButtonY];
     [self adjustViewPosition:_leftImageButton byHeight:kLeftImageButtonY];
-    
+
     if (_modalInput)
     {
         self.leftImageButton.hidden = NO;
@@ -876,7 +865,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         self.leftImageButton.hidden = YES;
         self.textField.frame = CGRectMake(8, 5 + statusBarHeight, self.view.frame.size.width - 84 - 8, self.textField.frame.size.height);
     }
-    
+
     _topView.frame = frame;
     _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, self.view.frame.size.height - frame.size.height - (_bottomViewVisible ? _bottomView.bounds.size.height : 0.0));
     _pageController.view.frame = _tableView.frame;
@@ -923,7 +912,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:nil];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
@@ -1002,7 +991,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [self startAddressSearch];
     else
         [self stopAddressSearch];
-    
+
     if (self.storedOriginalLocation)
     {
         // Restore previous search location
@@ -1020,7 +1009,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                     setSortByName:false]
                                    setSearchTypes:@[[OAObjectType withType:CITY], [OAObjectType withType:VILLAGE], [OAObjectType withType:POSTCODE], [OAObjectType withType:HOUSE], [OAObjectType withType:STREET_INTERSECTION], [OAObjectType withType:STREET],[OAObjectType withType:LOCATION], [OAObjectType withType:PARTIAL_LOCATION]]]
                                   setRadiusLevel:1];
-                                  
+
     [self.searchUICore updateSettings:settings];
 }
 
@@ -1032,7 +1021,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                     setSortByName:true]
                                    setSearchTypes:@[[OAObjectType withType:CITY], [OAObjectType withType:VILLAGE]]]
                                   setRadiusLevel:1];
-    
+
     [self.searchUICore updateSettings:settings];
     [self enterModalInputLayout];
 }
@@ -1045,7 +1034,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                     setSortByName:false]
                                    setSearchTypes:@[[OAObjectType withType:CITY]]]
                                   setRadiusLevel:1];
-    
+
     [self.searchUICore updateSettings:settings];
 }
 
@@ -1059,7 +1048,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                   setSearchTypes:@[[OAObjectType withType:CITY]]]
                  setOriginalLocation:latLon]
                 setRadiusLevel:1];
-    
+
     [self.searchUICore updateSettings:settings];
 }
 
@@ -1071,7 +1060,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                     setAddressSearch:true]
                                    setSortByName:true]
                                   setRadiusLevel:1];
-    
+
     [self.searchUICore updateSettings:settings];
     [self enterModalInputLayout];
 }
@@ -1084,7 +1073,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                     setSortByName:false]
                                    setAddressSearch:false]
                                   setRadiusLevel:1];
-    
+
     [self.searchUICore updateSettings:settings];
 }
 
@@ -1102,12 +1091,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
     [self startNearestCitySearch];
     [self runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:nil onPublish:nil onSearchFinished:^BOOL(OASearchPhrase *phrase) {
-        
+
         OASearchResultCollection *res = [self getResultCollection];
-        
+
         OAAppSettings *settings = [OAAppSettings sharedManager];
         NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *data = [NSMutableArray array];
-        
+
         self.citySearchedRect = [phrase getRadiusBBoxToSearch:1000];
         OASearchResult *lastCity = nil;
         if (res)
@@ -1123,7 +1112,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             }
         }
         NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
-        
+
         NSString *lastCityName = (!lastCity ? settings.lastSearchedCityName : lastCity.localeName);
         if (lastCityName.length > 0)
         {
@@ -1132,7 +1121,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             NSMutableAttributedString *selectStreetsInCityAttr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ %@", selectStreets, inCityName]];
             [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x2f7af5) range:NSMakeRange(0, selectStreets.length)];
             [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x727272) range:NSMakeRange(selectStreets.length + 1, inCityName.length)];
-            
+
             [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_street_name"] attributedText:selectStreetsInCityAttr onClickFunction:^(id sender) {
                 if (!lastCity)
                 {
@@ -1159,7 +1148,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         } onSearchFinished:^BOOL(OASearchPhrase *phrase) {
                             if (!cityFound)
                                 [self replaceQueryWithText:[lastCityName stringByAppendingString:@" "]];
-                            
+
                             return NO;
                         }];
                         [self restoreSearch];
@@ -1176,7 +1165,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [self.textField becomeFirstResponder];
             }]];
         }
-        
+
         [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_building_number"] text:OALocalizedString(@"select_city") onClickFunction:^(id sender) {
             self.textField.placeholder = OALocalizedString(@"type_city_town");
             [self startCitySearch];
@@ -1184,7 +1173,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [self runCoreSearch:@"" updateResult:NO searchMore:NO];
             [self.textField becomeFirstResponder];
         }]];
-        
+
         [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_postcode"] text:OALocalizedString(@"select_postcode") onClickFunction:^(id sender) {
             self.textField.placeholder = OALocalizedString(@"type_postcode");
             [self startPostcodeSearch];
@@ -1200,9 +1189,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                                       latLon.getLatitude(), latLon.getLongitude());
         }]];
          */
-        
+
         [data addObject:rows];
-        
+
         if (res)
         {
             NSArray<OASearchResult *> *currentSearchResults = [res getCurrentSearchResults];
@@ -1217,7 +1206,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
                     else
                         break;
-                    
+
                     limit--;
                 }
                 [data addObject:rows];
@@ -1277,7 +1266,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         h.date = [NSDate date];
         h.iconName = [OAQuickSearchListItem getIconName:searchResult];
         h.typeName = [OAQuickSearchListItem getTypeName:searchResult];
-        
+
         switch (searchResult.objectType)
         {
             case POI:
@@ -1287,7 +1276,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             case FAVORITE:
                 h.hType = OAHistoryTypeFavorite;
                 break;
-                
+
             case WPT:
                 h.hType = OAHistoryTypeWpt;
                 break;
@@ -1295,7 +1284,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             case LOCATION:
                 h.hType = OAHistoryTypeLocation;
                 break;
-                
+
             case CITY:
             case VILLAGE:
             case POSTCODE:
@@ -1309,7 +1298,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 h.hType = OAHistoryTypeUnknown;
                 break;
         }
-        
+
         [[OAHistoryHelper sharedInstance] addPoint:h];
     }
 }
@@ -1323,13 +1312,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     if (!_searchNearMapCenter)
         return;
-    
+
     CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
     if (newLocation)
     {
         self.myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
         [self setSearchNearMapCenter:NO];
-        
+
         [UIView animateWithDuration:.25 animations:^{
             [self.view layoutIfNeeded];
         } completion:^(BOOL finished) {
@@ -1387,7 +1376,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     poi.latitude = latitude;
     poi.longitude = longitude;
     poi.nameLocalized = @"";
-    
+
     [self goToPoint:poi];
 }
 
@@ -1397,7 +1386,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
-    
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -1418,11 +1407,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) runSearch:(NSString *)text
 {
-    [self showWaitingIndicator];    
+    [self showWaitingIndicator];
     OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
-    
+
     [self runCoreSearch:text updateResult:YES searchMore:NO];
 }
 
@@ -1448,17 +1437,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     self.interruptedSearch = false;
     self.searching = true;
     self.cancelPrev = true;
-    
+
     OASearchResultCollection __block *regionResultCollection;
     OASearchCoreAPI __block *regionResultApi;
     NSMutableArray<OASearchResult *> __block *results = [NSMutableArray array];
 
     [self.searchUICore search:text delayedExecution:updateResult matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
-        
+
         OASearchResult *obj = *object;
         if (obj.objectType == SEARCH_STARTED)
             self.cancelPrev = false;
-        
+
         if (self.paused || self.cancelPrev)
         {
             if (results.count > 0)
@@ -1493,7 +1482,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (self.paused)
                         return;
-                    
+
                     self.searching = false;
                     if (!onSearchFinished || onSearchFinished(obj.requiredSearchPhrase))
                     {
@@ -1527,7 +1516,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     apiResults = [NSMutableArray arrayWithArray:[regionCollection getCurrentSearchResults]];
                 else
                     apiResults = results;
-                
+
                 regionResultApi = nil;
                 regionResultCollection = nil;
                 results = [NSMutableArray array];
@@ -1552,14 +1541,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [results addObject:obj];
             }
         }
-        
+
         return true;
 
     } cancelledFunc:^BOOL {
-        
+
         return self.paused || self.cancelPrev;
     }]];
-    
+
     if (!searchMore)
     {
         [self setResultCollection:nil];
@@ -1571,7 +1560,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection onPublish:(OAPublishCallback)onPublish
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         if (!_paused && !_cancelPrev)
         {
             BOOL append = [self getResultCollection] != nil;
@@ -1594,7 +1583,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) showRegionResults:(OASearchResultCollection *)regionResultCollection onPublish:(OAPublishCallback)onPublish
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         if (!_paused && !_cancelPrev)
         {
             if ([self getResultCollection])
@@ -1625,7 +1614,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [custom clearFilter];
                 [custom updateTypesToAccept:parent];
                 [custom setFilterByName:[[additional.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] lowerCase]];
-                
+
                 OASearchPhrase *phrase = [self.searchUICore getPhrase];
                 sr = [[OASearchResult alloc] initWithPhrase:phrase];
                 sr.localeName = custom.name;
@@ -1655,7 +1644,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
-    
+
     [self runCoreSearch:txt updateResult:NO searchMore:NO];
 }
 
@@ -1666,7 +1655,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
-    
+
     [self runCoreSearch:txt updateResult:NO searchMore:NO];
 }
 
@@ -1724,7 +1713,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         double rd = [OsmAndApp.instance calculateRoundedDist:minimalSearchRadius];
         item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"), [OsmAndApp.instance getFormattedDistance:rd]];
     }
-    
+
     if (!_paused && !_cancelPrev)
     {
         [_tableController addItem:item groupIndex:0];
@@ -1732,7 +1721,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
-- (void) updateSearchResult:(OASearchResultCollection *)res append:(BOOL)append
+- (void)updateSearchResult:(OASearchResultCollection *)res append:(BOOL)append
 {
     if (!_paused)
     {
@@ -1742,6 +1731,24 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
 
         [self updateData:rows append:append];
+    }
+}
+
+- (void)createAndRefreshCustomFilter:(OAPOIUIFilter *)newFilter newName:(NSString *)newName
+{
+    if (newName.length > 0)
+    {
+        OAPOIUIFilter *filterToSave = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[newFilter getAcceptedTypes]];
+        if (newFilter.filterByName.length > 0)
+            [filterToSave setSavedFilterByName:newFilter.filterByName];
+
+        if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:filterToSave])
+        {
+            [self.searchHelper refreshCustomPoiFilters];
+            [self replaceQueryWithUiFilter:filterToSave nameFilter:@""];
+            [self reloadCategories];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -1796,7 +1803,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         _tabs.selectedSegmentIndex = 1;
     else
         _tabs.selectedSegmentIndex = 2;
-    
+
     if (prevTabIndex != _tabs.selectedSegmentIndex)
         [self processTabChange];
 }
@@ -1812,7 +1819,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     [self hideToolbar];
     [self addHistoryItem:searchResult];
-    
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -1832,6 +1839,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:filter];
     customPOIScreen.delegate = self;
     [self.navigationController pushViewController:customPOIScreen animated:YES];
+
 }
 
 - (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
@@ -1839,12 +1847,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OADeleteCustomFiltersViewController *removeFiltersScreen = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
     removeFiltersScreen.delegate = self;
     [self.navigationController pushViewController:removeFiltersScreen animated:YES];
+
 }
 
 - (void)showRearrangeFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
     OARearrangeCustomFiltersViewController *rearrangeCategoriesScreen = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
     [self.navigationController pushViewController:rearrangeCategoriesScreen animated:YES];
+
 }
 
 - (NSArray<OAPOIUIFilter *> *)getCustomFilters
@@ -1872,7 +1882,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         double latitude = item.latitude;
         double longitude = item.longitude;
         OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION typeName:item.typeName name:item.name];
-        
+
         if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
         {
             [[OARootViewController instance].mapPanel setRouteTargetPoint:self.searchType == OAQuickSearchType::DESTINATION intermediate:self.searchType == OAQuickSearchType::INTERMEDIATE latitude:latitude longitude:longitude pointDescription:pointDescription];
@@ -1908,7 +1918,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [_barActionTextButton setTitle:[NSString stringWithFormat:OALocalizedString(@"items_selected"), count] forState:UIControlStateNormal];
         else
             [_barActionTextButton setTitle:@"" forState:UIControlStateNormal];
-        
+
         [_barActionTextButton layoutIfNeeded];
     }];
 }
@@ -1920,70 +1930,16 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     return YES;
 }
 
-#pragma mark - OACustomPOIViewDelegate
-
-- (void) searchByUIFilter:(OAPOIUIFilter *)filter
-{
-    OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:[_searchUICore getPhrase]];
-    sr.localeName = [filter getName];
-    sr.object = filter;
-    sr.priority = 0;
-    sr.objectType = POI_TYPE;
-    [_searchUICore selectSearchResult:sr];
-    
-    NSString *txt = [[filter getName] stringByAppendingString:@" "];
-    self.searchQuery = txt;
-    [self updateTextField:txt];
-    OASearchSettings *settings = [[_searchUICore getPhrase] getSettings];
-    if ([settings getRadiusLevel] != 1)
-        [_searchUICore updateSettings:[settings setRadiusLevel:1]];
-
-    [self runCoreSearch:txt updateResult:NO searchMore:NO];
-    
-    [self setBottomViewVisible:YES];
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        NSString* newName = [[alertView textFieldAtIndex:0].text trim];
-        if (newName.length > 0)
-        {
-            OAPOIUIFilter *nFilter = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[_filterToSave getAcceptedTypes]];
-            if (_filterToSave.filterByName.length > 0)
-                [nFilter setSavedFilterByName:_filterToSave.filterByName];
-            
-            if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
-            {
-                [self.searchHelper refreshCustomPoiFilters];
-                [self replaceQueryWithUiFilter:nFilter nameFilter:@""];
-                [self reloadCategories];
-                [self setBottomViewVisible:NO];
-                [self.navigationController popToRootViewControllerAnimated:YES];
-            }
-        }
-    }
-}
-
 #pragma mark - OAPOIFilterViewDelegate
 
-- (BOOL) updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
+- (BOOL)updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
 {
     [self.searchHelper refreshCustomPoiFilters];
     [self replaceQueryWithUiFilter:filter nameFilter:nameFilter];
     return YES;
 }
 
-- (BOOL) saveFilter:(OAPOIUIFilter *)filter
-{
-    [self doSaveFilter:filter];
-    return NO;
-}
-
-- (BOOL) removeFilter:(OAPOIUIFilter *)filter
+- (BOOL)removeFilter:(OAPOIUIFilter *)filter
 {
     if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
     {
@@ -1996,6 +1952,49 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         return NO;
     }
+}
+
+- (UIAlertController *)createSaveFilterDialog:(OAPOIUIFilter *)filter customSaveAction:(BOOL)customSaveAction
+{
+    UIAlertController *saveDialog = [UIAlertController alertControllerWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+    [saveDialog addAction:actionCancel];
+
+    if (!customSaveAction) {
+        UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+            [self searchByUIFilter:filter newName:saveDialog.textFields[0].text willSaved:YES];
+        }];
+        [saveDialog addAction:actionSave];
+    }
+
+    [saveDialog addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.text = filter.name;
+    }];
+
+    return saveDialog;
+}
+
+- (void)searchByUIFilter:(OAPOIUIFilter *)filter newName:(NSString *)newName willSaved:(BOOL)willSaved
+{
+    OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:[_searchUICore getPhrase]];
+    sr.localeName = [filter getName];
+    sr.object = filter;
+    sr.priority = 0;
+    sr.objectType = POI_TYPE;
+    [_searchUICore selectSearchResult:sr];
+
+    NSString *txt = [[filter getName] stringByAppendingString:@" "];
+    self.searchQuery = txt;
+    [self updateTextField:txt];
+    OASearchSettings *settings = [[_searchUICore getPhrase] getSettings];
+    if ([settings getRadiusLevel] != 1)
+        [_searchUICore updateSettings:[settings setRadiusLevel:1]];
+
+    [self runCoreSearch:txt updateResult:NO searchMore:NO];
+
+    [self setBottomViewVisible:!willSaved];
+    if (willSaved)
+        [self createAndRefreshCustomFilter:filter newName:newName];
 }
 
 #pragma mark - OASearchToolbarViewControllerProtocol
@@ -2017,9 +2016,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (BOOL)removeFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
+    OAPOIFiltersHelper *filtersHelper = [OAPOIFiltersHelper sharedInstance];
     BOOL removed = YES;
     for (OAPOIUIFilter *filter in filters)
-        if (![[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
+        if (![filtersHelper removePoiFilter:filter])
             removed = NO;
     [self.searchHelper refreshCustomPoiFilters];
     [self reloadCategories];

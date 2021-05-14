@@ -292,7 +292,7 @@
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_routing" = "OsmAnd routing";
 "special_routing" = "Special routing";
-"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it into the OsmAnd folder in iTunes.";
+"import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "avoid_routes_and_road" = "Avoid certain routes and road types";

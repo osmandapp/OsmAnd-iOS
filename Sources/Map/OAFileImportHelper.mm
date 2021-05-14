@@ -73,16 +73,18 @@
 }
 
 // Used to import routing.xml and .render.xml
-- (BOOL)importResourceFileFromPath:(NSString *)filePath
+- (BOOL)importResourceFileFromPath:(NSString *)filePath toPath:(NSString *)destPath
 {
     NSString *fileName = [filePath lastPathComponent];
+    NSString *destDir = destPath.stringByDeletingLastPathComponent;
     
-    NSString *path = [self.documentsDir stringByAppendingPathComponent:fileName];
-    if ([_fileManager fileExistsAtPath:path])
-        [_fileManager removeItemAtPath:path error:nil];
+    if ([_fileManager fileExistsAtPath:destPath])
+        [_fileManager removeItemAtPath:destPath error:nil];
+    else if (![_fileManager fileExistsAtPath:destDir])
+        [_fileManager createDirectoryAtPath:destDir withIntermediateDirectories:YES attributes:nil error:nil];
     
     NSError *error;
-    [_fileManager moveItemAtPath:filePath toPath:path error:&error];
+    [_fileManager moveItemAtPath:filePath toPath:destPath error:&error];
     if (error)
         OALog(@"Failed to import resource: %@", filePath);
     

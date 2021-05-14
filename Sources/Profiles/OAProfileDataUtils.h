@@ -9,10 +9,12 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAProfileDataObject, OAApplicationMode;
+@class OAProfileDataObject, OARoutingProfileDataObject, OAApplicationMode;
 
 @interface OAProfileDataUtils : NSObject
 
 + (NSArray<OAProfileDataObject *> *) getDataObjects:(NSArray<OAApplicationMode *> *)appModes;
++ (NSArray<OARoutingProfileDataObject *> *) getSortedRoutingProfiles;
++ (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles;
 
 @end

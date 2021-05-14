@@ -194,4 +194,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize;
 
++ (NSString *) createNewFileName:(NSString *)oldName;
+
 @end

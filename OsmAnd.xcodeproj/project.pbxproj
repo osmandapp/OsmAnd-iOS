@@ -490,7 +490,7 @@
 		32BD81682599062600A54BB5 /* OANavRemoveNextDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81672599062600A54BB5 /* OANavRemoveNextDestination.m */; };
 		32BD81702599155100A54BB5 /* OASwitchProfileAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD816F2599155100A54BB5 /* OASwitchProfileAction.m */; };
 		32BD81792599209B00A54BB5 /* OAActionAddProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81782599209B00A54BB5 /* OAActionAddProfileViewController.m */; };
-		32BD818A25993B2A00A54BB5 /* OAProfileDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD818925993B2A00A54BB5 /* OAProfileDataUtils.m */; };
+		32BD818A25993B2A00A54BB5 /* OAProfileDataUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32BD818925993B2A00A54BB5 /* OAProfileDataUtils.mm */; };
 		32BD81AC259B5C9B00A54BB5 /* ic_custom_manage_profiles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */; };
 		32BD81AE259B5C9B00A54BB5 /* ic_custom_manage_profiles.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AA259B5C9A00A54BB5 /* ic_custom_manage_profiles.png */; };
 		32BD81B0259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */; };
@@ -3194,6 +3194,7 @@
 		DA8660852268A2870041F57D /* ic_custom_show_on_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86607A2268A2860041F57D /* ic_custom_show_on_map@2x.png */; };
 		DA86AF7526454AC600627B66 /* left_menu_icon_plugins@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86AF7326454AC500627B66 /* left_menu_icon_plugins@3x.png */; };
 		DA86AF7626454AC600627B66 /* left_menu_icon_plugins@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86AF7426454AC600627B66 /* left_menu_icon_plugins@2x.png */; };
+		DA86AF7B264BFF4900627B66 /* OAXmlImportHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA86AF7A264BFF4900627B66 /* OAXmlImportHandler.mm */; };
 		DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA879FD7227C23C5007E7817 /* hu-formal_tts.js */; };
 		DA87A48924D44C12002F8C77 /* OATitleRightIconCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA87A48724D44C12002F8C77 /* OATitleRightIconCell.m */; };
 		DA87A48E24D44C97002F8C77 /* OATitleRightIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA87A48D24D44C96002F8C77 /* OATitleRightIconCell.xib */; };
@@ -4338,7 +4339,7 @@
 		32BD81772599207200A54BB5 /* OAActionAddProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAActionAddProfileViewController.h; path = Sources/Controllers/2.0/OAActionAddProfileViewController.h; sourceTree = "<group>"; };
 		32BD81782599209B00A54BB5 /* OAActionAddProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAActionAddProfileViewController.m; path = Sources/Controllers/2.0/OAActionAddProfileViewController.m; sourceTree = "<group>"; };
 		32BD818825993B1B00A54BB5 /* OAProfileDataUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfileDataUtils.h; sourceTree = "<group>"; };
-		32BD818925993B2A00A54BB5 /* OAProfileDataUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataUtils.m; sourceTree = "<group>"; };
+		32BD818925993B2A00A54BB5 /* OAProfileDataUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProfileDataUtils.mm; sourceTree = "<group>"; };
 		32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@2x.png"; path = "Resources/Icons/ic_custom_manage_profiles@2x.png"; sourceTree = "<group>"; };
 		32BD81AA259B5C9A00A54BB5 /* ic_custom_manage_profiles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_manage_profiles.png; path = Resources/Icons/ic_custom_manage_profiles.png; sourceTree = "<group>"; };
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
@@ -7699,6 +7700,8 @@
 		DA86607A2268A2860041F57D /* ic_custom_show_on_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_show_on_map@2x.png"; path = "Resources/Icons/ic_custom_show_on_map@2x.png"; sourceTree = "<group>"; };
 		DA86AF7326454AC500627B66 /* left_menu_icon_plugins@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_plugins@3x.png"; path = "Resources/Icons/left_menu_icon_plugins@3x.png"; sourceTree = "<group>"; };
 		DA86AF7426454AC600627B66 /* left_menu_icon_plugins@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_plugins@2x.png"; path = "Resources/Icons/left_menu_icon_plugins@2x.png"; sourceTree = "<group>"; };
+		DA86AF79264BFF4900627B66 /* OAXmlImportHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAXmlImportHandler.h; path = Helpers/OAXmlImportHandler.h; sourceTree = "<group>"; };
+		DA86AF7A264BFF4900627B66 /* OAXmlImportHandler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAXmlImportHandler.mm; path = Helpers/OAXmlImportHandler.mm; sourceTree = "<group>"; };
 		DA879FD7227C23C5007E7817 /* hu-formal_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "hu-formal_tts.js"; path = "../resources/voice/hu-formal/hu-formal_tts.js"; sourceTree = "<group>"; };
 		DA87A48624D44C12002F8C77 /* OATitleRightIconCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATitleRightIconCell.h; sourceTree = "<group>"; };
 		DA87A48724D44C12002F8C77 /* OATitleRightIconCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATitleRightIconCell.m; sourceTree = "<group>"; };
@@ -12444,7 +12447,7 @@
 				8A09960F2430D9CB007192AD /* OAProfileIcon.h */,
 				8A0996102430D9CB007192AD /* OAProfileIcon.m */,
 				32BD818825993B1B00A54BB5 /* OAProfileDataUtils.h */,
-				32BD818925993B2A00A54BB5 /* OAProfileDataUtils.m */,
+				32BD818925993B2A00A54BB5 /* OAProfileDataUtils.mm */,
 			);
 			path = Profiles;
 			sourceTree = "<group>";
@@ -13166,6 +13169,8 @@
 				DA92555824A60A6E00871AAF /* OAMapTileDownloader.mm */,
 				8AF61CF224B21EEC00D23B84 /* OAAvoidRoadInfo.h */,
 				8AF61CF324B21EEC00D23B84 /* OAAvoidRoadInfo.m */,
+				DA86AF79264BFF4900627B66 /* OAXmlImportHandler.h */,
+				DA86AF7A264BFF4900627B66 /* OAXmlImportHandler.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -18022,6 +18027,7 @@
 				848300B81CFAD7A50018B27B /* OATargetDestinationViewController.m in Sources */,
 				84AD39E21DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */,
 				DA6D51EC21F35B6700EC84E2 /* OAEntity.m in Sources */,
+				DA86AF7B264BFF4900627B66 /* OAXmlImportHandler.mm in Sources */,
 				8AE1C8AB21D60D1300434F07 /* OASubscribeEmailView.m in Sources */,
 				BB54F7101989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				847B2DB81F7A6BBE008C7AD9 /* OASettingsTitleTableViewCell.m in Sources */,
@@ -18093,7 +18099,7 @@
 				DA65CC16256D0E8900DC896F /* OASegmentOptionsBottomSheetViewController.mm in Sources */,
 				DA6A2B84233CEC42005D2F4A /* OATitleIconRoundCell.m in Sources */,
 				DAB88FA826149F0E00093BE6 /* OACustomSelectionButtonCell.m in Sources */,
-				32BD818A25993B2A00A54BB5 /* OAProfileDataUtils.m in Sources */,
+				32BD818A25993B2A00A54BB5 /* OAProfileDataUtils.mm in Sources */,
 				84A819FD1CFACC80000C9E8C /* OAWikiMenuViewController.m in Sources */,
 				848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm in Sources */,
 				DA540DB0229E8F1C0069201E /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,

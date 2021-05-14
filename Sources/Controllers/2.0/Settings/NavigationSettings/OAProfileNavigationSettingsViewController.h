@@ -13,6 +13,4 @@
 
 @interface OAProfileNavigationSettingsViewController : OABaseSettingsViewController
 
-+ (NSArray<OARoutingProfileDataObject *> *) getSortedRoutingProfiles;
-
 @end

@@ -60,8 +60,9 @@
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeRoadMap:
         case EOASettingsItemFileSubtypeSrtmMap:
-        case EOASettingsItemFileSubtypeRenderingStyle:
             return documentsPath;
+        case EOASettingsItemFileSubtypeRenderingStyle:
+            [documentsPath stringByAppendingPathComponent:@"rendering"];
         case EOASettingsItemFileSubtypeTilesMap:
             return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];
         case EOASettingsItemFileSubtypeRoutingConfig:
@@ -219,6 +220,7 @@
 @implementation OAFileSettingsItem
 {
     NSString *_name;
+    OsmAndAppInstance _app;
 }
 
 @dynamic name;
@@ -226,8 +228,9 @@
 
 - (void) commonInit
 {
-    _docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    _libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+    _app = OsmAndApp.instance;
+    _docPath = _app.documentsPath;
+    _libPath = _app.dataPath;
 }
 
 - (instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error
@@ -236,7 +239,7 @@
     if (self)
     {
         [self commonInit];
-        self.name = [filePath lastPathComponent];
+        self.name = [filePath stringByReplacingOccurrencesOfString:_docPath withString:@""];
         if (error)
         {
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
@@ -554,8 +557,12 @@
 
 - (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *targetFolder = filePath.stringByDeletingLastPathComponent;
+    if (![fileManager fileExistsAtPath:targetFolder])
+        [fileManager createDirectoryAtPath:targetFolder withIntermediateDirectories:YES attributes:nil error:nil];
     NSError *copyError;
-    [[NSFileManager defaultManager] copyItemAtPath:self.item.filePath toPath:filePath error:&copyError];
+    [fileManager copyItemAtPath:self.item.filePath toPath:filePath error:&copyError];
     if (error && copyError)
     {
         *error = copyError;

@@ -117,7 +117,7 @@
 
 - (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs
 {
-    const auto router = [OARouteProvider getRouter:self.appMode];
+    const auto router = [OsmAndApp.instance getRouter:self.appMode];
     if (router == nullptr)
         return;
     OAAppSettings *settings = OAAppSettings.sharedManager;
@@ -375,7 +375,7 @@
         res[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
     }
     
-    const auto router = [OARouteProvider getRouter:self.appMode];
+    const auto router = [OsmAndApp.instance getRouter:self.appMode];
     if (router)
     {
         const auto& parameters = router->getParametersList();

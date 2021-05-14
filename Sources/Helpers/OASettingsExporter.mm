@@ -88,7 +88,7 @@
     const auto stringList = [self stringArrayToQList:paths];
     BOOL ok = YES;
     QString filePath = QString::fromNSString(file);
-    archiveWriter.createArchive(&ok, filePath, stringList);
+    archiveWriter.createArchive(&ok, filePath, stringList, QString::fromNSString(_tmpFilesDir));
     if (!ok)
     {
         NSLog(@"Archive creation failed: %@", file);
@@ -135,7 +135,7 @@
             NSString *fileName = item.fileName;
             if (!fileName || fileName.length == 0)
                 fileName = item.defaultFileName;
-            if (![_acceptedExtensions containsObject:fileName.pathExtension])
+            if (_acceptedExtensions && ![_acceptedExtensions containsObject:fileName.pathExtension])
                 continue;
             NSString *path = [_tmpFilesDir stringByAppendingPathComponent:fileName];
             [NSFileManager.defaultManager removeItemAtPath:path error:nil];
@@ -189,7 +189,7 @@
     {
         _settingsHelper = [OASettingsHelper sharedInstance];
         _filePath = settingsFile;
-        NSSet<NSString *> *acceptedExtensions = [NSSet set];
+        NSSet<NSString *> *acceptedExtensions = nil;
         if (extensionsFilter && extensionsFilter.length > 0)
             acceptedExtensions = [NSSet setWithArray:[extensionsFilter componentsSeparatedByString:@","]];
         _exporter = [[OASettingsExporter alloc] initWithExportParam:exportItemFiles acceptedExtensions:acceptedExtensions];

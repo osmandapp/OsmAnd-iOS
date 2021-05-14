@@ -80,11 +80,11 @@
 #define AV_INDEX_DIR @"avnotes/"
 #define FONT_INDEX_DIR @"fonts/"
 #define VOICE_INDEX_DIR @"voice/"
-#define RENDERERS_DIR @"rendering/"
+#define RENDERERS_DIR @"rendering"
 #define ROUTING_XML_FILE @"routing.xml"
 #define SETTINGS_DIR @"settings/"
 #define TEMP_DIR @"temp/"
-#define ROUTING_PROFILES_DIR @"routing/"
+#define ROUTING_PROFILES_DIR @"routing"
 #define PLUGINS_DIR @"Plugins/"
 
 #define VOICE_PROVIDER_SUFFIX @"-tts"

@@ -1644,4 +1644,41 @@ static const double d180PI = 180.0 / M_PI_2;
     return [[NSAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
 }
 
++ (NSString *) createNewFileName:(NSString *)oldName
+{
+    NSString *ext = oldName.pathExtension;
+    NSString *nameWithoutExt = oldName.stringByDeletingPathExtension;
+    
+    NSMutableString *numberSection = [NSMutableString string];
+    NSInteger i = nameWithoutExt.length - 1;
+    BOOL hasNameNumberSection = NO;
+    NSCharacterSet *numericSet = [NSCharacterSet decimalDigitCharacterSet];
+    do {
+        unichar c = [nameWithoutExt characterAtIndex:i];
+        if ([numericSet characterIsMember:c])
+        {
+            [numberSection insertString:[NSString stringWithFormat:@"%C", c] atIndex:0];
+        }
+        else if (c == ' ' && numberSection.length > 0)
+        {
+            hasNameNumberSection = YES;
+            break;
+        }
+        else
+        {
+            break;
+        }
+        i--;
+    } while (i >= 0);
+    NSInteger newNumberValue = (hasNameNumberSection ? [numberSection integerValue] : 0) + 1;
+    
+    NSString *newName;
+    if (newNumberValue == 1)
+        newName = [[NSString stringWithFormat:@"%@ %ld", nameWithoutExt, newNumberValue] stringByAppendingPathExtension:ext];
+    else
+        newName = [[NSString stringWithFormat:@"%@ %ld", [nameWithoutExt substringToIndex:i], newNumberValue] stringByAppendingPathExtension:ext];
+    
+    return newName;
+}
+
 @end

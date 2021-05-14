@@ -10,6 +10,11 @@
 
 @implementation OATitleDescriptionCollapsableCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATitleDescriptionCollapsableCell";
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
 }

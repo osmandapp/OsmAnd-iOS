@@ -47,8 +47,6 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-#define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
-
 #define KEY_MESSAGE @"message"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
@@ -620,12 +618,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleDescrDraggableCell])
+    else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
     {
-        OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:kTitleDescrDraggableCell];
+        OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:[OATitleDescrDraggableCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleDescrDraggableCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescrDraggableCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescrDraggableCell *)[nib objectAtIndex:0];
         }
         
@@ -767,7 +765,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]] || [item[@"type"] isEqualToString:kTitleDescrDraggableCell])
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
         return YES;
     return NO;
 }
@@ -809,7 +807,7 @@
     NSMutableArray *titles = [NSMutableArray new];
     for (NSDictionary *item in items)
     {
-        if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+        if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
             [titles addObject:item[@"title"]];
     }
     return [NSArray arrayWithArray:titles];
@@ -845,7 +843,7 @@
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    return [item[@"type"] isEqualToString:kTitleDescrDraggableCell];;
+    return [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]];;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
@@ -1032,7 +1030,7 @@
     for (NSDictionary *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item[@"name"],
                               @"img" : item[@"img"]
                               }];
@@ -1067,7 +1065,7 @@
     for (NSArray *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item.lastObject,
                               @"value" : item.firstObject,
                               @"img" : @"ic_custom_map_style"
@@ -1092,7 +1090,7 @@
     for (NSDictionary *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item[@"name"],
                               @"stringKey" : item[@"stringKey"],
                               @"img" : item[@"img"],

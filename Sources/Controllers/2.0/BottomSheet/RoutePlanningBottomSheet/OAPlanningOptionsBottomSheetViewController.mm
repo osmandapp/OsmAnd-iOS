@@ -19,7 +19,6 @@
 #import "OAGPXDocumentPrimitives.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-#define kTitleDescrIconRoundCell @"OATitleDescriptionIconRoundCell"
 
 @interface OAPlanningOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -105,7 +104,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kTitleDescrIconRoundCell,
+            @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"route_betw_points"),
             @"img" : icon,
             @"descr" : descr,
@@ -203,15 +202,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleDescrIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleDescrIconRoundCell;
         OATitleDescriptionIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleDescrIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescriptionIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = UIColor.blackColor;

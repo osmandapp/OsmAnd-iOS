@@ -16,6 +16,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAButtonCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OATitleDescrDraggableCell.h"
 
 #define KEY_OVERLAYS @"overlays"
 #define KEY_NO_OVERLAY @"no_overlay"
@@ -146,7 +147,7 @@ static OAQuickActionType *TYPE;
     for (NSArray *source in sources)
     {
         [arr addObject:@{
-                         @"type" : @"OATitleDescrDraggableCell",
+                         @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : source.lastObject,
                          @"value" : source.firstObject,
                          @"img" : @"ic_custom_map_style"
@@ -171,7 +172,7 @@ static OAQuickActionType *TYPE;
         {
             if ([item[@"key"] isEqualToString:KEY_DIALOG])
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
-            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+            else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                 [sources addObject:@[item[@"value"], item[@"title"]]];
         }
     }

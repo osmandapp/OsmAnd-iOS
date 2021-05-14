@@ -15,6 +15,7 @@
 #import "OAProfileSelectionBottomSheetViewController.h"
 #import "OAButtonCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OATitleDescrDraggableCell.h"
 
 #define kNames @"names"
 #define kStringKeys @"stringKeys"
@@ -131,7 +132,7 @@ static OAQuickActionType *TYPE;
     for (int i = 0; i < names.count; i++)
     {
         [arr addObject:@{
-                         @"type" : @"OATitleDescrDraggableCell",
+                         @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : names[i] ? names[i] : @"",
                          @"stringKey" : stringKeys[i] ? stringKeys[i] : @"",
                          @"img" : iconNames[i] ? iconNames[i] : @"",
@@ -162,7 +163,7 @@ static OAQuickActionType *TYPE;
             {
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
             }
-            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+            else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
             {
                 [names addObject:item[@"title"]];
                 [stringKeys addObject:item[@"stringKey"]];

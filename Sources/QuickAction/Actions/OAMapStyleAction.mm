@@ -18,6 +18,7 @@
 #import "OAQuickActionType.h"
 #import "OAButtonCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OATitleDescrDraggableCell.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -191,7 +192,7 @@ static OAQuickActionType *TYPE;
         NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [_offlineMapSources[source].resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
         
         [arr addObject:@{
-                         @"type" : @"OATitleDescrDraggableCell",
+                         @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : source,
                          @"img" : imgName ? imgName : @"ic_custom_show_on_map"
                          }];
@@ -215,7 +216,7 @@ static OAQuickActionType *TYPE;
         {
             if ([item[@"key"] isEqualToString:KEY_DIALOG])
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
-            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+            else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                      [sources addObject:item[@"title"]];
         }
     }

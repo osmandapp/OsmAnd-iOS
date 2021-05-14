@@ -18,8 +18,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeTitleDescriptionCheck @"OATitleDescriptionCollapsableCell"
-
 @interface OAProfileGeneralSettingsParametersViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -130,7 +128,7 @@
                 @"description" : OALocalizedString(@"device_settings"),
                 @"value" : @"",
                 @"selected" : @(automatic),
-                @"type" : kCellTypeTitleDescriptionCheck,
+                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_EUROPE_ASIA",
@@ -138,7 +136,7 @@
                 @"description" : [OADrivingRegion getDescription:DR_EUROPE_ASIA],
                 @"value" : @"",
                 @"selected" : @(drivingRegion == DR_EUROPE_ASIA),
-                @"type" : kCellTypeTitleDescriptionCheck,
+                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_US",
@@ -146,35 +144,35 @@
                 @"description" : [OADrivingRegion getDescription:DR_US],
                 @"value" : @"",
                 @"selected" : @(drivingRegion == DR_US),
-                @"type" : kCellTypeTitleDescriptionCheck,
+                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_CANADA",
                 @"title" : [OADrivingRegion getName:DR_CANADA],
                 @"description" : [OADrivingRegion getDescription:DR_CANADA],
                 @"selected" : @(drivingRegion == DR_CANADA),
-                @"type" : kCellTypeTitleDescriptionCheck,
+                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_UK_AND_OTHERS",
                 @"title" : [OADrivingRegion getName:DR_UK_AND_OTHERS],
                 @"description" : [OADrivingRegion getDescription:DR_UK_AND_OTHERS],
                 @"selected" : @(drivingRegion == DR_UK_AND_OTHERS),
-                @"type" : kCellTypeTitleDescriptionCheck,
+                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_JAPAN",
                 @"title" : [OADrivingRegion getName:DR_JAPAN],
                 @"description" : [OADrivingRegion getDescription:DR_JAPAN],
                 @"selected" : @(drivingRegion == DR_JAPAN),
-                @"type" : kCellTypeTitleDescriptionCheck,
+                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_AUSTRALIA",
                 @"title" : [OADrivingRegion getName:DR_AUSTRALIA],
                 @"description" : [OADrivingRegion getDescription:DR_AUSTRALIA],
                 @"selected" : @(drivingRegion == DR_AUSTRALIA),
-                @"type" : kCellTypeTitleDescriptionCheck,
+                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
             }];
             break;
             
@@ -323,13 +321,12 @@
         }
         return cell;
     }
-    if ([cellType isEqualToString:kCellTypeTitleDescriptionCheck])
+    if ([cellType isEqualToString:[OATitleDescriptionCollapsableCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitleDescriptionCheck;
-        OATitleDescriptionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleDescriptionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionCollapsableCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionCollapsableCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescriptionCollapsableCell *)[nib objectAtIndex:0];
             cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);

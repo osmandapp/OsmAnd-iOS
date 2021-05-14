@@ -21,6 +21,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OASearchSettings.h"
 #import "OAPOIType.h"
+#import "OAPOIFilterViewController.h"
 
 #define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
 #define kCellTypeTitle @"OAMenuSimpleCell"
@@ -398,12 +399,13 @@
                 descText = [NSString stringWithFormat:@"%@ - %lu", OALocalizedString(@"shared_string_all"), countAllTypes];
             else
                 descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
+            cell.descriptionView.hidden = false;
             cell.descriptionView.text = descText;
             cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
 
-            [cell updateConstraintsIfNeeded];
+            [cell updateConstraints];
+            return cell;
         }
-        return cell;
     } else {
         OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitle];
         if (cell == nil)
@@ -435,8 +437,7 @@
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
             cell.descriptionView.hidden = true;
 
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
+            [cell updateConstraints];
             return cell;
         }
     }

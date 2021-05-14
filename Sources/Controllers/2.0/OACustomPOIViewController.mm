@@ -17,9 +17,9 @@
 #import "OASizes.h"
 #import "OAPOIFilterViewController.h"
 #import "OAColors.h"
-#import "OATitleDescrDraggableCell.h"
+#import "OAMenuSimpleCell.h"
 
-#define kCellTypeTitleDescCollapse @"OATitleDescrDraggableCell"
+#define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
@@ -171,13 +171,14 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATitleDescrDraggableCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
+    OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
-        cell = (OATitleDescrDraggableCell *) nib[0];
+        cell = (OAMenuSimpleCell *) nib[0];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    
+
     if (cell)
     {
         OAPOICategory* item = _categories[indexPath.row];
@@ -192,23 +193,18 @@
         cell.textView.text = item.nameLocalized;
         cell.textView.textColor = [UIColor blackColor];
 
-        cell.overflowButton.enabled = NO;
-        cell.overflowButton.imageView.contentMode = UIViewContentModeCenter;
-        [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        cell.overflowButton.tintColor = UIColorFromRGB(color_tint_gray);
-
         UIImage *img = [[item icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.iconView.image = img;
-        cell.iconView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
-        cell.iconView.contentMode = UIViewContentModeCenter;
+        cell.imgView.image = img;
+        cell.imgView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+        cell.imgView.contentMode = UIViewContentModeCenter;
 
         NSString *descText;
         if (subtypes == [OAPOIBaseType nullSet] || countAllTypes == countAcceptedTypes)
             descText = [NSString stringWithFormat:@"%@ - %lu", OALocalizedString(@"shared_string_all"), countAllTypes];
         else
             descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
-        cell.descView.text = descText;
-        cell.descView.textColor = UIColorFromRGB(color_text_footer);
+        cell.descriptionView.text = descText;
+        cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
 
         [cell updateConstraintsIfNeeded];
     }
@@ -218,7 +214,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     OAPOICategory* item = _categories[indexPath.row];
     OASelectSubcategoryViewController *subcategoryScreen = [[OASelectSubcategoryViewController alloc] initWithCategory:item filter:_filter];
     subcategoryScreen.delegate = self;

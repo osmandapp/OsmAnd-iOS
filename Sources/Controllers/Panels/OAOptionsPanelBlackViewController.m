@@ -268,11 +268,7 @@
     [_menuButtonHelp setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonNavigation setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonPlanRoute setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [
-      
-      
-      
-      setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [setTintColor:UIColorFromRGB(color_options_panel_icon)];
 }
 
 - (void) didReceiveMemoryWarning

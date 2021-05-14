@@ -239,24 +239,15 @@
     [_menuButtonSettings.layer addSublayer:_menuButtonSettingsDiv];
     [_menuButtonPlanRoute.layer addSublayer:_menuButtonPlanRouteDiv];
     
-    [_menuButtonMaps setImage:[[UIImage imageNamed:@"left_menu_icon_map.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_menuButtonMyData setImage:[[UIImage imageNamed:@"ic_custom_my_places.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_menuButtonMyWaypoints setImage:[[UIImage imageNamed:@"left_menu_icon_waypoints.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_menuButtonMapsAndResources setImage:[[UIImage imageNamed:@"left_menu_icon_resources.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_menuButtonConfigureScreen setImage:[[UIImage imageNamed:@"left_menu_configure_screen.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_menuButtonSettings setImage:[[UIImage imageNamed:@"left_menu_icon_settings.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_menuButtonHelp setImage:[[UIImage imageNamed:@"left_menu_icon_about.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_menuButtonNavigation setImage:[[UIImage imageNamed:@"left_menu_icon_navigation.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_menuButtonPlanRoute setImage:[[UIImage imageNamed:@"ic_custom_routes.png"]
-    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
+    [_menuButtonMyData setImage:[UIImage templateImageNamed:@"ic_custom_my_places.png"] forState:UIControlStateNormal];
+    [_menuButtonMyWaypoints setImage:[UIImage templateImageNamed:@"left_menu_icon_waypoints.png"] forState:UIControlStateNormal];
+    [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:@"left_menu_icon_resources.png"] forState:UIControlStateNormal];
+    [_menuButtonConfigureScreen setImage:[UIImage templateImageNamed:@"left_menu_configure_screen.png"] forState:UIControlStateNormal];
+    [_menuButtonSettings setImage:[UIImage templateImageNamed:@"left_menu_icon_settings.png"] forState:UIControlStateNormal];
+    [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];
+    [_menuButtonNavigation setImage:[UIImage templateImageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
+    [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
 
     [_menuButtonMaps setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonMyData setTintColor:UIColorFromRGB(color_options_panel_icon)];

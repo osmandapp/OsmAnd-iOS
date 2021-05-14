@@ -305,7 +305,7 @@ static NSInteger kButtonsSection;
         {
             cell.textView.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = _isEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [UIImage templateImageNamed:imgName];
             cell.imgView.tintColor = _isEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -340,7 +340,7 @@ static NSInteger kButtonsSection;
                 itemMapSource = onlineSource.mapSource;
                 caption = onlineSource.mapSource.name;
                 description = OALocalizedString(@"online_map");
-                cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map_online"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map_online"];
                 cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
             }
         }
@@ -352,7 +352,7 @@ static NSInteger kButtonsSection;
             caption = sqlite.mapSource.name;
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];
-            cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map"];
             cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
         }
         

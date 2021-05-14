@@ -304,7 +304,7 @@
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
-                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             }
             else
             {

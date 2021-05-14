@@ -26,6 +26,7 @@
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OATargetMenuViewController.h"
+#import "OACustomSourceDetailsViewController.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -153,11 +154,9 @@ static BOOL dataInvalidated = NO;
 - (void) applyLocalization
 {
     [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
     [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
     
     [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
@@ -263,6 +262,15 @@ static BOOL dataInvalidated = NO;
 {
 }
 
+- (void) downloadCustomItem:(OACustomResourceItem *)item
+{
+    [OAResourcesUIHelper startDownloadOfCustomItem:item onTaskCreated:^(id<OADownloadTask> task) {
+        [self updateContent];
+    } onTaskResumed:^(id<OADownloadTask> task) {
+        [self showDownloadViewForTask:task];
+    }];
+}
+
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
@@ -362,7 +370,21 @@ static BOOL dataInvalidated = NO;
             else
                 [self offerDownloadAndInstallOf:item];
         }
+        else if ([item_ isKindOfClass:OACustomResourceItem.class])
+        {
+            OACustomResourceItem *customItem = (OACustomResourceItem *) item_;
+            if (!customItem.isInstalled)
+                [self downloadCustomItem:customItem];
+            else
+                [self showDetailsOfCustomItem:customItem];
+        }
     }
+}
+    
+- (void) showDetailsOfCustomItem:(OACustomResourceItem *)item
+{
+    OACustomSourceDetailsViewController *customSourceDetails = [[OACustomSourceDetailsViewController alloc] initWithCustomItem:item region:(OACustomRegion *)self.region];
+    [self.navigationController pushViewController:customSourceDetails animated:YES];
 }
 
 - (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId

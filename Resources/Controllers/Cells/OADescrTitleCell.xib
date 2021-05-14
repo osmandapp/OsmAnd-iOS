@@ -48,7 +48,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="descriptionView" destination="52n-KR-cXz" id="Ps6-Ue-4v0"/>
-                <outlet property="textView" destination="TXV-2C-Pg2" id="GSa-1U-qNE"/>
+                <outlet property="textView" destination="TXV-2C-Pg2" id="VPY-eo-ru6"/>
                 <outlet property="textViewZeroHeightConstraint" destination="Zea-FB-SQO" id="L0r-on-JSd"/>
             </connections>
             <point key="canvasLocation" x="-34" y="124"/>

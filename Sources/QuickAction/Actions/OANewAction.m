@@ -29,7 +29,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:1 stringId:@"new" class:self.class name:OALocalizedString(@"add_action") category:-1 iconName:@"ic_custom_add" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:1 stringId:@"new" class:self.class name:OALocalizedString(@"add_action") category:-1 iconName:@"ic_custom_add" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

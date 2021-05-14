@@ -8,7 +8,7 @@
 
 #import "OACompoundViewController.h"
 
-@class OAProduct;
+@class OAProduct, OAPlugin;
 
 @interface OAPluginDetailsViewController : OACompoundViewController
 
@@ -24,17 +24,11 @@
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
 @property (weak, nonatomic) IBOutlet UILabel *descLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descTextView;
-
-@property (weak, nonatomic) IBOutlet UIView *bottomToolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPlugins;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
+@property (weak, nonatomic) IBOutlet UIButton *buttonDeleteCustomPlugin;
 
 @property (nonatomic, readonly) OAProduct *product;
 
 - (instancetype)initWithProduct:(OAProduct *)product;
-
-@property (nonatomic, assign) BOOL openFromSplash;
-@property (nonatomic, assign) BOOL openFromCustomPlace;
+- (instancetype)initWithCustomPlugin:(OAPlugin *)plugin;
 
 @end

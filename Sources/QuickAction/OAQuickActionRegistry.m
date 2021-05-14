@@ -222,12 +222,32 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
 }
 
--(OAQuickAction *) getQuickAction:(long) identifier
+- (void)deleteQuickAction:(OAQuickAction *)action
+{
+    [_quickActions removeObject:action];
+    [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
+}
+
+-(OAQuickAction *) getQuickAction:(long)identifier
 {
     for (OAQuickAction *action in _quickActions)
     {
         if (action.identifier == identifier)
             return action;
+    }
+    return nil;
+}
+
+-(OAQuickAction *) getQuickAction:(NSInteger)type name:(NSString *)name params:(NSDictionary<NSString *, NSString *> *)params
+{
+    for (OAQuickAction *action in _quickActions)
+    {
+        if (action.getType == type
+            && ((action.hasCustomName && [action.getName isEqualToString:name]) || !action.hasCustomName)
+            && [action.getParams isEqual:params])
+        {
+            return action;
+        }
     }
     return nil;
 }

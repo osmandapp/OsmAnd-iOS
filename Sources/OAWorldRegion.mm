@@ -22,6 +22,8 @@
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
 
+#import "OAWorldRegion+Protected.h"
+
 @implementation OAWorldRegion
 {
     std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
@@ -277,6 +279,11 @@
 - (void) setNativeName:(NSString *)nativeName
 {
     _nativeName = nativeName;
+}
+
+- (void)setLocalizedName:(NSString *)localizedName
+{
+    _localizedName = localizedName;
 }
 
 - (void) setLocalizedNamesFrom:(const QHash<QString, QString>&)localizedNames

@@ -1726,7 +1726,7 @@
 "default_profile_descr" = "Elige el perfil que se usará al ejecutar la aplicación.";
 "allow_3d_descr" = "Activa esta opción para poder ver el mapa en la perspectiva 2.5D";
 "allow_3d" = "Permitir vista 2.5D";
-"quick_action_map_source_title" = "Repositorio de mapas";
+"quick_action_map_source_title" = "Fuentes del mapa";
 "configure_screen_quick_action" = "Acción rápida";
 "search_activity" = "Buscar";
 "layer_amenity_label" = "Nombres de PDI superpuestos";

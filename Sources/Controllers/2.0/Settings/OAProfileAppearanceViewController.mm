@@ -227,9 +227,7 @@
 
 - (void) setupNavBar
 {
-    NSString *imgName = _changedProfile.iconName;
-    UIImage *img = [UIImage imageNamed:imgName];
-    _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
     _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
 }
@@ -634,10 +632,7 @@
     _hasChangesBeenMade = YES;
     _changedProfile.iconName = _icons[tag];
     
-    UIImage *img = nil;
-    NSString *imgName = _changedProfile.iconName;
-    img = [UIImage imageNamed:imgName];
-    _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 

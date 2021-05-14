@@ -145,7 +145,7 @@
             NSString *imgColor = item[@"iconColor"];
             if (imgName && imgColor)
             {
-                cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [UIImage templateImageNamed:imgName];
                 cell.imgView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
             }
             else if (imgName)

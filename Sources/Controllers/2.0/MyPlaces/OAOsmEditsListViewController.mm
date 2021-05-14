@@ -221,7 +221,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [cell.textView setText:item[@"title"]];
         [cell.descView setText:item[@"description"]];
         [cell.iconView setImage:poiType ? poiType.icon : [UIImage imageNamed:@"ic_custom_osm_note_unresolved"]];
-        [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_custom_overflow_menu.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu.png"] forState:UIControlStateNormal];
         [cell.overflowButton setTintColor:UIColorFromRGB(color_icon_color_light)];
         [cell.overflowButton setTag:indexPath.row];
         [cell.overflowButton addTarget:self action:@selector(overflowButtonPressed:) forControlEvents:UIControlEventTouchUpInside];

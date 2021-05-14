@@ -127,7 +127,7 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image =[UIImage templateImageNamed:[UIImage templateImageNamed:@"ic_checkmark_default"]];
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.hidden = ![item[@"selected"] boolValue];
         }

@@ -321,7 +321,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.arrowIconView.hidden = ![item[@"selected"] boolValue];
-            cell.iconView.image = [UIImage templateImageNamed:[UIImage templateImageNamed:@"ic_checkmark_default"]];
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.iconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;
@@ -334,7 +334,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OATitleDescriptionCollapsableCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:[UIImage templateImageNamed:@"ic_checkmark_default"]];
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
@@ -353,7 +353,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:[UIImage templateImageNamed:@"ic_checkmark_default"]];
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)

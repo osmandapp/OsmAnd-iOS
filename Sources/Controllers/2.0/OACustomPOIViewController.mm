@@ -210,7 +210,14 @@
         cell.descView.text = descText;
         cell.descView.textColor = UIColorFromRGB(color_text_footer);
 
-        [cell updateConstraintsIfNeeded];
+        if ([cell needsUpdateConstraints]) {
+            [cell updateConstraints];
+            cell.textHeightPrimary.active = NO;
+            cell.textHeightSecondary.active = YES;
+            cell.descrBottomConstraint.active = YES;
+            cell.descrBottomConstraint.constant = 12;
+        }
+
     }
     return cell;
 }

@@ -48,14 +48,9 @@
     self.textHeightPrimary.active = self.descView.hidden;
     self.textHeightSecondary.active = !self.descView.hidden;
     
+    self.descrBottomConstraint.active = !self.descView.hidden;
     self.titleBottomToCenter.active = self.descView.hidden;
-
-    self.descrBottomConstraintPrimary.active = !self.descView.hidden && self.frame.size.height < 66;
-    self.descrBottomConstraintSecondary.active = !self.descView.hidden && self.frame.size.height >= 66;
-
-    self.titleTopConstraintPrimary.active = self.frame.size.height < 66;
-    self.titleTopConstraintSecondary.active = self.frame.size.height >= 66;
-
+    
     [super updateConstraints];
 }
 
@@ -74,13 +69,8 @@
 
         res = res || self.textHeightPrimary.active != self.descView.hidden;
         res = res || self.textHeightSecondary.active != !self.descView.hidden;
+        res = res || self.descrBottomConstraint.active != !self.descView.hidden;
         res = res || self.titleBottomToCenter.active != self.descView.hidden;
-
-        res = res || self.descrBottomConstraintPrimary.active != !self.descView.hidden && self.frame.size.height < 66;
-        res = res || self.descrBottomConstraintSecondary.active != !self.descView.hidden && self.frame.size.height >= 66;
-
-        res = res || self.titleTopConstraintPrimary.active != self.frame.size.height < 66;
-        res = res || self.titleTopConstraintSecondary.active != self.frame.size.height >= 66;
     }
     return res;
 }

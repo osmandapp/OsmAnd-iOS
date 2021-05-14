@@ -21,6 +21,7 @@
 - (BOOL) updateLayer;
 - (BOOL) drawLayer;
 - (double) getStrokeWidth;
+- (BOOL) areAttributesChanged;
 
 - (void) moveMarker:(NSInteger)index;
 

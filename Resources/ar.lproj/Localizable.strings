@@ -2073,3 +2073,8 @@
 "export_failed" = "تعذر تصدير ملف التعريف";
 "export_profile_select_descr" = "حدد البيانات المطلوب تصديرها.";
 "delete_custom_categories" = "حذف الفئات المخصصة";
+"reset_to_default_category_button_promo" = "ستؤدي إعادة التعيين إلى الوضع الافتراضي إلى استعادة ترتيب الفرز إلى حالته الأولية.";
+"create_custom_categories_list_promo" = "يمكنك إضافة فئات مخصصة، وإخفاء الفئات التي لا تجدها ضرورية، وتغيير ترتيب فرز القائمة. يمكن استيراد الفئات المخصصة وتصديرها باستخدام ملفات التعريف.";
+"hidden_categories" = "الفئات المخفية";
+"visible_categories" = "الفئات المرئية";
+"rearrange_categories" = "إعادة ترتيب الفئات";

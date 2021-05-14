@@ -38,6 +38,8 @@
 @property (readonly) NSArray<OAWorldRegion *> *subregions;
 @property (readonly) NSArray<OAWorldRegion *> *flattenedSubregions;
 
+- (instancetype) initWithId:(NSString*)regionId andLocalizedName:(NSString*)localizedName;
+
 - (NSComparisonResult) compare:(OAWorldRegion *)other;
 
 - (BOOL) purchased;
@@ -52,6 +54,8 @@
 - (OAWorldRegion *) getSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getPrimarySuperregion;
 - (OAProduct *) getProduct;
+
+- (void) addSubregion:(OAWorldRegion *)subregion;
 
 + (OAWorldRegion *) loadFrom:(NSString *)ocbfFilename;
 

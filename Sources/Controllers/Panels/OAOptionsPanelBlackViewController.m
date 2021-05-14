@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAHelpViewController.h"
+#import "OAPluginsViewController.h"
 #import "OAColors.h"
 
 #import "OARoutePlanningHudViewController.h"
@@ -37,6 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMapsAndResources;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonConfigureScreen;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonHelp;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonPlugins;
 
 @end
 
@@ -49,6 +51,7 @@
     CALayer *_menuButtonPlanRouteDiv;
     CALayer *_menuButtonConfigureScreenDiv;
     CALayer *_menuButtonSettingsDiv;
+    CALayer *_menuButtonPluginsDiv;
     CALayer *_menuButtonMapsAndResourcesDiv;
 }
 
@@ -91,6 +94,7 @@
                                          ];
     
     NSArray<UIButton *> *bottomButtons = @[ self.menuButtonConfigureScreen,
+                                            self.menuButtonPlugins,
                                             self.menuButtonSettings,
                                             self.menuButtonHelp
                                             ];
@@ -157,6 +161,7 @@
     _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
+    _menuButtonPluginsDiv.frame = CGRectMake(divX, divY, divW, divH);
 }
 
 - (void)adjustButtonInsets:(UIButton *)btn
@@ -206,6 +211,7 @@
     _menuButtonMapsAndResourcesDiv = [[CALayer alloc] init];
     _menuButtonConfigureScreenDiv = [[CALayer alloc] init];
     _menuButtonSettingsDiv = [[CALayer alloc] init];
+    _menuButtonPluginsDiv = [[CALayer alloc] init];
 
     UIColor *divColor = UIColorFromRGB(0xe2e1e6);
 
@@ -217,6 +223,7 @@
     _menuButtonMapsAndResourcesDiv.backgroundColor = divColor.CGColor;
     _menuButtonConfigureScreenDiv.backgroundColor = divColor.CGColor;
     _menuButtonSettingsDiv.backgroundColor = divColor.CGColor;
+    _menuButtonPluginsDiv.backgroundColor = divColor.CGColor;
 
     self.navigationController.delegate = self;
     
@@ -229,6 +236,7 @@
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_help") forState:UIControlStateNormal];
     [_menuButtonNavigation setTitle:OALocalizedString(@"get_directions") forState:UIControlStateNormal];
     [_menuButtonPlanRoute setTitle:OALocalizedString(@"plan_route") forState:UIControlStateNormal];
+    [_menuButtonPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
     
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];
@@ -238,6 +246,7 @@
     [_menuButtonConfigureScreen.layer addSublayer:_menuButtonConfigureScreenDiv];
     [_menuButtonSettings.layer addSublayer:_menuButtonSettingsDiv];
     [_menuButtonPlanRoute.layer addSublayer:_menuButtonPlanRouteDiv];
+    [_menuButtonPlugins.layer addSublayer:_menuButtonPluginsDiv];
     
     [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
     [_menuButtonMyData setImage:[UIImage templateImageNamed:@"ic_custom_my_places.png"] forState:UIControlStateNormal];
@@ -248,6 +257,7 @@
     [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];
     [_menuButtonNavigation setImage:[UIImage templateImageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
+    [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
 
     [_menuButtonMaps setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonMyData setTintColor:UIColorFromRGB(color_options_panel_icon)];
@@ -258,6 +268,11 @@
     [_menuButtonHelp setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonNavigation setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonPlanRoute setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [
+      
+      
+      
+      setTintColor:UIColorFromRGB(color_options_panel_icon)];
 }
 
 - (void) didReceiveMemoryWarning
@@ -318,6 +333,12 @@
 
     OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     [self.navigationController pushViewController:resourcesViewController animated:YES];
+}
+
+- (IBAction)pluginsButtonClicked:(id)sender
+{
+    OAPluginsViewController *pluginsVC = [[OAPluginsViewController alloc] init];
+    [self.navigationController pushViewController:pluginsVC animated:YES];
 }
 
 - (IBAction) helpButtonClicked:(id)sender

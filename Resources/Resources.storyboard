@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Lhe-yk-sVD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Lhe-yk-sVD">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -75,10 +75,10 @@
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="osmAndLiveCell" textLabel="oMf-rx-iRa" detailTextLabel="nqE-dZ-YsZ" style="IBUITableViewCellStyleSubtitle" id="nHz-ID-XKd">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="49.5" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nHz-ID-XKd" id="3UP-ni-npE">
-                                            <rect key="frame" x="0.0" y="0.0" width="348" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="349.5" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oMf-rx-iRa">
@@ -102,10 +102,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="subregionCell" textLabel="D8A-PV-RHr" detailTextLabel="imh-ai-plr" style="IBUITableViewCellStyleSubtitle" id="3fb-BT-U8K">
-                                        <rect key="frame" x="0.0" y="105.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="99.5" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3fb-BT-U8K" id="7Lf-YS-wG0">
-                                            <rect key="frame" x="0.0" y="0.0" width="348" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="349.5" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="D8A-PV-RHr">
@@ -129,10 +129,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="localResourceCell" textLabel="aFw-z6-EH8" detailTextLabel="3vQ-wj-3nf" style="IBUITableViewCellStyleSubtitle" id="8fx-0s-lN4">
-                                        <rect key="frame" x="0.0" y="155.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="149.5" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8fx-0s-lN4" id="Epz-5O-AxR">
-                                            <rect key="frame" x="0.0" y="0.0" width="316" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="321" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aFw-z6-EH8">
@@ -156,10 +156,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="outdatedResourcesSubmenuCell" textLabel="Iuf-YW-Fq0" detailTextLabel="tZN-sY-UAX" style="IBUITableViewCellStyleSubtitle" id="VZF-Hd-TvM">
-                                        <rect key="frame" x="0.0" y="205.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="199" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VZF-Hd-TvM" id="8Qv-4X-vf2">
-                                            <rect key="frame" x="0.0" y="0.0" width="348" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="349.5" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Iuf-YW-Fq0">
@@ -183,10 +183,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="installedResourcesSubmenuCell" textLabel="C7a-Mu-qLA" detailTextLabel="Kq6-h3-mRI" style="IBUITableViewCellStyleSubtitle" id="WoT-Y1-Bb5">
-                                        <rect key="frame" x="0.0" y="255.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="249.5" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WoT-Y1-Bb5" id="EnQ-ZV-XSf">
-                                            <rect key="frame" x="0.0" y="0.0" width="348" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="349.5" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="C7a-Mu-qLA">
@@ -220,7 +220,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zlr-Vo-anF" userLabel="Maps">
-                                        <rect key="frame" x="0.0" y="0.0" width="124" height="61"/>
+                                        <rect key="frame" x="40" y="0.0" width="123" height="61"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="tintColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -233,22 +233,8 @@
                                             <action selector="btnToolbarMapsClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="P2P-HS-mYh"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B55-gq-FRh" userLabel="Plugins">
-                                        <rect key="frame" x="125" y="0.0" width="124" height="61"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="PURCHASES" image="ic_tabbar_addons_normal.png">
-                                            <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarPluginsClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="FeM-A3-3bG"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQA-Ui-rQr" userLabel="Purchases">
-                                        <rect key="frame" x="251" y="0.0" width="124" height="61"/>
+                                        <rect key="frame" x="211" y="0.0" width="124" height="61"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -272,7 +258,6 @@
                     <connections>
                         <outlet property="backButton" destination="wjg-kr-sCO" id="rCy-d6-qg0"/>
                         <outlet property="btnToolbarMaps" destination="zlr-Vo-anF" id="Yja-0I-eOi"/>
-                        <outlet property="btnToolbarPlugins" destination="B55-gq-FRh" id="sPv-8y-avs"/>
                         <outlet property="btnToolbarPurchases" destination="MQA-Ui-rQr" id="44B-cL-EBf"/>
                         <outlet property="doneButton" destination="B0H-ih-pIM" id="fdl-X0-QbS"/>
                         <outlet property="searchButton" destination="yS2-Tu-WpJ" id="8Zc-qe-cWd"/>
@@ -344,7 +329,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1eq-9l-zUI" userLabel="Maps">
-                                        <rect key="frame" x="0.0" y="0.0" width="124" height="61"/>
+                                        <rect key="frame" x="40" y="0.0" width="123" height="61"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="tintColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -357,22 +342,8 @@
                                             <action selector="btnToolbarMapsClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="z1N-Lb-GzF"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RsZ-Zo-7NQ" userLabel="Plugins">
-                                        <rect key="frame" x="125" y="0.0" width="124" height="61"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="PURCHASES" image="ic_tabbar_addons_normal.png">
-                                            <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarPluginsClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="Dwt-sr-eQk"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4We-Xn-5pF" userLabel="Purchases">
-                                        <rect key="frame" x="251" y="0.0" width="124" height="61"/>
+                                        <rect key="frame" x="211" y="0.0" width="124" height="61"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -397,7 +368,6 @@
                     <connections>
                         <outlet property="backButton" destination="eVA-G5-Cns" id="J8w-tj-Tun"/>
                         <outlet property="btnToolbarMaps" destination="1eq-9l-zUI" id="0s9-RN-A0C"/>
-                        <outlet property="btnToolbarPlugins" destination="RsZ-Zo-7NQ" id="XA1-i9-UhS"/>
                         <outlet property="btnToolbarPurchases" destination="4We-Xn-5pF" id="mef-ar-BXT"/>
                         <outlet property="navBarView" destination="mgw-15-BJP" id="d91-ws-BCT"/>
                         <outlet property="tableView" destination="vN3-1c-cfU" id="sSL-OD-y2i"/>
@@ -458,7 +428,7 @@
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="detailsCell" rowHeight="50" id="OAZ-lO-cSC" customClass="OALocalResourceInfoCell">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="49.5" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="OAZ-lO-cSC" id="Ppi-EK-6rf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
@@ -507,7 +477,7 @@
                                 <rect key="frame" x="0.0" y="564" width="375" height="83"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p2T-4g-Lw7">
-                                        <rect key="frame" x="0.0" y="0.0" width="124" height="61"/>
+                                        <rect key="frame" x="40" y="0.0" width="124" height="61"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="124" id="UxK-Ls-QIx"/>
                                             <constraint firstAttribute="height" constant="61" id="kmY-Me-3RE"/>
@@ -523,25 +493,8 @@
                                             <action selector="btnToolbarMapsClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="zgp-F9-p7R"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HJk-z2-8FU">
-                                        <rect key="frame" x="125.5" y="0.0" width="124" height="61"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="61" id="O9x-s8-vE7"/>
-                                            <constraint firstAttribute="width" constant="124" id="lPJ-wJ-xNN"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-22" minY="26" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="60" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Plugins" image="ic_tabbar_addons_normal.png">
-                                            <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarPluginsClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="SQI-ac-usS"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kxo-08-WBh" userLabel="Purchases">
-                                        <rect key="frame" x="251" y="0.0" width="124" height="61"/>
+                                        <rect key="frame" x="211" y="0.0" width="124" height="61"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="124" id="1oU-25-pwL"/>
                                             <constraint firstAttribute="height" constant="61" id="Ft7-WS-t5T"/>
@@ -562,10 +515,8 @@
                                 <constraints>
                                     <constraint firstItem="Kxo-08-WBh" firstAttribute="top" secondItem="Hct-yH-a0T" secondAttribute="top" id="S7b-Zt-KMo"/>
                                     <constraint firstAttribute="height" constant="83" id="mSc-hP-bCt"/>
-                                    <constraint firstItem="p2T-4g-Lw7" firstAttribute="leading" secondItem="Hct-yH-a0T" secondAttribute="leading" id="nwI-hj-V7q"/>
-                                    <constraint firstAttribute="trailing" secondItem="Kxo-08-WBh" secondAttribute="trailing" id="qH7-YK-p7K"/>
-                                    <constraint firstItem="HJk-z2-8FU" firstAttribute="top" secondItem="Hct-yH-a0T" secondAttribute="top" id="quw-EM-D4O"/>
-                                    <constraint firstItem="HJk-z2-8FU" firstAttribute="centerX" secondItem="Hct-yH-a0T" secondAttribute="centerX" id="tub-zV-klp"/>
+                                    <constraint firstItem="p2T-4g-Lw7" firstAttribute="leading" secondItem="Hct-yH-a0T" secondAttribute="leading" constant="40" id="nwI-hj-V7q"/>
+                                    <constraint firstAttribute="trailing" secondItem="Kxo-08-WBh" secondAttribute="trailing" constant="40" id="qH7-YK-p7K"/>
                                     <constraint firstItem="p2T-4g-Lw7" firstAttribute="top" secondItem="Hct-yH-a0T" secondAttribute="top" id="yIy-Hs-Lml"/>
                                 </constraints>
                             </view>
@@ -590,7 +541,6 @@
                     <connections>
                         <outlet property="backButton" destination="FTj-dM-Wp5" id="Prn-xp-r0j"/>
                         <outlet property="btnToolbarMaps" destination="p2T-4g-Lw7" id="lfF-AX-geD"/>
-                        <outlet property="btnToolbarPlugins" destination="HJk-z2-8FU" id="bg0-Vv-xrB"/>
                         <outlet property="btnToolbarPurchases" destination="Kxo-08-WBh" id="cL4-WX-yMj"/>
                         <outlet property="navBarView" destination="byH-du-rhi" id="fGr-fE-9Qw"/>
                         <outlet property="tableView" destination="kbN-LD-cxr" id="hiu-I4-xHY"/>
@@ -691,7 +641,6 @@
     <resources>
         <image name="HUD_search_icon.png" width="25" height="25"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
-        <image name="ic_tabbar_addons_normal.png" width="25" height="25"/>
         <image name="ic_tabbar_maps_active.png" width="25" height="25"/>
         <image name="ic_tabbar_purchases_normal.png" width="25" height="25"/>
         <image name="ic_update.png" width="25" height="25"/>

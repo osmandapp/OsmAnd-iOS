@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,7 +11,6 @@
             <connections>
                 <outlet property="backButton" destination="kic-5D-Vbq" id="SlK-ny-oj8"/>
                 <outlet property="btnToolbarMaps" destination="2wz-7h-uOJ" id="6n2-oM-Ehw"/>
-                <outlet property="btnToolbarPlugins" destination="7EP-HW-o5e" id="TGo-eS-yWl"/>
                 <outlet property="btnToolbarPurchases" destination="afA-Kc-Aw8" id="gVl-XV-fAe"/>
                 <outlet property="doneButton" destination="4r6-Hs-k4U" id="gFZ-IW-oq6"/>
                 <outlet property="tableView" destination="P4b-42-BBD" id="L2l-2y-Zab"/>
@@ -75,7 +74,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2wz-7h-uOJ" userLabel="Maps">
-                            <rect key="frame" x="0.0" y="0.0" width="124" height="61"/>
+                            <rect key="frame" x="40" y="0.0" width="124" height="61"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -88,22 +87,8 @@
                                 <action selector="btnToolbarMapsClicked:" destination="-1" eventType="touchUpInside" id="e0S-ON-RbZ"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7EP-HW-o5e" userLabel="Plugins">
-                            <rect key="frame" x="125" y="0.0" width="124" height="61"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
-                            <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="MAPS" image="ic_tabbar_addons_normal.png">
-                                <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="btnToolbarPluginsClicked:" destination="-1" eventType="touchUpInside" id="5d4-dc-jcU"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="afA-Kc-Aw8" userLabel="Purchases">
-                            <rect key="frame" x="251" y="0.0" width="124" height="61"/>
+                            <rect key="frame" x="211" y="0.0" width="124" height="61"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <color key="tintColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -126,7 +111,6 @@
     </objects>
     <resources>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
-        <image name="ic_tabbar_addons_normal.png" width="25" height="25"/>
         <image name="ic_tabbar_maps_normal.png" width="25" height="25"/>
         <image name="ic_tabbar_purchases_selected.png" width="25" height="25"/>
     </resources>

@@ -47,6 +47,7 @@
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _destinationShowObserver;
     OAAutoObserverProxy* _destinationHideObserver;
+    OAAutoObserverProxy* _destinationsChangeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     
     OATargetPointsHelper *_targetPoints;
@@ -84,6 +85,10 @@
                                                          withHandler:@selector(onDestinationHide:withKey:)
                                                           andObserve:self.app.data.destinationHideObservable];
     
+    _destinationsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onDestinationsChange:)
+                                                             andObserve:self.app.data.destinationsChangeObservable];
+
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:self.app.locationServices.updateObserver];
@@ -139,6 +144,11 @@
         [_destinationRemoveObserver detach];
         _destinationRemoveObserver = nil;
     }
+    if (_destinationsChangeObserver)
+    {
+        [_destinationsChangeObserver detach];
+        _destinationsChangeObserver = nil;
+    }
     if (_locationServicesUpdateObserver)
     {
         [_locationServicesUpdateObserver detach];
@@ -167,8 +177,8 @@
 {
     [super updateLayer];
     BOOL widgetUpdated = [_destinationLayerWidget updateLayer];
-    
-    if (widgetUpdated || self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get)
+    BOOL attributesChanged = [_destinationLayerWidget areAttributesChanged];
+    if (widgetUpdated || self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get || attributesChanged)
     {
         _showCaptionsCache = self.showCaptions;
         _textSize = OAAppSettings.sharedManager.textSize.get;
@@ -267,7 +277,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
         [_destinationLayerWidget drawLineArrowWidget:destination];
-        [self drawDestinationLines];
     });
 }
 
@@ -277,10 +286,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self removeDestinationPin:destination.latitude longitude:destination.longitude];
         [_destinationLayerWidget removeLineToDestinationPin:destination];
-        [self drawDestinationLines];
     });
 }
-
 
 - (void) onDestinationShow:(id)observer withKey:(id)key
 {
@@ -305,7 +312,6 @@
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
             [_destinationLayerWidget drawLineArrowWidget:destination];
         }
-        [self drawDestinationLines];
     }
 }
 
@@ -325,8 +331,14 @@
                 break;
             }
         }
-        [self drawDestinationLines];
     }
+}
+
+- (void) onDestinationsChange:(id)observable
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self drawDestinationLines];
+    });
 }
 
 - (void) drawDestinationLines

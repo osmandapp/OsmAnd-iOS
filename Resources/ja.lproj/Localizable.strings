@@ -105,7 +105,7 @@
 "driving_region_automatic" = "自動判別";
 // Trip recording settings
 "save_global_track_interval" = "ログの記録間隔";
-"save_global_track_interval_descr" = "旅程ログ全般の記録間隔を選択します(マップ上のGPXログウィジェットで有効化)";
+"save_global_track_interval_descr" = "経路ログ全般の記録間隔を選択します(マップ上のGPXログウィジェットで有効化)";
 "logging_interval_navigation" = "ナビゲーション中のログ記録間隔";
 "logging_interval_navigation_descr" = "ナビゲーション中に行う経路ログの記録間隔を選択します";
 "logging_min_distance" = "最小移動量";
@@ -440,7 +440,7 @@
 "gpx_overwrite" = "上書き";
 "gpx_cannot_import" = "指定されたGPXファイルはインポートできませんでした";
 "gpx_export_title" = "経路のエクスポート";
-"gpx_export_select_track" = "エクスポートする旅程を選択してください";
+"gpx_export_select_track" = "エクスポートする経路を選択してください";
 "gpx_import_desc" = "GPXファイル(汎用GPSデータ形式)をDropbox、電子メール、またはその他のアプリからインポートするには、\"OsmAnd Mapsにコピー\"オプションを使用します";
 "import_from_docs" = "ドキュメントからインポート";
 "gpx_no_tracks" = "経路はありません";
@@ -472,7 +472,7 @@
 "track_clear" = "現在の経路を消去";
 "track_clear_q" = "現在の経路を消去しますか？";
 "show_info" = "詳細を表示";
-"record_trip" = "旅程を記録";
+"record_trip" = "経路を記録";
 "poi_clear" = "消去";
 "poi_list" = "POI一覧";
 "track_during_nav" = "経路の自動記録";
@@ -634,7 +634,7 @@
 "res_updates_exp" = "大陸マップを購入し、マップを更新してください";
 // Menu
 "menu_my_places" = "ブックマーク";
-"menu_my_trips" = "旅程履歴";
+"menu_my_trips" = "マイ経路";
 "menu_my_directions" = "案内履歴";
 "menu_feedback" = "フィードバック";
 "menu_help" = "ヘルプ";
@@ -794,9 +794,9 @@
 "day_mode" = "昼モード";
 "mute_voice" = "音声をミュート";
 "unmute_voice" = "音声ミュートを解除";
-"show_hide_gpx" = "旅程の表示/非表示";
-"show_gpx" = "旅程を表示";
-"hide_gpx" = "旅程を非表示";
+"show_hide_gpx" = "経路の表示/非表示";
+"show_gpx" = "経路を表示";
+"hide_gpx" = "経路を非表示";
 "show_notes" = "OSMメモを表示";
 "hide_notes" = "OSMメモを非表示";
 "show_edits" = "オフライン編集を表示";
@@ -839,11 +839,11 @@
 "quick_action_toggle_notes_descr" = "このアクションボタンをタップすると、オンラインOSMメモの表示/非表示を切り替えます。";
 "quick_action_toggle_edits_descr" = "このアクションボタンをタップすると、オフラインOSM編集の表示/非表示を切り替えます。";
 "quick_action_edit_list" = "アクションリストの編集";
-"quick_action_hillshade_descr" = "このアクションボタンをタップすると、陰影起伏図レイヤーの表示/非表示を切り替えます。";
+"quick_action_hillshade_descr" = "このアクションボタンをタップすると、地形レイヤーの表示/非表示を切り替えます。";
 "show_hillshade" = "陰影起伏図を表示";
 "hide_hillshade" = "陰影起伏図を非表示";
 "toggle_contour_lines" = "等高線の表示/非表示";
-"toggle_hillshade" = "陰影起伏図の表示/非表示";
+"toggle_hillshade" = "地形の表示/非表示";
 "display_starting_at_zoom_level" = "マップ拡縮時にズームレベルを表示";
 "quick_action_contour_lines_descr" = "このアクションボタンをタップすると、等高線レイヤーの表示/非表示を切り替えます。";
 "hide_contour_lines" = "等高線を非表示";
@@ -851,7 +851,7 @@
 "other_options" = "Other options";
 "add_parking" = "駐車位置を追加";
 "add_parking_short" = "駐車場を追加";
-"add_waypoint" = "旅程に経由地点を追加";
+"add_waypoint" = "経路に経由地点を追加";
 "add_waypoint_short" = "経由地点を追加";
 "edit_waypoint_short" = "経由地点を編集";
 "modify_poi_short" = "POIを変更";
@@ -920,14 +920,14 @@
 "import_favorite" = "お気に入り";
 "import_failed" = "インポートの失敗";
 "import_cannot" = "指定されたファイルはインポートできませんでした";
-"import_gpx" = "GPX旅程";
+"import_gpx" = "GPX経路";
 // Alerts
 "alert_inet_needed" = "この機能を使うにはインターネット接続が必要です。インターネット接続がなされているかを確認してください。";
 // Context menu
 "ctx_mnu_edit_fav" = "お気に入りを編集";
 "ctx_mnu_add_fav" = "お気に入りに追加";
 "ctx_mnu_share" = "共有";
-"ctx_mnu_direction" = "方向";
+"ctx_mnu_direction" = "マップマーカー";
 // Location Services
 "loc_access_denied" = "アクセスが拒否されました";
 "loc_access_denied_desc" = "位置情報サービスへのアクセスが拒否されました";
@@ -994,12 +994,12 @@
 "product_title_skimap" = "スキーマップ";
 "product_desc_skimap" = "世界中のスキーリゾート用ゲレンデなど";
 "product_desc_ext_skimap" = "OsmAndスキーマップは『OsmAnd Maps&Navigation』アプリのプラグインの一つで、ウィンタースポーツに関する場所へのナビゲートができるように設計されています。このツールはスキーゲレンデ、スキーリフトマーカー、および各経路の難易度などを色付きの線で示しそれらの情報を提供します。周辺のインフラだけでなく、スキー場自体に関する情報も得られます。\n\n使用方法:プラグインをOsmAndアプリ内で有効にし、『マップ設定』＞『マップスタイル』をタップしてマップの種類を『スキーマップ』に変更するか、アプリプロファイルを『スキー』に設定してください。";
-"product_title_track_recording" = "旅程・経路記録";
-"product_desc_track_recording" = "旅程を記録して保存する機能を有効にします";
-"product_desc_ext_track_recording" = "旅程・経路記録プラグインを使用して、旅程を記録し手動で保存します。旅程をGPXファイルとして書き出し共有したり、OpenStreetMapプロジェクトに貢献するために使用することもできます。ランナーやハイカーなど進んだ経路や旅程の記録にも興味のある人なら誰でも使える便利なツールです。";
+"product_title_track_recording" = "経路の記録";
+"product_desc_track_recording" = "経路を記録して保存する機能を有効にします";
+"product_desc_ext_track_recording" = "経路記録プラグインを使用して、経路を記録し手動で保存します。経路をGPXファイルとして書き出して共有したり、OpenStreetMapプロジェクトに貢献するために使用することもできます。ランナーやハイカーなど通った経路の記録に関心のある人なら誰でも使える便利なツールです。";
 "product_title_trip_planning" = "旅程計画";
 "product_desc_trip_planning" = "このプラグインは旅程の計画、細かな経由地点の追加、目的地までの距離の算出に役立ちます";
-"product_desc_ext_trip_planning" = "旅程・経路記録プラグインを使用すると、マップ上に旅程を作成したあと保存し、直線で接続されたポイント間の距離も測定できます。ルートの策定よりも、事前の旅程計画を詰める用途のために作成されました。";
+"product_desc_ext_trip_planning" = "旅程計画プラグインを使用すると、マップ上に旅程を作成したあと保存し、直線で接続されたポイント間の距離も測定できます。ルートの策定よりも、事前の旅程計画を詰める用途のために作成されました。";
 "product_title_osm_editing" = "OpenStreetMap編集";
 "product_desc_osm_editing" = "OsmAndからOpenStreetMapの情報を直接変更できます";
 "product_desc_ext_osm_editing" = "OSM編集プラグインを使用すると、POIオブジェクトの作成や修正、OSMメモの参照やコメント付け、記録されたGPXファイルの提出などOSMへの情報提供を行うことができます。OSMはコミュニティ主導のグローバルパブリックドメインマッピングプロジェクトです。詳細については、https://osm.orgを参照してください。アプリケーションでOSM認証情報を入力すると、OsmAndから情報の編集やデータ提供を行うことができます。";
@@ -1045,7 +1045,7 @@
 "get_unlimited_access" = "無制限のアクセスを取得";
 "latitude" = "Latitude";
 "longitude" = "Longitude";
-"track_save_short_q" = "非常に短い旅程ですが保存しますか？";
+"track_save_short_q" = "非常に短い経路ですが保存しますか？";
 "add_as" = "以下のものを保存：";
 "make_call" = "電話を掛ける";
 "enter_description" = "説明を入力";
@@ -1061,8 +1061,8 @@
 "open_url" = "ブラウザでページを開く";
 "no_other_translations" = "他に翻訳はありません";
 "wpt_remove_q" = "経由地点を削除しますか？";
-"gpx_select_track" = "旅程の選択";
-"gpx_curr_new_track" = "現在の旅程";
+"gpx_select_track" = "経路の選択";
+"gpx_curr_new_track" = "現在の経路";
 "enter_name" = "名前を入力";
 "not_selected" = "指定しない";
 "language" = "言語";
@@ -1078,21 +1078,21 @@
 "time_will_close" = "営業終了時間まで";
 "time_will_open" = "営業開始時間まで";
 "menu_active_trips" = "アクティブ";
-"menu_all_trips" = "すべての旅程";
+"menu_all_trips" = "すべての経路";
 "total_time" = "合計時間";
 "moving_time" = "移動時間";
 "change_group" = "グループを変更";
 "change_color" = "色を変更";
 "wpt_select" = "経由地点を選択してください";
 "gpx_remove_wpts_q" = "選択した経由地点を削除しますか？";
-"create_new_trip" = "新しい旅程を作成";
+"create_new_trip" = "新しい経路を作成";
 "editing_waypoints" = "経由地点の編集";
-"select_wpt_on_map" = "旅程に追加する地点をマップから選択してください";
-"gpx_rename_q" = "旅程の名前を変更";
-"gpx_enter_new_name" = "旅程の新しい名前を入力してください";
+"select_wpt_on_map" = "経路に追加する地点をマップから選択してください";
+"gpx_rename_q" = "経路名の変更";
+"gpx_enter_new_name" = "経路の新しい名前を入力してください";
 "gpx_cancel_route_q" = "このルートをキャンセルしますか？";
 "gpx_deactivated" = "無効化";
-"gpx_trip_groups" = "旅程のグループ";
+"gpx_trip_groups" = "経路のグループ";
 "gpx_group_select" = "グループの選択";
 "show_all" = "すべて表示";
 "get_directions" = "案内";
@@ -1114,7 +1114,7 @@
 "plugin_popup_srtm_ask" = "等高線をダウンロードするには、<b>等高線</b>プラグインを有効にする必要があります";
 "plugin_popup_nautical_title" = "航海マップのダウンロード";
 "plugin_popup_nautical_desc" = "最初に航海マップをダウンロードしてください。\n次に<b>マップ設定</b>＞ <b>マップタイプ</b>に移動し、<b>航海</b>スタイルをオンにします";
-"plugin_popup_trip_planning_ask" = "こまかな旅程の策定をおこないたいのなら、<b>旅程策定</b>プラグインを有効にする必要があります";
+"plugin_popup_trip_planning_ask" = "こまかなルート計画を行いたいのであれば、<b>旅程計画</b>プラグインを有効にする必要があります";
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "プラグインを有効にする";
 "all_world_popup_desc" = "ワールドベースマップ(世界地図)をダウンロードして、州名、国境、その他の情報を確認します";
@@ -1578,8 +1578,8 @@
 "res_confirmation_clear_cache" = "%@用キャッシュを消去してもよろしいですか？";
 "gpx_analyze" = "分析";
 "displayed_route_save" = "OsmAnd Tracksに保存";
-"trip_name" = "旅程の名前";
-"trip_hint" = "旅程に名前を付けてください";
+"trip_name" = "経路の名前";
+"trip_hint" = "経路名を入力";
 "shared_string_maximum" = "最大";
 "res_online_name_descr" = "オンラインソースの名前を入力してください";
 "res_online_url_descr" = "オンラインソースのURLを入力、または貼り付けしてください";
@@ -2010,3 +2010,60 @@
 "street_level_imagery" = "ストリート画像";
 "search_history" = "検索履歴";
 "markers_history" = "マーカー履歴";
+"desert" = "砂漠";
+"settings_item_read_error" = "%@が読み込めませんでした。";
+"travel" = "旅行";
+"transport" = "交通";
+"symbols" = "記号";
+"service" = "設備・技術";
+"special" = "特別";
+"sport" = "スポーツ";
+"emergency" = "緊急";
+"key_hint_recenter_map" = "マップを中央に再配置";
+"shared_z_a" = "降順(Z～A)";
+"shared_a_z" = "昇順(A～Z)";
+"reset_to_default_category_button_promo" = "デフォルトにリセットすると、並び順は初期状態に戻ります。";
+"create_custom_categories_list_promo" = "カスタムカテゴリを追加したり、不要なカテゴリを非表示にしたり、リストの並び順を変更したりできます。カスタムカテゴリは、プロファイルを使用してインポートおよびエクスポートできます。";
+"visible_categories" = "表示するカテゴリ";
+"hidden_categories" = "非表示のカテゴリ";
+"rearrange_categories" = "カテゴリの並べ替え";
+"delete_custom_categories" = "カスタムカテゴリを削除";
+"search_preogress" = "検索中…";
+"plugin_popup_osm_editing_ask" = "マップ編集とメモの追加や管理をするには、OpenStreetMap編集プラグインを有効にしてください";
+"plugin_popup_osm_editing_title" = "OpenStreetMap編集を有効化";
+"default_speed_descr" = "不明な道路タイプにおける到着時間を推定、すべての道路で速度を制限します(ルート決定に影響を与える可能性があります)";
+"shared_string_gpx_points" = "地点";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "最新バージョンがあります:%@";
+"res_standard" = "標準マップ";
+"vk" = "VKontakte(SNS)";
+"help_what_is_new" = "新着情報";
+"units_nm" = "海里";
+"unsupported_action_descr" = "このクイックアクションは現在サポートされていません。アプリ新しいバージョンで対応予定です。";
+"unsupported_action_title" = "サポートされていないアクション(%@)";
+"unsupported_action" = "サポートされていないアクション";
+"select_application_profile" = "アプリプロファイルの選択";
+"change_application_profile" = "アプリプロファイルの変更";
+"quick_action_showhide_mapillary_descr" = "このアクションボタンをタップすると、マップ上のMapillaryレイヤーの表示/非表示を切り替えます。";
+"quick_action_transport_descr" = "このアクションボタンをタップすると、マップ上の公共交通機関路線や停留所の表示/非表示を切り替えます。";
+"quick_action_dir_from_descr" = "このアクションボタンをタップすると、現画面の中心点へナビゲーションを開始します。";
+"enable_hillshade" = "地形データの表示を有効化";
+"hide_terrain" = "地形の非表示";
+"show_terrain" = "地形の表示";
+"unsupported_items" = "サポートされていない要素";
+"quick_action_coordinates_widget_descr" = "このアクションボタンをタップすると、座標ウィジェットの表示/非表示を切り替えます。";
+"hide_coordinates" = "座標を非表示";
+"show_coordinates" = "座標を表示";
+"toggle_coordinates" = "座標ウィジェットの表示/非表示";
+"copied_to_clipboard" = "クリップボードにコピー";
+"searching_gps" = "GPS検索";
+
+// Coordinate widget
+"coordinates_widget" = "座標ウィジェット";
+"osm_editing_access_descr" = "すべてのローカル編集とメモを%@で表示できます。すでにアップロードされたアイテムはOsmAndのリストに表示されません。";
+"shared_string_loading" = "読込中…";

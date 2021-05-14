@@ -2071,3 +2071,9 @@
 "preparing_file" = "Undirbý skrá";
 "export_failed" = "Ekki var hægt að flytja út notkunarsnið";
 "export_profile_select_descr" = "Veldu gögnin sem á að flytja út.";
+"reset_to_default_category_button_promo" = "Frumstilling á sjálfgefin gildi mun endurheimta röðunina eins og hún var upphaflega.";
+"create_custom_categories_list_promo" = "Þú getur bætt við sérniðnum flokkum, falið flokka sem þér finnast ekki nauðsynlegir og breytt röðun listans. Sérniðna flokka má flytja inn og út með forsniðum.";
+"hidden_categories" = "Faldir flokkar";
+"visible_categories" = "Sýnilegir flokkar";
+"rearrange_categories" = "Endurraða flokkum";
+"delete_custom_categories" = "Eyða sérsniðnum flokkum";

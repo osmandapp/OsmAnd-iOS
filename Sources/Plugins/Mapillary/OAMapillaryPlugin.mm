@@ -51,7 +51,7 @@
     return self;
 }
 
-+ (NSString *) getId
+- (NSString *) getId
 {
     return PLUGIN_ID;
 }

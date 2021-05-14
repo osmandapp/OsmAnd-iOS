@@ -1356,7 +1356,6 @@ static UIViewController *parentController;
                 else
                 {
                     OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-                    pluginsViewController.openFromCustomPlace = YES;
                     [self.navigationController pushViewController:pluginsViewController animated:YES];
                 }
             }

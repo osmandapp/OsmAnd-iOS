@@ -7,11 +7,12 @@
 //
 
 #import "OAPluginSettingsItem.h"
-#import "OAPlugin.h"
+#import "OACustomPlugin.h"
+#import "OADownloadsItem.h"
+#import "OAFileSettingsItem.h"
 
 @implementation OAPluginSettingsItem
 {
-    OAPlugin *_plugin;
     NSArray<OASettingsItem *> *_pluginDependentItems;
 }
 
@@ -24,67 +25,71 @@
 
 - (NSString *) name
 {
-    return [_plugin.class getId];
+    return [self.plugin getId];
 }
 
 - (NSString *) publicName
 {
-    return _plugin.getName;
+    return self.plugin.getName;
 }
 
 - (BOOL)exists
 {
-    return [OAPlugin getPlugin:_plugin.class] != nil;
+    return [OAPlugin getPluginById:self.pluginId] != nil;
+}
+
+- (NSArray<OASettingsItem *> *)pluginDependentItems
+{
+    if (!_pluginDependentItems)
+        _pluginDependentItems = [NSArray new];
+    return _pluginDependentItems;
+}
+
+- (void)setPluginDependentItems:(NSArray<OASettingsItem *> *)pluginDependentItems
+{
+    _pluginDependentItems = pluginDependentItems;
 }
 
 - (void)apply
 {
     if (self.shouldReplace || ![self exists])
     {
-        // TODO: implement custom plugins
-//        for (OASettingsItem *item : _pluginDependentItems)
-//        {
-//            if ([item isKindOfClass:OAFileSettingsItem.class])
-//            {
-//                OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-//                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
-//                {
-//                    [_plugin addRenderer:fileItem.name];
-//                }
-//                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
-//                {
-//                    [plugin addRouter:fileItem.name];
-//                }
-//                else if (fileItem.subtype == EOASettingsItemFileSubtypeOther)
-//                {
-//                    [plugin setResourceDirName:item.fileName];
-//                }
-//            }
+        for (OASettingsItem *item : _pluginDependentItems)
+        {
+            if ([item isKindOfClass:OAFileSettingsItem.class])
+            {
+                OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
+                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
+                    [_plugin addRenderer:fileItem.name];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
+                    [_plugin addRouter:fileItem.name];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeOther)
+                    _plugin.resourceDirName = item.fileName;
+            }
 //            else if ([item isKindOfClass:OASuggestedDownloadsItem.class])
 //            {
 //                [plugin updateSuggestedDownloads:((OASuggestedDownloadsItem *) item).items];
 //            }
-//            else if ([item isKindOfClass:OADownloadsItem.class])
-//            {
-//                [plugin updateDownloadItems:((OADownloadsItem *) item).items];
-//            }
-//        }
-//        [OAPlugin addCusomPlugin:_plugin];
+            else if ([item isKindOfClass:OADownloadsItem.class])
+            {
+                [_plugin updateDownloadItems:((OADownloadsItem *) item).items];
+            }
+        }
+        [OAPlugin addCustomPlugin:_plugin];
     }
 }
 
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     [super readFromJson:json error:error];
-//    _plugin = [[OAPlugin alloc] initWithJson:json];
-//    new CustomOsmandPlugin(app, json);
+    _plugin = [[OACustomPlugin alloc] initWithJson:json];
 }
 
 - (void) writeToJson:(id)json
 {
-    // TODO: Finish later
     [super writeToJson:json];
-//    _plugin.writeAdditionalDataToJson(json);
+    json[@"version"] = _plugin.getVersion;
+    [_plugin writeAdditionalDataToJson:json];
 }
 
 @end

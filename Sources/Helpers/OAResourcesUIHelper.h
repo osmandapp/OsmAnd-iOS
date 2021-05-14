@@ -15,6 +15,8 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/IncrementalChangesManager.h>
 
+@class OADownloadDescriptionInfo;
+
 @interface OAResourceItem : NSObject
 @property NSString* title;
 @property QString resourceId;
@@ -62,6 +64,26 @@
 @property int sortIndex;
 @end
 
+@interface OACustomResourceItem : OAResourceItem
+@property NSString *subfolder;
+@property NSString *downloadUrl;
+
+@property NSDictionary *downloadContent;
+
+@property NSDictionary<NSString *, NSString *> *names;
+@property NSDictionary<NSString *, NSString *> *firstSubNames;
+@property NSDictionary<NSString *, NSString *> *secondSubNames;
+
+@property OADownloadDescriptionInfo *descriptionInfo;
+
+- (NSString *) getVisibleName;
+- (NSString *) getSubName;
+- (NSString *) getTargetFilePath;
+
+- (BOOL) isInstalled;
+
+@end
+
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 @class MBProgressHUD;
@@ -95,6 +117,7 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 + (void) startDownloadOfItem:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 + (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop;
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_;

@@ -30,9 +30,11 @@
     OsmAndAppInstance _app;
     
     NSString *_tmpFilesDir;
+    
+    NSSet<NSString *> *_acceptedExtensions;
 }
 
-- (instancetype) initWithExportParam:(BOOL)exportItemsFiles
+- (instancetype) initWithExportParam:(BOOL)exportItemsFiles acceptedExtensions:(NSSet<NSString *> *)extensions
 {
     self = [super init];
     if (self)
@@ -40,6 +42,7 @@
         _items = [MutableOrderedDictionary new];
         _additionalParams = [MutableOrderedDictionary new];
         _exportItemsFiles = exportItemsFiles;
+        _acceptedExtensions = extensions;
         
         _app = OsmAndApp.instance;
 
@@ -132,7 +135,8 @@
             NSString *fileName = item.fileName;
             if (!fileName || fileName.length == 0)
                 fileName = item.defaultFileName;
-            
+            if (![_acceptedExtensions containsObject:fileName.pathExtension])
+                continue;
             NSString *path = [_tmpFilesDir stringByAppendingPathComponent:fileName];
             [NSFileManager.defaultManager removeItemAtPath:path error:nil];
             NSError *error = nil;
@@ -178,14 +182,17 @@
     OASettingsExporter *_exporter;
 }
  
-- (instancetype) initWithFile:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
+- (instancetype) initWithFile:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles extensionsFilter:(NSString *)extensionsFilter
 {
     self = [super init];
     if (self)
     {
         _settingsHelper = [OASettingsHelper sharedInstance];
         _filePath = settingsFile;
-        _exporter = [[OASettingsExporter alloc] initWithExportParam:exportItemFiles];
+        NSSet<NSString *> *acceptedExtensions = [NSSet set];
+        if (extensionsFilter && extensionsFilter.length > 0)
+            acceptedExtensions = [NSSet setWithArray:[extensionsFilter componentsSeparatedByString:@","]];
+        _exporter = [[OASettingsExporter alloc] initWithExportParam:exportItemFiles acceptedExtensions:acceptedExtensions];
         for (OASettingsItem *item in items)
             [_exporter addSettingsItem:item];
     }

@@ -20,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
-@property (weak, nonatomic) IBOutlet UIView *topHeaderContainerView;
 
 @end
 
@@ -112,7 +111,7 @@
         return;
     
     BOOL isLandscape = [self isLeftSidePresentation];
-    _currentState = isLandscape ? EOADraggableMenuStateFullScreen : (!self.supportsFullScreen && _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateExpanded : _currentState);
+    [self updateLayoutCurrentState];
     
     [_tableView setScrollEnabled:_currentState == EOADraggableMenuStateFullScreen || (!self.supportsFullScreen && EOADraggableMenuStateExpanded)];
     
@@ -162,6 +161,18 @@
     [self applyCornerRadius:!isLandscape && _currentState != EOADraggableMenuStateFullScreen];
     
     [self onViewHeightChanged:self.getViewHeight];
+    
+    [self doAdditionalLayout];
+}
+
+- (void) doAdditionalLayout
+{
+    //override
+}
+
+- (void) updateLayoutCurrentState
+{
+    _currentState = [self isLeftSidePresentation] ? EOADraggableMenuStateFullScreen : (!self.supportsFullScreen && _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateExpanded : _currentState);
 }
 
 - (CGFloat) additionalLandscapeOffset
@@ -175,7 +186,7 @@
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if ([self isLeftSidePresentation])
     {
-        f.origin = CGPointMake(0., self.additionalLandscapeOffset);
+        f.origin = CGPointMake(0., [self getLandscapeYOffset]);
         f.size.height = DeviceScreenHeight - self.additionalLandscapeOffset;
         f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
         
@@ -205,6 +216,11 @@
         _contentContainer.frame = contentFrame;
     }
     _scrollableView.frame = f;
+}
+
+- (CGFloat) getLandscapeYOffset
+{
+    return self.additionalLandscapeOffset;
 }
 
 - (CGFloat)initialMenuHeight
@@ -274,7 +290,7 @@
 - (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete
 {
     [_tableView setContentOffset:CGPointZero];
-    _currentState = self.isLeftSidePresentation ? EOADraggableMenuStateFullScreen : state;
+    [self updateShowingState:state];
     [_tableView setScrollEnabled:YES];
     
     [self adjustFrame];
@@ -287,6 +303,7 @@
         {
             frame.origin.x = -_scrollableView.bounds.size.width;
             frame.origin.y = self.additionalLandscapeOffset;
+            frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
             frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
             _scrollableView.frame = frame;
             
@@ -322,6 +339,11 @@
         if (onComplete)
             onComplete();
     }
+}
+
+- (void) updateShowingState:(EOADraggableMenuState)state
+{
+    _currentState = self.isLeftSidePresentation ? EOADraggableMenuStateFullScreen : state;
 }
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -481,20 +503,38 @@
 
 - (void) goExpanded
 {
-    _currentState = EOADraggableMenuStateExpanded;
-    [self updateViewAnimated];
+    [self goExpanded:YES];
 }
 
 - (void) goMinimized
 {
-    _currentState = EOADraggableMenuStateInitial;
-    [self updateViewAnimated];
+    [self goMinimized:YES];
 }
 
 - (void) goFullScreen
 {
+    [self goFullScreen:YES];
+}
+
+- (void) goExpanded:(BOOL)animated
+{
+    _currentState = EOADraggableMenuStateExpanded;
+    if (animated)
+        [self updateViewAnimated];
+}
+
+- (void) goMinimized:(BOOL)animated
+{
+    _currentState = EOADraggableMenuStateInitial;
+    if (animated)
+        [self updateViewAnimated];
+}
+
+- (void) goFullScreen:(BOOL)animated
+{
     _currentState = EOADraggableMenuStateFullScreen;
-    [self updateViewAnimated];
+    if (animated)
+        [self updateViewAnimated];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

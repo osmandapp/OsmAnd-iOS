@@ -51,6 +51,8 @@
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.rowHeight = kEstimatedRowHeight;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 
     [self setupDeleteButtonView];
 }
@@ -64,14 +66,14 @@
 
 - (IBAction)onCancelButtonClicked:(id)sender
 {
-    [self dismissViewController];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)onDeleteButtonClicked:(id)sender
 {
     if (self.delegate)
         [self.delegate removeFilters:_selectedItems];
-    [self dismissViewController];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)selectDeselectGroup:(id)sender

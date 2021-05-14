@@ -9,20 +9,13 @@
 #import "OACompoundViewController.h"
 
 @class OAPOIUIFilter;
-
-@protocol OACustomPOIViewDelegate
-
-@required
-
-- (void)searchByUIFilter:(OAPOIUIFilter *)filter wasSaved:(BOOL)wasSaved;
-- (BOOL)saveFilter:(OAPOIUIFilter *)filter alertDelegate:(id<UIAlertViewDelegate>)alertDelegate;
-- (void)updateRootScreen:(UIAlertView *)alertView;
-
-@end
+@protocol OAPOIFilterViewDelegate;
+@protocol OAPOIFilterRefreshDelegate;
 
 @interface OACustomPOIViewController : OACompoundViewController
 
-@property (weak, nonatomic) id<OACustomPOIViewDelegate> delegate;
+@property (weak, nonatomic) id<OAPOIFilterViewDelegate> delegate;
+@property (weak, nonatomic) id<OAPOIFilterRefreshDelegate> _Nullable refreshDelegate;
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter;
 

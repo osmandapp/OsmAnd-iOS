@@ -9,23 +9,24 @@
 #import "OACustomPOIViewController.h"
 #import "OAPOIHelper.h"
 #import "OAPOICategory.h"
+#import "OAPOISearchHelper.h"
 #import "OASelectSubcategoryViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
+#import "OASizes.h"
 #import "OAColors.h"
-#import "OATitleDescrDraggableCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"
 #import "OASearchSettings.h"
 #import "OAPOIType.h"
-#import "OAMenuSimpleCell.h"
 
-#define kCellTypeTitleDescCollapse @"OATitleDescrDraggableCell"
+#define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
 #define kCellTypeTitle @"OAMenuSimpleCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
-@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UIAlertViewDelegate, UITextFieldDelegate>
+@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -97,6 +98,7 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
 
     _searchMode = NO;
     self.searchField.delegate = self;
@@ -143,7 +145,8 @@
     }
 }
 
-- (void)updateTextShowButton {
+- (void)updateTextShowButton
+{
     _countShowCategories = 0;
     for (OAPOICategory *category in _acceptedTypes.keyEnumerator)
         if ([_filter isTypeAccepted:category])
@@ -234,21 +237,34 @@
 
 - (IBAction)onBackButtonClicked:(id)sender
 {
-    [self dismissViewController];
+    [self.navigationController popViewControllerAnimated:YES];
+
+    if (_editMode && self.refreshDelegate)
+        [self.refreshDelegate refreshList];
 }
 
 - (IBAction)onSaveButtonClicked:(id)sender
 {
-    if (self.delegate)
-        [self.delegate saveFilter:_filter alertDelegate:self];
+    if (self.delegate) {
+        UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
+        UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+            [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        [saveDialog addAction:actionSave];
+        [self presentViewController:saveDialog animated:YES completion:nil];
+    }
 }
 
 - (IBAction)onShowButtonClicked:(id)sender
 {
     if (self.delegate)
-        [self.delegate searchByUIFilter:_filter wasSaved:NO];
+        [self.delegate searchByUIFilter:_filter newName:nil willSaved:NO];
 
-    [self dismissViewController];
+    if (_editMode && self.refreshDelegate)
+        [self.refreshDelegate refreshList];
+
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)onSearchCancelButtonClicked:(id)sender
@@ -346,30 +362,17 @@
     [self updateTextShowButton];
 }
 
-#pragma mark - UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        if (self.delegate)
-        {
-            [self.delegate searchByUIFilter:_filter wasSaved:YES];
-            [self.delegate updateRootScreen:alertView];
-        }
-        [self dismissViewController];
-    }
-}
 
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (!_searchMode) {
-        OATitleDescrDraggableCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
+        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
-            cell = (OATitleDescrDraggableCell *) nib[0];
+            cell = (OAMenuSimpleCell *) nib[0];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
 
         if (cell) {
@@ -385,23 +388,18 @@
             cell.textView.text = category.nameLocalized;
             cell.textView.textColor = [UIColor blackColor];
 
-            cell.overflowButton.enabled = NO;
-            cell.overflowButton.imageView.contentMode = UIViewContentModeCenter;
-            [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-            cell.overflowButton.tintColor = UIColorFromRGB(color_tint_gray);
-
             UIImage *img = [[category icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.image = img;
-            cell.iconView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
-            cell.iconView.contentMode = UIViewContentModeCenter;
+            cell.imgView.image = img;
+            cell.imgView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+            cell.imgView.contentMode = UIViewContentModeCenter;
 
             NSString *descText;
             if (subtypes == [OAPOIBaseType nullSet] || countAllTypes == countAcceptedTypes)
                 descText = [NSString stringWithFormat:@"%@ - %lu", OALocalizedString(@"shared_string_all"), countAllTypes];
             else
                 descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
-            cell.descView.text = descText;
-            cell.descView.textColor = UIColorFromRGB(color_text_footer);
+            cell.descriptionView.text = descText;
+            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
 
             [cell updateConstraintsIfNeeded];
         }
@@ -473,8 +471,7 @@
         OAPOICategory* item = _categories[indexPath.row];
         OASelectSubcategoryViewController *subcategoryScreen = [[OASelectSubcategoryViewController alloc] initWithCategory:item filter:_filter];
         subcategoryScreen.delegate = self;
-        subcategoryScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-        [self showViewController:subcategoryScreen];
+        [self.navigationController pushViewController:subcategoryScreen animated:YES];
     }
 }
 
@@ -502,6 +499,16 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return _searchMode ? 48 : 66;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return [OAPOISearchHelper getHeightForFooter];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [OAPOISearchHelper getHeightForHeader];
 }
 
 @end

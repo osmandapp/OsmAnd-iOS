@@ -92,6 +92,8 @@
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.rowHeight = kEstimatedRowHeight;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 
     [self.tableView beginUpdates];
     for (NSInteger i = 0; i < _items.count; i++)
@@ -204,7 +206,7 @@
     if (self.delegate)
         [self.delegate selectSubcategoryCancel];
 
-    [self dismissViewController];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)onApplyButtonClicked:(id)sender
@@ -217,7 +219,7 @@
         [self.delegate selectSubcategoryDone:_category keys:selectedKeys allSelected:_selectedItems.count == _items.count];
     }
 
-    [self dismissViewController];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)onSearchCancelButtonClicked:(id)sender

@@ -92,7 +92,7 @@ typedef void(^OAPublishCallback)(OASearchResultCollection *res, BOOL append);
 typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 
-@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
+@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -150,8 +150,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     UIImageView *_leftImgView;
     UIActivityIndicatorView *_activityIndicatorView;
-
-    OAPOIUIFilter *_filterToSave;
 
     OAQuickSearchTableController *_tableController;
 
@@ -370,8 +368,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionSelectTarget:
         {
             _barActionLeftImageButton.hidden = YES;
-            UIImage *mapImage = [UIImage imageNamed:@"ic_action_marker"];
-            mapImage = [mapImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *mapImage = [UIImage templateImageNamed:@"ic_action_marker"];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
 
@@ -404,8 +401,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionShowOnMap:
         {
             _barActionLeftImageButton.hidden = YES;
-            UIImage *mapImage = [UIImage imageNamed:@"waypoint_map_disable.png"];
-            mapImage = [mapImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *mapImage = [UIImage templateImageNamed:@"waypoint_map_disable.png"];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
 
@@ -644,7 +640,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
                     OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:model filterByName:filterByName];
                     filterViewController.delegate = self;
-                    filterViewController.customPOIDelegate = self;
                     [self.navigationController pushViewController:filterViewController animated:YES];
                 }
                 else if ([object isKindOfClass:[OAPOIBaseType class]])
@@ -659,7 +654,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
                         OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:filterByName];
                         filterViewController.delegate = self;
-                        filterViewController.customPOIDelegate = self;
                         [self.navigationController pushViewController:filterViewController animated:YES];
                     }
                 }
@@ -680,7 +674,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     OAPOIUIFilter *customFilter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     if (customFilter)
-        [self doSaveFilter:customFilter alertDelegate:self];
+        [self presentViewController:[self createSaveFilterDialog:customFilter customSaveAction:NO] animated:YES completion:nil];
 }
 
 - (IBAction)bottomImageButtonPress:(id)sender
@@ -734,15 +728,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
         [self.view setNeedsLayout];
     }
-}
-
-- (void)doSaveFilter:(OAPOIUIFilter *)filter alertDelegate:(id<UIAlertViewDelegate>)alertDelegate
-{
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") delegate:alertDelegate cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_save"), nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert textFieldAtIndex:0].text = filter.name;
-    _filterToSave = filter;
-    [alert show];
 }
 
 - (void)setBottomViewVisible:(BOOL)visible
@@ -1736,7 +1721,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
-- (void) updateSearchResult:(OASearchResultCollection *)res append:(BOOL)append
+- (void)updateSearchResult:(OASearchResultCollection *)res append:(BOOL)append
 {
     if (!_paused)
     {
@@ -1746,6 +1731,24 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
 
         [self updateData:rows append:append];
+    }
+}
+
+- (void)createAndRefreshCustomFilter:(OAPOIUIFilter *)newFilter newName:(NSString *)newName
+{
+    if (newName.length > 0)
+    {
+        OAPOIUIFilter *filterToSave = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[newFilter getAcceptedTypes]];
+        if (newFilter.filterByName.length > 0)
+            [filterToSave setSavedFilterByName:newFilter.filterByName];
+
+        if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:filterToSave])
+        {
+            [self.searchHelper refreshCustomPoiFilters];
+            [self replaceQueryWithUiFilter:filterToSave nameFilter:@""];
+            [self reloadCategories];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -1835,23 +1838,23 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [filter clearFilter];
     OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:filter];
     customPOIScreen.delegate = self;
-    customPOIScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self showViewController:customPOIScreen];
+    [self.navigationController pushViewController:customPOIScreen animated:YES];
+
 }
 
 - (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
     OADeleteCustomFiltersViewController *removeFiltersScreen = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
     removeFiltersScreen.delegate = self;
-    removeFiltersScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self showViewController:removeFiltersScreen];
+    [self.navigationController pushViewController:removeFiltersScreen animated:YES];
+
 }
 
 - (void)showRearrangeFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
 {
     OARearrangeCustomFiltersViewController *rearrangeCategoriesScreen = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
-    rearrangeCategoriesScreen.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self showViewController:rearrangeCategoriesScreen];
+    [self.navigationController pushViewController:rearrangeCategoriesScreen animated:YES];
+
 }
 
 - (NSArray<OAPOIUIFilter *> *)getCustomFilters
@@ -1927,9 +1930,51 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     return YES;
 }
 
-#pragma mark - OACustomPOIViewDelegate
+#pragma mark - OAPOIFilterViewDelegate
 
-- (void)searchByUIFilter:(OAPOIUIFilter *)filter wasSaved:(BOOL)wasSaved
+- (BOOL)updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
+{
+    [self.searchHelper refreshCustomPoiFilters];
+    [self replaceQueryWithUiFilter:filter nameFilter:nameFilter];
+    return YES;
+}
+
+- (BOOL)removeFilter:(OAPOIUIFilter *)filter
+{
+    if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
+    {
+        [self.searchHelper refreshCustomPoiFilters];
+        [self reloadCategories];
+        [self clearLastWord];
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
+
+- (UIAlertController *)createSaveFilterDialog:(OAPOIUIFilter *)filter customSaveAction:(BOOL)customSaveAction
+{
+    UIAlertController *saveDialog = [UIAlertController alertControllerWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+    [saveDialog addAction:actionCancel];
+
+    if (!customSaveAction) {
+        UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+            [self searchByUIFilter:filter newName:saveDialog.textFields[0].text willSaved:YES];
+        }];
+        [saveDialog addAction:actionSave];
+    }
+
+    [saveDialog addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.text = filter.name;
+    }];
+
+    return saveDialog;
+}
+
+- (void)searchByUIFilter:(OAPOIUIFilter *)filter newName:(NSString *)newName willSaved:(BOOL)willSaved
 {
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:[_searchUICore getPhrase]];
     sr.localeName = [filter getName];
@@ -1947,73 +1992,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [self runCoreSearch:txt updateResult:NO searchMore:NO];
 
-    [self setBottomViewVisible:!wasSaved];
-}
-
-- (BOOL)saveFilter:(OAPOIUIFilter *)filter alertDelegate:(id<UIAlertViewDelegate>)alertDelegate
-{
-    [self doSaveFilter:filter alertDelegate:alertDelegate];
-    return YES;
-}
-
-- (void)updateRootScreen:(UIAlertView *)alertView
-{
-    NSString* newName = [[alertView textFieldAtIndex:0].text trim];
-    if (newName.length > 0)
-    {
-        OAPOIUIFilter *nFilter = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[_filterToSave getAcceptedTypes]];
-        if (_filterToSave.filterByName.length > 0)
-            [nFilter setSavedFilterByName:_filterToSave.filterByName];
-
-        if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
-        {
-            [self.searchHelper refreshCustomPoiFilters];
-            [self replaceQueryWithUiFilter:nFilter nameFilter:@""];
-            [self reloadCategories];
-            [self setBottomViewVisible:NO];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
-    }
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        [self updateRootScreen:alertView];
-    }
-}
-
-#pragma mark - OAPOIFilterViewDelegate
-
-- (BOOL)updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
-{
-    [self.searchHelper refreshCustomPoiFilters];
-    [self replaceQueryWithUiFilter:filter nameFilter:nameFilter];
-    return YES;
-}
-
-- (BOOL)saveFilter:(OAPOIUIFilter *)filter
-{
-    [self doSaveFilter:filter alertDelegate:self];
-    return YES;
-}
-
-- (BOOL)removeFilter:(OAPOIUIFilter *)filter
-{
-    if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
-    {
-        [self.searchHelper refreshCustomPoiFilters];
-        [self reloadCategories];
-        [self clearLastWord];
-        return YES;
-    }
-    else
-    {
-        return NO;
-    }
+    [self setBottomViewVisible:!willSaved];
+    if (willSaved)
+        [self createAndRefreshCustomFilter:filter newName:newName];
 }
 
 #pragma mark - OASearchToolbarViewControllerProtocol

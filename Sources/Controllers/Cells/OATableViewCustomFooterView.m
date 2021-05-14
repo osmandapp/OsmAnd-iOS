@@ -99,8 +99,7 @@
     }
     else
     {
-        UIImage *img = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _iconView.image = img;
+        _iconView.image = [UIImage templateImageNamed:imageName];
         [_iconView sizeToFit];
         _iconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
         if (!_iconView.superview)

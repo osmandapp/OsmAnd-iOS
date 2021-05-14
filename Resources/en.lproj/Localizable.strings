@@ -292,7 +292,7 @@
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_routing" = "OsmAnd routing";
 "special_routing" = "Special routing";
-"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it into the OsmAnd folder in iTunes.";
+"import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "avoid_routes_and_road" = "Avoid certain routes and road types";
@@ -450,6 +450,8 @@
 "search_history" = "Search history";
 
 // Shared Strings
+"shared_string_enable" = "Enable";
+"shared_string_disable" = "Disable";
 "shared_string_apply" = "Apply";
 "shared_string_select" = "Select";
 "shared_string_back" = "Back";
@@ -791,6 +793,9 @@
 "nav_type_hint" = "Navigation type: %@";
 "shared_string_nothing_selected" = "Nothing selected";
 "export_failed" = "Could not export profile";
+"custom_osmand_plugin_name" = "Custom OsmAnd plugin";
+"custom_plugins" = "Custom plugins";
+"extra_maps" = "Extra maps";
 
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
@@ -865,6 +870,7 @@
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
+"new_plugin_added" = "New plugin added";
 
 "reset_to_default" = "Reset to default";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";

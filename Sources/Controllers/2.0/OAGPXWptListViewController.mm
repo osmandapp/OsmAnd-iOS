@@ -384,7 +384,7 @@
             
             if (![cell.directionImageView.tintColor isEqual:UIColorFromRGB(color_elevation_chart)])
             {
-                cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
                 cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             }
         }

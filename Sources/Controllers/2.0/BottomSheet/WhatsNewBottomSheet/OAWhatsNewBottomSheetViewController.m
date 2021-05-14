@@ -37,6 +37,14 @@
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_poi.png"]];
 }
 
+- (void) adjustFrame
+{
+    if (!OAUtilities.isLandscapeIpadAware && [self screenHeight] > 0.75 * DeviceScreenHeight)
+        [self goFullScreen];
+
+    [super adjustFrame];
+}
+
 - (void) applyLocalization
 {
     self.titleView.text = [NSString stringWithFormat:OALocalizedString(@"help_what_is_new")];
@@ -79,7 +87,7 @@
     return attributedString;
 }
 
-- (CGFloat)initialHeight
+- (CGFloat)screenHeight
 {
     CGFloat width = DeviceScreenWidth - 2 * kHorizontalMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;

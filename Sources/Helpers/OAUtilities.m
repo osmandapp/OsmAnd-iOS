@@ -1459,9 +1459,8 @@ static const double d180PI = 180.0 / M_PI_2;
     return tableHeaderView;
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize
 {
-    CGFloat iconFrameSize = 34;
     CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
     label.text = text;
@@ -1484,7 +1483,7 @@ static const double d180PI = 180.0 / M_PI_2;
     imageView.frame = CGRectMake(2, 2, 30, 30);
     imageView.contentMode = UIViewContentModeCenter;
     [imageView setTintColor:tintColor];
-    [imageView setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     
     [imageContainer insertSubview:imageView atIndex:0];
     imageContainer.layer.cornerRadius = iconFrameSize / 2;
@@ -1492,6 +1491,43 @@ static const double d180PI = 180.0 / M_PI_2;
     [tableHeaderView addSubview:imageContainer];
     
     return tableHeaderView;
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode
+{
+    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    label.attributedText = text;
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [label sizeToFit];
+    CGRect frame = label.frame;
+    frame.size.height = label.frame.size.height;
+    frame.origin.y = 8.0;
+    label.frame = frame;
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];
+    [tableHeaderView addSubview:label];
+    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12 - OAUtilities.getLeftMargin - iconFrameSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize, iconFrameSize)];
+    imageContainer.backgroundColor = iconBackgroundColor;
+    
+    UIImageView *imageView = [[UIImageView alloc] init];
+    imageView.frame = CGRectMake(iconFrameSize / 2 - 15., iconFrameSize / 2 - 15., 30, 30);
+    imageView.contentMode = contentMode;
+    [imageView setTintColor:tintColor];
+    [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    
+    [imageContainer insertSubview:imageView atIndex:0];
+    imageContainer.layer.cornerRadius = iconFrameSize / 2;
+    
+    [tableHeaderView addSubview:imageContainer];
+    
+    return tableHeaderView;
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
+{
+    return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage imageNamed:iconName] iconFrameSize:34.];
 }
 
 + (CGFloat) heightForHeaderViewText:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing
@@ -1516,6 +1552,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize highlightColor:(UIColor *)highlightColor
 {
+    return [self getStringWithBoldPart:wholeString mainString:ms boldString:bs lineSpacing:lineSpacing fontSize:fontSize boldFontSize:0 boldColor:highlightColor mainColor:nil];
+}
+
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize boldFontSize:(CGFloat)boldFontSize boldColor:(UIColor *)boldColor mainColor:(UIColor *)mainColor
+{
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:lineSpacing];
     NSMutableAttributedString *descriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:wholeString
@@ -1525,9 +1566,11 @@ static const double d180PI = 180.0 / M_PI_2;
     NSRange boldRange = [wholeString rangeOfString:boldString];
     NSRange mainRange = [wholeString rangeOfString:mainString];
     [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
-    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:fontSize] range:boldRange];
-    if (highlightColor)
-        [descriptionAttributedString addAttribute: NSForegroundColorAttributeName value:highlightColor range:boldRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:boldFontSize > 0 ? boldFontSize : 15] range:boldRange];
+    if (boldColor)
+        [descriptionAttributedString addAttribute: NSForegroundColorAttributeName value:boldColor range:boldRange];
+    if (mainColor)
+        [descriptionAttributedString addAttribute:NSForegroundColorAttributeName value:mainColor range:mainRange];
     return descriptionAttributedString;
 }
 
@@ -1593,6 +1636,49 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         return [NSArray arrayWithArray:allFoldersNames];
     }
+}
+
++ (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize
+{
+    NSString *modifiedFontHtml = [NSString stringWithFormat:@"<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: %ld\">%@</span>", fontSize, html];
+    return [[NSAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
+}
+
++ (NSString *) createNewFileName:(NSString *)oldName
+{
+    NSString *ext = oldName.pathExtension;
+    NSString *nameWithoutExt = oldName.stringByDeletingPathExtension;
+    
+    NSMutableString *numberSection = [NSMutableString string];
+    NSInteger i = nameWithoutExt.length - 1;
+    BOOL hasNameNumberSection = NO;
+    NSCharacterSet *numericSet = [NSCharacterSet decimalDigitCharacterSet];
+    do {
+        unichar c = [nameWithoutExt characterAtIndex:i];
+        if ([numericSet characterIsMember:c])
+        {
+            [numberSection insertString:[NSString stringWithFormat:@"%C", c] atIndex:0];
+        }
+        else if (c == ' ' && numberSection.length > 0)
+        {
+            hasNameNumberSection = YES;
+            break;
+        }
+        else
+        {
+            break;
+        }
+        i--;
+    } while (i >= 0);
+    NSInteger newNumberValue = (hasNameNumberSection ? [numberSection integerValue] : 0) + 1;
+    
+    NSString *newName;
+    if (newNumberValue == 1)
+        newName = [[NSString stringWithFormat:@"%@ %ld", nameWithoutExt, newNumberValue] stringByAppendingPathExtension:ext];
+    else
+        newName = [[NSString stringWithFormat:@"%@ %ld", [nameWithoutExt substringToIndex:i], newNumberValue] stringByAppendingPathExtension:ext];
+    
+    return newName;
 }
 
 @end

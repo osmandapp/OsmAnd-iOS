@@ -17,7 +17,12 @@
 #import "OAPluginPopupViewController.h"
 #import "OAAppSettings.h"
 #import "OAResourcesUIHelper.h"
+#import "OAMapCreatorHelper.h"
 #import "OAIAPHelper.h"
+#import "OAGPXDocument.h"
+#import "OAGPXDatabase.h"
+
+#include <OsmAndCore/ArchiveReader.h>
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
 NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallationFailedNotification";
@@ -60,7 +65,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         return;
     
     // Skip other states except Finished (and completed)
-    if (task.state != OADownloadTaskStateFinished || task.progressCompleted < 1.0f) {
+    if (task.state != OADownloadTaskStateFinished || task.error) {
         
         if (task.state == OADownloadTaskStateFinished)
             [_app updateScreenTurnOffSetting];
@@ -74,6 +79,122 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         [self processResource:task];
     });
+}
+
++ (void)installGpxResource:(NSString *)localPath fileName:(NSString *)fileName
+{
+    OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:localPath];
+    NSString *destFilePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName];
+    [NSFileManager.defaultManager createDirectoryAtPath:destFilePath.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:nil];
+    [doc saveTo:destFilePath];
+    OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
+    [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+    [[OAGPXDatabase sharedDb] save];
+}
+
++ (void)installObfResource:(BOOL &)failed localPath:(NSString *)localPath fileName:(NSString *)fileName
+{
+    OsmAnd::ArchiveReader archive(QString::fromNSString(localPath));
+    // List items
+    bool ok = false;
+    const auto archiveItems = archive.getItems(&ok);
+    if (!ok)
+    {
+        [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
+        NSLog(@"Failed to install custom obf from the archive");
+        failed = YES;
+    }
+    
+    // Find the OBF file
+    OsmAnd::ArchiveReader::Item obfArchiveItem;
+    for (const auto& archiveItem : constOf(archiveItems))
+    {
+        if (!archiveItem.isValid() || !archiveItem.name.endsWith(QLatin1String(".obf")))
+            continue;
+        
+        obfArchiveItem = archiveItem;
+        break;
+    }
+    if (!obfArchiveItem.isValid())
+    {
+        [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
+        NSLog(@"Custom obf in the archive is not valid");
+        failed = YES;
+    }
+    NSString *unzippedPath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension;
+    [NSFileManager.defaultManager removeItemAtPath:unzippedPath error:nil];
+    QString pathToFile = QString::fromNSString(unzippedPath);
+    if (!archive.extractItemToFile(obfArchiveItem.name, pathToFile))
+    {
+        [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
+        NSLog(@"Failed to extract custom obf from the archive");
+        failed = YES;
+    }
+    [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
+    OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths();
+}
+
++ (void)installSqliteResource:(NSString *)localPath fileName:(NSString *)fileName
+{
+    OAMapCreatorHelper *mapCreatorHelper = OAMapCreatorHelper.sharedInstance;
+    [mapCreatorHelper installFile:localPath newFileName:fileName.lastPathComponent];
+}
+
++ (BOOL) installCustomResource:(NSString *)localPath nsResourceId:(NSString *)nsResourceId fileName:(NSString *)fileName
+{
+    BOOL failed = NO;
+    NSString *unzippedFilePath = localPath;
+    if ([nsResourceId hasSuffix:@".gz"] || ([nsResourceId hasSuffix:@".zip"] && ![nsResourceId hasSuffix:@"obf.zip"]))
+    {
+        const auto fileExt = QString::fromNSString(nsResourceId.stringByDeletingPathExtension.pathExtension);
+        if (fileExt.isEmpty())
+            return YES;
+        OsmAnd::ArchiveReader archive(QString::fromNSString(localPath));
+        OsmAnd::ArchiveReader::Item targetArchiveItem;
+        // List items
+        bool ok = false;
+        const auto archiveItems = archive.getItems(&ok);
+        if (!ok)
+        {
+            [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
+            NSLog(@"Failed to install custom resource from the archive");
+            return YES;
+        }
+        for (const auto& archiveItem : constOf(archiveItems))
+        {
+            if (!archiveItem.isValid() || !archiveItem.name.endsWith(fileExt))
+                continue;
+            
+            targetArchiveItem = archiveItem;
+            break;
+        }
+        if (!targetArchiveItem.isValid())
+        {
+            [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
+            NSLog(@"Custom resource file in the archive is not valid");
+            return YES;
+        }
+        unzippedFilePath = [localPath stringByDeletingPathExtension];
+        [NSFileManager.defaultManager removeItemAtPath:unzippedFilePath error:nil];
+        QString pathToFile = QString::fromNSString(unzippedFilePath);
+        if (!archive.extractItemToFile(targetArchiveItem.name, pathToFile))
+        {
+            [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
+            NSLog(@"Failed to extract custom resource from the archive");
+            return YES;
+        }
+        nsResourceId = [nsResourceId stringByDeletingPathExtension];
+    }
+    if ([nsResourceId hasSuffix:@"sqlitedb"])
+        [self installSqliteResource:unzippedFilePath fileName:fileName];
+    else if ([nsResourceId hasSuffix:@"obf.zip"])
+        [self installObfResource:failed localPath:unzippedFilePath fileName:fileName];
+    else if ([nsResourceId hasSuffix:@"gpx"])
+        [self installGpxResource:unzippedFilePath fileName:fileName];
+    
+    [NSFileManager.defaultManager removeItemAtPath:unzippedFilePath error:nil];
+    
+    return failed;
 }
 
 - (void) processResource:(id<OADownloadTask>)task
@@ -186,15 +307,20 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 }
                 else
                 {
-                    task.installResourceRetry++;
-                    if (task.installResourceRetry < 20)
+                    // Handle custom resources
+                    BOOL failed = [self.class installCustomResource:localPath nsResourceId:nsResourceId fileName:task.name];
+                    if (failed)
                     {
-                        OALog(@"installResourceRetry = %d", task.installResourceRetry);
-                        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
-                        dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-                            [self processResource:task];
-                        });
-                        return;
+                        task.installResourceRetry++;
+                        if (task.installResourceRetry < 20)
+                        {
+                            OALog(@"installResourceRetry = %d", task.installResourceRetry);
+                            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+                            dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                                [self processResource:task];
+                            });
+                            return;
+                        }
                     }
                 }
             }

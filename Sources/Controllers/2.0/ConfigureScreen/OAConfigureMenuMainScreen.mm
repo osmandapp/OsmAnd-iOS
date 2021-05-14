@@ -323,7 +323,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
         }
@@ -343,7 +343,7 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imgView.image = [UIImage templateImageNamed:imgName];
         cell.imgView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
     }
     else
@@ -376,6 +376,8 @@
     {
         OAQuickActionListViewController *vc = [[OAQuickActionListViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        return;
     }
     if ([data[@"key"] isEqualToString:@"map_markers"])
     {

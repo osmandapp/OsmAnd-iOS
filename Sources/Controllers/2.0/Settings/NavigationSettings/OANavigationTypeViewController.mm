@@ -11,6 +11,7 @@
 #import "OAProfileDataObject.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OAApplicationMode.h"
+#import "OAProfileDataUtils.h"
 #import "OAAppSettings.h"
 
 #import "Localization.h"
@@ -56,7 +57,7 @@
 
 - (void) setupView
 {
-    _sortedRoutingProfiles = [OAProfileNavigationSettingsViewController getSortedRoutingProfiles];
+    _sortedRoutingProfiles = [OAProfileDataUtils getSortedRoutingProfiles];
     NSMutableArray *tableData = [NSMutableArray new];
     NSString *lastFileName = _sortedRoutingProfiles.firstObject.fileName;
     NSMutableArray *sectionData = [NSMutableArray new];
@@ -128,9 +129,9 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.arrowIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
-            cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             BOOL isSelected = [_sortedRoutingProfiles[[item[@"profile_ind"] integerValue]].stringKey isEqualToString:_currentSelectedKey];
             cell.arrowIconView.hidden = !isSelected;
             cell.iconView.tintColor = isSelected ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);

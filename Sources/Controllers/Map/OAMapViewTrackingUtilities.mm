@@ -317,10 +317,13 @@
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
         
+        bool sameLocation = newLocation && [newLocation isEqual:_myLocation];
+        bool sameHeading = _heading == newHeading;
+
         _myLocation = newLocation;
         _heading = newHeading;
 
-        if (_mapViewController)
+        if (_mapViewController && (!sameLocation || !sameHeading))
         {
             // Wait for Map Mode changing animation if any, to prevent animation lags
             if (!newLocation || (CACurrentMediaTime() - _startChangingMapModeTime < kOneSecondAnimatonTime))
@@ -380,22 +383,25 @@
                 }
                 
                 // Update target
-                if (targetAnimation)
+                if (!sameLocation)
                 {
-                    _mapView.animator->cancelAnimation(targetAnimation);
-                    
-                    double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
-                    _mapView.animator->animateTargetTo(newTarget31,
-                                                       duration,
-                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                       kLocationServicesAnimationKey);
-                }
-                else
-                {
-                    _mapView.animator->animateTargetTo(newTarget31,
-                                                       kFastAnimationTime,
-                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                       kLocationServicesAnimationKey);
+                    if (targetAnimation)
+                    {
+                        _mapView.animator->cancelAnimation(targetAnimation);
+                        
+                        double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
+                        _mapView.animator->animateTargetTo(newTarget31,
+                                                           duration,
+                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                           kLocationServicesAnimationKey);
+                    }
+                    else
+                    {
+                        _mapView.animator->animateTargetTo(newTarget31,
+                                                           kFastAnimationTime,
+                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                           kLocationServicesAnimationKey);
+                    }
                 }
                 
                 // Update zoom

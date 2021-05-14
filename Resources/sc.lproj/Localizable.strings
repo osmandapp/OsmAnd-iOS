@@ -2095,3 +2095,11 @@
 "hidden_categories" = "Categorias cuadas";
 "visible_categories" = "Categorias visìbiles";
 "rearrange_categories" = "Torra a ordinare sas categorias";
+"new_plugin_added" = "Estensione noa annànghida";
+"extra_maps" = "Mapas additzionales";
+"custom_plugins" = "Estensiones personalidades";
+"custom_osmand_plugin_name" = "Estensione de OsmAnd personalizada";
+"shared_string_disable" = "Disabìlita";
+
+// Shared Strings
+"shared_string_enable" = "Abìlita";

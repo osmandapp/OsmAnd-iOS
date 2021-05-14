@@ -237,12 +237,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (!_routingHelper.isPublicTransportMode)
     {
         [_goButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
-        [_goButton setImage:[[UIImage imageNamed:@"ic_custom_navigation_arrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] forState:UIControlStateNormal];
     }
     else
     {
         [_goButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
-        [_goButton setImage:[[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_map"] forState:UIControlStateNormal];
     }
     [self layoutSubviews];
 }
@@ -1340,7 +1340,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 
                 cell.finishPoint = NO;
                 [cell setDividerVisibility:self.isFinishPointFromTrack];
-                [cell.imgView setImage:[[UIImage imageNamed:@"ic_custom_trip"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                [cell.imgView setImage:[UIImage templateImageNamed:@"ic_custom_trip"]];
                 cell.imgView.tintColor = UIColorFromRGB(color_icon_inactive);
                 cell.titleLabel.text = OALocalizedString(@"follow_track");
                 cell.addressLabel.text = fileName;
@@ -1505,7 +1505,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             NSString *key = item[@"key"];
             if ([key isEqualToString:@"pedestrian_short"])
             {
-                [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
                 cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
                 cell.textView.attributedText = item[@"title"];
                 cell.backgroundColor = UIColor.whiteColor;

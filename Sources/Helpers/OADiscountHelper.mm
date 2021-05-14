@@ -413,7 +413,6 @@ const static NSString *URL = @"http://osmand.net/api/motd";
             if ([@"plugin" isEqualToString:discountType] && _product)
             {
                 OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProduct:_product];
-                pluginDetails.openFromCustomPlace = YES;
                 [[OARootViewController instance].navigationController pushViewController:pluginDetails animated:YES];
 
                 //OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];

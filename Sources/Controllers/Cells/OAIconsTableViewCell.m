@@ -47,10 +47,8 @@
     static NSString* const identifierCell = @"OAIconsCollectionViewCell";
     OAIconsCollectionViewCell* cell = nil;
     cell = (OAIconsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
-    UIImage *img = nil;
     NSString *imgName = _dataArray[indexPath.row];
-    img = [UIImage imageNamed:imgName];
-    cell.iconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    cell.iconImageView.image = [UIImage templateImageNamed:imgName];
     cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
     
     if (indexPath.row == _currentIcon)

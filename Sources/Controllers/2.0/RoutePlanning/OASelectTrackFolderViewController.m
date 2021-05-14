@@ -136,7 +136,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
    
@@ -161,7 +161,7 @@
             if ([item[@"isSelected"] boolValue])
             {
                 [cell setOverflowVisibility:NO];
-                [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_checmark_default"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+                [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_checmark_default"] forState:UIControlStateNormal];
             }
             else
             {

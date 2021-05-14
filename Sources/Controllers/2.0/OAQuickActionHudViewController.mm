@@ -55,8 +55,7 @@
 {
     [super viewDidLoad];
     
-    [_quickActionFloatingButton setImage:[[UIImage imageNamed:@"ic_custom_quick_action"]
-                                          imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
+    [_quickActionFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_quick_action"]
                                 forState:UIControlStateNormal];
     _quickActionFloatingButton.hidden = ![_settings.quickActionIsOn get];
     _buttonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonDragged:)];

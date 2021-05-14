@@ -271,11 +271,11 @@
         NSMutableAttributedString *res = [NSMutableAttributedString new];
         
         NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
-        arrowUpAttachment.image = [[UIImage imageNamed:@"ic_small_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_arrow_up"];
         arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
         
         NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
-        arrowDownAttachment.image = [[UIImage imageNamed:@"ic_small_arrow_down"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_arrow_down"];
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
         
         [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
@@ -358,7 +358,7 @@
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
 {
     button.layer.cornerRadius = 9.;
-    [button setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [button setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
     [button setTintColor:color];
 }
 

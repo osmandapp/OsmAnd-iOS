@@ -2080,3 +2080,11 @@
 "hidden_categories" = "Приховані категорії";
 "visible_categories" = "Видимі категорії";
 "rearrange_categories" = "Перевпорядкування категорій";
+"new_plugin_added" = "Нове розширення додано";
+"extra_maps" = "Додаткові мапи";
+"custom_plugins" = "Користувацькі розширення";
+"custom_osmand_plugin_name" = "Користувацьке розширення OsmAnd";
+"shared_string_disable" = "Вимкнути";
+
+// Shared Strings
+"shared_string_enable" = "Увімкнути";

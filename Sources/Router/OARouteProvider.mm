@@ -25,6 +25,7 @@
 #include <routingConfiguration.h>
 #include <routingContext.h>
 #include <routeSegmentResult.h>
+#include <sstream>
 
 #define OSMAND_ROUTER @"OsmAndRouter"
 #define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
@@ -300,15 +301,6 @@
     return self;
 }
 
-+ (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    auto router = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
-    if (!router && am.parent)
-        router = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
-    return router;
-}
-
 + (NSString *) getExtensionValue:(OAGpxExtensions *)exts key:(NSString *)key
 {
     for (OAGpxExtension *e in exts.extensions) {
@@ -576,33 +568,6 @@
 
 - (std::shared_ptr<RoutingConfiguration>) initOsmAndRoutingConfig:(std::shared_ptr<RoutingConfigurationBuilder>)config params:(OARouteCalculationParams *)params generalRouter:(std::shared_ptr<GeneralRouter>)generalRouter
 {
-    GeneralRouterProfile p;
-    string profileName;
-    if ([params.mode isDerivedRoutingFrom:[OAApplicationMode BICYCLE]])
-    {
-        p = GeneralRouterProfile::BICYCLE;
-        profileName = "bicycle";
-    }
-    else if ([params.mode isDerivedRoutingFrom:[OAApplicationMode PEDESTRIAN]])
-    {
-        p = GeneralRouterProfile::PEDESTRIAN;
-        profileName = "pedestrian";
-    }
-    else if ([params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]])
-    {
-        p = GeneralRouterProfile::CAR;
-        profileName = "car";
-    }
-    else if ([params.mode isDerivedRoutingFrom:[OAApplicationMode BOAT]])
-    {
-        p = GeneralRouterProfile::BOAT;
-        profileName = "boat";
-    }
-    else
-    {
-        return nullptr;
-    }
-    
     OAAppSettings *settings = [OAAppSettings sharedManager];
     MAP_STR_STR paramsR;
     auto& routerParams = generalRouter->getParameters();
@@ -632,14 +597,33 @@
         if (vl.length() > 0)
             paramsR[key] = vl;
     }
-    
+    double defaultSpeed = params.mode.getDefaultSpeed;
+    std::ostringstream strs;
+    if (defaultSpeed > 0) {
+        strs << defaultSpeed;
+        paramsR[GeneralRouterConstants::DEFAULT_SPEED] = strs.str();
+    }
+    double minSpeed = params.mode.getMinSpeed;
+    if (minSpeed > 0) {
+        strs.clear();
+        strs.str("");
+        strs << minSpeed;
+        paramsR[GeneralRouterConstants::MIN_SPEED] = strs.str();
+    }
+    double maxSpeed = params.mode.getMaxSpeed;
+    if (maxSpeed > 0) {
+        strs.clear();
+        strs.str("");
+        strs << maxSpeed;
+        paramsR[GeneralRouterConstants::MAX_SPEED] = strs.str();
+    }
     float mb = (1 << 20);
     // make visible
     long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO
     long memoryTotal = (long) ([NSProcessInfo processInfo].physicalMemory / mb);
     NSLog(@"Use %ld MB of %ld", memoryLimit, memoryTotal);
     
-    auto cf = config->build(profileName, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
+    auto cf = config->build(params.mode.getRoutingProfile.UTF8String, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
     if ([OAAppSettings.sharedManager.enableTimeConditionalRouting get:params.mode])
     {
         cf->routeCalculationTime = [[NSDate date] timeIntervalSince1970] * 1000;
@@ -819,15 +803,6 @@
     }
 }
 
-- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
-{
-    auto router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
-    if (!router && am.parent)
-        router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
-    
-    return router;
-}
-
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end
 {
     OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
@@ -858,8 +833,8 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     router->setUseFastRecalculation(settings.useFastRecalculation);
     
-    auto config = app.defaultRoutingConfig;
-    auto generalRouter = [self getRouter:params.mode];
+    auto config = [app getRoutingConfigForMode:params.mode];
+    auto generalRouter = [app getRouter:config mode:params.mode];
     if (!generalRouter)
         return nil;
     

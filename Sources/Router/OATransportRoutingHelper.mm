@@ -199,9 +199,8 @@
 - (vector<SHARED_PTR<TransportRouteResult>>) calculateRouteImpl:(OATransportRouteCalculationParams *)params
 {
     vector<SHARED_PTR<TransportRouteResult>> res;
-    auto config = _app.defaultRoutingConfig;
     MAP_STR_STR paramsRes;
-    auto router = [OARouteProvider getRouter:params.mode];
+    auto router = [_app getRouter:params.mode];
     auto paramsMap = router->getParameters();
     for (auto it = paramsMap.begin(); it != paramsMap.end(); ++it)
     {

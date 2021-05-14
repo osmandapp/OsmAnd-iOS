@@ -214,7 +214,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.leftImageView.tintColor = UIColorFromRGB(color_primary_purple);
         }
@@ -222,7 +222,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftImageView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;
     }
@@ -295,7 +295,7 @@
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
     return nil;

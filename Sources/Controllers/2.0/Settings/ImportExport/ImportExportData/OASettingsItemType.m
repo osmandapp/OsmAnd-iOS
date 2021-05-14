@@ -24,6 +24,8 @@
             return @"DATA";
         case EOASettingsItemTypeFile:
             return @"FILE";
+        case EOASettingsItemTypeResources:
+            return @"RESOURCES";
         case EOASettingsItemTypeQuickActions:
             return @"QUICK_ACTIONS";
         case EOASettingsItemTypePoiUIFilters:
@@ -44,6 +46,8 @@
             return @"GPX";
         case EOASettingsItemTypeSearchHistory:
             return @"SEARCH_HISTORY";
+        case EOASettingsItemTypeDownloads:
+            return @"DOWNLOADS";
         default:
             return nil;
     }
@@ -61,6 +65,8 @@
         return EOASettingsItemTypeData;
     if ([typeName isEqualToString:@"FILE"])
         return EOASettingsItemTypeFile;
+    if ([typeName isEqualToString:@"RESOURCES"])
+        return EOASettingsItemTypeResources;
     if ([typeName isEqualToString:@"QUICK_ACTIONS"])
         return EOASettingsItemTypeQuickActions;
     if ([typeName isEqualToString:@"POI_UI_FILTERS"])
@@ -81,6 +87,8 @@
         return EOASettingsItemTypeGpx;
     if ([typeName isEqualToString:@"SEARCH_HISTORY"])
         return EOASettingsItemTypeSearchHistory;
+    if ([typeName isEqualToString:@"DOWNLOADS"])
+        return EOASettingsItemTypeDownloads;
     
     return EOASettingsItemTypeUnknown;
 }

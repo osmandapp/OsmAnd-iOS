@@ -9,26 +9,27 @@
 #import "OACustomPOIViewController.h"
 #import "OAPOIHelper.h"
 #import "OAPOICategory.h"
-#import "OASettingSwitchCell.h"
 #import "OAPOISearchHelper.h"
 #import "OASelectSubcategoryViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
-#import "OAUtilities.h"
 #import "OASizes.h"
+#import "OAPOIFilterViewController.h"
 #import "OAColors.h"
+#import "OAMenuSimpleCell.h"
+
+#define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
+#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *topView;
-@property (weak, nonatomic) IBOutlet UIButton *btnCancel;
-@property (weak, nonatomic) IBOutlet UILabel *textView;
-
-@property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet UILabel *bottomTextView;
-@property (weak, nonatomic) IBOutlet UILabel *bottomBtnView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIButton *showButton;
 
 @end
 
@@ -36,9 +37,9 @@
 {
     OAPOIFiltersHelper *_filterHelper;
     OAPOIUIFilter *_filter;
-    NSArray<OAPOICategory *> *_dataArray;
+    NSArray<OAPOICategory *> *_categories;
     BOOL _editMode;
-    BOOL _bottomViewVisible;
+    NSInteger _countShowCategories;
 }
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter
@@ -54,10 +55,10 @@
     return self;
 }
 
-- (void) initData
+- (void)initData
 {
-    _dataArray = [OAPOIHelper sharedInstance].poiCategoriesNoOther;
-    _dataArray = [_dataArray sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory * _Nonnull c1, OAPOICategory * _Nonnull c2) {
+    NSArray<OAPOICategory *> *poiCategoriesNoOther = [OAPOIHelper sharedInstance].poiCategoriesNoOther;
+    _categories = [poiCategoriesNoOther sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory * _Nonnull c1, OAPOICategory * _Nonnull c2) {
         return [c1.nameLocalized localizedCaseInsensitiveCompare:c2.nameLocalized];
     }];
 }
@@ -66,116 +67,82 @@
 {
     [super viewDidLoad];
 
-    // drop shadow
-    [_bottomView.layer setShadowColor:[UIColor blackColor].CGColor];
-    [_bottomView.layer setShadowOpacity:0.3];
-    [_bottomView.layer setShadowRadius:3.0];
-    [_bottomView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+}
 
-    _bottomView.hidden = YES;
-    [_bottomView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewPress:)]];
-    
+- (void)applyLocalization
+{
     if (_editMode)
-    {
-        self.textView.text = _filter.name;
-    }
+        self.titleLabel.text = _filter.name;
     else
-    {
-        self.textView.text = OALocalizedString(@"create_custom_poi");
-        self.bottomBtnView.text = [OALocalizedString(@"sett_show") upperCase];
-    }
+        self.titleLabel.text = OALocalizedString(@"create_custom_poi");
+
+    self.saveButton.titleLabel.text = OALocalizedString(@"shared_string_save");
+    [self updateTextShowButton];
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)updateTextShowButton
 {
-    [super viewWillAppear:animated];
-    [self applySafeAreaMargins];
+    _countShowCategories = 0;
+    for (OAPOICategory *category in _categories)
+        if ([_filter isTypeAccepted:category]) {
+            NSSet<NSString *> *acceptedSubtypes = [_filter getAcceptedSubtypes:category];
+            NSInteger count = acceptedSubtypes != [OAPOIBaseType nullSet] ? acceptedSubtypes.count : category.poiTypes.count;
+            _countShowCategories += count;
+        }
+
+    NSString *textShow = OALocalizedString(@"sett_show");
+    UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+    UIColor *colorShow = [[UIColor alloc] initWithWhite:1 alpha:1];
+    NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName:fontShow, NSForegroundColorAttributeName:colorShow}];
+
+    NSString *textCategories = [NSString stringWithFormat:@"\n%@: %li", OALocalizedString(@"categories"), _countShowCategories];
+    UIFont *fontCategories = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+    UIColor *colorCategories = [[UIColor alloc] initWithWhite:1 alpha:0.5];
+    NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName:fontCategories, NSForegroundColorAttributeName:colorCategories}];
+
+    [attrShow appendAttributedString:attrCategories];
+
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:2.0];
+    [style setAlignment:NSTextAlignmentCenter];
+    [attrShow addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attrShow.string.length)];
+
+    [_showButton setAttributedTitle:attrShow forState:UIControlStateNormal];
 }
 
--(UIView *) getTopView
-{
-    return _topView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
-
--(UIView *) getBottomView
-{
-    return _bottomViewVisible ? _bottomView : nil;
-}
-
--(CGFloat) getToolBarHeight
-{
-    return customSearchToolBarHeight;
-}
-
-- (IBAction)bottomViewPress:(id)sender
-{
-    if (_delegate)
-        [_delegate searchByUIFilter:_filter];
-    
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (IBAction)cancelPress:(id)sender
+- (IBAction)onBackButtonClicked:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+
+    if (_editMode && self.refreshDelegate)
+        [self.refreshDelegate refreshList];
 }
 
-- (void) saveFilter
+- (IBAction)onSaveButtonClicked:(id)sender
 {
-    [_filterHelper editPoiFilter:_filter];
-    if (!_editMode)
-    {
-        if ([_filter isEmpty])
-        {
-            [self setBottomViewVisibility:NO];
-        }
-        else
-        {
-            self.bottomTextView.text = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"selected_categories"), [_filter getAcceptedTypesCount]];
-
-            [self setBottomViewVisibility:YES];
-        }
+    if (self.delegate) {
+        UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
+        UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+            [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        [saveDialog addAction:actionSave];
+        [self presentViewController:saveDialog animated:YES completion:nil];
     }
 }
 
-- (void) setBottomViewVisibility:(BOOL)visible
+- (IBAction)onShowButtonClicked:(id)sender
 {
-    if (visible)
-    {
-        if (!_bottomViewVisible)
-        {
-            _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
-            _bottomView.hidden = NO;
-            CGRect tableFrame = _tableView.frame;
-            tableFrame.size.height -= _bottomView.bounds.size.height;
-            [UIView animateWithDuration:.25 animations:^{
-                _tableView.frame = tableFrame;
-                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - _bottomView.bounds.size.height, self.view.bounds.size.width, _bottomView.bounds.size.height);
-            }];
-        }
-        _bottomViewVisible = YES;
-        [self applySafeAreaMargins];
-    }
-    else
-    {
-        if (_bottomViewVisible)
-        {
-            CGRect tableFrame = _tableView.frame;
-            tableFrame.size.height = self.view.bounds.size.height - tableFrame.origin.y;
-            [UIView animateWithDuration:.25 animations:^{
-                _tableView.frame = tableFrame;
-                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
-            } completion:^(BOOL finished) {
-                _bottomView.hidden = YES;
-            }];
-        }
-        _bottomViewVisible = NO;
-    }
+    if (self.delegate)
+        [self.delegate searchByUIFilter:_filter newName:nil willSaved:NO];
+
+    if (_editMode && self.refreshDelegate)
+        [self.refreshDelegate refreshList];
+
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - OASelectSubcategoryDelegate
@@ -188,136 +155,85 @@
 - (void)selectSubcategoryDone:(OAPOICategory *)category keys:(NSMutableSet<NSString *> *)keys allSelected:(BOOL)allSelected;
 {
     if (allSelected)
-    {
         [_filter selectSubTypesToAccept:category accept:[OAPOIBaseType nullSet]];
-    }
     else if (keys.count == 0)
-    {
         [_filter setTypeToAccept:category b:NO];
-    }
     else
-    {
         [_filter selectSubTypesToAccept:category accept:keys];
-    }
-    
-    [self saveFilter];
+
+    [_filterHelper editPoiFilter:_filter];
     [self.tableView reloadData];
+    [self updateTextShowButton];
 }
 
 
 #pragma mark - UITableViewDataSource
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForFooter];
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForHeader];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASettingSwitchCell* cell;
-    cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OASettingSwitchCell"];
+    OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
-        cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-        cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
+        cell = (OAMenuSimpleCell *) nib[0];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    
+
     if (cell)
     {
-        [cell.switchView removeTarget:self action:@selector(toggle:) forControlEvents:UIControlEventValueChanged];
-        cell.contentView.backgroundColor = [UIColor whiteColor];
-        [cell.textView setTextColor:[UIColor blackColor]];
-        
-        OAPOICategory* item = _dataArray[indexPath.row];
+        OAPOICategory* item = _categories[indexPath.row];
         BOOL isSelected = [_filter isTypeAccepted:item];
-        
-        cell.switchView.tag = indexPath.row;
-        [cell.switchView addTarget:self action:@selector(toggle:) forControlEvents:UIControlEventValueChanged];
+        NSInteger countAllTypes = item.poiTypes.count;
+        NSInteger countAcceptedTypes = [[_filter getAcceptedTypes] objectForKey:item].count;
+        NSSet<NSString *> *subtypes = [_filter getAcceptedSubtypes:item];
 
-        [cell.textView setText:item.nameLocalized];
-        
-        if (isSelected)
-        {
-            [cell.imgView setImage: [item icon]];
-            cell.descriptionView.hidden = NO;
-            cell.switchView.on = YES;
-            NSSet<NSString *> *subtypes = [_filter getAcceptedSubtypes:item];
-            NSMutableSet<NSString *> *poiTypes = [[_filter getAcceptedTypes] objectForKey:item];
-            if (subtypes == [OAPOIBaseType nullSet] || item.poiTypes.count == poiTypes.count)
-            {
-                cell.descriptionView.text = OALocalizedString(@"shared_string_all");
-            }
-            else
-            {
-                NSMutableString *str = [NSMutableString string];
-                for (NSString *st in subtypes)
-                {
-                    if (str.length > 0)
-                        [str appendString:@", "];
-                    [str appendString:[[OAPOIHelper sharedInstance] getPhraseByName:st]];
-                }
-                cell.descriptionView.text = str;
-            }
-        }
+        cell.contentView.backgroundColor = [UIColor whiteColor];
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 66.0, 0.0, 0.0);
+
+        cell.textView.text = item.nameLocalized;
+        cell.textView.textColor = [UIColor blackColor];
+
+        UIImage *img = [[item icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imgView.image = img;
+        cell.imgView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+        cell.imgView.contentMode = UIViewContentModeCenter;
+
+        NSString *descText;
+        if (subtypes == [OAPOIBaseType nullSet] || countAllTypes == countAcceptedTypes)
+            descText = [NSString stringWithFormat:@"%@ - %lu", OALocalizedString(@"shared_string_all"), countAllTypes];
         else
-        {
-            UIImage *img = [[item icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [cell.imgView setImage: img];
-            cell.descriptionView.hidden = YES;
-            cell.switchView.on = NO;
-        }
+            descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
+        cell.descriptionView.text = descText;
+        cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
+
         [cell updateConstraintsIfNeeded];
     }
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    OAPOICategory* item = _categories[indexPath.row];
+    OASelectSubcategoryViewController *subcategoryScreen = [[OASelectSubcategoryViewController alloc] initWithCategory:item filter:_filter];
+    subcategoryScreen.delegate = self;
+    [self.navigationController pushViewController:subcategoryScreen animated:YES];
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _dataArray.count;
+    return _categories.count;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    OAPOICategory* item = _dataArray[indexPath.row];
-    OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item subcategories:[_filter getAcceptedSubtypes:item] selectAll:[_filter getAcceptedSubtypes:item] == [OAPOIBaseType nullSet]];
-    subcatController.delegate = self;
-    [self.navigationController pushViewController:subcatController animated:YES];
+    return [OAPOISearchHelper getHeightForFooter];
 }
 
-- (void)toggle:(id)sender
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([sender isKindOfClass:[UISwitch class]])
-    {
-        UISwitch *sw = (UISwitch *) sender;
-        if (sw.tag >= 0 && sw.tag < _dataArray.count)
-        {
-            OAPOICategory *item = _dataArray[sw.tag];
-            if (sw.on)
-            {
-                OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item subcategories:[_filter getAcceptedSubtypes:item] selectAll:YES];
-                subcatController.delegate = self;
-                [self.navigationController pushViewController:subcatController animated:YES];
-            }
-            else
-            {
-                [_filter setTypeToAccept:item b:NO];
-                [self saveFilter];
-                
-                [self.tableView beginUpdates];
-                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.tableView endUpdates];
-            }
-        }
-    }
+    return [OAPOISearchHelper getHeightForHeader];
 }
 
 @end

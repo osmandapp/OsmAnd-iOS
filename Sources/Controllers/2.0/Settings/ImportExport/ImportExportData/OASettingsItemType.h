@@ -27,7 +27,8 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeOsmEdits,
     EOASettingsItemTypeActiveMarkers,
     EOASettingsItemTypeGpx,
-    EOASettingsItemTypeSearchHistory
+    EOASettingsItemTypeSearchHistory,
+    EOASettingsItemTypeDownloads
 };
 
 @interface OASettingsItemType : NSObject

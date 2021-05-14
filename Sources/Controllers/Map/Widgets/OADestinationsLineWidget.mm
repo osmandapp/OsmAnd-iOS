@@ -48,6 +48,7 @@
     
     NSDictionary<NSString *, NSNumber *> *_lineAttrs;
     NSDictionary<UIColor *, NSString *> *_markerColors;
+    BOOL _attrsChanged;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -101,8 +102,16 @@
 - (BOOL) updateAttributes
 {
     NSDictionary<NSString *, NSNumber *> *lineAttrs = [_mapViewController getLineRenderingAttributes:@"measureDistanceLine"];
-    BOOL changed = [_lineAttrs isEqualToDictionary:lineAttrs];
+    BOOL changed = ![_lineAttrs isEqualToDictionary:lineAttrs];
     _lineAttrs = lineAttrs;
+    _attrsChanged = changed;
+    return changed;
+}
+
+- (BOOL) areAttributesChanged
+{
+    BOOL changed = _attrsChanged;
+    _attrsChanged = NO;
     return changed;
 }
 

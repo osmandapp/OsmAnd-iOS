@@ -1176,7 +1176,7 @@
             case 0: // Average speed
             {
                 [cell.lbTitle setText:OALocalizedString(@"gpx_average_speed")];
-                [cell.lbTitle setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
+                [cell.lbTime setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
                 break;
             }
             case 1: // Max speed

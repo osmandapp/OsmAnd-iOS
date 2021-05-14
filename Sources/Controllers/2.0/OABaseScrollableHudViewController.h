@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *toolBarView;
 @property (weak, nonatomic) IBOutlet UIView *scrollableView;
+@property (weak, nonatomic) IBOutlet UIView *topHeaderContainerView;
 
 @property (nonatomic, readonly) CGFloat initialMenuHeight;
 @property (nonatomic, readonly) CGFloat expandedMenuHeight;
@@ -34,8 +35,17 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 - (void) goExpanded;
 - (void) goMinimized;
 - (void) goFullScreen;
+- (void) goExpanded:(BOOL)animated;
+- (void) goMinimized:(BOOL)animated;
+- (void) goFullScreen:(BOOL)animated;
 
 - (CGFloat) getViewHeight:(EOADraggableMenuState)state;
 - (CGFloat) getViewHeight;
+
+- (void) doAdditionalLayout;
+- (void) updateLayoutCurrentState;
+- (CGFloat) getLandscapeYOffset;
+- (CGFloat) additionalLandscapeOffset;
+- (void) updateShowingState:(EOADraggableMenuState)state;
 
 @end

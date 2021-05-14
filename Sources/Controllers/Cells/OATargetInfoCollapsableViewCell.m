@@ -45,10 +45,8 @@
     {
         if (!_collapseIcon || !_expandIcon)
         {
-            _collapseIcon = [UIImage imageNamed:@"ic_arrow_close.png"];
-            _collapseIcon = [_collapseIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            _expandIcon = [UIImage imageNamed:@"ic_arrow_open.png"];
-            _expandIcon = [_expandIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            _collapseIcon = [UIImage templateImageNamed:@"ic_arrow_close.png"];
+            _expandIcon = [UIImage templateImageNamed:@"ic_arrow_open.png"];
         }
         _rightIconView.hidden = NO;
         _textView.frame = CGRectMake(tf.origin.x, 0, _rightIconView.frame.origin.x - tf.origin.x, rawHeight);

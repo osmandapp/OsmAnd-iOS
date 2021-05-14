@@ -141,7 +141,7 @@
         destCell.titleLabel.text = item[@"title"];
         destCell.descLabel.text = item[@"size"];
         destCell.imageView.tintColor = item[@"color"];
-        [destCell.imageView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [destCell.imageView setImage:[UIImage templateImageNamed:item[@"img"]]];
         
         if (indexPath.row == _selectedItemIndex)
         {

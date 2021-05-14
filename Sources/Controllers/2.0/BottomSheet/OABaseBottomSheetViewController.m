@@ -100,7 +100,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     self.leftButton.layer.cornerRadius = 9.;
     self.rightButton.layer.cornerRadius = 9.;
     
-    [self.closeButton setImage:[[UIImage imageNamed:@"ic_custom_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.closeButton setImage:[UIImage templateImageNamed:@"ic_custom_close"] forState:UIControlStateNormal];
     self.closeButton.tintColor = UIColorFromRGB(color_primary_purple);
     
     _currentState = EOAScrollableMenuStateInitial;

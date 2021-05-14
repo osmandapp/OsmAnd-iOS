@@ -34,6 +34,11 @@
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 
+#define firstLineId 11
+#define firstOutlineId 10
+#define secondLineId 21
+#define secondOutlineId 20
+
 @interface OADestinationsLayer () <OAStateChangedListener>
 
 @end
@@ -343,66 +348,72 @@
 
 - (void) drawDestinationLines
 {
-    [self.mapView removeKeyedSymbolsProvider:_linesCollection];
-    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    
-    if ([OADestinationsHelper instance].sortedDestinations.count > 0)
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if ([settings.directionLines get] && [OADestinationsHelper instance].sortedDestinations.count > 0)
     {
-        OAAppSettings *settings = OAAppSettings.sharedManager;
         NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
         OADestination *firstMarkerDestination = (destinations.count > 0 ? destinations[0] : nil);
         OADestination *secondMarkerDestination = (destinations.count > 1 ? destinations[1] : nil);
-        
-        if ([settings.directionLines get])
+        CLLocation *currLoc = [self.app.locationServices lastKnownLocation];
+        if (currLoc)
         {
-            CLLocation *currLoc = [self.app.locationServices lastKnownLocation];
-            if (currLoc)
+            if (firstMarkerDestination)
+                [self drawLine:firstMarkerDestination fromLocation:currLoc lineId:firstLineId outlineId:firstOutlineId];
+            
+            if (secondMarkerDestination && [settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
             {
-                if (firstMarkerDestination)
-                    [self drawLine:firstMarkerDestination fromLocation:currLoc lineId:10];
-                    
-                if (secondMarkerDestination && [settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
-                    [self drawLine:secondMarkerDestination fromLocation:currLoc lineId:20];
-                else
-                    _linesCollection->removeLine([self getLine:2]);
+                [self drawLine:secondMarkerDestination fromLocation:currLoc lineId:secondLineId outlineId:secondOutlineId];
             }
-            [self.mapView addKeyedSymbolsProvider:_linesCollection];
+            else
+            {
+                _linesCollection->removeLine([self getLine:secondOutlineId]);
+                _linesCollection->removeLine([self getLine:secondLineId]);
+            }
         }
+    }
+    else
+    {
+        _linesCollection->removeAllLines();
     }
 }
 
-- (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc lineId:(int)lineId
+- (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc lineId:(int)lineId outlineId:(int)outlineId
 {
     QVector<OsmAnd::PointI> points;
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(destination.latitude, destination.longitude)));
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currLoc.coordinate.latitude, currLoc.coordinate.longitude)));
+
     const auto color = [self argbFromUIColor:destination.color];
     const auto& line = [self getLine:lineId];
-    if (line == nullptr)
+    const auto& outline = [self getLine:outlineId];
+
+    double strokeWidth = _destinationLayerWidget.getStrokeWidth * 3.5;
+    std::vector<double> outlinePattern;
+    outlinePattern.push_back(75);
+    outlinePattern.push_back(25);
+    OsmAnd::FColorARGB outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);
+
+    std::vector<double> inlinePattern;
+    inlinePattern.push_back(-strokeWidth);
+    inlinePattern.push_back(75 - strokeWidth * 2);
+    inlinePattern.push_back(25 + strokeWidth * 2);
+
+    if (line == nullptr || outline == nullptr)
     {
-        double strokeWidth = _destinationLayerWidget.getStrokeWidth * 3.5;
-        std::vector<double> outlinePattern;
-        outlinePattern.push_back(75);
-        outlinePattern.push_back(25);
         OsmAnd::VectorLineBuilder outlineBuilder;
         outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId + 1)
         .setIsHidden(false)
-        .setLineId(lineId)
+        .setLineId(outlineId)
         .setLineWidth(strokeWidth * 2)
         .setLineDash(outlinePattern)
         .setPoints(points)
-        .setFillColor(OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0));
+        .setFillColor(outlineColor);
         outlineBuilder.buildAndAddToCollection(_linesCollection);
         
-        std::vector<double> inlinePattern;
-        inlinePattern.push_back(-strokeWidth);
-        inlinePattern.push_back(75 - strokeWidth * 2);
-        inlinePattern.push_back(25 + strokeWidth * 2);
-
         OsmAnd::VectorLineBuilder inlineBuilder;
         inlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId)
         .setIsHidden(false)
-        .setLineId(lineId + 1)
+        .setLineId(lineId)
         .setLineWidth(strokeWidth)
         .setLineDash(inlinePattern)
         .setPoints(points)
@@ -411,6 +422,15 @@
     }
     else
     {
+        outline->setIsHidden(false);
+        outline->setLineWidth(strokeWidth * 2);
+        outline->setLineDash(outlinePattern);
+        outline->setPoints(points);
+        outline->setFillColor(outlineColor);
+        
+        line->setIsHidden(false);
+        line->setLineWidth(strokeWidth);
+        line->setLineDash(inlinePattern);
         line->setPoints(points);
         line->setFillColor(color);
     }

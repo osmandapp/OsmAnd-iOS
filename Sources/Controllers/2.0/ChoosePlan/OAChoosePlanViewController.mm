@@ -436,7 +436,7 @@
     [self.cardsContainer addSubview:_osmLiveCard];
     
     [_btnBack setTintColor:UIColorFromRGB(color_primary_purple)];
-    [_btnBack setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    [_btnBack setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 }
 
 - (void) viewWillAppear:(BOOL)animated

@@ -53,7 +53,7 @@
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 55., 0.0, 0.0);
     [self.tableView setEditing:YES];
-    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
 }
 
@@ -113,7 +113,7 @@
     {
         cell.textView.text = item.name;
         cell.descriptionView.text = item.descr;
-        cell.imgView.image = [UIImage templateImageNamed:item.iconName];
+        cell.imgView.image = [[UIImage imageNamed:item.iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.imgView.tintColor = UIColorFromRGB(item.iconColor);
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         if ([_initialValues containsObject:item.stringKey])

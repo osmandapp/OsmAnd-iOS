@@ -19,7 +19,7 @@
     [super awakeFromNib];
     // Initialization code
     _showLegend = NO;
-    [_expandImageView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_down.png"]];
+    [_expandImageView setImage:[[UIImage imageNamed:@"ic_custom_arrow_down.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [_expandImageView setTintColor:UIColorFromRGB(color_primary_purple)];
 }
 
@@ -33,7 +33,7 @@
 {
     _showLegend = !_showLegend;
     
-    [_expandImageView setImage:[UIImage templateImageNamed:(_showLegend ? @"ic_custom_arrow_up.png" : @"ic_custom_arrow_down.png")]];
+    [_expandImageView setImage:[[UIImage imageNamed:(_showLegend ? @"ic_custom_arrow_up.png" : @"ic_custom_arrow_down.png")] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 }
 
 

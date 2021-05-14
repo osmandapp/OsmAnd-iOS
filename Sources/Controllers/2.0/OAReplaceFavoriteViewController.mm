@@ -259,7 +259,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell = [self setupPoiIconForCell:cell withFavaoriteItem:favorite];
             
             [cell.distanceView setText:item[@"distance"]];
-            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation([item[@"direction"] floatValue]);
             cell.separatorInset = UIEdgeInsetsZero;

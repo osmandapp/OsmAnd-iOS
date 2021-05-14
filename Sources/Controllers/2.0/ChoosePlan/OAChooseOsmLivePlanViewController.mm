@@ -173,7 +173,7 @@
     [self.cardsContainer addSubview:_purchaseButtonsCard];
     
     [_btnBack setTintColor:UIColor.whiteColor];
-    [_btnBack setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    [_btnBack setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     
     _navBarBackgroundView = [self createNavBarBackgroundView];
     _navBarBackgroundView.frame = _navBarView.bounds;

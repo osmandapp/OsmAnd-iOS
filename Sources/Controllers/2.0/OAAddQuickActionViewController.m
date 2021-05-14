@@ -49,9 +49,9 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.tableHeaderView = _tableHeaderView;
-    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
-    [self.searchBtn setImage:[UIImage templateImageNamed:@"ic_navbar_search"] forState:UIControlStateNormal];
+    [self.searchBtn setImage:[[UIImage imageNamed:@"ic_navbar_search"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.searchBtn setTintColor:UIColor.whiteColor];
     
     _searchFieldContainer = [[UIView alloc] initWithFrame:CGRectMake(0., defaultNavBarHeight + OAUtilities.getStatusBarHeight, DeviceScreenWidth, 0.1)];
@@ -120,7 +120,7 @@
     _searchField.delegate = self;
     [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"search_icon"]];
+    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"search_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     leftImageView.contentMode = UIViewContentModeCenter;
     leftImageView.frame = _searchField.leftView.frame;
     leftImageView.tintColor = [UIColor whiteColor];
@@ -247,7 +247,7 @@
             {
                 OAQuickAction *act = [action createNew];
                 CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
-                UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
+                UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
                 [background setTintColor:UIColor.whiteColor];
                 [cell.iconView addSubview:background];
@@ -258,7 +258,7 @@
             }
             [cell setButtonText:nil];
             cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.buttonView setImage:[UIImage templateImageNamed:@"ic_custom_plus"] forState:UIControlStateNormal];
+            [cell.buttonView setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
             [cell.buttonView addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
             cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
         }

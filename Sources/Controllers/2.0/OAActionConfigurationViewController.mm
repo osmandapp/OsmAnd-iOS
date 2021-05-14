@@ -118,7 +118,7 @@
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
     
     if (_action.getActionText)
@@ -247,8 +247,8 @@
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont systemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
     
     return resultCell;
 }
@@ -546,7 +546,7 @@
             NSString *imgName = item[@"img"];
             if (imgName && imgName.length > 0)
             {
-                [cell.iconView setImage:[UIImage templateImageNamed:imgName]];
+                [cell.iconView setImage:[[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
                 cell.iconView.tintColor = UIColorFromRGB(color_text_footer);
             }
         }
@@ -569,7 +569,7 @@
             if (item[@"img"])
             {
                 cell.leftImageView.layer.cornerRadius = 0.;
-                cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.leftImageView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.leftImageView.tintColor = color.color;
             }
             else if ([item[@"key"] isEqualToString:@"category_color"])
@@ -654,7 +654,7 @@
             cell.descView.hidden = YES;
             if (item[@"iconColor"])
             {
-                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.iconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
             }
             else
@@ -694,8 +694,8 @@
             [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             textField.font = [UIFont systemFontOfSize:17.0];
             textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-            [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-            [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
+            [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+            [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
         }
         return cell;
     }

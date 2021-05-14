@@ -243,7 +243,7 @@ static const NSInteger actionsSectionIndex = 2;
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         return cell;
     }
     else if ([type isEqualToString:kCellTypeButton])

@@ -158,7 +158,7 @@
         NSString *iconName = item[@"img"];
         if (iconName && iconName.length > 0)
         {
-            [destCell.imageView setImage:[UIImage templateImageNamed:item[@"img"]]];
+            [destCell.imageView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             destCell.imageView.hidden = NO;
             destCell.labelNoIconConstraint.priority = 1;
             destCell.labelWithIconConstraint.priority = 1000;

@@ -376,8 +376,8 @@
             cell.textLabel.font = [UIFont systemFontOfSize:17.0];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
-            UIImage* iconImage = [UIImage templateImageNamed:@"menu_item_update_icon.png"];
-            cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
+            UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {

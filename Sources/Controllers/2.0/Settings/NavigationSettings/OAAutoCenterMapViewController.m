@@ -91,7 +91,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:[UIImage templateImageNamed:@"ic_checkmark_default"]];
+            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)

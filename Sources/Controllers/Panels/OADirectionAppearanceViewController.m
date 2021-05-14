@@ -251,9 +251,8 @@
             cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
         }
-        
-        UIImage *fgImage = [UIImage templateImageNamed:item[@"fg_img"]];
-        UIImage *bgImage = [UIImage templateImageNamed:item[@"bg_img"]];
+        UIImage *fgImage = [[UIImage imageNamed:item[@"fg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage *bgImage = [[UIImage imageNamed:item[@"bg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconImageView.image = [self drawImage:fgImage inImage:bgImage bgColor:item[@"bg_color"] fgColor:item[@"fg_color"]];
         cell.titleLabel.text = item[@"title"];
         cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];

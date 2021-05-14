@@ -439,7 +439,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             cell.textView.text = [self isContourLinesOn] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = [self isContourLinesOn] ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [UIImage templateImageNamed:imgName];
+            cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.imgView.tintColor = [self isContourLinesOn] ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -616,7 +616,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [UIImage templateImageNamed:@"ic_custom_contour_lines"];
+        cell.imageView.image = [[UIImage imageNamed:@"ic_custom_contour_lines"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)
@@ -649,7 +649,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.titleView.text = item[@"title"];
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);

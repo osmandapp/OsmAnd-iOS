@@ -387,11 +387,13 @@
                 
                 if (groupData.isOpen)
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_up"];
+                    cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_up"]
+                                           imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 }
                 else
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection;
+                    cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
+                                           imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                     if ([cell isDirectionRTL])
                         [cell.iconView setImage:cell.iconView.image.imageFlippedForRightToLeftLayoutDirection];
                 }
@@ -454,7 +456,7 @@
             if (cell)
             {
                 cell.textView.text = item[@"title"];
-                cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.iconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
             }
             return cell;

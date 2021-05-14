@@ -98,7 +98,7 @@
         else
         {
             destCell.imageView.tintColor = tint;
-            destCell.imageView.image = [UIImage templateImageNamed:item[@"img"]];
+            destCell.imageView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
     }
     return cell;

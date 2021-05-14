@@ -57,7 +57,7 @@
 {
     NSString *iconName = [self iconName];
     if (iconName)
-        return [UIImage templateImageNamed:iconName];
+        return [[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     else
         return nil;
 }

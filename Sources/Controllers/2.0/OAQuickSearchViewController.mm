@@ -370,7 +370,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionSelectTarget:
         {
             _barActionLeftImageButton.hidden = YES;
-            UIImage *mapImage = [UIImage templateImageNamed:@"ic_action_marker"];
+            UIImage *mapImage = [UIImage imageNamed:@"ic_action_marker"];
+            mapImage = [mapImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
             
@@ -403,7 +404,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionShowOnMap:
         {
             _barActionLeftImageButton.hidden = YES;
-            UIImage *mapImage = [UIImage templateImageNamed:@"waypoint_map_disable.png"];
+            UIImage *mapImage = [UIImage imageNamed:@"waypoint_map_disable.png"];
+            mapImage = [mapImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
             

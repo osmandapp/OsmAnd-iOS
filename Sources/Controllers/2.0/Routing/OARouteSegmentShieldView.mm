@@ -62,7 +62,7 @@ static UIFont *_shieldFont;
         _contentView.layer.borderWidth = 2.0;
         _shieldLabel.textColor = primaryColor;
         _contentView.backgroundColor = UIColor.whiteColor;
-        _shieldImage.image = [UIImage templateImageNamed:_iconName];
+        _shieldImage.image = [[UIImage imageNamed:_iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _shieldImage.tintColor = primaryColor;
     }
     else

@@ -70,7 +70,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     [self.cardsContainer addSubview:_osmLiveCard];
     
     _closeButton.tintColor = UIColorFromRGB(color_primary_purple);
-    [_closeButton setImage:[UIImage templateImageNamed:@"ic_action_close_banner.png"] forState:UIControlStateNormal];
+    [_closeButton setImage:[[UIImage imageNamed:@"ic_action_close_banner.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     
     _subscribeButton.backgroundColor = UIColorFromRGB(color_primary_purple);
     

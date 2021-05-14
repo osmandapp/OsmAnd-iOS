@@ -47,13 +47,17 @@
     static NSString* const identifierCell = @"OAShapesCollectionViewCell";
     OAShapesCollectionViewCell* cell = nil;
     cell = (OAShapesCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
-    cell.iconImageView.image = [UIImage templateImageNamed:_iconNames[indexPath.row]];
+    UIImage *img = nil;
+    NSString *imgName = _iconNames[indexPath.row];
+    img = [UIImage imageNamed:imgName];
+    cell.iconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
     
     if (indexPath.row == _currentIcon)
     {
         cell.backgroundImageView.hidden = NO;
-        cell.backgroundImageView.image = [UIImage templateImageNamed:_contourIconNames[indexPath.row]];
+        UIImage *backfroundImg = [UIImage imageNamed:_contourIconNames[indexPath.row]];
+        cell.backgroundImageView.image = [backfroundImg imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.backgroundImageView.tintColor = UIColorFromRGB(color_primary_purple);
         cell.iconImageView.tintColor = UIColorFromRGB(_currentColor);
     }

@@ -21,7 +21,7 @@
         self.color = color;
         self.iconName = iconName;
         self.icon = [UIImage imageNamed:iconName];
-        self.cellIcon = [UIImage templateImageNamed:@"ic_custom_favorites"];
+        self.cellIcon = [[UIImage imageNamed:@"ic_custom_favorites"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return self;
 }

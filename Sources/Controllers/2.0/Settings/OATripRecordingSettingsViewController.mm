@@ -438,7 +438,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -463,7 +463,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             NSString *img = item[@"img"];
             if (img)
-                cell.leftImageView.image = [UIImage templateImageNamed:img];
+                cell.leftImageView.image = [[UIImage imageNamed:img] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             
             [cell showImage:img != nil];
         }
@@ -501,7 +501,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             
             cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.imgView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
         return cell;
     }
@@ -539,7 +539,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         return cell;
     }
     else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList])

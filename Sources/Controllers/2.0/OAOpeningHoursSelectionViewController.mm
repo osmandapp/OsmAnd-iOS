@@ -22,7 +22,6 @@
 #define kNumberOfSections 2
 #define kCellTypeCheck @"check"
 #define kCellTypeSwitch @"switch"
-#define kCellTypeTimeRightDetail @"time_right_detail"
 
 static const NSInteger daysSectionIndex = 0;
 static const NSInteger timeSectionIndex = 1;
@@ -155,12 +154,12 @@ static const NSInteger timeSectionIndex = 1;
     _endDate = [self dateFromMinutes:rule->getEndTime()];
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_opens_at"),
-                         @"type" : kCellTypeTimeRightDetail,
+                         @"type" : [OATimeTableViewCell getCellIdentifier],
                          }];
     
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_closes_at"),
-                         @"type" : kCellTypeTimeRightDetail,
+                         @"type" : [OATimeTableViewCell getCellIdentifier],
                          }];
     _timeData = [NSArray arrayWithArray:dataArr];
 }
@@ -328,14 +327,13 @@ static const NSInteger timeSectionIndex = 1;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeTimeRightDetail])
+    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -390,7 +388,7 @@ static const NSInteger timeSectionIndex = 1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeTimeRightDetail])
+    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
         

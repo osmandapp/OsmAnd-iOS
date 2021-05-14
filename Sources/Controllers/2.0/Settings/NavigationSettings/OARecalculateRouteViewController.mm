@@ -20,7 +20,6 @@
 
 #define kSidePadding 16
 #define kDistanceSection 1
-#define kCellTypeDistance @"time_cell"
 #define kCellTypePicker @"pickerCell"
 
 #define kDisableMode -1
@@ -111,7 +110,7 @@
     if (!disabled)
     {
         [distanceArr addObject:@{
-            @"type" : kCellTypeDistance,
+            @"type" : [OATimeTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_distance"),
         }];
         [distanceArr addObject:@{
@@ -147,14 +146,13 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeDistance])
+    else if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -206,7 +204,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kCellTypeDistance])
+    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
 

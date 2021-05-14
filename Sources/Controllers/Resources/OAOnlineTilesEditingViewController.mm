@@ -40,7 +40,6 @@
 
 #define kCellTypeFloatTextInput @"text_input_floating_cell"
 #define kCellTypeSetting @"settings_cell"
-#define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
 #define kCellTypeTextInput @"text_input_cell"
 
@@ -241,12 +240,12 @@
     [zoomArr addObject:@{
                         @"title": OALocalizedString(@"rec_interval_minimum"),
                         @"key" : @"minZoom",
-                        @"type" : kCellTypeZoom,
+                        @"type" : [OATimeTableViewCell getCellIdentifier],
                          }];
     [zoomArr addObject:@{
                         @"title": OALocalizedString(@"shared_string_maximum"),
                         @"key" : @"maxZoom",
-                        @"type" : kCellTypeZoom,
+                        @"type" : [OATimeTableViewCell getCellIdentifier],
                          }];
     [zoomArr addObject:@{
                         @"type" : kCellTypePicker,
@@ -832,14 +831,13 @@
         return cell;
     }
 
-    else if ([item[@"type"] isEqualToString:kCellTypeZoom])
+    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -878,7 +876,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item =  [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeZoom])
+    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
 

@@ -1683,7 +1683,7 @@
 		8490B1DF2068E22B007694A5 /* ic_small_turn_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 8490B1D42068E22A007694A5 /* ic_small_turn_right.png */; };
 		849E17E32074C8C9002E5A75 /* OAMenuSimpleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E17E02074C8C8002E5A75 /* OAMenuSimpleCell.xib */; };
 		849E17E72074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 849E17E62074C917002E5A75 /* OAMenuSimpleCell.mm */; };
-		849E812D1AFA142F00549953 /* OATimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81271AFA142F00549953 /* OATimeCell.xib */; };
+		849E812D1AFA142F00549953 /* OATimeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81271AFA142F00549953 /* OATimeTableViewCell.xib */; };
 		849E81321AFA146E00549953 /* OATimeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 849E812F1AFA146E00549953 /* OATimeTableViewCell.m */; };
 		849E813B1AFA157600549953 /* OADateTimePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81351AFA157600549953 /* OADateTimePickerTableViewCell.xib */; };
 		849E81401AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 849E813D1AFA158D00549953 /* OADateTimePickerTableViewCell.m */; };
@@ -5772,7 +5772,7 @@
 		849E17E02074C8C8002E5A75 /* OAMenuSimpleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAMenuSimpleCell.xib; path = Resources/Controllers/Cells/OAMenuSimpleCell.xib; sourceTree = "<group>"; };
 		849E17E52074C917002E5A75 /* OAMenuSimpleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMenuSimpleCell.h; path = Controllers/Cells/OAMenuSimpleCell.h; sourceTree = "<group>"; };
 		849E17E62074C917002E5A75 /* OAMenuSimpleCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMenuSimpleCell.mm; path = Controllers/Cells/OAMenuSimpleCell.mm; sourceTree = "<group>"; };
-		849E81271AFA142F00549953 /* OATimeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATimeCell.xib; path = Resources/Controllers/Cells/OATimeCell.xib; sourceTree = "<group>"; };
+		849E81271AFA142F00549953 /* OATimeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATimeTableViewCell.xib; path = Resources/Controllers/Cells/OATimeTableViewCell.xib; sourceTree = "<group>"; };
 		849E812E1AFA146E00549953 /* OATimeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATimeTableViewCell.h; path = Controllers/Cells/OATimeTableViewCell.h; sourceTree = "<group>"; };
 		849E812F1AFA146E00549953 /* OATimeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATimeTableViewCell.m; path = Controllers/Cells/OATimeTableViewCell.m; sourceTree = "<group>"; };
 		849E81351AFA157600549953 /* OADateTimePickerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADateTimePickerTableViewCell.xib; path = Resources/Controllers/Cells/OADateTimePickerTableViewCell.xib; sourceTree = "<group>"; };
@@ -8765,7 +8765,7 @@
 				84387B2F1ABCAB6F00504DA7 /* OAIconTextDescCell.xib */,
 				8440E2E51ABEB2450088856A /* OAPointDescCell.xib */,
 				8432E2681AC068880082CFC6 /* OASearchMoreCell.xib */,
-				849E81271AFA142F00549953 /* OATimeCell.xib */,
+				849E81271AFA142F00549953 /* OATimeTableViewCell.xib */,
 				849E81351AFA157600549953 /* OADateTimePickerTableViewCell.xib */,
 				848D17341B1C90BA00A656F4 /* OATextLineViewCell.xib */,
 				848D17421B1C977600A656F4 /* OAColorViewCell.xib */,
@@ -17100,7 +17100,7 @@
 				843E5CC91AB341E000BE14BE /* icon_direction@3x.png in Resources */,
 				DA13415C243DC5A80039D214 /* map_action_helicopter@3x.png in Resources */,
 				DA8EE7F6246D446400069A6D /* ic_custom_no_route@2x.png in Resources */,
-				849E812D1AFA142F00549953 /* OATimeCell.xib in Resources */,
+				849E812D1AFA142F00549953 /* OATimeTableViewCell.xib in Resources */,
 				84EC52BC1F8BF26600AFC252 /* ic_configure_screen_dark@3x.png in Resources */,
 				845E05C21B55129100DFC2A7 /* ic_destination_pin_2_small.png in Resources */,
 				84C41DE31AB8600D0089EABB /* free_map_mode_button@2x.png in Resources */,

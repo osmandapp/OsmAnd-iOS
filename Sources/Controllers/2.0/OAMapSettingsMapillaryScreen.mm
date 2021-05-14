@@ -158,13 +158,13 @@ static const NSInteger panoImageFilterSection = 3;
     [dataArr addObject:@[
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : @"OATimeTableViewCell",
+                             @"type" : [OATimeTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_start_date"),
                              @"key" : @"start_date_filter",
                              @"img" : @"ic_custom_date.png"
                              },
                          @{
-                             @"type" : @"OATimeTableViewCell",
+                             @"type" : [OATimeTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_end_date"),
                              @"key" : @"end_date_filter",
                              @"img" : @"ic_custom_date.png"
@@ -430,13 +430,12 @@ static const NSInteger panoImageFilterSection = 3;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OATimeTableViewCell"])
+    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeCell";
-        OATimeTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATimeTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             [cell showLeftImageView:YES];
         }

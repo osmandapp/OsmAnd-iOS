@@ -17,8 +17,6 @@
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
 
-#define kCellTypeSpeed @"time_cell"
-
 @interface OADefaultSpeedViewController()
 
 @end
@@ -119,7 +117,7 @@
     if (_selectedValue == 0)
         _selectedValue = _defaultValue;
     [tableData addObject:@{
-        @"type" : kCellTypeSpeed,
+        @"type" : [OATimeTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"default_speed"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _selectedValue, _units],
     }];
@@ -144,14 +142,13 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeSpeed])
+    if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.lbTime.textColor = UIColor.blackColor;

@@ -13,12 +13,11 @@
 #import "OASQLiteTileSource.h"
 #import "OAMapTileDownloader.h"
 #import "OARootViewController.h"
+#import "OATimeTableViewCell.h"
 
 #include "Localization.h"
 #include "OASizes.h"
 #include "OAColors.h"
-
-#define kGeneralInfoCell @"time_cell"
 
 @interface OADownloadMapProgressViewController() <UITableViewDelegate, UITableViewDataSource, OATileDownloadDelegate>
 
@@ -89,13 +88,13 @@
         @"type" : @"OADownloadProgressBarCell",
     }];
     [tableData addObject:@{
-        @"type" : kGeneralInfoCell,
+        @"type" : [OATimeTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"number_of_tiles"),
         @"value" : [NSString stringWithFormat:@"/ %@", [NSString stringWithFormat:@"%ld", _numberOfTiles]],
         @"key" : @"num_of_tiles"
     }];
     [tableData addObject:@{
-        @"type" : kGeneralInfoCell,
+        @"type" : [OATimeTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"download_size"),
         @"value" : [NSString stringWithFormat:@"/ ~ %@", [NSByteCountFormatter stringFromByteCount:_downloadSize countStyle:NSByteCountFormatterCountStyleFile]],
         @"key" : @"download_size"
@@ -175,11 +174,10 @@
         
         return cell;
     }
-    else if ([cellType isEqualToString:kGeneralInfoCell])
+    else if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OADownloadInfoTableViewCell* cell;
-        cell = (OADownloadInfoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OADownloadInfoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADownloadInfoTableViewCell getCellIdentifier] owner:self options:nil];

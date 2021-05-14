@@ -233,9 +233,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
-    
     NSInteger index = indexPath.row;
     if (indexPath.row == [tableView numberOfRowsInSection:0] - 1)
     {
@@ -276,10 +273,10 @@
         case 1:
         {
             OATimeTableViewCell* cell;
-            cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
+            cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

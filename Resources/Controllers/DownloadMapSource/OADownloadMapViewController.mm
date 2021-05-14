@@ -32,7 +32,6 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 
-#define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
 #define kMapTypeSection 0
 #define kZoomSection 1
@@ -298,7 +297,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"rec_interval_minimum"),
         @"value" : [NSString stringWithFormat:@"%d", _minZoom],
-        @"type"  : kCellTypeZoom,
+        @"type"  : [OATimeTableViewCell getCellIdentifier],
         @"clickable" : @(YES)
     }];
     [zoomLevelArr addObject:@{
@@ -308,7 +307,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"shared_string_maximum"),
         @"value" : [NSString stringWithFormat:@"%d", _maxZoom],
-        @"type" : kCellTypeZoom,
+        @"type" : [OATimeTableViewCell getCellIdentifier],
         @"clickable" : @(YES)
     }];
     [zoomLevelArr addObject:@{
@@ -316,13 +315,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"isVisible" : @(_maxZoomPickerIsShown),
     }];
     [generalInfoArr addObject:@{
-        @"type" : kCellTypeZoom,
+        @"type" : [OATimeTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"number_of_tiles"),
         @"value" : [NSString stringWithFormat:@"%ld", _numberOfTiles],
         @"clickable" : @(NO)
     }];
     [generalInfoArr addObject:@{
-        @"type" : kCellTypeZoom,
+        @"type" : [OATimeTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"download_size"),
         @"value" : [NSString stringWithFormat:@"~ %@", [NSByteCountFormatter stringFromByteCount:_downloadSize countStyle:NSByteCountFormatterCountStyleFile]],
         @"clickable" : @(NO)
@@ -520,14 +519,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeZoom])
+    else if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

@@ -40,6 +40,6 @@
 - (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload;
 - (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload restorePurchases:(BOOL)restore;
 
-- (void)openSafariWithURL:(NSString *)urlString;
+- (void) openSafariWithURL:(NSString *)urlString;
 
 @end

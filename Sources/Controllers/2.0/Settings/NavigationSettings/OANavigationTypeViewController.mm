@@ -11,6 +11,7 @@
 #import "OAProfileDataObject.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OAApplicationMode.h"
+#import "OAProfileDataUtils.h"
 #import "OAAppSettings.h"
 
 #import "Localization.h"
@@ -56,7 +57,7 @@
 
 - (void) setupView
 {
-    _sortedRoutingProfiles = [OAProfileNavigationSettingsViewController getSortedRoutingProfiles];
+    _sortedRoutingProfiles = [OAProfileDataUtils getSortedRoutingProfiles];
     NSMutableArray *tableData = [NSMutableArray new];
     NSString *lastFileName = _sortedRoutingProfiles.firstObject.fileName;
     NSMutableArray *sectionData = [NSMutableArray new];

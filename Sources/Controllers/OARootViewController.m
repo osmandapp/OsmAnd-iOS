@@ -31,6 +31,7 @@
 #import "OAGPXListViewController.h"
 #import "OAFileImportHelper.h"
 #import "OASettingsHelper.h"
+#import "OAXmlImportHandler.h"
 
 #import "Localization.h"
 #import "OAGPXDatabase.h"
@@ -456,7 +457,12 @@ typedef enum : NSUInteger {
         
         return YES;
     }
-    else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame || ([ext caseInsensitiveCompare:@"xml"] == NSOrderedSame && [self isGpx:url]))
+    else if ([ext caseInsensitiveCompare:@"xml"] == NSOrderedSame)
+    {
+        OAXmlImportHandler *xmlHandler = [[OAXmlImportHandler alloc] initWithUrl:url];
+        [xmlHandler handleImport];
+    }
+    else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame)
     {
         if ([fileName isEqual:@"favorites.gpx"] || [fileName isEqual:@"favourites.gpx"])
         {
@@ -486,25 +492,6 @@ typedef enum : NSUInteger {
     {
         [self importAsGPX:url];
     }
-    else if ([ext caseInsensitiveCompare:@"xml"] == NSOrderedSame)
-    {
-        BOOL isRouting = [fileName isEqualToString:@"routing.xml"];
-        BOOL isRendering = !isRouting && [fileName hasSuffix:@".render.xml"];
-        UIAlertController *alert;
-        if (isRouting || isRendering)
-        {
-            BOOL imported = [[OAFileImportHelper sharedInstance] importResourceFileFromPath:path];
-            NSString *message = imported ? [NSString stringWithFormat:OALocalizedString(@"res_import_success"), fileName] : OALocalizedString(@"obf_import_failed");
-            message = isRendering ? message : [NSString stringWithFormat:@"%@. %@", message, OALocalizedString(@"routing_import_please_restart")];
-            alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-        }
-        else
-        {
-            alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_import_unsupported") preferredStyle:UIAlertControllerStyleAlert];
-        }
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
-        [self presentViewController:alert animated:YES completion:nil];
-    }
     else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
     {
         OASettingsHelper *helper = OASettingsHelper.sharedInstance;
@@ -512,21 +499,6 @@ typedef enum : NSUInteger {
     }
     
     return YES;
-}
-
-- (BOOL) isGpx:(NSURL *)url
-{
-    NSFileHandle *file = [NSFileHandle fileHandleForReadingAtPath: url.path];
-    if (file == nil)
-    {
-        NSLog(@"Failed to open file: %@", url.path);
-        return NO;
-    }
-    NSData *databuffer = [file readDataOfLength: 100];
-    [file closeFile];
-    
-    NSString *fileIntro = [[NSString alloc] initWithData:databuffer encoding:NSUTF8StringEncoding];
-    return [fileIntro containsString:@"<gpx "];
 }
 
 - (void) showNoInternetAlert

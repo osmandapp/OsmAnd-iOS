@@ -336,14 +336,23 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //    NSArray<OAMapStyleResourceItem *> *mapStyles = [OAResourcesUIHelper getExternalMapStyles];
 //    if (mapStyles.count > 0)
 //        resourcesItems[OAExportSettingsType.CUSTOM_RENDER_STYLE] = mapStyles;
-    
-//    File routingProfilesFolder = app.getAppPath(IndexConstants.ROUTING_PROFILES_DIR);
-//    if (routingProfilesFolder.exists() && routingProfilesFolder.isDirectory()) {
-//        File[] fl = routingProfilesFolder.listFiles();
-//        if (fl != null && fl.length > 0) {
-//            resourcesItems.put(ExportSettingsType.CUSTOM_ROUTING, Arrays.asList(fl));
-//        }
-//    }
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    BOOL isDir = NO;
+    NSString *routingProfilesFolder = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR];
+    BOOL exists = [fileManager fileExistsAtPath:routingProfilesFolder isDirectory:&isDir];
+    if (exists && isDir)
+    {
+        NSArray<NSString *> *files = [fileManager contentsOfDirectoryAtPath:routingProfilesFolder error:nil];
+        NSMutableArray<NSString *> *items = [NSMutableArray array];
+        for (NSString *file in files)
+        {
+            if ([file.pathExtension isEqualToString:@"xml"])
+                [items addObject:[routingProfilesFolder stringByAppendingPathComponent:file]];
+        }
+        
+        if (items.count > 0)
+            resourcesItems[OAExportSettingsType.CUSTOM_ROUTING] = items;
+    }
 //    List<OnlineRoutingEngine> onlineRoutingEngines = app.getOnlineRoutingHelper().getEngines();
 //    if (!Algorithms.isEmpty(onlineRoutingEngines)) {
 //        resourcesItems.put(ExportSettingsType.ONLINE_ROUTING_ENGINES, onlineRoutingEngines);

@@ -79,7 +79,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *defaultSpeedArr = [NSMutableArray array];
-    auto router = [OARouteProvider getRouter:self.appMode];
+    auto router = [OsmAndApp.instance getRouter:self.appMode];
     _otherParameters.clear();
     NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
     NSString *parentAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;

@@ -17,7 +17,6 @@
 
 - (BOOL)importObfFileFromPath:(NSString *)filePath newFileName:(NSString *)newFileName;
 - (NSString *)getNewNameIfExists:(NSString *)fileName;
-
-- (BOOL)importResourceFileFromPath:(NSString *)filePath;
+- (BOOL)importResourceFileFromPath:(NSString *)filePath toPath:(NSString *)destPath;
 
 @end

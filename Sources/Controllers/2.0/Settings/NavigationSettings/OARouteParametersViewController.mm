@@ -128,7 +128,7 @@
          @"type" : kCellTypeSwitch }
      ];
     
-    auto router = [OARouteProvider getRouter:self.appMode];
+    auto router = [OsmAndApp.instance getRouter:self.appMode];
     [self clearParameters];
     if (router)
     {

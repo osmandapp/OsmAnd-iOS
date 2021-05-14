@@ -109,7 +109,7 @@
 
 - (void) generateData
 {
-    auto router = [OARouteProvider getRouter:self.appMode];
+    auto router = [OsmAndApp.instance getRouter:self.appMode];
     _units = [OASpeedConstant toShortString:[_settings.speedSystem get:self.appMode]];
     switch ([_settings.speedSystem get:self.appMode])
     {

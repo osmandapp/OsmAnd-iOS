@@ -196,7 +196,7 @@ static OAExportSettingsType * ONLINE_ROUTING_ENGINES;
 
 - (BOOL) isResourcesCategory
 {
-    return self == self.class.CUSTOM_RENDER_STYLE /*|| self == self.class.CUSTOM_ROUTING*/ || self == self.class.MAP_SOURCES
+    return self == self.class.CUSTOM_RENDER_STYLE || self == self.class.CUSTOM_ROUTING || self == self.class.MAP_SOURCES
     || self == self.class.OFFLINE_MAPS /*|| self == self.class.VOICE || self == self.class.TTS_VOICE || self == self.class.ONLINE_ROUTING_ENGINES*/;
 }
 

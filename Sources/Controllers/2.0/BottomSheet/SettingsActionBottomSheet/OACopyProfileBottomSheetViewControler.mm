@@ -119,7 +119,7 @@
 
 - (void) copyRoutingPreferences
 {
-    const auto router = [OARouteProvider getRouter:_sourceAppMode];
+    const auto router = [OsmAndApp.instance getRouter:_sourceAppMode];
     if (router)
     {
         const auto& parameters = router->getParametersList();

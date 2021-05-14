@@ -373,7 +373,6 @@
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
             cell = (OAMenuSimpleCell *) nib[0];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
 
         if (cell) {
@@ -382,6 +381,7 @@
             NSInteger countAcceptedTypes = subtypes.count;
             NSInteger countAllTypes = category.poiTypes.count;
             BOOL isSelected = [_filter isTypeAccepted:category] && subtypes.count > 0;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
             cell.contentView.backgroundColor = [UIColor whiteColor];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 66.0, 0.0, 0.0);
@@ -423,6 +423,7 @@
             OAPOIType *poiType = _searchResult[indexPath.row];
             NSSet<NSString *> *acceptedSubtypes = [_acceptedTypes objectForKey:poiType.category];
             BOOL accepted = [acceptedSubtypes containsObject:poiType.name];
+            cell.accessoryType = UITableViewCellAccessoryNone;
 
             UIColor *selectedColor = accepted ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];

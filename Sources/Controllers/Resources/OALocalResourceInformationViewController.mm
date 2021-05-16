@@ -397,16 +397,14 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     if (indexPath.section == 0)
     {
-        static NSString* const detailsCell = @"detailsCell";
-        
         NSString* title = [tableKeys objectAtIndex:indexPath.row];
         NSString* subtitle = [tableValues objectAtIndex:indexPath.row];
         
         // Obtain reusable cell or create one
-        OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:detailsCell];
+        OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:[OALocalResourceInfoCell getCellIdentifier]];
         if (cell == nil)
         {
-            cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:detailsCell];
+            cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[OALocalResourceInfoCell getCellIdentifier]];
         }
             
         // Fill cell content

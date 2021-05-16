@@ -16,7 +16,6 @@
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
-#import "OATableViewCell.h"
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
 #import "OALocalResourceInformationViewController.h"

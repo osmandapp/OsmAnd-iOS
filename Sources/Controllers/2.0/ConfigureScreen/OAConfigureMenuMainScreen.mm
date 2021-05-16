@@ -74,7 +74,7 @@
 - (void) setupViewInternal
 {
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
-    [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
+    [sectionMapStyle setObject:[OAAppModeCell getCellIdentifier] forKey:@"type"];
     
     NSMutableArray *arr = [NSMutableArray array];
     
@@ -244,7 +244,7 @@
     NSDictionary* data = tableData[section][@"cells"][0];
     if ([data[@"key"] isEqualToString:@"quick_action"])
         return 10.0;
-    else if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+    else if ([data[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
         return 0;
     else
         return 34.0;
@@ -280,11 +280,11 @@
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     
     UITableViewCell* outCell = nil;
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+    if ([data[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
     {
         if (!_appModeCell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAppModeCell getCellIdentifier] owner:self options:nil];
             _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
             _appModeCell.showDefault = YES;
             _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;

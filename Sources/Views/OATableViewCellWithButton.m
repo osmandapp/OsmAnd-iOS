@@ -16,6 +16,11 @@
 
 @implementation OATableViewCellWithButton
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATableViewCellWithButton";
+}
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
       andButtonType:(UIButtonType)buttonType
     reuseIdentifier:(NSString *)reuseIdentifier

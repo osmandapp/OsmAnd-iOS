@@ -137,7 +137,7 @@
     _styleSettings = [OAMapStyleSettings sharedInstance];
 
     NSMutableDictionary *sectionAppMode = [NSMutableDictionary dictionary];
-    [sectionAppMode setObject:@"OAAppModeCell" forKey:@"type"];
+    [sectionAppMode setObject:[OAAppModeCell getCellIdentifier] forKey:@"type"];
 
     NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
     [section0fav setObject:OALocalizedString(@"favorites") forKey:@"name"];
@@ -378,7 +378,7 @@
 - (CGFloat) heightForHeader:(NSInteger)section
 {
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) objectAtIndex:0];
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+    if ([[data objectForKey:@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
         return 0.01;
     else
         return 34.0;
@@ -416,11 +416,11 @@
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
     
     UITableViewCell* outCell = nil;
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+    if ([[data objectForKey:@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
     {
         if (!_appModeCell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAppModeCell getCellIdentifier] owner:self options:nil];
             _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
             _appModeCell.showDefault = YES;
             _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;

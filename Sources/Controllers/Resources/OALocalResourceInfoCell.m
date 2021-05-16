@@ -10,6 +10,11 @@
 
 @implementation OALocalResourceInfoCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OALocalResourceInfoCell";
+}
+
 - (void)awakeFromNib
 {
     self.leftLabelView.textAlignment = [self isDirectionRTL] ? NSTextAlignmentRight : NSTextAlignmentLeft;

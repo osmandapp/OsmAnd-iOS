@@ -6,9 +6,9 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OARoutingInfoCell : UITableViewCell
+@interface OARoutingInfoCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *trackImgView;
 @property (weak, nonatomic) IBOutlet UILabel *distanceTitleLabel;

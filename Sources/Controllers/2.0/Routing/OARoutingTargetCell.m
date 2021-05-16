@@ -13,6 +13,11 @@
     CALayer *_divider;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OARoutingTargetCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 
-@interface OALocalResourceInfoCell : UITableViewCell
+@interface OALocalResourceInfoCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UILabel *leftLabelView;
 @property (weak, nonatomic) IBOutlet UILabel *rightLabelView;

@@ -13,7 +13,6 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #include "Localization.h"
-#import "OALocalResourceInfoCell.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAIconTextDescCell.h"

@@ -535,21 +535,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableArray *section = [[NSMutableArray alloc] init];
     [section addObject:@{
-        @"cell" : @"OARoutingTargetCell",
+        @"cell" : [OARoutingTargetCell getCellIdentifier],
         @"type" : @"start"
     }];
     
     if ([self hasIntermediatePoints])
     {
         [section addObject:@{
-            @"cell" : @"OARoutingTargetCell",
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
             @"type" : @"intermediate"
         }];
     }
     else if (_routingHelper.getCurrentGPXRoute)
     {
         [section addObject:@{
-            @"cell" : @"OARoutingTargetCell",
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
             @"type" : @"gpx_route"
         }];
     }
@@ -557,13 +557,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (![self isFinishPointFromTrack])
     {
         [section addObject:@{
-            @"cell" : @"OARoutingTargetCell",
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
             @"type" : @"finish"
         }];
     }
     
     [section addObject:@{
-        @"cell" : @"OARoutingSettingsCell"
+        @"cell" : [OARoutingSettingsCell getCellIdentifier]
+
     }];
     
     if (_hasEmptyTransportRoute)
@@ -597,7 +598,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 @"custom_insets" : @(NO)
             }];
             [section addObject:@{
-                @"cell" : @"OARoutingInfoCell"
+                @"cell" : [OARoutingInfoCell getCellIdentifier]
             }];
             [section addObject:@{
                 @"cell" : kCellReuseIdentifier
@@ -1224,15 +1225,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"])
+    if ([item[@"cell"] isEqualToString:[OARoutingTargetCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingTargetCell* cell;
-        cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingTargetCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingTargetCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingTargetCell *)[nib objectAtIndex:0];
         }
         
@@ -1358,15 +1357,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARoutingInfoCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingInfoCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingInfoCell* cell;
-        cell = (OARoutingInfoCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingInfoCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingInfoCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingInfoCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingInfoCell *)[nib objectAtIndex:0];
         }
         
@@ -1406,15 +1403,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingSettingsCell* cell;
-        cell = (OARoutingSettingsCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingSettingsCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingSettingsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingSettingsCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingSettingsCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -1603,7 +1598,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
         return nil;
     return indexPath;
 }
@@ -1727,7 +1722,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"cell"] isEqualToString:[OAHomeWorkCell getCellIdentifier]])
         return 60.0;
-    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
         return 50.0;
     else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];

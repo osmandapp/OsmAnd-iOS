@@ -20,8 +20,6 @@
 
 #define kTime24_00 1440
 #define kNumberOfSections 2
-#define kCellTypeCheck @"check"
-#define kCellTypeSwitch @"switch"
 
 static const NSInteger daysSectionIndex = 0;
 static const NSInteger timeSectionIndex = 1;
@@ -137,7 +135,7 @@ static const NSInteger timeSectionIndex = 1;
     for (int i = 0; i < [_dateFormatter weekdaySymbols].count; i++) {
         [dataArr addObject:@{
                              @"title" : [[self weekdayNameFromWeekdayNumber:i] capitalizedString],
-                             @"type" : kCellTypeCheck
+                             @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
                              }];
     }
     _weekdaysData = [NSArray arrayWithArray:dataArr];
@@ -147,7 +145,7 @@ static const NSInteger timeSectionIndex = 1;
     const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_around_the_clock"),
-                         @"type" : kCellTypeSwitch
+                         @"type" : [OASwitchTableViewCell getCellIdentifier]
                          }];
 
     _startDate = [self dateFromMinutes:rule->getStartTime()];
@@ -290,7 +288,7 @@ static const NSInteger timeSectionIndex = 1;
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeCheck])
+    if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
         OASettingsTitleTableViewCell* cell = nil;
         cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
@@ -307,7 +305,7 @@ static const NSInteger timeSectionIndex = 1;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         OASwitchTableViewCell* cell = nil;
         cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
@@ -408,7 +406,7 @@ static const NSInteger timeSectionIndex = 1;
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeCheck])
+    else if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
         const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
         rule->getDays()[[self weekdayNumberFromIndex:indexPath.row]] = !rule->getDays()[[self weekdayNumberFromIndex:indexPath.row]];

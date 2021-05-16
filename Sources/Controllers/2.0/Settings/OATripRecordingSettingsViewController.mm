@@ -26,8 +26,6 @@
 
 #include <generalRouter.h>
 
-#define kCellTypeSingleSelectionList @"single_selection_list"
-#define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeCheck @"check"
 #define kNavigationSection 4
 
@@ -528,7 +526,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList])
+    else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]] || [type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
         OASettingsTableViewCell* cell = nil;
         cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];

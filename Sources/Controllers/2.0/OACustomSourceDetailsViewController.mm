@@ -18,10 +18,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kImageViewCell @"OAOnlyImageViewCell"
-#define kSimpleCell @"OAMenuSimpleCellNoIcon"
-#define kFilledButtonCell @"OAFilledButtonCell"
-
 @interface OACustomSourceDetailsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -92,12 +88,12 @@
     if (_downloadedImage)
     {
         [data addObject:@{
-            @"type" : kImageViewCell
+            @"type" : [OAOnlyImageViewCell getCellIdentifier]
         }];
     }
     
     [data addObject:@{
-        @"type" : kSimpleCell,
+        @"type" : [OAMenuSimpleCellNoIcon getCellIdentifier],
         @"title" : _item.getVisibleName ? : @"",
         @"descr" : [NSByteCountFormatter stringFromByteCount:_item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]
     }];
@@ -140,7 +136,7 @@
         if (actionButton.url)
         {
             [additionalButtons addObject:@{
-                @"type" : kFilledButtonCell,
+                @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"button" : actionButton
             }];
         }
@@ -201,9 +197,9 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kSimpleCell])
+    if ([type isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
     {
-        OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:type];
+        OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:type owner:self options:nil];
@@ -238,12 +234,12 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kImageViewCell])
+    else if ([type isEqualToString:[OAOnlyImageViewCell getCellIdentifier]])
     {
-        OAOnlyImageViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kImageViewCell];
+        OAOnlyImageViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAOnlyImageViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kImageViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAOnlyImageViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAOnlyImageViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
@@ -252,13 +248,13 @@
             cell.imageView.image = _downloadedImage;
         return cell;
     }
-    else if ([type isEqualToString:kFilledButtonCell])
+    else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {
         OAFilledButtonCell* cell;
-        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:kFilledButtonCell];
+        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kFilledButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;

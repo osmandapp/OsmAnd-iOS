@@ -22,9 +22,6 @@
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
 
-#define kCellTypeColorCollection @"colorCollectionCell"
-#define kCellTypeIconCollection @"iconCollectionCell"
-#define kCellTypePositionIconCollection @"positionIconCollection"
 #define kIconsAtRestRow 0
 #define kIconsWhileMovingRow 1
 
@@ -272,22 +269,22 @@
         @"title" : _changedProfile.name,
     }];
     [profileAppearanceArr addObject:@{
-        @"type" : kCellTypeColorCollection,
+        @"type" : [OAColorsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"select_color"),
         @"value" : profileColor,
     }];
     [profileAppearanceArr addObject:@{
-        @"type" : kCellTypeIconCollection,
+        @"type" : [OAIconsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"select_icon"),
         @"value" : @"",
     }];
     [profileMapAppearanceArr addObject:@{
-        @"type" : kCellTypePositionIconCollection,
+        @"type" : [OALocationIconsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"position_icon_at_rest"),
         @"description" : @"",
     }];
     [profileMapAppearanceArr addObject:@{
-        @"type" : kCellTypePositionIconCollection,
+        @"type" : [OALocationIconsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"position_icon_while_moving"),
         @"description" : OALocalizedString(@"will_be_show_while_moving"),
     }];
@@ -519,7 +516,7 @@
         cell.inputField.delegate = self;
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeColorCollection])
+    else if ([cellType isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {
         OAColorsTableViewCell *cell = nil;
         cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];
@@ -543,7 +540,7 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconCollection])
+    else if ([cellType isEqualToString:[OAIconsTableViewCell getCellIdentifier]])
     {
         OAIconsTableViewCell *cell = nil;
         cell = (OAIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAIconsTableViewCell getCellIdentifier]];
@@ -566,7 +563,7 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePositionIconCollection])
+    else if ([cellType isEqualToString:[OALocationIconsTableViewCell getCellIdentifier]])
     {
         static NSString* const identifierCell = [OALocationIconsTableViewCell getCellIdentifier];
         OALocationIconsTableViewCell *cell = nil;

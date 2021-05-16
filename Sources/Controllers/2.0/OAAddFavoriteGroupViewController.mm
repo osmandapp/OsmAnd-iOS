@@ -16,8 +16,6 @@
 #import "OAColorsTableViewCell.h"
 #import "OsmAndApp.h"
 
-#define kCellTypeColorCollection @"OAColorsTableViewCell"
-
 @interface OAAddFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAColorsTableViewCellDelegate>
 
 @end
@@ -81,7 +79,7 @@
         @{
             @"header" : OALocalizedString(@"default_color"),
             @"footer" : OALocalizedString(@"default_color_descr"),
-            @"type" : kCellTypeColorCollection,
+            @"type" : [OAColorsTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"fav_color"),
             @"value" : _selectedColor.name,
             @"index" : [NSNumber numberWithInt:_selectedColorIndex],
@@ -123,7 +121,7 @@
         cell.inputField.delegate = self;
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeColorCollection])
+    else if ([cellType isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {
         OAColorsTableViewCell *cell = nil;
         cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];

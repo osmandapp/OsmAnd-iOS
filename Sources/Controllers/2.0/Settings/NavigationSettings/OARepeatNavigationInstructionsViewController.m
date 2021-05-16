@@ -17,7 +17,6 @@
 
 #define kSidePadding 16
 #define kDistanceSection 1
-#define kCellTypePicker @"pickerCell"
 
 @interface OARepeatNavigationInstructionsViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
 
@@ -92,7 +91,7 @@
             @"title" : OALocalizedString(@"repeat_after"),
         }];
         [distanceArr addObject:@{
-            @"type" : kCellTypePicker,
+            @"type" : [OACustomPickerTableViewCell getCellIdentifier],
         }];
         [tableData addObject:distanceArr];
     }
@@ -140,7 +139,7 @@
 
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePicker])
+    else if ([cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
     {
         OACustomPickerTableViewCell* cell;
         cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];

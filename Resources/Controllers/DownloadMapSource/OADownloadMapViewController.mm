@@ -32,7 +32,6 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 
-#define kCellTypePicker @"picker"
 #define kMapTypeSection 0
 #define kZoomSection 1
 #define kZoomTilesRow 0
@@ -301,7 +300,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"clickable" : @(YES)
     }];
     [zoomLevelArr addObject:@{
-        @"type" : kCellTypePicker,
+        @"type" : [OACustomPickerTableViewCell getCellIdentifier],
         @"isVisible" : @(_minZoomPickerIsShown),
     }];
     [zoomLevelArr addObject:@{
@@ -311,7 +310,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"clickable" : @(YES)
     }];
     [zoomLevelArr addObject:@{
-        @"type" : kCellTypePicker,
+        @"type" : [OACustomPickerTableViewCell getCellIdentifier],
         @"isVisible" : @(_maxZoomPickerIsShown),
     }];
     [generalInfoArr addObject:@{
@@ -538,7 +537,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePicker])
+    else if ([cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
     {
         OACustomPickerTableViewCell* cell;
         cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];

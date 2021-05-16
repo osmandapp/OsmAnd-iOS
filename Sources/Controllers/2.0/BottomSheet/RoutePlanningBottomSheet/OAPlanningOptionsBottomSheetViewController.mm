@@ -18,8 +18,6 @@
 #import "OAMeasurementToolLayer.h"
 #import "OAGPXDocumentPrimitives.h"
 
-#define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-
 @interface OAPlanningOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end

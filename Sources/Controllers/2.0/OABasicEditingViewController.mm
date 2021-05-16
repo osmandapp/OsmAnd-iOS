@@ -25,9 +25,6 @@
 
 #include <openingHoursParser.h>
 
-#define kCellTypeTextInput @"text_input_cell"
-#define kCellTypeButton @"button"
-
 @interface OABasicEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
 
 @end
@@ -200,7 +197,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     }
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_add_timespan"),
-                         @"type" : kCellTypeButton
+                         @"type" : [OAButtonCell getCellIdentifier]
                          }];
     _hoursSectionItems = [NSArray arrayWithArray:dataArr];
 }
@@ -281,7 +278,7 @@ static const NSInteger _contactInfoSectionCount = 5;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeButton])
+    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
         OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)

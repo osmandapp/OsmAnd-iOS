@@ -17,10 +17,8 @@
 #import "OASizes.h"
 #import "OAPOIFilterViewController.h"
 #import "OAColors.h"
-#import "OAMenuSimpleCell.h"
 #import "OASettingSwitchCell.h"
 
-#define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>

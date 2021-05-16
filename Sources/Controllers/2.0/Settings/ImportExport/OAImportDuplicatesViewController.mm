@@ -39,9 +39,6 @@
 #import "OATileSource.h"
 #import "OAPOIHelper.h"
 
-#define kMenuSimpleCell @"kMenuSimpleCell"
-#define kCellTypeTitleDescription @"kCellTypeTitleDescription"
-
 @interface OAHeaderType : NSObject
 
 @property (nonatomic) NSString *title;
@@ -350,7 +347,7 @@
                 
                 item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
                 item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
-                item[@"cellType"] = kMenuSimpleCell;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAQuickAction.class])
             {
@@ -358,7 +355,7 @@
                 item[@"label"] = [action getName];
                 item[@"icon"] = [UIImage imageNamed:[action getIconResName]];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAPOIUIFilter.class])
             {
@@ -366,7 +363,7 @@
                 item[@"label"] = [filter getName];
                 item[@"icon"] = [OAPOIHelper getCustomFilterIcon:filter];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OATileSource.class])
             {
@@ -375,7 +372,7 @@
                 item[@"label"] = caption;
                 item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_map"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
                 item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
             }
             else if ([currentItem isKindOfClass:NSString.class])
@@ -415,14 +412,14 @@
                 }
                 item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
             {
                 item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_alert"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAFavoriteGroup.class])
             {
@@ -430,7 +427,7 @@
                 item[@"label"] = [OAFavoriteGroup getDisplayName:group.name];
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OADestination.class])
             {
@@ -438,7 +435,7 @@
                 item[@"label"] = marker.desc;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_marker"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             NSDictionary *newDict = [NSDictionary dictionaryWithDictionary:item];
             [sectionData addObject:newDict];
@@ -552,7 +549,7 @@
         cell.descriptionView.text = item[@"description"];
         return cell;
     }
-    else if ([type isEqualToString:kMenuSimpleCell])
+    else if ([type isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
         OAMenuSimpleCell* cell;
         cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
@@ -587,7 +584,7 @@
             [cell updateConstraints];
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeTitleDescription])
+    else if ([type isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
         OAMenuSimpleCell* cell;
         cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];

@@ -20,8 +20,6 @@
 
 #define kSidePadding 16
 #define kDistanceSection 1
-#define kCellTypePicker @"pickerCell"
-
 #define kDisableMode -1
 
 @interface OARecalculateRouteViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
@@ -114,7 +112,7 @@
             @"title" : OALocalizedString(@"shared_string_distance"),
         }];
         [distanceArr addObject:@{
-            @"type" : kCellTypePicker,
+            @"type" : [OACustomPickerTableViewCell getCellIdentifier],
         }];
         
         [tableData addObject:distanceArr];
@@ -162,7 +160,7 @@
 
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePicker])
+    else if ([cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
     {
         OACustomPickerTableViewCell* cell;
         cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];

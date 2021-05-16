@@ -22,8 +22,6 @@
 #import "OAAddTrackFolderViewController.h"
 #import "OACollectionViewCellState.h"
 
-#define kRouteGroupsCell @""
-
 @interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
 @end

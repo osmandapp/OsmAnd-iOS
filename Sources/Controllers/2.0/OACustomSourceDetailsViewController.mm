@@ -19,7 +19,6 @@
 #import "OAColors.h"
 
 #define kImageViewCell @"OAOnlyImageViewCell"
-#define kTextViewCell @"OATextViewSimpleCell"
 #define kSimpleCell @"OAMenuSimpleCellNoIcon"
 #define kFilledButtonCell @"OAFilledButtonCell"
 
@@ -107,7 +106,7 @@
     {
         NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17];
         [data addObject:@{
-                @"type" : kTextViewCell,
+                @"type" : [OATextViewSimpleCell getCellIdentifier],
                 @"attrText" : attrString
         }];
     }
@@ -222,12 +221,12 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kTextViewCell])
+    else if ([type isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kTextViewCell];
+        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

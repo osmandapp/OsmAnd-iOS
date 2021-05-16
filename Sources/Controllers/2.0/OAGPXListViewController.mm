@@ -55,7 +55,6 @@
 #define kAlertViewShareId -4
 #define kAlertViewCancelButtonIndex -1
 #define kMaxCancelButtonWidth 100
-#define kGPXTrackCell @"OAGPXTrackCell"
 
 #define GPX_EXT @"gpx"
 #define KML_EXT @"kml"
@@ -663,7 +662,7 @@ static UIViewController *parentController;
             @"distance" : [_app getFormattedDistance:_routeItem.totalDistance],
             @"time" : [_app getFormattedTimeInterval:_routeItem.timeSpan shortFormat:YES],
             @"wpt" : [NSString stringWithFormat:@"%d", _routeItem.wptPoints],
-            @"type" : kGPXTrackCell,
+            @"type" : [OAGPXTrackCell getCellIdentifier],
             @"key" : @"route_item"}
         ];
         [tableData addObject:routePlanningGroup];
@@ -706,7 +705,7 @@ static UIViewController *parentController;
                 continue;
             
             [tracksGroup.groupItems addObject:@{
-                @"type" : kGPXTrackCell,
+                @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"title" : [track getName],
                 @"track" : track.gpx,
                 @"distance" : [_app getFormattedDistance:track.gpx.totalDistance],
@@ -1159,14 +1158,13 @@ static UIViewController *parentController;
             }
             return cell;
         }
-        else if ([menuCellType isEqualToString:kGPXTrackCell])
+        else if ([menuCellType isEqualToString:[OAGPXTrackCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = kGPXTrackCell;
             OAGPXTrackCell* cell = nil;
-            cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
                 cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -1253,14 +1251,13 @@ static UIViewController *parentController;
                 }
                 return cell;
             }
-            if ([cellType isEqualToString:kGPXTrackCell])
+            if ([cellType isEqualToString:[OAGPXTrackCell getCellIdentifier]])
             {
-                static NSString* const identifierCell = kGPXTrackCell;
                 OAGPXTrackCell* cell = nil;
-                cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+                cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
                     cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
                     cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
                 }

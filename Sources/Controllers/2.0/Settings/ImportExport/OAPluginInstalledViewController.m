@@ -12,8 +12,6 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-#define kTextViewSimpleCell @"OATextViewSimpleCell"
-
 #define kSidePadding 20.0
 #define kTopPadding 6
 #define kBottomPadding 32
@@ -85,7 +83,7 @@
 {
     NSMutableArray *sectionData = [NSMutableArray new];
     [sectionData addObject:@{
-        @"type" : kTextViewSimpleCell,
+        @"type" : [OATextViewSimpleCell getCellIdentifier],
         @"text" : _plugin.getDescription
     }];
     _data = @[sectionData];
@@ -119,12 +117,12 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kTextViewSimpleCell])
+    if ([item[@"type"] isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kTextViewSimpleCell];
+        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextViewSimpleCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsZero;
         }

@@ -15,7 +15,6 @@
 #import "OAApplicationMode.h"
 #import "OAGPXTrackCell.h"
 #import "OAGPXDatabase.h"
-#import "OATitleRightIconCell.h"
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
 #import "OAGPXDocument.h"
@@ -29,10 +28,6 @@
 #import "OAGpxInfo.h"
 #import "OATargetPointsHelper.h"
 #import "OAGPXUIHelper.h"
-
-#define kGPXTrackCell @"OAGPXTrackCell"
-#define kCellTypeTitleRightIcon @"OATitleRightIconCell"
-
 
 @interface OATrackSegmentsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -101,7 +96,7 @@
     
     [data addObject:
      @{
-         @"type" : kGPXTrackCell,
+         @"type" : [OAGPXTrackCell getCellIdentifier],
          @"title" : gpxData ? [gpxData getNiceTitle] : fileName,
          @"distance" : gpxData ? [app getFormattedDistance:gpxData.totalDistance] : @"",
          @"time" : gpxData ? [app getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"",
@@ -118,7 +113,7 @@
         
         NSMutableDictionary *item = [NSMutableDictionary new];
         item[@"title"] = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), (int) idx];
-        item[@"type"] = kGPXTrackCell;
+        item[@"type"] = [OAGPXTrackCell getCellIdentifier];
         item[@"img"] = @"ic_custom_join_segments";
         item[@"distance"] = [app getFormattedDistance:segmentDist];
         
@@ -144,14 +139,13 @@
     NSDictionary *item = _data[indexPath.row];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kGPXTrackCell])
+    if ([type isEqualToString:[OAGPXTrackCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kGPXTrackCell;
         OAGPXTrackCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsZero;
             [cell setRightButtonVisibility:NO];

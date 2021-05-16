@@ -37,7 +37,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-#define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeColorCollection @"colorCollectionCell"
 #define kCellTypeIconCollection @"iconCollectionCell"
 #define kCellTypePoiCollection @"poiCollectionCell"
@@ -426,7 +425,7 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"actions").upperCase,
-        @"type" : kCellTypeAction,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"title" : OALocalizedString(@"fav_replace"),
         @"img" : @"ic_custom_replace",
         @"color" : UIColorFromRGB(color_primary_purple),
@@ -435,7 +434,7 @@
     if (!_isNewItemAdding)
     {
         [section addObject:@{
-            @"type" : kCellTypeAction,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_delete"),
             @"img" : @"ic_custom_remove_outlined",
             @"color" : UIColorFromRGB(color_primary_red),
@@ -851,12 +850,11 @@
     }
     else if ([cellType isEqualToString:kCellTypeIconCollection])
     {
-        static NSString* const identifierCell = @"OAShapesTableViewCell";
         OAShapesTableViewCell *cell = nil;
-        cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAShapesTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAShapesTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAShapesTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAShapesTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -877,13 +875,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeAction])
+    else if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

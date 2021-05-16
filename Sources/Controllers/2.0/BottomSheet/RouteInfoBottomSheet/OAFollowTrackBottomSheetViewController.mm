@@ -34,10 +34,6 @@
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
 
-#define kGPXTrackCell @"OAGPXTrackCell"
-#define kCellTypeTitleRightIcon @"OATitleRightIconCell"
-
-
 @interface OAFollowTrackBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
 @end
@@ -170,7 +166,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kGPXTrackCell,
+            @"type" : [OAGPXTrackCell getCellIdentifier],
             @"title" : title,
             @"distance" : distance,
             @"time" : time,
@@ -199,7 +195,7 @@
 
     [data addObject:@[
         @{
-            @"type" : kCellTypeTitleRightIcon,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"point_to_navigate")
         },
         @{
@@ -209,7 +205,7 @@
             @"key" : @"point_to_start"
         },
         @{
-            @"type" : kCellTypeTitleRightIcon,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"nav_type_title")
         },
         @{
@@ -317,14 +313,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kGPXTrackCell])
+    else if ([type isEqualToString:[OAGPXTrackCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kGPXTrackCell;
         OAGPXTrackCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsZero;
             [cell setRightButtonVisibility:YES];
@@ -402,9 +397,9 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeTitleRightIcon])
+    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:type];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:type owner:self options:nil];

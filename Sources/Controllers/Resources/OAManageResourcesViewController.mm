@@ -1828,7 +1828,6 @@ static BOOL _lackOfResources;
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const descriptionButtonIconCell = @"OAMultiIconTextDescCell";
-    static NSString* const descriptionTextViewCell = @"OATextViewSimpleCell";
     static NSString* const subregionCell = @"subregionCell";
     static NSString* const outdatedResourceCell = @"outdatedResourceCell";
     static NSString* const osmAndLiveCell = @"osmAndLiveCell";
@@ -1908,7 +1907,7 @@ static BOOL _lackOfResources;
         {
             if (indexPath.row == 0)
             {
-                cellTypeId = descriptionTextViewCell;
+                cellTypeId = [OATextViewSimpleCell getCellIdentifier];
                 title = nil;
             }
             else
@@ -2133,9 +2132,9 @@ static BOOL _lackOfResources;
             btnAcc.frame = CGRectMake(0.0, 0.0, 60.0, 50.0);
             [cell setAccessoryView:btnAcc];
         }
-        else if ([cellTypeId isEqualToString:descriptionTextViewCell])
+        else if ([cellTypeId isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:descriptionTextViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
             cell = [nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -2311,7 +2310,7 @@ static BOOL _lackOfResources;
             [progressView setNeedsDisplay];
         }
     }
-    else if ([cellTypeId isEqualToString:descriptionTextViewCell])
+    else if ([cellTypeId isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
     {
         OATextViewSimpleCell *textViewCell = (OATextViewSimpleCell *) cell;
         NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17];

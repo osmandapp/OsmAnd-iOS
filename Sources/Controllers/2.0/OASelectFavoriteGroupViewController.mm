@@ -18,7 +18,6 @@
 #import "OAAddFavoriteGroupViewController.h"
 #import "OsmAndApp.h"
 
-#define kCellTypeAction @"OATitleRightIconCell"
 #define kAddNewGroupSection 0
 #define kGroupsListSection 1
 
@@ -70,7 +69,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"type" : kCellTypeAction,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"fav_add_new_group"),
             @"img" : @"ic_custom_add",
         },
@@ -117,13 +116,12 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:kCellTypeAction])
+    if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);

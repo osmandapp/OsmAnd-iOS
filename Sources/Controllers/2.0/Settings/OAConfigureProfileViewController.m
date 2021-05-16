@@ -41,9 +41,6 @@
 #define BACKUP_INDEX_DIR @"backup"
 #define OSMAND_SETTINGS_FILE_EXT @"osf"
 
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kTitleRightIconCell @"OATitleRightIconCell"
-
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
     EOADashboardScreenTypeMap,
@@ -183,13 +180,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     // Actions
     NSMutableArray<NSDictionary *> *settingsActions = [NSMutableArray new];
     [settingsActions addObject:@{
-        @"type" : kTitleRightIconCell,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"title" : OALocalizedString(@"export_profile"),
         @"img" : @"ic_custom_export",
         @"key" : @"export_profile"
     }];
     [settingsActions addObject:@{
-        @"type" : kTitleRightIconCell,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"title" : OALocalizedString(@"copy_from_other_profile"),
         @"img" : @"ic_custom_copy",
         @"key" : @"copy_profile"
@@ -198,7 +195,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (![_appMode isCustomProfile] || ([_appMode isCustomProfile] && [self getBackupFileForCustomMode:_appMode.stringKey]))
     {
         [settingsActions addObject:@{
-            @"type" : kTitleRightIconCell,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"reset_to_default"),
             @"img" : @"ic_custom_reset",
             @"key" : @"reset_to_default"
@@ -208,7 +205,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if ([_appMode isCustomProfile])
     {
         [settingsActions addObject:@{
-           @"type" : kTitleRightIconCell,
+           @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"profile_alert_delete_title"),
             @"img" : @"ic_custom_remove_outlined",
             @"key" : @"delete_profile"
@@ -384,7 +381,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kTitleRightIconCell])
+    if ([item[@"type"] isEqualToString:[OATitleRightIconCell getCellIdentifier]])
         return 45.;
     else
         return UITableViewAutomaticDimension;
@@ -459,13 +456,12 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeAction])
+    else if ([item[@"type"] isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell *cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell *cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
@@ -474,27 +470,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:kTitleRightIconCell])
-    {
-        OATitleRightIconCell* cell;
-        cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:@"OATitleRightIconCell"];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            [cell.iconView setTintColor:UIColorFromRGB(color_primary_purple)];
-            [cell.titleView setTextColor:UIColorFromRGB(color_primary_purple)];
-            [cell.titleView setFont:[UIFont systemFontOfSize:17.0f weight:UIFontWeightMedium]];
-        }
-        if (cell)
-        {
-            [cell.titleView setText:item[@"title"]];
-            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
-        }
         return cell;
     }
     return nil;

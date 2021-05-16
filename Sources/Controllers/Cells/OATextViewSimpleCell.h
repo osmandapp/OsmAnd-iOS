@@ -6,10 +6,10 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OABaseCell.h"
 #import <WebKit/WebKit.h>
 
-@interface OATextViewSimpleCell : UITableViewCell
+@interface OATextViewSimpleCell : OABaseCell
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 

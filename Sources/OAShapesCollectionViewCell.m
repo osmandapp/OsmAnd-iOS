@@ -10,4 +10,9 @@
 
 @implementation OAShapesCollectionViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAShapesCollectionViewCell";
+}
+
 @end

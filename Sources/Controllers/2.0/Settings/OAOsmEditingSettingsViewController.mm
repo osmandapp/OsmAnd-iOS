@@ -19,9 +19,6 @@
 #import "OAColors.h"
 #import "OAMenuSimpleCellNoIcon.h"
 
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kCellTypeButton @"button"
-
 @interface OAOsmEditingSettingsViewController () <OAAccontSettingDelegate>
 
 @end
@@ -91,7 +88,7 @@ static const NSInteger actionsSectionIndex = 2;
     [dataArr addObject:
      @{
          @"name" : @"edit_credentials",
-         @"type" : kCellTypeButton
+         @"type" : [OAButtonCell getCellIdentifier]
      }];
     
     [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
@@ -123,7 +120,7 @@ static const NSInteger actionsSectionIndex = 2;
     
     [dataArr addObject:
      @{
-         @"type" : kCellTypeAction,
+         @"type" : [OATitleRightIconCell getCellIdentifier],
          @"title" : OALocalizedString(@"osm_edits_title"),
          @"img" : @"ic_custom_folder",
          @"name" : @"open_edits"
@@ -220,13 +217,12 @@ static const NSInteger actionsSectionIndex = 2;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeAction])
+    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
@@ -237,7 +233,7 @@ static const NSInteger actionsSectionIndex = 2;
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeButton])
+    else if ([type isEqualToString:[OAButtonCell getCellIdentifier]])
     {
         return [self getButtonCell];
     }

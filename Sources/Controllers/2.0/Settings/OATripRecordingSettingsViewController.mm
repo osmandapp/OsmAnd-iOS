@@ -26,7 +26,6 @@
 
 #include <generalRouter.h>
 
-#define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeCheck @"check"
@@ -204,20 +203,20 @@ static NSArray<NSString *> *minTrackSpeedNames;
                     @"header" : OALocalizedString(@"actions")
                 },
                 @{
-                    @"type" : kCellTypeAction,
+                    @"type" : [OATitleRightIconCell getCellIdentifier],
                     @"title" : OALocalizedString(@"tracks"),
                     @"img" : @"ic_custom_folder",
                     @"name" : @"open_trips"
                 },
                 @{
-                    @"type" : kCellTypeAction,
+                    @"type" : [OATitleRightIconCell getCellIdentifier],
                     @"title" : OALocalizedString(@"plugin_settings_reset"),
                     @"img" : @"ic_custom_reset",
                     @"name" : @"reset_plugin"
                 },
                 // TODO: add copy from profile
 //                @{
-//                    @"type" : kCellTypeAction,
+//                    @"type" : [OATitleRightIconCell getCellIdentifier],
 //                    @"title" : OALocalizedString(@"tracks"),
 //                    @"img" : @"ic_custom_folder",
 //                    @"key" : @"open_trips"
@@ -513,13 +512,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeAction])
+    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);

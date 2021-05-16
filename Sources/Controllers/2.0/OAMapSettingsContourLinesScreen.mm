@@ -635,11 +635,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
-        static NSString* const identifierCell = @"OATitleRightIconCell";
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleView.text = item[@"title"];

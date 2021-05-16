@@ -10,6 +10,11 @@
 
 @implementation OAColorViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAColorViewCell";
+}
+
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];
@@ -25,11 +30,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-+ (NSString *) getCellIdentifier
-{
-    return @"OAColorViewCell";
 }
 
 @end

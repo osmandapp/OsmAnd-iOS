@@ -31,7 +31,6 @@
 #import "OAFoldersCell.h"
 #import "OACollectionViewCellState.h"
 
-#define kGPXTrackCell @"OAGPXTrackCell"
 #define kAllFoldersKey @"kAllFoldersKey"
 #define kFolderKey @"kFolderKey"
 #define kAllFoldersIndex 0
@@ -165,7 +164,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     /*if ([self isShowCurrentGpx])
     {
         [existingTracksSection addObject:@{
-                @"type" : kGPXTrackCell,
+                @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"title" : OALocalizedString(@"track_recording_name"),
                 @"distance" : [app getFormattedDistance:0],
                 @"time" : [app getFormattedTimeInterval:0 shortFormat:YES],
@@ -177,7 +176,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     for (OAGPX *gpx in gpxList)
     {
         [existingTracksSection addObject:@{
-                @"type" : kGPXTrackCell,
+                @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"track" : gpx,
                 @"title" : [gpx getNiceTitle],
                 @"distance" : [app getFormattedDistance:gpx.totalDistance],
@@ -298,14 +297,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         return cell;
     }
-    else if ([type isEqualToString:kGPXTrackCell])
+    else if ([type isEqualToString:[OAGPXTrackCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kGPXTrackCell;
         OAGPXTrackCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
             cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);

@@ -997,11 +997,10 @@
     // Category item
     else if ([item isKindOfClass:[NSNumber class]])
     {
-        static NSString* const identifierCell = @"OAWaypointHeaderCell";
-        OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAWaypointHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWaypointHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAWaypointHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OAWaypointHeaderCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1013,11 +1012,10 @@
     // Location point
     else if ([item isKindOfClass:[OALocationPointWrapper class]])
     {
-        static NSString* const identifierCell = @"OAWaypointCell";
-        OAWaypointCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAWaypointCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAWaypointCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWaypointCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAWaypointCell getCellIdentifier] owner:self options:nil];
             cell = (OAWaypointCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 50, 0., 0.);
         }

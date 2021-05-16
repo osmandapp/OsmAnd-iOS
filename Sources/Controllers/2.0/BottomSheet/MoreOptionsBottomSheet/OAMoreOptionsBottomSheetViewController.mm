@@ -11,7 +11,6 @@
 #import "OATargetPoint.h"
 #import "OATargetPointsHelper.h"
 #import "OAMenuSimpleCell.h"
-#import "OAWaypointHeaderCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"

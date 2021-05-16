@@ -11,6 +11,11 @@
 
 @implementation OAWaypointHeaderCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OAWaypointHeaderCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

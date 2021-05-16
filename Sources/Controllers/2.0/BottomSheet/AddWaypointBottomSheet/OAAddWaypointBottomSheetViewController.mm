@@ -65,7 +65,7 @@
 {
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{ @"title" : OALocalizedString(@"new_destination_point_dialog"),
-                      @"type" : @"OAWaypointHeaderCell" } ];
+                      @"type" : [OAWaypointHeaderCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"replace_destination_point"),
                       @"key" : @"replace_destination_point",
@@ -130,7 +130,7 @@
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:@"OAWaypointHeaderCell"])
+    else if ([item[@"type"] isEqualToString:[OAWaypointHeaderCell getCellIdentifier]])
     {
         return 44.0;
     }
@@ -191,13 +191,12 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OAWaypointHeaderCell"])
+    else if ([item[@"type"] isEqualToString:[OAWaypointHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAWaypointHeaderCell";
-        OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAWaypointHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWaypointHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAWaypointHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OAWaypointHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.progressView.hidden = YES;

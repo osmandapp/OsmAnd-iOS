@@ -59,7 +59,7 @@
     
     [arr addObject:@{ @"title" : OALocalizedString(@"gpx_import_desc"),
                       @"key" : @"gpx_import_desc",
-                      @"type" : @"OAWaypointHeaderCell" } ];
+                      @"type" : [OAWaypointHeaderCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     
@@ -135,13 +135,12 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OAWaypointHeaderCell"])
+    else if ([item[@"type"] isEqualToString:[OAWaypointHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAWaypointHeaderCell";
-        OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAWaypointHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWaypointHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAWaypointHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OAWaypointHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.progressView.hidden = YES;

@@ -10,6 +10,11 @@
 
 @implementation OATitleSliderTableViewCell
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATitleSliderTableViewCell";
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];

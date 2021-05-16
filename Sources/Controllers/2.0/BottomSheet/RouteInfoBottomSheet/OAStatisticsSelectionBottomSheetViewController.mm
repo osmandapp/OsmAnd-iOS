@@ -31,8 +31,6 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kTitleIconRoundCell @"OATitleIconRoundCell"
-
 @interface OAStatisticsSelectionBottomSheetScreen ()
 
 @end
@@ -79,7 +77,7 @@
                      }];
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_widget_altitude"),
         @"img" : @"ic_custom_altitude",
         @"mode" : @(EOARouteStatisticsModeAltitude),
@@ -88,7 +86,7 @@
     }];
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"gpx_slope"),
         @"img" : @"ic_custom_ascent",
         @"mode" : @(EOARouteStatisticsModeSlope),
@@ -97,7 +95,7 @@
     }];
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")],
         @"img" : @"ic_custom_altitude_and_slope",
         @"mode" : @(EOARouteStatisticsModeBoth),
@@ -116,7 +114,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -161,15 +159,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
         }
         

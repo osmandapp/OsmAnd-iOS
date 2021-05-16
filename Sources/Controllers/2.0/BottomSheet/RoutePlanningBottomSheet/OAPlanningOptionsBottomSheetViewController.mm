@@ -73,7 +73,7 @@
     {
         [data addObject:@[
             @{
-                @"type" : kIconTitleIconRoundCell,
+                @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : OALocalizedString(@"track_new_segment"),
                 @"img" : @"ic_custom_new_segment",
                 @"tintColor" : UIColorFromRGB(color_primary_purple),
@@ -113,21 +113,21 @@
     ]];
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"save_changes"),
             @"img" : @"ic_custom_save_to_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_changes"
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"save_new_track"),
             @"img" : @"ic_custom_save_as_new_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_new_track"
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_to_track"),
             @"img" : @"ic_custom_add_to_track",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
@@ -137,14 +137,14 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"get_directions"),
             @"img" : @"left_menu_icon_navigation",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"get_directions"
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"reverse_route"),
             @"img" : @"ic_custom_swap",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
@@ -154,7 +154,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_clear_all"),
             @"img" : @"ic_custom_remove",
             @"tintColor" : UIColorFromRGB(color_primary_red),
@@ -169,15 +169,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = UIColor.blackColor;

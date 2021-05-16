@@ -31,7 +31,6 @@
 
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
-#define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
 
 @interface OAPluginResetBottomSheetScreen ()
 
@@ -84,7 +83,7 @@
     
     [arr removeAllObjects];
     [arr addObject:@{
-           @"type" : kTitleTwoIconsRoundCell,
+           @"type" : [OATitleTwoIconsRoundCell getCellIdentifier],
            @"title" : _appMode.toHumanString,
            @"img" : _appMode.getIconName,
            @"color" : UIColorFromRGB(_appMode.getIconColor),
@@ -123,7 +122,7 @@
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([type isEqualToString:kTitleTwoIconsRoundCell])
+    else if ([type isEqualToString:[OATitleTwoIconsRoundCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -176,15 +175,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleTwoIconsRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleTwoIconsRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleTwoIconsRoundCell;
         OATitleTwoIconsRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleTwoIconsRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleTwoIconsRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleTwoIconsRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleTwoIconsRoundCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;

@@ -9,7 +9,6 @@
 #import "OAFollowTrackBottomSheetViewController.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OARoutePlanningHudViewController.h"
-#import "OATitleIconRoundCell.h"
 #import "Localization.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAColors.h"

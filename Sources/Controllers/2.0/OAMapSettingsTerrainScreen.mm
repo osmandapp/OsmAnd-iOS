@@ -587,12 +587,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeSlider])
     {
-        static NSString* const identifierCell = @"OATitleSliderTableViewCell";
         OATitleSliderTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleSliderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }

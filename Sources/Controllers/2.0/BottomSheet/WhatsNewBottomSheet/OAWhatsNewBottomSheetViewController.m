@@ -8,13 +8,11 @@
 
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAAppVersionDependentConstants.h"
-#import "OATitleIconRoundCell.h"
 #import "OADescrTitleCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARootViewController.h"
 
-#define kIconTitleIconRoundCell @"OATitleIconRoundCell"
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
 

@@ -23,6 +23,11 @@ static UIFont *_titleFont;
     BOOL _topCorners;
 }
 
++ (NSString *) getCellIdentifier
+{
+    return @"OATitleIconRoundCell";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

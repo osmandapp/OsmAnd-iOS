@@ -27,8 +27,6 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kTitleIconRoundCell @"OATitleIconRoundCell"
-
 @interface OAWikiLinkBottomSheetScreen ()
 
 @end
@@ -87,7 +85,7 @@
     }] forKey:@(0)];
     
     [dict setObject:@[@{
-                          @"type" : kTitleIconRoundCell,
+                          @"type" : [OATitleIconRoundCell getCellIdentifier],
                           @"title" : [NSString stringWithFormat:OALocalizedString(@"download_wiki_data"), _regionName],
                           @"img" : @"ic_custom_download",
                           @"round_bottom" : @(NO),
@@ -95,7 +93,7 @@
                           @"key" : @"download_wiki_map"
                       },
                       @{
-                          @"type" : kTitleIconRoundCell,
+                          @"type" : [OATitleIconRoundCell getCellIdentifier],
                           @"title" : OALocalizedString(@"open_wiki_online"),
                           @"img" : @"ic_custom_online",
                           @"round_bottom" : @(YES),
@@ -152,15 +150,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
         }
         

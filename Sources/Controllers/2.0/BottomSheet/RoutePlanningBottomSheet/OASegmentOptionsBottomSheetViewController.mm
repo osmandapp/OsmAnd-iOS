@@ -18,8 +18,6 @@
 #import "OAMeasurementToolLayer.h"
 #import "OAGPXDocumentPrimitives.h"
 
-#define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-
 @interface OASegmentOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -84,7 +82,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"nav_type_straight_line"),
             @"img" : @"ic_custom_straight_line",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
@@ -101,7 +99,7 @@
         
         [sectionData addObject:
             @{
-                @"type" : kIconTitleIconRoundCell,
+                @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : mode.toHumanString,
                 @"img" : mode.getIconName,
                 @"tintColor" : UIColorFromRGB(mode.getIconColor),
@@ -278,15 +276,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = UIColor.blackColor;

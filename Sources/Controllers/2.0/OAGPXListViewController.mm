@@ -1154,7 +1154,7 @@ static UIViewController *parentController;
             }
             if (cell) {
                 cell.textView.text = menuItem[@"title"];
-                cell.iconView.image = [[UIImage imageNamed:menuItem[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
                 cell.arrowIconView.hidden = YES;
             }
             return cell;
@@ -1175,10 +1175,10 @@ static UIViewController *parentController;
                 cell.distanceLabel.text = menuItem[@"distance"];
                 cell.timeLabel.text = menuItem[@"time"];
                 cell.wptLabel.text = menuItem[@"wpt"];
-                cell.leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_route"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftIconImageView.image = [UIImage templateImageNamed:@"ic_custom_route"];
                 cell.leftIconImageView.tintColor = UIColorFromRGB(color_chart_orange);
                 [cell setRightButtonVisibility:YES];
-                [cell.editButton setImage:[[UIImage imageNamed:@"ic_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+                [cell.editButton setImage:[UIImage templateImageNamed:@"ic_close"] forState:UIControlStateNormal];
                 cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
                 [cell.editButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.editButton addTarget:self action:@selector(cancelRoutePressed) forControlEvents:UIControlEventTouchUpInside];
@@ -1199,7 +1199,7 @@ static UIViewController *parentController;
             {
                 cell.textView.text = item.groupName;
                 
-                cell.leftImageView.image = [[UIImage imageNamed:item.groupIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftImageView.image = [UIImage templateImageNamed:item.groupIcon];
                 cell.leftImageView.tintColor = UIColorFromRGB(color_chart_orange);
                 cell.descriptionView.text = [NSString stringWithFormat:@"%ld", item.groupItems.count];
                 cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
@@ -1213,13 +1213,11 @@ static UIViewController *parentController;
                 
                 if (item.isOpen)
                 {
-                    cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
-                    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
                 }
                 else
                 {
-                    cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"]
-                    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
                     if ([cell isDirectionRTL])
                         [cell.iconView setImage:cell.iconView.image.imageFlippedForRightToLeftLayoutDirection];
                 }
@@ -1246,7 +1244,7 @@ static UIViewController *parentController;
                 if (cell)
                 {
                     cell.textView.text = groupItem[@"title"];
-                    cell.imgView.image = [[UIImage imageNamed:groupItem[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    cell.imgView.image = [UIImage templateImageNamed:groupItem[@"icon"]];
                     [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
                     cell.switchView.on = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
@@ -1273,9 +1271,9 @@ static UIViewController *parentController;
                     cell.timeLabel.text = groupItem[@"time"];
                     cell.wptLabel.text = groupItem[@"wpt"];
                     [cell setRightButtonVisibility:YES];
-                    [cell.editButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+                    [cell.editButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"] forState:UIControlStateNormal];
                     cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
-                    cell.leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_trip"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    cell.leftIconImageView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
                     cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
                 }
                 return cell;
@@ -1346,7 +1344,6 @@ static UIViewController *parentController;
                 else
                 {
                     OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-                    pluginsViewController.openFromCustomPlace = YES;
                     [self.navigationController pushViewController:pluginsViewController animated:YES];
                 }
             }

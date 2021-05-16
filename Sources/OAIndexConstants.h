@@ -16,6 +16,9 @@
 #ifndef OAIndexConstants_h
 #define OAIndexConstants_h
 
+#define MAP_CREATOR_DIR @"MapCreator"
+#define RESOURCES_DIR @"Resources"
+
 #define SQLITE_EXT @".sqlitedb"
 #define TEMP_SOURCE_TO_LOAD @"temp"
 
@@ -77,12 +80,12 @@
 #define AV_INDEX_DIR @"avnotes/"
 #define FONT_INDEX_DIR @"fonts/"
 #define VOICE_INDEX_DIR @"voice/"
-#define RENDERERS_DIR @"rendering/"
+#define RENDERERS_DIR @"rendering"
 #define ROUTING_XML_FILE @"routing.xml"
 #define SETTINGS_DIR @"settings/"
 #define TEMP_DIR @"temp/"
-#define ROUTING_PROFILES_DIR @"routing/"
-#define PLUGINS_DIR @"plugins/"
+#define ROUTING_PROFILES_DIR @"routing"
+#define PLUGINS_DIR @"Plugins/"
 
 #define VOICE_PROVIDER_SUFFIX @"-tts"
 

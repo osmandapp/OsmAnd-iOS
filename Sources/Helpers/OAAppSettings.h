@@ -614,6 +614,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 // Contour Lines
 @property (nonatomic) OAProfileString *contourLinesZoom;
 
+// Custom plugins
+@property (nonatomic) NSString *customPluginsJson;
+
 - (OAProfileSetting *) getSettingById:(NSString *)stringId;
 
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;

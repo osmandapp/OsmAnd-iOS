@@ -174,7 +174,7 @@
             cell.backgroundColor = UIColor.clearColor;
             cell.titleView.text = item[@"title"];
             
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             cell.iconColorNormal = vwController.mode == (EOARouteStatisticsMode) [item[@"mode"] integerValue] ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);

@@ -112,7 +112,7 @@
     _searchField.delegate = self;
     [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"search_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"search_icon"]];
     leftImageView.contentMode = UIViewContentModeCenter;
     leftImageView.frame = _searchField.leftView.frame;
     leftImageView.tintColor = [UIColor whiteColor];

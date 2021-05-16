@@ -41,6 +41,7 @@
 #import "OATTSCommandPlayerImpl.h"
 #import "OAOsmAndLiveHelper.h"
 #import "OAAvoidSpecificRoads.h"
+#import "OAIndexConstants.h"
 
 #include <algorithm>
 
@@ -450,6 +451,7 @@
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];
+    [self loadRoutingFiles];
     
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
@@ -552,24 +554,19 @@
 
 - (std::vector<std::shared_ptr<RoutingConfigurationBuilder>>) getAllRoutingConfigs
 {
-    std::vector<std::shared_ptr<RoutingConfigurationBuilder>> values(_customRoutingConfigs.size());
+    std::vector<std::shared_ptr<RoutingConfigurationBuilder>> values;
     for (auto it = _customRoutingConfigs.begin(); it != _customRoutingConfigs.end(); ++it)
         values.push_back(it->second);
+    values.push_back(self.defaultRoutingConfig);
     return values;
 }
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
 {
-    // TODO: sync with android
-    // return RoutingConfiguration.getDefault();
-    
     float tm = [[NSDate date] timeIntervalSince1970];
     @try
     {
-        NSString *customRoutingPath = [self.documentsPath stringByAppendingPathComponent:@"routing.xml"];
-        BOOL useCustomRouting = [[NSFileManager defaultManager] fileExistsAtPath:customRoutingPath];
-        return parseRoutingConfigurationFromXml(useCustomRouting ? [customRoutingPath UTF8String] :
-                                                [[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String]);
+        return parseRoutingConfigurationFromXml([[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String]);
     }
     @finally
     {
@@ -604,6 +601,69 @@
         }
     }
     return builder;
+}
+
+- (void) loadRoutingFiles
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        const auto defaultAttributes = [self getDefaultAttributes];
+        UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> customConfigs;
+        
+        NSFileManager *fileManager = NSFileManager.defaultManager;
+        BOOL isDir = NO;
+        NSString *routingPath = [self.documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR];
+        BOOL exists = [fileManager fileExistsAtPath:routingPath isDirectory:&isDir];
+        if (exists && isDir)
+        {
+            NSArray<NSString *> *files = [fileManager contentsOfDirectoryAtPath:routingPath error:nil];
+            if (files != nil && files.count > 0)
+            {
+                for (NSString *f : files)
+                {
+                    NSString *fullPath = [routingPath stringByAppendingPathComponent:f];
+                    [fileManager fileExistsAtPath:fullPath isDirectory:&isDir];
+                    if (!isDir && [f.lastPathComponent hasSuffix:ROUTING_FILE_EXT])
+                    {
+                        NSString *fileName = fullPath.lastPathComponent;
+                        auto builder = parseRoutingConfigurationFromXml(fullPath.UTF8String);
+                        if (builder)
+                        {
+                            for (auto it = defaultAttributes.begin(); it != defaultAttributes.end(); ++it)
+                                builder->addAttribute(it->first, it->second);
+                            
+                            customConfigs[fileName.UTF8String] = builder;
+                        }
+                    }
+                }
+            }
+        }
+        _customRoutingConfigs = customConfigs;
+    });
+}
+
+- (MAP_STR_STR) getDefaultAttributes
+{
+    MAP_STR_STR defaultAttributes;
+    for (auto it = self.defaultRoutingConfig->attributes.begin(); it != self.defaultRoutingConfig->attributes.end(); ++it)
+    {
+        if ("routerName" != it->first)
+            defaultAttributes[it->first] = it->second;
+    }
+    return defaultAttributes;
+}
+
+- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
+{
+    auto builder = [OsmAndApp.instance getRoutingConfigForMode:am];
+    return [self getRouter:builder mode:am];
+}
+
+- (std::shared_ptr<GeneralRouter>) getRouter:(std::shared_ptr<RoutingConfigurationBuilder> &)builder mode:(OAApplicationMode *)am
+{
+    auto router = builder->getRouter([am.getRoutingProfile UTF8String]);
+    if (!router && am.parent)
+        router = builder->getRouter([am.parent.stringKey UTF8String]);
+    return router;
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force

@@ -59,7 +59,7 @@ static UIFont *_shieldFont;
 -(void) setData:(SHARED_PTR<TransportRouteResult>)data
 {
     _transportHelper = OATransportRoutingHelper.sharedInstance;
-    _arrowIcon = [[UIImage imageNamed:@"ic_small_arrow_forward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _arrowIcon = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
     _route = data;
     [self buildViews];
 }

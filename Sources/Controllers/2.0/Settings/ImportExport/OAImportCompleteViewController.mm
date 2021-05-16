@@ -354,7 +354,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     [cell.descView setText:countString];
     cell.iconView.hidden = YES;
     cell.overflowButton.enabled = NO;
-    [cell.overflowButton setImage:[[UIImage imageNamed:item[@"iconName"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateDisabled];
+    [cell.overflowButton setImage:[UIImage templateImageNamed:item[@"iconName"]] forState:UIControlStateDisabled];
     [cell.overflowButton setTintColor:UIColorFromRGB(color_primary_purple)];
     [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
     cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);

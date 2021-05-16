@@ -89,7 +89,7 @@
     
     CGFloat settingsDefaultSpeed = self.appMode.getDefaultSpeed;
     
-    auto router = [OARouteProvider getRouter:self.appMode];
+    auto router = [OsmAndApp.instance getRouter:self.appMode];
     if (!router || self.appMode.getRouterService == STRAIGHT || self.appMode.getRouterService == DIRECT_TO)
     {
         _minValue = round(MIN(1, settingsDefaultSpeed) * _ratio);

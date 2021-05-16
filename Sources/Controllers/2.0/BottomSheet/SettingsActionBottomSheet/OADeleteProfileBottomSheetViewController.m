@@ -119,7 +119,7 @@
         {
             cell.titleView.text = item[@"title"];
             cell.descrLabel.text = item[@"description"];
-            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.closeButton addTarget:self action:@selector(onCloseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }

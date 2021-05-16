@@ -12,7 +12,6 @@
 #import <StoreKit/StoreKit.h>
 #import "OALog.h"
 #import "OAResourcesUIHelper.h"
-#import "OAPluginsViewController.h"
 #import "OsmAndApp.h"
 #include "Localization.h"
 #import "OAUtilities.h"
@@ -54,10 +53,8 @@
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     
     [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
     [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
     [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
@@ -352,17 +349,6 @@
 - (IBAction) btnToolbarMapsClicked:(id)sender
 {
     [self.navigationController popViewControllerAnimated:NO];
-}
-
-- (IBAction) btnToolbarPluginsClicked:(id)sender
-{
-    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-    pluginsViewController.openFromSplash = _openFromSplash;
-    
-    NSMutableArray *controllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
-    [controllers removeObject:self];
-    [controllers addObject:pluginsViewController];
-    [self.navigationController setViewControllers:controllers];
 }
 
 - (IBAction) btnToolbarPurchasesClicked:(id)sender

@@ -37,6 +37,7 @@
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OATileSource.h"
+#import "OAPOIHelper.h"
 
 #define kMenuSimpleCell @"kMenuSimpleCell"
 #define kCellTypeTitleDescription @"kCellTypeTitleDescription"
@@ -363,8 +364,7 @@
             {
                 OAPOIUIFilter *filter = (OAPOIUIFilter *)currentItem;
                 item[@"label"] = [filter getName];
-                NSString *iconRes = [filter getIconId];
-                item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_custom_user")]; // check this
+                item[@"icon"] = [OAPOIHelper getCustomFilterIcon:filter];
                 item[@"description"] = @"";
                 item[@"cellType"] = kCellTypeTitleDescription;
             }

@@ -33,4 +33,8 @@
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode;
 
+- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am;
+- (std::shared_ptr<GeneralRouter>) getRouter:(std::shared_ptr<RoutingConfigurationBuilder> &)builder mode:(OAApplicationMode *)am;
+- (std::vector<std::shared_ptr<RoutingConfigurationBuilder>>) getAllRoutingConfigs;
+
 @end

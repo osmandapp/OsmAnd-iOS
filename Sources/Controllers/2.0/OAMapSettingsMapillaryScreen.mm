@@ -359,13 +359,13 @@ static const NSInteger panoImageFilterSection = 3;
             {
                 cell.textView.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
                 NSString *imgName = _mapillaryEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-                cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [UIImage templateImageNamed:imgName];
                 cell.imgView.tintColor = _mapillaryEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_mapillaryEnabled];
             }
             else if ([key isEqualToString:@"pano_only"])
             {
-                cell.imgView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.imgView.tintColor = _panoOnly ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_panoOnly];
             }
@@ -387,7 +387,7 @@ static const NSInteger panoImageFilterSection = 3;
         if (cell)
         {
             cell.titleView.text = item[@"title"];
-            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             [cell setButtonText:item[@"btnTitle"]];
             [cell.buttonView addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
@@ -406,7 +406,7 @@ static const NSInteger panoImageFilterSection = 3;
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.leftImageView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.leftImageView.tintColor = UIColorFromRGB(color_tint_gray);
             if ([item[@"key"] isEqualToString:@"users_filter"])
             {
@@ -444,7 +444,7 @@ static const NSInteger panoImageFilterSection = 3;
             double dateVal = [item[@"key"] isEqualToString:@"start_date_filter"] ? _startDate : _endDate;
             BOOL isNotSet = dateVal == 0;
             cell.lbTitle.text = item[@"title"];
-            UIImage *img = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *img = [UIImage templateImageNamed:item[@"img"]];
             if (img)
             {
                 [cell showLeftImageView:YES];

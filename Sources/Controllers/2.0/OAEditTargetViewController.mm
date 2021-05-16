@@ -371,7 +371,7 @@
     }
     else
     {
-        [self.buttonCancel setImage:[[UIImage imageNamed:@"ic_navbar_chevron.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [self.buttonCancel setImage:[UIImage templateImageNamed:@"ic_navbar_chevron.png"] forState:UIControlStateNormal];
         [self.buttonCancel setTintColor:[UIColor whiteColor]];
         self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
@@ -721,7 +721,7 @@
         }
         cell.iconView.contentMode = UIViewContentModeCenter;
         
-        [cell setImage:[[UIImage imageNamed:item[@"iconName"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [cell setImage:[UIImage templateImageNamed:item[@"iconName"]]];
         cell.iconView.tintColor = item[@"iconColor"];
         cell.textView.text = item[@"label"];
         cell.descrLabel.hidden = NO;

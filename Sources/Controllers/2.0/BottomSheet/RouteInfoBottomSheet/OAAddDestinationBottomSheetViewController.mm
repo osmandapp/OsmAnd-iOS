@@ -349,7 +349,7 @@
             cell.titleView.text = item[@"title"];
             if (![item[@"skip_tint"] boolValue])
             {
-                [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             }
             else

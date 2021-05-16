@@ -93,14 +93,11 @@ struct RouteSegmentResult;
 
 @interface OARouteProvider : NSObject
 
-+ (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am;
-
 - (OARouteCalculationResult *) calculateRouteImpl:(OARouteCalculationParams *)params;
 - (OARouteCalculationResult *) recalculatePartOfflineRoute:(OARouteCalculationResult *)res params:(OARouteCalculationParams *)params;
 
 - (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY;
 
 - (std::shared_ptr<RoutingConfiguration>) initOsmAndRoutingConfig:(std::shared_ptr<RoutingConfigurationBuilder>)config params:(OARouteCalculationParams *)params generalRouter:(std::shared_ptr<GeneralRouter>)generalRouter;
-- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am;
 
 @end

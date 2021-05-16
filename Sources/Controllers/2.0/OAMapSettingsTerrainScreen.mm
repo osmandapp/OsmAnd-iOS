@@ -522,7 +522,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             cell.textView.text = [self isTerrainOn] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = [self isTerrainOn] ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [UIImage templateImageNamed:imgName];
             cell.imgView.tintColor = [self isTerrainOn] ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -560,7 +560,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleView.text = item[@"title"];
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
@@ -749,8 +749,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [[UIImage imageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")]
-                                imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imageView.image = [UIImage templateImageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)

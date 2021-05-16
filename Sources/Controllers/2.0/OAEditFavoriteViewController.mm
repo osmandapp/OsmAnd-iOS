@@ -323,8 +323,7 @@
 
 - (void) updateHeaderIcon
 {
-    UIImage *backroundImage = [UIImage imageNamed:_backgroundIcons[_selectedBackgroundIndex]];
-    _headerIconBackground.image = [backroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _headerIconBackground.image = [UIImage templateImageNamed:_backgroundIcons[_selectedBackgroundIndex]];
     _headerIconBackground.tintColor = _selectedColor.color;
 
     UIImage *poiIcon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:_selectedIconName]];
@@ -745,8 +744,8 @@
         
         textField.font = [UIFont systemFontOfSize:17.0];
         textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-        [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+        [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
+        [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
         resultCell.buttonView.hidden = YES;
         resultCell.fieldLabelLeadingConstraint.constant = 0;
         resultCell.textFieldLeadingConstraint.constant = 0;
@@ -783,7 +782,7 @@
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., 0, 0, CGFLOAT_MAX);
@@ -892,7 +891,7 @@
         cell.titleView.text = item[@"title"];
         cell.titleView.textColor = item[@"color"];
         cell.iconView.tintColor = item[@"color"];
-        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
     else if ([cellType isEqualToString:[OAFolderCardsCell getCellIdentifier]])

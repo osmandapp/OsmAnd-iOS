@@ -15,6 +15,7 @@
 #import "OAButtonRightIconCell.h"
 #import "OAAppSettings.h"
 #import "OAQuickSearchButtonListItem.h"
+#import "OAPOIHelper.h"
 
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
@@ -80,7 +81,7 @@
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 @end
@@ -125,17 +126,16 @@
     self.tableView.allowsSelectionDuringEditing = YES;
 }
 
-- (void)applyLocalization
-{
-    self.titleLabel.text = OALocalizedString(@"rearrange_categories");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
-
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
     _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_custom_categories_list_promo") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+}
+
+- (void)applyLocalization
+{
+    self.titleLabel.text = OALocalizedString(@"rearrange_categories");
+    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
 - (void)generateData:(NSArray<OAPOIUIFilter *> *)filters
@@ -327,8 +327,20 @@
         if (cell)
         {
             cell.titleLabel.text = filter.name;
-            UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
-            cell.iconImageView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
+
+            UIImage *icon;
+            NSObject *res = [filter getIconResource];
+            if ([res isKindOfClass:[NSString class]])
+            {
+                NSString *iconName = (NSString *)res;
+                icon = [OAUtilities getMxIcon:iconName];
+            }
+            if (!icon)
+                icon = [OAPOIHelper getCustomFilterIcon:filter];
+            [cell.iconImageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            cell.iconImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.iconImageView.contentMode = UIViewContentModeCenter;
+
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
@@ -439,8 +451,8 @@
 {
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
-        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
+        UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
     }
 }
 

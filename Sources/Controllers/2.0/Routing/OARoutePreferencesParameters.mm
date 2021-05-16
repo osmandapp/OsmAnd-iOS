@@ -590,9 +590,9 @@
 {
     OAApplicationMode *am = [self getApplicationMode];
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto rm = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
+    auto rm = [app getRoutingConfigForMode:am]->getRouter([am.getRoutingProfile UTF8String]);
     if (!rm && am.parent)
-        rm = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
+        rm = [app getRoutingConfigForMode:am.parent]->getRouter([am.parent.getRoutingProfile UTF8String]);
     
     auto& params = rm->getParametersList();
     for (auto& r : params)
@@ -645,9 +645,9 @@
 {
     OAApplicationMode *am = [self getApplicationMode];
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto rm = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
+    auto rm = [app getRoutingConfigForMode:am]->getRouter([am.getRoutingProfile UTF8String]);
     if (!rm && am.parent)
-        rm = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
+        rm = [app getRoutingConfigForMode:am.parent]->getRouter([am.parent.getRoutingProfile UTF8String]);
     
     auto& params = rm->getParametersList();
     for (auto& r : params)

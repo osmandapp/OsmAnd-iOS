@@ -45,7 +45,7 @@ static UIFont *_descFont;
 - (void) setupPasswordButton
 {
     _togglePasswordButton.tintColor = UIColorFromRGB(color_primary_purple);
-    UIImage *img = [[UIImage imageNamed:_shouldShowPassword ? @"ic_custom_hide" : @"ic_custom_show"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *img = [UIImage templateImageNamed:(_shouldShowPassword ? @"ic_custom_hide" : @"ic_custom_show")];
     [_togglePasswordButton setImage:img  forState:UIControlStateNormal];
 }
 
@@ -54,7 +54,7 @@ static UIFont *_descFont;
     _shouldShowPassword = !_shouldShowPassword;
     [_inputField setSecureTextEntry:!_shouldShowPassword];
     [UIView animateWithDuration:0.5 delay:0.f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        UIImage *img = [[UIImage imageNamed:_shouldShowPassword ? @"ic_custom_hide" : @"ic_custom_show"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage *img = [UIImage templateImageNamed:(_shouldShowPassword ? @"ic_custom_hide" : @"ic_custom_show")];
         [_togglePasswordButton setImage:img  forState:UIControlStateNormal];
     } completion:nil];
 }

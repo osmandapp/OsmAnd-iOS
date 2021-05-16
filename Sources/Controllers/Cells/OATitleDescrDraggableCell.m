@@ -32,7 +32,7 @@
     _iconView.hidden = !show;
     
     _titleToMarginConstraint.active = !show;
-    _titleToIconCostraint.active = show;
+    _titleToIconConstraint.active = show;
     
     _descrToMarginConstraint.active = !show;
     _descrToIconConstraint.active = show;
@@ -44,7 +44,7 @@
 {
     BOOL hasImage = !self.iconView.hidden;
 
-    self.titleToIconCostraint.active = hasImage;
+    self.titleToIconConstraint.active = hasImage;
     self.titleToMarginConstraint.active = !hasImage;
 
     self.descrToIconConstraint.active = hasImage;
@@ -66,7 +66,7 @@
     {
         BOOL hasImage = !self.iconView.hidden;;
 
-        res = res || self.titleToIconCostraint.active != hasImage;
+        res = res || self.titleToIconConstraint.active != hasImage;
         res = res || self.titleToMarginConstraint.active != !hasImage;
 
         res = res || self.descrToIconConstraint.active != hasImage;

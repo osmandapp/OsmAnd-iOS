@@ -87,7 +87,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[[UIImage imageNamed:@"ic_custom_arrow_back"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"]];
     self.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.closeButton removeFromSuperview];
     [self.headerDividerView removeFromSuperview];
@@ -367,7 +367,7 @@
         {
             [cell.textView setText:item[@"title"]];
                 
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
@@ -391,7 +391,7 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.imgView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = _reverseParam.isSelected;

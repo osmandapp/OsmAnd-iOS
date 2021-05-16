@@ -12,8 +12,7 @@
 #import "OAColors.h"
 #import "OACustomSelectionButtonCell.h"
 #import "OAMenuSimpleCell.h"
-
-#define kDataTypeFilter @"OAPOIUIFilter"
+#import "OAPOIHelper.h"
 
 @interface OADeleteCustomFiltersViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -26,8 +25,8 @@
 
 @implementation OADeleteCustomFiltersViewController
 {
-    NSMutableArray *_items;
-    NSMutableArray *_selectedItems;
+    NSMutableArray<OAPOIUIFilter *> *_items;
+    NSMutableArray<OAPOIUIFilter *> *_selectedItems;
 }
 
 - (instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters
@@ -37,7 +36,6 @@
     {
         _selectedItems = [NSMutableArray new];
         _items = [NSMutableArray arrayWithArray:filters];
-        [_items insertObject:[[OACustomSelectionButtonCell alloc] init] atIndex:0];
     }
     return self;
 }
@@ -50,6 +48,8 @@
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.rowHeight = kEstimatedRowHeight;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 
     [self setupDeleteButtonView];
 }
@@ -79,12 +79,9 @@
     if (!shouldSelect)
         [_selectedItems removeAllObjects];
     else
-    {
         [_selectedItems addObjectsFromArray:_items];
-        [_selectedItems removeObjectAtIndex:0];
-    }
 
-    for (NSInteger i = 1; i < _items.count; i++)
+    for (NSInteger i = 0; i < _items.count; i++)
     {
         if (shouldSelect)
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -92,7 +89,7 @@
             [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO];
     }
     [self.tableView beginUpdates];
-    [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count - 1] upperCase];
+    [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
     [self setupDeleteButtonView];
@@ -103,12 +100,12 @@
     if (indexPath.row > 0)
     {
         [self.tableView beginUpdates];
-        OAPOIUIFilter *filter = _items[indexPath.row];
+        OAPOIUIFilter *filter = _items[indexPath.row - 1];
         if ([_selectedItems containsObject:filter])
             [_selectedItems removeObject:filter];
         else
             [_selectedItems addObject:filter];
-        [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count - 1] upperCase];
+        [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count] upperCase];
         [self.tableView endUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
@@ -129,7 +126,7 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSObject *item = _items[indexPath.row];
-    NSString *cellType = NSStringFromClass(item.class);
+    NSString *cellType = indexPath.row == 0 ? [OACustomSelectionButtonCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
     if ([cellType isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
     {
         OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
@@ -137,13 +134,15 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionButtonCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
         }
         if (cell)
         {
             NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all");
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
+            [cell.selectDeselectButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.selectionButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
 
             NSInteger selectedAmount = _selectedItems.count;
@@ -159,7 +158,7 @@
             return cell;
         }
     }
-    else if ([cellType isEqualToString:kDataTypeFilter])
+    else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
         OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
@@ -174,14 +173,18 @@
         }
         if (cell)
         {
-            OAPOIUIFilter *filter = (OAPOIUIFilter *) item;
-            UIImage *poiIcon = [UIImage templateImageNamed:filter.getIconId];
-            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_user"];
-            cell.textView.text = filter.getName ? filter.getName : @"";
-            cell.descriptionView.hidden = true;
+            OAPOIUIFilter *filter = _items[indexPath.row - 1];
             BOOL selected = [_selectedItems containsObject:filter];
+
+            UIImage *icon = [[OAPOIHelper getCustomFilterIcon:filter] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [cell.imgView setImage:icon ];
             UIColor *selectedColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             cell.imgView.tintColor = selectedColor;
+            cell.imgView.contentMode = UIViewContentModeCenter;
+
+            cell.textView.text = filter.getName ? filter.getName : @"";
+            cell.descriptionView.hidden = true;
+
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];
             return cell;
@@ -194,7 +197,7 @@
 {
     if (indexPath.row > 0)
     {
-        OAPOIUIFilter *item = _items[indexPath.row];
+        OAPOIUIFilter *item = _items[indexPath.row - 1];
         BOOL selected = [_selectedItems containsObject:item];
         [cell setSelected:selected animated:NO];
         if (selected)
@@ -221,7 +224,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count - 1];
+        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count];
     return nil;
 }
 
@@ -232,7 +235,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _items.count;
+    return _items.count + 1;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

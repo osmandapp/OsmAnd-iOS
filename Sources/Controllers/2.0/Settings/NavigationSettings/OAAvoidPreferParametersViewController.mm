@@ -61,7 +61,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    auto router = [OARouteProvider getRouter:self.appMode];
+    auto router = [OsmAndApp.instance getRouter:self.appMode];
     NSString *prefix = _isAvoid ? @"avoid_" : @"prefer_";
     if (router)
     {
@@ -90,7 +90,7 @@
 
 + (BOOL) hasPreferParameters:(OAApplicationMode *)appMode
 {
-    auto router = [OARouteProvider getRouter:appMode];
+    auto router = [OsmAndApp.instance getRouter:appMode];
     if (router)
     {
         auto& parameters = router->getParametersList();

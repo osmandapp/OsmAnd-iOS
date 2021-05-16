@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPluginDetailsViewController">
             <connections>
                 <outlet property="backButton" destination="cIJ-2h-P0q" id="Jgf-jr-AmX"/>
-                <outlet property="bottomToolbarView" destination="Oak-UR-t6w" id="F3a-nz-MRn"/>
-                <outlet property="btnToolbarMaps" destination="GIj-ae-fVr" id="y6x-Pc-tRs"/>
-                <outlet property="btnToolbarPlugins" destination="UWD-H9-ano" id="nKr-iT-miN"/>
-                <outlet property="btnToolbarPurchases" destination="Fa0-NB-ttG" id="cVe-K0-VMZ"/>
+                <outlet property="buttonDeleteCustomPlugin" destination="RxQ-RG-ANF" id="NCf-Ez-Bl8"/>
                 <outlet property="descLabel" destination="jYf-Nz-ubj" id="9Sp-3M-IOk"/>
                 <outlet property="descTextView" destination="nkq-Xw-j8P" id="xjF-Wh-uVM"/>
                 <outlet property="detailsView" destination="gdU-bL-CTA" id="3GQ-gh-6xd"/>
@@ -55,7 +52,6 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <inset key="imageEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" image="ic_navbar_chevron.png">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
@@ -100,54 +96,16 @@
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
+                        <button hidden="YES" opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RxQ-RG-ANF">
+                            <rect key="frame" x="179" y="19" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="ic_custom_remove_outlined.png"/>
+                            <connections>
+                                <action selector="deleteButtonClicked:" destination="-1" eventType="touchUpInside" id="vl9-uu-Erx"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Oak-UR-t6w">
-                    <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GIj-ae-fVr" userLabel="Maps">
-                            <rect key="frame" x="0.0" y="0.0" width="124" height="61"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
-                            <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="MAPS" image="ic_tabbar_maps_normal.png">
-                                <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="btnToolbarMapsClicked:" destination="-1" eventType="touchUpInside" id="mbX-BN-yJ5"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UWD-H9-ano" userLabel="Plugins">
-                            <rect key="frame" x="125" y="0.0" width="124" height="61"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <color key="tintColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
-                            <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="MAPS" image="ic_tabbar_addons_active.png">
-                                <color key="titleColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fa0-NB-ttG" userLabel="Purchases">
-                            <rect key="frame" x="251" y="0.0" width="124" height="61"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
-                            <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="PURCHASES" image="ic_tabbar_purchases_normal.png">
-                                <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="btnToolbarPurchasesClicked:" destination="-1" eventType="touchUpInside" id="0mO-XE-dKq"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" red="0.96055269241333008" green="0.96052390336990356" blue="0.96054017543792725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -156,11 +114,9 @@
     </objects>
     <resources>
         <image name="bg_title.png" width="320" height="64"/>
+        <image name="ic_custom_remove_outlined.png" width="30" height="30"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
         <image name="ic_plugin_nautical.png" width="25" height="25"/>
-        <image name="ic_tabbar_addons_active.png" width="25" height="25"/>
-        <image name="ic_tabbar_maps_normal.png" width="25" height="25"/>
-        <image name="ic_tabbar_purchases_normal.png" width="25" height="25"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

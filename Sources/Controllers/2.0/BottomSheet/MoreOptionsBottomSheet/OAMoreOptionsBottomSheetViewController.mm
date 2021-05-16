@@ -223,7 +223,7 @@
             UIImage *img = nil;
             NSString *imgName = item[@"img"];
             if (imgName)
-                img = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                img = [UIImage templateImageNamed:imgName];
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"description"];

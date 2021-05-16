@@ -115,8 +115,8 @@
     OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
     params.mode = appMode;
     
-    auto config = _app.defaultRoutingConfig;
-    auto generalRouter = [_provider getRouter:params.mode];
+    auto config = [_app getRoutingConfigForMode:params.mode];
+    auto generalRouter = [_app getRouter:config mode:params.mode];
     if (generalRouter)
     {
         auto cf = [_provider initOsmAndRoutingConfig:config params:params generalRouter:generalRouter];

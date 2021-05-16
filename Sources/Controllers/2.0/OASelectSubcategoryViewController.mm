@@ -7,214 +7,281 @@
 //
 
 #import "OASelectSubcategoryViewController.h"
-#import "OATextLineViewCell.h"
-#import "OAPOISearchHelper.h"
 #import "Localization.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
-#import "OAPOIHelper.h"
+#import "OACustomSelectionButtonCell.h"
+#import "OAMenuSimpleCell.h"
+#import "OAColors.h"
+#import "OAPOIUIFilter.h"
 
 @interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, OAMultiselectableHeaderDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *topView;
-@property (weak, nonatomic) IBOutlet UIButton *btnCancel;
-@property (weak, nonatomic) IBOutlet UILabel *textView;
-@property (weak, nonatomic) IBOutlet UILabel *descView;
-@property (weak, nonatomic) IBOutlet UIButton *btnDone;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *applyButton;
 
 @end
 
 @implementation OASelectSubcategoryViewController
 {
-    OAMultiselectableHeaderView *_headerView;
-    NSArray<NSString *> *_keys;
-    NSArray<NSString *> *_data;
     OAPOICategory *_category;
-    NSSet<NSString *> *_subcategories;
-    BOOL _selectAll;
+    OAPOIUIFilter *_filter;
+    NSMutableArray *_items;
+    NSMutableArray *_selectedItems;
 }
 
-- (instancetype)initWithCategory:(OAPOICategory *)category subcategories:(NSSet<NSString *> *)subcategories selectAll:(BOOL)selectAll
+- (instancetype)initWithCategory:(OAPOICategory *)category filter:(OAPOIUIFilter *)filter
 {
     self = [super init];
     if (self)
     {
         _category = category;
-        _subcategories = subcategories;
-        _selectAll = selectAll;
+        _filter = filter;
         [self initData];
     }
     return self;
 }
 
-- (void) initData
+- (void)initData
 {
     if (_category)
     {
-        OAPOIHelper *helper = [OAPOIHelper sharedInstance];
-        NSMutableDictionary<NSString *, NSString *> *subMap = [NSMutableDictionary dictionary];
-        for (NSString *name in _subcategories)
-            [subMap setObject:[helper getPhraseByName:name] forKey:name];
+        NSSet<NSString *> *acceptedTypes = [[_filter getAcceptedTypes] objectForKey:_category];
+        NSSet<NSString *> *acceptedSubtypes = [_filter getAcceptedSubtypes:_category];
+        NSArray<OAPOIType *> *types = _category.poiTypes;
 
-        for (OAPOIType *pt in _category.poiTypes)
-            [subMap setObject:pt.nameLocalized forKey:pt.name];
-        
-        NSMutableArray<NSString *> *keys = [NSMutableArray arrayWithArray:subMap.allKeys];
-        NSMutableArray<NSString *> *data = [NSMutableArray arrayWithArray:subMap.allValues];
-        
-        [keys sortUsingComparator:^NSComparisonResult(NSString * _Nonnull name1, NSString * _Nonnull name2) {
-            return [[subMap objectForKey:name1] localizedCaseInsensitiveCompare:[subMap objectForKey:name2]];
-        }];
-        [data sortUsingComparator:^NSComparisonResult(NSString * _Nonnull nameLoc1, NSString * _Nonnull nameLoc2) {
-            return [nameLoc1 localizedCaseInsensitiveCompare:nameLoc2];
-        }];
+        _selectedItems = [NSMutableArray new];
+        _items = [NSMutableArray arrayWithArray:[types sortedArrayUsingComparator:^NSComparisonResult(OAPOIType * _Nonnull t1, OAPOIType * _Nonnull t2) {
+            return [t1.nameLocalized localizedCaseInsensitiveCompare:t2.nameLocalized];
+        }]];
 
-        _data = [NSArray arrayWithArray:data];
-        _keys = [NSArray arrayWithArray:keys];
+        if (acceptedSubtypes == [OAPOIBaseType nullSet] || acceptedTypes.count == types.count)
+            _selectedItems = [NSMutableArray arrayWithArray:_items];
+        else
+            for (OAPOIType *poiType in _items)
+                if ([acceptedTypes containsObject:poiType.name])
+                    [_selectedItems addObject:poiType];
     }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     if (_category)
-        self.textView.text = _category.nameLocalized;
+        self.titleLabel.text = _category.nameLocalized;
     else
-        self.textView.text = @"";
-    
-    // add header
-    _headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
-    [_headerView setTitleText:OALocalizedString(@"select_all")];
-    
-    _headerView.section = 0;
-    _headerView.delegate = self;
-    
+        self.titleLabel.text = @"";
+
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     self.tableView.editing = YES;
-    if (_selectAll)
-    {
-        _headerView.selected = YES;
-        [self.tableView beginUpdates];
-        for (int i = 0; i < _data.count; i++)
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.rowHeight = kEstimatedRowHeight;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+
+    [self.tableView beginUpdates];
+    for (NSInteger i = 0; i < _items.count; i++)
+        if ([_selectedItems containsObject:_items[i]])
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-        [self.tableView endUpdates];
-    }
-    else
-    {
-        _headerView.selected = _subcategories.count == _keys.count;
-        [self.tableView beginUpdates];
-        for (int i = 0; i < _keys.count; i++)
-        {
-            NSString *name = _keys[i];
-            if ([_subcategories containsObject:name])
-                [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-        }
-        [self.tableView endUpdates];
-    }
-    [self applySafeAreaMargins];
-}
-
--(UIView *) getTopView
-{
-    return _topView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
+    [self.tableView endUpdates];
 }
 
 -(void)applyLocalization
 {
-    self.descView.text = OALocalizedString(@"subcategories");
+    self.applyButton.titleLabel.text = OALocalizedString(@"shared_string_apply");
 }
 
-- (IBAction)cancelPress:(id)sender
+- (IBAction)onBackButtonClicked:(id)sender
 {
     if (_delegate)
         [_delegate selectSubcategoryCancel];
-    
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)donePress:(id)sender
+- (IBAction)onApplyButtonClicked:(id)sender
 {
     if (_delegate)
     {
         NSMutableSet<NSString *> *selectedKeys = [NSMutableSet set];
-        NSArray<NSIndexPath *> *rows = [self.tableView indexPathsForSelectedRows];
-        for (NSIndexPath *index in rows)
-            [selectedKeys addObject:_keys[index.row]];
+        for (OAPOIType *poiType in _selectedItems)
+            [selectedKeys addObject:poiType.name];
 
-        [_delegate selectSubcategoryDone:_category keys:selectedKeys allSelected:_keys.count == selectedKeys.count];
+        [_delegate selectSubcategoryDone:_category keys:selectedKeys allSelected:_selectedItems.count == _items.count];
     }
 
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - OAMultiselectableHeaderDelegate
-
--(void)headerCheckboxChanged:(id)sender value:(BOOL)value
+- (void)selectDeselectGroup:(id)sender
 {
-    OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
-    NSInteger section = headerView.section;
-    NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
-    
-    [self.tableView beginUpdates];
-    if (value)
-    {
-        for (int i = 0; i < rowsCount; i++)
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
-    }
+    BOOL shouldSelect = _selectedItems.count == 0;
+    if (!shouldSelect)
+        [_selectedItems removeAllObjects];
     else
+        [_selectedItems addObjectsFromArray:_items];
+
+    for (NSInteger i = 0; i < _items.count; i++)
     {
-        for (int i = 0; i < rowsCount; i++)
-            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+        if (shouldSelect)
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        else
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO];
     }
+    [self.tableView beginUpdates];
+    [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)selectDeselectItem:(NSIndexPath *)indexPath
+{
+    if (indexPath.row > 0)
+    {
+        [self.tableView beginUpdates];
+        OAPOIUIFilter *filter = _items[indexPath.row - 1];
+        if ([_selectedItems containsObject:filter])
+            [_selectedItems removeObject:filter];
+        else
+            [_selectedItems addObject:filter];
+        [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count] upperCase];
+        [self.tableView endUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 #pragma mark - UITableViewDataSource
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [OAPOISearchHelper getHeightForFooter];
+    NSString *cellType = indexPath.row == 0 ? [OACustomSelectionButtonCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
+    if ([cellType isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
+    {
+        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionButtonCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            [cell setSelectedBackgroundView:bgColorView];
+        }
+        if (cell)
+        {
+            NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all");
+            [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
+            [cell.selectDeselectButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.selectionButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+
+            NSInteger selectedAmount = _selectedItems.count;
+            if (selectedAmount > 0)
+            {
+                UIImage *selectionImage = selectedAmount < _items.count ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
+                [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
+            }
+            else
+            {
+                [cell.selectionButton setImage:nil forState:UIControlStateNormal];
+            }
+            return cell;
+        }
+    }
+    else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    {
+        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
+            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            [cell setSelectedBackgroundView:bgColorView];
+        }
+        if (cell)
+        {
+            OAPOIType *poiType = _items[indexPath.row - 1];
+            BOOL selected = [_selectedItems containsObject:poiType];
+
+            UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+            UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];
+            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            cell.imgView.tintColor = selectedColor;
+
+            if (poiIcon.size.width < cell.imgView.frame.size.width && poiIcon.size.height < cell.imgView.frame.size.height)
+                cell.imgView.contentMode = UIViewContentModeCenter;
+            else
+                cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
+
+            cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
+            cell.descriptionView.hidden = true;
+
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
+            return cell;
+        }
+    }
+    return nil;
+}
+ 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row > 0)
+    {
+        OAPOIType *item = _items[indexPath.row - 1];
+        BOOL selected = [_selectedItems containsObject:item];
+        [cell setSelected:selected animated:NO];
+        if (selected)
+            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        else
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 46.0;
+    if (indexPath.row > 0)
+        [self selectDeselectItem:indexPath];
+    else
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _headerView;
+    if (indexPath.row > 0)
+        [self selectDeselectItem:indexPath];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count];
+    return nil;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
+    return _items.count + 1;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATextLineViewCell* cell;
-    cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OATextLineViewCell *)[nib objectAtIndex:0];
-    }
-    
-    if (cell)
-    {
-        cell.contentView.backgroundColor = [UIColor whiteColor];
-        [cell.textView setTextColor:[UIColor blackColor]];        
-        [cell.textView setText:_data[indexPath.row]];
-    }
-    return cell;
+    return indexPath.row != 0;
 }
 
 @end

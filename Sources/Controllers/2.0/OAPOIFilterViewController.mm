@@ -72,7 +72,7 @@ typedef enum
 @end
 
 
-@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate>
+@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, OAPOIFilterRefreshDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
@@ -304,11 +304,11 @@ typedef enum
         actionSaveTitle = OALocalizedString(@"shared_string_save_as");
         UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:OALocalizedString(@"delete_filter")
             style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            [self deleteFilter];
+                    [self showDeleteFilterScreen];
         }];
         UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:OALocalizedString(@"edit_filter")
             style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self editCategories];
+                    [self showEditCategoriesScreen];
           }];
         [alert addAction:actionDelete];
         [alert addAction:actionEdit];
@@ -321,8 +321,15 @@ typedef enum
         style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if ([self hasChanges])
             [self applyFilterFields];
-        if (self.delegate && [self.delegate saveFilter:_filter])
-            [self.navigationController popViewControllerAnimated:YES];
+        if (self.delegate) {
+            UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
+            UIAlertAction *actionSaveDialog = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+                [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
+                [self dismissViewController];
+            }];
+            [saveDialog addAction:actionSaveDialog];
+            [self presentViewController:saveDialog animated:YES completion:nil];
+        }
     }];
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
         style:UIAlertActionStyleCancel handler:nil];
@@ -334,7 +341,7 @@ typedef enum
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) deleteFilter
+- (void)showDeleteFilterScreen
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"edit_filter_delete_dialog_title")
         message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -360,10 +367,13 @@ typedef enum
     popPresenter.sourceRect = _btnMore.frame;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
 }
-- (void) editCategories
+
+- (void)showEditCategoriesScreen
 {
-    OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:_filter];
-    [self.navigationController pushViewController:customPOI animated:YES];
+    OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:_filter];
+    customPOIScreen.delegate = self.delegate;
+    customPOIScreen.refreshDelegate = self;
+    [self.navigationController pushViewController:customPOIScreen animated:YES];
 }
 
 - (void) applyFilterFields
@@ -535,6 +545,13 @@ typedef enum
     NSArray<NSString *> *categories = abstractPoiType.excludedPoiAdditionalCategories;
     if (categories)
         [excludedPoiAdditionalCategories addObjectsFromArray:categories];
+}
+
+- (void)refreshList
+{
+    [self initListItems];
+    [self updateGroups];
+    [self.tableView reloadData];
 }
 
 - (void) initListItems

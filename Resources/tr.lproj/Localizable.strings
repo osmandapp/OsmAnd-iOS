@@ -571,7 +571,7 @@
 "fast_route_mode" = "En hızlı rota";
 "fast_route_mode_descr" = "En hızlı rota hesaplamayı etkinleştirin ya da yakıt tasarruflu rota için devre dışı bırakın";
 "avoid_in_routing_title" = "Kaçın…";
-"avoid_in_routing_descr" = "Geçiş ücretli yollardan, asfaltsız toprak yollardan, feribotlardan sakınılsın";
+"avoid_in_routing_descr" = "Geçiş ücretli yollardan, asfaltsız toprak yollardan, feribotlardan kaçın";
 "prefer_in_routing_title" = "Tercih et…";
 "choose_auto_follow_route" = "Harita görünümünü otomatik olarak ortala";
 "auto_zoom_map" = "Haritayı kendiliğinden yakınlaştır";
@@ -598,7 +598,7 @@
 "use_points_as_intermediates" = "Noktalar arasındaki güzergahı hesapla";
 "routing_settings_2" = "Navigasyon ayarları";
 "gpx_navigation" = "Yolu takip et";
-"impassable_road" = "Yollardan kaçının";
+"impassable_road" = "Yollardan kaçın";
 "interrupt_music" = "Müziği duraklat";
 "voice_provider" = "Sesli yönlendirme";
 "sort_by_distance" = "Uzaklığa göre sırala";
@@ -807,7 +807,7 @@
 "subsequent_dest_description" = "Hedefi yukarı taşıyın ve hedef oluşturun";
 "first_intermediate_dest_description" = "Rotadaki ilk durağı ekler";
 "last_intermediate_dest_description" = "Rota boyunca son durağı ekler";
-"transport_routes" = "Rotalar";
+"transport_routes" = "Güzergah";
 "transport_stop" = "Durak";
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
@@ -1794,7 +1794,7 @@
 "arrival_announcement_frequency" = "Varış duyurusunu ne yakınlıkta istiyorsunuz?";
 "select_distance_for_recalculation" = "Güzergahın yeniden hesaplanacağı mesafeyi seçin.";
 "route_recalculation_descr" = "Güzergahtan geçerli konuma olan mesafe seçilen değerden fazla ise güzergah yeniden hesaplanacaktır.";
-"avoid_routes_and_road" = "Belirli güzergahlardan ve yol türlerinden kaçının";
+"avoid_routes_and_road" = "Belirli güzergahlardan ve yol türlerinden kaçın";
 "send_anonymous_data" = "Anonim veri gönder";
 "profile_type_base_string" = "Temel profil";
 "global_settings_descr" = "Tüm uygulamayı etkiler.";
@@ -1893,7 +1893,7 @@
 "configure_screen_quick_action" = "Hızlı eylem";
 "shared_string_settings" = "Ayarlar";
 "shared_string_importing" = "İçe aktarılıyor";
-"avoid_road" = "Yoldan sakın";
+"avoid_road" = "Yoldan kaçın";
 "shared_string_routing" = "Yönlendirme";
 "quick_action_map_source_title" = "Harita kaynakları";
 "shared_string_poi_types" = "POI türleri";
@@ -2077,3 +2077,11 @@
 "hidden_categories" = "Gizli kategoriler";
 "visible_categories" = "Görünür kategoriler";
 "rearrange_categories" = "Kategorileri yeniden düzenle";
+"new_plugin_added" = "Yeni eklenti eklendi";
+"extra_maps" = "Ek haritalar";
+"custom_plugins" = "Özel eklentiler";
+"custom_osmand_plugin_name" = "Özel OsmAnd eklentisi";
+"shared_string_disable" = "Devre dışı bırak";
+
+// Shared Strings
+"shared_string_enable" = "Etkinleştir";

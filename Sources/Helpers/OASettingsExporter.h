@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OASettingsExporter : NSObject
 
-- (instancetype) initWithExportParam:(BOOL)exportItemsFiles;
+- (instancetype) initWithExportParam:(BOOL)exportItemsFiles acceptedExtensions:(NSSet<NSString *> *)extensions;
 - (void) addSettingsItem:(OASettingsItem *)item;
 - (void) addAdditionalParam:(NSString *)key value:(NSString *)value;
 - (void) exportSettings:(NSString *)file error:(NSError * _Nullable *)error;
@@ -28,7 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<OASettingsImportExportDelegate> settingsExportDelegate;
 
-- (instancetype) initWithFile:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles;
+- (instancetype) initWithFile:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles extensionsFilter:(NSString *)extensionsFilter;
+
 - (void) execute;
 
 @end

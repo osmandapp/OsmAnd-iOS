@@ -452,7 +452,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             [cell.textView setText:item[@"title"]];
             cell.descView.hidden = YES;
                 
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
@@ -473,7 +473,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kTitleRightIconCell])
@@ -491,7 +491,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         if (cell)
         {
             [cell.titleView setText:item[@"title"]];
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
         }

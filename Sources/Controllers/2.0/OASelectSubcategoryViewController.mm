@@ -143,7 +143,7 @@
     {
         self.bottomView.hidden = NO;
         self.applyButton.hidden = NO;
-        self.tableBottomConstraint.constant = 87;
+        self.tableBottomConstraint.constant = 53 + OAUtilities.getBottomMargin;
     }
 }
 

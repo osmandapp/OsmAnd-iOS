@@ -18,8 +18,10 @@ typedef void(^OACustomSearchButtonOnClick)(id sender);
 @property (nonatomic) OACustomSearchButtonOnClick onClickFunction;
 
 - (instancetype)initWithIcon:(UIImage *)icon text:(NSString *)text onClickFunction:(OACustomSearchButtonOnClick)onClickFunction;
+- (instancetype)initWithIcon:(UIImage *)icon text:(NSString *)text actionButton:(BOOL)actionButton onClickFunction:(OACustomSearchButtonOnClick)onClickFunction;
 - (instancetype)initWithIcon:(UIImage *)icon attributedText:(NSAttributedString *)attributedText onClickFunction:(OACustomSearchButtonOnClick)onClickFunction;
 
-- (NSAttributedString *) getAttributedName;
+- (NSAttributedString *)getAttributedName;
+- (void)onClick;
 
 @end

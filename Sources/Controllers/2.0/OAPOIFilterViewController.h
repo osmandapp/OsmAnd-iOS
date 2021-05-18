@@ -14,9 +14,18 @@
 
 @required
 
-- (BOOL) updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter;
-- (BOOL) saveFilter:(OAPOIUIFilter *)filter;
-- (BOOL) removeFilter:(OAPOIUIFilter *)filter;
+- (BOOL)updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter;
+- (BOOL)removeFilter:(OAPOIUIFilter *)filter;
+- (UIAlertController *)createSaveFilterDialog:(OAPOIUIFilter *)filter customSaveAction:(BOOL)customSaveAction;
+- (void)searchByUIFilter:(OAPOIUIFilter *)filter newName:(NSString *)newName willSaved:(BOOL)willSave;
+
+@end
+
+@protocol OAPOIFilterRefreshDelegate
+
+@required
+
+- (void)refreshList;
 
 @end
 

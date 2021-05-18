@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -58,7 +58,9 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="deleteButton" destination="eqA-aj-Fd2" id="Zjm-8x-0JU"/>
+                <outlet property="iconHeightPrimary" destination="Af2-Wo-wKc" id="49K-2K-7ME"/>
                 <outlet property="iconImageView" destination="cXg-RC-sQD" id="iJe-0o-ro8"/>
+                <outlet property="iconWidthPrimary" destination="5Tb-cu-qIt" id="XEu-33-GCi"/>
                 <outlet property="titleLabel" destination="bbp-Ku-VYB" id="39M-HL-T8f"/>
             </connections>
             <point key="canvasLocation" x="160.86956521739131" y="87.723214285714278"/>

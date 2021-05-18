@@ -9,8 +9,16 @@
 #import "OAQuickSearchButtonListItem.h"
 
 @implementation OAQuickSearchButtonListItem
+{
+    BOOL _actionButton;
+}
 
 - (instancetype)initWithIcon:(UIImage *)icon text:(NSString *)text onClickFunction:(OACustomSearchButtonOnClick)onClickFunction
+{
+    return [self initWithIcon:icon text:text actionButton:NO onClickFunction:onClickFunction];
+}
+
+- (instancetype)initWithIcon:(UIImage *)icon text:(NSString *)text actionButton:(BOOL)actionButton onClickFunction:(OACustomSearchButtonOnClick)onClickFunction
 {
     self = [super init];
     if (self)
@@ -18,6 +26,7 @@
         _icon = icon;
         _text = text;
         _onClickFunction = onClickFunction;
+        _actionButton = actionButton;
     }
     return self;
 }
@@ -36,7 +45,7 @@
 
 - (EOAQuickSearchListItemType) getType
 {
-    return BUTTON;
+    return _actionButton ? ACTION_BUTTON : BUTTON;
 }
 
 - (NSString *) getName
@@ -47,6 +56,11 @@
 -(NSAttributedString *)getAttributedName
 {
     return self.attributedText;
+}
+
+- (void)onClick
+{
+    self.onClickFunction(self);
 }
 
 @end

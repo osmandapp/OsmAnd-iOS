@@ -187,6 +187,11 @@
 
 - (void)updateSearchView:(BOOL)searchMode
 {
+    [OACustomPOIViewController updateSearchView:searchMode search:self.searchField cancel:self.cancelSearchButton rightConstraint:self.searchFieldRightConstraint];
+}
+
++ (void)updateSearchView:(BOOL)searchMode search:(UITextField *)search cancel:(UIButton *)cancel rightConstraint:(NSLayoutConstraint *)rightConstraint;
+{
     UIView *searchLeftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
     UIImageView *searchLeftImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     UIImage *searchIcon = [UIImage templateImageNamed:@"ic_custom_search"];
@@ -194,21 +199,21 @@
     searchLeftImageView.tintColor = searchMode ? UIColorFromRGB(profile_icon_color_outdated_light) : [UIColor colorWithWhite:1 alpha:0.5];
     searchLeftImageView.center = searchLeftView.center;
     [searchLeftView addSubview:searchLeftImageView];
-    self.searchField.leftViewMode = UITextFieldViewModeAlways;
-    self.searchField.leftView = searchLeftView;
-    self.searchField.borderStyle = UITextBorderStyleNone;
-    self.searchField.layer.cornerRadius = 10;
+    search.leftViewMode = UITextFieldViewModeAlways;
+    search.leftView = searchLeftView;
+    search.borderStyle = UITextBorderStyleNone;
+    search.layer.cornerRadius = 10;
     UIFont *searchTextFont = [UIFont systemFontOfSize:17 weight:UIFontWeightRegular];
     UIColor *searchTextColor = [UIColor colorWithWhite:1 alpha:0.5];
-    self.searchField.placeholder = searchMode ? @"" : OALocalizedString(@"shared_string_search");
-    self.searchField.text = @"";
-    self.searchField.font = searchTextFont;
-    self.searchField.tintColor = UIColorFromRGB(color_footer_icon_gray);
-    self.searchField.backgroundColor = searchMode ? [UIColor colorWithWhite:1 alpha:1] : [UIColor colorWithWhite:1 alpha:0.24];
-    self.searchField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.searchField.placeholder attributes:@{NSFontAttributeName:searchTextFont, NSForegroundColorAttributeName: searchTextColor}];
-    [self.searchField endEditing:YES];
-    self.cancelSearchButton.hidden = !searchMode;
-    self.searchFieldRightConstraint.constant = searchMode ? 76 : 16;
+    search.placeholder = searchMode ? @"" : OALocalizedString(@"shared_string_search");
+    search.text = @"";
+    search.font = searchTextFont;
+    search.tintColor = UIColorFromRGB(color_footer_icon_gray);
+    search.backgroundColor = searchMode ? [UIColor colorWithWhite:1 alpha:1] : [UIColor colorWithWhite:1 alpha:0.24];
+    search.attributedPlaceholder = [[NSAttributedString alloc] initWithString:search.placeholder attributes:@{NSFontAttributeName:searchTextFont, NSForegroundColorAttributeName: searchTextColor}];
+    [search endEditing:YES];
+    cancel.hidden = !searchMode;
+    rightConstraint.constant = searchMode ? 76 : 16;
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath

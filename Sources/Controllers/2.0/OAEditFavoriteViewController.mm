@@ -37,10 +37,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-#define kCellTypeColorCollection @"colorCollectionCell"
-#define kCellTypeIconCollection @"iconCollectionCell"
-#define kCellTypePoiCollection @"poiCollectionCell"
-
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
 #define kAddressKey @"kAddressKeyd"
@@ -389,7 +385,7 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"map_settings_appearance"),
-        @"type" : kCellTypePoiCollection,
+        @"type" : [OAPoiTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"icon"),
         @"value" : @"",
         @"selectedCategoryName" : _selectedIconCategoryName,
@@ -401,7 +397,7 @@
     _poiIconRowIndex = section.count - 1;
     
     [section addObject:@{
-        @"type" : kCellTypeColorCollection,
+        @"type" : [OAColorsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"fav_color"),
         @"value" : _selectedColor.name,
         @"index" : [NSNumber numberWithInteger:_selectedColorIndex],
@@ -409,7 +405,7 @@
     _colorRowIndex = section.count - 1;
     
     [section addObject:@{
-        @"type" : kCellTypeIconCollection,
+        @"type" : [OAShapesTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"shape"),
         @"value" : OALocalizedString(_backgroundIconNames[_selectedBackgroundIndex]),
         @"index" : [NSNumber numberWithInteger:_selectedBackgroundIndex],
@@ -793,7 +789,7 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePoiCollection])
+    else if ([cellType isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
     {
         OAPoiTableViewCell *cell = nil;
         cell = [tableView dequeueReusableCellWithIdentifier:[OAPoiTableViewCell getCellIdentifier]];
@@ -823,7 +819,7 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeColorCollection])
+    else if ([cellType isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {
         OAColorsTableViewCell *cell = nil;
         cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];
@@ -848,7 +844,7 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconCollection])
+    else if ([cellType isEqualToString:[OAShapesTableViewCell getCellIdentifier]])
     {
         OAShapesTableViewCell *cell = nil;
         cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAShapesTableViewCell getCellIdentifier]];
@@ -922,7 +918,7 @@
          OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
          [folderCell updateContentOffset];
      }
-     else if ([type isEqualToString:kCellTypePoiCollection])
+     else if ([type isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
      {
          OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
          [poiCell updateContentOffset];

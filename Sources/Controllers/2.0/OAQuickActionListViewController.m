@@ -59,7 +59,7 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 48.0;
     [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    [self.btnAdd setImage:[[UIImage imageNamed:@"ic_custom_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.btnAdd setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
     [self.btnAdd setTintColor:UIColor.whiteColor];
     [self.btnEdit setImage:[UIImage templateImageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];

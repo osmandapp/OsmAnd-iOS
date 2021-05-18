@@ -1760,7 +1760,7 @@
 "move_map_to_select_area" = "Mover el mapa para elegir el área necesaria.";
 "update_map" = "Actualizar mapa";
 "shared_string_exit" = "Salir";
-"import_routing_file_descr" = "Puedes importar el archivo de navegación desde cualquier aplicación de almacenamiento en la nube o añadiéndolo en la carpeta de OsmAnd de iTunes.";
+"import_routing_file_descr" = "Puedes importar el archivo de navegación desde cualquier aplicación de almacenamiento en la nube, abriéndolo en OsmAnd.";
 "osmand_routing" = "Navegación de OsmAnd";
 "select_nav_profile_dialog_message" = "El «Tipo de navegación» determina cómo se calculan las rutas.";
 "change_map_behavior" = "Cambiar el comportamiento del mapa durante la navegación";
@@ -2104,3 +2104,5 @@
 
 // Shared Strings
 "shared_string_enable" = "Activar";
+"search_poi_types_descr" = "Puedes combinar tipos de PDI de diferentes categorías.";
+"add_custom_category" = "Añadir categoría personalizada";

@@ -220,16 +220,6 @@
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
-        NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
-            return 60;
-        else
-            return UITableViewAutomaticDimension;
-}
-
 #pragma mark - OAAddTrackFolderDelegate
 
 - (void) onTrackFolderAdded:(NSString *)folderName

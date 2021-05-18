@@ -76,11 +76,17 @@
         }]];
 
         if (acceptedSubtypes == [OAPOIBaseType nullSet] || acceptedTypes.count == types.count)
+        {
             _selectedItems = [NSMutableArray arrayWithArray:_items];
+        }
         else
+        {
             for (OAPOIType *poiType in _items)
+            {
                 if ([acceptedTypes containsObject:poiType.name])
                     [_selectedItems addObject:poiType];
+            }
+        }
     }
 }
 
@@ -109,13 +115,13 @@
 
 -(void)applyLocalization
 {
-    [self updateTextTitle];
+    [self updateScreenTitle];
 
     self.applyButton.titleLabel.text = OALocalizedString(@"shared_string_apply");
     self.cancelSearchButton.titleLabel.text = OALocalizedString(@"shared_string_cancel");
 }
 
-- (void)updateTextTitle
+- (void)updateScreenTitle
 {
     if (_searchMode)
         self.titleLabel.text = OALocalizedString(@"shared_string_search");
@@ -127,11 +133,14 @@
 
 - (void)updateApplyButton
 {
-    if (_searchMode) {
+    if (_searchMode)
+    {
         self.bottomView.hidden = YES;
         self.applyButton.hidden = YES;
         self.tableBottomConstraint.constant = 0;
-    } else {
+    }
+    else
+    {
         self.bottomView.hidden = NO;
         self.applyButton.hidden = NO;
         self.tableBottomConstraint.constant = 87;
@@ -142,7 +151,7 @@
 {
     UIView *searchLeftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
     UIImageView *searchLeftImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    UIImage *searchIcon = [[UIImage imageNamed:@"ic_custom_search"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *searchIcon = [UIImage templateImageNamed:@"ic_custom_search"];
     searchLeftImageView.image = searchIcon;
     searchLeftImageView.tintColor = searchMode ? UIColorFromRGB(profile_icon_color_outdated_light) : [UIColor colorWithWhite:1 alpha:0.5];
     searchLeftImageView.center = searchLeftView.center;
@@ -226,7 +235,7 @@
 {
     _searchMode = NO;
     _searchResult = [NSMutableArray new];
-    [self updateTextTitle];
+    [self updateScreenTitle];
     [self updateSearchView:NO];
     [self updateApplyButton];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
@@ -247,7 +256,8 @@
         _searchMode = NO;
         [_core updateSettings:_core.getSearchSettings.resetSearchTypes];
     }
-    else {
+    else
+    {
         _searchMode = YES;
         _searchResult = [NSMutableArray new];
         OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:POI_TYPE]]];
@@ -266,17 +276,23 @@
                         if (!poiType.isAdditional)
                         {
                             if (poiType.category == _category || [_items containsObject:poiType])
+                            {
                                 [results addObject:poiType];
+                            }
                             else
+                            {
                                 for (OAPOIType *item in _items)
+                                {
                                     if ([item.name isEqualToString:poiType.name])
                                         [results addObject:item];
+                                }
+                            }
                         }
                     }
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _searchResult = [NSMutableArray arrayWithArray:results];
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
                 });
             }
             return YES;
@@ -284,9 +300,9 @@
             return !_searchMode;
         }]];
     }
-    [self updateTextTitle];
+    [self updateScreenTitle];
     [self updateApplyButton];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - UITableViewDataSource
@@ -357,7 +373,7 @@
                 cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
 
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
-            cell.descriptionView.hidden = true;
+            cell.descriptionView.hidden = YES;
 
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];

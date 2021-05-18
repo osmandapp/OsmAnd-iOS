@@ -24,7 +24,6 @@
 #import "OAPOIFilterViewController.h"
 
 #define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
-#define kCellTypeTitle @"OAMenuSimpleCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UITextFieldDelegate>
@@ -83,8 +82,10 @@
         {
             NSMutableSet *types = [_acceptedTypes objectForKey:category];
             if (types == [OAPOIBaseType nullSet])
+            {
                 for (OAPOIType *poiType in category.poiTypes)
                     [types addObject:poiType.name];
+            }
         }
     }
     else
@@ -105,20 +106,21 @@
     self.searchField.delegate = self;
     [self.searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self updateSearchView:NO];
+
+    [self updateTextShowButton];
 }
 
 - (void)applyLocalization
 {
-    [self updateTextTitle];
+    [self updateScreenTitle];
 
     self.saveButton.titleLabel.text = OALocalizedString(@"shared_string_save");
     self.cancelSearchButton.titleLabel.text = OALocalizedString(@"shared_string_cancel");
-    [self updateTextShowButton];
 
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
 }
 
-- (void)updateTextTitle
+- (void)updateScreenTitle
 {
     if (_searchMode)
         self.titleLabel.text = OALocalizedString(@"shared_string_search");
@@ -135,11 +137,14 @@
     [self.showButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.showButton setUserInteractionEnabled:hasSelection];
 
-    if (_searchMode) {
+    if (_searchMode)
+    {
         self.bottomView.hidden = YES;
         self.showButton.hidden = YES;
         self.tableBottomConstraint.constant = 0;
-    } else {
+    }
+    else
+    {
         self.bottomView.hidden = NO;
         self.showButton.hidden = NO;
         self.tableBottomConstraint.constant = 110;
@@ -150,12 +155,14 @@
 {
     _countShowCategories = 0;
     for (OAPOICategory *category in _acceptedTypes.keyEnumerator)
+    {
         if ([_filter isTypeAccepted:category])
         {
             NSSet<NSString *> *acceptedSubtypes = [_acceptedTypes objectForKey:category];
             NSInteger count = acceptedSubtypes != [OAPOIBaseType nullSet] ? acceptedSubtypes.count : category.poiTypes.count;
             _countShowCategories += count;
         }
+    }
 
     NSString *textShow = OALocalizedString(@"sett_show");
     UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
@@ -182,7 +189,7 @@
 {
     UIView *searchLeftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
     UIImageView *searchLeftImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    UIImage *searchIcon = [[UIImage imageNamed:@"ic_custom_search"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *searchIcon = [UIImage templateImageNamed:@"ic_custom_search"];
     searchLeftImageView.image = searchIcon;
     searchLeftImageView.tintColor = searchMode ? UIColorFromRGB(profile_icon_color_outdated_light) : [UIColor colorWithWhite:1 alpha:0.5];
     searchLeftImageView.center = searchLeftView.center;
@@ -272,7 +279,7 @@
 {
     _searchMode = NO;
     _searchResult = [NSMutableArray new];
-    [self updateTextTitle];
+    [self updateScreenTitle];
     [self updateSearchView:NO];
     [self updateTextShowButton];
     self.saveButton.hidden = NO;
@@ -302,7 +309,8 @@
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
         [_core updateSettings:_core.getSearchSettings.resetSearchTypes];
     }
-    else {
+    else
+    {
         _searchMode = YES;
         self.saveButton.hidden = YES;
         [self.tableView setEditing:YES];
@@ -328,7 +336,7 @@
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _searchResult = [NSMutableArray arrayWithArray:results];
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
                 });
             }
             return YES;
@@ -336,9 +344,9 @@
             return !_searchMode;
         }]];
     }
-    [self updateTextTitle];
+    [self updateScreenTitle];
     [self updateTextShowButton];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - OASelectSubcategoryDelegate
@@ -368,14 +376,24 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_searchMode) {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
-        if (cell == nil) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
-            cell = (OAMenuSimpleCell *) nib[0];
+    OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
+        cell = (OAMenuSimpleCell *) nib[0];
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
+        if (_searchMode)
+        {
+            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            [cell setSelectedBackgroundView:bgColorView];
         }
-
-        if (cell) {
+    }
+    if (cell)
+    {
+        if (!_searchMode)
+        {
             OAPOICategory *category = _categories[indexPath.row];
             NSSet<NSString *> *subtypes = [_acceptedTypes objectForKey:category];
             NSInteger countAcceptedTypes = subtypes.count;
@@ -383,14 +401,10 @@
             BOOL isSelected = [_filter isTypeAccepted:category] && subtypes.count > 0;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
-            cell.contentView.backgroundColor = [UIColor whiteColor];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 66.0, 0.0, 0.0);
-
             cell.textView.text = category.nameLocalized;
-            cell.textView.textColor = [UIColor blackColor];
 
-            UIImage *img = [[category icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.image = img;
+            UIImage *categoryIcon = [[category icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = categoryIcon;
             cell.imgView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             cell.imgView.contentMode = UIViewContentModeCenter;
 
@@ -399,48 +413,34 @@
                 descText = [NSString stringWithFormat:@"%@ - %lu", OALocalizedString(@"shared_string_all"), countAllTypes];
             else
                 descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
-            cell.descriptionView.hidden = false;
+            cell.descriptionView.hidden = NO;
             cell.descriptionView.text = descText;
             cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
 
-            [cell updateConstraints];
-            return cell;
         }
-    } else {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitle];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitle owner:self options:nil];
-            cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
-            cell.tintColor = UIColorFromRGB(color_primary_purple);
-            UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-            [cell setSelectedBackgroundView:bgColorView];
-        }
-        if (cell)
+        else
         {
             OAPOIType *poiType = _searchResult[indexPath.row];
             NSSet<NSString *> *acceptedSubtypes = [_acceptedTypes objectForKey:poiType.category];
             BOOL accepted = [acceptedSubtypes containsObject:poiType.name];
             cell.accessoryType = UITableViewCellAccessoryNone;
 
+            cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
+
             UIColor *selectedColor = accepted ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];
             cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             cell.imgView.tintColor = selectedColor;
-
             if (poiIcon.size.width < cell.imgView.frame.size.width && poiIcon.size.height < cell.imgView.frame.size.height)
                 cell.imgView.contentMode = UIViewContentModeCenter;
             else
                 cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
 
-            cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
-            cell.descriptionView.hidden = true;
-
-            [cell updateConstraints];
-            return cell;
+            cell.descriptionView.hidden = YES;
         }
+
+        [cell updateConstraints];
+        return cell;
     }
     return nil;
 }

@@ -62,6 +62,7 @@
         group.type = [OAProgressTitleCell getCellIdentifier];
         group.groupName = OALocalizedString(@"preparing_file");
         self.data = @[group];
+        self.additionalNavBarButton.hidden = YES;
         return;
     }
     self.itemsMap = [_settingsHelper getSettingsByCategory:YES];

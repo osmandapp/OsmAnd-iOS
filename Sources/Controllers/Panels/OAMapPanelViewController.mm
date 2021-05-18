@@ -3314,12 +3314,6 @@ typedef enum
         _destinationViewController.view.frame = CGRectMake( markersHeaderLeftOffset - OAUtilities.getLeftMargin, coordinateWidgetTopOffset + self.hudViewController.statusBarView.frame.size.height, markersHeaderWidth, 50);
         _destinationViewController.titleLabel.frame = CGRectMake( 0, 0, markersHeaderWidth, 44);
         
-        _destinationViewController.view.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.7].CGColor;
-        _destinationViewController.view.layer.shadowOpacity = 1.0;
-        _destinationViewController.view.layer.shadowRadius = 1.0;
-        _destinationViewController.view.layer.shadowOffset = CGSizeMake(0.0, 1.0);
-        _destinationViewController.view.layer.masksToBounds = NO;
-        
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
         
         CGFloat bottomMargin = [OAUtilities getBottomMargin];

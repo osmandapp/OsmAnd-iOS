@@ -144,7 +144,7 @@
     float tm = [[NSDate date] timeIntervalSince1970];
     @try
     {
-        return parseRoutingConfigurationFromXml([[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String]);
+        return parseRoutingConfigurationFromXml([[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String], "");
     }
     @finally
     {

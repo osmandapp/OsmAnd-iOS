@@ -25,7 +25,6 @@
 #include <routingConfiguration.h>
 #include <routingContext.h>
 #include <routeSegmentResult.h>
-#include <sstream>
 
 #define OSMAND_ROUTER @"OsmAndRouter"
 #define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
@@ -598,25 +597,14 @@
             paramsR[key] = vl;
     }
     double defaultSpeed = params.mode.getDefaultSpeed;
-    std::ostringstream strs;
-    if (defaultSpeed > 0) {
-        strs << defaultSpeed;
-        paramsR[GeneralRouterConstants::DEFAULT_SPEED] = strs.str();
-    }
+    if (defaultSpeed > 0)
+        paramsR[GeneralRouterConstants::DEFAULT_SPEED] = [NSString stringWithFormat:@"%f", defaultSpeed].UTF8String;
     double minSpeed = params.mode.getMinSpeed;
-    if (minSpeed > 0) {
-        strs.clear();
-        strs.str("");
-        strs << minSpeed;
-        paramsR[GeneralRouterConstants::MIN_SPEED] = strs.str();
-    }
+    if (minSpeed > 0)
+        paramsR[GeneralRouterConstants::MIN_SPEED] = [NSString stringWithFormat:@"%f", minSpeed].UTF8String;
     double maxSpeed = params.mode.getMaxSpeed;
-    if (maxSpeed > 0) {
-        strs.clear();
-        strs.str("");
-        strs << maxSpeed;
-        paramsR[GeneralRouterConstants::MAX_SPEED] = strs.str();
-    }
+    if (maxSpeed > 0)
+        paramsR[GeneralRouterConstants::MAX_SPEED] = [NSString stringWithFormat:@"%f", maxSpeed].UTF8String;
     float mb = (1 << 20);
     // make visible
     long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO

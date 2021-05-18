@@ -10,11 +10,6 @@
 
 @implementation OARouteInfoAltitudeCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OARouteInfoAltitudeCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

@@ -10,11 +10,6 @@
 
 @implementation OATargetInfoViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATargetInfoViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

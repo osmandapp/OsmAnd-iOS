@@ -11,11 +11,6 @@
 
 @implementation OACustomSelectionCollapsableCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OACustomSelectionCollapsableCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

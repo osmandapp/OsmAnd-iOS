@@ -10,11 +10,6 @@
 
 @implementation OAPreviewZoomLevelsCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAPreviewZoomLevelsCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -12,11 +12,6 @@
 
 @implementation OABottomSheetHeaderDescrButtonCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OABottomSheetHeaderDescrButtonCell";
-}
-
 - (void) awakeFromNib
 {
     self.sliderView.layer.cornerRadius = 3.;

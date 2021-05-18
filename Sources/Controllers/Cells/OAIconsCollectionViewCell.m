@@ -10,11 +10,6 @@
 
 @implementation OAIconsCollectionViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAIconsCollectionViewCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.iconView.layer.cornerRadius = self.iconView.frame.size.height/2;

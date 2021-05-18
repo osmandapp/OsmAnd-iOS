@@ -15,11 +15,6 @@
 
 @implementation OAColorsTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAColorsTableViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

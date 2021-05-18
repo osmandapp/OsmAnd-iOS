@@ -12,11 +12,6 @@
 
 @implementation OARouteInfoLegendCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OARouteInfoLegendCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

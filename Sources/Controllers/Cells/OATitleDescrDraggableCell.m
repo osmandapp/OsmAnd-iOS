@@ -10,11 +10,6 @@
 
 @implementation OATitleDescrDraggableCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATitleDescrDraggableCell";
-}
-
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];

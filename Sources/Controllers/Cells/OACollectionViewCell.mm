@@ -25,11 +25,6 @@
     NSArray *_data;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OACollectionViewCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

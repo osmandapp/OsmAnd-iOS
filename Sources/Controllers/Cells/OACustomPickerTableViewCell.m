@@ -10,11 +10,6 @@
 
 @implementation OACustomPickerTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OACustomPickerTableViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

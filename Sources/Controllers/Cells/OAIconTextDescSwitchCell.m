@@ -10,11 +10,6 @@
 
 @implementation OAIconTextDescSwitchCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAIconTextDescSwitchCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

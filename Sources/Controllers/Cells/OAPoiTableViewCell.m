@@ -28,11 +28,6 @@
     NSArray<NSString *> *_categoryNames;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAPoiTableViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

@@ -12,11 +12,6 @@
 
 @implementation OAGPXTrackCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAGPXTrackCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

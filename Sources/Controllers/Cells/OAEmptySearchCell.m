@@ -11,11 +11,6 @@
 
 @implementation OAEmptySearchCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAEmptySearchCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

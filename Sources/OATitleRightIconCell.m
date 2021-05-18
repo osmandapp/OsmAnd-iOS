@@ -10,11 +10,6 @@
 
 @implementation OATitleRightIconCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATitleRightIconCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

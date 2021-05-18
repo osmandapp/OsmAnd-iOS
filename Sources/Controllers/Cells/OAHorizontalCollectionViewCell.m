@@ -15,11 +15,6 @@
 
 @implementation OAHorizontalCollectionViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAHorizontalCollectionViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

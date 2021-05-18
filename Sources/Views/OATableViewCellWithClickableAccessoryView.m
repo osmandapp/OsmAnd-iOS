@@ -18,11 +18,6 @@
     UITapGestureRecognizer* _tapGestureRecognizer;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATableViewCellWithClickableAccessoryView";
-}
-
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
        andCustomAccessoryView:(UIView *)customAccessoryView
               reuseIdentifier:(NSString *)reuseIdentifier

@@ -10,11 +10,6 @@
 
 @implementation OAIconButtonCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAIconButtonCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

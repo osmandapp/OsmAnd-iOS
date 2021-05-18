@@ -10,11 +10,6 @@
 
 @implementation OADownloadProgressBarCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OADownloadProgressBarCell";
-}
-
 - (void) awakeFromNib {
     [super awakeFromNib];
 }

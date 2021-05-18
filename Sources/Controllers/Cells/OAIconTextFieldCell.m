@@ -10,11 +10,6 @@
 
 @implementation OAIconTextFieldCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAIconTextFieldCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

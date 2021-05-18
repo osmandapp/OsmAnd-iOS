@@ -15,9 +15,4 @@
     BOOL _topCorners;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATitleTwoIconsRoundCell";
-}
-
 @end

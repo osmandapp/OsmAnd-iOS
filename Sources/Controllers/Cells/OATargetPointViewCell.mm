@@ -21,11 +21,6 @@
 
 @implementation OATargetPointViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATargetPointViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

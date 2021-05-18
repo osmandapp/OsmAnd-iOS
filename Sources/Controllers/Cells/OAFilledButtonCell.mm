@@ -10,11 +10,6 @@
 
 @implementation OAFilledButtonCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAFilledButtonCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

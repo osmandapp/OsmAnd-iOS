@@ -10,11 +10,6 @@
 
 @implementation OAFoldersCollectionViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAFoldersCollectionViewCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

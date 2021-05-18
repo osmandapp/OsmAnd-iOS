@@ -10,11 +10,6 @@
 
 @implementation OAWebViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAWebViewCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     _webView.userInteractionEnabled = NO;

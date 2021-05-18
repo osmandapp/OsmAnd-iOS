@@ -14,11 +14,6 @@
     UIImage *_reorderImage;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OADeleteButtonTableViewCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
 }

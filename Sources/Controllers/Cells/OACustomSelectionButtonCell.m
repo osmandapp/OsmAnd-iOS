@@ -11,11 +11,6 @@
 
 @implementation OACustomSelectionButtonCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OACustomSelectionButtonCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

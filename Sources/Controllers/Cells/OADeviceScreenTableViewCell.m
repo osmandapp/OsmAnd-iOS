@@ -10,11 +10,6 @@
 
 @implementation OADeviceScreenTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OADeviceScreenTableViewCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
 }

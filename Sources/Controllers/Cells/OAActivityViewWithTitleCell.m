@@ -10,11 +10,6 @@
 
 @implementation OAActivityViewWithTitleCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAActivityViewWithTitleCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
 }

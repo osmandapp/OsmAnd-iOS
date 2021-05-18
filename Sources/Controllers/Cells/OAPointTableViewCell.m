@@ -10,11 +10,6 @@
 
 @implementation OAPointTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAPointTableViewCell";
-}
-
 - (void) updateConstraints
 {
     BOOL hasImage = self.titleIcon.image != nil && !self.titleIcon.hidden;

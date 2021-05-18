@@ -10,11 +10,6 @@
 
 @implementation OATextViewSimpleCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATextViewSimpleCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     [self.textView setTextContainerInset:UIEdgeInsetsZero];

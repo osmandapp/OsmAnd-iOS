@@ -15,11 +15,6 @@
 
 @implementation OAPointDescCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAPointDescCell";
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

@@ -31,11 +31,6 @@
     BOOL _isFirstLoad;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAFoldersCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

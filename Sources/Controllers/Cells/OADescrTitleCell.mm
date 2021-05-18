@@ -11,11 +11,6 @@
 
 @implementation OADescrTitleCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OADescrTitleCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

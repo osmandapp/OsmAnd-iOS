@@ -12,11 +12,6 @@
 
 @implementation OAShapesTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAShapesTableViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

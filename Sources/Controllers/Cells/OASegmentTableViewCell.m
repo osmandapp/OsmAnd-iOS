@@ -10,11 +10,6 @@
 
 @implementation OASegmentTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OASegmentTableViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

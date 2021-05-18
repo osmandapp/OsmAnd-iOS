@@ -10,11 +10,6 @@
 
 @implementation OABottomSheetHeaderButtonCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OABottomSheetHeaderButtonCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
 }

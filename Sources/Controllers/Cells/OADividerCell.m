@@ -15,11 +15,6 @@
     CALayer *_divider;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OADividerCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

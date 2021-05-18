@@ -10,11 +10,6 @@
 
 @implementation OADownloadInfoTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OADownloadInfoTableViewCell";
-}
-
 - (void) awakeFromNib {
     [super awakeFromNib];
 }

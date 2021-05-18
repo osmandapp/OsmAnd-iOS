@@ -10,11 +10,6 @@
 
 @implementation OAColorViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAColorViewCell";
-}
-
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];

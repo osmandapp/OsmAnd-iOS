@@ -16,11 +16,6 @@
     UIView *_separator;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATimeTableViewCell";
-}
-
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];

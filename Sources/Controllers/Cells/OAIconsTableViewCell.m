@@ -12,11 +12,6 @@
 
 @implementation OAIconsTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAIconsTableViewCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

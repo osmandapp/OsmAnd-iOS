@@ -26,11 +26,6 @@
     NSInteger _selectedItemIndex;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAFolderCardsCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -15,11 +15,6 @@
     UIImage *_expandIcon;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATargetInfoCollapsableViewCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -11,11 +11,6 @@
 
 @implementation OATextViewResizingCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OATextViewResizingCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

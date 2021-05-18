@@ -13,9 +13,4 @@ static UIFont *_titleTextFont;
 
 @implementation OASwitchTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OASwitchTableViewCell";
-}
-
 @end

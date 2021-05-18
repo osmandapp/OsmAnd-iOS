@@ -34,11 +34,6 @@
     NSIndexPath *_touchIndexPath;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAHomeWorkCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

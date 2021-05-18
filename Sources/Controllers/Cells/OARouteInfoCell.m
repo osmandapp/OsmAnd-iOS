@@ -15,11 +15,6 @@
     BOOL _showLegend;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OARouteInfoCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

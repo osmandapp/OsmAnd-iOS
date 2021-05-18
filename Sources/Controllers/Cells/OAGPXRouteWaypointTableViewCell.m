@@ -10,11 +10,6 @@
 
 @implementation OAGPXRouteWaypointTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAGPXRouteWaypointTableViewCell";
-}
-
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];

@@ -10,11 +10,6 @@
 
 @implementation OADateTimePickerTableViewCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OADateTimePickerTableViewCell";
-}
-
 - (void)awakeFromNib {
     // Initialization code
 }

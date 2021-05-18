@@ -11,11 +11,6 @@
 
 @implementation OAQuickActionCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OAQuickActionCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -10,11 +10,6 @@
 
 @implementation OARadiusCell
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OARadiusCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

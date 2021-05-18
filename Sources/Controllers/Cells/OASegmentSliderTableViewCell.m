@@ -20,11 +20,6 @@ const CGFloat kMarkWidth = 2.0;
     NSInteger _selectingMark;
 }
 
-+ (NSString *) getCellIdentifier
-{
-    return @"OASegmentSliderTableViewCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

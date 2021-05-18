@@ -71,7 +71,7 @@ static const NSInteger actionsSectionIndex = 2;
     }
     if (cell)
     {
-        [cell.button setTitle:_settings.osmUserName.length == 0 ? OALocalizedString(@"shared_string_account_add") : _settings.osmUserName forState:UIControlStateNormal];
+        [cell.button setTitle:_settings.osmUserName.get.length == 0 ? OALocalizedString(@"shared_string_account_add") : _settings.osmUserName forState:UIControlStateNormal];
         [cell.button addTarget:self action:@selector(editPressed) forControlEvents:UIControlEventTouchDown];
         [cell showImage:NO];
     }

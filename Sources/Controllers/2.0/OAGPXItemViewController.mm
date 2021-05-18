@@ -1002,7 +1002,7 @@
                                      }
                                      else
                                      {
-                                         if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFilePath]) {
+                                         if ([settings.mapSettingVisibleGpx.get containsObject:self.gpx.gpxFilePath]) {
                                              [settings hideGpx:@[self.gpx.gpxFilePath]];
                                              [_mapViewController hideTempGpxTrack];
                                              [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
@@ -1128,7 +1128,7 @@
                     OAAppSettings *settings = [OAAppSettings sharedManager];
                     cell.textView.text = OALocalizedString(@"map_settings_show");
                     cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-                    [cell.switchView setOn:[settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFilePath]];
+                    [cell.switchView setOn:[settings.mapSettingVisibleGpx.get containsObject:self.gpx.gpxFilePath]];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
                 }
                 return cell;
@@ -1322,7 +1322,7 @@
         [_mapViewController hideTempGpxTrack:NO];
         [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     }
-    else if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFilePath])
+    else if ([settings.mapSettingVisibleGpx.get containsObject:self.gpx.gpxFilePath])
     {
         [settings hideGpx:@[self.gpx.gpxFilePath] update:NO];
         [_mapViewController showTempGpxTrack:self.gpx.gpxFilePath update:NO];
@@ -1572,7 +1572,7 @@
         OAGPXTrackAnalysis *analysis = [gpxDoc getAnalysis:0];
         [OAGPXDatabase.sharedDb addGpxItem:[newFolder stringByAppendingPathComponent:newName] title:newName desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds analysis:analysis];
         
-        NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:OAAppSettings.sharedManager.mapSettingVisibleGpx];
+        NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:OAAppSettings.sharedManager.mapSettingVisibleGpx.get];
         if ([visibleGpx containsObject:oldPath])
             [OAAppSettings.sharedManager showGpx:@[newStoringPath]];
     }

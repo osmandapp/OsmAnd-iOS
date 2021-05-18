@@ -36,7 +36,7 @@
 
 - (OASettingsItemReader *)getReader
 {
-    return self.getJsonReader;
+    return [[OAGlobalSettingsItemReader alloc] initWithItem:self];
 }
 
 - (OASettingsItemWriter *)getWriter
@@ -44,12 +44,9 @@
     return self.getJsonWriter;
 }
 
-// MARK: OASettingsItemReader
-
-- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
+- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
-    // TODO: migrate all settings to a class and use the references for import
-    return YES;
+    [OAAppSettings.sharedManager setGlobalSetting:value key:key];
 }
 
 // MARK: OASettingsItemWriter
@@ -57,14 +54,60 @@
 - (NSDictionary *) getSettingsJson
 {
     NSMutableDictionary *json = [NSMutableDictionary new];
-    NSMapTable<NSString *, NSString *> *globalSettings = OAAppSettings.sharedManager.getGlobalSettings;
-    for (NSString *key in globalSettings.keyEnumerator)
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    for (NSString *key in settings.getGlobalSettings2)
     {
-        NSString *val = [globalSettings objectForKey:key];
-        if (key && val)
-            json[key] = val;
+        OAProfileSetting *setting = [settings.getGlobalSettings2 objectForKey:key];
+        if (setting.shared)
+            json[key] = [setting toStringValue:nil];
     }
     return json;
+}
+
+@end
+
+// MARK: OASettingsItemReader
+
+#pragma mark - OAGlobalSettingsItemReader
+
+@implementation OAGlobalSettingsItemReader
+
+- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
+{
+    NSError *readError;
+    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
+    if (readError)
+    {
+        if (error)
+            *error = readError;
+
+        return NO;
+    }
+    if (data.length == 0)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
+
+        return NO;
+    }
+
+    NSError *jsonError;
+    id json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+    if (jsonError)
+    {
+        if (error)
+            *error = jsonError;
+
+        return NO;
+    }
+
+    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
+
+    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [self.item readPreferenceFromJson:key value:obj];
+    }];
+
+    return YES;
 }
 
 @end

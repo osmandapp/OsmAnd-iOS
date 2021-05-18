@@ -1744,7 +1744,7 @@ typedef enum
     NSMutableArray *paths = [NSMutableArray array];
     
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    for (NSString *filePath in settings.mapSettingVisibleGpx)
+    for (NSString *filePath in settings.mapSettingVisibleGpx.get)
     {
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
@@ -2405,10 +2405,10 @@ typedef enum
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
-    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if (!lang)
         lang = @"";
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     
     NSString *caption = name.length == 0 ? [address getName:lang transliterate:transliterate] : name;
     NSString *description = typeName.length == 0 ?  [address getAddressTypeName] : typeName;

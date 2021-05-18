@@ -51,7 +51,7 @@
 {
     if (self.values)
     {
-        NSString __block *_prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+        NSString __block *_prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         NSMutableDictionary __block *content = [NSMutableDictionary dictionary];
         NSString __block *descFieldLoc;
         if (_prefLang)

@@ -94,7 +94,7 @@
             NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
                 @"name" : @"settings_preset",
                 @"title" : OALocalizedString(@"settings_preset"),
-                @"value" : _settings.defaultApplicationMode.toHumanString,
+                @"value" : _settings.defaultApplicationMode.get.toHumanString,
                 @"description" : OALocalizedString(@"default_profile_descr"),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : kCellTypeTitle },
@@ -124,7 +124,7 @@
                 [arr addObject: @{
                     @"name" : mode.toHumanString,
                     @"descr" : mode.stringKey,
-                    @"isSelected" : @(_settings.defaultApplicationMode == mode),
+                    @"isSelected" : @(_settings.defaultApplicationMode.get == mode),
                     @"type" : kCellTypeCheck }];
             }
             _data = [NSArray arrayWithArray:arr];
@@ -244,7 +244,7 @@
             }
             case EOADefaultProfile:
             {
-                _settings.defaultApplicationMode = _profileList[indexPath.row];
+                [_settings.defaultApplicationMode set:_profileList[indexPath.row]];
                 _settings.applicationMode = _profileList[indexPath.row];
                 [self backButtonClicked:nil];
                 break;

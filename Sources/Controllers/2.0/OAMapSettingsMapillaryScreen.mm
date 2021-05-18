@@ -82,15 +82,15 @@ static const NSInteger panoImageFilterSection = 3;
         tblView = tableView;
         
         _mapillaryEnabled = _app.data.mapillary;
-        _panoOnly = _settings.mapillaryFilterPano;
+        _panoOnly = _settings.mapillaryFilterPano.get;
         
-        NSString *usernames = _settings.mapillaryFilterUserName;
-        NSString *userKeys = _settings.mapillaryFilterUserKey;
+        NSString *usernames = _settings.mapillaryFilterUserName.get;
+        NSString *userKeys = _settings.mapillaryFilterUserKey.get;
         _userNames = usernames ? usernames : @"";
         _userKeys = userKeys ? userKeys : @"";
         
-        _startDate = _settings.mapillaryFilterStartDate;
-        _endDate = _settings.mapillaryFilterEndDate;
+        _startDate = _settings.mapillaryFilterStartDate.get;
+        _endDate = _settings.mapillaryFilterEndDate.get;
         
         [self commonInit];
         [self initData];
@@ -271,20 +271,20 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void) resetPressed
 {
-    [_settings setMapillaryFilterPano:NO];
-    [_settings setMapillaryFilterUserKey:nil];
-    [_settings setMapillaryFilterUserName:nil];
-    [_settings setMapillaryFilterStartDate:0];
-    [_settings setMapillaryFilterEndDate:0];
-    [_settings setUseMapillaryFilter:NO];
+    [_settings.mapillaryFilterPano set:NO];
+    [_settings.mapillaryFilterUserKey set:nil];
+    [_settings.mapillaryFilterUserName set:nil];
+    [_settings.mapillaryFilterStartDate set:0];
+    [_settings.mapillaryFilterEndDate set:0];
+    [_settings.useMapillaryFilter set:NO];
     
-    _panoOnly = _settings.mapillaryFilterPano;
+    _panoOnly = _settings.mapillaryFilterPano.get;
     
     _userNames = @"";
     _userKeys = @"";
     
-    _startDate = _settings.mapillaryFilterStartDate;
-    _endDate = _settings.mapillaryFilterEndDate;
+    _startDate = _settings.mapillaryFilterStartDate.get;
+    _endDate = _settings.mapillaryFilterEndDate.get;
     
     _atLeastOneFilterChanged = YES;
     
@@ -293,12 +293,12 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void) applyPressed
 {
-    [_settings setMapillaryFilterPano:_panoOnly];
-    [_settings setMapillaryFilterUserKey:_userKeys];
-    [_settings setMapillaryFilterUserName:_userNames];
-    [_settings setMapillaryFilterStartDate:_startDate];
-    [_settings setMapillaryFilterEndDate:_endDate];
-    [_settings setUseMapillaryFilter:(_userNames && _userNames.length > 0) || _startDate != 0 || _endDate != 0 || _panoOnly];
+    [_settings.mapillaryFilterPano set:_panoOnly];
+    [_settings.mapillaryFilterUserKey set:_userKeys];
+    [_settings.mapillaryFilterUserName set:_userNames];
+    [_settings.mapillaryFilterStartDate set:_startDate];
+    [_settings.mapillaryFilterEndDate set:_endDate];
+    [_settings.useMapillaryFilter set:(_userNames && _userNames.length > 0) || _startDate != 0 || _endDate != 0 || _panoOnly];
     
     if (_atLeastOneFilterChanged)
         [self reloadRasterCache];

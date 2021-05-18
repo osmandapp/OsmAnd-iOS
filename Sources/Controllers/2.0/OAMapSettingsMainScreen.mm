@@ -86,14 +86,14 @@
 - (NSString *)getMapLangValueStr
 {
     NSString *prefLang;
-    NSString *prefLangId = _settings.settingPrefMapLanguage;
+    NSString *prefLangId = _settings.settingPrefMapLanguage.get;
     if (prefLangId)
         prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
         prefLang = OALocalizedString(@"local_names");
     
     NSString* languageValue;
-    switch (_settings.settingMapLanguage)
+    switch (_settings.settingMapLanguage.get)
     {
         case 0: // NativeOnly
             languageValue = OALocalizedString(@"sett_lang_local");
@@ -556,9 +556,9 @@
     {
         BOOL mapillaryOn = switchView.isOn;
         [[OsmAndApp instance].data setMapillary:mapillaryOn];
-        if (mapillaryOn && !_settings.mapillaryFirstDialogShown)
+        if (mapillaryOn && !_settings.mapillaryFirstDialogShown.get)
         {
-            [_settings setMapillaryFirstDialogShown:YES];
+            [_settings.mapillaryFirstDialogShown set:YES];
             OAFirstMapillaryBottomSheetViewController *screen = [[OAFirstMapillaryBottomSheetViewController alloc] init];
             [screen show];
         }

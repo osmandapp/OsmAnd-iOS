@@ -1146,8 +1146,8 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (NSString *) getRouteSegmentStreetName:(std::shared_ptr<RouteSegmentResult>)rs
 {
-    string locale = _settings.settingPrefMapLanguage ? [_settings.settingPrefMapLanguage UTF8String] : "";
-    BOOL transliterate = _settings.settingMapLanguageTranslit;
+    string locale = _settings.settingPrefMapLanguage.get ? [_settings.settingPrefMapLanguage.get UTF8String] : "";
+    BOOL transliterate = _settings.settingMapLanguageTranslit.get;
     NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
     NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
     NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];

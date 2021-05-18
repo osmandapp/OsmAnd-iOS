@@ -329,8 +329,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) setupSearch
 {
     // Setup search core
-    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage;
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     self.searchHelper = [OAQuickSearchHelper instance];
     self.searchUICore = [self.searchHelper getCore];
 
@@ -1249,8 +1249,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void) setupView
 {
-    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage;
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     OASearchSettings *settings = [[self.searchUICore getSearchSettings] setLang:locale ? locale : @"" transliterateIfMissing:transliterate];
     [self.searchUICore updateSettings:settings];
 }
@@ -1873,8 +1873,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     if (self.searchType == OAQuickSearchType::REGULAR)
     {
-        NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
-        BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+        NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+        BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
         [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate];
     }
     else if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE || self.searchType == OAQuickSearchType::HOME || self.searchType == OAQuickSearchType::WORK)

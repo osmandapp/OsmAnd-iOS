@@ -59,7 +59,7 @@
 
 - (void)setupView
 {
-    _prefLangId = _settings.settingPrefMapLanguage;
+    _prefLangId = _settings.settingPrefMapLanguage.get;
     if (_prefLangId)
         _prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:_prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
@@ -75,7 +75,7 @@
 
 -(void)updateMapLanguageSetting
 {
-    int currentValue = _settings.settingMapLanguage;
+    int currentValue = _settings.settingMapLanguage.get;
     
     /*
      // "name" only
@@ -102,21 +102,21 @@
      */
     
     int newValue;
-    if (_settings.settingPrefMapLanguage == nil)
+    if (_settings.settingPrefMapLanguage.get == nil)
     {
         newValue = 0;
         
-        if (_settings.settingMapLanguageShowLocal && _settings.settingMapLanguageTranslit)
+        if (_settings.settingMapLanguageShowLocal && _settings.settingMapLanguageTranslit.get)
         {
             newValue = 5;
         }
-        else if (_settings.settingMapLanguageTranslit)
+        else if (_settings.settingMapLanguageTranslit.get)
         {
             newValue = 6;
         }
         
     }
-    else if (_settings.settingMapLanguageShowLocal && _settings.settingMapLanguageTranslit)
+    else if (_settings.settingMapLanguageShowLocal && _settings.settingMapLanguageTranslit.get)
     {
         newValue = 5;
     }
@@ -124,7 +124,7 @@
     {
         newValue = 4;
     }
-    else if (_settings.settingMapLanguageTranslit)
+    else if (_settings.settingMapLanguageTranslit.get)
     {
         newValue = 6;
     }
@@ -134,7 +134,10 @@
     }
     
     if (newValue != currentValue)
-        [_settings setSettingMapLanguage:newValue];
+    {
+        [_settings.settingMapLanguage set:newValue];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -191,7 +194,7 @@
                 [cell.switchView setOn:_settings.settingMapLanguageShowLocal];
                 [cell.switchView addTarget:self action:@selector(showLocalChanged:) forControlEvents:UIControlEventValueChanged];
                 
-                if (!_prefLangId && !_settings.settingMapLanguageTranslit)
+                if (!_prefLangId && !_settings.settingMapLanguageTranslit.get)
                 {
                     cell.textView.textColor = [UIColor lightGrayColor];
                     cell.switchView.enabled = NO;
@@ -207,7 +210,7 @@
                 [cell.textView setText: OALocalizedString(@"sett_lang_show_trans")];
                 
                 [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-                [cell.switchView setOn:_settings.settingMapLanguageTranslit];
+                [cell.switchView setOn:_settings.settingMapLanguageTranslit.get];
                 [cell.switchView addTarget:self action:@selector(showTranslitChanged:) forControlEvents:UIControlEventValueChanged];
 
                 cell.textView.textColor = [UIColor blackColor];
@@ -234,7 +237,7 @@
 - (void) showTranslitChanged:(id)sender
 {
     UISwitch *sw = sender;
-    _settings.settingMapLanguageTranslit = sw.isOn;
+    [_settings.settingMapLanguageTranslit set:sw.isOn];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         

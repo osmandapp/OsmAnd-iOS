@@ -123,7 +123,7 @@
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
-            NSArray *visible = _settings.mapSettingVisibleGpx;
+            NSArray *visible = _settings.mapSettingVisibleGpx.get;
             
             if ([visible containsObject:item.gpxFilePath])
                 [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
@@ -168,7 +168,7 @@
     }
     else
     {
-        NSArray *visible = _settings.mapSettingVisibleGpx;
+        NSArray *visible = _settings.mapSettingVisibleGpx.get;
         OAGPX *gpx = gpxList[indexPath.row - (hasCurrentTrack ? 1 : 0)];
         if ([visible containsObject:gpx.gpxFilePath])
         {

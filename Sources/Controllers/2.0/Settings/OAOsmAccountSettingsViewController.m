@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
     
-    _newUserName = _settings.osmUserName;
+    _newUserName = _settings.osmUserName.get;
     _newPassword = _settings.osmUserPassword;
     
     self.tableView.delegate = self;
@@ -69,7 +69,7 @@
 
 - (void)applyLocalization
 {
-    self.titleView.text = _settings.osmUserName.length > 0 ? OALocalizedString(@"shared_string_account") : OALocalizedString(@"shared_string_account_add");
+    self.titleView.text = _settings.osmUserName.get.length > 0 ? OALocalizedString(@"shared_string_account") : OALocalizedString(@"shared_string_account_add");
     [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
@@ -81,7 +81,7 @@
 
 - (NSString *) getTextForIndex:(NSInteger)index
 {
-    return index == 0 ? _settings.osmUserName : _settings.osmUserPassword;
+    return index == 0 ? _settings.osmUserName.get : _settings.osmUserPassword;
 }
 
 - (NSString *) getHintForIndex:(NSInteger)index
@@ -91,7 +91,7 @@
 
 - (void)doneButtonPressed
 {
-    [_settings setOsmUserName:_newUserName];
+    [_settings.osmUserName set:_newUserName];
     [_settings setOsmUserPassword:_newPassword];
     if (self.delegate)
         [self.delegate onAccountInformationUpdated];

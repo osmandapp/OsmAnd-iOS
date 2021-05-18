@@ -234,7 +234,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         [_mapViewController.mapView convert:&circleCenterPos31 toScreen:&circleCenterPoint checkOffScreen:YES];
         
         EOARulerWidgetMode mode = _settings.rulerMode;
-        BOOL showCompass = [_settings.showCompassControlRuler get] && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
+        BOOL showCompass = _settings.showCompassControlRuler && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
         
         _imageView.center = CGPointMake(self.frame.size.width * 0.5,
                                         self.frame.size.height * 0.5 * _mapViewController.mapView.viewportYScale);
@@ -826,7 +826,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
                              || _cachedMapZoom != mapZoom
                              || modeChanged);
             
-            BOOL compassVisible = [_settings.showCompassControlRuler get] && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
+            BOOL compassVisible = _settings.showCompassControlRuler && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
             double heading = _app.locationServices.lastKnownHeading;
             BOOL headingChanged = abs(int(_cachedHeading) - int(heading)) >= ARROW_ROTATION_UPDATING_THRESHOLD;
             BOOL shouldUpdateCompass = compassVisible && headingChanged;

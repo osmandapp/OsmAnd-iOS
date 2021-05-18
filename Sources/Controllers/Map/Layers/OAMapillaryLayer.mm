@@ -263,7 +263,7 @@
                 
                 if (searchAreaBBox31.contains(tileX, tileY))
                 {
-                    if ([OAAppSettings sharedManager].useMapillaryFilter && mapillaryMapProvider->filtered(p->getUserData(), geometryTile))
+                    if ([OAAppSettings sharedManager].useMapillaryFilter.get && mapillaryMapProvider->filtered(p->getUserData(), geometryTile))
                             continue;
                     
                     auto latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(tileX, tileY));

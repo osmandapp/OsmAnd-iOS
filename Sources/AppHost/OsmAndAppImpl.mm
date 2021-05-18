@@ -238,7 +238,7 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (hideAllGPX)
     {
-        [settings setMapSettingVisibleGpx:@[]];
+        [settings.mapSettingVisibleGpx set:@[]];
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults synchronize];
     }
@@ -289,8 +289,8 @@
     
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
-    
-    settings.applicationMode = settings.defaultApplicationMode;
+
+    settings.applicationMode = settings.defaultApplicationMode.get;
     [_data setLastMapSourceVariant:settings.applicationMode.variantKey];
     
     // Get location of a shipped world mini-basemap and it's version stamp
@@ -382,7 +382,7 @@
         }
         if (prevVersion < VERSION_3_14)
         {
-            OAAppSettings.sharedManager.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
+            [OAAppSettings.sharedManager.availableApplicationModes set:@"car,bicycle,pedestrian,public_transport,"];
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
@@ -1219,7 +1219,7 @@
     settings.lastRoutingApplicationMode = settings.applicationMode;
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
-        settings.applicationMode = settings.defaultApplicationMode;
+        settings.applicationMode = settings.defaultApplicationMode.get;
     });
 }
 

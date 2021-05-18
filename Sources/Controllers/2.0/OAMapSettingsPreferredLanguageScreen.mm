@@ -59,7 +59,7 @@
 - (void) setupView
 {
     
-    NSString *prefLang = _settings.settingPrefMapLanguage;
+    NSString *prefLang = _settings.settingPrefMapLanguage.get;
     
     NSMutableArray *arr = [NSMutableArray array];
     
@@ -94,7 +94,7 @@
 
 - (void) updateMapLanguageSetting
 {
-    int currentValue = _settings.settingMapLanguage;
+    int currentValue = _settings.settingMapLanguage.get;
     
     /*
      // "name" only
@@ -121,11 +121,11 @@
      */
     
     int newValue;
-    if (_settings.settingPrefMapLanguage == nil)
+    if (_settings.settingPrefMapLanguage.get == nil)
     {
         newValue = 0;
     }
-    else if (_settings.settingMapLanguageShowLocal && _settings.settingMapLanguageTranslit)
+    else if (_settings.settingMapLanguageShowLocal && _settings.settingMapLanguageTranslit.get)
     {
         newValue = 5;
     }
@@ -133,7 +133,7 @@
     {
         newValue = 4;
     }
-    else if (_settings.settingMapLanguageTranslit)
+    else if (_settings.settingMapLanguageTranslit.get)
     {
         newValue = 6;
     }
@@ -143,7 +143,10 @@
     }
     
     if (newValue != currentValue)
-        [_settings setSettingMapLanguage:newValue];
+    {
+        [_settings.settingMapLanguage set:newValue];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -186,12 +189,14 @@
     int index = (int)indexPath.row;
     if (index == 0)
     {
-        [_settings setSettingPrefMapLanguage:nil];
+        [_settings.settingPrefMapLanguage set:nil];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
         _settings.settingMapLanguageShowLocal = NO;
     }
     else
     {
-        [_settings setSettingPrefMapLanguage:[[_data objectAtIndex:indexPath.row] objectForKey:@"value"]];
+        [_settings.settingPrefMapLanguage set:[[_data objectAtIndex:indexPath.row] objectForKey:@"value"]];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
 
     [self updateMapLanguageSetting];

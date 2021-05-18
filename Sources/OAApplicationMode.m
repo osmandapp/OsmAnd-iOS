@@ -227,7 +227,7 @@ static OAApplicationMode *_SKI;
                                                   withHandler:@selector(onAvailableAppModesChanged)
                                                    andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
         }
-        NSString *available = settings.availableApplicationModes;
+        NSString *available = settings.availableApplicationModes.get;
         _cachedFilteredValues = [NSMutableArray array];
         for (OAApplicationMode *v in _values)
             if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
@@ -693,7 +693,8 @@ static OAApplicationMode *_SKI;
             [str appendString:m.stringKey];
             [str appendString:@","];
         }
-        [settings setAvailableApplicationModes:str];
+        [settings.availableApplicationModes set:str];
+        [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
 }
 

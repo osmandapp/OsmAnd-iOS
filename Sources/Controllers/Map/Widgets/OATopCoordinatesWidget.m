@@ -124,8 +124,14 @@
     
     _horisontalSeparator.hidden = isLandscape;
     
-    CGFloat cornerRadius = [OAUtilities isLandscape] ? 3 : 0;
-    [OAUtilities setMaskTo:self byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:cornerRadius];
+    self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.7].CGColor;
+    self.layer.shadowOpacity = 1.0;
+    self.layer.shadowRadius = 1.0;
+    self.layer.shadowOffset = CGSizeMake(0.0, 1.0);
+    self.layer.masksToBounds = NO;
+    
+    self.layer.cornerRadius = [OAUtilities isLandscape] ? 3 : 0;
+    self.layer.maskedCorners = kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner;
 }
 
 - (BOOL) isVisible

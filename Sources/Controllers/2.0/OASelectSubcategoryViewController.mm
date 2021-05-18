@@ -20,9 +20,11 @@
 #import "OASearchSettings.h"
 #import "OAQuickSearchHelper.h"
 #import "OACustomPOIViewController.h"
+#import "OATableViewCustomHeaderView.h"
 
 #define kCellTypeSelectionButton @"OACustomSelectionButtonCell"
 #define kCellTypeTitle @"OAMenuSimpleCell"
+#define kHeaderId @"TableViewSectionHeader"
 
 @interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, OAMultiselectableHeaderDelegate, UITextFieldDelegate>
 
@@ -101,6 +103,7 @@
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
     self.tableView.rowHeight = kEstimatedRowHeight;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
 
     [self.tableView beginUpdates];
     for (NSInteger i = 0; i < _items.count; i++)
@@ -153,6 +156,11 @@
     [OACustomPOIViewController updateSearchView:searchMode search:self.searchField cancel:self.cancelSearchButton rightConstraint:self.searchFieldRightConstraint];
 }
 
+- (NSString *)getTitleForSection
+{
+    return [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, (int)_items.count] upperCase];
+}
+
 - (void)selectDeselectGroup:(id)sender
 {
     BOOL shouldSelect = _selectedItems.count == 0;
@@ -186,7 +194,7 @@
             [_selectedItems addObject:type];
         [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count] upperCase];
         [self.tableView endUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -391,11 +399,22 @@
         [self selectDeselectItem:indexPath];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (!_searchMode && section == 0)
-        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count];
+    if (section == 0) {
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+        [customHeader setYOffset:32];
+        customHeader.label.text = [self getTitleForSection];
+        return customHeader;
+    }
     return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection] width:tableView.bounds.size.width] + 18;
+    }
+    return UITableViewAutomaticDimension;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

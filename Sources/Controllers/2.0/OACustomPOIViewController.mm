@@ -22,9 +22,11 @@
 #import "OASearchSettings.h"
 #import "OAPOIType.h"
 #import "OAPOIFilterViewController.h"
+#import "OATableViewCustomHeaderView.h"
 
 #define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+#define kHeaderId @"TableViewSectionHeader"
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UITextFieldDelegate>
 
@@ -100,7 +102,7 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
 
     _searchMode = NO;
     self.searchField.delegate = self;
@@ -116,8 +118,6 @@
 
     self.saveButton.titleLabel.text = OALocalizedString(@"shared_string_save");
     self.cancelSearchButton.titleLabel.text = OALocalizedString(@"shared_string_cancel");
-
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
 }
 
 - (void)updateScreenTitle
@@ -216,6 +216,11 @@
     rightConstraint.constant = searchMode ? 76 : 16;
 }
 
+- (NSString *)getTitleForSection
+{
+    return OALocalizedString(@"search_poi_types_descr");
+}
+
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
     if (_searchMode)
@@ -288,7 +293,6 @@
     [self updateSearchView:NO];
     [self updateTextShowButton];
     self.saveButton.hidden = NO;
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
     [self.tableView setEditing:NO];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
@@ -311,7 +315,6 @@
         self.saveButton.hidden = NO;
         [self.tableView setEditing:NO];
         self.tableView.allowsMultipleSelectionDuringEditing = NO;
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"search_poi_types_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
         [_core updateSettings:_core.getSearchSettings.resetSearchTypes];
     }
     else
@@ -508,14 +511,28 @@
     return _searchMode ? 48 : 66;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 0 && !_searchMode) {
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+        customHeader.label.text = [self getTitleForSection];
+        customHeader.label.font = [UIFont systemFontOfSize:15];
+        [customHeader setYOffset:20];
+        return customHeader;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0 && !_searchMode) {
+        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection] width:tableView.bounds.size.width] + 24;
+    }
+    return 0.01;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return [OAPOISearchHelper getHeightForFooter];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForHeader];
 }
 
 @end

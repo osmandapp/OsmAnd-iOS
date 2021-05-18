@@ -62,7 +62,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeOsmNotes,
     EOAImportDataTypeOsmEdits,
     EOAImportDataTypeActiveMarkers,
-    EOAImportDataTypeSearchHistory
+    EOAImportDataTypeSearchHistory,
+    EOAImportDataTypeGlobal
 };
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -122,7 +123,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     __block NSInteger osmEditsCount = 0;
     __block NSInteger markersCount = 0;
     __block NSInteger searchHistoryCount = 0;
-    
+    __block NSInteger globalCount = 0;
+
     [_itemsMap enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull settings, BOOL * _Nonnull stop) {
         if (type == OAExportSettingsType.PROFILE)
             profilesCount += settings.count;
@@ -152,6 +154,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             markersCount += settings.count;
         else if (type == OAExportSettingsType.SEARCH_HISTORY)
             searchHistoryCount += settings.count;
+        else if (type == OAExportSettingsType.GLOBAL)
+            globalCount += settings.count;
     }];
     
     if (profilesCount > 0)
@@ -291,6 +295,16 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"iconName": @"ic_custom_history",
             @"count": [NSString stringWithFormat:@"%ld", searchHistoryCount],
             @"category" : @(EOAImportDataTypeSearchHistory)
+            }
+         ];
+    }
+    if (globalCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"general_settings_2"),
+            @"iconName": @"left_menu_icon_settings",
+            @"count": [NSString stringWithFormat:@"%ld", globalCount],
+            @"category" : @(EOAImportDataTypeGlobal)
             }
          ];
     }
@@ -447,6 +461,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     else if (dataType == EOAImportDataTypeSearchHistory)
     {
         [rootController.mapPanel openSearch];
+    }
+    else if (dataType == EOAImportDataTypeGlobal)
+    {
+        OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] init];
+        [rootController.navigationController pushViewController:settingsVC animated:NO];
     }
 }
 

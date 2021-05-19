@@ -964,9 +964,9 @@
 
 - (void)renameTrip
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_rename_q") message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [self.gpx.gpxTitle lastPathComponent]) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_rename_q") message:OALocalizedString(@"gpx_enter_new_name \"%@\"", self.gpx.gpxTitle) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert textFieldAtIndex:0].text = [self.gpx.gpxTitle lastPathComponent];
+    [alert textFieldAtIndex:0].text = self.gpx.gpxTitle;
     [alert show];
 }
 

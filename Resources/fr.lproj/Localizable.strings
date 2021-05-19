@@ -1307,7 +1307,7 @@
 "rendering_attr_surface_fine_gravel_name" = "Gravier fin";
 "rendering_attr_hmRendered_name" = "Afficher plus de détail";
 "rendering_value_medium_name" = "Moyen";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher les itinéraires cyclables du réseau de nœuds";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher les nœuds du réseau cyclable";
 "rendering_attr_highway_class_track_name" = "Piste";
 "routing_attr_avoid_ferries_description" = "Éviter les traversées en ferries";
 "routing_attr_weight_description" = "Indiquez le poids du véhicule à respecter sur les routes.";
@@ -1913,3 +1913,33 @@
 "favorites_empty" = "Vous n'avez pas encore enregistré de favoris";
 "map_markers_empty" = "Vous n'avez pas de marques actives sur la carte";
 "coordinates" = "Coordonnées";
+"move_point_descr" = "Déplacez la carte pour modifier la position de ce point.";
+"downloading" = "Téléchargement";
+"checking_for_duplicate_description" = "OsmAnd vérifie %@ pour détecter les doublons avec les éléments existants dans l'application. Cela peut prendre un certain temps.";
+"checking_for_duplicates" = "Vérification des doublons...";
+"reset_profile_action_descr" = "Réinitialiser tous les paramètres du profil aux valeurs par défaut de l'installation. Si vous appuyez sur Réinitialiser, toutes vos modifications seront annulées. Cette action ne peut pas être annulée.";
+"new_plugin_added" = "Nouveau plugin ajouté";
+"preparing_file" = "Préparation du fichier";
+"reading_file" = "Lecture du fichier";
+"extra_maps" = "Cartes supplémentaires";
+"custom_plugins" = "Plugins personnalisés";
+"custom_osmand_plugin_name" = "Plugin OsmAnd personnalisé";
+"export_failed" = "Impossible d'exporter le profil";
+"selected_of" = "Sélectionné - %d/%d";
+"export_profile_select_descr" = "Sélectionnez les données à exporter.";
+"square" = "Place";
+"fav_point_dublicate" = "Dupliquer le nom Favori spécifié";
+"replace_favorite_confirmation" = "Êtes-vous sûr de vouloir remplacer votre %@ favori ?";
+"shared_string_disable" = "Désactiver";
+
+// Shared Strings
+"shared_string_enable" = "Activer";
+"search_history" = "Historique de recherches";
+"poi_categories" = "Catégories de PI";
+"carplay_active_message" = "La carte est affichée via CarPlay";
+"tracks_empty" = "Votre liste d'enregistrements est vide";
+"street_level_imagery" = "Imagerie des rues";
+"markers_history" = "Historique des marqueurs";
+
+// Resources
+"shared_string_resources" = "Ressources";

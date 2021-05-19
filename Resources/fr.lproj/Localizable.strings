@@ -2062,3 +2062,12 @@
 "plugin_popup_osm_editing_ask" = "Veuillez activer le greffon d'édition OpenStreetMap pour ajouter et gérer les modifications et les notes de la carte";
 "default_speed_descr" = "Estime le temps d'arrivée pour les types de routes inconnus et limite la vitesse pour toutes les routes (peut affecter la navigation)";
 "shared_string_gpx_points" = "Points";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "Vous disposez déjà de la dernière version : %@";
+"desert" = "Désert";
+"settings_item_read_error" = "Impossible de lire %@.";

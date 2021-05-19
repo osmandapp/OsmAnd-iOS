@@ -1928,7 +1928,7 @@
 "selected_of" = "Sélectionné - %d/%d";
 "export_profile_select_descr" = "Sélectionnez les données à exporter.";
 "square" = "Place";
-"fav_point_dublicate" = "Dupliquer le nom Favori spécifié";
+"fav_point_dublicate" = "Ce nom est déjà utilisé pour un favori";
 "replace_favorite_confirmation" = "Êtes-vous sûr de vouloir remplacer votre %@ favori ?";
 "shared_string_disable" = "Désactiver";
 

@@ -2032,3 +2032,7 @@
 "trim_before" = "Découper avant ce point";
 "add_after" = "Ajouter des points après";
 "add_before" = "Ajouter des points avant";
+"unsupported_action_title" = "Action non prise en charge (%@)";
+"enable_contour_lines" = "Activer pour afficher les courbes de niveau sur la carte";
+"quick_action_enter_message" = "Entrer un message";
+"quick_action_get_info" = "Obtenir des informations";

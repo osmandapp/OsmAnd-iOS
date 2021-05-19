@@ -8,7 +8,6 @@
 //  OsmAnd-java/src/main/java/net/osmand/binary/Abbreviations.java
 //  git revision /54e26c5a6195beb371c210746c5d89674016b9f7
 
-#ifndef OAAbbreviations_h
 #define OAAbbreviations_h
 
 #import <Foundation/Foundation.h>
@@ -19,5 +18,3 @@
 + (NSString *) replaceAll:(NSString *)phrase;
 
 @end
-
-#endif /* OAAbbreviations_h */

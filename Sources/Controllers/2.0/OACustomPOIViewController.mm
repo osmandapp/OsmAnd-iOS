@@ -23,12 +23,11 @@
 #import "OAPOIType.h"
 #import "OAPOIFilterViewController.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OASettingSwitchCell.h"
 
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 #define kHeaderId @"TableViewSectionHeader"
 
-@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UITextFieldDelegate>
+@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -36,10 +35,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *showButton;
-@property (weak, nonatomic) IBOutlet UITextField *searchField;
-@property (weak, nonatomic) IBOutlet UIButton *cancelSearchButton;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchFieldRightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
 
 @end
@@ -105,9 +102,9 @@
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
 
     _searchMode = NO;
-    self.searchField.delegate = self;
-    [self.searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [self updateSearchView:NO];
+    self.searchBar.delegate = self;
+    UITextField *textField = [self.searchBar valueForKey:@"searchField"];
+    textField.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
 
     [self updateTextShowButton];
 }
@@ -117,7 +114,7 @@
     [self updateScreenTitle];
 
     self.saveButton.titleLabel.text = OALocalizedString(@"shared_string_save");
-    self.cancelSearchButton.titleLabel.text = OALocalizedString(@"shared_string_cancel");
+    self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
 }
 
 - (void)updateScreenTitle
@@ -183,37 +180,6 @@
 
     [self.showButton setAttributedTitle:attrShow forState:UIControlStateNormal];
     [self updateShowButton:_countShowCategories != 0];
-}
-
-- (void)updateSearchView:(BOOL)searchMode
-{
-    [OACustomPOIViewController updateSearchView:searchMode searchField:self.searchField cancelButton:self.cancelSearchButton searchFieldRightConstraint:self.searchFieldRightConstraint];
-}
-
-+ (void)updateSearchView:(BOOL)searchMode searchField:(UITextField *)searchField cancelButton:(UIButton *)cancelButton searchFieldRightConstraint:(NSLayoutConstraint *)searchFieldRightConstraint;
-{
-    UIView *searchLeftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
-    UIImageView *searchLeftImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    UIImage *searchIcon = [UIImage templateImageNamed:@"ic_custom_search"];
-    searchLeftImageView.image = searchIcon;
-    searchLeftImageView.tintColor = searchMode ? UIColorFromRGB(profile_icon_color_outdated_light) : [UIColor colorWithWhite:1 alpha:0.5];
-    searchLeftImageView.center = searchLeftView.center;
-    [searchLeftView addSubview:searchLeftImageView];
-    searchField.leftViewMode = UITextFieldViewModeAlways;
-    searchField.leftView = searchLeftView;
-    searchField.borderStyle = UITextBorderStyleNone;
-    searchField.layer.cornerRadius = 10;
-    UIFont *searchTextFont = [UIFont systemFontOfSize:17 weight:UIFontWeightRegular];
-    UIColor *searchTextColor = [UIColor colorWithWhite:1 alpha:0.5];
-    searchField.placeholder = searchMode ? @"" : OALocalizedString(@"shared_string_search");
-    searchField.text = @"";
-    searchField.font = searchTextFont;
-    searchField.tintColor = UIColorFromRGB(color_footer_icon_gray);
-    searchField.backgroundColor = searchMode ? [UIColor colorWithWhite:1 alpha:1] : [UIColor colorWithWhite:1 alpha:0.24];
-    searchField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:searchField.placeholder attributes:@{NSFontAttributeName:searchTextFont, NSForegroundColorAttributeName: searchTextColor}];
-    [searchField endEditing:YES];
-    cancelButton.hidden = !searchMode;
-    searchFieldRightConstraint.constant = searchMode ? 76 : 16;
 }
 
 - (NSString *)getTitleForSection
@@ -285,12 +251,15 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)onSearchCancelButtonClicked:(id)sender
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    searchBar.text = @"";
     _searchMode = NO;
     _searchResult = [NSMutableArray new];
+    self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
     [self updateScreenTitle];
-    [self updateSearchView:NO];
     [self updateTextShowButton];
     self.saveButton.hidden = NO;
     [self.tableView setEditing:NO];
@@ -298,18 +267,10 @@
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    [self updateSearchView:YES];
-    return YES;
-}
-
--(void)textViewDidChange:(UITextView *)textView
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     _searchResult = [NSMutableArray new];
-    if (textView.text.length == 0)
+    if (searchBar.text.length == 0)
     {
         _searchMode = NO;
         self.saveButton.hidden = NO;
@@ -326,7 +287,7 @@
         self.tableView.tableHeaderView = nil;
         OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:POI_TYPE]]];
         [_core updateSettings:searchSettings];
-        [_core search:textView.text delayedExecution:YES matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+        [_core search:searchBar.text delayedExecution:YES matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
             OASearchResult *obj = *object;
             if (obj.objectType == SEARCH_FINISHED)
             {
@@ -352,6 +313,7 @@
             return !_searchMode;
         }]];
     }
+    self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
     [self updateScreenTitle];
     [self updateTextShowButton];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -379,16 +341,15 @@
     [self updateTextShowButton];
 }
 
-
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASettingSwitchCell* cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+    OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
+        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
         if (_searchMode)
         {
@@ -396,7 +357,8 @@
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             [cell setSelectedBackgroundView:bgColorView];
-        }    }
+        }
+    }
     if (cell)
     {
         if (!_searchMode)

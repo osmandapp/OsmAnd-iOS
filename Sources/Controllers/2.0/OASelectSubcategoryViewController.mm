@@ -19,22 +19,19 @@
 #import "OASearchUICore.h"
 #import "OASearchSettings.h"
 #import "OAQuickSearchHelper.h"
-#import "OACustomPOIViewController.h"
 #import "OATableViewCustomHeaderView.h"
 
 #define kHeaderId @"TableViewSectionHeader"
 
-@interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, OAMultiselectableHeaderDelegate, UITextFieldDelegate>
+@interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *applyButton;
-@property (weak, nonatomic) IBOutlet UITextField *searchField;
-@property (weak, nonatomic) IBOutlet UIButton *cancelSearchButton;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchFieldRightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
 
 @end
@@ -110,9 +107,11 @@
     [self.tableView endUpdates];
 
     _searchMode = NO;
-    self.searchField.delegate = self;
-    [self.searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [self updateSearchView:NO];
+    self.searchBar.delegate = self;
+    UITextField *textField = [self.searchBar valueForKey:@"searchField"];
+    textField.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
+
+    [self updateApplyButton:NO];
 }
 
 -(void)applyLocalization
@@ -120,7 +119,7 @@
     [self updateScreenTitle];
 
     self.applyButton.titleLabel.text = OALocalizedString(@"shared_string_apply");
-    self.cancelSearchButton.titleLabel.text = OALocalizedString(@"shared_string_cancel");
+    self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
 }
 
 - (void)updateScreenTitle
@@ -133,8 +132,13 @@
         self.titleLabel.text = @"";
 }
 
-- (void)updateApplyButton
+- (void)updateApplyButton:(BOOL)hasSelection
 {
+    self.applyButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    [self.applyButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
+    [self.applyButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+    [self.applyButton setUserInteractionEnabled:hasSelection];
+
     if (_searchMode)
     {
         self.bottomView.hidden = YES;
@@ -149,9 +153,12 @@
     }
 }
 
-- (void)updateSearchView:(BOOL)searchMode
+- (NSMutableSet<NSString *> *)getSelectedKeys
 {
-    [OACustomPOIViewController updateSearchView:searchMode searchField:self.searchField cancelButton:self.cancelSearchButton searchFieldRightConstraint:self.searchFieldRightConstraint];
+    NSMutableSet<NSString *> *selectedKeys = [NSMutableSet set];
+    for (OAPOIType *poiType in _selectedItems)
+        [selectedKeys addObject:poiType.name];
+    return selectedKeys;
 }
 
 - (NSString *)getTitleForSection
@@ -178,11 +185,13 @@
     [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+
+    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
-    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
+    if (_searchMode || (!_searchMode && indexPath.row > 0))
     {
         [self.tableView beginUpdates];
         OAPOIType *type = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
@@ -193,6 +202,8 @@
         [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count] upperCase];
         [self.tableView endUpdates];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+
+        [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
     }
 }
 
@@ -207,37 +218,28 @@
 - (IBAction)onApplyButtonClicked:(id)sender
 {
     if (self.delegate)
-    {
-        NSMutableSet<NSString *> *selectedKeys = [NSMutableSet set];
-        for (OAPOIType *poiType in _selectedItems)
-            [selectedKeys addObject:poiType.name];
-        [self.delegate selectSubcategoryDone:_category keys:selectedKeys allSelected:_selectedItems.count == _items.count];
-    }
+        [self.delegate selectSubcategoryDone:_category keys:[self getSelectedKeys] allSelected:_selectedItems.count == _items.count];
 
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)onSearchCancelButtonClicked:(id)sender
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    searchBar.text = @"";
     _searchMode = NO;
     _searchResult = [NSMutableArray new];
+    self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
     [self updateScreenTitle];
-    [self updateSearchView:NO];
-    [self updateApplyButton];
+    [self.tableView setEditing:NO];
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    [self updateSearchView:YES];
-    return YES;
-}
-
--(void)textViewDidChange:(UITextView *)textView
-{
-    if (textView.text.length == 0)
+    if (searchBar.text.length == 0)
     {
         _searchMode = NO;
         [_core updateSettings:_core.getSearchSettings.resetSearchTypes];
@@ -248,7 +250,7 @@
         _searchResult = [NSMutableArray new];
         OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:POI_TYPE]]];
         [_core updateSettings:searchSettings];
-        [_core search:textView.text delayedExecution:YES matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+        [_core search:searchBar.text delayedExecution:YES matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
             OASearchResult *obj = *object;
             if (obj.objectType == SEARCH_FINISHED)
             {
@@ -279,6 +281,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _searchResult = [NSMutableArray arrayWithArray:results];
                     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
                 });
             }
             return YES;
@@ -286,9 +289,10 @@
             return !_searchMode;
         }]];
     }
+    self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
     [self updateScreenTitle];
-    [self updateApplyButton];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
 }
 
 #pragma mark - UITableViewDataSource

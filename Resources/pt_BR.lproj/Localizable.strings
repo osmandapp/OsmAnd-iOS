@@ -1748,7 +1748,7 @@
 "create_profile" = "Criar perfil";
 "import_from_files" = "Importar de arquivos";
 "shared_string_exit" = "Sair";
-"import_routing_file_descr" = "Você pode importar o arquivo de roteamento de qualquer aplicativo de armazenamento em nuvem ou colocando-o na pasta OsmAnd no iTunes.";
+"import_routing_file_descr" = "Você pode importar o arquivo de roteamento de qualquer aplicativo de armazenamento em nuvem, abrindo-o no OsmAnd.";
 "osmand_routing" = "Roteamento do OsmAnd";
 "select_nav_profile_dialog_message" = "O 'Tipo de navegação' controla como as rotas são calculadas.";
 "change_map_behavior" = "Alterar o comportamento do mapa durante a navegação";
@@ -2103,3 +2103,5 @@
 
 // Shared Strings
 "shared_string_enable" = "Ativar";
+"search_poi_types_descr" = "Você pode combinar tipos de POI de diferentes categorias.";
+"add_custom_category" = "Adicionar categoria personalizada";

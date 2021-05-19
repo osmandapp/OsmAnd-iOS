@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OATableViewCell.h"
 
 @protocol OAIconTextDescButtonCellDelegate <NSObject>
 
@@ -14,7 +14,7 @@
 
 @end
 
-@interface OAIconTextDescButtonCell : UITableViewCell
+@interface OAIconTextDescButtonCell : OATableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *leftIconView;
 @property (weak, nonatomic) IBOutlet UIButton *checkButton;

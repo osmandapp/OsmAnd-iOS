@@ -6,7 +6,6 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OADownloadMapViewController.h"
 
 @protocol OAPreviewZoomLevelsCellDelegate <NSObject>

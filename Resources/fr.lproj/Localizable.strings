@@ -2037,7 +2037,7 @@
 "quick_action_enter_message" = "Entrer un message";
 "quick_action_get_info" = "Obtenir des informations";
 "public_transport_empty_warning_title" = "Malheureusement, OsmAnd n'a pas trouvé d'itinéraire avec vos paramètres actuels.";
-"touting_specified_vehicle_parameters_descr" = "Les paramètres de véhicule spécifiés peuvent affecter le routage.";
+"touting_specified_vehicle_parameters_descr" = "Les paramètres de véhicule spécifiés peuvent affecter la navigation.";
 "key_hint_recenter_map" = "Recentrer la carte";
 "key_hint_goback" = "Revenir en arrière";
 "send_anonymous_data" = "Envoyer des données anonymes";
@@ -2071,3 +2071,11 @@
 "latest_version" = "Vous disposez déjà de la dernière version : %@";
 "desert" = "Désert";
 "settings_item_read_error" = "Impossible de lire %@.";
+"travel" = "Voyager";
+"transport" = "Transport";
+"symbols" = "Symboles";
+"sport" = "Sport";
+"special" = "Spécial";
+"service" = "Service";
+"emergency" = "Urgence";
+"vessel_height_limit_description" = "Définissez la hauteur du navire pour éviter les ponts bas. N'oubliez pas que si le pont est mobile, le calcul utilise sa hauteur à l'état ouvert.";

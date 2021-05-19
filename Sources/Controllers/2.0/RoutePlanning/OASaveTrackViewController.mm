@@ -22,12 +22,6 @@
 #import "OAAddTrackFolderViewController.h"
 #import "OACollectionViewCellState.h"
 
-#define kTextInputCell @"OATextViewResizingCell"
-#define kRouteGroupsCell @""
-#define kSwitchCell @"OASwitchTableViewCell"
-#define kCellTypeTitle @"OASettingsCell"
-#define kFolderCardsCell @"OAFolderCardsCell"
-
 @interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
 @end
@@ -137,7 +131,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kTextInputCell,
+            @"type" : [OATextViewResizingCell getCellIdentifier],
             @"fileName" : _fileName,
             @"header" : OALocalizedString(@"fav_name"),
             @"key" : @"input_name",
@@ -146,13 +140,13 @@
     
     [data addObject:@[
         @{
-            @"type" : kCellTypeTitle,
+            @"type" : [OASettingsTableViewCell getCellIdentifier],
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : @"Select folder",
             @"value" : _selectedFolderName,
         },
         @{
-            @"type" : @"OAFolderCardsCell",
+            @"type" : [OAFolderCardsCell getCellIdentifier],
             @"selectedValue" : @(_selectedFolderIndex),
             @"values" : _allFolders,
             @"addButtonTitle" : OALocalizedString(@"add_folder")
@@ -163,7 +157,7 @@
     {
         [data addObject:@[
             @{
-                @"type" : kSwitchCell,
+                @"type" : [OASwitchTableViewCell getCellIdentifier],
                 @"title" : OALocalizedString(@"simplified_track"),
                 @"key" : @"simplified_track",
                 @"footer" : OALocalizedString(@"simplified_track_description")
@@ -173,7 +167,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kSwitchCell,
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"map_settings_show"),
             @"key" : @"map_settings_show"
         }
@@ -251,12 +245,12 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kTextInputCell])
+    if ([cellType isEqualToString:[OATextViewResizingCell getCellIdentifier]])
     {
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:kTextInputCell];
+        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewResizingCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -275,12 +269,12 @@
         
         return cell;
     }
-    else if ([cellType isEqualToString:kSwitchCell])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kSwitchCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -296,13 +290,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
@@ -319,13 +312,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kFolderCardsCell])
+    else if ([cellType isEqualToString:[OAFolderCardsCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kFolderCardsCell;
-        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFolderCardsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFolderCardsCell getCellIdentifier] owner:self options:nil];
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
@@ -346,7 +338,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kFolderCardsCell])
+    if ([type isEqualToString:[OAFolderCardsCell getCellIdentifier]])
     {
         OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
         [folderCell updateContentOffset];
@@ -399,7 +391,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeTitle])
+    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
         [self showSelectFolderScreen];
     }

@@ -74,7 +74,7 @@
 - (void) setupViewInternal
 {
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
-    [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
+    [sectionMapStyle setObject:[OAAppModeCell getCellIdentifier] forKey:@"type"];
     
     NSMutableArray *arr = [NSMutableArray array];
     
@@ -92,7 +92,7 @@
                                             @"img" : @"ic_custom_quick_action",
                                             @"selected" : @([_settings.quickActionIsOn get]),
                                             @"secondaryImg" : @"ic_action_additional_option",
-                                            @"type" : @"OASettingSwitchCell"}]
+                                            @"type" : [OASettingSwitchCell getCellIdentifier]}]
                             }];
     [arr addObjectsFromArray:controls];
     
@@ -128,17 +128,17 @@
                                @"img" : @"ic_custom_coordinates",
                                @"key" : @"coordinates_widget",
                                @"selected" : @([_settings.showCoordinatesWidget get]),
-                               @"type" : @"OASettingSwitchCell"} ];
+                               @"type" : [OASettingSwitchCell getCellIdentifier]} ];
     
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_distance_by_tap"),
                                @"img" : @"ic_action_ruler_line",
                                @"key" : @"map_widget_distance_by_tap",
                                @"selected" : @([_settings.showDistanceRuler get]),
-                               @"type" : @"OASettingSwitchCell"} ];
+                               @"type" : [OASettingSwitchCell getCellIdentifier]} ];
     
     EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
     NSString *markersAppeareance = distanceIndication == WIDGET_DISPLAY ? OALocalizedString(@"shared_string_widgets") : OALocalizedString(@"shared_string_topbar") ;
-    [controlsList addObject:@{ @"type" : @"OASettingsCell",
+    [controlsList addObject:@{ @"type" : [OASettingsTableViewCell getCellIdentifier],
                                @"title" : OALocalizedString(@"map_markers"),
                                @"value" : markersAppeareance,
                                @"key" : @"map_markers"}];
@@ -146,13 +146,13 @@
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
                                @"selected" : @([_settings.transparentMapTheme get]),
-                               @"type" : @"OASettingSwitchCell"} ];
+                               @"type" : [OASettingSwitchCell getCellIdentifier]} ];
     
     [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
                                @"key" : @"show_lanes",
                                @"selected" : @([_settings.showLanes get]),
     
-                               @"type" : @"OASettingSwitchCell"} ];
+                               @"type" : [OASettingSwitchCell getCellIdentifier]} ];
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
     
@@ -176,7 +176,7 @@
                                    @"selected" : @(selected),
                                    @"secondaryImg" : r.widget ? @"ic_action_additional_option" : @"",
                                    
-                                   @"type" : @"OASettingSwitchCell"} ];
+                                   @"type" : [OASettingSwitchCell getCellIdentifier]} ];
     }
 }
 
@@ -244,7 +244,7 @@
     NSDictionary* data = tableData[section][@"cells"][0];
     if ([data[@"key"] isEqualToString:@"quick_action"])
         return 10.0;
-    else if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+    else if ([data[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
         return 0;
     else
         return 34.0;
@@ -280,11 +280,11 @@
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     
     UITableViewCell* outCell = nil;
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+    if ([data[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
     {
         if (!_appModeCell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAppModeCell getCellIdentifier] owner:self options:nil];
             _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
             _appModeCell.showDefault = YES;
             _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
@@ -293,13 +293,12 @@
         
         outCell = _appModeCell;
     }
-    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([data[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         
@@ -314,13 +313,12 @@
         }
         outCell = cell;
     }
-    else if ([data[@"type"] isEqualToString:@"OASettingsCell"])
+    else if ([data[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
@@ -384,7 +382,7 @@
         OADirectionAppearanceViewController *vc = [[OADirectionAppearanceViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
     }
-    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([data[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
         OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
         if (r && r.widget)

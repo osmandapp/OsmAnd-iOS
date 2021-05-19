@@ -13,14 +13,11 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
-#import "OASettingsTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAAddFavoriteGroupViewController.h"
 #import "OsmAndApp.h"
 
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kMultiIconTextDescCell @"OAMultiIconTextDescCell"
 #define kAddNewGroupSection 0
 #define kGroupsListSection 1
 
@@ -72,7 +69,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"type" : kCellTypeAction,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"fav_add_new_group"),
             @"img" : @"ic_custom_add",
         },
@@ -83,7 +80,7 @@
     if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
     {
         [cellFoldersData addObject:@{
-            @"type" : kMultiIconTextDescCell,
+            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
             @"header" : OALocalizedString(@"available_groups"),
             @"title" : OALocalizedString(@"favorites"),
             @"description" :@"0",
@@ -98,7 +95,7 @@
         NSString *name = [OAFavoriteGroup getDisplayName:group.name];
         
         [cellFoldersData addObject:@{
-            @"type" : kMultiIconTextDescCell,
+            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
             @"header" : OALocalizedString(@"available_groups"),
             @"title" : name,
             @"description" : [NSString stringWithFormat:@"%ld", (unsigned long)group.points.count],
@@ -119,13 +116,12 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:kCellTypeAction])
+    if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
@@ -137,12 +133,12 @@
         return cell;
     }
    
-    else if ([cellType isEqualToString:kMultiIconTextDescCell])
+    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:kMultiIconTextDescCell];
+        OAMultiIconTextDescCell* cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMultiIconTextDescCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.numberOfLines = 3;
@@ -211,7 +207,7 @@
 {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:kMultiIconTextDescCell])
+        if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
             return 60;
         else
             return UITableViewAutomaticDimension;

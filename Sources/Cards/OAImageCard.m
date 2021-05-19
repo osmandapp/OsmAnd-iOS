@@ -9,8 +9,6 @@
 #import "OAImageCard.h"
 #import "OAImageCardCell.h"
 
-#define kImageCardId @"OAImageCardCell"
-
 @implementation OAImageCard
 {
     BOOL _downloading;
@@ -126,7 +124,7 @@
 
 + (NSString *) getCellNibId
 {
-    return kImageCardId;
+    return [OAImageCardCell getCellIdentifier];
 }
 
 @end

@@ -24,8 +24,6 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
-#import "OASwitchTableViewCell.h"
-#import "OASettingsTableViewCell.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OABaseSettingsViewController.h"
@@ -34,8 +32,6 @@
 #import "OAGPXDatabase.h"
 #import "OAMapActions.h"
 #import "OAUtilities.h"
-#import "OASettingSwitchCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAFollowTrackBottomSheetViewController.h"
 

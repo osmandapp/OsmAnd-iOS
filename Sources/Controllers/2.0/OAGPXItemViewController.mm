@@ -1115,11 +1115,10 @@
         {
             case 0:
             {
-                static NSString* const identifierCell = @"OASwitchTableViewCell";
-                OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+                OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
                     cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
                 }
                 
@@ -1136,11 +1135,10 @@
             case 1:
             {
                 OAColorViewCell* cell;
-                static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
-                cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierColorCell];
+                cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAColorViewCell getCellIdentifier]];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorViewCell" owner:self options:nil];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorViewCell getCellIdentifier] owner:self options:nil];
                     cell = (OAColorViewCell *)[nib objectAtIndex:0];
                 }
 
@@ -1160,12 +1158,11 @@
     }
     if (indexPath.section == _speedSectionIndex)
     {
-        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             cell.lbTime.textColor = UIColor.blackColor;
             cell.lbTime.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
@@ -1194,12 +1191,11 @@
     }
     else if (indexPath.section == _timeSectionIndex)
     {
-        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             cell.lbTime.textColor = UIColor.blackColor;
             cell.lbTime.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
@@ -1240,12 +1236,11 @@
     }
     else if (indexPath.section == _uphillsSectionIndex)
     {
-        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
         }
         NSDictionary *attributesUp = @{NSForegroundColorAttributeName : UIColorFromRGB(color_gpx_up), NSFontAttributeName : _upDownFont};

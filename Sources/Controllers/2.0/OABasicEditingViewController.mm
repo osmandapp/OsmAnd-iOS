@@ -25,10 +25,6 @@
 
 #include <openingHoursParser.h>
 
-#define kCellTypeTextInput @"text_input_cell"
-#define kCellTypeSetting @"settings_cell"
-#define kCellTypeButton @"button"
-
 @interface OABasicEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
 
 @end
@@ -77,7 +73,7 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text isFloating:(BOOL)isFloating tag:(NSInteger)tag
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCell getCellIdentifier] owner:self options:nil];
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
     MDCMultilineTextField *textField = resultCell.inputField;
@@ -141,14 +137,14 @@ static const NSInteger _contactInfoSectionCount = 5;
                          @"title" : OALocalizedString(@"shared_string_category"),
                          @"value" : _poiData.getPoiCategory != [OAPOIHelper sharedInstance].otherPoiCategory ? _poiData.getPoiCategory.nameLocalized :
                              OALocalizedString(@"shared_string_select"),
-                         @"type" : kCellTypeSetting,
+                         @"type" : [OASettingsTableViewCell getCellIdentifier],
                          }];
     [dataArr addObject:@{
                          @"name" : @"poi_type",
                          @"title" : OALocalizedString(@"poi_type"),
                          @"value" : _poiData.getCurrentPoiType ? _poiData.getLocalizedTypeString :
                              OALocalizedString(@"shared_string_select"),
-                         @"type" : kCellTypeSetting,
+                         @"type" : [OASettingsTableViewCell getCellIdentifier],
                          }];
     _poiSectionItems = [NSArray arrayWithArray:dataArr];
 }
@@ -195,13 +191,13 @@ static const NSInteger _contactInfoSectionCount = 5;
         {
             [dataArr addObject:@{
                                  @"title" : [NSString stringWithUTF8String:rule->toLocalRuleString().c_str()],
-                                 @"type" : kCellTypeSetting
+                                 @"type" : [OASettingsTableViewCell getCellIdentifier]
                                  }];
         }
     }
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_add_timespan"),
-                         @"type" : kCellTypeButton
+                         @"type" : [OAButtonCell getCellIdentifier]
                          }];
     _hoursSectionItems = [NSArray arrayWithArray:dataArr];
 }
@@ -266,13 +262,12 @@ static const NSInteger _contactInfoSectionCount = 5;
         return cell;
     }
     
-    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -283,15 +278,12 @@ static const NSInteger _contactInfoSectionCount = 5;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeButton])
+    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAButtonCell";
-        OAButtonCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
             [cell showImage:NO];
         }
@@ -317,7 +309,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == _nameSectionIndex)
         return MAX(_poiNameCell.inputField.intrinsicContentSize.height, 44.0);
-    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
         return UITableViewAutomaticDimension;
     else if (indexPath.section == _contactInfoSectionIndex)
         return MAX(((OATextInputFloatingCell *)_contactInfoItems[indexPath.row]).inputField.intrinsicContentSize.height, 60.0);
@@ -364,14 +356,14 @@ static const NSInteger _contactInfoSectionCount = 5;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeSetting] && indexPath.section == _poiSectionIndex)
+    if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]] && indexPath.section == _poiSectionIndex)
     {
         OAPoiTypeSelectionViewController *detailViewController = [[OAPoiTypeSelectionViewController alloc]
                                                                   initWithType:(indexPath.row == 0 ? CATEGORY_SCREEN : POI_TYPE_SCREEN)];
         detailViewController.dataProvider = _dataProvider;
         [self.navigationController pushViewController:detailViewController animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSetting] && indexPath.section == _hoursSectionIndex)
+    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]] && indexPath.section == _hoursSectionIndex)
     {
         OAOpeningHoursSelectionViewController *openingHoursSelection = [[OAOpeningHoursSelectionViewController alloc] initWithEditData:_poiData openingHours:_openingHours ruleIndex:indexPath.row];
         [self.navigationController pushViewController:openingHoursSelection animated:YES];

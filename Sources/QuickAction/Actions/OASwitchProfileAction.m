@@ -13,6 +13,9 @@
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
 #import "OAProfileSelectionBottomSheetViewController.h"
+#import "OAButtonCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATitleDescrDraggableCell.h"
 
 #define kNames @"names"
 #define kStringKeys @"stringKeys"
@@ -111,7 +114,7 @@ static OAQuickActionType *TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
@@ -129,7 +132,7 @@ static OAQuickActionType *TYPE;
     for (int i = 0; i < names.count; i++)
     {
         [arr addObject:@{
-                         @"type" : @"OATitleDescrDraggableCell",
+                         @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : names[i] ? names[i] : @"",
                          @"stringKey" : stringKeys[i] ? stringKeys[i] : @"",
                          @"img" : iconNames[i] ? iconNames[i] : @"",
@@ -138,7 +141,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"shared_string_add_profile"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addProfile"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"app_profiles")];
@@ -160,7 +163,7 @@ static OAQuickActionType *TYPE;
             {
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
             }
-            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+            else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
             {
                 [names addObject:item[@"title"]];
                 [stringKeys addObject:item[@"stringKey"]];

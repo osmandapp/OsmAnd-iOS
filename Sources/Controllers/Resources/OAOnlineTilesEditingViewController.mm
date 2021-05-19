@@ -33,16 +33,9 @@
 #define kURLCellTag 101
 
 #define kMaxExpireMin 10000000
-
 #define kMinAllowedZoom 1
 #define kMaxAllowedZoom 22
 #define maxSaveButtonWidth 105
-
-#define kCellTypeFloatTextInput @"text_input_floating_cell"
-#define kCellTypeSetting @"settings_cell"
-#define kCellTypeZoom @"time_cell"
-#define kCellTypePicker @"picker"
-#define kCellTypeTextInput @"text_input_cell"
 
 @interface OAOnlineTilesEditingViewController () <UITextViewDelegate, UITextFieldDelegate, OACustomPickerTableViewCellDelegate, OAOnlineTilesSettingsViewControllerDelegate>
 
@@ -241,40 +234,40 @@
     [zoomArr addObject:@{
                         @"title": OALocalizedString(@"rec_interval_minimum"),
                         @"key" : @"minZoom",
-                        @"type" : kCellTypeZoom,
+                        @"type" : [OATimeTableViewCell getCellIdentifier],
                          }];
     [zoomArr addObject:@{
                         @"title": OALocalizedString(@"shared_string_maximum"),
                         @"key" : @"maxZoom",
-                        @"type" : kCellTypeZoom,
+                        @"type" : [OATimeTableViewCell getCellIdentifier],
                          }];
     [zoomArr addObject:@{
-                        @"type" : kCellTypePicker,
+                        @"type" : [OACustomPickerTableViewCell getCellIdentifier],
                          }];
     _zoomArray = [NSArray arrayWithArray: zoomArr];
     
     NSMutableArray *tableData = [NSMutableArray new];
     [tableData addObject:@{
-        @"type" : kCellTypeFloatTextInput,
+        @"type" : [OATextViewResizingCell getCellIdentifier],
     }];
     [tableData addObject:@{
-        @"type" : kCellTypeFloatTextInput,
+        @"type" : [OATextViewResizingCell getCellIdentifier],
     }];
     [tableData addObject: zoomArr];
     [tableData addObject:@{
         @"placeholder" : OALocalizedString(@"shared_string_not_set"),
-        @"type" : kCellTypeTextInput,
+        @"type" : [OATextInputCell getCellIdentifier],
     }];
     
     [tableData addObject:@{
         @"title": OALocalizedString(@"res_mercator"),
-        @"type" : kCellTypeSetting,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"key" : @"mercator_sett"
     }];
     
     [tableData addObject:@{
         @"title": OALocalizedString(@"res_source_format"),
-        @"type" : kCellTypeSetting,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"key" : @"format_sett"
     }];
     _data = [NSArray arrayWithArray:tableData];
@@ -734,13 +727,12 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item =  [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput])
+    if ([item[@"type"] isEqualToString:[OATextViewResizingCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATextViewResizingCell";
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewResizingCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
         }
         
@@ -772,13 +764,12 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeTextInput])
+    else if ([item[@"type"] isEqualToString:[OATextInputCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATextInputCell";
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
         }
         cell.inputField.text = _expireTimeMinutes;
@@ -799,13 +790,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
 
@@ -834,14 +824,13 @@
         return cell;
     }
 
-    else if ([item[@"type"] isEqualToString:kCellTypeZoom])
+    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -856,14 +845,13 @@
 
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypePicker])
+    else if ([item[@"type"] isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
         OACustomPickerTableViewCell* cell;
-        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _possibleZoomValues;
@@ -881,7 +869,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item =  [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeZoom])
+    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
 
@@ -901,7 +889,7 @@
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
         OAOnlineTilesSettingsViewController *settingsViewController;
         NSString *key = item[@"key"];

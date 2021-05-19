@@ -32,9 +32,6 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kTitleIconRoundCell @"OATitleIconRoundCell"
-#define kCollectionViewCell @"OACollectionViewCell"
-
 @interface OAAddDestinationBottomSheetScreen () <OACollectionViewCellDelegate, OADestinationPointListDelegate>
 
 @end
@@ -188,7 +185,7 @@
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderCell",
+                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : [self getTitle],
                      @"description" : @""
                      }];
@@ -196,7 +193,7 @@
     OADestination *parking = _destinationsHelper.getParkingPoint;
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_search"),
         @"img" : @"ic_navbar_search",
         @"key" : @"regular_search",
@@ -205,7 +202,7 @@
     }];
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_address"),
         @"img" : @"ic_custom_home",
         @"key" : @"address_search",
@@ -216,7 +213,7 @@
     if (parking)
     {
         [arr addObject:@{
-            @"type" : kTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"parking_place"),
             @"img" : @"parking_position",
             @"key" : @"parking",
@@ -230,7 +227,7 @@
     if (_type == EOADestinationTypeStart)
     {
         [arr addObject:@{
-            @"type" : kTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_my_location"),
             @"img" : @"map_default_location",
             @"key" : @"my_location",
@@ -240,7 +237,7 @@
         }];
     }
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_select_on_map"),
         @"img" : @"ic_custom_show_on_map",
         @"key" : @"select_on_map",
@@ -251,7 +248,7 @@
     [arr removeAllObjects];
     
     [arr addObject:@{
-        @"type" : kCollectionViewCell,
+        @"type" : [OACollectionViewCell getCellIdentifier],
         @"key" : @"favorites"
     }];
     [model setObject:[NSArray arrayWithArray:arr] forKey:@(2)];
@@ -259,14 +256,14 @@
     [arr removeAllObjects];
     
     [arr addObject:@{
-        @"type" : kCollectionViewCell,
+        @"type" : [OACollectionViewCell getCellIdentifier],
         @"key" : @"markers"
     }];
     [model setObject:[NSArray arrayWithArray:arr] forKey:@(3)];
     
     [arr removeAllObjects];
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"swap_points"),
         @"img" : @"ic_custom_swap",
         @"key" : @"swap_points",
@@ -286,11 +283,11 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:kCollectionViewCell])
+    else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
         return 60.0;
     }
@@ -317,10 +314,9 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderCell";
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderCell" owner:self options:nil];
@@ -337,15 +333,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
         }
         
@@ -368,15 +362,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCollectionViewCell])
+    else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCollectionViewCell;
-        OACollectionViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OACollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCollectionViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionViewCell getCellIdentifier] owner:self options:nil];
             cell = (OACollectionViewCell *)[nib objectAtIndex:0];
         }
         
@@ -435,7 +426,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if (![item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if (![item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

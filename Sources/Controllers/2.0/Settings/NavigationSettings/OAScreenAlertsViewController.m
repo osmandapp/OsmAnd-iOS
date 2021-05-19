@@ -60,37 +60,37 @@
     NSMutableArray *otherArr = [NSMutableArray array];
     
     [otherArr addObject:@{
-        @"type" : @"OADeviceScreenTableViewCell",
+        @"type" : [OADeviceScreenTableViewCell getCellIdentifier],
         @"foregroundImage" : @"img_settings_sreen_route_alerts@3x.png",
         @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
     }];
     [otherArr addObject:@{
-        @"type" : @"OASettingSwitchCell",
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"screen_alerts"),
         @"icon" : @"ic_custom_alert",
         @"value" : _settings.showScreenAlerts,
         @"key" : @"screenAlerts",
     }];
     [parametersArr addObject:@{
-        @"type" : @"OASettingSwitchCell",
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_traffic_warnings"),
         @"icon" : @"list_warnings_traffic_calming",
         @"value" : _settings.showTrafficWarnings,
     }];
     [parametersArr addObject:@{
-        @"type" : @"OASettingSwitchCell",
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_pedestrian_warnings"),
         @"icon" : @"list_warnings_pedestrian",
         @"value" : _settings.showPedestrian,
     }];
     [parametersArr addObject:@{
-        @"type" : @"OASettingSwitchCell",
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_cameras"),
         @"icon" : @"list_warnings_speed_camera",
         @"value" : _settings.showCameras,
     }];
     [parametersArr addObject:@{
-        @"type" : @"OASettingSwitchCell",
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_tunnels"),
         @"icon" : @"list_warnings_tunnel",
         @"value" : _settings.showTunnels,
@@ -105,13 +105,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OADeviceScreenTableViewCell"])
+    if ([cellType isEqualToString:[OADeviceScreenTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADeviceScreenTableViewCell";
-        OADeviceScreenTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADeviceScreenTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeviceScreenTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeviceScreenTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADeviceScreenTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -122,13 +121,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OASettingSwitchCell"])
+    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);

@@ -13,8 +13,6 @@
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 
-#define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-
 @interface OAPointOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -60,7 +58,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"move_point"),
             @"img" : @"ic_custom_change_object_position",
             @"key" : @"move_point"
@@ -69,14 +67,14 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_before"),
             @"img" : @"ic_custom_add_point_before",
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeBefore)
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_after"),
             @"img" : @"ic_custom_add_point_after",
             @"key" : @"add_points",
@@ -86,14 +84,14 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_before"),
             @"img" : @"ic_custom_trim_before",
             @"key" : @"trim",
             @"value" : @(EOAClearPointsModeBefore)
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_after"),
             @"img" : @"ic_custom_trim_after",
             @"key" : @"trim",
@@ -109,7 +107,7 @@
     {
         [data addObject:@[
             @{
-                @"type" : kIconTitleIconRoundCell,
+                @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : OALocalizedString(@"track_new_segment"),
                 @"img" : @"ic_custom_new_segment",
                 @"key" : @"new_segment"
@@ -120,7 +118,7 @@
     {
         [data addObject:@[
             @{
-                @"type" : kIconTitleIconRoundCell,
+                @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : OALocalizedString(@"join_segments"),
                 @"img" : @"ic_custom_join_segments",
                 @"key" : @"join_segments"
@@ -135,13 +133,13 @@
         {
             [data addObject:@[
                 @{
-                    @"type" : kIconTitleIconRoundCell,
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"split_before"),
                     @"img" : @"ic_custom_split_before",
                     @"key" : @"split_before"
                 },
                 @{
-                    @"type" : kIconTitleIconRoundCell,
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"split_after"),
                     @"img" : @"ic_custom_split_after",
                     @"key" : @"split_after"
@@ -152,7 +150,7 @@
         {
             [data addObject:@[
                 @{
-                    @"type" : kIconTitleIconRoundCell,
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"split_before"),
                     @"img" : @"ic_custom_split_before",
                     @"key" : @"split_before"
@@ -163,7 +161,7 @@
         {
             [data addObject:@[
                 @{
-                    @"type" : kIconTitleIconRoundCell,
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"split_after"),
                     @"img" : @"ic_custom_split_after",
                     @"key" : @"split_after"
@@ -174,13 +172,13 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"change_route_type_before"),
             @"img" : [self getRouteTypeIcon:YES],
             @"key" : @"change_route_before",
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"change_route_type_after"),
             @"img" : [self getRouteTypeIcon:NO],
             @"key" : @"change_route_after",
@@ -190,7 +188,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"delete_point"),
             @"img" : @"ic_custom_remove_outlined",
             @"custom_color" : UIColorFromRGB(color_primary_red),
@@ -224,15 +222,13 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }

@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OASegmentSliderTableViewCell.h"
 
 @interface OASliderWithValuesCell : UITableViewCell
 

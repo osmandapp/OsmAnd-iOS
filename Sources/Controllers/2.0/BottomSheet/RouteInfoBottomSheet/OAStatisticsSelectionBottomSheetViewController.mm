@@ -15,7 +15,6 @@
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OATitleIconRoundCell.h"
-#import "OACollectionViewCell.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OAFavoriteItem.h"
@@ -31,9 +30,6 @@
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
-
-#define kTitleIconRoundCell @"OATitleIconRoundCell"
-#define kCollectionViewCell @"OACollectionViewCell"
 
 @interface OAStatisticsSelectionBottomSheetScreen ()
 
@@ -75,13 +71,13 @@
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderCell",
+                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : OALocalizedString(@"stats_select_graph_data"),
                      @"description" : @""
                      }];
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_widget_altitude"),
         @"img" : @"ic_custom_altitude",
         @"mode" : @(EOARouteStatisticsModeAltitude),
@@ -90,7 +86,7 @@
     }];
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"gpx_slope"),
         @"img" : @"ic_custom_ascent",
         @"mode" : @(EOARouteStatisticsModeSlope),
@@ -99,7 +95,7 @@
     }];
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")],
         @"img" : @"ic_custom_altitude_and_slope",
         @"mode" : @(EOARouteStatisticsModeBoth),
@@ -118,7 +114,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -144,13 +140,12 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderCell";
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -164,15 +159,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
         }
         
@@ -220,7 +213,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if (![item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if (![item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

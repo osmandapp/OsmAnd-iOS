@@ -29,8 +29,6 @@
 #import "OAGPXDatabase.h"
 #import "OAMapActions.h"
 #import "OAUtilities.h"
-#import "OASettingSwitchCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAMenuSimpleCell.h"
 #import "OAButtonCell.h"
@@ -99,7 +97,7 @@
                                    @"roadId" : @((unsigned long long)r.roadId),
                                    @"descr"  : [self.class getDescr:r],
                                    @"header" : @"",
-                                   @"type"   : @"OAMenuSimpleCell"} ];
+                                   @"type"   : [OAMenuSimpleCell getCellIdentifier]} ];
         }
         
         [sectionData addObjectsFromArray:roadList];
@@ -107,7 +105,7 @@
     
     [sectionData addObject:@{
         @"title" : OALocalizedString(@"shared_string_select_on_map"),
-        @"type" : @"OAButtonCell",
+        @"type" : [OAButtonCell getCellIdentifier],
         @"key" : @"select_on_map"
     }];
     
@@ -216,13 +214,12 @@
 {
     NSString *text = [param getText];
     NSString *type = [param getCellType];
-    if ([type isEqualToString:@"OASwitchCell"])
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
-        OASwitchTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -250,13 +247,12 @@
     {
         NSString *text = item[@"title"];
         NSString *value = item[@"descr"];
-        if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
+        if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = @"OAMenuSimpleCell";
-            OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             }
             
@@ -272,15 +268,12 @@
             }
             return cell;
         }
-        else if ([item[@"type"] isEqualToString:@"OAButtonCell"])
+        else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = @"OAButtonCell";
-            OAButtonCell* cell = nil;
-            
-            cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAButtonCell *)[nib objectAtIndex:0];
             }
             if (cell)

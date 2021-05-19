@@ -1734,7 +1734,7 @@
 "create_profile_descr" = "Özel profilinizi öntanımlı uygulama profillerinden birine dayandırın, bu widget'ların öntanımlı görünürlüğü ile hız ve mesafe birimleri gibi temel ayarları tanımlar. Bunlar, genişletilebilecekleri özel profillerin örnekleri ile birlikte öntanımlı uygulama profilleridir:";
 "create_profile" = "Profil oluştur";
 "import_from_files" = "Dosyadan içe aktar";
-"import_routing_file_descr" = "Yönlendirme dosyasını herhangi bir bulut depolama uygulamasından veya iTunes'daki OsmAnd klasörüne koyarak içe aktarabilirsiniz.";
+"import_routing_file_descr" = "Yönlendirme dosyasını OsmAnd'da açarak herhangi bir bulut depolama uygulamasından içe aktarabilirsiniz.";
 "voice_anounces" = "Sesli duyurular";
 "base_profile_descr_aircraft" = "Uçak, planör";
 "base_profile_descr_boat" = "Tekne, kürek, yelken";
@@ -2085,3 +2085,5 @@
 
 // Shared Strings
 "shared_string_enable" = "Etkinleştir";
+"search_poi_types_descr" = "Farklı kategorilerdeki POI türlerini birleştirebilirsiniz.";
+"add_custom_category" = "Özel kategori ekle";

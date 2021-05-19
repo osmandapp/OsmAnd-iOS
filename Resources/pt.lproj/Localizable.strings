@@ -2016,7 +2016,7 @@
 "speed_limit_tolerance_descr" = "Selecione a margem de tolerância do limite de velocidade acima da qual receberá um aviso de voz.";
 "recalculate_wrong_dir" = "Recalcular a rota no caso de direção inversa";
 "recalculate_route" = "Recalcular rota no caso de desvio";
-"import_routing_file_descr" = "Pode importar ficheiros de roteamento de qualquer aplicação de armazenamento na nuvem ou colocando-o na pasta OsmAnd do iTunes.";
+"import_routing_file_descr" = "Pode importar ficheiros de roteamento de qualquer aplicação de armazenamento na nuvem abrindo-os no OsmAnd.";
 "repeat_after" = "Repetir após";
 "choose_auto_center_map_view_descr" = "Tempo até a visualização do mapa se sincroniza com a posição atual após o movimento";
 "nav_type_descr" = "Selecione como calcular uma rota para este perfil";
@@ -2080,3 +2080,5 @@
 // Shared Strings
 "shared_string_enable" = "Ativar";
 "new_plugin_added" = "Nova extensão adicionada";
+"search_poi_types_descr" = "Pode combinar tipos de POI de categorias diferentes.";
+"add_custom_category" = "Adicionar categoria personalizada";

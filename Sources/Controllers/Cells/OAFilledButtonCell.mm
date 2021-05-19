@@ -10,7 +10,6 @@
 
 @implementation OAFilledButtonCell
 
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

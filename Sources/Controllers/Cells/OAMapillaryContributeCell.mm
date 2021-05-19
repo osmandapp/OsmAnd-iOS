@@ -9,8 +9,6 @@
 #import "OAMapillaryContributeCell.h"
 
 @implementation OAMapillaryContributeCell
-{
-}
 
 - (void) awakeFromNib
 {

@@ -10,7 +10,6 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OASettingsTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAAddTrackFolderViewController.h"
@@ -18,9 +17,6 @@
 #import "OALoadGpxTask.h"
 #import "OATableViewCustomHeaderView.h"
 
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kMultiIconTextDescCell @"OAMultiIconTextDescCell"
-#define kHeaderId @"TableViewSectionHeader"
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
 
@@ -65,7 +61,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (void) applyLocalization
@@ -79,7 +75,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"type" : kCellTypeAction,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_folder"),
             @"img" : @"ic_custom_add",
         },
@@ -91,7 +87,7 @@
         NSArray *folderItems = foldersData[folderName];
         int tracksCount = folderItems ? folderItems.count : 0;
         [cellFoldersData addObject:@{
-            @"type" : kMultiIconTextDescCell,
+            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : folderName,
             @"description" : [NSString stringWithFormat:@"%i", tracksCount],
@@ -122,13 +118,12 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:kCellTypeAction])
+    if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
@@ -140,12 +135,12 @@
         return cell;
     }
    
-    else if ([cellType isEqualToString:kMultiIconTextDescCell])
+    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:kMultiIconTextDescCell];
+        OAMultiIconTextDescCell* cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMultiIconTextDescCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.numberOfLines = 3;
@@ -195,7 +190,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = [title upperCase];
     vw.label.textColor = UIColorFromRGB(color_text_footer);
     return vw;
@@ -223,16 +218,6 @@
             [_delegate onFolderSelected:item[@"title"]];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
-        NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:kMultiIconTextDescCell])
-            return 60;
-        else
-            return UITableViewAutomaticDimension;
 }
 
 #pragma mark - OAAddTrackFolderDelegate

@@ -1,5 +1,5 @@
 //
-//  OAIconsTableViewCell.m
+//  OAShapesTableViewCell.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 18.06.2020.
@@ -17,7 +17,7 @@
     [super awakeFromNib];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OAShapesCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAShapesCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OAShapesCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAShapesCollectionViewCell getCellIdentifier]];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -44,9 +44,8 @@
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAShapesCollectionViewCell";
     OAShapesCollectionViewCell* cell = nil;
-    cell = (OAShapesCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+    cell = (OAShapesCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAShapesCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     cell.iconImageView.image = [UIImage templateImageNamed:_iconNames[indexPath.row]];
     cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
     

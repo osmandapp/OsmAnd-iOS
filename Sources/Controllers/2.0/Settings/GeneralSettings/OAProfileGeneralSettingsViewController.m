@@ -18,10 +18,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
-#define kCellTypeIconTextSwitch @"OASettingSwitchCell"
-#define kCellTypeTitle @"OASettingsCell"
-
 @interface OAProfileGeneralSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -196,14 +192,14 @@
     NSMutableArray *unitsAndFormatsArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
 //    [appearanceArr addObject:@{
-//        @"type" : kCellTypeIconTitleValue,
+//        @"type" : [OAIconTitleValueCell getCellIdentifier],
 //        @"title" : OALocalizedString(@"settings_app_theme"),
 //        @"value" : OALocalizedString(@"app_theme_light"),
 //        @"icon" : @"ic_custom_contrast",
 //        @"key" : @"app_theme",
 //    }];
     [appearanceArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"rotate_map_to_bearing"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
@@ -211,7 +207,7 @@
     }];
     [appearanceArr addObject:@{
         @"name" : @"allow_3d",
-        @"type" : kCellTypeIconTextSwitch,
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"allow_3D_view"),
         @"isOn" : allow3DValue,
         @"icon" : @"ic_custom_2_5d_view",
@@ -219,7 +215,7 @@
     }];
     [appearanceArr addObject:@{
         @"name" : @"center_position",
-        @"type" : kCellTypeIconTextSwitch,
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"always_center_position_on_map"),
         @"key" : @"always_center_position_on_map",
         @"isOn" : positionInCenter,
@@ -227,42 +223,42 @@
         @"key" : @"center_position",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"driving_region"),
         @"value" : drivingRegionValue,
         @"icon" : @"ic_profile_car",
         @"key" : @"drivingRegion",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"unit_of_length"),
         @"value" : metricSystemValue,
         @"icon" : @"ic_custom_ruler",
         @"key" : @"lengthUnits",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"units_of_speed"),
         @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
         @"key" : @"speedUnits",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : geoFormatValue,
         @"icon" : @"ic_custom_coordinates",
         @"key" : @"coordsFormat",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
         @"icon" : @"ic_custom_angular_unit",
         @"key" : @"angulerMeasurmentUnits",
     }];
     [otherArr addObject:@{
-        @"type" : kCellTypeTitle,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"sett_ext_input"),
         @"value" : externalInputDeviceValue,
         @"key" : @"externalImputDevice",
@@ -284,13 +280,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeIconTitleValue])
+    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
@@ -305,13 +300,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconTextSwitch])
+    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
@@ -329,13 +323,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;

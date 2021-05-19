@@ -21,12 +21,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
-#define kCellTypeSectionHeader @"OACustomSelectionCollapsableCell"
-#define kCellTypeTitleDescription @"OAMenuSimpleCell"
-#define kCellTypeTitle @"OAIconTextCell"
-#define kCellTypeProgress @"OAProgressTitleCell"
-
 @implementation OATableGroupToImport
 
 -(instancetype) init
@@ -94,14 +88,14 @@
         OASettingsCategoryItems *categoryItems = self.itemsMap[type];
         OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
         group.groupName = type.title;
-        group.type = kCellTypeSectionHeader;
+        group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
         group.isOpen = NO;
         for (OAExportSettingsType *type in categoryItems.getTypes)
         {
             [group.groupItems addObject:@{
                 @"icon" :  type.icon,
                 @"title" : type.title,
-                @"type" : kCellTypeTitleDescription
+                @"type" : [OAMenuSimpleCell getCellIdentifier]
             }];
         }
         [data addObject:group];
@@ -243,7 +237,7 @@
 - (void) showActivityIndicatorWithLabel:(NSString *)labelText
 {
     OATableGroupToImport *tableGroup = [[OATableGroupToImport alloc] init];
-    tableGroup.type = kCellTypeWithActivity;
+    tableGroup.type = [OAActivityViewWithTitleCell getCellIdentifier];
     tableGroup.groupName = labelText;
     self.data = @[tableGroup];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -303,13 +297,12 @@
     OATableGroupToImport* groupData = [self.data objectAtIndex:indexPath.section];
     if (indexPath.row == 0)
     {
-        if ([groupData.type isEqualToString:kCellTypeWithActivity])
+        if ([groupData.type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = kCellTypeWithActivity;
-            OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAActivityViewWithTitleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAActivityViewWithTitleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAActivityViewWithTitleCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -321,13 +314,12 @@
             }
             return cell;
         }
-        else if ([groupData.type isEqualToString:kCellTypeProgress])
+        else if ([groupData.type isEqualToString:[OAProgressTitleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = kCellTypeProgress;
-            OAProgressTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAProgressTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAProgressTitleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressTitleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAProgressTitleCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -337,13 +329,12 @@
             }
             return cell;
         }
-        else if ([groupData.type isEqualToString:@"OACustomSelectionCollapsableCell"])
+        else if ([groupData.type isEqualToString:[OACustomSelectionCollapsableCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = @"OACustomSelectionCollapsableCell";
-            OACustomSelectionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OACustomSelectionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionCollapsableCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionCollapsableCell getCellIdentifier] owner:self options:nil];
                 cell = (OACustomSelectionCollapsableCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
                 cell.openCloseGroupButton.hidden = NO;
@@ -409,13 +400,12 @@
         NSInteger dataIndex = indexPath.row - 1;
         NSDictionary* item = [groupData.groupItems objectAtIndex:dataIndex];
         NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:kCellTypeTitleDescription])
+        if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = kCellTypeTitleDescription;
-            OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 70., 0., 0.);
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -444,14 +434,13 @@
             }
             return cell;
         }
-        else if ([cellType isEqualToString:kCellTypeTitle])
+        else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
         {
             
-            static NSString* const identifierCell = kCellTypeTitle;
-            OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
                 cell.arrowIconView.hidden = YES;

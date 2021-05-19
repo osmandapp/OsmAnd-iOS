@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAExportSettingsType.h"
 #import "Localization.h"
+#import "OAProgressTitleCell.h"
 #import "OAColors.h"
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
@@ -74,7 +75,7 @@
     if (_exportStarted)
     {
         OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
-        group.type = @"OAProgressTitleCell";
+        group.type = [OAProgressTitleCell getCellIdentifier];
         group.groupName = OALocalizedString(@"preparing_file");
         self.data = @[group];
         self.additionalNavBarButton.hidden = YES;

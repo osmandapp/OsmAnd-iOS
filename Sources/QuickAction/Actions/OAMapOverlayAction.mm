@@ -14,6 +14,9 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
+#import "OAButtonCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATitleDescrDraggableCell.h"
 
 #define KEY_OVERLAYS @"overlays"
 #define KEY_NO_OVERLAY @"no_overlay"
@@ -130,7 +133,7 @@ static OAQuickActionType *TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
@@ -144,7 +147,7 @@ static OAQuickActionType *TYPE;
     for (NSArray *source in sources)
     {
         [arr addObject:@{
-                         @"type" : @"OATitleDescrDraggableCell",
+                         @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : source.lastObject,
                          @"value" : source.firstObject,
                          @"img" : @"ic_custom_map_style"
@@ -152,7 +155,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"quick_action_add_overlay"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addMapOverlay"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_overlays")];
@@ -169,7 +172,7 @@ static OAQuickActionType *TYPE;
         {
             if ([item[@"key"] isEqualToString:KEY_DIALOG])
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
-            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+            else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                 [sources addObject:@[item[@"value"], item[@"title"]]];
         }
     }

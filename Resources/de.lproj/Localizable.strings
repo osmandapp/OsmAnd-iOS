@@ -1765,7 +1765,7 @@
 "preview_of_selected_zoom_levels" = "Vorschau der ausgewählten Zoomstufen";
 "number_of_tiles" = "Anzahl der Kacheln";
 "move_map_to_select_area" = "Bewegen Sie die Karte, um den gewünschten Bereich auszuwählen.";
-"import_routing_file_descr" = "Sie können die Routing-Datei von jeder beliebigen Cloud-Storage-Anwendung importieren oder sie in den Ordner OsmAnd in iTunes legen.";
+"import_routing_file_descr" = "Sie können die Routing-Datei von jeder beliebigen Cloud-Storage-Anwendung importieren, indem Sie sie in OsmAnd öffnen.";
 "vehicle_height_descr" = "Geben Sie Ihre Fahrzeughöhe an, einige Routenbeschränkungen können für hohe Fahrzeuge gelten.";
 "touting_specified_vehicle_parameters_descr" = "Angegebene Fahrzeugparameter können die Streckenführung beeinflussen.";
 "default_speed_descr" = "Schätzt die Ankunftszeit für unbekannte Straßentypen und begrenzt die Geschwindigkeit für alle Straßen (kann die Streckenführung beeinflussen)";
@@ -2092,3 +2092,5 @@
 
 // Shared Strings
 "shared_string_enable" = "Aktivieren";
+"search_poi_types_descr" = "Kombinieren Sie POI-Typen aus verschiedenen Kategorien.";
+"add_custom_category" = "Benutzerdefinierte Kategorie hinzufügen";

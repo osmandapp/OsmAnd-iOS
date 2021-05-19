@@ -338,13 +338,10 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (OAButtonCell *) getButtonCell:(NSString *)type
 {
-    static NSString* const identifierCell = @"OAButtonCell";
-    OAButtonCell* cell = nil;
-    
-    cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
         [cell showImage:NO];
         [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
@@ -398,16 +395,14 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     if (indexPath.section == 0)
     {
-        static NSString* const detailsCell = @"detailsCell";
-        
         NSString* title = [tableKeys objectAtIndex:indexPath.row];
         NSString* subtitle = [tableValues objectAtIndex:indexPath.row];
         
         // Obtain reusable cell or create one
-        OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:detailsCell];
+        OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:[OALocalResourceInfoCell getCellIdentifier]];
         if (cell == nil)
         {
-            cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:detailsCell];
+            cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[OALocalResourceInfoCell getCellIdentifier]];
         }
             
         // Fill cell content

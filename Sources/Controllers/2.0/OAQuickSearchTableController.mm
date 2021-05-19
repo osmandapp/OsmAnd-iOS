@@ -45,7 +45,6 @@
 #import "OAColors.h"
 
 #import "OAIconTextTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextDescCell.h"
@@ -452,13 +451,11 @@
 
 - (OAPointDescCell *) getPointDescCell
 {
-    static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-    
     OAPointDescCell* cell;
-    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointDescCell *)[nib objectAtIndex:0];
     }
     return cell;
@@ -484,10 +481,10 @@
 + (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
 {
     OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
         cell.textView.numberOfLines = 0;
     }
@@ -696,10 +693,10 @@
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
                     OAIconTextTableViewCell* cell;
-                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
                     if (cell == nil)
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
                         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                     }
                     if (cell)
@@ -743,10 +740,10 @@
         if ([item getType] == BUTTON)
         {
             OAIconButtonCell* cell;
-            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconButtonCell"];
+            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconButtonCell *)[nib objectAtIndex:0];
             }
             
@@ -768,10 +765,10 @@
         else if ([item getType] == SEARCH_MORE)
         {
             OASearchMoreCell* cell;
-            cell = (OASearchMoreCell *)[tableView dequeueReusableCellWithIdentifier:@"OASearchMoreCell"];
+            cell = (OASearchMoreCell *)[tableView dequeueReusableCellWithIdentifier:[OASearchMoreCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASearchMoreCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASearchMoreCell getCellIdentifier] owner:self options:nil];
                 cell = (OASearchMoreCell *)[nib objectAtIndex:0];
             }
             cell.textView.text = [item getName];
@@ -780,10 +777,10 @@
         else if ([item getType] == EMPTY_SEARCH)
         {
             OAEmptySearchCell* cell;
-            cell = (OAEmptySearchCell *)[tableView dequeueReusableCellWithIdentifier:@"OAEmptySearchCell"];
+            cell = (OAEmptySearchCell *)[tableView dequeueReusableCellWithIdentifier:[OAEmptySearchCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAEmptySearchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAEmptySearchCell getCellIdentifier] owner:self options:nil];
                 cell = (OAEmptySearchCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -797,10 +794,10 @@
         else if ([item getType] == HEADER)
         {
             OAMenuSimpleCell *cell;
-            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCell"];
+            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             }
             

@@ -102,14 +102,14 @@
                 @"name" : @"do_not_show_discount",
                 @"title" : OALocalizedString(@"do_not_show_discount"),
                 @"description" : OALocalizedString(@"do_not_show_discount_desc"),
-                @"value" : @(_settings.settingDoNotShowPromotions),
+                @"value" : @(_settings.settingDoNotShowPromotions.get),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : kCellTypeSwitch },
                 @{
                 @"name" : @"do_not_send_anonymous_data",
                 @"title" : OALocalizedString(@"send_anonymous_data"),
                 @"description" : OALocalizedString(@"send_anonymous_data_desc"),
-                @"value" : @(_settings.settingUseAnalytics),
+                @"value" : @(_settings.settingUseAnalytics.get),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : kCellTypeSwitch, }, nil
             ];
@@ -311,9 +311,9 @@
         if (name)
         {
             if ([name isEqualToString:@"do_not_show_discount"])
-                [_settings setSettingDoNotShowPromotions:isChecked];
+                [_settings.settingDoNotShowPromotions set:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-                [_settings setSettingUseAnalytics:isChecked];
+                [_settings.settingUseAnalytics set:isChecked];
         }
     }
 }

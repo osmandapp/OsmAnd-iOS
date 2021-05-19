@@ -2253,8 +2253,11 @@
 
         _settingShowAltInDriveMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapShowAltInDriveModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapShowAltInDriveModeKey] : NO;
 
-        _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
-        _settingUseAnalytics = [[NSUserDefaults standardUserDefaults] objectForKey:settingUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingUseFirebaseKey] : YES;
+        _settingDoNotShowPromotions = [[[OAProfileBoolean withKey:settingDoNotShowPromotionsKey defValue:NO] makeGlobal] makeShared];
+        _settingUseAnalytics = [[[OAProfileBoolean withKey:settingUseFirebaseKey defValue:YES] makeGlobal] makeShared];
+
+        [_globalSettings setObject:_settingDoNotShowPromotions forKey:@"do_not_show_promotions"];
+        [_globalSettings setObject:_settingUseAnalytics forKey:@"use_analytics"];
 
         _liveUpdatesPurchased = [[OAProfileBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OAProfileBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
@@ -3114,18 +3117,6 @@
 {
     _settingShowAltInDriveMode = settingShowAltInDriveMode;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
-}
-
-- (void) setSettingDoNotShowPromotions:(BOOL)settingDoNotShowPromotions
-{
-    _settingDoNotShowPromotions = settingDoNotShowPromotions;
-    [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotShowPromotions forKey:settingDoNotShowPromotionsKey];
-}
-
-- (void) setSettingUseAnalytics:(BOOL)settingUseAnalytics
-{
-    _settingUseAnalytics = settingUseAnalytics;
-    [[NSUserDefaults standardUserDefaults] setBool:_settingUseAnalytics forKey:settingUseFirebaseKey];
 }
 
 - (void) setLiveUpdatesPurchaseCancelledTime:(NSTimeInterval)liveUpdatesPurchaseCancelledTime

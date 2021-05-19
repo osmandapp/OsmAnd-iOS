@@ -24,9 +24,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-#define kPointCell @"OAPointTableViewCell"
-#define kCellTypeSegment @"OASegmentTableViewCell"
-
 #define kVerticalMargin 16.
 #define kHorizontalMargin 16.
 #define kGPXCellTextLeftOffset 62.
@@ -95,7 +92,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSMutableArray *favoritesSection = [NSMutableArray new];
 
     [favoritesSection addObject:@{
-        @"type" : kCellTypeSegment,
+        @"type" : [OASegmentTableViewCell getCellIdentifier],
         @"title0" : OALocalizedString(@"by_dist"),
         @"title1" : OALocalizedString(@"shared_a_z"),
         @"title2" : OALocalizedString(@"shared_z_a"),
@@ -109,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         NSString *distance = favorite.distance;
         
         [favoritesSection addObject:@{
-                @"type" : kPointCell,
+                @"type" : [OAPointTableViewCell getCellIdentifier],
                 @"title" : name ? name : @"",
                 @"distance" : distance ? distance : @"",
                 @"direction" : [NSNumber numberWithFloat:favorite.direction],
@@ -217,14 +214,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kCellTypeSegment])
+    if ([type isEqualToString:[OASegmentTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASegmentTableViewCell";
         OASegmentTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASegmentTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
@@ -238,15 +234,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         return cell;
     }
-    else if ([type isEqualToString:kPointCell])
+    else if ([type isEqualToString:[OAPointTableViewCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-
         OAPointTableViewCell* cell;
-        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
         }
         

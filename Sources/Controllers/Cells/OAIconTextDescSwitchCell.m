@@ -1,5 +1,5 @@
 //
-//  OAIconTextDescButtonTableViewCell.m
+//  OAIconTextDescSwitchCell.m
 //  OsmAnd
 //
 //  Created by igor on 18.02.2020.

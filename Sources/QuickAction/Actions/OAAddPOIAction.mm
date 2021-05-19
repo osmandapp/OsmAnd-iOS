@@ -22,6 +22,10 @@
 #import "OAOsmEditingViewController.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAQuickActionType.h"
+#import "OAButtonCell.h"
+#import "OAIconTitleValueCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATextInputFloatingCellWithIcon.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -76,7 +80,7 @@ static OAQuickActionType *ACTION_TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
@@ -86,7 +90,7 @@ static OAQuickActionType *ACTION_TYPE;
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
     [data setObject:@[@{
-                          @"type" : @"OAIconTitleValueCell",
+                          @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"title" : OALocalizedString(@"poi_type"),
                           @"key" : KEY_CATEGORY,
                           @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"key_hint_select"),
@@ -101,13 +105,13 @@ static OAQuickActionType *ACTION_TYPE;
         if (![key isEqualToString:POI_TYPE_TAG]
             && ![key hasPrefix:REMOVE_TAG_PREFIX]) {
             [arr addObject:@{
-                             @"type" : @"OATextInputFloatingCellWithIcon",
+                             @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                              @"hint" : OALocalizedString(@"osm_tag"),
                              @"title" : key,
                              @"img" : @"ic_custom_delete"
                              }];
             [arr addObject:@{
-                             @"type" : @"OATextInputFloatingCellWithIcon",
+                             @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                              @"hint" : OALocalizedString(@"osm_value"),
                              @"title" : value,
                              @"img" : @""
@@ -116,7 +120,7 @@ static OAQuickActionType *ACTION_TYPE;
     }];
     [arr addObject:@{
                      @"title" : OALocalizedString(@"quick_action_add_tag"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addTagValue:"
                      }];
     [data setObject:arr forKey:OALocalizedString(@"quick_action_tags")];

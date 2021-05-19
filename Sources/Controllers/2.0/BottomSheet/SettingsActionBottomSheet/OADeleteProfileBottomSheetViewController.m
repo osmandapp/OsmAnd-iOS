@@ -14,7 +14,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kBottomSheetHeaderButtonCell @"OABottomSheetHeaderButtonCell"
 #define kButtonsDividerTag 150
 #define kButtonsTag 1
 
@@ -57,7 +56,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-        @"type" : kBottomSheetHeaderButtonCell,
+        @"type" : [OABottomSheetHeaderButtonCell getCellIdentifier],
         @"title" : [NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")],
         @"img" : @"ic_custom_remove_outlined",
         @"description" : @""
@@ -105,13 +104,12 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kBottomSheetHeaderButtonCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetHeaderButtonCell;
-        OABottomSheetHeaderButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);

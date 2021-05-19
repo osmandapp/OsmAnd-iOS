@@ -20,8 +20,6 @@
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
 #define kActionsSection 2
-#define kCellTypeHideButton @"OADeleteButtonTableViewCell"
-#define kCellTypeButtonRightIcon @"OAButtonRightIconCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAEditFilterItem : NSObject
@@ -313,15 +311,15 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSString *cellType = indexPath.section == kActionsSection ? kCellTypeButtonRightIcon : kCellTypeHideButton;
-    if ([cellType isEqualToString:kCellTypeHideButton])
+    NSString *cellType = indexPath.section == kActionsSection ? [OAButtonRightIconCell getCellIdentifier] : [OADeleteButtonTableViewCell getCellIdentifier];
+    if ([cellType isEqualToString:[OADeleteButtonTableViewCell getCellIdentifier]])
     {
         BOOL isAllFilters = indexPath.section == kAllFiltersSection;
         OAPOIUIFilter *filter = isAllFilters ? _filtersItems[indexPath.row].filter : _hiddenFiltersItems[indexPath.row].filter;
-        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeHideButton];
+        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeleteButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeHideButton owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeleteButtonTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADeleteButtonTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
@@ -351,12 +349,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeButtonRightIcon])
+    else if ([cellType isEqualToString:[OAButtonRightIconCell getCellIdentifier]])
     {
-        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeButtonRightIcon];
+        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeButtonRightIcon owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
         }

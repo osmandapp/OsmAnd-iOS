@@ -171,7 +171,7 @@ typedef enum
     
     _applyView.hidden = YES;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextFieldCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextFieldCell getCellIdentifier] owner:self options:nil];
     _textFieldCell = (OAIconTextFieldCell *)[nib objectAtIndex:0];
     _textFieldCell.backgroundColor = [UIColor whiteColor];
     _textFieldCell.iconView.image = [OAUtilities getTintableImageNamed:@"search_icon"];
@@ -880,10 +880,10 @@ typedef enum
         case GROUP_HEADER:
         {
             OAIconTextCollapseCell* cell;
-            cell = (OAIconTextCollapseCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextCollapseCell"];
+            cell = (OAIconTextCollapseCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextCollapseCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCollapseCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextCollapseCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconTextCollapseCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
@@ -912,10 +912,10 @@ typedef enum
         case SWITCH_ITEM:
         {
             OASettingSwitchCell* cell;
-            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OASettingSwitchCell"];
+            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
                 cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
                 cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.descriptionView.hidden = YES;
@@ -948,10 +948,10 @@ typedef enum
         case BUTTON_ITEM:
         {
             OAIconButtonCell* cell;
-            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconButtonCell"];
+            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconButtonCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.arrowIconView.hidden = YES;

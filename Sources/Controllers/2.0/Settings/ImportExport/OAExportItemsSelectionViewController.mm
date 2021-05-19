@@ -36,8 +36,6 @@
 
 #include <OsmAndCore/ArchiveReader.h>
 
-#define kCellTypeTitleDescription @"OAMenuSimpleCell"
-
 @interface OAExportItemsSelectionViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -111,7 +109,7 @@
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray new];
     [data addObject:@{
-        @"type" : @"OACustomSelectionButtonCell"
+        @"type" : [OACustomSelectionButtonCell getCellIdentifier]
     }];
     
     for (id obj in _items)
@@ -127,7 +125,7 @@
         return nil;
     
     NSMutableDictionary *item = [NSMutableDictionary new];
-    item[@"type"] = kCellTypeTitleDescription;
+    item[@"type"] = [OAMenuSimpleCell getCellIdentifier];
     item[@"object"] = object;
     if ([object isKindOfClass:OAApplicationModeBean.class])
     {
@@ -424,13 +422,12 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OACustomSelectionButtonCell"])
+    if ([item[@"type"] isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OACustomSelectionButtonCell";
-        OACustomSelectionButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OACustomSelectionButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OACustomSelectionButtonCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
         }
@@ -454,14 +451,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeTitleDescription])
+    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        
-        static NSString* const identifierCell = kCellTypeTitleDescription;
-        OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);

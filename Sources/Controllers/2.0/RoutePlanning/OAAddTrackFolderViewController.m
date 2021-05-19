@@ -13,8 +13,6 @@
 #import "OATextViewResizingCell.h"
 #import "OsmAndApp.h"
 
-#define kTextInputCell @"OATextViewResizingCell"
-
 @interface OAAddTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @end
@@ -55,7 +53,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"type" : kTextInputCell,
+            @"type" : [OATextViewResizingCell getCellIdentifier],
             @"title" : @"",
             @"key" : @"input_name",
         }
@@ -90,12 +88,12 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:kTextInputCell])
+    if ([cellType isEqualToString:[OATextViewResizingCell getCellIdentifier]])
     {
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:kTextInputCell];
+        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewResizingCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

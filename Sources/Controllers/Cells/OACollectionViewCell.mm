@@ -16,8 +16,6 @@
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
 
-#define kDestCell @"OADestinationCollectionViewCell"
-
 @interface OACollectionViewCell() <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @end
@@ -33,7 +31,7 @@
     // Initialization code
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
-    [_collectionView registerNib:[UINib nibWithNibName:kDestCell bundle:nil] forCellWithReuseIdentifier:kDestCell];
+    [_collectionView registerNib:[UINib nibWithNibName:[OADestinationCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OADestinationCollectionViewCell getCellIdentifier]];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.minimumInteritemSpacing = 8.;
@@ -79,10 +77,10 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kDestCell forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OADestinationCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDestCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADestinationCollectionViewCell getCellIdentifier] owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
     if (cell && [cell isKindOfClass:OADestinationCollectionViewCell.class])

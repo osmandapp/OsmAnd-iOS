@@ -19,8 +19,6 @@
 #define kButtonHeight 42.
 #define kButtonsVerticalMargin 32.
 #define kHorizontalMargin 20.
-#define kLabelCell @"OATextLineViewCell"
-#define kButtonCell @"OAFilledButtonCell"
 
 @interface OAExitRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -101,12 +99,12 @@
     _data = [NSMutableArray new];
     
     [_data addObject: @{
-        @"type" : kLabelCell,
+        @"type" : [OATextLineViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"plan_route_exit_message"),
     }];
     
     [_data addObject: @{
-        @"type" : kButtonCell,
+        @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_exit"),
         @"buttonColor" : UIColorFromRGB(color_route_button_inactive),
         @"textColor" : UIColorFromRGB(color_primary_purple),
@@ -114,7 +112,7 @@
     }];
 
     [_data addObject: @{
-        @"type" : kButtonCell,
+        @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_save"),
         @"buttonColor" : UIColorFromRGB(color_primary_purple),
         @"textColor" : UIColor.whiteColor,
@@ -160,13 +158,13 @@
     NSDictionary *item = _data[indexPath.section];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kLabelCell])
+    if ([type isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {
         OATextLineViewCell* cell;
-        cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OATextLineViewCell"];
+        cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextLineViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextLineViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -178,13 +176,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kButtonCell])
+    else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {
         OAFilledButtonCell* cell;
-        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:kButtonCell];
+        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)

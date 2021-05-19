@@ -299,6 +299,33 @@
 
 @end
 
+@implementation UITableViewCell (util)
+
++ (NSString *) getCellIdentifier
+{
+    return NSStringFromClass(self.class);
+}
+
+@end
+
+@implementation UICollectionViewCell (util)
+
++ (NSString *) getCellIdentifier
+{
+    return NSStringFromClass(self.class);
+}
+
+@end
+
+@implementation UITableViewHeaderFooterView (util)
+
++ (NSString *) getCellIdentifier
+{
+    return NSStringFromClass(self.class);
+}
+
+@end
+
 @implementation OAUtilities
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion

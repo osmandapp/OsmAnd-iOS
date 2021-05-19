@@ -31,10 +31,6 @@
 #import "OAFoldersCell.h"
 #import "OACollectionViewCellState.h"
 
-#define kGPXTrackCell @"OAGPXTrackCell"
-#define kDividerCell @"OADividerCell"
-#define kCellTypeSegment @"OASegmentTableViewCell"
-#define kFoldersCell @"OAFoldersCell"
 #define kAllFoldersKey @"kAllFoldersKey"
 #define kFolderKey @"kFolderKey"
 #define kAllFoldersIndex 0
@@ -148,15 +144,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSArray *gpxList = [NSMutableArray arrayWithArray:[self sortData:filteredData]];
     
     [existingTracksSection addObject:@{
-        @"type" : kFoldersCell,
+        @"type" : [OAFoldersCell getCellIdentifier],
         @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
         @"values" : [self getFoldersList]
     }];
     
-    [existingTracksSection addObject:@{ @"type" : kDividerCell }];
+    [existingTracksSection addObject:@{ @"type" : [OADividerCell getCellIdentifier] }];
     
     [existingTracksSection addObject:@{
-        @"type" : kCellTypeSegment,
+        @"type" : [OASegmentTableViewCell getCellIdentifier],
         @"title0" : OALocalizedString(@"osm_modified"),
         @"title1" : OALocalizedString(@"shared_a_z"),
         @"title2" : OALocalizedString(@"shared_z_a"),
@@ -168,7 +164,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     /*if ([self isShowCurrentGpx])
     {
         [existingTracksSection addObject:@{
-                @"type" : kGPXTrackCell,
+                @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"title" : OALocalizedString(@"track_recording_name"),
                 @"distance" : [app getFormattedDistance:0],
                 @"time" : [app getFormattedTimeInterval:0 shortFormat:YES],
@@ -180,7 +176,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     for (OAGPX *gpx in gpxList)
     {
         [existingTracksSection addObject:@{
-                @"type" : kGPXTrackCell,
+                @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"track" : gpx,
                 @"title" : [gpx getNiceTitle],
                 @"distance" : [app getFormattedDistance:gpx.totalDistance],
@@ -189,7 +185,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 @"key" : @"gpx_route"
             }];
     }
-    [existingTracksSection addObject:@{ @"type" : kDividerCell }];
+    [existingTracksSection addObject:@{ @"type" : [OADividerCell getCellIdentifier] }];
     [data addObject:existingTracksSection];
     _data = data;
 }
@@ -269,9 +265,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
-    else if ([item[@"type"] isEqualToString:kFoldersCell])
+    else if ([item[@"type"] isEqualToString:[OAFoldersCell getCellIdentifier]])
         return 52;
     
     return UITableViewAutomaticDimension;
@@ -281,14 +277,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kCellTypeSegment])
+    if ([type isEqualToString:[OASegmentTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASegmentTableViewCell";
         OASegmentTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASegmentTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
@@ -302,14 +297,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         return cell;
     }
-    else if ([type isEqualToString:kGPXTrackCell])
+    else if ([type isEqualToString:[OAGPXTrackCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kGPXTrackCell;
         OAGPXTrackCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
             cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -326,13 +320,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         return cell;
     }
-    else if ([type isEqualToString:kFoldersCell])
+    else if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kFoldersCell;
-        OAFoldersCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAFoldersCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFoldersCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCell getCellIdentifier] owner:self options:nil];
             cell = (OAFoldersCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
@@ -347,12 +340,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kDividerCell])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:kDividerCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDividerCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);
@@ -368,7 +361,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
  {
      NSDictionary *item = _data[indexPath.section][indexPath.row];
      NSString *type = item[@"type"];
-     if ([type isEqualToString:kFoldersCell])
+     if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
      {
          OAFoldersCell *folderCell = (OAFoldersCell *)cell;
          [folderCell updateContentOffset];

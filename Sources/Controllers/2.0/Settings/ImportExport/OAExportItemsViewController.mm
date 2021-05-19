@@ -11,6 +11,7 @@
 #import "OASettingsHelper.h"
 #import "OAExportSettingsType.h"
 #import "Localization.h"
+#import "OAProgressTitleCell.h"
 
 @implementation OAExportItemsViewController
 {
@@ -58,9 +59,10 @@
     if (_exportStarted)
     {
         OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
-        group.type = @"OAProgressTitleCell";
+        group.type = [OAProgressTitleCell getCellIdentifier];
         group.groupName = OALocalizedString(@"preparing_file");
         self.data = @[group];
+        self.additionalNavBarButton.hidden = YES;
         return;
     }
     self.itemsMap = [_settingsHelper getSettingsByCategory:YES];

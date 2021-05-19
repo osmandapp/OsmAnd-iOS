@@ -20,7 +20,7 @@
     [super awakeFromNib];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OALabelCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OALabelCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OALabelCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OALabelCollectionViewCell getCellIdentifier]];
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex
@@ -48,9 +48,8 @@
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OALabelCollectionViewCell";
     OALabelCollectionViewCell* cell = nil;
-    cell = (OALabelCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+    cell = (OALabelCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OALabelCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     
     cell.titleLabel.text = _dataArray[indexPath.row];
     if (indexPath.row == _selectedIndex)

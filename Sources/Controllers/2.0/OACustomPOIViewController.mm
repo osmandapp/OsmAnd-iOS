@@ -23,8 +23,8 @@
 #import "OAPOIType.h"
 #import "OAPOIFilterViewController.h"
 #import "OATableViewCustomHeaderView.h"
+#import "OASettingSwitchCell.h"
 
-#define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 #define kHeaderId @"TableViewSectionHeader"
 
@@ -384,11 +384,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
+    OASettingSwitchCell* cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
-        cell = (OAMenuSimpleCell *) nib[0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
+        cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
         if (_searchMode)
         {
@@ -396,8 +396,7 @@
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             [cell setSelectedBackgroundView:bgColorView];
-        }
-    }
+        }    }
     if (cell)
     {
         if (!_searchMode)
@@ -424,7 +423,6 @@
             cell.descriptionView.hidden = NO;
             cell.descriptionView.text = descText;
             cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-
         }
         else
         {

@@ -18,10 +18,8 @@
 
 #include <generalRouter.h>
 
-#define kHeaderId @"TableViewSectionHeader"
 #define kSidePadding 16
 #define kTopPadding 6
-#define kCellTypeIconTitleSubtitle @"OAMenuSimpleCell"
 
 @interface OACreateProfileViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -65,7 +63,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (NSString *) getTableHeaderTitle
@@ -103,12 +101,11 @@
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    static NSString* const identifierCell = kCellTypeIconTitleSubtitle;
     OAMenuSimpleCell* cell;
-    cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeIconTitleSubtitle owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
         cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 70.0, 0.0, 0.0);
     }

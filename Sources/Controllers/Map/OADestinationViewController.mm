@@ -481,6 +481,12 @@
             [_multiCell updateLayout:frame];
             CGFloat cornerRadius = [OAUtilities isLandscape] ? 3 : 0;
             [OAUtilities setMaskTo:_multiCell.contentView byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:cornerRadius];
+            
+            self.view.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.7].CGColor;
+            self.view.layer.shadowOpacity = 1.0;
+            self.view.layer.shadowRadius = 1.0;
+            self.view.layer.shadowOffset = CGSizeMake(0.0, 1.0);
+            self.view.layer.masksToBounds = NO;
         }
     }
     else

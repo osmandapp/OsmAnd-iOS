@@ -18,13 +18,8 @@
 #import "OAGPXRouteDocument.h"
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
-
 #import "Localization.h"
 #import "OAColors.h"
-
-#define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-#define kGPXRouteRoundCell @"OAGPXRouteRoundCell"
-#define kHeaderRoundCell @"OAHeaderRoundCell"
 
 #define kVerticalMargin 18.
 #define kHorizontalMargin 20.
@@ -92,14 +87,14 @@
     NSMutableArray *existingTracksSection = [NSMutableArray new];
     
     [actionSection addObject: @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_create_new_route"),
             @"img" : @"ic_custom_trip",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"create_new_route"
         }];
     [actionSection addObject:@{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_open_existing_track"),
             @"img" : @"ic_custom_folder_outlined",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
@@ -120,7 +115,7 @@
     if (gpxTopList.count > 0)
     {
         [existingTracksSection addObject:@{
-            @"type" : kHeaderRoundCell,
+            @"type" : [OAHeaderRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_last_modified"),
             @"key" : @"header"
         }];
@@ -129,7 +124,7 @@
         for (OAGPX *gpx in gpxTopList)
         {
             [existingTracksSection addObject:@{
-                    @"type" : kGPXRouteRoundCell,
+                    @"type" : [OAGPXRouteRoundCell getCellIdentifier],
                     @"track" : gpx,
                     @"title" : [gpx getNiceTitle],
                     @"distance" : [app getFormattedDistance:gpx.totalDistance],
@@ -155,15 +150,13 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kIconTitleIconRoundCell])
+    if ([type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = UIColor.blackColor;
@@ -189,15 +182,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kHeaderRoundCell])
+    else if ([type isEqualToString:[OAHeaderRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kHeaderRoundCell;
         OAHeaderRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAHeaderRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kHeaderRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHeaderRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OAHeaderRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -208,15 +199,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kGPXRouteRoundCell])
+    else if ([type isEqualToString:[OAGPXRouteRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kGPXRouteRoundCell;
         OAGPXRouteRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXRouteRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXRouteRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXRouteRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXRouteRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

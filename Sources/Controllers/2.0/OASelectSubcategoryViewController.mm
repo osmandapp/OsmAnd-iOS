@@ -22,8 +22,6 @@
 #import "OACustomPOIViewController.h"
 #import "OATableViewCustomHeaderView.h"
 
-#define kCellTypeSelectionButton @"OACustomSelectionButtonCell"
-#define kCellTypeTitle @"OAMenuSimpleCell"
 #define kHeaderId @"TableViewSectionHeader"
 
 @interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, OAMultiselectableHeaderDelegate, UITextFieldDelegate>
@@ -299,10 +297,10 @@
 {
     if (indexPath.row == 0 && !_searchMode)
     {
-        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeSelectionButton];
+        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeSelectionButton owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionButtonCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);
@@ -334,10 +332,10 @@
     }
     else
     {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitle];
+        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitle owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
             cell.tintColor = UIColorFromRGB(color_primary_purple);

@@ -69,23 +69,23 @@
 //public static final String GPX_RECORDED_INDEX_DIR = GPX_INDEX_DIR + "rec/";
 //public static final String GPX_IMPORT_DIR = GPX_INDEX_DIR + "import/";
 
-#define TILES_INDEX_DIR @"tiles/"
-#define LIVE_INDEX_DIR @"live/"
-#define TOURS_INDEX_DIR @"tours/"
-#define SRTM_INDEX_DIR @"srtm/"
-#define ROADS_INDEX_DIR @"roads/"
-#define WIKI_INDEX_DIR @"wiki/"
-#define WIKIVOYAGE_INDEX_DIR @"travel/"
+#define TILES_INDEX_DIR @"tiles"
+#define LIVE_INDEX_DIR @"live"
+#define TOURS_INDEX_DIR @"tours"
+#define SRTM_INDEX_DIR @"srtm"
+#define ROADS_INDEX_DIR @"roads"
+#define WIKI_INDEX_DIR @"wiki"
+#define WIKIVOYAGE_INDEX_DIR @"travel"
 //public static final String GPX_TRAVEL_DIR = GPX_INDEX_DIR + WIKIVOYAGE_INDEX_DIR;
-#define AV_INDEX_DIR @"avnotes/"
-#define FONT_INDEX_DIR @"fonts/"
-#define VOICE_INDEX_DIR @"voice/"
+#define AV_INDEX_DIR @"avnotes"
+#define FONT_INDEX_DIR @"fonts"
+#define VOICE_INDEX_DIR @"voice"
 #define RENDERERS_DIR @"rendering"
 #define ROUTING_XML_FILE @"routing.xml"
-#define SETTINGS_DIR @"settings/"
-#define TEMP_DIR @"temp/"
+#define SETTINGS_DIR @"settings"
+#define TEMP_DIR @"temp"
 #define ROUTING_PROFILES_DIR @"routing"
-#define PLUGINS_DIR @"Plugins/"
+#define PLUGINS_DIR @"Plugins"
 
 #define VOICE_PROVIDER_SUFFIX @"-tts"
 

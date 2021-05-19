@@ -434,6 +434,7 @@
 		3270DBD42600A66300ADD4F7 /* OASelectFavoriteGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBD32600A66300ADD4F7 /* OASelectFavoriteGroupViewController.mm */; };
 		3270DBDB2600A77400ADD4F7 /* OAPoiCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBD92600A77300ADD4F7 /* OAPoiCollectionViewCell.m */; };
 		3270DBE22600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3270DBE12600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm */; };
+		327AE84D26552E7900B19925 /* OAAbbreviations.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327AE84B26552E7900B19925 /* OAAbbreviations.mm */; };
 		32A0013A2610A2FB00ABE0D2 /* OATopCoordinatesWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A001392610A2FB00ABE0D2 /* OATopCoordinatesWidget.m */; };
 		32A001652610B43700ABE0D2 /* widget_coordinates_longitude_west_day.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001472610B42F00ABE0D2 /* widget_coordinates_longitude_west_day.png */; };
 		32A001662610B43700ABE0D2 /* widget_coordinates_longitude_west_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001482610B42F00ABE0D2 /* widget_coordinates_longitude_west_night@2x.png */; };
@@ -4270,6 +4271,8 @@
 		3270DBDA2600A77300ADD4F7 /* OAPoiCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPoiCollectionViewCell.h; path = Controllers/Cells/OAPoiCollectionViewCell.h; sourceTree = "<group>"; };
 		3270DBE02600BD4C00ADD4F7 /* OAAddFavoriteGroupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAAddFavoriteGroupViewController.h; path = Sources/Controllers/2.0/OAAddFavoriteGroupViewController.h; sourceTree = "<group>"; };
 		3270DBE12600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAAddFavoriteGroupViewController.mm; path = Sources/Controllers/2.0/OAAddFavoriteGroupViewController.mm; sourceTree = "<group>"; };
+		327AE84B26552E7900B19925 /* OAAbbreviations.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbbreviations.mm; sourceTree = "<group>"; };
+		327AE84C26552E7900B19925 /* OAAbbreviations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAbbreviations.h; sourceTree = "<group>"; };
 		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
 		32A001382610A2DA00ABE0D2 /* OATopCoordinatesWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopCoordinatesWidget.h; sourceTree = "<group>"; };
 		32A001392610A2FB00ABE0D2 /* OATopCoordinatesWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATopCoordinatesWidget.m; sourceTree = "<group>"; };
@@ -11260,6 +11263,8 @@
 				845AFB5A1E264EE800170026 /* OASearchUICore.mm */,
 				840021451E28D4D70035F944 /* OASearchResultMatcher.h */,
 				840021461E28D4D70035F944 /* OASearchResultMatcher.mm */,
+				327AE84C26552E7900B19925 /* OAAbbreviations.h */,
+				327AE84B26552E7900B19925 /* OAAbbreviations.mm */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -17553,6 +17558,7 @@
 				8417A67B1B25C28000EA1D17 /* OAEditColorViewController.m in Sources */,
 				DAC0278B22A14CC300D1689E /* OAIconTitleButtonCell.m in Sources */,
 				DA2FA6FC2302EBA3006DB2E5 /* OANavAddDestinationAction.mm in Sources */,
+				327AE84D26552E7900B19925 /* OAAbbreviations.mm in Sources */,
 				848A3EC31B6A6F0B0016F6F4 /* QuadRect.m in Sources */,
 				DABA3DC222684D7F005BB777 /* OAMultiIconTextDescCell.m in Sources */,
 				32A7EE03261BB96800F7A697 /* OAShapesCollectionViewCell.m in Sources */,

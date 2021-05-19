@@ -2037,3 +2037,13 @@
 "quick_action_enter_message" = "Entrer un message";
 "quick_action_get_info" = "Obtenir des informations";
 "public_transport_empty_warning_title" = "Malheureusement OsmAnd n'a pas trouvé d'itinéraire avec les paramètres actuels.";
+"touting_specified_vehicle_parameters_descr" = "Les paramètres de véhicule spécifiés peuvent affecter le routage.";
+"key_hint_recenter_map" = "Recentrer la carte";
+"key_hint_goback" = "Revenir en arrière";
+"send_anonymous_data" = "Envoyer des données anonymes";
+"shared_z_a" = "Z - A";
+"shared_string_account_add" = "Ajouter un compte";
+"res_import_unsupported" = "Type de fichier incorrect. Seuls les fichiers routing.xml et *.render.xml sont pris en charge.";
+"obf_import_already_exists" = "Un fichier portant ce nom existe déjà. Veuillez sélectionner une action.";
+"plugin_popup_osm_editing_title" = "Activer l’édition OpenStreetMap";
+"map_coords" = "Carte : Lat %.5f Lon %.5f";

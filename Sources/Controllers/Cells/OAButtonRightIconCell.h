@@ -6,9 +6,9 @@
 // Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OAButtonRightIconCell : OABaseCell
+@interface OAButtonRightIconCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIView *view;
 @property (weak, nonatomic) IBOutlet UIButton *button;

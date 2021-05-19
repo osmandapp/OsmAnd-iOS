@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
 @protocol OAHorizontalCollectionViewCellDelegate <NSObject>
 
@@ -14,7 +14,7 @@
 
 @end
 
-@interface OAHorizontalCollectionViewCell : OABaseCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OAHorizontalCollectionViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic) NSArray *dataArray;

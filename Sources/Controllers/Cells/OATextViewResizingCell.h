@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OATextViewResizingCell : OABaseCell
+@interface OATextViewResizingCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UITextView *inputField;
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;

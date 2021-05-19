@@ -6,10 +6,10 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 #import "MaterialTextFields.h"
 
-@interface OATextInputFloatingCellWithIcon : OABaseCell
+@interface OATextInputFloatingCellWithIcon : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonView;
 @property (weak, nonatomic) IBOutlet MDCMultilineTextField *textField;

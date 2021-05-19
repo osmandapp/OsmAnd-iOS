@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OAImageTextViewCell : OABaseCell
+@interface OAImageTextViewCell : UITableViewCell
 
 
 @property (strong, nonatomic) IBOutlet UITextView *descView;

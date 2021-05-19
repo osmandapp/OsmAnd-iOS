@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OAPublicTransportRouteCell : OABaseCell
+@interface OAPublicTransportRouteCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *topInfoLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bottomInfoLabel;

@@ -6,13 +6,13 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class LineChartView;
 
-@interface OARouteInfoAltitudeCell : OABaseCell
+@interface OARouteInfoAltitudeCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *avgAltitudeTitle;
 @property (weak, nonatomic) IBOutlet UILabel *avgAltitudeValue;

@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OASliderWithValuesCell : OABaseCell
+@interface OASliderWithValuesCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UISlider *sliderView;
 @property (weak, nonatomic) IBOutlet UILabel *leftValueLabel;

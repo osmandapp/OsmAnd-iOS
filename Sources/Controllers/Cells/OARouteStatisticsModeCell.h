@@ -6,9 +6,9 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OARouteStatisticsModeCell : OABaseCell
+@interface OARouteStatisticsModeCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *iconButton;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;

@@ -6,9 +6,9 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OAProgressBarCell : OABaseCell
+@interface OAProgressBarCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
 
 @end

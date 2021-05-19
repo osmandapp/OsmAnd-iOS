@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OABaseMGSwipeCell.h"
+#import <UIKit/UIKit.h>
 #import "MGSwipeTableCell.h"
 
-@interface OATitleDescrDraggableCell : OABaseMGSwipeCell
+@interface OATitleDescrDraggableCell : MGSwipeTableCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;

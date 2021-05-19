@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OATextLineViewCell : OABaseCell
+@interface OATextLineViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 

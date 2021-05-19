@@ -6,11 +6,11 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
 @class OACollapsableView;
 
-@interface OATargetInfoCollapsableViewCell : OABaseCell
+@interface OATargetInfoCollapsableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *descrLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;

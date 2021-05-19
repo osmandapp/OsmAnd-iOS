@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OADateTimePickerTableViewCell : OABaseCell
+@interface OADateTimePickerTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIDatePicker *dateTimePicker;
 

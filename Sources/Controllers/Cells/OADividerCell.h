@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OADividerCell : OABaseCell
+@interface OADividerCell : UITableViewCell
 
 @property (nonatomic) CGFloat dividerHight;
 @property (nonatomic) UIEdgeInsets dividerInsets;

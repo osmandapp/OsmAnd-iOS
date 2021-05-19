@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OABaseMGSwipeCell.h"
+#import "MGSwipeTableCell.h"
 
-@interface OADirectionTableViewCell : OABaseMGSwipeCell
+@interface OADirectionTableViewCell : MGSwipeTableCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *leftIcon;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;

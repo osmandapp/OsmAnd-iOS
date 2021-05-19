@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCollectionCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OAMapillaryContributeCell : OABaseCollectionCell
+@interface OAMapillaryContributeCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *contributeLabel;
 @property (weak, nonatomic) IBOutlet UIButton *addPhotosButton;

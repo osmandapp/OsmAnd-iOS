@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OAPointHeaderTableViewCell : OABaseCell
+@interface OAPointHeaderTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *folderIcon;
 @property (weak, nonatomic) IBOutlet UILabel *groupTitle;

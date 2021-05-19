@@ -6,13 +6,13 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class HorizontalBarChartView;
 
-@interface OARouteInfoLegendCell : OABaseCell
+@interface OARouteInfoLegendCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIStackView *legendStackView;
 

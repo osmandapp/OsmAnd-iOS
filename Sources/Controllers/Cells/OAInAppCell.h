@@ -6,14 +6,14 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
 #define kPriceTextInset 6.0
 #define kPriceMinTextWidth 53.0
 #define kPriceMinTextHeight 26.0
 #define kPriceRectBorder 15.0
 
-@interface OAInAppCell : OABaseCell
+@interface OAInAppCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UILabel *lbDescription;

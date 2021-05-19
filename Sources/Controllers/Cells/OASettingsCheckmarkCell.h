@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OASettingsCheckmarkCell : OABaseCell
+@interface OASettingsCheckmarkCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *checkmarkImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;

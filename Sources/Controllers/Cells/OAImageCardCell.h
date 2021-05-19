@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCollectionCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OAImageCardCell : OABaseCollectionCell
+@interface OAImageCardCell : UICollectionViewCell
 
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;

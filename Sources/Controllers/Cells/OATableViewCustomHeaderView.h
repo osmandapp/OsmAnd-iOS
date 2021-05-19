@@ -6,9 +6,9 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OABaseHeaderFooterCell.h"
+#import <Foundation/Foundation.h>
 
-@interface OATableViewCustomHeaderView : OABaseHeaderFooterCell
+@interface OATableViewCustomHeaderView : UITableViewHeaderFooterView
 
 @property (nonatomic, readonly) UITextView *label;
 

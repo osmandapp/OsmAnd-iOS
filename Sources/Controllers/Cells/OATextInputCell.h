@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OATextInputCell : OABaseCell
+@interface OATextInputCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UITextField *inputField;
 

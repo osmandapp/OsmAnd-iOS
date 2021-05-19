@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OACustomSelectionButtonCell : OABaseCell
+@interface OACustomSelectionButtonCell : UITableViewCell
 
 
 @property (weak, nonatomic) IBOutlet UIButton *selectDeselectButton;

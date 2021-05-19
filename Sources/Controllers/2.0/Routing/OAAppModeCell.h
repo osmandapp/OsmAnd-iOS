@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 #import "OAApplicationMode.h"
 
 @protocol OAAppModeCellDelegate <NSObject>
@@ -15,7 +15,7 @@
 
 @end
 
-@interface OAAppModeCell : OABaseCell
+@interface OAAppModeCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) id<OAAppModeCellDelegate> delegate;

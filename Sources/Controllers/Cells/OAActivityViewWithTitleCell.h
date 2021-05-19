@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 
-@interface OAActivityViewWithTitleCell : OABaseCell
+@interface OAActivityViewWithTitleCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;

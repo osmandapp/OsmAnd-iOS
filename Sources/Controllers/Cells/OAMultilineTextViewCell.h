@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCell.h"
+#import <UIKit/UIKit.h>
 #import "MaterialTextFields.h"
 
-@interface OAMultilineTextViewCell : OABaseCell
+@interface OAMultilineTextViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet MDCMultilineTextField *inputField;
 

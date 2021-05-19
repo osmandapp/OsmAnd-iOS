@@ -140,7 +140,7 @@
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"shared_string_export"),
         @"img" : @"ic_custom_export",
-        @"type" : kCellTypeAction,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"name" : @"export_settings"
     }];
 

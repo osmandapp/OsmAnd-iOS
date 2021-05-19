@@ -153,7 +153,7 @@
 
 - (void)updateSearchView:(BOOL)searchMode
 {
-    [OACustomPOIViewController updateSearchView:searchMode search:self.searchField cancel:self.cancelSearchButton rightConstraint:self.searchFieldRightConstraint];
+    [OACustomPOIViewController updateSearchView:searchMode searchField:self.searchField cancelButton:self.cancelSearchButton searchFieldRightConstraint:self.searchFieldRightConstraint];
 }
 
 - (NSString *)getTitleForSection

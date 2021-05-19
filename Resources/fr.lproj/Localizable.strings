@@ -2036,3 +2036,4 @@
 "enable_contour_lines" = "Activer pour afficher les courbes de niveau sur la carte";
 "quick_action_enter_message" = "Entrer un message";
 "quick_action_get_info" = "Obtenir des informations";
+"public_transport_empty_warning_title" = "Malheureusement OsmAnd n'a pas trouvé d'itinéraire avec les paramètres actuels.";

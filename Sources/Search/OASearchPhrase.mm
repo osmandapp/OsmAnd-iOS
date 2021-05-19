@@ -292,9 +292,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         {
             NSString *wd = wrs[i].trim;
             if (wd.length > 0)
-            {
                 [ws addObject:wd];
-            }
         }
     }
     return ws;

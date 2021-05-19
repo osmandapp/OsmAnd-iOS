@@ -15,6 +15,8 @@
 #import "OAMapViewController.h"
 #import "OsmAndApp.h"
 #import "OAQuickActionType.h"
+#import "OAButtonCell.h"
+#import "OAMenuSimpleCell.h"
 
 #define KEY_FILTERS @"filters"
 
@@ -103,13 +105,13 @@ static OAQuickActionType *TYPE;
         [items addObject:@{
                            @"title" : filter.getName,
                            @"value" : filter.filterId,
-                           @"type" : @"OAMenuSimpleCell",
+                           @"type" : [OAMenuSimpleCell getCellIdentifier],
                            @"img" : iconId
                            }];
     }
     [items addObject:@{
                        @"title" : OALocalizedString(@"quick_action_add_poi_category"),
-                       @"type" : @"OAButtonCell",
+                       @"type" : [OAButtonCell getCellIdentifier],
                        @"target" : @"addCategory"
                        }];
     
@@ -126,7 +128,7 @@ static OAQuickActionType *TYPE;
     for (NSInteger i = 0; i < items.count; i ++)
     {
         NSDictionary *item = items[i];
-        if ([item[@"type"] isEqualToString:@"OAButtonCell"])
+        if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
             continue;
         
         [filters appendString:item[@"value"]];

@@ -16,8 +16,6 @@
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
 #import "OAPOIHelper.h"
-#import "OASearchMoreCell.h"
-#import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OAPOIFavType.h"

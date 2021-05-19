@@ -37,11 +37,11 @@
     _favoritesLayer = [[OAFavoritesLayer alloc] initWithMapViewController:_mapViewController baseOrder:-160000];
     [self addLayer:_favoritesLayer];
 
-    _destinationsLayer = [[OADestinationsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-207000];
-    [self addLayer:_destinationsLayer];
-
     _myPositionLayer = [[OAMyPositionLayer alloc] initWithMapViewController:_mapViewController baseOrder:-206000];
     [self addLayer:_myPositionLayer];
+
+    _destinationsLayer = [[OADestinationsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-207000];
+    [self addLayer:_destinationsLayer];
 
     _contextMenuLayer = [[OAContextMenuLayer alloc] initWithMapViewController:_mapViewController baseOrder:-210000];
     [self addLayer:_contextMenuLayer];

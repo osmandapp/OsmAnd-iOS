@@ -14,11 +14,9 @@
 #import "OAGpxInfo.h"
 #import "OALoadGpxTask.h"
 
-#import "OAGPXTableViewCell.h"
 #import "OAGPXRecTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingSwitchCell.h"
-#import "OAIconTitleButtonCell.h"
 #import "OAGPXTrackCell.h"
 
 #import "OsmAndApp.h"
@@ -31,7 +29,6 @@
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
-#import "OAGPXRouteTableViewCell.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAKml2Gpx.h"
@@ -58,13 +55,6 @@
 #define kAlertViewShareId -4
 #define kAlertViewCancelButtonIndex -1
 #define kMaxCancelButtonWidth 100
-#define kIconTitleValueCell @"OAIconTitleValueCell"
-#define kCellTypeSwitch @"OASettingSwitchCell"
-#define kCellTypeGPX @"OAGPXTableViewCell"
-#define kCellTypeTrackRecord @"OAIconTitleButtonCell"
-#define kCellTypeTrackRecordMessage @"OAMenuSimpleCellNoIcon"
-#define kCellMenu @"OAIconTextTableViewCell"
-#define kGPXTrackCell @"OAGPXTrackCell"
 
 #define GPX_EXT @"gpx"
 #define KML_EXT @"kml"
@@ -633,20 +623,20 @@ static UIViewController *parentController;
     
     OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
     trackRecordingGroup.isMenu = YES;
-    trackRecordingGroup.type = kCellMenu;
+    trackRecordingGroup.type = [OAIconTextTableViewCell getCellIdentifier];
     trackRecordingGroup.header = OALocalizedString(@"record_trip");
     
     if ([_iapHelper.trackRecording isActive])
         [trackRecordingGroup.groupItems addObject:@{
             @"title" : OALocalizedString(@"track_recording_name"),
             @"icon" : @"ic_custom_reverse_direction.png",
-            @"type" : kCellTypeTrackRecord,
+            @"type" : [OAGPXRecTableViewCell getCellIdentifier],
             @"key" : @"track_recording"}
         ];
     else
         [trackRecordingGroup.groupItems addObject:@{
             @"title" : OALocalizedString(@"track_rec_addon_q"),
-            @"type" : kCellTypeTrackRecordMessage,
+            @"type" : [OAMenuSimpleCellNoIcon getCellIdentifier],
             @"key" : @"track_recording"}
         ];
     [tableData addObject:trackRecordingGroup];
@@ -672,7 +662,7 @@ static UIViewController *parentController;
             @"distance" : [_app getFormattedDistance:_routeItem.totalDistance],
             @"time" : [_app getFormattedTimeInterval:_routeItem.timeSpan shortFormat:YES],
             @"wpt" : [NSString stringWithFormat:@"%d", _routeItem.wptPoints],
-            @"type" : kGPXTrackCell,
+            @"type" : [OAGPXTrackCell getCellIdentifier],
             @"key" : @"route_item"}
         ];
         [tableData addObject:routePlanningGroup];
@@ -693,7 +683,7 @@ static UIViewController *parentController;
                  @"title" : [item getNiceTitle],
                  @"icon" : @"ic_custom_trip.png",
                  @"track" : item,
-                 @"type" : kCellTypeSwitch,
+                 @"type" : [OASettingSwitchCell getCellIdentifier],
                  @"key" : @"track_group"}];
         }
     }
@@ -715,7 +705,7 @@ static UIViewController *parentController;
                 continue;
             
             [tracksGroup.groupItems addObject:@{
-                @"type" : kGPXTrackCell,
+                @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"title" : [track getName],
                 @"track" : track.gpx,
                 @"distance" : [_app getFormattedDistance:track.gpx.totalDistance],
@@ -732,14 +722,14 @@ static UIViewController *parentController;
     // Generate menu items
     OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
     actionsGroup.isMenu = YES;
-    actionsGroup.type = kCellMenu;
+    actionsGroup.type = [OAIconTextTableViewCell getCellIdentifier];
     actionsGroup.header = OALocalizedString(@"actions");
-    self.menuItems = @[@{@"type" : kCellMenu,
+    self.menuItems = @[@{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"import_track",
                          @"title": OALocalizedString(@"gpx_import_title"),
                          @"icon": @"ic_custom_import",
                          @"header" : OALocalizedString(@"actions")},
-                       @{@"type" : kCellMenu,
+                       @{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"create_new_trip",
                          @"title": OALocalizedString(@"create_new_trip"),
                          @"icon": @"ic_custom_trip.png"}];
@@ -1114,11 +1104,11 @@ static UIViewController *parentController;
     {
         NSDictionary *menuItem = item.groupItems[indexPath.row];
         NSString *menuCellType = menuItem[@"type"];
-        if ([menuCellType isEqualToString:kCellTypeTrackRecord])
+        if ([menuCellType isEqualToString:[OAGPXRecTableViewCell getCellIdentifier]])
         {
             if (!_recCell)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXRecCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXRecTableViewCell getCellIdentifier] owner:self options:nil];
                 _recCell = (OAGPXRecTableViewCell *)[nib objectAtIndex:0];
             }
             if (_recCell)
@@ -1136,12 +1126,12 @@ static UIViewController *parentController;
             }
             return _recCell;
         }
-        else if ([menuCellType isEqualToString:kCellTypeTrackRecordMessage])
+        else if ([menuCellType isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
         {
-            OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:kCellTypeTrackRecordMessage];
+            OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTrackRecordMessage owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
                 cell.descriptionView.hidden = YES;
                 cell.textView.font = [UIFont systemFontOfSize:14.0];
@@ -1151,14 +1141,13 @@ static UIViewController *parentController;
                 [cell.textView setText:OALocalizedString(@"track_rec_addon_q")];
             return cell;
         }
-        else if ([menuCellType isEqualToString:kCellMenu])
+        else if ([menuCellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
         {
-            static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
             OAIconTextTableViewCell* cell;
-            cell = (OAIconTextTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+            cell = (OAIconTextTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             }
@@ -1169,14 +1158,13 @@ static UIViewController *parentController;
             }
             return cell;
         }
-        else if ([menuCellType isEqualToString:kGPXTrackCell])
+        else if ([menuCellType isEqualToString:[OAGPXTrackCell getCellIdentifier]])
         {
-            static NSString* const identifierCell = kGPXTrackCell;
             OAGPXTrackCell* cell = nil;
-            cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
                 cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -1199,11 +1187,10 @@ static UIViewController *parentController;
     else {
         if (indexPath.row == kGPXGroupHeaderRow)
         {
-            static NSString* const identifierCell = kIconTitleValueCell;
-            OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleValueCell owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -1242,13 +1229,12 @@ static UIViewController *parentController;
             NSDictionary *groupItem = item.groupItems[dataIndex];
             NSString *cellType = groupItem[@"type"];
             OAGPX *gpx = groupItem[@"track"];
-            if ([cellType isEqualToString:kCellTypeSwitch])
+            if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
             {
-                static NSString* const identifierCell = kCellTypeSwitch;
-                OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+                OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
                     cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
                     cell.descriptionView.hidden = YES;
                     cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
@@ -1265,14 +1251,13 @@ static UIViewController *parentController;
                 }
                 return cell;
             }
-            if ([cellType isEqualToString:kGPXTrackCell])
+            if ([cellType isEqualToString:[OAGPXTrackCell getCellIdentifier]])
             {
-                static NSString* const identifierCell = kGPXTrackCell;
                 OAGPXTrackCell* cell = nil;
-                cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+                cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
                     cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
                     cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
                 }

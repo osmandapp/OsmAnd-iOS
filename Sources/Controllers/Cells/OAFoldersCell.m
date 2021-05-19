@@ -13,7 +13,6 @@
 #import "Localization.h"
 #import "OACollectionViewCellState.h"
 
-#define kDestCell @"OAFoldersCollectionViewCell"
 #define kCellHeight 36
 #define kImageWidth 38
 #define kLabelOffsetsWidth 20
@@ -37,7 +36,7 @@
     [super awakeFromNib];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
-    [_collectionView registerNib:[UINib nibWithNibName:kDestCell bundle:nil] forCellWithReuseIdentifier:kDestCell];
+    [_collectionView registerNib:[UINib nibWithNibName:[OAFoldersCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     [_collectionView setCollectionViewLayout:layout];
@@ -143,10 +142,10 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kDestCell forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDestCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCollectionViewCell getCellIdentifier] owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
     if (cell && [cell isKindOfClass:OAFoldersCollectionViewCell.class])

@@ -255,9 +255,9 @@
 "si_m_s" = "م/ث";
 "si_min_km" = "دقيقة/كم";
 "si_min_m" = "دقيقة/ميل";
-"si_nm_h" = "ميل بحري في الساعة (عقدة)";
+"si_nm_h" = "أميال بحرية في الساعة (عقدة)";
 "nm" = "ميل بحري";
-"nm_h" = "ميل بحري";
+"nm_h" = "ميل بحري/في الساعة";
 "min_mile" = "د/م";
 "min_km" = "د/كم";
 "m_s" = "م/ث";
@@ -2078,3 +2078,11 @@
 "hidden_categories" = "الفئات المخفية";
 "visible_categories" = "الفئات المرئية";
 "rearrange_categories" = "إعادة ترتيب الفئات";
+"new_plugin_added" = "ملحق جديد مضاف";
+"extra_maps" = "خرائط إضافية";
+"custom_plugins" = "الإضافات المخصصة";
+"custom_osmand_plugin_name" = "تخصيص ملحق أوسمتند";
+"shared_string_disable" = "تعطيل";
+
+// Shared Strings
+"shared_string_enable" = "تفعيل";

@@ -21,8 +21,6 @@
 #import "OAMapStyleAction.h"
 
 #define kButtonsDividerTag 150
-#define kBottomSheetActionCell @"OAMenuSimpleCell"
-
 
 @implementation OAProfileSelectionBottomSheetScreen
 {
@@ -62,7 +60,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     NSArray *params = _action.loadListFromParams;
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderCell",
+                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : _action.getDescrTitle,
                      @"description" : @""
                      }];
@@ -75,7 +73,7 @@
     for (int i = 0; i < stringKeys.count; i++)
     {
         [arr addObject:@{
-                         @"type" : kBottomSheetActionCell,
+                         @"type" : [OAMenuSimpleCell getCellIdentifier],
                          @"title" : names[i],
                          @"value" : stringKeys[i],
                          @"param" : stringKeys[i],
@@ -106,13 +104,12 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderCell";
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -125,22 +122,20 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
+    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetActionCell;
         OAMenuSimpleCell* cell = nil;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }
         
         if (cell)
         {
-            UIImage *img = nil;
             NSString *imgName = item[@"img"];
             NSString *imgColor = item[@"iconColor"];
             if (imgName && imgColor)
@@ -195,7 +190,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if (![item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

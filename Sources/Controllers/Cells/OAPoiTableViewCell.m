@@ -16,7 +16,6 @@
 
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
-#define kDestCell @"OAFoldersCollectionViewCell"
 #define kCellHeight 36
 #define kImageWidth 38
 #define kLabelOffsetsWidth 20
@@ -34,11 +33,11 @@
     [super awakeFromNib];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OAPoiCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAPoiCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OAPoiCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAPoiCollectionViewCell getCellIdentifier]];
     
     self.categoriesCollectionView.delegate = self;
     self.categoriesCollectionView.dataSource = self;
-    [self.categoriesCollectionView registerNib:[UINib nibWithNibName:kDestCell bundle:nil] forCellWithReuseIdentifier:kDestCell];
+    [self.categoriesCollectionView registerNib:[UINib nibWithNibName:[OAFoldersCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     
     layout.sectionInset = UIEdgeInsetsMake(0, kCategoriesCellsSpacing, 0, 8);
@@ -162,10 +161,10 @@
     if (collectionView.tag == kCategoryCellIndex)
     {
         NSDictionary *item = _categoryDataArray[indexPath.row];
-        UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kDestCell forIndexPath:indexPath];
+        UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDestCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCollectionViewCell getCellIdentifier] owner:self options:nil];
             cell = [nib objectAtIndex:0];
         }
         if (cell && [cell isKindOfClass:OAFoldersCollectionViewCell.class])
@@ -207,9 +206,8 @@
     }
     else
     {
-        static NSString* const identifierCell = @"OAPoiCollectionViewCell";
         OAPoiCollectionViewCell* cell = nil;
-        cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+        cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAPoiCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
         UIImage *img = nil;
         NSString *imgName = _poiData[_currentCategory][indexPath.row];
         img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];

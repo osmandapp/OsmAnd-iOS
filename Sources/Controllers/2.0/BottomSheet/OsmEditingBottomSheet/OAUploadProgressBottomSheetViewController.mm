@@ -9,23 +9,18 @@
 #import "OAUploadProgressBottomSheetViewController.h"
 #import "Localization.h"
 #import "OABottomSheetHeaderCell.h"
-#import "OABottomSheetHeaderIconCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
-#import "OADividerCell.h"
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
-#import "OASettingSwitchCell.h"
 #import "OAOsmEditingPlugin.h"
-#import "OADividerCell.h"
 #import "MaterialTextFields.h"
-#import "OATextInputFloatingCell.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OATextEditingBottomSheetViewController.h"
 #import "OAAppSettings.h"
@@ -80,13 +75,13 @@
     _pbCell = [self getProgressBarCell];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderCell",
+                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : OALocalizedString(@"osm_edit_uploading"),
                      @"description" : @"",
                      }];
     
     [arr addObject:@{
-                     @"type" : @"OAProgressBarCell",
+                     @"type" : [OAProgressBarCell getCellIdentifier],
                      }];
     
     _data = [NSArray arrayWithArray:arr];
@@ -99,7 +94,7 @@
 
 - (OAProgressBarCell *) getProgressBarCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAProgressBarCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressBarCell getCellIdentifier] owner:self options:nil];
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
     [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
@@ -135,13 +130,12 @@
     NSDictionary *item = _data[indexPath.row];
     
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderCell";
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -152,7 +146,7 @@
             cell.titleView.text = item[@"title"];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OAProgressBarCell"])
+    else if ([item[@"type"] isEqualToString:[OAProgressBarCell getCellIdentifier]])
     {
         return _pbCell;
     }

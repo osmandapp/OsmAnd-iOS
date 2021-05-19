@@ -227,11 +227,10 @@
     OAQuickActionType *action = [self getItem:indexPath];
     if (action)
     {
-        static NSString* const identifierCell = @"OAIconTitleButtonCell";
-        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleButtonCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
         }
         
@@ -258,7 +257,7 @@
             }
             [cell setButtonText:nil];
             cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.buttonView setImage:[UIImage templateImageNamed:@"ic_custom_plus"] forState:UIControlStateNormal];
+            [cell.buttonView setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
             [cell.buttonView addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
             cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
         }

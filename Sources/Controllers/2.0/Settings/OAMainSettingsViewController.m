@@ -27,12 +27,6 @@
 #import "OAConfigureProfileViewController.h"
 #import "OAExportItemsViewController.h"
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
-#define kCellTypeCheck @"OAMultiIconTextDescCell"
-#define kCellTypeProfileSwitch @"OAIconTextDescSwitchCell"
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kFooterId @"TableViewSectionFooter"
-
 #define kAppModesSection 2
 
 @implementation OAMainSettingsViewController
@@ -113,14 +107,14 @@
         @"title" : OALocalizedString(@"osmand_settings"),
         @"description" : OALocalizedString(@"global_settings_descr"),
         @"img" : @"left_menu_icon_settings",
-        @"type" : kCellTypeIconTitleValue }
+        @"type" : [OAIconTitleValueCell getCellIdentifier] }
     ]];
     
     [data addObject:@[
         @{
             @"name" : @"current_profile",
             @"app_mode" : appMode,
-            @"type" : kCellTypeCheck,
+            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
             @"isColored" : @YES
         }
     ]];
@@ -131,7 +125,7 @@
         [profilesSection addObject:@{
             @"name" : @"profile_val",
             @"app_mode" : OAApplicationMode.allPossibleValues[i],
-            @"type" : i == 0 ? kCellTypeCheck : kCellTypeProfileSwitch,
+            @"type" : i == 0 ? [OAMultiIconTextDescCell getCellIdentifier] : [OAIconTextDescSwitchCell getCellIdentifier],
             @"isColored" : @NO
         }];
     }
@@ -139,7 +133,7 @@
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"new_profile"),
         @"img" : @"ic_custom_add",
-        @"type" : kCellTypeAction,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"name" : @"add_profile"
     }];
     
@@ -153,7 +147,7 @@
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"edit_profile_list"),
         @"img" : @"ic_custom_edit",
-        @"type" : kCellTypeAction,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"name" : @"edit_profiles"
     }];
     
@@ -205,13 +199,12 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kCellTypeIconTitleValue])
+    if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
@@ -226,13 +219,12 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeCheck])
+    else if ([type isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeCheck;
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
             [cell setOverflowVisibility:YES];
@@ -252,13 +244,12 @@
             cell.backgroundColor = UIColor.whiteColor;
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeProfileSwitch])
+    else if ([type isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeProfileSwitch;
-        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDescSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeProfileSwitch owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
         }
         OAApplicationMode *am = item[@"app_mode"];
@@ -281,13 +272,12 @@
         cell.dividerView.hidden = isDefault;
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeAction])
+    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);

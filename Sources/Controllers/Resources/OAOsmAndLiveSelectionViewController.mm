@@ -16,14 +16,9 @@
 #import "OASettingsTitleTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
-
 #import "OAColors.h"
 
 #include <OsmAndCore/IncrementalChangesManager.h>
-
-#define kCellTypeSwitch @"switch"
-#define kCellTypeSingleSelectionList @"single_selection_list"
-#define kCellTypeCheck @"check"
 
 @interface OAOsmAndLiveSelectionViewController ()
 
@@ -183,7 +178,7 @@ static const NSInteger groupCount = 1;
                @"name" : @"osm_live_enabled",
                @"title" : OALocalizedString(@"osmand_live_updates"),
                @"value" : @([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:_regionNameNSString]),
-               @"type" : kCellTypeSwitch
+               @"type" : [OASwitchTableViewCell getCellIdentifier]
                }];
             
             [dataArr addObject:
@@ -191,7 +186,7 @@ static const NSInteger groupCount = 1;
                @"name" : @"wifi_only",
                @"title" : OALocalizedString(@"osmand_live_wifi_only"),
                @"value" : @([OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:_regionNameNSString]),
-               @"type" : kCellTypeSwitch,
+               @"type" : [OASwitchTableViewCell getCellIdentifier],
                }];
             
             [dataArr addObject:
@@ -200,7 +195,7 @@ static const NSInteger groupCount = 1;
                @"title" : OALocalizedString(@"osmand_live_upd_frequency"),
                @"value" : [OAOsmAndLiveHelper getFrequencyString:[OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString]],
                @"img" : @"menu_cell_pointer.png",
-               @"type" : kCellTypeSingleSelectionList }
+               @"type" : [OASettingsTableViewCell getCellIdentifier] }
              ];
             
             [dataArr addObject:
@@ -209,7 +204,7 @@ static const NSInteger groupCount = 1;
                @"title" : OALocalizedString(@"osmand_live_updates_size"),
                @"value" : [NSByteCountFormatter stringFromByteCount:_app.resourcesManager->changesManager->getUpdatesSize(_regionName)
                                                          countStyle:NSByteCountFormatterCountStyleFile],
-               @"type" : kCellTypeSingleSelectionList }
+               @"type" : [OASettingsTableViewCell getCellIdentifier] }
              ];
             
             _data = [NSArray arrayWithArray:dataArr];
@@ -226,7 +221,7 @@ static const NSInteger groupCount = 1;
                @"name" : @"hourly_freq",
                @"title" : OALocalizedString(@"osmand_live_hourly"),
                @"img" : currentFrequency == ELiveUpdateFrequencyHourly ? @"menu_cell_selected.png" : @"",
-               @"type" : kCellTypeCheck }
+               @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
             [dataArr addObject:
@@ -234,7 +229,7 @@ static const NSInteger groupCount = 1;
                @"name" : @"daily_freq",
                @"title" : OALocalizedString(@"osmand_live_daily"),
                @"img" : currentFrequency == ELiveUpdateFrequencyDaily ? @"menu_cell_selected.png" : @"",
-               @"type" : kCellTypeCheck }
+               @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
             [dataArr addObject:
@@ -242,7 +237,7 @@ static const NSInteger groupCount = 1;
                @"name" : @"weekly_freq",
                @"title" : OALocalizedString(@"osmand_live_weekly"),
                @"img" : currentFrequency == ELiveUpdateFrequencyWeekly ? @"menu_cell_selected.png" : @"",
-               @"type" : kCellTypeCheck }
+               @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
             _data = [NSArray arrayWithArray:dataArr];
@@ -289,15 +284,13 @@ static const NSInteger groupCount = 1;
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kCellTypeSwitch])
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -312,15 +305,13 @@ static const NSInteger groupCount = 1;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList])
+    else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -332,15 +323,14 @@ static const NSInteger groupCount = 1;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeCheck])
+    else if ([type isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
         OASettingsTitleTableViewCell* cell = nil;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
         }
         

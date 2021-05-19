@@ -518,13 +518,11 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (UITableViewCell *) getMarkerCellForIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-    
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -551,13 +549,11 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (UITableViewCell*) getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-    
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -585,14 +581,12 @@ typedef NS_ENUM(NSInteger, EOASortType)
 - (UITableViewCell*) getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FavTableGroup* groupData = [_groupsAndFavorites objectAtIndex:indexPath.section];
-    
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-    
+
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
     }
     

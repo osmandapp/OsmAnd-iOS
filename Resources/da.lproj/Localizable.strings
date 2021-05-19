@@ -1879,7 +1879,6 @@
 "routing_attr_length_name" = "Længdegrænse";
 "default_profile_descr" = "Vælg en profil, der skal bruges til programstart.";
 "shared_string_next" = "Næste";
-
 "quick_action_remove_next_destination" = "Slet næste destinationspunkt";
 "quick_action_mapillary_show" = "Vis Mapillary";
 "next_seg" = "Næste segment";
@@ -1899,3 +1898,6 @@
 "quick_action_mapillary_hide" = "Skjul Mapillary";
 "layer_amenity_label" = "Overlejring af IP-etiketter";
 "shared_string_add_profile" = "Tilføj profil";
+"profile_type_osmand_string" = "OsmAnd-profil";
+"profile_type_user_string" = "Brugerprofil";
+"map_widget_distance_by_tap" = "Afstand ved tryk";

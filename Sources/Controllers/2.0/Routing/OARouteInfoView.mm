@@ -62,11 +62,7 @@
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
 #define kHistoryItemLimitDefault 3
-
 #define kCellReuseIdentifier @"emptyCell"
-#define kHeaderId @"TableViewSectionHeader"
-#define kFooterId @"TableViewSectionFooter"
-
 #define MAX_PEDESTRIAN_ROUTE_DURATION (30 * 60)
 #define kSoundButtonRow 2
 #define kSoundButtonSection 0
@@ -177,13 +173,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [_tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    [_tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
     _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
     
     self.sliderView.layer.cornerRadius = 2.;
@@ -311,7 +307,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return;
     
     [section addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(NO)
     }];
     
@@ -322,7 +318,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (gpx && doc)
         {
             [section addObject:@{
-                @"cell" : @"OAMultiIconTextDescCell",
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : gpx.getNiceTitle,
                 @"descr" : [OAGPXUIHelper getDescription:gpx],
                 @"img" : @"ic_custom_trip",
@@ -333,13 +329,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (i != visibleGpx.count - 1)
         {
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(YES)
             }];
         }
     }
     [section addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(NO)
     }];
     _gpxTripSection = sectionIndex;
@@ -353,12 +349,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (destinationBackup != nil)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADescrTitleIconCell",
+            @"cell" : [OADescrTitleIconCell getCellIdentifier],
             @"title" : destinationBackup.pointDescription.name,
             @"descr" : startBackup ? startBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location"),
             @"img" : @"ic_custom_point_to_point",
@@ -366,7 +362,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _prevRouteSection = sectionIndex;
@@ -380,14 +376,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (markers.count > 0)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         for (NSInteger i = 0; i < markers.count; i++)
         {
             OADestination *item = markers[i];
             [section addObject:@{
-                @"cell" : @"OAMultiIconTextDescCell",
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : item.desc,
                 @"img" : [item.markerResourceName ? item.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"],
                 @"item" : item
@@ -395,13 +391,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if (i != markers.count - 1)
             {
                 [section addObject:@{
-                    @"cell" : @"OADividerCell",
+                    @"cell" : [OADividerCell getCellIdentifier],
                     @"custom_insets" : @(YES)
                 }];
             }
         }
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _mapMarkerSection = sectionIndex;
@@ -416,20 +412,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (allItems.count > 0)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         for (OAHistoryItem *item in allItems)
         {
             [section addObject:@{
-                @"cell" : @"OAMultiIconTextDescCell",
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : item.name,
                 @"img" : @"ic_custom_history",
                 @"item" : item
             }];
             
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(YES)
             }];
             
@@ -437,7 +433,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (allItems.count == _historyItemsLimit)
         {
             [section addObject:@{
-                @"cell" : @"OAButtonCell",
+                @"cell" : [OAButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_show_more")
             }];
         }
@@ -446,7 +442,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [section removeObjectAtIndex:section.count - 1];
         }
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _historySection = sectionIndex;
@@ -463,21 +459,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     for (NSInteger i = 0; i < _transportHelper.getRoutes.size(); i++)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
         [section addObject:@{
-            @"cell" : @"OAPublicTransportShieldCell",
+            @"cell" : [OAPublicTransportShieldCell getCellIdentifier],
             @"route_index" : @(i)
         }];
         [section addObject:@{
-            @"cell" : @"OAPublicTransportRouteCell",
+            @"cell" : [OAPublicTransportRouteCell getCellIdentifier],
             @"route_index" : @(i)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -499,7 +495,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (showPedestrianCard)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
@@ -511,20 +507,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [str setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]} range:range];
         
         [section addObject:@{
-            @"cell" : @"OADescrTitleIconCell",
+            @"cell" : [OADescrTitleIconCell getCellIdentifier],
             @"title" : str,
             @"img" : @"ic_profile_pedestrian",
             @"key" : @"pedestrian_short"
         }];
         
         [section addObject:@{
-            @"cell" : @"OAFilledButtonCell",
+            @"cell" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"calc_pedestrian_route"),
             @"key": @"calc_pedestrian"
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
@@ -539,21 +535,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableArray *section = [[NSMutableArray alloc] init];
     [section addObject:@{
-        @"cell" : @"OARoutingTargetCell",
+        @"cell" : [OARoutingTargetCell getCellIdentifier],
         @"type" : @"start"
     }];
     
     if ([self hasIntermediatePoints])
     {
         [section addObject:@{
-            @"cell" : @"OARoutingTargetCell",
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
             @"type" : @"intermediate"
         }];
     }
     else if (_routingHelper.getCurrentGPXRoute)
     {
         [section addObject:@{
-            @"cell" : @"OARoutingTargetCell",
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
             @"type" : @"gpx_route"
         }];
     }
@@ -561,13 +557,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (![self isFinishPointFromTrack])
     {
         [section addObject:@{
-            @"cell" : @"OARoutingTargetCell",
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
             @"type" : @"finish"
         }];
     }
     
     [section addObject:@{
-        @"cell" : @"OARoutingSettingsCell"
+        @"cell" : [OARoutingSettingsCell getCellIdentifier]
+
     }];
     
     if (_hasEmptyTransportRoute)
@@ -581,7 +578,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ((![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated]) || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
     {
         [section addObject:@{
-            @"cell" : @"OARouteProgressBarCell"
+            @"cell" : [OARouteProgressBarCell getCellIdentifier]
         }];
     }
     [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -597,22 +594,22 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         else
         {
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(NO)
             }];
             [section addObject:@{
-                @"cell" : @"OARoutingInfoCell"
+                @"cell" : [OARoutingInfoCell getCellIdentifier]
             }];
             [section addObject:@{
                 @"cell" : kCellReuseIdentifier
             }];
             [section addObject:@{
-                @"cell" : @"OAFilledButtonCell",
+                @"cell" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"res_details"),
                 @"key" : @"route_details"
             }];
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(NO)
             }];
             [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -629,14 +626,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if (!_routingHelper.isRouteBeingCalculated && !_transportHelper.isRouteBeingCalculated)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [section addObject:@{
-            @"cell" : @"OAHomeWorkCell"
+            @"cell" : [OAHomeWorkCell getCellIdentifier]
         }];
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -1228,15 +1225,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"])
+    if ([item[@"cell"] isEqualToString:[OARoutingTargetCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingTargetCell* cell;
-        cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingTargetCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingTargetCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingTargetCell *)[nib objectAtIndex:0];
         }
         
@@ -1362,15 +1357,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARoutingInfoCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingInfoCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingInfoCell* cell;
-        cell = (OARoutingInfoCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingInfoCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingInfoCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingInfoCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingInfoCell *)[nib objectAtIndex:0];
         }
         
@@ -1387,15 +1380,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         return _routeStatsCell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAFilledButtonCell* cell;
-        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
         }
         
@@ -1412,29 +1403,25 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingSettingsCell* cell;
-        cell = (OARoutingSettingsCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingSettingsCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingSettingsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingSettingsCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingSettingsCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    else if ([item[@"cell"] isEqualToString:[OAHomeWorkCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAHomeWorkCell *cell;
-        cell = (OAHomeWorkCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAHomeWorkCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAHomeWorkCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHomeWorkCell getCellIdentifier] owner:self options:nil];
             cell = (OAHomeWorkCell *)[nib objectAtIndex:0];
         }
         
@@ -1445,15 +1432,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
+    else if ([item[@"cell"] isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAMultiIconTextDescCell* cell;
-        cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             [cell setOverflowVisibility:YES];
         }
@@ -1468,13 +1453,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell updateConstraints];
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1488,15 +1472,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OADescrTitleIconCell"])
+    else if ([item[@"cell"] isEqualToString:[OADescrTitleIconCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OADescrTitleIconCell* cell;
-        cell = (OADescrTitleIconCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OADescrTitleIconCell *)[tableView dequeueReusableCellWithIdentifier:[OADescrTitleIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleIconCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleIconCell *)[nib objectAtIndex:0];
         }
         
@@ -1530,15 +1512,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAButtonCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1550,15 +1530,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
+    else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OARouteProgressBarCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteProgressBarCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteProgressBarCell getCellIdentifier] owner:self options:nil];
             cell = (OARouteProgressBarCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1566,15 +1544,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportRouteCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportRouteCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportRouteCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportRouteCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportRouteCell *)[nib objectAtIndex:0];
         }
         
@@ -1596,15 +1572,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportShieldCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportShieldCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportShieldCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportShieldCell *)[nib objectAtIndex:0];
         }
         
@@ -1624,7 +1598,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
         return nil;
     return indexPath;
 }
@@ -1746,15 +1720,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    if ([item[@"cell"] isEqualToString:[OAHomeWorkCell getCellIdentifier]])
         return 60.0;
-    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
         return 50.0;
-    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
-    else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
+    else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
         return 2.0;
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])
         return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
     return UITableViewAutomaticDimension;
 }
@@ -1762,9 +1736,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+    if ([item[@"cell"] isEqualToString:[OAPublicTransportRouteCell getCellIdentifier]])
         return 118.;
-    else if ([item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
         return 58.;
     
     return kEstimatedRowHeight;
@@ -1794,7 +1768,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = [self getTitleForSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     
     if (!title)
     {
@@ -1845,7 +1819,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute) && section == _data.count - 1)
     {
-        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
         NSAttributedString* res = _hasEmptyTransportRoute ? [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning];
         vw.label.attributedText = res;
         vw.label.delegate = self;

@@ -17,9 +17,8 @@
 #import "OASizes.h"
 #import "OAPOIFilterViewController.h"
 #import "OAColors.h"
-#import "OAMenuSimpleCell.h"
+#import "OASettingSwitchCell.h"
 
-#define kCellTypeTitleDescCollapse @"OAMenuSimpleCell"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
@@ -171,12 +170,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitleDescCollapse];
+    OASettingSwitchCell* cell;
+    cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescCollapse owner:self options:nil];
-        cell = (OAMenuSimpleCell *) nib[0];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
+        cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+        cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
     }
 
     if (cell)

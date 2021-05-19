@@ -21,8 +21,6 @@
 #include "OASizes.h"
 #include "OAColors.h"
 
-#define kHeaderId @"TableViewSectionHeader"
-#define kFooterId @"TableViewSectionFooter"
 #define kActiveMarkers @"activeMarkers"
 #define kOneActiveMarker @"oneActiveMarker"
 #define kTwoActiveMarkers @"twoActiveMarkers"
@@ -62,8 +60,8 @@
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 }
 
 - (void) viewWillLayoutSubviews
@@ -121,7 +119,7 @@
     EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
 
     [activeMarkersArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kOneActiveMarker,
                         @"value" : activeMarkers == ONE_ACTIVE_MARKER ? @YES : @NO,
@@ -133,7 +131,7 @@
                         }];
     
     [activeMarkersArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kTwoActiveMarkers,
                         @"value" : activeMarkers == TWO_ACTIVE_MARKERS ? @YES : @NO,
@@ -145,14 +143,14 @@
                         }];
 
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kDistanceIndication,
                         @"value" : @([_settings.distanceIndicationVisibility get]),
                         @"title" : OALocalizedString(@"distance_indication"),
                         }];
     
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kDistanceIndication,
                         @"key" : kTopBarDisplay,
                         @"value" : distanceIndication == TOP_BAR_DISPLAY ? @YES : @NO,
@@ -165,7 +163,7 @@
                         }];
     
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kDistanceIndication,
                         @"key" : kWidgetDisplay,
                         @"value" : distanceIndication == WIDGET_DISPLAY ? @YES : @NO,
@@ -178,14 +176,14 @@
                         }];
    
     [appearanceOnMapArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kArrowsOnMap,
                         @"value" : @([_settings.arrowsOnMap get]),
                         @"title" : OALocalizedString(@"arrows_on_map"),
                         }];
     
     [appearanceOnMapArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kLinesOnMap,
                         @"value" : @([_settings.directionLines get]),
                         @"title" : OALocalizedString(@"direction_lines"),
@@ -241,17 +239,15 @@
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OASettingsCheckmarkCell"])
+    if ([item[@"type"] isEqualToString:[OASettingsCheckmarkCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsCheckmarkCell";
-        OASettingsCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsCheckmarkCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCheckmarkCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsCheckmarkCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
         }
-        
         UIImage *fgImage = [UIImage templateImageNamed:item[@"fg_img"]];
         UIImage *bgImage = [UIImage templateImageNamed:item[@"bg_img"]];
         cell.iconImageView.image = [self drawImage:fgImage inImage:bgImage bgColor:item[@"bg_color"] fgColor:item[@"fg_color"]];
@@ -261,11 +257,10 @@
     }
     else
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -300,7 +295,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = [self getTitleForHeaderSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     if (!title)
     {
         vw.label.text = title;
@@ -334,7 +329,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     NSString *title = [self getTitleForFooterSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     vw.label.text = title;
     return vw;
 }

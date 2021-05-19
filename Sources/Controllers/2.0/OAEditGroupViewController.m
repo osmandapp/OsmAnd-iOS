@@ -13,7 +13,6 @@
 #import "OsmAndApp.h"
 #include "Localization.h"
 
-
 @implementation OAEditGroupViewController
 {
     NSArray* _groups;
@@ -93,13 +92,11 @@
 {
     if (indexPath.section == 0)
     {
-        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
-        
         OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -129,13 +126,11 @@
     }
     else
     {
-        static NSString* const reusableIdentifierPoint = @"OATextViewTableViewCell";
-        
         OATextViewTableViewCell* cell;
-        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextViewTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
         }
         

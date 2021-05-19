@@ -566,7 +566,7 @@
     float tm = [[NSDate date] timeIntervalSince1970];
     @try
     {
-        return parseRoutingConfigurationFromXml([[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String]);
+        return parseRoutingConfigurationFromXml([[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String], "");
     }
     @finally
     {
@@ -625,7 +625,7 @@
                     if (!isDir && [f.lastPathComponent hasSuffix:ROUTING_FILE_EXT])
                     {
                         NSString *fileName = fullPath.lastPathComponent;
-                        auto builder = parseRoutingConfigurationFromXml(fullPath.UTF8String);
+                        auto builder = parseRoutingConfigurationFromXml(fullPath.UTF8String, fullPath.lastPathComponent.UTF8String);
                         if (builder)
                         {
                             for (auto it = defaultAttributes.begin(); it != defaultAttributes.end(); ++it)

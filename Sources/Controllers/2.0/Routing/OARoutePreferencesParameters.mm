@@ -26,6 +26,9 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
+#import "OAIconTitleValueCell.h"
+#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 
 #include <generalRouter.h>
 
@@ -123,7 +126,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASwitchCell";
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -253,7 +256,7 @@
 
 - (NSString *)getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (UIImage *)getIcon
@@ -391,7 +394,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (OALocalRoutingParameter *) getSelected
@@ -470,7 +473,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -530,7 +533,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASwitchCell";
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -569,7 +572,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -624,7 +627,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -680,7 +683,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -715,7 +718,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (BOOL) isSelected
@@ -766,7 +769,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (BOOL) isSelected
@@ -818,7 +821,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath

@@ -23,7 +23,6 @@
 #import "OAProfileDataObject.h"
 #import "OAMenuSimpleCell.h"
 #import "OAMenuSimpleCellNoIcon.h"
-#import "OAMenuSimpleCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAMapSource.h"
 #import "OAIndexConstants.h"
@@ -39,11 +38,6 @@
 #import "OADestination.h"
 #import "OATileSource.h"
 #import "OAPOIHelper.h"
-
-#define kMenuSimpleCell @"OAMenuSimpleCell"
-#define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
-#define kCellTypeTitleDescription @"OAMenuSimpleCell"
-#define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
 
 @interface OAHeaderType : NSObject
 
@@ -153,7 +147,7 @@
 
 - (void) turnOnLoadingIndicator
 {
-    NSDictionary * loadingItem = @{@"cellType": kCellTypeWithActivity,
+    NSDictionary * loadingItem = @{@"cellType": [OAActivityViewWithTitleCell getCellIdentifier],
                                    @"label": OALocalizedString(@"shared_string_importing")};
     NSMutableArray *firstSection = [NSMutableArray arrayWithObject:loadingItem];
     _data = [NSArray arrayWithObject:firstSection];
@@ -316,7 +310,7 @@
                 OAHeaderType *header = (OAHeaderType *)currentItem;
                 item[@"label"] = header.title;
                 item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [header.title lowerCase]];
-                item[@"cellType"] = kMenuSimpleCellNoIcon;
+                item[@"cellType"] = [OAMenuSimpleCellNoIcon getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAApplicationModeBean.class])
             {
@@ -353,7 +347,7 @@
                 
                 item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
                 item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
-                item[@"cellType"] = kMenuSimpleCell;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAQuickAction.class])
             {
@@ -361,7 +355,7 @@
                 item[@"label"] = [action getName];
                 item[@"icon"] = [UIImage imageNamed:[action getIconResName]];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAPOIUIFilter.class])
             {
@@ -369,7 +363,7 @@
                 item[@"label"] = [filter getName];
                 item[@"icon"] = [OAPOIHelper getCustomFilterIcon:filter];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OATileSource.class])
             {
@@ -378,7 +372,7 @@
                 item[@"label"] = caption;
                 item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_map"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
                 item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
             }
             else if ([currentItem isKindOfClass:NSString.class])
@@ -418,14 +412,14 @@
                 }
                 item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
             {
                 item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_alert"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAFavoriteGroup.class])
             {
@@ -433,7 +427,7 @@
                 item[@"label"] = [OAFavoriteGroup getDisplayName:group.name];
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OADestination.class])
             {
@@ -441,7 +435,7 @@
                 item[@"label"] = marker.desc;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_marker"];
                 item[@"description"] = @"";
-                item[@"cellType"] = kCellTypeTitleDescription;
+                item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
             }
             NSDictionary *newDict = [NSDictionary dictionaryWithDictionary:item];
             [sectionData addObject:newDict];
@@ -540,14 +534,13 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"cellType"];
 
-    if ([type isEqualToString:kMenuSimpleCellNoIcon])
+    if ([type isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
     {
-        static NSString* const identifierCell = kMenuSimpleCellNoIcon;
         OAMenuSimpleCellNoIcon* cell;
-        cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMenuSimpleCellNoIcon owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
         }
@@ -556,14 +549,13 @@
         cell.descriptionView.text = item[@"description"];
         return cell;
     }
-    else if ([type isEqualToString:kMenuSimpleCell])
+    else if ([type isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kMenuSimpleCell;
         OAMenuSimpleCell* cell;
-        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMenuSimpleCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 70., 0.0, 0.0);
         }
@@ -592,14 +584,13 @@
             [cell updateConstraints];
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeTitleDescription])
+    else if ([type isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitleDescription;
         OAMenuSimpleCell* cell;
-        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitleDescription owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 70., 0.0, 0.0);
             cell.descriptionView.hidden = YES;
@@ -618,13 +609,12 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeWithActivity])
+    else if ([type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeWithActivity;
-        OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAActivityViewWithTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAActivityViewWithTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OAActivityViewWithTitleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;

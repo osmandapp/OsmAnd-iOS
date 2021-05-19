@@ -105,19 +105,19 @@
     NSMutableArray *arr = [NSMutableArray array];
     BOOL shouldDelete = ((OAOsmPoint *)_osmPoints.firstObject).getAction == DELETE;
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderCell",
+                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : shouldDelete ? OALocalizedString(@"osm_confirm_delete") : OALocalizedString(@"osm_confirm_upload"),
                      @"description" : @""
                      }];
     NSString *message = !_messageText || _messageText.length == 0 ? [self generateMessage] : _messageText;
     [arr addObject:@{
-                     @"type" : @"OATextInputFloatingCell",
+                     @"type" : [OATextInputFloatingCell getCellIdentifier],
                      @"name" : @"osm_message",
                      @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:message roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                      }];
     
     [arr addObject:@{
-                     @"type" : @"OASwitchCell",
+                     @"type" : [OASwitchTableViewCell getCellIdentifier],
                      @"name" : @"close_changeset",
                      @"title" : OALocalizedString(@"osm_close_changeset"),
                      @"value" : @(_closeChangeset)
@@ -125,17 +125,17 @@
     
     
     
-    [arr addObject:@{ @"type" : @"OADividerCell" } ];
+    [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     OAAppSettings *settings = [OAAppSettings sharedManager];
     
     [arr addObject:@{
-                     @"type" : @"OATextInputFloatingCell",
+                     @"type" : [OATextInputFloatingCell getCellIdentifier],
                      @"name" : @"osm_user",
                      @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_name") text:settings.osmUserName.get roundedCorners:UIRectCornerTopLeft | UIRectCornerTopRight hideUnderline:NO floatingTextFieldControllers:_floatingTextFieldControllers]
                      }];
     
     [arr addObject:@{
-                     @"type" : @"OATextInputFloatingCell",
+                     @"type" : [OATextInputFloatingCell getCellIdentifier],
                      @"name" : @"osm_pass",
                      @"cell" : [OAOsmNoteBottomSheetViewController getPasswordCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword.get roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                      }];
@@ -273,15 +273,15 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 16.0, 0.0)];
     }
-    else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
-    else if ([item[@"type"] isEqualToString:@"OASwitchCell"] || [item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -307,13 +307,12 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
@@ -322,13 +321,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    else if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderCell";
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -341,15 +339,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OASwitchCell"])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -365,7 +361,7 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         return item[@"cell"];
     }
@@ -428,7 +424,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:@"OASwitchCell"])
+    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
         return indexPath;
     else
         return nil;
@@ -437,7 +433,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         OATextInputFloatingCell *cell = item[@"cell"];
         EOATextInputBottomSheetType type = [item[@"name"] isEqualToString:@"osm_message"] ?

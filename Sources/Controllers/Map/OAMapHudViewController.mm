@@ -709,7 +709,7 @@
     else
     {
         BOOL isNight = [OAAppSettings sharedManager].nightMode;
-        return isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+        return isNight || [_topCoordinatesWidget isVisible] ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     }
 }
 

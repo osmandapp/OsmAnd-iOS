@@ -21,7 +21,7 @@
     
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OAColorsCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAColorsCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OAColorsCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -44,9 +44,8 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAColorsCollectionViewCell";
     OAColorsCollectionViewCell* cell = nil;
-    cell = (OAColorsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+    cell = (OAColorsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     
     int color = [_dataArray[indexPath.row] intValue];
     cell.colorView.backgroundColor = UIColorFromRGB(color);

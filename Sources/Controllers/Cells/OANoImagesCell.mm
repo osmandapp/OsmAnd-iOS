@@ -9,8 +9,6 @@
 #import "OANoImagesCell.h"
 
 @implementation OANoImagesCell
-{
-}
 
 - (void) awakeFromNib
 {

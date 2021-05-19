@@ -14,7 +14,6 @@
 #import "OAAutoObserverProxy.h"
 #import "MGSwipeButton.h"
 #import "OAUtilities.h"
-#import "OADestinationCell.h"
 #import "OARootViewController.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
@@ -101,10 +100,10 @@
 - (UITableViewCell *)cellForRow:(NSInteger)row
 {
     OADirectionTableViewCell* cell;
-    cell = (OADirectionTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OADirectionTableViewCell"];
+    cell = (OADirectionTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OADirectionTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADirectionCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADirectionTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OADirectionTableViewCell *)[nib objectAtIndex:0];
     }
     

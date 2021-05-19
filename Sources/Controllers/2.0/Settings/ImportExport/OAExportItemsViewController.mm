@@ -14,6 +14,7 @@
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
 #import "OATableViewCustomHeaderView.h"
+#import "OAProgressTitleCell.h"
 
 #define kHeaderId @"TableViewSectionHeader"
 
@@ -74,9 +75,10 @@
     if (_exportStarted)
     {
         OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
-        group.type = @"OAProgressTitleCell";
+        group.type = [OAProgressTitleCell getCellIdentifier];
         group.groupName = OALocalizedString(@"preparing_file");
         self.data = @[group];
+        self.additionalNavBarButton.hidden = YES;
         return;
     }
     self.itemsMap = [_settingsHelper getSettingsByCategory:YES];

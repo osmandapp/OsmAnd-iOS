@@ -15,10 +15,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeTitle @"OASettingsCell"
-#define kCellTypeSwitch @"OASwitchCell"
-#define kCellTypeCheck @"OAMultiIconTextDescCell"
-
 @interface OAGlobalSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -97,21 +93,21 @@
                 @"value" : _settings.defaultApplicationMode.get.toHumanString,
                 @"description" : OALocalizedString(@"default_profile_descr"),
                 @"img" : @"menu_cell_pointer.png",
-                @"type" : kCellTypeTitle },
+                @"type" : [OASettingsTableViewCell getCellIdentifier] },
                 @{
                 @"name" : @"do_not_show_discount",
                 @"title" : OALocalizedString(@"do_not_show_discount"),
                 @"description" : OALocalizedString(@"do_not_show_discount_desc"),
                 @"value" : @(_settings.settingDoNotShowPromotions.get),
                 @"img" : @"menu_cell_pointer.png",
-                @"type" : kCellTypeSwitch },
+                @"type" : [OASwitchTableViewCell getCellIdentifier] },
                 @{
                 @"name" : @"do_not_send_anonymous_data",
                 @"title" : OALocalizedString(@"send_anonymous_data"),
                 @"description" : OALocalizedString(@"send_anonymous_data_desc"),
                 @"value" : @(_settings.settingUseAnalytics.get),
                 @"img" : @"menu_cell_pointer.png",
-                @"type" : kCellTypeSwitch, }, nil
+                @"type" : [OASwitchTableViewCell getCellIdentifier], }, nil
             ];
             _data = [NSArray arrayWithArray:arr];
             break;
@@ -125,7 +121,7 @@
                     @"name" : mode.toHumanString,
                     @"descr" : mode.stringKey,
                     @"isSelected" : @(_settings.defaultApplicationMode.get == mode),
-                    @"type" : kCellTypeCheck }];
+                    @"type" : [OAMultiIconTextDescCell getCellIdentifier] }];
             }
             _data = [NSArray arrayWithArray:arr];
             break;
@@ -153,13 +149,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = [self getItem:indexPath];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeTitle])
+    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
@@ -173,13 +168,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeSwitch])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSwitch;
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -193,13 +187,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeCheck])
+    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeCheck;
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
             [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_checkmark_default"] forState:UIControlStateNormal];

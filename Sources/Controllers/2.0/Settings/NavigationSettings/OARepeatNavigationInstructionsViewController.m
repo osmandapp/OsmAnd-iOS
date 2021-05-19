@@ -17,8 +17,6 @@
 
 #define kSidePadding 16
 #define kDistanceSection 1
-#define kCellTypeDistance @"time_cell"
-#define kCellTypePicker @"pickerCell"
 
 @interface OARepeatNavigationInstructionsViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
 
@@ -81,7 +79,7 @@
     NSMutableArray *distanceArr = [NSMutableArray array];
     BOOL isManualAnnunce = [_settings.keepInforming get:self.appMode] == 0;
     [statusArr addObject:@{
-        @"type" : @"OASwitchCell",
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"only_manually"),
         @"isOn" : @(isManualAnnunce),
     }];
@@ -89,11 +87,11 @@
     if (!isManualAnnunce)
     {
         [distanceArr addObject:@{
-            @"type" : kCellTypeDistance,
+            @"type" : [OATimeTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"repeat_after"),
         }];
         [distanceArr addObject:@{
-            @"type" : kCellTypePicker,
+            @"type" : [OACustomPickerTableViewCell getCellIdentifier],
         }];
         [tableData addObject:distanceArr];
     }
@@ -106,13 +104,13 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASwitchCell"])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchCell";
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -125,14 +123,13 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeDistance])
+    else if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -142,14 +139,13 @@
 
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePicker])
+    else if ([cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
         OACustomPickerTableViewCell* cell;
-        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _keepInformingEntries;
@@ -185,7 +181,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kCellTypeDistance])
+    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
 

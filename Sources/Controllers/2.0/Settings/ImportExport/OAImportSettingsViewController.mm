@@ -14,13 +14,12 @@
 #import "OsmAndApp.h"
 #import "OASettingsCategoryItems.h"
 #import "OAExportSettingsCategory.h"
+#import "OAProgressTitleCell.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #include <OsmAndCore/ArchiveReader.h>
-
-#define kCellTypeProgress @"OAProgressTitleCell"
 
 @implementation OAImportSettingsViewController
 {
@@ -89,7 +88,7 @@
     else
     {
         OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
-        group.type = kCellTypeProgress;
+        group.type = [OAProgressTitleCell getCellIdentifier];
         group.groupName = OALocalizedString(@"reading_file");
         self.data = @[group];
     }

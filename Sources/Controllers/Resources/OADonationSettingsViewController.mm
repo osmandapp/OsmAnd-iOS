@@ -118,27 +118,27 @@
 
     if (_settingsType == EDonationSettingsScreenMain)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
         _donationSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         _donationSwitch.textView.numberOfLines = 0;
         _donationSwitch.textView.text = OALocalizedString(@"osmand_live_donation_switch_title");
         _donationSwitch.switchView.on = _donation;
         [_donationSwitch.switchView addTarget:self action:@selector(donationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
         _hideNameSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         _hideNameSwitch.textView.numberOfLines = 0;
         _hideNameSwitch.textView.text = OALocalizedString(@"osm_live_hide_user_name");
         _hideNameSwitch.switchView.on = _settings.billingHideUserName;
         
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
         _emailCell = (OATextInputCell *)[nib objectAtIndex:0];
         _emailCell.inputField.text = _settings.billingUserEmail;
         _emailCell.inputField.placeholder = OALocalizedString(@"osmand_live_donations_enter_email");
         _emailCell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
         _emailCell.inputField.delegate = self;
 
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
         _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
         _userNameCell.inputField.text = _settings.billingUserName;
         _userNameCell.inputField.placeholder = OALocalizedString(@"osmand_live_public_name");
@@ -530,13 +530,11 @@
     }
     else if ([type isEqualToString:kCellTypeSingleSelectionList])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -557,13 +555,11 @@
     }
     else if ([type isEqualToString:kCellTypeCheck])
     {
-        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
         OASettingsTitleTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
         }
         

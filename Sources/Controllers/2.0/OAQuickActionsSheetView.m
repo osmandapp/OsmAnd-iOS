@@ -23,8 +23,6 @@
 #define kMargin 16.0
 #define kButtonSpacing 13.0
 
-#define kActionCellIdentifier @"OAQuickActionCell"
-
 @interface OAQuickActionsSheetView () <UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topSliderView;
@@ -265,8 +263,8 @@
 
 - (void) registerSupportedNibs
 {
-    [_collectionView registerNib:[UINib nibWithNibName:kActionCellIdentifier bundle:nil]
-      forCellWithReuseIdentifier:kActionCellIdentifier];
+    [_collectionView registerNib:[UINib nibWithNibName:[OAQuickActionCell getCellIdentifier] bundle:nil]
+      forCellWithReuseIdentifier:[OAQuickActionCell getCellIdentifier]];
 }
 
 - (void) setupButton:(UIButton *)button active:(BOOL)active title:(NSString *)title
@@ -526,10 +524,10 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kActionCellIdentifier forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAQuickActionCell getCellIdentifier] forIndexPath:indexPath];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kActionCellIdentifier owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAQuickActionCell getCellIdentifier] owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
     if (cell && [cell isKindOfClass:OAQuickActionCell.class])

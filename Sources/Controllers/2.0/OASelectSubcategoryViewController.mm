@@ -16,9 +16,6 @@
 #import "OAColors.h"
 #import "OAPOIUIFilter.h"
 
-#define kCellTypeSelectionButton @"OACustomSelectionButtonCell"
-#define kCellTypeTitle @"OAMenuSimpleCell"
-
 @interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, OAMultiselectableHeaderDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
@@ -162,13 +159,13 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cellType = indexPath.row == 0 ? kCellTypeSelectionButton : kCellTypeTitle;
-    if ([cellType isEqualToString:kCellTypeSelectionButton])
+    NSString *cellType = indexPath.row == 0 ? [OACustomSelectionButtonCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
+    if ([cellType isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
     {
-        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeSelectionButton];
+        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeSelectionButton owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionButtonCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);
@@ -198,12 +195,12 @@
             return cell;
         }
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellTypeTitle];
+        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeTitle owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
             cell.tintColor = UIColorFromRGB(color_primary_purple);
@@ -236,7 +233,7 @@
     }
     return nil;
 }
-
+ 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row > 0)

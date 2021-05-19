@@ -13,7 +13,6 @@
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OATitleRightIconCell.h"
-#import "OATextViewTableViewCell.h"
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OASettingsTableViewCell.h"
 #import "OAColorsTableViewCell.h"
@@ -37,17 +36,6 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
-
-#define kTextFieldCell @"OATextViewTableViewCell"
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
-#define kCellTypeTitle @"OASettingsCell"
-#define kCellTypeColorCollection @"colorCollectionCell"
-#define kCellTypeIconCollection @"iconCollectionCell"
-#define kCellTypePoiCollection @"poiCollectionCell"
-#define kFolderCardsCell @"OAFolderCardsCell"
-#define kHeaderId @"TableViewSectionHeader"
-#define kPoiTableViewCell @"OAPoiTableViewCell"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -347,21 +335,21 @@
     NSMutableArray *section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"name_and_descr"),
-        @"type" : kTextInputFloatingCellWithIcon,
+        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
         @"title" : self.name,
         @"hint" : OALocalizedString(@"fav_name"),
         @"isEditable" : [NSNumber numberWithBool:![self.favorite isSpecialPoint]],
         @"key" : kNameKey
     }];
     [section addObject:@{
-        @"type" : kTextInputFloatingCellWithIcon,
+        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
         @"title" : self.desc,
         @"hint" : OALocalizedString(@"description"),
         @"isEditable" : @YES,
         @"key" : kDescKey
     }];
     [section addObject:@{
-        @"type" : kTextInputFloatingCellWithIcon,
+        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
         @"title" : self.address,
         @"hint" : OALocalizedString(@"shared_string_address"),
         @"isEditable" : @YES,
@@ -372,7 +360,7 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"fav_group"),
-        @"type" : kCellTypeTitle,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"select_group"),
         @"value" : self.groupTitle,
         @"key" : kSelectGroupKey
@@ -383,7 +371,7 @@
     if (selectedGroupIndex < 0)
         selectedGroupIndex = 0;
     [section addObject:@{
-        @"type" : kFolderCardsCell,
+        @"type" : [OAFolderCardsCell getCellIdentifier],
         @"selectedValue" : [NSNumber numberWithInteger:selectedGroupIndex],
         @"values" : _groupNames,
         @"sizes" : _groupSizes,
@@ -397,7 +385,7 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"map_settings_appearance"),
-        @"type" : kCellTypePoiCollection,
+        @"type" : [OAPoiTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"icon"),
         @"value" : @"",
         @"selectedCategoryName" : _selectedIconCategoryName,
@@ -409,7 +397,7 @@
     _poiIconRowIndex = section.count - 1;
     
     [section addObject:@{
-        @"type" : kCellTypeColorCollection,
+        @"type" : [OAColorsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"fav_color"),
         @"value" : _selectedColor.name,
         @"index" : [NSNumber numberWithInteger:_selectedColorIndex],
@@ -417,7 +405,7 @@
     _colorRowIndex = section.count - 1;
     
     [section addObject:@{
-        @"type" : kCellTypeIconCollection,
+        @"type" : [OAShapesTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"shape"),
         @"value" : OALocalizedString(_backgroundIconNames[_selectedBackgroundIndex]),
         @"index" : [NSNumber numberWithInteger:_selectedBackgroundIndex],
@@ -433,7 +421,7 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"actions").upperCase,
-        @"type" : kCellTypeAction,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"title" : OALocalizedString(@"fav_replace"),
         @"img" : @"ic_custom_replace",
         @"color" : UIColorFromRGB(color_primary_purple),
@@ -442,7 +430,7 @@
     if (!_isNewItemAdding)
     {
         [section addObject:@{
-            @"type" : kCellTypeAction,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_delete"),
             @"img" : @"ic_custom_remove_outlined",
             @"color" : UIColorFromRGB(color_primary_red),
@@ -461,7 +449,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.doneButton.hidden = NO;
     
     [self updateHeaderIcon];
@@ -727,13 +715,13 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:kTextInputFloatingCellWithIcon])
+    if ([cellType isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         OATextInputFloatingCellWithIcon *resultCell = nil;
-        resultCell = [self.tableView dequeueReusableCellWithIdentifier:kTextInputFloatingCellWithIcon];
+        resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OATextInputFloatingCellWithIcon getCellIdentifier]];
         if (resultCell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputFloatingCellWithIcon owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCellWithIcon getCellIdentifier] owner:self options:nil];
             resultCell = (OATextInputFloatingCellWithIcon *)[nib objectAtIndex:0];
             resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -780,13 +768,12 @@
         
         return resultCell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
@@ -802,14 +789,13 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePoiCollection])
+    else if ([cellType isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kPoiTableViewCell;
         OAPoiTableViewCell *cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAPoiTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kPoiTableViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPoiTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAPoiTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.cellIndex = indexPath;
@@ -833,14 +819,13 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeColorCollection])
+    else if ([cellType isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAColorsTableViewCell";
         OAColorsTableViewCell *cell = nil;
-        cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorsTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAColorsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _colors;
             cell.delegate = self;
@@ -859,14 +844,13 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconCollection])
+    else if ([cellType isEqualToString:[OAShapesTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAShapesTableViewCell";
         OAShapesTableViewCell *cell = nil;
-        cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAShapesTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAShapesTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAShapesTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAShapesTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAShapesTableViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -887,13 +871,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeAction])
+    else if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -904,13 +887,12 @@
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
-    else if ([cellType isEqualToString:kFolderCardsCell])
+    else if ([cellType isEqualToString:[OAFolderCardsCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kFolderCardsCell;
-        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFolderCardsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFolderCardsCell getCellIdentifier] owner:self options:nil];
             cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
@@ -931,12 +913,12 @@
  {
      NSDictionary *item = _data[indexPath.section][indexPath.row];
      NSString *type = item[@"type"];
-     if ([type isEqualToString:kFolderCardsCell])
+     if ([type isEqualToString:[OAFolderCardsCell getCellIdentifier]])
      {
          OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
          [folderCell updateContentOffset];
      }
-     else if ([type isEqualToString:kCellTypePoiCollection])
+     else if ([type isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
      {
          OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
          [poiCell updateContentOffset];
@@ -952,7 +934,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.textColor = UIColorFromRGB(color_text_footer);
     vw.label.text = [title upperCase];
     vw.label.userInteractionEnabled = NO;
@@ -1005,7 +987,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kTextInputFloatingCellWithIcon])
+    if ([cellType isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         NSString *key = item[@"key"];
         NSString *text;

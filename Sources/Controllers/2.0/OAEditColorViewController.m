@@ -13,8 +13,6 @@
 #import "OsmAndApp.h"
 #include "Localization.h"
 
-#define kCellTypeCheck @"OAIconTextCell"
-
 @implementation OAEditColorViewController
 
 - (id) initWithColor:(UIColor *)color
@@ -86,13 +84,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierPoint = @"OAViewTextTableViewCell";
-    
     OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeCheck owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
     }
     

@@ -16,6 +16,9 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAMapStyleTitles.h"
 #import "OAQuickActionType.h"
+#import "OAButtonCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATitleDescrDraggableCell.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -172,7 +175,7 @@ static OAQuickActionType *TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
@@ -189,14 +192,14 @@ static OAQuickActionType *TYPE;
         NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [_offlineMapSources[source].resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
         
         [arr addObject:@{
-                         @"type" : @"OATitleDescrDraggableCell",
+                         @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : source,
                          @"img" : imgName ? imgName : @"ic_custom_show_on_map"
                          }];
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"add_map_style"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addMapStyle"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_styles")];
@@ -213,7 +216,7 @@ static OAQuickActionType *TYPE;
         {
             if ([item[@"key"] isEqualToString:KEY_DIALOG])
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
-            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+            else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                      [sources addObject:item[@"title"]];
         }
     }

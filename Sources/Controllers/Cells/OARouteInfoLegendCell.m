@@ -11,8 +11,6 @@
 #import <Charts/Charts-Swift.h>
 
 @implementation OARouteInfoLegendCell
-{
-}
 
 - (void)awakeFromNib {
     [super awakeFromNib];

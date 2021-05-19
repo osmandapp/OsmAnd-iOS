@@ -32,13 +32,6 @@
 
 #include "Localization.h"
 
-#define kRowNameCell @"OATextViewTableViewCell"
-#define kRowColorCell @"OAColorViewCell"
-#define kRowGroupCell @"OAIconTitleValueCell"
-#define kRowDescriptionCell @"OATextMultiViewCell"
-#define kRowWaypointsCell @"OATargetInfoCollapsableViewCell"
-#define kRowCoordinatesCell @"OATargetInfoCollapsableCoordinatesViewCell"
-
 @interface OAEditTargetViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAEditDescriptionViewControllerDelegate, UITextFieldDelegate>
 
 @end
@@ -398,7 +391,7 @@
     if ([self hasDescription])
     {
         [_data addObject:@{
-            @"type" : kRowDescriptionCell,
+            @"type" : [OATextMultiViewCell getCellIdentifier],
             @"label" : self.desc,
             @"placeholder" : OALocalizedString(@"enter_description"),
         }];
@@ -407,7 +400,7 @@
     if ([self isKindOfClass:OAFavoriteViewController.class])
     {
         [_data addObject:@{
-            @"type" : kRowWaypointsCell,
+            @"type" : [OATargetInfoCollapsableViewCell getCellIdentifier],
             @"label" : self.groupTitle,
             @"description" : OALocalizedString(@"all_group_points"),
             @"iconName" : @"ic_custom_folder",
@@ -421,7 +414,7 @@
             groupName = [((OAGPXWptViewController *)self) getGpxFileName];
         
         [_data addObject:@{
-            @"type" : kRowWaypointsCell,
+            @"type" : [OATargetInfoCollapsableViewCell getCellIdentifier],
             @"label" : groupName ? groupName : @"",
             @"description" : OALocalizedString(@"all_group_points"),
             @"iconName" : @"ic_custom_folder",
@@ -430,7 +423,7 @@
     }
     
     [_data addObject:@{
-        @"type" : kRowCoordinatesCell,
+        @"type" : [OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier],
         @"lat" : [NSNumber numberWithFloat:self.location.latitude],
         @"lon" : [NSNumber numberWithFloat:self.location.longitude]
     }];
@@ -623,13 +616,13 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kRowNameCell])
+    if ([item[@"type"] isEqualToString:[OATextViewTableViewCell getCellIdentifier]])
     {
         OATextViewTableViewCell* cell;
-        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowNameCell];
+        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextViewTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -646,13 +639,13 @@
             return cell;
         }
     }
-    else if ([item[@"type"] isEqualToString:kRowColorCell])
+    else if ([item[@"type"] isEqualToString:[OAColorViewCell getCellIdentifier]])
     {
         OAColorViewCell* cell;
-        cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowColorCell];
+        cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAColorViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAColorViewCell *)[nib objectAtIndex:0];
         }
         OAFavoriteColor *favCol = item[@"color"];
@@ -663,13 +656,13 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kRowGroupCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         OAIconTitleValueCell* cell;
-        cell = (OAIconTitleValueCell *)[tableView dequeueReusableCellWithIdentifier:kRowGroupCell];
+        cell = (OAIconTitleValueCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleValueCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         
@@ -679,13 +672,13 @@
         cell.backgroundColor = UIColorFromRGB(0xffffff);
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+    else if ([item[@"type"] isEqualToString:[OATextMultiViewCell getCellIdentifier]])
     {
         OATextMultiViewCell* cell;
-        cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:kRowDescriptionCell];
+        cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextMultiViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextMultiViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultiViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
         }
         
@@ -717,13 +710,13 @@
         cell.backgroundColor = UIColorFromRGB(0xffffff);
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableViewCell getCellIdentifier]])
     {
         OATargetInfoCollapsableViewCell* cell;
-        cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:kRowWaypointsCell];
+        cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATargetInfoCollapsableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kRowWaypointsCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoCollapsableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
         }
         cell.iconView.contentMode = UIViewContentModeCenter;
@@ -739,14 +732,14 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]])
     {
         OATargetInfoCollapsableCoordinatesViewCell* cell;
-        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:kRowCoordinatesCell];
+        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]];
         
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kRowCoordinatesCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
         }
         
@@ -777,11 +770,11 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+    if ([item[@"type"] isEqualToString:[OATextMultiViewCell getCellIdentifier]])
         return _descHeight;
-    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableViewCell getCellIdentifier]])
         return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
-    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]])
         return 48. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height + 16.);
     else
         return UITableViewAutomaticDimension;
@@ -792,24 +785,24 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:kRowNameCell])
+    if ([item[@"type"] isEqualToString:[OATextViewTableViewCell getCellIdentifier]])
     {
     }
-    else if ([item[@"type"] isEqualToString:kRowColorCell])
+    else if ([item[@"type"] isEqualToString:[OAColorViewCell getCellIdentifier]])
     {
         if ([self supportEditing])
             [self changeColorClicked];
     }
-    else if ([item[@"type"] isEqualToString:kRowGroupCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         if ([self supportEditing])
             [self changeGroupClicked];
     }
-    else if ([item[@"type"] isEqualToString:kRowDescriptionCell])
+    else if ([item[@"type"] isEqualToString:[OATextMultiViewCell getCellIdentifier]])
     {
         [self changeDescriptionClicked];
     }
-    else if ([item[@"type"] isEqualToString:kRowWaypointsCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableViewCell getCellIdentifier]])
     {
         UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
         if ([cell isKindOfClass:OATargetInfoCollapsableViewCell.class])
@@ -821,7 +814,7 @@
             [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
-    else if ([item[@"type"] isEqualToString:kRowCoordinatesCell])
+    else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]])
     {
         UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
         if ([cell isKindOfClass:OATargetInfoCollapsableCoordinatesViewCell.class])

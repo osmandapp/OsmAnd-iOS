@@ -72,6 +72,24 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface UITableViewCell (util)
+
++ (NSString *) getCellIdentifier;
+
+@end
+
+@interface UICollectionViewCell (util)
+
++ (NSString *) getCellIdentifier;
+
+@end
+
+@interface UITableViewHeaderFooterView (util)
+
++ (NSString *) getCellIdentifier;
+
+@end
+
 @interface UIColor (util)
 
 - (NSString *) toHexString;

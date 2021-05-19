@@ -47,20 +47,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-#define kTextInputCell @"OATextInputCell"
-#define kCellTypeSwitch @"OASwitchTableViewCell"
-#define kTextInputIconCell @"OATextInputIconCell"
-#define kIconTitleValueCell @"OAIconTitleValueCell"
-#define kBottomSheetActionCell @"OAMenuSimpleCell"
-#define kButtonCell @"OAButtonCell"
-#define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
-#define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
-#define kMultilineTextViewCell @"OAMultilineTextViewCell"
-
 #define KEY_MESSAGE @"message"
-
-#define kFooterId @"TableViewSectionFooter"
-#define kHeaderId @"TableViewSectionHeader"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
@@ -114,8 +101,8 @@
     [self.tableView setEditing:YES];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     self.tableView.allowsSelectionDuringEditing = YES;
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     
     [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
@@ -145,7 +132,7 @@
 {
     MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
     [dataModel setObject:@[@{
-                           @"type" : kTextInputCell,
+                           @"type" : [OATextInputCell getCellIdentifier],
                            @"title" : _action.getName
                            }] forKey:OALocalizedString(@"quick_action_name_str")];
     
@@ -221,10 +208,10 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     OATextInputFloatingCellWithIcon *resultCell = nil;
-    resultCell = [self.tableView dequeueReusableCellWithIdentifier:kTextInputFloatingCellWithIcon];
+    resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OATextInputFloatingCellWithIcon getCellIdentifier]];
     if (resultCell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputFloatingCellWithIcon owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCellWithIcon getCellIdentifier] owner:self options:nil];
         resultCell = (OATextInputFloatingCellWithIcon *)[nib objectAtIndex:0];
     }
     if (item[@"img"] && ![item[@"img"] isEqualToString:@""]) {
@@ -354,7 +341,7 @@
     NSMutableArray *arr = [NSMutableArray new];
     for (NSDictionary *item in _data[_data.allKeys.lastObject])
     {
-        if (![item[@"type"] isEqualToString:kButtonCell])
+        if (![item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
             [arr addObject:item[@"title"]];
     }
     return arr;
@@ -420,13 +407,13 @@
         NSDictionary *buttonModel = arr.lastObject;
         [arr removeLastObject];
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCellWithIcon",
+                         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                          @"hint" : OALocalizedString(@"osm_tag"),
                          @"title" : @"",
                          @"img" : @"ic_custom_delete"
                          }];
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCellWithIcon",
+                         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                          @"hint" : OALocalizedString(@"osm_value"),
                          @"title" : @"",
                          @"img" : @""
@@ -467,7 +454,7 @@
         poiTypeSelection.delegate = self;
         [self.navigationController pushViewController:poiTypeSelection animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:kTextInputFloatingCellWithIcon])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         if ([cell canBecomeFirstResponder])
@@ -481,12 +468,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kTextInputCell])
+    if ([item[@"type"] isEqualToString:[OATextInputCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:kTextInputCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
         }
         
@@ -506,15 +493,13 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -528,12 +513,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTextInputIconCell])
+    else if ([item[@"type"] isEqualToString:[OATextInputIconCell getCellIdentifier]])
     {
-        OATextInputIconCell* cell = [tableView dequeueReusableCellWithIdentifier:kTextInputIconCell];
+        OATextInputIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputIconCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputIconCell *)[nib objectAtIndex:0];
         }
         
@@ -553,13 +538,12 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kIconTitleValueCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleValueCell;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleValueCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -588,15 +572,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
+    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetActionCell;
         OAMenuSimpleCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         }
         
@@ -619,15 +601,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kButtonCell])
+    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kButtonCell;
-        OAButtonCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -639,12 +618,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleDescrDraggableCell])
+    else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
     {
-        OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:kTitleDescrDraggableCell];
+        OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:[OATitleDescrDraggableCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleDescrDraggableCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescrDraggableCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescrDraggableCell *)[nib objectAtIndex:0];
         }
         
@@ -669,16 +648,16 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTextInputFloatingCellWithIcon])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         return [self getInputCellWithHint:indexPath];
     }
-    else if ([item[@"type"] isEqualToString:kMultilineTextViewCell])
+    else if ([item[@"type"] isEqualToString:[OAMultilineTextViewCell getCellIdentifier]])
     {
-        OAMultilineTextViewCell* cell = (OAMultilineTextViewCell *)[tableView dequeueReusableCellWithIdentifier:kMultilineTextViewCell];
+        OAMultilineTextViewCell* cell = (OAMultilineTextViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultilineTextViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMultilineTextViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultilineTextViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultilineTextViewCell *)[nib objectAtIndex:0];
         }
         
@@ -724,7 +703,7 @@
     else if (!text)
         text = @"";
     
-    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     if (url)
     {
         NSURL *URL = [NSURL URLWithString:url];
@@ -750,7 +729,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = _data.allKeys[section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = nil;
     
     if ([title hasPrefix:kSectionNoName])
@@ -786,7 +765,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kBottomSheetActionCell] || [item[@"type"] isEqualToString:kTitleDescrDraggableCell])
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
         return YES;
     return NO;
 }
@@ -828,7 +807,7 @@
     NSMutableArray *titles = [NSMutableArray new];
     for (NSDictionary *item in items)
     {
-        if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+        if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
             [titles addObject:item[@"title"]];
     }
     return [NSArray arrayWithArray:titles];
@@ -864,7 +843,7 @@
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    return [item[@"type"] isEqualToString:kTitleDescrDraggableCell];;
+    return [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]];;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
@@ -1015,7 +994,7 @@
             [newItems addObject:@{
                                   @"title" : filter.getName,
                                   @"value" : filter.filterId,
-                                  @"type" : @"OAMenuSimpleCell",
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier],
                                   @"img" : iconId
                                   }];
             [titles addObject:filter.getName];
@@ -1026,7 +1005,7 @@
             [newItems addObject:@{
                                   @"title" : filter.nameLocalized,
                                   @"value" : [STD_PREFIX stringByAppendingString:filter.name],
-                                  @"type" : @"OAMenuSimpleCell",
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier],
                                   @"img" : filter.name
                                   }];
             [titles addObject:filter.nameLocalized];
@@ -1051,7 +1030,7 @@
     for (NSDictionary *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item[@"name"],
                               @"img" : item[@"img"]
                               }];
@@ -1086,7 +1065,7 @@
     for (NSArray *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item.lastObject,
                               @"value" : item.firstObject,
                               @"img" : @"ic_custom_map_style"
@@ -1111,7 +1090,7 @@
     for (NSDictionary *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item[@"name"],
                               @"stringKey" : item[@"stringKey"],
                               @"img" : item[@"img"],

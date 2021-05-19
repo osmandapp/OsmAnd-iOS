@@ -13,8 +13,6 @@
 #define urlTextMargin 32
 
 @implementation OAImageCardCell
-{
-}
 
 - (void) awakeFromNib
 {

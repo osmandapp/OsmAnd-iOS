@@ -26,9 +26,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
-#define kCellTypeIconText @"OAIconTextCell"
-#define kCellTypeTitle @"OASettingsTitleCell"
+#define kOsmAndNavigation @"osmand_navigation"
 
 @interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -79,38 +77,38 @@
     NSMutableArray *navigationArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"nav_type_title"),
         @"value" : routingData ? routingData.name : @"",
         @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
         @"key" : @"navigationType",
     }];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"route_parameters"),
         @"icon" : @"ic_custom_route",
         @"key" : @"routeParams",
     }];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"voice_announces"),
         @"icon" : @"ic_custom_sound",
         @"key" : @"voicePrompts",
     }];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"screen_alerts"),
         @"icon" : @"ic_custom_alert",
         @"key" : @"screenAlerts",
     }];
     [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"vehicle_parameters"),
         @"icon" : self.appMode.getIconName,
         @"key" : @"vehicleParams",
     }];
     [otherArr addObject:@{
-        @"type" : kCellTypeTitle,
+        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_during_navigation"),
         @"key" : @"mapBehavior",
     }];
@@ -140,13 +138,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeIconTitleValue])
+    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
@@ -162,13 +159,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconText])
+    else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconText;
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
         }
@@ -182,13 +178,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
+    else if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;

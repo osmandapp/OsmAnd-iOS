@@ -21,6 +21,9 @@
 #import "OrderedDictionary.h"
 #import "Localization.h"
 #import "OAQuickActionType.h"
+#import "OAIconTitleValueCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATextInputIconCell.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -144,7 +147,7 @@ static OAQuickActionType *TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
@@ -153,7 +156,7 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"shared_string_options")];
     [data setObject:@[@{
-                          @"type" : @"OATextInputIconCell",
+                          @"type" : [OATextInputIconCell getCellIdentifier],
                           @"key" : KEY_NAME,
                           @"title" : self.getParams[KEY_NAME] ? self.getParams[KEY_NAME] : @"",
                           @"hint" : OALocalizedString(@"quick_action_template_name"),
@@ -168,7 +171,7 @@ static OAQuickActionType *TYPE;
     OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
     
     [data setObject:@[@{
-                          @"type" : @"OAIconTitleValueCell",
+                          @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_NAME,
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites"),
@@ -176,7 +179,7 @@ static OAQuickActionType *TYPE;
                           @"img" : @"ic_custom_folder"
                           },
                       @{
-                          @"type" : @"OAIconTitleValueCell",
+                          @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_COLOR,
                           @"title" : OALocalizedString(@"fav_color"),
                           @"value" : color ? color.name : @"",

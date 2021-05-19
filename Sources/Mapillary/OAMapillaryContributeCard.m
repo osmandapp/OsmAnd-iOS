@@ -12,8 +12,6 @@
 #import "OAMapillaryPlugin.h"
 #import "OAColors.h"
 
-#define kContributeCard @"OAMapillaryContributeCell"
-
 @implementation OAMapillaryContributeCard
 
 - (void) build:(UICollectionViewCell *) cell
@@ -43,7 +41,7 @@
 
 + (NSString *) getCellNibId
 {
-    return kContributeCard;
+    return [OAMapillaryContributeCell getCellIdentifier];
 }
 
 @end

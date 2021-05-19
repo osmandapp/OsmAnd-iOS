@@ -44,10 +44,6 @@
 #import "OAExportSettingsType.h"
 #import "OADestination.h"
 
-#define kMenuSimpleCell @"OAMenuSimpleCell"
-#define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
-#define kIconTitleButtonCell @"OAIconTitleButtonCell"
-
 typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeProfiles = 0,
     EOAImportDataTypeQuickActions,
@@ -347,10 +343,10 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 {
     NSDictionary *item = _data[indexPath.row];
       
-    OAMultiIconTextDescCell *cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMultiIconTextDescCell"];
+    OAMultiIconTextDescCell *cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
     }
     [cell.textView setText:item[@"label"]];

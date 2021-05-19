@@ -16,9 +16,6 @@
 #import "OAColorsTableViewCell.h"
 #import "OsmAndApp.h"
 
-#define kCellTypeInput @"OATextInputCell"
-#define kCellTypeColorCollection @"OAColorsTableViewCell"
-
 @interface OAAddFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAColorsTableViewCellDelegate>
 
 @end
@@ -74,7 +71,7 @@
         @{
             @"header" : OALocalizedString(@"group_name"),
             @"footer" : @"",
-            @"type" : kCellTypeInput,
+            @"type" : [OATextInputCell getCellIdentifier],
             @"title" : @""
         }
     ]];
@@ -82,7 +79,7 @@
         @{
             @"header" : OALocalizedString(@"default_color"),
             @"footer" : OALocalizedString(@"default_color_descr"),
-            @"type" : kCellTypeColorCollection,
+            @"type" : [OAColorsTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"fav_color"),
             @"value" : _selectedColor.name,
             @"index" : [NSNumber numberWithInt:_selectedColorIndex],
@@ -109,13 +106,12 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:kCellTypeInput])
+    if ([cellType isEqualToString:[OATextInputCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATextInputCell";
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -125,14 +121,13 @@
         cell.inputField.delegate = self;
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeColorCollection])
+    else if ([cellType isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAColorsTableViewCell";
         OAColorsTableViewCell *cell = nil;
-        cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorsTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAColorsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _colors;
             cell.delegate = self;

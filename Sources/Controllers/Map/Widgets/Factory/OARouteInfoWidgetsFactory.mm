@@ -113,7 +113,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 @implementation OAIntermediateTimeControlWidgetState
 {
-    OAProfileBoolean *_showArrival;
+    OACommonBoolean *_showArrival;
 }
 
 - (instancetype) init
@@ -191,7 +191,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     NSString *timeIntermediate = @"widget_intermediate_time_day";
     NSString *timeIntermediateN = @"widget_intermediate_time_night";
 
-    OAProfileBoolean *showArrival = intermediate ? [OAAppSettings sharedManager].showIntermediateArrivalTime : [OAAppSettings sharedManager].showArrivalTime;
+    OACommonBoolean *showArrival = intermediate ? [OAAppSettings sharedManager].showIntermediateArrivalTime : [OAAppSettings sharedManager].showArrivalTime;
     OATextInfoWidget *leftTimeControl = [[OATextInfoWidget alloc] init];
     
     __weak OATextInfoWidget *leftTimeControlWeak = leftTimeControl;

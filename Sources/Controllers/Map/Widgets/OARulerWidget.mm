@@ -72,7 +72,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double _mapScaleUnrounded;
     NSTimeInterval _cachedTimestamp;
     
-    OAProfileDouble *_mapDensity;
+    OACommonDouble *_mapDensity;
     double _cachedMapDensity;
     EOAMetricsConstant _cacheMetricSystem;
     EOARulerWidgetMode _cachedRulerMode;

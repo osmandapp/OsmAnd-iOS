@@ -319,9 +319,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
         id v = item[@"value"];
         NSString *name = item[@"name"];
         
-        if ([v isKindOfClass:[OAProfileBoolean class]])
+        if ([v isKindOfClass:[OACommonBoolean class]])
         {
-            OAProfileBoolean *value = v;
+            OACommonBoolean *value = v;
             [value set:isChecked mode:self.appMode];
             if ([name isEqualToString:@"track_during_nav"])
             {
@@ -367,7 +367,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 {
     if (section == kNavigationSection)
     {
-        OAProfileBoolean *value = [self getItem:[NSIndexPath indexPathForRow:0 inSection:kNavigationSection]][@"value"];
+        OACommonBoolean *value = [self getItem:[NSIndexPath indexPathForRow:0 inSection:kNavigationSection]][@"value"];
         BOOL isAutoRecordOn = [value get:self.appMode];
         return isAutoRecordOn ? 2 : 1;
     }
@@ -403,9 +403,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
         {
             [cell.textView setText: item[@"title"]];
             id v = item[@"value"];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
+                OACommonBoolean *value = v;
                 [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
                 cell.switchView.on = [value get:self.appMode];
             }
@@ -472,9 +472,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
         if (cell)
         {
             id v = item[@"value"];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
+                OACommonBoolean *value = v;
                 [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
                 cell.switchView.on = [value get:self.appMode];
             }

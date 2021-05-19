@@ -777,7 +777,7 @@
 
 @end
 
-@interface OAProfileSetting ()
+@interface OACommonPreference ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic) NSString *key;
@@ -796,7 +796,7 @@
 
 @end
 
-@implementation OAProfileSetting
+@implementation OACommonPreference
 
 - (OAApplicationMode *) appMode
 {
@@ -810,7 +810,7 @@
 
 + (instancetype) withKey:(NSString *)key
 {
-    OAProfileSetting *obj = [[OAProfileSetting alloc] init];
+    OACommonPreference *obj = [[OACommonPreference alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -936,17 +936,17 @@
 
 @end
 
-@interface OAProfileAppMode ()
+@interface OACommonAppMode ()
 
 @property (nonatomic) OAApplicationMode *defValue;
 
 @end
 
-@implementation OAProfileAppMode
+@implementation OACommonAppMode
 
 + (instancetype) withKey:(NSString *)key defValue:(OAApplicationMode *)defValue
 {
-    OAProfileAppMode *obj = [[OAProfileAppMode alloc] init];
+    OACommonAppMode *obj = [[OACommonAppMode alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1043,17 +1043,17 @@
 
 @end
 
-@interface OAProfileBoolean ()
+@interface OACommonBoolean ()
 
 @property (nonatomic) BOOL defValue;
 
 @end
 
-@implementation OAProfileBoolean
+@implementation OACommonBoolean
 
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue
 {
-    OAProfileBoolean *obj = [[OAProfileBoolean alloc] init];
+    OACommonBoolean *obj = [[OACommonBoolean alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1116,17 +1116,17 @@
 
 @end
 
-@interface OAProfileInteger ()
+@interface OACommonInteger ()
 
 @property (nonatomic) int defValue;
 
 @end
 
-@implementation OAProfileInteger
+@implementation OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue
 {
-    OAProfileInteger *obj = [[OAProfileInteger alloc] init];
+    OACommonInteger *obj = [[OACommonInteger alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1193,17 +1193,17 @@
 
 @end
 
-@interface OAProfileLong ()
+@interface OACommonLong ()
 
 @property (nonatomic) long defValue;
 
 @end
 
-@implementation OAProfileLong
+@implementation OACommonLong
 
 + (instancetype) withKey:(NSString *)key defValue:(long)defValue
 {
-    OAProfileLong *obj = [[OAProfileLong alloc] init];
+    OACommonLong *obj = [[OACommonLong alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1259,17 +1259,17 @@
 
 @end
 
-@interface OAProfileString ()
+@interface OACommonString ()
 
 @property (nonatomic) NSString *defValue;
 
 @end
 
-@implementation OAProfileString
+@implementation OACommonString
 
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue
 {
-    OAProfileString *obj = [[OAProfileString alloc] init];
+    OACommonString *obj = [[OACommonString alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1325,17 +1325,17 @@
 
 @end
 
-@interface OAProfileDouble ()
+@interface OACommonDouble ()
 
 @property (nonatomic) double defValue;
 
 @end
 
-@implementation OAProfileDouble
+@implementation OACommonDouble
 
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue
 {
-    OAProfileDouble *obj = [[OAProfileDouble alloc] init];
+    OACommonDouble *obj = [[OACommonDouble alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1391,17 +1391,17 @@
 
 @end
 
-@interface OAProfileStringList ()
+@interface OACommonStringList ()
 
 @property (nonatomic) NSArray<NSString *> *defValue;
 
 @end
 
-@implementation OAProfileStringList
+@implementation OACommonStringList
 
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue
 {
-    OAProfileStringList *obj = [[OAProfileStringList alloc] init];
+    OACommonStringList *obj = [[OACommonStringList alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1478,17 +1478,17 @@
 
 @end
 
-@interface OAProfileMapSource ()
+@interface OACommonMapSource ()
 
 @property (nonatomic) OAMapSource *defValue;
 
 @end
 
-@implementation OAProfileMapSource
+@implementation OACommonMapSource
 
 + (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue
 {
-    OAProfileMapSource *obj = [[OAProfileMapSource alloc] init];
+    OACommonMapSource *obj = [[OACommonMapSource alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1531,19 +1531,19 @@
 
 @end
 
-@interface OAProfileTerrain ()
+@interface OACommonTerrain ()
 
 @property (nonatomic) EOATerrainType defValue;
 
 @end
 
-@implementation OAProfileTerrain
+@implementation OACommonTerrain
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue
 {
-    OAProfileTerrain *obj = [[OAProfileTerrain alloc] init];
+    OACommonTerrain *obj = [[OACommonTerrain alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1606,19 +1606,19 @@
 
 @end
 
-@interface OAProfileAutoZoomMap ()
+@interface OACommonAutoZoomMap ()
 
 @property (nonatomic) EOAAutoZoomMap defValue;
 
 @end
 
-@implementation OAProfileAutoZoomMap
+@implementation OACommonAutoZoomMap
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue
 {
-    OAProfileAutoZoomMap *obj = [[OAProfileAutoZoomMap alloc] init];
+    OACommonAutoZoomMap *obj = [[OACommonAutoZoomMap alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1685,19 +1685,19 @@
 
 @end
 
-@interface OAProfileSpeedConstant ()
+@interface OACommonSpeedConstant ()
 
 @property (nonatomic) EOASpeedConstant defValue;
 
 @end
 
-@implementation OAProfileSpeedConstant
+@implementation OACommonSpeedConstant
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue
 {
-    OAProfileSpeedConstant *obj = [[OAProfileSpeedConstant alloc] init];
+    OACommonSpeedConstant *obj = [[OACommonSpeedConstant alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1797,13 +1797,13 @@
 
 @end
 
-@implementation OAProfileAngularConstant
+@implementation OACommonAngularConstant
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue
 {
-    OAProfileAngularConstant *obj = [[OAProfileAngularConstant alloc] init];
+    OACommonAngularConstant *obj = [[OACommonAngularConstant alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1870,13 +1870,13 @@
 
 @end
 
-@implementation OAProfileActiveMarkerConstant
+@implementation OACommonActiveMarkerConstant
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue
 {
-    OAProfileActiveMarkerConstant *obj = [[OAProfileActiveMarkerConstant alloc] init];
+    OACommonActiveMarkerConstant *obj = [[OACommonActiveMarkerConstant alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1944,13 +1944,13 @@
 
 @end
 
-@implementation OAProfileDistanceIndicationConstant
+@implementation OACommonDistanceIndicationConstant
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue
 {
-    OAProfileDistanceIndicationConstant *obj = [[OAProfileDistanceIndicationConstant alloc] init];
+    OACommonDistanceIndicationConstant *obj = [[OACommonDistanceIndicationConstant alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -2017,13 +2017,13 @@
 
 @end
 
-@implementation OAProfileDrivingRegion
+@implementation OACommonDrivingRegion
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue
 {
-    OAProfileDrivingRegion *obj = [[OAProfileDrivingRegion alloc] init];
+    OACommonDrivingRegion *obj = [[OACommonDrivingRegion alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -2104,19 +2104,19 @@
 
 @end
 
-@interface OAProfileMetricSystem ()
+@interface OACommonMetricSystem ()
 
 @property (nonatomic) EOAMetricsConstant defValue;
 
 @end
 
-@implementation OAProfileMetricSystem
+@implementation OACommonMetricSystem
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue
 {
-    OAProfileMetricSystem *obj = [[OAProfileMetricSystem alloc] init];
+    OACommonMetricSystem *obj = [[OACommonMetricSystem alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -2192,11 +2192,11 @@
 
 @implementation OAAppSettings
 {
-    NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
-    NSMapTable<NSString *, OAProfileString *> *_customRoutingProps;
-    NSMapTable<NSString *, OAProfileSetting *> *_registeredPreferences;
+    NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
+    NSMapTable<NSString *, OACommonString *> *_customRoutingProps;
+    NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
     NSMapTable<NSString *, NSString *> *_globalPreferences;
-    NSMapTable<NSString *, OAProfileSetting *> *_globalSettings;
+    NSMapTable<NSString *, OACommonPreference *> *_globalSettings;
     OADayNightHelper *_dayNightHelper;
 }
 
@@ -2235,17 +2235,17 @@
         _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"hu", @"hu-formal", @"it", @"ja", @"nl", @"pl", @"pt", @"pt-br", @"ru", @"zh", @"zh-hk", @"ar", @"cs", @"da", @"en-gb", @"el", @"et", @"es-ar", @"fa", @"hi", @"hr", @"ko", @"ro", @"sk", @"sv", @"nb", @"tr"];
 
         // Common Settings
-        _settingMapLanguage = [[[OAProfileInteger withKey:settingMapLanguageKey defValue: 0] makeGlobal] makeShared];
-        _settingPrefMapLanguage = [[[OAProfileString withKey:settingPrefMapLanguageKey defValue: @""] makeGlobal] makeShared];
+        _settingMapLanguage = [[[OACommonInteger withKey:settingMapLanguageKey defValue: 0] makeGlobal] makeShared];
+        _settingPrefMapLanguage = [[[OACommonString withKey:settingPrefMapLanguageKey defValue:@""] makeGlobal] makeShared];
         _settingMapLanguageShowLocal = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageShowLocalKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageShowLocalKey] : NO;
-        _settingMapLanguageTranslit = [[[OAProfileBoolean withKey:settingMapLanguageTranslitKey defValue: NO] makeGlobal] makeShared];
+        _settingMapLanguageTranslit = [[[OACommonBoolean withKey:settingMapLanguageTranslitKey defValue: NO] makeGlobal] makeShared];
 
         [_globalSettings setObject:_settingMapLanguage forKey:@"preferred_locale"];
         [_globalSettings setObject:_settingPrefMapLanguage forKey:@"map_preferred_locale"];
         [_globalSettings setObject:_settingMapLanguageTranslit forKey:@"map_transliterate_names"];
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _appearanceMode = [OAProfileInteger withKey:settingAppModeKey defValue:0];
+        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:0];
         [_registeredPreferences setObject:_appearanceMode forKey:@"daynight_mode"];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
@@ -2253,38 +2253,38 @@
 
         _settingShowAltInDriveMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapShowAltInDriveModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapShowAltInDriveModeKey] : NO;
 
-        _settingDoNotShowPromotions = [[[OAProfileBoolean withKey:settingDoNotShowPromotionsKey defValue:NO] makeGlobal] makeShared];
-        _settingUseAnalytics = [[[OAProfileBoolean withKey:settingUseFirebaseKey defValue:YES] makeGlobal] makeShared];
+        _settingDoNotShowPromotions = [[[OACommonBoolean withKey:settingDoNotShowPromotionsKey defValue:NO] makeGlobal] makeShared];
+        _settingUseAnalytics = [[[OACommonBoolean withKey:settingUseFirebaseKey defValue:YES] makeGlobal] makeShared];
 
         [_globalSettings setObject:_settingDoNotShowPromotions forKey:@"do_not_show_promotions"];
         [_globalSettings setObject:_settingUseAnalytics forKey:@"use_analytics"];
 
-        _liveUpdatesPurchased = [[OAProfileBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
-        _settingOsmAndLiveEnabled = [[[OAProfileBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
-        _liveUpdatesRetryes = [[OAProfileInteger withKey:liveUpdatesRetryesKey defValue:2] makeGlobal];
+        _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
+        _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
+        _liveUpdatesRetryes = [[OACommonInteger withKey:liveUpdatesRetryesKey defValue:2] makeGlobal];
 
         [_globalSettings setObject:_liveUpdatesPurchased forKey:@"billing_live_updates_purchased"];
         [_globalSettings setObject:_settingOsmAndLiveEnabled forKey:@"is_live_updates_on"];
         [_globalSettings setObject:_liveUpdatesRetryes forKey:@"live_updates_retryes"];
 
-        _billingUserId = [[OAProfileString withKey:billingUserIdKey defValue: @""] makeGlobal];
-        _billingUserName = [[OAProfileString withKey:billingUserNameKey defValue:@""] makeGlobal];
-        _billingUserToken = [[OAProfileString withKey:billingUserTokenKey defValue:@""] makeGlobal];
-        _billingUserEmail = [[OAProfileString withKey:billingUserEmailKey defValue:@""] makeGlobal];
-        _billingUserCountry = [[OAProfileString withKey:billingUserCountryKey defValue:@""] makeGlobal];
-        _billingUserCountryDownloadName = [[OAProfileString withKey:billingUserCountryDownloadNameKey defValue:kBillingUserDonationNone] makeGlobal];
-        _billingHideUserName = [[OAProfileBoolean withKey:billingHideUserNameKey defValue:NO] makeGlobal];
-        _billingPurchaseTokenSent = [[OAProfileBoolean withKey:billingPurchaseTokenSentKey defValue:NO] makeGlobal];
-        _billingPurchaseTokensSent = [[OAProfileString withKey:billingPurchaseTokensSentKey defValue:@""] makeGlobal];
+        _billingUserId = [[OACommonString withKey:billingUserIdKey defValue:@""] makeGlobal];
+        _billingUserName = [[OACommonString withKey:billingUserNameKey defValue:@""] makeGlobal];
+        _billingUserToken = [[OACommonString withKey:billingUserTokenKey defValue:@""] makeGlobal];
+        _billingUserEmail = [[OACommonString withKey:billingUserEmailKey defValue:@""] makeGlobal];
+        _billingUserCountry = [[OACommonString withKey:billingUserCountryKey defValue:@""] makeGlobal];
+        _billingUserCountryDownloadName = [[OACommonString withKey:billingUserCountryDownloadNameKey defValue:kBillingUserDonationNone] makeGlobal];
+        _billingHideUserName = [[OACommonBoolean withKey:billingHideUserNameKey defValue:NO] makeGlobal];
+        _billingPurchaseTokenSent = [[OACommonBoolean withKey:billingPurchaseTokenSentKey defValue:NO] makeGlobal];
+        _billingPurchaseTokensSent = [[OACommonString withKey:billingPurchaseTokensSentKey defValue:@""] makeGlobal];
         _liveUpdatesPurchaseCancelledTime = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledTimeKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:liveUpdatesPurchaseCancelledTimeKey] : 0;
-        _liveUpdatesPurchaseCancelledFirstDlgShown = [[OAProfileBoolean withKey:liveUpdatesPurchaseCancelledFirstDlgShownKey defValue:NO] makeGlobal];
-        _liveUpdatesPurchaseCancelledSecondDlgShown = [[OAProfileBoolean withKey:liveUpdatesPurchaseCancelledSecondDlgShownKey defValue:NO] makeGlobal];
-        _fullVersionPurchased = [[OAProfileBoolean withKey:fullVersionPurchasedKey defValue:NO] makeGlobal];
-        _depthContoursPurchased = [[OAProfileBoolean withKey:depthContoursPurchasedKey defValue:NO] makeGlobal];
-        _contourLinesPurchased = [[OAProfileBoolean withKey:contourLinesPurchasedKey defValue:NO] makeGlobal];
-        _emailSubscribed = [[OAProfileBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
-        _osmandProPurchased = [[OAProfileBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
-        _osmandMapsPurchased = [[OAProfileBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
+        _liveUpdatesPurchaseCancelledFirstDlgShown = [[OACommonBoolean withKey:liveUpdatesPurchaseCancelledFirstDlgShownKey defValue:NO] makeGlobal];
+        _liveUpdatesPurchaseCancelledSecondDlgShown = [[OACommonBoolean withKey:liveUpdatesPurchaseCancelledSecondDlgShownKey defValue:NO] makeGlobal];
+        _fullVersionPurchased = [[OACommonBoolean withKey:fullVersionPurchasedKey defValue:NO] makeGlobal];
+        _depthContoursPurchased = [[OACommonBoolean withKey:depthContoursPurchasedKey defValue:NO] makeGlobal];
+        _contourLinesPurchased = [[OACommonBoolean withKey:contourLinesPurchasedKey defValue:NO] makeGlobal];
+        _emailSubscribed = [[OACommonBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
+        _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
+        _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
         _displayDonationSettings = [[NSUserDefaults standardUserDefaults] objectForKey:displayDonationSettingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayDonationSettingsKey] : NO;
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
@@ -2312,11 +2312,11 @@
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
 
         // Map Settings
-        _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
-        _mapSettingShowPoiLabel = [OAProfileBoolean withKey:mapSettingShowPoiLabelKey defValue:NO];
-        _mapSettingShowOfflineEdits = [OAProfileBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
-        _mapSettingShowOnlineNotes = [OAProfileBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
-        _layerTransparencySeekbarMode = [OAProfileInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
+        _mapSettingShowFavorites = [OACommonBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
+        _mapSettingShowPoiLabel = [OACommonBoolean withKey:mapSettingShowPoiLabelKey defValue:NO];
+        _mapSettingShowOfflineEdits = [OACommonBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
+        _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
+        _layerTransparencySeekbarMode = [OACommonInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
 
         [_registeredPreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
         [_registeredPreferences setObject:_mapSettingShowPoiLabel forKey:@"show_poi_label"];
@@ -2324,17 +2324,17 @@
         [_registeredPreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
         [_registeredPreferences setObject:_layerTransparencySeekbarMode forKey:@"layer_transparency_seekbar_mode"];
 
-        _mapSettingVisibleGpx = [[[OAProfileStringList withKey:mapSettingVisibleGpxKey defValue:@[]] makeGlobal] makeShared];
+        _mapSettingVisibleGpx = [[[OACommonStringList withKey:mapSettingVisibleGpxKey defValue:@[]] makeGlobal] makeShared];
         [_globalSettings setObject:_mapSettingVisibleGpx forKey:@"selected_gpx"];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
 
-        _mapSettingSaveGlobalTrackToGpx = [[OAProfileBoolean withKey:mapSettingSaveGlobalTrackToGpxKey defValue:NO] makeGlobal];
-        _mapSettingSaveTrackIntervalGlobal = [OAProfileInteger withKey:mapSettingSaveTrackIntervalGlobalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
-        _mapSettingSaveTrackIntervalApproved = [OAProfileBoolean withKey:mapSettingSaveTrackIntervalApprovedKey defValue:NO];
+        _mapSettingSaveGlobalTrackToGpx = [[OACommonBoolean withKey:mapSettingSaveGlobalTrackToGpxKey defValue:NO] makeGlobal];
+        _mapSettingSaveTrackIntervalGlobal = [OACommonInteger withKey:mapSettingSaveTrackIntervalGlobalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
+        _mapSettingSaveTrackIntervalApproved = [OACommonBoolean withKey:mapSettingSaveTrackIntervalApprovedKey defValue:NO];
         // TODO: redesign alert as in android to show/hide recorded trip on map
-        _mapSettingShowRecordingTrack = [[[OAProfileBoolean withKey:mapSettingShowRecordingTrackKey defValue:YES] makeGlobal] makeShared];
-        _mapSettingShowTripRecordingStartDialog = [[[OAProfileBoolean withKey:mapSettingShowTripRecordingStartDialogKey defValue:YES] makeGlobal] makeShared];
+        _mapSettingShowRecordingTrack = [[[OACommonBoolean withKey:mapSettingShowRecordingTrackKey defValue:YES] makeGlobal] makeShared];
+        _mapSettingShowTripRecordingStartDialog = [[[OACommonBoolean withKey:mapSettingShowTripRecordingStartDialogKey defValue:YES] makeGlobal] makeShared];
 
         [_globalSettings setObject:_mapSettingSaveGlobalTrackToGpx forKey:@"save_global_track_to_gpx"];
         [_registeredPreferences setObject:_mapSettingSaveTrackIntervalGlobal forKey:@"save_global_track_interval"];
@@ -2345,16 +2345,16 @@
         _mapSettingActiveRouteFilePath = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFilePathKey];
         _mapSettingActiveRouteVariantType = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteVariantTypeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingActiveRouteVariantTypeKey] : 0;
 
-        _selectedPoiFilters = [OAProfileString withKey:selectedPoiFiltersKey defValue:@""];
+        _selectedPoiFilters = [OACommonString withKey:selectedPoiFiltersKey defValue:@""];
         [_registeredPreferences setObject:_selectedPoiFilters forKey:@"selected_poi_filter_for_map"];
 
-        _plugins = [[[OAProfileStringList withKey:pluginsKey defValue:@[]] makeGlobal] makeShared];
+        _plugins = [[[OACommonStringList withKey:pluginsKey defValue:@[]] makeGlobal] makeShared];
         [_globalSettings setObject:_plugins forKey:@"enabled_plugins"];
 
-        _discountId = [[OAProfileInteger withKey:discountIdKey defValue:0] makeGlobal];
-        _discountShowNumberOfStarts = [[OAProfileInteger withKey:discountShowNumberOfStartsKey defValue:0] makeGlobal];
-        _discountTotalShow = [[OAProfileInteger withKey:discountTotalShowKey defValue:0] makeGlobal];
-        _discountShowDatetime = [[OAProfileDouble withKey:discountShowDatetimeKey defValue:0] makeGlobal];
+        _discountId = [[OACommonInteger withKey:discountIdKey defValue:0] makeGlobal];
+        _discountShowNumberOfStarts = [[OACommonInteger withKey:discountShowNumberOfStartsKey defValue:0] makeGlobal];
+        _discountTotalShow = [[OACommonInteger withKey:discountTotalShowKey defValue:0] makeGlobal];
+        _discountShowDatetime = [[OACommonDouble withKey:discountShowDatetimeKey defValue:0] makeGlobal];
 
         [_globalSettings setObject:_discountId forKey:@"discount_id"];
         [_globalSettings setObject:_discountShowNumberOfStarts forKey:@"number_of_starts_on_discount_show"];
@@ -2384,19 +2384,19 @@
             @"app_mode_icon_res_name"
         ];
 
-        _defaultApplicationMode = [[[OAProfileAppMode withKey:defaultApplicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
+        _defaultApplicationMode = [[[OACommonAppMode withKey:defaultApplicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
         [_globalSettings setObject:_defaultApplicationMode forKey:@"default_application_mode_string"];
 
-        _availableApplicationModes = [[[OAProfileString withKey:availableApplicationModesKey defValue:@"car,bicycle,pedestrian,public_transport,"] makeGlobal] makeShared];
+        _availableApplicationModes = [[[OACommonString withKey:availableApplicationModesKey defValue:@"car,bicycle,pedestrian,public_transport,"] makeGlobal] makeShared];
         [_globalSettings setObject:_availableApplicationModes forKey:@"available_application_modes"];
 
-        _customAppModes = [[[OAProfileString withKey:customAppModesKey defValue:@""] makeGlobal] makeShared];
+        _customAppModes = [[[OACommonString withKey:customAppModesKey defValue:@""] makeGlobal] makeShared];
         [_globalSettings setObject:_customAppModes forKey:@"custom_app_modes_keys"];
 
-        _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
+        _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
         [_registeredPreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
 
-        _routingProfile = [OAProfileString withKey:routingProfileKey defValue:@""];
+        _routingProfile = [OACommonString withKey:routingProfileKey defValue:@""];
         [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
         [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];
         [_routingProfile setModeDefaultValue:@"pedestrian" mode:OAApplicationMode.PEDESTRIAN];
@@ -2406,7 +2406,7 @@
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
         [_registeredPreferences setObject:_routingProfile forKey:@"routing_profile"];
 
-        _profileIconName = [OAProfileString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
+        _profileIconName = [OACommonString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
         [_profileIconName setModeDefaultValue:@"ic_world_globe_dark" mode:OAApplicationMode.DEFAULT];
         [_profileIconName setModeDefaultValue:@"ic_action_car_dark" mode:OAApplicationMode.CAR];
         [_profileIconName setModeDefaultValue:@"ic_action_bicycle_dark" mode:OAApplicationMode.BICYCLE];
@@ -2416,31 +2416,31 @@
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
 
-        _profileIconColor = [OAProfileInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
-        _userProfileName = [OAProfileString withKey:userProfileNameKey defValue:@""];
-        _parentAppMode = [OAProfileString withKey:parentAppModeKey defValue:nil];
+        _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
+        _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
+        _parentAppMode = [OACommonString withKey:parentAppModeKey defValue:nil];
 
-        _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
+        _routerService = [OACommonInteger withKey:routerServiceKey defValue:0]; // OSMAND
         // 2 = STRAIGHT
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.DEFAULT];
         [_routerService set:2 mode:OAApplicationMode.DEFAULT];
 
         [_registeredPreferences setObject:_routerService forKey:@"route_service"];
-        _navigationIcon = [OAProfileInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
+        _navigationIcon = [OACommonInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
         [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
         [_registeredPreferences setObject:_navigationIcon forKey:@"navigation_icon"];
 
-        _locationIcon = [OAProfileInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
+        _locationIcon = [OACommonInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
         [_registeredPreferences setObject:_locationIcon forKey:@"location_icon"];
 
-        _appModeOrder = [OAProfileInteger withKey:appModeOrderKey defValue:0];
+        _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
 
-        _defaultSpeed = [OAProfileDouble withKey:defaultSpeedKey defValue:10.];
+        _defaultSpeed = [OACommonDouble withKey:defaultSpeedKey defValue:10.];
         [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];
         [_defaultSpeed setModeDefaultValue:@12.5 mode:OAApplicationMode.CAR];
         [_defaultSpeed setModeDefaultValue:@2.77 mode:OAApplicationMode.BICYCLE];
@@ -2450,34 +2450,34 @@
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.SKI];
         [_registeredPreferences setObject:_defaultSpeed forKey:@"default_speed"];
 
-        _minSpeed = [OAProfileDouble withKey:minSpeedKey defValue:0.];
-        _maxSpeed = [OAProfileDouble withKey:maxSpeedKey defValue:0.];
-        _routeStraightAngle = [OAProfileDouble withKey:routeStraightAngleKey defValue:30.];
+        _minSpeed = [OACommonDouble withKey:minSpeedKey defValue:0.];
+        _maxSpeed = [OACommonDouble withKey:maxSpeedKey defValue:0.];
+        _routeStraightAngle = [OACommonDouble withKey:routeStraightAngleKey defValue:30.];
         [_registeredPreferences setObject:_minSpeed forKey:@"min_speed"];
         [_registeredPreferences setObject:_maxSpeed forKey:@"max_speed"];
         [_registeredPreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];
 
-        _transparentMapTheme = [OAProfileBoolean withKey:transparentMapThemeKey defValue:YES];
+        _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:YES];
         [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
         [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_transparentMapTheme setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
 
-        _showStreetName = [OAProfileBoolean withKey:showStreetNameKey defValue:NO];
+        _showStreetName = [OACommonBoolean withKey:showStreetNameKey defValue:NO];
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode DEFAULT]];
         [_showStreetName setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_showStreetName forKey:@"show_street_name"];
 
-        _showDistanceRuler = [OAProfileBoolean withKey:showDistanceRulerKey defValue:NO];
+        _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_registeredPreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
 
-        _showArrivalTime = [OAProfileBoolean withKey:showArrivalTimeKey defValue:YES];
-        _showIntermediateArrivalTime = [OAProfileBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
-        _showRelativeBearing = [OAProfileBoolean withKey:showRelativeBearingKey defValue:YES];
-        _showCompassControlRuler = [[[OAProfileBoolean withKey:showCompassControlRulerKey defValue:YES] makeGlobal] makeShared];
-        _showCoordinatesWidget = [OAProfileBoolean withKey:showCoordinatesWidgetKey defValue:NO];
+        _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
+        _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
+        _showRelativeBearing = [OACommonBoolean withKey:showRelativeBearingKey defValue:YES];
+        _showCompassControlRuler = [[[OACommonBoolean withKey:showCompassControlRulerKey defValue:YES] makeGlobal] makeShared];
+        _showCoordinatesWidget = [OACommonBoolean withKey:showCoordinatesWidgetKey defValue:NO];
 
         [_registeredPreferences setObject:_showArrivalTime forKey:@"show_arrival_time"];
         [_registeredPreferences setObject:_showIntermediateArrivalTime forKey:@"show_intermediate_arrival_time"];
@@ -2486,46 +2486,46 @@
 
         [_registeredPreferences setObject:_showCoordinatesWidget forKey:@"show_coordinates_widget"];
 
-        _centerPositionOnMap = [OAProfileBoolean withKey:centerPositionOnMapKey defValue:NO];
+        _centerPositionOnMap = [OACommonBoolean withKey:centerPositionOnMapKey defValue:NO];
         [_registeredPreferences setObject:_centerPositionOnMap forKey:@"center_position_on_map"];
 
-        _rotateMap = [OAProfileInteger withKey:rotateMapKey defValue:ROTATE_MAP_NONE];
+        _rotateMap = [OACommonInteger withKey:rotateMapKey defValue:ROTATE_MAP_NONE];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode BICYCLE]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_COMPASS) mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_rotateMap forKey:@"rotate_map"];
 
-        _mapDensity = [OAProfileDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
+        _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_mapDensity forKey:@"map_density_n"];
 
-        _textSize = [OAProfileDouble withKey:textSizeKey defValue:MAGNIFIER_DEFAULT_VALUE];
+        _textSize = [OACommonDouble withKey:textSizeKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode CAR]];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_textSize forKey:@"text_scale"];
 
-        _renderer = [OAProfileString withKey:rendererKey defValue:@"OsmAnd"];
+        _renderer = [OACommonString withKey:rendererKey defValue:@"OsmAnd"];
         [_registeredPreferences setObject:_renderer forKey:@"renderer"];
 
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
 
         // trip recording settings
-        _saveTrackToGPX = [OAProfileBoolean withKey:saveTrackToGPXKey defValue:NO];
+        _saveTrackToGPX = [OACommonBoolean withKey:saveTrackToGPXKey defValue:NO];
         [_registeredPreferences setObject:_saveTrackToGPX forKey:@"save_track_to_gpx"];
 
-        _mapSettingSaveTrackInterval = [OAProfileInteger withKey:mapSettingSaveTrackIntervalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
+        _mapSettingSaveTrackInterval = [OACommonInteger withKey:mapSettingSaveTrackIntervalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
         [_mapSettingSaveTrackInterval setModeDefaultValue:@3 mode:[OAApplicationMode CAR]];
         [_mapSettingSaveTrackInterval setModeDefaultValue:@5 mode:[OAApplicationMode BICYCLE]];
         [_mapSettingSaveTrackInterval setModeDefaultValue:@10 mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_mapSettingSaveTrackInterval forKey:@"save_track_interval"];
 
-        _saveTrackMinDistance = [OAProfileDouble withKey:saveTrackMinDistanceKey defValue:REC_FILTER_DEFAULT];
-        _saveTrackPrecision = [OAProfileDouble withKey:saveTrackPrecisionKey defValue:REC_FILTER_DEFAULT];
-        _saveTrackMinSpeed = [OAProfileDouble withKey:saveTrackMinSpeedKey defValue:REC_FILTER_DEFAULT];
-        _autoSplitRecording = [OAProfileBoolean withKey:autoSplitRecordingKey defValue:NO];
+        _saveTrackMinDistance = [OACommonDouble withKey:saveTrackMinDistanceKey defValue:REC_FILTER_DEFAULT];
+        _saveTrackPrecision = [OACommonDouble withKey:saveTrackPrecisionKey defValue:REC_FILTER_DEFAULT];
+        _saveTrackMinSpeed = [OACommonDouble withKey:saveTrackMinSpeedKey defValue:REC_FILTER_DEFAULT];
+        _autoSplitRecording = [OACommonBoolean withKey:autoSplitRecordingKey defValue:NO];
 
         [_registeredPreferences setObject:_saveTrackMinDistance forKey:@"save_track_min_distance"];
         [_registeredPreferences setObject:_saveTrackPrecision forKey:@"save_track_precision"];
@@ -2534,57 +2534,57 @@
 
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
-        _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];
+        _fastRouteMode = [OACommonBoolean withKey:fastRouteModeKey defValue:YES];
         [_registeredPreferences setObject:_fastRouteMode forKey:@"fast_route_mode"];
         _disableComplexRouting = [[NSUserDefaults standardUserDefaults] objectForKey:disableComplexRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableComplexRoutingKey] : NO;
-        _followTheRoute = [[OAProfileBoolean withKey:followTheRouteKey defValue:NO] makeGlobal];
+        _followTheRoute = [[OACommonBoolean withKey:followTheRouteKey defValue:NO] makeGlobal];
         [_globalSettings setObject:_followTheRoute forKey:@"follow_to_route"];
-        _followTheGpxRoute = [[OAProfileString withKey:followTheGpxRouteKey defValue:nil] makeGlobal];
+        _followTheGpxRoute = [[OACommonString withKey:followTheGpxRouteKey defValue:nil] makeGlobal];
         [_globalSettings setObject:_followTheGpxRoute forKey:@"follow_gpx"];
-        _arrivalDistanceFactor = [OAProfileDouble withKey:arrivalDistanceFactorKey defValue:1.0];
+        _arrivalDistanceFactor = [OACommonDouble withKey:arrivalDistanceFactorKey defValue:1.0];
         [_registeredPreferences setObject:_arrivalDistanceFactor forKey:@"arrival_distance_factor"];
-        _enableTimeConditionalRouting = [OAProfileBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
+        _enableTimeConditionalRouting = [OACommonBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
         [_registeredPreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
-        _useIntermediatePointsNavigation = [OAProfileBoolean withKey:useIntermediatePointsNavigationKey defValue:NO];
+        _useIntermediatePointsNavigation = [OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO];
         [_globalSettings setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
 
-        _disableOffrouteRecalc = [OAProfileBoolean withKey:disableOffrouteRecalcKey defValue:NO];
-        _disableWrongDirectionRecalc = [OAProfileBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
+        _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];
+        _disableWrongDirectionRecalc = [OACommonBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
 
         [_registeredPreferences setObject:_disableOffrouteRecalc forKey:@"disable_offroute_recalc"];
         [_registeredPreferences setObject:_disableWrongDirectionRecalc forKey:@"disable_wrong_direction_recalc"];
 
-        _autoFollowRoute = [OAProfileInteger withKey:autoFollowRouteKey defValue:0];
+        _autoFollowRoute = [OACommonInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode BICYCLE]];
         [_autoFollowRoute setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_autoFollowRoute forKey:@"auto_follow_route"];
 
-        _autoZoomMap = [OAProfileBoolean withKey:autoZoomMapKey defValue:NO];
+        _autoZoomMap = [OACommonBoolean withKey:autoZoomMapKey defValue:NO];
         [_autoZoomMap setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_autoZoomMap forKey:@"auto_zoom_map_on_off"];
 
-        _autoZoomMapScale = [OAProfileAutoZoomMap withKey:autoZoomMapScaleKey defValue:AUTO_ZOOM_MAP_FAR];
+        _autoZoomMapScale = [OACommonAutoZoomMap withKey:autoZoomMapScaleKey defValue:AUTO_ZOOM_MAP_FAR];
         [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_FAR) mode:[OAApplicationMode CAR]];
         [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_CLOSE) mode:[OAApplicationMode BICYCLE]];
         [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_CLOSE) mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_autoZoomMapScale forKey:@"auto_zoom_map_scale"];
 
-        _keepInforming = [OAProfileInteger withKey:keepInformingKey defValue:0];
+        _keepInforming = [OACommonInteger withKey:keepInformingKey defValue:0];
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_keepInforming forKey:@"keep_informing"];
 
-        _settingAllow3DView = [OAProfileBoolean withKey:settingEnable3DViewKey defValue:YES];
-        _drivingRegionAutomatic = [OAProfileBoolean withKey:drivingRegionAutomaticKey defValue:YES];
-        _drivingRegion = [OAProfileDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
-        _metricSystem = [OAProfileMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
-        _metricSystemChangedManually = [OAProfileBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
-        _settingGeoFormat = [[OAProfileInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES] makeGlobal];
-        _settingExternalInputDevice = [OAProfileInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
+        _settingAllow3DView = [OACommonBoolean withKey:settingEnable3DViewKey defValue:YES];
+        _drivingRegionAutomatic = [OACommonBoolean withKey:drivingRegionAutomaticKey defValue:YES];
+        _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
+        _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
+        _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
+        _settingGeoFormat = [[OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES] makeGlobal];
+        _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
 
         [_registeredPreferences setObject:_settingAllow3DView forKey:@"enable_3d_view"];
         [_registeredPreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
@@ -2594,46 +2594,46 @@
         [_globalSettings setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_registeredPreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
 
-        _speedSystem = [OAProfileSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
-        _angularUnits = [OAProfileAngularConstant withKey:angularUnitsKey defValue:DEGREES];
-        _speedLimitExceedKmh = [OAProfileDouble withKey:speedLimitExceedKey defValue:5.f];
-        _switchMapDirectionToCompass = [OAProfileDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
+        _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
+        _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
+        _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
+        _switchMapDirectionToCompass = [OACommonDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
 
         [_registeredPreferences setObject:_switchMapDirectionToCompass forKey:@"speed_for_map_to_direction_of_movement"];
         [_registeredPreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_registeredPreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_registeredPreferences setObject:_speedSystem forKey:@"default_speed_system"];
 
-        _routeRecalculationDistance = [OAProfileDouble withKey:routeRecalculationDistanceKey defValue:0.];
+        _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
         [_registeredPreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
 
-        _showTrafficWarnings = [OAProfileBoolean withKey:showTrafficWarningsKey defValue:NO];
+        _showTrafficWarnings = [OACommonBoolean withKey:showTrafficWarningsKey defValue:NO];
         [_showTrafficWarnings setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_registeredPreferences setObject:_showTrafficWarnings forKey:@"show_traffic_warnings"];
 
-        _showPedestrian = [OAProfileBoolean withKey:showPedestrianKey defValue:NO];
+        _showPedestrian = [OACommonBoolean withKey:showPedestrianKey defValue:NO];
         [_showPedestrian setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_registeredPreferences setObject:_showPedestrian forKey:@"show_pedestrian"];
 
-        _showCameras = [OAProfileBoolean withKey:showCamerasKey defValue:NO];
+        _showCameras = [OACommonBoolean withKey:showCamerasKey defValue:NO];
         [_registeredPreferences setObject:_showCameras forKey:@"show_cameras"];
-        _showTunnels = [OAProfileBoolean withKey:showTunnelsKey defValue:NO];
+        _showTunnels = [OACommonBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_registeredPreferences setObject:_showTunnels forKey:@"show_tunnels"];
 
-        _showLanes = [OAProfileBoolean withKey:showLanesKey defValue:NO];
+        _showLanes = [OACommonBoolean withKey:showLanesKey defValue:NO];
         [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
         [_registeredPreferences setObject:_showLanes forKey:@"show_lanes"];
 
-        _speakStreetNames = [OAProfileBoolean withKey:speakStreetNamesKey defValue:YES];
-        _speakTrafficWarnings = [OAProfileBoolean withKey:speakTrafficWarningsKey defValue:YES];
-        _speakPedestrian = [OAProfileBoolean withKey:speakPedestrianKey defValue:YES];
-        _speakSpeedLimit = [OAProfileBoolean withKey:speakSpeedLimitKey defValue:YES];
-        _speakTunnels = [OAProfileBoolean withKey:speakTunnels defValue:NO];
-        _speakCameras = [OAProfileBoolean withKey:speakCamerasKey defValue:NO];
-        _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
-        _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];
+        _speakStreetNames = [OACommonBoolean withKey:speakStreetNamesKey defValue:YES];
+        _speakTrafficWarnings = [OACommonBoolean withKey:speakTrafficWarningsKey defValue:YES];
+        _speakPedestrian = [OACommonBoolean withKey:speakPedestrianKey defValue:YES];
+        _speakSpeedLimit = [OACommonBoolean withKey:speakSpeedLimitKey defValue:YES];
+        _speakTunnels = [OACommonBoolean withKey:speakTunnels defValue:NO];
+        _speakCameras = [OACommonBoolean withKey:speakCamerasKey defValue:NO];
+        _announceNearbyFavorites = [OACommonBoolean withKey:announceNearbyFavoritesKey defValue:NO];
+        _announceNearbyPoi = [OACommonBoolean withKey:announceNearbyPoiKey defValue:NO];
 
         [_registeredPreferences setObject:_speakStreetNames forKey:@"speak_street_names"];
         [_registeredPreferences setObject:_speakTrafficWarnings forKey:@"speak_traffic_warnings"];
@@ -2644,9 +2644,9 @@
         [_registeredPreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_registeredPreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 
-        _voiceProvider = [OAProfileString withKey:voiceProviderKey defValue:@""];
-        _announceWpt = [OAProfileBoolean withKey:announceWptKey defValue:YES];
-        _showScreenAlerts = [OAProfileBoolean withKey:showScreenAlertsKey defValue:NO];
+        _voiceProvider = [OACommonString withKey:voiceProviderKey defValue:@""];
+        _announceWpt = [OACommonBoolean withKey:announceWptKey defValue:YES];
+        _showScreenAlerts = [OACommonBoolean withKey:showScreenAlertsKey defValue:NO];
 
         [_registeredPreferences setObject:_voiceProvider forKey:@"voice_provider"];
         [_registeredPreferences setObject:_announceWpt forKey:@"announce_wpt"];
@@ -2656,18 +2656,18 @@
 
         _useOsmLiveForRouting = [[NSUserDefaults standardUserDefaults] objectForKey:useOsmLiveForRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOsmLiveForRoutingKey] : YES;
 
-        _showGpxWpt = [[[OAProfileBoolean withKey:showGpxWptKey defValue:YES] makeGlobal] makeShared];
-        _showNearbyFavorites = [OAProfileBoolean withKey:showNearbyFavoritesKey defValue:NO];
-        _showNearbyPoi = [OAProfileBoolean withKey:showNearbyPoiKey defValue:NO];
+        _showGpxWpt = [[[OACommonBoolean withKey:showGpxWptKey defValue:YES] makeGlobal] makeShared];
+        _showNearbyFavorites = [OACommonBoolean withKey:showNearbyFavoritesKey defValue:NO];
+        _showNearbyPoi = [OACommonBoolean withKey:showNearbyPoiKey defValue:NO];
         [_globalSettings setObject:_showGpxWpt forKey:@"show_gpx_wpt"];
         [_registeredPreferences setObject:_showNearbyFavorites forKey:@"show_nearby_favorites"];
         [_registeredPreferences setObject:_showNearbyPoi forKey:@"show_nearby_poi"];
 
-        _gpxRouteCalcOsmandParts = [[[OAProfileBoolean withKey:gpxRouteCalcOsmandPartsKey defValue:YES] makeGlobal] makeShared];
-        _gpxCalculateRtept = [[[OAProfileBoolean withKey:gpxCalculateRteptKey defValue:YES] makeGlobal] makeShared];
-        _gpxRouteCalc = [[[OAProfileBoolean withKey:gpxRouteCalcKey defValue:NO] makeGlobal] makeShared];
-        _gpxRouteSegment = [[[OAProfileInteger withKey:gpxRouteSegmentKey defValue:-1] makeGlobal] makeShared];
-        _showStartFinishIcons = [[[OAProfileBoolean withKey:showStartFinishIconsKey defValue:YES] makeGlobal] makeShared];
+        _gpxRouteCalcOsmandParts = [[[OACommonBoolean withKey:gpxRouteCalcOsmandPartsKey defValue:YES] makeGlobal] makeShared];
+        _gpxCalculateRtept = [[[OACommonBoolean withKey:gpxCalculateRteptKey defValue:YES] makeGlobal] makeShared];
+        _gpxRouteCalc = [[[OACommonBoolean withKey:gpxRouteCalcKey defValue:NO] makeGlobal] makeShared];
+        _gpxRouteSegment = [[[OACommonInteger withKey:gpxRouteSegmentKey defValue:-1] makeGlobal] makeShared];
+        _showStartFinishIcons = [[[OACommonBoolean withKey:showStartFinishIconsKey defValue:YES] makeGlobal] makeShared];
 
         [_globalSettings setObject:_gpxRouteCalcOsmandParts forKey:@"gpx_routing_calculate_osmand_route"];
         [_globalSettings setObject:_gpxCalculateRtept forKey:@"gpx_routing_calculate_rtept"];
@@ -2675,18 +2675,18 @@
         [_globalSettings setObject:_gpxRouteSegment forKey:@"gpx_route_segment"];
         [_globalSettings setObject:_showStartFinishIcons forKey:@"show_start_finish_icons"];
 
-        _voiceMute = [OAProfileBoolean withKey:voiceMuteKey defValue:NO];
+        _voiceMute = [OACommonBoolean withKey:voiceMuteKey defValue:NO];
         [_registeredPreferences setObject:_voiceMute forKey:@"voice_mute"];
 
-        _interruptMusic = [OAProfileBoolean withKey:interruptMusicKey defValue:NO];
+        _interruptMusic = [OACommonBoolean withKey:interruptMusicKey defValue:NO];
         [_registeredPreferences setObject:_interruptMusic forKey:@"interrupt_music"];
-        _snapToRoad = [OAProfileBoolean withKey:snapToRoadKey defValue:NO];
+        _snapToRoad = [OACommonBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
         [_registeredPreferences setObject:_snapToRoad forKey:@"snap_to_road"];
 
-        _poiFiltersOrder = [OAProfileStringList withKey:poiFiltersOrderKey defValue:nil];
-        _inactivePoiFilters = [OAProfileStringList withKey:inactivePoiFiltersKey defValue:nil];
+        _poiFiltersOrder = [OACommonStringList withKey:poiFiltersOrderKey defValue:nil];
+        _inactivePoiFilters = [OACommonStringList withKey:inactivePoiFiltersKey defValue:nil];
         [_registeredPreferences setObject:_poiFiltersOrder forKey:@"poi_filters_order"];
         [_registeredPreferences setObject:_inactivePoiFilters forKey:@"inactive_poi_filters"];
 
@@ -2695,19 +2695,19 @@
 //        _rulerMode = [[[OAProfileRadiusRulerMode withKey:rulerModeKey defValue:RadiusRulerMode.FIRST, RadiusRulerMode.values()] makeGlobal] makeShared];
 //        [_globalSettings setObject:_rulerMode forKey:@"ruler_mode"];
 
-        _osmUserName = [[[OAProfileString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
-        _osmUserDisplayName = [[[OAProfileString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
+        _osmUserName = [[[OACommonString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
+        _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
 //        _osmUploadVisibility = [[[OAProfileUploadVisibility withKey:osmUploadVisibilityKey defValue:UploadVisibility.PUBLIC, UploadVisibility.values()] makeGlobal] makeShared];
-        _userOsmBugName = [[[OAProfileString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
-        _osmUserPassword = [[[OAProfileString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
-        _osmUserAccessToken = [[OAProfileString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
-        _osmUserAccessTokenSecret = [[OAProfileString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
-        _oprAccessToken = [[OAProfileString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
-        _oprUsername = [[OAProfileString withKey:oprUsernameKey defValue:@""] makeGlobal];
-        _oprBlockchainName = [[OAProfileString withKey:oprBlockchainNameKey defValue:@""] makeGlobal];
-        _oprUseDevUrl = [[[OAProfileBoolean withKey:oprUseDevUrlKey defValue:NO] makeGlobal] makeShared];
-        _offlineEditing = [[[OAProfileBoolean withKey:offlineEditingKey defValue:YES] makeGlobal] makeShared];
-        _osmUseDevUrl = [[[OAProfileBoolean withKey:osmUseDevUrlKey defValue:NO] makeGlobal] makeShared];
+        _userOsmBugName = [[[OACommonString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
+        _osmUserPassword = [[[OACommonString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
+        _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
+        _osmUserAccessTokenSecret = [[OACommonString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
+        _oprAccessToken = [[OACommonString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
+        _oprUsername = [[OACommonString withKey:oprUsernameKey defValue:@""] makeGlobal];
+        _oprBlockchainName = [[OACommonString withKey:oprBlockchainNameKey defValue:@""] makeGlobal];
+        _oprUseDevUrl = [[[OACommonBoolean withKey:oprUseDevUrlKey defValue:NO] makeGlobal] makeShared];
+        _offlineEditing = [[[OACommonBoolean withKey:offlineEditingKey defValue:YES] makeGlobal] makeShared];
+        _osmUseDevUrl = [[[OACommonBoolean withKey:osmUseDevUrlKey defValue:NO] makeGlobal] makeShared];
 
         [_globalSettings setObject:_osmUserName forKey:@"user_name"];
         [_globalSettings setObject:_osmUserDisplayName forKey:@"user_display_name"];
@@ -2723,14 +2723,14 @@
         [_globalSettings setObject:_offlineEditing forKey:@"offline_osm_editing"];
         [_globalSettings setObject:_osmUseDevUrl forKey:@"use_dev_url"];
 
-        _mapillaryFirstDialogShown = [[OAProfileBoolean withKey:mapillaryFirstDialogShownKey defValue:NO] makeGlobal];
-        _onlinePhotosRowCollapsed = [[[OAProfileBoolean withKey:onlinePhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
-        _useMapillaryFilter = [[[OAProfileBoolean withKey:useMapillaryFilterKey defValue:NO] makeGlobal] makeShared];
-        _mapillaryFilterUserKey = [[[OAProfileString withKey:mapillaryFilterUserKeyKey defValue: @""] makeGlobal] makeShared];
-        _mapillaryFilterUserName = [[[OAProfileString withKey:mapillaryFilterUserNameKey defValue: @""] makeGlobal] makeShared];
-        _mapillaryFilterStartDate = [[[OAProfileDouble withKey:mapillaryFilterStartDateKey defValue: 0] makeGlobal] makeShared];
-        _mapillaryFilterEndDate = [[[OAProfileDouble withKey:mapillaryFilterEndDateKey defValue: 0] makeGlobal] makeShared];
-        _mapillaryFilterPano = [[[OAProfileBoolean withKey:mapillaryFilterPanoKey defValue:NO] makeGlobal] makeShared];
+        _mapillaryFirstDialogShown = [[OACommonBoolean withKey:mapillaryFirstDialogShownKey defValue:NO] makeGlobal];
+        _onlinePhotosRowCollapsed = [[[OACommonBoolean withKey:onlinePhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
+        _useMapillaryFilter = [[[OACommonBoolean withKey:useMapillaryFilterKey defValue:NO] makeGlobal] makeShared];
+        _mapillaryFilterUserKey = [[[OACommonString withKey:mapillaryFilterUserKeyKey defValue:@""] makeGlobal] makeShared];
+        _mapillaryFilterUserName = [[[OACommonString withKey:mapillaryFilterUserNameKey defValue:@""] makeGlobal] makeShared];
+        _mapillaryFilterStartDate = [[[OACommonDouble withKey:mapillaryFilterStartDateKey defValue: 0] makeGlobal] makeShared];
+        _mapillaryFilterEndDate = [[[OACommonDouble withKey:mapillaryFilterEndDateKey defValue: 0] makeGlobal] makeShared];
+        _mapillaryFilterPano = [[[OACommonBoolean withKey:mapillaryFilterPanoKey defValue:NO] makeGlobal] makeShared];
 
         [_globalSettings setObject:_mapillaryFirstDialogShown forKey:@"mapillary_first_dialog_shown"];
         [_globalSettings setObject:_onlinePhotosRowCollapsed forKey:@"mapillary_menu_collapsed"];
@@ -2741,82 +2741,82 @@
         [_globalSettings setObject:_mapillaryFilterEndDate forKey:@"mapillary_filter_to_date"];
         [_globalSettings setObject:_mapillaryFilterPano forKey:@"mapillary_filter_pano"];
 
-        _quickActionIsOn = [OAProfileBoolean withKey:quickActionIsOnKey defValue:NO];
-        _quickActionsList = [[[OAProfileString withKey:quickActionsListKey defValue:@""] makeGlobal] makeShared];
-        _isQuickActionTutorialShown = [[[OAProfileBoolean withKey:isQuickActionTutorialShownKey defValue:NO] makeGlobal] makeShared];
+        _quickActionIsOn = [OACommonBoolean withKey:quickActionIsOnKey defValue:NO];
+        _quickActionsList = [[[OACommonString withKey:quickActionsListKey defValue:@""] makeGlobal] makeShared];
+        _isQuickActionTutorialShown = [[[OACommonBoolean withKey:isQuickActionTutorialShownKey defValue:NO] makeGlobal] makeShared];
 
         [_registeredPreferences setObject:_quickActionIsOn forKey:@"quick_action_state"];
         [_globalSettings setObject:_quickActionsList forKey:@"quick_action_list"];
         [_globalSettings setObject:_isQuickActionTutorialShown forKey:@"quick_action_tutorial"];
 
-        _quickActionPortraitX = [OAProfileDouble withKey:quickActionPortraitXKey defValue:0];
-        _quickActionPortraitY = [OAProfileDouble withKey:quickActionPortraitYKey defValue:0];
-        _quickActionLandscapeX = [OAProfileDouble withKey:quickActionLandscapeXKey defValue:0];
-        _quickActionLandscapeY = [OAProfileDouble withKey:quickActionLandscapeYKey defValue:0];
+        _quickActionPortraitX = [OACommonDouble withKey:quickActionPortraitXKey defValue:0];
+        _quickActionPortraitY = [OACommonDouble withKey:quickActionPortraitYKey defValue:0];
+        _quickActionLandscapeX = [OACommonDouble withKey:quickActionLandscapeXKey defValue:0];
+        _quickActionLandscapeY = [OACommonDouble withKey:quickActionLandscapeYKey defValue:0];
         [_registeredPreferences setObject:_quickActionPortraitX forKey:@"quick_fab_margin_x_portrait_margin"];
         [_registeredPreferences setObject:_quickActionPortraitY forKey:@"quick_fab_margin_y_portrait_margin"];
         [_registeredPreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
         [_registeredPreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
 
-        _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
+        _contourLinesZoom = [OACommonString withKey:contourLinesZoomKey defValue:@""];
         [_registeredPreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
 
         // Custom plugins
         _customPluginsJson = [[NSUserDefaults standardUserDefaults] objectForKey:customPluginsJsonKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:customPluginsJsonKey] : @"";
 
         // Direction Appearance
-        _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
+        _activeMarkers = [OACommonActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
         [_registeredPreferences setObject:_activeMarkers forKey:@"displayed_markers_widgets_count"];
-        _distanceIndicationVisibility = [OAProfileBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
+        _distanceIndicationVisibility = [OACommonBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
         [_registeredPreferences setObject:_distanceIndicationVisibility forKey:@"markers_distance_indication_enabled"];
-        _distanceIndication = [OAProfileDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
+        _distanceIndication = [OACommonDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
         [_registeredPreferences setObject:_distanceIndication forKey:@"map_markers_mode"];
-        _arrowsOnMap = [OAProfileBoolean withKey:mapArrowsOnMapKey defValue:YES];
+        _arrowsOnMap = [OACommonBoolean withKey:mapArrowsOnMapKey defValue:YES];
         [_registeredPreferences setObject:_arrowsOnMap forKey:@"show_arrows_to_first_markers"];
-        _directionLines = [OAProfileBoolean withKey:mapDirectionLinesKey defValue:YES];
+        _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:YES];
         [_registeredPreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
 
         // global
 
-        _wikiArticleShowImagesAsked = [[OAProfileBoolean withKey:wikiArticleShowImagesAskedKey defValue:NO] makeGlobal];
+        _wikiArticleShowImagesAsked = [[OACommonBoolean withKey:wikiArticleShowImagesAskedKey defValue:NO] makeGlobal];
         //todo convert to OAProfileWikiArticleShowImages
 //        _wikivoyageShowImgs = [[[OAProfileWikiArticleShowImages withKey:wikivoyageShowImgsKey defValue:WikiArticleShowImages.OFF, WikiArticleShowImages.values()] makeGlobal] makeShared] : NO;
 
         [_globalSettings setObject:_wikiArticleShowImagesAsked forKey:@"wikivoyage_show_images_asked"];
 //        [_globalSettings setObject:_wikivoyageShowImgs forKey:@"wikivoyage_show_imgs"];
 
-        _coordsInputUseRightSide = [[[OAProfileBoolean withKey:coordsInputUseRightSideKey defValue:YES] makeGlobal] makeShared];
+        _coordsInputUseRightSide = [[[OACommonBoolean withKey:coordsInputUseRightSideKey defValue:YES] makeGlobal] makeShared];
         //todo convert to OAProfileFormat
 //        _coordsInputFormat = [[[OAProfileFormat withKey:coordsInputFormatKey defValue:Format.DD_MM_MMM, Format.values()] makeGlobal] makeShared];
-        _coordsInputUseOsmandKeyboard = [[[OAProfileBoolean withKey:coordsInputUseOsmandKeyboardKey defValue: YES] makeGlobal] makeShared];
-        _coordsInputTwoDigitsLongitude = [[[OAProfileBoolean withKey:coordsInputTwoDigitsLongitudeKey defValue: NO] makeGlobal] makeShared];
+        _coordsInputUseOsmandKeyboard = [[[OACommonBoolean withKey:coordsInputUseOsmandKeyboardKey defValue: YES] makeGlobal] makeShared];
+        _coordsInputTwoDigitsLongitude = [[[OACommonBoolean withKey:coordsInputTwoDigitsLongitudeKey defValue: NO] makeGlobal] makeShared];
 
         [_globalSettings setObject:_coordsInputUseRightSide forKey:@"coords_input_use_right_side"];
 //        [_globalSettings setObject:_coordsInputFormat forKey:@"coords_input_format"];
         [_globalSettings setObject:_coordsInputUseOsmandKeyboard forKey:@"coords_input_use_osmand_keyboard"];
         [_globalSettings setObject:_coordsInputTwoDigitsLongitude forKey:@"coords_input_two_digits_longitude"];
 
-        _showCardToChooseDrawer = [[[OAProfileBoolean withKey:showCardToChooseDrawerKey defValue:NO] makeGlobal] makeShared];
-        _shouldShowDashboardOnStart = [[[OAProfileBoolean withKey:shouldShowDashboardOnStartKey defValue:NO] makeGlobal] makeShared];
-        _showDashboardOnMapScreen = [[[OAProfileBoolean withKey:showDashboardOnMapScreenKey defValue:NO] makeGlobal] makeShared];
-        _showOsmandWelcomeScreen = [[OAProfileBoolean withKey:showOsmandWelcomeScreenKey defValue:YES] makeGlobal];
+        _showCardToChooseDrawer = [[[OACommonBoolean withKey:showCardToChooseDrawerKey defValue:NO] makeGlobal] makeShared];
+        _shouldShowDashboardOnStart = [[[OACommonBoolean withKey:shouldShowDashboardOnStartKey defValue:NO] makeGlobal] makeShared];
+        _showDashboardOnMapScreen = [[[OACommonBoolean withKey:showDashboardOnMapScreenKey defValue:NO] makeGlobal] makeShared];
+        _showOsmandWelcomeScreen = [[OACommonBoolean withKey:showOsmandWelcomeScreenKey defValue:YES] makeGlobal];
 
         [_globalSettings setObject:_showCardToChooseDrawer forKey:@"show_card_to_choose_drawer"];
         [_globalSettings setObject:_shouldShowDashboardOnStart forKey:@"should_show_dashboard_on_start"];
         [_globalSettings setObject:_showDashboardOnMapScreen forKey:@"show_dashboard_on_map_screen"];
         [_globalSettings setObject:_showOsmandWelcomeScreen forKey:@"show_osmand_welcome_screen"];
 
-        _apiNavDrawerItemsJson = [[[OAProfileString withKey:apiNavDrawerItemsJsonKey defValue:@"{}"] makeGlobal] makeShared];
-        _apiConnectedAppsJson = [[[OAProfileString withKey:apiConnectedAppsJsonKey defValue:@"[]"] makeGlobal] makeShared];
+        _apiNavDrawerItemsJson = [[[OACommonString withKey:apiNavDrawerItemsJsonKey defValue:@"{}"] makeGlobal] makeShared];
+        _apiConnectedAppsJson = [[[OACommonString withKey:apiConnectedAppsJsonKey defValue:@"[]"] makeGlobal] makeShared];
 
         [_globalSettings setObject:_apiNavDrawerItemsJson forKey:@"api_nav_drawer_items_json"];
         [_globalSettings setObject:_apiConnectedAppsJson forKey:@"api_connected_apps_json"];
 
-        _numberOfStartsFirstXmasShown = [[OAProfileInteger withKey:numberOfStartsFirstXmasShownKey defValue:0] makeGlobal];
-        _lastFavCategoryEntered = [[OAProfileString withKey:lastFavCategoryEnteredKey defValue:@""] makeGlobal];
-        _useLastApplicationModeByDefault = [[[OAProfileBoolean withKey:useLastApplicationModeByDefaultKey defValue:NO] makeGlobal] makeShared];
-        _lastUsedApplicationMode = [[[OAProfileString withKey:lastUsedApplicationModeKey defValue:OAApplicationMode.DEFAULT.stringKey] makeGlobal] makeShared];
-        _lastRouteApplicationMode = [[OAProfileAppMode withKey:lastRouteApplicationModeBackupStringKey defValue:OAApplicationMode.DEFAULT] makeGlobal];
+        _numberOfStartsFirstXmasShown = [[OACommonInteger withKey:numberOfStartsFirstXmasShownKey defValue:0] makeGlobal];
+        _lastFavCategoryEntered = [[OACommonString withKey:lastFavCategoryEnteredKey defValue:@""] makeGlobal];
+        _useLastApplicationModeByDefault = [[[OACommonBoolean withKey:useLastApplicationModeByDefaultKey defValue:NO] makeGlobal] makeShared];
+        _lastUsedApplicationMode = [[[OACommonString withKey:lastUsedApplicationModeKey defValue:OAApplicationMode.DEFAULT.stringKey] makeGlobal] makeShared];
+        _lastRouteApplicationMode = [[OACommonAppMode withKey:lastRouteApplicationModeBackupStringKey defValue:OAApplicationMode.DEFAULT] makeGlobal];
 
         [_globalSettings setObject:_numberOfStartsFirstXmasShown forKey:@"number_of_starts_first_xmas_shown"];
         [_globalSettings setObject:_lastFavCategoryEntered forKey:@"last_fav_category"];
@@ -2824,20 +2824,20 @@
         [_globalSettings setObject:_lastUsedApplicationMode forKey:@"last_used_application_mode"];
         [_globalSettings setObject:_lastRouteApplicationMode forKey:@"last_route_application_mode_backup_string"];
 
-        _onlineRoutingEngines = [[OAProfileString withKey:onlineRoutingEnginesKey defValue:nil] makeGlobal];
+        _onlineRoutingEngines = [[OACommonString withKey:onlineRoutingEnginesKey defValue:nil] makeGlobal];
         [_globalSettings setObject:_onlineRoutingEngines forKey:@"online_routing_engines"];
 
-        _doNotShowStartupMessages = [[[OAProfileBoolean withKey:doNotShowStartupMessagesKey defValue:NO] makeGlobal] makeShared];
-        _showDownloadMapDialog = [[[OAProfileBoolean withKey:showDownloadMapDialogKey defValue:YES] makeGlobal] makeShared];
+        _doNotShowStartupMessages = [[[OACommonBoolean withKey:doNotShowStartupMessagesKey defValue:NO] makeGlobal] makeShared];
+        _showDownloadMapDialog = [[[OACommonBoolean withKey:showDownloadMapDialogKey defValue:YES] makeGlobal] makeShared];
 
         [_globalSettings setObject:_doNotShowStartupMessages forKey:@"do_not_show_startup_messages"];
         [_globalSettings setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
 
-        _sendAnonymousMapDownloadsData = [[[OAProfileBoolean withKey:sendAnonymousMapDownloadsDataKey defValue:NO] makeGlobal] makeShared];
-        _sendAnonymousAppUsageData = [[[OAProfileBoolean withKey:sendAnonymousAppUsageDataKey defValue:NO] makeGlobal] makeShared];
-        _sendAnonymousDataRequestProcessed = [[[OAProfileBoolean withKey:sendAnonymousDataRequestProcessedKey defValue:NO] makeGlobal] makeShared];
-        _sendAnonymousDataRequestCount = [[OAProfileInteger withKey:sendAnonymousDataRequestCountKey defValue:0] makeGlobal];
-        _sendAnonymousDataLastRequestNs = [[OAProfileInteger withKey:sendAnonymousDataLastRequestNsKey defValue:-1] makeGlobal];
+        _sendAnonymousMapDownloadsData = [[[OACommonBoolean withKey:sendAnonymousMapDownloadsDataKey defValue:NO] makeGlobal] makeShared];
+        _sendAnonymousAppUsageData = [[[OACommonBoolean withKey:sendAnonymousAppUsageDataKey defValue:NO] makeGlobal] makeShared];
+        _sendAnonymousDataRequestProcessed = [[[OACommonBoolean withKey:sendAnonymousDataRequestProcessedKey defValue:NO] makeGlobal] makeShared];
+        _sendAnonymousDataRequestCount = [[OACommonInteger withKey:sendAnonymousDataRequestCountKey defValue:0] makeGlobal];
+        _sendAnonymousDataLastRequestNs = [[OACommonInteger withKey:sendAnonymousDataLastRequestNsKey defValue:-1] makeGlobal];
 
         [_globalSettings setObject:_sendAnonymousMapDownloadsData forKey:@"send_anonymous_map_downloads_data"];
         [_globalSettings setObject:_sendAnonymousAppUsageData forKey:@"send_anonymous_app_usage_data"];
@@ -2845,18 +2845,18 @@
         [_globalSettings setObject:_sendAnonymousDataRequestCount forKey:@"send_anonymous_data_requests_count"];
         [_globalSettings setObject:_sendAnonymousDataLastRequestNs forKey:@"send_anonymous_data_last_request_ns"];
 
-        _webglSupported = [[OAProfileBoolean withKey:webglSupportedKey defValue:YES] makeGlobal];
+        _webglSupported = [[OACommonBoolean withKey:webglSupportedKey defValue:YES] makeGlobal];
         [_globalSettings setObject:_webglSupported forKey:@"webgl_supported"];
 
-        _inappsRead = [[OAProfileBoolean withKey:inappsReadKey defValue:YES] makeGlobal];
+        _inappsRead = [[OACommonBoolean withKey:inappsReadKey defValue:YES] makeGlobal];
         [_globalSettings setObject:_inappsRead forKey:@"inapps_read"];
 
-        _backupUserEmail = [[OAProfileString withKey:backupUserEmailKey defValue:@""] makeGlobal];
-        _backupUserId = [[OAProfileString withKey:backupUserIdKey defValue:@""] makeGlobal];
-        _backupDeviceId = [[OAProfileString withKey:backupDeviceIdKey defValue:@""] makeGlobal];
-        _backupNativeDeviceId = [[OAProfileString withKey:backupNativeDeviceIdKey defValue:@""] makeGlobal];
-        _backupAccessToken = [[OAProfileString withKey:backupAccessTokenKey defValue:@""] makeGlobal];
-        _backupAccessTokenUpdateTime = [[OAProfileString withKey:backupAccessTokenUpdateTimeKey defValue:@""] makeGlobal];
+        _backupUserEmail = [[OACommonString withKey:backupUserEmailKey defValue:@""] makeGlobal];
+        _backupUserId = [[OACommonString withKey:backupUserIdKey defValue:@""] makeGlobal];
+        _backupDeviceId = [[OACommonString withKey:backupDeviceIdKey defValue:@""] makeGlobal];
+        _backupNativeDeviceId = [[OACommonString withKey:backupNativeDeviceIdKey defValue:@""] makeGlobal];
+        _backupAccessToken = [[OACommonString withKey:backupAccessTokenKey defValue:@""] makeGlobal];
+        _backupAccessTokenUpdateTime = [[OACommonString withKey:backupAccessTokenUpdateTimeKey defValue:@""] makeGlobal];
 
         [_globalSettings setObject:_backupUserEmail forKey:@"backup_user_email"];
         [_globalSettings setObject:_backupUserId forKey:@"backup_user_id"];
@@ -2865,43 +2865,43 @@
         [_globalSettings setObject:_backupAccessToken forKey:@"backup_access_token"];
         [_globalSettings setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
 
-        _favoritesLastUploadedTime = [[OAProfileLong withKey:favoritesLastUploadedTimeKey defValue:0] makeGlobal];
-        _backupLastUploadedTime = [[OAProfileLong withKey:backupLastUploadedTimeKey defValue:0] makeGlobal];
+        _favoritesLastUploadedTime = [[OACommonLong withKey:favoritesLastUploadedTimeKey defValue:0] makeGlobal];
+        _backupLastUploadedTime = [[OACommonLong withKey:backupLastUploadedTimeKey defValue:0] makeGlobal];
 
         [_globalSettings setObject:_favoritesLastUploadedTime forKey:@"favorites_last_uploaded_time"];
         [_globalSettings setObject:_backupLastUploadedTime forKey:@"backup_last_uploaded_time"];
 
-        _delayToStartNavigation = [[[OAProfileInteger withKey:delayToStartNavigationKey defValue:-1] makeGlobal] makeShared];
+        _delayToStartNavigation = [[[OACommonInteger withKey:delayToStartNavigationKey defValue:-1] makeGlobal] makeShared];
         [_globalSettings setObject:_delayToStartNavigation forKey:@"delay_to_start_navigation"];
 
-        _enableProxy = [[[OAProfileBoolean withKey:enableProxyKey defValue:NO] makeGlobal] makeShared];
-        _proxyHost = [[[OAProfileString withKey:proxyHostKey defValue:@"127.0.0.1"] makeGlobal] makeShared];
-        _proxyPort = [[[OAProfileInteger withKey:proxyPortKey defValue:8118] makeGlobal] makeShared];
-//        _userAndroidId = [[OAProfileString withKey:userAndroidIdKey defValue:@""] makeGlobal];
+        _enableProxy = [[[OACommonBoolean withKey:enableProxyKey defValue:NO] makeGlobal] makeShared];
+        _proxyHost = [[[OACommonString withKey:proxyHostKey defValue:@"127.0.0.1"] makeGlobal] makeShared];
+        _proxyPort = [[[OACommonInteger withKey:proxyPortKey defValue:8118] makeGlobal] makeShared];
+//        _userAndroidId = [[OACommonString withKey:userAndroidIdKey defValue:@""] makeGlobal];
 
         [_globalSettings setObject:_enableProxy forKey:@"enable_proxy"];
         [_globalSettings setObject:_proxyHost forKey:@"proxy_host"];
         [_globalSettings setObject:_proxyPort forKey:@"proxy_port"];
 //        [_globalSettings setObject:_userAndroidId forKey:@"user_android_id"];
 
-        _speedCamerasUninstalled = [[[OAProfileBoolean withKey:speedCamerasUninstalledKey defValue:NO] makeGlobal] makeShared];
-        _speedCamerasAlertShowed = [[[OAProfileBoolean withKey:speedCamerasAlertShowedKey defValue:NO] makeGlobal] makeShared];
+        _speedCamerasUninstalled = [[[OACommonBoolean withKey:speedCamerasUninstalledKey defValue:NO] makeGlobal] makeShared];
+        _speedCamerasAlertShowed = [[[OACommonBoolean withKey:speedCamerasAlertShowedKey defValue:NO] makeGlobal] makeShared];
 
         [_globalSettings setObject:_speedCamerasUninstalled forKey:@"speed_cameras_uninstalled"];
         [_globalSettings setObject:_speedCamerasAlertShowed forKey:@"speed_cameras_alert_showed"];
 
-        _lastUpdatesCardRefresh = [[OAProfileLong withKey:lastUpdatesCardRefreshKey defValue:0] makeGlobal];
+        _lastUpdatesCardRefresh = [[OACommonLong withKey:lastUpdatesCardRefreshKey defValue:0] makeGlobal];
         [_globalSettings setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
 
-        _currentTrackColor = [[[OAProfileInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
+        _currentTrackColor = [[[OACommonInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
 //        _currentTrackColorization = [[[OAProfileGradientScaleType withKey:currentTrackColorizationKey defValue:null, GradientScaleType.values()] makeGlobal] makeShared];
-        _currentTrackSpeedGradientPalette = [[[OAProfileString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
-        _currentTrackAltitudeGradientPalette = [[[OAProfileString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
-        _currentTrackSlopeGradientPalette = [[[OAProfileString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
-        _currentTrackWidth = [[[OAProfileString withKey:currentTrackWidthKey defValue:@""] makeGlobal] makeShared];
-        _currentTrackShowArrows = [[[OAProfileBoolean withKey:currentTrackShowArrowsKey defValue:NO] makeGlobal] makeShared];
-        _currentTrackShowStartFinish = [[[OAProfileBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
-        _customTrackColors = [[[OAProfileStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
+        _currentTrackSpeedGradientPalette = [[[OACommonString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
+        _currentTrackAltitudeGradientPalette = [[[OACommonString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
+        _currentTrackSlopeGradientPalette = [[[OACommonString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
+        _currentTrackWidth = [[[OACommonString withKey:currentTrackWidthKey defValue:@""] makeGlobal] makeShared];
+        _currentTrackShowArrows = [[[OACommonBoolean withKey:currentTrackShowArrowsKey defValue:NO] makeGlobal] makeShared];
+        _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
+        _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalSettings setObject:_currentTrackColor forKey:@"current_track_color"];
 //        [_globalSettings setObject:_currentTrackColorization forKey:@"current_track_colorization"];
@@ -2913,13 +2913,13 @@
         [_globalSettings setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
         [_globalSettings setObject:_customTrackColors forKey:@"custom_track_colors"];
 
-        _gpsStatusApp = [[[OAProfileString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
+        _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
         [_globalSettings setObject:_gpsStatusApp forKey:@"gps_status_app"];
 
-        _debugRenderingInfo = [[[OAProfileBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
+        _debugRenderingInfo = [[[OACommonBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalSettings setObject:_debugRenderingInfo forKey:@"debug_rendering"];
 
-        _levelToSwitchVectorRaster = [[OAProfileInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
+        _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
         [_globalSettings setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 
         // For now this can be changed only in TestVoiceActivity
@@ -2933,73 +2933,73 @@
 //            VOICE_PROMPT_DELAY[5] = new IntPreference(this, "voice_prompt_delay_5", 0).makeGlobal().makeShared().cache();    /*AudioManager.STREAM_NOTIFICATION*/
 //        }
 
-        _displayTtsUtterance = [[[OAProfileBoolean withKey:displayTtsUtteranceKey defValue:NO] makeGlobal] makeShared];
+        _displayTtsUtterance = [[[OACommonBoolean withKey:displayTtsUtteranceKey defValue:NO] makeGlobal] makeShared];
         [_globalSettings setObject:_displayTtsUtterance forKey:@"display_tts_utterance"];
 
-        _mapOverlayPrevious = [[OAProfileString withKey:mapOverlayPreviousKey defValue:nil] makeGlobal];
-        _mapUnderlayPrevious = [[OAProfileString withKey:mapUnderlayPreviousKey defValue:nil] makeGlobal];
-        _previousInstalledVersion = [[OAProfileString withKey:previousInstalledVersionKey defValue:@""] makeGlobal];
-        _shouldShowFreeVersionBanner = [[[OAProfileBoolean withKey:shouldShowFreeVersionBannerKey defValue:NO] makeGlobal] makeShared];
+        _mapOverlayPrevious = [[OACommonString withKey:mapOverlayPreviousKey defValue:nil] makeGlobal];
+        _mapUnderlayPrevious = [[OACommonString withKey:mapUnderlayPreviousKey defValue:nil] makeGlobal];
+        _previousInstalledVersion = [[OACommonString withKey:previousInstalledVersionKey defValue:@""] makeGlobal];
+        _shouldShowFreeVersionBanner = [[[OACommonBoolean withKey:shouldShowFreeVersionBannerKey defValue:NO] makeGlobal] makeShared];
 
         [_globalSettings setObject:_mapOverlayPrevious forKey:@"map_overlay_previous"];
         [_globalSettings setObject:_mapUnderlayPrevious forKey:@"map_underlay_previous"];
         [_globalSettings setObject:_previousInstalledVersion forKey:@"previous_installed_version"];
         [_globalSettings setObject:_shouldShowFreeVersionBanner forKey:@"should_show_free_version_banner"];
 
-        _routeMapMarkersStartMyLoc = [[[OAProfileBoolean withKey:routeMapMarkersStartMyLocKey defValue:NO] makeGlobal] makeShared];
-        _routeMapMarkersRoundTrip = [[[OAProfileBoolean withKey:routeMapMarkersRoundTripKey defValue:NO] makeGlobal] makeShared];
+        _routeMapMarkersStartMyLoc = [[[OACommonBoolean withKey:routeMapMarkersStartMyLocKey defValue:NO] makeGlobal] makeShared];
+        _routeMapMarkersRoundTrip = [[[OACommonBoolean withKey:routeMapMarkersRoundTripKey defValue:NO] makeGlobal] makeShared];
 
         [_globalSettings setObject:_routeMapMarkersStartMyLoc forKey:@"route_map_markers_start_my_loc"];
         [_globalSettings setObject:_routeMapMarkersRoundTrip forKey:@"route_map_markers_round_trip"];
 
-        _osmandUsageSpace = [[OAProfileLong withKey:osmandUsageSpaceKey defValue:0] makeGlobal];
+        _osmandUsageSpace = [[OACommonLong withKey:osmandUsageSpaceKey defValue:0] makeGlobal];
         [_globalSettings setObject:_osmandUsageSpace forKey:@"osmand_usage_space"];
 
-        _lastSelectedGpxTrackForNewPoint = [[OAProfileString withKey:lastSelectedGpxTrackForNewPointKey defValue:@""] makeGlobal];
+        _lastSelectedGpxTrackForNewPoint = [[OACommonString withKey:lastSelectedGpxTrackForNewPointKey defValue:@""] makeGlobal];
         [_globalSettings setObject:_lastSelectedGpxTrackForNewPoint forKey:@"last_selected_gpx_track_for_new_point"];
 
-        _customRouteLineColors = [[[OAProfileStringList withKey:customRouteLineColorsKey defValue:@[]] makeGlobal] makeShared];
+        _customRouteLineColors = [[[OACommonStringList withKey:customRouteLineColorsKey defValue:@[]] makeGlobal] makeShared];
         [_globalSettings setObject:_customRouteLineColors forKey:@"custom_route_line_colors"];
 
-        _mapActivityEnabled = [[OAProfileBoolean withKey:mapActivityEnabledKey defValue: NO] makeGlobal];
+        _mapActivityEnabled = [[OACommonBoolean withKey:mapActivityEnabledKey defValue: NO] makeGlobal];
         [_globalSettings setObject:_mapActivityEnabled forKey:@"map_activity_enabled"];
 
-        _safeMode = [[[OAProfileBoolean withKey:safeModeKey defValue: NO] makeGlobal] makeShared];
-        _nativeRenderingFailed = [[OAProfileBoolean withKey:nativeRenderingFailedKey defValue: NO] makeGlobal];
+        _safeMode = [[[OACommonBoolean withKey:safeModeKey defValue: NO] makeGlobal] makeShared];
+        _nativeRenderingFailed = [[OACommonBoolean withKey:nativeRenderingFailedKey defValue: NO] makeGlobal];
 
         [_globalSettings setObject:_safeMode forKey:@"safe_mode"];
         [_globalSettings setObject:_nativeRenderingFailed forKey:@"native_rendering_failed_init"];
 
-        _useOpenglRender = [[[OAProfileBoolean withKey:useOpenglRenderKey defValue: NO] makeGlobal] makeShared];
-        _openglRenderFailed = [[OAProfileBoolean withKey:openglRenderFailedKey defValue: NO] makeGlobal];
+        _useOpenglRender = [[[OACommonBoolean withKey:useOpenglRenderKey defValue: NO] makeGlobal] makeShared];
+        _openglRenderFailed = [[OACommonBoolean withKey:openglRenderFailedKey defValue: NO] makeGlobal];
 
         [_globalSettings setObject:_useOpenglRender forKey:@"use_opengl_render"];
         [_globalSettings setObject:_openglRenderFailed forKey:@"opengl_render_failed"];
 
-        _contributionInstallAppDate = [[OAProfileString withKey:contributionInstallAppDateKey defValue:@""] makeGlobal];
+        _contributionInstallAppDate = [[OACommonString withKey:contributionInstallAppDateKey defValue:@""] makeGlobal];
         [_globalSettings setObject:_contributionInstallAppDate forKey:@"CONTRIBUTION_INSTALL_APP_DATE"];
 
-        _selectedTravelBook = [[[OAProfileString withKey:selectedTravelBookKey defValue:@""] makeGlobal] makeShared];
+        _selectedTravelBook = [[[OACommonString withKey:selectedTravelBookKey defValue:@""] makeGlobal] makeShared];
         [_globalSettings setObject:_selectedTravelBook forKey:@"selected_travel_book"];
 
-        _agpsDataLastTimeDownloaded = [[OAProfileLong withKey:agpsDataLastTimeDownloadedKey defValue:0] makeGlobal];
+        _agpsDataLastTimeDownloaded = [[OACommonLong withKey:agpsDataLastTimeDownloadedKey defValue:0] makeGlobal];
         [_globalSettings setObject:_agpsDataLastTimeDownloaded forKey:@"agps_data_downloaded"];
 
-        _searchTab = [[OAProfileInteger withKey:searchTabKey defValue:0] makeGlobal];
-        _favoritesTab = [[OAProfileInteger withKey:favoritesTabKey defValue:0] makeGlobal];
+        _searchTab = [[OACommonInteger withKey:searchTabKey defValue:0] makeGlobal];
+        _favoritesTab = [[OACommonInteger withKey:favoritesTabKey defValue:0] makeGlobal];
 
         [_globalSettings setObject:_searchTab forKey:@"SEARCH_TAB"];
         [_globalSettings setObject:_favoritesTab forKey:@"FAVORITES_TAB"];
 
-        _fluorescentOverlays = [[[OAProfileBoolean withKey:fluorescentOverlaysKey defValue:NO] makeGlobal] makeShared];
+        _fluorescentOverlays = [[[OACommonBoolean withKey:fluorescentOverlaysKey defValue:NO] makeGlobal] makeShared];
         [_globalSettings setObject:_fluorescentOverlays forKey:@"fluorescent_overlays"];
 
-        _numberOfFreeDownloads = [[OAProfileInteger withKey:numberOfFreeDownloadsKey defValue:0] makeGlobal];
+        _numberOfFreeDownloads = [[OACommonInteger withKey:numberOfFreeDownloadsKey defValue:0] makeGlobal];
         [_globalSettings setObject:_numberOfFreeDownloads forKey:@"free_downloads_v3"];
 
-        _lastDisplayTime = [[OAProfileLong withKey:lastDisplayTimeKey defValue:0] makeGlobal];
-        _lastCheckedUpdates = [[OAProfileLong withKey:lastCheckedUpdatesKey defValue:0] makeGlobal];
-        _numberOfAppStartsOnDislikeMoment = [[OAProfileInteger withKey:numberOfAppStartsOnDislikeMomentKey defValue:0] makeGlobal];
+        _lastDisplayTime = [[OACommonLong withKey:lastDisplayTimeKey defValue:0] makeGlobal];
+        _lastCheckedUpdates = [[OACommonLong withKey:lastCheckedUpdatesKey defValue:0] makeGlobal];
+        _numberOfAppStartsOnDislikeMoment = [[OACommonInteger withKey:numberOfAppStartsOnDislikeMomentKey defValue:0] makeGlobal];
 //        _rateUsState = [[OAProfileRateUsState withKey:rateUsStateKey defValue:RateUsState.INITIAL_STATE, RateUsState.values()] makeGlobal];
 
         [_globalSettings setObject:_lastDisplayTime forKey:@"last_display_time"];
@@ -3012,12 +3012,12 @@
     return self;
 }
 
-- (void) registerPreference:(OAProfileSetting *)pref forKey:(NSString *)key
+- (void)registerPreference:(OACommonPreference *)pref forKey:(NSString *)key
 {
     [_registeredPreferences setObject:pref forKey:key];
 }
 
-- (NSMapTable<NSString *, OAProfileSetting *> *) getRegisteredSettings
+- (NSMapTable<NSString *, OACommonPreference *> *) getRegisteredSettings
 {
     return _registeredPreferences;
 }
@@ -3027,41 +3027,41 @@
     return _globalPreferences;
 }
 
-- (NSMapTable<NSString *, OAProfileSetting *> *) getGlobalSettings2
+- (NSMapTable<NSString *, OACommonPreference *> *) getGlobalSettings2
 {
     return _globalSettings;
 }
 
 - (void) setGlobalSetting:(NSString *)value key:(NSString *)key
 {
-    OAProfileSetting *setting = [_globalSettings objectForKey:key];
+    OACommonPreference *setting = [_globalSettings objectForKey:key];
     if (setting)
         [setting setValueFromString:value appMode:nil];
 }
 
-- (OAProfileSetting *) getGlobalSetting:(NSString *)key
+- (OACommonPreference *)getGlobalSetting:(NSString *)key
 {
     return [_globalSettings objectForKey:key];
 }
 
-- (OAProfileSetting *) getSettingById:(NSString *)stringId
+- (OACommonPreference *)getSettingById:(NSString *)stringId
 {
     return [_registeredPreferences objectForKey:stringId];
 }
 
 - (void) resetPreferencesForProfile:(OAApplicationMode *)appMode
 {
-    for (OAProfileSetting *value in [_registeredPreferences objectEnumerator].allObjects)
+    for (OACommonPreference *value in [_registeredPreferences objectEnumerator].allObjects)
     {
         [value resetModeToDefault:appMode];
     }
 
-    for (OAProfileBoolean *value in [_customBooleanRoutingProps objectEnumerator].allObjects)
+    for (OACommonBoolean *value in [_customBooleanRoutingProps objectEnumerator].allObjects)
     {
         [value resetModeToDefault:appMode];
     }
 
-    for (OAProfileString *value in [_customRoutingProps objectEnumerator].allObjects)
+    for (OACommonString *value in [_customRoutingProps objectEnumerator].allObjects)
     {
         [value resetModeToDefault:appMode];
     }
@@ -3445,23 +3445,23 @@
     return [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
 }
 
-- (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue
+- (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue
 {
-    OAProfileBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
+    OACommonBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
     if (!value)
     {
-        value = [OAProfileBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+        value = [OACommonBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
         [_customBooleanRoutingProps setObject:value forKey:attrName];
     }
     return value;
 }
 
-- (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue
+- (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue
 {
-    OAProfileString *value = [_customRoutingProps objectForKey:attrName];
+    OACommonString *value = [_customRoutingProps objectForKey:attrName];
     if (!value)
     {
-        value = [OAProfileString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+        value = [OACommonString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
         [_customRoutingProps setObject:value forKey:attrName];
     }
     return value;

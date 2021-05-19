@@ -146,9 +146,9 @@
             }
             id v = item[@"value"];
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
+                OACommonBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
             }
             else
@@ -209,9 +209,9 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     BOOL isChecked = ((UISwitch *) sender).on;
     id v = item[@"value"];
-    if ([v isKindOfClass:[OAProfileBoolean class]])
+    if ([v isKindOfClass:[OACommonBoolean class]])
     {
-        OAProfileBoolean *value = v;
+        OACommonBoolean *value = v;
         [value set:isChecked mode:self.appMode];
         if ([[v key] isEqualToString:@"showScreenAlerts"])
         {

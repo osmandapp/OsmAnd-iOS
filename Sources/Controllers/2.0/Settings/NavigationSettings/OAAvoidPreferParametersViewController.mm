@@ -73,7 +73,7 @@
             {
                 NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
                 NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
-                OAProfileBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
+                OACommonBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
 
                 [dataArr addObject:
                  @{
@@ -146,9 +146,9 @@
             cell.textView.text = item[@"title"];
             id v = item[@"value"];
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
+                OACommonBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
             }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -195,9 +195,9 @@
         NSDictionary *item = _data[indexPath.row];
         BOOL isChecked = ((UISwitch *) sender).on;
         id v = item[@"value"];
-        if ([v isKindOfClass:[OAProfileBoolean class]])
+        if ([v isKindOfClass:[OACommonBoolean class]])
         {
-            OAProfileBoolean *value = v;
+            OACommonBoolean *value = v;
             [value set:isChecked mode:self.appMode];
         }
         if (self.delegate)

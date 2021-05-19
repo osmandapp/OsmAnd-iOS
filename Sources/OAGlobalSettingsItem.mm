@@ -57,7 +57,7 @@
     OAAppSettings *settings = OAAppSettings.sharedManager;
     for (NSString *key in settings.getGlobalSettings2)
     {
-        OAProfileSetting *setting = [settings.getGlobalSettings2 objectForKey:key];
+        OACommonPreference *setting = [settings.getGlobalSettings2 objectForKey:key];
         if (setting.shared)
             json[key] = [setting toStringValue:nil];
     }

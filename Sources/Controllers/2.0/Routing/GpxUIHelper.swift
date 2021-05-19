@@ -860,7 +860,7 @@ public enum GPXDataSetAxisType: String {
             divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
         }
         
-        let sps: OAProfileSpeedConstant = settings.speedSystem
+        let sps: OACommonSpeedConstant = settings.speedSystem
         var mulSpeed = Double.nan
         var divSpeed = Double.nan
         let mainUnitY = OASpeedConstant.toShortString(sps.get())

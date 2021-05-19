@@ -46,39 +46,15 @@
 - (double) getSumPhraseMatchWeight
 {
     // if result is a complete match in the search we prioritize it higher
-    NSString *name = _alternateName ? _alternateName : _localeName;
-    NSMutableArray<NSString *> *localResultNames = [NSMutableArray array];
-    NSMutableArray<NSString *> *searchPhraseNames = [NSMutableArray array];
-    [_requiredSearchPhrase splitWords:name ws:localResultNames];
-    
-    NSString *fw = [_requiredSearchPhrase getFirstUnknownSearchWord];
-    NSMutableArray<NSString *> *ow = [_requiredSearchPhrase getUnknownSearchWords];
-    
-    if (fw)
-        [searchPhraseNames addObject:fw];
-    if (ow)
-        [searchPhraseNames addObjectsFromArray:ow];
-    
-    int idxMatchedWord = -1;
-    BOOL allWordsMatched = YES;
-    
-    for (NSString *searchPhraseName : searchPhraseNames)
+    NSMutableArray<NSString *> *searchPhraseNames = [self getSearchPhraseNames];
+    BOOL allWordsMatched = [self allWordsMatched:[OASearchPhrase splitWords:_localeName ws:[NSMutableArray array]] searchPhraseNames: searchPhraseNames];
+    if (_otherNames != nil && !allWordsMatched)
     {
-        BOOL wordMatched = NO;
-        for (int i = idxMatchedWord + 1; i < [localResultNames count]; i++)
+        for (NSString *otherName : _otherNames)
         {
-            int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString(localResultNames[i]));
-            if (r == 0)
-            {
-                wordMatched = YES;
-                idxMatchedWord = i;
+            allWordsMatched = [self allWordsMatched:[OASearchPhrase splitWords:otherName ws:[NSMutableArray array]] searchPhraseNames: searchPhraseNames];
+            if (allWordsMatched)
                 break;
-            }
-        }
-        if (!wordMatched)
-        {
-            allWordsMatched = NO;
-            break;
         }
     }
     if (_objectType == POI_TYPE)
@@ -94,6 +70,45 @@
         res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;
     
     return res;
+}
+
+- (BOOL) allWordsMatched:(NSMutableArray<NSString *> *)localResultNames searchPhraseNames:(NSMutableArray<NSString *> *)searchPhraseNames
+{
+    if ([searchPhraseNames count] == 0)
+        return NO;
+    int idxMatchedWord = -1;
+    for (NSString *searchPhraseName : searchPhraseNames)
+    {
+        BOOL wordMatched = NO;
+        for (int i = idxMatchedWord + 1; i < [localResultNames count]; i++)
+        {
+            int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString(localResultNames[i]));
+            if (r == 0)
+            {
+                wordMatched = YES;
+                idxMatchedWord = i;
+                break;
+            }
+        }
+        if (!wordMatched)
+            return NO;
+    }
+    return YES;
+}
+
+-(NSMutableArray<NSString *> *) getSearchPhraseNames
+{
+    NSMutableArray<NSString *> *searchPhraseNames = [NSMutableArray array];
+    
+    NSString *fw = [_requiredSearchPhrase getFirstUnknownSearchWord];
+    NSMutableArray<NSString *> *ow = [_requiredSearchPhrase getUnknownSearchWords];
+    
+    if (fw && [fw length] > 0)
+        [searchPhraseNames addObject:fw];
+    if (ow)
+        [searchPhraseNames addObjectsFromArray:ow];
+    
+    return searchPhraseNames;
 }
 
 - (int) getDepth

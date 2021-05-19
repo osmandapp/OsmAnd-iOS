@@ -2036,7 +2036,7 @@
 "enable_contour_lines" = "Activer pour afficher les courbes de niveau sur la carte";
 "quick_action_enter_message" = "Entrer un message";
 "quick_action_get_info" = "Obtenir des informations";
-"public_transport_empty_warning_title" = "Malheureusement OsmAnd n'a pas trouvé d'itinéraire avec les paramètres actuels.";
+"public_transport_empty_warning_title" = "Malheureusement, OsmAnd n'a pas trouvé d'itinéraire avec vos paramètres actuels.";
 "touting_specified_vehicle_parameters_descr" = "Les paramètres de véhicule spécifiés peuvent affecter le routage.";
 "key_hint_recenter_map" = "Recentrer la carte";
 "key_hint_goback" = "Revenir en arrière";
@@ -2047,3 +2047,18 @@
 "obf_import_already_exists" = "Un fichier portant ce nom existe déjà. Veuillez sélectionner une action.";
 "plugin_popup_osm_editing_title" = "Activer l’édition OpenStreetMap";
 "map_coords" = "Carte : Lat %.5f Lon %.5f";
+"sett_ext_input_desc" = "Sélectionnez un dispositif tel qu'un clavier générique ou WunderLINQ pour les commandes externes.";
+"shared_string_required" = "Requis";
+"search_poi_types_descr" = "Vous pouvez combiner des types de PI de différentes catégories.";
+"reset_to_default_category_button_promo" = "La réinitialisation à la valeur par défaut rétablira l'ordre de tri à son état initial.";
+"create_custom_categories_list_promo" = "Vous pouvez ajouter des catégories personnalisées, masquer les catégories que vous ne jugez pas nécessaires et modifier l'ordre de tri de la liste. Les catégories personnalisées peuvent être importées et exportées avec les profils.";
+"hidden_categories" = "Catégories masquées";
+"visible_categories" = "Catégories visibles";
+"rearrange_categories" = "Réorganiser les catégories";
+"delete_custom_categories" = "Supprimer les catégories personnalisées";
+"add_custom_category" = "Ajouter une catégorie personnalisée";
+"search_preogress" = "Recherche…";
+"obf_import_title" = "Importer un fichier de carte hors ligne";
+"plugin_popup_osm_editing_ask" = "Veuillez activer le greffon d'édition OpenStreetMap pour ajouter et gérer les modifications et les notes de la carte";
+"default_speed_descr" = "Estime le temps d'arrivée pour les types de routes inconnus et limite la vitesse pour toutes les routes (peut affecter la navigation)";
+"shared_string_gpx_points" = "Points";

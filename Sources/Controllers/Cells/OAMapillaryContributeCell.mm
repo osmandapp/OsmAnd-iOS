@@ -10,11 +10,6 @@
 
 @implementation OAMapillaryContributeCell
 
-+ (NSString *)getCellIdentifier
-{
-    return @"OAMapillaryContributeCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -14,11 +14,6 @@
 
 @implementation OAImageCardCell
 
-+ (NSString *)getCellIdentifier
-{
-    return @"OAImageCardCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

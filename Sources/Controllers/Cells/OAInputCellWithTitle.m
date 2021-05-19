@@ -10,11 +10,6 @@
 
 @implementation OAInputCellWithTitle
 
-+ (NSString *)getCellIdentifier
-{
-    return @"OAInputCellWithTitle";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -11,11 +11,6 @@
 
 @implementation OAMenuSimpleCell
 
-+ (NSString *)getCellIdentifier
-{
-    return @"OAMenuSimpleCell";
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -14,11 +14,6 @@
     BOOL _hideOverflowButton;
 }
 
-+ (NSString *)getCellIdentifier
-{
-    return @"OAMultiIconTextDescCell";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

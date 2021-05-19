@@ -10,11 +10,6 @@
 
 @implementation OALabelCollectionViewCell
 
-+ (NSString *)getCellIdentifier
-{
-    return @"OALabelCollectionViewCell";
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.backView.layer.cornerRadius = 14.;

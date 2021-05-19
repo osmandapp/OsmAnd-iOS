@@ -1985,7 +1985,7 @@
 "toggle_coordinates" = "Afficher/Masquer le gadget des coordonnées";
 "quick_action_list_descr" = "Appuyez pour faire défiler la liste ci-dessous";
 "copied_to_clipboard" = "Copié dans le presse-papiers";
-"searching_gps" = "Recherche GPS";
+"searching_gps" = "Recherche des satellites";
 
 // Coordinate widget
 "coordinates_widget" = "Gadget de coordonnées";

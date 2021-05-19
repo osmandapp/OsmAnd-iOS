@@ -1510,7 +1510,7 @@
             return;
         }
 
-        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
         {
             if (!_recTrackShowing)
                 [self showRecGpxTrack:YES];
@@ -1539,7 +1539,7 @@
 
 - (void) onTrackRecordingChanged:(id)observable withKey:(id)key
 {
-    if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1974,7 +1974,7 @@
         
         [_mapLayers updateLayers];
 
-        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
             [self showRecGpxTrack:YES];
         
         if (_gpxRouter.gpx && !_gpxDocFileRoute)

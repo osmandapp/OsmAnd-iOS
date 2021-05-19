@@ -75,12 +75,12 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     _subscribeButton.backgroundColor = UIColorFromRGB(color_primary_purple);
     
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
-    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown;
+    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown.get;
+    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown.get;
     if (!firstTimeShown)
-        settings.liveUpdatesPurchaseCancelledFirstDlgShown = YES;
+        [settings.liveUpdatesPurchaseCancelledFirstDlgShown set:YES];
     else if (!secondTimeShown)
-        settings.liveUpdatesPurchaseCancelledSecondDlgShown = YES;
+        [settings.liveUpdatesPurchaseCancelledSecondDlgShown set:YES];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -209,8 +209,8 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime;
-    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
-    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown;
+    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown.get;
+    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown.get;
     return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
 }
 

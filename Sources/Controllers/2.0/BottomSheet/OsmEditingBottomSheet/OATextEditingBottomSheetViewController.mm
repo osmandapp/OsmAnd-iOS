@@ -125,7 +125,7 @@
             [vwController dismiss];
             break;
         case PASSWORD_INPUT:
-            [settings setOsmUserPassword:cell.inputField.text];
+            [settings.osmUserPassword set:cell.inputField.text];
             [vwController.messageDelegate refreshData];
             [vwController dismiss];
             break;

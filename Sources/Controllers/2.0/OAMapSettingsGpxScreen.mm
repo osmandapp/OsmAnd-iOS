@@ -108,7 +108,7 @@
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:helper.distance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", helper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
-            if (_settings.mapSettingShowRecordingTrack)
+            if (_settings.mapSettingShowRecordingTrack.get)
                 [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
             else
                 [cell.iconView setImage:nil];
@@ -152,13 +152,13 @@
 {
     if (hasCurrentTrack && indexPath.row == 0)
     {
-        if (_settings.mapSettingShowRecordingTrack)
+        if (_settings.mapSettingShowRecordingTrack.get)
         {
-            _settings.mapSettingShowRecordingTrack = NO;
+            [_settings.mapSettingShowRecordingTrack set:NO];
         }
         else
         {
-            _settings.mapSettingShowRecordingTrack = YES;
+            [_settings.mapSettingShowRecordingTrack set:YES];
             [helper.currentTrack applyBounds];
             OAGpxBounds bounds = helper.currentTrack.bounds;
 

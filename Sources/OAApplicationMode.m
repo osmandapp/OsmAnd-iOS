@@ -549,7 +549,7 @@ static OAApplicationMode *_SKI;
 + (void) initCustomModes
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if (settings.customAppModes.length == 0)
+    if (settings.customAppModes.get.length == 0)
         return;
     
     for (NSString *appModeKey in [settings getCustomAppModesKeys])
@@ -596,8 +596,8 @@ static OAApplicationMode *_SKI;
             [res appendString:@","];
     }];
     
-    if (![res isEqualToString:settings.customAppModes])
-        settings.customAppModes = res;
+    if (![res isEqualToString:settings.customAppModes.get])
+        [settings.customAppModes set:res];
 }
 
 + (NSArray<OAApplicationMode *> *) getCustomAppModes

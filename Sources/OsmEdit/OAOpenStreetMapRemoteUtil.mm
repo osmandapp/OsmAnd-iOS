@@ -112,7 +112,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     else
     {
         NSURLCredential *credential = [NSURLCredential credentialWithUser:_settings.osmUserName.get
-                                                                 password:_settings.osmUserPassword
+                                                                 password:_settings.osmUserPassword.get
                                                               persistence:NSURLCredentialPersistenceForSession];
         completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
     }

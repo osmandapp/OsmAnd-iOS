@@ -109,7 +109,7 @@ static const NSInteger actionsSectionIndex = 2;
          @"name" : @"offline_editing",
          @"type" : kCellTypeSwitch,
          @"title" : OALocalizedString(@"osm_offline_editing"),
-         @"value" : @(_settings.offlineEditing)
+         @"value" : @(_settings.offlineEditing.get)
      }];
     
     [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
@@ -160,7 +160,7 @@ static const NSInteger actionsSectionIndex = 2;
         NSString *name = item[@"name"];
         
         if ([name isEqualToString:@"offline_editing"])
-            [_settings setOfflineEditing:isChecked];
+            [_settings.offlineEditing set:isChecked];
     }
 }
 

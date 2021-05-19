@@ -139,7 +139,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
         return;
     }
     BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable;
-    if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts)
+    if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts.get)
     {
         if (_params.previousToRecalculate && [_params.previousToRecalculate isCalculated])
         {
@@ -1241,8 +1241,9 @@ static BOOL _isDeviatedFromRoute = false;
         
         if (!newFinalLocation)
         {
-            _settings.followTheRoute = false;
-            _settings.followTheGpxRoute = nil;
+            [_settings.followTheRoute set:NO];
+            [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
+            [_settings.followTheGpxRoute set:nil];
             // clear last fixed location
             _lastProjection = nil;
             [self setFollowingMode:NO];

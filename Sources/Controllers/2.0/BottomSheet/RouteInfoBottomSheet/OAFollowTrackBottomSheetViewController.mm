@@ -262,7 +262,7 @@
         OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
         editingContext.gpxData = gpxData;
         editingContext.appMode = OARoutingHelper.sharedInstance.getAppMode;
-        editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment;
+        editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
         [self dismissViewControllerAnimated:NO completion:^{
             [[OARootViewController instance].mapPanel closeRouteInfo];
             [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES]];
@@ -548,7 +548,7 @@
 
 - (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
-    OAAppSettings.sharedManager.gpxRouteSegment = position;
+    [OAAppSettings.sharedManager.gpxRouteSegment set:position];
     
     [self setGpxRouteIfNeeded:gpx];
     

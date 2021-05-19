@@ -664,7 +664,7 @@
     _appMode = settings.applicationMode;
     if (route && ![route isEmpty])
     {
-        BOOL showWaypoints = settings.showGpxWpt; // global
+        BOOL showWaypoints = settings.showGpxWpt.get; // global
         BOOL announceWaypoints = [settings.announceWpt get:_appMode]; // global
         
         if (route.appMode)
@@ -746,7 +746,7 @@
     }
     else if (type == LPW_WAYPOINTS)
     {
-        settings.showGpxWpt = enable;
+        [settings.showGpxWpt set:enable];
         [settings.announceWpt set:enable mode:_appMode];
     }
     [self recalculatePoints:_route type:type locationPoints:_locationPoints];
@@ -786,7 +786,7 @@
     else if (type == LPW_FAVORITES)
         return [settings.showNearbyFavorites get:_appMode];
     else if (type == LPW_WAYPOINTS)
-        return settings.showGpxWpt;
+        return settings.showGpxWpt.get;
     
     return true;
 }

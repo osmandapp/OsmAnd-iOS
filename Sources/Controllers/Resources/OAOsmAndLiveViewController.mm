@@ -547,7 +547,7 @@ static const NSInteger sectionCount = 2;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
                 [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
-                [button setOn:_settings.settingOsmAndLiveEnabled && _iapHelper.subscribedToLiveUpdates];
+                [button setOn:_settings.settingOsmAndLiveEnabled.get && _iapHelper.subscribedToLiveUpdates];
                 [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [headerView addSubview:button];
                 [headerView addSubview:label];
@@ -578,13 +578,13 @@ static const NSInteger sectionCount = 2;
 - (void) sectionHeaderButtonPressed:(id)sender
 {
     UISwitch *btn = (UISwitch *)sender;
-    BOOL newValue = !_settings.settingOsmAndLiveEnabled;
+    BOOL newValue = !_settings.settingOsmAndLiveEnabled.get;
     if (!_iapHelper.subscribedToLiveUpdates)
     {
         newValue = NO;
         [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_ask_for_purchase") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
     }
-    [_settings setSettingOsmAndLiveEnabled:newValue];
+    [_settings.settingOsmAndLiveEnabled set:newValue];
     [btn setOn:newValue];
     if (newValue)
         [_app checkAndDownloadOsmAndLiveUpdates];

@@ -39,7 +39,7 @@
     [super viewDidLoad];
     
     _newUserName = _settings.osmUserName.get;
-    _newPassword = _settings.osmUserPassword;
+    _newPassword = _settings.osmUserPassword.get;
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -81,7 +81,7 @@
 
 - (NSString *) getTextForIndex:(NSInteger)index
 {
-    return index == 0 ? _settings.osmUserName.get : _settings.osmUserPassword;
+    return index == 0 ? _settings.osmUserName.get : _settings.osmUserPassword.get;
 }
 
 - (NSString *) getHintForIndex:(NSInteger)index
@@ -92,7 +92,7 @@
 - (void)doneButtonPressed
 {
     [_settings.osmUserName set:_newUserName];
-    [_settings setOsmUserPassword:_newPassword];
+    [_settings.osmUserPassword set:_newPassword];
     if (self.delegate)
         [self.delegate onAccountInformationUpdated];
 

@@ -1077,9 +1077,16 @@
 {
     NSObject *value = [self getValue:mode];
     if (value)
-        return ((NSNumber *)value).boolValue;
+    {
+        return ((NSNumber *) value).boolValue;
+    }
     else
-        return [self.key isEqualToString:settingMapLanguageTranslitKey] ? [[OAAppSettings sharedManager].settingPrefMapLanguage.get isEqualToString:@"en"] : self.defValue;
+    {
+        if ([self.key isEqualToString:settingMapLanguageTranslitKey])
+            return [[OAAppSettings sharedManager].settingPrefMapLanguage.get isEqualToString:@"en"];
+        else
+            return self.defValue;
+    }
 }
 
 - (void) set:(BOOL)boolean mode:(OAApplicationMode *)mode
@@ -1143,9 +1150,16 @@
 {
     NSObject *value = [self getValue:mode];
     if (value)
-        return ((NSNumber *)value).intValue;
+    {
+        return ((NSNumber *) value).intValue;
+    }
     else
-        return self.defValue;
+    {
+        if ([self.key isEqualToString:delayToStartNavigationKey])
+            return [[OAAppSettings sharedManager].defaultApplicationMode.get isDerivedRoutingFrom:OAApplicationMode.CAR] ? 10 : -1;
+        else
+            return self.defValue;
+    }
 }
 
 - (void) set:(int)integer mode:(OAApplicationMode *)mode
@@ -1155,7 +1169,11 @@
 
 - (void) resetToDefault
 {
-    int defaultValue = self.defValue;
+    int defaultValue;
+    if ([self.key isEqualToString:delayToStartNavigationKey])
+        defaultValue = [[OAAppSettings sharedManager].defaultApplicationMode.get isDerivedRoutingFrom:OAApplicationMode.CAR] ? 10 : -1;
+    else
+        defaultValue = self.defValue;
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = ((NSNumber *)pDefault).intValue;
@@ -1171,6 +1189,72 @@
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [NSString stringWithFormat:@"%d", [self get:mode]];
+}
+
+@end
+
+@interface OAProfileLong ()
+
+@property (nonatomic) long defValue;
+
+@end
+
+@implementation OAProfileLong
+
++ (instancetype) withKey:(NSString *)key defValue:(long)defValue
+{
+    OAProfileLong *obj = [[OAProfileLong alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+
+    return obj;
+}
+
+- (long) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(long)_long
+{
+    [self set:_long mode:self.appMode];
+}
+
+- (long) get:(OAApplicationMode *)mode
+{
+    NSObject *value = [self getValue:mode];
+    if (value)
+        return ((NSNumber *)value).longValue;
+    else
+        return self.defValue;
+}
+
+- (void) set:(long)_long mode:(OAApplicationMode *)mode
+{
+    [self setValue:@(_long) mode:mode];
+}
+
+- (void) resetToDefault
+{
+    long defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = ((NSNumber *)pDefault).longValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:strValue.longLongValue mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [NSString stringWithFormat:@"%li", [self get:mode]];
 }
 
 @end
@@ -2116,12 +2200,10 @@
     OADayNightHelper *_dayNightHelper;
 }
 
-@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, appearanceMode=_appearanceMode;
-@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
-@synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
-@synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
-@synthesize plugins=_plugins;
-@synthesize osmUserName=_osmUserName;
+@synthesize settingShowMapRulet=_settingShowMapRulet, appearanceMode=_appearanceMode;
+@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits, mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes;
+@synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingOsmAndLiveEnabled = _settingOsmAndLiveEnabled;
+@synthesize mapSettingTrackRecording=_mapSettingTrackRecording;
 
 + (OAAppSettings*) sharedManager
 {
@@ -2174,62 +2256,61 @@
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
         _settingUseAnalytics = [[NSUserDefaults standardUserDefaults] objectForKey:settingUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingUseFirebaseKey] : YES;
 
-        _liveUpdatesPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchasedKey] : NO;
-        _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
-        _liveUpdatesRetryes = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesRetryesKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:liveUpdatesRetryesKey] : 2;
+        _liveUpdatesPurchased = [[OAProfileBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
+        _settingOsmAndLiveEnabled = [[[OAProfileBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
+        _liveUpdatesRetryes = [[OAProfileInteger withKey:liveUpdatesRetryesKey defValue:2] makeGlobal];
 
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_liveUpdatesPurchased] forKey:@"billing_live_updates_purchased"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_settingOsmAndLiveEnabled] forKey:@"is_live_updates_on"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _liveUpdatesRetryes] forKey:@"live_updates_retryes"];
+        [_globalSettings setObject:_liveUpdatesPurchased forKey:@"billing_live_updates_purchased"];
+        [_globalSettings setObject:_settingOsmAndLiveEnabled forKey:@"is_live_updates_on"];
+        [_globalSettings setObject:_liveUpdatesRetryes forKey:@"live_updates_retryes"];
 
-        _billingUserId = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserIdKey];
-        _billingUserName = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserNameKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserNameKey] : @"";
-        _billingUserToken = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserTokenKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserTokenKey] : @"";
-        _billingUserEmail = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserEmailKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserEmailKey] : @"";
-        _billingUserCountry = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryKey] : @"";
-        _billingUserCountryDownloadName = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryDownloadNameKey] ?
-            [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryDownloadNameKey] : kBillingUserDonationNone;
-        _billingHideUserName = [[NSUserDefaults standardUserDefaults] objectForKey:billingHideUserNameKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:billingHideUserNameKey] : NO;
-        _billingPurchaseTokenSent = [[NSUserDefaults standardUserDefaults] objectForKey:billingPurchaseTokenSentKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:billingPurchaseTokenSentKey] : NO;
-        _billingPurchaseTokensSent = [[NSUserDefaults standardUserDefaults] objectForKey:billingPurchaseTokensSentKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingPurchaseTokensSentKey] : @"";
+        _billingUserId = [[OAProfileString withKey:billingUserIdKey defValue: @""] makeGlobal];
+        _billingUserName = [[OAProfileString withKey:billingUserNameKey defValue:@""] makeGlobal];
+        _billingUserToken = [[OAProfileString withKey:billingUserTokenKey defValue:@""] makeGlobal];
+        _billingUserEmail = [[OAProfileString withKey:billingUserEmailKey defValue:@""] makeGlobal];
+        _billingUserCountry = [[OAProfileString withKey:billingUserCountryKey defValue:@""] makeGlobal];
+        _billingUserCountryDownloadName = [[OAProfileString withKey:billingUserCountryDownloadNameKey defValue:kBillingUserDonationNone] makeGlobal];
+        _billingHideUserName = [[OAProfileBoolean withKey:billingHideUserNameKey defValue:NO] makeGlobal];
+        _billingPurchaseTokenSent = [[OAProfileBoolean withKey:billingPurchaseTokenSentKey defValue:NO] makeGlobal];
+        _billingPurchaseTokensSent = [[OAProfileString withKey:billingPurchaseTokensSentKey defValue:@""] makeGlobal];
         _liveUpdatesPurchaseCancelledTime = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledTimeKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:liveUpdatesPurchaseCancelledTimeKey] : 0;
-        _liveUpdatesPurchaseCancelledFirstDlgShown = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledFirstDlgShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchaseCancelledFirstDlgShownKey] : NO;
-        _liveUpdatesPurchaseCancelledSecondDlgShown = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledSecondDlgShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchaseCancelledSecondDlgShownKey] : NO;
-        _fullVersionPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:fullVersionPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:fullVersionPurchasedKey] : NO;
-        _depthContoursPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:depthContoursPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:depthContoursPurchasedKey] : NO;
-        _contourLinesPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:contourLinesPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:contourLinesPurchasedKey] : NO;
-        _emailSubscribed = [[NSUserDefaults standardUserDefaults] objectForKey:emailSubscribedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:emailSubscribedKey] : NO;
-        _osmandProPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:osmandProPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:osmandProPurchasedKey] : NO;
-        _osmandMapsPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:osmandMapsPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:osmandMapsPurchasedKey] : NO;
+        _liveUpdatesPurchaseCancelledFirstDlgShown = [[OAProfileBoolean withKey:liveUpdatesPurchaseCancelledFirstDlgShownKey defValue:NO] makeGlobal];
+        _liveUpdatesPurchaseCancelledSecondDlgShown = [[OAProfileBoolean withKey:liveUpdatesPurchaseCancelledSecondDlgShownKey defValue:NO] makeGlobal];
+        _fullVersionPurchased = [[OAProfileBoolean withKey:fullVersionPurchasedKey defValue:NO] makeGlobal];
+        _depthContoursPurchased = [[OAProfileBoolean withKey:depthContoursPurchasedKey defValue:NO] makeGlobal];
+        _contourLinesPurchased = [[OAProfileBoolean withKey:contourLinesPurchasedKey defValue:NO] makeGlobal];
+        _emailSubscribed = [[OAProfileBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
+        _osmandProPurchased = [[OAProfileBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
+        _osmandMapsPurchased = [[OAProfileBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
         _displayDonationSettings = [[NSUserDefaults standardUserDefaults] objectForKey:displayDonationSettingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayDonationSettingsKey] : NO;
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
 
-        [_globalPreferences setObject:_billingUserId forKey:@"billing_user_id"];
-        [_globalPreferences setObject:_billingUserName forKey:@"billing_user_name"];
-        [_globalPreferences setObject:_billingUserToken forKey:@"billing_user_token"];
-        [_globalPreferences setObject:_billingUserEmail forKey:@"billing_user_email"];
-        [_globalPreferences setObject:_billingUserCountry forKey:@"billing_user_country"];
-        [_globalPreferences setObject:_billingUserCountryDownloadName forKey:@"billing_user_country_download_name"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_billingHideUserName] forKey:@"billing_hide_user_name"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_billingPurchaseTokenSent] forKey:@"billing_purchase_token_sent"];
-        [_globalPreferences setObject:_billingPurchaseTokensSent forKey:@"billing_purchase_tokens_sent"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_liveUpdatesPurchaseCancelledFirstDlgShown] forKey:@"live_updates_cancelled_first_dlg_shown_time"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_liveUpdatesPurchaseCancelledSecondDlgShown] forKey:@"live_updates_cancelled_second_dlg_shown_time"];
+        [_globalSettings setObject:_billingUserId forKey:@"billing_user_id"];
+        [_globalSettings setObject:_billingUserName forKey:@"billing_user_name"];
+        [_globalSettings setObject:_billingUserToken forKey:@"billing_user_token"];
+        [_globalSettings setObject:_billingUserEmail forKey:@"billing_user_email"];
+        [_globalSettings setObject:_billingUserCountry forKey:@"billing_user_country"];
+        [_globalSettings setObject:_billingUserCountryDownloadName forKey:@"billing_user_country_download_name"];
+        [_globalSettings setObject:_billingHideUserName forKey:@"billing_hide_user_name"];
+        [_globalSettings setObject:_billingPurchaseTokenSent forKey:@"billing_purchase_token_sent"];
+        [_globalSettings setObject:_billingPurchaseTokensSent forKey:@"billing_purchase_tokens_sent"];
+        [_globalSettings setObject:_liveUpdatesPurchaseCancelledFirstDlgShown forKey:@"live_updates_cancelled_first_dlg_shown_time"];
+        [_globalSettings setObject:_liveUpdatesPurchaseCancelledSecondDlgShown forKey:@"live_updates_cancelled_second_dlg_shown_time"];
         [_globalPreferences setObject:[NSString stringWithFormat:@"%ld", (long) _liveUpdatesPurchaseCancelledTime] forKey:@"live_updates_purchase_cancelled_time"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_fullVersionPurchased] forKey:@"billing_full_version_purchased"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_depthContoursPurchased] forKey:@"billing_sea_depth_purchased"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_contourLinesPurchased] forKey:@"billing_srtm_purchased"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_emailSubscribed] forKey:@"email_subscribed"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_osmandProPurchased] forKey:@"billing_osmand_pro_purchased"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_osmandMapsPurchased] forKey:@"billing_osmand_maps_purchased"];
+        [_globalSettings setObject:_fullVersionPurchased forKey:@"billing_full_version_purchased"];
+        [_globalSettings setObject:_depthContoursPurchased forKey:@"billing_sea_depth_purchased"];
+        [_globalSettings setObject:_contourLinesPurchased forKey:@"billing_srtm_purchased"];
+        [_globalSettings setObject:_emailSubscribed forKey:@"email_subscribed"];
+        [_globalSettings setObject:_osmandProPurchased forKey:@"billing_osmand_pro_purchased"];
+        [_globalSettings setObject:_osmandMapsPurchased forKey:@"billing_osmand_maps_purchased"];
 
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
 
         // Map Settings
         _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
-        _mapSettingShowPoiLabel = [OAProfileBoolean withKey:_mapSettingShowPoiLabel defValue:NO];
+        _mapSettingShowPoiLabel = [OAProfileBoolean withKey:mapSettingShowPoiLabelKey defValue:NO];
         _mapSettingShowOfflineEdits = [OAProfileBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OAProfileBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _layerTransparencySeekbarMode = [OAProfileInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
@@ -2245,18 +2326,18 @@
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
 
-        _mapSettingSaveGlobalTrackToGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveGlobalTrackToGpxKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingSaveGlobalTrackToGpxKey] : NO;
+        _mapSettingSaveGlobalTrackToGpx = [[OAProfileBoolean withKey:mapSettingSaveGlobalTrackToGpxKey defValue:NO] makeGlobal];
         _mapSettingSaveTrackIntervalGlobal = [OAProfileInteger withKey:mapSettingSaveTrackIntervalGlobalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
         _mapSettingSaveTrackIntervalApproved = [OAProfileBoolean withKey:mapSettingSaveTrackIntervalApprovedKey defValue:NO];
         // TODO: redesign alert as in android to show/hide recorded trip on map
-        _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : YES;
-        _mapSettingShowTripRecordingStartDialog = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowTripRecordingStartDialogKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowTripRecordingStartDialogKey] : YES;
+        _mapSettingShowRecordingTrack = [[[OAProfileBoolean withKey:mapSettingShowRecordingTrackKey defValue:YES] makeGlobal] makeShared];
+        _mapSettingShowTripRecordingStartDialog = [[[OAProfileBoolean withKey:mapSettingShowTripRecordingStartDialogKey defValue:YES] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_mapSettingSaveGlobalTrackToGpx] forKey:@"save_global_track_to_gpx"];
+        [_globalSettings setObject:_mapSettingSaveGlobalTrackToGpx forKey:@"save_global_track_to_gpx"];
         [_registeredPreferences setObject:_mapSettingSaveTrackIntervalGlobal forKey:@"save_global_track_interval"];
         [_registeredPreferences setObject:_mapSettingSaveTrackIntervalApproved forKey:@"save_global_track_remember"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_mapSettingShowRecordingTrack] forKey:@"show_saved_track_remember"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_mapSettingShowTripRecordingStartDialog] forKey:@"show_trip_recording_start_dialog"];
+        [_globalSettings setObject:_mapSettingShowRecordingTrack forKey:@"show_saved_track_remember"];
+        [_globalSettings setObject:_mapSettingShowTripRecordingStartDialog forKey:@"show_trip_recording_start_dialog"];
 
         _mapSettingActiveRouteFilePath = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFilePathKey];
         _mapSettingActiveRouteVariantType = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteVariantTypeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingActiveRouteVariantTypeKey] : 0;
@@ -2267,15 +2348,15 @@
         _plugins = [[[OAProfileStringList withKey:pluginsKey defValue:@[]] makeGlobal] makeShared];
         [_globalSettings setObject:_plugins forKey:@"enabled_plugins"];
 
-        _discountId = [[NSUserDefaults standardUserDefaults] objectForKey:discountIdKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountIdKey] : 0;
-        _discountShowNumberOfStarts = [[NSUserDefaults standardUserDefaults] objectForKey:discountShowNumberOfStartsKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountShowNumberOfStartsKey] : 0;
-        _discountTotalShow = [[NSUserDefaults standardUserDefaults] objectForKey:discountTotalShowKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountTotalShowKey] : 0;
-        _discountShowDatetime = [[NSUserDefaults standardUserDefaults] objectForKey:discountShowDatetimeKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:discountShowDatetimeKey] : 0;
+        _discountId = [[OAProfileInteger withKey:discountIdKey defValue:0] makeGlobal];
+        _discountShowNumberOfStarts = [[OAProfileInteger withKey:discountShowNumberOfStartsKey defValue:0] makeGlobal];
+        _discountTotalShow = [[OAProfileInteger withKey:discountTotalShowKey defValue:0] makeGlobal];
+        _discountShowDatetime = [[OAProfileDouble withKey:discountShowDatetimeKey defValue:0] makeGlobal];
 
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", (int) _discountId] forKey:@"discount_id"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", (int) _discountShowNumberOfStarts] forKey:@"number_of_starts_on_discount_show"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", (int) _discountTotalShow] forKey:@"discount_total_show"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%ld", (long) _discountShowDatetime] forKey:@"show_discount_datetime_ms"];
+        [_globalSettings setObject:_discountId forKey:@"discount_id"];
+        [_globalSettings setObject:_discountShowNumberOfStarts forKey:@"number_of_starts_on_discount_show"];
+        [_globalSettings setObject:_discountTotalShow forKey:@"discount_total_show"];
+        [_globalSettings setObject:_discountShowDatetime forKey:@"show_discount_datetime_ms"];
 
         _lastSearchedCity = [[NSUserDefaults standardUserDefaults] objectForKey:lastSearchedCityKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:lastSearchedCityKey]).unsignedLongLongValue : 0;
         _lastSearchedCityName = [[NSUserDefaults standardUserDefaults] objectForKey:lastSearchedCityNameKey];
@@ -2306,8 +2387,8 @@
         _availableApplicationModes = [[[OAProfileString withKey:availableApplicationModesKey defValue:@"car,bicycle,pedestrian,public_transport,"] makeGlobal] makeShared];
         [_globalSettings setObject:_availableApplicationModes forKey:@"available_application_modes"];
 
-        _customAppModes = [NSUserDefaults.standardUserDefaults objectForKey:customAppModesKey] ? [NSUserDefaults.standardUserDefaults stringForKey:customAppModesKey] : @"";
-        [_globalPreferences setObject:_customAppModes forKey:@"custom_app_modes_keys"];
+        _customAppModes = [[[OAProfileString withKey:customAppModesKey defValue:@""] makeGlobal] makeShared];
+        [_globalSettings setObject:_customAppModes forKey:@"custom_app_modes_keys"];
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
         [_registeredPreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
@@ -2453,16 +2534,16 @@
         _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];
         [_registeredPreferences setObject:_fastRouteMode forKey:@"fast_route_mode"];
         _disableComplexRouting = [[NSUserDefaults standardUserDefaults] objectForKey:disableComplexRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableComplexRoutingKey] : NO;
-        _followTheRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheRouteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:followTheRouteKey] : NO;
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_followTheRoute] forKey:@"follow_to_route"];
-        _followTheGpxRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheGpxRouteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:followTheGpxRouteKey] : nil;
-        [_globalPreferences setObject:_followTheGpxRoute forKey:@"follow_gpx"];
+        _followTheRoute = [[OAProfileBoolean withKey:followTheRouteKey defValue:NO] makeGlobal];
+        [_globalSettings setObject:_followTheRoute forKey:@"follow_to_route"];
+        _followTheGpxRoute = [[OAProfileString withKey:followTheGpxRouteKey defValue:nil] makeGlobal];
+        [_globalSettings setObject:_followTheGpxRoute forKey:@"follow_gpx"];
         _arrivalDistanceFactor = [OAProfileDouble withKey:arrivalDistanceFactorKey defValue:1.0];
         [_registeredPreferences setObject:_arrivalDistanceFactor forKey:@"arrival_distance_factor"];
         _enableTimeConditionalRouting = [OAProfileBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
         [_registeredPreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
-        _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_useIntermediatePointsNavigation] forKey:@"use_intermediate_points_navigation"];
+        _useIntermediatePointsNavigation = [OAProfileBoolean withKey:useIntermediatePointsNavigationKey defValue:NO];
+        [_globalSettings setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
 
         _disableOffrouteRecalc = [OAProfileBoolean withKey:disableOffrouteRecalcKey defValue:NO];
         _disableWrongDirectionRecalc = [OAProfileBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
@@ -2572,24 +2653,24 @@
 
         _useOsmLiveForRouting = [[NSUserDefaults standardUserDefaults] objectForKey:useOsmLiveForRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOsmLiveForRoutingKey] : YES;
 
-        _showGpxWpt = [[NSUserDefaults standardUserDefaults] objectForKey:showGpxWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showGpxWptKey] : YES;
+        _showGpxWpt = [[[OAProfileBoolean withKey:showGpxWptKey defValue:YES] makeGlobal] makeShared];
         _showNearbyFavorites = [OAProfileBoolean withKey:showNearbyFavoritesKey defValue:NO];
         _showNearbyPoi = [OAProfileBoolean withKey:showNearbyPoiKey defValue:NO];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_showGpxWpt] forKey:@"show_gpx_wpt"];
+        [_globalSettings setObject:_showGpxWpt forKey:@"show_gpx_wpt"];
         [_registeredPreferences setObject:_showNearbyFavorites forKey:@"show_nearby_favorites"];
         [_registeredPreferences setObject:_showNearbyPoi forKey:@"show_nearby_poi"];
 
-        _gpxRouteCalcOsmandParts = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcOsmandPartsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcOsmandPartsKey] : YES;
-        _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
-        _gpxRouteCalc = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcKey] : NO;
-        _gpxRouteSegment = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteSegmentKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:gpxRouteSegmentKey] : -1;
-        _showStartFinishIcons = [[NSUserDefaults standardUserDefaults] objectForKey:showStartFinishIconsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showStartFinishIconsKey] : YES;
+        _gpxRouteCalcOsmandParts = [[[OAProfileBoolean withKey:gpxRouteCalcOsmandPartsKey defValue:YES] makeGlobal] makeShared];
+        _gpxCalculateRtept = [[[OAProfileBoolean withKey:gpxCalculateRteptKey defValue:YES] makeGlobal] makeShared];
+        _gpxRouteCalc = [[[OAProfileBoolean withKey:gpxRouteCalcKey defValue:NO] makeGlobal] makeShared];
+        _gpxRouteSegment = [[[OAProfileInteger withKey:gpxRouteSegmentKey defValue:-1] makeGlobal] makeShared];
+        _showStartFinishIcons = [[[OAProfileBoolean withKey:showStartFinishIconsKey defValue:YES] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_gpxRouteCalcOsmandParts] forKey:@"gpx_routing_calculate_osmand_route"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_gpxCalculateRtept] forKey:@"gpx_routing_calculate_rtept"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_gpxRouteCalc] forKey:@"calc_gpx_route"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _gpxRouteSegment] forKey:@"gpx_route_segment"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_showStartFinishIcons] forKey:@"show_start_finish_icons"];
+        [_globalSettings setObject:_gpxRouteCalcOsmandParts forKey:@"gpx_routing_calculate_osmand_route"];
+        [_globalSettings setObject:_gpxCalculateRtept forKey:@"gpx_routing_calculate_rtept"];
+        [_globalSettings setObject:_gpxRouteCalc forKey:@"calc_gpx_route"];
+        [_globalSettings setObject:_gpxRouteSegment forKey:@"gpx_route_segment"];
+        [_globalSettings setObject:_showStartFinishIcons forKey:@"show_start_finish_icons"];
 
         _voiceMute = [OAProfileBoolean withKey:voiceMuteKey defValue:NO];
         [_registeredPreferences setObject:_voiceMute forKey:@"voice_mute"];
@@ -2606,33 +2687,38 @@
         [_registeredPreferences setObject:_poiFiltersOrder forKey:@"poi_filters_order"];
         [_registeredPreferences setObject:_inactivePoiFilters forKey:@"inactive_poi_filters"];
 
-        //todo convert to OAProfileRadiusRulerMode
         _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : RULER_MODE_DARK;
         [_globalPreferences setObject:[OAImportExportSettingsConverter rulerWidgetModeToString:_rulerMode] forKey:@"ruler_mode"];
+//        _rulerMode = [[[OAProfileRadiusRulerMode withKey:rulerModeKey defValue:RadiusRulerMode.FIRST, RadiusRulerMode.values()] makeGlobal] makeShared];
+//        [_globalSettings setObject:_rulerMode forKey:@"ruler_mode"];
 
         _osmUserName = [[[OAProfileString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
-        _userOsmBugName = [[NSUserDefaults standardUserDefaults] objectForKey:userOsmBugNameKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:userOsmBugNameKey] : @"NoName/OsmAnd";
-        _osmUserPassword = [[NSUserDefaults standardUserDefaults] objectForKey:osmPasswordKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmPasswordKey] : @"";
-        _osmUserAccessToken = [[NSUserDefaults standardUserDefaults] objectForKey:osmUserAccessTokenKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmUserAccessTokenKey] : @"";
-        _osmUserAccessTokenSecret = [[NSUserDefaults standardUserDefaults] objectForKey:osmUserAccessTokenSecretKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmUserAccessTokenSecretKey] : @"";
-        _oprAccessToken = [[NSUserDefaults standardUserDefaults] objectForKey:oprAccessTokenKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:oprAccessTokenKey] : @"";
-        _oprUsername = [[NSUserDefaults standardUserDefaults] objectForKey:oprUsernameKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:oprUsernameKey] : @"";
-        _oprBlockchainName = [[NSUserDefaults standardUserDefaults] objectForKey:oprBlockchainNameKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:oprBlockchainNameKey] : @"";
-        _oprUseDevUrl = [[NSUserDefaults standardUserDefaults] objectForKey:oprUseDevUrlKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:oprUseDevUrlKey] : NO;
-        _offlineEditing = [[NSUserDefaults standardUserDefaults] objectForKey:offlineEditingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:offlineEditingKey] : YES;
-        _osmUseDevUrl = [[NSUserDefaults standardUserDefaults] objectForKey:osmUseDevUrlKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:osmUseDevUrlKey] : NO;
+        _osmUserDisplayName = [[[OAProfileString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
+//        _osmUploadVisibility = [[[OAProfileUploadVisibility withKey:osmUploadVisibilityKey defValue:UploadVisibility.PUBLIC, UploadVisibility.values()] makeGlobal] makeShared];
+        _userOsmBugName = [[[OAProfileString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
+        _osmUserPassword = [[[OAProfileString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
+        _osmUserAccessToken = [[OAProfileString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
+        _osmUserAccessTokenSecret = [[OAProfileString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
+        _oprAccessToken = [[OAProfileString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
+        _oprUsername = [[OAProfileString withKey:oprUsernameKey defValue:@""] makeGlobal];
+        _oprBlockchainName = [[OAProfileString withKey:oprBlockchainNameKey defValue:@""] makeGlobal];
+        _oprUseDevUrl = [[[OAProfileBoolean withKey:oprUseDevUrlKey defValue:NO] makeGlobal] makeShared];
+        _offlineEditing = [[[OAProfileBoolean withKey:offlineEditingKey defValue:YES] makeGlobal] makeShared];
+        _osmUseDevUrl = [[[OAProfileBoolean withKey:osmUseDevUrlKey defValue:NO] makeGlobal] makeShared];
 
         [_globalSettings setObject:_osmUserName forKey:@"user_name"];
-        [_globalPreferences setObject:_userOsmBugName forKey:@"user_osm_bug_name"];
-        [_globalPreferences setObject:_osmUserPassword forKey:@"user_password"];
-        [_globalPreferences setObject:_osmUserAccessToken forKey:@"user_access_token"];
-        [_globalPreferences setObject:_osmUserAccessTokenSecret forKey:@"user_access_token_secret"];
-        [_globalPreferences setObject:_oprAccessToken forKey:@"opr_user_access_token_secret"];
-        [_globalPreferences setObject:_oprUsername forKey:@"opr_username_secret"];
-        [_globalPreferences setObject:_oprBlockchainName forKey:@"opr_blockchain_name"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_oprUseDevUrl] forKey:@"opr_use_dev_url"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_offlineEditing] forKey:@"offline_osm_editing"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_osmUseDevUrl] forKey:@"use_dev_url"];
+        [_globalSettings setObject:_osmUserDisplayName forKey:@"user_display_name"];
+//        [_globalSettings setObject:_osmUploadVisibility forKey:@"upload_visibility"];
+        [_globalSettings setObject:_userOsmBugName forKey:@"user_osm_bug_name"];
+        [_globalSettings setObject:_osmUserPassword forKey:@"user_password"];
+        [_globalSettings setObject:_osmUserAccessToken forKey:@"user_access_token"];
+        [_globalSettings setObject:_osmUserAccessTokenSecret forKey:@"user_access_token_secret"];
+        [_globalSettings setObject:_oprAccessToken forKey:@"opr_user_access_token_secret"];
+        [_globalSettings setObject:_oprUsername forKey:@"opr_username_secret"];
+        [_globalSettings setObject:_oprBlockchainName forKey:@"opr_blockchain_name"];
+        [_globalSettings setObject:_oprUseDevUrl forKey:@"opr_use_dev_url"];
+        [_globalSettings setObject:_offlineEditing forKey:@"offline_osm_editing"];
+        [_globalSettings setObject:_osmUseDevUrl forKey:@"use_dev_url"];
 
         _mapillaryFirstDialogShown = [[OAProfileBoolean withKey:mapillaryFirstDialogShownKey defValue:NO] makeGlobal];
         _onlinePhotosRowCollapsed = [[[OAProfileBoolean withKey:onlinePhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
@@ -2653,12 +2739,12 @@
         [_globalSettings setObject:_mapillaryFilterPano forKey:@"mapillary_filter_pano"];
 
         _quickActionIsOn = [OAProfileBoolean withKey:quickActionIsOnKey defValue:NO];
-        _quickActionsList = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionsListKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:quickActionsListKey] : @"";
-        _isQuickActionTutorialShown = [[NSUserDefaults standardUserDefaults] objectForKey:isQuickActionTutorialShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:isQuickActionTutorialShownKey] : NO;
+        _quickActionsList = [[[OAProfileString withKey:quickActionsListKey defValue:@""] makeGlobal] makeShared];
+        _isQuickActionTutorialShown = [[[OAProfileBoolean withKey:isQuickActionTutorialShownKey defValue:NO] makeGlobal] makeShared];
 
         [_registeredPreferences setObject:_quickActionIsOn forKey:@"quick_action_state"];
-        [_globalPreferences setObject:_quickActionsList forKey:@"quick_action_list"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_isQuickActionTutorialShown] forKey:@"quick_action_tutorial"];
+        [_globalSettings setObject:_quickActionsList forKey:@"quick_action_list"];
+        [_globalSettings setObject:_isQuickActionTutorialShown forKey:@"quick_action_tutorial"];
 
         _quickActionPortraitX = [OAProfileDouble withKey:quickActionPortraitXKey defValue:0];
         _quickActionPortraitY = [OAProfileDouble withKey:quickActionPortraitYKey defValue:0];
@@ -2756,88 +2842,82 @@
         [_globalSettings setObject:_sendAnonymousDataRequestCount forKey:@"send_anonymous_data_requests_count"];
         [_globalSettings setObject:_sendAnonymousDataLastRequestNs forKey:@"send_anonymous_data_last_request_ns"];
 
-        _webglSupported = [[[OAProfileBoolean withKey:webglSupportedKey defValue:YES] makeGlobal] makeShared];
+        _webglSupported = [[OAProfileBoolean withKey:webglSupportedKey defValue:YES] makeGlobal];
         [_globalSettings setObject:_webglSupported forKey:@"webgl_supported"];
 
-        _osmUserDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:osmUserDisplayNameKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmUserDisplayNameKey] : @"";
-//        _osmUploadVisibility = [[NSUserDefaults standardUserDefaults] objectForKey:osmUploadVisibilityKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmUploadVisibilityKey] : nil;
+        _inappsRead = [[OAProfileBoolean withKey:inappsReadKey defValue:YES] makeGlobal];
+        [_globalSettings setObject:_inappsRead forKey:@"inapps_read"];
 
-        [_globalPreferences setObject:_osmUserDisplayName forKey:@"user_display_name"];
-//        [_globalPreferences setObject:_osmUploadVisibility forKey:@"upload_visibility"];
+        _backupUserEmail = [[OAProfileString withKey:backupUserEmailKey defValue:@""] makeGlobal];
+        _backupUserId = [[OAProfileString withKey:backupUserIdKey defValue:@""] makeGlobal];
+        _backupDeviceId = [[OAProfileString withKey:backupDeviceIdKey defValue:@""] makeGlobal];
+        _backupNativeDeviceId = [[OAProfileString withKey:backupNativeDeviceIdKey defValue:@""] makeGlobal];
+        _backupAccessToken = [[OAProfileString withKey:backupAccessTokenKey defValue:@""] makeGlobal];
+        _backupAccessTokenUpdateTime = [[OAProfileString withKey:backupAccessTokenUpdateTimeKey defValue:@""] makeGlobal];
 
-        _inappsRead = [[NSUserDefaults standardUserDefaults] objectForKey:inappsReadKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:inappsReadKey] : YES;
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_inappsRead] forKey:@"inapps_read"];
+        [_globalSettings setObject:_backupUserEmail forKey:@"backup_user_email"];
+        [_globalSettings setObject:_backupUserId forKey:@"backup_user_id"];
+        [_globalSettings setObject:_backupDeviceId forKey:@"backup_device_id"];
+        [_globalSettings setObject:_backupNativeDeviceId forKey:@"backup_native_device_id"];
+        [_globalSettings setObject:_backupAccessToken forKey:@"backup_access_token"];
+        [_globalSettings setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
 
-        _backupUserEmail = [[NSUserDefaults standardUserDefaults] objectForKey:backupUserEmailKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:backupUserEmailKey] : @"";
-        _backupUserId = [[NSUserDefaults standardUserDefaults] objectForKey:backupUserIdKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:backupUserIdKey] : @"";
-        _backupDeviceId = [[NSUserDefaults standardUserDefaults] objectForKey:backupDeviceIdKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:backupDeviceIdKey] : @"";
-        _backupNativeDeviceId = [[NSUserDefaults standardUserDefaults] objectForKey:backupNativeDeviceIdKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:backupNativeDeviceIdKey] : @"";
-        _backupAccessToken = [[NSUserDefaults standardUserDefaults] objectForKey:backupAccessTokenKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:backupAccessTokenKey] : @"";
-        _backupAccessTokenUpdateTime = [[NSUserDefaults standardUserDefaults] objectForKey:backupAccessTokenUpdateTimeKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:backupAccessTokenUpdateTimeKey] : @"";
+        _favoritesLastUploadedTime = [[OAProfileLong withKey:favoritesLastUploadedTimeKey defValue:0] makeGlobal];
+        _backupLastUploadedTime = [[OAProfileLong withKey:backupLastUploadedTimeKey defValue:0] makeGlobal];
 
-        [_globalPreferences setObject:_backupUserEmail forKey:@"backup_user_email"];
-        [_globalPreferences setObject:_backupUserId forKey:@"backup_user_id"];
-        [_globalPreferences setObject:_backupDeviceId forKey:@"backup_device_id"];
-        [_globalPreferences setObject:_backupNativeDeviceId forKey:@"backup_native_device_id"];
-        [_globalPreferences setObject:_backupAccessToken forKey:@"backup_access_token"];
-        [_globalPreferences setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
+        [_globalSettings setObject:_favoritesLastUploadedTime forKey:@"favorites_last_uploaded_time"];
+        [_globalSettings setObject:_backupLastUploadedTime forKey:@"backup_last_uploaded_time"];
 
-        _favoritesLastUploadedTime = [[NSUserDefaults standardUserDefaults] objectForKey:favoritesLastUploadedTimeKey] ? (long) [[NSUserDefaults standardUserDefaults] integerForKey:favoritesLastUploadedTimeKey] : 0;
-        _backupLastUploadedTime = [[NSUserDefaults standardUserDefaults] objectForKey:backupLastUploadedTimeKey] ? (long) [[NSUserDefaults standardUserDefaults] integerForKey:backupLastUploadedTimeKey] : 0;
+        _delayToStartNavigation = [[[OAProfileInteger withKey:delayToStartNavigationKey defValue:-1] makeGlobal] makeShared];
+        [_globalSettings setObject:_delayToStartNavigation forKey:@"delay_to_start_navigation"];
 
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%li", _favoritesLastUploadedTime] forKey:@"favorites_last_uploaded_time"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%li", _backupLastUploadedTime] forKey:@"backup_last_uploaded_time"];
+        _enableProxy = [[[OAProfileBoolean withKey:enableProxyKey defValue:NO] makeGlobal] makeShared];
+        _proxyHost = [[[OAProfileString withKey:proxyHostKey defValue:@"127.0.0.1"] makeGlobal] makeShared];
+        _proxyPort = [[[OAProfileInteger withKey:proxyPortKey defValue:8118] makeGlobal] makeShared];
+//        _userAndroidId = [[OAProfileString withKey:userAndroidIdKey defValue:@""] makeGlobal];
 
-        _delayToStartNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:delayToStartNavigationKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:delayToStartNavigationKey] : -1;
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _delayToStartNavigation] forKey:@"delay_to_start_navigation"];
+        [_globalSettings setObject:_enableProxy forKey:@"enable_proxy"];
+        [_globalSettings setObject:_proxyHost forKey:@"proxy_host"];
+        [_globalSettings setObject:_proxyPort forKey:@"proxy_port"];
+//        [_globalSettings setObject:_userAndroidId forKey:@"user_android_id"];
 
-        _enableProxy = [[NSUserDefaults standardUserDefaults] objectForKey:enableProxyKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:enableProxyKey] : NO;
-        _proxyHost = [[NSUserDefaults standardUserDefaults] objectForKey:proxyHostKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:proxyHostKey] : @"127.0.0.1";
-        _proxyPort = [[NSUserDefaults standardUserDefaults] objectForKey:proxyPortKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:proxyPortKey] : 8118;
-//        _userAndroidId = [[NSUserDefaults standardUserDefaults] objectForKey:userAndroidIdKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:userAndroidIdKey] : @"";
+        _speedCamerasUninstalled = [[[OAProfileBoolean withKey:speedCamerasUninstalledKey defValue:NO] makeGlobal] makeShared];
+        _speedCamerasAlertShowed = [[[OAProfileBoolean withKey:speedCamerasAlertShowedKey defValue:NO] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_enableProxy] forKey:@"enable_proxy"];
-        [_globalPreferences setObject:_proxyHost forKey:@"proxy_host"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _proxyPort] forKey:@"proxy_port"];
-//        [_globalPreferences setObject:_userAndroidId forKey:@"user_android_id"];
+        [_globalSettings setObject:_speedCamerasUninstalled forKey:@"speed_cameras_uninstalled"];
+        [_globalSettings setObject:_speedCamerasAlertShowed forKey:@"speed_cameras_alert_showed"];
 
-        _speedCamerasUninstalled = [[NSUserDefaults standardUserDefaults] objectForKey:speedCamerasUninstalledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:speedCamerasUninstalledKey] : NO;
-        _speedCamerasAlertShowed = [[NSUserDefaults standardUserDefaults] objectForKey:speedCamerasAlertShowedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:speedCamerasAlertShowedKey] : NO;
+        _lastUpdatesCardRefresh = [[OAProfileLong withKey:lastUpdatesCardRefreshKey defValue:0] makeGlobal];
+        [_globalSettings setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
 
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_speedCamerasUninstalled] forKey:@"speed_cameras_uninstalled"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_speedCamerasAlertShowed] forKey:@"speed_cameras_alert_showed"];
+        _currentTrackColor = [[[OAProfileInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
+//        _currentTrackColorization = [[[OAProfileGradientScaleType withKey:currentTrackColorizationKey defValue:null, GradientScaleType.values()] makeGlobal] makeShared];
+        _currentTrackSpeedGradientPalette = [[[OAProfileString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
+        _currentTrackAltitudeGradientPalette = [[[OAProfileString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
+        _currentTrackSlopeGradientPalette = [[[OAProfileString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
+        _currentTrackWidth = [[[OAProfileString withKey:currentTrackWidthKey defValue:@""] makeGlobal] makeShared];
+        _currentTrackShowArrows = [[[OAProfileBoolean withKey:currentTrackShowArrowsKey defValue:NO] makeGlobal] makeShared];
+        _currentTrackShowStartFinish = [[[OAProfileBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
+        _customTrackColors = [[[OAProfileStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
 
-        _lastUpdatesCardRefresh = [[NSUserDefaults standardUserDefaults] objectForKey:lastUpdatesCardRefreshKey] ? (long) [[NSUserDefaults standardUserDefaults] integerForKey:lastUpdatesCardRefreshKey] : 0;
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%li", _lastUpdatesCardRefresh] forKey:@"last_updates_card_refresh"];
+        [_globalSettings setObject:_currentTrackColor forKey:@"current_track_color"];
+//        [_globalSettings setObject:_currentTrackColorization forKey:@"current_track_colorization"];
+        [_globalSettings setObject:_currentTrackSpeedGradientPalette forKey:@"current_track_speed_gradient_palette"];
+        [_globalSettings setObject:_currentTrackAltitudeGradientPalette forKey:@"current_track_altitude_gradient_palette"];
+        [_globalSettings setObject:_currentTrackSlopeGradientPalette forKey:@"current_track_slope_gradient_palette"];
+        [_globalSettings setObject:_currentTrackWidth forKey:@"current_track_width"];
+        [_globalSettings setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
+        [_globalSettings setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
+        [_globalSettings setObject:_customTrackColors forKey:@"custom_track_colors"];
 
-        _currentTrackColor = [[NSUserDefaults standardUserDefaults] objectForKey:currentTrackColorKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:currentTrackColorKey] : 0;
-//        _currentTrackColorization = [[NSUserDefaults standardUserDefaults] objectForKey:currentTrackColorizationKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:currentTrackColorizationKey] : 0;
-        _currentTrackSpeedGradientPalette = [[NSUserDefaults standardUserDefaults] objectForKey:currentTrackSpeedGradientPaletteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:currentTrackSpeedGradientPaletteKey] : nil;
-        _currentTrackAltitudeGradientPalette = [[NSUserDefaults standardUserDefaults] objectForKey:currentTrackAltitudeGradientPaletteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:currentTrackAltitudeGradientPaletteKey] : nil;
-        _currentTrackSlopeGradientPalette = [[NSUserDefaults standardUserDefaults] objectForKey:currentTrackSlopeGradientPaletteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:currentTrackSlopeGradientPaletteKey] : nil;
-        _currentTrackWidth = [[NSUserDefaults standardUserDefaults] objectForKey:currentTrackWidthKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:currentTrackWidthKey] : @"";
-        _currentTrackShowArrows = [[NSUserDefaults standardUserDefaults] objectForKey:currentTrackShowArrowsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:currentTrackShowArrowsKey] : NO;
-        _currentTrackShowStartFinish = [[NSUserDefaults standardUserDefaults] objectForKey:currentTrackShowStartFinishKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:currentTrackShowStartFinishKey] : YES;
-        _customTrackColors = [[NSUserDefaults standardUserDefaults] objectForKey:customTrackColorsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:customTrackColorsKey] : @[];
+        _gpsStatusApp = [[[OAProfileString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
+        [_globalSettings setObject:_gpsStatusApp forKey:@"gps_status_app"];
 
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _currentTrackColor] forKey:@"current_track_color"];
-//        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _currentTrackColorization] forKey:@"current_track_colorization"];
-        [_globalPreferences setObject:_currentTrackSpeedGradientPalette forKey:@"current_track_speed_gradient_palette"];
-        [_globalPreferences setObject:_currentTrackAltitudeGradientPalette forKey:@"current_track_altitude_gradient_palette"];
-        [_globalPreferences setObject:_currentTrackSlopeGradientPalette forKey:@"current_track_slope_gradient_palette"];
-        [_globalPreferences setObject:_currentTrackWidth forKey:@"current_track_width"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_currentTrackShowArrows] forKey:@"current_track_show_arrows"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_currentTrackShowStartFinish] forKey:@"current_track_show_start_finish"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter arrayPreferenceToString:_customTrackColors] forKey:@"custom_track_colors"];
+        _debugRenderingInfo = [[[OAProfileBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
+        [_globalSettings setObject:_debugRenderingInfo forKey:@"debug_rendering"];
 
-        _gpsStatusApp = [[NSUserDefaults standardUserDefaults] objectForKey:gpsStatusAppKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:gpsStatusAppKey] : @"";
-        [_globalPreferences setObject:_gpsStatusApp forKey:@"gps_status_app"];
-
-        _debugRenderingInfo = [[NSUserDefaults standardUserDefaults] objectForKey:debugRenderingInfoKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:debugRenderingInfoKey] : NO;
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_debugRenderingInfo] forKey:@"debug_rendering"];
-
-        _levelToSwitchVectorRaster = [[NSUserDefaults standardUserDefaults] objectForKey:levelToSwitchVectorRasterKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:levelToSwitchVectorRasterKey] : 1;
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _levelToSwitchVectorRaster] forKey:@"level_to_switch_vector_raster"];
+        _levelToSwitchVectorRaster = [[OAProfileInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
+        [_globalSettings setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 
         // For now this can be changed only in TestVoiceActivity
 //        public final OsmandPreference<Integer>[] VOICE_PROMPT_DELAY = new IntPreference[10];
@@ -2850,79 +2930,79 @@
 //            VOICE_PROMPT_DELAY[5] = new IntPreference(this, "voice_prompt_delay_5", 0).makeGlobal().makeShared().cache();    /*AudioManager.STREAM_NOTIFICATION*/
 //        }
 
-        _displayTtsUtterance = [[NSUserDefaults standardUserDefaults] objectForKey:displayTtsUtteranceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayTtsUtteranceKey] : NO;
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_displayTtsUtterance] forKey:@"display_tts_utterance"];
+        _displayTtsUtterance = [[[OAProfileBoolean withKey:displayTtsUtteranceKey defValue:NO] makeGlobal] makeShared];
+        [_globalSettings setObject:_displayTtsUtterance forKey:@"display_tts_utterance"];
 
-        _mapOverlayPrevious = [[NSUserDefaults standardUserDefaults] objectForKey:mapOverlayPreviousKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:mapOverlayPreviousKey] : nil;
-        _mapUnderlayPrevious = [[NSUserDefaults standardUserDefaults] objectForKey:mapUnderlayPreviousKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:mapUnderlayPreviousKey] : nil;
-        _previousInstalledVersion = [[NSUserDefaults standardUserDefaults] objectForKey:previousInstalledVersionKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:previousInstalledVersionKey] : @"";
-        _shouldShowFreeVersionBanner = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowFreeVersionBannerKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowFreeVersionBannerKey] : NO;
+        _mapOverlayPrevious = [[OAProfileString withKey:mapOverlayPreviousKey defValue:nil] makeGlobal];
+        _mapUnderlayPrevious = [[OAProfileString withKey:mapUnderlayPreviousKey defValue:nil] makeGlobal];
+        _previousInstalledVersion = [[OAProfileString withKey:previousInstalledVersionKey defValue:@""] makeGlobal];
+        _shouldShowFreeVersionBanner = [[[OAProfileBoolean withKey:shouldShowFreeVersionBannerKey defValue:NO] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:_mapOverlayPrevious forKey:@"map_overlay_previous"];
-        [_globalPreferences setObject:_mapUnderlayPrevious forKey:@"map_underlay_previous"];
-        [_globalPreferences setObject:_previousInstalledVersion forKey:@"previous_installed_version"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_shouldShowFreeVersionBanner] forKey:@"should_show_free_version_banner"];
+        [_globalSettings setObject:_mapOverlayPrevious forKey:@"map_overlay_previous"];
+        [_globalSettings setObject:_mapUnderlayPrevious forKey:@"map_underlay_previous"];
+        [_globalSettings setObject:_previousInstalledVersion forKey:@"previous_installed_version"];
+        [_globalSettings setObject:_shouldShowFreeVersionBanner forKey:@"should_show_free_version_banner"];
 
-        _routeMapMarkersStartMyLoc = [[NSUserDefaults standardUserDefaults] objectForKey:routeMapMarkersStartMyLocKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:routeMapMarkersStartMyLocKey] : NO;
-        _routeMapMarkersRoundTrip = [[NSUserDefaults standardUserDefaults] objectForKey:routeMapMarkersRoundTripKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:routeMapMarkersRoundTripKey] : NO;
+        _routeMapMarkersStartMyLoc = [[[OAProfileBoolean withKey:routeMapMarkersStartMyLocKey defValue:NO] makeGlobal] makeShared];
+        _routeMapMarkersRoundTrip = [[[OAProfileBoolean withKey:routeMapMarkersRoundTripKey defValue:NO] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_routeMapMarkersStartMyLoc] forKey:@"route_map_markers_start_my_loc"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_routeMapMarkersRoundTrip] forKey:@"route_map_markers_round_trip"];
+        [_globalSettings setObject:_routeMapMarkersStartMyLoc forKey:@"route_map_markers_start_my_loc"];
+        [_globalSettings setObject:_routeMapMarkersRoundTrip forKey:@"route_map_markers_round_trip"];
 
-        _osmandUsageSpace = [[NSUserDefaults standardUserDefaults] objectForKey:osmandUsageSpaceKey] ? (long) [[NSUserDefaults standardUserDefaults] integerForKey:osmandUsageSpaceKey] : 0;
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%li", _osmandUsageSpace] forKey:@"osmand_usage_space"];
+        _osmandUsageSpace = [[OAProfileLong withKey:osmandUsageSpaceKey defValue:0] makeGlobal];
+        [_globalSettings setObject:_osmandUsageSpace forKey:@"osmand_usage_space"];
 
-        _lastSelectedGpxTrackForNewPoint = [[NSUserDefaults standardUserDefaults] objectForKey:lastSelectedGpxTrackForNewPointKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:lastSelectedGpxTrackForNewPointKey] : @"";
-        [_globalPreferences setObject:_lastSelectedGpxTrackForNewPoint forKey:@"last_selected_gpx_track_for_new_point"];
+        _lastSelectedGpxTrackForNewPoint = [[OAProfileString withKey:lastSelectedGpxTrackForNewPointKey defValue:@""] makeGlobal];
+        [_globalSettings setObject:_lastSelectedGpxTrackForNewPoint forKey:@"last_selected_gpx_track_for_new_point"];
 
-        _customRouteLineColors = [[NSUserDefaults standardUserDefaults] objectForKey:customRouteLineColorsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:customRouteLineColorsKey] : @[];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter arrayPreferenceToString:_customRouteLineColors] forKey:@"custom_route_line_colors"];
+        _customRouteLineColors = [[[OAProfileStringList withKey:customRouteLineColorsKey defValue:@[]] makeGlobal] makeShared];
+        [_globalSettings setObject:_customRouteLineColors forKey:@"custom_route_line_colors"];
 
-        _mapActivityEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:mapActivityEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapActivityEnabledKey] : NO;
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_mapActivityEnabled] forKey:@"map_activity_enabled"];
+        _mapActivityEnabled = [[OAProfileBoolean withKey:mapActivityEnabledKey defValue: NO] makeGlobal];
+        [_globalSettings setObject:_mapActivityEnabled forKey:@"map_activity_enabled"];
 
-        _safeMode = [[NSUserDefaults standardUserDefaults] objectForKey:safeModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:safeModeKey] : NO;
-        _nativeRenderingFailed = [[NSUserDefaults standardUserDefaults] objectForKey:nativeRenderingFailedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:nativeRenderingFailedKey] : NO;
+        _safeMode = [[[OAProfileBoolean withKey:safeModeKey defValue: NO] makeGlobal] makeShared];
+        _nativeRenderingFailed = [[OAProfileBoolean withKey:nativeRenderingFailedKey defValue: NO] makeGlobal];
 
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_safeMode] forKey:@"safe_mode"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_nativeRenderingFailed] forKey:@"native_rendering_failed_init"];
+        [_globalSettings setObject:_safeMode forKey:@"safe_mode"];
+        [_globalSettings setObject:_nativeRenderingFailed forKey:@"native_rendering_failed_init"];
 
-        _useOpenglRender = [[NSUserDefaults standardUserDefaults] objectForKey:useOpenglRenderKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOpenglRenderKey] : NO;
-        _openglRenderFailed = [[NSUserDefaults standardUserDefaults] objectForKey:openglRenderFailedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:openglRenderFailedKey] : NO;
+        _useOpenglRender = [[[OAProfileBoolean withKey:useOpenglRenderKey defValue: NO] makeGlobal] makeShared];
+        _openglRenderFailed = [[OAProfileBoolean withKey:openglRenderFailedKey defValue: NO] makeGlobal];
 
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_useOpenglRender] forKey:@"use_opengl_render"];
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_openglRenderFailed] forKey:@"opengl_render_failed"];
+        [_globalSettings setObject:_useOpenglRender forKey:@"use_opengl_render"];
+        [_globalSettings setObject:_openglRenderFailed forKey:@"opengl_render_failed"];
 
-        _contributionInstallAppDate = [[NSUserDefaults standardUserDefaults] objectForKey:contributionInstallAppDateKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:contributionInstallAppDateKey] : @"";
-        [_globalPreferences setObject:_contributionInstallAppDate forKey:@"CONTRIBUTION_INSTALL_APP_DATE"];
+        _contributionInstallAppDate = [[OAProfileString withKey:contributionInstallAppDateKey defValue:@""] makeGlobal];
+        [_globalSettings setObject:_contributionInstallAppDate forKey:@"CONTRIBUTION_INSTALL_APP_DATE"];
 
-        _selectedTravelBook = [[NSUserDefaults standardUserDefaults] objectForKey:selectedTravelBookKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:selectedTravelBookKey] : @"";
-        [_globalPreferences setObject:_selectedTravelBook forKey:@"selected_travel_book"];
+        _selectedTravelBook = [[[OAProfileString withKey:selectedTravelBookKey defValue:@""] makeGlobal] makeShared];
+        [_globalSettings setObject:_selectedTravelBook forKey:@"selected_travel_book"];
 
-        _agpsDataLastTimeDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:agpsDataLastTimeDownloadedKey] ? (long) [[NSUserDefaults standardUserDefaults] integerForKey:agpsDataLastTimeDownloadedKey] : 0;
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%li", _agpsDataLastTimeDownloaded] forKey:@"agps_data_downloaded"];
+        _agpsDataLastTimeDownloaded = [[OAProfileLong withKey:agpsDataLastTimeDownloadedKey defValue:0] makeGlobal];
+        [_globalSettings setObject:_agpsDataLastTimeDownloaded forKey:@"agps_data_downloaded"];
 
-        _searchTab = [[NSUserDefaults standardUserDefaults] objectForKey:searchTabKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:searchTabKey] : 0;
-        _favoritesTab = [[NSUserDefaults standardUserDefaults] objectForKey:favoritesTabKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:favoritesTabKey] : 0;
+        _searchTab = [[OAProfileInteger withKey:searchTabKey defValue:0] makeGlobal];
+        _favoritesTab = [[OAProfileInteger withKey:favoritesTabKey defValue:0] makeGlobal];
 
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _searchTab] forKey:@"SEARCH_TAB"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _favoritesTab] forKey:@"FAVORITES_TAB"];
+        [_globalSettings setObject:_searchTab forKey:@"SEARCH_TAB"];
+        [_globalSettings setObject:_favoritesTab forKey:@"FAVORITES_TAB"];
 
-        _fluorescentOverlays = [[NSUserDefaults standardUserDefaults] objectForKey:fluorescentOverlaysKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:fluorescentOverlaysKey] : NO;
-        [_globalPreferences setObject:[OAImportExportSettingsConverter booleanPreferenceToString:_fluorescentOverlays] forKey:@"fluorescent_overlays"];
+        _fluorescentOverlays = [[[OAProfileBoolean withKey:fluorescentOverlaysKey defValue:NO] makeGlobal] makeShared];
+        [_globalSettings setObject:_fluorescentOverlays forKey:@"fluorescent_overlays"];
 
-        _numberOfFreeDownloads = [[NSUserDefaults standardUserDefaults] objectForKey:numberOfFreeDownloadsKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:numberOfFreeDownloadsKey] : 0;
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _numberOfFreeDownloads] forKey:@"free_downloads_v3"];
+        _numberOfFreeDownloads = [[OAProfileInteger withKey:numberOfFreeDownloadsKey defValue:0] makeGlobal];
+        [_globalSettings setObject:_numberOfFreeDownloads forKey:@"free_downloads_v3"];
 
-        _lastDisplayTime = [[NSUserDefaults standardUserDefaults] objectForKey:lastDisplayTimeKey] ? (long) [[NSUserDefaults standardUserDefaults] integerForKey:lastDisplayTimeKey] : 0;
-        _lastCheckedUpdates = [[NSUserDefaults standardUserDefaults] objectForKey:lastCheckedUpdatesKey] ? (long) [[NSUserDefaults standardUserDefaults] integerForKey:lastCheckedUpdatesKey] : 0;
-        _numberOfAppStartsOnDislikeMoment = [[NSUserDefaults standardUserDefaults] objectForKey:numberOfAppStartsOnDislikeMomentKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:numberOfAppStartsOnDislikeMomentKey] : 0;
-//        _rateUsState = [[NSUserDefaults standardUserDefaults] objectForKey:rateUsStateKey] ? (int) [[NSUserDefaults standardUserDefaults] integerForKey:rateUsStateKey] : 0;
+        _lastDisplayTime = [[OAProfileLong withKey:lastDisplayTimeKey defValue:0] makeGlobal];
+        _lastCheckedUpdates = [[OAProfileLong withKey:lastCheckedUpdatesKey defValue:0] makeGlobal];
+        _numberOfAppStartsOnDislikeMoment = [[OAProfileInteger withKey:numberOfAppStartsOnDislikeMomentKey defValue:0] makeGlobal];
+//        _rateUsState = [[OAProfileRateUsState withKey:rateUsStateKey defValue:RateUsState.INITIAL_STATE, RateUsState.values()] makeGlobal];
 
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%li", _lastDisplayTime] forKey:@"last_display_time"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%li", _lastCheckedUpdates] forKey:@"last_checked_updates"];
-        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _numberOfAppStartsOnDislikeMoment] forKey:@"number_of_app_starts_on_dislike_moment"];
-//        [_globalPreferences setObject:[NSString stringWithFormat:@"%i", _rateUsState] forKey:@"rate_us_state"];
+        [_globalSettings setObject:_lastDisplayTime forKey:@"last_display_time"];
+        [_globalSettings setObject:_lastCheckedUpdates forKey:@"last_checked_updates"];
+        [_globalSettings setObject:_numberOfAppStartsOnDislikeMoment forKey:@"number_of_app_starts_on_dislike_moment"];
+//        [_globalSettings setObject:_rateUsState forKey:@"rate_us_state"];
 
         [self fetchImpassableRoads];
     }
@@ -3048,82 +3128,10 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingUseAnalytics forKey:settingUseFirebaseKey];
 }
 
-- (void) setLiveUpdatesPurchased:(BOOL)liveUpdatesPurchased
-{
-    _liveUpdatesPurchased = liveUpdatesPurchased;
-    [[NSUserDefaults standardUserDefaults] setBool:_liveUpdatesPurchased forKey:liveUpdatesPurchasedKey];
-}
-
-- (void) setSettingOsmAndLiveEnabled:(BOOL)settingOsmAndLiveEnabled
-{
-    _settingOsmAndLiveEnabled = settingOsmAndLiveEnabled;
-    [[NSUserDefaults standardUserDefaults] setBool:_settingOsmAndLiveEnabled forKey:settingOsmAndLiveEnabledKey];
-}
-
-- (void) setBillingUserId:(NSString *)billingUserId
-{
-    _billingUserId = billingUserId;
-    [[NSUserDefaults standardUserDefaults] setObject:_billingUserId forKey:billingUserIdKey];
-}
-
--  (void) setBillingUserName:(NSString *)billingUserName
-{
-    _billingUserName = billingUserName;
-    [[NSUserDefaults standardUserDefaults] setObject:_billingUserName forKey:billingUserNameKey];
-}
-
-- (void) setBillingUserToken:(NSString *)billingUserToken
-{
-    _billingUserToken = billingUserToken;
-    [[NSUserDefaults standardUserDefaults] setObject:_billingUserToken forKey:billingUserTokenKey];
-}
-
-- (void) setBillingUserEmail:(NSString *)billingUserEmail
-{
-    _billingUserEmail = billingUserEmail;
-    [[NSUserDefaults standardUserDefaults] setObject:_billingUserEmail forKey:billingUserEmailKey];
-}
-
-- (void) setBillingUserCountry:(NSString *)billingUserCountry
-{
-    _billingUserCountry = billingUserCountry;
-    [[NSUserDefaults standardUserDefaults] setObject:_billingUserCountry forKey:billingUserCountryKey];
-}
-
-- (void) setBillingUserCountryDownloadName:(NSString *)billingUserCountryDownloadName
-{
-    _billingUserCountryDownloadName = billingUserCountryDownloadName;
-    [[NSUserDefaults standardUserDefaults] setObject:_billingUserCountryDownloadName forKey:billingUserCountryDownloadNameKey];
-}
-
-- (void) setBillingHideUserName:(BOOL)billingHideUserName
-{
-    _billingHideUserName = billingHideUserName;
-    [[NSUserDefaults standardUserDefaults] setBool:_billingHideUserName forKey:billingHideUserNameKey];
-}
-
 - (void) setLiveUpdatesPurchaseCancelledTime:(NSTimeInterval)liveUpdatesPurchaseCancelledTime
 {
     _liveUpdatesPurchaseCancelledTime = liveUpdatesPurchaseCancelledTime;
     [[NSUserDefaults standardUserDefaults] setDouble:_liveUpdatesPurchaseCancelledTime forKey:liveUpdatesPurchaseCancelledTimeKey];
-}
-
-- (void) setLiveUpdatesPurchaseCancelledFirstDlgShown:(BOOL)liveUpdatesPurchaseCancelledFirstDlgShown
-{
-    _liveUpdatesPurchaseCancelledFirstDlgShown = liveUpdatesPurchaseCancelledFirstDlgShown;
-    [[NSUserDefaults standardUserDefaults] setBool:_liveUpdatesPurchaseCancelledFirstDlgShown forKey:liveUpdatesPurchaseCancelledFirstDlgShownKey];
-}
-
-- (void) setLiveUpdatesPurchaseCancelledSecondDlgShown:(BOOL)liveUpdatesPurchaseCancelledSecondDlgShown
-{
-    _liveUpdatesPurchaseCancelledSecondDlgShown = liveUpdatesPurchaseCancelledSecondDlgShown;
-    [[NSUserDefaults standardUserDefaults] setBool:_liveUpdatesPurchaseCancelledSecondDlgShown forKey:liveUpdatesPurchaseCancelledSecondDlgShownKey];
-}
-
-- (void) setEmailSubscribed:(BOOL)emailSubscribed
-{
-    _emailSubscribed = emailSubscribed;
-    [[NSUserDefaults standardUserDefaults] setBool:_emailSubscribed forKey:emailSubscribedKey];
 }
 
 - (void) setDisplayDonationSettings:(BOOL)displayDonationSettings
@@ -3276,12 +3284,6 @@
         [_plugins set:array];
 }
 
-- (void) setMapSettingShowRecordingTrack:(BOOL)mapSettingShowRecordingTrack
-{
-    _mapSettingShowRecordingTrack = mapSettingShowRecordingTrack;
-    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowRecordingTrack forKey:mapSettingShowRecordingTrackKey];
-}
-
 - (void) setMapSettingActiveRouteFilePath:(NSString *)mapSettingActiveRouteFilePath
 {
     _mapSettingActiveRouteFilePath = mapSettingActiveRouteFilePath;
@@ -3294,43 +3296,19 @@
     [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingActiveRouteVariantType forKey:mapSettingActiveRouteVariantTypeKey];
 }
 
-- (void) setDiscountId:(NSInteger)discountId
-{
-    _discountId = discountId;
-    [[NSUserDefaults standardUserDefaults] setInteger:discountId forKey:discountIdKey];
-}
-
-- (void) setDiscountShowNumberOfStarts:(NSInteger)discountShowNumberOfStarts
-{
-    _discountShowNumberOfStarts = discountShowNumberOfStarts;
-    [[NSUserDefaults standardUserDefaults] setInteger:discountShowNumberOfStarts forKey:discountShowNumberOfStartsKey];
-}
-
-- (void) setDiscountTotalShow:(NSInteger)discountTotalShow
-{
-    _discountTotalShow = discountTotalShow;
-    [[NSUserDefaults standardUserDefaults] setInteger:discountTotalShow forKey:discountTotalShowKey];
-}
-
-- (void) setDiscountShowDatetime:(double)discountShowDatetime
-{
-    _discountShowDatetime = discountShowDatetime;
-    [[NSUserDefaults standardUserDefaults] setInteger:discountShowDatetime forKey:discountShowDatetimeKey];
-}
-
 - (void) setLastSearchedCity:(unsigned long long)lastSearchedCity
 {
     _lastSearchedCity = lastSearchedCity;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedLongLong:lastSearchedCity] forKey:lastSearchedCityKey];
+    [[NSUserDefaults standardUserDefaults] setObject:@(lastSearchedCity) forKey:lastSearchedCityKey];
 }
 
-- (void)  setLastSearchedCityName:(NSString *)lastSearchedCityName
+- (void) setLastSearchedCityName:(NSString *)lastSearchedCityName
 {
     _lastSearchedCityName = lastSearchedCityName;
     [[NSUserDefaults standardUserDefaults] setObject:lastSearchedCityName forKey:lastSearchedCityNameKey];
 }
 
-- (void)  setLastSearchedPoint:(CLLocation *)lastSearchedPoint
+- (void) setLastSearchedPoint:(CLLocation *)lastSearchedPoint
 {
     _lastSearchedPoint = lastSearchedPoint;
     if (lastSearchedPoint)
@@ -3512,37 +3490,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:_disableComplexRouting forKey:disableComplexRoutingKey];
 }
 
-- (void) setFollowTheRoute:(BOOL)followTheRoute
-{
-    _followTheRoute = followTheRoute;
-    [[NSUserDefaults standardUserDefaults] setBool:_followTheRoute forKey:followTheRouteKey];
-    [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
-}
-
-- (void)setFollowTheGpxRoute:(NSString *)followTheGpxRoute
-{
-    _followTheGpxRoute = followTheGpxRoute;
-    [[NSUserDefaults standardUserDefaults] setObject:_followTheGpxRoute forKey:followTheGpxRouteKey];
-}
-
-- (void) setUseIntermediatePointsNavigation:(BOOL)useIntermediatePointsNavigation
-{
-    _useIntermediatePointsNavigation = useIntermediatePointsNavigation;
-    [[NSUserDefaults standardUserDefaults] setBool:_useIntermediatePointsNavigation forKey:useIntermediatePointsNavigationKey];
-}
-
-- (void) setGpxRouteCalcOsmandParts:(BOOL)gpxRouteCalcOsmandParts
-{
-    _gpxRouteCalcOsmandParts = gpxRouteCalcOsmandParts;
-    [[NSUserDefaults standardUserDefaults] setBool:_gpxRouteCalcOsmandParts forKey:gpxRouteCalcOsmandPartsKey];
-}
-
-- (void) setShowGpxWpt:(BOOL)showGpxWpt
-{
-    _showGpxWpt = showGpxWpt;
-    [[NSUserDefaults standardUserDefaults] setBool:_showGpxWpt forKey:showGpxWptKey];
-}
-
 - (void) setSimulateRouting:(BOOL)simulateRouting
 {
     _simulateRouting = simulateRouting;
@@ -3556,40 +3503,10 @@
     [[NSUserDefaults standardUserDefaults] setBool:_useOsmLiveForRouting forKey:useOsmLiveForRoutingKey];
 }
 
-- (void) setGpxCalculateRtept:(BOOL)gpxCalculateRtept
-{
-    _gpxCalculateRtept = gpxCalculateRtept;
-    [[NSUserDefaults standardUserDefaults] setBool:_gpxCalculateRtept forKey:gpxCalculateRteptKey];
-}
-
-- (void) setGpxRouteCalc:(BOOL)gpxRouteCalc
-{
-    _gpxRouteCalc = gpxRouteCalc;
-    [[NSUserDefaults standardUserDefaults] setBool:_gpxRouteCalc forKey:gpxRouteCalcKey];
-}
-
-- (void) setOsmUserPassword:(NSString *)osmUserPassword
-{
-    _osmUserPassword = osmUserPassword;
-    [[NSUserDefaults standardUserDefaults] setObject:_osmUserPassword forKey:osmPasswordKey];
-}
-
--(void) setOfflineEditing:(BOOL)offlineEditing
-{
-    _offlineEditing = offlineEditing;
-    [[NSUserDefaults standardUserDefaults] setBool:_offlineEditing forKey:offlineEditingKey];
-}
-
 - (void)setCustomPluginsJson:(NSString *)customPluginsJson
 {
     _customPluginsJson = customPluginsJson;
     [[NSUserDefaults standardUserDefaults] setObject:_customPluginsJson forKey:customPluginsJsonKey];
-}
-
-- (void) setQuickActionsList:(NSString *)quickActionsList
-{
-    _quickActionsList = quickActionsList;
-    [[NSUserDefaults standardUserDefaults] setObject:_quickActionsList forKey:quickActionsListKey];
 }
 
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y
@@ -3745,15 +3662,9 @@
 
 - (NSSet<NSString *> *) getCustomAppModesKeys
 {
-    NSString *appModeKeys = self.customAppModes;
+    NSString *appModeKeys = self.customAppModes.get;
     NSArray<NSString *> *keysArr = [appModeKeys componentsSeparatedByString:@","];
     return [NSSet setWithArray:keysArr];
-}
-
-- (void)setCustomAppModes:(NSString *)customAppModes
-{
-    _customAppModes = customAppModes;
-    [[NSUserDefaults standardUserDefaults] setObject:_customAppModes forKey:customAppModesKey];
 }
 
 - (void) setupAppMode

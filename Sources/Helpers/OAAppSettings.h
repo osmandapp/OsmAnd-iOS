@@ -203,6 +203,17 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
+@interface OAProfileLong : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(long)defValue;
+
+- (long) get;
+- (void) set:(long)_long;
+- (long) get:(OAApplicationMode *)mode;
+- (void) set:(long)_long mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OAProfileString : OAProfileSetting
 
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
@@ -442,28 +453,28 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (void) setOverlayOpacitySliderVisibility:(BOOL)visibility;
 - (void) setUnderlayOpacitySliderVisibility:(BOOL)visibility;
 
-@property (nonatomic) NSString *billingUserId;
-@property (nonatomic) NSString *billingUserName;
-@property (nonatomic) NSString *billingUserToken;
-@property (nonatomic) NSString *billingUserEmail;
-@property (nonatomic) NSString *billingUserCountry;
-@property (nonatomic) NSString *billingUserCountryDownloadName;
-@property (nonatomic, assign) BOOL billingHideUserName;
-@property (nonatomic, assign) BOOL billingPurchaseTokenSent;
-@property (nonatomic) NSString *billingPurchaseTokensSent;
-@property (nonatomic, assign) NSTimeInterval liveUpdatesPurchaseCancelledTime;
-@property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledFirstDlgShown;
-@property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledSecondDlgShown;
-@property (nonatomic, assign) BOOL fullVersionPurchased;
-@property (nonatomic, assign) BOOL depthContoursPurchased;
-@property (nonatomic, assign) BOOL contourLinesPurchased;
-@property (nonatomic, assign) BOOL emailSubscribed;
-@property (nonatomic, assign) BOOL osmandProPurchased;
-@property (nonatomic, assign) BOOL osmandMapsPurchased;
-@property (nonatomic, assign) BOOL displayDonationSettings;
-@property (nonatomic) NSDate* lastReceiptValidationDate;
-@property (nonatomic, assign) BOOL eligibleForIntroductoryPrice;
-@property (nonatomic, assign) BOOL eligibleForSubscriptionOffer;
+@property (nonatomic) OAProfileString *billingUserId;
+@property (nonatomic) OAProfileString *billingUserName;
+@property (nonatomic) OAProfileString *billingUserToken;
+@property (nonatomic) OAProfileString *billingUserEmail;
+@property (nonatomic) OAProfileString *billingUserCountry;
+@property (nonatomic) OAProfileString *billingUserCountryDownloadName;
+@property (nonatomic) OAProfileBoolean *billingHideUserName;
+@property (nonatomic) OAProfileBoolean *billingPurchaseTokenSent;
+@property (nonatomic) OAProfileString *billingPurchaseTokensSent;
+@property (nonatomic, assign) NSTimeInterval liveUpdatesPurchaseCancelledTime; //global ?
+@property (nonatomic) OAProfileBoolean *liveUpdatesPurchaseCancelledFirstDlgShown;
+@property (nonatomic) OAProfileBoolean *liveUpdatesPurchaseCancelledSecondDlgShown;
+@property (nonatomic) OAProfileBoolean *fullVersionPurchased;
+@property (nonatomic) OAProfileBoolean *depthContoursPurchased;
+@property (nonatomic) OAProfileBoolean *contourLinesPurchased;
+@property (nonatomic) OAProfileBoolean *emailSubscribed;
+@property (nonatomic) OAProfileBoolean *osmandProPurchased;
+@property (nonatomic) OAProfileBoolean *osmandMapsPurchased;
+@property (nonatomic, assign) BOOL displayDonationSettings; //global ?
+@property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
+@property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
+@property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
 
 // Track recording settings
 @property (nonatomic) OAProfileBoolean *saveTrackToGPX;
@@ -476,33 +487,33 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
 
-@property (assign, nonatomic) BOOL mapSettingSaveGlobalTrackToGpx;
+@property (nonatomic) OAProfileBoolean *mapSettingSaveGlobalTrackToGpx;
 @property (nonatomic) OAProfileInteger *mapSettingSaveTrackIntervalGlobal;
 @property (nonatomic) OAProfileBoolean *mapSettingSaveTrackIntervalApproved;
-@property (assign, nonatomic) BOOL mapSettingShowRecordingTrack;
-@property (assign, nonatomic) BOOL mapSettingShowTripRecordingStartDialog;
+@property (nonatomic) OAProfileBoolean *mapSettingShowRecordingTrack;
+@property (nonatomic) OAProfileBoolean *mapSettingShowTripRecordingStartDialog;
 
 @property (nonatomic) NSString* mapSettingActiveRouteFilePath;
 @property (nonatomic) int mapSettingActiveRouteVariantType;
 
 @property (nonatomic) OAProfileString *selectedPoiFilters;
 
-@property (nonatomic) NSInteger discountId;
-@property (nonatomic) NSInteger discountShowNumberOfStarts;
-@property (nonatomic) NSInteger discountTotalShow;
-@property (nonatomic) double discountShowDatetime;
+@property (nonatomic) OAProfileInteger *discountId;
+@property (nonatomic) OAProfileInteger *discountShowNumberOfStarts;
+@property (nonatomic) OAProfileInteger *discountTotalShow;
+@property (nonatomic) OAProfileDouble *discountShowDatetime;
 
 @property (nonatomic) unsigned long long lastSearchedCity;
 @property (nonatomic) NSString* lastSearchedCityName;
 @property (nonatomic) CLLocation *lastSearchedPoint;
 
-@property (assign, nonatomic) BOOL settingDoNotShowPromotions;
-@property (assign, nonatomic) BOOL settingUseAnalytics;
+@property (assign, nonatomic) BOOL settingDoNotShowPromotions; //global ?
+@property (assign, nonatomic) BOOL settingUseAnalytics; //global ?
 @property (nonatomic) OAProfileInteger *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
 
-@property (assign, nonatomic) BOOL liveUpdatesPurchased;
-@property (assign, nonatomic) BOOL settingOsmAndLiveEnabled;
-@property (nonatomic) int liveUpdatesRetryes;
+@property (nonatomic) OAProfileBoolean *liveUpdatesPurchased;
+@property (nonatomic) OAProfileBoolean *settingOsmAndLiveEnabled;
+@property (nonatomic) OAProfileInteger *liveUpdatesRetryes;
 
 - (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
@@ -531,7 +542,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (nonatomic) OAProfileString *routingProfile;
 
-@property (nonatomic) NSString *customAppModes;
+@property (nonatomic) OAProfileString *customAppModes;
 
 @property (nonatomic) OAProfileDouble *mapDensity;
 @property (nonatomic) OAProfileDouble *textSize;
@@ -546,18 +557,18 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL useFastRecalculation;
 @property (nonatomic) OAProfileBoolean *fastRouteMode;
 @property (assign, nonatomic) BOOL disableComplexRouting;
-@property (assign, nonatomic) BOOL followTheRoute;
-@property (nonatomic) NSString *followTheGpxRoute;
+@property (nonatomic) OAProfileBoolean *followTheRoute;
+@property (nonatomic) OAProfileString *followTheGpxRoute;
 @property (nonatomic) OAProfileBoolean *enableTimeConditionalRouting;
 @property (nonatomic) OAProfileDouble *arrivalDistanceFactor;
-@property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
+@property (nonatomic) OAProfileBoolean *useIntermediatePointsNavigation;
 @property (nonatomic) OAProfileBoolean *disableOffrouteRecalc;
 @property (nonatomic) OAProfileBoolean *disableWrongDirectionRecalc;
-@property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
-@property (assign, nonatomic) BOOL gpxCalculateRtept;
-@property (assign, nonatomic) BOOL gpxRouteCalc;
-@property (nonatomic) int gpxRouteSegment;
-@property (assign, nonatomic) BOOL showStartFinishIcons;
+@property (nonatomic) OAProfileBoolean *gpxRouteCalcOsmandParts;
+@property (nonatomic) OAProfileBoolean *gpxCalculateRtept;
+@property (nonatomic) OAProfileBoolean *gpxRouteCalc;
+@property (nonatomic) OAProfileInteger *gpxRouteSegment;
+@property (nonatomic) OAProfileBoolean *showStartFinishIcons;
 @property (nonatomic) OAProfileBoolean *voiceMute;
 @property (nonatomic) OAProfileString *voiceProvider;
 @property (nonatomic) OAProfileBoolean *interruptMusic;
@@ -595,7 +606,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *announceNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *announceNearbyPoi;
 
-@property (assign, nonatomic) BOOL showGpxWpt;
+@property (nonatomic) OAProfileBoolean *showGpxWpt;
 @property (nonatomic) OAProfileBoolean *announceWpt;
 @property (nonatomic) OAProfileBoolean *showNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *showNearbyPoi;
@@ -608,22 +619,22 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL simulateRouting;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
-@property (nonatomic) EOARulerWidgetMode rulerMode;
+@property (nonatomic) EOARulerWidgetMode rulerMode; //convert to OAProfileRadiusRulerMode
 
 @property (nonatomic) OAProfileStringList *poiFiltersOrder;
 @property (nonatomic) OAProfileStringList *inactivePoiFilters;
 
 // OSM Editing
 @property (nonatomic) OAProfileString *osmUserName;
-@property (nonatomic) NSString *osmUserPassword;
-@property (nonatomic) NSString *osmUserAccessToken;
-@property (nonatomic) NSString *osmUserAccessTokenSecret;
-@property (nonatomic) NSString *oprAccessToken;
-@property (nonatomic) NSString *oprUsername;
-@property (nonatomic) NSString *oprBlockchainName;
-@property (nonatomic) BOOL oprUseDevUrl;
-@property (nonatomic) BOOL offlineEditing;
-@property (nonatomic) BOOL osmUseDevUrl;
+@property (nonatomic) OAProfileString *osmUserPassword;
+@property (nonatomic) OAProfileString *osmUserAccessToken;
+@property (nonatomic) OAProfileString *osmUserAccessTokenSecret;
+@property (nonatomic) OAProfileString *oprAccessToken;
+@property (nonatomic) OAProfileString *oprUsername;
+@property (nonatomic) OAProfileString *oprBlockchainName;
+@property (nonatomic) OAProfileBoolean *oprUseDevUrl;
+@property (nonatomic) OAProfileBoolean *offlineEditing;
+@property (nonatomic) OAProfileBoolean *osmUseDevUrl;
 
 // Mapillary
 @property (nonatomic) OAProfileBoolean *onlinePhotosRowCollapsed;
@@ -638,8 +649,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 // Quick Action
 @property (nonatomic) OAProfileBoolean *quickActionIsOn;
-@property (nonatomic) NSString *quickActionsList;
-@property (assign, nonatomic) BOOL isQuickActionTutorialShown;
+@property (nonatomic) OAProfileString *quickActionsList;
+@property (nonatomic) OAProfileBoolean *isQuickActionTutorialShown;
 
 @property (nonatomic, readonly) OAProfileDouble *quickActionLandscapeX;
 @property (nonatomic, readonly) OAProfileDouble *quickActionLandscapeY;
@@ -707,10 +718,10 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 // global
 
 @property (nonatomic) OAProfileBoolean *wikiArticleShowImagesAsked;
-//@property (nonatomic) OAProfileWikiArticleShowImages *wikivoyageShowImgs; //todo convert to OAProfileWikiArticleShowImages
+//@property (nonatomic) OAProfileWikiArticleShowImages *wikivoyageShowImgs; //convert to OAProfileWikiArticleShowImages
 
 @property (nonatomic) OAProfileBoolean *coordsInputUseRightSide;
-//@property (nonatomic) OAProfileFormat *coordsInputFormat; //todo convert to OAProfileFormat
+//@property (nonatomic) OAProfileFormat *coordsInputFormat; //convert to OAProfileFormat
 @property (nonatomic) OAProfileBoolean *coordsInputUseOsmandKeyboard;
 @property (nonatomic) OAProfileBoolean *coordsInputTwoDigitsLongitude;
 
@@ -741,95 +752,95 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (nonatomic) OAProfileBoolean *webglSupported;
 
-@property (nonatomic) NSString *osmUserDisplayName;
-//@property (nonatomic) NSString *osmUploadVisibility; //todo enum
+@property (nonatomic) OAProfileString *osmUserDisplayName;
+//@property (nonatomic) OAProfileUploadVisibility *osmUploadVisibility; //convert to OAProfileUploadVisibility
 
-@property (assign, nonatomic) BOOL inappsRead;
+@property (nonatomic) OAProfileBoolean *inappsRead;
 
-@property (nonatomic) NSString *backupUserEmail;
-@property (nonatomic) NSString *backupUserId;
-@property (nonatomic) NSString *backupDeviceId;
-@property (nonatomic) NSString *backupNativeDeviceId;
-@property (nonatomic) NSString *backupAccessToken;
-@property (nonatomic) NSString *backupAccessTokenUpdateTime;
+@property (nonatomic) OAProfileString *backupUserEmail;
+@property (nonatomic) OAProfileString *backupUserId;
+@property (nonatomic) OAProfileString *backupDeviceId;
+@property (nonatomic) OAProfileString *backupNativeDeviceId;
+@property (nonatomic) OAProfileString *backupAccessToken;
+@property (nonatomic) OAProfileString *backupAccessTokenUpdateTime;
 
-@property (nonatomic) long favoritesLastUploadedTime;
-@property (nonatomic) long backupLastUploadedTime;
+@property (nonatomic) OAProfileLong *favoritesLastUploadedTime;
+@property (nonatomic) OAProfileLong *backupLastUploadedTime;
 
-@property (nonatomic) NSString *userOsmBugName;
+@property (nonatomic) OAProfileString *userOsmBugName;
 
-@property (nonatomic) int delayToStartNavigation;
+@property (nonatomic) OAProfileInteger *delayToStartNavigation;
 
-@property (assign, nonatomic) BOOL enableProxy;
-@property (nonatomic) NSString *proxyHost;
-@property (nonatomic) int proxyPort;
-//@property (nonatomic) NSString *userAndroidId; //todo android id ???
+@property (nonatomic) OAProfileBoolean *enableProxy;
+@property (nonatomic) OAProfileString *proxyHost;
+@property (nonatomic) OAProfileInteger *proxyPort;
+//@property (nonatomic) OAProfileString *userAndroidId; //need ?
 
-@property (assign, nonatomic) BOOL speedCamerasUninstalled;
-@property (assign, nonatomic) BOOL speedCamerasAlertShowed;
+@property (nonatomic) OAProfileBoolean *speedCamerasUninstalled;
+@property (nonatomic) OAProfileBoolean *speedCamerasAlertShowed;
 
-@property (nonatomic) long lastUpdatesCardRefresh;
+@property (nonatomic) OAProfileLong *lastUpdatesCardRefresh;
 
-@property (nonatomic) int currentTrackColor;
-//@property (nonatomic) int currentTrackColorization; //todo enum
-@property (nonatomic) NSString *currentTrackSpeedGradientPalette;
-@property (nonatomic) NSString *currentTrackAltitudeGradientPalette;
-@property (nonatomic) NSString *currentTrackSlopeGradientPalette;
-@property (nonatomic) NSString *currentTrackWidth;
-@property (assign, nonatomic) BOOL currentTrackShowArrows;
-@property (assign, nonatomic) BOOL currentTrackShowStartFinish;
-@property (nonatomic) NSArray *customTrackColors;
+@property (nonatomic) OAProfileInteger *currentTrackColor;
+//@property (nonatomic) OAProfileGradientScaleType currentTrackColorization; //convert to OAProfileGradientScaleType
+@property (nonatomic) OAProfileString *currentTrackSpeedGradientPalette;
+@property (nonatomic) OAProfileString *currentTrackAltitudeGradientPalette;
+@property (nonatomic) OAProfileString *currentTrackSlopeGradientPalette;
+@property (nonatomic) OAProfileString *currentTrackWidth;
+@property (nonatomic) OAProfileBoolean *currentTrackShowArrows;
+@property (nonatomic) OAProfileBoolean *currentTrackShowStartFinish;
+@property (nonatomic) OAProfileStringList *customTrackColors;
 
-@property (nonatomic) NSString *gpsStatusApp;
+@property (nonatomic) OAProfileString *gpsStatusApp;
 
-@property (assign, nonatomic) BOOL debugRenderingInfo;
+@property (nonatomic) OAProfileBoolean *debugRenderingInfo;
 
-@property (nonatomic) int levelToSwitchVectorRaster;
+@property (nonatomic) OAProfileInteger *levelToSwitchVectorRaster;
 
-//@property (nonatomic) int voicePromptDelay0;
-//@property (nonatomic) int voicePromptDelay3;
-//@property (nonatomic) int voicePromptDelay5;
+//@property (nonatomic) OAProfileInteger *voicePromptDelay0;
+//@property (nonatomic) OAProfileInteger *voicePromptDelay3;
+//@property (nonatomic) OAProfileInteger *voicePromptDelay5;
 
-@property (assign, nonatomic) BOOL displayTtsUtterance;
+@property (nonatomic) OAProfileBoolean *displayTtsUtterance;
 
-@property (nonatomic) NSString *mapOverlayPrevious;
-@property (nonatomic) NSString *mapUnderlayPrevious;
-@property (nonatomic) NSString *previousInstalledVersion;
-@property (assign, nonatomic) BOOL shouldShowFreeVersionBanner;
+@property (nonatomic) OAProfileString *mapOverlayPrevious;
+@property (nonatomic) OAProfileString *mapUnderlayPrevious;
+@property (nonatomic) OAProfileString *previousInstalledVersion;
+@property (nonatomic) OAProfileBoolean *shouldShowFreeVersionBanner;
 
-@property (assign, nonatomic) BOOL routeMapMarkersStartMyLoc;
-@property (assign, nonatomic) BOOL routeMapMarkersRoundTrip;
+@property (nonatomic) OAProfileBoolean *routeMapMarkersStartMyLoc;
+@property (nonatomic) OAProfileBoolean *routeMapMarkersRoundTrip;
 
-@property (nonatomic) long osmandUsageSpace;
+@property (nonatomic) OAProfileLong *osmandUsageSpace;
 
-@property (nonatomic) NSString *lastSelectedGpxTrackForNewPoint;
+@property (nonatomic) OAProfileString *lastSelectedGpxTrackForNewPoint;
 
-@property (nonatomic) NSArray *customRouteLineColors;
+@property (nonatomic) OAProfileStringList *customRouteLineColors;
 
-@property (assign, nonatomic) BOOL mapActivityEnabled;
+@property (nonatomic) OAProfileBoolean *mapActivityEnabled;
 
-@property (assign, nonatomic) BOOL safeMode;
-@property (assign, nonatomic) BOOL nativeRenderingFailed;
+@property (nonatomic) OAProfileBoolean *safeMode;
+@property (nonatomic) OAProfileBoolean *nativeRenderingFailed;
 
-@property (assign, nonatomic) BOOL useOpenglRender;
-@property (assign, nonatomic) BOOL openglRenderFailed;
+@property (nonatomic) OAProfileBoolean *useOpenglRender;
+@property (nonatomic) OAProfileBoolean *openglRenderFailed;
 
-@property (nonatomic) NSString *contributionInstallAppDate;
+@property (nonatomic) OAProfileString *contributionInstallAppDate;
 
-@property (nonatomic) NSString *selectedTravelBook;
+@property (nonatomic) OAProfileString *selectedTravelBook;
 
-@property (nonatomic) long agpsDataLastTimeDownloaded;
+@property (nonatomic) OAProfileLong *agpsDataLastTimeDownloaded;
 
-@property (nonatomic) int searchTab;
-@property (nonatomic) int favoritesTab;
+@property (nonatomic) OAProfileInteger *searchTab;
+@property (nonatomic) OAProfileInteger *favoritesTab;
 
-@property (assign, nonatomic) BOOL fluorescentOverlays;
+@property (nonatomic) OAProfileBoolean *fluorescentOverlays;
 
-@property (nonatomic) int numberOfFreeDownloads;
+@property (nonatomic) OAProfileInteger *numberOfFreeDownloads;
 
-@property (nonatomic) long lastDisplayTime;
-@property (nonatomic) long lastCheckedUpdates;
-@property (nonatomic) int numberOfAppStartsOnDislikeMoment;
-//@property (nonatomic) int rateUsState; //todo enum
+@property (nonatomic) OAProfileLong *lastDisplayTime;
+@property (nonatomic) OAProfileLong *lastCheckedUpdates;
+@property (nonatomic) OAProfileInteger *numberOfAppStartsOnDislikeMoment;
+//@property (nonatomic) OAProfileRateUsState rateUsState; //convert to OAProfileRateUsState
 
 @end

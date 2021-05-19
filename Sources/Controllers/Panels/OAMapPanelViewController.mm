@@ -1850,9 +1850,9 @@ typedef enum
     if (_activeTargetType == OATargetGPXEdit)
         wptViewController.navBarBackground.backgroundColor = UIColorFromRGB(0x4caf50);
 
-    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
     {
-        [OAAppSettings sharedManager].mapSettingShowRecordingTrack = YES;
+        [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
         [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
 }
@@ -3678,7 +3678,8 @@ typedef enum
             //app.logEvent(mapActivity, "start_navigation");
             _settings.applicationMode = [_routingHelper getAppMode];
             [_mapViewTrackingUtilities backToLocationImpl:17 forceZoom:YES];
-            _settings.followTheRoute = YES;
+            [_settings.followTheRoute set:YES];
+            [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
             [_routingHelper setFollowingMode:true];
             [_routingHelper setRoutePlanningMode:false];
             [_mapViewTrackingUtilities switchToRoutePlanningMode];

@@ -827,8 +827,8 @@ static UIViewController *parentController;
         [gpxFilesHide addObject:gpx.gpxFilePath];
     for (OAGPX *gpx in gpxArrNew)
         [gpxFilesNew addObject:gpx.gpxFilePath];
-    
-    _settings.mapSettingShowRecordingTrack = currentTripSelected;
+
+    [_settings.mapSettingShowRecordingTrack set:currentTripSelected];
     [_settings hideGpx:gpxFilesHide];
     [_settings showGpx:gpxFilesNew];
     
@@ -948,8 +948,8 @@ static UIViewController *parentController;
                                          [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[[view getInterval]] intValue]];
                                          if (view.swRemember.isOn)
                                              [_settings.mapSettingSaveTrackIntervalApproved set:YES];
-                                         
-                                         _settings.mapSettingShowRecordingTrack = view.swShowOnMap.isOn;
+
+                                         [_settings.mapSettingShowRecordingTrack set:view.swShowOnMap.isOn];
 
                                          _settings.mapSettingTrackRecording = YES;
                                          dispatch_async(dispatch_get_main_queue(), ^{

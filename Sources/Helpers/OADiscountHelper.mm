@@ -303,20 +303,20 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 int discountId = [self getDiscountId:message description:description start:start end:end];
-                BOOL discountChanged = settings.discountId != discountId;
+                BOOL discountChanged = settings.discountId.get != discountId;
                 if (discountChanged)
-                    settings.discountTotalShow = 0;
+                    [settings.discountTotalShow set:0];
                 
                 if (discountChanged
-                    || execCount - settings.discountShowNumberOfStarts >= showStartFrequency
-                    || [date timeIntervalSince1970] - settings.discountShowDatetime > 60 * 60 * 24 * showDayFrequency)
+                    || execCount - settings.discountShowNumberOfStarts.get >= showStartFrequency
+                    || [date timeIntervalSince1970] - settings.discountShowDatetime.get > 60 * 60 * 24 * showDayFrequency)
                 {
-                    if (settings.discountTotalShow < maxTotalShow)
+                    if (settings.discountTotalShow.get < maxTotalShow)
                     {
-                        settings.discountId = discountId;
-                        settings.discountTotalShow = settings.discountTotalShow + 1;
-                        settings.discountShowNumberOfStarts = execCount;
-                        settings.discountShowDatetime = [date timeIntervalSince1970];
+                        [settings.discountId set:discountId];
+                        [settings.discountTotalShow set:settings.discountTotalShow.get + 1];
+                        [settings.discountShowNumberOfStarts set:execCount];
+                        [settings.discountShowDatetime set:[date timeIntervalSince1970]];
                         
                         _title = message ? message : @"";
                         _description = description ? description : @"";

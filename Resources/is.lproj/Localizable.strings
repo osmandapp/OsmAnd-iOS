@@ -1723,7 +1723,7 @@
 "default_profile_descr" = "Veldu sniðið sem verður notað þegar forritið er ræst.";
 "quick_action_transport_descr" = "Ýttu á þessa aðgerð til að birta leiðir / biðstöðvar almenningssamgangna á korti.";
 "use_of_downloaded_map" = "Þú getur núna notað þetta kort án nettengingar sem gunn aðalkorts eða sem yfirlag/undirlag";
-"import_routing_file_descr" = "Þú getur flutt inn leiðaskrá úr hvaða skýjageymsluhugbúnaði sem er eða sett hana inn í OsmAnd-möppuna í iTunes.";
+"import_routing_file_descr" = "Þú getur flutt inn leiðaskrá úr hvaða skýjageymsluhugbúnaði sem er með því að opna hana í OsmAnd.";
 "export_profile_descr" = "Þú getur flutt út allar stillingar leiðsagnarsniðs, afritað allar stillingar úr öðru sniði eða frumstillt allar stillingar leiðsagnarsniðs á upprunalega stöðu.";
 "plugin_settings_descr" = "Stillingar viðbótarinnar í valda sniðinu.";
 "size_of_downloaded_data" = "Hinn mikli munur milli aðdráttarstiga getur aukið stærð sóttra gagna.";
@@ -2077,3 +2077,13 @@
 "visible_categories" = "Sýnilegir flokkar";
 "rearrange_categories" = "Endurraða flokkum";
 "delete_custom_categories" = "Eyða sérsniðnum flokkum";
+"search_poi_types_descr" = "Þú getur sameinað gerðir merkisstaða úr mismunandi flokkum.";
+"add_custom_category" = "Bæta við sérsniðnum flokki";
+"new_plugin_added" = "Nýrri viðbót bætt við";
+"extra_maps" = "Viðbótarkort";
+"custom_plugins" = "Sérsniðnar viðbætur";
+"custom_osmand_plugin_name" = "Sérsniðin OsmAnd-viðbót";
+"shared_string_disable" = "Gera óvirkt";
+
+// Shared Strings
+"shared_string_enable" = "Virkja";

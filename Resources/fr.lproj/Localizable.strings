@@ -2068,7 +2068,7 @@
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 
-"latest_version" = "Vous disposez déjà de la dernière version : %@";
+"latest_version" = "Vous disposez de la dernière version : %@";
 "desert" = "Désert";
 "settings_item_read_error" = "Impossible de lire %@.";
 "travel" = "Voyager";
@@ -2079,3 +2079,7 @@
 "service" = "Service";
 "emergency" = "Urgence";
 "vessel_height_limit_description" = "Définissez la hauteur du navire pour éviter les ponts bas. N'oubliez pas que si le pont est mobile, le calcul utilise sa hauteur à l'état ouvert.";
+"route_between_points_add_track_desc" = "Sélectionnez un fichier de traces pour lequel un nouveau segment sera ajouté.";
+"track_is_saved" = "%@\nest enregistré !";
+"ios_release_3_90" = "- Introduction d'une fonction \"Planifier un itinéraire\" pour planifier de futurs voyages avec la possibilité de créer des segments de parcours en utilisant différents types de navigation\n- Ajout d'une option permettant d'activer une boussole sur l'outil \"Règle de rayon\"\n- Ajout de l'option \"Superposition des étiquettes de PI\" qui permet d'afficher les noms des favoris, des points de repère et des marqueurs sur la carte\n- Ajout de nouvelles actions rapides pour la visibilité des courbes de niveau et du relief sur la carte, la modification d'un profil d'application, la suppression d'un point intermédiaire le plus proche\n- Correction des problèmes liés à la catégorie de recherche Wikipédia manquante\n- Importation de paramètres : correction de bugs, ajout du support pour tous les types de données disponibles dans OsmAnd\n- Edition d'OpenStreetMap : correction du sélecteur de temps et de l'impossibilité de modifier le commentaire de l'ensemble des modifications\n";
+"ios_release_3_80" = "- Introduction de \"profils d'application\" avec des paramètres indépendants\n- Nouvelle disposition des paramètres par profils et types : navigation, général, carte et écran\n- Possibilité d'importer ou d'exporter les paramètres des profils\n- Ajout de sources de données pour les photos en ligne\n- Ajout de la possibilité de télécharger des cartes en ligne dans la mémoire cache\n- Algorithmes de \"recherche\" améliorés\n";

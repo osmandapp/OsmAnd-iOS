@@ -8,8 +8,6 @@
 //  OsmAnd-java/src/main/java/net/osmand/binary/Abbreviations.java
 //  git revision /54e26c5a6195beb371c210746c5d89674016b9f7
 
-#define OAAbbreviations_h
-
 #import <Foundation/Foundation.h>
 
 @interface OAAbbreviations : NSObject

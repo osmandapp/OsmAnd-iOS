@@ -4273,6 +4273,7 @@
 		3270DBE12600BD6900ADD4F7 /* OAAddFavoriteGroupViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAAddFavoriteGroupViewController.mm; path = Sources/Controllers/2.0/OAAddFavoriteGroupViewController.mm; sourceTree = "<group>"; };
 		327AE84B26552E7900B19925 /* OAAbbreviations.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbbreviations.mm; sourceTree = "<group>"; };
 		327AE84C26552E7900B19925 /* OAAbbreviations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAbbreviations.h; sourceTree = "<group>"; };
+		327AE8532656466B00B19925 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
 		32A001382610A2DA00ABE0D2 /* OATopCoordinatesWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopCoordinatesWidget.h; sourceTree = "<group>"; };
 		32A001392610A2FB00ABE0D2 /* OATopCoordinatesWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATopCoordinatesWidget.m; sourceTree = "<group>"; };
@@ -14463,6 +14464,7 @@
 				et,
 				el,
 				kab,
+				fi,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -18283,6 +18285,7 @@
 				8A4D82C623C1CD85003DC887 /* et */,
 				8A6E582023F003BD001C9A04 /* el */,
 				8AE0197224505D4400DA5C33 /* kab */,
+				327AE8532656466B00B19925 /* fi */,
 			);
 			name = Localizable.strings;
 			path = Resources;

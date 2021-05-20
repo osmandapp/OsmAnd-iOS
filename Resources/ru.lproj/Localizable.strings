@@ -575,7 +575,7 @@
 "unit_of_length" = "Единицы измерения расстояния";
 "unit_of_length_descr" = "Выберите единицы измерения расстояния.";
 "coords_format" = "Формат координат";
-"save_global_track_interval_descr" = "Выберите интервал для записи поездки (включается через виджет записи GPX на карте).";
+"save_global_track_interval_descr" = "Укажите интервал общей записи трека (включается через виджет «Запись поездки» на карте).";
 "rotate_map_to_bearing_descr" = "Выберите способ вращения карты.";
 "rotate_map_none_opt" = "Не вращать (север сверху)";
 "driving_region_automatic" = "Авто";
@@ -601,7 +601,7 @@
 "impassable_road" = "Избегать дорог";
 "shared_string_do_not_use" = "Не использовать";
 "voice_provider" = "Голосовые данные";
-"navigation_over_track" = "Начать навигацию по путешествию?";
+"navigation_over_track" = "Начать навигацию по треку?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Выбрать на карте";
 "shared_string_my_location" = "Моё местоположение";
@@ -647,7 +647,7 @@
 "shared_string_turn" = "Поворот";
 "directions_other" = "Другие направления";
 "use_points_as_intermediates" = "Рассчитать маршрут между точками";
-"gpx_navigation" = "Следовать путешествию";
+"gpx_navigation" = "Следовать по маршруту";
 "app_mode_truck" = "Грузовик";
 "app_mode_motorcycle" = "Мотоцикл";
 "app_mode_boat" = "Лодка";
@@ -1037,7 +1037,7 @@
 "selected_roads" = "Выбранные дороги";
 "shared_string_clear_all" = "Очистить все";
 "select_route_intermediate" = "Выберите промежуточную точку";
-"displayed_trips" = "Отображаемые поездки";
+"displayed_trips" = "Отображаемые треки";
 "prev_route" = "Предыдущий маршрут";
 "map_settings_install_maps" = "Выберите карты для установки или обновления";
 "online_map" = "Онлайн-карта";
@@ -1055,7 +1055,7 @@
 "keep_informing_never" = "При нажатии на стрелку (вручную)";
 "map_widget_next_next_turn" = "Второй след. поворот";
 "unknown_location" = "Определяем местоположение";
-"logging_interval_navigation_descr" = "Выберите интервал регистрации местоположения для записи поездки во время навигации";
+"logging_interval_navigation_descr" = "Выберите интервал регистрации местоположения для записи трека во время навигации";
 "logging_min_distance" = "Минимальное смещение";
 "logging_min_distance_descr" = "Фильтр: минимальное расстояние, необходимое для регистрации новой точки";
 "logging_min_accuracy" = "Минимальная точность";
@@ -1250,7 +1250,7 @@
 "commiting_node" = "Сохранение объекта…";
 "select_avoid_descr" = "Выберите дороги, которые хотите избегать во время навигации. Вы можете выбрать дорогу на карте или выбрать тип из списка ниже.";
 "left_side_navigation" = "Левостороннее движение";
-"use_displayed_track_for_navigation" = "Вы хотите использовать отображаемую поездку для навигации?";
+"use_displayed_track_for_navigation" = "Вы хотите использовать показанный путь для навигации?";
 "calculate_osmand_route_without_internet" = "Рассчитать сегмент маршрута OsmAnd без Интернета";
 "impassable_road_desc" = "Выберите дороги, которые необходимо избегать во время навигации";
 "interrupt_music_descr" = "Полностью приостанавливать любую музыку во время голосовых подсказок (а не просто снизить ее громкость)";
@@ -1261,7 +1261,7 @@
 "wake_on_voice_descr" = "Включать экран устройства (если выключен) при приближении к повороту";
 "voice_provider_descr" = "Выберите язык голосовых подсказок для навигации";
 "choose_audio_stream_descr" = "Выберите канал для голосовых подсказок";
-"recording_preferences_descr" = "Настройки записи путешествия";
+"recording_preferences_descr" = "Настройки записи трека";
 "osm_live_routing_descr" = "Использовать обновления OsmAnd Live для навигации";
 "osmand_live_donation_switch_descr" = "Часть вашего пожертвования распределяется среди пользователей OSM, которые вносят изменения в OpenStreetMap. Стоимость подписки остается прежней";
 "osmand_live_donations_email_descr" = "Пожалуйста, укажите свой адрес электронной почты для получения отчетов о пожертвованиях";
@@ -1790,7 +1790,7 @@
 "map_update_warning" = "Вы хотите загрузить тайлы из сети?";
 "use_of_downloaded_map" = "Теперь вы можете использовать эту карту без сети как основной источник, или как слой накладки/подложки";
 "size_of_downloaded_data" = "Большая разница между уровнями масштабирования, это может увеличить размер загруженных данных.";
-"import_routing_file_descr" = "Вы можете импортировать файл маршрутизации из любого приложения облачного хранилища или поместив его в папку OsmAnd в iTunes.";
+"import_routing_file_descr" = "Вы можете импортировать файл маршрутизации из любого приложения облачного хранилища или открыв его в OsmAnd.";
 "units_and_formats" = "Единицы измерения и форматы";
 "app_theme_light" = "Светлая";
 "settings_app_theme" = "Тема приложения";
@@ -1990,3 +1990,20 @@
 "nearest_point" = "Ближайшая точка";
 "simplified_track" = "Упрощённый трек";
 "follow_track" = "Следовать по маршруту";
+"replace_favorite_confirmation" = "Вы уверены, что хотите заменить избранные %@?";
+"group_name" = "Имя группы";
+"available_groups" = "Доступные группы";
+"select_group_descr" = "Выберите группу или создайте новую";
+"fav_add_new_group" = "Добавить группу";
+"shared_string_disable" = "Выключить";
+
+// Shared Strings
+"shared_string_enable" = "Включить";
+"search_history" = "История поиска";
+"poi_categories" = "Категории POI";
+"carplay_active_message" = "Карта отображается через CarPlay";
+"favorites_empty" = "Вы не сохранили ни одной любимой точки";
+"tracks_empty" = "Ваш список треков пуст";
+"map_markers_empty" = "У вас нет активных маркеров на карте";
+"markers_history" = "История маркеров";
+"coordinates" = "Координаты";

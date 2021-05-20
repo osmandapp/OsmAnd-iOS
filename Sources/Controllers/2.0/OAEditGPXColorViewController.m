@@ -105,7 +105,7 @@
         
         cell.iconView.layer.cornerRadius = cell.iconViewHeightConstraint.constant / 2;
         cell.iconView.backgroundColor = gpxColor.color;
-        cell.textLeftMarginNoImage.constant += cell.iconView.frame.size.width + 4.;
+        cell.textLeftMarginNoImage.constant = 50.;
         [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
         cell.arrowIconView.hidden = indexPath.row != self.colorIndex;
     }

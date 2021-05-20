@@ -2079,3 +2079,5 @@
 "service" = "Service";
 "emergency" = "Urgence";
 "vessel_height_limit_description" = "Définissez la hauteur du navire pour éviter les ponts bas. N'oubliez pas que si le pont est mobile, le calcul utilise sa hauteur à l'état ouvert.";
+
+"units_nm" = "mn";

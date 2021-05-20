@@ -2067,3 +2067,12 @@
 "coordinates_widget" = "座標ウィジェット";
 "osm_editing_access_descr" = "すべてのローカル編集とメモを%@で表示できます。すでにアップロードされたアイテムはOsmAndのリストに表示されません。";
 "shared_string_loading" = "読込中…";
+
+"new_plugin_added" = "新しいプラグインが追加されました";
+"add_custom_category" = "カスタムカテゴリーを追加";
+"shared_string_enable" = "有効化";
+"custom_osmand_plugin_name" = "OsmAndプラグインのカスタマイズ";
+"some_of" = "%d中の%d";
+"shared_string_disable" = "無効化";
+"coordinates" = "座標";
+"extra_maps" = "追加マップ";

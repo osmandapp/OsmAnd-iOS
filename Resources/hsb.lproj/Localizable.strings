@@ -1430,3 +1430,26 @@
 "select_icon" = "Wubjer symbol";
 "shared_string_deselect_all" = "Wšě wotwolić";
 "app_profiles" = "Profile aplikacije";
+
+"favorite_places_category" = "Městna";
+"track" = "Čara";
+"favorite_friends_category" = "Přećeljo";
+"transport" = "Zjawny transport";
+"default_color" = "Standardna barba";
+"visible" = "Widźomne";
+"replace_favorite_confirmation" = "Sy sej wěsty/a, zo chceš narunać faworit %@?";
+"shared_string_others" = "Druhe";
+"res_standard" = "Standardna karta";
+"none_point_error" = "Prošu dodaj znajmjeńša jedyn dypk.";
+"group_name" = "Mjeno skupiny";
+"join_segments" = "Segmenty zwjazać";
+"address_search" = "Pytanje za adresu";
+"units_nm" = "nmi";
+"new_plugin_added" = "Nowy plugin přidaty";
+"coordinates" = "Koordinaty";
+"fav_points_not_exist" = "Njejsužane faworitowe dypki";
+"icon" = "Symbol";
+"emergency" = "Nuzowy pad";
+"search_preogress" = "Pytam…";
+"sport" = "Sport";
+"shared_string_import" = "Import";

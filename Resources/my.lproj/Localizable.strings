@@ -901,3 +901,11 @@
 "app_profiles" = "အက်ပလီကေးရှင်းပရိုဖိုင်းများ";
 "total" = "စုစုပေါင်း";
 "configure_map_descr" = "မြေပုံမျက်နှာပြင်";
+
+"searching_gps" = "GPSရှာဖွေခြင်း";
+"coordinates_widget" = "Coordinatesဝစ်ဂျက်";
+"map_during_navigation" = "လမ်းညွှန်နေစဉ်မြေပုံ";
+"show_compass_ruler" = "သံလိုက်အိမ်မြှောင်ကိုဖော်ပြ";
+"osmand_settings" = "OsmAအပြင်အဆင်များ";
+"hide_compass_ruler" = "သံလိုက်အိမ်မြှောင်ကိုဖြောက်လိုက်";
+"units_nm" = "nmi";

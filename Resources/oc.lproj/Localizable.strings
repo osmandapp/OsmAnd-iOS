@@ -1377,3 +1377,14 @@
 "osm_notes" = "Nòtas OSM";
 "m_style_pulic_transport" = "Transpòrt public";
 "app_profiles" = "Perfius de l\'aplicacion";
+
+"none_point_error" = "Ajustar un ponch aumens.";
+"hide_compass_ruler" = "Escondre la règla de la bossòla";
+"coordinates_widget" = "Emoticòna  de coordonadas";
+"track" = "Pista, draia, carraira";
+"icon" = "Icòna";
+"shared_string_enable" = "Activar";
+"show_compass_ruler" = "Mostrar la règla de la bossòla";
+"shared_string_disable" = "Desactivar";
+"searching_gps" = "Recèrca GPS en trin";
+"service" = "Via de servici";

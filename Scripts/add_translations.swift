@@ -27,6 +27,7 @@ let languageDict = [
                     "de" : "de",
                     "es" : "es",
                     "et" : "et",
+                    "fi" : "fi",
                     "fa" : "fa",
                     "fr" : "fr",
                     "gl" : "gl",

@@ -104,9 +104,9 @@
 
 - (void) copyRegisteredPreferences
 {
-    for (NSString *key in _settings.getRegisteredSettings)
+    for (NSString *key in [_settings getPreferences:NO].keyEnumerator)
     {
-        OACommonPreference *setting = [_settings.getRegisteredSettings objectForKey:key];
+        OACommonPreference *setting = [_settings getPreferenceByKey:key];
         if (setting)
             [setting copyValueFromAppMode:_sourceAppMode targetAppMode:_targetAppMode];
     }

@@ -600,7 +600,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                     [purchased addObject:product];
             }
             
-            NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime;
+            NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime.get;
             if (!subscribedToLiveUpdates && self.subscribedToLiveUpdates)
             {
                 OASubscription *s = [self.liveUpdates getPurchasedSubscription];
@@ -610,7 +610,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                 if (subscriptionCancelledTime == 0)
                 {
                     subscriptionCancelledTime = [[[NSDate alloc] init] timeIntervalSince1970];
-                    _settings.liveUpdatesPurchaseCancelledTime = subscriptionCancelledTime;
+                    [_settings.liveUpdatesPurchaseCancelledTime set:subscriptionCancelledTime];
                     [_settings.liveUpdatesPurchaseCancelledFirstDlgShown set:NO];
                     [_settings.liveUpdatesPurchaseCancelledSecondDlgShown set:NO];
                 }
@@ -623,7 +623,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
             }
             else if (subscribedToLiveUpdates)
             {
-                _settings.liveUpdatesPurchaseCancelledTime = 0;
+                [_settings.liveUpdatesPurchaseCancelledTime set:0];
                 [_settings.liveUpdatesPurchased set:YES];
             }
             

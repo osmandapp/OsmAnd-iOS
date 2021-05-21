@@ -170,7 +170,7 @@
     if (![_appModeBeanPrefsIds containsObject:key])
     {
         OsmAndAppInstance app = OsmAndApp.instance;
-        OACommonPreference *setting = [settings getSettingById:key];
+        OACommonPreference *setting = [settings getPreferenceByKey:key];
         if (setting)
         {
             if ([key isEqualToString:@"voice_provider"])
@@ -336,11 +336,11 @@
     MutableOrderedDictionary *res = [MutableOrderedDictionary new];
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
-    for (NSString *key in settings.getRegisteredSettings)
+    for (NSString *key in [settings getPreferences:NO].keyEnumerator)
     {
         if ([appModeBeanPrefsIds containsObject:key])
             continue;
-        OACommonPreference *setting = [settings.getRegisteredSettings objectForKey:key];
+        OACommonPreference *setting = [settings getPreferenceByKey:key];
         if (setting)
         {
             if ([setting.key isEqualToString:@"voice_provider"])

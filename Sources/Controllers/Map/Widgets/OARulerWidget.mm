@@ -233,7 +233,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         CGPoint circleCenterPoint;
         [_mapViewController.mapView convert:&circleCenterPos31 toScreen:&circleCenterPoint checkOffScreen:YES];
         
-        EOARulerWidgetMode mode = _settings.rulerMode;
+        EOARulerWidgetMode mode = _settings.rulerMode.get;
         BOOL showCompass = _settings.showCompassControlRuler && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
         
         _imageView.center = CGPointMake(self.frame.size.width * 0.5,
@@ -798,7 +798,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         if (centerChanged)
             [self changeCenter];
         
-        BOOL modeChanged = _cachedRulerMode != _settings.rulerMode;
+        BOOL modeChanged = _cachedRulerMode != _settings.rulerMode.get;
         if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged)
         {
             _cachedMapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
@@ -845,7 +845,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             if ((mapMoved || shouldUpdateCompass) && !wasUpdatedRecently )
                 [self setNeedsDisplay];
         }
-        _cachedRulerMode = _settings.rulerMode;
+        _cachedRulerMode = _settings.rulerMode.get;
     }
     [self updateVisibility:visible];
     return YES;

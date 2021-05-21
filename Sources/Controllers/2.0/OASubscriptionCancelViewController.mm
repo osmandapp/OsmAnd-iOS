@@ -208,7 +208,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 + (BOOL) shouldShowDialog
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime;
+    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime.get;
     BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown.get;
     BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown.get;
     return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));

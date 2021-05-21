@@ -46,7 +46,7 @@
 
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
-    [OAAppSettings.sharedManager setGlobalSetting:value key:key];
+    [OAAppSettings.sharedManager setGlobalPreference:value key:key];
 }
 
 // MARK: OASettingsItemWriter
@@ -54,10 +54,10 @@
 - (NSDictionary *) getSettingsJson
 {
     NSMutableDictionary *json = [NSMutableDictionary new];
-    OAAppSettings *settings = OAAppSettings.sharedManager;
-    for (NSString *key in settings.getGlobalSettings2)
+    NSMapTable<NSString *, OACommonPreference *> *globalPreferences = [OAAppSettings.sharedManager getPreferences:YES];
+    for (NSString *key in globalPreferences.keyEnumerator)
     {
-        OACommonPreference *setting = [settings.getGlobalSettings2 objectForKey:key];
+        OACommonPreference *setting = [globalPreferences objectForKey:key];
         if (setting.shared)
             json[key] = [setting toStringValue:nil];
     }

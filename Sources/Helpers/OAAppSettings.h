@@ -158,63 +158,69 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 @property (nonatomic, readonly) BOOL global;
 @property (nonatomic, readonly) BOOL shared;
 
+- (id) makeGlobal;
+- (id) makeShared;
+
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
 - (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;
 - (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
 - (NSString *) toStringValue:(OAApplicationMode *)mode;
 - (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
-- (id) makeGlobal;
-- (id) makeShared;
 
 @end
 
 @interface OACommonAppMode : OACommonPreference
 
+- (instancetype) initWithKey:(NSString *)key defValue:(OAApplicationMode *)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(OAApplicationMode *)defValue;
 
 - (OAApplicationMode *) get;
-- (void) set:(OAApplicationMode *)appMode;
 - (OAApplicationMode *) get:(OAApplicationMode *)mode;
+- (void) set:(OAApplicationMode *)appMode;
 - (void) set:(OAApplicationMode *)appMode mode:(OAApplicationMode *)mode;
 
 @end
 
 @interface OACommonBoolean : OACommonPreference
 
+- (instancetype) initWithKey:(NSString *)key defValue:(BOOL)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue;
 
 - (BOOL) get;
-- (void) set:(BOOL)boolean;
 - (BOOL) get:(OAApplicationMode *)mode;
+- (void) set:(BOOL)boolean;
 - (void) set:(BOOL)boolean mode:(OAApplicationMode *)mode;
 
 @end
 
 @interface OACommonInteger : OACommonPreference
 
+- (instancetype) initWithKey:(NSString *)key defValue:(int)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue;
 
 - (int) get;
-- (void) set:(int)integer;
 - (int) get:(OAApplicationMode *)mode;
+- (void) set:(int)integer;
 - (void) set:(int)integer mode:(OAApplicationMode *)mode;
 
 @end
 
 @interface OACommonLong : OACommonPreference
 
+- (instancetype) initWithKey:(NSString *)key defValue:(long)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(long)defValue;
 
 - (long) get;
-- (void) set:(long)_long;
 - (long) get:(OAApplicationMode *)mode;
+- (void) set:(long)_long;
 - (void) set:(long)_long mode:(OAApplicationMode *)mode;
 
 @end
 
 @interface OACommonString : OACommonPreference
 
+- (instancetype) initWithKey:(NSString *)key defValue:(NSString *)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
 
 - (NSString *) get;
@@ -226,23 +232,26 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonDouble : OACommonPreference
 
+- (instancetype) initWithKey:(NSString *)key defValue:(double)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue;
 
 - (double) get;
-- (void) set:(double)dbl;
 - (double) get:(OAApplicationMode *)mode;
+- (void) set:(double)dbl;
 - (void) set:(double)dbl mode:(OAApplicationMode *)mode;
 
 @end
 
 @interface OACommonStringList : OACommonPreference
 
+- (instancetype) initWithKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
 
 - (NSArray<NSString *> *) get;
 - (NSArray<NSString *> *) get:(OAApplicationMode *)mode;
 - (void) set:(NSArray<NSString *> *)arr;
 - (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode;
+
 - (void) add:(NSString *)string;
 - (void) addUnique:(NSString *)string;
 - (void) remove:(NSString *)string;
@@ -252,6 +261,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonMapSource : OACommonPreference
 
+- (instancetype) initWithKey:(NSString *)key defValue:(OAMapSource *)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
 
 - (OAMapSource *) get;
@@ -270,67 +280,49 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 
 @interface OACommonTerrain : OACommonInteger
 
+- (instancetype) initWithKey:(NSString *)key defValue:(EOATerrainType)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue;
 
 - (EOATerrainType) get;
-- (void) set:(EOATerrainType)autoZoomMap;
 - (EOATerrainType) get:(OAApplicationMode *)mode;
+- (void) set:(EOATerrainType)autoZoomMap;
 - (void) set:(EOATerrainType)autoZoomMap mode:(OAApplicationMode *)mode;
 
 @end
 
 @interface OACommonAutoZoomMap : OACommonInteger
 
+- (instancetype) initWithKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
 
 - (EOAAutoZoomMap) get;
-- (void) set:(EOAAutoZoomMap)autoZoomMap;
 - (EOAAutoZoomMap) get:(OAApplicationMode *)mode;
+- (void) set:(EOAAutoZoomMap)autoZoomMap;
 - (void) set:(EOAAutoZoomMap)autoZoomMap mode:(OAApplicationMode *)mode;
 
 @end
 
 @interface OACommonSpeedConstant : OACommonInteger
 
+- (instancetype) initWithKey:(NSString *)key defValue:(EOASpeedConstant)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue;
 
 - (EOASpeedConstant) get;
-- (void) set:(EOASpeedConstant)speedConstant;
 - (EOASpeedConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOASpeedConstant)speedConstant;
 - (void) set:(EOASpeedConstant)speedConstant mode:(OAApplicationMode *)mode;
 
 @end
 
 @interface OACommonAngularConstant : OACommonInteger
 
+- (instancetype) initWithKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
 
 - (EOAAngularConstant) get;
-- (void) set:(EOAAngularConstant)angularConstant;
 - (EOAAngularConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAAngularConstant)angularConstant;
 - (void) set:(EOAAngularConstant)angularConstant mode:(OAApplicationMode *)mode;
-
-@end
-
-@interface OACommonDrivingRegion : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
-
-- (EOADrivingRegion) get;
-- (void) set:(EOADrivingRegion)drivingRegionConstant;
-- (EOADrivingRegion) get:(OAApplicationMode *)mode;
-- (void) set:(EOADrivingRegion)drivingRegionConstant mode:(OAApplicationMode *)mode;
-
-@end
-
-@interface OACommonMetricSystem : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
-
-- (EOAMetricsConstant) get;
-- (void) set:(EOAMetricsConstant)metricsConstant;
-- (EOAMetricsConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -340,6 +332,18 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
     TWO_ACTIVE_MARKERS
 };
 
+@interface OACommonActiveMarkerConstant : OACommonInteger
+
+- (instancetype) initWithKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
+
+- (EOAActiveMarkerConstant) get;
+- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant;
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
 {
     TOP_BAR_DISPLAY = 0,
@@ -347,25 +351,39 @@ typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
     NONE_DISPLAY
 };
 
-@interface OACommonActiveMarkerConstant : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
-
-- (EOAActiveMarkerConstant) get;
-- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant;
-- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode;
-
-@end
-
 @interface OACommonDistanceIndicationConstant : OACommonInteger
 
+- (instancetype) initWithKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
 
 - (EOADistanceIndicationConstant) get;
-- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant;
 - (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant;
 - (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonDrivingRegion : OACommonInteger
+
+- (instancetype) initWithKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
+
+- (EOADrivingRegion) get;
+- (EOADrivingRegion) get:(OAApplicationMode *)mode;
+- (void) set:(EOADrivingRegion)drivingRegionConstant;
+- (void) set:(EOADrivingRegion)drivingRegionConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonMetricSystem : OACommonInteger
+
+- (instancetype) initWithKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
+
+- (EOAMetricsConstant) get;
+- (EOAMetricsConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAMetricsConstant)metricsConstant;
+- (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -375,6 +393,18 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
     RULER_MODE_LIGHT,
     RULER_MODE_NO_CIRCLES
 };
+
+@interface OACommonRulerWidgetMode : OACommonInteger
+
+- (instancetype) initWithKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue;
+
+- (EOARulerWidgetMode) get;
+- (EOARulerWidgetMode) get:(OAApplicationMode *)mode;
+- (void) set:(EOARulerWidgetMode)rulerWidgetMode;
+- (void) set:(EOARulerWidgetMode)rulerWidgetMode mode:(OAApplicationMode *)mode;
+
+@end
 
 @interface OAAppSettings : NSObject
 
@@ -461,7 +491,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OACommonBoolean *billingHideUserName;
 @property (nonatomic) OACommonBoolean *billingPurchaseTokenSent;
 @property (nonatomic) OACommonString *billingPurchaseTokensSent;
-@property (nonatomic, assign) NSTimeInterval liveUpdatesPurchaseCancelledTime; //global ?
+@property (nonatomic) OACommonDouble *liveUpdatesPurchaseCancelledTime;
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchaseCancelledFirstDlgShown;
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchaseCancelledSecondDlgShown;
 @property (nonatomic) OACommonBoolean *fullVersionPurchased;
@@ -618,7 +648,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL simulateRouting;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
-@property (nonatomic) EOARulerWidgetMode rulerMode; //convert to OAProfileRadiusRulerMode
+@property (nonatomic) OACommonRulerWidgetMode *rulerMode;
 
 @property (nonatomic) OACommonStringList *poiFiltersOrder;
 @property (nonatomic) OACommonStringList *inactivePoiFilters;
@@ -662,8 +692,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
 
-- (OACommonPreference *)getSettingById:(NSString *)stringId;
-
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
 
@@ -694,15 +722,16 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 - (NSSet<NSString *> *) getCustomAppModesKeys;
 
-- (void)registerPreference:(OACommonPreference *)pref forKey:(NSString *)key;
-- (NSMapTable<NSString *, OACommonPreference *> *) getRegisteredSettings;
-- (NSMapTable<NSString *, NSString *> *) getGlobalSettings;
-- (NSMapTable<NSString *, OACommonPreference *> *) getGlobalSettings2;
+- (NSMapTable<NSString *, OACommonPreference *> *)getPreferences:(BOOL)global;
+- (OACommonPreference *)getGlobalPreference:(NSString *)key;
+- (void)setGlobalPreference:(NSString *)value key:(NSString *)key;
+- (OACommonPreference *)getProfilePreference:(NSString *)key;
+- (void)setProfilePreference:(NSString *)value key:(NSString *)key;
 
-- (void)setGlobalSetting:(NSString *)value key:(NSString *)key;
-- (OACommonPreference *)getGlobalSetting:(NSString *)key;
-
-- (void)resetPreferencesForProfile:(OAApplicationMode *)appMode;
+- (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences;
+- (OACommonPreference *)getPreferenceByKey:(NSString *)key;
+- (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
+- (void)resetPreferences:(OAApplicationMode *)appMode;
 
 - (void) setupAppMode;
 

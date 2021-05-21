@@ -2086,3 +2086,5 @@
 
 // Shared Strings
 "shared_string_enable" = "تفعيل";
+
+"add_custom_category" = "إضافة فئة مخصصة";

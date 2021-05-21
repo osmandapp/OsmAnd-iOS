@@ -899,6 +899,11 @@
     [self setValue:defValue mode:mode];
 }
 
+- (void) resetToDefault
+{
+    [self resetModeToDefault:self.appMode];
+}
+
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode
 {
 
@@ -920,10 +925,6 @@
     }
 
     return nil;
-}
-
-- (void) resetToDefault
-{
 }
 
 - (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode

@@ -128,7 +128,7 @@
 
 -(BOOL)publish:(OASearchResult *)object
 {
-    if (_phrase && object.otherNames)
+    if (_phrase && object.otherNames && ![[_phrase getFirstUnknownNameStringMatcher] matches:object.localeName])
     {
         for (NSString *s in object.otherNames)
         {

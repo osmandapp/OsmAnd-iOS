@@ -503,6 +503,7 @@
 "shared_string_preparing" = "Preparing";
 "shared_string_min" = "Min.";
 "shared_string_max" = "Max.";
+"shared_string_wifi_only" = "Only on Wi-Fi";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -656,6 +657,15 @@
 "poi_clear" = "Clear";
 "poi_list" = "POI list";
 
+"gpxup_public" = "Public";
+"gpxup_identifiable" = "Identifiable";
+"gpxup_trackable" = "Trackable";
+"gpxup_private" = "Private";
+
+"gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
+"gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
+"gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
+"gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
 
 "track_during_nav" = "Auto-record track";
 "track_during_nav_descr" = "Turn on to automatically save a track during navigation";

@@ -152,6 +152,86 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAWikiArticleShowConstant)
+{
+    ON = 0,
+    OFF,
+    WIFI
+};
+
+@interface OAWikiArticleShowConstant : NSObject
+
+@property (nonatomic, readonly) EOAWikiArticleShowConstant wasc;
+
++ (instancetype) withWikiArticleShowConstant:(EOAWikiArticleShowConstant)wasc;
+
++ (NSString *) toHumanString:(EOAWikiArticleShowConstant)wasc;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOAGradientScaleType)
+{
+    SPEED = 0,
+    ALTITUDE,
+    SLOPE,
+    NONE
+};
+
+@interface OAGradientScaleType : NSObject
+
+@property (nonatomic, readonly) EOAGradientScaleType gst;
+
++ (instancetype) withGradientScaleType:(EOAGradientScaleType)gst;
+
++ (NSString *) toHumanString:(EOAGradientScaleType)gst;
++ (NSString *) toTypeName:(EOAGradientScaleType)gst;
++ (NSString *) toColorTypeName:(EOAGradientScaleType)gst;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOAUploadVisibility)
+{
+    PUBLIC = 0,
+    IDENTIFIABLE,
+    TRACKABLE,
+    PRIVATE
+};
+
+@interface OAUploadVisibility : NSObject
+
+@property (nonatomic, readonly) EOAUploadVisibility uv;
+
++ (instancetype) withUploadVisibility:(EOAUploadVisibility)uv;
+
++ (NSString *) toTitle:(EOAUploadVisibility)uv;
++ (NSString *) toDescription:(EOAUploadVisibility)uv;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOACoordinateInputFormats)
+{
+    DD_MM_MMM = 0,
+    DD_MM_MMMM,
+    DD_DDDDD,
+    DD_DDDDDD,
+    DD_MM_SS
+};
+
+@interface OACoordinateInputFormats : NSObject
+
+@property (nonatomic, readonly) EOACoordinateInputFormats cif;
+
++ (instancetype) withUploadVisibility:(EOACoordinateInputFormats)cif;
+
++ (NSString *) toHumanString:(EOACoordinateInputFormats)cif;
++ (BOOL) containsThirdPart:(EOACoordinateInputFormats)cif;
++ (int) toSecondPartSymbolsCount:(EOACoordinateInputFormats)cif;
++ (int) toThirdPartSymbolsCount:(EOACoordinateInputFormats)cif;
++ (NSString *) toFirstSeparator:(EOACoordinateInputFormats)cif;
++ (NSString *) toSecondSeparator:(EOACoordinateInputFormats)cif;
+
+@end
+
 @interface OACommonPreference : NSObject
 
 @property (nonatomic, readonly) NSString *key;
@@ -172,7 +252,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonAppMode : OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key defValue:(OAApplicationMode *)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(OAApplicationMode *)defValue;
 
 - (OAApplicationMode *) get;
@@ -184,7 +263,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonBoolean : OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key defValue:(BOOL)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue;
 
 - (BOOL) get;
@@ -196,7 +274,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonInteger : OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key defValue:(int)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue;
 
 - (int) get;
@@ -208,7 +285,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonLong : OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key defValue:(long)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(long)defValue;
 
 - (long) get;
@@ -220,7 +296,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonString : OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key defValue:(NSString *)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
 
 - (NSString *) get;
@@ -232,7 +307,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonDouble : OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key defValue:(double)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue;
 
 - (double) get;
@@ -244,7 +318,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonStringList : OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
 
 - (NSArray<NSString *> *) get;
@@ -261,7 +334,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @interface OACommonMapSource : OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key defValue:(OAMapSource *)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
 
 - (OAMapSource *) get;
@@ -280,7 +352,6 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 
 @interface OACommonTerrain : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOATerrainType)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue;
 
 - (EOATerrainType) get;
@@ -292,7 +363,6 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 
 @interface OACommonAutoZoomMap : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
 
 - (EOAAutoZoomMap) get;
@@ -304,7 +374,6 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 
 @interface OACommonSpeedConstant : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOASpeedConstant)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue;
 
 - (EOASpeedConstant) get;
@@ -316,7 +385,6 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 
 @interface OACommonAngularConstant : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
 
 - (EOAAngularConstant) get;
@@ -334,7 +402,6 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 
 @interface OACommonActiveMarkerConstant : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
 
 - (EOAActiveMarkerConstant) get;
@@ -353,7 +420,6 @@ typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
 
 @interface OACommonDistanceIndicationConstant : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
 
 - (EOADistanceIndicationConstant) get;
@@ -365,7 +431,6 @@ typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
 
 @interface OACommonDrivingRegion : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
 
 - (EOADrivingRegion) get;
@@ -377,7 +442,6 @@ typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
 
 @interface OACommonMetricSystem : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
 
 - (EOAMetricsConstant) get;
@@ -396,13 +460,77 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @interface OACommonRulerWidgetMode : OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue;
 + (instancetype) withKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue;
 
 - (EOARulerWidgetMode) get;
 - (EOARulerWidgetMode) get:(OAApplicationMode *)mode;
 - (void) set:(EOARulerWidgetMode)rulerWidgetMode;
 - (void) set:(EOARulerWidgetMode)rulerWidgetMode mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonWikiArticleShowImages : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue;
+
+- (EOAWikiArticleShowConstant) get;
+- (EOAWikiArticleShowConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow;
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOARateUsState)
+{
+    INITIAL_STATE = 0,
+    IGNORED,
+    LIKED,
+    DISLIKED_WITH_MESSAGE,
+    DISLIKED_WITHOUT_MESSAGE,
+    DISLIKED_OR_IGNORED_AGAIN
+};
+
+@interface OACommonRateUsState : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOARateUsState)defValue;
+
+- (EOARateUsState) get;
+- (EOARateUsState) get:(OAApplicationMode *)mode;
+- (void) set:(EOARateUsState)rateUsState;
+- (void) set:(EOARateUsState)rateUsState mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonGradientScaleType : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAGradientScaleType)defValue;
+
+- (EOAGradientScaleType) get;
+- (EOAGradientScaleType) get:(OAApplicationMode *)mode;
+- (void) set:(EOAGradientScaleType)gradientScaleType;
+- (void) set:(EOAGradientScaleType)gradientScaleType mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonUploadVisibility : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAUploadVisibility)defValue;
+
+- (EOAUploadVisibility) get;
+- (EOAUploadVisibility) get:(OAApplicationMode *)mode;
+- (void) set:(EOAUploadVisibility)uploadVisibility;
+- (void) set:(EOAUploadVisibility)uploadVisibility mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonCoordinateInputFormats : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOACoordinateInputFormats)defValue;
+
+- (EOACoordinateInputFormats) get;
+- (EOACoordinateInputFormats) get:(OAApplicationMode *)mode;
+- (void) set:(EOACoordinateInputFormats)coordinateInputFormats;
+- (void) set:(EOACoordinateInputFormats)coordinateInputFormats mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -746,10 +874,10 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 // global
 
 @property (nonatomic) OACommonBoolean *wikiArticleShowImagesAsked;
-//@property (nonatomic) OAProfileWikiArticleShowImages *wikivoyageShowImgs; //convert to OAProfileWikiArticleShowImages
+@property (nonatomic) OACommonWikiArticleShowImages *wikivoyageShowImgs;
 
 @property (nonatomic) OACommonBoolean *coordsInputUseRightSide;
-//@property (nonatomic) OAProfileFormat *coordsInputFormat; //convert to OAProfileFormat
+@property (nonatomic) OACommonCoordinateInputFormats *coordsInputFormat;
 @property (nonatomic) OACommonBoolean *coordsInputUseOsmandKeyboard;
 @property (nonatomic) OACommonBoolean *coordsInputTwoDigitsLongitude;
 
@@ -781,7 +909,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OACommonBoolean *webglSupported;
 
 @property (nonatomic) OACommonString *osmUserDisplayName;
-//@property (nonatomic) OAProfileUploadVisibility *osmUploadVisibility; //convert to OAProfileUploadVisibility
+@property (nonatomic) OACommonUploadVisibility *osmUploadVisibility;
 
 @property (nonatomic) OACommonBoolean *inappsRead;
 
@@ -810,7 +938,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OACommonLong *lastUpdatesCardRefresh;
 
 @property (nonatomic) OACommonInteger *currentTrackColor;
-//@property (nonatomic) OAProfileGradientScaleType currentTrackColorization; //convert to OAProfileGradientScaleType
+@property (nonatomic) OACommonGradientScaleType *currentTrackColorization;
 @property (nonatomic) OACommonString *currentTrackSpeedGradientPalette;
 @property (nonatomic) OACommonString *currentTrackAltitudeGradientPalette;
 @property (nonatomic) OACommonString *currentTrackSlopeGradientPalette;
@@ -869,6 +997,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OACommonLong *lastDisplayTime;
 @property (nonatomic) OACommonLong *lastCheckedUpdates;
 @property (nonatomic) OACommonInteger *numberOfAppStartsOnDislikeMoment;
-//@property (nonatomic) OAProfileRateUsState rateUsState; //convert to OAProfileRateUsState
+@property (nonatomic) OACommonRateUsState *rateUsState;
 
 @end

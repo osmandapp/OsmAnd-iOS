@@ -777,18 +777,303 @@
 
 @end
 
+@interface OAWikiArticleShowConstant()
+
+@property (nonatomic) EOAWikiArticleShowConstant wasc;
+
+@end
+
+@implementation OAWikiArticleShowConstant
+
++ (instancetype)withWikiArticleShowConstant:(EOAWikiArticleShowConstant)wasc
+{
+    OAWikiArticleShowConstant *obj = [[OAWikiArticleShowConstant alloc] init];
+    if (obj)
+    {
+        obj.wasc = wasc;
+    }
+    return obj;
+}
+
++ (NSString *) toHumanString:(EOAWikiArticleShowConstant)wasc
+{
+    switch (wasc)
+    {
+        case ON:
+            return OALocalizedString(@"shared_string_on");
+        case OFF:
+            return OALocalizedString(@"shared_string_off");
+        case WIFI:
+            return OALocalizedString(@"shared_string_wifi_only");
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@interface OAGradientScaleType()
+
+@property (nonatomic) EOAGradientScaleType gst;
+
+@end
+
+@implementation OAGradientScaleType
+
++ (instancetype)withGradientScaleType:(EOAGradientScaleType)gst
+{
+    OAGradientScaleType *obj = [[OAGradientScaleType alloc] init];
+    if (obj)
+    {
+        obj.gst = gst;
+    }
+    return obj;
+}
+
++ (NSString *) toHumanString:(EOAGradientScaleType)gst
+{
+    switch (gst)
+    {
+        case SPEED:
+            return OALocalizedString(@"gpx_speed");
+        case ALTITUDE:
+            return OALocalizedString(@"map_widget_altitude");
+        case SLOPE:
+            return OALocalizedString(@"gpx_slope");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) toTypeName:(EOAGradientScaleType)gst
+{
+    switch (gst)
+    {
+        case SPEED:
+            return @"speed";
+        case ALTITUDE:
+            return @"altitude";
+        case SLOPE:
+            return @"slope";
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) toColorTypeName:(EOAGradientScaleType)gst
+{
+    switch (gst)
+    {
+        case SPEED:
+            return @"gradient_speed_color";
+        case ALTITUDE:
+            return @"gradient_altitude_color";
+        case SLOPE:
+            return @"gradient_slope_color";
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@interface OAUploadVisibility()
+
+@property (nonatomic) EOAUploadVisibility uv;
+
+@end
+
+@implementation OAUploadVisibility
+
++ (instancetype)withUploadVisibility:(EOAUploadVisibility)uv
+{
+    OAUploadVisibility *obj = [[OAUploadVisibility alloc] init];
+    if (obj)
+    {
+        obj.uv = uv;
+    }
+    return obj;
+}
+
++ (NSString *) toTitle:(EOAUploadVisibility)uv
+{
+    switch (uv)
+    {
+        case PUBLIC:
+            return OALocalizedString(@"gpxup_public");
+        case IDENTIFIABLE:
+            return OALocalizedString(@"gpxup_identifiable");
+        case TRACKABLE:
+            return OALocalizedString(@"gpxup_trackable");
+        case PRIVATE:
+            return OALocalizedString(@"gpxup_private");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) toDescription:(EOAUploadVisibility)uv
+{
+    switch (uv)
+    {
+        case PUBLIC:
+            return OALocalizedString(@"gpx_upload_public_visibility_descr");
+        case IDENTIFIABLE:
+            return OALocalizedString(@"gpx_upload_identifiable_visibility_descr");
+        case TRACKABLE:
+            return OALocalizedString(@"gpx_upload_trackable_visibility_descr");
+        case PRIVATE:
+            return OALocalizedString(@"gpx_upload_private_visibility_descr");
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@interface OACoordinateInputFormats()
+
+@property (nonatomic) EOACoordinateInputFormats cif;
+
+@end
+
+@implementation OACoordinateInputFormats
+
++ (instancetype)withUploadVisibility:(EOACoordinateInputFormats)cif
+{
+    OACoordinateInputFormats *obj = [[OACoordinateInputFormats alloc] init];
+    if (obj)
+    {
+        obj.cif = cif;
+    }
+    return obj;
+}
+
++ (NSString *) toHumanString:(EOACoordinateInputFormats)cif
+{
+    switch (cif)
+    {
+        case DD_MM_MMM:
+            return OALocalizedString(@"dd_mm_mmm_format");
+        case DD_MM_MMMM:
+            return OALocalizedString(@"dd_mm_mmmm_format");
+        case DD_DDDDD:
+            return OALocalizedString(@"dd_ddddd_format");
+        case DD_DDDDDD:
+            return OALocalizedString(@"dd_dddddd_format");
+        case DD_MM_SS:
+            return OALocalizedString(@"dd_mm_ss_format");
+        default:
+            return @"";
+    }
+}
+
++ (BOOL) containsThirdPart:(EOACoordinateInputFormats)cif
+{
+    switch (cif)
+    {
+        case DD_MM_MMM:
+            return YES;
+        case DD_MM_MMMM:
+            return YES;
+        case DD_DDDDD:
+            return NO;
+        case DD_DDDDDD:
+            return NO;
+        case DD_MM_SS:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
++ (int) toSecondPartSymbolsCount:(EOACoordinateInputFormats)cif
+{
+    switch (cif)
+    {
+        case DD_MM_MMM:
+            return 2;
+        case DD_MM_MMMM:
+            return 2;
+        case DD_DDDDD:
+            return 5;
+        case DD_DDDDDD:
+            return 6;
+        case DD_MM_SS:
+            return 2;
+        default:
+            return 0;
+    }
+}
+
++ (int) toThirdPartSymbolsCount:(EOACoordinateInputFormats)cif
+{
+    switch (cif)
+    {
+        case DD_MM_MMM:
+            return 3;
+        case DD_MM_MMMM:
+            return 4;
+        case DD_DDDDD:
+            return 0;
+        case DD_DDDDDD:
+            return 0;
+        case DD_MM_SS:
+            return 2;
+        default:
+            return 0;
+    }
+}
+
++ (NSString *) toFirstSeparator:(EOACoordinateInputFormats)cif
+{
+    switch (cif)
+    {
+        case DD_MM_MMM:
+            return @"°";
+        case DD_MM_MMMM:
+            return @"°";
+        case DD_DDDDD:
+            return @".";
+        case DD_DDDDDD:
+            return @".";
+        case DD_MM_SS:
+            return @"°";
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) toSecondSeparator:(EOACoordinateInputFormats)cif
+{
+    switch (cif)
+    {
+        case DD_MM_MMM:
+            return @".";
+        case DD_MM_MMMM:
+            return @".";
+        case DD_DDDDD:
+            return @"°";
+        case DD_DDDDDD:
+            return @"°";
+        case DD_MM_SS:
+            return @"′";
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @interface OACommonPreference ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic) NSString *key;
-@property (nonatomic) BOOL global;
-@property (nonatomic) BOOL shared;
 @property (nonatomic) NSMapTable<OAApplicationMode *, NSObject *> *cachedValues;
 @property (nonatomic) NSMapTable<OAApplicationMode *, NSObject *> *defaultValues;
 @property (nonatomic) NSObject *cachedValue;
 @property (nonatomic) NSObject *defaultValue;
 
-- (instancetype) initWithKey:(NSString *)key;
 + (instancetype) withKey:(NSString *)key;
 - (NSObject *) getValue;
 - (NSObject *) getValue:(OAApplicationMode *)mode;
@@ -799,32 +1084,28 @@
 
 @implementation OACommonPreference
 
-- (instancetype) initWithKey:(NSString *)key
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-    }
-
-    return self;
-}
+@synthesize global=_global, shared=_shared;
 
 + (instancetype) withKey:(NSString *)key
 {
-    return [[OACommonPreference alloc] initWithKey:key];
+    OACommonPreference *obj = [[OACommonPreference alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
+    }
+    return obj;
 }
 
 - (id) makeGlobal
 {
-    self.global = YES;
+    _global = YES;
     return self;
 }
 
 - (id) makeShared
 {
-    self.shared = YES;
+    _shared = YES;
     return self;
 }
 
@@ -951,22 +1232,15 @@
 
 @implementation OACommonAppMode
 
-- (instancetype) initWithKey:(NSString *)key defValue:(OAApplicationMode *)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(OAApplicationMode *)defValue
 {
-    return [[OACommonAppMode alloc] initWithKey:key defValue:defValue];
+    OACommonAppMode *obj = [[OACommonAppMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (OAApplicationMode *)get {
@@ -1064,22 +1338,15 @@
 
 @implementation OACommonBoolean
 
-- (instancetype) initWithKey:(NSString *)key defValue:(BOOL)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue
 {
-    return [[OACommonBoolean alloc] initWithKey:key defValue:defValue];
+    OACommonBoolean *obj = [[OACommonBoolean alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (BOOL) get
@@ -1143,22 +1410,15 @@
 
 @implementation OACommonInteger
 
-- (instancetype) initWithKey:(NSString *)key defValue:(int)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue
 {
-    return [[OACommonInteger alloc] initWithKey:key defValue:defValue];
+    OACommonInteger *obj = [[OACommonInteger alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (int) get
@@ -1226,22 +1486,15 @@
 
 @implementation OACommonLong
 
-- (instancetype) initWithKey:(NSString *)key defValue:(long)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(long)defValue
 {
-    return [[OACommonLong alloc] initWithKey:key defValue:defValue];
+    OACommonLong *obj = [[OACommonLong alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (long) get
@@ -1298,22 +1551,15 @@
 
 @implementation OACommonString
 
-- (instancetype) initWithKey:(NSString *)key defValue:(NSString *)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue
 {
-    return [[OACommonString alloc] initWithKey:key defValue:defValue];
+    OACommonString *obj = [[OACommonString alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (NSString *) get
@@ -1370,22 +1616,15 @@
 
 @implementation OACommonDouble
 
-- (instancetype) initWithKey:(NSString *)key defValue:(double)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue
 {
-    return [[OACommonDouble alloc] initWithKey:key defValue:defValue];
+    OACommonDouble *obj = [[OACommonDouble alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (double) get
@@ -1442,22 +1681,15 @@
 
 @implementation OACommonStringList
 
-- (instancetype) initWithKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue
 {
-    return [[OACommonString alloc] initWithKey:key defValue:defValue];
+    OACommonStringList *obj = [[OACommonStringList alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (NSArray<NSString *> *) get
@@ -1535,22 +1767,15 @@
 
 @implementation OACommonMapSource
 
-- (instancetype) initWithKey:(NSString *)key defValue:(OAMapSource *)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue
 {
-    return [[OACommonMapSource alloc] initWithKey:key defValue:defValue];
+    OACommonMapSource *obj = [[OACommonMapSource alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (OAMapSource *) get
@@ -1586,32 +1811,19 @@
 
 @end
 
-@interface OACommonTerrain ()
-
-@property (nonatomic) EOATerrainType defValue;
-
-@end
-
 @implementation OACommonTerrain
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOATerrainType)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue
 {
-    return [[OACommonTerrain alloc] initWithKey:key defValue:defValue];
+    OACommonTerrain *obj = [[OACommonTerrain alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOATerrainType) get
@@ -1667,32 +1879,19 @@
 
 @end
 
-@interface OACommonAutoZoomMap ()
-
-@property (nonatomic) EOAAutoZoomMap defValue;
-
-@end
-
 @implementation OACommonAutoZoomMap
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;        
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue
 {
-    return [[OACommonAutoZoomMap alloc] initWithKey:key defValue:defValue];
+    OACommonAutoZoomMap *obj = [[OACommonAutoZoomMap alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOAAutoZoomMap) get
@@ -1752,32 +1951,19 @@
 
 @end
 
-@interface OACommonSpeedConstant ()
-
-@property (nonatomic) EOASpeedConstant defValue;
-
-@end
-
 @implementation OACommonSpeedConstant
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOASpeedConstant)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;        
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue
 {
-    return [[OACommonSpeedConstant alloc] initWithKey:key defValue:defValue];
+    OACommonSpeedConstant *obj = [[OACommonSpeedConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOASpeedConstant) get
@@ -1874,22 +2060,15 @@
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOAAngularConstant)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue
 {
-    return [[OACommonAngularConstant alloc] initWithKey:key defValue:defValue];
+    OACommonAngularConstant *obj = [[OACommonAngularConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOAAngularConstant) get
@@ -1953,22 +2132,15 @@
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;        
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue
 {
-    return [[OACommonActiveMarkerConstant alloc] initWithKey:key defValue:defValue];
+    OACommonActiveMarkerConstant *obj = [[OACommonActiveMarkerConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOAActiveMarkerConstant) get
@@ -2033,22 +2205,15 @@
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;        
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue
 {
-    return [[OACommonDistanceIndicationConstant alloc] initWithKey:key defValue:defValue];
+    OACommonDistanceIndicationConstant *obj = [[OACommonDistanceIndicationConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOADistanceIndicationConstant) get
@@ -2112,22 +2277,15 @@
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOADrivingRegion)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;        
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue
 {
-    return [[OACommonDrivingRegion alloc] initWithKey:key defValue:defValue];
+    OACommonDrivingRegion *obj = [[OACommonDrivingRegion alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOADrivingRegion) get
@@ -2201,32 +2359,19 @@
 
 @end
 
-@interface OACommonMetricSystem ()
-
-@property (nonatomic) EOAMetricsConstant defValue;
-
-@end
-
 @implementation OACommonMetricSystem
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOAMetricsConstant)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;        
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue
 {
-    return [[OACommonMetricSystem alloc] initWithKey:key defValue:defValue];
+    OACommonMetricSystem *obj = [[OACommonMetricSystem alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOAMetricsConstant) get
@@ -2294,32 +2439,19 @@
 
 @end
 
-@interface OACommonRulerWidgetMode ()
-
-@property (nonatomic) EOARulerWidgetMode defValue;
-
-@end
-
 @implementation OACommonRulerWidgetMode
 
 @dynamic defValue;
 
-- (instancetype) initWithKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue
-{
-    self = [super init];
-    if (self)
-    {
-        self.key = key;
-        self.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
-        self.defValue = defValue;        
-    }
-
-    return self;
-}
-
 + (instancetype) withKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue
 {
-    return [[OACommonRulerWidgetMode alloc] initWithKey:key defValue:defValue];
+    OACommonRulerWidgetMode *obj = [[OACommonRulerWidgetMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOARulerWidgetMode) get
@@ -2373,6 +2505,391 @@
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOARulerWidgetMode)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonWikiArticleShowImages
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue
+{
+    OACommonWikiArticleShowImages *obj = [[OACommonWikiArticleShowImages alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAWikiArticleShowConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow
+{
+    [super set:wikiArticleShow];
+}
+
+- (EOAWikiArticleShowConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow mode:(OAApplicationMode *)mode
+{
+    [super set:wikiArticleShow mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"ON"])
+        return [self set:ON mode:mode];
+    else if ([strValue isEqualToString:@"OFF"])
+        return [self set:OFF mode:mode];
+    else if ([strValue isEqualToString:@"WIFI"])
+        return [self set:WIFI mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case ON:
+            return @"ON";
+        case OFF:
+            return @"OFF";
+        case WIFI:
+            return @"WIFI";
+        default:
+            return @"OFF";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOAWikiArticleShowConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAWikiArticleShowConstant)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonRateUsState
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOARateUsState)defValue
+{
+    OACommonRateUsState *obj = [[OACommonRateUsState alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOARateUsState) get
+{
+    return [super get];
+}
+
+- (void) set:(EOARateUsState)rateUsState
+{
+    [super set:rateUsState];
+}
+
+- (EOARateUsState) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOARateUsState)rateUsState mode:(OAApplicationMode *)mode
+{
+    [super set:rateUsState mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"INITIAL_STATE"])
+        return [self set:INITIAL_STATE mode:mode];
+    else if ([strValue isEqualToString:@"IGNORED"])
+        return [self set:IGNORED mode:mode];
+    else if ([strValue isEqualToString:@"LIKED"])
+        return [self set:LIKED mode:mode];
+    else if ([strValue isEqualToString:@"DISLIKED_WITH_MESSAGE"])
+        return [self set:DISLIKED_WITH_MESSAGE mode:mode];
+    else if ([strValue isEqualToString:@"DISLIKED_WITHOUT_MESSAGE"])
+        return [self set:DISLIKED_WITHOUT_MESSAGE mode:mode];
+    else if ([strValue isEqualToString:@"DISLIKED_OR_IGNORED_AGAIN"])
+        return [self set:DISLIKED_OR_IGNORED_AGAIN mode:mode];
+
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case INITIAL_STATE:
+            return @"INITIAL_STATE";
+        case IGNORED:
+            return @"IGNORED";
+        case LIKED:
+            return @"LIKED";
+        case DISLIKED_WITH_MESSAGE:
+            return @"DISLIKED_WITH_MESSAGE";
+        case DISLIKED_WITHOUT_MESSAGE:
+            return @"DISLIKED_WITHOUT_MESSAGE";
+        case DISLIKED_OR_IGNORED_AGAIN:
+            return @"DISLIKED_OR_IGNORED_AGAIN";
+        default:
+            return @"INITIAL_STATE";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOARateUsState defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOARateUsState)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonGradientScaleType
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAGradientScaleType)defValue
+{
+    OACommonGradientScaleType *obj = [[OACommonGradientScaleType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAGradientScaleType) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAGradientScaleType)gradientScaleType
+{
+    [super set:gradientScaleType];
+}
+
+- (EOAGradientScaleType) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAGradientScaleType)gradientScaleType mode:(OAApplicationMode *)mode
+{
+    [super set:gradientScaleType mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"speed"])
+        return [self set:SPEED mode:mode];
+    else if ([strValue isEqualToString:@"altitude"])
+        return [self set:ALTITUDE mode:mode];
+    else if ([strValue isEqualToString:@"slope"])
+        return [self set:SLOPE mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case SPEED:
+            return @"speed";
+        case ALTITUDE:
+            return @"altitude";
+        case SLOPE:
+            return @"slope";
+        default:
+            return @"speed";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOAGradientScaleType defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAGradientScaleType)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonUploadVisibility
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAUploadVisibility)defValue
+{
+    OACommonUploadVisibility *obj = [[OACommonUploadVisibility alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAUploadVisibility) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAUploadVisibility)gradientScaleType
+{
+    [super set:gradientScaleType];
+}
+
+- (EOAUploadVisibility) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAUploadVisibility)gradientScaleType mode:(OAApplicationMode *)mode
+{
+    [super set:gradientScaleType mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"PUBLIC"])
+        return [self set:PUBLIC mode:mode];
+    else if ([strValue isEqualToString:@"IDENTIFIABLE"])
+        return [self set:IDENTIFIABLE mode:mode];
+    else if ([strValue isEqualToString:@"TRACKABLE"])
+        return [self set:TRACKABLE mode:mode];
+    else if ([strValue isEqualToString:@"PRIVATE"])
+        return [self set:PRIVATE mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case PUBLIC:
+            return @"PUBLIC";
+        case IDENTIFIABLE:
+            return @"IDENTIFIABLE";
+        case TRACKABLE:
+            return @"TRACKABLE";
+        case PRIVATE:
+            return @"PRIVATE";
+        default:
+            return @"PUBLIC";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOAUploadVisibility defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAUploadVisibility)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonCoordinateInputFormats
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOACoordinateInputFormats)defValue
+{
+    OACommonCoordinateInputFormats *obj = [[OACommonCoordinateInputFormats alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOACoordinateInputFormats) get
+{
+    return [super get];
+}
+
+- (void) set:(EOACoordinateInputFormats)coordinateInputFormats
+{
+    [super set:coordinateInputFormats];
+}
+
+- (EOACoordinateInputFormats) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOACoordinateInputFormats)coordinateInputFormats mode:(OAApplicationMode *)mode
+{
+    [super set:coordinateInputFormats mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"DD_MM_MMM"])
+        return [self set:DD_MM_MMMM mode:mode];
+    else if ([strValue isEqualToString:@"DD_MM_MMMM"])
+        return [self set:DD_MM_MMM mode:mode];
+    else if ([strValue isEqualToString:@"DD_DDDDD"])
+        return [self set:DD_DDDDD mode:mode];
+    else if ([strValue isEqualToString:@"DD_DDDDDD"])
+        return [self set:DD_DDDDDD mode:mode];
+    else if ([strValue isEqualToString:@"DD_MM_SS"])
+        return [self set:DD_MM_SS mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case DD_MM_MMM:
+            return @"DD_MM_MMM";
+        case DD_MM_MMMM:
+            return @"DD_MM_MMMM";
+        case DD_DDDDD:
+            return @"DD_DDDDD";
+        case DD_DDDDDD:
+            return @"DD_DDDDDD";
+        case DD_MM_SS:
+            return @"DD_MM_SS";
+        default:
+            return @"PUBLIC";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOACoordinateInputFormats defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOACoordinateInputFormats)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -2883,7 +3400,7 @@
 
         _osmUserName = [[[OACommonString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
-//        _osmUploadVisibility = [[[[OAProfileUploadVisibility withKey:osmUploadVisibilityKey defValue:PUBLIC] makeGlobal] makeShared];
+        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:PUBLIC] makeGlobal] makeShared];
         _userOsmBugName = [[[OACommonString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
         _osmUserPassword = [[[OACommonString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
@@ -2897,7 +3414,7 @@
 
         [_globalPreferences setObject:_osmUserName forKey:@"user_name"];
         [_globalPreferences setObject:_osmUserDisplayName forKey:@"user_display_name"];
-//        [_globalPreferences setObject:_osmUploadVisibility forKey:@"upload_visibility"];
+        [_globalPreferences setObject:_osmUploadVisibility forKey:@"upload_visibility"];
         [_globalPreferences setObject:_userOsmBugName forKey:@"user_osm_bug_name"];
         [_globalPreferences setObject:_osmUserPassword forKey:@"user_password"];
         [_globalPreferences setObject:_osmUserAccessToken forKey:@"user_access_token"];
@@ -2965,20 +3482,18 @@
         // global
 
         _wikiArticleShowImagesAsked = [[OACommonBoolean withKey:wikiArticleShowImagesAskedKey defValue:NO] makeGlobal];
-        //todo convert to OAProfileWikiArticleShowImages
-//        _wikivoyageShowImgs = [[[[OAProfileWikiArticleShowImages withKey:wikivoyageShowImgsKey defValue:OFF] makeGlobal] makeShared] register] : NO;
+        _wikivoyageShowImgs = [[[OACommonWikiArticleShowImages withKey:wikivoyageShowImgsKey defValue:OFF] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_wikiArticleShowImagesAsked forKey:@"wikivoyage_show_images_asked"];
-//        [_globalPreferences setObject:_wikivoyageShowImgs forKey:@"wikivoyage_show_imgs"];
+        [_globalPreferences setObject:_wikivoyageShowImgs forKey:@"wikivoyage_show_imgs"];
 
         _coordsInputUseRightSide = [[[OACommonBoolean withKey:coordsInputUseRightSideKey defValue:YES] makeGlobal] makeShared];
-        //todo convert to OAProfileFormat
-//        _coordsInputFormat = [[[[OAProfileFormat withKey:coordsInputFormatKey defValue:DD_MM_MMM] makeGlobal] makeShared];
+        _coordsInputFormat = [[[OACommonCoordinateInputFormats withKey:coordsInputFormatKey defValue:DD_MM_MMM] makeGlobal] makeShared];
         _coordsInputUseOsmandKeyboard = [[[OACommonBoolean withKey:coordsInputUseOsmandKeyboardKey defValue: YES] makeGlobal] makeShared];
         _coordsInputTwoDigitsLongitude = [[[OACommonBoolean withKey:coordsInputTwoDigitsLongitudeKey defValue: NO] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_coordsInputUseRightSide forKey:@"coords_input_use_right_side"];
-//        [_globalPreferences setObject:_coordsInputFormat forKey:@"coords_input_format"];
+        [_globalPreferences setObject:_coordsInputFormat forKey:@"coords_input_format"];
         [_globalPreferences setObject:_coordsInputUseOsmandKeyboard forKey:@"coords_input_use_osmand_keyboard"];
         [_globalPreferences setObject:_coordsInputTwoDigitsLongitude forKey:@"coords_input_two_digits_longitude"];
 
@@ -3080,7 +3595,7 @@
         [_globalPreferences setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
 
         _currentTrackColor = [[[OACommonInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
-//        _currentTrackColorization = [[[[OAProfileGradientScaleType withKey:currentTrackColorizationKey defValue:null] makeGlobal] makeShared];
+        _currentTrackColorization = [[[OACommonGradientScaleType withKey:currentTrackColorizationKey defValue:NONE] makeGlobal] makeShared];
         _currentTrackSpeedGradientPalette = [[[OACommonString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
         _currentTrackAltitudeGradientPalette = [[[OACommonString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
         _currentTrackSlopeGradientPalette = [[[OACommonString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
@@ -3090,7 +3605,7 @@
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
-//        [_globalPreferences setObject:_currentTrackColorization forKey:@"current_track_colorization"];
+        [_globalPreferences setObject:_currentTrackColorization forKey:@"current_track_colorization"];
         [_globalPreferences setObject:_currentTrackSpeedGradientPalette forKey:@"current_track_speed_gradient_palette"];
         [_globalPreferences setObject:_currentTrackAltitudeGradientPalette forKey:@"current_track_altitude_gradient_palette"];
         [_globalPreferences setObject:_currentTrackSlopeGradientPalette forKey:@"current_track_slope_gradient_palette"];
@@ -3186,12 +3701,12 @@
         _lastDisplayTime = [[OACommonLong withKey:lastDisplayTimeKey defValue:0] makeGlobal];
         _lastCheckedUpdates = [[OACommonLong withKey:lastCheckedUpdatesKey defValue:0] makeGlobal];
         _numberOfAppStartsOnDislikeMoment = [[OACommonInteger withKey:numberOfAppStartsOnDislikeMomentKey defValue:0] makeGlobal];
-//        _rateUsState = [[OAProfileRateUsState withKey:rateUsStateKey defValue:INITIAL_STATE] makeGlobal];
+        _rateUsState = [[OACommonRateUsState withKey:rateUsStateKey defValue:INITIAL_STATE] makeGlobal];
 
         [_globalPreferences setObject:_lastDisplayTime forKey:@"last_display_time"];
         [_globalPreferences setObject:_lastCheckedUpdates forKey:@"last_checked_updates"];
         [_globalPreferences setObject:_numberOfAppStartsOnDislikeMoment forKey:@"number_of_app_starts_on_dislike_moment"];
-//        [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
+        [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
 
         [self fetchImpassableRoads];
 

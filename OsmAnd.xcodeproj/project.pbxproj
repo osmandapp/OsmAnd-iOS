@@ -4360,6 +4360,7 @@
 		32D7D4C625AF313B00868E80 /* OARangeSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OARangeSlider.m; path = Views/OARangeSlider.m; sourceTree = "<group>"; };
 		32DB230D262EFDDF00696A95 /* OACollectionViewCellState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OACollectionViewCellState.h; path = Controllers/Cells/OACollectionViewCellState.h; sourceTree = "<group>"; };
 		32DB230E262EFDFF00696A95 /* OACollectionViewCellState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OACollectionViewCellState.m; path = Controllers/Cells/OACollectionViewCellState.m; sourceTree = "<group>"; };
+		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B52507803500266047 /* ic_custom_logo_wikidata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_logo_wikidata.png; path = Resources/Icons/ic_custom_logo_wikidata.png; sourceTree = "<group>"; };
 		333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@3x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@3x.png"; sourceTree = "<group>"; };
@@ -14463,6 +14464,7 @@
 				et,
 				el,
 				kab,
+				fi,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -18283,6 +18285,7 @@
 				8A4D82C623C1CD85003DC887 /* et */,
 				8A6E582023F003BD001C9A04 /* el */,
 				8AE0197224505D4400DA5C33 /* kab */,
+				32ECBEAD2657AD7F005D33BD /* fi */,
 			);
 			name = Localizable.strings;
 			path = Resources;

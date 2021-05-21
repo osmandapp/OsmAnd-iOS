@@ -1938,7 +1938,7 @@
 "poi_categories" = "Catégories de PI";
 "carplay_active_message" = "La carte est affichée via CarPlay";
 "tracks_empty" = "Votre liste d'enregistrements est vide";
-"street_level_imagery" = "Imagerie des rues";
+"street_level_imagery" = "Photos des rues";
 "markers_history" = "Historique des marqueurs";
 
 // Resources
@@ -2020,7 +2020,7 @@
 "incorrect_symbols" = "Caractères non valides saisis";
 "none_point_error" = "Veuillez ajouter au moins un point.";
 "gpx_saved_successfully" = "Fichier GPX enregistré dans %@";
-"simplified_track_description" = "Seule la ligne de l'itinéraire sera sauvegardée, les points de passage seront supprimés.";
+"simplified_track_description" = "Seule la ligne d'itinéraire sera enregistrée, les points de passage seront supprimés.";
 "whole_track_descr" = "L'itinéraire entier sera recalculé en utilisant le profil sélectionné.";
 "next_seg_descr" = "Le segment suivant sera recalculé en utilisant le profil sélectionné.";
 "route_betw_points_descr" = "Choisissez comment connecter ces points : avec une ligne droite ou en calculant un itinéraires à l'aide des profils répertoriés ci-dessous.";

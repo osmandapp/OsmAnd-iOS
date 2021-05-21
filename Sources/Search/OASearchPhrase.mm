@@ -283,8 +283,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return cnt;
 }
 
-- (void) splitWords:(NSString *)w
-                 ws:(NSMutableArray<NSString *> *)ws
++ (NSMutableArray<NSString *> *) splitWords:(NSString *)w ws:(NSMutableArray<NSString *> *)ws
 {
     if (w && w.length > 0)
     {
@@ -292,9 +291,11 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         for (int i = 0; i < [wrs count]; i++)
         {
             NSString *wd = wrs[i].trim;
-            [ws addObject:wd];
+            if (wd.length > 0)
+                [ws addObject:wd];
         }
     }
+    return ws;
 }
 
 - (OASearchPhrase *) selectWord:(OASearchResult *) res unknownWords:(NSArray<NSString *> *)unknownWords lastComplete:(BOOL)lastComplete

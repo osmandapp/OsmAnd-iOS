@@ -818,13 +818,13 @@
 
 - (id) makeGlobal
 {
-    self.global = true;
+    self.global = YES;
     return self;
 }
 
 - (id) makeShared
 {
-    self.shared = true;
+    self.shared = YES;
     return self;
 }
 

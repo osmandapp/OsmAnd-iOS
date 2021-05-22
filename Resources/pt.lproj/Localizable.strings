@@ -720,8 +720,8 @@
 "in_app_purchase_desc_ex" = "Uma vez comprado, estará sempre disponível para si.";
 "unlock_all_features" = "Desbloquear todas as características de OsmAnd";
 "osm_live_subscribe_btn" = "Subscrever";
-"shared_string_email_address" = "Endereço de e-mail";
-"osm_live_enter_email" = "Favor introduzir um endereço de e-mail válido";
+"shared_string_email_address" = "Endereço de email";
+"osm_live_enter_email" = "Favor introduzir um endereço de email válido";
 "osm_live_enter_user_name" = "Introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
 "osm_live_payment_desc" = "Pode gerir e cancelar as suas subscrições nas configurações da sua conta na App Store após a compra";

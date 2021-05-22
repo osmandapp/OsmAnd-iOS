@@ -28,6 +28,7 @@ let languageDict = [
                     "es" : "es",
                     "et" : "et",
                     "fa" : "fa",
+                    "fi" : "fi",
                     "fr" : "fr",
                     "gl" : "gl",
                     "hu" : "hu",
@@ -112,38 +113,69 @@ func androidContains(androidDict: [String:String], keys: [String]) -> String? {
     return nil
 }
 
+func isValueCorrect(value: String) -> Bool {
+    return value.count > 0 && !value.contains("$")
+}
+
 func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String]) {
     let androidDict = modifyVariables(dict: androidDict)
-    var outputDict: [String:String] = [:]
-    var outputArray: [String] = []
-    for elem in androidDict {
-        if commonDict!.keys.contains(elem.key) && !iosDict.keys.contains(elem.key) {
-            outputDict.updateValue(elem.value, forKey: elem.key)
-        }
-    }
-    for elem in commonValuesDict {
-        if !iosDict.keys.contains(elem.key) {
-            if let key = androidContains(androidDict: androidDict, keys: elem.value) {
-                outputDict.updateValue(androidDict[key]!, forKey: elem.key)
+    var newLinesDict: [String:String] = [:]
+    var existingLinesDict: [String:String] = [:]
+
+    for elem in commonDict! {
+        if androidDict.keys.contains(elem.key)
+        {
+            guard isValueCorrect(value: androidDict[elem.key]!) else {continue}
+            if iosDict.keys.contains(elem.key) {
+                existingLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
+            } else {
+                newLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
             }
         }
     }
-    for elem in outputDict {
-        outputArray.append(makeOutputString(str1: elem.key, str2: elem.value))
+    
+    for elem in commonValuesDict {
+        if let key = androidContains(androidDict: androidDict, keys: elem.value) {
+            guard isValueCorrect(value: androidDict[key]!) else {continue}
+            if iosDict.keys.contains(elem.key) {
+                existingLinesDict.updateValue(androidDict[key]!, forKey: elem.key)
+            } else {
+                newLinesDict.updateValue(androidDict[key]!, forKey: elem.key)
+            }
+        }
     }
-    let joined = outputArray.joined(separator: "")
+    
+    if existingLinesDict.count > 0 || newLinesDict.count > 0 {
+        let fileURL = URL(fileURLWithPath: "Resources/" + language + ".lproj/Localizable.strings")
+        do {
+            let fileContent = try String(contentsOf: fileURL)
+            var strings = fileContent.components(separatedBy: ";")
 
-    let fileURL = URL(fileURLWithPath: "Resources/" + language + ".lproj/Localizable.strings")
-    do {
-        let fileHandle = try FileHandle(forWritingTo: fileURL)
-        fileHandle.seekToEndOfFile()
-        let textData = Data(joined.utf8)
-        fileHandle.write(textData)
-        fileHandle.closeFile()
-    } catch {
-        print(error)
+            for elem in existingLinesDict {
+                for i in 0 ..< strings.count {
+                    if strings[i].contains("\"" + elem.key + "\"")
+                    {
+                        strings[i] = strings[i].replacingOccurrences(of: "\"" + iosDict[elem.key]! + "\"", with: "\"" + elem.value + "\"")
+                    }
+                }
+            }
+
+            for elem in newLinesDict {
+                strings.append("\n\"" + elem.key + "\" = \"" + elem.value + "\";")
+            }
+            
+            let newFileContent = strings.joined(separator: ";")
+        
+            do {
+                try newFileContent.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+            } catch {
+                print ("error writing file: \(error)")
+            }
+        } catch {
+            print ("error reading file: \(error)")
+        }
     }
-    print(language, "added: ", outputDict.count)
+    print(language, "added: ", newLinesDict.count, " udated: ", existingLinesDict.count)
 }
 
 func parseIos (language: String, initial: Bool) -> [String : String] {
@@ -310,6 +342,11 @@ class Parser: NSObject, XMLParserDelegate {
         return dict
     }
 }
+
+
+//change directory to OsmAnd-ios repo folder.
+//uncomment this line for debugging.
+//FileManager.default.changeCurrentDirectoryPath("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/")
 
 if (CommandLine.arguments.count == 2) && (CommandLine.arguments[1] == "-routing") {
     for lang in allLanguagesDict {

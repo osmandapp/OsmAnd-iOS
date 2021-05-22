@@ -361,7 +361,7 @@
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
 "map_mode" = "Application mode";
-"map_settings_day" = "Day";
+"map_settings_day" = "နေ့";
 "map_settings_night" = "Night";
 "map_settings_style" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -520,7 +520,7 @@
 "col_gray" = "Gray";
 "col_red" = "Red";
 "col_blue" = "Blue";
-"col_magenta" = "Magenta";
+"col_magenta" = "ပန်းခရမ်းရောင်";
 // World Regions
 "region_africa" = "Africa";
 "region_asia" = "Asia";
@@ -710,10 +710,10 @@
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
 "shared_string_save_as" = "Save As";
-"delete_filter" = "filter ကိုဖျက်ပါ";
-"save_filter" = "filter ကိုသိမ်းပါ";
+"delete_filter" = "filterကိုဖျက်ပါ";
+"save_filter" = "filterကိုသိမ်းပါ";
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
-"apply_filters" = "filter များကိုအသုံးပြုပါ";
+"apply_filters" = "filterများကိုအသုံးပြုပါ";
 "filter_poi_hint" = "Filter by name";
 "city_type_suburb" = "Suburb";
 "city_type_hamlet" = "Hamlet";
@@ -725,7 +725,7 @@
 "postcode" = "စာပို့သင်္ကေတ";
 "show_something_on_map" = "Show %@ on the map";
 "search_POI_level_btn" = "Increase search radius";
-"shared_string_street" = "Street";
+"shared_string_street" = "လမ်း";
 "shared_string_building" = "Building";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Address";
@@ -884,7 +884,7 @@
 "special_routing" = "အထူးလမ်းကြောင်း";
 "base_profile_descr_public_transport" = "ပြည်သူပို့ဆောင်ရေးအမျိုးအားလုံး";
 "public_transport_warning_title" = "ပြည်သူပို့ဆောင်ရေးလမ်းညွှန်သည်လက်ရှိတွင် beta စမ်းသပ်ခြင်းဖြစ်၍၊ အမှားအယွင်းများနှင့်အမှားများရှိနိင်သည်။";
-"voice_announces" = "အသံကြေငြာချက်များ";
+"voice_announces" = "အသံကြေငြာ";
 "nav_type_title" = "လမ်းညွှန်အမျိုးအစား";
 "reset_to_default" = "မူလပုံမှန်ကိုပြန်ပြောင်းမြည်";
 "walk" = "လမ်းလျှောက်";

@@ -125,7 +125,7 @@
 "quick_action_add_poi_category" = "Προσθήκη κατηγορίας";
 "ending_point_too_far" = "Το τελικό σημείο είναι πολύ μακριά από τον πλησιέστερο δρόμο.";
 "arrival_distance_factor_early" = "Πρόωρα";
-"free_memory" = "Εξοικονόμηση %@";
+"free_memory" = "Ελεύθερο %@";
 "open_osm_note" = "Άνοιγμα σημείωσης OSM";
 "speed_limit_exceed" = "Ανοχή ορίου ταχύτητας";
 "week" = "Εβδομάδα";
@@ -136,7 +136,7 @@
 "osm_phone" = "Τηλέφωνο";
 "res_url" = "URL";
 "shared_string_near" = "Κοντά";
-"ctx_mnu_share" = "Διαμοιρασμός";
+"ctx_mnu_share" = "Κοινοποίηση";
 "search_poi_category_hint" = "Πληκτρολογήστε για αναζήτηση όλων";
 "no_inet_connection_desc_map" = "Απαιτείται για λήψη χαρτών.";
 "add_action" = "Προσθήκη ενέργειας";
@@ -151,7 +151,7 @@
 "osm_live_cancel_subscription" = "Ακύρωση συνδρομής";
 "shared_string_address" = "Διεύθυνση";
 "shared_string_road" = "Δρόμος";
-"fast_route_mode_descr" = "Ενεργοποίηση για υπολογισμό ταχύτερης διαδρομής ή απενεργοποίηση για διαδρομή εξοικονόμησης καυσίμου";
+"fast_route_mode_descr" = "Ενεργοποίησε για υπολογισμό ταχύτερης διαδρομής ή απενεργοποίησε για διαδρομή με οικονομία καυσίμων.";
 "gpx_waypoints" = "Σημεία διαδρομής";
 "col_purple" = "Μοβ";
 "shared_setting_always_ask" = "Πάντα ερώτηση";
@@ -160,7 +160,7 @@
 "year" = "Έτος";
 "add_work" = "Προσθήκη εργασίας";
 "route_tsll" = "Στρίψτε ελαφρώς αριστερά και προχωρήστε";
-"wake_on_voice_descr" = "Ενεργοποίση της οθόνης της συσκευής (εάν είναι ανενεργή) όταν πλησιάζετε μια στροφή";
+"wake_on_voice_descr" = "Ενεργοποίση της οθόνης της συσκευής (εάν είναι ανενεργή) όταν πλησιάζετε μια στροφή.";
 "shared_string_previous" = "Προηγούμενο";
 "track_recording_name" = "Τρέχουσα καταγραφή ίχνους";
 "filter_poi_hint" = "Φιλτράρισμα κατά όνομα";
@@ -220,11 +220,11 @@
 "show_pedestrian_warnings" = "Διαβάσεις πεζών";
 "nearby_search" = "Αναζήτηση στη γύρω περιοχή";
 "help_versions" = "Εκδόσεις";
-"prefer_in_routing_descr" = "Προτίμησε τους αυτοκινητοδρόμους";
+"prefer_in_routing_descr" = "Να προτιμώνται αυτοκινητόδρομοι.";
 "gpx_deactivated" = "Απενεργοποιημένο";
 "key_hint_deselect" = "Αποεπιλογή";
 "map_underlays" = "Υποστρώματα χάρτη";
-"favorites" = "Αγαπημένα";
+"favorites" = "Τα Αγαπημένα";
 "shared_string_from" = "από";
 "show_traffic_warnings" = "Κυκλοφοριακές προειδοποιήσεις";
 "help_about" = "Περί";
@@ -444,7 +444,7 @@
 "map_settings_show" = "Εμφάνιση στον χάρτη";
 "day" = "Ημέρα";
 "poi_type" = "Τύπος ΣΕ";
-"unknown_location" = "Η θέση δεν είναι ακόμα γνωστή";
+"unknown_location" = "Η Θέση δεν είναι ακόμα γνωστή.";
 "shared_string_buy" = "Αγορά";
 "shared_string_on" = "Ενεργό";
 "loading_poi_obj" = "Φόρτωση ΣΕ…";
@@ -509,7 +509,7 @@
 "snap_to_road_descr" = "Προσανατολισμός στους δρόμους κατά τη διάρκεια της πλοήγησης";
 "snap_to_road" = "Προσανατολισμός στο δρόμο";
 "shared_string_street" = "Οδός";
-"default_speed_system_descr" = "Ορισμός μονάδας ταχύτητας";
+"default_speed_system_descr" = "Ορισμός μονάδας ταχύτητας.";
 "translucent_red" = "Ημιδιαφανές κόκκινο";
 "fav_color" = "Χρώμα";
 "osm_str_name" = "Όνομα οδού";
@@ -531,7 +531,7 @@
 "select_map_marker" = "Επιλέξτε έναν δείκτη χάρτη";
 "auto_zoom_map" = "Αυτόματη εστίαση χάρτη";
 "try_again" = "Ξαναδοκιμάστε";
-"relief_smoothness_factor_descr" = "Προτιμώμενο έδαφος: επίπεδο ή λοφώδες";
+"relief_smoothness_factor_descr" = "Προτιμώμενο έδαφος: επίπεδο ή λοφώδες.";
 "shared_string_apply" = "Εφαρμογή";
 "first_usage_wizard_desc" = "Αφήστε το OsmAnd να προσδιορίσει την τοποθεσία σας και να προτείνει χάρτες για λήψη για αυτήν την περιοχή.";
 "shared_string_remove" = "Αφαίρεση";
@@ -570,7 +570,7 @@
 "units_mph" = "μαω";
 "gpx_avg_altitude" = "Μέσο υψόμετρο";
 "simulate_navigation" = "Προσομοίωση πλοήγησης";
-"transport_stop" = "Διακοπή";
+"transport_stop" = "Στάση";
 "rendering_category_others" = "Άλλα χαρακτηριστικά χάρτη";
 "m_style_bicycle" = "Ποδήλατο";
 "osm_live_hide_user_name" = "Να μην εμφανίζεται το όνομά μου στις αναφορές";
@@ -578,7 +578,7 @@
 "shared_string_go" = "Εκτέλεση";
 "maps" = "Χάρτες";
 "nothanks" = "Όχι, ευχαριστώ";
-"mapillary" = "Mapillary";
+"mapillary" = "Εικόνες επιπέδου οδού";
 "gpx_finish" = "Τερματισμός";
 "destination_point" = "Προορισμός %@";
 "gpx_start" = "Έναρξη";
@@ -597,7 +597,7 @@
 "map_styles" = "Τύποι χάρτη";
 "shared_string_widgets" = "Γραφικά στοιχεία";
 "speak_poi" = "ΣΕ σε κοντινή απόσταση";
-"keep_informing_descr" = "Επανάληψη οδηγιών πλοήγησης σε τακτά χρονικά διαστήματα";
+"keep_informing_descr" = "Επανάληψη οδηγιών πλοήγησης σε τακτά χρονικά διαστήματα.";
 "shared_string_my_location" = "Η θέση μου";
 "clear_all_intermediates" = "Καθαρισμός όλων των ενδιάμεσων σημείων";
 "col_red" = "Κόκκινο";
@@ -609,7 +609,7 @@
 "select_street" = "Επιλέξτε οδό";
 "orange" = "Πορτοκαλί";
 "city_type_suburb" = "Προάστιο";
-"impassable_road_desc" = "Επιλέξτε τους δρόμους που θέλετε να αποφύγετε κατά την πλοήγηση";
+"impassable_road_desc" = "Επιλέξτε τους δρόμους που θέλετε να αποφύγετε κατά την πλοήγηση.";
 "help_trip_planning" = "Προγραμματισμός ταξιδιού";
 "fav_add_group" = "Προσθήκη ομάδας";
 "fav_replace" = "Αντικατάσταση";
@@ -636,7 +636,7 @@
 "routing_attr_avoid_unpaved_description" = "Απέφυγε χωματόδρομους";
 "routing_attr_avoid_stairs_description" = "Απέφυγε σκαλιά";
 "rendering_attr_noAdminboundaries_name" = "Όρια";
-"rendering_value__name" = "Προκαθορισμένο";
+"rendering_value__name" = "Προεπιλογή";
 "rendering_value_lightblue_name" = "Γαλάζιο";
 "rendering_attr_surface_asphalt_name" = "Άσφαλτος";
 "rendering_attr_surface_ice_name" = "Πάγος";
@@ -834,7 +834,7 @@
 "routing_attr_driving_style_speed_name" = "Πιο σύντομες διαδρομές";
 "routing_attr_avoid_ferry_description" = "Απέφυγε πορθμεία";
 "rendering_value_orange_name" = "Πορτοκαλί";
-"rendering_value_default_name" = "Προκαθορισμένο";
+"rendering_value_default_name" = "Προεπιλογή";
 "routing_attr_height_description" = "Καθορισμός ύψους οχήματος που επιτρέπεται σε διαδρομές.";
 "routing_attr_avoid_bus_description" = "Απέφυγε λεωφορεία και τρόλεϊ";
 "rendering_attr_smoothness_good_name" = "Καλό";
@@ -944,7 +944,7 @@
 "logging_interval_navigation_descr" = "Επιλέξτε το διάστημα καταγραφής για τη εγγραφή ταξιδιού κατά τη διάρκεια της πλοήγησης";
 "save_global_track_interval_descr" = "Επιλέξτε το διάστημα καταγραφής για τη γενική εγγραφή ταξιδιού (ενεργοποιείται μέσω του γραφικού στοιχείου καταγραφής GPX στο χάρτη).";
 "max_speed" = "Μέγιστη ταχύτητα";
-"min_speed" = "Ελάχιστη ταχύτητα";
+"min_speed" = "Ελαχ. ταχύτητα";
 "default_speed" = "Προεπιλεγμένη ταχύτητα";
 "driving_region_descr" = "Επιλέξτε την περιοχή οδήγησης: ΗΠΑ, Ευρώπη, Ηνωμένο Βασίλειο, Ασία και άλλα.";
 "rotate_map_none_opt" = "Να μην περιστρέφετε (ο βορράς είναι επάνω)";
@@ -988,19 +988,19 @@
 "map_orientation_change_in_accordance_with_speed_descr" = "Επιλογή ταχύτητας που ο προσανατολισμός του χάρτη θα αλλάξει από «Προς την κατεύθυνση κίνησης» σε «Προς την πυξίδα»";
 "vehicle_parameters" = "Παράμετροι οχήματος";
 "screen_alerts" = "Προειδοποιήσεις οθόνης";
-"voice_announces" = "Φωνητικές οδηγίες";
+"voice_announces" = "Φωνητικές ανακοινώσεις";
 "nav_type_title" = "Τύπος πλοήγησης";
-"nav_type_geocoding" = "Fεωκωδικοποίηση";
-"nav_type_ski" = "Σκί";
+"nav_type_geocoding" = "Γεωκωδικοποίηση";
+"nav_type_ski" = "Σκι";
 "nav_type_brouter" = "BRouter";
-"nav_type_direct_to" = "Απευθείας στο σημείο";
+"nav_type_direct_to" = "Άμεσα-στο-σημείο";
 "nav_type_straight_line" = "Ευθεία γραμμή";
 "nav_type_osmand" = "OsmAnd (δρομολόγηση χωρις ίντερνετ)";
 "nav_type_descr" = "Επιλογή υπολογισμού διαδρομής για αυτό το προφίλ";
 "change_map_behavior" = "Αλλαγή συμπεριφοράς χάρτη κατά την διάρκεια της πλοήγησης";
 "weeks_short" = "Εβδ";
 "shared_string_next" = "Επόμενο";
-"map_during_navigation" = "Συμπεριφορά χάρτη";
+"map_during_navigation" = "Χάρτης κατά την πλοήγηση";
 "mapil_usernames" = "Ονόματα χρηστών";
 "mapil_select_user" = "Επιλογή χρήστη";
 "select_map_style" = "Επιλογή στυλ χάρτη";
@@ -1178,7 +1178,7 @@
 "group_name" = "Όνομα ομάδας";
 "shared_string_import" = "Εισαγωγή";
 "fav_points_not_exist" = "Δεν υπάρχουν αγαπημένα σημεία";
-"track" = "Ίχνος";
+"track" = "Αγροτική Οδός";
 "track_save_descr" = "Αποθήκευση τρέχοντος ίχνους ως αρχείου GPX τώρα.";
 "emergency" = "Επείγοντα";
 "select_group" = "Επιλογή ομάδας";

@@ -24,7 +24,7 @@
         return OALocalizedString(@"create_new_trip");
 
     if (self.gpxTitle)
-        return [[[self.gpxFileName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
+        return [[[[self.gpxFileName lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
 
     return self.gpxTitle;
 }
@@ -97,7 +97,7 @@
     OAGPX *gpx = [[OAGPX alloc] init];
     NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
     gpx.bounds = bounds;
-    gpx.gpxFileName = [fileName lastPathComponent];
+    gpx.gpxFileName = fileName;
     gpx.gpxFilePath = [filepath stringByReplacingOccurrencesOfString:pathToRemove withString:@""];
     title = [title length] != 0 ? title : nil;
     if (title)

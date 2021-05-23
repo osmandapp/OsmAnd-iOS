@@ -1747,16 +1747,6 @@
     [self set:defaultValue];
 }
 
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    [self set:[strValue componentsSeparatedByString:@","] mode:mode];
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    return [[self get:mode] componentsJoinedByString:@","];
-}
-
 @end
 
 @interface OACommonMapSource ()

@@ -64,6 +64,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, assign) BOOL needRestart;
+
 @end
 
 @implementation OAImportCompleteViewController
@@ -296,6 +298,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     if (globalCount > 0)
     {
+        _needRestart = YES;
         [_data addObject: @{
             @"label": OALocalizedString(@"general_settings_2"),
             @"iconName": @"left_menu_icon_settings",
@@ -339,6 +342,14 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     [OARoutingHelper.sharedInstance setAppMode:currentRoutingMode];
 }
 
+- (NSString *)getTitleForSection
+{
+    NSString *headerText = OALocalizedString(@"import_complete_description");
+    if (_needRestart)
+        headerText = [NSString stringWithFormat:@"%@\n\n%@", headerText, OALocalizedString(@"app_restart_required")];
+    return headerText;
+}
+
 #pragma mark - Actions
 
 - (IBAction)secondaryButtonPressed:(id)sender
@@ -379,12 +390,12 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:[self getTitleForSection] boldFragment:_fileName forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:[self getTitleForSection] boldFragment:_fileName inSection:section];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

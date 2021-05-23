@@ -505,6 +505,8 @@
 "shared_string_max" = "Max.";
 "shared_string_wifi_only" = "Only on Wi-Fi";
 
+"restart" = "Restart";
+
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
 "update_map" = "Update map";
@@ -835,6 +837,7 @@
 
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
+"app_restart_required" = "Application restart required to apply some settings.";
 "shared_string_finish" = "Finish";
 "added_items" = "Added items: %@";
 

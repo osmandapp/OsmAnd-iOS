@@ -316,10 +316,10 @@
     {
         BOOL isAllFilters = indexPath.section == kAllFiltersSection;
         OAPOIUIFilter *filter = isAllFilters ? _filtersItems[indexPath.row].filter : _hiddenFiltersItems[indexPath.row].filter;
-        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeleteButtonTableViewCell getCellIdentifier]];
+        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellType];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeleteButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
             cell = (OADeleteButtonTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
@@ -351,10 +351,10 @@
     }
     else if ([cellType isEqualToString:[OAButtonRightIconCell getCellIdentifier]])
     {
-        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonRightIconCell getCellIdentifier]];
+        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
         }

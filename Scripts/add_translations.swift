@@ -404,7 +404,7 @@ class Parser: NSObject, XMLParserDelegate {
 
 //change directory to OsmAnd-ios repo folder.
 //uncomment this line for debugging.
-FileManager.default.changeCurrentDirectoryPath("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/")
+//FileManager.default.changeCurrentDirectoryPath("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/")
 
 if (CommandLine.arguments.count == 2) && (CommandLine.arguments[1] == "-routing") {
     for lang in allLanguagesDict {

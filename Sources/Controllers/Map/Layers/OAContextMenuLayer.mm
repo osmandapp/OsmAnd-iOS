@@ -407,12 +407,7 @@
             
             NSMutableSet<OATargetPoint *> *filtredPointsSet = [NSMutableSet new];
             for (OATargetPoint *point in found)
-            {
-                OAPOI *targetObj = point.targetObj;
-                if (!targetObj.type.parentType)
-                    targetObj.type.parentType = [[OAPOIBaseType alloc] initWithName:@""];
                 [filtredPointsSet addObject:point];
-            }
             found = [NSMutableArray arrayWithArray:filtredPointsSet.allObjects];
         }
         

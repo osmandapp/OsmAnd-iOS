@@ -486,6 +486,10 @@
             [tableView reloadRowsAtIndexPaths:@[indexPath, [NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
+    else
+    {
+        [self openCloseGroup:indexPath];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self updateControls];
 }

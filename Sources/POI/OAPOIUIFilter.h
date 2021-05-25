@@ -43,7 +43,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic) BOOL isActive;
 @property (nonatomic) BOOL isDeleted;
 
-@property (nonatomic, readonly) NSString *filterByName;
+@property (nonatomic) NSString *filterByName;
 @property (nonatomic) NSString *savedFilterByName;
 @property (nonatomic, readonly) NSArray<OAPOI *> *currentSearchResult;
 @property (nonatomic, readonly) OAPOIBaseType *baseType;

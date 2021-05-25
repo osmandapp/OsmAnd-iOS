@@ -1731,7 +1731,7 @@
 "will_be_show_while_moving" = "At a èssere ammustradu durante su movimentu";
 "create_profile" = "Crea unu profilu";
 "import_from_files" = "Importa dae sos documentos";
-"import_routing_file_descr" = "Podes importare unu documentu pro su càlculu de s'àndala dae cale si siat aplicatzione de archiviatzione in sa nue o ponende·lu in sa cartella de OsmAnd de iTunes.";
+"import_routing_file_descr" = "Podes importare unu documentu pro su càlculu de s'àndala dae cale si siat aplicatzione de archiviatzione in sa nue o aberende·lu in OsmAnd.";
 "osmand_routing" = "Càrculu de s'àndala de OsmAnd";
 "change_map_behavior" = "Modìfica su cumportamentu de sa mapa durante sa navigatzione";
 "map_behavior" = "Cumportamentu de sa mapa";
@@ -2089,7 +2089,7 @@
 "search_history" = "Cronologia de chirca";
 "markers_history" = "Cronologia de sos marcadores";
 "coordinates" = "Coordinadas";
-"delete_custom_categories" = "Iscantzella categorias personalizadas";
+"delete_custom_categories" = "Iscantzella sas categorias personalizadas";
 "reset_to_default_category_button_promo" = "Resetende a su valore predefinidu as a ripristinare s'òrdine initziale.";
 "create_custom_categories_list_promo" = "Podes annànghere categorias personalizadas, cuare categorias chi pensas chi non ti serbant, e mudare s'òrdine de sa lista. Podes importare o esportare sas categorias personalizadas cun sos profilos.";
 "hidden_categories" = "Categorias cuadas";
@@ -2103,3 +2103,5 @@
 
 // Shared Strings
 "shared_string_enable" = "Abìlita";
+"search_poi_types_descr" = "Podes cumbinare castas de PDI dae categorias diferentes.";
+"add_custom_category" = "Annanghe una categoria personalizada";

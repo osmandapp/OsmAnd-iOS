@@ -2088,5 +2088,5 @@
 
 // Shared Strings
 "shared_string_enable" = "Увімкнути";
-"search_poi_types_descr" = "Ви можете сполучати типи об'єктів (POI) різних категорій.";
+"search_poi_types_descr" = "Ви можете поєднувати типи об'єктів (POI) різних категорій.";
 "add_custom_category" = "Додати власну категорію";

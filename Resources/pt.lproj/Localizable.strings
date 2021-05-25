@@ -38,7 +38,7 @@
 "fav_export_title" = "Exportar favorito";
 "fav_select_remove" = "Selecione os favoritos a remover";
 "fav_export_select" = "Selecione os favoritos a exportar";
-"fav_import_desc" = "Pode importar os seus favoritos como marcos de trajeto no ficheiro GPX (formato de dados GPS comum)\n\nPara partilhar o ficheiro favorites.gpx pode abri-lo no Dropbox, e-mail ou qualquer outra origem - use a função 'Abrir com'.";
+"fav_import_desc" = "Pode importar os seus favoritos como marcos de trajeto no ficheiro GPX (formato de dados GPS comum)\n\nPara partilhar o ficheiro favorites.gpx pode abri-lo no Dropbox, email ou qualquer outra origem - use a função 'Abrir com'.";
 "fav_create_group" = "Criar novo grupo";
 "fav_enter_group_name" = "Digite o nome do grupo";
 "fav_exists" = "O favorito com o nome \"%@\" já existe";
@@ -720,8 +720,8 @@
 "in_app_purchase_desc_ex" = "Uma vez comprado, estará sempre disponível para si.";
 "unlock_all_features" = "Desbloquear todas as características de OsmAnd";
 "osm_live_subscribe_btn" = "Subscrever";
-"shared_string_email_address" = "Endereço de e-mail";
-"osm_live_enter_email" = "Favor introduzir um endereço de e-mail válido";
+"shared_string_email_address" = "Endereço de email";
+"osm_live_enter_email" = "Favor introduzir um endereço de email válido";
 "osm_live_enter_user_name" = "Introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
 "osm_live_payment_desc" = "Pode gerir e cancelar as suas subscrições nas configurações da sua conta na App Store após a compra";
@@ -843,7 +843,7 @@
 "osmand_live_donation_switch_title" = "Doação para a comunidade OpenStreetMap";
 "osmand_live_donation_switch_descr" = "Parte do seu donativo é distribuído entre os utilizadores do OSM que enviam alterações para o OpenStreetMap. O custo da subscrição continua o mesmo";
 "osmand_live_donations_enter_email" = "Insira o seu endereço de email";
-"osmand_live_donations_email_descr" = "Por favor, forneça seu endereço de e-mail para obter os relatórios de doação";
+"osmand_live_donations_email_descr" = "Por favor, forneça seu endereço de email para obter os relatórios de doação";
 "osmand_live_support_reg_descr" = "Parte do seu donativo será enviado para utilizadores do OSM que editam o mapa nessa região";
 "osmand_live_public_name" = "Digite seu nome público";
 "osmand_live_subscription_canceled" = "Cancelou a subscrição do OsmAnd Live";
@@ -1014,7 +1014,7 @@
 "monthly_map_updates" = "Atualizações de mapas: a cada mês";
 "daily_map_updates" = "Atualizações de mapas: a cada hora";
 "purchase_unlim_title" = "Comprar - %@";
-"subscribe_email_desc" = "Assine a nossa lista de e-mail:<br/>• Obtenha 3 mapas extras para descarregar<br/>• Ouça sobre descontos primeiro<br/>• Participe nos <a href='https://osmand.net/giveaway'>códigos promocionais</a>";
+"subscribe_email_desc" = "Inscreva-se na nossa lista de email:<br/>• Obtenha 3 mapas extras para descarregar<br/>• Seja dos primeiros a saber sobre descontos<br/>• Participe nos <a href='https://osmand.net/giveaway'>códigos promocionais</a>";
 "osm_live_unlock_all" = "Desbloquear todos os recursos";
 "osm_live_unlock_updates" = "Desbloquear atualizações de mapas por hora";
 "osm_live_banner_descr" = "Inscreva-se no OsmAnd Live e ganhe atualizações a cada <b>1 hora</b> ilimitadas e <b>todas as funcionalidades</b> incluídas a partir de %@";

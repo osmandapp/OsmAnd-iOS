@@ -3051,6 +3051,7 @@
 		DA68B404233B826E00F5ACCC /* ic_custom_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B400233B826D00F5ACCC /* ic_custom_add@3x.png */; };
 		DA68B406233B826E00F5ACCC /* ic_custom_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B401233B826E00F5ACCC /* ic_custom_add@2x.png */; };
 		DA68B40B233B92D500F5ACCC /* OAAddDestinationBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA68B409233B92D400F5ACCC /* OAAddDestinationBottomSheetViewController.mm */; };
+		DA69B74B26563B28004CCDC5 /* OARendererRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = DA69B74A26563B28004CCDC5 /* OARendererRegistry.m */; };
 		DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */; };
 		DA6A2B80233CEBE4005D2F4A /* OATitleIconRoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6A2B7F233CEBE4005D2F4A /* OATitleIconRoundCell.xib */; };
 		DA6A2B84233CEC42005D2F4A /* OATitleIconRoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A2B83233CEC42005D2F4A /* OATitleIconRoundCell.m */; };
@@ -7528,6 +7529,8 @@
 		DA68B401233B826E00F5ACCC /* ic_custom_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_add@2x.png"; path = "Resources/Icons/ic_custom_add@2x.png"; sourceTree = "<group>"; };
 		DA68B409233B92D400F5ACCC /* OAAddDestinationBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddDestinationBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA68B40A233B92D500F5ACCC /* OAAddDestinationBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddDestinationBottomSheetViewController.h; sourceTree = "<group>"; };
+		DA69B74926563B28004CCDC5 /* OARendererRegistry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARendererRegistry.h; sourceTree = "<group>"; };
+		DA69B74A26563B28004CCDC5 /* OARendererRegistry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARendererRegistry.m; sourceTree = "<group>"; };
 		DA6A1C4121FAF5AA00D5CC86 /* OAEditPOIData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEditPOIData.h; sourceTree = "<group>"; };
 		DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditPOIData.mm; sourceTree = "<group>"; };
 		DA6A2B7F233CEBE4005D2F4A /* OATitleIconRoundCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATitleIconRoundCell.xib; path = Resources/Controllers/Cells/OATitleIconRoundCell.xib; sourceTree = "<group>"; };
@@ -12655,6 +12658,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				DA69B74826563AF4004CCDC5 /* Rendering */,
 				DACB1A182634419E00E5D159 /* Extensions */,
 				DACBB96525D2BFCE00378C47 /* CarPlay */,
 				8A8C1171242FB4E800E47052 /* Profiles */,
@@ -13821,6 +13825,15 @@
 				DAB3E54C23BB537400EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm */,
 			);
 			path = RouteInfoBottomSheet;
+			sourceTree = "<group>";
+		};
+		DA69B74826563AF4004CCDC5 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				DA69B74926563B28004CCDC5 /* OARendererRegistry.h */,
+				DA69B74A26563B28004CCDC5 /* OARendererRegistry.m */,
+			);
+			path = Rendering;
 			sourceTree = "<group>";
 		};
 		DA6B361B2265EF2500FBB46D /* MyPlaces */ = {
@@ -17820,6 +17833,7 @@
 				DA23E1ED23361A2B0056F4A8 /* OAAppModeView.m in Sources */,
 				BBA3AFF819854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				1581A38D2566C3C5004CB4B3 /* OASettingsItemReader.m in Sources */,
+				DA69B74B26563B28004CCDC5 /* OARendererRegistry.m in Sources */,
 				BBA3AF51197FC4BB0039D991 /* OAMapPanelViewController.mm in Sources */,
 				845AFB3F1E261A4900170026 /* OAObjectType.m in Sources */,
 				84C86A1B1FB988DA00AA7C1B /* OATopTextView.mm in Sources */,

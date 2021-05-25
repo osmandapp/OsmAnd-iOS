@@ -360,7 +360,7 @@
 "cannot_add_marker_desc" = "Si prega di rimuovere almeno una direzione e riprovare";
 "cannot_add_destination" = "Impossibile aggiungere una direzione";
 "product_desc_skimap" = "Piste da sci per tutte le stazioni sciistiche del mondo";
-"shared_string_dismiss" = "Ignora";
+"shared_string_dismiss" = "Abbandona";
 "shared_string_modify" = "Modifica";
 "shared_string_later" = "Dopo";
 "offline_maps" = "Mappe offline";

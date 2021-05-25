@@ -569,10 +569,8 @@
 
 - (void) updateLocation
 {
-    CLLocation* location = _app.locationServices.lastKnownLocation;
-
     dispatch_sync(syncQueue, ^{
-        
+        CLLocation* location = [_app.locationServices.lastKnownLocation copy];
         if (location)
         {
             long locationTime = (long)[location.timestamp timeIntervalSince1970];

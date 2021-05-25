@@ -668,9 +668,9 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"m_style_car" = "Car";
+"m_style_car" = "Driving";
 "m_style_walk" = "Walking";
-"m_style_bicycle" = "Bicycle";
+"m_style_bicycle" = "Cycling";
 "m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
@@ -1990,7 +1990,7 @@
 "routing_attr_driving_style_speed_name" = "Shorter routes";
 "routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
 "rendering_attr_hikingRoutesOSMC_description" = "Render paths according to OSMC traces.";
-"rendering_value_car_name" = "Car";
+"rendering_value_car_name" = "Driving";
 "routing_attr_avoid_unpaved_name" = "No unpaved roads";
 "rendering_attr_lessDetailed_name" = "Fewer details";
 "routing_attr_avoid_borders_description" = "Avoids crossing national borders";
@@ -2030,7 +2030,7 @@
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";
 "rendering_attr_surface_unpaved_name" = "Unpaved";
 "rendering_attr_noAdminboundaries_description" = "Suppress display of regional boundaries (admin levels 5–9).";
-"rendering_value_bicycle_name" = "Bicycle";
+"rendering_value_bicycle_name" = "Cycling";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
 "rendering_attr_showAccess_name" = "Show access restrictions and toll";

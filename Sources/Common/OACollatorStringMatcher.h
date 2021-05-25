@@ -5,7 +5,8 @@
 //  Created by Alexey Kulish on 21/12/2016.
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
-//  8298dbdf17d9ece341fa7b790019c193e01698c5
+//  OsmAnd-java/src/main/java/net/osmand/CollatorStringMatcher.java
+//  git revision fd0a6fa1bd4f5202c13b9e98b1f7297e1e8b755c
 
 #import <Foundation/Foundation.h>
 #import "OAStringMatcher.h"

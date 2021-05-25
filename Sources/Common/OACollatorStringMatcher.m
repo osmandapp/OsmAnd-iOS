@@ -23,7 +23,7 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     self = [super init];
     if (self)
     {
-        part = [self.class simplifyStringAndAlignChars:part];
+        part = [self.class simplifyStringAndAlignChars:part key:@""];
         if (part.length > 0 && [part characterAtIndex:(part.length - 1)] == '.')
         {
             part = [part substringToIndex:part.length - 1];
@@ -122,7 +122,7 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
  */
 + (BOOL) cstartsWith:(NSString *)fullTextP theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
 {
-    NSString *searchIn = [self simplifyStringAndAlignChars:fullTextP];
+    NSString *searchIn = [self simplifyStringAndAlignChars:fullTextP key:theStart];
     NSInteger searchInLength = searchIn.length;
     
     NSInteger startLength = theStart.length;
@@ -185,11 +185,11 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     return ![[NSCharacterSet letterCharacterSet] characterIsMember:c] && ![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:c];
 }
 
-+ (NSString *) simplifyStringAndAlignChars:(NSString *)fullText
++ (NSString *) simplifyStringAndAlignChars:(NSString *)fullText key:(NSString *)key
 {
     int i;
     fullText = fullText.lowerCase;
-    while( (i = [fullText indexOf:@"ß"] ) != -1 ) {
+    while([key indexOf:@"ß"] == -1 &&  (i = [fullText indexOf:@"ß"] ) != -1 ) {
         fullText = [NSString stringWithFormat:@"%@ss%@", [fullText substringToIndex:i], [fullText substringFromIndex:i+1]];
     }
     return fullText;

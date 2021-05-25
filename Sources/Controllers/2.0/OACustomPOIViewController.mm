@@ -103,8 +103,6 @@
 
     _searchMode = NO;
     self.searchBar.delegate = self;
-    UITextField *textField = [self.searchBar valueForKey:@"searchField"];
-    textField.backgroundColor = UIColor.whiteColor;
 
     [self updateTextShowButton];
 }

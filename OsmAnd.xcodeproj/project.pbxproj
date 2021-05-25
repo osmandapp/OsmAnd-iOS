@@ -1275,7 +1275,6 @@
 		84686AB21E05282500DA09BC /* OACategoriesTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84686AAF1E05282500DA09BC /* OACategoriesTableViewController.xib */; };
 		84686AB71E05283C00DA09BC /* OAHistoryTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84686AB51E05283C00DA09BC /* OAHistoryTableViewController.mm */; };
 		84686AB91E05283C00DA09BC /* OAHistoryTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84686AB61E05283C00DA09BC /* OAHistoryTableViewController.xib */; };
-		84686AC11E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84686AC01E056F0500DA09BC /* OAPOISearchHelper.mm */; };
 		84686AC71E09740500DA09BC /* ic_search_filter.png in Resources */ = {isa = PBXBuildFile; fileRef = 84686AC41E09740500DA09BC /* ic_search_filter.png */; };
 		84686AC81E09740500DA09BC /* ic_search_filter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84686AC51E09740500DA09BC /* ic_search_filter@2x.png */; };
 		84686AC91E09740500DA09BC /* ic_search_filter@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84686AC61E09740500DA09BC /* ic_search_filter@3x.png */; };
@@ -5301,8 +5300,6 @@
 		84686AB41E05283C00DA09BC /* OAHistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHistoryTableViewController.h; path = Sources/Controllers/2.0/OAHistoryTableViewController.h; sourceTree = "<group>"; };
 		84686AB51E05283C00DA09BC /* OAHistoryTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAHistoryTableViewController.mm; path = Sources/Controllers/2.0/OAHistoryTableViewController.mm; sourceTree = "<group>"; };
 		84686AB61E05283C00DA09BC /* OAHistoryTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAHistoryTableViewController.xib; path = Sources/Controllers/2.0/OAHistoryTableViewController.xib; sourceTree = "<group>"; };
-		84686ABF1E056F0500DA09BC /* OAPOISearchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPOISearchHelper.h; path = Sources/Controllers/2.0/OAPOISearchHelper.h; sourceTree = "<group>"; };
-		84686AC01E056F0500DA09BC /* OAPOISearchHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAPOISearchHelper.mm; path = Sources/Controllers/2.0/OAPOISearchHelper.mm; sourceTree = "<group>"; };
 		84686AC31E0670F400DA09BC /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84686AC41E09740500DA09BC /* ic_search_filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_search_filter.png; path = Resources/Icons/ic_search_filter.png; sourceTree = "<group>"; };
 		84686AC51E09740500DA09BC /* ic_search_filter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_search_filter@2x.png"; path = "Resources/Icons/ic_search_filter@2x.png"; sourceTree = "<group>"; };
@@ -11132,8 +11129,6 @@
 		84387B191ABAFFE800504DA7 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				84686ABF1E056F0500DA09BC /* OAPOISearchHelper.h */,
-				84686AC01E056F0500DA09BC /* OAPOISearchHelper.mm */,
 				84387B1C1ABB1A6100504DA7 /* OAPOISearchViewController.xib */,
 				84735EE41ED4598A00E89F8B /* OAAddressTableViewController.h */,
 				84735EE51ED4598A00E89F8B /* OAAddressTableViewController.mm */,
@@ -17923,7 +17918,6 @@
 				DADBC629242A43ED008B7423 /* OAPublicTransportPointCell.m in Sources */,
 				DA71EAA92346232E00B9D7F3 /* OARouteAvoidSettingsViewController.mm in Sources */,
 				8456654F1FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
-				84686AC11E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */,
 				84064DF71B83907600033C47 /* OAGPXEditWptViewController.mm in Sources */,
 				DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
 				33AA1222252DE3E500292229 /* OAColorsCollectionViewCell.m in Sources */,

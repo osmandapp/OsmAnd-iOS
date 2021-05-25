@@ -363,11 +363,15 @@
                 {
                     cell.descriptionView.text = [cell.descriptionView.text stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
                 }
+                [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
                 cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
                 [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 
+                [cell.selectionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
                 cell.selectionButton.tag = indexPath.section << 10 | indexPath.row;
                 [cell.selectionButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+                [cell.selectionGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
                 cell.selectionGroupButton.tag = indexPath.section << 10 | indexPath.row;
                 [cell.selectionGroupButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
 

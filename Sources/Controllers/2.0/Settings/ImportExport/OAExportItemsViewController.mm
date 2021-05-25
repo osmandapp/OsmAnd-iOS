@@ -185,6 +185,12 @@
     self.selectedItemsMap[type] = items;
     [self updateFileSize];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+
+    OAExportSettingsCategory * category = [type getCategory];
+    NSInteger indexCategory = [self.itemTypes indexOfObject:category];
+    if (category && indexCategory != 0)
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexCategory] withRowAnimation:UITableViewRowAnimationNone];
+
     [self updateControls];
 }
 

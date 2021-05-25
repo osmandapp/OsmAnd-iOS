@@ -76,7 +76,7 @@
     if ([object isKindOfClass:[OAPOIType class]])
     {
         OAPOIType *obj = object;
-        return [self.name isEqualToString:obj.name] && [self.tag isEqualToString:obj.tag] && [self.parentType isEqual:obj.parentType];
+        return [self.name isEqualToString:obj.name] && [self.tag isEqualToString:obj.tag] && (self.parentType == obj.parentType || [self.parentType isEqual:obj.parentType]);
     }
     return NO;
 }

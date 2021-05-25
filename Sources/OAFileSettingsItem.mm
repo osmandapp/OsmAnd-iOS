@@ -62,7 +62,7 @@
         case EOASettingsItemFileSubtypeSrtmMap:
             return documentsPath;
         case EOASettingsItemFileSubtypeRenderingStyle:
-            [documentsPath stringByAppendingPathComponent:@"rendering"];
+            return [documentsPath stringByAppendingPathComponent:@"rendering"];
         case EOASettingsItemFileSubtypeTilesMap:
             return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];
         case EOASettingsItemFileSubtypeRoutingConfig:

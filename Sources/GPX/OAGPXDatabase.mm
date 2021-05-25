@@ -24,7 +24,7 @@
         return OALocalizedString(@"create_new_trip");
 
     if (self.gpxTitle)
-        return [[[self.gpxFileName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
+        return [[[[self.gpxFileName lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
 
     return self.gpxTitle;
 }

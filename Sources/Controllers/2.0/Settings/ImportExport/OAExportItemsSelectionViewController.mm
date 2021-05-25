@@ -38,7 +38,6 @@
 #include <OsmAndCore/ArchiveReader.h>
 
 #define titleWithDescrCellHeight 60.0
-#define kHeaderId @"TableViewSectionHeader"
 
 @interface OAExportItemsSelectionViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -82,11 +81,14 @@
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     [self.tableView setEditing:YES];
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     self.cancelButton.layer.cornerRadius = 9.0;
     self.saveButton.layer.cornerRadius = 9.0;
-    
+
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = titleWithDescrCellHeight;
+
     [self generateData];
 }
 
@@ -395,14 +397,19 @@
 {
     if (indexPath.row < 1)
         return;
+    [UIView setAnimationsEnabled:NO];
     [self.tableView beginUpdates];
     id item = _items[indexPath.row - 1];
     if ([_selectedItems containsObject:item])
         [_selectedItems removeObject:item];
     else
         [_selectedItems addObject:item];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+    [UIView setAnimationsEnabled:YES];
+
+    OATableViewCustomHeaderView *headerView = (OATableViewCustomHeaderView *) [self.tableView headerViewForSection:0];
+    headerView.label.text = [self getTitleForSection];
 }
 
 - (IBAction)onCancelPressed:(id)sender
@@ -436,7 +443,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
         [customHeader setYOffset:32];
         customHeader.label.text = [self getTitleForSection];
         return customHeader;
@@ -513,24 +520,6 @@
         return cell;
     }
     return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (item[@"descr"])
-        return titleWithDescrCellHeight;
-    else
-        return kEstimatedRowHeight;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (item[@"descr"])
-        return titleWithDescrCellHeight;
-    else
-        return kEstimatedRowHeight;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

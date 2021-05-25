@@ -598,7 +598,7 @@
 "gpx_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
-"gpx_export" = "Export";
+"shared_string_export" = "Export";
 
 "import_export" = "Import/Export";
 
@@ -760,6 +760,7 @@
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
+"approximate_file_size" = "Approximate file size: %@";
 
 "coordinates_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";

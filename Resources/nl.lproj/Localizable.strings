@@ -344,7 +344,7 @@
 "gpx_waypoint" = "Routepunt";
 "gpx_waypoints" = "Routepunt(en)";
 "gpx_points" = "Point(s)";
-"gpx_export" = "Exporteer";
+"shared_string_export" = "Exporteer";
 "import_export" = "Import/Export";
 "gpx_import_title" = "Import trip";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";

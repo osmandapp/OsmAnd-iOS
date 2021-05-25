@@ -54,7 +54,7 @@
 "gpx_point" = "Punto";
 "gpx_waypoints" = "Puntos de referencia";
 "gpx_points" = "Punto(s)";
-"gpx_export" = "Exportar";
+"shared_string_export" = "Exportar";
 "import_export" = "Importar/Exportar";
 "gpx_import_title" = "Importar traza";
 "shared_string_buy_for" = "por";

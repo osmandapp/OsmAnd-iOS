@@ -55,7 +55,7 @@
 "gpx_point" = "Ponto";
 "gpx_waypoints" = "Marcos do trajeto";
 "gpx_points" = "Ponto(s)";
-"gpx_export" = "Exportar";
+"shared_string_export" = "Exportar";
 "import_export" = "Importar/Exportar";
 "gpx_import_title" = "Importar trilha";
 "gpx_import_already_exists" = "A trilha especificada já existe na lista. Por favor, escolha a ação.";

@@ -68,7 +68,7 @@
 "gpx_point" = "Point";
 "gpx_waypoints" = "Itinéraire";
 "gpx_points" = "Point(s)";
-"gpx_export" = "Exporter";
+"shared_string_export" = "Exporter";
 "poi_search_near_center" = "La recherche est effectuée à proximité du centre de la carte";
 "import_export" = "Importer / Exporter";
 "gpx_add_new" = "Ajouter un nouveau fichier";

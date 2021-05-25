@@ -152,7 +152,7 @@
 "poi_max_radius_reached" = "Maksimal søgeradius er nået";
 "poi_search_near_center" = "Søgningen udføres nær midten af kortet";
 "gpx_points" = "Punkter";
-"gpx_export" = "Eksporter";
+"shared_string_export" = "Eksporter";
 "import_export" = "Import/eksport";
 "gpx_import_title" = "Importer rute";
 "gpx_import_already_exists" = "Den angivne rute findes allerede på listen. Vælg en handling.";

@@ -81,7 +81,7 @@
 "gpx_waypoint" = "航点";
 "gpx_waypoints" = "路标";
 "gpx_points" = "";
-"gpx_export" = "导出";
+"shared_string_export" = "导出";
 "import_export" = "导入／导出";
 "gpx_import_title" = "";
 "gpx_import_already_exists" = "";

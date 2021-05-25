@@ -434,7 +434,7 @@
 "gpx_waypoint" = "Teekonnapunkt";
 "gpx_waypoints" = "Teekonnapunktid";
 "gpx_points" = "Punkt(id)";
-"gpx_export" = "Ekspordi";
+"shared_string_export" = "Ekspordi";
 "import_export" = "Import/Eksport";
 "gpx_import_title" = "Impordi teekondi";
 "gpx_import_already_exists" = "Määratud teekonna fail on juba nimekirjas. Palun vali tegevus.";

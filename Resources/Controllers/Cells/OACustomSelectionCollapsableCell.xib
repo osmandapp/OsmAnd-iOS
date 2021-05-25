@@ -38,6 +38,9 @@
                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="grl-0r-JnU" userLabel="Open Close Button Group">
                         <rect key="frame" x="384" y="0.0" width="30" height="60"/>
                     </button>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fm3-EN-oCF" userLabel="Selection Button Group">
+                        <rect key="frame" x="0.0" y="0.0" width="70" height="60"/>
+                    </button>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dQc-CQ-9rt">
                         <rect key="frame" x="21" y="19.5" width="21" height="21"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -59,13 +62,19 @@
                     <constraint firstItem="9Em-pM-N5g" firstAttribute="leading" secondItem="Hl5-QD-FCC" secondAttribute="trailing" constant="20" id="4Ab-l2-tBW"/>
                     <constraint firstItem="9Em-pM-N5g" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H0e-1h-kDC" secondAttribute="top" constant="15" id="5gy-mL-n3L"/>
                     <constraint firstItem="grl-0r-JnU" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" id="Epb-wh-lNK"/>
+                    <constraint firstItem="Fm3-EN-oCF" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" id="J7r-cm-59t"/>
+                    <constraint firstItem="p63-ib-lPh" firstAttribute="centerY" secondItem="H0e-1h-kDC" secondAttribute="centerY" id="JhN-0f-5w4"/>
+                    <constraint firstItem="Fm3-EN-oCF" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leading" id="Kat-vc-c92"/>
                     <constraint firstItem="p63-ib-lPh" firstAttribute="centerY" secondItem="dQc-CQ-9rt" secondAttribute="centerY" id="Rng-aQ-I5I"/>
                     <constraint firstAttribute="trailing" secondItem="9Em-pM-N5g" secondAttribute="trailing" constant="10" id="VRy-Ie-nev"/>
                     <constraint firstAttribute="trailing" secondItem="grl-0r-JnU" secondAttribute="trailing" id="aq5-yR-ge2"/>
                     <constraint firstItem="9Em-pM-N5g" firstAttribute="leading" secondItem="qFY-zc-7s4" secondAttribute="trailing" constant="20" id="asz-CI-6I0"/>
                     <constraint firstItem="Hl5-QD-FCC" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" constant="10" id="cfD-Gu-5yI"/>
+                    <constraint firstItem="Fm3-EN-oCF" firstAttribute="bottom" secondItem="H0e-1h-kDC" secondAttribute="bottom" id="ebY-bV-vla"/>
+                    <constraint firstItem="p63-ib-lPh" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leadingMargin" id="fEL-bx-UDf"/>
                     <constraint firstItem="dQc-CQ-9rt" firstAttribute="centerY" secondItem="H0e-1h-kDC" secondAttribute="centerY" id="fQw-I5-TJz"/>
                     <constraint firstAttribute="bottom" secondItem="qFY-zc-7s4" secondAttribute="bottom" constant="10" id="h5h-Z3-aKL"/>
+                    <constraint firstItem="Fm3-EN-oCF" firstAttribute="trailing" secondItem="grl-0r-JnU" secondAttribute="leading" id="kqa-vc-c92"/>
                     <constraint firstItem="p63-ib-lPh" firstAttribute="height" secondItem="H0e-1h-kDC" secondAttribute="height" id="m1W-KE-emT"/>
                     <constraint firstItem="dQc-CQ-9rt" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leadingMargin" constant="1" id="mUp-wo-GGq"/>
                     <constraint firstItem="p63-ib-lPh" firstAttribute="centerX" secondItem="dQc-CQ-9rt" secondAttribute="centerX" id="qbJ-Ji-iWN"/>
@@ -81,6 +90,7 @@
                 <outlet property="openCloseGroupButton" destination="grl-0r-JnU" id="JPj-BR-5nR"/>
                 <outlet property="selectionButton" destination="p63-ib-lPh" id="O1Z-gz-c95"/>
                 <outlet property="selectionButtonContainer" destination="dQc-CQ-9rt" id="SJa-gY-2eF"/>
+                <outlet property="selectionGroupButton" destination="Fm3-EN-oCF" id="vlx-QH-JTI"/>
                 <outlet property="textView" destination="Hl5-QD-FCC" id="aHL-uX-jcc"/>
             </connections>
             <point key="canvasLocation" x="100.00000000000001" y="116.51785714285714"/>

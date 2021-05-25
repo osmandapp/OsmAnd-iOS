@@ -57,7 +57,7 @@
 "gpx_point" = "Punto";
 "gpx_waypoints" = "Punti intermedi";
 "gpx_points" = "Punto(i)";
-"gpx_export" = "Esporta";
+"shared_string_export" = "Esporta";
 "import_export" = "Importa/Esporta";
 "gpx_import_title" = "Importa viaggio";
 "gpx_import_already_exists" = "Il file del viaggio indicato è già presente nella lista. Per favore scegliere l'azione.";

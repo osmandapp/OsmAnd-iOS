@@ -187,7 +187,7 @@
 "toggle_nav" = "Έναρξη/στάση πλοήγησης";
 "wikivoyage_offline" = "Βικιταξίδια χωρίς διαδίκτυο";
 "display_starting_at_zoom_level" = "Εμφάνιση της εκκίνησης από το επίπεδο εστίασης";
-"gpx_export" = "Εξαγωγή";
+"shared_string_export" = "Εξαγωγή";
 "product_title_centralamerica" = "Κεντρική Αμερική";
 "translucent_lightblue" = "Ημιδιαφανές γαλάζιο";
 "offline_vector_maps" = "Διανυσματικοί χάρτες χωρίς σύνδεση";

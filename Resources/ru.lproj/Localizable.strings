@@ -47,7 +47,7 @@
 "gpx_waypoints" = "Путевые точки";
 "gpx_points" = "Точки";
 "gpx_points_b" = "точки";
-"gpx_export" = "Экспорт";
+"shared_string_export" = "Экспорт";
 "gpx_import_export" = "Импорт/Экспорт";
 "gpx_import_title" = "Импорт поездки";
 "shared_string_ok" = "ОК";
@@ -1926,7 +1926,7 @@
 "point_num" = "Точка %d";
 "shared_string_rendering_style" = "Стиль отрисовки";
 "shared_string_routing" = "Маршрутизация";
-"selected_profiles" = "%dиз %d";
+"selected_profiles" = "%d из %d";
 "shared_string_deselect_all" = "Отменить выбор";
 "move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
 
@@ -2020,7 +2020,7 @@
 "start_of_track" = "Начало трека";
 "split_after" = "Разделить после";
 "track" = "Трек";
-"some_of" = "%dиз %d";
+"some_of" = "%d из %d";
 "rearrange_categories" = "Упорядочить категории";
 "join_segments" = "Объединить сегменты";
 "none_point_error" = "Добавьте хотя бы одну точку.";

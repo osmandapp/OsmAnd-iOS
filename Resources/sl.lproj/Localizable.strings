@@ -53,7 +53,7 @@
 "gpx_point" = "Točka";
 "gpx_waypoints" = "Vmesne točke";
 "gpx_points" = "Točke";
-"gpx_export" = "Izvozi";
+"shared_string_export" = "Izvozi";
 "import_export" = "Uvoz/Izvoz";
 "gpx_import_title" = "Uvozi pot potovanja";
 "gpx_add_new" = "Dodaj novo datoteko";

@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *openCloseGroupButton;
 @property (weak, nonatomic) IBOutlet UIView *selectionButtonContainer;
 @property (weak, nonatomic) IBOutlet UIButton *selectionButton;
+@property (weak, nonatomic) IBOutlet UIButton *selectionGroupButton;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *checkboxHeightContainer;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *checkboxWidthContainer;

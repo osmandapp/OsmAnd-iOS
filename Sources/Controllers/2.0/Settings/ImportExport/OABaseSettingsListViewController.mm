@@ -230,6 +230,8 @@
     OATableGroupToImport* groupData = [self.data objectAtIndex:indexPath.section];
     groupData.isOpen = !groupData.isOpen;
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+    UITableViewScrollPosition scrollPosition = !groupData.isOpen ? UITableViewScrollPositionNone : UITableViewScrollPositionTop;
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
 }
 
 - (void) showActivityIndicatorWithLabel:(NSString *)labelText
@@ -336,6 +338,7 @@
                 cell = (OACustomSelectionCollapsableCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
                 cell.openCloseGroupButton.hidden = NO;
+                cell.selectionGroupButton.hidden = NO;
                 cell.separatorInset = UIEdgeInsetsZero;
             }
             if (cell)
@@ -360,12 +363,18 @@
                 {
                     cell.descriptionView.text = [cell.descriptionView.text stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
                 }
+                [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
                 cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
                 [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-                
+
+                [cell.selectionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
                 cell.selectionButton.tag = indexPath.section << 10 | indexPath.row;
                 [cell.selectionButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
-                
+
+                [cell.selectionGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+                cell.selectionGroupButton.tag = indexPath.section << 10 | indexPath.row;
+                [cell.selectionGroupButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
+
                 if (itemSelectionCount > 0)
                 {
                     UIImage *selectionImage = partiallySelected ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];

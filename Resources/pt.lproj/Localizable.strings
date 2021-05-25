@@ -60,7 +60,7 @@
 "gpx_point" = "Ponto";
 "gpx_waypoints" = "Pontos de rota";
 "gpx_points" = "Ponto(s)";
-"gpx_export" = "Exportar";
+"shared_string_export" = "Exportar";
 "import_export" = "Importar/exportar";
 "gpx_import_title" = "Importar trilhos";
 "gpx_import_already_exists" = "O trilho especificado já existe na lista. Por favor, escolha a ação.";

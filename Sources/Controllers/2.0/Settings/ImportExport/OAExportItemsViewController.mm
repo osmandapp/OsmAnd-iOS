@@ -8,29 +8,33 @@
 
 #import "OAExportItemsViewController.h"
 #import "OARootViewController.h"
-#import "OASettingsHelper.h"
 #import "OAExportSettingsType.h"
 #import "Localization.h"
 #import "OAProgressTitleCell.h"
+#import "OAColors.h"
+#import "OAExportSettingsCategory.h"
+#import "OASettingsCategoryItems.h"
+#import "OATableViewCustomHeaderView.h"
 
 @implementation OAExportItemsViewController
 {
     NSString *_descriptionText;
     NSString *_descriptionBoldText;
-    
+
     OASettingsHelper *_settingsHelper;
     OAApplicationMode *_appMode;
-    
+
     BOOL _exportStarted;
+    long _itemsSize;
+    NSString *_fileSize;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
     self = [super init];
     if (self)
     {
         _appMode = appMode;
-        self.selectedItemsMap[OAExportSettingsType.PROFILE] = @[appMode.toModeBean];
     }
     return self;
 }
@@ -38,24 +42,34 @@
 - (void)commonInit
 {
     _settingsHelper = OASettingsHelper.sharedInstance;
+    _itemsSize = 0;
+    [self updateFileSize];
 }
 
 - (void)applyLocalization
 {
     [super applyLocalization];
     _descriptionText = OALocalizedString(@"export_profile_select_descr");
-    _descriptionBoldText = OALocalizedString(@"export_profile");
+    _descriptionBoldText = _appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export");
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
-- (void) setupView
+-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [self setTableHeaderView:OALocalizedString(@"export_profile")];
-    
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self setTableHeaderView:_descriptionBoldText];
+    } completion:nil];
+}
+
+- (void)setupView
+{
+    [self setTableHeaderView:_descriptionBoldText];
+
     if (_exportStarted)
     {
         OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
@@ -68,16 +82,43 @@
     self.itemsMap = [_settingsHelper getSettingsByCategory:YES];
     self.itemTypes = self.itemsMap.allKeys;
     [self generateData];
+    [self updateSelectedProfile];
+    [self updateControls];
 }
 
-- (NSString *) descriptionText
+- (NSString *)descriptionText
 {
     return _descriptionText;
 }
 
-- (NSString *) descriptionBoldText
+- (NSString *)descriptionBoldText
 {
     return _descriptionBoldText;
+}
+
+- (NSString *)getTitleForSection
+{
+    return [NSString stringWithFormat: @"%@\n%@", _descriptionText, _fileSize];
+}
+
+- (void)onGroupCheckmarkPressed:(UIButton *)sender
+{
+    [super onGroupCheckmarkPressed:sender];
+    [self updateFileSize];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) updateSelectedProfile {
+    OASettingsCategoryItems *items = self.itemsMap[OAExportSettingsCategory.SETTINGS];
+    NSArray<OAApplicationModeBean *> *profileItems = [items getItemsForType:OAExportSettingsType.PROFILE];
+
+    for (OAApplicationModeBean *item in profileItems) {
+        if ([_appMode.stringKey isEqualToString:(item.stringKey)]) {
+            NSArray<id> *selectedProfiles = @[item];
+            self.selectedItemsMap[OAExportSettingsType.PROFILE] = selectedProfiles;
+            break;
+        }
+    }
 }
 
 - (void)shareProfile
@@ -85,7 +126,7 @@
     _exportStarted = YES;
     [self setupView];
     [self.tableView reloadData];
-    
+
     OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
     NSArray<OASettingsItem *> *settingsItems = [settingsHelper prepareSettingsItems:self.getSelectedItems settingsItems:@[] doExport:YES];
     [settingsHelper exportSettings:NSTemporaryDirectory() fileName:_appMode.toHumanString items:settingsItems exportItemFiles:YES delegate:self];
@@ -98,9 +139,59 @@
     return attrs.fileSize;
 }
 
-- (IBAction) primaryButtonPressed:(id)sender
+- (void)updateFileSize
+{
+    _itemsSize = [self calculateItemsSize:self.getSelectedItems];
+    _fileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
+}
+
+- (IBAction)primaryButtonPressed:(id)sender
 {
     [self shareProfile];
+}
+
+#pragma mark - UITableViewDelegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+        [customHeader setYOffset:8];
+        UITextView *headerLabel = customHeader.label;
+        NSMutableAttributedString *newHeaderText = [[NSMutableAttributedString alloc] initWithString:_descriptionText attributes:@{NSForegroundColorAttributeName:UIColorFromRGB(color_text_footer)}];
+        UIColor *colorFileSize = _itemsSize == 0 ? UIColorFromRGB(color_text_footer) : [UIColor blackColor];
+        NSMutableAttributedString *headerFileSizeText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", _fileSize] attributes:@{NSForegroundColorAttributeName: colorFileSize}];
+        [newHeaderText appendAttributedString:headerFileSizeText];
+        headerLabel.attributedText = newHeaderText;
+        headerLabel.font = [UIFont systemFontOfSize:15];
+        return customHeader;
+    }
+    return nil;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        NSString *title = [self getTitleForSection];
+        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + 8;
+    }
+    return UITableViewAutomaticDimension;
+}
+
+#pragma mark - OASettingItemsSelectionDelegate
+
+- (void)onItemsSelected:(NSArray *)items type:(OAExportSettingsType *)type
+{
+    self.selectedItemsMap[type] = items;
+    [self updateFileSize];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+
+    OAExportSettingsCategory * category = [type getCategory];
+    NSInteger indexCategory = [self.itemTypes indexOfObject:category];
+    if (category && indexCategory != 0)
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexCategory] withRowAnimation:UITableViewRowAnimationNone];
+
+    [self updateControls];
 }
 
 #pragma mark - OASettingsImportExportDelegate
@@ -118,6 +209,7 @@
     }
 }
 
+#pragma mark - OASettingsImportExportDelegate
 
 - (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed {
     [self.navigationController popViewControllerAnimated:YES];

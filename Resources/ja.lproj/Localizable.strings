@@ -432,7 +432,7 @@
 "gpx_waypoint" = "経由地点";
 "gpx_waypoints" = "経由地点";
 "gpx_points" = "地点";
-"gpx_export" = "エクスポート";
+"shared_string_export" = "エクスポート";
 "import_export" = "インポート/エクスポート";
 "gpx_import_title" = "経路のインポート";
 "gpx_import_already_exists" = "指定された経路ファイルは既にリストに存在します。どのように処理するかを選択してください。";

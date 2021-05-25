@@ -641,7 +641,7 @@
                 [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
                                         message:nil
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                    otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export")]
+                                    otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"shared_string_export")]
                                       otherDesc:nil
                                     otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
@@ -668,7 +668,7 @@
                                         message:nil
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
                                     otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")),
-                                                  OALocalizedString(@"gpx_export"),
+                                                  OALocalizedString(@"shared_string_export"),
                                                   OALocalizedString(@"gpx_edit_mode"),
                                                   OALocalizedString(@"product_title_trip_planning"),
                                                   OALocalizedString(@"plan_route_change_folder")]

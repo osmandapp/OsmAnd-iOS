@@ -25,6 +25,7 @@
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAGlobalSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
+#import "OAExportItemsViewController.h"
 
 #define kAppModesSection 2
 
@@ -136,6 +137,13 @@
         @"name" : @"add_profile"
     }];
     
+    [profilesSection addObject:@{
+        @"title" : OALocalizedString(@"shared_string_export"),
+        @"img" : @"ic_custom_export",
+        @"type" : [OATitleRightIconCell getCellIdentifier],
+        @"name" : @"export_settings"
+    }];
+
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"edit_profile_list"),
         @"img" : @"ic_custom_edit",
@@ -340,6 +348,11 @@
     {
         OACreateProfileViewController* createProfileViewController = [[OACreateProfileViewController alloc] init];
         [self.navigationController pushViewController:createProfileViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"export_settings"])
+    {
+        OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] init];
+        [self.navigationController pushViewController:exportController animated:YES];
     }
     else if ([name isEqualToString:@"edit_profiles"])
     {

@@ -63,7 +63,7 @@
 "gpx_point" = "Mevki";
 "gpx_waypoints" = "Yol işaretleri";
 "gpx_points" = "Noktalarının";
-"gpx_export" = "Dışa aktar";
+"shared_string_export" = "Dışa aktar";
 "import_export" = "Alma/verme";
 "gpx_import_title" = "Yolları içe aktar";
 "gpx_import_already_exists" = "Belirtilen yol dosyası listede zaten var. Lütfen eylem seçin.";

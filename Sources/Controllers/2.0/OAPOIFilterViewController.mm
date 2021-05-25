@@ -7,7 +7,6 @@
 //
 
 #import "OAPOIFilterViewController.h"
-#import "OAPOISearchHelper.h"
 #import "OAPOIUIFilter.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
@@ -825,7 +824,7 @@ typedef enum
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if (section == _groups.count - 1)
-        return [OAPOISearchHelper getHeightForFooter];
+        return tableView.sectionFooterHeight;
     else
         return 0.01;
 }
@@ -833,9 +832,9 @@ typedef enum
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return 51.0 + [OAPOISearchHelper getHeightForHeader];
+        return 51.0 + tableView.sectionHeaderHeight;
     else
-        return [OAPOISearchHelper getHeightForHeader];
+        return tableView.sectionHeaderHeight;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

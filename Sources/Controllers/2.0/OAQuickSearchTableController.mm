@@ -38,7 +38,6 @@
 #import "OAPOIUIFilter.h"
 #import "OADefaultFavorite.h"
 #import "OAPOILocationType.h"
-#import "OAPOISearchHelper.h"
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
 #import "OAReverseGeocoder.h"
@@ -517,12 +516,12 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [OAPOISearchHelper getHeightForHeader];
+    return 16.0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == _dataGroups.count - 1 ? [OAPOISearchHelper getHeightForFooter] : 0.01;
+    return section == _dataGroups.count - 1 ? 16.0 : 0.01;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

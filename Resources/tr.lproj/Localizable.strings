@@ -57,7 +57,7 @@
 "poi_search_near_center" = "Arama haritanın merkezine yakın yapılır";
 "poi_hide" = "Gizle";
 // My Places
-"favorites" = "Sık Kullanılanlar";
+"favorites" = "Sık kullanılanlar";
 "tracks" = "İzlenen yollar";
 // GPX
 "gpx_point" = "Mevki";
@@ -237,7 +237,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"units_hour" = "sa";
 "units_min" = "dk";
 "units_sec" = "sn";
 // Map
@@ -928,7 +928,7 @@
 "open_osm_note" = "OSM Not\'u aç";
 "menu_help" = "Yardım";
 "osm_note_upload" = "OSM Not yükle";
-"osm_alert_message" = "İleti";
+"osm_alert_message" = "Mesaj";
 "display_starting_at_zoom_level" = "Yakınlaştırma seviyesinde başlayarak görüntüle";
 "mapillary_get_title" = "Mapillary ile fotoğraf kapsama alanını geliştir";
 "shared_string_time_of_day" = "Günün zamanı";
@@ -1508,7 +1508,6 @@
 "routing_attr_short_way_name" = "Yakıt-tasarruflu yol";
 "routing_attr_avoid_ice_roads_fords_name" = "Buzlu yol veya nehir geçişleri yok";
 "rendering_value_translucent_pink_name" = "Şeffaf pembe";
-"rendering_value_browse_map_name" = "Haritaya göz at";
 "rendering_attr_streetLighting_name" = "Sokak aydınlatma";
 "rendering_attr_hideUnderground_name" = "Yeraltı nesneleri";
 "routing_attr_difficulty_preference_description" = "Bu zorluktaki rotaları tercih et, ancak eğer daha kısa ise daha zor veya daha kolay pistler üzerinden yönlendirmek yine de mümkündür.";
@@ -1668,7 +1667,7 @@
 "transfers" = "Aktarmalar:";
 "avoid_transport_type" = "Kaçınılacak taşıma türleri";
 "consider_limitations_param" = "Geçici sınırlamaları göz önünde bulundur";
-"m_style_pulic_transport" = "Toplu taşıma";
+"m_style_pulic_transport" = "Toplu Taşıma";
 "exit_at" = "Buradaçık";
 "public_transport_warning_title" = "Toplu taşıma navigasyonu şu anda beta testindedir, hatalar ve yanlışlıklar olabilir.";
 "allow_3d" = "2.5B görüntülemeye izin ver";
@@ -2015,7 +2014,7 @@
 "symbols" = "Semboller";
 "sport" = "Spor";
 "special" = "Özel";
-"service" = "Hizmet";
+"service" = "Servis yolu";
 "emergency" = "Acil durum";
 "shared_string_gpx_points" = "Noktalar";
 "res_standard" = "Standart harita";

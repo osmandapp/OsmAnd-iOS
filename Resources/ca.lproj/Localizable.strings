@@ -209,7 +209,7 @@
 // Import
 "import_title" = "Importa dades";
 "import_choose_type" = "Trieu què voleu importar";
-"import_favorite" = "Preferida";
+"import_favorite" = "Preferit";
 "import_failed" = "La importació ha fallat";
 "import_cannot" = "No es pot importar el fitxer especificat";
 "import_gpx" = "Trajecte en GPX";
@@ -384,7 +384,7 @@
 "est_travel_time" = "Durada estimada del trajecte";
 "pedestrian" = "Vianant";
 "sorting" = "Classificant";
-"plugins" = "Gestor de connectors";
+"plugins" = "Connectors";
 "shared_string_later" = "Mes tard";
 "open_map_settings" = "Obre la configuració del mapa";
 "plugin_popup_wiki_title" = "Baixa dades de Viquipèdia";
@@ -815,7 +815,7 @@
 "shared_string_close" = "Tanca";
 "actions" = "Accions";
 "directions_more_options" = "Indicacions des de";
-"nearby_search" = "Cerca pel voltant";
+"nearby_search" = "Cerca a prop";
 "map_widget_ruler_control" = "Radi de distància";
 "import_from_docs" = "Importa des de documents";
 "osm_live_routing" = "Navegació OsmAnd Live";
@@ -948,7 +948,7 @@
 "osm_opens_at" = "Obre a les:";
 "osm_closes_at" = "Tanca a les:";
 "osm_editing_contact_info" = "Informació de contacte";
-"osm_str_name" = "Nom del carrer";
+"osm_str_name" = "Nom de carrer";
 "osm_building_num" = "Número de finca";
 "osm_phone" = "Telèfon";
 "osm_website" = "Lloc web";
@@ -1004,7 +1004,7 @@
 "osm_notes_online_layer" = "Notes d'OSM (en línia)";
 "my_places" = "Preferits";
 "osm_edits_basic" = "Bàsic";
-"osm_edits_advanced" = "Avançada";
+"osm_edits_advanced" = "Estès";
 "osm_edits_all" = "Totes les edicions";
 "osm_edits_poi" = "Edicions de PDI";
 "osm_edits_notes" = "Notes";
@@ -1340,7 +1340,6 @@
 "rendering_attr_showCycleRoutes_name" = "Mostra les vies ciclistes";
 "routing_attr_avoid_tram_description" = "Evita el tram";
 "rendering_attr_noPolygons_name" = "Polígons";
-"rendering_value_browse_map_name" = "Mapa esquemàtic";
 "rendering_attr_surface_sett_name" = "Llambordí";
 "rendering_value_medium_name" = "Normal";
 "rendering_attr_piste_difficulty_extreme_name" = "Extrema";
@@ -1995,7 +1994,7 @@
 "split_after" = "Separa després";
 "favorite_places_category" = "Llocs";
 "replace_favorite_confirmation" = "Confirmeu que voleu substituir el Preferit %@?";
-"sport" = "Esports";
+"sport" = "Esport";
 "plan_route_open_existing_track" = "Obre una traça existent";
 "transport" = "Transport col·lectiu";
 "icon" = "Icona";

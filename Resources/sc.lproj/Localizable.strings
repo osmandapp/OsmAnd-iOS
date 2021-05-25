@@ -53,7 +53,7 @@
 "poi_insrease_radius" = "Aumenta su raju de chirca a";
 "poi_max_radius_reached" = "Raju de chirca màssimu segudadu";
 "poi_search_near_center" = "Sa chirca est fata a curtzu de su tzentru de sa mapa";
-"poi_hide" = "Istichi";
+"poi_hide" = "Cua";
 // My Places
 "favorites" = "Preferidos";
 "tracks" = "Rastas";
@@ -106,7 +106,7 @@
 "record_trip" = "Registra sa rasta tua";
 // Map settings
 "m_style_overview" = "Resumu";
-"m_style_car" = "In vetura";
+"m_style_car" = "Màchina";
 "m_style_walk" = "A pee";
 "m_style_bicycle" = "Bitzicleta";
 "map_settings_map" = "Mapa";
@@ -119,7 +119,7 @@
 "map_settings_overunder" = "Subrapositzione/isfundu";
 "map_settings_over" = "Subrapositzione";
 "map_settings_under" = "Isfundu";
-"map_settings_none" = "Perunu";
+"map_settings_none" = "Peruna";
 "map_settings_offline" = "Istiles pro sas mapas non in lìnia";
 "map_settings_online" = "Mapas in lìnia";
 "map_settings_transp" = "Trasparèntzia";
@@ -761,7 +761,7 @@
 "product_desc_ext_parking" = "S'estensione Positzione Parchègiu de Osmand t'ammentat sa positzione de su parchègiu tuo. Est un'estensione pro s'aplicatzione OsmAnd Maps&Navigation.\nIssèbera unu promemòria indipendente dae su tempus (petzi unu marcadore in sa mapa) o unu a tempus limitadu cun un'allarme chi sonat cando su tempus est acabbadu (incluet fintzas unu marcadore in sa mapa). Pro impreare s'estensione, abilita·la in su menù Estensiones.";
 "transport_routes" = "Àndalas";
 "transport_nearby_routes_within" = "Àndalas a curtzu intre";
-"transport_stop" = "Stop";
+"transport_stop" = "Firmada";
 "transport_nearby_routes" = "Intre";
 "route_stops_before" = "%1$s firmadas in antis";
 "shared_string_previous" = "Antepostu";
@@ -875,7 +875,7 @@
 "product_title_wikivoyage" = "Ghias de biàgiu";
 "product_desc_wikivoyage" = "Sa ghia turìstica lìbera pro totu su mundu chi totus podent megiorare.";
 "product_desc_ext_wikivoyage" = "Ghias pro sos logos prus interessantes de su mundu, in intro de OsmAnd, chi non tenent bisòngiu de impreare una connessione a ìnternet.";
-"product_title_sea_depth_contours" = "Curvas de profondidade nàuticas";
+"product_title_sea_depth_contours" = "Curvas de livellu nàuticas";
 "product_desc_sea_depth_contours" = "Mapas de sas curvas de livellu nàuticas e de sos pidagnos";
 "in_app_purchase_desc_ex" = "A pustis de sa còmpora at a èssere disponìbile pro semper.";
 "unlock_all_features" = "Isbloca totu sas funtzionalidades de OsmAnd";
@@ -937,7 +937,7 @@
 "osm_str_name" = "Nùmene de sa carrera";
 "osm_phone" = "Telèfonu";
 "osm_website" = "Situ web";
-"osm_poi_delete_title" = "Iscantzelladura PDI";
+"osm_poi_delete_title" = "Iscantzella PDI";
 "osm_target_modified" = "PDI OSM modificadu";
 "osm_target_deleted" = "PDI OSM iscantzelladu";
 "osm_target_created" = "PDI de OSM creadu";
@@ -1859,7 +1859,7 @@
 "import_profile_descr" = "Pro importare unu profilu incarca in su documentu netzessàriu (*.osf) in cale si siat aplicatzione e ischerta \"Còpia in OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Totu sas impostatziones de sos profilos sunt torradas a s\'istadu predefinidu.";
 "gpx_parse_error" = "Su GPX de OsmAnd no est fraigadu bene, pro praghere cuntata s\'iscuadra de suportu pro investigare prus a fundu.";
-"nothing_found_empty" = "Nudda agatau";
+"nothing_found_empty" = "Nudda de agatadu";
 "shared_string_next" = "Imbeniente";
 "add_one_more_pnt" = "Annanghe un'àteru puntu";
 "delete_point" = "Iscantzella puntu";
@@ -2104,6 +2104,4 @@
 // Shared Strings
 "shared_string_enable" = "Abìlita";
 "search_poi_types_descr" = "Podes cumbinare castas de PDI dae categorias diferentes.";
-"add_custom_category" = "Annanghe una categoria personalizada";
-
 "add_custom_category" = "Annanghe una categoria personalizada";

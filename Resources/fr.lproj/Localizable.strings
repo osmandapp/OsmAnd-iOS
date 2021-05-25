@@ -292,7 +292,7 @@
 "gpx_trip_groups" = "Groupes de voyage";
 "gpx_group_select" = "Sélection de groupe";
 "get_directions" = "Navigation";
-"plugins" = "Greffons";
+"plugins" = "Gestionnaire de greffons";
 "open_map_settings" = "Ouvrez les paramètres de la carte";
 "plugin_popup_wiki_title" = "Télécharger Wikipédia";
 "gpx_no_tracks" = "Il n'y a aucunes traces";
@@ -760,7 +760,7 @@
 "poi_clear" = "Effacer";
 "map_creator" = "Map Creator";
 "shared_string_close" = "Fermer";
-"transport_routes" = "Chemins";
+"transport_routes" = "Routes";
 "new_destination_point_dialog" = "Vous avez déjà défini une destination";
 "logging_interval_navigation" = "Intervalle d\'enregistrement pendant la navigation";
 "logging_min_speed_descr" = "Filtre : enregistrement inactif en-dessous de vitesse sélectionnée";
@@ -784,7 +784,7 @@
 "track_during_nav" = "Auto-enregistrement du parcours";
 "track_during_nav_descr" = "Activez pour enregistrer automatiquement un trajet durant la navigation";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Miseà jour automatique";
+"osmand_live_updates" = "Misesà jour en temps réel";
 "osmand_live_available_maps" = "Cartes disponibles";
 "osmand_live_last_changed" = "Dernière modification de la carte : %@";
 "osmand_live_last_live_update" = "Dernière mise à jour : %@";
@@ -803,7 +803,7 @@
 "help_faq" = "FAQ";
 "help_faq_descr" = "Foire Aux Questions";
 "help_features" = "Fonctionnalités";
-"help_other_header" = "Divers";
+"help_other_header" = "Autre";
 "help_contact_us" = "Contactez-nous";
 "help_about" = "À propos";
 "help_follow_us" = "Suivez-nous";
@@ -966,7 +966,7 @@
 "modify_edit_short" = "Modifier la contribution OSM";
 "open_osm_note" = "Signaler une anomalie OSM";
 "edit_osm_note" = "Modifier la note OSM";
-"osm_alert_title" = "Soumettre";
+"osm_alert_title" = "Envoyer";
 "osm_alert_message" = "Message";
 "osm_alert_button_ok" = "Créer une note";
 "modify_poi" = "Modifier le point d'intérêt OSM";
@@ -1320,7 +1320,6 @@
 "rendering_attr_highway_class_state_road_name" = "Route nationale";
 "routing_attr_driving_style_balance_name" = "Équilibré";
 "rendering_attr_surfaceIntegrity_name" = "État de la route";
-"rendering_value_browse_map_name" = "Parcourir la carte";
 "rendering_attr_piste_difficulty_advanced_name" = "Avancé";
 "routing_attr_avoid_motorway_name" = "Éviter les autoroutes";
 "rendering_attr_surface_paving_stones_name" = "Pavés réguliers";
@@ -1826,20 +1825,15 @@
 "save_changes" = "Enregistrer les modifications";
 "quick_action_remove_next_destination" = "Supprimer le prochain point";
 "profile_sett_descr" = "Affecter le profil de l'application sélectionnée";
-"listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "export_profile_descr" = "Vous pouvez exporter tous les paramètres du profil, copier tous les paramètres d'un autre profil ou réinitialiser tous les paramètres du profil à l'état par défaut.";
 "import_profile_descr" = "Pour importer un profil, appuyez sur le fichier voulu (*.osf) dans n'importe quelle application et sélectionnez \"Copier vers les cartes OsmAnd\"";
-"app_profiles" = "Profils de l\'appli";
 "osmand_profile" = "Profil OsmAnd";
 "err_profile_import" = "Erreur lors de la lecture de l'élément : %@";
 "after_tapping_done" = "Après avoir appuyé sur Terminé, les profils supprimés seront définitivement perdus.";
 "all_application_profiles" = "Tous les profils de l'application";
 "rearrange_profile_descr" = "Les profils OsmAnd par défaut ne peuvent pas être supprimés, mais vous pouvez les désactiver sur l'écran précédent ou les glisser en bas de la liste.";
 "position_icon_while_moving" = "Icône de votre position en déplacement";
-"position_icon_at_rest" = "Icône de votre position à l\'arrêt";
 "ui_customization_descr" = "Éléments du panneau déroulant, menu contextuel";
-"create_profile_descr" = "Basez votre profil personnel sur l\'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l\'application ainsi que des exemples de profils personnalisés :";
-"import_complete_description" = "Les données de %@ ont été importées, vous pouvez utiliser les boutons ci-dessous pour ouvrir la partie adéquate de l\'application pour les gérer.";
 "lenght_limit_description" = "Indiquez la longueur de votre véhicule, certaines restrictions d'itinéraire peuvent s'appliquer aux véhicules longs.";
 "shared_a_z" = "A - Z";
 "trip_name" = "Nom du trajet";
@@ -1851,7 +1845,7 @@
 "start_of_track" = "Début de la trace";
 "reverse_track_dir" = "Inverser le sens de la trace";
 "select_another_track" = "Sélectionner une autre trace";
-"track" = "Trace";
+"track" = "Piste";
 "follow_track" = "Suivre la trace";
 "gpx_already_exsists" = "Un fichier avec ce nom existe déjà";
 "empty_filename" = "Le nom du fichier ne peut être vide";
@@ -2021,7 +2015,6 @@
 "none_point_error" = "Merci d\'ajouter au moins un point.";
 "gpx_saved_successfully" = "Fichier GPX enregistré dans %@";
 "simplified_track_description" = "Seule la ligne d\'itinéraire sera enregistrée, les points de passage seront supprimés.";
-"simplified_track_description" = "Seule la ligne d\'itinéraire sera enregistrée, les points de passage seront supprimés.";
 "whole_track_descr" = "L'itinéraire entier sera recalculé en utilisant le profil sélectionné.";
 "next_seg_descr" = "Le segment suivant sera recalculé en utilisant le profil sélectionné.";
 "route_betw_points_descr" = "Choisissez comment connecter ces points : avec une ligne droite ou en calculant un itinéraires à l'aide des profils répertoriés ci-dessous.";
@@ -2078,7 +2071,7 @@
 "sport" = "Sport";
 "special" = "Spécial";
 "service" = "Service";
-"emergency" = "Urgences";
+"emergency" = "Urgence";
 "vessel_height_limit_description" = "Définissez la hauteur du navire pour éviter les ponts bas. N'oubliez pas que si le pont est mobile, le calcul utilise sa hauteur à l'état ouvert.";
 "route_between_points_add_track_desc" = "Sélectionnez un fichier de traces pour lequel un nouveau segment sera ajouté.";
 "track_is_saved" = "%@\nest enregistré !";

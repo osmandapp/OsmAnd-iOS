@@ -84,12 +84,12 @@
 "rendering_value_browse_map_name" = "Огляд";
 "m_style_car" = "Водіння";
 "m_style_walk" = "Ходіння";
-"m_style_bicycle" = "Їзда на велосипеді";
+"m_style_bicycle" = "Велосипед";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Показати";
 "map_settings_type" = "Тип мапи";
 "map_settings_day" = "День";
-"map_settings_night" = "Вночі";
+"map_settings_night" = "Ніч";
 "map_settings_transp" = "Прозорість";
 // Intro
 "intro_skip" = "Пропустити";
@@ -296,7 +296,7 @@
 // Import
 "import_title" = "Імпортувати дані";
 "import_choose_type" = "Виберіть що імпортувати";
-"import_favorite" = "Закладка";
+"import_favorite" = "Закладки";
 "import_failed" = "Імпорт завершився невдачею";
 "import_cannot" = "Зазначений файл неможливо імпортувати";
 "import_gpx" = "GPX трек";
@@ -754,7 +754,7 @@
 "transport_routes" = "Маршрути";
 "transport_nearby_routes_within" = "Близькі маршрути в межах";
 "transport_nearby_routes" = "В межах";
-"transport_stop" = "Зупинка";
+"transport_stop" = "Зупинити";
 "add_as_first_destination_point" = "Додати як перший проміжний пункт призначення";
 "first_intermediate_dest_description" = "Додає першу зупинку на маршруті";
 "add_as_last_destination_point" = "Додати як останній проміжний пункт призначення";
@@ -906,7 +906,7 @@
 "osm_notes_online_layer" = "OSM Примітки (мережні)";
 "my_places" = "Мої місця";
 "osm_edits_basic" = "Основні";
-"osm_edits_advanced" = "Розширені";
+"osm_edits_advanced" = "Розширений";
 "osm_edits_all" = "Всі правки";
 "osm_edits_poi" = "Правки POI";
 "osm_edits_notes" = "Примітки";
@@ -1213,7 +1213,7 @@
 "avoid_by_type" = "Уникати за типом";
 "parking_place" = "Місце для паркування";
 "add_start" = "Додати відправну точку";
-"home_pt" = "Дім";
+"home_pt" = "Вдома";
 "work_pt" = "Робота";
 "mapillary_descr" = "Вуличні світлини в Інтернеті для всіх. Відкривайте місця, співпрацюйте, захоплюйте світ";
 // Rendering attributes
@@ -1384,7 +1384,6 @@
 "rendering_attr_currentTrackWidth_description" = "Товщина GPX";
 "routing_attr_allow_advanced_description" = "Складні маршрути з небезпечними перешкодами і крутими ділянками.";
 "rendering_attr_piste_difficulty_novice_name" = "Новачок";
-"rendering_value_browse_map_name" = "Огляд мапи";
 "rendering_attr_pisteRoutes_name" = "Лижні траси";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Рівнинно";
 "rendering_attr_piste_difficulty_expert_name" = "Досвідчений";

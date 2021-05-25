@@ -74,7 +74,7 @@
 "poi_search_near_center" = "";
 "poi_hide" = "隐藏";
 // My Places
-"favorites" = "收藏";
+"favorites" = "收藏夹";
 "tracks" = "轨迹";
 // GPX
 "gpx_point" = "点";
@@ -133,7 +133,7 @@
 "map_settings_show" = "在地图上显示";
 "map_settings_type" = "地图类型";
 "map_mode" = "地图模式";
-"map_settings_day" = "日";
+"map_settings_day" = "白天";
 "map_settings_night" = "夜晚";
 "map_settings_style" = "地图风格";
 "map_settings_overunder" = "叠加层 / 背景层";
@@ -566,7 +566,7 @@
 "m_s" = "米/秒";
 // Shared Strings
 "shared_string_apply" = "应用";
-"transport_routes" = "路线";
+"transport_routes" = "线路";
 "switch_start_finish" = "交换起始点和目的地";
 "replace_destination_point" = "替换目的地";
 "traffic_warning_stop" = "停止标志";
@@ -578,7 +578,7 @@
 "driving_region_uk" = "英国、印度和类似地区";
 "driving_region_australia" = "澳大利亚";
 "left_side_navigation" = "靠左驾驶";
-"nearby_search" = "搜索附近";
+"nearby_search" = "周边搜索";
 "cancel_navigation" = "停止导航";
 "shared_string_search" = "搜索";
 "search_radius" = "搜索半径";
@@ -915,7 +915,7 @@
 "min_km" = "分/千米";
 "help_install_and_troubleshoot" = "安装和疑难解答";
 "shared_string_io_error" = "I/O错误";
-"help_other_header" = "其它";
+"help_other_header" = "其他";
 "shared_string_unexpected_error" = "意外的错误";
 "map_styles" = "地图样式";
 "poi_list" = "POI列表";
@@ -962,7 +962,7 @@
 "shared_string_category" = "类别";
 "osm_alert_message" = "消息";
 "key_hint_deselect" = "取消选中";
-"osm_poi_delete_title" = "删除 POI";
+"osm_poi_delete_title" = "删除兴趣点";
 "osm_edits_basic" = "基本";
 "quick_action_no_underlay" = "无衬底层";
 "osm_edit_without_name" = "没有名称";
@@ -1060,7 +1060,6 @@
 "rendering_attr_hikingRoutesOSMC_name" = "徒步旅行符号叠加层";
 "routing_attr_prefer_unpaved_description" = "偏好未铺设道路。";
 "rendering_attr_highway_class_street_name" = "街道";
-"rendering_value_browse_map_name" = "浏览地图";
 "routing_attr_height_obstacles_name" = "使用标高数据";
 "rendering_attr_pisteRoutes_name" = "滑雪场";
 "routing_attr_height_name" = "高度限制";
@@ -1368,7 +1367,7 @@
 "configure_screen_quick_action" = "快捷操作";
 "select_icon" = "选择图标";
 "one" = "一";
-"nothing_found_empty" = "什么都没找到";
+"nothing_found_empty" = "什么也没找到";
 "export_profile" = "导出配置文件";
 "osm_notes" = "OSM注记";
 "select_color" = "选择颜色";

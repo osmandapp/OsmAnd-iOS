@@ -71,7 +71,7 @@
 "description" = "Opis";
 "shared_string_remove" = "Usuń";
 "shared_string_modify" = "Modyfikuj";
-"shared_string_later" = "Później";
+"shared_string_later" = "Następnie";
 "offline_maps" = "Mapy offline";
 "download_map" = "Pobierz mapę";
 "my_favorites" = "Moje ulubione";
@@ -152,7 +152,7 @@
 "rendering_value_browse_map_name" = "Przegląd";
 "m_style_car" = "Samochód";
 "m_style_walk" = "Pieszo";
-"m_style_bicycle" = "Rower";
+"m_style_bicycle" = "Kolarstwo";
 "map_settings_overunder" = "Nakładka/Podkład";
 "map_settings_under" = "Podkład";
 "sett_show" = "Wyświetl";
@@ -382,7 +382,7 @@
 "moving_time" = "Czas w ruchu";
 "change_group" = "Zmień grupę";
 "show_all" = "Wyświetl wszystko";
-"parking" = "Miejsce parkowania";
+"parking" = "Parking";
 "pedestrian" = "Pieszy";
 "sorting" = "Sortowanie";
 "plugins" = "Wtyczki";
@@ -931,7 +931,7 @@
 "loading_poi_obj" = "Wczytywanie użytecznego miejsca…";
 "osm_note" = "Uwaga OSM";
 "osm_created" = "Utworzono";
-"osm_deleted" = "Usunięte";
+"osm_deleted" = "Usunięto";
 "osm_modified" = "Zmodyfikowano";
 "osm_reopened" = "Otwarto ponownie";
 "osm_name" = "Nazwa użytkownika OpenStreetMap";
@@ -946,7 +946,7 @@
 "osm_opens_at" = "Zostanie otwarte o:";
 "osm_closes_at" = "Zostanie zamknięte o:";
 "osm_editing_contact_info" = "Informacje kontaktowe";
-"osm_str_name" = "Ulica";
+"osm_str_name" = "Nazwa ulicy";
 "osm_building_num" = "Numer budynku";
 "osm_phone" = "Telefon";
 "osm_website" = "Strona internetowa";
@@ -964,7 +964,7 @@
 "modify_edit_short" = "Zmodyfikuj zmianę OSM";
 "open_osm_note" = "Utwórz uwagę OSM";
 "edit_osm_note" = "Edytuj uwagę OSM";
-"osm_alert_title" = "Zatwierdź";
+"osm_alert_title" = "Wyślij";
 "osm_alert_message" = "Wiadomość";
 "osm_alert_button_ok" = "Utwórz uwagę";
 "modify_poi" = "Zmodyfikuj informacje o Użytecznym Miejscu";
@@ -1059,7 +1059,6 @@
 "month_short" = "mies.";
 "months_short" = "mies.";
 "year_short" = "rok";
-"years_short" = "lat";
 "day" = "Dzień";
 "days_2_4" = "Dni";
 "days_5" = "Dni";
@@ -1139,7 +1138,7 @@
 "add_map_style" = "Dodaj styl mapy";
 "map_sources" = "Zasoby map";
 "map_styles" = "Style map";
-"add_action" = "Dodawanie czynności";
+"add_action" = "Dodaj czynność";
 "create_items" = "Tworzenie elementów";
 "add_map_marker" = "Dodaj znacznik mapy";
 "add_gpx_waypoint" = "Dodaj punkt do GPX";
@@ -1481,7 +1480,6 @@
 "routeInfo_roadClass_name" = "Rodzaj drogi";
 "routing_attr_short_way_name" = "Ekonomiczna trasa";
 "routing_attr_avoid_ice_roads_fords_name" = "Omijanie lodowych dróg i brodów";
-"rendering_value_browse_map_name" = "Przeglądaj mapę";
 "routing_attr_difficulty_preference_description" = "Preferuj trasy o tej trudności, chociaż wyznaczanie tras na trudniejsze lub łatwiejsze jest nadal możliwe, jeśli jest krótsza.";
 "rendering_value_translucent_pink_name" = "Przezroczysty różowy";
 "rendering_attr_hideUnderground_name" = "Podziemne obiekty";
@@ -2030,3 +2028,10 @@
 "transport" = "Transport publiczny";
 "replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";
 "service" = "Dojazdowa";
+"service" = "Usługi";
+"start_of_track" = "Początek trasy";
+"transport" = "Transport publiczny";
+"special" = "Specjalny";
+"track" = "Polna/leśna";
+"replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";
+"square" = "Kwadrat";

@@ -1353,7 +1353,7 @@
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 
-"units_hour" = "h";
+"units_hour" = "t";
 "units_min" = "min";
 "units_sec" = "sec";
 "units_min_short" = "m";
@@ -1646,7 +1646,7 @@
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
-"plugins" = "Lisäosat";
+"plugins" = "Liitännäiset";
 "open_map_settings" = "Open Map Settings";
 
 "plugin_popup_ski_title" = "Turn on Ski map style";
@@ -2175,7 +2175,7 @@
 
 //Poi catagories
 "amenity" = "Mukavuus";
-"emergency" = "Hätätapaus";
+"emergency" = "Ensiapu";
 "service" = "Palvelu";
 "special" = "Erityinen";
 "sport" = "Urheilu";

@@ -1001,7 +1001,7 @@
 "osm_edits_offline_layer" = "OSM breytingar/minnispunktar (ónettengt)";
 "osm_notes_online_layer" = "OSM-minnispunktar (nettengt)";
 "osm_edits_basic" = "Einfalt";
-"osm_edits_advanced" = "Nánar";
+"osm_edits_advanced" = "Vanir";
 "osm_edits_all" = "Allar breytingar";
 "osm_edits_poi" = "Breytingar á merkisstöðum (POI)";
 "osm_edits_notes" = "Minnispunktar";
@@ -1526,7 +1526,6 @@
 "routing_attr_allow_skating_only_description" = "Leiðir sem eru troðnar fyrir frjálsan stíl eða skautun án klassískra skíðaspora.";
 "routing_attr_avoid_stairs_name" = "Forðast stiga";
 "rendering_value_medium_name" = "Miðlungs";
-"rendering_value_browse_map_name" = "Fletta korti";
 "rendering_attr_piste_difficulty_novice_name" = "Byrjendur";
 "rendering_attr_tracktype_grade2_name" = "Þétt (óbundið slitlag)";
 "rendering_attr_depthContours_description" = "Birta dýptarlínur og punkta.";

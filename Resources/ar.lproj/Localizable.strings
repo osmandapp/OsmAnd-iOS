@@ -179,7 +179,6 @@
 "interrupt_music_descr" = "قم بإيقاف الموسيقى مؤقتًا أثناء المطالبات الصوتية (لايكفي خفض مستوى الصوت)";
 "interrupt_music" = "إيقاف الموسيقى";
 "shared_string_do_not_use" = "لا تستخدم";
-"voice_provider" = "التوجيه الصوتي";
 "shared_string_sound" = "الصوت";
 "select_route_start_on_map" = "حدد نقطة بداية الطريق";
 "select_route_finish_on_map" = "حدد نقطة نهاية الطريق";
@@ -236,7 +235,6 @@
 "traffic_warning_railways" = "عبور خط السكة الحديدية";
 "traffic_warning_pedestrian" = "ممرات الراجلين";
 "traffic_warning_hazard" = "خطر";
-"driving_region" = "منطقة القيادة";
 "driving_region_japan" = "اليابان";
 "driving_region_us" = "الولايات المتحدة";
 "driving_region_canada" = "كندا";
@@ -396,13 +394,13 @@
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_mode" = "مظهرالخريطة";
-"map_settings_day" = "نهاري";
-"map_settings_night" = "ليلاً";
+"map_settings_day" = "نهار";
+"map_settings_night" = "ليلي";
 "map_settings_style" = "نمط الخريطة";
 "map_settings_overunder" = "الخريطة العلوية/ السفلية";
 "map_settings_over" = "الخريطة العلوية";
 "map_settings_under" = "الخريطة السفلية";
-"map_settings_none" = "بدون";
+"map_settings_none" = "لا شيء";
 "map_settings_offline" = "أنماط للخرائط غير المتصلة";
 "map_settings_online" = "خرائط الإنترنت";
 "map_settings_transp" = "الشفافية";
@@ -615,7 +613,7 @@
 "product_title_wiki" = "ويكيبيديا";
 "product_desc_wiki" = "بيانات ويكيبيديا";
 "product_desc_ext_wiki" = "الحصول على معلومات حول النقاط المثيرة للاهتمام من ويكيبيديا. إنه دليلك غير المتصل بجيبك - ما عليك سوى تمكين المكون الإضافي ويكبيديا والاستمتاع بمقالات حول الكائنات من حولك.";
-"product_title_srtm" = "بيانات الخطوط الكنتورية";
+"product_title_srtm" = "الخطوط الكنتورية";
 "product_desc_srtm" = "إظهارالخطوط الكنتورية";
 "product_desc_ext_srtm" = "توفر هذه الأداة طبقة الخطوط الكنتورية وطبقة للتضاريس ظاهرة على الخريطة الأساسية للتطبيق. هذه الوظيفة ستكوم محل تقدير من طرف الرياضيين، المتنزهين، الرحالة، وكل من هو مهتم بجمال ورخاء الطبيعة. \n \nالبيانات العالمية (بين 70 درجة شمالا و70 جنوبا) مبنية حسب قياسات SRTM (مكوك رادار البعثة الطبوغرافية) وASTER (المكوك المتقدم الخاص بالإنبعاث الحراري والانعكاس الإشعاعي)، أداة تصوير على متن Terra، القمر الصناعي الرئيسي لنظام رصد الأرض التابع لناسا. ASTER هو جهد تعاوني فيما بين وكالة ناسا، وزارة الاقتصاد اليابانية، التجارة والصناعة (METI)، و أنظمة الفضاء اليابانية (J-spacesystems).";
 "my_location" = "موقعي";
@@ -631,7 +629,7 @@
 "enter_fav_name" = "أدخل اسم المفضلة";
 "res_installing" = "تثبيت…";
 "res_roads" = "الطرق";
-"res_srtm" = "بيانات الخطوط الكنتورية";
+"res_srtm" = "الخطوط الكنتورية";
 "res_wiki" = "ويكيبيديا";
 "res_hillshade" = "التضاريس";
 "select_language" = "اختيار اللغة";
@@ -994,8 +992,8 @@
 "modify_edit_short" = "تعديل OSM";
 "open_osm_note" = "فتح ملاحظة OSM";
 "edit_osm_note" = "تحرير ملاحظة OSM";
-"osm_alert_title" = "تقديم";
-"osm_alert_message" = "رسالة";
+"osm_alert_title" = "ارتكب";
+"osm_alert_message" = "الرسالة";
 "osm_alert_button_ok" = "إنشاء الملاحظة";
 "modify_poi" = "تعديل معلومات POI";
 "product_title_osm_editing" = "تعديلات خريطة الشارع المفتوح";
@@ -1513,7 +1511,6 @@
 "routing_attr_allow_motorway_name" = "استخدام الطرق السريعة";
 "routing_attr_avoid_borders_description" = "تجنب عبور الحدود الوطنية";
 "rendering_value_pedestrian_name" = "مشي";
-"rendering_value_browse_map_name" = "استعراض";
 "routing_attr_avoid_sett_description" = "تجنب الحصى والطرق المرصوفة";
 "rendering_attr_surfaceIntegrity_name" = "سلامة سطح الطرق";
 "rendering_attr_surface_sett_name" = "ضبط";
@@ -1816,7 +1813,7 @@
 "configure_map_descr" = "مظهر الخريطة";
 "export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد نسخ إلى أوسماند.";
 "profile_sett_descr" = "تؤثر على ملف التعريف المحدد";
-"app_profiles" = "تطبيق الوضع";
+"app_profiles" = "أوضاع التطبيق";
 "selected_profile" = "الوضع المحدد";
 "osmand_profile" = "ملف تعريف أوسماند";
 "ui_customization_descr" = "عناصر الدرج، قائمة السياق";
@@ -1870,7 +1867,7 @@
 "move_point" = "نقل نقطة";
 "add_to_track" = "إضافة إلى مسار";
 "save_new_track" = "حفظ كمسار جديد";
-"save_changes" = "حفظ التعديلات";
+"save_changes" = "حفظ التغييرات";
 "route_betw_points" = "المسار بين النقاط";
 "points_count" = "النقاط:";
 "point_num" = "النقطة %d";
@@ -2022,7 +2019,7 @@
 "sport" = "رياضة";
 "special" = "خاص";
 "service" = "خدمة";
-"emergency" = "حالة طوارئ";
+"emergency" = "الطوارئ";
 "square" = "مربع";
 "octagon" = "مثمن";
 

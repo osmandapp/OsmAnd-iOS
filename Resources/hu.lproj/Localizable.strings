@@ -93,13 +93,13 @@
 // Map settings
 "rendering_value_browse_map_name" = "Áttekintés";
 "m_style_car" = "Autóvezetés";
-"m_style_walk" = "Gyaloglás";
+"m_style_walk" = "Séta";
 "m_style_bicycle" = "Kerékpározás";
 "map_settings_map" = "Térkép";
 "map_settings_show" = "Megjelenítés a térképen";
 "map_settings_type" = "Térképtípus";
 "map_mode" = "Térképmód";
-"map_settings_day" = "Nappal";
+"map_settings_day" = "napra";
 "map_settings_night" = "Éjjel";
 "map_settings_style" = "Térképstílus";
 "map_settings_overunder" = "Rátét / alátét";
@@ -148,7 +148,7 @@
 "prch_nau_q3" = "A Térképek és erőforrásokon keresztül később is telepítheti.";
 "proceed_q" = "Folytatja?";
 "download" = "Letöltés";
-"nothanks" = "Nem szükséges";
+"nothanks" = "Köszönöm, nem";
 "download_now" = "Térkép letöltése most";
 "prch_failed" = "A(z) „%@” vásárlása nem sikerült";
 "prch_items_failed" = "elem nem került visszaállításra. Próbálja újra.";
@@ -883,7 +883,7 @@
 "translucent_orange" = "Átlátszó narancs";
 "route_parameters" = "Útvonal paraméterek";
 "osm_alert_title" = "Véglegesítés";
-"create_poi_short" = "POI létrehozása";
+"create_poi_short" = "POI készítés";
 "osmand_live_weekly" = "Hetente";
 "open_osm_note" = "OSM Jegyzet megnyitása";
 "change_map_overlay" = "Térképrátét módosítása";
@@ -909,11 +909,11 @@
 "gpx_slope" = "Lejtő";
 "work_pt" = "Munkahely";
 "osmand_live_donation_switch_title" = "Adomány az OpenStreetMap közösségnek";
-"transport_stop" = "Leállítás";
+"transport_stop" = "Megálló";
 "logging_interval_navigation" = "Naplózási intervallum navigáció közben";
 "map_settings_map_magnifier" = "Térképnagyító";
 "quick_actions_show_dialog" = "Ideiglenes dialógusablak megjelenítése";
-"help_other_header" = "Egyéb";
+"help_other_header" = "Egyebek";
 "quick_action_name_footer" = "A cím vagy a hely nevének használatához hagyja üresen.";
 "dark_yellow" = "Sötétsárga";
 "directions_more_options" = "Navigáció innen";
@@ -990,7 +990,6 @@
 "res_url" = "URL";
 "rendering_attr_currentTrackWidth_description" = "GPX vastagsága";
 "rendering_attr_piste_difficulty_aerialway_name" = "Kötélpályás felvonó";
-"rendering_value_browse_map_name" = "Térképböngészés";
 "routing_attr_no_new_routing_description" = "Ne használja az 1.9-es verzióban bevezetett útvonalszabályokat.";
 "routeInfo_roadClass_name" = "Úttípus";
 "routing_attr_difficulty_preference_description" = "Az ilyen nehézségű pályák részesülnek előnyben, azonban az útvonalba továbbra is bekerülhetnek nehezebb vagy könnyebb pályák, ha úgy rövidebb.";
@@ -1527,11 +1526,11 @@
 "search_history" = "Keresési előzmények";
 "markers_history" = "Jelölők előzményei";
 "favorite_places_category" = "Helyek";
-"service" = "Szervizút";
+"service" = "Szolgáltatás";
 "osmand_live_title" = "OsmAnd Live";
 "copied_to_clipboard" = "Vágólapra másolva";
 "res_standard" = "Normál térkép";
-"track" = "Mzg. vagy erdészeti út";
+"track" = "Nyomvonal";
 "octagon" = "Nyolcszög";
 "plan_route_last_modified" = "Utolsó módosítás";
 "new_plugin_added" = "Új bővítmény hozzáadva";

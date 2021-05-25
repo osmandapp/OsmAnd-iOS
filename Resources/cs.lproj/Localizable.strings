@@ -1,7 +1,7 @@
 "OsmAnd Maps" = "Mapy OsmAnd";
 "shared_string_previous" = "Předchozí";
 "route_stops_before" = "%1$s zastávek před";
-"transport_routes" = "Trasy";
+"transport_routes" = "Cesty";
 "transport_nearby_routes_within" = "Nejbližší trasy v okruhu";
 "transport_nearby_routes" = "V okruhu";
 "transport_stop" = "Zastavit";
@@ -179,7 +179,6 @@
 "interrupt_music_descr" = "Úplně pozastavit hudbu během hlasových pokynů (ne pouze snížit hlasitost)";
 "interrupt_music" = "Pozastavit hudbu";
 "shared_string_do_not_use" = "Nepoužívat";
-"voice_provider" = "Hlasová data";
 "shared_string_sound" = "Zvuk";
 "select_route_start_on_map" = "Zvolte počáteční bod trasy";
 "select_route_finish_on_map" = "Zvolte koncový bod trasy";
@@ -236,7 +235,6 @@
 "traffic_warning_railways" = "Železniční přejezd";
 "traffic_warning_pedestrian" = "Přechod pro chodce";
 "traffic_warning_hazard" = "Nebezpečí";
-"driving_region" = "Dopravní oblast";
 "driving_region_japan" = "Japonsko";
 "driving_region_us" = "Spojené státy";
 "driving_region_canada" = "Kanada";
@@ -296,7 +294,7 @@
 "shared_string_and" = "a";
 "shared_string_edit" = "Upravit";
 "shared_string_modify" = "Upravit";
-"shared_string_later" = "Pokračujte";
+"shared_string_later" = "Později";
 "shared_string_of" = "of";
 "shared_string_all" = "Všechny";
 "shared_string_from" = "od";
@@ -397,12 +395,12 @@
 "map_settings_type" = "Typ mapy";
 "map_mode" = "Režim mapy";
 "map_settings_day" = "Den";
-"map_settings_night" = "Noc";
+"map_settings_night" = "V noci";
 "map_settings_style" = "Styl mapy";
 "map_settings_overunder" = "Překryvná / podkladová";
 "map_settings_over" = "Překryvná";
 "map_settings_under" = "Podkladová";
-"map_settings_none" = "Žádné";
+"map_settings_none" = "Žádná";
 "map_settings_offline" = "Styly pro offline mapy";
 "map_settings_online" = "On-line mapy";
 "map_settings_transp" = "Průhlednost";
@@ -422,7 +420,7 @@
 "sett_km" = "Kilometry";
 "sett_ml" = "Míle";
 "sett_zoom" = "Tlačítko přiblížení";
-"sett_show" = "Ukázat";
+"sett_show" = "Zobrazit";
 "sett_notshow" = "Nezobrazovat";
 "sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
@@ -446,7 +444,7 @@
 "prch_nau_q3" = "Instalaci lze provést později přes Mapy a zdroje.";
 "proceed_q" = "Pokračovat?";
 "download" = "Stáhnout";
-"nothanks" = "Není potřeba";
+"nothanks" = "Ne, díky";
 "download_now" = "Stáhnout mapu nyní";
 "prch_failed" = "Nákup \"%@\" se nezdařil";
 "prch_items_failed" = "položek nebylo obnoveno. Zkuste to prosím znovu.";
@@ -674,11 +672,11 @@
 "gpx_group_select" = "Výběr skupiny";
 "show_all" = "Zobrazit vše";
 "get_directions" = "Navigace";
-"parking" = "Parkování";
+"parking" = "Parkoviště";
 "est_travel_time" = "Odhadovaný čas jízdy";
 "pedestrian" = "Chodec";
 "sorting" = "Řazení";
-"plugins" = "Moduly";
+"plugins" = "Správce modulů";
 "open_map_settings" = "Otevřít nastavení mapy";
 "plugin_popup_ski_title" = "Zapnout lyžařský mapový styl";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -813,7 +811,7 @@
 "shared_string_close" = "Zavřít";
 "actions" = "Akce";
 "directions_more_options" = "Navigovat odsud";
-"nearby_search" = "Hledat v okolí";
+"nearby_search" = "Hledat poblíž";
 "map_widget_ruler_control" = "Kruhové pravítko";
 "import_from_docs" = "Import z dokumentů";
 "osm_live_routing" = "OsmAnd Live navigace";
@@ -967,7 +965,7 @@
 "change_map_overlay" = "Změnit překryvnou mapu";
 "quick_action_add_overlay" = "Přidat překrytí";
 "blue" = "Modrá";
-"osm_edits_advanced" = "Pokročilý";
+"osm_edits_advanced" = "Rozšířené";
 "quick_action_name" = "Rychlá akce";
 "gpx_avg_altitude" = "Průměrná výška";
 "shared_string_time_of_day" = "Denní doba";
@@ -1009,7 +1007,7 @@
 "green" = "Zelená";
 "osm_edit_without_name" = "Bez názvu";
 "replace_destination" = "Nahradit cíl";
-"osm_poi_delete_title" = "Smazat POI";
+"osm_poi_delete_title" = "Vymazat POI";
 "osm_target_created" = "Vytvořen OSM POI";
 "quick_action_name_footer" = "Ponecháte-li prázdné, bude použita adresa nebo název místa.";
 "dark_yellow" = "Tmavě žlutá";
@@ -1032,9 +1030,9 @@
 "quick_action_pause_nav_descr" = "Stiskněte toto tlačítko na pozastavení, nebo pokračování navigace.";
 "osm_close_changeset" = "Zavřít změny";
 "quick_action_add_underlay" = "Přidat podklad";
-"osm_deleted" = "Smazáno";
+"osm_deleted" = "Odstraněné";
 "map_styles" = "Styly mapy";
-"osm_alert_message" = "Hlášení";
+"osm_alert_message" = "Zpráva";
 "shared_string_retry" = "Zkusit znovu";
 "shared_string_filter" = "Filtr";
 "map_settings_map_magnifier" = "Lupa mapy";
@@ -1318,7 +1316,6 @@
 "rendering_attr_roadStyle_description" = "Styl cesty";
 "routing_attr_driving_style_balance_name" = "Vyvážený";
 "rendering_attr_tracktype_grade4_name" = "Většinou měkký";
-"rendering_value_browse_map_name" = "Standardní";
 "routing_attr_allow_advanced_name" = "Povolit pokročilé trasy";
 "routing_attr_prefer_unpaved_name" = "Upřednostňovat nezpevněné cesty";
 "rendering_value_pedestrian_name" = "Chodec";
@@ -2009,7 +2006,7 @@
 "symbols" = "Symboly";
 "sport" = "Sport";
 "special" = "Speciální";
-"service" = "Dopravní obsluha";
+"service" = "Služby";
 "emergency" = "Nouzová situace";
 "search_poi_types_descr" = "Můžete kombinovat body zájmu různých kategorií.";
 "reset_to_default_category_button_promo" = "Obnovení do základního nastavení vrátí pořadí do výchozího stavu.";

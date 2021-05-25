@@ -121,7 +121,7 @@
 // Intro
 "intro_skip" = "Ignorar";
 "intro_download" = "Descarregar\nmapa";
-"intro_next" = "Próximo";
+"intro_next" = "Seguinte";
 "intro_welcome" = "Bem-vindo(a) ao\nOsmAnd";
 "intro_promo" = "Mapas globais offline";
 "intro_placeholder" = "Digite o nome da sua região";
@@ -416,7 +416,7 @@
 "twitter" = "Twitter";
 "poi_opening_hours" = "Horário de abertura";
 "unlimited_downloads" = "Descarregamentos ilimitados";
-"transport_stop" = "Parar";
+"transport_stop" = "Paragem";
 "cancel_navigation" = "Parar navegação";
 "intermediate_items_sort_by_distance" = "Ordenar por porta a porta";
 "switch_start_finish" = "Inverter ponto de partida e destino";
@@ -570,7 +570,7 @@
 "shared_string_select" = "Selecionar";
 "shared_string_close" = "Fechar";
 "shared_string_upload" = "Enviar";
-"shared_string_later" = "Mais tarde";
+"shared_string_later" = "Continuar";
 "shared_string_all" = "Tudo";
 "download_map" = "Descarregar mapa";
 "poi_type" = "Tipo de POI";
@@ -580,7 +580,7 @@
 "poi_clear" = "Apagar";
 "track_during_nav" = "Gravar o trilho automaticamente";
 "gpx_speed" = "Velocidade";
-"osmand_live_updates" = "Atualizações sincronizadas";
+"osmand_live_updates" = "Atualizações em tempo real";
 "osmand_live_available_maps" = "Mapas disponíveis";
 "osmand_live_hourly" = "A cada hora";
 "osmand_live_daily" = "Diário";
@@ -636,7 +636,7 @@
 "help_map_viewing" = "Visualização do mapa";
 "help_trip_planning" = "Planear uma viagem";
 "help_legend" = "Legenda do mapa";
-"help_other_header" = "Outros";
+"help_other_header" = "Outro";
 "help_install_and_troubleshoot" = "Instalação e resolução de problemas";
 "help_tech_articles" = "Artigos técnicos";
 "help_versions" = "Versões";
@@ -675,7 +675,7 @@
 "get_directions" = "Direções";
 "parking" = "Estacionamento";
 "directions_more_options" = "Direções daqui";
-"nearby_search" = "Pesquisar perto daqui";
+"nearby_search" = "Procurar nas proximidades";
 "pedestrian" = "A pé";
 "plugins" = "Extensões";
 "restore" = "Restaurar";
@@ -921,7 +921,7 @@
 "product_title_srtm" = "Curvas de nível";
 "product_desc_srtm" = "Mostrar curvas de nível";
 "product_desc_ext_srtm" = "Esta extensão fornece as camadas curvas de nível e sombra de colinas (relevo) por cima dos mapas offline do OsmAnd. As curvas de nível fornecem as informações sobre altura da área enquanto sombra de colina é sua visualização. Veja os nomes dos cumes das montanhas e características específicas do terreno usando esta extensão.\n\nOs dados globais (entre as latitudes 70º norte e 70º sul) são baseados em medições do SRTM (Shuttle Radar Topography Mission) e ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), um instrumento de imagens do satélite \"Terra\", o principal satélite do Sistema de Observação da Terra da NASA. ASTER é um esforço conjunto da NASA, do Ministério Japonês da Economia, Comércio e Indústria (METI) e do Sistema Espacial Japonês (J-spacesystems).";
-"product_title_sea_depth_contours" = "Curvas de profundidades náuticas";
+"product_title_sea_depth_contours" = "Contornos de profundidade náutica";
 "product_desc_sea_depth_contours" = "Curvas de nível e cartografia náutica";
 "enter_description" = "Insira a descrição";
 "enter_fav_name" = "Digite o nome do favorito";
@@ -1076,7 +1076,7 @@
 "key_hint_zoom_out" = "Afastar";
 "osm_live_cancel_subscription" = "Cancelar subscrição";
 // Quick action
-"quick_action_name" = "Botão de ação rápida";
+"quick_action_name" = "Botão de ações rápidas";
 "quick_action_no_overlay" = "Sem camada superior";
 "quick_action_add_overlay" = "Adicionar camada superior";
 "quick_action_no_underlay" = "Sem camada inferior";
@@ -1250,7 +1250,7 @@
 "add_intermediate" = "Adicionar ponto intermédio";
 "add_home" = "Adicionar casa";
 "add_work" = "Adicionar trabalho";
-"home_pt" = "Casa";
+"home_pt" = "Início";
 "work_pt" = "Trabalho";
 "shared_string_clear_all" = "Limpar tudo";
 "no_active_route" = "Nenhuma rota ativa";
@@ -1470,7 +1470,6 @@
 "routing_attr_avoid_shuttle_train_name" = "Evitar comboios vaivém";
 "rendering_attr_showLez_name" = "Mostrar zonas de baixas emissões poluentes";
 "routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora o roteamento sobre pistas mais difíceis ou mais fáceis ainda seja possível se for mais curto.";
-"rendering_value_browse_map_name" = "Explorar o mapa";
 "rendering_value_light_brown_name" = "Castanho claro";
 "rendering_attr_surface_ice_name" = "Gelo";
 "rendering_attr_smoothness_very_bad_name" = "Muito mau";

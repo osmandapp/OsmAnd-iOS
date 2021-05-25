@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAExportSettingsCategory;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAExportSettingsType : NSObject <NSCopying>
@@ -39,6 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isSettingsCategory;
 - (BOOL) isMyPlacesCategory;
 - (BOOL) isResourcesCategory;
+
+- (OAExportSettingsCategory *) getCategory;
 
 @end
 

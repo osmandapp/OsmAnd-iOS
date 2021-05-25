@@ -15,23 +15,34 @@
 #import "OAMenuSimpleCell.h"
 #import "OAColors.h"
 #import "OAPOIUIFilter.h"
+#import "OASearchResult.h"
+#import "OASearchUICore.h"
+#import "OASearchSettings.h"
+#import "OAQuickSearchHelper.h"
+#import "OATableViewCustomHeaderView.h"
 
-@interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, OAMultiselectableHeaderDelegate>
+@interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *applyButton;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UIView *bottomView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
 
 @end
 
 @implementation OASelectSubcategoryViewController
 {
+    OASearchUICore *_core;
     OAPOICategory *_category;
     OAPOIUIFilter *_filter;
-    NSMutableArray *_items;
-    NSMutableArray *_selectedItems;
+    NSArray<OAPOIType *> *_items;
+    NSMutableArray<OAPOIType *> *_selectedItems;
+    NSMutableArray<OAPOIType *> *_searchResult;
+    BOOL _searchMode;
 }
 
 - (instancetype)initWithCategory:(OAPOICategory *)category filter:(OAPOIUIFilter *)filter
@@ -39,6 +50,7 @@
     self = [super init];
     if (self)
     {
+        _core = [[OAQuickSearchHelper instance] getCore];
         _category = category;
         _filter = filter;
         [self initData];
@@ -55,16 +67,22 @@
         NSArray<OAPOIType *> *types = _category.poiTypes;
 
         _selectedItems = [NSMutableArray new];
-        _items = [NSMutableArray arrayWithArray:[types sortedArrayUsingComparator:^NSComparisonResult(OAPOIType * _Nonnull t1, OAPOIType * _Nonnull t2) {
+        _items = [NSArray arrayWithArray:[types sortedArrayUsingComparator:^NSComparisonResult(OAPOIType * _Nonnull t1, OAPOIType * _Nonnull t2) {
             return [t1.nameLocalized localizedCaseInsensitiveCompare:t2.nameLocalized];
         }]];
 
         if (acceptedSubtypes == [OAPOIBaseType nullSet] || acceptedTypes.count == types.count)
+        {
             _selectedItems = [NSMutableArray arrayWithArray:_items];
+        }
         else
+        {
             for (OAPOIType *poiType in _items)
+            {
                 if ([acceptedTypes containsObject:poiType.name])
                     [_selectedItems addObject:poiType];
+            }
+        }
     }
 }
 
@@ -72,50 +90,67 @@
 {
     [super viewDidLoad];
 
-    if (_category)
-        self.titleLabel.text = _category.nameLocalized;
-    else
-        self.titleLabel.text = @"";
-
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
     self.tableView.rowHeight = kEstimatedRowHeight;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     [self.tableView beginUpdates];
     for (NSInteger i = 0; i < _items.count; i++)
         if ([_selectedItems containsObject:_items[i]])
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
     [self.tableView endUpdates];
+
+    _searchMode = NO;
+    self.searchBar.delegate = self;
+
+    [self updateApplyButton:NO];
 }
 
 -(void)applyLocalization
 {
+    [self updateScreenTitle];
+
     self.applyButton.titleLabel.text = OALocalizedString(@"shared_string_apply");
+    self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
 }
 
-- (IBAction)onBackButtonClicked:(id)sender
+- (void)updateScreenTitle
 {
-    if (_delegate)
-        [_delegate selectSubcategoryCancel];
-
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_searchMode)
+        self.titleLabel.text = OALocalizedString(@"shared_string_search");
+    else if (_category)
+        self.titleLabel.text = _category.nameLocalized;
+    else
+        self.titleLabel.text = @"";
 }
 
-- (IBAction)onApplyButtonClicked:(id)sender
+- (void)updateApplyButton:(BOOL)hasSelection
 {
-    if (_delegate)
-    {
-        NSMutableSet<NSString *> *selectedKeys = [NSMutableSet set];
-        for (OAPOIType *poiType in _selectedItems)
-            [selectedKeys addObject:poiType.name];
+    self.applyButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    [self.applyButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
+    [self.applyButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+    [self.applyButton setUserInteractionEnabled:hasSelection];
 
-        [_delegate selectSubcategoryDone:_category keys:selectedKeys allSelected:_selectedItems.count == _items.count];
-    }
+    self.bottomView.hidden = _searchMode;
+    self.applyButton.hidden = _searchMode;
+    self.tableBottomConstraint.constant = _searchMode ? 0 : 53 + OAUtilities.getBottomMargin;
+}
 
-    [self.navigationController popViewControllerAnimated:YES];
+- (NSMutableSet<NSString *> *)getSelectedKeys
+{
+    NSMutableSet<NSString *> *selectedKeys = [NSMutableSet set];
+    for (OAPOIType *poiType in _selectedItems)
+        [selectedKeys addObject:poiType.name];
+    return selectedKeys;
+}
+
+- (NSString *)getTitleForSection
+{
+    return [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, (int)_items.count] upperCase];
 }
 
 - (void)selectDeselectGroup:(id)sender
@@ -137,30 +172,121 @@
     [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+
+    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > 0)
+    if (_searchMode || (!_searchMode && indexPath.row > 0))
     {
         [self.tableView beginUpdates];
-        OAPOIUIFilter *filter = _items[indexPath.row - 1];
-        if ([_selectedItems containsObject:filter])
-            [_selectedItems removeObject:filter];
+        OAPOIType *type = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
+        if ([_selectedItems containsObject:type])
+            [_selectedItems removeObject:type];
         else
-            [_selectedItems addObject:filter];
+            [_selectedItems addObject:type];
         [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count] upperCase];
         [self.tableView endUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+
+        [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
     }
+}
+
+- (IBAction)onBackButtonClicked:(id)sender
+{
+    if (self.delegate)
+        [self.delegate selectSubcategoryCancel];
+
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)onApplyButtonClicked:(id)sender
+{
+    if (self.delegate)
+        [self.delegate selectSubcategoryDone:_category keys:[self getSelectedKeys] allSelected:_selectedItems.count == _items.count];
+
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    searchBar.text = @"";
+    _searchMode = NO;
+    _searchResult = [NSMutableArray new];
+    self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
+    [self updateScreenTitle];
+    [self.tableView setEditing:NO];
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if (searchBar.text.length == 0)
+    {
+        _searchMode = NO;
+        [_core updateSettings:_core.getSearchSettings.resetSearchTypes];
+    }
+    else
+    {
+        _searchMode = YES;
+        _searchResult = [NSMutableArray new];
+        OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:POI_TYPE]]];
+        [_core updateSettings:searchSettings];
+        [_core search:searchBar.text delayedExecution:YES matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+            OASearchResult *obj = *object;
+            if (obj.objectType == SEARCH_FINISHED)
+            {
+                OASearchResultCollection *currentSearchResult = [_core getCurrentSearchResult];
+                NSMutableArray<OAPOIType *> *results = [NSMutableArray new];
+                for (OASearchResult *result in currentSearchResult.getCurrentSearchResults)
+                {
+                    NSObject *poiObject = result.object;
+                    if ([poiObject isKindOfClass:[OAPOIType class]]) {
+                        OAPOIType *poiType = (OAPOIType *) poiObject;
+                        if (!poiType.isAdditional)
+                        {
+                            if (poiType.category == _category || [_items containsObject:poiType])
+                            {
+                                [results addObject:poiType];
+                            }
+                            else
+                            {
+                                for (OAPOIType *item in _items)
+                                {
+                                    if ([item.name isEqualToString:poiType.name])
+                                        [results addObject:item];
+                                }
+                            }
+                        }
+                    }
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _searchResult = [NSMutableArray arrayWithArray:results];
+                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
+                });
+            }
+            return YES;
+        } cancelledFunc:^BOOL {
+            return !_searchMode;
+        }]];
+    }
+    self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
+    [self updateScreenTitle];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
 }
 
 #pragma mark - UITableViewDataSource
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cellType = indexPath.row == 0 ? [OACustomSelectionButtonCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
-    if ([cellType isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
+    if (indexPath.row == 0 && !_searchMode)
     {
         OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
         if (cell == nil)
@@ -195,7 +321,7 @@
             return cell;
         }
     }
-    else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else
     {
         OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
@@ -210,7 +336,7 @@
         }
         if (cell)
         {
-            OAPOIType *poiType = _items[indexPath.row - 1];
+            OAPOIType *poiType = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
             BOOL selected = [_selectedItems containsObject:poiType];
 
             UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
@@ -224,7 +350,7 @@
                 cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
 
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
-            cell.descriptionView.hidden = true;
+            cell.descriptionView.hidden = YES;
 
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];
@@ -233,12 +359,12 @@
     }
     return nil;
 }
- 
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > 0)
+    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
     {
-        OAPOIType *item = _items[indexPath.row - 1];
+        OAPOIType *item = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
         BOOL selected = [_selectedItems containsObject:item];
         [cell setSelected:selected animated:NO];
         if (selected)
@@ -250,7 +376,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > 0)
+    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
         [self selectDeselectItem:indexPath];
     else
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -258,15 +384,26 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > 0)
+    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
         [self selectDeselectItem:indexPath];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count];
+    if (section == 0) {
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+        [customHeader setYOffset:32];
+        customHeader.label.text = [self getTitleForSection];
+        return customHeader;
+    }
     return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection] width:tableView.bounds.size.width] + 18;
+    }
+    return UITableViewAutomaticDimension;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -276,12 +413,12 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _items.count + 1;
+    return _searchMode ? _searchResult.count : _items.count + 1;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return indexPath.row != 0;
+    return _searchMode || (!_searchMode && indexPath.row != 0);
 }
 
 @end

@@ -15,6 +15,7 @@
 #import "OARootViewController.h"
 #import "OAIndexConstants.h"
 #import "OAPluginSettingsItem.h"
+#import "OARendererRegistry.h"
 #import "Localization.h"
 #import "OAImportSettingsViewController.h"
 #import "OAExportSettingsType.h"
@@ -332,10 +333,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *resourcesItems = [MutableOrderedDictionary new];
     
-    //TODO: refactor rendering styles to support multiple files
-//    NSArray<OAMapStyleResourceItem *> *mapStyles = [OAResourcesUIHelper getExternalMapStyles];
-//    if (mapStyles.count > 0)
-//        resourcesItems[OAExportSettingsType.CUSTOM_RENDER_STYLE] = mapStyles;
+    NSArray<NSString *> *mapStyleFiles = [OARendererRegistry getExternalRenderers];
+    if (mapStyleFiles.count > 0)
+        resourcesItems[OAExportSettingsType.CUSTOM_RENDER_STYLE] = mapStyleFiles;
     NSFileManager *fileManager = NSFileManager.defaultManager;
     BOOL isDir = NO;
     NSString *routingProfilesFolder = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR];

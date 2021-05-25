@@ -635,8 +635,34 @@
     return YES;
 }
  
+- (void)updateDataIfNeeded
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    BOOL updateRoutingFiles = NO;
+    BOOL updateResources = NO;
+    for (OASettingsItem *item in _items)
+    {
+        if ([item isKindOfClass:OAFileSettingsItem.class])
+        {
+            OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
+            updateResources = updateResources || fileItem.subtype != EOASettingsItemFileSubtypeUnknown;
+            updateRoutingFiles = updateRoutingFiles || fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig;
+            
+            if (updateResources && updateRoutingFiles)
+                break;
+        }
+    }
+    
+    if (updateRoutingFiles)
+        [app loadRoutingFiles];
+    if (updateResources)
+        [app.localResourcesChangedObservable notifyEvent];
+}
+
 - (void) onPostExecute:(BOOL)success
 {
+    [self updateDataIfNeeded];
+    
     if (_delegate)
         [_delegate onSettingsImportFinished:success items:_items];
     if (self.onImportComplete)

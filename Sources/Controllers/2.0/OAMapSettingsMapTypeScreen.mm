@@ -225,18 +225,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             
             caption = item.mapSource.name;
             description = nil;
-#if defined(OSMAND_IOS_DEV)
-            description = item.mapSource.variant;
-#endif // defined(OSMAND_IOS_DEV)
         }
         else if ([someItem isKindOfClass:OAOnlineTilesResourceItem.class])
         {
             OAOnlineTilesResourceItem* item = (OAOnlineTilesResourceItem*)someItem;
             caption = item.mapSource.name;
             description = nil;
-#if defined(OSMAND_IOS_DEV)
-            description = item.resource->id.toNSString();
-#endif // defined(OSMAND_IOS_DEV)
         }
     }
     else

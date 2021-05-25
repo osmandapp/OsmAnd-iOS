@@ -9,6 +9,7 @@
 #import "OAExportSettingsType.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAExportSettingsCategory.h"
 
 static OAExportSettingsType * PROFILE;
 static OAExportSettingsType * GLOBAL;
@@ -198,6 +199,18 @@ static OAExportSettingsType * ONLINE_ROUTING_ENGINES;
 {
     return self == self.class.CUSTOM_RENDER_STYLE || self == self.class.CUSTOM_ROUTING || self == self.class.MAP_SOURCES
     || self == self.class.OFFLINE_MAPS /*|| self == self.class.VOICE || self == self.class.TTS_VOICE || self == self.class.ONLINE_ROUTING_ENGINES*/;
+}
+
+- (OAExportSettingsCategory *) getCategory
+{
+    if ([self isSettingsCategory])
+        return OAExportSettingsCategory.SETTINGS;
+    else if ([self isMyPlacesCategory])
+        return OAExportSettingsCategory.MY_PLACES;
+    else if ([self isResourcesCategory])
+        return OAExportSettingsCategory.RESOURCES;
+    else
+        return nil;
 }
 
 #pragma mark NSCopying

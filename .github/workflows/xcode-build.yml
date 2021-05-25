@@ -14,7 +14,7 @@ on:
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '3.91'
+        default: '3.99'
       download_qt_ios_library:
         description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
         required: true
@@ -97,13 +97,14 @@ jobs:
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
       working-directory: baked/fat-ios-clang.xcode
     - name: Build iOS OsmAndCore
-      run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release'
+      run: 'xcodebuild BITCODE_GENERATION_MODE=bitcode OTHER_CFLAGS="-fembed-bitcode" -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release'
       working-directory: baked/fat-ios-clang.xcode
     - name: Creating iOS archive
       env:
         BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }} 
         RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }} 
-      run: 'xcodebuild -workspace ios/OsmAnd.xcworkspace
+      run: 'xcodebuild BITCODE_GENERATION_MODE=bitcode OTHER_CFLAGS="-fembed-bitcode"
+            -workspace ios/OsmAnd.xcworkspace
             -scheme "OsmAnd Maps Release"
             -sdk iphoneos
             -configuration AppStoreDistribution

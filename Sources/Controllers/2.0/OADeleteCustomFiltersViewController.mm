@@ -125,7 +125,6 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSObject *item = _items[indexPath.row];
     NSString *cellType = indexPath.row == 0 ? [OACustomSelectionButtonCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
     if ([cellType isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
     {

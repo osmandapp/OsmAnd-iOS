@@ -400,6 +400,17 @@
     
     if (found.count > 0)
     {
+        if (found.count > 1)
+        {
+            // Sometimes there appears two copy of one point. We decided to filter it right here (in UI).
+            // https://github.com/osmandapp/OsmAnd-Issues/issues/533
+            
+            NSMutableSet<OATargetPoint *> *filtredPointsSet = [NSMutableSet new];
+            for (OATargetPoint *point in found)
+                [filtredPointsSet addObject:point];
+            found = [NSMutableArray arrayWithArray:filtredPointsSet.allObjects];
+        }
+        
         NSMutableArray *existingPoints = [NSMutableArray array];
         for (OATargetPoint *targetPoint in found)
         {

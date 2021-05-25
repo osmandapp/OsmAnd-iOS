@@ -10,13 +10,11 @@
 #import "OARootViewController.h"
 #import "OAExportSettingsType.h"
 #import "Localization.h"
+#import "OAProgressTitleCell.h"
 #import "OAColors.h"
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OAProgressTitleCell.h"
-
-#define kHeaderId @"TableViewSectionHeader"
 
 @implementation OAExportItemsViewController
 {
@@ -57,7 +55,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 -(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -157,7 +155,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
         [customHeader setYOffset:8];
         UITextView *headerLabel = customHeader.label;
         NSMutableAttributedString *newHeaderText = [[NSMutableAttributedString alloc] initWithString:_descriptionText attributes:@{NSForegroundColorAttributeName:UIColorFromRGB(color_text_footer)}];
@@ -169,7 +167,6 @@
         return customHeader;
     }
     return nil;
-
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -188,6 +185,12 @@
     self.selectedItemsMap[type] = items;
     [self updateFileSize];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+
+    OAExportSettingsCategory * category = [type getCategory];
+    NSInteger indexCategory = [self.itemTypes indexOfObject:category];
+    if (category && indexCategory != 0)
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexCategory] withRowAnimation:UITableViewRowAnimationNone];
+
     [self updateControls];
 }
 

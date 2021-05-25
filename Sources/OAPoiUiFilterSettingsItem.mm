@@ -18,6 +18,7 @@
 #define kNAME_KEY @"name"
 #define kFILTER_ID_KEY @"filterId"
 #define kACCEPTED_TYPES_KEY @"acceptedTypes"
+#define kFILTER_BY_NAME @"filterByName"
 
 @interface OAPoiUiFilterSettingsItem()
 
@@ -113,6 +114,7 @@
         NSString *name = object[kNAME_KEY];
         NSString *filterId = object[kFILTER_ID_KEY];
         NSString *acceptedTypes = object[kACCEPTED_TYPES_KEY];
+        NSString *filterByName = object[kFILTER_BY_NAME];
 
         NSDictionary<NSString *, NSMutableSet<NSString *> *> *acceptedTypesDictionary = [NSJSONSerialization JSONObjectWithData:[acceptedTypes dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
         NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypesDone = [NSMapTable strongToStrongObjectsMapTable];
@@ -125,6 +127,7 @@
         }
 
         OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:name filterId:filterId acceptedTypes:acceptedTypesDone];
+        [filter setFilterByName:filterByName];
         [self.items addObject:filter];
     }
 }
@@ -157,6 +160,7 @@
             NSData *acceptedTypesData = [NSJSONSerialization dataWithJSONObject:acceptedTypesDictionary options:0 error:nil];
             NSString *acceptedTypesValue = [[NSString alloc] initWithData:acceptedTypesData encoding:NSUTF8StringEncoding];
             jsonObject[kACCEPTED_TYPES_KEY] = acceptedTypesValue;
+            jsonObject[kFILTER_BY_NAME] = filter.filterByName;
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

@@ -456,8 +456,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
                 }
             }
         }
-        else if (OsmAnd::Utilities::distance([entity getLongitude], [entity getLatitude], [downloadedEntity getLongitude], [downloadedEntity getLatitude]) < 10) {
-            // avoid shifting due to round error
+        else if (OsmAnd::Utilities::distance([entity getLongitude], [entity getLatitude], [downloadedEntity getLongitude], [downloadedEntity getLatitude]) < 10 || OsmAnd::Utilities::distance([entity getLongitude], [entity getLatitude], [downloadedEntity getLongitude], [downloadedEntity getLatitude]) > 10000) {
+            // avoid shifting due to round error and avoid moving to more than 10 km
             [entity setLatitude:[downloadedEntity getLatitude]];
             [entity setLongitude:[downloadedEntity getLongitude]];
         }

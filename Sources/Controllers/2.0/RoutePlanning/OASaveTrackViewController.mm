@@ -463,6 +463,7 @@
 {
     _rightButtonEnabled = NO;
     NSString *text = name.trim;
+    _fileName = text;
     if (text.length == 0)
     {
         _inputFieldError = OALocalizedString(@"empty_filename");
@@ -478,7 +479,6 @@
     else
     {
         _inputFieldError = nil;
-        _fileName = text;
         _rightButtonEnabled = YES;
     }
     [self updateBottomButtons];

@@ -2023,10 +2023,10 @@
 "open_saved_track" = "Otwórz zapisaną ścieżkę";
 "new_plugin_added" = "Dodano nową wtyczkę";
 ;
-"special" = "Specjalny";;
-"start_of_track" = "Początek trasy";;
-"square" = "Kwadrat";;
-"track" = "Ślad";;
-"transport" = "Transport publiczny";;
-"replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";;
+"special" = "Specjalny";
+"start_of_track" = "Początek trasy";
+"square" = "Kwadrat";
+"track" = "Ślad";
+"transport" = "Transport publiczny";
+"replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";
 "service" = "Dojazdowa";

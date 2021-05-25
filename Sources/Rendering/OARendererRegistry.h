@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OARendererRegistry : NSObject
 
++ (NSArray<NSString *> *) getExternalRenderers;
+
 @end
 
 NS_ASSUME_NONNULL_END

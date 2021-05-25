@@ -569,9 +569,8 @@
 
 - (void) updateLocation
 {
-    CLLocation* location = _app.locationServices.lastKnownLocation;
-
     dispatch_sync(syncQueue, ^{
+        CLLocation* location = _app.locationServices.lastKnownLocation != nil ? [_app.locationServices.lastKnownLocation copy] : nil;
         
         if (location)
         {

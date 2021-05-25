@@ -9,7 +9,6 @@
 #import "OACustomPOIViewController.h"
 #import "OAPOIHelper.h"
 #import "OAPOICategory.h"
-#import "OAPOISearchHelper.h"
 #import "OASelectSubcategoryViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
@@ -24,8 +23,7 @@
 #import "OAPOIFilterViewController.h"
 #import "OATableViewCustomHeaderView.h"
 
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
-#define kHeaderId @"TableViewSectionHeader"
+#define titleWithDescrCellHeight 66.0
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UISearchBarDelegate>
 
@@ -37,7 +35,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *showButton;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
 
 @end
 
@@ -99,12 +97,14 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = titleWithDescrCellHeight;
 
     _searchMode = NO;
     self.searchBar.delegate = self;
     UITextField *textField = [self.searchBar valueForKey:@"searchField"];
-    textField.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
+    textField.backgroundColor = UIColor.whiteColor;
 
     [self updateTextShowButton];
 }
@@ -134,18 +134,9 @@
     [self.showButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.showButton setUserInteractionEnabled:hasSelection];
 
-    if (_searchMode)
-    {
-        self.bottomView.hidden = YES;
-        self.showButton.hidden = YES;
-        self.tableBottomConstraint.constant = 0;
-    }
-    else
-    {
-        self.bottomView.hidden = NO;
-        self.showButton.hidden = NO;
-        self.tableBottomConstraint.constant = 76 + OAUtilities.getBottomMargin;
-    }
+    self.bottomView.hidden = _searchMode;
+    self.showButton.hidden = _searchMode;
+    self.tableBottomConstraint.constant = _searchMode ? 0 : 76 + OAUtilities.getBottomMargin;
 }
 
 - (void)updateTextShowButton
@@ -180,11 +171,6 @@
 
     [self.showButton setAttributedTitle:attrShow forState:UIControlStateNormal];
     [self updateShowButton:_countShowCategories != 0];
-}
-
-- (NSString *)getTitleForSection
-{
-    return OALocalizedString(@"search_poi_types_descr");
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
@@ -466,16 +452,11 @@
     return _searchMode;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return _searchMode ? 48 : 66;
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 0 && !_searchMode) {
-        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
-        customHeader.label.text = [self getTitleForSection];
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+        customHeader.label.text = OALocalizedString(@"search_poi_types_descr");
         customHeader.label.font = [UIFont systemFontOfSize:15];
         [customHeader setYOffset:20];
         return customHeader;
@@ -485,14 +466,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0 && !_searchMode) {
-        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection] width:tableView.bounds.size.width] + 24;
+        return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"search_poi_types_descr") width:tableView.bounds.size.width] + 24;
     }
     return 0.01;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForFooter];
 }
 
 @end

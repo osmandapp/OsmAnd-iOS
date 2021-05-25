@@ -7,7 +7,6 @@
 //
 
 #import "OAHistoryTableViewController.h"
-#import "OAPOISearchHelper.h"
 #import "OsmAndApp.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OAHistoryItem.h"
@@ -481,7 +480,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if (section == tableView.numberOfSections - 1)
-        return [OAPOISearchHelper getHeightForFooter];
+        return tableView.sectionFooterHeight;
     else
         return 0.01;
 }

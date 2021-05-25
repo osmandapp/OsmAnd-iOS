@@ -21,8 +21,6 @@
 #import "OAQuickSearchHelper.h"
 #import "OATableViewCustomHeaderView.h"
 
-#define kHeaderId @"TableViewSectionHeader"
-
 @interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
@@ -98,7 +96,7 @@
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
     self.tableView.rowHeight = kEstimatedRowHeight;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     [self.tableView beginUpdates];
     for (NSInteger i = 0; i < _items.count; i++)
@@ -139,18 +137,9 @@
     [self.applyButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.applyButton setUserInteractionEnabled:hasSelection];
 
-    if (_searchMode)
-    {
-        self.bottomView.hidden = YES;
-        self.applyButton.hidden = YES;
-        self.tableBottomConstraint.constant = 0;
-    }
-    else
-    {
-        self.bottomView.hidden = NO;
-        self.applyButton.hidden = NO;
-        self.tableBottomConstraint.constant = 53 + OAUtilities.getBottomMargin;
-    }
+    self.bottomView.hidden = _searchMode;
+    self.applyButton.hidden = _searchMode;
+    self.tableBottomConstraint.constant = _searchMode ? 0 : 53 + OAUtilities.getBottomMargin;
 }
 
 - (NSMutableSet<NSString *> *)getSelectedKeys
@@ -404,7 +393,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
         [customHeader setYOffset:32];
         customHeader.label.text = [self getTitleForSection];
         return customHeader;

@@ -8,7 +8,6 @@
 
 #import "OACategoriesTableViewController.h"
 #import "Localization.h"
-#import "OAPOISearchHelper.h"
 #import "OACustomPOIViewController.h"
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"

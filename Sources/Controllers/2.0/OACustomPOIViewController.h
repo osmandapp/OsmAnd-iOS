@@ -19,6 +19,4 @@
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter;
 
-+ (void)updateSearchView:(BOOL)searchMode searchField:(UITextField * _Nonnull)searchField cancelButton:(UIButton * _Nonnull)cancelButton searchFieldRightConstraint:(NSLayoutConstraint * _Nonnull)searchFieldRightConstraint;
-
 @end

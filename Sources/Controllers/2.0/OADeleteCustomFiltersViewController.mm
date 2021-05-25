@@ -128,10 +128,10 @@
     NSString *cellType = indexPath.row == 0 ? [OACustomSelectionButtonCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
     if ([cellType isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
     {
-        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
+        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionButtonCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
         }
@@ -159,10 +159,10 @@
     }
     else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
+        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);

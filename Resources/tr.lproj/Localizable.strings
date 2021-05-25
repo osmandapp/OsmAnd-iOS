@@ -57,7 +57,7 @@
 "poi_search_near_center" = "Arama haritanın merkezine yakın yapılır";
 "poi_hide" = "Gizle";
 // My Places
-"favorites" = "Favoriler";
+"favorites" = "Sık Kullanılanlar";
 "tracks" = "İzlenen yollar";
 // GPX
 "gpx_point" = "Mevki";
@@ -107,9 +107,9 @@
 "gpx_speed" = "Hız";
 // Map settings
 "rendering_value_browse_map_name" = "Genel bakış";
-"m_style_car" = "Araba";
+"m_style_car" = "Araba sürme";
 "m_style_walk" = "Yürüme";
-"m_style_bicycle" = "Bisiklet";
+"m_style_bicycle" = "Bisiklet sürme";
 "map_settings_map" = "Harita";
 "map_settings_show" = "Haritada göster";
 "map_settings_type" = "Harita türü";
@@ -120,7 +120,7 @@
 "map_settings_overunder" = "Üst katman / Alt katman";
 "map_settings_over" = "Üst katman";
 "map_settings_under" = "Altına koymak";
-"map_settings_none" = "Yok";
+"map_settings_none" = "Hiçbiri";
 "map_settings_offline" = "Çevrim dışı haritalar için tarzlar";
 "map_settings_online" = "Çevrim içi haritalar";
 "map_settings_transp" = "Şeffaflık";
@@ -237,7 +237,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "sa";
+"units_hour" = "h";
 "units_min" = "dk";
 "units_sec" = "sn";
 // Map
@@ -323,7 +323,7 @@
 "product_desc_allworld" = "Tüm Dünya Haritaları";
 "product_title_asia" = "Asya";
 "product_desc_asia" = "Asya için sınırsız harita indirme";
-"product_title_wiki" = "Wikipedia";
+"product_title_wiki" = "Vikipedi";
 "product_desc_wiki" = "Vikipedi veri";
 "product_desc_ext_wiki" = "Wikipedia'dan ilgi çekici yerler hakkında bilgi alın. Bu sizin çevrim dışı cep rehberinizdir - sadece Wikipedia eklentisini etkinleştirin ve etrafınızdaki nesneler hakkında makalelerin tadını çıkarın.";
 "product_title_srtm" = "Eş yükselti eğrileri";
@@ -342,7 +342,7 @@
 "res_installing" = "Yükleniyor…";
 "res_roads" = "Yollar";
 "res_srtm" = "Eş yükselti eğrileri";
-"res_wiki" = "Wikipedia";
+"res_wiki" = "Vikipedi";
 "select_language" = "Dil Seçin";
 "language_short" = "Dil";
 "open_url" = "Sayfayı tarayıcıda aç";
@@ -383,7 +383,7 @@
 "gpx_group_select" = "Grup Seç";
 "show_all" = "Tümünü göster";
 "get_directions" = "Yol tarifleri";
-"parking" = "Park Etme";
+"parking" = "Park et";
 "est_travel_time" = "Tahmini seyahat süresi";
 "pedestrian" = "Yaya";
 "sorting" = "Sıralama";
@@ -808,7 +808,7 @@
 "first_intermediate_dest_description" = "Rotadaki ilk durağı ekler";
 "last_intermediate_dest_description" = "Rota boyunca son durağı ekler";
 "transport_routes" = "Güzergah";
-"transport_stop" = "Durdur";
+"transport_stop" = "Dur";
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
@@ -857,7 +857,7 @@
 "mapil_pano_only" = "Sadece 360° resimleri göster";
 "shared_string_in_name" = "%@ \'de";
 "help_legend" = "Harita lejandı";
-"osmand_live_updates" = "Canlı güncellemeler";
+"osmand_live_updates" = "Canlı güncelleştirmeler";
 "translucent_purple" = "Yarı saydam mor";
 "show_contour_lines" = "Eş yükselti eğrilerini göster";
 "help_about" = "Hakkında";
@@ -928,7 +928,7 @@
 "open_osm_note" = "OSM Not\'u aç";
 "menu_help" = "Yardım";
 "osm_note_upload" = "OSM Not yükle";
-"osm_alert_message" = "Mesaj";
+"osm_alert_message" = "İleti";
 "display_starting_at_zoom_level" = "Yakınlaştırma seviyesinde başlayarak görüntüle";
 "mapillary_get_title" = "Mapillary ile fotoğraf kapsama alanını geliştir";
 "shared_string_time_of_day" = "Günün zamanı";
@@ -1668,7 +1668,7 @@
 "transfers" = "Aktarmalar:";
 "avoid_transport_type" = "Kaçınılacak taşıma türleri";
 "consider_limitations_param" = "Geçici sınırlamaları göz önünde bulundur";
-"m_style_pulic_transport" = "Toplu Taşıma";
+"m_style_pulic_transport" = "Toplu taşıma";
 "exit_at" = "Buradaçık";
 "public_transport_warning_title" = "Toplu taşıma navigasyonu şu anda beta testindedir, hatalar ve yanlışlıklar olabilir.";
 "allow_3d" = "2.5B görüntülemeye izin ver";
@@ -1973,7 +1973,7 @@
 "reverse_track_dir" = "İzlenen yol yönünü tersine çevir";
 "attach_to_the_roads" = "Yollara ekle";
 "select_another_track" = "Başka bir yol seç";
-"track" = "Takip et";
+"track" = "Tarımsal yol";
 "follow_track" = "Yolu takip et";
 "split_after" = "Sonra böl";
 "split_before" = "Önce böl";
@@ -2016,7 +2016,7 @@
 "sport" = "Spor";
 "special" = "Özel";
 "service" = "Hizmet";
-"emergency" = "Acil Durum";
+"emergency" = "Acil durum";
 "shared_string_gpx_points" = "Noktalar";
 "res_standard" = "Standart harita";
 "quick_action_coordinates_widget_descr" = "Bu eylem düğmesine dokunmak, koordinatlar widget'ını gösterir veya gizler.";

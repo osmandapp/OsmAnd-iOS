@@ -1,10 +1,10 @@
 "OsmAnd Maps" = "OsmAnd Maps";
 "shared_string_previous" = "Vorige";
 "route_stops_before" = "%d stops before";
-"transport_routes" = "(Bus)Lijnen";
+"transport_routes" = "Routes";
 "transport_nearby_routes_within" = "Nabije routes binnen";
 "transport_nearby_routes" = "Binnen";
-"transport_stop" = "Stoppen";
+"transport_stop" = "Halte";
 "cancel_navigation" = "Stop navigatie";
 "intermediate_items_sort_by_distance" = "Sorteer kortste afstand";
 "switch_start_finish" = "Startpunt en bestemming omwisselen";
@@ -338,7 +338,7 @@
 "poi_hide" = "Verberg";
 // My Places
 "favorites" = "Favorieten";
-"tracks" = "Routes";
+"tracks" = "Tracks";
 // GPX
 "gpx_point" = "Punt";
 "gpx_waypoint" = "Routepunt";
@@ -446,7 +446,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Download";
-"nothanks" = "Nee, dankje";
+"nothanks" = "Niet nodig";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -678,7 +678,7 @@
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins" = "Plugins";
+"plugins" = "Plugin-manager";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -854,7 +854,7 @@
 "edit_action" = "Sneltoets bewerken";
 "fav_add_group" = "Een groep toevoegen";
 "shared_string_filter" = "Filter";
-"help_other_header" = "Andere";
+"help_other_header" = "Overig";
 "blue" = "Blauw";
 "poi_type" = "POI type";
 "osm_target_modified" = "Gewijzigde OSM POI";
@@ -870,7 +870,7 @@
 "res_world_region" = "Wereld";
 "osm_website" = "Website";
 "commiting_node" = "Punt wordt vastgelegd…";
-"osm_alert_title" = "Bevestigen";
+"osm_alert_title" = "Bijdrage versturen";
 "pink" = "Roze";
 "osm_note_created" = "OSM-opmerking aangemaakt";
 "dark_yellow" = "Donkergeel";
@@ -890,7 +890,7 @@
 "product_desc_ext_wikivoyage" = "Voert je binnen OsmAnd naar de meest interessante plaatsen op aarde, zonder internetverbinding.";
 "angular_units_descr" = "Wijzig azimut eenheid.";
 "modify_poi_short" = "Wijzig POI";
-"osm_poi_delete_title" = "POI verwijderen";
+"osm_poi_delete_title" = "Verwijder POI";
 "create_items" = "Items aanmaken";
 "help_follow_us" = "Volg ons";
 "osm_target_deleted" = "Gewiste OSM POI";
@@ -939,7 +939,7 @@
 "quick_action_add_poi_category" = "Categorie toevoegen";
 "osm_edit_without_name" = "Zonder naam";
 "map_overlays" = "Extra kaartlagen";
-"add_action" = "Sneltoets toevoegen";
+"add_action" = "Actie toevoegen";
 "osm_note_comment" = "Commentaar";
 "osmand_live_available_maps" = "Beschikbare kaarten";
 "add_parking_place" = "Parkeerlocatie instellen";
@@ -985,7 +985,7 @@
 "save_poi_too_many_uppercase" = "Naam bevat erg veel hoofdletters, toch doorgaan?";
 "gpx_slope" = "Helling";
 "osm_editing_offline" = "Offline bewerking";
-"product_title_sea_depth_contours" = "Diepte contourlijnen";
+"product_title_sea_depth_contours" = "Nautische dieptelijnen";
 "translucent_lightgreen" = "Doorschijnend lichtgroen";
 "product_desc_wikivoyage" = "De gratis wereldwijde reisgids die iedereen kan bewerken.";
 "help_tech_articles" = "Technische artikelen";
@@ -994,7 +994,7 @@
 "change_map_style" = "Kaartstijl wijzigen";
 "shared_string_time_of_day" = "Huidige tijd";
 "osm_alert_button_ok" = "Notitie aanmaken";
-"osm_edits_advanced" = "Geavanceerd";
+"osm_edits_advanced" = "Gevorderd";
 "quick_action_name_footer" = "Leeg laten om adres of plaatsnaam te gebruiken.";
 "offline_vector_maps" = "OsmAnd Offline vectorkaart";
 "black" = "Zwart";
@@ -1440,7 +1440,7 @@
 "meters" = "meter";
 "shared_string_min" = "Min";
 "add_point" = "Punt toevoegen";
-"app_profiles" = "Profielen";
+"app_profiles" = "Toepassingsprofielen";
 "quick_action_showhide_mapillary_title" = "Mapillary tonen/verbergen";
 "add_to_track" = "Voeg toe aan een track";
 "public_transport_empty_warning_descr" = "Probeer de instellingen te wijzigen.";
@@ -1595,7 +1595,7 @@
 "visible" = "Zichtbaar";
 "shared_string_others" = "Overige";
 "some_of" = "%d van de %d";
-"service" = "Dienstweg";
+"service" = "Onderhoud";
 "osmand_live_upd_frequency" = "Update frequentie";
 "replace_favorite_confirmation" = "Wil je Favoriet %@ inderdaad vervangen\?";
 "address_search" = "Adres zoeken";

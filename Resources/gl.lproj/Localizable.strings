@@ -313,7 +313,7 @@
 "shared_string_and" = "e";
 "shared_string_edit" = "Editar";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Despois";
+"shared_string_later" = "Noutro intre";
 "shared_string_of" = "of";
 "shared_string_all" = "Todo";
 "shared_string_from" = "dende";
@@ -411,8 +411,8 @@
 "gpx_speed" = "Velocidade";
 // Map settings
 "rendering_value_browse_map_name" = "Overview";
-"m_style_car" = "Automóbil";
-"m_style_walk" = "A pé";
+"m_style_car" = "Conducindo";
+"m_style_walk" = "Peón";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Amosar no mapa";
@@ -719,7 +719,7 @@
 "get_directions" = "Indicacións";
 "parking" = "Aparcamento";
 "directions_more_options" = "Indicacións dende";
-"nearby_search" = "Procurar preto daquí";
+"nearby_search" = "Procurar preto";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -1375,7 +1375,7 @@
 "edit_profile_list" = "Editar a listaxe de perfís";
 "amenity" = "Instalación";
 "profile_type_custom_string" = "Perfil personalizado";
-"nothing_found_empty" = "Non se atopou ren";
+"nothing_found_empty" = "Non se atopou nada";
 "position_icon_at_rest" = "Icona de posición en asueto";
 "app_profiles" = "Perfís de aplicación";
 "reverse_route" = "Ruta inversa";
@@ -1558,7 +1558,7 @@
 "hide_compass_ruler" = "Agochar a regra de compás";
 "street_level_imagery" = "Imaxes a nivel de rúa";
 "fav_point_dublicate" = "Favorito especificado con nome duplicado";
-"emergency" = "Urxencia";
+"emergency" = "Urxencias";
 "custom_osmand_plugin_name" = "Plugin personalizado do OsmAnd";
 "plan_route_change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";

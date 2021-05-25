@@ -40,7 +40,7 @@
 "poi_search_near_center" = "Поиск выполняется вокруг центра карты";
 "poi_hide" = "Скрыть";
 // My Places
-"favorites" = "Избранное";
+"favorites" = "Избранные";
 "tracks" = "Треки";
 // GPX
 "gpx_point" = "Точка";
@@ -76,7 +76,7 @@
 "gpx_uphills_total" = "Всего подъем";
 // Map settings
 "rendering_value_browse_map_name" = "Обзор";
-"m_style_car" = "Автомобиль";
+"m_style_car" = "Вождение";
 "m_style_walk" = "Пешеход";
 "m_style_bicycle" = "Велосипед";
 "map_settings_map" = "Карта";
@@ -111,7 +111,7 @@
 "sett_km" = "Километры";
 "sett_ml" = "Мили";
 "sett_zoom" = "Кнопки масштаба";
-"sett_show" = "Показать";
+"sett_show" = "Просмотр";
 "sett_notshow" = "Не показывать";
 "sett_loc_fmt" = "Формат координат";
 "sett_deg" = "Градусы";
@@ -180,7 +180,7 @@
 // Import
 "import_title" = "Импортировать данные";
 "import_choose_type" = "Выберите что импортировать";
-"import_favorite" = "Избранная";
+"import_favorite" = "Избранное";
 "import_failed" = "Импорт завершился не успешно";
 "import_gpx" = "GPX трек";
 // Context menu
@@ -391,7 +391,7 @@
 "gpx_speed" = "Скорость";
 "shared_string_dismiss" = "Отменить";
 "shared_string_modify" = "Изменить";
-"shared_string_later" = "Позже";
+"shared_string_later" = "Продолжить";
 "offline_maps" = "Офлайн-карты";
 "download_map" = "Скачать карту";
 "gpx_route" = "Маршрут";
@@ -413,7 +413,7 @@
 "gpx_group_select" = "Выбор групп";
 "show_all" = "Показать все";
 "get_directions" = "Маршрут";
-"parking" = "Парковка";
+"parking" = "Парковки";
 "est_travel_time" = "Время в пути";
 "pedestrian" = "Пешеход";
 "sorting" = "Сортировка";
@@ -634,7 +634,7 @@
 "in_app_purchase_desc" = "Разовый платёж";
 "transport_routes" = "Маршруты";
 "transport_nearby_routes" = "В пределах";
-"transport_stop" = "Стоп";
+"transport_stop" = "Выключить";
 "cancel_navigation" = "Остановить навигацию";
 "switch_start_finish" = "Поменять местами пункты отправления и назначения";
 "shared_string_options" = "Опции";
@@ -689,7 +689,7 @@
 "osm_add_place" = "Добавить место";
 "osm_modify_place" = "Изменить место";
 "osm_poi_delete_title" = "Удаление POI";
-"osm_alert_message" = "Комментарий";
+"osm_alert_message" = "Сообщение";
 "osm_alert_button_ok" = "Создать заметку";
 "osm_upload_failed_title" = "Ошибка отправки";
 "osm_editing_lost_changes_title" = "Выйти без сохранения?";

@@ -363,7 +363,7 @@
 "shared_string_and" = "と";
 "shared_string_edit" = "編集";
 "shared_string_modify" = "変更する";
-"shared_string_later" = "続ける";
+"shared_string_later" = "後で";
 "shared_string_of" = "of";
 "shared_string_all" = "全て";
 "shared_string_from" = "から";
@@ -483,7 +483,7 @@
 "gpx_slope" = "勾配";
 // Map settings
 "rendering_value_browse_map_name" = "概要";
-"m_style_car" = "車";
+"m_style_car" = "乗用車";
 "m_style_walk" = "徒歩";
 "m_style_bicycle" = "自転車";
 "map_settings_map" = "マップ";
@@ -492,8 +492,8 @@
 "map_mode" = "昼夜モード切替";
 "map_settings_map_magnifier" = "マップ表示倍率";
 "map_settings_text_size" = "文字サイズ";
-"map_settings_day" = "日";
-"map_settings_night" = "夜固定";
+"map_settings_day" = "昼固定";
+"map_settings_night" = "夜";
 "map_settings_style" = "マップスタイル";
 "map_settings_overunder" = "オーバーレイ / アンダーレイ";
 "map_settings_over" = "オーバーレイ";
@@ -559,7 +559,7 @@
 "prch_nau_q3" = "マップ＆リソースにて後からでもインストールできます。";
 "proceed_q" = "続行しますか？";
 "download" = "ダウンロード";
-"nothanks" = "いいえ、結構です";
+"nothanks" = "遠慮します";
 "download_now" = "今すぐマップをダウンロードする";
 "prch_failed" = "\"%@\"の購入に失敗しました";
 "prch_items_failed" = "アイテムの復元がなされませんでした。もう一度やり直してみてください。";
@@ -653,7 +653,7 @@
 "osm_failed_uploads" = "失敗しました";
 "osm_note" = "OSMでの注釈";
 "osm_created" = "作成しました";
-"osm_deleted" = "削除されました";
+"osm_deleted" = "削除しました";
 "osm_modified" = "修正しました";
 "osm_reopened" = "再開しました";
 "osm_name" = "OpenStreetMapのユーザー名";
@@ -698,7 +698,7 @@
 "osm_edits_offline_layer" = "OSM編集/メモ (オフライン)";
 "osm_notes_online_layer" = "OSMメモ (オンライン)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "上級者向け";
+"osm_edits_advanced" = "拡張";
 "osm_edits_all" = "すべての編集";
 "osm_edits_poi" = "POIの編集";
 "osm_edits_notes" = "メモ";
@@ -1098,7 +1098,7 @@
 "get_directions" = "ナビ開始";
 "parking" = "駐車場";
 "directions_more_options" = "ここから出発";
-"nearby_search" = "近くを検索";
+"nearby_search" = "近隣を検索";
 "est_travel_time" = "所要時間の見積もり";
 "pedestrian" = "徒歩";
 "sorting" = "並び替え";
@@ -1199,7 +1199,7 @@
 "postcode" = "郵便番号";
 "show_something_on_map" = "マップ上に%@を表示";
 "search_POI_level_btn" = "検索範囲を拡大";
-"shared_string_street" = "通り";
+"shared_string_street" = "街路";
 "shared_string_building" = "建物";
 "shared_string_street_intersection" = "交差点";
 "shared_string_address" = "住所";
@@ -1924,7 +1924,7 @@
 "point_to_navigate" = "案内する";
 "select_another_track" = "別の経路を選択";
 "select_track_to_follow" = "たどる経路の選択";
-"track" = "農業用道路、林道";
+"track" = "経路";
 "follow_track" = "経路をたどる";
 "split_after" = "この後で分割";
 "split_before" = "この前で分割";
@@ -2018,7 +2018,7 @@
 "service" = "アクセス道路、特定施設用道路";
 "special" = "特別";
 "sport" = "スポーツ";
-"emergency" = "緊急";
+"emergency" = "救急";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";

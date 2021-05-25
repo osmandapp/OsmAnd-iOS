@@ -48,7 +48,7 @@
 "transport_routes" = "Reitit";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Pysähdys";
+"transport_stop" = "Lopeta";
 
 "cancel_navigation" = "Keskeytä suunnistus";
 "start_navigation" = "Start navigation";
@@ -589,7 +589,7 @@
 
 // My Places
 "favorites" = "Suosikit";
-"tracks" = "Reittini";
+"tracks" = "Jäljet";
 "personal_category_name" = "Personal";
 "visible" = "Näkyvissä";
 
@@ -670,7 +670,7 @@
 // Map settings
 "m_style_car" = "Auto";
 "m_style_walk" = "Kävely";
-"m_style_bicycle" = "Polkupyörä";
+"m_style_bicycle" = "Pyörä";
 "m_style_pulic_transport" = "Julkinen liikenne";
 
 "map_settings_map" = "Kartta";
@@ -946,7 +946,7 @@
 "split_before" = "Jaa ennen";
 "split_after" = "Jaa jälkeen";
 "follow_track" = "Seuraa jälkeä";
-"track" = "Jälki";
+"track" = "Polku";
 "select_another_track" = "Select another track";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Attach to the roads";
@@ -1084,7 +1084,7 @@
 
 "osm_note" = "OSM Huomautus";
 "osm_created" = "Created";
-"osm_deleted" = "KP poistettiin onnistuneesti";
+"osm_deleted" = "Poistettu";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";

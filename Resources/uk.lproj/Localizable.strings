@@ -46,7 +46,7 @@
 "shared_string_dismiss" = "Відхилити";
 "description" = "Опис";
 "shared_string_modify" = "Змінити";
-"shared_string_later" = "Пізніше";
+"shared_string_later" = "Далі";
 "fav_create_group" = "Створити нову групу";
 "fav_ignore" = "Ігнорувати";
 "fav_rename" = "Перейменувати";
@@ -82,14 +82,14 @@
 "gpx_speed" = "Швидкість";
 // Map settings
 "rendering_value_browse_map_name" = "Огляд";
-"m_style_car" = "Автомобіль";
-"m_style_walk" = "Ходьба";
-"m_style_bicycle" = "Велосипед";
+"m_style_car" = "Водіння";
+"m_style_walk" = "Ходіння";
+"m_style_bicycle" = "Їзда на велосипеді";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Показати";
 "map_settings_type" = "Тип мапи";
 "map_settings_day" = "День";
-"map_settings_night" = "Ніч";
+"map_settings_night" = "Вночі";
 "map_settings_transp" = "Прозорість";
 // Intro
 "intro_skip" = "Пропустити";
@@ -195,7 +195,7 @@
 "map_settings_overunder" = "Накладка та підкладка";
 "map_settings_over" = "Накладка";
 "map_settings_under" = "Підкладка";
-"map_settings_none" = "Немає";
+"map_settings_none" = "Нема";
 "map_settings_offline" = "Стилі оффлайн мап";
 "map_settings_online" = "Мережеві мапи";
 "map_settings_avail_lay" = "Доступні шари";
@@ -296,7 +296,7 @@
 // Import
 "import_title" = "Імпортувати дані";
 "import_choose_type" = "Виберіть що імпортувати";
-"import_favorite" = "Закладки";
+"import_favorite" = "Закладка";
 "import_failed" = "Імпорт завершився невдачею";
 "import_cannot" = "Зазначений файл неможливо імпортувати";
 "import_gpx" = "GPX трек";
@@ -754,7 +754,7 @@
 "transport_routes" = "Маршрути";
 "transport_nearby_routes_within" = "Близькі маршрути в межах";
 "transport_nearby_routes" = "В межах";
-"transport_stop" = "Зупинити";
+"transport_stop" = "Зупинка";
 "add_as_first_destination_point" = "Додати як перший проміжний пункт призначення";
 "first_intermediate_dest_description" = "Додає першу зупинку на маршруті";
 "add_as_last_destination_point" = "Додати як останній проміжний пункт призначення";
@@ -906,7 +906,7 @@
 "osm_notes_online_layer" = "OSM Примітки (мережні)";
 "my_places" = "Мої місця";
 "osm_edits_basic" = "Основні";
-"osm_edits_advanced" = "Розширений";
+"osm_edits_advanced" = "Розширені";
 "osm_edits_all" = "Всі правки";
 "osm_edits_poi" = "Правки POI";
 "osm_edits_notes" = "Примітки";
@@ -1213,7 +1213,7 @@
 "avoid_by_type" = "Уникати за типом";
 "parking_place" = "Місце для паркування";
 "add_start" = "Додати відправну точку";
-"home_pt" = "Вдома";
+"home_pt" = "Дім";
 "work_pt" = "Робота";
 "mapillary_descr" = "Вуличні світлини в Інтернеті для всіх. Відкривайте місця, співпрацюйте, захоплюйте світ";
 // Rendering attributes

@@ -354,9 +354,9 @@
 "gpx_speed" = "سرعت";
 // Map settings
 "rendering_value_browse_map_name" = "Overview";
-"m_style_car" = "خودرو";
+"m_style_car" = "رانندگی";
 "m_style_walk" = "پیاده‌روی";
-"m_style_bicycle" = "دوچرخه";
+"m_style_bicycle" = "دوچرخه‌سواری";
 "map_settings_map" = "نقشه";
 "map_settings_show" = "روی نقشه نشان بده";
 "map_settings_type" = "Map type";
@@ -367,7 +367,7 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_none" = "هیچ‌کدام";
+"map_settings_none" = "هیچ";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "نقشه‌های آنلاین";
 "map_settings_transp" = "شفافیت";
@@ -411,7 +411,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "دانلود";
-"nothanks" = "خیر، سپاسگزارم";
+"nothanks" = "نه، متشکرم";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -498,7 +498,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "علاقه‌مندی‌ها";
+"import_favorite" = "علاقه‌مندی";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -872,14 +872,14 @@
 "lightblue" = "آبی روشن";
 "quick_action_name_footer" = "خالی بگذارید تا از نشانی یا نام محل استفاده شود.";
 "brown" = "قهوه‌ای";
-"osm_alert_title" = "ارسال";
+"osm_alert_title" = "اجرا";
 "osm_poi_delete_title" = "حذف POI";
 "translucent_lightgreen" = "سبز روشن شفاف";
 "translucent_yellow" = "زرد شفاف";
 "poi_opening_hours" = "ساعت کاری";
 "gpx_alt_range" = "دامنهٔ ارتفاع";
 "poi_clear" = "پاک‌کردن";
-"nearby_search" = "جست‌وجوی این اطراف";
+"nearby_search" = "جست‌وجوی اطراف";
 "translucent_purple" = "بنفش شفاف";
 "translucent_red" = "قرمز شفاف";
 "green" = "سبز";
@@ -936,7 +936,7 @@
 "add_first_inermediate" = "افزودن اولین میانی";
 "gpx_descent" = "نزول";
 "quick_action_start_stop_nav_descr" = "این دکمه را لمس کنید تا ناوبری را شروع کنید یا پایان دهید.";
-"osm_edits_advanced" = "پیشرفته";
+"osm_edits_advanced" = "دشوار";
 "add_action" = "افزودن کنش";
 "units_min_short" = "m";
 "osmand_live_weekly" = "هفتگی";
@@ -974,7 +974,7 @@
 "shared_string_retry" = "تلاش مجدد";
 "translucent_orange" = "نارنجی شفاف";
 "download_depth_countours" = "منحنی‌های میزان عمق دریا";
-"shared_string_filter" = "پالایه";
+"shared_string_filter" = "پالایش";
 "help_about" = "درباره";
 "traffic_warning_tunnel" = "تونل";
 "product_title_sea_depth_contours" = "منحنی‌های میزان عمق دریا";
@@ -1541,7 +1541,7 @@
 "favorite_places_category" = "مکان‌ها";
 "osmand_live_upd_frequency" = "تکرار روزآمدسازی";
 "plan_route_select_folder" = "انتخاب پوشه";
-"sport" = "ورزشی";
+"sport" = "ورزش";
 "group_name" = "نام گروه";
 "address_search" = "جست‌وجوی نشانی";
 "extra_maps" = "نقشه‌های بیشتر";

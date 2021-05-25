@@ -37,7 +37,7 @@
 "transport_routes" = "Ruter";
 "transport_nearby_routes_within" = "Ruter i nærheten innen";
 "transport_nearby_routes" = "Innenfor";
-"transport_stop" = "Stoppested";
+"transport_stop" = "Stopp";
 "cancel_navigation" = "Stopp navigering";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sorter dør-til-dør";
@@ -483,9 +483,9 @@
 "gpx_slope" = "Bakkehelning";
 // Map settings
 "rendering_value_browse_map_name" = "Oversikt";
-"m_style_car" = "Bil";
+"m_style_car" = "Kjøring";
 "m_style_walk" = "Gåing";
-"m_style_bicycle" = "Sykkel";
+"m_style_bicycle" = "Sykling";
 "map_settings_map" = "Kart";
 "map_settings_show" = "Vis på kart";
 "map_settings_type" = "Map type";

@@ -490,9 +490,9 @@
 "stats_select_graph_data" = "Vali graafiku andmed";
 // Map settings
 "rendering_value_browse_map_name" = "Ülevaade";
-"m_style_car" = "Auto";
+"m_style_car" = "Autosõit";
 "m_style_walk" = "Kõndimine";
-"m_style_bicycle" = "Jalgratas";
+"m_style_bicycle" = "Rattasõit";
 "map_settings_map" = "Kaart";
 "map_settings_show" = "Näita kaardil";
 "map_settings_type" = "Kaardi liik";
@@ -705,7 +705,7 @@
 "osm_edits_offline_layer" = "OSM muudatused/märkmed (võrguühenduseta)";
 "osm_notes_online_layer" = "OSM märkmed (veebis)";
 "osm_edits_basic" = "Põhiline";
-"osm_edits_advanced" = "Edasijõudnud";
+"osm_edits_advanced" = "Täpsem";
 "osm_edits_all" = "Kõik muudatused";
 "osm_edits_poi" = "HP muudatused";
 "osm_edits_notes" = "Märkmed";
@@ -745,7 +745,7 @@
 "mapil_pano_only" = "Kuva ainult 360° pildid";
 "mapil_select_user" = "Vali kasutaja";
 // Quick action
-"quick_action_name" = "Kiirtegevus";
+"quick_action_name" = "Kiirtoiming";
 "quick_action_no_overlay" = "Ülekate puudub";
 "quick_action_add_overlay" = "Lisaülekate";
 "quick_action_no_underlay" = "Aluskiht puudub";
@@ -890,7 +890,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"units_hour" = "t";
 "units_min" = "min";
 "units_sec" = "sek";
 "units_min_short" = "m";
@@ -2010,7 +2010,7 @@
 
 // Coordinate widget
 "coordinates_widget" = "Koordinaatide vidin";
-"searching_gps" = "GPSi otsimine";
+"searching_gps" = "GPS-i otsimine";
 "new_plugin_added" = "Uus laiendus lisatud";
 "add_custom_category" = "Lisa oma kategooria";
 "rearrange_categories" = "Järjesta kategooriad ümber";
@@ -2019,3 +2019,32 @@
 
 // Resources
 "shared_string_resources" = "Ressursid";
+;
+"fav_point_dublicate" = "Antud korduv lemmiku nimi";;
+"favorite_friends_category" = "Sõbrad";;
+"octagon" = "Kaheksanurk";;
+"shared_string_others" = "Muud";;
+"icon" = "Ikoon";;
+"shared_string_gpx_points" = "Punktid";;
+"shared_string_disable" = "Keela";;
+"special" = "Eriteenused";;
+"emergency" = "Hädaolukord";;
+"square" = "Ruut";;
+"symbols" = "Sümbolid";;
+"sport" = "Sport";;
+"fav_points_not_exist" = "Lemmikpunkte pole";;
+"travel" = "Reisimine";;
+"res_standard" = "Tavaline kaart";;
+"default_color" = "Vaikevärv";;
+"transport" = "Transport";;
+"custom_osmand_plugin_name" = "Kohandatud OsmAnd pistik";;
+"coordinates" = "Koordinaadid";;
+"shared_string_enable" = "Luba";;
+"circle" = "Ring";;
+"extra_maps" = "Täiendavad kaardid";;
+"favorite_places_category" = "Kohad";;
+"search_history" = "Otsinguajalugu";;
+"group_name" = "Grupi nimi";;
+"copied_to_clipboard" = "Kopeeritud lõikelauale";;
+"service" = "Teenused";;
+"replace_favorite_confirmation" = "Oled kindel, et soovid asendada lemmiku %@\?";

@@ -82,15 +82,15 @@
 "gpx_uphills_total" = "Ascenso total";
 // Map settings
 "rendering_value_browse_map_name" = "Resumen";
-"m_style_car" = "Coche";
+"m_style_car" = "Conduciendo";
 "m_style_walk" = "Peatón";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_mode" = "Modo del mapa";
-"map_settings_day" = "Día";
-"map_settings_night" = "Por la noche";
+"map_settings_day" = "Diurno";
+"map_settings_night" = "Nocturno";
 "map_settings_style" = "Estilo del mapa";
 "map_settings_none" = "Ninguno";
 "map_settings_offline" = "Estilos de mapas sin conexión";
@@ -389,7 +389,7 @@
 "pedestrian" = "Peatón";
 "sorting" = "Ordenar";
 "plugins" = "Complementos";
-"shared_string_later" = "Después";
+"shared_string_later" = "Luego";
 "product_desc_ext_nautical" = "El complemento de estilos náuticos, es una representación gráfica detallada de los océanos, mares, zonas costeras y ríos. Los gráficos pueden contener diversas informaciones como rutas y luces de navegación, áreas peligrosas, zonas donde se autoriza o no a navegar o amarrar, etc.\n\nInstrucciones de uso: se recomienda descargar el mapa base náutico para ver los mapas independiente de la presencia del mapa detallado. Para activar el estilo náutico, toque el botón del mapa y establezca el tipo de mapa a Náutico.\n\nNota: Todos los marineros profesionales están obligados a tener las cartas náuticas oficiales en sus buques.\n\nEl estilo náutico de OsmAnd, se basan en los datos del proyecto OpenSeaMap. Si bien los gráficos de OpenSeaMap en este momento no pueden competir con los estilos náuticos oficiales, pueden ser utilizados por los navegantes de recreo para la orientación o la planificación de rutas.";
 "product_desc_ext_parking" = "El complemento de aparcamiento de OsmAnd, le recuerda la ubicación del aparcamiento. Este complemento sirve para la aplicación OsmAnd Mapas y Navegación.\nElija un recordatorio de tiempo ilimitado o limitado con notificación de expiración, ambos con sólo un marcador en el mapa. Para usarlo, activelo en el menú de Complementos.";
 "product_desc_ext_track_recording" = "Grabe sus trazas y guárdelos manualmente usando el complemento de OsmAnd de Grabación de traza. Exporte la traza como un archivo GPX, compártelo o incluso úsalo para colaborar en el proyecto OpenStreetMap. Una herramienta útil para corredores, excursionistas y cualquiera interesado en la grabación de las trazas.";
@@ -1792,7 +1792,7 @@
 "total" = "Total";
 "res_online_source_cache_alert" = "Al aplicar estos cambios, los datos almacenados de esta fuente de teselas serán borrados";
 "menu" = "Menú";
-"app_profiles" = "Perfiles de la aplicación";
+"app_profiles" = "Perfiles de aplicación";
 "quick_action_showhide_mapillary_title" = "Mostrar u ocultar Mapillary";
 "public_transport_show" = "Mostrar transporte público";
 "help_osmand_live" = "Suscripción - OsmAnd Live";

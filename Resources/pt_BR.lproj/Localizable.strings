@@ -95,9 +95,9 @@
 "show_info" = "Mostrar informações";
 // Map settings
 "m_style_overview" = "Explorar";
-"m_style_car" = "Carro";
-"m_style_walk" = "Caminhando";
-"m_style_bicycle" = "Bicicleta";
+"m_style_car" = "Dirigindo";
+"m_style_walk" = "A pé";
+"m_style_bicycle" = "Ciclismo";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Exibir no mapa";
 "map_settings_type" = "Tipo de mapa";
@@ -692,7 +692,7 @@
 "show_warnings_title" = "Mostrar alertas…";
 "shared_string_previous" = "Anterior";
 "transport_nearby_routes" = "Cerca de";
-"transport_stop" = "Parar";
+"transport_stop" = "Parada";
 "shared_string_close" = "Fechar";
 "save_global_track_interval_descr" = "Escolha o intervalo de registro para a gravação de trilha geral (habilitado por meio do widget de registro GPX no mapa).";
 "show_pedestrian_warnings" = "Faixas de pedestre";
@@ -776,7 +776,7 @@
 "track_during_nav" = "Auto-registrar a trilha";
 "track_during_nav_descr" = "Ativar para salvar automaticamente uma trilha durante a navegação";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Atualizações ao vivo";
+"osmand_live_updates" = "Atualização ao vivo";
 "osmand_live_available_maps" = "Mapas disponíveis";
 "osmand_live_last_changed" = "Última alteração no mapa: %@";
 "osmand_live_last_live_update" = "Última atualização: %@";

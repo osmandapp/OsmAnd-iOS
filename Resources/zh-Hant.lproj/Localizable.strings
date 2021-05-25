@@ -48,7 +48,7 @@
 "poi_search_near_center" = "已執行在地圖中心附近的查尋";
 "poi_hide" = "隱藏";
 // My Places
-"favorites" = "收藏";
+"favorites" = "我的收藏";
 // GPX
 "gpx_point" = "標點";
 // Rendering categories
@@ -103,14 +103,14 @@
 "show_info" = "顯示資訊";
 // Map settings
 "rendering_value_browse_map_name" = "概覽";
-"m_style_car" = "汽車";
-"m_style_walk" = "步行";
+"m_style_car" = "駕駛";
+"m_style_walk" = "走路";
 "m_style_bicycle" = "自行車";
 "map_settings_map" = "地圖";
 "map_settings_show" = "在地圖上顯示";
 "map_settings_type" = "地圖類型";
 "map_mode" = "地圖模式";
-"map_settings_day" = "日間";
+"map_settings_day" = "天";
 "map_settings_night" = "夜間";
 "map_settings_style" = "地圖樣式";
 "map_settings_overunder" = "上層 / 下層";
@@ -124,7 +124,7 @@
 // Intro
 "intro_skip" = "跳過";
 "intro_download" = "下載\n地圖";
-"intro_next" = "下頁";
+"intro_next" = "下一頁";
 "intro_welcome" = "歡迎使用\nOsmAnd";
 "intro_promo" = "全球離線地圖";
 "intro_placeholder" = "請輸入您所在地區的名稱";
@@ -154,7 +154,7 @@
 "prch_nau_q3" = "您稍後可以通過地圖和資源安裝。";
 "proceed_q" = "是否繼續？";
 "download" = "下載";
-"nothanks" = "不需要，謝謝";
+"nothanks" = "不，謝了";
 "download_now" = "現在下載地圖";
 "prch_failed" = "購買\"%@\"失敗";
 "prch_items_failed" = "項目未還原。請再試一次。";
@@ -224,7 +224,7 @@
 "units_ft" = "呎";
 "units_kmh" = "公里/小時";
 "units_mph" = "哩/小時";
-"units_hour" = "小時";
+"units_hour" = "時";
 "units_min" = "分";
 "units_sec" = "秒";
 "map_remind" = "稍後提醒我";
@@ -384,7 +384,7 @@
 "est_travel_time" = "估算行程時間";
 "pedestrian" = "步行";
 "sorting" = "排序";
-"plugins" = "外掛元件";
+"plugins" = "外掛元件管理";
 "shared_string_later" = "隨後";
 "open_map_settings" = "開啟地圖設定";
 "plugin_popup_ski_title" = "打開滑雪地圖樣式";
@@ -766,7 +766,7 @@
 "cancel_navigation" = "停止導航";
 "transport_routes" = "導航路線";
 "transport_nearby_routes_within" = "在附近的路線";
-"transport_stop" = "停靠點";
+"transport_stop" = "停止";
 "transport_nearby_routes" = "範圍內";
 "route_stops_before" = "%1$s 之前停止";
 "shared_string_previous" = "上一頁";
@@ -804,7 +804,7 @@
 "help_search" = "地圖搜尋";
 "help_trip_planning" = "規劃一次旅程";
 "help_legend" = "地圖圖例";
-"help_other_header" = "其他";
+"help_other_header" = "其它";
 "help_install_and_troubleshoot" = "安裝和疑難排除";
 "help_tech_articles" = "技術文章";
 "help_versions" = "版本";
@@ -960,7 +960,7 @@
 "osm_note_reopen" = "重新開啟";
 "osm_notes_online_layer" = "OSM 註解(連線)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "展開";
+"osm_edits_advanced" = "進階";
 "osm_edits_notes" = "註解";
 "modify_poi_short" = "修改 POI";
 "create_poi_short" = "建立 POI";
@@ -1499,7 +1499,7 @@
 "public_transport_show" = "顯示大眾運輸";
 "position_icon_at_rest" = "靜止位置圖示";
 "nav_type_geocoding" = "天氣預報";
-"nothing_found_empty" = "找不到";
+"nothing_found_empty" = "没有找到";
 "product_title_antarctica" = "南極洲";
 "res_source_one_per_tile" = "每個圖磚一個圖片檔案";
 "osmand_routing" = "OsmAnd規畫路徑";
@@ -1554,7 +1554,7 @@
 "listed_exist" = "列出的 %@ 已存在於 OsmAnd 中。";
 "meters" = "公尺";
 "shared_string_add_profile" = "新增設定檔";
-"m_style_pulic_transport" = "公共交通";
+"m_style_pulic_transport" = "大眾運輸";
 "one" = "一";
 "consider_limitations_param" = "考慮暫時限制";
 "create_profile_descr" = "讓您自訂的設定檔以其中一個預設應用程式設定檔為基礎，這定義了如小工具、速度單位與距離的顯示方式。這些是預設的應用程式設定檔，連同其可以擴展成的自訂設定檔範例：";

@@ -91,7 +91,7 @@
 "gpx_speed" = "Vitesse";
 // Map settings
 "rendering_value_browse_map_name" = "Vue d'ensemble";
-"m_style_car" = "Voiture";
+"m_style_car" = "En voiture";
 "m_style_bicycle" = "Vélo";
 "map_settings_map" = "Carte";
 "map_settings_show" = "Afficher sur la carte";
@@ -239,7 +239,7 @@
 "cannot_add_marker" = "Impossible d'ajouter un Parking";
 "map_no_address" = "L'adresse n'est pas encore connue";
 "import_choose_type" = "Merci de choisir ce qu'il faut importer";
-"import_favorite" = "Favoris";
+"import_favorite" = "Favori";
 // Alerts
 "alert_inet_needed" = "Connexion Internet requise pour effectuer cette action. Veuillez vérifier votre connexion Internet.";
 "ctx_mnu_add_fav" = "Ajouter un favori";
@@ -314,7 +314,7 @@
 "track_rec_addon_q" = "Veuillez activer le greffons d'enregistrement de parcours pour les enregistrer et les sauvegarder";
 "track_clear" = "Effacer la trace actuelle";
 "track_clear_q" = "Voulez-vous effacer la trace actuelle ?";
-"m_style_walk" = "À pied";
+"m_style_walk" = "Marche";
 "map_settings_offline" = "Styles de cartes hors ligne";
 "map_settings_hillshade" = "Ombrage du relief";
 "intro_download" = "Télécharger\nla carte";
@@ -784,7 +784,7 @@
 "track_during_nav" = "Auto-enregistrement du parcours";
 "track_during_nav_descr" = "Activez pour enregistrer automatiquement un trajet durant la navigation";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Misesà jour en temps réel";
+"osmand_live_updates" = "Miseà jour automatique";
 "osmand_live_available_maps" = "Cartes disponibles";
 "osmand_live_last_changed" = "Dernière modification de la carte : %@";
 "osmand_live_last_live_update" = "Dernière mise à jour : %@";
@@ -803,7 +803,7 @@
 "help_faq" = "FAQ";
 "help_faq_descr" = "Foire Aux Questions";
 "help_features" = "Fonctionnalités";
-"help_other_header" = "Autre";
+"help_other_header" = "Divers";
 "help_contact_us" = "Contactez-nous";
 "help_about" = "À propos";
 "help_follow_us" = "Suivez-nous";
@@ -896,7 +896,7 @@
 "osm_editing_offline" = "Modifications hors-ligne";
 "osm_working_days" = "Jours travaillés";
 "osm_editing_contact_info" = "Contact";
-"osm_str_name" = "Nom de rue";
+"osm_str_name" = "Nom de la rue";
 "osm_phone" = "Téléphone";
 "osm_website" = "Site web";
 "osm_add_place" = "Ajouter un lieu";
@@ -966,7 +966,7 @@
 "modify_edit_short" = "Modifier la contribution OSM";
 "open_osm_note" = "Signaler une anomalie OSM";
 "edit_osm_note" = "Modifier la note OSM";
-"osm_alert_title" = "Envoyer";
+"osm_alert_title" = "Soumettre";
 "osm_alert_message" = "Message";
 "osm_alert_button_ok" = "Créer une note";
 "modify_poi" = "Modifier le point d'intérêt OSM";
@@ -996,7 +996,7 @@
 "product_desc_ext_osm_editing" = "OSM Editing plugin peut être utilisé pour faire des contributions OSM comme créer ou modifier des objets POI, ouvrir ou commenter des notes OSM, et contribuer des fichiers GPX enregistrés. OSM est un projet communautaire de cartographie du domaine public mondial. Pour plus d'informations, veuillez consulter le site https://osm.org. Les contributions peuvent être faites directement depuis OsmAnd, si vous spécifiez vos identifiants OSM dans l'application.";
 "product_desc_ext_srtm" = "Ce plugin fournit des courbes de niveau et des ombres de collines, qui peuvent être affichées sur des cartes OsmAnd hors ligne. Les courbes de niveau fournissent des informations sur les hauteurs de la zone tandis que l'ombre des collines est leur visualisation. Voir les noms des sommets de montagne et les caractéristiques spécifiques du terrain à l'aide de ce plugin.\n\nLes données globales (entre 70 degrés nord et 70 degrés sud) sont basées sur des mesures effectuées par SRTM (Shuttle Radar Topography Mission) et ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), un instrument d'imagerie à bord de Terra, le satellite phare du système d'observation de la Terre de la NASA. ASTER est un effort de coopération entre la NASA, le ministère japonais de l'économie, du commerce et de l'industrie (METI) et Japan Space Systems (J-spacesystems).";
 "product_desc_ext_wikivoyage" = "Guides des lieux les plus intéressants au monde depuis OsmAnd et sans connexion Internet.";
-"product_title_sea_depth_contours" = "Isobathes";
+"product_title_sea_depth_contours" = "Lignes de sonde marines";
 "product_desc_sea_depth_contours" = "Isobathes et balisage maritime";
 "prch_wiki_info" = "L'addon Wikipedia permet d'activer les informations wikipedia pour les cartes que vous avez le droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
 "prch_srtm_info" = "L'extension courbes de niveau permet d'activer l'affichage des courbes de niveau pour les cartes auxquelles vous avez droit, achetées ou téléchargées dans les limites de l'offre gratuite.";
@@ -1779,7 +1779,7 @@
 "shared_string_import" = "Importer";
 "shared_string_max" = "Max";
 "shared_string_min" = "Min";
-"nothing_found_empty" = "Aucun résultat";
+"nothing_found_empty" = "Rien n\'aété trouvé";
 "road_max_speed_descr" = "Définit la vitesse maximale pour toutes les routes sur le trajet. Cela diminuera la priorité des routes dont la vitesse autorisée est supérieure à ce maximum.";
 "road_min_speed_descr" = "Définit la vitesse minimale pour toutes les routes sur le trajet. Augmentera la priorité des routes dont la vitesse recommandée est inférieure à ce minimum.";
 "road_speeds_descr" = "Ces paramètres peuvent affecter le calcul d'itinéraire.";
@@ -2021,7 +2021,7 @@
 "none_point_error" = "Merci d\'ajouter au moins un point.";
 "gpx_saved_successfully" = "Fichier GPX enregistré dans %@";
 "simplified_track_description" = "Seule la ligne d\'itinéraire sera enregistrée, les points de passage seront supprimés.";
-"simplified_track_description" = "Seule la ligne d'itinéraire sera enregistrée, les points de passage seront supprimés.";
+"simplified_track_description" = "Seule la ligne d\'itinéraire sera enregistrée, les points de passage seront supprimés.";
 "whole_track_descr" = "L'itinéraire entier sera recalculé en utilisant le profil sélectionné.";
 "next_seg_descr" = "Le segment suivant sera recalculé en utilisant le profil sélectionné.";
 "route_betw_points_descr" = "Choisissez comment connecter ces points : avec une ligne droite ou en calculant un itinéraires à l'aide des profils répertoriés ci-dessous.";
@@ -2078,7 +2078,7 @@
 "sport" = "Sport";
 "special" = "Spécial";
 "service" = "Service";
-"emergency" = "Urgence";
+"emergency" = "Urgences";
 "vessel_height_limit_description" = "Définissez la hauteur du navire pour éviter les ponts bas. N'oubliez pas que si le pont est mobile, le calcul utilise sa hauteur à l'état ouvert.";
 "route_between_points_add_track_desc" = "Sélectionnez un fichier de traces pour lequel un nouveau segment sera ajouté.";
 "track_is_saved" = "%@\nest enregistré !";

@@ -25,22 +25,22 @@
 "fav_replace" = "Замяніць";
 "poi_hide" = "Схаваць";
 // My Places
-"favorites" = "Улюбёнае";
+"favorites" = "Улюбёныя";
 "gpx_waypoints" = "Пункты шляху";
 "gpx_export" = "Экспартаваць";
 "gpx_stat" = "Статыстыка";
 "rec_interval" = "Інтэрвал запісу";
 // Map settings
 "rendering_value_browse_map_name" = "Агляд";
-"m_style_car" = "Аўтамабіль";
-"m_style_bicycle" = "Ровар";
+"m_style_car" = "Кіраванне";
+"m_style_bicycle" = "Язда на ровары";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Паказаць на мапе";
 "map_settings_day" = "Дзень";
 "map_settings_night" = "Ноч";
 "map_settings_style" = "Стыль мапы";
 "map_settings_overunder" = "Ніжні/верхні пласты";
-"map_settings_none" = "Няма";
+"map_settings_none" = "Нічога";
 "map_settings_online" = "Сеціўныя мапы";
 "intro_download" = "Спампаваць\nмапу";
 "intro_next" = "Далей";
@@ -261,7 +261,7 @@
 // Import
 "import_title" = "Імпартаваць даныя";
 "import_choose_type" = "Абярыце што імпартаваць";
-"import_favorite" = "Улюбёнае";
+"import_favorite" = "Улюбёныя мясціны";
 "import_failed" = "Не атрымалася імпартаваць";
 "import_cannot" = "Вызначаны файл не можа быць імпартаваны";
 "import_gpx" = "GPX-сляды";
@@ -730,7 +730,7 @@
 "twitter" = "Twitter";
 "route_stops_before" = "%1$s прыпынкаў да абранага";
 "transport_routes" = "Маршруты";
-"transport_stop" = "Спыніць";
+"transport_stop" = "Прыпынак";
 "new_destination_point_dialog" = "Вы ўжо абралі пункт прызначэння";
 "show_poi_over_map" = "Паказваць POI";
 "search_radius" = "Радыус пошуку";
@@ -1926,7 +1926,7 @@
 "shared_string_gpx_points" = "Пункты";
 "select_group" = "Абраць групу";
 "extra_maps" = "Дадатковыя мапы";
-"track" = "След";
+"track" = "Грунтовая дарога";
 "shared_string_disable" = "Выключыць";
 "icon" = "Значок";
 "search_preogress" = "Пошук…";
@@ -1957,7 +1957,7 @@
 "octagon" = "Васьмівугольнік";
 "custom_osmand_plugin_name" = "Адвольная ўбудова OsmAnd";
 "markers_history" = "Гісторыя адзнак";
-"service" = "Сэрвіс";
+"service" = "Паслугі";
 "add_custom_category" = "Дадаць адвольную катэгорыю";
 "units_nm" = "м.мілі";
 "shared_string_others" = "Іншае";

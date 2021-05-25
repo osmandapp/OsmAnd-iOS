@@ -53,7 +53,7 @@
 "poi_insrease_radius" = "Aumenta su raju de chirca a";
 "poi_max_radius_reached" = "Raju de chirca màssimu segudadu";
 "poi_search_near_center" = "Sa chirca est fata a curtzu de su tzentru de sa mapa";
-"poi_hide" = "Cua";
+"poi_hide" = "Istichi";
 // My Places
 "favorites" = "Preferidos";
 "tracks" = "Rastas";
@@ -106,7 +106,7 @@
 "record_trip" = "Registra sa rasta tua";
 // Map settings
 "m_style_overview" = "Resumu";
-"m_style_car" = "Màchina";
+"m_style_car" = "In vetura";
 "m_style_walk" = "A pee";
 "m_style_bicycle" = "Bitzicleta";
 "map_settings_map" = "Mapa";
@@ -380,7 +380,7 @@
 "show_all" = "AMMUSTRA TOTU";
 "directions" = "Indicatziones";
 "shared_string_modify" = "Modìfica";
-"shared_string_later" = "A pustis";
+"shared_string_later" = "Prus a tardu";
 "map_settings_hillshade" = "Umbraduras de sos rilievos";
 "product_title_trip_planning" = "Pianificatzione biàgiu";
 "parking" = "Parchègiu";
@@ -875,7 +875,7 @@
 "product_title_wikivoyage" = "Ghias de biàgiu";
 "product_desc_wikivoyage" = "Sa ghia turìstica lìbera pro totu su mundu chi totus podent megiorare.";
 "product_desc_ext_wikivoyage" = "Ghias pro sos logos prus interessantes de su mundu, in intro de OsmAnd, chi non tenent bisòngiu de impreare una connessione a ìnternet.";
-"product_title_sea_depth_contours" = "Curvas de livellu nàuticas";
+"product_title_sea_depth_contours" = "Curvas de profondidade nàuticas";
 "product_desc_sea_depth_contours" = "Mapas de sas curvas de livellu nàuticas e de sos pidagnos";
 "in_app_purchase_desc_ex" = "A pustis de sa còmpora at a èssere disponìbile pro semper.";
 "unlock_all_features" = "Isbloca totu sas funtzionalidades de OsmAnd";
@@ -1004,7 +1004,7 @@
 "my_places" = "Logos meos";
 "osm_confirm_bulk_delete" = "Iscantzellare %d modìficas?";
 "osm_edits_basic" = "Bàsicu";
-"osm_edits_advanced" = "Avantzada";
+"osm_edits_advanced" = "Estesu";
 "osm_edits_all" = "Totu sas modìficas";
 "osm_edits_poi" = "Modìficas de sos PDI";
 "osm_edits_notes" = "Notas";
@@ -1732,7 +1732,7 @@
 "create_profile" = "Crea unu profilu";
 "import_from_files" = "Importa dae sos documentos";
 "import_routing_file_descr" = "Podes importare unu documentu pro su càlculu de s'àndala dae cale si siat aplicatzione de archiviatzione in sa nue o aberende·lu in OsmAnd.";
-"osmand_routing" = "Càrculu de s'àndala de OsmAnd";
+"osmand_routing" = "Càrculu de s\'àndala de OsmAnd";
 "change_map_behavior" = "Modìfica su cumportamentu de sa mapa durante sa navigatzione";
 "map_behavior" = "Cumportamentu de sa mapa";
 "voice_anounces" = "Annùntzios vocales";
@@ -1766,7 +1766,7 @@
 "download_size" = "Mannària de s'iscarrigamentu";
 "number_of_tiles" = "Nùmeru de tasseddos";
 "move_map_to_select_area" = "Move sa mapa pro ischertare s'àrea chi serbit.";
-"update_map" = "Agiorna sa mapa";
+"update_map" = "Agiorna mapa";
 "quick_action_transport_descr" = "Toca custa atzione pro ammustrare o cuare sas àndalas e sas firmadas de sos trasportos pùblicos in sa mapa.";
 "max_speed" = "Lestresa màssima";
 "min_speed" = "Lestresa mìn.";
@@ -2039,7 +2039,7 @@
 "sport" = "Isport";
 "special" = "Ispetziales";
 "service" = "Servìtziu";
-"emergency" = "Emergèntzia";
+"emergency" = "Apretu/Emergèntzia";
 "square" = "Cuadradu";
 "octagon" = "Otàgonu";
 

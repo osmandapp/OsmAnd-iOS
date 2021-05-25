@@ -4,7 +4,7 @@
 "transport_routes" = "المسارات الرياضية";
 "transport_nearby_routes_within" = "الطرق الداخلية المجاورة";
 "transport_nearby_routes" = "في غضون";
-"transport_stop" = "موقف";
+"transport_stop" = "إيقاف";
 "cancel_navigation" = "إيقاف التوجيه";
 "intermediate_items_sort_by_distance" = "فرز من الباب إلى الباب";
 "switch_start_finish" = "اعكس نقطة الانطلاق والوصول";
@@ -396,7 +396,7 @@
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_mode" = "مظهرالخريطة";
-"map_settings_day" = "نهار";
+"map_settings_day" = "نهاري";
 "map_settings_night" = "ليلاً";
 "map_settings_style" = "نمط الخريطة";
 "map_settings_overunder" = "الخريطة العلوية/ السفلية";
@@ -523,7 +523,7 @@
 "units_ft" = "قدم";
 "units_kmh" = "كم/س";
 "units_mph" = "ميل ساعة";
-"units_hour" = "h";
+"units_hour" = "س";
 "units_min" = "د";
 "units_sec" = "ثانية";
 // Map
@@ -615,7 +615,7 @@
 "product_title_wiki" = "ويكيبيديا";
 "product_desc_wiki" = "بيانات ويكيبيديا";
 "product_desc_ext_wiki" = "الحصول على معلومات حول النقاط المثيرة للاهتمام من ويكيبيديا. إنه دليلك غير المتصل بجيبك - ما عليك سوى تمكين المكون الإضافي ويكبيديا والاستمتاع بمقالات حول الكائنات من حولك.";
-"product_title_srtm" = "الخطوط الكنتورية";
+"product_title_srtm" = "بيانات الخطوط الكنتورية";
 "product_desc_srtm" = "إظهارالخطوط الكنتورية";
 "product_desc_ext_srtm" = "توفر هذه الأداة طبقة الخطوط الكنتورية وطبقة للتضاريس ظاهرة على الخريطة الأساسية للتطبيق. هذه الوظيفة ستكوم محل تقدير من طرف الرياضيين، المتنزهين، الرحالة، وكل من هو مهتم بجمال ورخاء الطبيعة. \n \nالبيانات العالمية (بين 70 درجة شمالا و70 جنوبا) مبنية حسب قياسات SRTM (مكوك رادار البعثة الطبوغرافية) وASTER (المكوك المتقدم الخاص بالإنبعاث الحراري والانعكاس الإشعاعي)، أداة تصوير على متن Terra، القمر الصناعي الرئيسي لنظام رصد الأرض التابع لناسا. ASTER هو جهد تعاوني فيما بين وكالة ناسا، وزارة الاقتصاد اليابانية، التجارة والصناعة (METI)، و أنظمة الفضاء اليابانية (J-spacesystems).";
 "my_location" = "موقعي";
@@ -631,7 +631,7 @@
 "enter_fav_name" = "أدخل اسم المفضلة";
 "res_installing" = "تثبيت…";
 "res_roads" = "الطرق";
-"res_srtm" = "الخطوط الكنتورية";
+"res_srtm" = "بيانات الخطوط الكنتورية";
 "res_wiki" = "ويكيبيديا";
 "res_hillshade" = "التضاريس";
 "select_language" = "اختيار اللغة";
@@ -858,7 +858,7 @@
 "help_follow_us" = "تابعنا";
 "actions" = "إجراءات";
 "directions_more_options" = "الاتجاهات من";
-"nearby_search" = "بحث بالجوار";
+"nearby_search" = "بحث بالقرب";
 "map_widget_ruler_control" = "دوائر القياس";
 "import_from_docs" = "الاستيراد من المستندات";
 "osm_live_routing" = "الملاحة عبر أوسماند لايف";
@@ -904,7 +904,7 @@
 "product_title_wikivoyage" = "أدلة السفر";
 "product_desc_wikivoyage" = "دليل السفر إلى جميع أنحاء العالم مجاناً.";
 "product_desc_ext_wikivoyage" = "أدلةالسفر إلى الأماكن الأكثر إثارة على هذا الكوكب, داخل أوسماند دون اتصال بالإنترنت.";
-"product_title_sea_depth_contours" = "محيطات الأعماق البحرية";
+"product_title_sea_depth_contours" = "معالم العمق البحري";
 "product_desc_sea_depth_contours" = "مجموعة من الخرائط التي تحوي نقاط أعماق البحر وخطوطه الكنتورية";
 "osmand_live_donation_header" = "إعدادات التبرع";
 "osmand_live_donations" = "التبرعات";
@@ -1125,7 +1125,7 @@
 "download_pending" = "تحميل معلق";
 "reddit" = "موقع Reddit";
 // Quick action
-"quick_action_name" = "إجراء سريع";
+"quick_action_name" = "إجراءات سريعة";
 "quick_action_no_overlay" = "بدون طبقة";
 "quick_action_add_overlay" = "إضافة طبقة علوية";
 "quick_action_no_underlay" = "بدون طبقة";
@@ -1816,7 +1816,7 @@
 "configure_map_descr" = "مظهر الخريطة";
 "export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد نسخ إلى أوسماند.";
 "profile_sett_descr" = "تؤثر على ملف التعريف المحدد";
-"app_profiles" = "أوضاع التطبيق";
+"app_profiles" = "تطبيق الوضع";
 "selected_profile" = "الوضع المحدد";
 "osmand_profile" = "ملف تعريف أوسماند";
 "ui_customization_descr" = "عناصر الدرج، قائمة السياق";

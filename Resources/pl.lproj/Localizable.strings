@@ -55,7 +55,7 @@
 "poi_insrease_radius" = "Zwiększ promień wyszukiwania";
 "poi_max_radius_reached" = "Osiągnięto maksymalny promień poszukiwania";
 "poi_search_near_center" = "Wyszukiwanie prowadzone jest blisko centrum mapy";
-"poi_hide" = "Ukryj";
+"poi_hide" = "Ukrywanie";
 // My Places
 "favorites" = "Ulubione";
 "tracks" = "Ślady";
@@ -71,7 +71,7 @@
 "description" = "Opis";
 "shared_string_remove" = "Usuń";
 "shared_string_modify" = "Modyfikuj";
-"shared_string_later" = "Następnie";
+"shared_string_later" = "Później";
 "offline_maps" = "Mapy offline";
 "download_map" = "Pobierz mapę";
 "my_favorites" = "Moje ulubione";
@@ -106,7 +106,7 @@
 // Intro
 "intro_skip" = "Pomiń";
 "intro_download" = "Pobierz\nmapę";
-"intro_next" = "Naprzód";
+"intro_next" = "Dalej";
 "intro_welcome" = "Witamy w\nOsmAnd";
 "intro_promo" = "Globalne mapy offline";
 "intro_placeholder" = "Proszę wprowadzić nazwę swojego regionu";
@@ -728,7 +728,7 @@
 "poi_clear" = "Wyczyść";
 "make_call" = "Zadzwoń";
 "gpx_select_track" = "Wybierz trasę";
-"gpx_curr_new_track" = "Bieżąca podróż";
+"gpx_curr_new_track" = "Aktualnyślad";
 "you_searching" = "Wyszukujesz";
 "menu_all_trips" = "Wszystkie Podróże";
 "create_new_trip" = "Utwórz nową podróż";
@@ -754,9 +754,9 @@
 "auto_split_gap" = "Automatyczne dzielenie nagrań po przerwie";
 "auto_split_gap_descr" = "Rozpocznij nowy segment po 6-minutowej przerwie, nowej ścieżce po 2-godzinnej przerwie lub nowym pliku po dłuższej przerwie";
 "speak_tunnels" = "Tunele";
-"shared_setting_always_ask" = "Zawsze pytaj";
+"shared_setting_always_ask" = "Ponawianie pytania";
 "recording_preferences_descr" = "Ustawienia nagrywania trasy";
-"traffic_warning_tunnel" = "Tunel przed nami";
+"traffic_warning_tunnel" = "Zbliżasz się do tunelu";
 "poi_overlay" = "Nakładka POI";
 "track_save_descr" = "Zapisuje bieżący ślad jako plik GPX.";
 "track_during_nav" = "Automatycznie rejestruj ścieżkę";
@@ -931,7 +931,7 @@
 "loading_poi_obj" = "Wczytywanie użytecznego miejsca…";
 "osm_note" = "Uwaga OSM";
 "osm_created" = "Utworzono";
-"osm_deleted" = "Usunięto";
+"osm_deleted" = "Usunięte";
 "osm_modified" = "Zmodyfikowano";
 "osm_reopened" = "Otwarto ponownie";
 "osm_name" = "Nazwa użytkownika OpenStreetMap";
@@ -1899,12 +1899,12 @@
 "road_speeds_descr" = "Te parametry mogą mieć wpływ na obliczanie trasy.";
 "shared_string_add_profile" = "Dodaj profil";
 "whole_track" = "Cała trasa";
-"arrived_at_destination" = "Osiągnięto cel";
+"arrived_at_destination" = "Osiągnięto cel.";
 "quick_action_mapillary_hide" = "Ukryj Mapillary";
 "profile_type_user_string" = "Profil użytkownika";
 "next_seg" = "Nowy segment";
 "reverse_route" = "Odwróć trasę";
-"vessel_width_limit_description" = "Ustaw szerokość statku, by unikać wąskich mostów.";
+"vessel_width_limit_description" = "Ustaw szerokość statku, by unikać wąskich mostów";
 "quick_action_switch_profile_descr" = "Przycisk akcji przełącza między wybranymi profilami.";
 "quick_action_remove_next_destination_descr" = "Usuwa następny cel na trasie. Jeśli jest to miejsce docelowe, nawigacja zostanie zatrzymana.";
 "create_profile_descr" = "Profil dostosowany można oprzeć na jednym z domyślnych profili aplikacji. Określają one podstawowe ustawienia, takie jak domyślna widoczność widżetów i jednostek prędkości i odległości. Są to domyślne profile aplikacji, wraz z przykładami profili dostosowanych, które można rozszerzyć na:";
@@ -1939,7 +1939,7 @@
 "folder_already_exsists" = "Folder o tej nazwie już istnieje";
 "gpx_already_exsists" = "Plik o tej nazwie już istnieje";
 "simplified_track_description" = "Zapisana zostanie tylko linia trasy, punkty trasy zostaną usunięte.";
-"simplified_track" = "Uproszczona ścieżka";
+"simplified_track" = "Uproszczonaścieżka";
 "join_segments" = "Połącz segmenty";
 "copy_from_other_profile_descr" = "Możesz skopiować wszystkie ustawienia z dowolnego profilu do wybranego profilu: ";
 "extra_maps" = "Dodatkowe mapy";
@@ -2022,3 +2022,11 @@
 "plan_route_create_new_route" = "Utwórz nową trasę";
 "open_saved_track" = "Otwórz zapisaną ścieżkę";
 "new_plugin_added" = "Dodano nową wtyczkę";
+;
+"special" = "Specjalny";;
+"start_of_track" = "Początek trasy";;
+"square" = "Kwadrat";;
+"track" = "Ślad";;
+"transport" = "Transport publiczny";;
+"replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";;
+"service" = "Dojazdowa";

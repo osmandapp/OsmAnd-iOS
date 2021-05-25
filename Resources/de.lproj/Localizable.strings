@@ -35,7 +35,7 @@
 // POI
 "poi_insrease_radius" = "Erweitere Suchradius nach";
 "poi_max_radius_reached" = "Maximaler Suchradius erreicht";
-"poi_hide" = "Verbergen";
+"poi_hide" = "Ausblenden";
 // My Places
 "favorites" = "Favoriten";
 "tracks" = "Tracks";
@@ -72,7 +72,7 @@
 "map_settings_day" = "Tag";
 "map_settings_night" = "Nacht";
 "map_settings_style" = "Kartendarstellung";
-"map_settings_none" = "Keines";
+"map_settings_none" = "Keine";
 "map_settings_offline" = "Stile für Offline Karten";
 "map_settings_online" = "Online-Karten";
 "map_settings_transp" = "Transparenz";
@@ -315,7 +315,7 @@
 "shared_string_dismiss" = "Verwerfen";
 "shared_string_remove" = "Entfernen";
 "shared_string_modify" = "Ändern";
-"shared_string_later" = "Später";
+"shared_string_later" = "Weiter";
 "my_favorites" = "Meine Favoriten";
 "fav_select" = "Bitte Favoriten auswählen";
 "gpx_route" = "Route";
@@ -769,7 +769,7 @@
 "search_radius" = "Suchradius";
 "transport_routes" = "Routen";
 "transport_nearby_routes_within" = "Nahegelegene Routen innerhalb von";
-"transport_stop" = "Haltestelle";
+"transport_stop" = "Beenden";
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%d Haltestellen davor";
 "shared_string_previous" = "Zurück";
@@ -807,7 +807,7 @@
 "help_search" = "Kartensuche";
 "help_trip_planning" = "Eine Strecke planen";
 "help_legend" = "Kartenlegende";
-"help_other_header" = "Weitere";
+"help_other_header" = "Andere";
 "help_install_and_troubleshoot" = "Installation und Problembehebung";
 "help_tech_articles" = "Technische Themen";
 "help_versions" = "Versionen";
@@ -817,7 +817,7 @@
 "shared_string_close" = "Schließen";
 "actions" = "Aktionen";
 "directions_more_options" = "Navigiere von";
-"nearby_search" = "In der Nähe suchen";
+"nearby_search" = "Suche um Aufenthaltsort";
 "map_widget_ruler_control" = "Zirkel";
 "import_from_docs" = "Aus Dokumenten importieren";
 "osm_live_routing" = "OsmAnd-Live-Navigation";
@@ -968,7 +968,7 @@
 "modify_edit_short" = "OSM-Änderung bearbeiten";
 "open_osm_note" = "OSM-Hinweis erstellen";
 "edit_osm_note" = "OSM-Hinweis bearbeiten";
-"osm_alert_title" = "Ändern";
+"osm_alert_title" = "Bestätigen";
 "osm_alert_message" = "Nachricht";
 "osm_alert_button_ok" = "Hinweis erstellen";
 "modify_poi" = "POI-Information ändern";
@@ -1677,7 +1677,7 @@
 "public_transport_ped_route_title" = "Die Route zu Fuß beträgt ca. %1$s und könnte schneller sein als mit öffentlichen Verkehrsmitteln.";
 "product_desc_antarctica" = "Unbegrenzte Karten-Downloads für die Antarktis";
 "product_title_antarctica" = "Antarktis";
-"m_style_pulic_transport" = "Öffentlicher Verkehr";
+"m_style_pulic_transport" = "ÖPNV";
 "transfers" = "Umstiege:";
 "consider_limitations_param" = "Vorübergehende Einschränkungen berücksichtigen";
 "avoid_transport_type" = "Transportarten vermeiden";

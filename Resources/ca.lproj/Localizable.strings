@@ -209,7 +209,7 @@
 // Import
 "import_title" = "Importa dades";
 "import_choose_type" = "Trieu què voleu importar";
-"import_favorite" = "Preferit";
+"import_favorite" = "Preferida";
 "import_failed" = "La importació ha fallat";
 "import_cannot" = "No es pot importar el fitxer especificat";
 "import_gpx" = "Trajecte en GPX";
@@ -319,14 +319,14 @@
 "help_quiz" = "Consulta";
 "product_title_wiki" = "Viquipèdia";
 "product_desc_wiki" = "Dades de la Viquipèdia";
-"product_title_srtm" = "Corbes de nivell";
+"product_title_srtm" = "Línies de nivell";
 "product_desc_srtm" = "Mostra les corbes de nivell";
 "enter_description" = "Introduïu la descripció";
 "description" = "Descripció";
 "enter_fav_name" = "Introduïu el nom del preferit";
 "res_installing" = "S'està instal·lant…";
 "res_roads" = "Carreteres";
-"res_srtm" = "Corbes de nivell";
+"res_srtm" = "Línies de nivell";
 "res_wiki" = "Viquipèdia";
 "select_language" = "Tria la llengua";
 "language_short" = "Llengua";
@@ -384,7 +384,7 @@
 "est_travel_time" = "Durada estimada del trajecte";
 "pedestrian" = "Vianant";
 "sorting" = "Classificant";
-"plugins" = "Connectors";
+"plugins" = "Gestor de connectors";
 "shared_string_later" = "Mes tard";
 "open_map_settings" = "Obre la configuració del mapa";
 "plugin_popup_wiki_title" = "Baixa dades de Viquipèdia";
@@ -803,7 +803,7 @@
 "help_search" = "Cerca de mapa";
 "help_trip_planning" = "Planificació d\'un viatge";
 "help_legend" = "Llegenda del mapa";
-"help_other_header" = "Una altra";
+"help_other_header" = "Altres";
 "help_install_and_troubleshoot" = "Instal·lació i solució de problemes";
 "help_tech_articles" = "Articles tècnics";
 "help_versions" = "Versions";
@@ -815,7 +815,7 @@
 "shared_string_close" = "Tanca";
 "actions" = "Accions";
 "directions_more_options" = "Indicacions des de";
-"nearby_search" = "Cerca a prop";
+"nearby_search" = "Cerca pel voltant";
 "map_widget_ruler_control" = "Radi de distància";
 "import_from_docs" = "Importa des de documents";
 "osm_live_routing" = "Navegació OsmAnd Live";
@@ -933,7 +933,7 @@
 "loading_poi_obj" = "S\'està carregant el PDI…";
 "osm_note" = "Nota d\'OSM";
 "osm_created" = "Creat";
-"osm_deleted" = "Eliminat";
+"osm_deleted" = "S\'ha esborrat";
 "osm_modified" = "Modificat";
 "osm_reopened" = "Tornat a obrir";
 "osm_name" = "Nom d'usuari OpenStreetMap";
@@ -948,7 +948,7 @@
 "osm_opens_at" = "Obre a les:";
 "osm_closes_at" = "Tanca a les:";
 "osm_editing_contact_info" = "Informació de contacte";
-"osm_str_name" = "Nom de carrer";
+"osm_str_name" = "Nom del carrer";
 "osm_building_num" = "Número de finca";
 "osm_phone" = "Telèfon";
 "osm_website" = "Lloc web";
@@ -966,7 +966,7 @@
 "modify_edit_short" = "Modifica el canvi OSM";
 "open_osm_note" = "Obre una nota d\'OSM";
 "edit_osm_note" = "Edita la nota d'OSM";
-"osm_alert_title" = "Publica";
+"osm_alert_title" = "Valida";
 "osm_alert_message" = "Missatge";
 "osm_alert_button_ok" = "Crea nota";
 "modify_poi" = "Modifica la informació del PDI";
@@ -1246,7 +1246,7 @@
 "add_intermediate" = "Afegiu un punt intermedi";
 "add_home" = "Afegeix casa meva";
 "add_work" = "Afegeix lloc de la feina";
-"home_pt" = "Inici";
+"home_pt" = "Casa";
 "work_pt" = "Feina";
 "select_route_intermediate" = "Seleccioneu un punt intermedi";
 "sett_deg180" = "180 graus";
@@ -2012,7 +2012,7 @@
 "shared_string_disable" = "Desactiva";
 "open_saved_track" = "Obre una traça enregistrada";
 "octagon" = "Octàgon";
-"emergency" = "Emergències";
+"emergency" = "Emergència";
 "nearest_point" = "El punt més proper";
 "visible" = "Visible";
 "default_color" = "Color per defecte";

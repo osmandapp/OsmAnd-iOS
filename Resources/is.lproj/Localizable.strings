@@ -112,14 +112,14 @@
 "gpx_speed" = "Hraði";
 // Map settings
 "rendering_value_browse_map_name" = "Yfirlit";
-"m_style_car" = "Bíll";
+"m_style_car" = "Akstur";
 "m_style_walk" = "Gangandi";
-"m_style_bicycle" = "Hjólandi";
+"m_style_bicycle" = "Hjólreiðar";
 "map_settings_map" = "Kort";
 "map_settings_show" = "Birtaá korti";
 "map_settings_type" = "Gerð korts";
 "map_mode" = "Kortahamur";
-"map_settings_day" = "dag";
+"map_settings_day" = "Dagur";
 "map_settings_night" = "Nótt";
 "map_settings_style" = "Stíll korts";
 "map_settings_overunder" = "Yfirlag / Undirlag";
@@ -812,7 +812,7 @@
 "shared_string_close" = "Loka";
 "actions" = "Aðgerðir";
 "directions_more_options" = "Leiðir frá";
-"nearby_search" = "Leitaí nágrenninu";
+"nearby_search" = "Leitaí nágrenni";
 "map_widget_ruler_control" = "Mælistika út frá miðju hrings";
 "import_from_docs" = "Flytja inn úr skjölum";
 "osm_live_routing" = "OsmAnd Live leiðsögn";
@@ -1972,7 +1972,7 @@
 "reverse_track_dir" = "Snúa við stefnu ferils";
 "attach_to_the_roads" = "Tengja við vegina";
 "select_another_track" = "Velja annan feril";
-"track" = "Slóð";
+"track" = "Ferill";
 "follow_track" = "Fylgja ferli";
 "split_after" = "Skipta uppá eftir";
 "split_before" = "Skipta uppá undan";

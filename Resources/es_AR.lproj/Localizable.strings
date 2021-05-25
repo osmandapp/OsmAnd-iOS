@@ -164,8 +164,8 @@
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_settings_mode" = "Modo de aplicación";
-"map_settings_day" = "Diurno";
-"map_settings_night" = "Por la noche";
+"map_settings_day" = "Día";
+"map_settings_night" = "Nocturno";
 "map_settings_style" = "Estilo del mapa";
 "map_settings_overunder" = "Superpuesta/Subyacente";
 "map_settings_over" = "Superposición";
@@ -380,7 +380,7 @@
 "directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
 "shared_string_modify" = "Modificar";
-"parking" = "Estacionamientos";
+"parking" = "Estacionamiento";
 "est_travel_time" = "Tiempo de viaje estimado";
 "pedestrian" = "Peatón";
 "sorting" = "Ordenar";
@@ -2039,7 +2039,7 @@
 "symbols" = "Símbolos";
 "sport" = "Deporte";
 "special" = "Especial";
-"service" = "Servicio";
+"service" = "Vía de servicio";
 "emergency" = "Emergencia";
 "square" = "Cuadrado";
 "octagon" = "Octágono";

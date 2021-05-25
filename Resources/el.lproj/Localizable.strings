@@ -143,7 +143,7 @@
 "purchase_get" = "Λήψη";
 "arrival_distance_factor_late" = "Καθυστερημένα";
 "osm_target_created" = "Δημιουργήθηκε ΣΕ OSM";
-"m_style_car" = "Αυτοκίνητο";
+"m_style_car" = "Οδήγηση";
 "simulate_routing" = "Προσομοίωση της θέση σας";
 "help_map_viewing" = "Προβολή χάρτη";
 "show_warnings_title" = "Εμφάνιση προειδοποιήσεων…";
@@ -224,7 +224,7 @@
 "gpx_deactivated" = "Απενεργοποιημένο";
 "key_hint_deselect" = "Αποεπιλογή";
 "map_underlays" = "Υποστρώματα χάρτη";
-"favorites" = "Τα Αγαπημένα";
+"favorites" = "Αγαπημένα";
 "shared_string_from" = "από";
 "show_traffic_warnings" = "Κυκλοφοριακές προειδοποιήσεις";
 "help_about" = "Περί";
@@ -429,7 +429,7 @@
 "si_nm" = "Ναυτικά μίλια";
 "selected_categories" = "Επιλεγμένες κατηγορίες";
 "product_title_sea_depth_contours" = "Ναυτικές ισοβαθείς καμπύλες";
-"home_pt" = "Αρχική σελίδα";
+"home_pt" = "Σπίτι";
 "traffic_warning_pedestrian" = "Διάβαση πεζών";
 "price_free" = "Δωρεάν";
 "map_markers" = "Δείκτες χάρτη";
@@ -459,7 +459,7 @@
 "shared_string_building" = "Κτήριο";
 "osmand_live_updates" = "Ζωντανές ενημερώσεις";
 "create_items" = "Δημιουργία στοιχείων";
-"transport_routes" = "Διαδρομές";
+"transport_routes" = "Δρομολόγια";
 "get_discount_second_part" = "έπειτα %@";
 "sett_settings" = "Επιλογές";
 "edit_action" = "Επεξεργασία ενέργειας";
@@ -469,7 +469,7 @@
 "si_m_s" = "Μέτρα ανά δευτερόλεπτο";
 "opening_changeset" = "Άνοιγμα ομάδας αλλαγών…";
 "route_tr" = "Στρίψτε δεξιά και προχωρήστε";
-"map_settings_night" = "Βράδυ";
+"map_settings_night" = "Νύχτα";
 "toggle_poi" = "Εμφάνιση/απόκρυψη ΣΕ";
 "map_widget_max_speed" = "Όριο ταχύτητας";
 "rendering_category_transport" = "Μ.Μ.Μ";
@@ -494,7 +494,7 @@
 "speak_title" = "Εκφώνηση…";
 "app_mode_bus" = "Λεωφορείο";
 "help_faq_descr" = "Συχνές ερωτήσεις";
-"osm_deleted" = "Διαγράφτηκε";
+"osm_deleted" = "Διαγραμμένο";
 "arrival_distance" = "Αναγγελία άφιξης";
 "actions" = "Ενέργειες";
 "res_details" = "Λεπτομέρειες";
@@ -566,13 +566,13 @@
 "custom_search" = "Προσαρμοσμένη αναζήτηση";
 "poi_opening_hours" = "Ώρες λειτουργίας";
 "unlimited_downloads" = "Απεριόριστες λήψεις";
-"osm_edits_advanced" = "Προχωρημένη";
+"osm_edits_advanced" = "Προχωρημένο";
 "units_mph" = "μαω";
 "gpx_avg_altitude" = "Μέσο υψόμετρο";
 "simulate_navigation" = "Προσομοίωση πλοήγησης";
-"transport_stop" = "Στάση";
+"transport_stop" = "Διακοπή";
 "rendering_category_others" = "Άλλα χαρακτηριστικά χάρτη";
-"m_style_bicycle" = "Ποδήλατο";
+"m_style_bicycle" = "Ποδηλασία";
 "osm_live_hide_user_name" = "Να μην εμφανίζεται το όνομά μου στις αναφορές";
 "osm_editing_contact_info" = "Πληροφορίες επαφής";
 "shared_string_go" = "Εκτέλεση";
@@ -1178,7 +1178,7 @@
 "group_name" = "Όνομα ομάδας";
 "shared_string_import" = "Εισαγωγή";
 "fav_points_not_exist" = "Δεν υπάρχουν αγαπημένα σημεία";
-"track" = "Αγροτική Οδός";
+"track" = "Ίχνος";
 "track_save_descr" = "Αποθήκευση τρέχοντος ίχνους ως αρχείου GPX τώρα.";
 "emergency" = "Επείγοντα";
 "select_group" = "Επιλογή ομάδας";

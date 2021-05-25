@@ -14,7 +14,7 @@ on:
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '3.91'
+        default: '3.99'
       download_qt_ios_library:
         description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
         required: true

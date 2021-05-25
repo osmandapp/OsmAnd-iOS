@@ -2007,3 +2007,15 @@
 "track_multiple_segments_select" = "%@ sisaldab mitut segmenti. Palun vali teekonnalõik, mida soovid navigeerimiseks kasutada.";
 "select_segment" = "Vali segment";
 "select_track_to_follow" = "Vali järgimiseks teekond";
+
+// Coordinate widget
+"coordinates_widget" = "Koordinaatide vidin";
+"searching_gps" = "GPSi otsimine";
+"new_plugin_added" = "Uus laiendus lisatud";
+"add_custom_category" = "Lisa oma kategooria";
+"rearrange_categories" = "Järjesta kategooriad ümber";
+"select_group" = "Vali grupp";
+"markers_history" = "Markerite ajalugu";
+
+// Resources
+"shared_string_resources" = "Ressursid";

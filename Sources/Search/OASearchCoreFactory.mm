@@ -531,7 +531,9 @@
                                       BOOL closestCitiesRequested = NO;
                                       if (address->addressType == OsmAnd::AddressType::Street)
                                       {
-                                          if ((locSpecified && ![streetBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:STREET])
+                                          // remove limitation by location
+                                          if (//(locSpecified && ![streetBbox contains:x top:y right:x bottom:y]) ||
+                                              ![phrase isSearchTypeAllowed:STREET])
                                               return NO;
                                           
                                           if (address->nativeName.startsWith("<"))

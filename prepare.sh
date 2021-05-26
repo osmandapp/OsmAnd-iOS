@@ -29,3 +29,6 @@ fi
 
 # Download all shipped resources
 "$SRCLOC/Scripts/download-shipped-resources.sh"
+
+# Fetch translation from Android
+"$SRCLOC/Scripts/add_translations.swift"

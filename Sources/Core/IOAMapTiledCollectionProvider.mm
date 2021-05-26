@@ -144,14 +144,14 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> IOAMapTiledCollectionProvider::b
             }
             else if (showCaptions && !getCaption(i).isEmpty())
             {
-                img = getImageBitmap(i, true);
+                img = getImageBitmap(i);
                 builder.setCaption(getCaption(i));
                 builder.setCaptionStyle(captionStyle);
                 builder.setCaptionTopSpace(captionTopSpace);
             }
             else
             {
-                img = getImageBitmap(i, true);
+                img = getImageBitmap(i);
             }
             builder.setPinIcon(img);
             builder.buildAndAddToCollection(collection);

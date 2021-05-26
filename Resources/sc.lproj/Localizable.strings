@@ -53,7 +53,7 @@
 "poi_insrease_radius" = "Aumenta su raju de chirca a";
 "poi_max_radius_reached" = "Raju de chirca màssimu segudadu";
 "poi_search_near_center" = "Sa chirca est fata a curtzu de su tzentru de sa mapa";
-"poi_hide" = "Cua";
+"poi_hide" = "Istichi";
 // My Places
 "favorites" = "Preferidos";
 "tracks" = "Rastas";
@@ -106,7 +106,7 @@
 "record_trip" = "Registra sa rasta tua";
 // Map settings
 "m_style_overview" = "Resumu";
-"m_style_car" = "Màchina";
+"m_style_car" = "In vetura";
 "m_style_walk" = "A pee";
 "m_style_bicycle" = "Bitzicleta";
 "map_settings_map" = "Mapa";
@@ -119,7 +119,7 @@
 "map_settings_overunder" = "Subrapositzione/isfundu";
 "map_settings_over" = "Subrapositzione";
 "map_settings_under" = "Isfundu";
-"map_settings_none" = "Peruna";
+"map_settings_none" = "Perunu";
 "map_settings_offline" = "Istiles pro sas mapas non in lìnia";
 "map_settings_online" = "Mapas in lìnia";
 "map_settings_transp" = "Trasparèntzia";
@@ -383,7 +383,7 @@
 "shared_string_later" = "Prus a tardu";
 "map_settings_hillshade" = "Umbraduras de sos rilievos";
 "product_title_trip_planning" = "Pianificatzione biàgiu";
-"parking" = "Parchègiu";
+"parking" = "Parchezu";
 "est_travel_time" = "Tempus dàbile de biàgiu";
 "pedestrian" = "A pedes";
 "sorting" = "Ordinamentu";
@@ -820,7 +820,7 @@
 "osm_live_routing" = "Navigatzione OsmAnd Live";
 "osm_live_routing_descr" = "Imprea sos agiornamentos de OsmAnd Live pro sa navigatzione";
 "osmand_live_title" = "OsmAnd in direta";
-"osmand_live_updates" = "Agiornamentos automàticos";
+"osmand_live_updates" = "Agiornamentos in tempus reale";
 "osmand_live_available_maps" = "Mapas disponìbiles";
 "osmand_live_last_changed" = "Ùrtima modìfica de sa mapa: %@";
 "osmand_live_last_live_update" = "Ùrtimu agiornamentu: %@";
@@ -1766,7 +1766,7 @@
 "download_size" = "Mannària de s'iscarrigamentu";
 "number_of_tiles" = "Nùmeru de tasseddos";
 "move_map_to_select_area" = "Move sa mapa pro ischertare s'àrea chi serbit.";
-"update_map" = "Agiorna mapa";
+"update_map" = "Agiorna sa mapa";
 "quick_action_transport_descr" = "Toca custa atzione pro ammustrare o cuare sas àndalas e sas firmadas de sos trasportos pùblicos in sa mapa.";
 "max_speed" = "Lestresa màssima";
 "min_speed" = "Lestresa mìn.";

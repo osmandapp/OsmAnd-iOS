@@ -90,7 +90,7 @@
 "gpx_max_speed" = "Vitesse maximale";
 "gpx_speed" = "Vitesse";
 // Map settings
-"rendering_value_browse_map_name" = "Vue d'ensemble";
+"rendering_value_browse_map_name" = "Parcourir la carte";
 "m_style_car" = "En voiture";
 "m_style_bicycle" = "Vélo";
 "map_settings_map" = "Carte";
@@ -120,7 +120,7 @@
 "prch_addons" = "Addons";
 "incur_high_charges" = "Cela peut entrainer des frais élevés.";
 "download" = "Télécharger";
-"nothanks" = "Non, merci";
+"nothanks" = "Pas nécessaire";
 "download_now" = "Télécharger la carte maintenant";
 "download_tab_local" = "Installé";
 "res_banner_free_maps_title" = "Vous avez %d cartes gratuites !";
@@ -239,7 +239,7 @@
 "cannot_add_marker" = "Impossible d'ajouter un Parking";
 "map_no_address" = "L'adresse n'est pas encore connue";
 "import_choose_type" = "Merci de choisir ce qu'il faut importer";
-"import_favorite" = "Favori";
+"import_favorite" = "Favoris";
 // Alerts
 "alert_inet_needed" = "Connexion Internet requise pour effectuer cette action. Veuillez vérifier votre connexion Internet.";
 "ctx_mnu_add_fav" = "Ajouter un favori";
@@ -765,7 +765,7 @@
 "logging_interval_navigation" = "Intervalle d\'enregistrement pendant la navigation";
 "logging_min_speed_descr" = "Filtre : enregistrement inactif en-dessous de vitesse sélectionnée";
 "route_stops_before" = "%d arrêts avant";
-"transport_stop" = "Arrêter";
+"transport_stop" = "Arrêt";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "logging_interval_navigation_descr" = "Choisissez l'intervalle d'enregistrement de votre voyage durant la navigation";
@@ -951,7 +951,7 @@
 "osm_edits_offline_layer" = "Modifications/Notes OSM (hors ligne)";
 "osm_notes_online_layer" = "Notes OSM (en ligne)";
 "osm_edits_basic" = "Basique";
-"osm_edits_advanced" = "Étendue";
+"osm_edits_advanced" = "Avancé";
 "osm_edits_all" = "Toutes les modifications";
 "osm_edits_poi" = "Modifications du POI";
 "osm_edits_notes" = "Notes";
@@ -1307,7 +1307,7 @@
 "rendering_attr_surface_fine_gravel_name" = "Gravier fin";
 "rendering_attr_hmRendered_name" = "Afficher plus de détail";
 "rendering_value_medium_name" = "Moyen";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher les itinéraires cyclables du réseau de nœuds";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher les nœuds du réseau cyclable";
 "rendering_attr_highway_class_track_name" = "Piste";
 "routing_attr_avoid_ferries_description" = "Éviter les traversées en ferries";
 "routing_attr_weight_description" = "Indiquez le poids du véhicule à respecter sur les routes.";
@@ -1978,7 +1978,7 @@
 "show_coordinates" = "Afficher les coordonnées";
 "toggle_coordinates" = "Afficher/Masquer le gadget des coordonnées";
 "quick_action_list_descr" = "Appuyez pour faire défiler la liste ci-dessous";
-"copied_to_clipboard" = "Copié dans le presse-papier";
+"copied_to_clipboard" = "Copié dans le presse-papiers";
 "searching_gps" = "Recherche des satellites";
 
 // Coordinate widget
@@ -2050,7 +2050,7 @@
 "visible_categories" = "Catégories visibles";
 "rearrange_categories" = "Réorganiser les catégories";
 "delete_custom_categories" = "Supprimer les catégories personnalisées";
-"add_custom_category" = "Ajouter une catégorie personnelle";
+"add_custom_category" = "Ajouter une catégorie personnalisée";
 "search_preogress" = "Recherche en cours…";
 "obf_import_title" = "Importer un fichier de carte hors ligne";
 "plugin_popup_osm_editing_ask" = "Veuillez activer le greffon d'édition OpenStreetMap pour ajouter et gérer les modifications et les notes de la carte";
@@ -2071,7 +2071,7 @@
 "sport" = "Sport";
 "special" = "Spécial";
 "service" = "Service";
-"emergency" = "Urgence";
+"emergency" = "Urgences";
 "vessel_height_limit_description" = "Définissez la hauteur du navire pour éviter les ponts bas. N'oubliez pas que si le pont est mobile, le calcul utilise sa hauteur à l'état ouvert.";
 "route_between_points_add_track_desc" = "Sélectionnez un fichier de traces pour lequel un nouveau segment sera ajouté.";
 "track_is_saved" = "%@\nest enregistré !";

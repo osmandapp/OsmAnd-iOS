@@ -81,7 +81,7 @@
 "gpx_updown" = "Arriba/Abajo";
 "gpx_uphills_total" = "Ascenso total";
 // Map settings
-"rendering_value_browse_map_name" = "Resumen";
+"rendering_value_browse_map_name" = "Ver mapa";
 "m_style_car" = "Automóvil";
 "m_style_walk" = "Peatón";
 "m_style_bicycle" = "Bicicleta";
@@ -89,7 +89,7 @@
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_mode" = "Modo del mapa";
-"map_settings_day" = "Diurno";
+"map_settings_day" = "Día";
 "map_settings_night" = "Nocturno";
 "map_settings_style" = "Estilo del mapa";
 "map_settings_none" = "Ninguno";

@@ -428,7 +428,7 @@
 "poi_hide" = "Peida";
 // My Places
 "favorites" = "Lemmikud";
-"tracks" = "Rajad";
+"tracks" = "Rajafailid";
 // GPX
 "gpx_point" = "Punkt";
 "gpx_waypoint" = "Teekonnapunkt";
@@ -489,8 +489,8 @@
 "gpx_slope" = "Kallak";
 "stats_select_graph_data" = "Vali graafiku andmed";
 // Map settings
-"rendering_value_browse_map_name" = "Ülevaade";
-"m_style_car" = "Autosõit";
+"rendering_value_browse_map_name" = "Sirvi kaarti";
+"m_style_car" = "Sõites";
 "m_style_walk" = "Kõndimine";
 "m_style_bicycle" = "Rattasõit";
 "map_settings_map" = "Kaart";
@@ -867,7 +867,7 @@
 "open_osm_note" = "Ava OSM märge";
 "edit_osm_note" = "Muuda OSM märget";
 "osm_alert_title" = "Kinnita";
-"osm_alert_message" = "Sõnum";
+"osm_alert_message" = "Teade";
 "osm_alert_button_ok" = "Loo märge";
 "modify_poi" = "Muuda HP teavet";
 "actions" = "Tegevused";
@@ -890,7 +890,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "t";
+"units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sek";
 "units_min_short" = "m";
@@ -1715,7 +1715,7 @@
 "change_object_posiotion" = "Muuda objekti asukoha";
 "map_coords" = "Kaart: Laiuskraad %.5f Pikkuskraad %.5f";
 "default_speed_dialog_msg" = "Hindab saabumisaega tundmatute teede korral ja kiirusepiiranguid kõikidel teedel (võib muuta teekonda)";
-"vessel_width_limit_description" = "Lühikeste sildade vältimiseks kirjelda laeva laius";
+"vessel_width_limit_description" = "Lühikeste sildade vältimiseks määra laeva laius";
 "vessel_height_limit_description" = "Madalate sildade vältimiseks kirjelda laeva kõrgus. Palun arvesta, et liikuva silla puhul me kasutame seda kõrgust ka siis, kui sild on avatud.";
 "width_limit_description" = "Kuna mõnedel marsruutidel võidakse kohaldada sõidukite laiuspiiranguid, siis palun märkige oma sõiduki laius.";
 "lenght_limit_description" = "Kuna mõnedel marsruutidel võidakse kohaldada piiranguid pikkade sõidukite suhtes, siia palun märkige oma sõiduki pikkus.";
@@ -1834,7 +1834,7 @@
 "map_settings_hillshade_description" = "Kasutades erinevaid halli varjundeid kuvavad kõrgusreljeefi kaardid nõlvasid, tippe ja tasandikke";
 "import_routing_file_descr" = "Sa võid importida teekonnafaili ükspuha missugusest pilvepõhise salvestusruumi rakendusest või tõstes ta OsmAnd kausta iTunes'is.";
 "help_nav_profiles" = "Navigeerimisprofiilid";
-"profile_prefs_reset_successful" = "Kõik profiilide seadistused on lähtestatud.";
+"profile_prefs_reset_successful" = "Kõik profiili seadistused on lähtestatud.";
 "import_profile_descr" = "Profiili importimiseks klõpsi ükspuha mis rakenduses vajaliku faili (*.osf) ja vali „Kopeeri OsmAnd Maps rakendusse“";
 "reset_profile_action_descr" = "Muuda kõik profiili seadistused paigaldusjärgsesse algeolekusse. Klõpsates Lähtesta-nuppu kaovad kõik sinu tehtud muudatused ja seda tegevust ei saa tagasi pöörata.";
 "res_zoom_levels_desc" = "Need parameetrid mõjutavad kaardi kuvamist, kui seda kasutatakse kaardi liigina või ülekatte / aluskattena.\n\nKaardi liik: kaart piirdub valitud suurendustasemetega.\n\nÜlekate / aluskate: suurendustasemed, kus kaardiosad on nähtavad. Üles või alla skaleerimine toimub seatud väärtustest kõrgemal või madalamal.";
@@ -1842,14 +1842,14 @@
 "arrows_direction_to_markers" = "Nooled osutavad aktiivse markeri suunda, kui see asub väljaspool ekraani. Suunajooned viitavad aktiivsetele markeritele.";
 "specify_number_of_dir_indicators" = "Määra suunamärguannete arv, see mõjutab kõiki allpool olevaid seadeid.";
 "gpx_parse_error" = "OsmAnd GPX-andmestiku vorming on vigane. Täpsemaks uurimiseks palun võta ühendust meie kasutajatoega.";
-"nothing_found_empty" = "Midagi ei leitud";
+"nothing_found_empty" = "Ei leitud midagi";
 "shared_string_next" = "Järgmine";
 "checking_for_duplicates" = "Otsin topeltkirjeid...";
 "added_items" = "Lisatud kirjed: %@";
 "listed_exist" = "Märgitud %@, on juba OsmAndis olemas.";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"importing_from" = "Andmete import %@-st";
+"importing_from" = "Andmete import failist %@";
 "shared_string_rendering_style" = "Visualiseerimise stiilid";
 "nav_type_hint" = "Navigeerimise liik: %@";
 "selected_profiles" = "%d / %d";
@@ -1898,7 +1898,7 @@
 // Route planning
 "plan_route" = "Kavanda teekonda";
 "checking_for_duplicate_description" = "OsmAnd kontrollib %1$s rakenduses korduvate kirjete osas. Selleks võib kuluda aega.";
-"import_complete_description" = "Kõik andmed %@-st on imporditud, rakenduse vajaliku osaga töötamiseks võid kasutada nuppe allpool.";
+"import_complete_description" = "Kõik andmed on failist %@ imporditud. Rakenduses vajaliku osaga töötamiseks võid kasutada nuppe allpool.";
 "road_speeds_descr" = "Need parameetrid võivad mõjutada teekonna koostamist.";
 "maximum_speed" = "Suurim kiirus";
 "vk" = "VK";
@@ -1930,7 +1930,7 @@
 "ios_release_3_90" = "• Tutvustasime funktsiooni \"Teekonna planeerimine\", et kavandada tuleviku teekondi. See lubab luua teekonna segmente kasutades erinevat tüüpi navigeerimist\n• Lisatud võimalus lubada kompass tööriistale \"Radiaaljoonlaud\"\n• Lisatud võimalus \"Huvipunktide siltide ülekate\", mis lubab kuvada lemmikuid, teekonna kontrollpunkte ja markereid kaardil\n• Lisatud uued kiirtegevused kontuurjoonte kuvamisele ja maastikule kaardil, rakenduse profiili muutmine ja lähima vahepunkti kustutamine\n• Parandati probleemid puuduva Wikipeedia otsingukategooriaga\n• Seadete importimine: parandati vigu, lisati kõigi OsmAnd toetatud andmetüüpide tugi\n• OpenStreetMap'i muutmine: parandati aja valija ja taastatai muudatuse kommentaari kohendamine\n";
 "ios_release_3_80" = "• Tutvustasime sõltumatute seadetega rakenduse profiile\n• Seadete uus paigutus profiilide ja tüüpide järgi: navigeerimine, üldine, kaart ja ekraan\n• Võimalus profiili seadeid importida või eksportida\n• Lisatud veebialaste fotode andmeallikaid\n• Lisatud võimalus veebikaarte vahemällu alla laadida\n• Täiustatud otsingu algoritme\n";
 "shared_string_max" = "Suurim";
-"shared_string_min" = "Min";
+"shared_string_min" = "Min.";
 "road_speeds" = "Kiirused teedel";
 "road_max_speed_descr" = "Määrab kõigi marsruudil olevate teede maksimaalse sõidukiiruse. Alandab prioriteeti maanteedel, mille võimalik kiirus on üle maksimaalse.";
 "road_min_speed_descr" = "Määrab kõigi marsruudil olevate teede minimaalse sõidukiiruse. Tõstab prioriteedi maanteedele, mille soovitatav kiirus on alla miinimumi.";
@@ -2009,7 +2009,7 @@
 
 // Coordinate widget
 "coordinates_widget" = "Koordinaatide vidin";
-"searching_gps" = "GPS-i otsimine";
+"searching_gps" = "GPSi otsimine";
 "new_plugin_added" = "Uus laiendus lisatud";
 "add_custom_category" = "Lisa oma kategooria";
 "rearrange_categories" = "Järjesta kategooriad ümber";
@@ -2026,51 +2026,23 @@
 "shared_string_gpx_points" = "Punktid";
 "shared_string_disable" = "Keela";
 "special" = "Eriteenused";
-"emergency" = "Hädaolukord";
-"square" = "Ruut";
-"symbols" = "Sümbolid";
-"sport" = "Sport";
-"fav_points_not_exist" = "Lemmikpunkte pole";
-"travel" = "Reisimine";
-"res_standard" = "Tavaline kaart";
-"default_color" = "Vaikevärv";
-"transport" = "Transport";
-"custom_osmand_plugin_name" = "Kohandatud OsmAnd pistik";
-"coordinates" = "Koordinaadid";
-"shared_string_enable" = "Luba";
-"circle" = "Ring";
-"extra_maps" = "Täiendavad kaardid";
-"favorite_places_category" = "Kohad";
-"search_history" = "Otsinguajalugu";
-"group_name" = "Grupi nimi";
-"copied_to_clipboard" = "Kopeeritud lõikelauale";
-"service" = "Teenused";
-"replace_favorite_confirmation" = "Oled kindel, et soovid asendada lemmiku %@\?";
-"fav_point_dublicate" = "Antud korduv lemmiku nimi";
-"service" = "Teenused";
-"search_history" = "Otsinguajalugu";
-"circle" = "Ring";
-"shared_string_enable" = "Luba";
-"sport" = "Sport";
-"coordinates" = "Koordinaadid";
-"symbols" = "Sümbolid";
-"copied_to_clipboard" = "Kopeeritud lõikelauale";
 "emergency" = "Hädaabi";
 "square" = "Ruut";
-"res_standard" = "Tavaline kaart";
-"special" = "Eriteenused";
-"octagon" = "Kaheksanurk";
-"icon" = "Ikoon";
-"transport" = "Transport";
-"default_color" = "Vaikevärv";
-"replace_favorite_confirmation" = "Oled kindel, et soovid asendada lemmiku %@\?";
-"shared_string_disable" = "Keela";
-"shared_string_gpx_points" = "Punktid";
+"symbols" = "Sümbolid";
+"sport" = "Sport";
 "fav_points_not_exist" = "Lemmikpunkte pole";
-"favorite_places_category" = "Kohad";
-"group_name" = "Grupi nimi";
-"favorite_friends_category" = "Sõbrad";
-"custom_osmand_plugin_name" = "Kohandatud OsmAnd pistik";
-"shared_string_others" = "Muud";
 "travel" = "Reisimine";
+"res_standard" = "Tavaline kaart";
+"default_color" = "Vaikevärv";
+"transport" = "Transport";
+"custom_osmand_plugin_name" = "Kohandatud OsmAnd pistik";
+"coordinates" = "Koordinaadid";
+"shared_string_enable" = "Luba";
+"circle" = "Ring";
 "extra_maps" = "Täiendavad kaardid";
+"favorite_places_category" = "Kohad";
+"search_history" = "Otsinguajalugu";
+"group_name" = "Grupi nimi";
+"copied_to_clipboard" = "Kopeeritud lõikelauale";
+"service" = "Teenindus";
+"replace_favorite_confirmation" = "Oled kindel, et soovid asendada lemmiku %@\?";

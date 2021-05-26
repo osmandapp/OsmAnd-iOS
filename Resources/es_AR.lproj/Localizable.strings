@@ -164,8 +164,8 @@
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_settings_mode" = "Modo de aplicación";
-"map_settings_day" = "Diurno";
-"map_settings_night" = "Por la noche";
+"map_settings_day" = "Día";
+"map_settings_night" = "Nocturno";
 "map_settings_style" = "Estilo del mapa";
 "map_settings_overunder" = "Superpuesta/Subyacente";
 "map_settings_over" = "Superposición";
@@ -767,7 +767,7 @@
 "cancel_navigation" = "Parar navegación";
 "transport_routes" = "Rutas";
 "transport_nearby_routes_within" = "Rutas a menos de";
-"transport_stop" = "Parada";
+"transport_stop" = "Parar";
 "route_stops_before" = "%d parada(s) anterior(es)";
 "transport_nearby_routes" = "A menos de";
 "shared_string_previous" = "Anterior";
@@ -1821,7 +1821,7 @@
 "configure_map_descr" = "Apariencia del mapa";
 "export_profile_descr" = "Puedes exportar todos los ajustes del perfil, copiar todos los ajustes de otro perfil o restablecer todos los ajustes del perfil al estado predefinido.";
 "profile_sett_descr" = "Afecta al perfil de la aplicación elegido";
-"app_profiles" = "Perfiles de aplicación";
+"app_profiles" = "Perfiles de la aplicación";
 "selected_profile" = "Perfil marcado";
 "osmand_profile" = "Perfil de OsmAnd";
 "ui_customization_descr" = "Elementos del menú lateral y menú contextual";
@@ -2039,7 +2039,7 @@
 "symbols" = "Símbolos";
 "sport" = "Deporte";
 "special" = "Especial";
-"service" = "Vía de servicio";
+"service" = "Servicio";
 "emergency" = "Emergencia";
 "square" = "Cuadrado";
 "octagon" = "Octágono";

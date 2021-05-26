@@ -49,9 +49,9 @@
 "track_interval_remember" = "Husk valg";
 "show_info" = "Vis Infoformation";
 // Map settings
-"rendering_value_browse_map_name" = "Oversigt";
+"rendering_value_browse_map_name" = "Gennemse kort";
 "m_style_car" = "Kørsel";
-"m_style_bicycle" = "Cykle";
+"m_style_bicycle" = "Cykling";
 "map_settings_map" = "Kort";
 "map_settings_show" = "Vis på kort";
 "map_settings_day" = "Dag";
@@ -767,7 +767,7 @@
 "cancel_navigation" = "Stop navigation";
 "transport_routes" = "Ruter";
 "transport_nearby_routes_within" = "Nærliggende ruter indenfor";
-"transport_stop" = "Stop";
+"transport_stop" = "Stoppested";
 "transport_nearby_routes" = "Indenfor";
 "route_stops_before" = "%d stop før";
 "shared_string_previous" = "Forrige";
@@ -1674,7 +1674,7 @@
 "product_desc_antarctica" = "Ubegrænset hentning af kort til Antarktis";
 "product_title_antarctica" = "Antarktis";
 "map_settings_line_density_slowdown_warning" = "Høj linjetæthed kan bremse kortgengivelse";
-"m_style_pulic_transport" = "Offentlig transport";
+"m_style_pulic_transport" = "Kollektivtrafik";
 "transfers" = "Overførsler:";
 "consider_limitations_param" = "Overvej midlertidige begrænsninger";
 "avoid_transport_type" = "Undgå transporttyper";
@@ -1871,7 +1871,7 @@
 "shared_string_preparing" = "Forbereder";
 "shared_string_deselect_all" = "Fravælg alle";
 "shared_string_continue" = "Fortsæt";
-"nothing_found_empty" = "Fandt intet";
+"nothing_found_empty" = "Fandt ikke noget";
 "nav_type_direct_to" = "Direkte-til-punkt";
 "nav_type_osmand" = "OsmAnd (offlinerouting)";
 "nav_type_descr" = "Vælg, hvordan en rute skal beregnes for profilen";

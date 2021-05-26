@@ -48,7 +48,7 @@
 "poi_hide" = "Amaga";
 // My Places
 "favorites" = "Preferits";
-"tracks" = "Traces";
+"tracks" = "Pistes";
 // GPX
 "gpx_point" = "Punt";
 "gpx_waypoints" = "Fites";
@@ -88,7 +88,7 @@
 "track_clear_q" = "Voleu eliminar el trajecte actual?";
 "show_info" = "Mostra informació";
 // Map settings
-"rendering_value_browse_map_name" = "Informació general";
+"rendering_value_browse_map_name" = "Mapa esquemàtic";
 "m_style_car" = "Cotxe";
 "m_style_walk" = "A peu";
 "m_style_bicycle" = "Bicicleta";
@@ -319,14 +319,14 @@
 "help_quiz" = "Consulta";
 "product_title_wiki" = "Viquipèdia";
 "product_desc_wiki" = "Dades de la Viquipèdia";
-"product_title_srtm" = "Línies de nivell";
+"product_title_srtm" = "Dades de corbes de nivell";
 "product_desc_srtm" = "Mostra les corbes de nivell";
 "enter_description" = "Introduïu la descripció";
 "description" = "Descripció";
 "enter_fav_name" = "Introduïu el nom del preferit";
 "res_installing" = "S'està instal·lant…";
 "res_roads" = "Carreteres";
-"res_srtm" = "Línies de nivell";
+"res_srtm" = "Dades de corbes de nivell";
 "res_wiki" = "Viquipèdia";
 "select_language" = "Tria la llengua";
 "language_short" = "Llengua";
@@ -384,7 +384,7 @@
 "est_travel_time" = "Durada estimada del trajecte";
 "pedestrian" = "Vianant";
 "sorting" = "Classificant";
-"plugins" = "Connectors";
+"plugins" = "Gestor de connectors";
 "shared_string_later" = "Mes tard";
 "open_map_settings" = "Obre la configuració del mapa";
 "plugin_popup_wiki_title" = "Baixa dades de Viquipèdia";
@@ -767,7 +767,7 @@
 "shared_string_apply" = "Aplica";
 "transport_routes" = "Rutes";
 "transport_nearby_routes_within" = "Rutes properes a dins";
-"transport_stop" = "Atura";
+"transport_stop" = "Parada";
 "transport_nearby_routes" = "A dins";
 "route_stops_before" = "Queden %1$s parades";
 "shared_string_previous" = "Enrere";
@@ -803,7 +803,7 @@
 "help_search" = "Cerca de mapa";
 "help_trip_planning" = "Planificació d\'un viatge";
 "help_legend" = "Llegenda del mapa";
-"help_other_header" = "Altres";
+"help_other_header" = "Una altra";
 "help_install_and_troubleshoot" = "Instal·lació i solució de problemes";
 "help_tech_articles" = "Articles tècnics";
 "help_versions" = "Versions";
@@ -966,7 +966,7 @@
 "modify_edit_short" = "Modifica el canvi OSM";
 "open_osm_note" = "Obre una nota d\'OSM";
 "edit_osm_note" = "Edita la nota d'OSM";
-"osm_alert_title" = "Valida";
+"osm_alert_title" = "Publica";
 "osm_alert_message" = "Missatge";
 "osm_alert_button_ok" = "Crea nota";
 "modify_poi" = "Modifica la informació del PDI";
@@ -1246,7 +1246,7 @@
 "add_intermediate" = "Afegiu un punt intermedi";
 "add_home" = "Afegeix casa meva";
 "add_work" = "Afegeix lloc de la feina";
-"home_pt" = "Casa";
+"home_pt" = "Inici";
 "work_pt" = "Feina";
 "select_route_intermediate" = "Seleccioneu un punt intermedi";
 "sett_deg180" = "180 graus";
@@ -2011,7 +2011,7 @@
 "shared_string_disable" = "Desactiva";
 "open_saved_track" = "Obre una traça enregistrada";
 "octagon" = "Octàgon";
-"emergency" = "Emergència";
+"emergency" = "Emergències";
 "nearest_point" = "El punt més proper";
 "visible" = "Visible";
 "default_color" = "Color per defecte";

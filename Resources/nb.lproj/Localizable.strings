@@ -37,7 +37,7 @@
 "transport_routes" = "Ruter";
 "transport_nearby_routes_within" = "Ruter i nærheten innen";
 "transport_nearby_routes" = "Innenfor";
-"transport_stop" = "Stopp";
+"transport_stop" = "Stoppested";
 "cancel_navigation" = "Stopp navigering";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sorter dør-til-dør";
@@ -482,7 +482,7 @@
 "gpx_speed" = "Hastighet";
 "gpx_slope" = "Bakkehelning";
 // Map settings
-"rendering_value_browse_map_name" = "Oversikt";
+"rendering_value_browse_map_name" = "Se gjennom kart";
 "m_style_car" = "Kjøring";
 "m_style_walk" = "Gåing";
 "m_style_bicycle" = "Sykling";
@@ -846,7 +846,7 @@
 "modify_edit_short" = "Modifiser OSM-endring";
 "open_osm_note" = "Åpne OSM-notat";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Send";
+"osm_alert_title" = "Send inn";
 "osm_alert_message" = "Melding";
 "osm_alert_button_ok" = "Opprett notat";
 "modify_poi" = "Modify the POI information";
@@ -1894,7 +1894,7 @@
 "shared_string_others" = "Andre";
 "coordinates" = "Koordinater";
 "reverse_track_dir" = "Snu GPX-retning";
-"emergency" = "Nødsfall";
+"emergency" = "Nødsituasjon";
 "copied_to_clipboard" = "Kopiert til utklippstavle";
 "icon" = "Ikon";
 "some_of" = "%d av %d";

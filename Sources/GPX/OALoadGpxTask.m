@@ -75,7 +75,7 @@
     NSArray* listFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:mapPath error:nil];
     for (NSString *gpxFile in listFiles)
     {
-        if (![[gpxFile pathExtension] isEqual:@"gpx"])
+        if (![[[gpxFile pathExtension] lowerCase] isEqual:@"gpx"])
         {
             if([gpxFile hasPrefix:@"."])
                 continue;

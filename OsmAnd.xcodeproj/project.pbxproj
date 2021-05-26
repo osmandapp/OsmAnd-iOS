@@ -611,8 +611,8 @@
 		78A5C1EB23FAF2CF00312FC4 /* OATitleSliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A5C1EA23FAF2CF00312FC4 /* OATitleSliderTableViewCell.m */; };
 		78A5C1ED23FBDF0D00312FC4 /* OACustomPickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A5C1EC23FBDF0C00312FC4 /* OACustomPickerTableViewCell.xib */; };
 		78A5C1F123FBDF5F00312FC4 /* OACustomPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A5C1F023FBDF5F00312FC4 /* OACustomPickerTableViewCell.m */; };
-		78A5C1FA23FC373600312FC4 /* OAIconTextDescButtonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A5C1F823FC373600312FC4 /* OAIconTextDescButtonTableViewCell.m */; };
-		78A5C1FF23FC37B100312FC4 /* OAIconTextDescButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A5C1FE23FC37B100312FC4 /* OAIconTextDescButtonTableViewCell.xib */; };
+		78A5C1FA23FC373600312FC4 /* OAIconTextDescButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A5C1F823FC373600312FC4 /* OAIconTextDescButtonCell.m */; };
+		78A5C1FF23FC37B100312FC4 /* OAIconTextDescButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A5C1FE23FC37B100312FC4 /* OAIconTextDescButtonCell.xib */; };
 		78A5C206240807B900312FC4 /* OAOnlineTilesSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 78A5C204240807B700312FC4 /* OAOnlineTilesSettingsViewController.mm */; };
 		78A5C208240807B900312FC4 /* OAOnlineTilesSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A5C205240807B800312FC4 /* OAOnlineTilesSettingsViewController.xib */; };
 		78AC698A23AB7BE1006C3DDE /* left_menu_configure_screen.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698723AB7BDF006C3DDE /* left_menu_configure_screen.png */; };
@@ -4507,9 +4507,9 @@
 		78A5C1EC23FBDF0C00312FC4 /* OACustomPickerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OACustomPickerTableViewCell.xib; path = Resources/Controllers/Cells/OACustomPickerTableViewCell.xib; sourceTree = "<group>"; };
 		78A5C1EF23FBDF5E00312FC4 /* OACustomPickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACustomPickerTableViewCell.h; path = Controllers/Cells/OACustomPickerTableViewCell.h; sourceTree = "<group>"; };
 		78A5C1F023FBDF5F00312FC4 /* OACustomPickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACustomPickerTableViewCell.m; path = Controllers/Cells/OACustomPickerTableViewCell.m; sourceTree = "<group>"; };
-		78A5C1F723FC373600312FC4 /* OAIconTextDescButtonTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAIconTextDescButtonTableViewCell.h; path = Controllers/Cells/OAIconTextDescButtonTableViewCell.h; sourceTree = "<group>"; };
-		78A5C1F823FC373600312FC4 /* OAIconTextDescButtonTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAIconTextDescButtonTableViewCell.m; path = Controllers/Cells/OAIconTextDescButtonTableViewCell.m; sourceTree = "<group>"; };
-		78A5C1FE23FC37B100312FC4 /* OAIconTextDescButtonTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconTextDescButtonTableViewCell.xib; path = Resources/Controllers/Cells/OAIconTextDescButtonTableViewCell.xib; sourceTree = "<group>"; };
+		78A5C1F723FC373600312FC4 /* OAIconTextDescButtonCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAIconTextDescButtonCell.h; path = Controllers/Cells/OAIconTextDescButtonCell.h; sourceTree = "<group>"; };
+		78A5C1F823FC373600312FC4 /* OAIconTextDescButtonCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAIconTextDescButtonCell.m; path = Controllers/Cells/OAIconTextDescButtonCell.m; sourceTree = "<group>"; };
+		78A5C1FE23FC37B100312FC4 /* OAIconTextDescButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconTextDescButtonCell.xib; path = Resources/Controllers/Cells/OAIconTextDescButtonCell.xib; sourceTree = "<group>"; };
 		78A5C203240807B700312FC4 /* OAOnlineTilesSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOnlineTilesSettingsViewController.h; path = Controllers/Resources/OAOnlineTilesSettingsViewController.h; sourceTree = "<group>"; };
 		78A5C204240807B700312FC4 /* OAOnlineTilesSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOnlineTilesSettingsViewController.mm; path = Controllers/Resources/OAOnlineTilesSettingsViewController.mm; sourceTree = "<group>"; };
 		78A5C205240807B800312FC4 /* OAOnlineTilesSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOnlineTilesSettingsViewController.xib; path = Controllers/Resources/OAOnlineTilesSettingsViewController.xib; sourceTree = "<group>"; };
@@ -8749,7 +8749,7 @@
 				78496C502412370C006EA39E /* OAColorsTableViewCell.xib */,
 				DAE79D40260E1E7200E2EE11 /* OATitleDescriptionCollapsableCell.xib */,
 				78496C3B2410FF53006EA39E /* OASegmentSliderTableViewCell.xib */,
-				78A5C1FE23FC37B100312FC4 /* OAIconTextDescButtonTableViewCell.xib */,
+				78A5C1FE23FC37B100312FC4 /* OAIconTextDescButtonCell.xib */,
 				78A5C1E223FAE8E500312FC4 /* OATitleSliderTableViewCell.xib */,
 				78A5C1EC23FBDF0C00312FC4 /* OACustomPickerTableViewCell.xib */,
 				DAB3E54523BB462600EAE6A5 /* OARouteStatisticsModeCell.xib */,
@@ -8923,8 +8923,8 @@
 				78496C4A24123687006EA39E /* OAColorsTableViewCell.m */,
 				78496C3F2410FFB8006EA39E /* OASegmentSliderTableViewCell.h */,
 				78496C3E2410FFB7006EA39E /* OASegmentSliderTableViewCell.m */,
-				78A5C1F723FC373600312FC4 /* OAIconTextDescButtonTableViewCell.h */,
-				78A5C1F823FC373600312FC4 /* OAIconTextDescButtonTableViewCell.m */,
+				78A5C1F723FC373600312FC4 /* OAIconTextDescButtonCell.h */,
+				78A5C1F823FC373600312FC4 /* OAIconTextDescButtonCell.m */,
 				78A5C1E923FAF2CE00312FC4 /* OATitleSliderTableViewCell.h */,
 				78A5C1EA23FAF2CF00312FC4 /* OATitleSliderTableViewCell.m */,
 				78A5C1EF23FBDF5E00312FC4 /* OACustomPickerTableViewCell.h */,
@@ -15286,7 +15286,7 @@
 				843394B71FF54A19006205A5 /* list_warnings_railways_us@3x.png in Resources */,
 				84C102991FBDC10800D3E5EE /* warnings_hazard@3x.png in Resources */,
 				848F558D1FBB609900CEFB4B /* ic_action_bearing@3x.png in Resources */,
-				78A5C1FF23FC37B100312FC4 /* OAIconTextDescButtonTableViewCell.xib in Resources */,
+				78A5C1FF23FC37B100312FC4 /* OAIconTextDescButtonCell.xib in Resources */,
 				845E06971B5FF17400DFC2A7 /* ic_plugin_contourlines@3x.png in Resources */,
 				DAF345BF22F4482C009E2EB6 /* ic_custom_compound_action_add.png in Resources */,
 				84342E061CFD872800EF04ED /* left_menu_icon_waypoints.png in Resources */,
@@ -17610,7 +17610,7 @@
 				DAB2A55121F1E4FC00D9F01A /* OAOsmEditingPlugin.mm in Sources */,
 				DA31EE0122CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */,
 				84F989471B5157A0009C443C /* OAGPXRouteCardController.mm in Sources */,
-				78A5C1FA23FC373600312FC4 /* OAIconTextDescButtonTableViewCell.m in Sources */,
+				78A5C1FA23FC373600312FC4 /* OAIconTextDescButtonCell.m in Sources */,
 				8A3F030E21C7FBB20043797E /* OAPurchaseDialogCardButton.m in Sources */,
 				DAA8641523041270000E1900 /* OANewAction.m in Sources */,
 				84E12BFA1F025C2000F141AD /* OARouteProvider.mm in Sources */,

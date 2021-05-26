@@ -145,7 +145,6 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
 "shared_string_do_not_use" = "Do not use";
-"voice_provider" = "Voice guidance";
 "shared_string_sound" = "အသံ";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -202,7 +201,6 @@
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
-"driving_region" = "Driving region";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";

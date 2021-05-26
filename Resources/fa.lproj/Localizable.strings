@@ -145,7 +145,6 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "مکث موسیقی";
 "shared_string_do_not_use" = "استفاده نشود";
-"voice_provider" = "راهنمای گفتاری";
 "shared_string_sound" = "صدا";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -202,7 +201,6 @@
 "traffic_warning_railways" = "تقاطع جاده با راه‌آهن";
 "traffic_warning_pedestrian" = "گذرگاه پیاده";
 "traffic_warning_hazard" = "خطر";
-"driving_region" = "منطقهٔ رانندگی";
 "driving_region_japan" = "ژاپن";
 "driving_region_us" = "ایالات متحدهٔ آمریکا";
 "driving_region_canada" = "کانادا";
@@ -367,7 +365,7 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_none" = "هیچ";
+"map_settings_none" = "هیچ‌کدام";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "نقشه‌های آنلاین";
 "map_settings_transp" = "شفافیت";
@@ -879,7 +877,7 @@
 "poi_opening_hours" = "ساعت کاری";
 "gpx_alt_range" = "دامنهٔ ارتفاع";
 "poi_clear" = "پاک‌کردن";
-"nearby_search" = "جست‌وجوی اطراف";
+"nearby_search" = "جست‌وجوی این اطراف";
 "translucent_purple" = "بنفش شفاف";
 "translucent_red" = "قرمز شفاف";
 "green" = "سبز";
@@ -990,11 +988,11 @@
 "change_map_source" = "تغییر منبع نقشه";
 "translucent_blue" = "آبی شفاف";
 "get_discount_second_part" = "سپس %@";
-"osm_deleted" = "حذف‌شده(ها)";
+"osm_deleted" = "حذف شد";
 "poi_list" = "لیست POI";
 "osm_editing_lost_changes_descr" = "تغییراتی که ذخیره نکرده‌اید، از دست می‌رود. ادامه می‌دهید؟";
 "prev_route" = "مسیر قبلی";
-"help_other_header" = "سایر";
+"help_other_header" = "دیگر";
 "help_faq" = "سؤالات رایج";
 "map_sources" = "منابع نقشه";
 "offline_vector_maps" = "نقشه‌های بُرداری آفلاین";
@@ -1173,7 +1171,6 @@
 "rendering_value_green_name" = "سبز";
 "rendering_attr_currentTrackColor_description" = "رنگ GPX";
 "rendering_value_medium_name" = "متوسط";
-"rendering_value_browse_map_name" = "مرور نقشه";
 "routing_attr_driving_style_prefer_unpaved_description" = "در مسیریابی، جاده‌های روسازی‌نشده را به روسازی‌شده ترجیح می‌دهد.";
 "rendering_attr_surface_stone_name" = "سنگ";
 "rendering_attr_highway_class_service_name" = "خدماتی";
@@ -1496,7 +1493,7 @@
 "walk" = "پیاده";
 "configure_map_descr" = "ظاهر نقشه";
 "res_pseudo_mercator" = "فراتابی شبه مرکاتور";
-"save_changes" = "ذخیره‌کردن تغییرات";
+"save_changes" = "ذخیرهٔ تغییرات";
 "import_complete_description" = "همهٔ داده از %@ درون‌برد شد. با استفاده از دکمه‌های زیر می‌توانید بخش موردنیاز برنامه را برای مدیریت آن باز کنید.";
 "map_settings_legend" = "کلید";
 "quick_action_switch_profile_descr" = "با لمس دکمهٔ عملیاتی بین پروفایل‌های انتخاب‌شده جابه‌جا شوید.";
@@ -1541,7 +1538,7 @@
 "favorite_places_category" = "مکان‌ها";
 "osmand_live_upd_frequency" = "تکرار روزآمدسازی";
 "plan_route_select_folder" = "انتخاب پوشه";
-"sport" = "ورزش";
+"sport" = "ورزشی";
 "group_name" = "نام گروه";
 "address_search" = "جست‌وجوی نشانی";
 "extra_maps" = "نقشه‌های بیشتر";

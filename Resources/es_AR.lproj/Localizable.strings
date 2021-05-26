@@ -164,8 +164,8 @@
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_settings_mode" = "Modo de aplicación";
-"map_settings_day" = "Día";
-"map_settings_night" = "Nocturno";
+"map_settings_day" = "Diurno";
+"map_settings_night" = "Por la noche";
 "map_settings_style" = "Estilo del mapa";
 "map_settings_overunder" = "Superpuesta/Subyacente";
 "map_settings_over" = "Superposición";
@@ -380,7 +380,7 @@
 "directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
 "shared_string_modify" = "Modificar";
-"parking" = "Estacionamiento";
+"parking" = "Estacionamientos";
 "est_travel_time" = "Tiempo de viaje estimado";
 "pedestrian" = "Peatón";
 "sorting" = "Ordenar";
@@ -488,7 +488,7 @@
 "postcode" = "Código postal";
 "show_something_on_map" = "Mostrar«%@» en el mapa";
 "search_POI_level_btn" = "Aumentar radio de búsqueda";
-"shared_string_street" = "Calle";
+"shared_string_street" = "Calle residencial";
 "shared_string_building" = "Edificio";
 "shared_string_street_intersection" = "Intersección de calles";
 "shared_string_address" = "Dirección";
@@ -767,7 +767,7 @@
 "cancel_navigation" = "Parar navegación";
 "transport_routes" = "Rutas";
 "transport_nearby_routes_within" = "Rutas a menos de";
-"transport_stop" = "Parar";
+"transport_stop" = "Parada";
 "route_stops_before" = "%d parada(s) anterior(es)";
 "transport_nearby_routes" = "A menos de";
 "shared_string_previous" = "Anterior";
@@ -803,7 +803,7 @@
 "help_search" = "Búsqueda en el mapa";
 "help_trip_planning" = "Planificación de viaje";
 "help_legend" = "Leyenda del mapa";
-"help_other_header" = "Otros";
+"help_other_header" = "Otro";
 "help_install_and_troubleshoot" = "Instalación y solución de problemas";
 "help_tech_articles" = "Artículos técnicos";
 "help_versions" = "Versiones";

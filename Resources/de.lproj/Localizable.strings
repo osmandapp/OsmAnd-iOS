@@ -62,7 +62,7 @@
 "track_continue_rec" = "Aufnahme fortsetzen";
 // Map settings
 "rendering_value_browse_map_name" = "Übersicht";
-"m_style_car" = "Auto";
+"m_style_car" = "Fahrzeug";
 "m_style_walk" = "Fußgänger";
 "m_style_bicycle" = "Fahrrad";
 "map_settings_map" = "Karte";
@@ -72,7 +72,7 @@
 "map_settings_day" = "Tag";
 "map_settings_night" = "Nacht";
 "map_settings_style" = "Kartendarstellung";
-"map_settings_none" = "Keine";
+"map_settings_none" = "Keines";
 "map_settings_offline" = "Stile für Offline Karten";
 "map_settings_online" = "Online-Karten";
 "map_settings_transp" = "Transparenz";
@@ -94,7 +94,7 @@
 "prch_ski_q" = "Bitte den \"Ski Karten\" Stil einschalten in den Karten Einstellungen";
 "proceed_q" = "fortfahren?";
 "download" = "Herunterladen";
-"nothanks" = "Nicht verwendet";
+"nothanks" = "Nein, danke";
 "download_now" = "Karte jetzt herunterladen";
 "shared_string_ok" = "OK";
 "shared_string_add" = "Hinzufügen";
@@ -377,7 +377,7 @@
 "gpx_group_select" = "Gruppenauswahl";
 "show_all" = "Alle anzeigen";
 "get_directions" = "Navigation";
-"parking" = "Parken";
+"parking" = "Parkplatz";
 "est_travel_time" = "Reisezeit abschätzen";
 "pedestrian" = "Fußgänger";
 "sorting" = "Sortierung";
@@ -769,7 +769,7 @@
 "search_radius" = "Suchradius";
 "transport_routes" = "Routen";
 "transport_nearby_routes_within" = "Nahegelegene Routen innerhalb von";
-"transport_stop" = "Beenden";
+"transport_stop" = "Haltestelle";
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%d Haltestellen davor";
 "shared_string_previous" = "Zurück";
@@ -807,7 +807,7 @@
 "help_search" = "Kartensuche";
 "help_trip_planning" = "Eine Strecke planen";
 "help_legend" = "Kartenlegende";
-"help_other_header" = "Andere";
+"help_other_header" = "Weitere";
 "help_install_and_troubleshoot" = "Installation und Problembehebung";
 "help_tech_articles" = "Technische Themen";
 "help_versions" = "Versionen";
@@ -1049,7 +1049,7 @@
 "tile_cache" = "Kachelzwischenspeicher";
 "shared_string_reload" = "Neu laden";
 "mapil_reload_cache" = "Kacheln neu laden, um die neuesten Daten zu sehen";
-"shared_string_filter" = "Filter";
+"shared_string_filter" = "Filtern";
 "mapil_filter_user_descr" = "Bilder nach Benutzer filtern";
 "mapil_filter_date" = "Bilder nach Datum filtern";
 "mapil_usernames" = "Benutzernamen";
@@ -1556,7 +1556,6 @@
 "rendering_attr_tracktype_grade5_name" = "Weich";
 "rendering_attr_hideWaterPolygons_name" = "Wasserflächen ausblenden";
 "rendering_attr_contourColorScheme_name" = "Farbschema für Höhenlinien";
-"rendering_value_browse_map_name" = "Karte ansehen";
 "routeInfo_steepness_name" = "Steilheit";
 "rendering_attr_trolleybusRoutes_name" = "Oberleitungsbuslinien";
 "rendering_value_thick_name" = "Fett";
@@ -1741,7 +1740,7 @@
 "online_sources" = "Online-Quellen";
 "select_online_source" = "Quelle auswählen";
 "download_size" = "Downloadgröße";
-"update_map" = "Aktualisieren";
+"update_map" = "Karte aktualisieren";
 "enter_profile_name" = "Profilnamen eingeben";
 "position_icon_while_moving" = "Positionssymbol in Bewegung";
 "position_icon_at_rest" = "Positionssymbol im Ruhezustand";
@@ -1859,7 +1858,7 @@
 "reset_profile_action_descr" = "Setzen Sie alle Profileinstellungen auf die Installationsvorgaben zurück. Wenn Sie auf Zurücksetzen tippen, werden alle Ihre Änderungen verworfen, diese Aktion kann nicht rückgängig gemacht werden.";
 "import_profile_descr" = "Um ein Profil zu importieren, tippen Sie in einer beliebigen Anwendung auf die gewünschte Datei (*.osf) und wählen Sie \"Nach OsmAnd Maps kopieren\"";
 "gpx_parse_error" = "OsmAnd GPX ist nicht optimal geformt, bitte kontaktieren Sie das Support-Team, um weitere Nachforschungen anzustellen.";
-"nothing_found_empty" = "Nichts gefunden";
+"nothing_found_empty" = "Kein Treffer";
 "shared_string_next" = "Weiter";
 "add_one_more_pnt" = "Einen weiteren Punkt hinzufügen";
 "delete_point" = "Punkt löschen";
@@ -2052,7 +2051,7 @@
 "available_groups" = "Verfügbare Gruppen";
 "select_group_descr" = "Gruppe auswählen oder neue hinzufügen";
 "fav_add_new_group" = "Neue Gruppe hinzufügen";
-"service" = "Dienstleistung";
+"service" = "Erschließungsweg";
 "square" = "Quadrat";
 "quick_action_coordinates_widget_descr" = "Durch Antippen dieser Aktionsschaltfläche wird das Koordinaten-Widget ein- oder ausgeblendet.";
 "hide_coordinates" = "Koordinaten ausblenden";

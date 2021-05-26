@@ -194,7 +194,6 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Deter a música";
 "shared_string_do_not_use" = "Do not use";
-"voice_provider" = "Indicacións por voz";
 "shared_string_sound" = "Son";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -252,7 +251,6 @@
 "traffic_warning_pedestrian" = "Paso de peóns";
 "traffic_warning_hazard" = "Perigo";
 "traffic_warning_tunnel" = "Túnel adiante";
-"driving_region" = "Rexión na que conducir";
 "driving_region_japan" = "Xapón";
 "driving_region_us" = "Estados Unidos";
 "driving_region_canada" = "Canadá";
@@ -412,7 +410,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Conducindo";
-"m_style_walk" = "Peón";
+"m_style_walk" = "A pé";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Amosar no mapa";
@@ -560,7 +558,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Planificación dunha viaxe";
 "help_legend" = "Lenda do mapa";
-"help_other_header" = "Outros";
+"help_other_header" = "Outra";
 "help_install_and_troubleshoot" = "Instalación e resolución de problemas";
 "help_tech_articles" = "Artigos técnicos";
 "help_versions" = "Versións";
@@ -719,7 +717,7 @@
 "get_directions" = "Indicacións";
 "parking" = "Aparcamento";
 "directions_more_options" = "Indicacións dende";
-"nearby_search" = "Procurar preto";
+"nearby_search" = "Procurar preto daquí";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -913,7 +911,7 @@
 "brown" = "Marrón";
 "display_starting_at_zoom_level" = "Amosar dende o nivel de achegamento";
 "osm_live_cancel_subscription" = "Cancelar subscrición";
-"osm_alert_title" = "Remitir";
+"osm_alert_title" = "Enviar";
 "hide_contour_lines" = "Agochar curvas de nivel";
 "blue" = "Azul";
 "shared_string_upload" = "Enviar";
@@ -1031,7 +1029,7 @@
 "shared_string_clear_all" = "Limpar todo";
 "translucent_orange" = "Laranxa translúcido";
 "modify_edit_short" = "Modificar modificación do OSM";
-"home_pt" = "Casa";
+"home_pt" = "Inicio";
 "show_notes" = "Amosar notas do OSM";
 "hide_notes" = "Agochar notas do OSM";
 "res_elliptic_mercator" = "Mercator elíptico";
@@ -1246,7 +1244,6 @@
 "routing_attr_avoid_stairs_name" = "Sen escadas";
 "routeInfo_steepness_name" = "Pendente";
 "rendering_value_red_name" = "Vermello";
-"rendering_value_browse_map_name" = "Ollar mapa";
 "rendering_value_translucent_orange_name" = "Laranxa translúcido";
 "routing_attr_avoid_ice_roads_fords_name" = "Sen estradas de xeo ou vaos";
 "rendering_attr_surface_compacted_name" = "Compactado";
@@ -1558,7 +1555,7 @@
 "hide_compass_ruler" = "Agochar a regra de compás";
 "street_level_imagery" = "Imaxes a nivel de rúa";
 "fav_point_dublicate" = "Favorito especificado con nome duplicado";
-"emergency" = "Urxencias";
+"emergency" = "Urxencia";
 "custom_osmand_plugin_name" = "Plugin personalizado do OsmAnd";
 "plan_route_change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";
@@ -1571,7 +1568,7 @@
 "square" = "Cadrado";
 "simplified_track_description" = "Só gravarase a liña da ruta, os puntos intermedios serán eliminados.";
 "show_compass_ruler" = "Amosar a regra de compás";
-"sport" = "Sport";
+"sport" = "Deporte";
 "shared_string_enable" = "Activar";
 "displayed_trips" = "Pistas amosadas";
 "res_standard" = "Mapa normal";

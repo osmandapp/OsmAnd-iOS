@@ -11,6 +11,8 @@ import Foundation
 
 var commonDict: [String:String]?
 var commonValuesDict: [String:[String]] = [:]
+var duplicatesCount = 0
+
 let languageDict = [
                     "es_AR" : "es-rAR",
                     "hsb" : "b+hsb",
@@ -150,19 +152,21 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
         do {
             let fileContent = try String(contentsOf: fileURL)
             var strings = fileContent.components(separatedBy: ";")
+            strings = filterDuplicateStrings(strings, iosDict: iosDict)
+            strings = filterEndingEmptyStrings(strings)
 
             for elem in existingLinesDict {
                 for i in 0 ..< strings.count {
-                    if strings[i].contains("\"" + elem.key + "\"")
-                    {
-                        strings[i] = strings[i].replacingOccurrences(of: "\"" + iosDict[elem.key]! + "\"", with: "\"" + elem.value + "\"")
+                    if strings[i].contains("\"" + elem.key + "\"") {
+                        strings[i] = strings[i].replacingOccurrences(of: "\"" + iosDict[elem.key]! + "\"", with: "\"" + filterUnsafeChars(elem.value) + "\"")
                     }
                 }
             }
 
             for elem in newLinesDict {
-                strings.append("\n\"" + elem.key + "\" = \"" + elem.value + "\";")
+                strings.append("\n\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
             }
+            strings.append("")
             
             let newFileContent = strings.joined(separator: ";")
         
@@ -175,7 +179,61 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
             print ("error reading file: \(error)")
         }
     }
-    print(language, "added: ", newLinesDict.count, " udated: ", existingLinesDict.count)
+    print(language, "added: ", newLinesDict.count, "   udated: ", existingLinesDict.count, "   deleted duplicates: ", duplicatesCount)
+}
+
+func filterEndingEmptyStrings(_ stringsArray: [String]) -> [String] {
+    var strings = stringsArray
+    repeat {
+        while strings.last!.hasSuffix("\n")
+        {
+            strings[strings.count - 1] = String(strings[strings.count - 1].dropLast())
+        }
+        if strings.last!.count == 0
+        {
+            strings.removeLast()
+        }
+    } while strings.last!.count == 0
+    return strings
+}
+
+func filterDuplicateStrings(_ stringsArray: [String], iosDict: [String : String]) -> [String]
+{
+    var strings = stringsArray
+    var linesToDelete = Set<Int>()
+    
+    for key in iosDict.keys {
+        var count = 0
+        for i in 0 ..< strings.count {
+            if strings[i].contains("\"" + key + "\"") {
+                count += 1
+                if count > 1 {
+                    linesToDelete.insert(i)
+                }
+            }
+        }
+    }
+
+    for i in linesToDelete.sorted(by: >) {
+        strings.remove(at: i)
+    }
+    
+    duplicatesCount = linesToDelete.count
+    return strings
+}
+
+func filterUnsafeChars(_ text: String) -> String {
+    var result: String = text;
+    if result.hasPrefix("\"") {
+        result = String(result.dropFirst())
+    }
+    if result.hasSuffix(";") {
+        result = String(result.dropLast())
+    }
+    if result.hasSuffix("\"") {
+        result = String(result.dropLast())
+    }
+    return result
 }
 
 func parseIos (language: String, initial: Bool) -> [String : String] {

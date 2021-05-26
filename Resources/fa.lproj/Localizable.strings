@@ -1529,3 +1529,11 @@
 
 // Resources
 "shared_string_resources" = "منابع";
+"mapil_usernames" = "نام‌های کاربری";
+"osm_edits_edits_label" = "ویرایش‌ها";
+"osm_value" = "مقدار";
+"osm_tag" = "تگ";
+"osm_modified" = "اصلاح‌شده";
+"osm_created" = "ایجادشده";
+"years_short" = "سال‌ها";
+"year_short" = "سال";

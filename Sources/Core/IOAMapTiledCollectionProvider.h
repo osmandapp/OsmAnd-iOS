@@ -62,7 +62,7 @@ public:
 
     virtual OsmAnd::PointI getPoint31(const int index) const = 0;
     virtual int getPointsCount() const = 0;
-    virtual std::shared_ptr<SkBitmap> getImageBitmap(const int index) = 0;
+    virtual std::shared_ptr<SkBitmap> getImageBitmap(const int index, bool isFullSize) = 0;
     virtual QString getCaption(const int index) const = 0;
     virtual OsmAnd::MapMarker::PinIconVerticalAlignment getPinIconVerticalAlignment() const;
     virtual OsmAnd::MapMarker::PinIconHorisontalAlignment getPinIconHorisontalAlignment() const;

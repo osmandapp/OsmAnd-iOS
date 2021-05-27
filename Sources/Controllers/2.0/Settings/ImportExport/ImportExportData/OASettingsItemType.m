@@ -42,6 +42,8 @@
             return @"OSM_EDITS";
         case EOASettingsItemTypeActiveMarkers:
             return @"ACTIVE_MARKERS";
+        case EOASettingsItemTypeHistoryMarkers:
+            return @"HISTORY_MARKERS";
         case EOASettingsItemTypeGpx:
             return @"GPX";
         case EOASettingsItemTypeSearchHistory:
@@ -83,6 +85,8 @@
         return EOASettingsItemTypeOsmEdits;
     if ([typeName isEqualToString:@"ACTIVE_MARKERS"])
         return EOASettingsItemTypeActiveMarkers;
+    if ([typeName isEqualToString:@"HISTORY_MARKERS"])
+        return EOASettingsItemTypeHistoryMarkers;
     if ([typeName isEqualToString:@"GPX"])
         return EOASettingsItemTypeGpx;
     if ([typeName isEqualToString:@"SEARCH_HISTORY"])

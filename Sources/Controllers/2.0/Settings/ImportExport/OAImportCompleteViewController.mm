@@ -58,6 +58,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeOsmNotes,
     EOAImportDataTypeOsmEdits,
     EOAImportDataTypeActiveMarkers,
+    EOAImportDataTypeHistoryMarkers,
     EOAImportDataTypeSearchHistory
 };
 
@@ -117,6 +118,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     __block NSInteger osmNotesCount = 0;
     __block NSInteger osmEditsCount = 0;
     __block NSInteger markersCount = 0;
+    __block NSInteger historyMarkersCount = 0;
     __block NSInteger searchHistoryCount = 0;
     
     [_itemsMap enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull settings, BOOL * _Nonnull stop) {
@@ -146,6 +148,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             osmEditsCount += settings.count;
         else if (type == OAExportSettingsType.ACTIVE_MARKERS)
             markersCount += settings.count;
+        else if (type == OAExportSettingsType.HISTORY_MARKERS)
+            historyMarkersCount += settings.count;
         else if (type == OAExportSettingsType.SEARCH_HISTORY)
             searchHistoryCount += settings.count;
     }];
@@ -277,6 +281,16 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"iconName": @"ic_custom_marker",
             @"count": [NSString stringWithFormat:@"%ld", markersCount],
             @"category" : @(EOAImportDataTypeActiveMarkers)
+            }
+         ];
+    }
+    if (historyMarkersCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"markers_history"),
+            @"iconName": @"ic_custom_history",
+            @"count": [NSString stringWithFormat:@"%ld", historyMarkersCount],
+            @"category" : @(EOAImportDataTypeHistoryMarkers)
             }
          ];
     }
@@ -437,6 +451,10 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         }
     }
     else if (dataType == EOAImportDataTypeActiveMarkers)
+    {
+        [rootController.mapPanel showCards];
+    }
+    else if (dataType == EOAImportDataTypeHistoryMarkers)
     {
         [rootController.mapPanel showCards];
     }

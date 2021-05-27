@@ -479,7 +479,7 @@
     {
         OASettingsCategoryItems *items = self.itemsMap[_itemTypes[indexPath.section]];
         OAExportSettingsType *type = [items getTypes][indexPath.row - 1];
-        if (type != OAExportSettingsType.SEARCH_HISTORY && type != OAExportSettingsType.GLOBAL)
+        if (type != OAExportSettingsType.SEARCH_HISTORY && type != OAExportSettingsType.HISTORY_MARKERS && type != OAExportSettingsType.GLOBAL)
         {
             OAExportItemsSelectionViewController *selectionVC = [[OAExportItemsSelectionViewController alloc] initWithItems:[items getItemsForType:type] type:type selectedItems:self.selectedItemsMap[type]];
             selectionVC.delegate = self;

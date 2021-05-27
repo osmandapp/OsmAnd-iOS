@@ -29,6 +29,7 @@
 #import "OAExportSettingsType.h"
 #import "OAFavoritesHelper.h"
 #import "OAMarkersSettingsItem.h"
+#import "OAHistoryMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
 #import "OASearchHistorySettingsItem.h"
@@ -349,6 +350,9 @@
             break;
         case EOASettingsItemTypeActiveMarkers:
             item = [[OAMarkersSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeHistoryMarkers:
+            item = [[OAHistoryMarkersSettingsItem alloc] initWithJson:json error:&error];
             break;
         case EOASettingsItemTypeGpx:
             item = [[OAGpxSettingsItem alloc] initWithJson:json error:&error];

@@ -51,7 +51,7 @@ int OAWaypointsMapLayerProvider::getPointsCount() const
     return _locationMarks.size();
 }
 
-std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getImageBitmap(const int index, bool isFullSize)
+std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getImageBitmap(const int index, bool isFullSize /*= true*/)
 {
     const auto locationMark = _locationMarks[index];
     return getBitmapByWaypoint(locationMark, isFullSize);

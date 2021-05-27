@@ -49,7 +49,7 @@ int OAFavoritesMapLayerProvider::getPointsCount() const
     return _favorites.size();
 }
 
-std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getImageBitmap(const int index, bool isFullSize = true)
+std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getImageBitmap(const int index, bool isFullSize)
 {
     const auto fav = _favorites[index];
     return getBitmapByFavorite(fav, isFullSize);

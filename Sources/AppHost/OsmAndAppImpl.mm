@@ -134,10 +134,6 @@
 
 @synthesize carPlayActive = _carPlayActive;
 
-#if defined(OSMAND_IOS_DEV)
-@synthesize debugSettings = _debugSettings;
-#endif // defined(OSMAND_IOS_DEV)
-
 - (instancetype)init
 {
     self = [super init];
@@ -176,10 +172,6 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
-
-#if defined(OSMAND_IOS_DEV)
-        _debugSettings = [[OADebugSettings alloc] init];
-#endif // defined(OSMAND_IOS_DEV)
     }
     return self;
 }

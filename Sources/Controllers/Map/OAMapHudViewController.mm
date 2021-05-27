@@ -23,9 +23,6 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewController.h"
-#if defined(OSMAND_IOS_DEV)
-#   import "OADebugHudViewController.h"
-#endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
 #import "OAOverlayUnderlayView.h"
 #import "OAToolbarViewController.h"
@@ -83,10 +80,6 @@
     
     NSLayoutConstraint *_bottomRulerConstraint;
     NSLayoutConstraint *_leftRulerConstraint;
-    
-#if defined(OSMAND_IOS_DEV)
-    OADebugHudViewController* _debugHudViewController;
-#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -160,12 +153,6 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-	    
-#if defined(OSMAND_IOS_DEV)
-    UILongPressGestureRecognizer* debugLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                                 action:@selector(onDebugButtonLongClicked:)];
-    [_debugButton addGestureRecognizer:debugLongPress];
-#endif
 
     _mapInfoController = [[OAMapInfoController alloc] initWithHudViewController:self];
 
@@ -208,11 +195,6 @@
     [self updateColors];
 
     _mapInfoController.delegate = self;
-
-#if !defined(OSMAND_IOS_DEV)
-    _debugButton.hidden = YES;
-    _debugButton.userInteractionEnabled = NO;
-#endif // !defined(OSMAND_IOS_DEV)
 }
 
 - (void)applyCorrectViewSize
@@ -932,19 +914,6 @@
 
 - (IBAction)onDebugButtonClicked:(id)sender
 {
-#if defined(OSMAND_IOS_DEV)
-    
-    if (_debugHudViewController == nil)
-    {
-        _debugHudViewController = [OADebugHudViewController attachTo:self];
-    }
-    else
-    {
-        [_debugHudViewController.view removeFromSuperview];
-        [_debugHudViewController removeFromParentViewController];
-        _debugHudViewController = nil;
-    }
-#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value

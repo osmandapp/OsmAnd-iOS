@@ -142,10 +142,6 @@
                            selector:@selector(onApplicationDidEnterBackground)
                                name:UIApplicationDidEnterBackgroundNotification
                              object:nil];
-
-#if defined(OSMAND_IOS_DEV)
-    _forceAccuracy = OALocationServicesForcedAccuracyNone;
-#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (void) deinit
@@ -418,28 +414,8 @@
     _manager.headingOrientation = clDeviceOrientation;
 }
 
-#if defined(OSMAND_IOS_DEV)
-@synthesize forceAccuracy = _forceAccuracy;
-#endif // defined(OSMAND_IOS_DEV)
-
 - (CLLocationAccuracy) desiredAccuracy
 {
-#if defined(OSMAND_IOS_DEV)
-    switch (_forceAccuracy)
-    {
-        default:
-        case OALocationServicesForcedAccuracyNone:
-            // Do nothing
-            break;
-
-        case OALocationServicesForcedAccuracyBest:
-            return kCLLocationAccuracyBest;
-
-        case OALocationServicesForcedAccuracyBestForNavigation:
-            return kCLLocationAccuracyBestForNavigation;
-    }
-#endif // defined(OSMAND_IOS_DEV)
-
     UIDeviceBatteryState batteryState = [UIDevice currentDevice].batteryState;
 
     // In case device is plugged-in, there's no reason to save battery

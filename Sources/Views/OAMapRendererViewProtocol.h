@@ -40,10 +40,6 @@
 
 @property(readonly) OAObservable* framePreparedObservable;
 
-#if defined(OSMAND_IOS_DEV)
-@property(nonatomic) BOOL forceRenderingOnEachFrame;
-#endif // defined(OSMAND_IOS_DEV)
-
 // Utilities:
 - (void)dumpResourcesInfo;
 

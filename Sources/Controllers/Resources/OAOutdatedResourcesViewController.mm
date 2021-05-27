@@ -145,14 +145,7 @@
     // Obtain all resources separately
 
     // IOS-199
-#if defined(OSMAND_IOS_DEV)
-    if (_app.debugSettings.setAllResourcesAsOutdated)
-        _outdatedResources = _app.resourcesManager->getLocalResources();
-    else
-        _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
-#else
     _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
-#endif
 }
 
 - (void)collectResourcesDataAndItems

@@ -28,8 +28,9 @@
 @property (nonatomic) NSInteger routePointIndex;
 
 @property (nonatomic) BOOL hidden;
-
 @property (nonatomic) BOOL manual;
+
+@property (nonatomic) NSDate *creationDate;
 
 - (instancetype)initWithDesc:(NSString *)desc latitude:(double)latitude longitude:(double)longitude;
 - (double) distance:(double)latitude longitude:(double)longitude;

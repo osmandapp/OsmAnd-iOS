@@ -9,8 +9,6 @@
 #import "OsmAndAppImpl.h"
 
 #import <UIKit/UIKit.h>
-#import <QElement.h>
-#import <QElement+Appearance.h>
 
 #import "OsmAndApp.h"
 #import "OAResourcesInstaller.h"

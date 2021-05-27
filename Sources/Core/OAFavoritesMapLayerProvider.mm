@@ -49,10 +49,10 @@ int OAFavoritesMapLayerProvider::getPointsCount() const
     return _favorites.size();
 }
 
-std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getImageBitmap(const int index)
+std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getImageBitmap(const int index, bool isFullSize /*= true*/)
 {
     const auto fav = _favorites[index];
-    return getBitmapByFavorite(fav);
+    return getBitmapByFavorite(fav, isFullSize);
 }
 
 QString OAFavoritesMapLayerProvider::getCaption(const int index) const
@@ -60,16 +60,17 @@ QString OAFavoritesMapLayerProvider::getCaption(const int index) const
     return _favorites[index]->getTitle();
 }
 
-std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getBitmapByFavorite(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav)
+std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getBitmapByFavorite(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav, bool isFullSize)
 {
-    QString iconName = fav->getIcon();
+    QString iconName = isFullSize ? fav->getIcon() : QStringLiteral("");
     QString backgroundIconName = backgroundImageNameByType(fav->getBackground());
-    QString iconId = QString::number(fav->getColor().r + fav->getColor().g + fav->getColor().b) + QStringLiteral("_") + iconName + QStringLiteral("_") + backgroundIconName;
+    QString size = isFullSize ? QStringLiteral("_full") : QStringLiteral("_small");
+    QString iconId = QString::number(fav->getColor().r + fav->getColor().g + fav->getColor().b) + QStringLiteral("_") + iconName + QStringLiteral("_") + backgroundIconName + size;
     const auto bitmapIt = _iconsCache.find(iconId);
     std::shared_ptr<SkBitmap> bitmap;
     if (bitmapIt == _iconsCache.end())
     {
-        bitmap = createCompositeBitmap(fav);
+        bitmap = createCompositeBitmap(fav, isFullSize);
         _iconsCache[iconId] = bitmap;
     }
     else
@@ -79,7 +80,7 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::getBitmapByFavorite(const
     return bitmap;
 }
 
-std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav) const
+std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav, bool isFullSize) const
 {
     std::shared_ptr<SkBitmap> result;
     
@@ -108,16 +109,21 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
         return result;
     
     // poi image icon
-    UIImage *origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
-    if (!origImage)
-        origImage = [UIImage imageNamed:[OAUtilities drawablePath:@"mm_special_star"]];
+    std::shared_ptr<SkBitmap> poiIcon;
+    if (isFullSize)
+    {
+        UIImage *origImage;
+        origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
+        if (!origImage)
+            origImage = [UIImage imageNamed:[OAUtilities drawablePath:@"mm_special_star"]];
 
-    // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
-    UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(14, 14)];
-    UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
-    auto icon = [OANativeUtilities skBitmapFromCGImage:coloredImage.CGImage];
-    if (!icon)
-        return result;
+        // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
+        UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(14, 14)];
+        UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
+        poiIcon = [OANativeUtilities skBitmapFromCGImage:coloredImage.CGImage];
+        if (!poiIcon)
+            return result;
+    }
     
     // highlight icon
     NSString *highlightIconName = [NSString stringWithFormat:@"ic_bg_point_%@_top", shapeName];
@@ -125,9 +131,14 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
     if (!highlightIcon)
         return result;
     
-    if (shadowIcon && backgroundIcon && icon && highlightIcon)
+    if (isFullSize && shadowIcon && backgroundIcon && poiIcon && highlightIcon)
     {
-        QList<std::shared_ptr<const SkBitmap>> toMerge({shadowIcon, backgroundIcon, icon, highlightIcon});
+        QList<std::shared_ptr<const SkBitmap>> toMerge({shadowIcon, backgroundIcon, poiIcon, highlightIcon});
+        result = OsmAnd::SkiaUtilities::mergeBitmaps(toMerge);
+    }
+    else if (! isFullSize && shadowIcon && backgroundIcon && highlightIcon)
+    {
+        QList<std::shared_ptr<const SkBitmap>> toMerge({shadowIcon, backgroundIcon, highlightIcon});
         result = OsmAnd::SkiaUtilities::mergeBitmaps(toMerge);
     }
     return result;

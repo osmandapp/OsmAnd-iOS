@@ -195,6 +195,9 @@
     [self updateColors];
 
     _mapInfoController.delegate = self;
+    
+    _debugButton.hidden = YES;
+    _debugButton.userInteractionEnabled = NO;
 }
 
 - (void)applyCorrectViewSize

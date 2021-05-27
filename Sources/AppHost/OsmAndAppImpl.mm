@@ -16,7 +16,6 @@
 #import "OAResourcesInstaller.h"
 #import "OADaytimeAppearance.h"
 #import "OANighttimeAppearance.h"
-#import "OAQFlatAppearance.h"
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OALog.h"
@@ -481,7 +480,6 @@
 
     _appearance = [[OADaytimeAppearance alloc] init];
     _appearanceChangeObservable = [[OAObservable alloc] init];
-    QElement.appearance = [[OAQFlatAppearance alloc] init];
     
     [OAMapStyleSettings sharedInstance];
 

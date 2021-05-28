@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeOsmEdits,
     EOAImportDataTypeActiveMarkers,
     EOAImportDataTypeHistoryMarkers,
-    EOAImportDataTypeSearchHistory
+    EOAImportDataTypeSearchHistory,
     EOAImportDataTypeGlobal
 };
 

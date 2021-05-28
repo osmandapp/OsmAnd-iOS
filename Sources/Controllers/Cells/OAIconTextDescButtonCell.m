@@ -1,12 +1,12 @@
 //
-//  OAIconTextDescButtonTableViewCell.m
+//  OAIconTextDescButtonCell.m
 //  OsmAnd
 //
 //  Created by igor on 18.02.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAIconTextDescButtonTableViewCell.h"
+#import "OAIconTextDescButtonCell.h"
 
 @implementation OAIconTextDescButtonCell
 

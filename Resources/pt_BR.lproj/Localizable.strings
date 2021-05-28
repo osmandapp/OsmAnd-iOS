@@ -97,7 +97,7 @@
 "m_style_overview" = "Explorar";
 "m_style_car" = "Dirigindo";
 "m_style_walk" = "A pé";
-"m_style_bicycle" = "Ciclismo";
+"m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Exibir no mapa";
 "map_settings_type" = "Tipo de mapa";
@@ -692,7 +692,7 @@
 "show_warnings_title" = "Mostrar alertas…";
 "shared_string_previous" = "Anterior";
 "transport_nearby_routes" = "Cerca de";
-"transport_stop" = "Parada";
+"transport_stop" = "Parar";
 "shared_string_close" = "Fechar";
 "save_global_track_interval_descr" = "Escolha o intervalo de registro para a gravação de trilha geral (habilitado por meio do widget de registro GPX no mapa).";
 "show_pedestrian_warnings" = "Faixas de pedestre";
@@ -1821,7 +1821,7 @@
 "configure_map_descr" = "Aparência do mapa";
 "export_profile_descr" = "Você pode exportar todas as configurações do perfil, copiar todas as configurações de outro perfil ou redefinir todas as configurações do perfil para o estado padrão.";
 "profile_sett_descr" = "Afetar o perfil de aplicativo selecionado";
-"app_profiles" = "Perfis de aplicação";
+"app_profiles" = "Perfis do aplicativo";
 "selected_profile" = "Perfil selecionado";
 "osmand_profile" = "Perfil do OsmAnd";
 "ui_customization_descr" = "Itens da gaveta, menu de contexto";

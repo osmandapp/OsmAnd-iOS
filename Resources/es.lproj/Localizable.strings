@@ -82,7 +82,7 @@
 "gpx_uphills_total" = "Ascenso total";
 // Map settings
 "rendering_value_browse_map_name" = "Resumen";
-"m_style_car" = "Conduciendo";
+"m_style_car" = "Automóvil";
 "m_style_walk" = "Peatón";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
@@ -384,7 +384,7 @@
 "get_directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
 "shared_string_modify" = "Modificar";
-"parking" = "Aparcamiento";
+"parking" = "Aparcamientos";
 "est_travel_time" = "Tiempo de viaje estimado";
 "pedestrian" = "Peatón";
 "sorting" = "Ordenar";
@@ -810,7 +810,7 @@
 "help_search" = "Búsqueda en el mapa";
 "help_trip_planning" = "Planificación de viaje";
 "help_legend" = "Leyenda del mapa";
-"help_other_header" = "Otra";
+"help_other_header" = "Otros";
 "help_install_and_troubleshoot" = "Instalación y solución de problemas";
 "help_tech_articles" = "Artículos técnicos";
 "help_versions" = "Versiones";
@@ -1285,7 +1285,6 @@
 "res_elliptic_mercator" = "Mercator elíptica";
 "res_url" = "URL";
 "rendering_attr_hmRendered_name" = "Mostrar más detalle del mapa";
-"rendering_value_browse_map_name" = "Ver mapa";
 "routing_attr_avoid_ice_roads_fords_name" = "Sin caminos de hielo ni vados";
 "rendering_value_lightblue_name" = "Azul claro";
 "rendering_attr_alpineHiking_description" = "Dibujar senderos según la escala SAC.";
@@ -1792,7 +1791,7 @@
 "total" = "Total";
 "res_online_source_cache_alert" = "Al aplicar estos cambios, los datos almacenados de esta fuente de teselas serán borrados";
 "menu" = "Menú";
-"app_profiles" = "Perfiles de aplicación";
+"app_profiles" = "Perfiles de la aplicación";
 "quick_action_showhide_mapillary_title" = "Mostrar u ocultar Mapillary";
 "public_transport_show" = "Mostrar transporte público";
 "help_osmand_live" = "Suscripción - OsmAnd Live";
@@ -1969,7 +1968,7 @@
 "trim_after" = "Recortar después de este punto";
 "tracks_on_map" = "Trazas en el mapa";
 "track_is_saved" = "¡Se ha guardado \n«%s»!";
-"track" = "Camino rural";
+"track" = "Traza";
 "touting_specified_vehicle_parameters_descr" = "Los parámetros definidos del vehículo pueden afectar la navegación.";
 "toggle_public_transport" = "Mostrar u ocultar transporte público";
 "toggle_hillshade" = "Mostrar/Ocultar terreno";

@@ -79,7 +79,7 @@
 "map_settings_type" = "Typ mapy";
 "map_mode" = "Režim mapy";
 "map_settings_day" = "Denný režim";
-"map_settings_night" = "V noci";
+"map_settings_night" = "Nočný režim";
 "map_settings_style" = "Štýl vykresľovania";
 "map_settings_overunder" = "Prekrývacia/Podkladová";
 "map_settings_over" = "Prekrývacia";
@@ -269,7 +269,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "hod";
+"units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sek.";
 // Map
@@ -345,7 +345,7 @@
 "product_desc_asia" = "Neobmedzené sťahovania máp Ázie";
 "product_title_wiki" = "Wikipédia";
 "product_desc_wiki" = "Údaje Wikipédie";
-"product_title_srtm" = "Vrstevnice";
+"product_title_srtm" = "Údaje vrstevníc";
 "product_desc_srtm" = "Zobrazenie vrstevníc";
 "my_location" = "Moja poloha";
 "all_categories" = "Všetky kategórie";
@@ -402,7 +402,7 @@
 "enter_fav_name" = "Zadajte názov obľúbeného bodu";
 "res_installing" = "Inštaluje sa…";
 "res_roads" = "Cesty";
-"res_srtm" = "Vrstevnice";
+"res_srtm" = "Údaje vrstevníc";
 "res_wiki" = "Wikipédia";
 "res_hillshade" = "Tieňované svahy";
 "select_language" = "Zvoľte jazyk";
@@ -763,7 +763,7 @@
 "switch_start_finish" = "Vymeniť východzí a cieľový bod";
 "clear_all_intermediates" = "Zmazať všetky prechodné body";
 "cancel_navigation" = "Zastaviť navigáciu";
-"transport_routes" = "Trasy";
+"transport_routes" = "Linky";
 "transport_nearby_routes_within" = "Blízke trasy do";
 "transport_stop" = "Zastaviť";
 "transport_nearby_routes" = "Do vzdialenosti";
@@ -813,7 +813,7 @@
 "shared_string_close" = "Zavrieť";
 "actions" = "Akcie";
 "directions_more_options" = "Pokyny odtiaľto";
-"nearby_search" = "Hľadať v okolí";
+"nearby_search" = "Hľadať neďaleko Vás";
 "map_widget_ruler_control" = "Kruhové pravítko";
 "import_from_docs" = "Importovať z dokumentov";
 "osm_live_routing" = "Navigácia OsmAnd Live";
@@ -906,7 +906,7 @@
 "osm_edits_offline_layer" = "OSM úpravy/poznámky (offline)";
 "osm_notes_online_layer" = "OSM Poznámky (online)";
 "osm_edits_basic" = "Základné";
-"osm_edits_advanced" = "Rozšírené";
+"osm_edits_advanced" = "Pokročilí";
 "osm_edits_all" = "Všetky úpravy";
 "osm_edits_poi" = "Úpravy POI";
 "osm_edits_notes" = "Poznámky";
@@ -917,7 +917,7 @@
 "osm_edit_show_on_map" = "Zobraziť zmenu na mape";
 "osm_edit_show_on_map_descr" = "Zobraziť mapu okolo tohto bodu";
 "modify_poi_short" = "Upraviť bod záujmu (POI)";
-"create_poi_short" = "Vytvoriť POI";
+"create_poi_short" = "Vytvorenie bodu záujmu (POI)";
 "modify_edit_short" = "Upraviť zmenu OSM";
 "open_osm_note" = "Otvoriť OSM poznámku";
 "edit_osm_note" = "Upraviť OSM poznámku";
@@ -1183,7 +1183,7 @@
 "quick_action_start_stop_nav_descr" = "Použite toto tlačidlo pre spustenie alebo ukončenie navigácie.";
 "quick_action_no_underlay" = "Žiadna podkladová vrstva";
 "change_map_source" = "Zmeniť zdroj mapy";
-"home_pt" = "Doma";
+"home_pt" = "Domov";
 "change_map_underlay" = "Zmeniť podkladovú mapu";
 "osm_note_action_field_descr" = "Táto správa je zahrnutá do poľa komentára.";
 "key_hint_deselect" = "Zrušiť výber";
@@ -1369,7 +1369,6 @@
 "routing_attr_avoid_share_taxi_description" = "Vyhnúť sa zdieľaným taxíkom";
 "rendering_attr_smoothness_good_name" = "Dobrá";
 "rendering_value_germanRoadAtlas_name" = "Nemecký atlas ciest";
-"rendering_value_browse_map_name" = "Štandardná";
 "rendering_attr_noAdminboundaries_name" = "Hranice oblastí";
 "routing_attr_driving_style_safety_name" = "Preferovať vedľajšie cesty";
 "rendering_attr_tracktype_grade3_name" = "Väčšinou pevný";
@@ -1737,7 +1736,7 @@
 "square" = "Štvorec";
 "group_name" = "Názov skupiny";
 "some_of" = "%d z %d";
-"service" = "Služby";
+"service" = "Obslužná cesta";
 "searching_gps" = "Hľadá sa GPS";
 "shared_string_gpx_points" = "Body";
 "search_preogress" = "Vyhľadávanie…";
@@ -1753,7 +1752,7 @@
 "shared_string_import" = "Import";
 "symbols" = "Symboly";
 "add_custom_category" = "Pridať vlastnú kategóriu";
-"emergency" = "Pomoc v núdzi";
+"emergency" = "Núdzová situácia/Záchrana";
 "sport" = "Šport";
 "select_group" = "Zvoľte skupinu";
 "favorite_friends_category" = "Priatelia";
@@ -1769,7 +1768,7 @@
 "special" = "Špeciálne";
 "icon" = "Ikona";
 "split_before" = "Rozdeliť predtým";
-"track" = "Stopa";
+"track" = "Poľná cesta";
 "reverse_track_dir" = "Obrátiť smer stopy";
 "shared_string_others" = "Iné";
 "default_color" = "Predvolená farba";

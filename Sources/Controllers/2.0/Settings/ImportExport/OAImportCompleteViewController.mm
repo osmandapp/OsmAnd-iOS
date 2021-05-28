@@ -43,6 +43,7 @@
 #import "OAMarkersSettingsItem.h"
 #import "OAExportSettingsType.h"
 #import "OADestination.h"
+#import "OAHistoryViewController.h"
 
 typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeProfiles = 0,
@@ -58,7 +59,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeOsmNotes,
     EOAImportDataTypeOsmEdits,
     EOAImportDataTypeActiveMarkers,
-    EOAImportDataTypeSearchHistory,
+    EOAImportDataTypeHistoryMarkers,
+    EOAImportDataTypeSearchHistory
     EOAImportDataTypeGlobal
 };
 
@@ -120,6 +122,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     __block NSInteger osmNotesCount = 0;
     __block NSInteger osmEditsCount = 0;
     __block NSInteger markersCount = 0;
+    __block NSInteger historyMarkersCount = 0;
     __block NSInteger searchHistoryCount = 0;
     __block NSInteger globalCount = 0;
 
@@ -150,6 +153,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             osmEditsCount += settings.count;
         else if (type == OAExportSettingsType.ACTIVE_MARKERS)
             markersCount += settings.count;
+        else if (type == OAExportSettingsType.HISTORY_MARKERS)
+            historyMarkersCount += settings.count;
         else if (type == OAExportSettingsType.SEARCH_HISTORY)
             searchHistoryCount += settings.count;
         else if (type == OAExportSettingsType.GLOBAL)
@@ -283,6 +288,16 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"iconName": @"ic_custom_marker",
             @"count": [NSString stringWithFormat:@"%ld", markersCount],
             @"category" : @(EOAImportDataTypeActiveMarkers)
+            }
+         ];
+    }
+    if (historyMarkersCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"markers_history"),
+            @"iconName": @"ic_custom_history",
+            @"count": [NSString stringWithFormat:@"%ld", historyMarkersCount],
+            @"category" : @(EOAImportDataTypeHistoryMarkers)
             }
          ];
     }
@@ -464,6 +479,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     else if (dataType == EOAImportDataTypeActiveMarkers)
     {
         [rootController.mapPanel showCards];
+    }
+    else if (dataType == EOAImportDataTypeHistoryMarkers)
+    {
+        OAHistoryViewController *history = [[OAHistoryViewController alloc] init];
+        [rootController.navigationController pushViewController:history animated:YES];
     }
     else if (dataType == EOAImportDataTypeSearchHistory)
     {

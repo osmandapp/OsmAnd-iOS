@@ -94,7 +94,7 @@ jobs:
         name: qt-ios-prebuilt.zip
         path: qt-ios-prebuilt.zip
     - name: Configure iOS OsmAndCore
-      run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
+      run: 'xcodebuild BITCODE_GENERATION_MODE=bitcode OTHER_CFLAGS="-fembed-bitcode" -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
       working-directory: baked/fat-ios-clang.xcode
     - name: Build iOS OsmAndCore
       run: 'xcodebuild BITCODE_GENERATION_MODE=bitcode OTHER_CFLAGS="-fembed-bitcode" -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release'

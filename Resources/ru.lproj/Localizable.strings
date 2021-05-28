@@ -76,7 +76,7 @@
 "gpx_uphills_total" = "Всего подъем";
 // Map settings
 "rendering_value_browse_map_name" = "Обзор";
-"m_style_car" = "Вождение";
+"m_style_car" = "Автомобиль";
 "m_style_walk" = "Пешеход";
 "m_style_bicycle" = "Велосипед";
 "map_settings_map" = "Карта";
@@ -101,7 +101,7 @@
 // Intro
 "intro_skip" = "Пропустить";
 "intro_download" = "Загрузить\nкарту";
-"intro_next" = "Следующий";
+"intro_next" = "Далее";
 "intro_welcome" = "Добро пожаловать\nOsmAnd";
 "intro_promo" = "Мировые офлайн карты";
 "intro_placeholder" = "введите название региона";
@@ -180,7 +180,7 @@
 // Import
 "import_title" = "Импортировать данные";
 "import_choose_type" = "Выберите что импортировать";
-"import_favorite" = "Избранное";
+"import_favorite" = "Избранная";
 "import_failed" = "Импорт завершился не успешно";
 "import_gpx" = "GPX трек";
 // Context menu
@@ -347,14 +347,14 @@
 "shared_string_edit" = "Редактировать";
 "product_title_wiki" = "Википедия";
 "product_desc_wiki" = "Данные Википедии";
-"product_title_srtm" = "Линии высот";
+"product_title_srtm" = "Контурные линии";
 "product_desc_srtm" = "Отображать контурные линии";
 "enter_description" = "Введите описание";
 "description" = "Описание";
 "enter_fav_name" = "Введите имя";
 "res_installing" = "Установка…";
 "res_roads" = "Дороги";
-"res_srtm" = "Линии высот";
+"res_srtm" = "Контурные линии";
 "res_wiki" = "Википедия";
 "res_hillshade" = "Затенение рельефа";
 "select_language" = "Выберите язык";
@@ -391,7 +391,7 @@
 "gpx_speed" = "Скорость";
 "shared_string_dismiss" = "Отменить";
 "shared_string_modify" = "Изменить";
-"shared_string_later" = "Продолжить";
+"shared_string_later" = "Позже";
 "offline_maps" = "Офлайн-карты";
 "download_map" = "Скачать карту";
 "gpx_route" = "Маршрут";
@@ -634,7 +634,7 @@
 "in_app_purchase_desc" = "Разовый платёж";
 "transport_routes" = "Маршруты";
 "transport_nearby_routes" = "В пределах";
-"transport_stop" = "Выключить";
+"transport_stop" = "Стоп";
 "cancel_navigation" = "Остановить навигацию";
 "switch_start_finish" = "Поменять местами пункты отправления и назначения";
 "shared_string_options" = "Опции";
@@ -688,7 +688,7 @@
 "osm_website" = "Веб-сайт";
 "osm_add_place" = "Добавить место";
 "osm_modify_place" = "Изменить место";
-"osm_poi_delete_title" = "Удаление POI";
+"osm_poi_delete_title" = "Удалить POI";
 "osm_alert_message" = "Сообщение";
 "osm_alert_button_ok" = "Создать заметку";
 "osm_upload_failed_title" = "Ошибка отправки";
@@ -762,7 +762,7 @@
 "help_search" = "Поиск по карте";
 "help_trip_planning" = "Планирование поездки";
 "help_legend" = "Легенда";
-"help_other_header" = "Прочее";
+"help_other_header" = "Другое";
 "help_install_and_troubleshoot" = "Установка и решение проблем";
 "help_tech_articles" = "Технические статьи";
 "help_versions" = "Версии";
@@ -970,7 +970,7 @@
 "mapillary_get_title" = "Улучшить фотопокрытие в Mapillary";
 "shared_string_not_set" = "Не установлено";
 "shared_string_reset" = "Сбросить";
-"shared_string_filter" = "Фильтровать";
+"shared_string_filter" = "Фильтр";
 "mapil_usernames" = "Имена пользователей";
 "osm_upload_complete" = "Отправка завершена";
 "osm_edit_uploading" = "Отправка…";
@@ -1163,7 +1163,7 @@
 "osm_edits_offline_layer" = "OSM Правки/Заметки (офлайн)";
 "osm_notes_online_layer" = "OSM Заметки (онлайн)";
 "osm_edits_basic" = "Основные";
-"osm_edits_advanced" = "Продвинуто";
+"osm_edits_advanced" = "Расширенные";
 "osm_edits_poi" = "Правки POI";
 "osm_poi_id_label" = "Идентификатор POI:";
 "osm_edits_title" = "OSM Правки";
@@ -1225,7 +1225,6 @@
 "select_favorite" = "Выберите избранное";
 "avoid_by_type" = "Исключение по типу";
 "select_map_marker" = "Выберите маркер";
-"shared_string_on" = "Вкл.";
 "shared_string_show_more" = "Показать больше";
 "sett_deg180" = "180 градусов";
 "sett_deg360" = "360 градусов";
@@ -1524,7 +1523,6 @@
 "rendering_attr_hidePOILabels_name" = "Названия POI";
 "rendering_value_low_name" = "Низкая";
 "routeInfo_steepness_name" = "Крутизна";
-"rendering_value_browse_map_name" = "Обзор карты";
 "routeInfo_surface_name" = "Покрытие";
 "routing_attr_allow_expert_description" = "Чрезвычайно сложные маршруты с опасными препятствиями и небезопасным окружением.";
 "rendering_attr_hideOverground_name" = "Надземные объекты";
@@ -2026,7 +2024,7 @@
 "none_point_error" = "Добавьте хотя бы одну точку.";
 "default_color" = "Цвет по умолчанию";
 "copied_to_clipboard" = "Скопировано в буфер обмена";
-"service" = "Служебная";
+"service" = "Сервис";
 "square" = "Квадрат";
 "emergency" = "Экстренные службы";
 "symbols" = "Символы";

@@ -16,7 +16,7 @@
 #import "OAMapStyleSettings.h"
 #import "OASettingSwitchCell.h"
 #import "OATitleSliderTableViewCell.h"
-#import "OAIconTextDescButtonTableViewCell.h"
+#import "OAIconTextDescButtonCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
 #import "OALocalResourceInformationViewController.h"
@@ -319,7 +319,7 @@ static NSInteger kButtonsSection;
         OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-           NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescButtonTableViewCell" owner:self options:nil];
+           NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescButtonCell getCellIdentifier] owner:self options:nil];
            cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
         }
         

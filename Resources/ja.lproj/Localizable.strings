@@ -37,7 +37,7 @@
 "transport_routes" = "ルート";
 "transport_nearby_routes_within" = "近辺のルート";
 "transport_nearby_routes" = "内";
-"transport_stop" = "停止";
+"transport_stop" = "乗り場";
 "cancel_navigation" = "ナビゲーションの停止";
 "start_navigation" = "ナビゲーションの開始";
 "intermediate_items_sort_by_distance" = "移動距離を最短で並べ替え";
@@ -426,7 +426,7 @@
 "poi_hide" = "非表示";
 // My Places
 "favorites" = "お気に入り";
-"tracks" = "経路";
+"tracks" = "使用した経路";
 // GPX
 "gpx_point" = "地点";
 "gpx_waypoint" = "経由地点";
@@ -483,7 +483,7 @@
 "gpx_slope" = "勾配";
 // Map settings
 "rendering_value_browse_map_name" = "概要";
-"m_style_car" = "乗用車";
+"m_style_car" = "ドライブ";
 "m_style_walk" = "徒歩";
 "m_style_bicycle" = "自転車";
 "map_settings_map" = "マップ";
@@ -653,7 +653,7 @@
 "osm_failed_uploads" = "失敗しました";
 "osm_note" = "OSMでの注釈";
 "osm_created" = "作成しました";
-"osm_deleted" = "削除しました";
+"osm_deleted" = "削除されました";
 "osm_modified" = "修正しました";
 "osm_reopened" = "再開しました";
 "osm_name" = "OpenStreetMapのユーザー名";
@@ -698,7 +698,7 @@
 "osm_edits_offline_layer" = "OSM編集/メモ (オフライン)";
 "osm_notes_online_layer" = "OSMメモ (オンライン)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "拡張";
+"osm_edits_advanced" = "上級者向け";
 "osm_edits_all" = "すべての編集";
 "osm_edits_poi" = "POIの編集";
 "osm_edits_notes" = "メモ";
@@ -1199,7 +1199,7 @@
 "postcode" = "郵便番号";
 "show_something_on_map" = "マップ上に%@を表示";
 "search_POI_level_btn" = "検索範囲を拡大";
-"shared_string_street" = "街路";
+"shared_string_street" = "通り";
 "shared_string_building" = "建物";
 "shared_string_street_intersection" = "交差点";
 "shared_string_address" = "住所";
@@ -1509,7 +1509,6 @@
 "rendering_attr_highway_class_street_name" = "街路";
 "rendering_attr_tramRoutes_name" = "路面電車でのルート";
 "routing_attr_avoid_borders_description" = "国境を越えて別の国に入るようなルート設定を避けます。";
-"rendering_value_browse_map_name" = "マップの閲覧";
 "routing_attr_avoid_ferry_description" = "移動手段にフェリーを使いません";
 "rendering_attr_surface_pebblestone_name" = "砂利舗装";
 "routing_attr_avoid_bus_name" = "バスを使わない";
@@ -1924,7 +1923,7 @@
 "point_to_navigate" = "案内する";
 "select_another_track" = "別の経路を選択";
 "select_track_to_follow" = "たどる経路の選択";
-"track" = "経路";
+"track" = "農業用道路、林道";
 "follow_track" = "経路をたどる";
 "split_after" = "この後で分割";
 "split_before" = "この前で分割";
@@ -2018,7 +2017,7 @@
 "service" = "アクセス道路、特定施設用道路";
 "special" = "特別";
 "sport" = "スポーツ";
-"emergency" = "救急";
+"emergency" = "救急施設";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";

@@ -128,7 +128,7 @@ static OAExportSettingsType * ONLINE_ROUTING_ENGINES;
 + (OAExportSettingsType *)HISTORY_MARKERS
 {
     if (!HISTORY_MARKERS)
-        HISTORY_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"markers_history") icon:[UIImage templateImageNamed:@"ic_custom_marker"]];
+        HISTORY_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"markers_history") icon:[UIImage templateImageNamed:@"ic_custom_history"]];
     return HISTORY_MARKERS;
 }
 

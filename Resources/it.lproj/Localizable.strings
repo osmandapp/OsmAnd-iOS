@@ -103,7 +103,7 @@
 // Intro
 "intro_skip" = "Salta";
 "intro_download" = "Scarica\nmappa";
-"intro_next" = "Avanti";
+"intro_next" = "Successivo";
 "intro_welcome" = "Benvenuti su \nOsmAnd";
 "intro_promo" = "Mappe globali offline";
 "intro_placeholder" = "immetti il nome della tua regione";
@@ -113,7 +113,7 @@
 "sett_km" = "Chilometri";
 "sett_ml" = "Miglia";
 "sett_zoom" = "Pulsante zoom";
-"sett_show" = "Mostra";
+"sett_show" = "Visualizza";
 "sett_notshow" = "Non mostrare";
 "sett_loc_fmt" = "Formato posizione";
 "sett_deg" = "Gradi";
@@ -362,7 +362,7 @@
 "product_desc_skimap" = "Piste da sci per tutte le stazioni sciistiche del mondo";
 "shared_string_dismiss" = "Ignora";
 "shared_string_modify" = "Modifica";
-"shared_string_later" = "Dopo";
+"shared_string_later" = "In seguito";
 "offline_maps" = "Mappe offline";
 "download_map" = "Download mappa";
 "gpx_route" = "Percorso";
@@ -861,7 +861,7 @@
 "my_places" = "I miei luoghi";
 "map_sources" = "Sorgenti della mappa";
 "create_items" = "Crea oggetti";
-"osm_alert_title" = "Invia";
+"osm_alert_title" = "Esegui";
 "show_contour_lines" = "Visualizza le isoipse";
 "black" = "Nero";
 "route_parameters" = "Parametri del percorso";
@@ -886,7 +886,7 @@
 "osm_editing_lost_changes_title" = "Uscire senza salvare?";
 "add_first_inermediate" = "Aggiungi il primo intermedio";
 "change_map_source" = "Cambia la sorgente della mappa";
-"help_other_header" = "Altra";
+"help_other_header" = "Altro";
 "help_follow_us" = "Seguici";
 "map_underlays" = "Mappa di sottofondo";
 "key_hint_deselect" = "Deseleziona";
@@ -937,7 +937,7 @@
 "prefer_in_routing_descr" = "Preferisci autostrade.";
 "replace_destination" = "Sostituisci la destinazione";
 "key_hint_select" = "Seleziona";
-"product_title_sea_depth_contours" = "Isoipse nautiche";
+"product_title_sea_depth_contours" = "Linee isoipse marine";
 "quick_action_no_overlay" = "Nessun stato sovrapposto";
 "translucent_purple" = "Viola traslucido";
 "tile_cache" = "Cache mattonelle";
@@ -948,7 +948,7 @@
 "nearby_search" = "Ricerca vicino";
 "help_first_use" = "Primo utilizzo";
 "fav_add_group" = "Aggiungi un gruppo";
-"quick_action_name" = "Azione rapida";
+"quick_action_name" = "Azione veloce";
 "osm_alert_button_ok" = "Crea nota";
 "mapil_pano_only" = "Mostra solo immagini a 360°";
 "routing_settings_descr" = "Configura la navigazione";
@@ -961,7 +961,7 @@
 "shared_string_street" = "Strada";
 "brown" = "Marrone";
 "osm_note_created" = "Nota di OSM creata";
-"osm_str_name" = "Nome della strada";
+"osm_str_name" = "Nome strada";
 "work_pt" = "Lavoro";
 "keep_informing_descr" = "Annuncia nuovamente a intervalli regolari le indicazioni di navigazione.";
 "add_gpx_waypoint" = "Aggiungi un punto intermedio GPX";
@@ -1018,7 +1018,6 @@
 "routing_attr_driving_style_prefer_unpaved_description" = "Preferisci le strade pavimentate.";
 "routeInfo_road_types_name" = "Tipi di strade";
 "rendering_attr_piste_difficulty_aerialway_name" = "Funivia";
-"rendering_value_browse_map_name" = "Esplorazione mappa";
 "rendering_attr_roadColors_description" = "Seleziona una combinazione di colori per le strade:";
 "rendering_attr_hideProposed_name" = "Oggetti proposti";
 "rendering_attr_highway_class_road_name" = "Strada";
@@ -1695,7 +1694,7 @@
 "update_map" = "Aggiorna mappa";
 "shared_string_max" = "Massimo";
 "shared_string_min" = "Min";
-"nothing_found_empty" = "Nessun risultato";
+"nothing_found_empty" = "Nonè stato tovato nulla";
 "meters" = "metri";
 "tones" = "toni";
 "announce" = "Annunci";

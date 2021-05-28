@@ -218,13 +218,13 @@
 "units_km" = "χλμ";
 "gpx_waypoint" = "Σημείο διαδρομής";
 "show_pedestrian_warnings" = "Διαβάσεις πεζών";
-"nearby_search" = "Αναζήτηση στη γύρω περιοχή";
+"nearby_search" = "Αναζήτηση κοντινών αποστάσεων";
 "help_versions" = "Εκδόσεις";
 "prefer_in_routing_descr" = "Να προτιμώνται αυτοκινητόδρομοι.";
 "gpx_deactivated" = "Απενεργοποιημένο";
 "key_hint_deselect" = "Αποεπιλογή";
 "map_underlays" = "Υποστρώματα χάρτη";
-"favorites" = "Αγαπημένα";
+"favorites" = "Τα Αγαπημένα";
 "shared_string_from" = "από";
 "show_traffic_warnings" = "Κυκλοφοριακές προειδοποιήσεις";
 "help_about" = "Περί";
@@ -348,7 +348,7 @@
 "settings_preset_descr" = "Η εμφάνιση χάρτη και οι ρυθμίσεις πλοήγησης απομνημονευονται ανά προφίλ χρήστη. Καθορίστε το προεπιλεγμένο προφίλ σας εδώ.";
 "green" = "Πράσινο";
 "road_blocked" = "Κλειστός δρόμος";
-"osm_alert_title" = "Υποβολή";
+"osm_alert_title" = "Commit";
 "min_mile" = "λεπτά/μίλι";
 "shared_string_is_open" = "Άνοιγμα";
 "day_night_info" = "Πληρ. Ημέρας/Νύχτας";
@@ -429,7 +429,7 @@
 "si_nm" = "Ναυτικά μίλια";
 "selected_categories" = "Επιλεγμένες κατηγορίες";
 "product_title_sea_depth_contours" = "Ναυτικές ισοβαθείς καμπύλες";
-"home_pt" = "Σπίτι";
+"home_pt" = "Αρχική σελίδα";
 "traffic_warning_pedestrian" = "Διάβαση πεζών";
 "price_free" = "Δωρεάν";
 "map_markers" = "Δείκτες χάρτη";
@@ -537,7 +537,7 @@
 "shared_string_remove" = "Αφαίρεση";
 "osm_live_payment_renews_quarterly" = "Τριμηνιαίες ανανεώσεις";
 "city_type_district" = "Περιοχή";
-"help_other_header" = "Άλλα";
+"help_other_header" = "Άλλη";
 "osm_live_enter_email" = "Παρακαλούμε, εισάγετε μια έγκυρη διεύθυνση ηλεκτρονικής αλληλογραφίας";
 "intro_skip" = "Παράλειψη";
 "speak_cameras" = "Κάμερες ταχύτητας";
@@ -570,7 +570,7 @@
 "units_mph" = "μαω";
 "gpx_avg_altitude" = "Μέσο υψόμετρο";
 "simulate_navigation" = "Προσομοίωση πλοήγησης";
-"transport_stop" = "Διακοπή";
+"transport_stop" = "Σταμάτημα";
 "rendering_category_others" = "Άλλα χαρακτηριστικά χάρτη";
 "m_style_bicycle" = "Ποδηλασία";
 "osm_live_hide_user_name" = "Να μην εμφανίζεται το όνομά μου στις αναφορές";
@@ -855,7 +855,6 @@
 "rendering_attr_tracktype_grade5_name" = "Μαλακός";
 "rendering_attr_hideWaterPolygons_name" = "Απόκρυψη νερού";
 "rendering_attr_contourColorScheme_name" = "Χρωματικός συνδυασμός ισοϋψών καμπυλών";
-"rendering_value_browse_map_name" = "Επισκόπηση χάρτη";
 "routeInfo_steepness_name" = "Απότομη κλίση";
 "rendering_attr_trolleybusRoutes_name" = "Διαδρομές τρόλεϊ";
 "rendering_value_thick_name" = "Πυκνός";
@@ -1020,7 +1019,7 @@
 "default_speed_dialog_msg" = "Εκτιμά τον χρόνο άφιξης αγνώστων τύπων δρόμων και περιορίζει την ταχύτητα σε όλους τους δρόμους (μπορεί να επηρεάσει τη διαδρομή)";
 "base_profile_descr_car" = "Αυτοκίνητο, φορτηγό, μηχανή";
 "reverse_route" = "Αντιστροφή διαδρομής";
-"nothing_found_empty" = "Δε βρέθηκε τίποτα";
+"nothing_found_empty" = "Δεν βρέθηκε τίποτα";
 "announce" = "Ανακοίνωση";
 "base_profile_descr_pedestrian" = "Περπάτημα, πεζοπορία, τρέξιμο";
 "map_settings_legend" = "Υπόμνημα";

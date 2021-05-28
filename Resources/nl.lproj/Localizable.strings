@@ -1,7 +1,7 @@
 "OsmAnd Maps" = "OsmAnd Maps";
 "shared_string_previous" = "Vorige";
 "route_stops_before" = "%d stops before";
-"transport_routes" = "Routes";
+"transport_routes" = "(Bus)Lijnen";
 "transport_nearby_routes_within" = "Nabije routes binnen";
 "transport_nearby_routes" = "Binnen";
 "transport_stop" = "Halte";
@@ -179,7 +179,6 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Muziek onderbreken";
 "shared_string_do_not_use" = "Do not use";
-"voice_provider" = "Taal stembegeleiding";
 "shared_string_sound" = "Geluid";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -236,7 +235,6 @@
 "traffic_warning_railways" = "Spoorwegovergang";
 "traffic_warning_pedestrian" = "Voetgangers oversteekplaats";
 "traffic_warning_hazard" = "Gevaar";
-"driving_region" = "Regio voor autorijden";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "Verenigde Staten";
 "driving_region_canada" = "Canada";
@@ -338,7 +336,7 @@
 "poi_hide" = "Verberg";
 // My Places
 "favorites" = "Favorieten";
-"tracks" = "Tracks";
+"tracks" = "Routes";
 // GPX
 "gpx_point" = "Punt";
 "gpx_waypoint" = "Routepunt";
@@ -390,7 +388,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Auto\'s";
-"m_style_walk" = "Wandelen";
+"m_style_walk" = "Voetganger";
 "m_style_bicycle" = "Fiets";
 "map_settings_map" = "Kaart";
 "map_settings_show" = "Toon op de kaart";
@@ -854,7 +852,7 @@
 "edit_action" = "Sneltoets bewerken";
 "fav_add_group" = "Een groep toevoegen";
 "shared_string_filter" = "Filter";
-"help_other_header" = "Overig";
+"help_other_header" = "Overige";
 "blue" = "Blauw";
 "poi_type" = "POI type";
 "osm_target_modified" = "Gewijzigde OSM POI";
@@ -870,7 +868,7 @@
 "res_world_region" = "Wereld";
 "osm_website" = "Website";
 "commiting_node" = "Punt wordt vastgelegd…";
-"osm_alert_title" = "Bijdrage versturen";
+"osm_alert_title" = "Bevestigen";
 "pink" = "Roze";
 "osm_note_created" = "OSM-opmerking aangemaakt";
 "dark_yellow" = "Donkergeel";
@@ -880,7 +878,7 @@
 "help_versions" = "Versies";
 "osm_edits_notes" = "AV-Notities";
 "logging_interval_navigation" = "Registratie-interval bij navigatie";
-"nearby_search" = "Zoek dichtbij";
+"nearby_search" = "Zoek hier dichtbij";
 "gpx_alt_range" = "Hoogtebereik";
 "red" = "Rood";
 "help_install_and_troubleshoot" = "Installeren en foutoplossen";
@@ -985,7 +983,7 @@
 "save_poi_too_many_uppercase" = "Naam bevat erg veel hoofdletters, toch doorgaan?";
 "gpx_slope" = "Helling";
 "osm_editing_offline" = "Offline bewerking";
-"product_title_sea_depth_contours" = "Nautische dieptelijnen";
+"product_title_sea_depth_contours" = "Diepte contourlijnen";
 "translucent_lightgreen" = "Doorschijnend lichtgroen";
 "product_desc_wikivoyage" = "De gratis wereldwijde reisgids die iedereen kan bewerken.";
 "help_tech_articles" = "Technische artikelen";
@@ -1127,7 +1125,6 @@
 "rendering_attr_shareTaxiRoutes_name" = "Deeltaxi routes";
 "rendering_value_pink_name" = "Roze";
 "rendering_value_bold_name" = "Vet";
-"rendering_value_browse_map_name" = "Bekijk kaart";
 "rendering_attr_roadColors_description" = "Kies kleurschema voor wegen:";
 "rendering_attr_currentTrackWidth_description" = "GPX breedte";
 "rendering_value_fine_name" = "Fijn";
@@ -1588,7 +1585,7 @@
 "shared_string_disable" = "Schakel uit";
 "plan_route_change_folder" = "Map wijzigen";
 "split_after" = "Hierna splitsen";
-"emergency" = "Noodgevallen";
+"emergency" = "Hulpdiensten";
 "start_of_track" = "Begin van de track";
 "special" = "Speciaal";
 "search_history" = "Zoekgeschiedenis";

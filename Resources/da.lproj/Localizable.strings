@@ -51,7 +51,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Oversigt";
 "m_style_car" = "Kørsel";
-"m_style_bicycle" = "Cykling";
+"m_style_bicycle" = "Cykle";
 "map_settings_map" = "Kort";
 "map_settings_show" = "Vis på kort";
 "map_settings_day" = "Dag";
@@ -1003,7 +1003,7 @@
 "osm_notes_online_layer" = "OSM-noter (online)";
 "my_places" = "Foretrukne";
 "osm_edits_basic" = "Grundlæggende";
-"osm_edits_advanced" = "Udvidet";
+"osm_edits_advanced" = "Avanceret";
 "osm_edits_all" = "Alle redigeringer";
 "osm_edits_poi" = "IP-redigeringer";
 "osm_edits_notes" = "Noter";
@@ -1349,7 +1349,6 @@
 "rendering_attr_contourLines_name" = "Vis højdekurver";
 "rendering_attr_showAccess_name" = "Vis adgangsbegrænsninger og vejafgifter";
 "routing_attr_allow_intermediate_name" = "Tillad mellemliggende ruter";
-"rendering_value_browse_map_name" = "Gennemse kort";
 "routing_attr_avoid_stairs_name" = "Ingen trapper";
 "rendering_value_brown_name" = "Brun";
 "routing_attr_no_new_routing_description" = "Brug ikke ruteplanlægningsregler indført i v1.9.";
@@ -1872,7 +1871,7 @@
 "shared_string_preparing" = "Forbereder";
 "shared_string_deselect_all" = "Fravælg alle";
 "shared_string_continue" = "Fortsæt";
-"nothing_found_empty" = "Fandt ikke noget";
+"nothing_found_empty" = "Fandt intet";
 "nav_type_direct_to" = "Direkte-til-punkt";
 "nav_type_osmand" = "OsmAnd (offlinerouting)";
 "nav_type_descr" = "Vælg, hvordan en rute skal beregnes for profilen";

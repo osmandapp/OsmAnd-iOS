@@ -38,7 +38,6 @@
 #import "OAFileSettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OASettingsItem.h"
-#import "OAHistoryHelper.h"
 #import "OAResourcesUIHelper.h"
 #import "OASQLiteTileSource.h"
 #import "OAFileNameTranslationHelper.h"
@@ -62,6 +61,7 @@
 #import "OAExportSettingsType.h"
 #import "OAFavoritesHelper.h"
 #import "OAMarkersSettingsItem.h"
+#import "OAHistoryMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
 #import "OASearchHistorySettingsItem.h"
@@ -302,7 +302,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //            myPlacesItems.put(ExportSettingsType.MULTIMEDIA_NOTES, files);
 //        }
 //    }
-    OAHistoryHelper *historyHelper = OAHistoryHelper.sharedInstance;
     NSArray<OADestination *> *mapMarkers = [OADestinationsHelper.instance sortedDestinationsWithoutParking];
     if (mapMarkers.count > 0)
     {
@@ -313,15 +312,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        markersGroup.setMarkers(mapMarkers);
         myPlacesItems[OAExportSettingsType.ACTIVE_MARKERS] = mapMarkers;
     }
-//    NSArray<OAHistoryItem *> *markersHistory = [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0];
-//    if (markersHistory.count > 0)
-//    {
+    OAHistoryHelper *historyHelper = OAHistoryHelper.sharedInstance;
+    NSArray<OAHistoryItem *> *markersHistory = [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0];
+    if (markersHistory.count > 0)
+    {
 //        String name = app.getString(R.string.shared_string_history);
 //        String groupId = ExportSettingsType.HISTORY_MARKERS.name();
 //        ItineraryGroup markersGroup = new ItineraryGroup(groupId, name, ItineraryGroup.ANY_TYPE);
 //        markersGroup.setMarkers(markersHistory);
-//        myPlacesItems[OAExportSettingsType.HISTORY_MARKERS] = markersHistory;
-//    }
+        myPlacesItems[OAExportSettingsType.HISTORY_MARKERS] = markersHistory;
+    }
     NSArray<OAHistoryItem *> *historyEntries = [historyHelper getPointsHavingTypes:historyHelper.searchTypes limit:0];
     if (historyEntries.count > 0)
         myPlacesItems[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
@@ -512,6 +512,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList = [NSMutableArray array];
     NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *historyMarkersList = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyItems = [NSMutableArray array];
 
     for (id object in data)
@@ -545,7 +546,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         else if ([object isKindOfClass:OADestination.class])
             [activeMarkersList addObject:object];
         else if ([object isKindOfClass:OAHistoryItem.class])
-            [historyItems addObject:object];
+        {
+            if ([[OAHistoryHelper sharedInstance].destinationTypes containsObject:@(((OAHistoryItem *) object).hType)])
+                [historyMarkersList addObject:object];
+            else
+                [historyItems addObject:object];
+        }
 //        else if ([object isKindOfClass:OAGlobalSettingsItem.class])
 //            [result addObject:(OAGlobalSettingsItem *)object];
     }
@@ -593,6 +599,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         [result addObject:[[OAMarkersSettingsItem alloc] initWithItems:activeMarkersList]];
     }
+    if (historyMarkersList.count > 0)
+    {
+        [result addObject:[[OAHistoryMarkersSettingsItem alloc] initWithItems:historyMarkersList]];
+    }
     if (historyItems.count > 0)
     {
         [result addObject:[[OASearchHistorySettingsItem alloc] initWithItems:historyItems]];
@@ -616,6 +626,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
     NSMutableArray<OADestination *> *markers = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *historyMarkers = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyEntries = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
@@ -714,6 +725,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     [markers addObjectsFromArray:markersItem.items];
                 break;
             }
+            case EOASettingsItemTypeHistoryMarkers:
+            {
+                OAHistoryMarkersSettingsItem *historyMarkersItem = (OAHistoryMarkersSettingsItem *) item;
+                [historyMarkers addObjectsFromArray:historyMarkersItem.items];
+                break;
+            }
             case EOASettingsItemTypeSearchHistory:
             {
                 OASearchHistorySettingsItem *searchHistorySettingsItem = (OASearchHistorySettingsItem *) item;
@@ -750,6 +767,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsToOperate[OAExportSettingsType.OSM_EDITS] = osmEditsPointList;
     if (markers.count > 0)
         settingsToOperate[OAExportSettingsType.ACTIVE_MARKERS] = markers;
+    if (historyMarkers.count > 0)
+        settingsToOperate[OAExportSettingsType.HISTORY_MARKERS] = historyMarkers;
     if (historyEntries.count > 0)
         settingsToOperate[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
     return settingsToOperate;

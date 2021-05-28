@@ -64,7 +64,7 @@
             _file = importTask.getFile;
             _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(_file)).getItems();
         }
-            
+
         NSArray *duplicates = [importTask getDuplicates];
         NSArray *selectedItems = [importTask getSelectedItems];
         

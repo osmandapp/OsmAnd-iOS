@@ -441,6 +441,18 @@
         wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
         wpt.name = marker.desc;
         wpt.color = marker.color.toHexString;
+
+        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = @"creation_date";
+
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
+        e.value = [dateFormatter stringFromDate:marker.creationDate];;
+
+        ext.extensions = @[e];
+        wpt.extraData = ext;
+
 //        if (completeBackup)
 //        {
 //            if (marker.creationDate != 0) {

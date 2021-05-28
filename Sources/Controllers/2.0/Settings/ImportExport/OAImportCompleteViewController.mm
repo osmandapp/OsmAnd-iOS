@@ -43,6 +43,7 @@
 #import "OAMarkersSettingsItem.h"
 #import "OAExportSettingsType.h"
 #import "OADestination.h"
+#import "OAHistoryViewController.h"
 
 typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeProfiles = 0,
@@ -456,7 +457,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     else if (dataType == EOAImportDataTypeHistoryMarkers)
     {
-        [rootController.mapPanel showCards];
+        OAHistoryViewController *history = [[OAHistoryViewController alloc] init];
+        [rootController.navigationController pushViewController:history animated:YES];
     }
     else if (dataType == EOAImportDataTypeSearchHistory)
     {

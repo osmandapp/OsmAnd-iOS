@@ -5,9 +5,9 @@
 
 #import "OACollectionSettingsItem.h"
 
+@class OAHistoryItem;
 
-
-@interface OAHistoryMarkersSettingsItem : OACollectionSettingsItem
+@interface OAHistoryMarkersSettingsItem : OACollectionSettingsItem<OAHistoryItem *>
 
 @end
 

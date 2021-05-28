@@ -86,6 +86,11 @@
     
 }
 
+- (BOOL) applyFileName:(NSString *)fileName
+{
+    return self.fileName ? ((![fileName isEqualToString:@"history_markers.gpx"] && [fileName hasSuffix:self.fileName]) || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]] || [fileName isEqualToString:self.fileName]) : NO;
+}
+
 - (BOOL) isDuplicate:(OADestination *)mapMarker
 {
     for (OADestination *marker in self.existingItems)
@@ -137,15 +142,15 @@
 
 - (NSString *) getResourceName:(NSString *)color
 {
-    if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_orange) toHexString]])
+    if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_orange) toHexString]] || [color isEqualToString:@"#FF9800"])
         return @"ic_destination_pin_1";
-    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_teal) toHexString]])
+    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_teal) toHexString]] || [color isEqualToString:@"#26A69A"])
         return @"ic_destination_pin_2";
-    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_green) toHexString]])
+    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_green) toHexString]] || [color isEqualToString:@"#73B825"])
         return @"ic_destination_pin_3";
-    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_red) toHexString]])
+    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_red) toHexString]] || [color isEqualToString:@"#E53935"])
         return @"ic_destination_pin_4";
-    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_light_green) toHexString]])
+    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_light_green) toHexString]] || [color isEqualToString:@"#FDD835"])
         return @"ic_destination_pin_5";
     else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_purple) toHexString]])
         return @"ic_destination_pin_6";
@@ -163,7 +168,7 @@
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
             dest.color = [OAUtilities colorFromString:wpt.color];
-            dest.markerResourceName = [self getResourceName:wpt.color];
+            dest.markerResourceName = [self getResourceName:[wpt.color upperCase]];
 
             for (OAGpxExtension *e in ((OAGpxExtensions *) wpt.extraData).extensions)
             {

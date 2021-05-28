@@ -8,7 +8,6 @@
 
 #import "OAHistoryMarkersSettingsItem.h"
 #import "OAGPXMutableDocument.h"
-#import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "Localization.h"
 
@@ -26,12 +25,6 @@
 }
 
 @dynamic items, appliedItems, existingItems;
-
-- (instancetype) initWithItems:(NSArray<OAHistoryItem *> *)items
-{
-    self = [super initWithItems:items];
-    return self;
-}
 
 - (void)initialization
 {
@@ -149,7 +142,7 @@
 
 @end
 
-#pragma mark - OAMarkersSettingsItemReader
+#pragma mark - OAHistoryMarkersSettingsItemReader
 
 @implementation OAHistoryMarkersSettingsItemReader
 

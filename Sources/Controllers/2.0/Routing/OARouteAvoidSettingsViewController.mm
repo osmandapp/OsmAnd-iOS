@@ -280,6 +280,7 @@
             {
                 cell.userInteractionEnabled = YES;
                 [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+                [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
                 [cell.button addTarget:self action:@selector(addRoadPressed:) forControlEvents:UIControlEventTouchDown];
                 [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
                 [cell showImage:NO];

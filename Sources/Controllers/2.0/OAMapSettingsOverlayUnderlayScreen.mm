@@ -411,6 +411,7 @@ static NSInteger kButtonsSection;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
+            [cell.sliderView removeTarget:NULL action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
         
@@ -439,7 +440,7 @@ static NSInteger kButtonsSection;
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
-            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             if (indexPath.section == kAvailableLayersSection)
                 [cell.button addTarget:self action:@selector(installMorePressed) forControlEvents:UIControlEventTouchUpInside];
             else

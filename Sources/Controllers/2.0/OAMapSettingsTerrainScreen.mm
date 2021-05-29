@@ -616,6 +616,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
+            [cell.segmentControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
             [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];

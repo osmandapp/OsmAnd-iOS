@@ -321,6 +321,7 @@ static const NSInteger timeSectionIndex = 1;
             [cell.textView setText: item[@"title"]];
             cell.switchView.on = _isOpened24_7;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;

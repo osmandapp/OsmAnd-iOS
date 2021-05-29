@@ -919,6 +919,7 @@ static UIViewController *parentController;
         cell.folderIcon.tintColor = groupData.favoriteGroup.color;
         
         cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
+        [cell.openCloseGroupButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         if ([self.favoriteTableView isEditing])
             [cell.openCloseGroupButton setHidden:NO];

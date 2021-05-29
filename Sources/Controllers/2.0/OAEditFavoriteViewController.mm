@@ -735,6 +735,7 @@
         
         textField.textView.delegate = self;
         textField.layoutDelegate = self;
+        [textField.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
         [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         textField.font = [UIFont systemFontOfSize:17.0];

@@ -286,6 +286,7 @@
             BOOL value = [self cellValueByKey:itemKey];
             cell.switchView.on = value;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;

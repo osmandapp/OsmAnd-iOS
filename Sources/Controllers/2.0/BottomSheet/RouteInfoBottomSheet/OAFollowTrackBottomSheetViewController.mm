@@ -296,6 +296,7 @@
         }
         if (cell)
         {
+            [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
             [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];
@@ -323,6 +324,7 @@
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsZero;
             [cell setRightButtonVisibility:YES];
+            [cell.editButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.editButton addTarget:self action:@selector(openPlanRoute) forControlEvents:UIControlEventTouchUpInside];
             cell.editButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);

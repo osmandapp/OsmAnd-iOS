@@ -84,6 +84,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     textField.layoutDelegate = self;
     textField.textView.tag = tag;
     textField.clearButton.tag = tag;
+    [textField.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont systemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
@@ -290,6 +291,7 @@ static const NSInteger _contactInfoSectionCount = 5;
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchDown];
             [cell.button addTarget:self action:@selector(addOpeningHours) forControlEvents:UIControlEventTouchDown];
         }
         return cell;

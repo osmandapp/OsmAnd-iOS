@@ -67,6 +67,7 @@
     }
     else
     {
+        _app.resourcesManager->rescanUnmanagedStoragePaths();
         [_app.localResourcesChangedObservable notifyEventWithKey:nil];
         return YES;
     }

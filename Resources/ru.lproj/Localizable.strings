@@ -75,10 +75,10 @@
 "gpx_updown" = "Вверх/Вниз";
 "gpx_uphills_total" = "Всего подъем";
 // Map settings
-"rendering_value_browse_map_name" = "Обзор";
-"m_style_car" = "Автомобиль";
+"rendering_value_browse_map_name" = "Обзор карты";
+"m_style_car" = "Вождение";
 "m_style_walk" = "Пешеход";
-"m_style_bicycle" = "Велосипед";
+"m_style_bicycle" = "Езда на велосипеде";
 "map_settings_map" = "Карта";
 "map_settings_fav" = "Избранное";
 "map_settings_tracks" = "Треки";
@@ -101,7 +101,7 @@
 // Intro
 "intro_skip" = "Пропустить";
 "intro_download" = "Загрузить\nкарту";
-"intro_next" = "Далее";
+"intro_next" = "Следующий";
 "intro_welcome" = "Добро пожаловать\nOsmAnd";
 "intro_promo" = "Мировые офлайн карты";
 "intro_placeholder" = "введите название региона";
@@ -180,7 +180,7 @@
 // Import
 "import_title" = "Импортировать данные";
 "import_choose_type" = "Выберите что импортировать";
-"import_favorite" = "Избранная";
+"import_favorite" = "Избранное";
 "import_failed" = "Импорт завершился не успешно";
 "import_gpx" = "GPX трек";
 // Context menu
@@ -284,7 +284,7 @@
 "cannot_add_marker" = "Нельзя добавить парковку";
 "cannot_add_marker_desc" = "Уберите одно из направлений и повторите попытку";
 "cannot_add_destination" = "Нельзя добавить направление";
-"units_hour" = "ч.";
+"units_hour" = "час";
 "units_min" = "мин.";
 "units_sec" = "сек.";
 "cannot_access_calendar" = "Ошибка доступа к календарю";
@@ -413,7 +413,7 @@
 "gpx_group_select" = "Выбор групп";
 "show_all" = "Показать все";
 "get_directions" = "Маршрут";
-"parking" = "Парковки";
+"parking" = "Парковка";
 "est_travel_time" = "Время в пути";
 "pedestrian" = "Пешеход";
 "sorting" = "Сортировка";
@@ -762,7 +762,7 @@
 "help_search" = "Поиск по карте";
 "help_trip_planning" = "Планирование поездки";
 "help_legend" = "Легенда";
-"help_other_header" = "Другое";
+"help_other_header" = "Другие";
 "help_install_and_troubleshoot" = "Установка и решение проблем";
 "help_tech_articles" = "Технические статьи";
 "help_versions" = "Версии";
@@ -961,7 +961,7 @@
 "osm_name" = "Имя пользователя OpenStreetMap";
 "osm_pass" = "Пароль OpenStreetMap";
 "osm_confirm_delete" = "Удалить POI?";
-"create_poi_short" = "Добавление POI";
+"create_poi_short" = "Добавить POI";
 "amenity" = "Удобства";
 "osm_tag" = "Тег";
 "osm_edits_edits_label" = "Правки";
@@ -970,7 +970,7 @@
 "mapillary_get_title" = "Улучшить фотопокрытие в Mapillary";
 "shared_string_not_set" = "Не установлено";
 "shared_string_reset" = "Сбросить";
-"shared_string_filter" = "Фильтр";
+"shared_string_filter" = "Фильтровать";
 "mapil_usernames" = "Имена пользователей";
 "osm_upload_complete" = "Отправка завершена";
 "osm_edit_uploading" = "Отправка…";
@@ -986,7 +986,7 @@
 "add_map_style" = "Добавить стиль карты";
 "map_sources" = "Источники карты";
 "map_styles" = "Стили карты";
-"add_action" = "Добавить";
+"add_action" = "Добавить действие";
 "toggle_poi" = "Показать/скрыть POI";
 "add_parking_place" = "Место парковки";
 "add_poi" = "POI";
@@ -1163,7 +1163,7 @@
 "osm_edits_offline_layer" = "OSM Правки/Заметки (офлайн)";
 "osm_notes_online_layer" = "OSM Заметки (онлайн)";
 "osm_edits_basic" = "Основные";
-"osm_edits_advanced" = "Расширенные";
+"osm_edits_advanced" = "Продвинуто";
 "osm_edits_poi" = "Правки POI";
 "osm_poi_id_label" = "Идентификатор POI:";
 "osm_edits_title" = "OSM Правки";
@@ -2026,7 +2026,7 @@
 "copied_to_clipboard" = "Скопировано в буфер обмена";
 "service" = "Сервис";
 "square" = "Квадрат";
-"emergency" = "Экстренные службы";
+"emergency" = "Чрезвычайные обстоятельства";
 "symbols" = "Символы";
 "fav_point_dublicate" = "Введено повторяющееся название избранной точки";
 "reverse_track_dir" = "Обратное направление трека";

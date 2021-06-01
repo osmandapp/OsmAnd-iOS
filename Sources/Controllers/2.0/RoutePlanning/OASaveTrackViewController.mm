@@ -263,7 +263,7 @@
             cell.inputField.returnKeyType = UIReturnKeyDone;
             cell.inputField.enablesReturnKeyAutomatically = YES;
             cell.clearButton.tag = cell.inputField.tag;
-            [cell.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         
@@ -286,6 +286,7 @@
             BOOL value = [self cellValueByKey:itemKey];
             cell.switchView.on = value;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;

@@ -395,7 +395,7 @@
             cell.textView.text = item[@"title"];
             cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
             id v = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OALocalRoutingParameter class]])
             {
                 OALocalRoutingParameter *value = v;

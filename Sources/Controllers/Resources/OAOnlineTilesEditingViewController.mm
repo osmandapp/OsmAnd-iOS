@@ -744,7 +744,7 @@
             cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
             cell.inputField.tag = isURL ? kURLCellTag : kNameCellTag;
             cell.clearButton.tag = cell.inputField.tag;
-            [cell.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             if ([self isOfflineSQLiteDB] && isURL)
             {
@@ -775,7 +775,7 @@
         cell.inputField.text = _expireTimeMinutes;
         cell.inputField.delegate = self;
         cell.userInteractionEnabled = YES;
-        [cell.inputField removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
         cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
         if ([self isOfflineSQLiteDB])

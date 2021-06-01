@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapHudViewController">
             <connections>
-                <outlet property="actionsMenuButton" destination="iT3-1A-Wkq" id="rDs-SG-UrC"/>
                 <outlet property="compassBox" destination="zKf-ZI-4L4" id="8yD-MW-KXd"/>
                 <outlet property="compassButton" destination="duk-mu-8Hu" id="vvC-Wd-07Q"/>
                 <outlet property="compassImage" destination="qfF-4i-ios" id="lwK-mx-JcJ"/>
-                <outlet property="debugButton" destination="zUK-AA-Umg" id="W0Q-by-MH6"/>
                 <outlet property="driveModeButton" destination="QPn-ok-Vxm" id="puw-oM-kqp"/>
-                <outlet property="expandButton" destination="vBY-lp-XfQ" id="hVG-yw-ycY"/>
                 <outlet property="leftWidgetsView" destination="aXd-Ik-jGG" id="Rq9-t7-En2"/>
                 <outlet property="mapModeButton" destination="Tol-6L-Amr" id="0Lv-8x-10z"/>
                 <outlet property="mapSettingsButton" destination="Ezz-bP-gmB" id="fQV-HX-alr"/>
@@ -40,26 +35,16 @@
                 <userLayoutGuide location="391" affinity="minY"/>
             </userGuides>
             <subviews>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iT3-1A-Wkq" userLabel="actionsMenuButton">
-                    <rect key="frame" x="360" y="21" width="15" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="HUD_more_halfbutton.png" backgroundImage="HUD_right_narrowbutton_bg.png">
-                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="onActionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="8sR-Ef-2iJ"/>
-                    </connections>
-                </button>
-                <view contentMode="scaleToFill" id="lga-DK-9T5" userLabel="statusBar">
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lga-DK-9T5" userLabel="statusBar">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <view contentMode="scaleToFill" id="zKf-ZI-4L4" userLabel="compassBox">
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zKf-ZI-4L4" userLabel="compassBox">
                     <rect key="frame" x="7" y="72" width="41" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="duk-mu-8Hu" userLabel="compassButton">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="duk-mu-8Hu" userLabel="compassButton">
                             <rect key="frame" x="0.0" y="0.0" width="41" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="HUD_compass_bg.png"/>
@@ -67,7 +52,7 @@
                                 <action selector="onCompassButtonClicked:" destination="-1" eventType="touchUpInside" id="tcA-jH-xge"/>
                             </connections>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="HUD_compass.png" id="qfF-4i-ios" userLabel="compassImage">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="qfF-4i-ios" userLabel="compassImage">
                             <rect key="frame" x="11.5" y="11.5" width="18" height="18"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration">
@@ -76,7 +61,7 @@
                         </imageView>
                     </subviews>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ezz-bP-gmB" userLabel="mapSettingsButton">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ezz-bP-gmB" userLabel="mapSettingsButton">
                     <rect key="frame" x="7" y="27" width="41" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.24618944525718689" green="0.24618205428123474" blue="0.24618625640869141" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -85,30 +70,21 @@
                         <action selector="onMapSettingsButtonClick:" destination="-1" eventType="touchUpInside" id="0fq-p8-YC7"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" misplaced="YES" id="6pw-WI-HAJ" userLabel="widgetsView" customClass="OAUserInteractionPassThroughView">
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6pw-WI-HAJ" userLabel="widgetsView" customClass="OAUserInteractionPassThroughView">
                     <rect key="frame" x="0.0" y="20" width="375" height="41"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" misplaced="YES" id="aXd-Ik-jGG" customClass="OAUserInteractionPassThroughView">
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aXd-Ik-jGG" customClass="OAUserInteractionPassThroughView">
                             <rect key="frame" x="0.0" y="0.0" width="152" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </view>
-                        <view contentMode="scaleToFill" misplaced="YES" id="WK4-Aa-5Eu" customClass="OAUserInteractionPassThroughView">
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WK4-Aa-5Eu" customClass="OAUserInteractionPassThroughView">
                             <rect key="frame" x="195" y="0.0" width="180" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vBY-lp-XfQ">
-                            <rect key="frame" x="167" y="0.0" width="41" height="41"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <state key="normal" image="ic_expand.png" backgroundImage="HUD_compass_bg.png"/>
-                            <connections>
-                                <action selector="expandClicked:" destination="-1" eventType="touchUpInside" id="KwY-xP-lLb"/>
-                            </connections>
-                        </button>
                     </subviews>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QPn-ok-Vxm" userLabel="driveModeButton">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPn-ok-Vxm" userLabel="driveModeButton">
                     <rect key="frame" x="57" y="604" width="51" height="51"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="icon_drive_mode_off.png">
@@ -118,11 +94,11 @@
                         <action selector="onDriveModeButtonClicked:" destination="-1" eventType="touchUpInside" id="eBM-Fz-ZQm"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" id="o72-6U-6Av" userLabel="zoomButtons">
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o72-6U-6Av" userLabel="zoomButtons">
                     <rect key="frame" x="307" y="538" width="68" height="129"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GgY-iA-GiG" userLabel="zoomInButton">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GgY-iA-GiG" userLabel="zoomInButton">
                             <rect key="frame" x="0.0" y="0.0" width="68" height="61"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <inset key="imageEdgeInsets" minX="-7" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -133,7 +109,7 @@
                                 <action selector="onZoomInButtonClicked:" destination="-1" eventType="touchUpInside" id="OLM-9v-gVr"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="l4t-EI-ihD" userLabel="zoomOutButton">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l4t-EI-ihD" userLabel="zoomOutButton">
                             <rect key="frame" x="0.0" y="60" width="68" height="61"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <inset key="imageEdgeInsets" minX="-7" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -146,17 +122,7 @@
                         </button>
                     </subviews>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zUK-AA-Umg" userLabel="debugButton">
-                    <rect key="frame" x="8" y="314" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="HUD_debug_button.png" backgroundImage="HUD_button_bg.png">
-                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="onDebugButtonClicked:" destination="-1" eventType="touchUpInside" id="udt-Zy-sVw"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4" userLabel="optionsMenuButton">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4" userLabel="optionsMenuButton">
                     <rect key="frame" x="0.0" y="604" width="48" height="51"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="menu_button.png">
@@ -167,7 +133,7 @@
                         <action selector="onOptionsMenuButtonDown:" destination="-1" eventType="touchDragInside" id="BcB-jK-AfK"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gMm-Ly-WJo" userLabel="searchButton">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gMm-Ly-WJo" userLabel="searchButton">
                     <rect key="frame" x="52" y="27" width="41" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -176,7 +142,7 @@
                         <action selector="onSearchButtonClick:" destination="-1" eventType="touchUpInside" id="cYt-nS-ixL"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Tol-6L-Amr" userLabel="mapModeButton">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tol-6L-Amr" userLabel="mapModeButton">
                     <rect key="frame" x="247" y="598" width="61" height="68"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="-7" maxX="0.0" maxY="0.0"/>
@@ -189,24 +155,19 @@
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="25.5" y="52.5"/>
+            <point key="canvasLocation" x="36.956521739130437" y="35.15625"/>
         </view>
     </objects>
     <resources>
-        <image name="HUD_button_bg.png" width="40" height="40"/>
         <image name="HUD_compass.png" width="18" height="18"/>
         <image name="HUD_compass_bg.png" width="41" height="41"/>
         <image name="HUD_configure_map.png" width="18" height="18"/>
-        <image name="HUD_debug_button.png" width="25" height="25"/>
-        <image name="HUD_more_halfbutton.png" width="12" height="25"/>
-        <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
-        <image name="bt_round_big.png" width="60" height="67"/>
+        <image name="bt_round_big.png" width="60" height="67.5"/>
         <image name="free_map_mode_button.png" width="22" height="22"/>
-        <image name="ic_expand.png" width="10" height="6"/>
         <image name="icon_drive_mode_off.png" width="51" height="51"/>
         <image name="menu_button.png" width="48" height="51"/>
-        <image name="search_icon.png" width="12" height="12"/>
-        <image name="zoom_button_bg.png" width="67" height="60"/>
+        <image name="search_icon.png" width="12.5" height="12.5"/>
+        <image name="zoom_button_bg.png" width="67.5" height="60"/>
         <image name="zoom_in_button.png" width="22" height="22"/>
         <image name="zoom_out_button.png" width="22" height="22"/>
     </resources>

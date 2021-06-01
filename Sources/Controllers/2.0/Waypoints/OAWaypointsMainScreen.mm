@@ -807,7 +807,7 @@
         cell.removeButton.hidden = targets && !_flat;
         cell.removeButton.enabled = canRemove;
         cell.removeButton.alpha = canRemove ? 1.0 : 0.5;
-        [cell.removeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.removeButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.removeButton.tag = [self encodePos:indexPath];
         [cell.removeButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -824,7 +824,7 @@
         cell.title.text = OALocalizedString(@"search_radius_proximity");
         NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
         [cell.button setTitle:desc forState:UIControlStateNormal];
-        [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.button.tag = [self encodePos:indexPath];
         cell.button.enabled = !_calculatingRoute;
         [cell.button addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -848,13 +848,13 @@
         NSString *descEx = [helper isShowingAnyPoi] ? OALocalizedString(@"poi") : [helper getSelectedPoiFiltersName];
         [cell setButtonRightTitle:[OALocalizedString(@"res_type") stringByAppendingString:@":"] description:descEx];
         
-        [cell.buttonLeft removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.buttonLeft removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.buttonLeft.tag = [self encodePos:indexPath];
         cell.buttonLeft.enabled = !inProgress;
         if (!inProgress)
             [cell.buttonLeft addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         
-        [cell.buttonRight removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.buttonRight removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.buttonRight.tag = [self encodePos:indexPath];
         cell.buttonRight.enabled = !_calculatingRoute;
         [cell.buttonRight addTarget:self action:@selector(onButtonExClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -885,7 +885,7 @@
         }
         
         cell.switchView.hidden = ![_waypointHelper isTypeConfigurable:type];
-        [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         BOOL checked = [_waypointHelper isTypeEnabled:type];
         if (!cell.switchView.hidden)
         {
@@ -901,7 +901,7 @@
         
         cell.imageButton.hidden = YES;
         UIButton *optionsBtn = cell.textButton;
-        [optionsBtn removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [optionsBtn removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         if (type == LPW_TARGETS)
         {
             [optionsBtn setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];

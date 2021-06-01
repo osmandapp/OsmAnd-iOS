@@ -426,7 +426,7 @@
 "poi_hide" = "非表示";
 // My Places
 "favorites" = "お気に入り";
-"tracks" = "使用した経路";
+"tracks" = "経路";
 // GPX
 "gpx_point" = "地点";
 "gpx_waypoint" = "経由地点";
@@ -482,7 +482,7 @@
 "gpx_speed" = "速度";
 "gpx_slope" = "勾配";
 // Map settings
-"rendering_value_browse_map_name" = "概要";
+"rendering_value_browse_map_name" = "マップの閲覧";
 "m_style_car" = "ドライブ";
 "m_style_walk" = "徒歩";
 "m_style_bicycle" = "自転車";
@@ -493,7 +493,7 @@
 "map_settings_map_magnifier" = "マップ表示倍率";
 "map_settings_text_size" = "文字サイズ";
 "map_settings_day" = "昼固定";
-"map_settings_night" = "夜";
+"map_settings_night" = "夜固定";
 "map_settings_style" = "マップスタイル";
 "map_settings_overunder" = "オーバーレイ / アンダーレイ";
 "map_settings_over" = "オーバーレイ";
@@ -510,7 +510,7 @@
 // Intro
 "intro_skip" = "スキップ";
 "intro_download" = "ダウンロード\nマップ";
-"intro_next" = "次へ";
+"intro_next" = "次";
 "intro_welcome" = "ようこそ\nOsmAndへ";
 "intro_promo" = "グローバルオフラインマップ";
 "intro_placeholder" = "居住地域の名前を入力してください";
@@ -559,7 +559,7 @@
 "prch_nau_q3" = "マップ＆リソースにて後からでもインストールできます。";
 "proceed_q" = "続行しますか？";
 "download" = "ダウンロード";
-"nothanks" = "遠慮します";
+"nothanks" = "いいえ、結構です";
 "download_now" = "今すぐマップをダウンロードする";
 "prch_failed" = "\"%@\"の購入に失敗しました";
 "prch_items_failed" = "アイテムの復元がなされませんでした。もう一度やり直してみてください。";
@@ -667,7 +667,7 @@
 "osm_opens_at" = "営業開始時間:";
 "osm_closes_at" = "営業終了時間:";
 "osm_editing_contact_info" = "連絡先";
-"osm_str_name" = "道路名称";
+"osm_str_name" = "道路名称(国道、高速道路等)";
 "osm_building_num" = "棟番号";
 "osm_phone" = "電話番号";
 "osm_website" = "ウェブサイト";
@@ -698,7 +698,7 @@
 "osm_edits_offline_layer" = "OSM編集/メモ (オフライン)";
 "osm_notes_online_layer" = "OSMメモ (オンライン)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "上級者向け";
+"osm_edits_advanced" = "拡張";
 "osm_edits_all" = "すべての編集";
 "osm_edits_poi" = "POIの編集";
 "osm_edits_notes" = "メモ";
@@ -2014,10 +2014,10 @@
 "travel" = "旅行";
 "transport" = "交通";
 "symbols" = "記号";
-"service" = "アクセス道路、特定施設用道路";
+"service" = "設備・技術";
 "special" = "特別";
 "sport" = "スポーツ";
-"emergency" = "救急施設";
+"emergency" = "救急";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";

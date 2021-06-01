@@ -81,10 +81,10 @@
 "gpx_updown" = "Su/giù";
 "gpx_uphills_total" = "Totale salite";
 // Map settings
-"rendering_value_browse_map_name" = "Panoramica";
-"m_style_car" = "Driving";
+"rendering_value_browse_map_name" = "Esplorazione mappa";
+"m_style_car" = "Alla guida";
 "m_style_walk" = "A piedi";
-"m_style_bicycle" = "In bicicletta";
+"m_style_bicycle" = "Bici";
 "map_settings_map" = "Mappa";
 "map_settings_show" = "Mostra sulla mappa";
 "map_settings_type" = "Tipo mappa";
@@ -103,7 +103,7 @@
 // Intro
 "intro_skip" = "Salta";
 "intro_download" = "Scarica\nmappa";
-"intro_next" = "Successivo";
+"intro_next" = "Avanti";
 "intro_welcome" = "Benvenuti su \nOsmAnd";
 "intro_promo" = "Mappe globali offline";
 "intro_placeholder" = "immetti il nome della tua regione";
@@ -113,7 +113,7 @@
 "sett_km" = "Chilometri";
 "sett_ml" = "Miglia";
 "sett_zoom" = "Pulsante zoom";
-"sett_show" = "Visualizza";
+"sett_show" = "Mostra";
 "sett_notshow" = "Non mostrare";
 "sett_loc_fmt" = "Formato posizione";
 "sett_deg" = "Gradi";
@@ -354,13 +354,13 @@
 "time_will_open" = "Sarà aperto in";
 "time_will_close" = "Sarà chiuso in";
 "time_closed" = "Chiuso";
-"time_open" = "Apri";
+"time_open" = "Aperto";
 "prch_srtm_info" = "Il componente aggiuntivo Linee isocline aggiunge le linee di livello per le mappe che sono state scaricare gratuitamente o acquistate.";
 "sett_lang_trans" = "Translitterazione";
 "cannot_add_marker_desc" = "Si prega di rimuovere almeno una direzione e riprovare";
 "cannot_add_destination" = "Impossibile aggiungere una direzione";
 "product_desc_skimap" = "Piste da sci per tutte le stazioni sciistiche del mondo";
-"shared_string_dismiss" = "Ignora";
+"shared_string_dismiss" = "Abbandona";
 "shared_string_modify" = "Modifica";
 "shared_string_later" = "In seguito";
 "offline_maps" = "Mappe offline";
@@ -765,7 +765,7 @@
 "sett_generic_ext_input" = "Tastiera generica";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "transport_routes" = "Percorsi";
-"transport_stop" = "Ferma";
+"transport_stop" = "Fermata";
 "route_stops_before" = "%d fermate prima";
 "logging_interval_navigation" = "Intervallo di registrazione durante la navigazione";
 "logging_interval_navigation_descr" = "Scegli l'intervallo di registrazione per la registrazione del viaggio durante la navigazione";
@@ -861,7 +861,7 @@
 "my_places" = "I miei luoghi";
 "map_sources" = "Sorgenti della mappa";
 "create_items" = "Crea oggetti";
-"osm_alert_title" = "Esegui";
+"osm_alert_title" = "Invia";
 "show_contour_lines" = "Visualizza le isoipse";
 "black" = "Nero";
 "route_parameters" = "Parametri del percorso";
@@ -881,7 +881,7 @@
 "home_pt" = "Casa";
 "shared_string_in_name" = "in %@";
 "units_min_short" = "m";
-"osm_note_reopen" = "Riapri";
+"osm_note_reopen" = "Riapre";
 "sett_ext_input" = "Dispositivi di input esterni";
 "osm_editing_lost_changes_title" = "Uscire senza salvare?";
 "add_first_inermediate" = "Aggiungi il primo intermedio";
@@ -898,7 +898,7 @@
 "categories" = "Categorie";
 "osm_editing_offline" = "Modifiche offline";
 "osm_edit_without_name" = "Senza nome";
-"osm_note_comment" = "Commento";
+"osm_note_comment" = "Commenta";
 "help_about" = "Informazioni";
 "help_faq_descr" = "Domande frequenti";
 "change_map_underlay" = "Cambia la mappa di sottofondo";
@@ -921,7 +921,7 @@
 "res_world_region" = "Mondo";
 "osmand_live_update_now" = "Aggiorna ora";
 "quick_action_add_underlay" = "Aggiungi sottofondo";
-"osmand_live_updates" = "Aggiornamenti Live";
+"osmand_live_updates" = "Aggiornamenti automatici";
 "toggle_poi" = "Mostra/nascondi PDI";
 "restore" = "Ripristina";
 "region_nautical" = "Mappe nautiche";
@@ -961,7 +961,7 @@
 "shared_string_street" = "Strada";
 "brown" = "Marrone";
 "osm_note_created" = "Nota di OSM creata";
-"osm_str_name" = "Nome strada";
+"osm_str_name" = "Nome della strada";
 "work_pt" = "Lavoro";
 "keep_informing_descr" = "Annuncia nuovamente a intervalli regolari le indicazioni di navigazione.";
 "add_gpx_waypoint" = "Aggiungi un punto intermedio GPX";
@@ -1694,7 +1694,7 @@
 "update_map" = "Aggiorna mappa";
 "shared_string_max" = "Massimo";
 "shared_string_min" = "Min";
-"nothing_found_empty" = "Nonè stato tovato nulla";
+"nothing_found_empty" = "Nessun risultato";
 "meters" = "metri";
 "tones" = "toni";
 "announce" = "Annunci";
@@ -1813,7 +1813,7 @@
 "add_custom_category" = "Aggiungi categoria personalizzata";
 "extra_maps" = "Mappe extra";
 "reverse_track_dir" = "Inverti direzione GPX";
-"service" = "Servizi";
+"service" = "Strada di servizio";
 "sport" = "Sport";
 "plan_route_last_modified" = "Cronologico";
 "visible" = "Visibile";
@@ -1829,7 +1829,7 @@
 "copied_to_clipboard" = "Copiato negli appunti";
 "street_level_imagery" = "Immagini stradali";
 "markers_history" = "Cronologia dei marcatori";
-"track" = "Traccia";
+"track" = "Carrareccia";
 "split_after" = "Spezza dopo";
 "shared_string_others" = "Ancora";
 "select_group" = "Seleziona il gruppo";

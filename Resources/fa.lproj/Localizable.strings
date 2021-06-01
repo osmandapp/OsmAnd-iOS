@@ -32,7 +32,7 @@
 "rotate_map_bearing_opt" = "در جهت حرکت";
 "rotate_map_none_opt" = "بدون چرخش (بالا به‌طرف شمال است)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
-"driving_region" = "Driving region";
+"driving_region" = "منطقهٔ رانندگی";
 "driving_region_automatic" = "خودکار";
 "map_widget_magnetic_bearing" = "سویهٔ مغناطیسی";
 "map_widget_bearing" = "سویهٔ نسبی";
@@ -119,7 +119,7 @@
 "wake_on_voice" = "نمایشگر روشن شود";
 "wake_on_voice_descr" = "هنگام نزدیک‌شدن به پیچ، نمایشگر روشن شود (اگر خاموش است).";
 "voice_pref_title" = "گفتار";
-"voice_provider" = "Voice guidance";
+"voice_provider" = "راهنمای گفتاری";
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "خروجی راهنمای گفتاری";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
@@ -351,7 +351,7 @@
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "سرعت";
 // Map settings
-"rendering_value_browse_map_name" = "Overview";
+"rendering_value_browse_map_name" = "مرور نقشه";
 "m_style_car" = "رانندگی";
 "m_style_walk" = "پیاده‌روی";
 "m_style_bicycle" = "دوچرخه‌سواری";
@@ -365,7 +365,7 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_none" = "هیچ‌کدام";
+"map_settings_none" = "هیچ";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "نقشه‌های آنلاین";
 "map_settings_transp" = "شفافیت";
@@ -409,7 +409,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "دانلود";
-"nothanks" = "نه، متشکرم";
+"nothanks" = "خیر، سپاسگزارم";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -496,7 +496,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "علاقه‌مندی";
+"import_favorite" = "علاقه‌مندی‌ها";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -877,7 +877,7 @@
 "poi_opening_hours" = "ساعت کاری";
 "gpx_alt_range" = "دامنهٔ ارتفاع";
 "poi_clear" = "پاک‌کردن";
-"nearby_search" = "جست‌وجوی این اطراف";
+"nearby_search" = "جست‌وجوی اطراف";
 "translucent_purple" = "بنفش شفاف";
 "translucent_red" = "قرمز شفاف";
 "green" = "سبز";
@@ -972,7 +972,7 @@
 "shared_string_retry" = "تلاش مجدد";
 "translucent_orange" = "نارنجی شفاف";
 "download_depth_countours" = "منحنی‌های میزان عمق دریا";
-"shared_string_filter" = "پالایش";
+"shared_string_filter" = "پالایه";
 "help_about" = "درباره";
 "traffic_warning_tunnel" = "تونل";
 "product_title_sea_depth_contours" = "منحنی‌های میزان عمق دریا";
@@ -988,11 +988,11 @@
 "change_map_source" = "تغییر منبع نقشه";
 "translucent_blue" = "آبی شفاف";
 "get_discount_second_part" = "سپس %@";
-"osm_deleted" = "حذف شد";
+"osm_deleted" = "حذف‌شده(ها)";
 "poi_list" = "لیست POI";
 "osm_editing_lost_changes_descr" = "تغییراتی که ذخیره نکرده‌اید، از دست می‌رود. ادامه می‌دهید؟";
 "prev_route" = "مسیر قبلی";
-"help_other_header" = "دیگر";
+"help_other_header" = "سایر";
 "help_faq" = "سؤالات رایج";
 "map_sources" = "منابع نقشه";
 "offline_vector_maps" = "نقشه‌های بُرداری آفلاین";
@@ -1575,7 +1575,7 @@
 "circle" = "دایره";
 "amenity" = "تسهیلات";
 "fav_points_not_exist" = "هیچ نقطهٔ موردعلاقه‌ای وجود ندارد";
-"service" = "خدمات";
+"service" = "خدماتی";
 "favorite_friends_category" = "دوستان";
 "units_nm" = "nmi";
 "shared_string_import" = "درون‌برد";

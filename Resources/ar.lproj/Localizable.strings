@@ -66,7 +66,7 @@
 "rotate_map_bearing_opt" = "حسب اتجاه الحركة";
 "rotate_map_none_opt" = "الشمال في الأعلى";
 "driving_region_descr" = "حدد منطقة القيادة: الولايات المتحدة، أوروبا، المملكة المتحدة، آسيا، وأخرى.";
-"driving_region" = "Driving region";
+"driving_region" = "منطقة القيادة";
 "driving_region_automatic" = "تلقائي";
 "map_widget_magnetic_bearing" = "تأثير مغناطيسي";
 "map_widget_bearing" = "التأثير النسبي";
@@ -153,7 +153,7 @@
 "wake_on_voice" = "تشغيل الشاشة";
 "wake_on_voice_descr" = "تشغيل شاشة الجهاز إذا كانت مغلقة عند الاقتراب من منعطف.";
 "voice_pref_title" = "تفضيلات الصوت";
-"voice_provider" = "Voice guidance";
+"voice_provider" = "التوجيه الصوتي";
 "voice_provider_descr" = "تحديد التوجيه الصوتي للتنقل";
 "choose_audio_stream" = "مصدر التوجيه الصوتي";
 "choose_audio_stream_descr" = "اختيار قناة لتشغيل التوجيه الصوتي";
@@ -386,15 +386,15 @@
 "gpx_max_speed" = "السرعة القصوى";
 "gpx_speed" = "السرعة";
 // Map settings
-"rendering_value_browse_map_name" = "نظرة عامة";
-"m_style_car" = "سيارة";
+"rendering_value_browse_map_name" = "استعراض";
+"m_style_car" = "القيادة";
 "m_style_walk" = "مشي";
 "m_style_bicycle" = "دراجة";
 "map_settings_map" = "إدارة الخرائط";
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_mode" = "مظهرالخريطة";
-"map_settings_day" = "نهار";
+"map_settings_day" = "نهاري";
 "map_settings_night" = "ليلي";
 "map_settings_style" = "نمط الخريطة";
 "map_settings_overunder" = "الخريطة العلوية/ السفلية";
@@ -444,7 +444,7 @@
 "prch_nau_q3" = "يمكنك تثبيته لاحقا من خلال مصادر الخرائط.";
 "proceed_q" = "تقدم؟";
 "download" = "تحميل";
-"nothanks" = "لا شكراً";
+"nothanks" = "لا ، شكراً";
 "download_now" = "تحميل الخريطة الآن";
 "prch_failed" = "الشراء \"%@\" فشل";
 "prch_items_failed" = "لم تتم استعادة العنصر (العناصر). حاول مرة أخرى.";
@@ -521,7 +521,7 @@
 "units_ft" = "قدم";
 "units_kmh" = "كم/س";
 "units_mph" = "ميل ساعة";
-"units_hour" = "س";
+"units_hour" = "h";
 "units_min" = "د";
 "units_sec" = "ثانية";
 // Map
@@ -613,7 +613,7 @@
 "product_title_wiki" = "ويكيبيديا";
 "product_desc_wiki" = "بيانات ويكيبيديا";
 "product_desc_ext_wiki" = "الحصول على معلومات حول النقاط المثيرة للاهتمام من ويكيبيديا. إنه دليلك غير المتصل بجيبك - ما عليك سوى تمكين المكون الإضافي ويكبيديا والاستمتاع بمقالات حول الكائنات من حولك.";
-"product_title_srtm" = "الخطوط الكنتورية";
+"product_title_srtm" = "خرائط الخطوط الكنتورية";
 "product_desc_srtm" = "إظهارالخطوط الكنتورية";
 "product_desc_ext_srtm" = "توفر هذه الأداة طبقة الخطوط الكنتورية وطبقة للتضاريس ظاهرة على الخريطة الأساسية للتطبيق. هذه الوظيفة ستكوم محل تقدير من طرف الرياضيين، المتنزهين، الرحالة، وكل من هو مهتم بجمال ورخاء الطبيعة. \n \nالبيانات العالمية (بين 70 درجة شمالا و70 جنوبا) مبنية حسب قياسات SRTM (مكوك رادار البعثة الطبوغرافية) وASTER (المكوك المتقدم الخاص بالإنبعاث الحراري والانعكاس الإشعاعي)، أداة تصوير على متن Terra، القمر الصناعي الرئيسي لنظام رصد الأرض التابع لناسا. ASTER هو جهد تعاوني فيما بين وكالة ناسا، وزارة الاقتصاد اليابانية، التجارة والصناعة (METI)، و أنظمة الفضاء اليابانية (J-spacesystems).";
 "my_location" = "موقعي";
@@ -629,7 +629,7 @@
 "enter_fav_name" = "أدخل اسم المفضلة";
 "res_installing" = "تثبيت…";
 "res_roads" = "الطرق";
-"res_srtm" = "الخطوط الكنتورية";
+"res_srtm" = "خرائط الخطوط الكنتورية";
 "res_wiki" = "ويكيبيديا";
 "res_hillshade" = "التضاريس";
 "select_language" = "اختيار اللغة";
@@ -856,7 +856,7 @@
 "help_follow_us" = "تابعنا";
 "actions" = "إجراءات";
 "directions_more_options" = "الاتجاهات من";
-"nearby_search" = "بحث بالقرب";
+"nearby_search" = "بحث بالجوار";
 "map_widget_ruler_control" = "دوائر القياس";
 "import_from_docs" = "الاستيراد من المستندات";
 "osm_live_routing" = "الملاحة عبر أوسماند لايف";
@@ -960,7 +960,7 @@
 "loading_poi_obj" = "تحميل POI…";
 "osm_note" = "ملاحظة OSM";
 "osm_created" = "تم إنشاءة";
-"osm_deleted" = "تم الحذف";
+"osm_deleted" = "حذف";
 "osm_modified" = "تم التعديل";
 "osm_reopened" = "إعادة فتح";
 "osm_name" = "اسم مستخدم خريطة الشارع المفتوح";
@@ -1123,7 +1123,7 @@
 "download_pending" = "تحميل معلق";
 "reddit" = "موقع Reddit";
 // Quick action
-"quick_action_name" = "إجراءات سريعة";
+"quick_action_name" = "إجراء سريع";
 "quick_action_no_overlay" = "بدون طبقة";
 "quick_action_add_overlay" = "إضافة طبقة علوية";
 "quick_action_no_underlay" = "بدون طبقة";
@@ -1666,7 +1666,7 @@
 "public_transport_warning_title" = "يخضع التنقل في وسائل النقل العام حاليًا للاختبار التجريبي ، ويتوقع أن يكون فيه أخطاء .";
 "calc_pedestrian_route" = "احسب طريق المشاة";
 "public_transport_ped_route_title" = "المسار على الأقدام حوالي %@, وقد يكون أسرع من وسائل النقل العام.";
-"m_style_pulic_transport" = "وسائل النقل العام";
+"m_style_pulic_transport" = "النقل العام";
 "transfers" = "النقل:";
 "consider_limitations_param" = "النظر في القيود المؤقتة";
 "avoid_transport_type" = "تجنب أنواع النقل";
@@ -1813,7 +1813,7 @@
 "configure_map_descr" = "مظهر الخريطة";
 "export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد نسخ إلى أوسماند.";
 "profile_sett_descr" = "تؤثر على ملف التعريف المحدد";
-"app_profiles" = "أوضاع التطبيق";
+"app_profiles" = "تطبيق الوضع";
 "selected_profile" = "الوضع المحدد";
 "osmand_profile" = "ملف تعريف أوسماند";
 "ui_customization_descr" = "عناصر الدرج، قائمة السياق";
@@ -2019,7 +2019,7 @@
 "sport" = "رياضة";
 "special" = "خاص";
 "service" = "خدمة";
-"emergency" = "الطوارئ";
+"emergency" = "حالة طوارئ";
 "square" = "مربع";
 "octagon" = "مثمن";
 

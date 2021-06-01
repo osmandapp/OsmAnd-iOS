@@ -88,6 +88,7 @@
     {
         resultCell.buttonView.hidden = NO;
         [resultCell.buttonView setImage:[UIImage imageNamed:item[@"img"]] forState:UIControlStateNormal];
+        [resultCell.buttonView removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [resultCell.buttonView addTarget:self action:@selector(deleteSectionPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     else
@@ -102,6 +103,7 @@
     textField.textView.delegate = self;
     textField.textView.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.layoutDelegate = self;
+    [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont systemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
@@ -122,6 +124,7 @@
     if (cell)
     {
         [cell.button setTitle:OALocalizedString(@"shared_string_add") forState:UIControlStateNormal];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchDown];
         [cell.button addTarget:self action:@selector(addTag:) forControlEvents:UIControlEventTouchDown];
         [cell showImage:YES];
         cell.iconView.image = [UIImage imageNamed:@"ic_custom_plus"];

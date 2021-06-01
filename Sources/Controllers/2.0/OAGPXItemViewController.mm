@@ -1128,6 +1128,7 @@
                     cell.textView.text = OALocalizedString(@"map_settings_show");
                     cell.switchView.tag = indexPath.section << 10 | indexPath.row;
                     [cell.switchView setOn:[settings.mapSettingVisibleGpx.get containsObject:self.gpx.gpxFilePath]];
+                    [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
                 }
                 return cell;

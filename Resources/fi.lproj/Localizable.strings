@@ -48,7 +48,7 @@
 "transport_routes" = "Reitit";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Lopeta";
+"transport_stop" = "Pysähdys";
 
 "cancel_navigation" = "Keskeytä suunnistus";
 "start_navigation" = "Start navigation";
@@ -1098,7 +1098,7 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Yhteystiedot";
-"osm_str_name" = "Katunimi";
+"osm_str_name" = "Kadun nimi";
 "osm_building_num" = "Building number";
 "osm_phone" = "puhelin";
 "osm_website" = "nettisivusto";
@@ -1353,7 +1353,7 @@
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 
-"units_hour" = "t";
+"units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sec";
 "units_min_short" = "m";
@@ -2175,7 +2175,7 @@
 
 //Poi catagories
 "amenity" = "Mukavuus";
-"emergency" = "Ensiapu";
+"emergency" = "Hätätapaus";
 "service" = "Palvelu";
 "special" = "Erityinen";
 "sport" = "Urheilu";
@@ -2228,3 +2228,4 @@
 • Fixed issues with missing Wikipedia search category\n
 • Settings Import: fixed bugs, added support for all data types available in OsmAnd\n
 • OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
+"shared_string_export" = "Vie";

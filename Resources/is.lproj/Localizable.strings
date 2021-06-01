@@ -111,7 +111,7 @@
 "gpx_max_speed" = "Hámarkshraði";
 "gpx_speed" = "Hraði";
 // Map settings
-"rendering_value_browse_map_name" = "Yfirlit";
+"rendering_value_browse_map_name" = "Fletta korti";
 "m_style_car" = "Akstur";
 "m_style_walk" = "Gangandi";
 "m_style_bicycle" = "Hjólreiðar";
@@ -119,7 +119,7 @@
 "map_settings_show" = "Birtaá korti";
 "map_settings_type" = "Gerð korts";
 "map_mode" = "Kortahamur";
-"map_settings_day" = "Dagur";
+"map_settings_day" = "dag";
 "map_settings_night" = "Nótt";
 "map_settings_style" = "Stíll korts";
 "map_settings_overunder" = "Yfirlag / Undirlag";

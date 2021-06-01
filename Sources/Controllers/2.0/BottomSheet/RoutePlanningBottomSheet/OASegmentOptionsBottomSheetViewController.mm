@@ -271,6 +271,7 @@
         {
             [cell.segmentedControl setTitle:item[@"first_item_title"] forSegmentAtIndex:0];
             [cell.segmentedControl setTitle:item[@"second_item_title"] forSegmentAtIndex:1];
+            [cell.segmentedControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentedControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentedControl setSelectedSegmentIndex:_dialogMode == EOARouteBetweenPointsDialogModeSingle ? 0 : 1];
         }

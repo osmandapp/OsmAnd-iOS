@@ -371,6 +371,7 @@ static const NSInteger panoImageFilterSection = 3;
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         outCell = cell;
@@ -390,6 +391,7 @@ static const NSInteger panoImageFilterSection = 3;
             cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             [cell setButtonText:item[@"btnTitle"]];
+            [cell.buttonView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.buttonView addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

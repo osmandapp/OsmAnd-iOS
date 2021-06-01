@@ -49,13 +49,6 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
-#if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
-#endif // defined(OSMAND_IOS_DEV)
-
-
 
 @interface OAMapSettingsViewController ()
 {

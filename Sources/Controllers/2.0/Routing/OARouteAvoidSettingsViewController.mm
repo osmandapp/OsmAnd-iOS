@@ -226,7 +226,7 @@
         if (cell)
         {
             [cell.textView setText:text];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
             [param setControlAction:cell.switchView];
         }
@@ -280,6 +280,7 @@
             {
                 cell.userInteractionEnabled = YES;
                 [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+                [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
                 [cell.button addTarget:self action:@selector(addRoadPressed:) forControlEvents:UIControlEventTouchDown];
                 [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
                 [cell showImage:NO];

@@ -262,7 +262,7 @@
         cell.descLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
-        [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         if (!isDefault)
         {
             [cell.switchView setOn:isEnabled];

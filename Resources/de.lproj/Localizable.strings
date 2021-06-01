@@ -61,8 +61,8 @@
 "track_save" = "Aktuellen Track speichern";
 "track_continue_rec" = "Aufnahme fortsetzen";
 // Map settings
-"rendering_value_browse_map_name" = "Übersicht";
-"m_style_car" = "Fahrzeug";
+"rendering_value_browse_map_name" = "Karte ansehen";
+"m_style_car" = "Auto";
 "m_style_walk" = "Fußgänger";
 "m_style_bicycle" = "Fahrrad";
 "map_settings_map" = "Karte";
@@ -377,7 +377,7 @@
 "gpx_group_select" = "Gruppenauswahl";
 "show_all" = "Alle anzeigen";
 "get_directions" = "Navigation";
-"parking" = "Parkplatz";
+"parking" = "Parken";
 "est_travel_time" = "Reisezeit abschätzen";
 "pedestrian" = "Fußgänger";
 "sorting" = "Sortierung";
@@ -769,7 +769,7 @@
 "search_radius" = "Suchradius";
 "transport_routes" = "Routen";
 "transport_nearby_routes_within" = "Nahegelegene Routen innerhalb von";
-"transport_stop" = "Haltestelle";
+"transport_stop" = "Beenden";
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%d Haltestellen davor";
 "shared_string_previous" = "Zurück";
@@ -807,7 +807,7 @@
 "help_search" = "Kartensuche";
 "help_trip_planning" = "Eine Strecke planen";
 "help_legend" = "Kartenlegende";
-"help_other_header" = "Weitere";
+"help_other_header" = "Anderes";
 "help_install_and_troubleshoot" = "Installation und Problembehebung";
 "help_tech_articles" = "Technische Themen";
 "help_versions" = "Versionen";
@@ -817,7 +817,7 @@
 "shared_string_close" = "Schließen";
 "actions" = "Aktionen";
 "directions_more_options" = "Navigiere von";
-"nearby_search" = "Suche um Aufenthaltsort";
+"nearby_search" = "In der Nähe suchen";
 "map_widget_ruler_control" = "Zirkel";
 "import_from_docs" = "Aus Dokumenten importieren";
 "osm_live_routing" = "OsmAnd-Live-Navigation";
@@ -956,7 +956,7 @@
 "osm_website" = "Webseite";
 "osm_add_place" = "Ort hinzufügen";
 "osm_modify_place" = "Ort bearbeiten";
-"osm_poi_delete_title" = "Lösche POI";
+"osm_poi_delete_title" = "POI löschen";
 "osm_target_modified" = "Geänderter OSM-POI";
 "osm_target_deleted" = "Gelöschter OSM-POI";
 "osm_target_created" = "OSM-POI erstellt";
@@ -1049,7 +1049,7 @@
 "tile_cache" = "Kachelzwischenspeicher";
 "shared_string_reload" = "Neu laden";
 "mapil_reload_cache" = "Kacheln neu laden, um die neuesten Daten zu sehen";
-"shared_string_filter" = "Filtern";
+"shared_string_filter" = "Filter";
 "mapil_filter_user_descr" = "Bilder nach Benutzer filtern";
 "mapil_filter_date" = "Bilder nach Datum filtern";
 "mapil_usernames" = "Benutzernamen";
@@ -1975,7 +1975,7 @@
 "nearest_point" = "Nächstgelegener Punkt";
 "start_of_track" = "Startpunkt des Tracks";
 "point_to_navigate" = "Navigation";
-"track" = "Track";
+"track" = "Wirtschaftsweg";
 "reverse_track_dir" = "Trackrichtung umkehren";
 "attach_to_the_roads" = "Auf Straßen einrasten";
 "select_another_track" = "Anderen Track wählen";

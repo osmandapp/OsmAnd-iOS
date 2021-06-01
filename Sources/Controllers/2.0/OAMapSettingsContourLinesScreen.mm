@@ -526,6 +526,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.valueLabel.text = [self getLocalizedParamValue:v];
                 cell.numberOfMarks = _visibleDensityValues.count;
                 cell.selectedMark = [_visibleDensityValues indexOfObject:v];
+                [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
             }
             else if ([p.name isEqualToString:kContourLinesWidth])
@@ -534,6 +535,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.valueLabel.text = [self getLocalizedParamValue:v];
                 cell.numberOfMarks = _visibleWidthValues.count;
                 cell.selectedMark = [_visibleWidthValues indexOfObject:v];
+                [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];
             }
         }

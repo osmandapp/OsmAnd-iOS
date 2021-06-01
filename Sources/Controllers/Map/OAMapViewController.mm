@@ -106,12 +106,6 @@
 
 #include <OsmAndCore/QKeyValueIterator.h>
 
-#if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
-#endif // defined(OSMAND_IOS_DEV)
-
 #import "OANativeUtilities.h"
 #import "OALog.h"
 #include "Localization.h"
@@ -394,13 +388,6 @@
     
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
     [helper addListener:self];
-    
-#if defined(OSMAND_IOS_DEV)
-    _hideStaticSymbols = NO;
-    _visualMetricsMode = OAVisualMetricsModeOff;
-    _forceDisplayDensityFactor = NO;
-    _forcedDisplayDensityFactor = self.displayDensityFactor;
-#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (void) deinit
@@ -1821,55 +1808,13 @@
                     _mapPresentationEnvironment->setSettings(newSettings);
             }
         
-#if defined(OSMAND_IOS_DEV)
-            switch (_visualMetricsMode)
-            {
-                case OAVisualMetricsModeBinaryMapData:
-                    _rasterMapProvider.reset(new OsmAnd::ObfMapObjectsMetricsLayerProvider(_obfMapObjectsProvider,
-                                                                                           256 * _mapView.contentScaleFactor,
-                                                                                           _mapView.contentScaleFactor));
-                    break;
-
-                case OAVisualMetricsModeBinaryMapPrimitives:
-                    _rasterMapProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(_mapPrimitivesProvider,
-                                                                                           256 * _mapView.contentScaleFactor,
-                                                                                           _mapView.contentScaleFactor));
-                    break;
-
-                case OAVisualMetricsModeBinaryMapRasterize:
-                {
-                    std::shared_ptr<OsmAnd::MapRasterLayerProvider> backendProvider(
-                        new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-                    _rasterMapProvider.reset(new OsmAnd::MapRasterMetricsLayerProvider(backendProvider,
-                                                                                       256 * _mapView.contentScaleFactor,
-                                                                                       _mapView.contentScaleFactor));
-                    break;
-                }
-
-                case OAVisualMetricsModeOff:
-                default:
-                    _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-                    break;
-            }
-#else
           _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-#endif // defined(OSMAND_IOS_DEV)
             [_mapView setProvider:_rasterMapProvider
                         forLayer:0];
 
-#if defined(OSMAND_IOS_DEV)
-            if (!_hideStaticSymbols)
-            {
-                _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
-                                                                                       rasterTileSize));
-                [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
-            }
-#else
             _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
-#endif
-            
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
         {
@@ -2032,10 +1977,6 @@
 
 - (CGFloat) displayDensityFactor
 {
-#if defined(OSMAND_IOS_DEV)
-    if (_forceDisplayDensityFactor)
-        return _forcedDisplayDensityFactor;
-#endif // defined(OSMAND_IOS_DEV)
 
     if (!self.mapViewLoaded || _contentScaleFactor == 0.0)
         return [UIScreen mainScreen].scale;
@@ -3203,90 +3144,6 @@
 }
 
 @synthesize framePreparedObservable = _framePreparedObservable;
-
-#if defined(OSMAND_IOS_DEV)
-@synthesize hideStaticSymbols = _hideStaticSymbols;
-- (void)setHideStaticSymbols:(BOOL)hideStaticSymbols
-{
-    if (_hideStaticSymbols == hideStaticSymbols)
-        return;
-
-    _hideStaticSymbols = hideStaticSymbols;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateCurrentMapSource];
-        });
-    });
-}
-
-@synthesize visualMetricsMode = _visualMetricsMode;
-- (void)setVisualMetricsMode:(OAVisualMetricsMode)visualMetricsMode
-{
-    if (_visualMetricsMode == visualMetricsMode)
-        return;
-
-    _visualMetricsMode = visualMetricsMode;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateCurrentMapSource];
-        });
-    });
-}
-
-@synthesize forceDisplayDensityFactor = _forceDisplayDensityFactor;
-- (void)setForceDisplayDensityFactor:(BOOL)forceDisplayDensityFactor
-{
-    if (_forceDisplayDensityFactor == forceDisplayDensityFactor)
-        return;
-
-    _forceDisplayDensityFactor = forceDisplayDensityFactor;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateCurrentMapSource];
-        });
-    });
-}
-
-@synthesize forcedDisplayDensityFactor = _forcedDisplayDensityFactor;
-- (void)setForcedDisplayDensityFactor:(CGFloat)forcedDisplayDensityFactor
-{
-    _forcedDisplayDensityFactor = forcedDisplayDensityFactor;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateCurrentMapSource];
-        });
-    });
-}
-
-#endif // defined(OSMAND_IOS_DEV)
 
 - (BOOL) isMyLocationVisible
 {

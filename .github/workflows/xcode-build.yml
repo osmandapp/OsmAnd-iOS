@@ -87,7 +87,7 @@ jobs:
       env:
         BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
         DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
-      run: exec ios/prepare.sh
+      run: exec ios/prepare.sh --sync_translations
     - name: Upload qt-ios-prebuilt
       uses: actions/upload-artifact@v2
       with:
@@ -114,13 +114,13 @@ jobs:
             CODE_SIGN_IDENTITY="iPhone Distribution"
             PROVISIONING_PROFILE_SPECIFIER="Github Build"
             archive | xcpretty'
-    # - name: Zip iOS archive
-    #   run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
-    # - name: Upload maps archive zip
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: OsmAndMaps.xcarchive.zip
-    #     path: OsmAndMaps.xcarchive.zip
+    - name: Zip iOS archive
+      run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
+    - name: Upload maps archive zip
+      uses: actions/upload-artifact@v2
+      with:
+         name: OsmAndMaps-${{ github.event.inputs.buildversion }}.${{ github.event.inputs.releaseversion }}.xcarchive.zip
+         path: OsmAndMaps.xcarchive.zip
     # - name: Download iOS archive
     #   run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive.zip" -O OsmAndMaps.xcarchive.zip'
     # - name: Unzip iOS archive
@@ -134,7 +134,7 @@ jobs:
     - name: Upload maps archive
       uses: actions/upload-artifact@v2
       with:
-        name: 'OsmAnd Maps.ipa'
+        name: OsmAndMaps-${{ github.event.inputs.buildversion }}.${{ github.event.inputs.releaseversion }}.ipa
         path: 'OsmAnd Maps.ipa'
     - name: Publish TestFlight
       env:

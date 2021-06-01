@@ -63,6 +63,7 @@ static const NSInteger actionsSectionIndex = 2;
     if (cell)
     {
         [cell.button setTitle:_settings.osmUserName.get.length == 0 ? OALocalizedString(@"shared_string_account_add") : _settings.osmUserName forState:UIControlStateNormal];
+        [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
         [cell.button addTarget:self action:@selector(editPressed) forControlEvents:UIControlEventTouchDown];
         [cell showImage:NO];
     }
@@ -197,6 +198,7 @@ static const NSInteger actionsSectionIndex = 2;
             
             cell.switchView.on = [v boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;

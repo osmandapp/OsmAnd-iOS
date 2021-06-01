@@ -217,6 +217,7 @@
     if (item[@"img"] && ![item[@"img"] isEqualToString:@""]) {
         resultCell.buttonView.hidden = NO;
         [resultCell.buttonView setImage:[UIImage imageNamed:item[@"img"]] forState:UIControlStateNormal];
+        [resultCell.buttonView removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [resultCell.buttonView addTarget:self action:@selector(deleteTagPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     else
@@ -231,6 +232,7 @@
     [textField.textView setText:item[@"title"]];
     textField.textView.delegate = self;
     textField.layoutDelegate = self;
+    [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont systemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
@@ -482,6 +484,7 @@
             if (_action.isActionEditable)
             {
                 cell.inputField.text = item[@"title"];
+                [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventEditingChanged];
                 [cell.inputField addTarget:self action:@selector(onNameChanged:) forControlEvents:UIControlEventEditingChanged];
             }
             else
@@ -509,6 +512,7 @@
             [cell.textView setText: item[@"title"]];
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
@@ -527,6 +531,7 @@
             cell.inputField.text = item[@"title"];
             cell.inputField.placeholder = item[@"hint"];
             cell.inputField.tag = indexPath.section << 10 | indexPath.row;
+            [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(onTextFieldChanged:) forControlEvents:UIControlEventEditingChanged];
             NSString *imgName = item[@"img"];
             if (imgName && imgName.length > 0)
@@ -612,6 +617,7 @@
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchDown];
             [cell.button addTarget:self action:NSSelectorFromString(item[@"target"]) forControlEvents:UIControlEventTouchDown];
             [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
             [cell showImage:NO];
@@ -670,6 +676,7 @@
             [textField.textView setText:item[@"title"]];
             textField.textView.delegate = self;
             textField.layoutDelegate = self;
+            [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             textField.font = [UIFont systemFontOfSize:17.0];
             textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);

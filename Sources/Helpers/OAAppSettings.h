@@ -152,7 +152,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-typedef NS_ENUM(NSInteger, EOAWikiArticleShowConstant)
+typedef NS_ENUM(NSInteger, EOAWikiArticleShowConstantOn)
 {
     ON = 0,
     OFF,
@@ -161,11 +161,11 @@ typedef NS_ENUM(NSInteger, EOAWikiArticleShowConstant)
 
 @interface OAWikiArticleShowConstant : NSObject
 
-@property (nonatomic, readonly) EOAWikiArticleShowConstant wasc;
+@property (nonatomic, readonly) EOAWikiArticleShowConstantOn wasc;
 
-+ (instancetype) withWikiArticleShowConstant:(EOAWikiArticleShowConstant)wasc;
++ (instancetype) withWikiArticleShowConstant:(EOAWikiArticleShowConstantOn)wasc;
 
-+ (NSString *) toHumanString:(EOAWikiArticleShowConstant)wasc;
++ (NSString *) toHumanString:(EOAWikiArticleShowConstantOn)wasc;
 
 @end
 
@@ -471,12 +471,12 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @interface OACommonWikiArticleShowImages : OACommonInteger
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstantOn)defValue;
 
-- (EOAWikiArticleShowConstant) get;
-- (EOAWikiArticleShowConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow;
-- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow mode:(OAApplicationMode *)mode;
+- (EOAWikiArticleShowConstantOn) get;
+- (EOAWikiArticleShowConstantOn) get:(OAApplicationMode *)mode;
+- (void) set:(EOAWikiArticleShowConstantOn)wikiArticleShow;
+- (void) set:(EOAWikiArticleShowConstantOn)wikiArticleShow mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -670,7 +670,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchased;
 @property (nonatomic) OACommonBoolean *settingOsmAndLiveEnabled;
-@property (nonatomic) OACommonInteger *liveUpdatesRetryes;
+@property (nonatomic) OACommonInteger *liveUpdatesRetries;
 
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;

@@ -32,7 +32,7 @@
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
 #define liveUpdatesPurchasedKey @"liveUpdatesPurchasedKey"
 #define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
-#define liveUpdatesRetryesKey @"liveUpdatesRetryesKey"
+#define liveUpdatesRetriesKey @"liveUpdatesRetriesKey"
 #define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
@@ -779,13 +779,13 @@
 
 @interface OAWikiArticleShowConstant()
 
-@property (nonatomic) EOAWikiArticleShowConstant wasc;
+@property (nonatomic) EOAWikiArticleShowConstantOn wasc;
 
 @end
 
 @implementation OAWikiArticleShowConstant
 
-+ (instancetype)withWikiArticleShowConstant:(EOAWikiArticleShowConstant)wasc
++ (instancetype)withWikiArticleShowConstant:(EOAWikiArticleShowConstantOn)wasc
 {
     OAWikiArticleShowConstant *obj = [[OAWikiArticleShowConstant alloc] init];
     if (obj)
@@ -795,7 +795,7 @@
     return obj;
 }
 
-+ (NSString *) toHumanString:(EOAWikiArticleShowConstant)wasc
++ (NSString *) toHumanString:(EOAWikiArticleShowConstantOn)wasc
 {
     switch (wasc)
     {
@@ -2505,7 +2505,7 @@
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue
++ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstantOn)defValue
 {
     OACommonWikiArticleShowImages *obj = [[OACommonWikiArticleShowImages alloc] init];
     if (obj)
@@ -2516,22 +2516,22 @@
     return obj;
 }
 
-- (EOAWikiArticleShowConstant) get
+- (EOAWikiArticleShowConstantOn) get
 {
     return [super get];
 }
 
-- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow
+- (void) set:(EOAWikiArticleShowConstantOn)wikiArticleShow
 {
     [super set:wikiArticleShow];
 }
 
-- (EOAWikiArticleShowConstant) get:(OAApplicationMode *)mode
+- (EOAWikiArticleShowConstantOn) get:(OAApplicationMode *)mode
 {
     return [super get:mode];
 }
 
-- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow mode:(OAApplicationMode *)mode
+- (void) set:(EOAWikiArticleShowConstantOn)wikiArticleShow mode:(OAApplicationMode *)mode
 {
     [super set:wikiArticleShow mode:mode];
 }
@@ -2563,10 +2563,10 @@
 
 - (void) resetToDefault
 {
-    EOAWikiArticleShowConstant defaultValue = self.defValue;
+    EOAWikiArticleShowConstantOn defaultValue = self.defValue;
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
-        defaultValue = (EOAWikiArticleShowConstant)((NSNumber *)pDefault).intValue;
+        defaultValue = (EOAWikiArticleShowConstantOn)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -2956,11 +2956,11 @@
 
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
-        _liveUpdatesRetryes = [[OACommonInteger withKey:liveUpdatesRetryesKey defValue:2] makeGlobal];
+        _liveUpdatesRetries = [[OACommonInteger withKey:liveUpdatesRetriesKey defValue:2] makeGlobal];
 
         [_globalPreferences setObject:_liveUpdatesPurchased forKey:@"billing_live_updates_purchased"];
         [_globalPreferences setObject:_settingOsmAndLiveEnabled forKey:@"is_live_updates_on"];
-        [_globalPreferences setObject:_liveUpdatesRetryes forKey:@"live_updates_retryes"];
+        [_globalPreferences setObject:_liveUpdatesRetries forKey:@"live_updates_retryes"];
 
         _billingUserId = [[OACommonString withKey:billingUserIdKey defValue:@""] makeGlobal];
         _billingUserName = [[OACommonString withKey:billingUserNameKey defValue:@""] makeGlobal];

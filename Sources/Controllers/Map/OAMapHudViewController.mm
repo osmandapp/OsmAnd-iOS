@@ -195,9 +195,6 @@
     [self updateColors];
 
     _mapInfoController.delegate = self;
-    
-    _debugButton.hidden = YES;
-    _debugButton.userInteractionEnabled = NO;
 }
 
 - (void)applyCorrectViewSize
@@ -591,11 +588,6 @@
 - (IBAction) onDriveModeButtonClicked:(id)sender
 {
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
-}
-
-- (IBAction) onActionsMenuButtonClicked:(id)sender
-{
-    [self.sidePanelController showRightPanelAnimated:YES];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
@@ -1219,11 +1211,6 @@
         imageName = isNight ? @"icon_drive_mode_off_night" : @"icon_drive_mode_off";
 
     [_driveModeButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-}
-
-- (IBAction) expandClicked:(id)sender
-{
-    [_mapInfoController expandClicked:sender];
 }
 
 - (void) recreateControls

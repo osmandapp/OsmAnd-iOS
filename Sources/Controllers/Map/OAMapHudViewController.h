@@ -29,7 +29,6 @@
 @property (weak, nonatomic) IBOutlet UIView *widgetsView;
 @property (weak, nonatomic) IBOutlet UIView *leftWidgetsView;
 @property (weak, nonatomic) IBOutlet UIView *rightWidgetsView;
-@property (weak, nonatomic) IBOutlet UIButton *expandButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *mapSettingsButton;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
@@ -40,10 +39,8 @@
 @property (weak, nonatomic) IBOutlet UIView *zoomButtonsView;
 
 @property (weak, nonatomic) IBOutlet UIButton *driveModeButton;
-@property (weak, nonatomic) IBOutlet UIButton *debugButton;
 @property (weak, nonatomic) IBOutlet UITextField *searchQueryTextfield;
 @property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
-@property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
 
 @property (strong, nonatomic) IBOutlet OAMapRulerView *rulerLabel;
 

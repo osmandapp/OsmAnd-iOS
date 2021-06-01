@@ -2145,7 +2145,6 @@
 		8A475C2221D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */; };
 		8A47B84A25875CB700FE5DE5 /* IOAMapTiledCollectionProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A47B84925875CB700FE5DE5 /* IOAMapTiledCollectionProvider.mm */; };
 		8A47B8552587A62700FE5DE5 /* OAWaypointsMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A47B8542587A62700FE5DE5 /* OAWaypointsMapLayerProvider.mm */; };
-		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
 		8A6CBCA821CE25F0004033C7 /* ic_live_purchased@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9821CE25EE004033C7 /* ic_live_purchased@3x.png */; };
 		8A6CBCAA21CE25F0004033C7 /* img_logo_38dp_sea_depth@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9921CE25EE004033C7 /* img_logo_38dp_sea_depth@3x.png */; };
@@ -2328,6 +2327,8 @@
 		B0D619F2CDE86225BEBC83FB /* OARearrangeCustomFiltersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61C17B82A2A45EA763869 /* OARearrangeCustomFiltersViewController.mm */; };
 		B0D61BE10DA62CC3244272FE /* OAButtonRightIconCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */; };
 		B0D61C744384818EFE0EFC65 /* OAButtonRightIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */; };
+		B0D61E12EA985194F803A5DD /* OAHistoryMarkersSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D6115DA512EEFB8779E3C2 /* OAHistoryMarkersSettingsItem.mm */; };
+		BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB27270119CB38D7007C5613 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FC19CB38D7007C5613 /* fonts */; };
@@ -2933,6 +2934,7 @@
 		DA54AA8324EFEFBE001E6560 /* ic_custom_elevation.png in Resources */ = {isa = PBXBuildFile; fileRef = DA54AA8024EFEFBD001E6560 /* ic_custom_elevation.png */; };
 		DA54AA8524EFEFBE001E6560 /* ic_custom_elevation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA54AA8124EFEFBE001E6560 /* ic_custom_elevation@3x.png */; };
 		DA54AA8724EFEFBE001E6560 /* ic_custom_elevation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA54AA8224EFEFBE001E6560 /* ic_custom_elevation@2x.png */; };
+		DA578C4C26626422007A086E /* libqtpcre2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA578C4B266263D2007A086E /* libqtpcre2.a */; };
 		DA5793C5229FD14C00750C8F /* OAMapillaryContributeCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5793C4229FD14C00750C8F /* OAMapillaryContributeCell.mm */; };
 		DA5793C8229FD19D00750C8F /* OAMapillaryContributeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5793C7229FD19D00750C8F /* OAMapillaryContributeCell.xib */; };
 		DA5793CC229FD36A00750C8F /* OAMapillaryContributeCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5793CB229FD36A00750C8F /* OAMapillaryContributeCard.m */; };
@@ -6581,7 +6583,9 @@
 		8AFD2D9D210E1D2E007AA07D /* OATransportRouteToolbarViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportRouteToolbarViewController.mm; path = Sources/Controllers/2.0/OATransportRouteToolbarViewController.mm; sourceTree = "<group>"; };
 		8AFD2D9E210E1D2E007AA07D /* OATransportRouteToolbarViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportRouteToolbarViewController.xib; path = Sources/Controllers/2.0/OATransportRouteToolbarViewController.xib; sourceTree = "<group>"; };
 		B0D6110893459B1D4D26BC18 /* OARearrangeCustomFiltersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARearrangeCustomFiltersViewController.h; path = Sources/Controllers/2.0/OARearrangeCustomFiltersViewController.h; sourceTree = "<group>"; };
+		B0D6115DA512EEFB8779E3C2 /* OAHistoryMarkersSettingsItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHistoryMarkersSettingsItem.mm; sourceTree = "<group>"; };
 		B0D611965D0A6A725E8CBDB1 /* OADeleteCustomFiltersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADeleteCustomFiltersViewController.mm; path = Sources/Controllers/2.0/OADeleteCustomFiltersViewController.mm; sourceTree = "<group>"; };
+		B0D617E2F1BED00DEA088AB5 /* OAHistoryMarkersSettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryMarkersSettingsItem.h; sourceTree = "<group>"; };
 		B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAButtonRightIconCell.xib; path = Resources/Controllers/Cells/OAButtonRightIconCell.xib; sourceTree = "<group>"; };
 		B0D61C17B82A2A45EA763869 /* OARearrangeCustomFiltersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARearrangeCustomFiltersViewController.mm; path = Sources/Controllers/2.0/OARearrangeCustomFiltersViewController.mm; sourceTree = "<group>"; };
 		B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAButtonRightIconCell.mm; path = Controllers/Cells/OAButtonRightIconCell.mm; sourceTree = "<group>"; };
@@ -7375,6 +7379,7 @@
 		DA54AA8024EFEFBD001E6560 /* ic_custom_elevation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_elevation.png; path = Resources/Icons/ic_custom_elevation.png; sourceTree = "<group>"; };
 		DA54AA8124EFEFBE001E6560 /* ic_custom_elevation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_elevation@3x.png"; path = "Resources/Icons/ic_custom_elevation@3x.png"; sourceTree = "<group>"; };
 		DA54AA8224EFEFBE001E6560 /* ic_custom_elevation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_elevation@2x.png"; path = "Resources/Icons/ic_custom_elevation@2x.png"; sourceTree = "<group>"; };
+		DA578C4B266263D2007A086E /* libqtpcre2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre2.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre2.a"; sourceTree = "<group>"; };
 		DA5793C3229FD14C00750C8F /* OAMapillaryContributeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapillaryContributeCell.h; path = Controllers/Cells/OAMapillaryContributeCell.h; sourceTree = "<group>"; };
 		DA5793C4229FD14C00750C8F /* OAMapillaryContributeCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapillaryContributeCell.mm; path = Controllers/Cells/OAMapillaryContributeCell.mm; sourceTree = "<group>"; };
 		DA5793C7229FD19D00750C8F /* OAMapillaryContributeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMapillaryContributeCell.xib; path = Resources/Controllers/Cells/OAMapillaryContributeCell.xib; sourceTree = "<group>"; };
@@ -8357,6 +8362,7 @@
 				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
 				8440E2E21ABEA7370088856A /* libz_static.a in Frameworks */,
 				8440E2D01ABEA7200088856A /* libarchive_static.a in Frameworks */,
+				DA578C4C26626422007A086E /* libqtpcre2.a in Frameworks */,
 				8440E2CE1ABEA7100088856A /* libOsmAndCore_static_standalone.a in Frameworks */,
 				84C41E7B1AB9EEA20089EABB /* libxml2.dylib in Frameworks */,
 				84185A821AA9A00D00F70328 /* StoreKit.framework in Frameworks */,
@@ -8366,7 +8372,6 @@
 				BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */,
 				BBA3AF76197FC4BB0039D991 /* OpenGLES.framework in Frameworks */,
 				BBA3AF77197FC4BB0039D991 /* UIKit.framework in Frameworks */,
-				8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */,
 				BBA3AF78197FC4BB0039D991 /* Foundation.framework in Frameworks */,
 				BBA3AF79197FC4BB0039D991 /* CoreGraphics.framework in Frameworks */,
 				BBA3AF7A197FC4BB0039D991 /* CoreLocation.framework in Frameworks */,
@@ -8476,6 +8481,8 @@
 				DA03F2BC262ABECB00364BAF /* OACustomRegion.mm */,
 				DA74670A2634303D00DBA863 /* OADownloadsItem.h */,
 				DA74670B2634303D00DBA863 /* OADownloadsItem.mm */,
+				B0D6115DA512EEFB8779E3C2 /* OAHistoryMarkersSettingsItem.mm */,
+				B0D617E2F1BED00DEA088AB5 /* OAHistoryMarkersSettingsItem.h */,
 			);
 			name = ImportExport;
 			sourceTree = "<group>";
@@ -12575,6 +12582,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA578C4B266263D2007A086E /* libqtpcre2.a */,
 				81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */,
 				DACBB96325D2BEA200378C47 /* CarPlay.framework */,
 				DA80DACE251E3440008E6267 /* UIKit.framework */,
@@ -18184,6 +18192,7 @@
 				B0D6143A4EEB3410F47A53B8 /* OADeleteCustomFiltersViewController.mm in Sources */,
 				B0D619F2CDE86225BEBC83FB /* OARearrangeCustomFiltersViewController.mm in Sources */,
 				B0D61BE10DA62CC3244272FE /* OAButtonRightIconCell.mm in Sources */,
+				B0D61E12EA985194F803A5DD /* OAHistoryMarkersSettingsItem.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

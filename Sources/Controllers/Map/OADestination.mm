@@ -26,6 +26,7 @@
         self.index = 0;
         self.hidden = NO;
         self.manual = NO;
+        self.creationDate = [NSDate date];
     }
     return self;
 }
@@ -77,6 +78,8 @@
 #define kDestinationHidden @"destination_hidden"
 #define kDestinationManual @"destination_manual"
 
+#define kDestinationCreationDate @"destination_creation_date"
+
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_desc forKey:kDestinationDesc];
@@ -94,6 +97,7 @@
     [aCoder encodeObject:[NSNumber numberWithInteger:_routePointIndex] forKey:kDestinationRoutePointIndexName];
     [aCoder encodeObject:[NSNumber numberWithBool:_hidden] forKey:kDestinationHidden];
     [aCoder encodeObject:[NSNumber numberWithBool:_manual] forKey:kDestinationManual];
+    [aCoder encodeObject:_creationDate forKey:kDestinationCreationDate];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -115,6 +119,7 @@
         _routePointIndex = [[aDecoder decodeObjectForKey:kDestinationRoutePointIndexName] integerValue];
         _hidden = [[aDecoder decodeObjectForKey:kDestinationHidden] boolValue];
         _manual = [[aDecoder decodeObjectForKey:kDestinationManual] boolValue];
+        _creationDate = [aDecoder decodeObjectForKey:kDestinationCreationDate];
     }
     return self;
 }
@@ -136,6 +141,7 @@
     clone.routePointIndex = _routePointIndex;
     clone.hidden = _hidden;
     clone.manual = _manual;
+    clone.creationDate = _creationDate;
 
     return clone;
 }

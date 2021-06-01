@@ -87,7 +87,7 @@ jobs:
       env:
         BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
         DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
-      run: exec ios/prepare.sh
+      run: exec ios/prepare.sh --sync_translations
     - name: Upload qt-ios-prebuilt
       uses: actions/upload-artifact@v2
       with:

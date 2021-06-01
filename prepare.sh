@@ -31,7 +31,7 @@ fi
 "$SRCLOC/Scripts/download-shipped-resources.sh"
 
 # Fetch translation from Android.
-# Only if script running with "--sync_translations" parameter ($ ...prepare.sh t)
+# Only if script running with "--sync_translations" parameter ($ ...prepare.sh --sync_translations)
 if [[ "$1" == --sync_translations ]]; then
   "$SRCLOC/Scripts/add_translations.swift"
 fi

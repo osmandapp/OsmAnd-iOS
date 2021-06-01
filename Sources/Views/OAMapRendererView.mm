@@ -125,10 +125,6 @@
     auto debugSettings = [self getMapDebugSettings];
     //debugSettings->disableSymbolsFastCheckByFrustum = true;
     [self setMapDebugSettings:debugSettings];
-
-#if defined(OSMAND_IOS_DEV)
-    _forceRenderingOnEachFrame = NO;
-#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (void)deinit
@@ -752,9 +748,6 @@
     // Perform rendering only if frame is marked as invalidated
     bool shouldRenderFrame = false;
     shouldRenderFrame = shouldRenderFrame || _renderer->isFrameInvalidated();
-#if defined(OSMAND_IOS_DEV)
-    shouldRenderFrame = shouldRenderFrame || _forceRenderingOnEachFrame;
-#endif // defined(OSMAND_IOS_DEV)
     if (shouldRenderFrame && _renderer->prepareFrame())
     {
         // Activate framebuffer
@@ -936,16 +929,5 @@
 {
     return _renderer->resumeGpuWorker();
 }
-
-
-#if defined(OSMAND_IOS_DEV)
-@synthesize forceRenderingOnEachFrame = _forceRenderingOnEachFrame;
-- (void)setForceRenderingOnEachFrame:(BOOL)forceRenderingOnEachFrame
-{
-    _forceRenderingOnEachFrame = forceRenderingOnEachFrame;
-
-    [_settingsObservable notifyEvent];
-}
-#endif // defined(OSMAND_IOS_DEV)
 
 @end

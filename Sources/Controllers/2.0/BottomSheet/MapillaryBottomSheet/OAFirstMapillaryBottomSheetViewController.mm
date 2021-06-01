@@ -226,6 +226,7 @@
             [cell.descriptionView setText:item[@"description"]];
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }

@@ -380,11 +380,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 }
 
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
-{
-#if defined(OSMAND_IOS_DEV)
-    return YES;
-#endif
-    
+{    
     NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
     
     if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))

@@ -39,7 +39,7 @@
 "years_5" = "Iseggasen";
 "units_mph" = "m/tasint";
 "product_title_africa" = "Tafriqt";
-"favorites" = "Imenyafen";
+"favorites" = "Inurifen";
 "rendering_category_transport" = "Amesni";
 "col_blue" = "Azegzaw";
 "shared_string_yes" = "Ih";
@@ -127,7 +127,7 @@
 "shared_string_reset" = "Ales awennez";
 "region_south_america" = "Marikan n Unẓul";
 "shared_string_io_error" = "Tuccḍa I/O";
-"map_settings_none" = "Ulac";
+"map_settings_none" = "Ula yiwen";
 "osm_phone" = "Tiliɣri";
 "shared_string_building" = "Azadaɣ";
 "rendering_attr_roadStyle_description" = "Aɣanib:";
@@ -178,7 +178,7 @@
 "search_poi_category_hint" = "Aru kra iw nadiɣef kullec";
 "rendering_attr_smoothness_intermediate_name" = "2: Alemmas";
 "rendering_attr_hideText_name" = "Aḍris";
-"m_style_bicycle" = "Azlalam";
+"m_style_bicycle" = "Tilḥin s uvilo";
 "gpx_speed" = "Arured";
 "key_hint_deselect" = "Kkes tafrayt";
 "shared_string_no" = "Ala";
@@ -203,7 +203,7 @@
 "rendering_category_hide" = "Ffer";
 "help_legend" = "Taneffust";
 "col_green" = "Adal";
-"rendering_value_browse_map_name" = "Agzul";
+"rendering_value_browse_map_name" = "Snirem";
 "map_markers" = "Ticraḍ n tkarḍa";
 "fav_name" = "Isem";
 "int_seconds" = "Tasinin";
@@ -267,7 +267,7 @@
 "sett_show" = "Sken";
 "shared_string_email_address" = "Tansa imayl";
 "gpx_route" = "Abrid";
-"help_other_header" = "Nniḍen";
+"help_other_header" = "Wayeḍ";
 "rendering_attr_smoothness_very_bad_name" = "Dirit";
 "clear_all_intermediates" = "Sfeḍ akk tineqqiḍin";
 "map_settings_appearance" = "Udem";
@@ -310,7 +310,7 @@
 "help_first_use" = "Amezwaru";
 "type_address" = "Gred tansa";
 "map_styles" = "Iɣunab";
-"m_style_car" = "Takeṛṛust";
+"m_style_car" = "Anehheṛ";
 "type_postcode" = "Sekcem angal n tesreqqest";
 "today" = "Ass-a";
 "directions_more_options" = "Tinilwin seg";
@@ -354,7 +354,7 @@
 "app_mode_utv" = "Côte à côte";
 "shared_string_buy" = "AΓ";
 "actions" = "Tigawin";
-"intro_next" = "Ar zdat";
+"intro_next" = "Ɣer zdat";
 "no_inet_connection" = "Ulac tuqqna n Internet";
 "rendering_attr_highway_class_steps_name" = "Imecwaṛen";
 "rendering_attr_hideWaterPolygons_name" = "Ffer aman";
@@ -429,7 +429,7 @@
 "postcode" = "Tangalt n lpusṭa";
 "rendering_value_yellow_name" = "Awraɣ";
 "region_others" = "Wayeḍ";
-"home_pt" = "Agejdan";
+"home_pt" = "Tinefrent tagejdant";
 "osm_deleted" = "Ittwakkes";
 "shared_string_my_location" = "ideg";
 "get_started" = "Aha bdu tura";
@@ -541,7 +541,7 @@
 "profile_type_base_string" = "Amaɣnu";
 "reset_to_default" = "Err-d azalen s lexṣas";
 "search_activity" = "Rechercher";
-"save_changes" = "Sekles asnifel";
+"save_changes" = "Sekles ibeddilen";
 "shared_string_settings" = "Iɣewwaṛen";
 "selected_profiles" = "%dɣef %d";
 "profile_type_osmand_string" = "Amaɣnu OsmAnd";
@@ -589,7 +589,7 @@
 "select_group" = "Fren agraw";
 "favorite_friends_category" = "Imdukal";
 "circle" = "Tawinest";
-"track" = "Piste";
+"track" = "Abrid";
 "service" = "Ameẓlu";
 "ctx_mnu_direction" = "marker";
 "square" = "Amkuẓ";

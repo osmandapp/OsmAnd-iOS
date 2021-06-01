@@ -406,7 +406,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             if ([v isKindOfClass:[OAProfileBoolean class]])
             {
                 OAProfileBoolean *value = v;
-                [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 cell.switchView.on = [value get:self.appMode];
             }
             else
@@ -475,7 +475,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             if ([v isKindOfClass:[OAProfileBoolean class]])
             {
                 OAProfileBoolean *value = v;
-                [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 cell.switchView.on = [value get:self.appMode];
             }
             else

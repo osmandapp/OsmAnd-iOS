@@ -37,7 +37,7 @@
 "transport_routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Zastanišćo";
+"transport_stop" = "Stop";
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
@@ -363,7 +363,7 @@
 "shared_string_and" = "a";
 "shared_string_edit" = "Wobdźěłać";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Dale";
+"shared_string_later" = "Pozdźišo";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "wot";
@@ -483,16 +483,16 @@
 "gpx_slope" = "spad";
 // Map settings
 "rendering_value_browse_map_name" = "Overview";
-"m_style_car" = "Awto";
+"m_style_car" = "Jězdźenje";
 "m_style_walk" = "Běhanje";
-"m_style_bicycle" = "Koleso";
+"m_style_bicycle" = "Kolesowanje";
 "map_settings_map" = "Karta";
 "map_settings_show" = "Na karće pokazać";
 "map_settings_type" = "Map type";
 "map_mode" = "Kartowy modus";
 "map_settings_map_magnifier" = "Powjetšenje karty";
 "map_settings_text_size" = "Wulkosć teksta";
-"map_settings_day" = "dźeń";
+"map_settings_day" = "Dźeń";
 "map_settings_night" = "Nóc";
 "map_settings_style" = "Stil karty";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -653,7 +653,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_note" = "OSM-notica";
 "osm_created" = "Created";
-"osm_deleted" = "Zajimawostka je so wotstroniła";
+"osm_deleted" = "Wotstronjene";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -673,7 +673,7 @@
 "osm_website" = "Webstrona";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "POI wušmórnyć";
+"osm_poi_delete_title" = "POI wotstronić";
 "osm_target_modified" = "Změnjene OSM POI-dypki";
 "osm_target_deleted" = "Wotstronjene OSM POI-dypki";
 "osm_target_created" = "OSM POI-dypk wutworjeny";
@@ -1089,11 +1089,11 @@
 "get_directions" = "Nawigacija";
 "parking" = "Parkowanišćo";
 "directions_more_options" = "Nawigacija wottud";
-"nearby_search" = "We wokolinje pytać";
+"nearby_search" = "Wokoło stejišća pytać";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins" = "Přidatki";
+"plugins" = "Rozšěrjenja";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -1411,7 +1411,7 @@
 "shared_string_next" = "Přichodne";
 "base_profile_descr_aircraft" = "Lětadło, gliding";
 "app_theme_light" = "Swětłe";
-"update_map" = "Zaktualizuj kartu";
+"update_map" = "Kartowe kachlicy zaktualizować";
 "enter_profile_name" = "Zapodaj mjeno profila";
 "nothing_found_empty" = "Žadyn pytanski wuslědk";
 "res_slope" = "spad";

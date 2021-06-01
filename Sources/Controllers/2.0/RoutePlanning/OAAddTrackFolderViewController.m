@@ -110,7 +110,7 @@
             cell.inputField.returnKeyType = UIReturnKeyDone;
             cell.inputField.enablesReturnKeyAutomatically = YES;
             cell.clearButton.tag = cell.inputField.tag;
-            [cell.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         

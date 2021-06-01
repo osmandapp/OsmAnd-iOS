@@ -333,18 +333,13 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                             if (!product && inAppId && [identifier hasSuffix:inAppId])
                             {
                                 product = p;
-#if !defined(OSMAND_IOS_DEV)
                                 if ([p isPurchased])
                                     return;
-#endif
                             }
-                            
-#if !defined(OSMAND_IOS_DEV)
                             if (purchasedInApps)
                                 for (NSString *purchased in purchasedInApps)
                                     if ([identifier hasSuffix:purchased] && [p isPurchased])
                                         return;
-#endif
                         }
                         _product = product;
                         

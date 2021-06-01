@@ -63,7 +63,6 @@
     UIView __weak *_widgetsView;
     UIView __weak *_leftWidgetsView;
     UIView __weak *_rightWidgetsView;
-    UIButton __weak *_expandButton;
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
@@ -98,7 +97,6 @@
         _widgetsView = mapHudViewController.widgetsView;
         _leftWidgetsView = mapHudViewController.leftWidgetsView;
         _rightWidgetsView = mapHudViewController.rightWidgetsView;
-        _expandButton = mapHudViewController.expandButton;
 
         _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
         _expanded = NO;
@@ -224,17 +222,7 @@
         _lanesControl.backgroundColor = ts.leftColor;
         [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
         //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
-        
-        if (ts.expand)
-            [_expandButton setBackgroundImage:[UIImage imageNamed:ts.expand] forState:UIControlStateNormal];
     }
-}
-
-- (void) layoutExpandButton
-{
-    CGRect f = _rightWidgetsView.frame;
-    CGRect bf = _expandButton.frame;
-    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height == 0 ? 0 : f.size.height + 2, bf.size.width, bf.size.height);
 }
 
 - (void) layoutWidgets:(OATextInfoWidget *)widget
@@ -326,8 +314,6 @@
         }
         
         CGFloat containerHeight = widgetsHeight;
-        if (maxWidth == 0)
-            maxWidth = _expandButton.frame.size.width + 8;
         
         if (container == _rightWidgetsView)
         {
@@ -337,7 +323,6 @@
             {
                 container.frame = rightContainerFrame;
             }
-            containerHeight += _expandButton.frame.size.height + 2;
         }
         else
         {
@@ -362,9 +347,6 @@
             v.frame = CGRectMake(0, y, maxWidth, h);
             y += h + 2;
         }
-        
-        if (container == _rightWidgetsView)
-            [self layoutExpandButton];
     }
     
     if (hasStreetName)
@@ -486,9 +468,6 @@
     }
     
     [self layoutWidgets:nil];
-    
-    _expandButton.hidden = ![_mapWidgetRegistry hasCollapsibles:appMode];
-    [_expandButton setImage:[OAUtilities tintImageWithColor:(_expanded ? [UIImage imageNamed:@"ic_collapse"] : [UIImage imageNamed:@"ic_expand"]) color:UIColorFromRGB(0x505050)] forState:UIControlStateNormal];
 }
 
 - (void) expandClicked:(id)sender

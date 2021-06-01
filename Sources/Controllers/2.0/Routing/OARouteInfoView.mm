@@ -1259,7 +1259,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.routingCellButton addTarget:self action:@selector(swapPressed:) forControlEvents:UIControlEventTouchUpInside];
                 cell.routingCellButton.hidden = self.isGpxTrackFollowingMode;
-                cell.routingCellButton.userInteractionEnabled = cell.routingCellButton.isHidden;
+                cell.routingCellButton.userInteractionEnabled = !cell.routingCellButton.isHidden;
             }
             else if ([type isEqualToString:@"finish"])
             {
@@ -1524,6 +1524,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
             [cell.button addTarget:self action:@selector(onHistoryButtonPressed:) forControlEvents:UIControlEventTouchDown];
             [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
             [cell showImage:NO];

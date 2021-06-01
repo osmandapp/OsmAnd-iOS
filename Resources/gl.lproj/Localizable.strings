@@ -64,7 +64,7 @@
 "rotate_map_bearing_opt" = "To direction of movement";
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
-"driving_region" = "Driving region";
+"driving_region" = "Rexión na que conducir";
 "driving_region_automatic" = "Automático";
 // Trip recording settings
 "save_global_track_interval" = "Intre de rexistro xeral";
@@ -167,7 +167,7 @@
 "wake_on_voice" = "Acender a pantalla";
 "wake_on_voice_descr" = "Acende a pantalla do dispositivo (se estiver apagada)ó aproximarse a unha manobra.";
 "voice_pref_title" = "Voz";
-"voice_provider" = "Voice guidance";
+"voice_provider" = "Indicacións por voz";
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Saída das indicacións por voz";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
@@ -408,9 +408,9 @@
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Velocidade";
 // Map settings
-"rendering_value_browse_map_name" = "Overview";
-"m_style_car" = "Conducindo";
-"m_style_walk" = "A pé";
+"rendering_value_browse_map_name" = "Ollar mapa";
+"m_style_car" = "Automóbil";
+"m_style_walk" = "Camiñando";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Amosar no mapa";
@@ -558,7 +558,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Planificación dunha viaxe";
 "help_legend" = "Lenda do mapa";
-"help_other_header" = "Outra";
+"help_other_header" = "Outros";
 "help_install_and_troubleshoot" = "Instalación e resolución de problemas";
 "help_tech_articles" = "Artigos técnicos";
 "help_versions" = "Versións";
@@ -1029,7 +1029,7 @@
 "shared_string_clear_all" = "Limpar todo";
 "translucent_orange" = "Laranxa translúcido";
 "modify_edit_short" = "Modificar modificación do OSM";
-"home_pt" = "Inicio";
+"home_pt" = "Casa";
 "show_notes" = "Amosar notas do OSM";
 "hide_notes" = "Agochar notas do OSM";
 "res_elliptic_mercator" = "Mercator elíptico";
@@ -1372,9 +1372,9 @@
 "edit_profile_list" = "Editar a listaxe de perfís";
 "amenity" = "Instalación";
 "profile_type_custom_string" = "Perfil personalizado";
-"nothing_found_empty" = "Non se atopou nada";
+"nothing_found_empty" = "Non se atopou ren";
 "position_icon_at_rest" = "Icona de posición en asueto";
-"app_profiles" = "Perfís de aplicación";
+"app_profiles" = "Perfís da aplicación";
 "reverse_route" = "Ruta inversa";
 "plugin_settings_reset" = "Restabelecer a configuración do plugin ós valores por defecto";
 "app_theme_light" = "Claro";
@@ -1555,7 +1555,7 @@
 "hide_compass_ruler" = "Agochar a regra de compás";
 "street_level_imagery" = "Imaxes a nivel de rúa";
 "fav_point_dublicate" = "Favorito especificado con nome duplicado";
-"emergency" = "Urxencia";
+"emergency" = "Urxencias";
 "custom_osmand_plugin_name" = "Plugin personalizado do OsmAnd";
 "plan_route_change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";

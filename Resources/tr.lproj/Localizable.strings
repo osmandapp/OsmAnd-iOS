@@ -20,7 +20,7 @@
 "shared_string_and" = "ve";
 "shared_string_edit" = "Düzenle";
 "shared_string_modify" = "Değiştirmek";
-"shared_string_later" = "Sonra";
+"shared_string_later" = "Daha Sonra";
 "offline_maps" = "Çevrim Dışı Haritalar";
 "download_map" = "Harita indir";
 // HUD
@@ -57,7 +57,7 @@
 "poi_search_near_center" = "Arama haritanın merkezine yakın yapılır";
 "poi_hide" = "Gizle";
 // My Places
-"favorites" = "Sık kullanılanlar";
+"favorites" = "Favoriler";
 "tracks" = "İzlenen yollar";
 // GPX
 "gpx_point" = "Mevki";
@@ -106,7 +106,7 @@
 "gpx_max_speed" = "Max hız";
 "gpx_speed" = "Hız";
 // Map settings
-"rendering_value_browse_map_name" = "Genel bakış";
+"rendering_value_browse_map_name" = "Haritaya göz at";
 "m_style_car" = "Araba sürme";
 "m_style_walk" = "Yürüme";
 "m_style_bicycle" = "Bisiklet sürme";
@@ -237,7 +237,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "sa";
+"units_hour" = "h";
 "units_min" = "dk";
 "units_sec" = "sn";
 // Map
@@ -323,7 +323,7 @@
 "product_desc_allworld" = "Tüm Dünya Haritaları";
 "product_title_asia" = "Asya";
 "product_desc_asia" = "Asya için sınırsız harita indirme";
-"product_title_wiki" = "Vikipedi";
+"product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Vikipedi veri";
 "product_desc_ext_wiki" = "Wikipedia'dan ilgi çekici yerler hakkında bilgi alın. Bu sizin çevrim dışı cep rehberinizdir - sadece Wikipedia eklentisini etkinleştirin ve etrafınızdaki nesneler hakkında makalelerin tadını çıkarın.";
 "product_title_srtm" = "Eş yükselti eğrileri";
@@ -342,7 +342,7 @@
 "res_installing" = "Yükleniyor…";
 "res_roads" = "Yollar";
 "res_srtm" = "Eş yükselti eğrileri";
-"res_wiki" = "Vikipedi";
+"res_wiki" = "Wikipedia";
 "select_language" = "Dil Seçin";
 "language_short" = "Dil";
 "open_url" = "Sayfayı tarayıcıda aç";
@@ -808,7 +808,7 @@
 "first_intermediate_dest_description" = "Rotadaki ilk durağı ekler";
 "last_intermediate_dest_description" = "Rota boyunca son durağı ekler";
 "transport_routes" = "Güzergah";
-"transport_stop" = "Dur";
+"transport_stop" = "Durak";
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
@@ -886,7 +886,7 @@
 "toggle_voice" = "Ses açık/kapalı";
 "day_mode" = "Gündüz modu";
 "osm_edits_notes" = "Notlar";
-"shared_string_filter" = "Süzgeç";
+"shared_string_filter" = "Filtrele";
 "osmand_live_support_reg_title" = "Destek bölgesi";
 "work_pt" = "İş";
 "wake_on_voice_descr" = "Bir dönüşe yaklaşırken (kapalı ise) aygıtın ekranını aç.";
@@ -2014,8 +2014,8 @@
 "symbols" = "Semboller";
 "sport" = "Spor";
 "special" = "Özel";
-"service" = "Servis yolu";
-"emergency" = "Acil durum";
+"service" = "Hizmet";
+"emergency" = "Acil";
 "shared_string_gpx_points" = "Noktalar";
 "res_standard" = "Standart harita";
 "quick_action_coordinates_widget_descr" = "Bu eylem düğmesine dokunmak, koordinatlar widget'ını gösterir veya gizler.";

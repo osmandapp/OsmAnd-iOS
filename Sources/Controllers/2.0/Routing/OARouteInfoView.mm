@@ -1259,7 +1259,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.routingCellButton addTarget:self action:@selector(swapPressed:) forControlEvents:UIControlEventTouchUpInside];
                 cell.routingCellButton.hidden = self.isGpxTrackFollowingMode;
-                cell.routingCellButton.userInteractionEnabled = cell.routingCellButton.isHidden;
+                cell.routingCellButton.userInteractionEnabled = !cell.routingCellButton.isHidden;
             }
             else if ([type isEqualToString:@"finish"])
             {

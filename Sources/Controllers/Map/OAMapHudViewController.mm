@@ -909,16 +909,6 @@
 
 #pragma mark - debug
 
-- (void)onDebugButtonLongClicked:(id)sender
-{
-    _debugButton.hidden = YES;
-    _debugButton.userInteractionEnabled = NO;
-}
-
-- (IBAction)onDebugButtonClicked:(id)sender
-{
-}
-
 - (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;

@@ -1118,9 +1118,9 @@ static UIViewController *parentController;
                 _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
                 _recCell.descriptionDistanceView.text = [_app getFormattedDistance:_savingHelper.distance];
                 
-                [_recCell.btnStartStopRec removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [_recCell.btnStartStopRec removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
-                [_recCell.btnSaveGpx removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [_recCell.btnSaveGpx removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [_recCell.btnSaveGpx addTarget:self action:@selector(saveGpxPressed) forControlEvents:UIControlEventTouchUpInside];
                 
                 [self updateRecImg];
@@ -1180,7 +1180,7 @@ static UIViewController *parentController;
                 [cell setRightButtonVisibility:YES];
                 [cell.editButton setImage:[UIImage templateImageNamed:@"ic_close"] forState:UIControlStateNormal];
                 cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
-                [cell.editButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [cell.editButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.editButton addTarget:self action:@selector(cancelRoutePressed) forControlEvents:UIControlEventTouchUpInside];
             }
             return cell;
@@ -1205,7 +1205,7 @@ static UIViewController *parentController;
                 cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
                 
                 cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
-                [cell.openCloseGroupButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [cell.openCloseGroupButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
                 if ([self.gpxTableView isEditing])
                     [cell.openCloseGroupButton setHidden:NO];
@@ -1246,7 +1246,7 @@ static UIViewController *parentController;
                 {
                     cell.textView.text = groupItem[@"title"];
                     cell.imgView.image = [UIImage templateImageNamed:groupItem[@"icon"]];
-                    [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+                    [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                     cell.switchView.on = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
                     cell.imgView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);

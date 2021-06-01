@@ -170,7 +170,7 @@
             cell.titleView.text = item[@"title"];
             [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             cell.iconView.hidden = !cell.iconView.image;
-            [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.closeButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.closeButton addTarget:self action:@selector(onCloseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;

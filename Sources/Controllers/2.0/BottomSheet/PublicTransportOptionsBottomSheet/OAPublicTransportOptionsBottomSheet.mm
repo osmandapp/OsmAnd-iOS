@@ -162,7 +162,7 @@
         {
             [self updateSettingSwitchCell:cell data:item];
             
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             cell.switchView.on = [item[@"value"] isEqualToString:@"true"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

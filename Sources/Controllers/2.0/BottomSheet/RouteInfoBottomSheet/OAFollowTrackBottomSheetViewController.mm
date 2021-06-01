@@ -390,7 +390,7 @@
             cell.textView.text = item[@"title"];
             cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = _reverseParam.isSelected;
             [_reverseParam setControlAction:cell.switchView];
             

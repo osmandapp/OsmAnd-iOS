@@ -301,7 +301,7 @@
             cell.descIcon.image = [UIImage imageNamed:@"ic_trip_location"];
             
             [cell hideRightButton:NO];
-            [cell.rightButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.rightButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.rightButton addTarget:self action:@selector(callFirstPointMenu) forControlEvents:UIControlEventTouchUpInside];
             
             [cell hideDescIcon:NO];

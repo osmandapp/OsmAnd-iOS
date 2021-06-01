@@ -301,7 +301,7 @@ static const NSInteger groupCount = 1;
             id v = item[@"value"];
             cell.switchView.on = [v boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;

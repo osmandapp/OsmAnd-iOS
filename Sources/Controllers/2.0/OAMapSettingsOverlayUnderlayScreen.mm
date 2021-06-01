@@ -411,7 +411,7 @@ static NSInteger kButtonsSection;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
-            [cell.sliderView removeTarget:NULL action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.sliderView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
         

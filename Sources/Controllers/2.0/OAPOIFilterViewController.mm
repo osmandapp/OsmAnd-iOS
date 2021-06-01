@@ -924,7 +924,7 @@ typedef enum
             {
                 [cell.switchView removeTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
                 cell.switchView.tag = (indexPath.section << 10) + indexPath.row;
-                [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventValueChanged];
+                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
                 [cell.switchView addTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
                 if (item.icon)
                 {

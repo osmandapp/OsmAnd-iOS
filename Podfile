@@ -13,7 +13,6 @@ def defaultPods
     pod 'UIActionSheet-Blocks', '~> 1.0.1'
     pod 'DACircularProgress', '~> 2.2.0'
     pod 'FFCircularProgressView', '~> 0.4'
-    pod 'QuickDialog', :subspecs => ["Core"], :git => 'https://github.com/escoz/QuickDialog.git'
     pod 'FormatterKit', '~> 1.8.0'
     pod 'SWTableViewCell', '~> 0.3.7'
     pod 'RegexKitLite', '~> 4.0'

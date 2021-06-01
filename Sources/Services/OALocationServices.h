@@ -20,15 +20,6 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
     OALocationServicesStatusSuspended
 };
 
-#if defined(OSMAND_IOS_DEV)
-typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
-{
-    OALocationServicesForcedAccuracyNone = 0,
-    OALocationServicesForcedAccuracyBest,
-    OALocationServicesForcedAccuracyBestForNavigation
-};
-#endif // defined(OSMAND_IOS_DEV)
-
 @class OALocationSimulation;
 
 @interface CLLocation (util)
@@ -74,9 +65,5 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 + (BOOL) isPointAccurateForRouting:(CLLocation *)loc;
 
 - (void) setLocationFromSimulation:(CLLocation *)location;
-
-#if defined(OSMAND_IOS_DEV)
-@property (nonatomic) OALocationServicesForcedAccuracy forceAccuracy;
-#endif // defined(OSMAND_IOS_DEV)
 
 @end

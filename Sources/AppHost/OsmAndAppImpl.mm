@@ -9,14 +9,11 @@
 #import "OsmAndAppImpl.h"
 
 #import <UIKit/UIKit.h>
-#import <QElement.h>
-#import <QElement+Appearance.h>
 
 #import "OsmAndApp.h"
 #import "OAResourcesInstaller.h"
 #import "OADaytimeAppearance.h"
 #import "OANighttimeAppearance.h"
-#import "OAQFlatAppearance.h"
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OALog.h"
@@ -134,10 +131,6 @@
 
 @synthesize carPlayActive = _carPlayActive;
 
-#if defined(OSMAND_IOS_DEV)
-@synthesize debugSettings = _debugSettings;
-#endif // defined(OSMAND_IOS_DEV)
-
 - (instancetype)init
 {
     self = [super init];
@@ -176,10 +169,6 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
-
-#if defined(OSMAND_IOS_DEV)
-        _debugSettings = [[OADebugSettings alloc] init];
-#endif // defined(OSMAND_IOS_DEV)
     }
     return self;
 }
@@ -489,7 +478,6 @@
 
     _appearance = [[OADaytimeAppearance alloc] init];
     _appearanceChangeObservable = [[OAObservable alloc] init];
-    QElement.appearance = [[OAQFlatAppearance alloc] init];
     
     [OAMapStyleSettings sharedInstance];
 

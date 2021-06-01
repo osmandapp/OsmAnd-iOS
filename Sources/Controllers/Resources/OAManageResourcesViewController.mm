@@ -655,14 +655,7 @@ static BOOL _lackOfResources;
     _localResources = app.resourcesManager->getLocalResources();
     
     // IOS-199
-#if defined(OSMAND_IOS_DEV)
-    if (app.debugSettings.setAllResourcesAsOutdated)
-        _outdatedResources = app.resourcesManager->getLocalResources();
-    else
-        _outdatedResources = app.resourcesManager->getOutdatedInstalledResources();
-#else
     _outdatedResources = app.resourcesManager->getOutdatedInstalledResources();
-#endif // defined(OSMAND_IOS_DEV)
     
     BOOL doInit = (_resourcesByRegions.count() == 0);
     BOOL initWorldwideRegionItems = (_searchableWorldwideRegionItems == nil) || doInit;

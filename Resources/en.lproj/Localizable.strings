@@ -672,6 +672,7 @@
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Cycling";
 "m_style_pulic_transport" = "Public transport";
+"m_style_carplay" = "CarPlay";
 
 "map_settings_map" = "Map";
 "layer_amenity_label" = "POI overlay labels";
@@ -849,6 +850,7 @@
 "position_icon_while_moving" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
+"base_profile_descr_carplay" = "Driving with CarPlay mode";
 "base_profile_descr_bicycle" = "Mountain bike, moped, horse";
 "base_profile_descr_pedestrian" = "Walking, hiking, running";
 "base_profile_descr_public_transport" = "Public transport types";

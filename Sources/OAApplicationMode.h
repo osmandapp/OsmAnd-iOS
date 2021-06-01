@@ -52,6 +52,7 @@
 + (OAApplicationMode *) BOAT;
 + (OAApplicationMode *) PUBLIC_TRANSPORT;
 + (OAApplicationMode *) SKI;
++ (OAApplicationMode *) CARPLAY;
 
 + (NSArray<OAApplicationMode *> *) values;
 + (NSArray<OAApplicationMode *> *) allPossibleValues;

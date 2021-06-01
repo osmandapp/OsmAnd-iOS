@@ -122,6 +122,8 @@
     NSMutableArray *profilesSection = [NSMutableArray new];    
     for (int i = 0; i < OAApplicationMode.allPossibleValues.count; i++)
     {
+        if (OAApplicationMode.allPossibleValues[i] == OAApplicationMode.CARPLAY)
+            continue;;
         [profilesSection addObject:@{
             @"name" : @"profile_val",
             @"app_mode" : OAApplicationMode.allPossibleValues[i],
@@ -129,6 +131,13 @@
             @"isColored" : @NO
         }];
     }
+    
+    [profilesSection addObject:@{
+        @"name" : @"profile_val",
+        @"app_mode" : OAApplicationMode.CARPLAY,
+        @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+        @"isColored" : @NO
+    }];
     
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"new_profile"),

@@ -1981,6 +1981,7 @@
         [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
+        [_profileIconName setModeDefaultValue:@"ic_action_wagon" mode:OAApplicationMode.CARPLAY];
         
         _profileIconColor = [OAProfileInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
         _userProfileName = [OAProfileString withKey:userProfileNameKey defValue:@""];

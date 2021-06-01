@@ -320,7 +320,7 @@
     NSString *folder = @"";
     NSArray<NSString *> *pathComponents = filePath.pathComponents;
     NSString *parent = pathComponents.count > 1 ? pathComponents[pathComponents.count - 2] : @"";
-    if ([pathComponents[pathComponents.count - 3] isEqualToString:@"Documents"])
+    if ([[filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath])
         parent = OALocalizedString(@"tracks");
     if (parent.length > 0)
         folder = parent.capitalizedString;

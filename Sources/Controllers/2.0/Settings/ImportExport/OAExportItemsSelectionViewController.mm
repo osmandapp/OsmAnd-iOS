@@ -475,7 +475,9 @@
         {
             NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all");
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
+            [cell.selectDeselectButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.selectionButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
             
             NSInteger selectedAmount = _selectedItems.count;

@@ -233,6 +233,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputCellWithTitle getCellIdentifier] owner:self options:nil];
             cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
             cell.inputField.tintColor = UIColorFromRGB(color_primary_purple);

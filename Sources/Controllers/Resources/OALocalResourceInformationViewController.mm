@@ -348,7 +348,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     }
     if (cell)
     {
-        [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         if ([type isEqual:@"delete"])
         {
             [cell.button setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];

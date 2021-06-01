@@ -158,7 +158,7 @@
         
         if (cell)
         {
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
             cell.textView.text = text;
             cell.descriptionView.text = nil;

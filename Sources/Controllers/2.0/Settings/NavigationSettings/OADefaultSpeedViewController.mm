@@ -175,6 +175,7 @@
             cell.sliderView.minimumValue = _minValue;
             cell.sliderView.maximumValue = _maxValue;
             cell.sliderView.value = _selectedValue;
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.sliderView addTarget:self action:@selector(speedValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;

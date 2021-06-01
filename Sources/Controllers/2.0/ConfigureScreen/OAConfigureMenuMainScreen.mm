@@ -306,7 +306,7 @@
         {
             [self updateSettingSwitchCell:cell data:data];
             
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = ((NSNumber *)data[@"selected"]).boolValue;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];

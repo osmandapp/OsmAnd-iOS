@@ -2321,6 +2321,7 @@ static BOOL _lackOfResources;
         [buttonCell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_safari"] forState:UIControlStateNormal];
         buttonCell.overflowButton.tag = indexPath.row - 1;
         buttonCell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
+        [buttonCell.overflowButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [buttonCell.overflowButton addTarget:self action:@selector(onWebPagePressed:) forControlEvents:UIControlEventTouchUpInside];
     }
 

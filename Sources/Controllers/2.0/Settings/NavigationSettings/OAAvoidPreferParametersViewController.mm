@@ -145,13 +145,14 @@
         {
             cell.textView.text = item[@"title"];
             id v = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OAProfileBoolean class]])
             {
                 OAProfileBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
             }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;

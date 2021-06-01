@@ -319,6 +319,7 @@
             cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.imgView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;

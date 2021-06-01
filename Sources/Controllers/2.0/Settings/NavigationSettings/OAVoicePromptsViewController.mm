@@ -238,7 +238,7 @@
             cell.imgView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
                                   
             id v = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OAProfileBoolean class]])
             {
                 OAProfileBoolean *value = v;
@@ -286,7 +286,7 @@
         {
             cell.textView.text = item[@"title"];
             id v = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OAProfileBoolean class]])
             {
                 OAProfileBoolean *value = v;

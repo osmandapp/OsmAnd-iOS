@@ -13,7 +13,8 @@
 
 @required
 
-- (void) onApproximateContinued;
+- (void)onCancelSnapApproximation;
+- (void)onContinueSnapApproximation;
 
 @end
 
@@ -27,7 +28,7 @@
 
 @property (nonatomic) id<OASnapTrackWarningBottomSheetDelegate> delegate;
 
-- (void)setContinued:(BOOL)continued;
-- (void)presentInViewController:(UIViewController *)viewController;
+- (void)setCancel:(BOOL)cancel;
+- (void)setContinue:(BOOL)__continue;
 
 @end

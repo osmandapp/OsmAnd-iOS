@@ -1,5 +1,5 @@
 //
-//  OASnapTrackWarningViewController.h
+//  OASnapTrackWarningViewController.mm
 //  OsmAnd
 //
 // Created by Skalii on 28.05.2021.
@@ -47,31 +47,33 @@
 - (void)setupView
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
-    NSMutableArray *arr = [NSMutableArray array];
-    
-    [arr addObject:@{
-        @"type" : [OABottomSheetHeaderButtonCell getCellIdentifier],
-        @"title" : OALocalizedString(@"attach_to_the_roads"),
-        @"img" : @"ic_custom_attach_track",
-        @"description" : @""
-    }];
-    
-    _data = [NSArray arrayWithArray:arr];
 }
 
 - (void)initData
 {
+    NSMutableArray *arr = [NSMutableArray array];
+
+    [arr addObject:@{
+            @"type" : [OABottomSheetHeaderButtonCell getCellIdentifier],
+            @"title" : OALocalizedString(@"attach_to_the_roads"),
+            @"img" : @"ic_custom_attach_track",
+            @"description" : @""
+    }];
+
+    _data = [NSArray arrayWithArray:arr];
 }
 
 - (void)onCloseButtonPressed:(id)sender
 {
-    [vwController setContinued:NO];
+    [vwController setCancel:YES];
+    [vwController setContinue:NO];
     [vwController dismiss];
 }
 
 - (void)doneButtonPressed
 {
-    [vwController setContinued:YES];
+    [vwController setCancel:NO];
+    [vwController setContinue:YES];
     [vwController dismiss];
 }
 
@@ -97,7 +99,7 @@
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
+            cell = nib[0];
             cell.backgroundColor = UIColor.clearColor;
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -152,7 +154,8 @@
 
 @implementation OASnapTrackWarningViewController
 {
-    BOOL _continued;
+    BOOL _cancel;
+    BOOL _continue;
 }
 
 - (void)setupView
@@ -161,6 +164,13 @@
         self.screenObj = [[OASnapTrackWarningBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
     
     [super setupView];
+}
+
+- (void)additionalSetup
+{
+    [super additionalSetup];
+    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
 }
 
 - (void)applyLocalization
@@ -172,25 +182,35 @@
 - (void)dismiss
 {
     [super dismiss];
-    if (self.delegate && _continued)
-        [self.delegate onApproximateContinued];
+    if (self.delegate)
+    {
+        if (_continue)
+            [self.delegate onContinueSnapApproximation];
+        else if (_cancel)
+            [self.delegate onCancelSnapApproximation];
+    }
 }
 
 - (void)dismiss:(id)sender
 {
     [super dismiss:sender];
-    if (self.delegate && _continued)
-        [self.delegate onApproximateContinued];
+    if (self.delegate)
+    {
+        if (_continue)
+            [self.delegate onContinueSnapApproximation];
+        else if (_cancel)
+            [self.delegate onCancelSnapApproximation];
+    }
 }
 
-- (void)presentInViewController:(UIViewController *)viewController
+- (void)setCancel:(BOOL)cancel
 {
-    self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [viewController presentViewController:self animated:NO completion:nil];}
+    _cancel = cancel;
+}
 
-- (void)setContinued:(BOOL)continued
+- (void)setContinue:(BOOL)__continue
 {
-    _continued = continued;
+    _continue = __continue;
 }
 
 @end

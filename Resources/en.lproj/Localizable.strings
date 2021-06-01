@@ -965,6 +965,8 @@
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segment %d";
 "some_of" = "%d of %d";
+"threshold_distance" = "Threshold distance";
+"select_profile" = "Select profile";
 
 // Resources
 "shared_string_resources" = "Resources";

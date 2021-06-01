@@ -26,6 +26,36 @@
     [super setSelected:selected animated:animated];
 }
 
+- (void) updateSeparator:(NSInteger)x
+{
+
+}
+
+- (void) updateConstraints
+{
+    self.iconView.hidden = self.iconView.image == nil;
+    _leftTextPrimaryConstraint.active = !self.iconView.hidden;
+    _leftTextSecondaryConstraint.active = self.iconView.hidden;
+    _leftSeparatorPrimaryConstraint.active = !self.iconView.hidden;
+    _leftSeparatorSecondaryConstraint.active = self.iconView.hidden;
+
+    [super updateConstraints];
+}
+
+- (BOOL) needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    self.iconView.hidden = self.iconView.image == nil;
+    if (!res)
+    {
+        res = res || self.leftTextPrimaryConstraint.active != self.iconView.hidden;
+        res = res || self.leftTextSecondaryConstraint.active != !self.iconView.hidden;
+        res = res || self.leftSeparatorPrimaryConstraint.active != self.iconView.hidden;
+        res = res || self.leftSeparatorSecondaryConstraint.active != !self.iconView.hidden;
+    }
+    return res;
+}
+
 - (void) layoutSubviews
 {
     [super layoutSubviews];

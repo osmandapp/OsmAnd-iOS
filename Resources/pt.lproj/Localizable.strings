@@ -99,7 +99,7 @@
 "track_clear_q" = "Quer limpar o trilho atual?";
 "show_info" = "Mostrar informações";
 // Map settings
-"rendering_value_browse_map_name" = "Visão Geral";
+"rendering_value_browse_map_name" = "Explorar o mapa";
 "m_style_car" = "Condução";
 "m_style_walk" = "A pé";
 "m_style_bicycle" = "Ciclismo";
@@ -121,7 +121,7 @@
 // Intro
 "intro_skip" = "Ignorar";
 "intro_download" = "Descarregar\nmapa";
-"intro_next" = "Seguinte";
+"intro_next" = "Próximo";
 "intro_welcome" = "Bem-vindo(a) ao\nOsmAnd";
 "intro_promo" = "Mapas globais offline";
 "intro_placeholder" = "Digite o nome da sua região";
@@ -131,7 +131,7 @@
 "sett_km" = "Quilómetros";
 "sett_ml" = "Milhas";
 "sett_zoom" = "Botão de zoom";
-"sett_show" = "Ver";
+"sett_show" = "Mostrar";
 "sett_notshow" = "Não mostrar";
 "sett_loc_fmt" = "Formato de localização";
 "sett_deg" = "Graus";
@@ -570,7 +570,7 @@
 "shared_string_select" = "Selecionar";
 "shared_string_close" = "Fechar";
 "shared_string_upload" = "Enviar";
-"shared_string_later" = "Continuar";
+"shared_string_later" = "Mais tarde";
 "shared_string_all" = "Tudo";
 "download_map" = "Descarregar mapa";
 "poi_type" = "Tipo de POI";
@@ -580,7 +580,7 @@
 "poi_clear" = "Apagar";
 "track_during_nav" = "Gravar o trilho automaticamente";
 "gpx_speed" = "Velocidade";
-"osmand_live_updates" = "Atualizações em tempo real";
+"osmand_live_updates" = "Atualizações sincronizadas";
 "osmand_live_available_maps" = "Mapas disponíveis";
 "osmand_live_hourly" = "A cada hora";
 "osmand_live_daily" = "Diário";
@@ -622,7 +622,7 @@
 "osm_edits_advanced" = "Avançado";
 "osm_edits_notes" = "Notas";
 "modify_poi_short" = "Alterar POI OSM";
-"create_poi_short" = "Criar POI OpenStreetMap";
+"create_poi_short" = "Criar POI";
 "modify_edit_short" = "Alterar edição do OpenStreetMap";
 "open_osm_note" = "Criar nota OSM";
 "osm_alert_title" = "Enviar";
@@ -720,8 +720,8 @@
 "in_app_purchase_desc_ex" = "Uma vez comprado, estará sempre disponível para si.";
 "unlock_all_features" = "Desbloquear todas as características de OsmAnd";
 "osm_live_subscribe_btn" = "Subscrever";
-"shared_string_email_address" = "Endereço de e-mail";
-"osm_live_enter_email" = "Favor introduzir um endereço de e-mail válido";
+"shared_string_email_address" = "Endereço de email";
+"osm_live_enter_email" = "Favor introduzir um endereço de email válido";
 "osm_live_enter_user_name" = "Introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
 "osm_live_payment_desc" = "Pode gerir e cancelar as suas subscrições nas configurações da sua conta na App Store após a compra";
@@ -921,7 +921,7 @@
 "product_title_srtm" = "Curvas de nível";
 "product_desc_srtm" = "Mostrar curvas de nível";
 "product_desc_ext_srtm" = "Esta extensão fornece as camadas curvas de nível e sombra de colinas (relevo) por cima dos mapas offline do OsmAnd. As curvas de nível fornecem as informações sobre altura da área enquanto sombra de colina é sua visualização. Veja os nomes dos cumes das montanhas e características específicas do terreno usando esta extensão.\n\nOs dados globais (entre as latitudes 70º norte e 70º sul) são baseados em medições do SRTM (Shuttle Radar Topography Mission) e ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), um instrumento de imagens do satélite \"Terra\", o principal satélite do Sistema de Observação da Terra da NASA. ASTER é um esforço conjunto da NASA, do Ministério Japonês da Economia, Comércio e Indústria (METI) e do Sistema Espacial Japonês (J-spacesystems).";
-"product_title_sea_depth_contours" = "Contornos de profundidade náutica";
+"product_title_sea_depth_contours" = "Curvas de profundidades náuticas";
 "product_desc_sea_depth_contours" = "Curvas de nível e cartografia náutica";
 "enter_description" = "Insira a descrição";
 "enter_fav_name" = "Digite o nome do favorito";
@@ -1076,7 +1076,7 @@
 "key_hint_zoom_out" = "Afastar";
 "osm_live_cancel_subscription" = "Cancelar subscrição";
 // Quick action
-"quick_action_name" = "Botão de ações rápidas";
+"quick_action_name" = "Botão de ação rápida";
 "quick_action_no_overlay" = "Sem camada superior";
 "quick_action_add_overlay" = "Adicionar camada superior";
 "quick_action_no_underlay" = "Sem camada inferior";

@@ -31,7 +31,7 @@
 "gpx_stat" = "Статыстыка";
 "rec_interval" = "Інтэрвал запісу";
 // Map settings
-"rendering_value_browse_map_name" = "Агляд";
+"rendering_value_browse_map_name" = "Прагляд мапы";
 "m_style_car" = "Аўтамабіль";
 "m_style_bicycle" = "Язда на ровары";
 "map_settings_map" = "Мапа";
@@ -40,7 +40,7 @@
 "map_settings_night" = "Ноч";
 "map_settings_style" = "Стыль мапы";
 "map_settings_overunder" = "Ніжні/верхні пласты";
-"map_settings_none" = "Нічога";
+"map_settings_none" = "Няма";
 "map_settings_online" = "Сеціўныя мапы";
 "intro_download" = "Спампаваць\nмапу";
 "intro_next" = "Далей";
@@ -184,7 +184,7 @@
 "track_interval_remember" = "Запомніць мой выбар";
 "track_clear_q" = "Сапраўды хочаце ачысціць бягучы след?";
 "show_info" = "Паказаць інфармацыю";
-"m_style_walk" = "Хада";
+"m_style_walk" = "Пешаход";
 "map_mode" = "Рэжым мапы";
 "sett_zoom" = "Кнопкі маштабу";
 "sett_notshow" = "Не паказваць";
@@ -447,7 +447,7 @@
 "nothing_found" = "Нічога не знойдзена: %@";
 "nothing_found_descr" = "Змяніць запыт пошуку ці павялічыць радыус пошуку";
 "shared_string_in_name" = "у %@";
-"shared_string_later" = "Далей";
+"shared_string_later" = "Пазней";
 "shared_string_of" = "з";
 "right_side_navigation" = "Правабаковы рух";
 "si_mi_meters" = "Мілі/метры";
@@ -961,7 +961,7 @@
 "translucent_red" = "Празрысты чырвоны";
 "home_pt" = "Дом";
 "traffic_warning_tunnel" = "Наперадзе тунэль";
-"nearby_search" = "Шукаць навокал";
+"nearby_search" = "Шукаць паблізу";
 "quick_action_start_stop_nav_descr" = "Націсніце гэтую кнопку, каб пачаць або скончыць навігацыю.";
 "map_styles" = "Стылі мапы";
 "osmand_live_updates" = "Аўтаматычныя абнаўленні";
@@ -1917,7 +1917,7 @@
 
 "split_after" = "Падзяліць пасля";
 "plan_route_last_modified" = "Апошняя змена";
-"emergency" = "Аварыйныя службы";
+"emergency" = "Экстранныя службы";
 "address_search" = "Пошук па адрасе";
 "favorite_friends_category" = "Сябры";
 "start_of_track" = "Пачатак следу";
@@ -1925,7 +1925,7 @@
 "shared_string_gpx_points" = "Пункты";
 "select_group" = "Абраць групу";
 "extra_maps" = "Дадатковыя мапы";
-"track" = "Грунтовая дарога";
+"track" = "След";
 "shared_string_disable" = "Выключыць";
 "icon" = "Значок";
 "search_preogress" = "Пошук…";
@@ -1956,7 +1956,7 @@
 "octagon" = "Васьмівугольнік";
 "custom_osmand_plugin_name" = "Адвольная ўбудова OsmAnd";
 "markers_history" = "Гісторыя адзнак";
-"service" = "Паслугі";
+"service" = "Сэрвіс";
 "add_custom_category" = "Дадаць адвольную катэгорыю";
 "units_nm" = "м.мілі";
 "shared_string_others" = "Іншае";

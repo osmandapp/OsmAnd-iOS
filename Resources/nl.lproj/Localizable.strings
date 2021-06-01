@@ -1,7 +1,7 @@
 "OsmAnd Maps" = "OsmAnd Maps";
 "shared_string_previous" = "Vorige";
 "route_stops_before" = "%d stops before";
-"transport_routes" = "(Bus)Lijnen";
+"transport_routes" = "Routes";
 "transport_nearby_routes_within" = "Nabije routes binnen";
 "transport_nearby_routes" = "Binnen";
 "transport_stop" = "Halte";
@@ -66,7 +66,7 @@
 "rotate_map_bearing_opt" = "To direction of movement";
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
-"driving_region" = "Driving region";
+"driving_region" = "Regio voor autorijden";
 "driving_region_automatic" = "Automatisch";
 "map_widget_magnetic_bearing" = "Magnetische koers";
 "map_widget_bearing" = "Relatieve koers";
@@ -153,7 +153,7 @@
 "wake_on_voice" = "Zet het scherm aan";
 "wake_on_voice_descr" = "Zet het scherm aan (indien het uit staat) bij het naderen van een bocht.";
 "voice_pref_title" = "Stem";
-"voice_provider" = "Voice guidance";
+"voice_provider" = "Taal stembegeleiding";
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Audiokanaal voor stembegeleiding";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
@@ -294,7 +294,7 @@
 "shared_string_and" = "en";
 "shared_string_edit" = "Bewerk";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Later";
+"shared_string_later" = "Ga door";
 "shared_string_of" = "of";
 "shared_string_all" = "Alles";
 "shared_string_from" = "van";
@@ -386,16 +386,16 @@
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Snelheid";
 // Map settings
-"rendering_value_browse_map_name" = "Overview";
+"rendering_value_browse_map_name" = "Bekijk kaart";
 "m_style_car" = "Auto\'s";
-"m_style_walk" = "Voetganger";
+"m_style_walk" = "Wandelen";
 "m_style_bicycle" = "Fiets";
 "map_settings_map" = "Kaart";
 "map_settings_show" = "Toon op de kaart";
 "map_settings_type" = "Map type";
 "map_mode" = "Dag/Nacht stijl";
 "map_settings_day" = "Dag";
-"map_settings_night" = "Nacht";
+"map_settings_night" = "\'s avonds";
 "map_settings_style" = "Kaartstijl";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -444,7 +444,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Download";
-"nothanks" = "Niet nodig";
+"nothanks" = "Nee, dankje";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -521,7 +521,7 @@
 "units_ft" = "voet";
 "units_kmh" = "km/u";
 "units_mph" = "mpu";
-"units_hour" = "u.";
+"units_hour" = "u";
 "units_min" = "min";
 "units_sec" = "sec";
 // Map
@@ -676,7 +676,7 @@
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins" = "Plugin-manager";
+"plugins" = "Plugins";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -868,7 +868,7 @@
 "res_world_region" = "Wereld";
 "osm_website" = "Website";
 "commiting_node" = "Punt wordt vastgelegd…";
-"osm_alert_title" = "Bevestigen";
+"osm_alert_title" = "Bijdrage versturen";
 "pink" = "Roze";
 "osm_note_created" = "OSM-opmerking aangemaakt";
 "dark_yellow" = "Donkergeel";
@@ -983,7 +983,7 @@
 "save_poi_too_many_uppercase" = "Naam bevat erg veel hoofdletters, toch doorgaan?";
 "gpx_slope" = "Helling";
 "osm_editing_offline" = "Offline bewerking";
-"product_title_sea_depth_contours" = "Diepte contourlijnen";
+"product_title_sea_depth_contours" = "Zeedieptelijnen";
 "translucent_lightgreen" = "Doorschijnend lichtgroen";
 "product_desc_wikivoyage" = "De gratis wereldwijde reisgids die iedereen kan bewerken.";
 "help_tech_articles" = "Technische artikelen";
@@ -1471,7 +1471,7 @@
 "configure_map_descr" = "Kaartweergave";
 "total" = "Totaal";
 "announce" = "Meld";
-"m_style_pulic_transport" = "Openbaar Vervoer";
+"m_style_pulic_transport" = "Openbaar vervoer";
 "nav_type_title" = "Navigatietype";
 "profile_type_user_string" = "Gebruikersprofiel";
 "help_mapillary" = "OsmAnd + Mapillary";
@@ -1592,7 +1592,7 @@
 "visible" = "Zichtbaar";
 "shared_string_others" = "Overige";
 "some_of" = "%d van de %d";
-"service" = "Onderhoud";
+"service" = "Dienstweg";
 "osmand_live_upd_frequency" = "Update frequentie";
 "replace_favorite_confirmation" = "Wil je Favoriet %@ inderdaad vervangen\?";
 "address_search" = "Adres zoeken";

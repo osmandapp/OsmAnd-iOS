@@ -81,10 +81,10 @@
 "gpx_distance_points" = "Відстань (точки)";
 "gpx_speed" = "Швидкість";
 // Map settings
-"rendering_value_browse_map_name" = "Огляд";
+"rendering_value_browse_map_name" = "Огляд мапи";
 "m_style_car" = "Водіння";
-"m_style_walk" = "Ходіння";
-"m_style_bicycle" = "Велосипед";
+"m_style_walk" = "Ходьба";
+"m_style_bicycle" = "Їзда на велосипеді";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Показати";
 "map_settings_type" = "Тип мапи";
@@ -428,7 +428,7 @@
 "gpx_group_select" = "Вибір груп";
 "show_all" = "Показати усе";
 "get_directions" = "Напрямки";
-"parking" = "Стоянки";
+"parking" = "Стоянка";
 "est_travel_time" = "Розрахунковий час подорожі";
 "pedestrian" = "Пішохід";
 "sorting" = "Сортування";
@@ -874,7 +874,7 @@
 "osm_website" = "Веб-сайт";
 "osm_add_place" = "Додати місце";
 "osm_modify_place" = "Змінити місце";
-"osm_poi_delete_title" = "Вилучення POI";
+"osm_poi_delete_title" = "Вилучити POI";
 "osm_target_modified" = "OSM POIвідредаговано";
 "osm_target_deleted" = "OSM POIвидалено";
 "osm_target_created" = "OSM POIстворено";
@@ -906,7 +906,7 @@
 "osm_notes_online_layer" = "OSM Примітки (мережні)";
 "my_places" = "Мої місця";
 "osm_edits_basic" = "Основні";
-"osm_edits_advanced" = "Розширений";
+"osm_edits_advanced" = "Розширені";
 "osm_edits_all" = "Всі правки";
 "osm_edits_poi" = "Правки POI";
 "osm_edits_notes" = "Примітки";
@@ -1169,7 +1169,7 @@
 "modify_edit_short" = "Редагувати OSM зміну";
 "open_osm_note" = "Відкрити примітку OSM";
 "edit_osm_note" = "Редагувати нотатку OSM";
-"osm_alert_title" = "Підтвердити";
+"osm_alert_title" = "Зберегти";
 "osm_alert_message" = "Повідомлення";
 "osm_alert_button_ok" = "Створити примітку";
 "modify_poi" = "Редагувати відомості про POI";
@@ -2022,7 +2022,7 @@
 "symbols" = "Знаки";
 "sport" = "Спорт";
 "special" = "Спеціальні";
-"service" = "Послуги";
+"service" = "Проїзд";
 "emergency" = "Аварійні служби";
 "square" = "Квадрат";
 "octagon" = "Восьмикутник";

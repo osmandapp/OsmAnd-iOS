@@ -224,7 +224,7 @@
 "gpx_deactivated" = "Απενεργοποιημένο";
 "key_hint_deselect" = "Αποεπιλογή";
 "map_underlays" = "Υποστρώματα χάρτη";
-"favorites" = "Τα Αγαπημένα";
+"favorites" = "Αγαπημένα";
 "shared_string_from" = "από";
 "show_traffic_warnings" = "Κυκλοφοριακές προειδοποιήσεις";
 "help_about" = "Περί";
@@ -248,7 +248,7 @@
 "help_install_and_troubleshoot" = "Εγκατάσταση και επίλυση προβλημάτων";
 "groups" = "Ομάδες";
 "commiting_node" = "Δέσμευση κόμβου…";
-"rendering_value_browse_map_name" = "Επισκόπηση";
+"rendering_value_browse_map_name" = "Επισκόπηση χάρτη";
 "years_2_4" = "Έτη";
 "shared_string_filters" = "Φίλτρα";
 "type_postcode" = "Πληκτρολόγησε ταχυδρομικό κώδικα";
@@ -348,7 +348,7 @@
 "settings_preset_descr" = "Η εμφάνιση χάρτη και οι ρυθμίσεις πλοήγησης απομνημονευονται ανά προφίλ χρήστη. Καθορίστε το προεπιλεγμένο προφίλ σας εδώ.";
 "green" = "Πράσινο";
 "road_blocked" = "Κλειστός δρόμος";
-"osm_alert_title" = "Commit";
+"osm_alert_title" = "Υποβολή";
 "min_mile" = "λεπτά/μίλι";
 "shared_string_is_open" = "Άνοιγμα";
 "day_night_info" = "Πληρ. Ημέρας/Νύχτας";
@@ -494,7 +494,7 @@
 "speak_title" = "Εκφώνηση…";
 "app_mode_bus" = "Λεωφορείο";
 "help_faq_descr" = "Συχνές ερωτήσεις";
-"osm_deleted" = "Διαγραμμένο";
+"osm_deleted" = "Διαγράφτηκε";
 "arrival_distance" = "Αναγγελία άφιξης";
 "actions" = "Ενέργειες";
 "res_details" = "Λεπτομέρειες";
@@ -537,7 +537,7 @@
 "shared_string_remove" = "Αφαίρεση";
 "osm_live_payment_renews_quarterly" = "Τριμηνιαίες ανανεώσεις";
 "city_type_district" = "Περιοχή";
-"help_other_header" = "Άλλη";
+"help_other_header" = "Άλλα";
 "osm_live_enter_email" = "Παρακαλούμε, εισάγετε μια έγκυρη διεύθυνση ηλεκτρονικής αλληλογραφίας";
 "intro_skip" = "Παράλειψη";
 "speak_cameras" = "Κάμερες ταχύτητας";
@@ -1177,7 +1177,7 @@
 "group_name" = "Όνομα ομάδας";
 "shared_string_import" = "Εισαγωγή";
 "fav_points_not_exist" = "Δεν υπάρχουν αγαπημένα σημεία";
-"track" = "Ίχνος";
+"track" = "Αγροτική Οδός";
 "track_save_descr" = "Αποθήκευση τρέχοντος ίχνους ως αρχείου GPX τώρα.";
 "emergency" = "Επείγοντα";
 "select_group" = "Επιλογή ομάδας";

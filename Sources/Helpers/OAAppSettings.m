@@ -779,13 +779,13 @@
 
 @interface OAWikiArticleShowConstant()
 
-@property (nonatomic) EOAWikiArticleShowConstantOn wasc;
+@property (nonatomic) EOAWikiArticleShowConstant wasc;
 
 @end
 
 @implementation OAWikiArticleShowConstant
 
-+ (instancetype)withWikiArticleShowConstant:(EOAWikiArticleShowConstantOn)wasc
++ (instancetype)withWikiArticleShowConstant:(EOAWikiArticleShowConstant)wasc
 {
     OAWikiArticleShowConstant *obj = [[OAWikiArticleShowConstant alloc] init];
     if (obj)
@@ -795,15 +795,15 @@
     return obj;
 }
 
-+ (NSString *) toHumanString:(EOAWikiArticleShowConstantOn)wasc
++ (NSString *) toHumanString:(EOAWikiArticleShowConstant)wasc
 {
     switch (wasc)
     {
-        case ON:
+        case EOAWikiArticleShowConstantOn:
             return OALocalizedString(@"shared_string_on");
-        case OFF:
+        case EOAWikiArticleShowConstantOff:
             return OALocalizedString(@"shared_string_off");
-        case WIFI:
+        case EOAWikiArticleShowConstantWiFi:
             return OALocalizedString(@"shared_string_wifi_only");
         default:
             return @"";
@@ -834,11 +834,11 @@
 {
     switch (gst)
     {
-        case SPEED:
+        case EOAGradientScaleTypeSpeed:
             return OALocalizedString(@"gpx_speed");
-        case ALTITUDE:
+        case EOAGradientScaleTypeAltitude:
             return OALocalizedString(@"map_widget_altitude");
-        case SLOPE:
+        case EOAGradientScaleTypeSlope:
             return OALocalizedString(@"gpx_slope");
         default:
             return @"";
@@ -849,11 +849,11 @@
 {
     switch (gst)
     {
-        case SPEED:
+        case EOAGradientScaleTypeSpeed:
             return @"speed";
-        case ALTITUDE:
+        case EOAGradientScaleTypeAltitude:
             return @"altitude";
-        case SLOPE:
+        case EOAGradientScaleTypeSlope:
             return @"slope";
         default:
             return @"";
@@ -864,11 +864,11 @@
 {
     switch (gst)
     {
-        case SPEED:
+        case EOAGradientScaleTypeSpeed:
             return @"gradient_speed_color";
-        case ALTITUDE:
+        case EOAGradientScaleTypeAltitude:
             return @"gradient_altitude_color";
-        case SLOPE:
+        case EOAGradientScaleTypeSlope:
             return @"gradient_slope_color";
         default:
             return @"";
@@ -899,13 +899,13 @@
 {
     switch (uv)
     {
-        case PUBLIC:
+        case EOAUploadVisibilityPublic:
             return OALocalizedString(@"gpxup_public");
-        case IDENTIFIABLE:
+        case EOAUploadVisibilityIdentifiable:
             return OALocalizedString(@"gpxup_identifiable");
-        case TRACKABLE:
+        case EOAUploadVisibilityTrackable:
             return OALocalizedString(@"gpxup_trackable");
-        case PRIVATE:
+        case EOAUploadVisibilityPrivate:
             return OALocalizedString(@"gpxup_private");
         default:
             return @"";
@@ -916,13 +916,13 @@
 {
     switch (uv)
     {
-        case PUBLIC:
+        case EOAUploadVisibilityPublic:
             return OALocalizedString(@"gpx_upload_public_visibility_descr");
-        case IDENTIFIABLE:
+        case EOAUploadVisibilityIdentifiable:
             return OALocalizedString(@"gpx_upload_identifiable_visibility_descr");
-        case TRACKABLE:
+        case EOAUploadVisibilityTrackable:
             return OALocalizedString(@"gpx_upload_trackable_visibility_descr");
-        case PRIVATE:
+        case EOAUploadVisibilityPrivate:
             return OALocalizedString(@"gpx_upload_private_visibility_descr");
         default:
             return @"";
@@ -953,15 +953,15 @@
 {
     switch (cif)
     {
-        case DD_MM_MMM:
+        case EOACoordinateInputFormatsDdMmMmm:
             return OALocalizedString(@"dd_mm_mmm_format");
-        case DD_MM_MMMM:
+        case EOACoordinateInputFormatsDdMmMmmm:
             return OALocalizedString(@"dd_mm_mmmm_format");
-        case DD_DDDDD:
+        case EOACoordinateInputFormatsDdDdddd:
             return OALocalizedString(@"dd_ddddd_format");
-        case DD_DDDDDD:
+        case EOACoordinateInputFormatsDdDddddd:
             return OALocalizedString(@"dd_dddddd_format");
-        case DD_MM_SS:
+        case EOACoordinateInputFormatsDdMmSs:
             return OALocalizedString(@"dd_mm_ss_format");
         default:
             return @"";
@@ -972,15 +972,15 @@
 {
     switch (cif)
     {
-        case DD_MM_MMM:
+        case EOACoordinateInputFormatsDdMmMmm:
             return YES;
-        case DD_MM_MMMM:
+        case EOACoordinateInputFormatsDdMmMmmm:
             return YES;
-        case DD_DDDDD:
+        case EOACoordinateInputFormatsDdDdddd:
             return NO;
-        case DD_DDDDDD:
+        case EOACoordinateInputFormatsDdDddddd:
             return NO;
-        case DD_MM_SS:
+        case EOACoordinateInputFormatsDdMmSs:
             return YES;
         default:
             return NO;
@@ -991,15 +991,15 @@
 {
     switch (cif)
     {
-        case DD_MM_MMM:
+        case EOACoordinateInputFormatsDdMmMmm:
             return 2;
-        case DD_MM_MMMM:
+        case EOACoordinateInputFormatsDdMmMmmm:
             return 2;
-        case DD_DDDDD:
+        case EOACoordinateInputFormatsDdDdddd:
             return 5;
-        case DD_DDDDDD:
+        case EOACoordinateInputFormatsDdDddddd:
             return 6;
-        case DD_MM_SS:
+        case EOACoordinateInputFormatsDdMmSs:
             return 2;
         default:
             return 0;
@@ -1010,15 +1010,15 @@
 {
     switch (cif)
     {
-        case DD_MM_MMM:
+        case EOACoordinateInputFormatsDdMmMmm:
             return 3;
-        case DD_MM_MMMM:
+        case EOACoordinateInputFormatsDdMmMmmm:
             return 4;
-        case DD_DDDDD:
+        case EOACoordinateInputFormatsDdDdddd:
             return 0;
-        case DD_DDDDDD:
+        case EOACoordinateInputFormatsDdDddddd:
             return 0;
-        case DD_MM_SS:
+        case EOACoordinateInputFormatsDdMmSs:
             return 2;
         default:
             return 0;
@@ -1029,15 +1029,15 @@
 {
     switch (cif)
     {
-        case DD_MM_MMM:
+        case EOACoordinateInputFormatsDdMmMmm:
             return @"°";
-        case DD_MM_MMMM:
+        case EOACoordinateInputFormatsDdMmMmmm:
             return @"°";
-        case DD_DDDDD:
+        case EOACoordinateInputFormatsDdDdddd:
             return @".";
-        case DD_DDDDDD:
+        case EOACoordinateInputFormatsDdDddddd:
             return @".";
-        case DD_MM_SS:
+        case EOACoordinateInputFormatsDdMmSs:
             return @"°";
         default:
             return @"";
@@ -1048,15 +1048,15 @@
 {
     switch (cif)
     {
-        case DD_MM_MMM:
+        case EOACoordinateInputFormatsDdMmMmm:
             return @".";
-        case DD_MM_MMMM:
+        case EOACoordinateInputFormatsDdMmMmmm:
             return @".";
-        case DD_DDDDD:
+        case EOACoordinateInputFormatsDdDdddd:
             return @"°";
-        case DD_DDDDDD:
+        case EOACoordinateInputFormatsDdDddddd:
             return @"°";
-        case DD_MM_SS:
+        case EOACoordinateInputFormatsDdMmSs:
             return @"′";
         default:
             return @"";
@@ -2505,7 +2505,7 @@
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstantOn)defValue
++ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue
 {
     OACommonWikiArticleShowImages *obj = [[OACommonWikiArticleShowImages alloc] init];
     if (obj)
@@ -2516,22 +2516,22 @@
     return obj;
 }
 
-- (EOAWikiArticleShowConstantOn) get
+- (EOAWikiArticleShowConstant) get
 {
     return [super get];
 }
 
-- (void) set:(EOAWikiArticleShowConstantOn)wikiArticleShow
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow
 {
     [super set:wikiArticleShow];
 }
 
-- (EOAWikiArticleShowConstantOn) get:(OAApplicationMode *)mode
+- (EOAWikiArticleShowConstant) get:(OAApplicationMode *)mode
 {
     return [super get:mode];
 }
 
-- (void) set:(EOAWikiArticleShowConstantOn)wikiArticleShow mode:(OAApplicationMode *)mode
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow mode:(OAApplicationMode *)mode
 {
     [super set:wikiArticleShow mode:mode];
 }
@@ -2539,22 +2539,22 @@
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     if ([strValue isEqualToString:@"ON"])
-        return [self set:ON mode:mode];
+        return [self set:EOAWikiArticleShowConstantOn mode:mode];
     else if ([strValue isEqualToString:@"OFF"])
-        return [self set:OFF mode:mode];
+        return [self set:EOAWikiArticleShowConstantOff mode:mode];
     else if ([strValue isEqualToString:@"WIFI"])
-        return [self set:WIFI mode:mode];
+        return [self set:EOAWikiArticleShowConstantWiFi mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     switch ([self get:mode])
     {
-        case ON:
+        case EOAWikiArticleShowConstantOn:
             return @"ON";
-        case OFF:
+        case EOAWikiArticleShowConstantOff:
             return @"OFF";
-        case WIFI:
+        case EOAWikiArticleShowConstantWiFi:
             return @"WIFI";
         default:
             return @"OFF";
@@ -2563,10 +2563,10 @@
 
 - (void) resetToDefault
 {
-    EOAWikiArticleShowConstantOn defaultValue = self.defValue;
+    EOAWikiArticleShowConstant defaultValue = self.defValue;
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
-        defaultValue = (EOAWikiArticleShowConstantOn)((NSNumber *)pDefault).intValue;
+        defaultValue = (EOAWikiArticleShowConstant)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -2611,17 +2611,17 @@
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     if ([strValue isEqualToString:@"INITIAL_STATE"])
-        return [self set:INITIAL_STATE mode:mode];
+        return [self set:EOARateUsStateInitialState mode:mode];
     else if ([strValue isEqualToString:@"IGNORED"])
-        return [self set:IGNORED mode:mode];
+        return [self set:EOARateUsStateIgnored mode:mode];
     else if ([strValue isEqualToString:@"LIKED"])
-        return [self set:LIKED mode:mode];
+        return [self set:EOARateUsStateLiked mode:mode];
     else if ([strValue isEqualToString:@"DISLIKED_WITH_MESSAGE"])
-        return [self set:DISLIKED_WITH_MESSAGE mode:mode];
+        return [self set:EOARateUsStateDislikedWithMessage mode:mode];
     else if ([strValue isEqualToString:@"DISLIKED_WITHOUT_MESSAGE"])
-        return [self set:DISLIKED_WITHOUT_MESSAGE mode:mode];
+        return [self set:EOARateUsStateDislikedWithoutMessage mode:mode];
     else if ([strValue isEqualToString:@"DISLIKED_OR_IGNORED_AGAIN"])
-        return [self set:DISLIKED_OR_IGNORED_AGAIN mode:mode];
+        return [self set:EOARateUsStateDislikedOrIgnoredAgain mode:mode];
 
 }
 
@@ -2629,20 +2629,20 @@
 {
     switch ([self get:mode])
     {
-        case INITIAL_STATE:
+        case EOARateUsStateInitialState:
             return @"INITIAL_STATE";
-        case IGNORED:
+        case EOARateUsStateIgnored:
             return @"IGNORED";
-        case LIKED:
+        case EOARateUsStateLiked:
             return @"LIKED";
-        case DISLIKED_WITH_MESSAGE:
+        case EOARateUsStateDislikedWithMessage:
             return @"DISLIKED_WITH_MESSAGE";
-        case DISLIKED_WITHOUT_MESSAGE:
+        case EOARateUsStateDislikedWithoutMessage:
             return @"DISLIKED_WITHOUT_MESSAGE";
-        case DISLIKED_OR_IGNORED_AGAIN:
+        case EOARateUsStateDislikedOrIgnoredAgain:
             return @"DISLIKED_OR_IGNORED_AGAIN";
         default:
-            return @"INITIAL_STATE";
+            return @"EOARateUsStateInitialState";
     }
 }
 
@@ -2695,26 +2695,26 @@
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"speed"])
-        return [self set:SPEED mode:mode];
-    else if ([strValue isEqualToString:@"altitude"])
-        return [self set:ALTITUDE mode:mode];
-    else if ([strValue isEqualToString:@"slope"])
-        return [self set:SLOPE mode:mode];
+    if ([strValue isEqualToString:@"SPEED"])
+        return [self set:EOAGradientScaleTypeSpeed mode:mode];
+    else if ([strValue isEqualToString:@"ALTITUDE"])
+        return [self set:EOAGradientScaleTypeAltitude mode:mode];
+    else if ([strValue isEqualToString:@"SLOPE"])
+        return [self set:EOAGradientScaleTypeSlope mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     switch ([self get:mode])
     {
-        case SPEED:
-            return @"speed";
-        case ALTITUDE:
-            return @"altitude";
-        case SLOPE:
-            return @"slope";
+        case EOAGradientScaleTypeSpeed:
+            return @"SPEED";
+        case EOAGradientScaleTypeAltitude:
+            return @"ALTITUDE";
+        case EOAGradientScaleTypeSlope:
+            return @"SLOPE";
         default:
-            return @"speed";
+            return @"SPEED";
     }
 }
 
@@ -2768,26 +2768,26 @@
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     if ([strValue isEqualToString:@"PUBLIC"])
-        return [self set:PUBLIC mode:mode];
+        return [self set:EOAUploadVisibilityPublic mode:mode];
     else if ([strValue isEqualToString:@"IDENTIFIABLE"])
-        return [self set:IDENTIFIABLE mode:mode];
+        return [self set:EOAUploadVisibilityIdentifiable mode:mode];
     else if ([strValue isEqualToString:@"TRACKABLE"])
-        return [self set:TRACKABLE mode:mode];
+        return [self set:EOAUploadVisibilityTrackable mode:mode];
     else if ([strValue isEqualToString:@"PRIVATE"])
-        return [self set:PRIVATE mode:mode];
+        return [self set:EOAUploadVisibilityPrivate mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     switch ([self get:mode])
     {
-        case PUBLIC:
+        case EOAUploadVisibilityPublic:
             return @"PUBLIC";
-        case IDENTIFIABLE:
+        case EOAUploadVisibilityIdentifiable:
             return @"IDENTIFIABLE";
-        case TRACKABLE:
+        case EOAUploadVisibilityTrackable:
             return @"TRACKABLE";
-        case PRIVATE:
+        case EOAUploadVisibilityPrivate:
             return @"PRIVATE";
         default:
             return @"PUBLIC";
@@ -2844,33 +2844,33 @@
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     if ([strValue isEqualToString:@"DD_MM_MMM"])
-        return [self set:DD_MM_MMMM mode:mode];
+        return [self set:EOACoordinateInputFormatsDdMmMmm mode:mode];
     else if ([strValue isEqualToString:@"DD_MM_MMMM"])
-        return [self set:DD_MM_MMM mode:mode];
+        return [self set:EOACoordinateInputFormatsDdMmMmmm mode:mode];
     else if ([strValue isEqualToString:@"DD_DDDDD"])
-        return [self set:DD_DDDDD mode:mode];
+        return [self set:EOACoordinateInputFormatsDdDdddd mode:mode];
     else if ([strValue isEqualToString:@"DD_DDDDDD"])
-        return [self set:DD_DDDDDD mode:mode];
+        return [self set:EOACoordinateInputFormatsDdDddddd mode:mode];
     else if ([strValue isEqualToString:@"DD_MM_SS"])
-        return [self set:DD_MM_SS mode:mode];
+        return [self set:EOACoordinateInputFormatsDdMmSs mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     switch ([self get:mode])
     {
-        case DD_MM_MMM:
+        case EOACoordinateInputFormatsDdMmMmm:
             return @"DD_MM_MMM";
-        case DD_MM_MMMM:
+        case EOACoordinateInputFormatsDdMmMmmm:
             return @"DD_MM_MMMM";
-        case DD_DDDDD:
+        case EOACoordinateInputFormatsDdDdddd:
             return @"DD_DDDDD";
-        case DD_DDDDDD:
+        case EOACoordinateInputFormatsDdDddddd:
             return @"DD_DDDDDD";
-        case DD_MM_SS:
+        case EOACoordinateInputFormatsDdMmSs:
             return @"DD_MM_SS";
         default:
-            return @"PUBLIC";
+            return @"DD_MM_MMM";
     }
 }
 
@@ -3390,7 +3390,7 @@
 
         _osmUserName = [[[OACommonString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
-        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:PUBLIC] makeGlobal] makeShared];
+        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityPublic] makeGlobal] makeShared];
         _userOsmBugName = [[[OACommonString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
         _osmUserPassword = [[[OACommonString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
@@ -3472,13 +3472,13 @@
         // global
 
         _wikiArticleShowImagesAsked = [[OACommonBoolean withKey:wikiArticleShowImagesAskedKey defValue:NO] makeGlobal];
-        _wikivoyageShowImgs = [[[OACommonWikiArticleShowImages withKey:wikivoyageShowImgsKey defValue:OFF] makeGlobal] makeShared];
+        _wikivoyageShowImgs = [[[OACommonWikiArticleShowImages withKey:wikivoyageShowImgsKey defValue:EOAWikiArticleShowConstantOff] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_wikiArticleShowImagesAsked forKey:@"wikivoyage_show_images_asked"];
         [_globalPreferences setObject:_wikivoyageShowImgs forKey:@"wikivoyage_show_imgs"];
 
         _coordsInputUseRightSide = [[[OACommonBoolean withKey:coordsInputUseRightSideKey defValue:YES] makeGlobal] makeShared];
-        _coordsInputFormat = [[[OACommonCoordinateInputFormats withKey:coordsInputFormatKey defValue:DD_MM_MMM] makeGlobal] makeShared];
+        _coordsInputFormat = [[[OACommonCoordinateInputFormats withKey:coordsInputFormatKey defValue:EOACoordinateInputFormatsDdMmMmm] makeGlobal] makeShared];
         _coordsInputUseOsmandKeyboard = [[[OACommonBoolean withKey:coordsInputUseOsmandKeyboardKey defValue: YES] makeGlobal] makeShared];
         _coordsInputTwoDigitsLongitude = [[[OACommonBoolean withKey:coordsInputTwoDigitsLongitudeKey defValue: NO] makeGlobal] makeShared];
 
@@ -3585,7 +3585,7 @@
         [_globalPreferences setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
 
         _currentTrackColor = [[[OACommonInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
-        _currentTrackColorization = [[[OACommonGradientScaleType withKey:currentTrackColorizationKey defValue:NONE] makeGlobal] makeShared];
+        _currentTrackColorization = [[[OACommonGradientScaleType withKey:currentTrackColorizationKey defValue:EOAGradientScaleTypeNone] makeGlobal] makeShared];
         _currentTrackSpeedGradientPalette = [[[OACommonString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
         _currentTrackAltitudeGradientPalette = [[[OACommonString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
         _currentTrackSlopeGradientPalette = [[[OACommonString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
@@ -3691,7 +3691,7 @@
         _lastDisplayTime = [[OACommonLong withKey:lastDisplayTimeKey defValue:0] makeGlobal];
         _lastCheckedUpdates = [[OACommonLong withKey:lastCheckedUpdatesKey defValue:0] makeGlobal];
         _numberOfAppStartsOnDislikeMoment = [[OACommonInteger withKey:numberOfAppStartsOnDislikeMomentKey defValue:0] makeGlobal];
-        _rateUsState = [[OACommonRateUsState withKey:rateUsStateKey defValue:INITIAL_STATE] makeGlobal];
+        _rateUsState = [[OACommonRateUsState withKey:rateUsStateKey defValue:EOARateUsStateInitialState] makeGlobal];
 
         [_globalPreferences setObject:_lastDisplayTime forKey:@"last_display_time"];
         [_globalPreferences setObject:_lastCheckedUpdates forKey:@"last_checked_updates"];

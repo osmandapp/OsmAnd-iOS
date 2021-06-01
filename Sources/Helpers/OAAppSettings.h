@@ -152,29 +152,29 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-typedef NS_ENUM(NSInteger, EOAWikiArticleShowConstantOn)
+typedef NS_ENUM(NSInteger, EOAWikiArticleShowConstant)
 {
-    ON = 0,
-    OFF,
-    WIFI
+    EOAWikiArticleShowConstantOn = 0,
+    EOAWikiArticleShowConstantOff,
+    EOAWikiArticleShowConstantWiFi
 };
 
 @interface OAWikiArticleShowConstant : NSObject
 
-@property (nonatomic, readonly) EOAWikiArticleShowConstantOn wasc;
+@property (nonatomic, readonly) EOAWikiArticleShowConstant wasc;
 
-+ (instancetype) withWikiArticleShowConstant:(EOAWikiArticleShowConstantOn)wasc;
++ (instancetype) withWikiArticleShowConstant:(EOAWikiArticleShowConstant)wasc;
 
-+ (NSString *) toHumanString:(EOAWikiArticleShowConstantOn)wasc;
++ (NSString *) toHumanString:(EOAWikiArticleShowConstant)wasc;
 
 @end
 
 typedef NS_ENUM(NSInteger, EOAGradientScaleType)
 {
-    SPEED = 0,
-    ALTITUDE,
-    SLOPE,
-    NONE
+    EOAGradientScaleTypeSpeed = 0,
+    EOAGradientScaleTypeAltitude,
+    EOAGradientScaleTypeSlope,
+    EOAGradientScaleTypeNone
 };
 
 @interface OAGradientScaleType : NSObject
@@ -191,10 +191,10 @@ typedef NS_ENUM(NSInteger, EOAGradientScaleType)
 
 typedef NS_ENUM(NSInteger, EOAUploadVisibility)
 {
-    PUBLIC = 0,
-    IDENTIFIABLE,
-    TRACKABLE,
-    PRIVATE
+    EOAUploadVisibilityPublic = 0,
+    EOAUploadVisibilityIdentifiable,
+    EOAUploadVisibilityTrackable,
+    EOAUploadVisibilityPrivate
 };
 
 @interface OAUploadVisibility : NSObject
@@ -210,11 +210,11 @@ typedef NS_ENUM(NSInteger, EOAUploadVisibility)
 
 typedef NS_ENUM(NSInteger, EOACoordinateInputFormats)
 {
-    DD_MM_MMM = 0,
-    DD_MM_MMMM,
-    DD_DDDDD,
-    DD_DDDDDD,
-    DD_MM_SS
+    EOACoordinateInputFormatsDdMmMmm = 0,
+    EOACoordinateInputFormatsDdMmMmmm,
+    EOACoordinateInputFormatsDdDdddd,
+    EOACoordinateInputFormatsDdDddddd,
+    EOACoordinateInputFormatsDdMmSs
 };
 
 @interface OACoordinateInputFormats : NSObject
@@ -471,23 +471,23 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @interface OACommonWikiArticleShowImages : OACommonInteger
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstantOn)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue;
 
-- (EOAWikiArticleShowConstantOn) get;
-- (EOAWikiArticleShowConstantOn) get:(OAApplicationMode *)mode;
-- (void) set:(EOAWikiArticleShowConstantOn)wikiArticleShow;
-- (void) set:(EOAWikiArticleShowConstantOn)wikiArticleShow mode:(OAApplicationMode *)mode;
+- (EOAWikiArticleShowConstant) get;
+- (EOAWikiArticleShowConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow;
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow mode:(OAApplicationMode *)mode;
 
 @end
 
 typedef NS_ENUM(NSInteger, EOARateUsState)
 {
-    INITIAL_STATE = 0,
-    IGNORED,
-    LIKED,
-    DISLIKED_WITH_MESSAGE,
-    DISLIKED_WITHOUT_MESSAGE,
-    DISLIKED_OR_IGNORED_AGAIN
+    EOARateUsStateInitialState = 0,
+    EOARateUsStateIgnored,
+    EOARateUsStateLiked,
+    EOARateUsStateDislikedWithMessage,
+    EOARateUsStateDislikedWithoutMessage,
+    EOARateUsStateDislikedOrIgnoredAgain
 };
 
 @interface OACommonRateUsState : OACommonInteger

@@ -187,7 +187,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _appModeView = [NSBundle.mainBundle loadNibNamed:@"OAAppModeView" owner:nil options:nil].firstObject;
     _appModeView.frame = CGRectMake(0., 0., _appModeViewContainer.frame.size.width, _appModeViewContainer.frame.size.height);
     _appModeView.showDefault = NO;
-    _appModeView.showCarPlay = NO;
+    _appModeView.showCarPlay = YES;
     _appModeView.delegate = self;
     [_appModeViewContainer addSubview:_appModeView];
     

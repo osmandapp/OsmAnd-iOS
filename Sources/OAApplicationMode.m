@@ -243,7 +243,7 @@ static OAApplicationMode *_CARPLAY;
         _cachedFilteredValues = [NSMutableArray array];
         for (OAApplicationMode *v in _values)
         {
-            if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT || v == _CARPLAY)
+            if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
                 [_cachedFilteredValues addObject:v];
         }
     }

@@ -76,16 +76,13 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
-    if (self.appMode != OAApplicationMode.CARPLAY)
-    {
-        [navigationArr addObject:@{
-            @"type" : [OAIconTitleValueCell getCellIdentifier],
-            @"title" : OALocalizedString(@"nav_type_title"),
-            @"value" : routingData ? routingData.name : @"",
-            @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
-            @"key" : @"navigationType",
-        }];
-    }
+    [navigationArr addObject:@{
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"title" : OALocalizedString(@"nav_type_title"),
+        @"value" : routingData ? routingData.name : @"",
+        @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
+        @"key" : @"navigationType",
+    }];
     [navigationArr addObject:@{
         @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"route_parameters"),

@@ -105,12 +105,6 @@ static OAApplicationMode *_CARPLAY;
     _CAR.baseMaxSpeed = 54.17;
     [_values addObject:_CAR];
     
-    _CARPLAY = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_carplay") stringKey:@"carplay"];
-    _CARPLAY.descr = OALocalizedString(@"base_profile_descr_carplay");
-    _CARPLAY.baseMinSpeed = 2.78;
-    _CARPLAY.baseMaxSpeed = 54.17;
-    [_values addObject:_CARPLAY];
-    
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
     _BICYCLE.baseMinSpeed = 0.7;
@@ -146,6 +140,12 @@ static OAApplicationMode *_CARPLAY;
     _SKI.baseMinSpeed = 0.42;
     _SKI.baseMaxSpeed = 62.5;
     [_values addObject:_SKI];
+    
+    _CARPLAY = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_carplay") stringKey:@"carplay"];
+    _CARPLAY.descr = OALocalizedString(@"base_profile_descr_carplay");
+    _CARPLAY.baseMinSpeed = 2.78;
+    _CARPLAY.baseMaxSpeed = 54.17;
+    [_values addObject:_CARPLAY];
 }
 
 + (OAApplicationMode *) DEFAULT
@@ -156,11 +156,6 @@ static OAApplicationMode *_CARPLAY;
 + (OAApplicationMode *) CAR
 {
     return _CAR;
-}
-
-+ (OAApplicationMode *) CARPLAY
-{
-    return _CARPLAY;
 }
 
 + (OAApplicationMode *) BICYCLE;
@@ -191,6 +186,11 @@ static OAApplicationMode *_CARPLAY;
 + (OAApplicationMode *) SKI
 {
     return _SKI;
+}
+
++ (OAApplicationMode *) CARPLAY
+{
+    return _CARPLAY;
 }
 
 + (OAApplicationMode *) buildApplicationModeByKey:(NSString *)key
@@ -242,8 +242,10 @@ static OAApplicationMode *_CARPLAY;
         NSString *available = settings.availableApplicationModes;
         _cachedFilteredValues = [NSMutableArray array];
         for (OAApplicationMode *v in _values)
-            if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
+        {
+            if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT || v == _CARPLAY)
                 [_cachedFilteredValues addObject:v];
+        }
     }
     return [NSArray arrayWithArray:_cachedFilteredValues];
 }

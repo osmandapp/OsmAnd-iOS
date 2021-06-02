@@ -2326,11 +2326,12 @@
 		B0D61365006F70CE9BE5A92C /* OAGpxApproximationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D610200EA4F32E81ED7491 /* OAGpxApproximationViewController.mm */; };
 		B0D6143A4EEB3410F47A53B8 /* OADeleteCustomFiltersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D611965D0A6A725E8CBDB1 /* OADeleteCustomFiltersViewController.mm */; };
 		B0D619F2CDE86225BEBC83FB /* OARearrangeCustomFiltersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61C17B82A2A45EA763869 /* OARearrangeCustomFiltersViewController.mm */; };
+		B0D61A1252D305F9C6ABAF61 /* OATitleSliderRoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D61A71FCB50975CB4FB88D /* OATitleSliderRoundCell.m */; };
 		B0D61BE10DA62CC3244272FE /* OAButtonRightIconCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */; };
 		B0D61C744384818EFE0EFC65 /* OAButtonRightIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */; };
+		B0D61D8B99490DB472386484 /* OATitleSliderRoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D614BB18254A1F93F26F85 /* OATitleSliderRoundCell.xib */; };
 		B0D61E12EA985194F803A5DD /* OAHistoryMarkersSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D6115DA512EEFB8779E3C2 /* OAHistoryMarkersSettingsItem.mm */; };
 		B0D61FA5FA22DF7673B9A410 /* OASnapTrackWarningViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D6118298660C49762B711A /* OASnapTrackWarningViewController.mm */; };
-		BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB27270119CB38D7007C5613 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FC19CB38D7007C5613 /* fonts */; };
@@ -6590,8 +6591,11 @@
 		B0D6118298660C49762B711A /* OASnapTrackWarningViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASnapTrackWarningViewController.mm; sourceTree = "<group>"; };
 		B0D611965D0A6A725E8CBDB1 /* OADeleteCustomFiltersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADeleteCustomFiltersViewController.mm; path = Sources/Controllers/2.0/OADeleteCustomFiltersViewController.mm; sourceTree = "<group>"; };
 		B0D61468F2D17944CB55F9A1 /* OAGpxApproximationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximationViewController.h; sourceTree = "<group>"; };
+		B0D614BB18254A1F93F26F85 /* OATitleSliderRoundCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATitleSliderRoundCell.xib; path = Resources/Controllers/Cells/OATitleSliderRoundCell.xib; sourceTree = "<group>"; };
+		B0D6176F9D200C0C6E9CD4BA /* OATitleSliderRoundCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATitleSliderRoundCell.h; path = Controllers/Cells/OATitleSliderRoundCell.h; sourceTree = "<group>"; };
 		B0D617E2F1BED00DEA088AB5 /* OAHistoryMarkersSettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryMarkersSettingsItem.h; sourceTree = "<group>"; };
 		B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAButtonRightIconCell.xib; path = Resources/Controllers/Cells/OAButtonRightIconCell.xib; sourceTree = "<group>"; };
+		B0D61A71FCB50975CB4FB88D /* OATitleSliderRoundCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATitleSliderRoundCell.m; path = Controllers/Cells/OATitleSliderRoundCell.m; sourceTree = "<group>"; };
 		B0D61C17B82A2A45EA763869 /* OARearrangeCustomFiltersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARearrangeCustomFiltersViewController.mm; path = Sources/Controllers/2.0/OARearrangeCustomFiltersViewController.mm; sourceTree = "<group>"; };
 		B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAButtonRightIconCell.mm; path = Controllers/Cells/OAButtonRightIconCell.mm; sourceTree = "<group>"; };
 		B0D61DD18284A06727B5FF67 /* OASnapTrackWarningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASnapTrackWarningViewController.h; sourceTree = "<group>"; };
@@ -8831,6 +8835,7 @@
 				32196FF425F0CE1200C3FED6 /* OAFoldersCell.xib */,
 				32196FF625F0CE1200C3FED6 /* OAFoldersCollectionViewCell.xib */,
 				B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */,
+				B0D614BB18254A1F93F26F85 /* OATitleSliderRoundCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -9098,6 +9103,8 @@
 				32DB230E262EFDFF00696A95 /* OACollectionViewCellState.m */,
 				B0D61F4B4148554FA324AABA /* OAButtonRightIconCell.h */,
 				B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */,
+				B0D61A71FCB50975CB4FB88D /* OATitleSliderRoundCell.m */,
+				B0D6176F9D200C0C6E9CD4BA /* OATitleSliderRoundCell.h */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -17338,6 +17345,7 @@
 				DADBC61E2426489B008B7423 /* OAPublicTransportShieldCell.xib in Resources */,
 				0A2A7C6F262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib in Resources */,
 				B0D61C744384818EFE0EFC65 /* OAButtonRightIconCell.xib in Resources */,
+				B0D61D8B99490DB472386484 /* OATitleSliderRoundCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -18205,6 +18213,7 @@
 				B0D61E12EA985194F803A5DD /* OAHistoryMarkersSettingsItem.mm in Sources */,
 				B0D61FA5FA22DF7673B9A410 /* OASnapTrackWarningViewController.mm in Sources */,
 				B0D61365006F70CE9BE5A92C /* OAGpxApproximationViewController.mm in Sources */,
+				B0D61A1252D305F9C6ABAF61 /* OATitleSliderRoundCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

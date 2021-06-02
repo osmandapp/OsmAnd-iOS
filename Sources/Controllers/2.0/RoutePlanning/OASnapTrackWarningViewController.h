@@ -2,8 +2,8 @@
 //  OASnapTrackWarningViewController.h
 //  OsmAnd
 //
-// Created by Skalii on 28.05.2021.
-// Copyright (c) 2021 OsmAnd. All rights reserved.
+//  Created by Skalii on 28.05.2021.
+//  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
 #import "OABottomSheetViewController.h"
@@ -28,7 +28,6 @@
 
 @property (nonatomic) id<OASnapTrackWarningBottomSheetDelegate> delegate;
 
-- (void)setCancel:(BOOL)cancel;
 - (void)setContinue:(BOOL)__continue;
 
 @end

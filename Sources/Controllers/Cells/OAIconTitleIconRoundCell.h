@@ -22,6 +22,5 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftSeparatorSecondaryConstraint;
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
-- (void) updateSeparator:(NSInteger)x;
 
 @end

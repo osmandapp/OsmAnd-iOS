@@ -26,11 +26,6 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void) updateSeparator:(NSInteger)x
-{
-
-}
-
 - (void) updateConstraints
 {
     self.iconView.hidden = self.iconView.image == nil;

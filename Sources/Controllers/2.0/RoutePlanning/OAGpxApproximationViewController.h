@@ -2,8 +2,8 @@
 //  OAGpxApproximationViewController.h
 //  OsmAnd
 //
-// Created by Skalii on 31.05.2021.
-// Copyright (c) 2021 OsmAnd. All rights reserved.
+//  Created by Skalii on 31.05.2021.
+//  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
 #import "OABottomSheetViewController.h"
@@ -31,7 +31,6 @@
 
 - (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OAGpxRtePt *> *> *)routePoints;
 
-- (void)setCancel:(BOOL)cancel;
 - (void)setApply:(BOOL)apply;
 
 @end

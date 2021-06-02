@@ -2,8 +2,8 @@
 //  OASnapTrackWarningViewController.mm
 //  OsmAnd
 //
-// Created by Skalii on 28.05.2021.
-// Copyright (c) 2021 OsmAnd. All rights reserved.
+//  Created by Skalii on 28.05.2021.
+//  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
 #import "OASnapTrackWarningViewController.h"
@@ -65,14 +65,12 @@
 
 - (void)onCloseButtonPressed:(id)sender
 {
-    [vwController setCancel:YES];
     [vwController setContinue:NO];
     [vwController dismiss];
 }
 
 - (void)doneButtonPressed
 {
-    [vwController setCancel:NO];
     [vwController setContinue:YES];
     [vwController dismiss];
 }
@@ -154,7 +152,6 @@
 
 @implementation OASnapTrackWarningViewController
 {
-    BOOL _cancel;
     BOOL _continue;
 }
 
@@ -186,7 +183,7 @@
     {
         if (_continue)
             [self.delegate onContinueSnapApproximation];
-        else if (_cancel)
+        else
             [self.delegate onCancelSnapApproximation];
     }
 }
@@ -198,14 +195,9 @@
     {
         if (_continue)
             [self.delegate onContinueSnapApproximation];
-        else if (_cancel)
+        else
             [self.delegate onCancelSnapApproximation];
     }
-}
-
-- (void)setCancel:(BOOL)cancel
-{
-    _cancel = cancel;
 }
 
 - (void)setContinue:(BOOL)__continue

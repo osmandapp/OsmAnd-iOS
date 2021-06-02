@@ -114,7 +114,7 @@
 #import "OASizes.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OAHistoryViewController.h"
-#import "OAEditFavoriteViewController.h"
+#import "OAEditPointViewController.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -1651,7 +1651,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditFavoriteViewController *controller = [[OAEditFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title address:self.targetMenuView.targetPoint.titleAddress];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title address:self.targetMenuView.targetPoint.titleAddress];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
@@ -1659,7 +1659,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditFavoriteViewController *controller = [[OAEditFavoriteViewController alloc] initWithItem:item];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithItem:item];
     [self presentViewController:controller animated:YES completion:nil];
 }
 

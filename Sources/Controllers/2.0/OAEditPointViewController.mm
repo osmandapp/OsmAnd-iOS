@@ -1,12 +1,12 @@
 //
-//  OAEditFavoriteViewController.m
+//  OAEditPointViewController.m
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 05.03.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OAEditFavoriteViewController.h"
+#import "OAEditPointViewController.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -29,12 +29,9 @@
 #import "OATargetPointsHelper.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OACollectionViewCellState.h"
-#import <UIAlertView+Blocks.h>
-#import <UIAlertView-Blocks/RIButtonItem.h>
+#import "OABasePointEditingHandler.h"
+#import "OAFavoriteEditingHandler.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
 #define kNameKey @"kNameKey"
@@ -56,11 +53,11 @@
 #define kFullHeaderHeight 100
 #define kCompressedHeaderHeight 62
 
-@interface OAEditFavoriteViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
+@interface OAEditPointViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
 
-@implementation OAEditFavoriteViewController
+@implementation OAEditPointViewController
 {
     OsmAndAppInstance _app;
     BOOL _isNewItemAdding;
@@ -68,6 +65,8 @@
     BOOL _isUnsaved;
     NSString *_ininialName;
     NSString *_ininialGroupName;
+    
+    OABasePointEditingHandler *_pointHandler;
     
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<NSNumber *> *_colors;
@@ -99,89 +98,41 @@
     NSString *_renamedPointAlertMessage;
 }
 
-- (id) initWithItem:(OAFavoriteItem *)favorite
+- (instancetype) initWithItem:(OAFavoriteItem *)favorite
 {
-    self = [super initWithNibName:@"OAEditFavoriteViewController" bundle:nil];
+    self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
     {
         _app = [OsmAndApp instance];
         _isNewItemAdding = NO;
         _isUnsaved = YES;
-        self.favorite = favorite;
-        self.name = [self.favorite getDisplayName];
-        self.desc = [self.favorite getDescription];
-        self.address = [self.favorite getAddress];
-        self.groupTitle = [self getGroupTitle];
-        self.groupColor = [self.favorite getColor];
+        _pointHandler = [[OAFavoriteEditingHandler alloc] initWithItem:favorite];
+        self.name = [favorite getDisplayName];
+        self.desc = [favorite getDescription];
+        self.address = [favorite getAddress];
+        self.groupTitle = [favorite getCategoryDisplayName];
+        self.groupColor = [favorite getColor];
         [self commonInit];
     }
     return self;
 }
 
-- (id) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation
+- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation
 {
-    self = [super initWithNibName:@"OAEditFavoriteViewController" bundle:nil];
+    self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
     {
         _isNewItemAdding = YES;
         _isUnsaved = YES;
         _app = [OsmAndApp instance];
         
-        // Create favorite
-        OsmAnd::PointI locationPoint;
-        locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
-        locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
-        
-        QString elevation = QString::null;
-        QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
-        
-        QString title = QString::fromNSString(formattedTitle);
-        QString address = QString::fromNSString(formattedLocation);
-        QString description = QString::null;
-        QString icon = QString::null;
-        QString background = QString::null;
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *groupName;
-        if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
-            groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
-        
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
-        
-        UIColor* color_ = favCol.color;
-        CGFloat r,g,b,a;
-        [color_ getRed:&r
-                 green:&g
-                  blue:&b
-                 alpha:&a];
-        
-        QString group;
-        if (groupName)
-            group = QString::fromNSString(groupName);
-        else
-            group = QString::null;
-        
-        auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
-                                                                        elevation,
-                                                                        time,
-                                                                        title,
-                                                                        description,
-                                                                        address,
-                                                                        group,
-                                                                        icon,
-                                                                        background,
-                                                                        OsmAnd::FColorRGB(r,g,b));
-        
-        OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-        
-        self.favorite = fav;
-        [_app saveFavoritesToPermamentStorage];
+        _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:formattedLocation];
         
         self.name = formattedTitle ? formattedTitle : @"";
         self.desc = @"";
         self.address = formattedLocation ? formattedLocation : @"";
         self.groupTitle = [self getGroupTitle];
-        self.groupColor = [self.favorite getColor];
+        self.groupColor = [_pointHandler getColor];
         
         _selectedIconCategoryName = @"special";
         _selectedIconName = @"special_star";
@@ -253,7 +204,7 @@
 
 - (void) setupIcons
 {
-    NSString *loadedPoiIconName = [self.favorite getIcon];
+    NSString *loadedPoiIconName = [_pointHandler getIcon];
     _poiIcons = [OAFavoritesHelper getCategirizedIconNames];
     
     for (NSString *categoryName in _poiIcons.allKeys)
@@ -297,14 +248,14 @@
 
     _backgroundIcons = [NSArray arrayWithArray:tempBackgroundIcons];
     
-    _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[self.favorite getBackgroundIcon]];
+    _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[_pointHandler getBackgroundIcon]];
     if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;
 }
 
 - (void) setupColors
 {
-    UIColor* loadedColor = [self.favorite getColor];
+    UIColor* loadedColor = [_pointHandler getColor];
     _selectedColor = [OADefaultFavorite nearestFavColor:loadedColor];
     _selectedColorIndex = [[OADefaultFavorite builtinColors] indexOfObject:_selectedColor];
     
@@ -338,7 +289,7 @@
         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
         @"title" : self.name,
         @"hint" : OALocalizedString(@"fav_name"),
-        @"isEditable" : [NSNumber numberWithBool:![self.favorite isSpecialPoint]],
+        @"isEditable" : [NSNumber numberWithBool:![_pointHandler isSpecialPoint]],
         @"key" : kNameKey
     }];
     [section addObject:@{
@@ -467,7 +418,7 @@
 
 - (NSString *) getGroupTitle
 {
-    return [self.favorite getCategoryDisplayName];
+    return [_pointHandler getGroupTitle];
 }
 
 - (void)viewDidLayoutSubviews
@@ -518,8 +469,8 @@
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            if (_isNewItemAdding )
-                [self deleteFavoriteItem:self.favorite];
+            if (_isNewItemAdding)
+                [_pointHandler deleteItem];
             [self doDismiss];
         }]];
         [self presentViewController:alert animated:YES completion:nil];
@@ -553,20 +504,19 @@
     _isUnsaved = NO;
     if (_wasChanged || _isNewItemAdding)
     {
-        
+        OAPointEditingData *data = [[OAPointEditingData alloc] init];
         NSString *savingGroup = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle] trim];
         
-        [self.favorite setDescription:self.desc ? self.desc : @""];
-        [self.favorite setAddress:self.address ? self.address : @""];
-        [self.favorite setColor:_selectedColor.color];
-        [self.favorite setBackgroundIcon:_backgroundIconNames[_selectedBackgroundIndex]];
-        [self.favorite setIcon:_selectedIconName];
+        data.descr = self.desc ? self.desc : @"";
+        data.address = self.address ? self.address : @"";
+        data.color = _selectedColor.color;
+        data.backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
+        data.icon = _selectedIconName;
         
         if (_isNewItemAdding || ![self.name isEqualToString:_ininialName] || ![self.groupTitle isEqualToString:_ininialGroupName])
         {
             NSString *savingName = [self.name trim];
-            NSDictionary *checkingResult = [OAFavoritesHelper checkDuplicates:self.favorite newName:savingName newCategory:savingGroup];
-            
+            NSDictionary *checkingResult = [_pointHandler checkDuplicates:savingName group:savingGroup];
             
             if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
             {
@@ -577,22 +527,18 @@
                     _renamedPointAlertMessage = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), savingName];
             }
             
-            if (_isNewItemAdding)
-            {
-                [self.favorite setName:savingName];
-                [self.favorite setCategory:savingGroup];
-                [OAFavoritesHelper addFavorite:self.favorite];
-            }
-            else
-            {
-                [OAFavoritesHelper editFavoriteName:self.favorite newName:savingName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
-            }
+            data.name = savingName;
+            data.category = savingGroup;
+            
+            [_pointHandler savePoint:data newPoint:_isNewItemAdding];
         }
         else
         {
-            NSString *savingName = [self.favorite isSpecialPoint] ? [self.favorite getName] : self.name;
+            NSString *savingName = [_pointHandler isSpecialPoint] ? [_pointHandler getName] : self.name;
             savingName = [savingName trim];
-            [OAFavoritesHelper editFavoriteName:self.favorite newName:savingName group:savingGroup descr:[self.favorite getDescription] address:[self.favorite getAddress]];
+            data.name = savingName;
+            data.category = savingGroup;
+            [_pointHandler savePoint:data newPoint:NO];
         }
     }
 }
@@ -622,7 +568,7 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
     
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self deleteFavoriteItem:self.favorite];
+        [_pointHandler deleteItem];
         [self dismissViewControllerAnimated:YES completion:nil];
     }]];
     
@@ -632,26 +578,6 @@
 - (void) deleteFavoriteItem:(OAFavoriteItem *)favoriteItem
 {
     [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[favoriteItem]];
-}
-
-- (void) removeExistingItemFromCollection
-{
-    NSString *favoriteTitle = [self.favorite getName];
-    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
-    {
-        if ((localFavorite != self.favorite.favorite) &&
-            [favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()])
-        {
-            [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(localFavorite);
-            break;
-        }
-    }
-}
-
-- (void) removeNewItemFromCollection
-{
-    _app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
-    [_app saveFavoritesToPermamentStorage];
 }
 
 -(void) clearButtonPressed:(UIButton *)sender
@@ -1222,33 +1148,18 @@
     
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
-        NSString *description = [favoriteItem getDescription];
-        NSString *address = [favoriteItem getAddress];
-        UIColor *color = [favoriteItem getColor];
-        NSString *backgroundIcon = [favoriteItem getBackgroundIcon];
-        NSString *icon = [favoriteItem getIcon];
-        NSString *category = [favoriteItem getCategory];
-        NSString *name = [favoriteItem getName];
+        OAPointEditingData *data = [[OAPointEditingData alloc] init];
         
-        [self.favorite setDescription:description];
-        [self.favorite setAddress:address];
-        [self.favorite setColor:color];
-        [self.favorite setBackgroundIcon:backgroundIcon];
-        [self.favorite setIcon:icon];
+        data.descr = [favoriteItem getDescription];
+        data.address = [favoriteItem getAddress];
+        data.color = [favoriteItem getColor];
+        data.backgroundIcon = [favoriteItem getBackgroundIcon];
+        data.icon = [favoriteItem getIcon];
+        data.category = [favoriteItem getCategory];
+        data.name = [favoriteItem getName];
         
         [self deleteFavoriteItem:favoriteItem];
-
-        if (_isNewItemAdding)
-        {
-            [self.favorite setCategory:category];
-            [self.favorite setName:name];
-            [OAFavoritesHelper addFavorite:self.favorite];
-        }
-        else
-        {
-            [OAFavoritesHelper editFavoriteName:self.favorite newName:name group:category descr:description address:address];
-        }
-        
+        [_pointHandler savePoint:data newPoint:_isNewItemAdding];
         [self dismissViewController];
     }]];
     

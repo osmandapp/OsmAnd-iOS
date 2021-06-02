@@ -1,5 +1,5 @@
 //
-//  OAEditFavoriteViewController.h
+//  OAEditPointViewController.h
 //  OsmAnd
 //
 //  Created by nnngrach on 05.03.2021.
@@ -7,17 +7,16 @@
 //
 
 #import "OABaseTableViewController.h"
-#import "OAFavoriteItem.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface OAEditFavoriteViewController : OABaseTableViewController
+@class OAFavoriteItem;
+
+@interface OAEditPointViewController : OABaseTableViewController
 
 @property (weak, nonatomic) IBOutlet UIImageView *headerIconPoi;
 @property (weak, nonatomic) IBOutlet UIImageView *headerIconBackground;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
 
-
-@property (nonatomic) OAFavoriteItem *favorite;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *desc;
 @property (nonatomic, copy) NSString *address;

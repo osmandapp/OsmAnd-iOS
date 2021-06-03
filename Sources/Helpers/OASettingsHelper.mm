@@ -528,7 +528,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         else if ([object isKindOfClass:NSString.class])
         {
             NSString *filePath = object;
-            if ([filePath hasSuffix:GPX_FILE_EXT])
+            if ([filePath.lowercaseString hasSuffix:GPX_FILE_EXT])
                 [result addObject:[[OAGpxSettingsItem alloc] initWithFilePath:filePath error:nil]];
             else
                 [result addObject:[[OAFileSettingsItem alloc] initWithFilePath:filePath error:nil]];

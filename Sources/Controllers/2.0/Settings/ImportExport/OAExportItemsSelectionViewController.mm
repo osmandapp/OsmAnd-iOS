@@ -290,7 +290,7 @@
     EOASettingsItemFileSubtype fileSubtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
     item[@"title"] = [filePath.lastPathComponent stringByDeletingPathExtension];
     item[@"icon"] = [UIImage templateImageNamed:[OAFileSettingsItemFileSubtype getIcon:fileSubtype]];
-    if ([filePath hasSuffix:GPX_FILE_EXT])
+    if ([filePath.lowercaseString hasSuffix:GPX_FILE_EXT])
     {
         [self setupItemFromGpx:item filePath:filePath appearanceInfo:nil];
     }

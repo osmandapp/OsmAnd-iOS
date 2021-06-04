@@ -94,14 +94,16 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
     if (!iconName || iconName.length == 0)
         iconName = @"mm_special_star";
     
+    NSString *sizeName = isFullSize ? @"" : @"_small";
+    
     // shadow icon
-    NSString *shadowIconName = [NSString stringWithFormat:@"ic_bg_point_%@_bottom", shapeName];
+    NSString *shadowIconName = [NSString stringWithFormat:@"ic_bg_point_%@_bottom%@", shapeName, sizeName];
     auto shadowIcon = [OANativeUtilities skBitmapFromPngResource:shadowIconName];
     if (!shadowIcon)
         return result;
     
     // color filled background icon
-    NSString *backgroundIconName = [NSString stringWithFormat:@"ic_bg_point_%@_center", shapeName];
+    NSString *backgroundIconName = [NSString stringWithFormat:@"ic_bg_point_%@_center%@", shapeName, sizeName];
     UIImage *img = getIcon(backgroundIconName, @"ic_bg_point_circle_center");
     img = [OAUtilities tintImageWithColor:img color:color];
     auto backgroundIcon = [OANativeUtilities skBitmapFromCGImage:img.CGImage];
@@ -126,7 +128,7 @@ std::shared_ptr<SkBitmap> OAFavoritesMapLayerProvider::createCompositeBitmap(con
     }
     
     // highlight icon
-    NSString *highlightIconName = [NSString stringWithFormat:@"ic_bg_point_%@_top", shapeName];
+    NSString *highlightIconName = [NSString stringWithFormat:@"ic_bg_point_%@_top%@", shapeName, sizeName];
     auto highlightIcon = [OANativeUtilities skBitmapFromPngResource:highlightIconName];
     if (!highlightIcon)
         return result;

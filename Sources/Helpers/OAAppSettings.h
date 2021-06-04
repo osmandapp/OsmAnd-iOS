@@ -825,7 +825,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 - (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes;
 - (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
-- (void) setAppearanceMode:(int)settingAppMode;
 - (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
 - (void) setShowPoiLabel:(BOOL)mapSettingShowPoiLabel;
 

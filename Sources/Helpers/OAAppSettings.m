@@ -3796,12 +3796,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingMapLanguageShowLocal forKey:settingMapLanguageShowLocalKey];
 }
 
-- (void) setAppearanceMode:(int)appearanceMode
-{
-    [_appearanceMode set:appearanceMode];
-    [_dayNightHelper forceUpdate];
-}
-
 - (void) setFirstMapIsDownloaded:(BOOL)firstMapIsDownloaded
 {
     _firstMapIsDownloaded = firstMapIsDownloaded;

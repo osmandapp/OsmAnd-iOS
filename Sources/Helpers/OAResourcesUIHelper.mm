@@ -119,7 +119,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         else
             return [OsmAndApp.instance.cachePath stringByAppendingPathComponent:self.downloadContent[@"name"]];
     }
-    else if ([titleWithoutExt hasSuffix:GPX_FILE_EXT])
+    else if ([titleWithoutExt.lowercaseString hasSuffix:GPX_FILE_EXT])
         return OsmAndApp.instance.gpxPath;
     else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
         return OsmAndApp.instance.documentsPath;

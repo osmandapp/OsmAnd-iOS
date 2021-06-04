@@ -1584,6 +1584,15 @@
     [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
 }
 
+- (void) onFolderAdded:(NSString *)addedFolderName
+{
+    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:addedFolderName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
+        [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
+    
+    [self onFolderSelected:addedFolderName];
+}
+
 #pragma mark - OASaveTrackViewControllerDelegate
 
 - (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack

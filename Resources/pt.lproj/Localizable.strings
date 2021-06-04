@@ -367,9 +367,9 @@
 "shared_string_current" = "Atual";
 "make_as_start_point" = "Usar como ponto de partida";
 "add_as_first_destination_point" = "Adicionar primeiro destino intermédio";
-"add_as_last_destination_point" = "Adicionarúltimo destino intermédio";
-"open_from" = "Abreàs";
-"open_till" = "Fechaàs";
+"add_as_last_destination_point" = "Adicionar último destino intermédio";
+"open_from" = "Abre às";
+"open_till" = "Fecha às";
 "driving_region_automatic" = "Automático";
 "map_widget_magnetic_bearing" = "Rumo magnético";
 "map_widget_bearing" = "Rumo relativo";
@@ -453,7 +453,7 @@
 "map_widget_distance" = "Destino";
 "monitoring_control_start" = "Gravar";
 "map_widget_altitude" = "Altitude";
-"map_widget_plain_time" = "Tempo atual";
+"map_widget_plain_time" = "Hora atual";
 "map_widget_max_speed" = "Limite de velocidade";
 "max_speed_none" = "nenhuma";
 "access_arrival_time" = "Hora de chegada";
@@ -478,13 +478,13 @@
 "arrival_distance_factor_early" = "Adiantado";
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Atrasado";
-"arrival_distance_factor_at_last" = "Nosúltimos metros";
+"arrival_distance_factor_at_last" = "Nos últimos metros";
 "fast_route_mode" = "Caminho mais rápido";
 "avoid_in_routing_title" = "Evitar…";
 "prefer_in_routing_title" = "Preferir…";
 "choose_auto_follow_route" = "Auto-centrar visualização do mapa";
 "auto_zoom_map" = "Ampliação automática do mapa";
-"snap_to_road" = "Ajustarà estrada";
+"snap_to_road" = "Ajustar à estrada";
 "speak_title" = "Anunciar…";
 "keep_informing" = "Repetir as instruções de navegação";
 "arrival_distance" = "Anúncio da chegada";
@@ -505,7 +505,7 @@
 "app_mode_motorcycle" = "Motorizada";
 "app_mode_boat" = "Barco";
 "app_mode_aircraft" = "Aeronave";
-"gpx_option_calculate_first_last_segment" = "Calcular rota de OsmAnd para o primeiro eúltimo segmento da rota";
+"gpx_option_calculate_first_last_segment" = "Calcular rota de OsmAnd para o primeiro e último segmento da rota";
 "gpx_option_from_start_point" = "Percorrer toda a rota";
 "gpx_option_reverse_route" = "Inverter direção GPX";
 "use_points_as_intermediates" = "Calcular rota entre pontos";
@@ -527,14 +527,14 @@
 "route_from" = "De";
 "starting_point_too_far" = "Ponto de partida demasiado distante da estrada mais próxima.";
 "ending_point_too_far" = "Destino muito longe da estrada mais próxima.";
-"route_kl" = "Mantenha-seà esquerda e continue em";
-"route_kr" = "Mantenha-seà direita e continue em";
-"route_tr" = "Vireà direita e continue em";
-"route_tshr" = "Vire acentuadamenteà direita e continue em";
-"route_tslr" = "Vire ligeiramenteà direita e continue em";
-"route_tl" = "Vireà esquerda e continue em";
-"route_tshl" = "Vire acentuadamenteà esquerda e continue em";
-"route_tsll" = "Vire ligeiramenteà esquerda e continue em";
+"route_kl" = "Mantenha-se à esquerda e continue em";
+"route_kr" = "Mantenha-se à direita e continue em";
+"route_tr" = "Vire à direita e continue em";
+"route_tshr" = "Vire acentuadamente à direita e continue em";
+"route_tslr" = "Vire ligeiramente à direita e continue em";
+"route_tl" = "Vire à esquerda e continue em";
+"route_tshl" = "Vire acentuadamente à esquerda e continue em";
+"route_tsll" = "Vire ligeiramente à esquerda e continue em";
 "route_tu" = "Faça inversão de marcha e continue em";
 "route_head" = "Comece em";
 "looking_up_address" = "A procurar o endereço";
@@ -773,7 +773,7 @@
 "routing_settings_descr" = "Configurar navegação";
 "fast_route_mode_descr" = "Ativar para calcular a rota mais rápida ou desativar para a rota de poupança de combustível.";
 "avoid_in_routing_descr" = "Evitar estradas com portagem, não pavimentadas e balsas/ferries";
-"prefer_in_routing_descr" = "Preferir autoestradas.";
+"prefer_in_routing_descr" = "Preferir autoestradas";
 "choose_auto_follow_route_descr" = "Tempo até o mapa ser centrado na posição atual";
 "auto_zoom_map_descr" = "Nível de zoom automático de acordo com a sua velocidade (enquanto o mapa é sincronizado com a posição atual)";
 "snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação";
@@ -1355,7 +1355,7 @@
 "rendering_value_translucent_purple_name" = "Roxo translúcido";
 "routing_attr_avoid_shuttle_train_description" = "Evita usar comboios vaivém, em pequenos trajetos predefinidos como aeroportos";
 "rendering_attr_tracktype_grade3_name" = "Maioritariamente sólido";
-"routing_attr_allow_private_description" = "Permitir acesso aáreas privadas.";
+"routing_attr_allow_private_description" = "Permitir acesso a áreas privadas.";
 "routing_attr_allow_skating_only_name" = "Permitir apenas rotas de patinagem";
 "rendering_value_brown_name" = "Castanho";
 "routing_attr_allow_intermediate_description" = "Rotas mais difíceis com secções mais íngremes. Geralmente, contém alguns obstáculos que deviam ser evitados.";
@@ -1373,7 +1373,7 @@
 "rendering_attr_surface_compacted_name" = "Compactado";
 "routing_attr_allow_classic_only_description" = "Rotas preparadas apenas para o estilo clássico sem pistas de patinagem. Isso inclui rotas preparadas por uma moto de neve menor com pista mais solta e pistas feitas manualmente por esquiadores.";
 "rendering_attr_subwayMode_name" = "Rotas de metropolitanos";
-"rendering_attr_hideOverground_name" = "Objetosà superfície";
+"rendering_attr_hideOverground_name" = "Objetos à superfície";
 "rendering_attr_appMode_name" = "Modo de visualização";
 "rendering_attr_transportStops_name" = "Paragens de transporte";
 "rendering_attr_hikingRoutesOSMC_name" = "Camada superior de símbolos de montanhismo";
@@ -1506,7 +1506,7 @@
 "routing_attr_height_obstacles_description" = "Utilizar elevação de terreno (dos dados do SRTM, ASTER e EU-DEM).";
 "routing_attr_avoid_sett_description" = "Evita pedras irregulares e paralelos";
 "routing_attr_weight_name" = "Peso máximo";
-"rendering_value_car_name" = "Carro";
+"rendering_value_car_name" = "Condução";
 "routing_attr_freeride_policy_name" = "Fora de pista";
 "rendering_attr_hideHouseNumbers_name" = "Números de porta";
 "rendering_value_translucent_lightgreen_name" = "Verde claro translúcido";
@@ -1536,7 +1536,7 @@
 "rendering_attr_moreDetailed_name" = "Mais detalhes";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "routing_attr_avoid_sett_name" = "Sem pedras irregulares ou paralelos";
-"rendering_attr_hideWaterPolygons_name" = "Corpos deágua largos";
+"rendering_attr_hideWaterPolygons_name" = "Corpos de água largos";
 "rendering_value_black_name" = "Preto";
 "rendering_attr_contourDensity_name" = "Densidade das curvas de nível";
 "rendering_attr_piste_type_snow_park_name" = "Parque de neve";
@@ -1544,7 +1544,7 @@
 "routeInfo_steepness_name" = "Inclinação";
 "routing_attr_avoid_toll_description" = "Evitar estradas com portagem";
 "rendering_value_germanRoadAtlas_name" = "Atlas de vias alemãs";
-"rendering_attr_whiteWaterSports_name" = "Desportos deágua doce";
+"rendering_attr_whiteWaterSports_name" = "Desportos de água doce";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferir estradas não pavimentadas";
 "rendering_value_translucent_lightblue_name" = "Azul claro translúcido";
 "routing_attr_avoid_motorway_name" = "Evitar autoestradas";
@@ -1563,7 +1563,7 @@
 "rendering_attr_roadStyle_description" = "Estilo de estrada";
 "rendering_value_green_name" = "Verde";
 "rendering_attr_busRoutes_name" = "Rotas de autocarros";
-"rendering_value_bicycle_name" = "Bicicleta";
+"rendering_value_bicycle_name" = "Ciclismo";
 "rendering_attr_piste_type_sled_name" = "Trenó";
 "rendering_attr_trainLightrailRoutes_name" = "Rotas de comboio";
 "app_mode_pedestrian" = "A pé";
@@ -1588,7 +1588,7 @@
 "app_mode_wagon" = "Vagão";
 "app_mode_utv" = "Lado a lado";
 "app_mode_osm" = "OSM";
-"rendering_attr_streetLightingNight_name" = "Mostrar apenasà noite";
+"rendering_attr_streetLightingNight_name" = "Mostrar apenas à noite";
 "all_group_points" = "Todos os pontos do grupo";
 "res_zoom_levels" = "Níveis de ampliação";
 "region_antarctica" = "Antártida";
@@ -1756,7 +1756,7 @@
 "map_settings_slopes_description" = "Os mapas de declives usam cores diferentes para visualizar o terreno";
 "map_settings_slopes_legend" = "Pode ler mais sobre declives na Wikipédia";
 "ios_release_3_90" = "- Introduzida a funcionalidade \"Planear uma rota\" para planear viagens futuras com a capacidade de criar segmentos de trilhos utilizando diferentes tipos de navegação\n- Adicionada uma opção para ativar um compasso sobre a ferramenta \"Raio da régua\"\n- Adicionada a opção \"Nomes dos POI\" que permite mostrar nomes de favoritos, pontos de passagem de trilhos e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia em falta\n- Importação de configurações: erros corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
-"ios_release_3_80" = "• Adicionados \"Perfis da Aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
+"ios_release_3_80" = "• Adicionados \"Perfis da aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfis\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
 
 
 // Release Notes
@@ -1833,7 +1833,7 @@
 "hide_coordinates" = "Ocultar coordenadas";
 "show_coordinates" = "Mostrar coordenadas";
 "toggle_coordinates" = "Mostrar/ocultar widget de coordenadas";
-"copied_to_clipboard" = "Copiado para aárea de transferência";
+"copied_to_clipboard" = "Copiado para a área de transferência";
 "searching_gps" = "A procurar GPS";
 
 // Coordinate widget
@@ -2045,7 +2045,7 @@
 "max_speed" = "Velocidade máxima";
 "ui_customization" = "Personalização da interface";
 "units_nm" = "mn";
-"attach_to_the_roads" = "Fixaràs estradas";
+"attach_to_the_roads" = "Fixar às estradas";
 "follow_track" = "Seguir o trilho";
 "select_another_track" = "Selecionar outro trilho";
 "map_widget_distance_by_tap" = "Distância com 2 dedos";
@@ -2081,3 +2081,5 @@
 "new_plugin_added" = "Nova extensão adicionada";
 "search_poi_types_descr" = "Pode combinar tipos de POI de categorias diferentes.";
 "add_custom_category" = "Adicionar categoria personalizada";
+"ios_release_4_00" = "• Novo! Ecrã \"Adicionar favorito\" com opções para selecionar o ícone, cor e forma personalizados\n• Adicionado novo \"widget de Coordenadas\" com coordenadas da localização atual\n• Capacidade de importar plug-ins personalizados definidos pelo utilizador\n• Funcionalidade de importação / exportação melhorada significativamente\n• \"Distância por toque\" movida da régua de raio para uma opção separada\n• Corrigido o bloqueio da aplicação CarPlay quando o ecrã do iPhone é desligado\n• O ecrã de plug-ins foi movido de \"Mapas e recursos\" para o \"Menu principal\"\n• Adicionada localização finlandesa\n• Correção da interface no modo paisagem no ecrã \"Planear uma rota\"\n• Adicionado suporte para roteamento personalizado e ficheiros de renderização\n• Corrigido o desempenho da linha de direção dos marcadores\n• Corrigido problema com a importação de ficheiros GPX com extensões em maiúsculas\n• Corrigido problema com o menu \"Seguir trilho\"\n• Corrigida importação de ficheiros OBF\n";
+"approximate_file_size" = "Tamanho aproximado do ficheiro: %@";

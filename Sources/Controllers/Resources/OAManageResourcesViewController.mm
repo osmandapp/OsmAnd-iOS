@@ -456,7 +456,7 @@ static BOOL _lackOfResources;
 
 - (BOOL) shouldHideEmailSubscription
 {
-    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || _iapHelper.subscribedToLiveUpdates || [OAAppSettings sharedManager].emailSubscribed || [self.region isKindOfClass:OACustomRegion.class];
+    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || _iapHelper.subscribedToLiveUpdates || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class];
 }
 
 - (void) updateContentIfNeeded
@@ -2789,7 +2789,7 @@ static BOOL _lackOfResources;
                          if ([email caseInsensitiveCompare:responseEmail] == NSOrderedSame)
                          {
                              [OAIAPHelper increaseFreeMapsCount:3];
-                             [OAAppSettings sharedManager].emailSubscribed = YES;
+                             [[OAAppSettings sharedManager].emailSubscribed set:YES];
                              
                              if (_displaySubscribeEmailView)
                              {

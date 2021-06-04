@@ -66,7 +66,7 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     self.bottomView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.bottomView.layer addSublayer:_horizontalLine];
     
-    _contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    _contentLocale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if (!_contentLocale)
         _contentLocale = [OAUtilities currentLang];
     

@@ -2086,7 +2086,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
-    OAAppSettings.sharedManager.gpxRouteSegment = position;
+    [OAAppSettings.sharedManager.gpxRouteSegment set:position];
     
     [[OARootViewController instance].mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
     [_routingHelper recalculateRouteDueToSettingsChange];

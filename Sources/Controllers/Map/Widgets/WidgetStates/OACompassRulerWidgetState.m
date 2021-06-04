@@ -16,7 +16,7 @@
 
 @implementation OACompassRulerWidgetState
 {
-    OAProfileBoolean *_showCompass;
+    BOOL _showCompass;
 }
 
 - (instancetype) init
@@ -41,7 +41,7 @@
 
 - (NSString *) getMenuItemId
 {
-    return [_showCompass get] ? COMPASS_CONTROL_WIDGET_STATE_SHOW : COMPASS_CONTROL_WIDGET_STATE_HIDE;
+    return _showCompass ? COMPASS_CONTROL_WIDGET_STATE_SHOW : COMPASS_CONTROL_WIDGET_STATE_HIDE;
 }
 
 - (NSArray<NSString *> *) getMenuTitles
@@ -61,7 +61,7 @@
 
 - (void) changeState:(NSString *)stateId
 {
-    [_showCompass set:[COMPASS_CONTROL_WIDGET_STATE_SHOW isEqualToString:stateId]];
+    _showCompass  = [COMPASS_CONTROL_WIDGET_STATE_SHOW isEqualToString:stateId];
 }
 
 @end

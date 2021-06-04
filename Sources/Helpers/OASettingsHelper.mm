@@ -239,7 +239,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         settingsItems[OAExportSettingsType.PROFILE] = appModeBeans;
     }
-//    settingsItems[OAExportSettingsType.GLOBAL] = @[[[OAGlobalSettingsItem alloc] init]];
+    settingsItems[OAExportSettingsType.GLOBAL] = @[[[OAGlobalSettingsItem alloc] init]];
     
     OAQuickActionRegistry *registry = OAQuickActionRegistry.sharedInstance;
     NSArray<OAQuickAction *> *actionsList = registry.getQuickActions;
@@ -552,8 +552,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             else
                 [historyItems addObject:object];
         }
-//        else if ([object isKindOfClass:OAGlobalSettingsItem.class])
-//            [result addObject:(OAGlobalSettingsItem *)object];
+        else if ([object isKindOfClass:OAGlobalSettingsItem.class])
+            [result addObject:object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)
@@ -628,6 +628,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OADestination *> *markers = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyMarkers = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyEntries = [NSMutableArray array];
+    NSMutableArray<OAGlobalSettingsItem *> *globalSettingsItems = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)
@@ -737,6 +738,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 [historyEntries addObjectsFromArray:searchHistorySettingsItem.items];
                 break;
             }
+            case EOASettingsItemTypeGlobal:
+            {
+                OAGlobalSettingsItem *globalItem = (OAGlobalSettingsItem *) item;
+                [globalSettingsItems addObject:globalItem];
+                break;
+            }
             default:
                 break;
         }
@@ -771,6 +778,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsToOperate[OAExportSettingsType.HISTORY_MARKERS] = historyMarkers;
     if (historyEntries.count > 0)
         settingsToOperate[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
+    if (globalSettingsItems.count > 0)
+        settingsToOperate[OAExportSettingsType.GLOBAL] = globalSettingsItems;
     return settingsToOperate;
 }
 

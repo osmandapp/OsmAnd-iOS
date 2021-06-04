@@ -152,9 +152,94 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-@interface OAProfileSetting : NSObject
+typedef NS_ENUM(NSInteger, EOAWikiArticleShowConstant)
+{
+    EOAWikiArticleShowConstantOn = 0,
+    EOAWikiArticleShowConstantOff,
+    EOAWikiArticleShowConstantWiFi
+};
+
+@interface OAWikiArticleShowConstant : NSObject
+
+@property (nonatomic, readonly) EOAWikiArticleShowConstant wasc;
+
++ (instancetype) withWikiArticleShowConstant:(EOAWikiArticleShowConstant)wasc;
+
++ (NSString *) toHumanString:(EOAWikiArticleShowConstant)wasc;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOAGradientScaleType)
+{
+    EOAGradientScaleTypeSpeed = 0,
+    EOAGradientScaleTypeAltitude,
+    EOAGradientScaleTypeSlope,
+    EOAGradientScaleTypeNone
+};
+
+@interface OAGradientScaleType : NSObject
+
+@property (nonatomic, readonly) EOAGradientScaleType gst;
+
++ (instancetype) withGradientScaleType:(EOAGradientScaleType)gst;
+
++ (NSString *) toHumanString:(EOAGradientScaleType)gst;
++ (NSString *) toTypeName:(EOAGradientScaleType)gst;
++ (NSString *) toColorTypeName:(EOAGradientScaleType)gst;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOAUploadVisibility)
+{
+    EOAUploadVisibilityPublic = 0,
+    EOAUploadVisibilityIdentifiable,
+    EOAUploadVisibilityTrackable,
+    EOAUploadVisibilityPrivate
+};
+
+@interface OAUploadVisibility : NSObject
+
+@property (nonatomic, readonly) EOAUploadVisibility uv;
+
++ (instancetype) withUploadVisibility:(EOAUploadVisibility)uv;
+
++ (NSString *) toTitle:(EOAUploadVisibility)uv;
++ (NSString *) toDescription:(EOAUploadVisibility)uv;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOACoordinateInputFormats)
+{
+    EOACoordinateInputFormatsDdMmMmm = 0,
+    EOACoordinateInputFormatsDdMmMmmm,
+    EOACoordinateInputFormatsDdDdddd,
+    EOACoordinateInputFormatsDdDddddd,
+    EOACoordinateInputFormatsDdMmSs
+};
+
+@interface OACoordinateInputFormats : NSObject
+
+@property (nonatomic, readonly) EOACoordinateInputFormats cif;
+
++ (instancetype) withUploadVisibility:(EOACoordinateInputFormats)cif;
+
++ (NSString *) toHumanString:(EOACoordinateInputFormats)cif;
++ (BOOL) containsThirdPart:(EOACoordinateInputFormats)cif;
++ (int) toSecondPartSymbolsCount:(EOACoordinateInputFormats)cif;
++ (int) toThirdPartSymbolsCount:(EOACoordinateInputFormats)cif;
++ (NSString *) toFirstSeparator:(EOACoordinateInputFormats)cif;
++ (NSString *) toSecondSeparator:(EOACoordinateInputFormats)cif;
+
+@end
+
+@interface OACommonPreference : NSObject
 
 @property (nonatomic, readonly) NSString *key;
+@property (nonatomic, readonly) BOOL global;
+@property (nonatomic, readonly) BOOL shared;
+
+- (id) makeGlobal;
+- (id) makeShared;
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
 - (void) resetModeToDefault:(OAApplicationMode *)mode;
@@ -165,29 +250,51 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-@interface OAProfileBoolean : OAProfileSetting
+@interface OACommonAppMode : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(OAApplicationMode *)defValue;
+
+- (OAApplicationMode *) get;
+- (OAApplicationMode *) get:(OAApplicationMode *)mode;
+- (void) set:(OAApplicationMode *)appMode;
+- (void) set:(OAApplicationMode *)appMode mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonBoolean : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue;
 
 - (BOOL) get;
-- (void) set:(BOOL)boolean;
 - (BOOL) get:(OAApplicationMode *)mode;
+- (void) set:(BOOL)boolean;
 - (void) set:(BOOL)boolean mode:(OAApplicationMode *)mode;
 
 @end
 
-@interface OAProfileInteger : OAProfileSetting
+@interface OACommonInteger : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue;
 
 - (int) get;
-- (void) set:(int)integer;
 - (int) get:(OAApplicationMode *)mode;
+- (void) set:(int)integer;
 - (void) set:(int)integer mode:(OAApplicationMode *)mode;
 
 @end
 
-@interface OAProfileString : OAProfileSetting
+@interface OACommonLong : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(long)defValue;
+
+- (long) get;
+- (long) get:(OAApplicationMode *)mode;
+- (void) set:(long)_long;
+- (void) set:(long)_long mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonString : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
 
@@ -198,18 +305,18 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-@interface OAProfileDouble : OAProfileSetting
+@interface OACommonDouble : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue;
 
 - (double) get;
-- (void) set:(double)dbl;
 - (double) get:(OAApplicationMode *)mode;
+- (void) set:(double)dbl;
 - (void) set:(double)dbl mode:(OAApplicationMode *)mode;
 
 @end
 
-@interface OAProfileStringList : OAProfileSetting
+@interface OACommonStringList : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
 
@@ -217,6 +324,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 - (NSArray<NSString *> *) get:(OAApplicationMode *)mode;
 - (void) set:(NSArray<NSString *> *)arr;
 - (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode;
+
 - (void) add:(NSString *)string;
 - (void) addUnique:(NSString *)string;
 - (void) remove:(NSString *)string;
@@ -224,7 +332,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-@interface OAProfileMapSource : OAProfileSetting
+@interface OACommonMapSource : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
 
@@ -242,69 +350,47 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
     EOATerrainTypeSlope
 };
 
-@interface OAProfileTerrain : OAProfileInteger
+@interface OACommonTerrain : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue;
 
 - (EOATerrainType) get;
-- (void) set:(EOATerrainType)autoZoomMap;
 - (EOATerrainType) get:(OAApplicationMode *)mode;
+- (void) set:(EOATerrainType)autoZoomMap;
 - (void) set:(EOATerrainType)autoZoomMap mode:(OAApplicationMode *)mode;
 
 @end
 
-@interface OAProfileAutoZoomMap : OAProfileInteger
+@interface OACommonAutoZoomMap : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
 
 - (EOAAutoZoomMap) get;
-- (void) set:(EOAAutoZoomMap)autoZoomMap;
 - (EOAAutoZoomMap) get:(OAApplicationMode *)mode;
+- (void) set:(EOAAutoZoomMap)autoZoomMap;
 - (void) set:(EOAAutoZoomMap)autoZoomMap mode:(OAApplicationMode *)mode;
 
 @end
 
-@interface OAProfileSpeedConstant : OAProfileInteger
+@interface OACommonSpeedConstant : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue;
 
 - (EOASpeedConstant) get;
-- (void) set:(EOASpeedConstant)speedConstant;
 - (EOASpeedConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOASpeedConstant)speedConstant;
 - (void) set:(EOASpeedConstant)speedConstant mode:(OAApplicationMode *)mode;
 
 @end
 
-@interface OAProfileAngularConstant : OAProfileInteger
+@interface OACommonAngularConstant : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
 
 - (EOAAngularConstant) get;
-- (void) set:(EOAAngularConstant)angularConstant;
 - (EOAAngularConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAAngularConstant)angularConstant;
 - (void) set:(EOAAngularConstant)angularConstant mode:(OAApplicationMode *)mode;
-
-@end
-
-@interface OAProfileDrivingRegion : OAProfileInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
-
-- (EOADrivingRegion) get;
-- (void) set:(EOADrivingRegion)drivingRegionConstant;
-- (EOADrivingRegion) get:(OAApplicationMode *)mode;
-- (void) set:(EOADrivingRegion)drivingRegionConstant mode:(OAApplicationMode *)mode;
-
-@end
-
-@interface OAProfileMetricSystem : OAProfileInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
-
-- (EOAMetricsConstant) get;
-- (void) set:(EOAMetricsConstant)metricsConstant;
-- (EOAMetricsConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -314,6 +400,17 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
     TWO_ACTIVE_MARKERS
 };
 
+@interface OACommonActiveMarkerConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
+
+- (EOAActiveMarkerConstant) get;
+- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant;
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
 {
     TOP_BAR_DISPLAY = 0,
@@ -321,25 +418,36 @@ typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
     NONE_DISPLAY
 };
 
-@interface OAProfileActiveMarkerConstant : OAProfileInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
-
-- (EOAActiveMarkerConstant) get;
-- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant;
-- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode;
-
-@end
-
-@interface OAProfileDistanceIndicationConstant : OAProfileInteger
+@interface OACommonDistanceIndicationConstant : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
 
 - (EOADistanceIndicationConstant) get;
-- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant;
 - (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant;
 - (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonDrivingRegion : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
+
+- (EOADrivingRegion) get;
+- (EOADrivingRegion) get:(OAApplicationMode *)mode;
+- (void) set:(EOADrivingRegion)drivingRegionConstant;
+- (void) set:(EOADrivingRegion)drivingRegionConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonMetricSystem : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
+
+- (EOAMetricsConstant) get;
+- (EOAMetricsConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAMetricsConstant)metricsConstant;
+- (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -350,15 +458,91 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
     RULER_MODE_NO_CIRCLES
 };
 
+@interface OACommonRulerWidgetMode : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue;
+
+- (EOARulerWidgetMode) get;
+- (EOARulerWidgetMode) get:(OAApplicationMode *)mode;
+- (void) set:(EOARulerWidgetMode)rulerWidgetMode;
+- (void) set:(EOARulerWidgetMode)rulerWidgetMode mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonWikiArticleShowImages : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue;
+
+- (EOAWikiArticleShowConstant) get;
+- (EOAWikiArticleShowConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow;
+- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOARateUsState)
+{
+    EOARateUsStateInitialState = 0,
+    EOARateUsStateIgnored,
+    EOARateUsStateLiked,
+    EOARateUsStateDislikedWithMessage,
+    EOARateUsStateDislikedWithoutMessage,
+    EOARateUsStateDislikedOrIgnoredAgain
+};
+
+@interface OACommonRateUsState : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOARateUsState)defValue;
+
+- (EOARateUsState) get;
+- (EOARateUsState) get:(OAApplicationMode *)mode;
+- (void) set:(EOARateUsState)rateUsState;
+- (void) set:(EOARateUsState)rateUsState mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonGradientScaleType : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAGradientScaleType)defValue;
+
+- (EOAGradientScaleType) get;
+- (EOAGradientScaleType) get:(OAApplicationMode *)mode;
+- (void) set:(EOAGradientScaleType)gradientScaleType;
+- (void) set:(EOAGradientScaleType)gradientScaleType mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonUploadVisibility : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAUploadVisibility)defValue;
+
+- (EOAUploadVisibility) get;
+- (EOAUploadVisibility) get:(OAApplicationMode *)mode;
+- (void) set:(EOAUploadVisibility)uploadVisibility;
+- (void) set:(EOAUploadVisibility)uploadVisibility mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonCoordinateInputFormats : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOACoordinateInputFormats)defValue;
+
+- (EOACoordinateInputFormats) get;
+- (EOACoordinateInputFormats) get:(OAApplicationMode *)mode;
+- (void) set:(EOACoordinateInputFormats)coordinateInputFormats;
+- (void) set:(EOACoordinateInputFormats)coordinateInputFormats mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
 @property (assign, nonatomic) BOOL settingShowMapRulet;
 
-@property (assign, nonatomic) int settingMapLanguage;
-@property (nonatomic) NSString *settingPrefMapLanguage;
+@property (nonatomic) OACommonInteger *settingMapLanguage;
+@property (nonatomic) OACommonString *settingPrefMapLanguage;
 @property (assign, nonatomic) BOOL settingMapLanguageShowLocal;
-@property (assign, nonatomic) BOOL settingMapLanguageTranslit;
+@property (nonatomic) OACommonBoolean *settingMapLanguageTranslit;
 
 @property (assign, nonatomic) BOOL shouldShowWhatsNewScreen;
 
@@ -401,223 +585,240 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
-@property (nonatomic) OAProfileInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OACommonInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (readonly, nonatomic) BOOL nightMode;
-@property (nonatomic) OAProfileMetricSystem *metricSystem;
-@property (nonatomic) OAProfileBoolean *drivingRegionAutomatic;
-@property (nonatomic) OAProfileDrivingRegion *drivingRegion;
+@property (nonatomic) OACommonMetricSystem *metricSystem;
+@property (nonatomic) OACommonBoolean *drivingRegionAutomatic;
+@property (nonatomic) OACommonDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
-@property (nonatomic) OAProfileInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
+@property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
-@property (nonatomic) OAProfileBoolean *metricSystemChangedManually;
-@property (nonatomic) OAProfileBoolean *settingAllow3DView;
+@property (nonatomic) OACommonBoolean *metricSystemChangedManually;
+@property (nonatomic) OACommonBoolean *settingAllow3DView;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
 
-@property (nonatomic) OAProfileBoolean *mapSettingShowFavorites;
-@property (nonatomic) OAProfileBoolean *mapSettingShowPoiLabel;
-@property (nonatomic) OAProfileBoolean *mapSettingShowOfflineEdits;
-@property (nonatomic) OAProfileBoolean *mapSettingShowOnlineNotes;
-@property (nonatomic) NSArray *mapSettingVisibleGpx;
-@property (nonatomic) OAProfileInteger *layerTransparencySeekbarMode; // 0 - overlay, 1 - underlay, 2 - off, 3 - undefined, 4 - overlay&underlay
+@property (nonatomic) OACommonBoolean *mapSettingShowFavorites;
+@property (nonatomic) OACommonBoolean *mapSettingShowPoiLabel;
+@property (nonatomic) OACommonBoolean *mapSettingShowOfflineEdits;
+@property (nonatomic) OACommonBoolean *mapSettingShowOnlineNotes;
+@property (nonatomic) OACommonStringList *mapSettingVisibleGpx;
+@property (nonatomic) OACommonInteger *layerTransparencySeekbarMode; // 0 - overlay, 1 - underlay, 2 - off, 3 - undefined, 4 - overlay&underlay
 - (BOOL) getOverlayOpacitySliderVisibility;
 - (BOOL) getUnderlayOpacitySliderVisibility;
 - (void) setOverlayOpacitySliderVisibility:(BOOL)visibility;
 - (void) setUnderlayOpacitySliderVisibility:(BOOL)visibility;
 
-@property (nonatomic) NSString *billingUserId;
-@property (nonatomic) NSString *billingUserName;
-@property (nonatomic) NSString *billingUserToken;
-@property (nonatomic) NSString *billingUserEmail;
-@property (nonatomic) NSString *billingUserCountry;
-@property (nonatomic) NSString *billingUserCountryDownloadName;
-@property (nonatomic, assign) BOOL billingHideUserName;
-@property (nonatomic, assign) NSTimeInterval liveUpdatesPurchaseCancelledTime;
-@property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledFirstDlgShown;
-@property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledSecondDlgShown;
-@property (nonatomic, assign) BOOL emailSubscribed;
-@property (nonatomic, assign) BOOL displayDonationSettings;
-@property (nonatomic) NSDate* lastReceiptValidationDate;
-@property (nonatomic, assign) BOOL eligibleForIntroductoryPrice;
-@property (nonatomic, assign) BOOL eligibleForSubscriptionOffer;
+@property (nonatomic) OACommonString *billingUserId;
+@property (nonatomic) OACommonString *billingUserName;
+@property (nonatomic) OACommonString *billingUserToken;
+@property (nonatomic) OACommonString *billingUserEmail;
+@property (nonatomic) OACommonString *billingUserCountry;
+@property (nonatomic) OACommonString *billingUserCountryDownloadName;
+@property (nonatomic) OACommonBoolean *billingHideUserName;
+@property (nonatomic) OACommonBoolean *billingPurchaseTokenSent;
+@property (nonatomic) OACommonString *billingPurchaseTokensSent;
+@property (nonatomic) OACommonDouble *liveUpdatesPurchaseCancelledTime;
+@property (nonatomic) OACommonBoolean *liveUpdatesPurchaseCancelledFirstDlgShown;
+@property (nonatomic) OACommonBoolean *liveUpdatesPurchaseCancelledSecondDlgShown;
+@property (nonatomic) OACommonBoolean *fullVersionPurchased;
+@property (nonatomic) OACommonBoolean *depthContoursPurchased;
+@property (nonatomic) OACommonBoolean *contourLinesPurchased;
+@property (nonatomic) OACommonBoolean *emailSubscribed;
+@property (nonatomic) OACommonBoolean *osmandProPurchased;
+@property (nonatomic) OACommonBoolean *osmandMapsPurchased;
+@property (nonatomic, assign) BOOL displayDonationSettings; //global ?
+@property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
+@property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
+@property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
 
 // Track recording settings
-@property (nonatomic) OAProfileBoolean *saveTrackToGPX;
-@property (nonatomic) OAProfileInteger *mapSettingSaveTrackInterval;
-@property (nonatomic) OAProfileDouble *saveTrackMinDistance;
-@property (nonatomic) OAProfileDouble *saveTrackPrecision;
-@property (nonatomic) OAProfileDouble *saveTrackMinSpeed;
-@property (nonatomic) OAProfileBoolean *autoSplitRecording;
+@property (nonatomic) OACommonBoolean *saveTrackToGPX;
+@property (nonatomic) OACommonInteger *mapSettingSaveTrackInterval;
+@property (nonatomic) OACommonDouble *saveTrackMinDistance;
+@property (nonatomic) OACommonDouble *saveTrackPrecision;
+@property (nonatomic) OACommonDouble *saveTrackMinSpeed;
+@property (nonatomic) OACommonBoolean *autoSplitRecording;
 
 
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
-@property (nonatomic) OAProfileInteger *mapSettingSaveTrackIntervalGlobal;
-@property (nonatomic) OAProfileBoolean *mapSettingSaveTrackIntervalApproved;
 
-@property (assign, nonatomic) BOOL mapSettingShowRecordingTrack;
+@property (nonatomic) OACommonBoolean *mapSettingSaveGlobalTrackToGpx;
+@property (nonatomic) OACommonInteger *mapSettingSaveTrackIntervalGlobal;
+@property (nonatomic) OACommonBoolean *mapSettingSaveTrackIntervalApproved;
+@property (nonatomic) OACommonBoolean *mapSettingShowRecordingTrack;
+@property (nonatomic) OACommonBoolean *mapSettingShowTripRecordingStartDialog;
 
 @property (nonatomic) NSString* mapSettingActiveRouteFilePath;
 @property (nonatomic) int mapSettingActiveRouteVariantType;
 
-@property (nonatomic) OAProfileString *selectedPoiFilters;
+@property (nonatomic) OACommonString *selectedPoiFilters;
 
-@property (nonatomic) NSInteger discountId;
-@property (nonatomic) NSInteger discountShowNumberOfStarts;
-@property (nonatomic) NSInteger discountTotalShow;
-@property (nonatomic) double discountShowDatetime;
+@property (nonatomic) OACommonInteger *discountId;
+@property (nonatomic) OACommonInteger *discountShowNumberOfStarts;
+@property (nonatomic) OACommonInteger *discountTotalShow;
+@property (nonatomic) OACommonDouble *discountShowDatetime;
 
 @property (nonatomic) unsigned long long lastSearchedCity;
 @property (nonatomic) NSString* lastSearchedCityName;
 @property (nonatomic) CLLocation *lastSearchedPoint;
 
-@property (assign, nonatomic) BOOL settingDoNotShowPromotions;
-@property (assign, nonatomic) BOOL settingUseAnalytics;
-@property (nonatomic) OAProfileInteger *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
+@property (nonatomic) OACommonBoolean *settingDoNotShowPromotions;
+@property (nonatomic) OACommonBoolean *settingUseAnalytics;
+@property (nonatomic) OACommonInteger *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
 
-@property (assign, nonatomic) BOOL liveUpdatesPurchased;
-@property (assign, nonatomic) BOOL settingOsmAndLiveEnabled;
+@property (nonatomic) OACommonBoolean *liveUpdatesPurchased;
+@property (nonatomic) OACommonBoolean *settingOsmAndLiveEnabled;
+@property (nonatomic) OACommonInteger *liveUpdatesRetries;
 
-- (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
-- (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
+- (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
+- (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 
 @property (nonatomic) NSArray<NSString *> *appModeBeanPrefsIds;
 @property (nonatomic) OAApplicationMode* applicationMode;
-@property (nonatomic) NSString* availableApplicationModes;
-@property (nonatomic) OAApplicationMode* defaultApplicationMode;
+@property (nonatomic) OACommonString* availableApplicationModes;
+@property (nonatomic) OACommonAppMode* defaultApplicationMode;
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
-@property (nonatomic) OAProfileInteger *rotateMap;
+@property (nonatomic) OACommonInteger *rotateMap;
 
 // Application mode related settings
-@property (nonatomic) OAProfileString *profileIconName;
-@property (nonatomic) OAProfileInteger *profileIconColor;
-@property (nonatomic) OAProfileString *userProfileName;
-@property (nonatomic) OAProfileString *parentAppMode;
-@property (nonatomic) OAProfileInteger *navigationIcon;
-@property (nonatomic) OAProfileInteger *locationIcon;
-@property (nonatomic) OAProfileInteger *appModeOrder;
+@property (nonatomic) OACommonString *profileIconName;
+@property (nonatomic) OACommonInteger *profileIconColor;
+@property (nonatomic) OACommonString *userProfileName;
+@property (nonatomic) OACommonString *parentAppMode;
+@property (nonatomic) OACommonInteger *navigationIcon;
+@property (nonatomic) OACommonInteger *locationIcon;
+@property (nonatomic) OACommonInteger *appModeOrder;
 
-@property (nonatomic) OAProfileDouble *defaultSpeed;
-@property (nonatomic) OAProfileDouble *minSpeed;
-@property (nonatomic) OAProfileDouble *maxSpeed;
-@property (nonatomic) OAProfileDouble *routeStraightAngle;
-@property (nonatomic) OAProfileInteger *routerService;
+@property (nonatomic) OACommonDouble *defaultSpeed;
+@property (nonatomic) OACommonDouble *minSpeed;
+@property (nonatomic) OACommonDouble *maxSpeed;
+@property (nonatomic) OACommonDouble *routeStraightAngle;
+@property (nonatomic) OACommonInteger *routerService;
 
-@property (nonatomic) OAProfileString *routingProfile;
+@property (nonatomic) OACommonString *routingProfile;
 
-@property (nonatomic) NSString *customAppModes;
+@property (nonatomic) OACommonString *customAppModes;
 
-@property (nonatomic) OAProfileDouble *mapDensity;
-@property (nonatomic) OAProfileDouble *textSize;
+@property (nonatomic) OACommonDouble *mapDensity;
+@property (nonatomic) OACommonDouble *textSize;
 
-@property (nonatomic) OAProfileString *mapInfoControls;
-@property (nonatomic) NSSet<NSString *> *plugins;
+@property (nonatomic) OACommonString *mapInfoControls;
+@property (nonatomic) OACommonStringList *plugins;
 @property (assign, nonatomic) BOOL firstMapIsDownloaded;
 
-@property (nonatomic) OAProfileString *renderer;
+@property (nonatomic) OACommonString *renderer;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
-@property (nonatomic) OAProfileBoolean *fastRouteMode;
+@property (nonatomic) OACommonBoolean *fastRouteMode;
 @property (assign, nonatomic) BOOL disableComplexRouting;
-@property (assign, nonatomic) BOOL followTheRoute;
-@property (nonatomic) NSString *followTheGpxRoute;
-@property (nonatomic) OAProfileBoolean *enableTimeConditionalRouting;
-@property (nonatomic) OAProfileDouble *arrivalDistanceFactor;
-@property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
-@property (nonatomic) OAProfileBoolean *disableOffrouteRecalc;
-@property (nonatomic) OAProfileBoolean *disableWrongDirectionRecalc;
-@property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
-@property (assign, nonatomic) BOOL gpxCalculateRtept;
-@property (assign, nonatomic) BOOL gpxRouteCalc;
-@property (nonatomic) NSInteger gpxRouteSegment;
-@property (nonatomic) OAProfileBoolean *voiceMute;
-@property (nonatomic) OAProfileString *voiceProvider;
-@property (nonatomic) OAProfileBoolean *interruptMusic;
-@property (nonatomic) OAProfileBoolean *snapToRoad;
-@property (nonatomic) OAProfileInteger *autoFollowRoute;
-@property (nonatomic) OAProfileBoolean *autoZoomMap;
-@property (nonatomic) OAProfileAutoZoomMap *autoZoomMapScale;
-@property (nonatomic) OAProfileInteger *keepInforming;
-@property (nonatomic) OAProfileSpeedConstant *speedSystem;
-@property (nonatomic) OAProfileAngularConstant *angularUnits;
-@property (nonatomic) OAProfileDouble *speedLimitExceedKmh;
-@property (nonatomic) OAProfileDouble *switchMapDirectionToCompass;
-@property (nonatomic) OAProfileDouble *routeRecalculationDistance;
+@property (nonatomic) OACommonBoolean *followTheRoute;
+@property (nonatomic) OACommonString *followTheGpxRoute;
+@property (nonatomic) OACommonBoolean *enableTimeConditionalRouting;
+@property (nonatomic) OACommonDouble *arrivalDistanceFactor;
+@property (nonatomic) OACommonBoolean *useIntermediatePointsNavigation;
+@property (nonatomic) OACommonBoolean *disableOffrouteRecalc;
+@property (nonatomic) OACommonBoolean *disableWrongDirectionRecalc;
+@property (nonatomic) OACommonBoolean *gpxRouteCalcOsmandParts;
+@property (nonatomic) OACommonBoolean *gpxCalculateRtept;
+@property (nonatomic) OACommonBoolean *gpxRouteCalc;
+@property (nonatomic) OACommonInteger *gpxRouteSegment;
+@property (nonatomic) OACommonBoolean *showStartFinishIcons;
+@property (nonatomic) OACommonBoolean *voiceMute;
+@property (nonatomic) OACommonString *voiceProvider;
+@property (nonatomic) OACommonBoolean *interruptMusic;
+@property (nonatomic) OACommonBoolean *snapToRoad;
+@property (nonatomic) OACommonInteger *autoFollowRoute;
+@property (nonatomic) OACommonBoolean *autoZoomMap;
+@property (nonatomic) OACommonAutoZoomMap *autoZoomMapScale;
+@property (nonatomic) OACommonInteger *keepInforming;
+@property (nonatomic) OACommonSpeedConstant *speedSystem;
+@property (nonatomic) OACommonAngularConstant *angularUnits;
+@property (nonatomic) OACommonDouble *speedLimitExceedKmh;
+@property (nonatomic) OACommonDouble *switchMapDirectionToCompass;
+@property (nonatomic) OACommonDouble *routeRecalculationDistance;
 
-@property (nonatomic) OAProfileBoolean *showScreenAlerts;
-@property (nonatomic) OAProfileBoolean *showRoutingAlarms;
-@property (nonatomic) OAProfileBoolean *showTrafficWarnings;
-@property (nonatomic) OAProfileBoolean *showPedestrian;
-@property (nonatomic) OAProfileBoolean *showCameras;
-@property (nonatomic) OAProfileBoolean *showTunnels;
-@property (nonatomic) OAProfileBoolean *showLanes;
-@property (nonatomic) OAProfileBoolean *showArrivalTime;
-@property (nonatomic) OAProfileBoolean *showIntermediateArrivalTime;
-@property (nonatomic) OAProfileBoolean *showRelativeBearing;
-@property (nonatomic) OAProfileBoolean *showCompassControlRuler;
-@property (nonatomic) OAProfileBoolean *showCoordinatesWidget;
+@property (nonatomic) OACommonBoolean *showScreenAlerts;
+@property (nonatomic) OACommonBoolean *showRoutingAlarms;
+@property (nonatomic) OACommonBoolean *showTrafficWarnings;
+@property (nonatomic) OACommonBoolean *showPedestrian;
+@property (nonatomic) OACommonBoolean *showCameras;
+@property (nonatomic) OACommonBoolean *showTunnels;
+@property (nonatomic) OACommonBoolean *showLanes;
+@property (nonatomic) OACommonBoolean *showArrivalTime;
+@property (nonatomic) OACommonBoolean *showIntermediateArrivalTime;
+@property (nonatomic) OACommonBoolean *showRelativeBearing;
+@property (nonatomic) OACommonBoolean *showCompassControlRuler;
+@property (nonatomic) OACommonBoolean *showCoordinatesWidget;
 @property (nonatomic) NSArray<OAAvoidRoadInfo *> *impassableRoads;
 
-@property (nonatomic) OAProfileBoolean *speakStreetNames;
-@property (nonatomic) OAProfileBoolean *speakTrafficWarnings;
-@property (nonatomic) OAProfileBoolean *speakPedestrian;
-@property (nonatomic) OAProfileBoolean *speakSpeedLimit;
-@property (nonatomic) OAProfileBoolean *speakCameras;
-@property (nonatomic) OAProfileBoolean *speakTunnels;
-@property (nonatomic) OAProfileBoolean *announceNearbyFavorites;
-@property (nonatomic) OAProfileBoolean *announceNearbyPoi;
+@property (nonatomic) OACommonBoolean *speakStreetNames;
+@property (nonatomic) OACommonBoolean *speakTrafficWarnings;
+@property (nonatomic) OACommonBoolean *speakPedestrian;
+@property (nonatomic) OACommonBoolean *speakSpeedLimit;
+@property (nonatomic) OACommonBoolean *speakCameras;
+@property (nonatomic) OACommonBoolean *speakTunnels;
+@property (nonatomic) OACommonBoolean *announceNearbyFavorites;
+@property (nonatomic) OACommonBoolean *announceNearbyPoi;
 
-@property (assign, nonatomic) BOOL showGpxWpt;
-@property (nonatomic) OAProfileBoolean *announceWpt;
-@property (nonatomic) OAProfileBoolean *showNearbyFavorites;
-@property (nonatomic) OAProfileBoolean *showNearbyPoi;
+@property (nonatomic) OACommonBoolean *showGpxWpt;
+@property (nonatomic) OACommonBoolean *announceWpt;
+@property (nonatomic) OACommonBoolean *showNearbyFavorites;
+@property (nonatomic) OACommonBoolean *showNearbyPoi;
 
-@property (nonatomic) OAProfileBoolean *transparentMapTheme;
-@property (nonatomic) OAProfileBoolean *showStreetName;
-@property (nonatomic) OAProfileBoolean *centerPositionOnMap;
-@property (nonatomic) OAProfileBoolean *showDistanceRuler;
+@property (nonatomic) OACommonBoolean *transparentMapTheme;
+@property (nonatomic) OACommonBoolean *showStreetName;
+@property (nonatomic) OACommonBoolean *centerPositionOnMap;
+@property (nonatomic) OACommonBoolean *showDistanceRuler;
 
 @property (assign, nonatomic) BOOL simulateRouting;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
-@property (nonatomic) EOARulerWidgetMode rulerMode;
+@property (nonatomic) OACommonRulerWidgetMode *rulerMode;
 
-@property (nonatomic) OAProfileStringList *poiFiltersOrder;
-@property (nonatomic) OAProfileStringList *inactivePoiFilters;
+@property (nonatomic) OACommonStringList *poiFiltersOrder;
+@property (nonatomic) OACommonStringList *inactivePoiFilters;
 
 // OSM Editing
-@property (nonatomic) NSString *osmUserName;
-@property (nonatomic) NSString *osmUserPassword;
-@property (nonatomic) BOOL offlineEditing;
+@property (nonatomic) OACommonString *osmUserName;
+@property (nonatomic) OACommonString *osmUserPassword;
+@property (nonatomic) OACommonString *osmUserAccessToken;
+@property (nonatomic) OACommonString *osmUserAccessTokenSecret;
+@property (nonatomic) OACommonString *oprAccessToken;
+@property (nonatomic) OACommonString *oprUsername;
+@property (nonatomic) OACommonString *oprBlockchainName;
+@property (nonatomic) OACommonBoolean *oprUseDevUrl;
+@property (nonatomic) OACommonBoolean *offlineEditing;
+@property (nonatomic) OACommonBoolean *osmUseDevUrl;
 
 // Mapillary
-@property (nonatomic) BOOL onlinePhotosRowCollapsed;
-@property (nonatomic) BOOL mapillaryFirstDialogShown;
+@property (nonatomic) OACommonBoolean *onlinePhotosRowCollapsed;
+@property (nonatomic) OACommonBoolean *mapillaryFirstDialogShown;
 
-@property (nonatomic) BOOL useMapillaryFilter;
-@property (nonatomic) NSString *mapillaryFilterUserKey;
-@property (nonatomic) NSString *mapillaryFilterUserName;
-@property (nonatomic) double mapillaryFilterStartDate;
-@property (nonatomic) double mapillaryFilterEndDate;
-@property (nonatomic) BOOL mapillaryFilterPano;
+@property (nonatomic) OACommonBoolean *useMapillaryFilter;
+@property (nonatomic) OACommonString *mapillaryFilterUserKey;
+@property (nonatomic) OACommonString *mapillaryFilterUserName;
+@property (nonatomic) OACommonDouble *mapillaryFilterStartDate;
+@property (nonatomic) OACommonDouble *mapillaryFilterEndDate;
+@property (nonatomic) OACommonBoolean *mapillaryFilterPano;
 
 // Quick Action
-@property (nonatomic) OAProfileBoolean *quickActionIsOn;
-@property (nonatomic) NSString *quickActionsList;
+@property (nonatomic) OACommonBoolean *quickActionIsOn;
+@property (nonatomic) OACommonString *quickActionsList;
+@property (nonatomic) OACommonBoolean *isQuickActionTutorialShown;
 
-@property (nonatomic, readonly) OAProfileDouble *quickActionLandscapeX;
-@property (nonatomic, readonly) OAProfileDouble *quickActionLandscapeY;
-@property (nonatomic, readonly) OAProfileDouble *quickActionPortraitX;
-@property (nonatomic, readonly) OAProfileDouble *quickActionPortraitY;
+@property (nonatomic, readonly) OACommonDouble *quickActionLandscapeX;
+@property (nonatomic, readonly) OACommonDouble *quickActionLandscapeY;
+@property (nonatomic, readonly) OACommonDouble *quickActionPortraitX;
+@property (nonatomic, readonly) OACommonDouble *quickActionPortraitY;
 
 // Contour Lines
-@property (nonatomic) OAProfileString *contourLinesZoom;
+@property (nonatomic) OACommonString *contourLinesZoom;
 
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
-
-- (OAProfileSetting *) getSettingById:(NSString *)stringId;
 
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
@@ -649,19 +850,153 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 - (NSSet<NSString *> *) getCustomAppModesKeys;
 
-- (void) registerPreference:(OAProfileSetting *)pref forKey:(NSString *)key;
-- (NSMapTable<NSString *, OAProfileSetting *> *) getRegisteredSettings;
-- (NSMapTable<NSString *, NSString *> *) getGlobalSettings;
-- (void) resetPreferencesForProfile:(OAApplicationMode *)appMode;
+- (NSMapTable<NSString *, OACommonPreference *> *)getPreferences:(BOOL)global;
+- (OACommonPreference *)getGlobalPreference:(NSString *)key;
+- (void)setGlobalPreference:(NSString *)value key:(NSString *)key;
+- (OACommonPreference *)getProfilePreference:(NSString *)key;
+- (void)setProfilePreference:(NSString *)value key:(NSString *)key;
+
+- (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences;
+- (OACommonPreference *)getPreferenceByKey:(NSString *)key;
+- (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
+- (void)resetPreferences:(OAApplicationMode *)appMode;
 
 - (void) setupAppMode;
 
 // Direction Appearance
 
-@property (nonatomic) OAProfileActiveMarkerConstant* activeMarkers;
-@property (nonatomic) OAProfileBoolean *distanceIndicationVisibility;
-@property (nonatomic) OAProfileDistanceIndicationConstant *distanceIndication;
-@property (nonatomic) OAProfileBoolean *arrowsOnMap;
-@property (nonatomic) OAProfileBoolean *directionLines;
+@property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;
+@property (nonatomic) OACommonBoolean *distanceIndicationVisibility;
+@property (nonatomic) OACommonDistanceIndicationConstant *distanceIndication;
+@property (nonatomic) OACommonBoolean *arrowsOnMap;
+@property (nonatomic) OACommonBoolean *directionLines;
+
+// global
+
+@property (nonatomic) OACommonBoolean *wikiArticleShowImagesAsked;
+@property (nonatomic) OACommonWikiArticleShowImages *wikivoyageShowImgs;
+
+@property (nonatomic) OACommonBoolean *coordsInputUseRightSide;
+@property (nonatomic) OACommonCoordinateInputFormats *coordsInputFormat;
+@property (nonatomic) OACommonBoolean *coordsInputUseOsmandKeyboard;
+@property (nonatomic) OACommonBoolean *coordsInputTwoDigitsLongitude;
+
+@property (nonatomic) OACommonBoolean *shouldShowDashboardOnStart;
+@property (nonatomic) OACommonBoolean *showDashboardOnMapScreen;
+@property (nonatomic) OACommonBoolean *showOsmandWelcomeScreen;
+@property (nonatomic) OACommonBoolean *showCardToChooseDrawer;
+
+@property (nonatomic) OACommonString *apiNavDrawerItemsJson;
+@property (nonatomic) OACommonString *apiConnectedAppsJson;
+
+@property (nonatomic) OACommonInteger *numberOfStartsFirstXmasShown;
+@property (nonatomic) OACommonString *lastFavCategoryEntered;
+@property (nonatomic) OACommonBoolean *useLastApplicationModeByDefault;
+@property (nonatomic) OACommonString *lastUsedApplicationMode;
+@property (nonatomic) OACommonAppMode * lastRouteApplicationMode;
+
+@property (nonatomic) OACommonString *onlineRoutingEngines;
+
+@property (nonatomic) OACommonBoolean *doNotShowStartupMessages;
+@property (nonatomic) OACommonBoolean *showDownloadMapDialog;
+
+@property (nonatomic) OACommonBoolean *sendAnonymousMapDownloadsData;
+@property (nonatomic) OACommonBoolean *sendAnonymousAppUsageData;
+@property (nonatomic) OACommonBoolean *sendAnonymousDataRequestProcessed;
+@property (nonatomic) OACommonInteger *sendAnonymousDataRequestCount;
+@property (nonatomic) OACommonInteger *sendAnonymousDataLastRequestNs;
+
+@property (nonatomic) OACommonBoolean *webglSupported;
+
+@property (nonatomic) OACommonString *osmUserDisplayName;
+@property (nonatomic) OACommonUploadVisibility *osmUploadVisibility;
+
+@property (nonatomic) OACommonBoolean *inappsRead;
+
+@property (nonatomic) OACommonString *backupUserEmail;
+@property (nonatomic) OACommonString *backupUserId;
+@property (nonatomic) OACommonString *backupDeviceId;
+@property (nonatomic) OACommonString *backupNativeDeviceId;
+@property (nonatomic) OACommonString *backupAccessToken;
+@property (nonatomic) OACommonString *backupAccessTokenUpdateTime;
+
+@property (nonatomic) OACommonLong *favoritesLastUploadedTime;
+@property (nonatomic) OACommonLong *backupLastUploadedTime;
+
+@property (nonatomic) OACommonString *userOsmBugName;
+
+@property (nonatomic) OACommonInteger *delayToStartNavigation;
+
+@property (nonatomic) OACommonBoolean *enableProxy;
+@property (nonatomic) OACommonString *proxyHost;
+@property (nonatomic) OACommonInteger *proxyPort;
+//@property (nonatomic) OACommonString *userAndroidId; //need ?
+
+@property (nonatomic) OACommonBoolean *speedCamerasUninstalled;
+@property (nonatomic) OACommonBoolean *speedCamerasAlertShowed;
+
+@property (nonatomic) OACommonLong *lastUpdatesCardRefresh;
+
+@property (nonatomic) OACommonInteger *currentTrackColor;
+@property (nonatomic) OACommonGradientScaleType *currentTrackColorization;
+@property (nonatomic) OACommonString *currentTrackSpeedGradientPalette;
+@property (nonatomic) OACommonString *currentTrackAltitudeGradientPalette;
+@property (nonatomic) OACommonString *currentTrackSlopeGradientPalette;
+@property (nonatomic) OACommonString *currentTrackWidth;
+@property (nonatomic) OACommonBoolean *currentTrackShowArrows;
+@property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
+@property (nonatomic) OACommonStringList *customTrackColors;
+
+@property (nonatomic) OACommonString *gpsStatusApp;
+
+@property (nonatomic) OACommonBoolean *debugRenderingInfo;
+
+@property (nonatomic) OACommonInteger *levelToSwitchVectorRaster;
+
+//@property (nonatomic) OACommonInteger *voicePromptDelay0;
+//@property (nonatomic) OACommonInteger *voicePromptDelay3;
+//@property (nonatomic) OACommonInteger *voicePromptDelay5;
+
+@property (nonatomic) OACommonBoolean *displayTtsUtterance;
+
+@property (nonatomic) OACommonString *mapOverlayPrevious;
+@property (nonatomic) OACommonString *mapUnderlayPrevious;
+@property (nonatomic) OACommonString *previousInstalledVersion;
+@property (nonatomic) OACommonBoolean *shouldShowFreeVersionBanner;
+
+@property (nonatomic) OACommonBoolean *routeMapMarkersStartMyLoc;
+@property (nonatomic) OACommonBoolean *routeMapMarkersRoundTrip;
+
+@property (nonatomic) OACommonLong *osmandUsageSpace;
+
+@property (nonatomic) OACommonString *lastSelectedGpxTrackForNewPoint;
+
+@property (nonatomic) OACommonStringList *customRouteLineColors;
+
+@property (nonatomic) OACommonBoolean *mapActivityEnabled;
+
+@property (nonatomic) OACommonBoolean *safeMode;
+@property (nonatomic) OACommonBoolean *nativeRenderingFailed;
+
+@property (nonatomic) OACommonBoolean *useOpenglRender;
+@property (nonatomic) OACommonBoolean *openglRenderFailed;
+
+@property (nonatomic) OACommonString *contributionInstallAppDate;
+
+@property (nonatomic) OACommonString *selectedTravelBook;
+
+@property (nonatomic) OACommonLong *agpsDataLastTimeDownloaded;
+
+@property (nonatomic) OACommonInteger *searchTab;
+@property (nonatomic) OACommonInteger *favoritesTab;
+
+@property (nonatomic) OACommonBoolean *fluorescentOverlays;
+
+@property (nonatomic) OACommonInteger *numberOfFreeDownloads;
+
+@property (nonatomic) OACommonLong *lastDisplayTime;
+@property (nonatomic) OACommonLong *lastCheckedUpdates;
+@property (nonatomic) OACommonInteger *numberOfAppStartsOnDislikeMoment;
+@property (nonatomic) OACommonRateUsState *rateUsState;
 
 @end

@@ -680,7 +680,7 @@
     OACollapsableCardsView *cardView = [[OACollapsableCardsView alloc] init];
     cardView.delegate = self;
     nearbyImagesRowInfo.collapsable = YES;
-    nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed;
+    nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed.get;
     nearbyImagesRowInfo.collapsableView = cardView;
     nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
     [_rows addObject:nearbyImagesRowInfo];

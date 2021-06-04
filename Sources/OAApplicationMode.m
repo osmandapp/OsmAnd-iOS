@@ -227,7 +227,7 @@ static OAApplicationMode *_SKI;
                                                   withHandler:@selector(onAvailableAppModesChanged)
                                                    andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
         }
-        NSString *available = settings.availableApplicationModes;
+        NSString *available = settings.availableApplicationModes.get;
         _cachedFilteredValues = [NSMutableArray array];
         for (OAApplicationMode *v in _values)
             if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
@@ -549,7 +549,7 @@ static OAApplicationMode *_SKI;
 + (void) initCustomModes
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if (settings.customAppModes.length == 0)
+    if (settings.customAppModes.get.length == 0)
         return;
     
     for (NSString *appModeKey in [settings getCustomAppModesKeys])
@@ -596,8 +596,8 @@ static OAApplicationMode *_SKI;
             [res appendString:@","];
     }];
     
-    if (![res isEqualToString:settings.customAppModes])
-        settings.customAppModes = res;
+    if (![res isEqualToString:settings.customAppModes.get])
+        [settings.customAppModes set:res];
 }
 
 + (NSArray<OAApplicationMode *> *) getCustomAppModes
@@ -693,7 +693,8 @@ static OAApplicationMode *_SKI;
             [str appendString:m.stringKey];
             [str appendString:@","];
         }
-        [settings setAvailableApplicationModes:str];
+        [settings.availableApplicationModes set:str];
+        [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
 }
 

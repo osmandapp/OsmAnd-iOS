@@ -74,7 +74,7 @@ static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/
     if (!_anonymous)
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        NSString *authStr = [NSString stringWithFormat:@"%@:%@", settings.osmUserName, settings.osmUserPassword];
+        NSString *authStr = [NSString stringWithFormat:@"%@:%@", settings.osmUserName.get, settings.osmUserPassword.get];
         NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
         NSString *authValue = [NSString stringWithFormat: @"Basic %@", [authData base64EncodedStringWithOptions:0]];
         [request setValue:authValue forHTTPHeaderField:@"Authorization"];
@@ -108,8 +108,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         else
         {
             OAAppSettings *settings = [OAAppSettings sharedManager];
-            NSURLCredential *credential = [NSURLCredential credentialWithUser:settings.osmUserName
-                                                                     password:settings.osmUserPassword
+            NSURLCredential *credential = [NSURLCredential credentialWithUser:settings.osmUserName.get
+                                                                     password:settings.osmUserPassword.get
                                                                   persistence:NSURLCredentialPersistenceForSession];
             completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
         }

@@ -72,7 +72,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double _mapScaleUnrounded;
     NSTimeInterval _cachedTimestamp;
     
-    OAProfileDouble *_mapDensity;
+    OACommonDouble *_mapDensity;
     double _cachedMapDensity;
     EOAMetricsConstant _cacheMetricSystem;
     EOARulerWidgetMode _cachedRulerMode;
@@ -233,8 +233,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         CGPoint circleCenterPoint;
         [_mapViewController.mapView convert:&circleCenterPos31 toScreen:&circleCenterPoint checkOffScreen:YES];
         
-        EOARulerWidgetMode mode = _settings.rulerMode;
-        BOOL showCompass = [_settings.showCompassControlRuler get] && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
+        EOARulerWidgetMode mode = _settings.rulerMode.get;
+        BOOL showCompass = _settings.showCompassControlRuler && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
         
         _imageView.center = CGPointMake(self.frame.size.width * 0.5,
                                         self.frame.size.height * 0.5 * _mapViewController.mapView.viewportYScale);
@@ -798,7 +798,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         if (centerChanged)
             [self changeCenter];
         
-        BOOL modeChanged = _cachedRulerMode != _settings.rulerMode;
+        BOOL modeChanged = _cachedRulerMode != _settings.rulerMode.get;
         if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged)
         {
             _cachedMapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
@@ -826,7 +826,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
                              || _cachedMapZoom != mapZoom
                              || modeChanged);
             
-            BOOL compassVisible = [_settings.showCompassControlRuler get] && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
+            BOOL compassVisible = _settings.showCompassControlRuler && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
             double heading = _app.locationServices.lastKnownHeading;
             BOOL headingChanged = abs(int(_cachedHeading) - int(heading)) >= ARROW_ROTATION_UPDATING_THRESHOLD;
             BOOL shouldUpdateCompass = compassVisible && headingChanged;
@@ -845,7 +845,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             if ((mapMoved || shouldUpdateCompass) && !wasUpdatedRecently )
                 [self setNeedsDisplay];
         }
-        _cachedRulerMode = _settings.rulerMode;
+        _cachedRulerMode = _settings.rulerMode.get;
     }
     [self updateVisibility:visible];
     return YES;

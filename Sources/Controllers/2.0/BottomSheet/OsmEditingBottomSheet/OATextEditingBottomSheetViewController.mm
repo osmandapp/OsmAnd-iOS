@@ -118,12 +118,12 @@
     [cell.inputField resignFirstResponder];
     switch (_inputType) {
         case USERNAME_INPUT:
-            [settings setOsmUserName:cell.inputField.text];
+            [settings.osmUserName set:cell.inputField.text];
             [vwController.messageDelegate refreshData];
             [vwController dismiss];
             break;
         case PASSWORD_INPUT:
-            [settings setOsmUserPassword:cell.inputField.text];
+            [settings.osmUserPassword set:cell.inputField.text];
             [vwController.messageDelegate refreshData];
             [vwController dismiss];
             break;

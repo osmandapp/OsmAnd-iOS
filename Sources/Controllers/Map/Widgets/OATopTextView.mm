@@ -466,8 +466,8 @@
             road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
             if (road)
             {
-                string lang = [_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage].UTF8String : "";
-                bool transliterate = [_settings settingMapLanguageTranslit];
+                string lang = _settings.settingPrefMapLanguage.get ? _settings.settingPrefMapLanguage.get.UTF8String : "";
+                bool transliterate = _settings.settingMapLanguageTranslit.get;
 
                 string rStreetName = road->getName(lang, transliterate);
                 string rRefName = road->getRef(lang, transliterate, road->bearingVsRouteDirection(lastKnownLocation.course));

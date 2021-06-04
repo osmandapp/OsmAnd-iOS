@@ -595,7 +595,7 @@
     
     _limitCounter = _searchLimit;
     
-    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     
     if (_radius == 0.0)
     {
@@ -680,7 +680,7 @@
         
         _limitCounter = _searchLimit;
         
-        _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+        _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         
         const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
         
@@ -1118,7 +1118,7 @@
 
     if (names.count == 0)
     {
-        NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+        NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         NSString *transliterated = type.nameLocalized && type.nameLocalized.length > 0 ? OsmAnd::ICU::transliterateToLatin(QString::fromNSString(type.nameLocalized)).toNSString() : @"";
         [names setObject:transliterated forKey:@""];
         [names setObject:type.nameLocalized forKey:lang ? lang : @""];
@@ -1227,8 +1227,8 @@
 
 + (NSString *)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(QString)nativeName names:(NSMutableDictionary *)names
 {
-    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage;
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
 
     const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString::null);
     QString nameLocalized;

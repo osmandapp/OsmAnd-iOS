@@ -104,9 +104,9 @@
 
 - (void) copyRegisteredPreferences
 {
-    for (NSString *key in _settings.getRegisteredSettings)
+    for (NSString *key in [_settings getPreferences:NO].keyEnumerator)
     {
-        OAProfileSetting *setting = [_settings.getRegisteredSettings objectForKey:key];
+        OACommonPreference *setting = [_settings getPreferenceByKey:key];
         if (setting)
             [setting copyValueFromAppMode:_sourceAppMode targetAppMode:_targetAppMode];
     }
@@ -122,12 +122,12 @@
         {
             if (p.type == RoutingParameterType::BOOLEAN)
             {
-                OAProfileBoolean *boolSetting = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
+                OACommonBoolean *boolSetting = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
                 [boolSetting set:[boolSetting get:_sourceAppMode] mode:_targetAppMode];
             }
             else
             {
-                OAProfileString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                OACommonString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
                 [stringSetting set:[stringSetting get:_sourceAppMode] mode:_targetAppMode];
             }
         }

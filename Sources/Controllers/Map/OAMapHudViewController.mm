@@ -601,9 +601,9 @@
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OAProfileSetting *obj = notification.object;
-    OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
-    OAProfileBoolean *transparentMapTheme = [OAAppSettings sharedManager].transparentMapTheme;
+    OACommonPreference *obj = notification.object;
+    OACommonInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
+    OACommonBoolean *transparentMapTheme = [OAAppSettings sharedManager].transparentMapTheme;
     if (obj)
     {
         if (obj == rotateMap)
@@ -657,7 +657,7 @@
 
 - (void) updateCompassButton
 {
-    OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
+    OACommonInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     BOOL showCompass = [self shouldShowCompass];
     if ([rotateMap get] == ROTATE_MAP_NONE)

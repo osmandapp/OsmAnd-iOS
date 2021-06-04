@@ -158,7 +158,7 @@
 "sett_arr_map" = "Harita merkezi";
 "sett_lang_local" = "Yerel";
 "prch_nau_q2_wifi" = "İndirme %@ WiFi ağ üzerinden gerektirir.";
-"prch_nau_q3" = "Daha sonra haritalar ve kaynaklar yükleyebilir.";
+"prch_nau_q3" = "Daha sonra Haritalar & Kaynaklar aracılığıyla kurabilirsiniz.";
 "proceed_q" = "Devam edilsin mi?";
 "download" = "İndir";
 "nothanks" = "Hayır, teşekkürler";
@@ -166,7 +166,7 @@
 "prch_failed" = "Bir satın alma \"%@\" başarısız oldu";
 "prch_items_failed" = "Ürün (ler) restore. Lütfen yeniden deneyin.";
 // Resources
-"res_mapsres" = "Haritalar ve kaynakları";
+"res_mapsres" = "Haritalar & Kaynaklar";
 "download_tab_local" = "Yerel";
 "res_banner_free_maps_title" = "%d ücretsiz haritalar var!";
 "res_banner_free_maps_desc" = "%d güncelleştirmeler olmadan ücretsiz haritalar indirebilir miyim";
@@ -256,7 +256,7 @@
 "alert_inet_needed" = "Bu eylemi gerçekleştirmek için internet bağlantısı gereklidir. Lütfen internet bağlantınızı gözden geçirin.";
 // Context menu
 "ctx_mnu_edit_fav" = "Sık kullanılanı düzenle";
-"ctx_mnu_add_fav" = "Sık kullanılan ekle";
+"ctx_mnu_add_fav" = "Sık kullanılanlara ekle";
 "ctx_mnu_share" = "Paylaş";
 "ctx_mnu_direction" = "Harita işaretleyici";
 // Location Services
@@ -2054,7 +2054,7 @@
 "icon" = "Simge";
 "select_group" = "Grup seç";
 "name_and_descr" = "Ad ve açıklama";
-"add_favorite" = "Sık kullanılan ekle";
+"add_favorite" = "Sık kullanılanlara ekle";
 "fav_points_not_exist" = "Sık kullanılanlara eklenen nokta yok";
 "replace_favorite_confirmation" = "Sık kullanılanlardan %@\'ı yenisiyle değiştirmek istediğinizden emin misiniz\?";
 "group_name" = "Grup adı";
@@ -2086,3 +2086,5 @@
 "shared_string_enable" = "Etkinleştir";
 "search_poi_types_descr" = "Farklı kategorilerdeki POI türlerini birleştirebilirsiniz.";
 "add_custom_category" = "Özel kategori ekle";
+"ios_release_4_00" = "• Yeni! Özel simge, renk ve şekli seçme seçenekleriyle \"Sık kullanılanlara ekle\" ekranı\n• Geçerli konumun koordinatlarıyla yeni \"Koordinatlar widget'ı\" eklendi\n• Özel kullanıcı tarafından tanımlanan eklentileri içe aktarma özelliği eklendi\n• İçe/dışa aktarma işlevi önemli ölçüde genişletildi\n• Dokunma mesafesi, Yarıçap cetvelinden ayrı bir seçeneğe taşındı\n• iPhone ekranı kapatıldığında CarPlay uygulamasının donması düzeltildi\n• Eklentiler ekranı, Haritalar & Kaynaklar bölümünden ana menüye taşındı\n• Fince yerelleştirmesi eklendi\n• \"Güzergah planla\" ekranı için yatay yönlendirmede kullanıcı arayüzü düzeltildi\n• Özel yönlendirme ve görselleştirme dosyaları için destek eklendi\n• İşaretleyici yön çizgisinin performansı düzeltildi\n• Büyük harfli uzantıya sahip GPX dosyalarını içe aktarmayla ilgili sorun düzeltildi\n• \"Yolu takip et\" menüsüyle ilgili sorun düzeltildi\n• OBF dosyalarının içe aktarılması düzeltildi\n";
+"approximate_file_size" = "Yaklaşık dosya boyutu: %@";

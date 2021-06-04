@@ -111,8 +111,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }
     else
     {
-        NSURLCredential *credential = [NSURLCredential credentialWithUser:_settings.osmUserName
-                                                                 password:_settings.osmUserPassword
+        NSURLCredential *credential = [NSURLCredential credentialWithUser:_settings.osmUserName.get
+                                                                 password:_settings.osmUserPassword.get
                                                               persistence:NSURLCredentialPersistenceForSession];
         completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
     }
@@ -268,9 +268,9 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
     xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));
     if ([entity isKindOfClass:OANode.class])
-        [self writeNode:(OANode *)entity entityInfo:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName];
+        [self writeNode:(OANode *)entity entityInfo:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName.get];
     else if ([entity isKindOfClass:OAWay.class])
-        [self writeWay:(OAWay *)entity info:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName];
+        [self writeWay:(OAWay *)entity info:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName.get];
     // </action>
     xmlWriter.writeEndElement();
     // </osmChange>

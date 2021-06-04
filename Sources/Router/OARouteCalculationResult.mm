@@ -807,12 +807,12 @@
             auto lastSegmentResult = segs[segs.size() - 1];
             auto routeDataObject = lastSegmentResult->object;
             
-            NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
             if (!lang)
                 lang = [OAUtilities currentLang];
             
             auto locale = std::string([lang UTF8String]);
-            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
             info.routeDataObject = routeDataObject;
             info.ref = [NSString stringWithUTF8String:routeDataObject->getRef(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
             info.streetName = [NSString stringWithUTF8String:routeDataObject->getName(locale, transliterate).c_str()];
@@ -1179,12 +1179,12 @@
                 }
                 auto next = list[lind];
                 
-                NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+                NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
                 if (!lang)
                     lang = [OAUtilities currentLang];
                 
                 auto locale = std::string([lang UTF8String]);
-                BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+                BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
                 
                 NSString *ref = [NSString stringWithUTF8String:next->object->getRef(locale,
                                             transliterate, next->isForwardDirection()).c_str()];

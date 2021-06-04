@@ -11,3 +11,7 @@
 @interface OAGlobalSettingsItem : OASettingsItem
 
 @end
+
+@interface OAGlobalSettingsItemReader : OASettingsItemReader<OAGlobalSettingsItem *>
+
+@end

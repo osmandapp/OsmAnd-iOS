@@ -15,7 +15,7 @@
 
 @implementation OATimeWidgetState
 {
-    OAProfileBoolean *_showArrival;
+    OACommonBoolean *_showArrival;
 }
 
 - (instancetype) init

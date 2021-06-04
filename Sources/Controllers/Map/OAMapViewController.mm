@@ -1497,7 +1497,7 @@
             return;
         }
 
-        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
         {
             if (!_recTrackShowing)
                 [self showRecGpxTrack:YES];
@@ -1526,7 +1526,7 @@
 
 - (void) onTrackRecordingChanged:(id)observable withKey:(id)key
 {
-    if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1721,7 +1721,7 @@
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
-            switch ([settings settingMapLanguage]) {
+            switch (settings.settingMapLanguage.get) {
                 case 0:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
@@ -1746,10 +1746,10 @@
             }
             
             NSString *langId = [OAUtilities currentLang];
-            if ([settings settingPrefMapLanguage])
-                langId = [settings settingPrefMapLanguage];
-            else if ([settings settingMapLanguageShowLocal] &&
-                     [settings settingMapLanguageTranslit])
+            if (settings.settingPrefMapLanguage.get)
+                langId = settings.settingPrefMapLanguage.get;
+            else if (settings.settingMapLanguageShowLocal &&
+                     settings.settingMapLanguageTranslit.get)
                 langId = @"en";
             double mapDensity = [settings.mapDensity get:settings.applicationMode];
             [_mapView setVisualZoomShift:mapDensity];
@@ -1864,7 +1864,7 @@
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
-            switch ([settings settingMapLanguage]) {
+            switch (settings.settingMapLanguage.get) {
                 case 0:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
@@ -1889,10 +1889,10 @@
             }
             
             NSString *langId = [OAUtilities currentLang];
-            if ([settings settingPrefMapLanguage])
-                langId = [settings settingPrefMapLanguage];
+            if (settings.settingPrefMapLanguage.get)
+                langId = settings.settingPrefMapLanguage.get;
             else if ([settings settingMapLanguageShowLocal] &&
-                     [settings settingMapLanguageTranslit])
+                     settings.settingMapLanguageTranslit.get)
                 langId = @"en";
             
             
@@ -1919,7 +1919,7 @@
         
         [_mapLayers updateLayers];
 
-        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
             [self showRecGpxTrack:YES];
         
         if (_gpxRouter.gpx && !_gpxDocFileRoute)
@@ -2170,7 +2170,7 @@
     @synchronized(_rendererSync)
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        if ([settings.mapSettingVisibleGpx containsObject:filePath]) {
+        if ([settings.mapSettingVisibleGpx.get containsObject:filePath]) {
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = nil;
             return;
@@ -2260,7 +2260,7 @@
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
     NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]; 
     QString qPath = QString::fromNSString(path);
-    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx containsObject:_gpxDocFileTemp])
+    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:_gpxDocFileTemp])
     {
         _selectedGpxHelper.activeGpx[qPath] = doc;
 

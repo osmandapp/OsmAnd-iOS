@@ -104,7 +104,7 @@
     _showPoiOnMap = YES;
     _poiUiFilter = uiFilter;
     _poiKeyword = keyword;
-    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self doShowPoiUiFilterOnMap];
@@ -156,8 +156,8 @@
         OAAppSettings *settings = OAAppSettings.sharedManager;
         BOOL nightMode = settings.nightMode;
         BOOL showLabels = settings.mapSettingShowPoiLabel.get;
-        NSString *lang = settings.settingPrefMapLanguage;
-        BOOL transliterate = settings.settingMapLanguageTranslit;
+        NSString *lang = settings.settingPrefMapLanguage.get;
+        BOOL transliterate = settings.settingMapLanguageTranslit.get;
         float textSize = settings.textSize.get;
 
         const auto displayDensityFactor = self.mapViewController.displayDensityFactor;

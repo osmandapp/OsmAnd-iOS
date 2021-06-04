@@ -53,8 +53,8 @@
     if (object)
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        QString lang = QString::fromNSString([settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage] : @"");
-        bool transliterate = [settings settingMapLanguageTranslit];
+        QString lang = QString::fromNSString(settings.settingPrefMapLanguage.get ? settings.settingPrefMapLanguage.get : @"");
+        bool transliterate = settings.settingMapLanguageTranslit.get;
         if (object->building)
         {
             QString bldName;
@@ -107,8 +107,8 @@
     const auto result = search->performSearch(*searchCriteria);
     
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    QString lang = QString::fromNSString([settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage] : @"");
-    bool transliterate = [settings settingMapLanguageTranslit];
+    QString lang = QString::fromNSString(settings.settingPrefMapLanguage.get ? settings.settingPrefMapLanguage.get : @"");
+    bool transliterate = settings.settingMapLanguageTranslit.get;
 
     for (auto& res : result)
     {

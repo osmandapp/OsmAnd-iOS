@@ -18,8 +18,8 @@
 {
     if (_stop)
     {
-        NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-        BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+        NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+        BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
         return _stop->getName(QString::fromNSString(prefLang), transliterate).toNSString();
     }
     else

@@ -277,7 +277,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         // test - reset osm live purchases
         if (TEST_LOCAL_PURCHASE)
         {
-            _settings.liveUpdatesPurchased = NO;
+            [_settings.liveUpdatesPurchased set:NO];
             for (OASubscription *s in [_products.liveUpdates getAllSubscriptions])
                 [_products setExpired:s.productIdentifier];
         }
@@ -406,20 +406,20 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     
     if ([self productsLoaded] && subscription.skProduct)
     {
-        NSString *userId = _settings.billingUserId;
+        NSString *userId = _settings.billingUserId.get;
         if (!userId || userId.length == 0)
         {
             NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
             [params setObject:@"ios" forKey:@"os"];
-            NSString *visibleName = _settings.billingHideUserName ? @"" : _settings.billingUserName;
+            NSString *visibleName = _settings.billingHideUserName.get ? @"" : _settings.billingUserName.get;
             if (visibleName)
                 [params setObject:visibleName forKey:@"visibleName"];
 
-            NSString *preferredCountry = _settings.billingUserCountryDownloadName;
+            NSString *preferredCountry = _settings.billingUserCountryDownloadName.get;
             if (preferredCountry)
                 [params setObject:preferredCountry forKey:@"preferredCountry"];
 
-            NSString *email = _settings.billingUserEmail;
+            NSString *email = _settings.billingUserEmail.get;
             if (email)
                 [params setObject:email forKey:@"email"];
 
@@ -528,7 +528,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 
 - (BOOL) subscribedToLiveUpdates
 {
-    return _settings.liveUpdatesPurchased;
+    return _settings.liveUpdatesPurchased.get;
 }
 
 - (OASubscription *) getCheapestMonthlySubscription
@@ -600,7 +600,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                     [purchased addObject:product];
             }
             
-            NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime;
+            NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime.get;
             if (!subscribedToLiveUpdates && self.subscribedToLiveUpdates)
             {
                 OASubscription *s = [self.liveUpdates getPurchasedSubscription];
@@ -610,21 +610,21 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                 if (subscriptionCancelledTime == 0)
                 {
                     subscriptionCancelledTime = [[[NSDate alloc] init] timeIntervalSince1970];
-                    _settings.liveUpdatesPurchaseCancelledTime = subscriptionCancelledTime;
-                    _settings.liveUpdatesPurchaseCancelledFirstDlgShown = NO;
-                    _settings.liveUpdatesPurchaseCancelledSecondDlgShown = NO;
+                    [_settings.liveUpdatesPurchaseCancelledTime set:subscriptionCancelledTime];
+                    [_settings.liveUpdatesPurchaseCancelledFirstDlgShown set:NO];
+                    [_settings.liveUpdatesPurchaseCancelledSecondDlgShown set:NO];
                 }
                 else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
                 {
-                    _settings.liveUpdatesPurchased = NO;
+                    [_settings.liveUpdatesPurchased set:NO];
                     //if (!isDepthContoursPurchased(ctx))
                     //    ctx.getSettings().getCustomRenderBooleanProperty("depthContours").set(false);
                 }
             }
             else if (subscribedToLiveUpdates)
             {
-                _settings.liveUpdatesPurchaseCancelledTime = 0;
-                _settings.liveUpdatesPurchased = YES;
+                [_settings.liveUpdatesPurchaseCancelledTime set:0];
+                [_settings.liveUpdatesPurchased set:YES];
             }
             
             for (OAProduct *p in purchased)
@@ -826,29 +826,29 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 {
     NSObject *userId = [map objectForKey:@"userid"];
     if (userId)
-        _settings.billingUserId = [userId isKindOfClass:[NSString class]] ? (NSString *)userId : @"";
+        [_settings.billingUserId set:[userId isKindOfClass:[NSString class]] ? (NSString *)userId : @""];
 
     NSObject *token = [map objectForKey:@"token"];
     if (token)
-        _settings.billingUserToken = [token isKindOfClass:[NSString class]] ? (NSString *)token : @"";
+        [_settings.billingUserToken set:[token isKindOfClass:[NSString class]] ? (NSString *)token : @""];
 
     NSObject *visibleName = [map objectForKey:@"visibleName"];
     if (visibleName && [visibleName isKindOfClass:[NSString class]] && ((NSString *)visibleName).length > 0)
     {
-        _settings.billingUserName = (NSString *)visibleName;
-        _settings.billingHideUserName = NO;
+        [_settings.billingUserName set:(NSString *)visibleName];
+        [_settings.billingHideUserName set:NO];
     }
     else
     {
-        _settings.billingHideUserName = YES;
+        [_settings.billingHideUserName set:YES];
     }
     NSObject *preferredCountryObj = [map objectForKey:@"preferredCountry"];
     if (preferredCountryObj && [preferredCountryObj isKindOfClass:[NSString class]])
     {
         NSString *preferredCountry = (NSString *)preferredCountryObj;
-        if (![_settings.billingUserCountryDownloadName isEqualToString:preferredCountry])
+        if (![_settings.billingUserCountryDownloadName.get isEqualToString:preferredCountry])
         {
-            _settings.billingUserCountryDownloadName = preferredCountry;
+            [_settings.billingUserCountryDownloadName set:preferredCountry];
             OADonationSettingsViewController *donationSettingsController = [[OADonationSettingsViewController alloc] init];
             [donationSettingsController initCountries];
             NSArray<OACountryItem *> *countryItems = donationSettingsController.countryItems;
@@ -859,12 +859,12 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                 countryItem = [donationSettingsController getCountryItem:preferredCountry];
             
             if (countryItem)
-                _settings.billingUserCountry = countryItem.localName;
+                [_settings.billingUserCountry set:countryItem.localName];
         }
     }
     NSObject *email = [map objectForKey:@"email"];
     if (email)
-        _settings.billingUserEmail = [email isKindOfClass:[NSString class]] ? (NSString *)email : @"";
+        [_settings.billingUserEmail set:[email isKindOfClass:[NSString class]] ? (NSString *)email : @""];
 }
 
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
@@ -879,7 +879,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
             // test - emulate purchase
             if (TEST_LOCAL_PURCHASE)
             {
-                _settings.liveUpdatesPurchased = YES;
+                [_settings.liveUpdatesPurchased set:YES];
                 [_products setPurchased:productIdentifier];
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
                 return;
@@ -902,11 +902,11 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
             {
                 NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
                 [params setObject:@"ios" forKey:@"os"];
-                NSString *userId = _settings.billingUserId;
+                NSString *userId = _settings.billingUserId.get;
                 if (userId)
                     [params setObject:userId forKey:@"userid"];
                 
-                NSString *token = _settings.billingUserToken;
+                NSString *token = _settings.billingUserToken.get;
                 if (token)
                     [params setObject:token forKey:@"token"];
 
@@ -922,7 +922,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                 if (receiptStr)
                     [params setObject:receiptStr forKey:@"payload"];
 
-                NSString *email = _settings.billingUserEmail;
+                NSString *email = _settings.billingUserEmail.get;
                 if (email)
                     [params setObject:email forKey:@"email"];
                 
@@ -942,14 +942,14 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                                      if ([map objectForKey:@"userid"])
                                          [self applyUserPreferences:map];
 
-                                     _settings.liveUpdatesPurchased = YES;
+                                     [_settings.liveUpdatesPurchased set:YES];
                                      _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
                                      [_products setPurchased:productIdentifier];
                                      [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
                                  }
                                  else
                                  {
-                                     errorStr = [NSString stringWithFormat:@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+                                     errorStr = [NSString stringWithFormat:@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId.get, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
                                      NSLog(errorStr);
                                  }
                              }
@@ -988,7 +988,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 
 - (BOOL) needValidateReceipt
 {
-    if (!_settings.billingUserId)
+    if (!_settings.billingUserId.get)
         return YES;
     
     NSTimeInterval lastReceiptValidationTimeInterval = [[[NSDate alloc] init] timeIntervalSinceDate:_settings.lastReceiptValidationDate];
@@ -1023,7 +1023,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     {
         NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
         [params setObject:@"ios" forKey:@"os"];
-        NSString *userId = _settings.billingUserId;
+        NSString *userId = _settings.billingUserId.get;
         if (userId)
             [params setObject:userId forKey:@"userid"];
         
@@ -1139,7 +1139,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 {
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     [params setObject:@"ios" forKey:@"os"];
-    NSString *userId = _settings.billingUserId;
+    NSString *userId = _settings.billingUserId.get;
     if (userId)
         [params setObject:userId forKey:@"userId"];
 

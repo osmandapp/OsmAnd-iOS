@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 {
     RoutingParameter _param;
     OALocalRoutingParameterGroup *_group;
-    OAProfileString *_setting;
+    OACommonString *_setting;
 
     OAAppSettings *_settings;
     

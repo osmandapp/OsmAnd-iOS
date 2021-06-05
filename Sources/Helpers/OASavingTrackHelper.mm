@@ -497,12 +497,12 @@
                     long currentInterval = labs(pt.time - previousTime);
                     BOOL newInterval = (lat == 0.0 && lon == 0.0);
                     
-                    if (track && !newInterval && (![OAAppSettings sharedManager].autoSplitRecording || currentInterval < 6 * 60 || currentInterval < 10 * previousInterval))
+                    if (track && !newInterval && (![OAAppSettings sharedManager].autoSplitRecording.get || currentInterval < 6 * 60 || currentInterval < 10 * previousInterval))
                     {
                         // 6 minute - same segment
                         [gpx addTrackPoint:pt segment:segment];
                     }
-                    else if (track && [OAAppSettings sharedManager].autoSplitRecording && currentInterval < 2 * 60 * 60)
+                    else if (track && [OAAppSettings sharedManager].autoSplitRecording.get && currentInterval < 2 * 60 * 60)
                     {
                         // 2 hour - same track
                         segment = [[OAGpxTrkSeg alloc] init];

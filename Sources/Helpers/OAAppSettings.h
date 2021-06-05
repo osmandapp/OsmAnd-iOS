@@ -576,7 +576,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 #define LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY 0
 #define LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY 1
 #define LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF 2
-#define LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY 3
+#define LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED 3
 #define LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL 4
 
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
@@ -825,7 +825,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 - (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes;
 - (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
-- (void) setAppearanceMode:(int)settingAppMode;
 - (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
 - (void) setShowPoiLabel:(BOOL)mapSettingShowPoiLabel;
 

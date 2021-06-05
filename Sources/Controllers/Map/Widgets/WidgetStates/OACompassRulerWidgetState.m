@@ -24,7 +24,7 @@
     self = [super init];
     if (self)
     {
-        _showCompass = [OAAppSettings sharedManager].showCompassControlRuler;
+        _showCompass = [OAAppSettings sharedManager].showCompassControlRuler.get;
     }
     return self;
 }

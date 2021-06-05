@@ -11,6 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "Localization.h"
+#import "OADayNightHelper.h"
 
 @implementation OAMapSettingsSettingScreen
 {
@@ -213,11 +214,12 @@
     {
         int index = (int)indexPath.row;
         if (index == 1)
-            [_settings setAppearanceMode:APPEARANCE_MODE_DAY];
+            [_settings.appearanceMode set:APPEARANCE_MODE_DAY];
         else if (index == 2)
-            [_settings setAppearanceMode:APPEARANCE_MODE_NIGHT];
+            [_settings.appearanceMode set:APPEARANCE_MODE_NIGHT];
         else
-            [_settings setAppearanceMode:APPEARANCE_MODE_AUTO];
+            [_settings.appearanceMode set:APPEARANCE_MODE_AUTO];
+        [[OADayNightHelper instance] forceUpdate];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {

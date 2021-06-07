@@ -404,7 +404,7 @@
 {
     _app.carPlayActive = NO;
     
-    OAAppSettings.sharedManager.applicationMode = OAAppSettings.sharedManager.defaultApplicationMode;
+    OAAppSettings.sharedManager.applicationMode = [OAAppSettings.sharedManager.defaultApplicationMode get];
     [OARootViewController.instance.mapPanel onCarPlayDisconnected:^{
         [_carPlayMapController detachFromCarPlayWindow];
         _carPlayDashboardController = nil;

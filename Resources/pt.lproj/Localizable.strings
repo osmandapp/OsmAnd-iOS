@@ -1477,7 +1477,7 @@
 "routing_attr_avoid_unpaved_name" = "Evitar estradas não pavimentadas";
 "rendering_attr_showAccess_name" = "Mostrar restrições de acesso e portagens";
 "routing_attr_relief_smoothness_factor_plains_name" = "Menos inclinado";
-"routing_attr_piste_type_skitour_description" = "Rotas para excursões de esqui.";
+"routing_attr_piste_type_skitour_description" = "Rotas para passeios de esqui.";
 "routing_attr_short_way_name" = "Percurso económico";
 "routing_attr_avoid_train_description" = "Evitar comboios";
 "rendering_attr_piste_type_sleigh_name" = "Trenó";
@@ -2083,3 +2083,14 @@
 "add_custom_category" = "Adicionar categoria personalizada";
 "ios_release_4_00" = "• Novo! Ecrã \"Adicionar favorito\" com opções para selecionar o ícone, cor e forma personalizados\n• Adicionado novo \"widget de Coordenadas\" com coordenadas da localização atual\n• Capacidade de importar plug-ins personalizados definidos pelo utilizador\n• Funcionalidade de importação / exportação melhorada significativamente\n• \"Distância por toque\" movida da régua de raio para uma opção separada\n• Corrigido o bloqueio da aplicação CarPlay quando o ecrã do iPhone é desligado\n• O ecrã de plug-ins foi movido de \"Mapas e recursos\" para o \"Menu principal\"\n• Adicionada localização finlandesa\n• Correção da interface no modo paisagem no ecrã \"Planear uma rota\"\n• Adicionado suporte para roteamento personalizado e ficheiros de renderização\n• Corrigido o desempenho da linha de direção dos marcadores\n• Corrigido problema com a importação de ficheiros GPX com extensões em maiúsculas\n• Corrigido problema com o menu \"Seguir trilho\"\n• Corrigida importação de ficheiros OBF\n";
 "approximate_file_size" = "Tamanho aproximado do ficheiro: %@";
+"gpx_upload_private_visibility_descr" = "\"Privado\" significa que o rastreamento não aparece em nenhuma listagem pública, mas os pontos de rastreamento dela em ordem não cronológica estão disponíveis através da API pública do GPS sem carimbos de tempo.";
+"gpx_upload_trackable_visibility_descr" = "\"Rastreável\" significa que o rastreamento não aparece em nenhuma listagem pública, mas pontos de rastreamento processados com carimbos de tempo a partir dele (que não podem ser associados diretamente a si) estarão disponíveis através da API pública de GPS.";
+"gpx_upload_identifiable_visibility_descr" = "\"Identificável\" significa que o rastreamento será mostrado publicamente nos seus traços de GPS e nas listas públicas de rastreamento de GPS, ou seja, outros utilizadores serão capazes de descarregar o rastreamento bruto e associá-lo ao seu nome de utilizador. Os dados públicos de pontos de rastreamento marcados com a hora da API do GPS servidos através da API de pontos de rastreamento farão referência à sua página de rastreamento original.";
+"gpx_upload_public_visibility_descr" = "\"Público\" significa que o rastreamento é mostrado publicamente nos seus traços de GPS, em listas públicas de rastreamento de GPS e na lista pública de rastreamento com carimbos de data e hora na forma bruta. Os dados servidos através da API não fazem referência à sua página de rastreamento. Os marcadores de ponto de rastreamento não estão disponíveis através da API de GPS pública, e os pontos de rastreamento não estão ordenados cronologicamente.";
+"gpxup_private" = "Privado";
+"gpxup_trackable" = "Rastreável";
+"gpxup_identifiable" = "Identificável";
+"gpxup_public" = "Público";
+"restart" = "Reiniciar";
+"shared_string_wifi_only" = "Só em Wi-Fi";
+"app_restart_required" = "Necessário reiniciar a aplicação para aplicar algumas configurações.";

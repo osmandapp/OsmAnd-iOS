@@ -1063,7 +1063,7 @@
 "rendering_attr_contourLines_description" = "Visualizza dal livello di zoom (necessita dei dati delle isoipse):";
 "rendering_attr_highway_class_track_grade4_name" = "Grado 4";
 "rendering_value_white_name" = "Bianco";
-"rendering_attr_piste_difficulty_connection_name" = "Collegamento";
+"rendering_attr_piste_difficulty_connection_name" = "Connessione";
 "rendering_attr_highway_class_track_name" = "Carrareccia";
 "rendering_attr_surface_wood_name" = "Legno";
 "rendering_attr_contourWidth_description" = "Spessore linee isoipse";
@@ -1802,7 +1802,6 @@
 "profile_type_user_string" = "Profilo utente";
 "map_widget_distance_by_tap" = "Distanza dal tocco";
 "address_search" = "Ricerca degli indirizzi";
-
 "shared_string_gpx_points" = "Punti";
 "shared_string_enable" = "Attiva";
 "search_preogress" = "Ricerca…";

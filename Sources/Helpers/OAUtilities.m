@@ -1522,6 +1522,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode
 {
+    return [self setupTableHeaderViewWithText:text tintColor:tintColor icon:icon iconFrameSize:iconFrameSize iconBackgroundColor:iconBackgroundColor iconContentMode:contentMode iconYOffset:0];
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset
+{
     CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
     label.attributedText = text;
@@ -1531,11 +1536,13 @@ static const double d180PI = 180.0 / M_PI_2;
     [label sizeToFit];
     CGRect frame = label.frame;
     frame.size.height = label.frame.size.height;
-    frame.origin.y = 8.0;
+    frame.origin.y = 12.0;
     label.frame = frame;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 16)];
     [tableHeaderView addSubview:label];
-    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12 - OAUtilities.getLeftMargin - iconFrameSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize, iconFrameSize)];
+    
+    CGFloat yOffset = iconYOffset == 0 ? tableHeaderView.frame.size.height / 2 - iconFrameSize / 2 : iconYOffset;
+    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 20 - OAUtilities.getLeftMargin - iconFrameSize, yOffset, iconFrameSize, iconFrameSize)];
     imageContainer.backgroundColor = iconBackgroundColor;
     
     UIImageView *imageView = [[UIImageView alloc] init];

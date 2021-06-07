@@ -128,8 +128,8 @@
         }
         if (cell)
         {
-            NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:17];
-            cell.textView.attributedText = attrString;
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:17];
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }
         return cell;

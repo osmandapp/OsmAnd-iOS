@@ -2306,8 +2306,8 @@ static BOOL _lackOfResources;
     else if ([cellTypeId isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
     {
         OATextViewSimpleCell *textViewCell = (OATextViewSimpleCell *) cell;
-        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17];
-        textViewCell.textView.attributedText = attrString;
+        textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17];
+        textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
         [textViewCell.textView sizeToFit];
     }
     else if ([cellTypeId isEqualToString:descriptionButtonIconCell])

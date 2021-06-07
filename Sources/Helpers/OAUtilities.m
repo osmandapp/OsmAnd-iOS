@@ -1667,8 +1667,16 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize
 {
-    NSString *modifiedFontHtml = [NSString stringWithFormat:@"<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: %ld\">%@</span>", fontSize, html];
-    return [[NSAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
+    NSString *modifiedFontHtml =
+    @" <style> \n"
+    @"   a { color: #5714CC; text-decoration: none;} \n"
+    @"   body { font-family: -apple-system, BlinkMacSystemFont, HelveticaNeue; font-size: %ld} \n"
+    @" </style> \n"
+    @" <p>%@</p>";
+    
+    modifiedFontHtml = [NSString stringWithFormat:modifiedFontHtml, fontSize, html];
+    
+    return [[NSMutableAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
 }
 
 + (NSString *) createNewFileName:(NSString *)oldName

@@ -584,7 +584,7 @@
         }
         else if (pr.type == RoutingParameterType::BOOLEAN)
         {
-            OAProfileBoolean *pref = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:pr.defaultBoolean];
+            OACommonBoolean *pref = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:pr.defaultBoolean];
             BOOL b = [pref get:params.mode];
             vl = b ? "true" : "";
         }

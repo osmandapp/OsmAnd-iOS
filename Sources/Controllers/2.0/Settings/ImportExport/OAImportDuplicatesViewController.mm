@@ -189,7 +189,7 @@
                 [renderFilesList addObject:file];
             else if ([file hasSuffix:ROUTING_FILE_EXT])
                 [routingFilesList addObject:file];
-            else if ([file hasSuffix:GPX_FILE_EXT])
+            else if ([file.lowercaseString hasSuffix:GPX_FILE_EXT])
                 [gpxFilesList addObject:file];
             else if ([OAFileSettingsItemFileSubtype isMap:subType])
                 [mapFiles addObject:file];
@@ -390,7 +390,7 @@
                     item[@"label"] = fileName;
                     item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
                 }
-                else if ([file hasSuffix:GPX_FILE_EXT])
+                else if ([file.lowercaseString hasSuffix:GPX_FILE_EXT])
                 {
                     item[@"label"] = fileName;
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_trip"];

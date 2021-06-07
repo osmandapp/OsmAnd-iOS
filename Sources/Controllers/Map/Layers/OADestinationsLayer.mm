@@ -163,10 +163,10 @@
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OAProfileSetting *obj = notification.object;
+    OACommonPreference *obj = notification.object;
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    OAProfileActiveMarkerConstant *activeMarkers = settings.activeMarkers;
-    OAProfileBoolean *directionLines = settings.directionLines;
+    OACommonActiveMarkerConstant *activeMarkers = settings.activeMarkers;
+    OACommonBoolean *directionLines = settings.directionLines;
     if (obj)
     {
         if (obj == activeMarkers || obj == directionLines)

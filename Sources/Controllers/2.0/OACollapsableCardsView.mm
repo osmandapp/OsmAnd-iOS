@@ -66,7 +66,7 @@ static NSArray<NSString *> *nibNames;
 - (void) setCollapsed:(BOOL)collapsed
 {
     [super setCollapsed:collapsed];
-    [[OAAppSettings sharedManager] setOnlinePhotosRowCollapsed:collapsed];
+    [[OAAppSettings sharedManager].onlinePhotosRowCollapsed set:collapsed];
     if (!collapsed && self.delegate)
         [self.delegate onViewExpanded];
 }

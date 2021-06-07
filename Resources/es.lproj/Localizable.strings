@@ -1638,7 +1638,7 @@
 "copy_from_other_profile" = "Copiar desde otro perfil";
 "reset_to_default" = "Restaurar a valores predefinidos";
 "configure_profile" = "Configurar perfil";
-"export_profile" = "Exportar perfil";
+"export_profile" = "Exportar";
 "selected_profile" = "Perfil seleccionado";
 "profile_appearance" = "Aspecto del perfil";
 "select_nav_profile_dialog_message" = "El «Tipo de navegación» determina cómo se calculan las rutas.";
@@ -2000,7 +2000,6 @@
 "select_group" = "Elige grupo";
 "street_level_imagery" = "Fotos a pie de calle";
 "map_widget_distance_by_tap" = "Distancia por toque";
-
 "transport" = "Transporte";
 "group_name" = "Nombre del grupo";
 "custom_osmand_plugin_name" = "Complemento personalizado de OsmAnd";
@@ -2040,3 +2039,8 @@
 "coordinates" = "Coordenadas";
 "emergency" = "Emergencia";
 "default_color" = "Color predefinido";
+"preparing_file" = "Preparando archivo";
+"reading_file" = "Leyendo archivo";
+"add_folder" = "Añadir carpeta";
+"plan_route_folder" = "Carpeta";
+"ios_release_4_00" = "• ¡Nuevo! Se ha añadido la opción para elegir un icono, color y forma propia en «Añadir favorito»\n• Se ha añadido el nuevo widget de coordenadas con las coordenadas de la ubicación actual\n• Se ha añadido la posibilidad de importar complementos personalizados definidos por el usuario\n• Se ha ampliado significativamente la funcionalidad de importar/exportar\n• La función «Distancia al pulsar» se ha movido de la regla radial a una opción separada\n• Se ha corregido el bloqueo de la aplicación CarPlay cuando se apaga la pantalla del iPhone\n• Se han trasladado al menú principal los complementos desde «Mapas y Recursos»\n• Se ha añadido el idioma finlandés\n• Se ha corregido la interfaz de usuario en orientación horizontal para la función «Planificar ruta»\n• Se ha añadido soporte para los archivos personalizados de navegación y visualización\n• Se ha corregido el rendimiento de la línea de dirección de los marcadores\n• Se ha solucionado un problema con la importación de archivos GPX con extensiones en mayúsculas\n• Se ha corregido un problema con el menú «Seguir traza».\n• Se ha corregido la importación de archivos OBF\n";

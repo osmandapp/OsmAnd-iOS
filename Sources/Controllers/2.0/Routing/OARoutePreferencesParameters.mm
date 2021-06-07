@@ -77,14 +77,14 @@
 
 - (BOOL) isSelected
 {
-    OAProfileBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
+    OACommonBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
     
     return [property get:_am];
 }
 
 - (void) setSelected:(BOOL)isChecked
 {
-    OAProfileBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
+    OACommonBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
     
     [property set:isChecked mode:_am];
     if (self.delegate)
@@ -211,7 +211,7 @@
         else if ([gpxParam getId] == gpx_option_calculate_first_last_segment_id)
         {
             [rp setCalculateOsmAndRouteParts:selected];
-            self.settings.gpxRouteCalcOsmandParts = selected;
+            [self.settings.gpxRouteCalcOsmandParts set:selected];
         }
         else if ([gpxParam getId] == gpx_option_from_start_point_id)
         {
@@ -219,19 +219,19 @@
         }
         else if ([gpxParam getId] == use_points_as_intermediates_id)
         {
-            self.settings.gpxCalculateRtept = selected;
+            [self.settings.gpxCalculateRtept set:selected];
             [rp setUseIntermediatePointsRTE:selected];
         }
         else if ([gpxParam getId] == calculate_osmand_route_gpx_id)
         {
-            self.settings.gpxRouteCalc = selected;
+            [self.settings.gpxRouteCalc set:selected];
             [rp setCalculateOsmAndRoute:selected];
             if (self.delegate)
                 [self.delegate updateParameters];
         }
     }
     if ([gpxParam getId] == calculate_osmand_route_without_internet_id)
-        self.settings.gpxRouteCalcOsmandParts = selected;
+        [self.settings.gpxRouteCalcOsmandParts set:selected];
     
     if ([gpxParam getId] == fast_route_mode_id)
         [self.settings.fastRouteMode set:selected];
@@ -677,7 +677,7 @@
 
 - (NSString *) getValue
 {
-    NSString *path = self.settings.followTheGpxRoute;
+    NSString *path = self.settings.followTheGpxRoute.get;
     return !path ? @"" : [[[[path lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
 }
 

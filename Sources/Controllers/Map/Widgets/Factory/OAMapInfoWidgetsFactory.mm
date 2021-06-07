@@ -103,15 +103,15 @@
     };
     rulerControl.onClickFunction = ^(id sender) {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        EOARulerWidgetMode mode = settings.rulerMode;
+        EOARulerWidgetMode mode = settings.rulerMode.get;
         if (mode == RULER_MODE_DARK)
-            [settings setRulerMode:RULER_MODE_LIGHT];
+            [settings.rulerMode set:RULER_MODE_LIGHT];
         else if (mode == RULER_MODE_LIGHT)
-            [settings setRulerMode:RULER_MODE_NO_CIRCLES];
+            [settings.rulerMode set:RULER_MODE_NO_CIRCLES];
         else if (mode == RULER_MODE_NO_CIRCLES)
-            [settings setRulerMode:RULER_MODE_DARK];
+            [settings.rulerMode set:RULER_MODE_DARK];
         
-        if (settings.rulerMode == RULER_MODE_NO_CIRCLES) {
+        if (settings.rulerMode.get == RULER_MODE_NO_CIRCLES) {
             [rulerControlWeak setIcons:@"widget_ruler_circle_hide_day" widgetNightIcon:@"widget_ruler_circle_hide_night"];
         } else {
             [rulerControlWeak setIcons:@"widget_ruler_circle_day" widgetNightIcon:@"widget_ruler_circle_night"];
@@ -119,7 +119,7 @@
         [[OARootViewController instance].mapPanel.hudViewController.mapInfoController updateRuler];
     };
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    BOOL circlesShown = settings.rulerMode == RULER_MODE_NO_CIRCLES;
+    BOOL circlesShown = settings.rulerMode.get == RULER_MODE_NO_CIRCLES;
     [rulerControl setIcons:circlesShown ? @"widget_ruler_circle_hide_day" : @"widget_ruler_circle_day"
            widgetNightIcon:circlesShown ?  @"widget_ruler_circle_hide_night" : @"widget_ruler_circle_night"];
     return rulerControl;

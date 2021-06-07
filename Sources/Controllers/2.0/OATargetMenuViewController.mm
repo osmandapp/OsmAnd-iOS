@@ -160,7 +160,7 @@
         }
         case OATargetWiki:
         {
-            NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            NSString *contentLocale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
             if (!contentLocale)
                 contentLocale = [OAUtilities currentLang];
             

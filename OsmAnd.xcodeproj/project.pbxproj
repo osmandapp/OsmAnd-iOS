@@ -2328,7 +2328,6 @@
 		B0D61BE10DA62CC3244272FE /* OAButtonRightIconCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61D3FD9AA71B8466C76BC /* OAButtonRightIconCell.mm */; };
 		B0D61C744384818EFE0EFC65 /* OAButtonRightIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D61A1429F246314E2B7A6A /* OAButtonRightIconCell.xib */; };
 		B0D61E12EA985194F803A5DD /* OAHistoryMarkersSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D6115DA512EEFB8779E3C2 /* OAHistoryMarkersSettingsItem.mm */; };
-		BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB27270119CB38D7007C5613 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FC19CB38D7007C5613 /* fonts */; };
@@ -18285,7 +18284,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				CONFIGURATION_BUILD_DIR = "${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -18363,7 +18362,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COMPRESS_PNG_FILES = NO;
-				CONFIGURATION_BUILD_DIR = "${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				ENABLE_BITCODE = YES;

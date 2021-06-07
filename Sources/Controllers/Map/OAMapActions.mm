@@ -72,14 +72,15 @@
 - (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
-    _settings.useIntermediatePointsNavigation = useIntermediatePointsByDefault;
+    [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     
     OAApplicationMode *mode = [self getRouteMode];
     [_routingHelper setAppMode:mode];
     [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
     // save application mode controls
-    _settings.followTheRoute = NO;
+    [_settings.followTheRoute set:NO];
+    [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
     [_routingHelper setFollowingMode:false];
     [_routingHelper setRoutePlanningMode:true];
     // reset start point
@@ -105,23 +106,23 @@
     if (!doc)
     {
         [_routingHelper setGpxParams:nil];
-        _settings.followTheGpxRoute = nil;
+        [_settings.followTheGpxRoute set:nil];
     }
     else
     {
         OAGPXRouteParamsBuilder *params = [[OAGPXRouteParamsBuilder alloc] initWithDoc:doc];
         if ([doc hasRtePt] && ![doc hasTrkPt])
-            _settings.gpxCalculateRtept = true;
+            [_settings.gpxCalculateRtept set:YES];
         else
-            _settings.gpxCalculateRtept = false;
+            [_settings.gpxCalculateRtept set:NO];
         
-        [params setCalculateOsmAndRouteParts:_settings.gpxRouteCalcOsmandParts];
-        [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept];
-        [params setCalculateOsmAndRoute:_settings.gpxRouteCalc];
-        [params setSelectedSegment:_settings.gpxRouteSegment];
+        [params setCalculateOsmAndRouteParts:_settings.gpxRouteCalcOsmandParts.get];
+        [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept.get];
+        [params setCalculateOsmAndRoute:_settings.gpxRouteCalc.get];
+        [params setSelectedSegment:_settings.gpxRouteSegment.get];
         NSArray<CLLocation *> *ps = [params getPoints];
         [_routingHelper setGpxParams:params];
-        _settings.followTheGpxRoute = path;
+        [_settings.followTheGpxRoute set:path];
         if (ps.count > 0)
         {
             OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
@@ -162,7 +163,7 @@
 - (OAApplicationMode *) getRouteMode
 {
     OAApplicationMode *selected = _settings.applicationMode;
-    OAApplicationMode *mode = _settings.defaultApplicationMode;
+    OAApplicationMode *mode = _settings.defaultApplicationMode.get;
     if (selected != [OAApplicationMode DEFAULT])
     {
         mode = selected;

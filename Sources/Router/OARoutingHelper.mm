@@ -139,7 +139,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
         return;
     }
     BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable;
-    if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts)
+    if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts.get)
     {
         if (_params.previousToRecalculate && [_params.previousToRecalculate isCalculated])
         {
@@ -1146,8 +1146,8 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (NSString *) getRouteSegmentStreetName:(std::shared_ptr<RouteSegmentResult>)rs
 {
-    string locale = _settings.settingPrefMapLanguage ? [_settings.settingPrefMapLanguage UTF8String] : "";
-    BOOL transliterate = _settings.settingMapLanguageTranslit;
+    string locale = _settings.settingPrefMapLanguage.get ? [_settings.settingPrefMapLanguage.get UTF8String] : "";
+    BOOL transliterate = _settings.settingMapLanguageTranslit.get;
     NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
     NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
     NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
@@ -1241,8 +1241,9 @@ static BOOL _isDeviatedFromRoute = false;
         
         if (!newFinalLocation)
         {
-            _settings.followTheRoute = false;
-            _settings.followTheGpxRoute = nil;
+            [_settings.followTheRoute set:NO];
+            [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
+            [_settings.followTheGpxRoute set:nil];
             // clear last fixed location
             _lastProjection = nil;
             [self setFollowingMode:NO];

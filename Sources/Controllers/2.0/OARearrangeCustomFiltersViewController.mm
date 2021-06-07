@@ -109,8 +109,8 @@
     {
         _settings = [OAAppSettings sharedManager];
         _filtersHelper = [OAPOIFiltersHelper sharedInstance];
-        _orderModified = [_settings poiFiltersOrder] != nil;
-        _hiddenModified = [_settings inactivePoiFilters] != nil;
+        _orderModified = _settings.poiFiltersOrder.get != nil;
+        _hiddenModified = _settings.inactivePoiFilters.get != nil;
         [self generateData:filters];
     }
     return self;

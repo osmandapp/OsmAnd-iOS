@@ -95,7 +95,7 @@
 "show_info" = "Mostrar informações";
 // Map settings
 "m_style_overview" = "Explorar";
-"m_style_car" = "Dirigindo";
+"m_style_car" = "Condução";
 "m_style_walk" = "A pé";
 "m_style_bicycle" = "Ciclismo";
 "map_settings_map" = "Mapa";
@@ -1381,7 +1381,7 @@
 "routing_attr_piste_type_downhill_name" = "Esqui alpino/de declínio";
 "rendering_value_white_name" = "Branco";
 "rendering_attr_piste_type_snow_park_name" = "Parque de terreno";
-"rendering_value_car_name" = "Carro";
+"rendering_value_car_name" = "Condução";
 "rendering_attr_smoothness_very_horrible_name" = "Muito horrível";
 "rendering_attr_smoothness_very_bad_name" = "Muito ruim";
 "rendering_attr_surface_salt_name" = "Sal";
@@ -1586,7 +1586,7 @@
 "routing_attr_avoid_motorway_name" = "Sem autoestradas";
 "rendering_value_pink_name" = "rosa";
 "rendering_attr_surface_grass_paver_name" = "Pavimentadora de grama";
-"rendering_value_bicycle_name" = "Bicicleta";
+"rendering_value_bicycle_name" = "Ciclismo";
 "rendering_value_boldOutline_name" = "Títulos com contornos";
 "routing_attr_prefer_unpaved_name" = "Preferir estradas não pavimentadas";
 "rendering_value_highContrastRoads_name" = "Vias em alto contraste";
@@ -1650,8 +1650,8 @@
 "app_mode_shuttle_bus" = "Ônibus de conexão";
 "app_mode_taxi" = "Táxi";
 "app_mode_pedestrian" = "A pé";
-"app_mode_bicycle" = "Bicicleta";
-"app_mode_car" = "Carro";
+"app_mode_bicycle" = "Ciclismo";
+"app_mode_car" = "Condução";
 "app_mode_default" = "Navegar no mapa";
 "enable_contour_lines" = "Ativar para visualizar linhas de contorno no mapa";
 "map_settings_available_srtm_maps_descr" = "Mapas adicionais são necessários para visualizar sombras de relevo no mapa";
@@ -1924,7 +1924,7 @@
 "road_speeds_descr" = "Esses parâmetros podem afetar o cálculo da rota.";
 "maximum_speed" = "Velocidade máxima";
 "ios_release_3_90" = "• Introduziu um recurso \"Planejar uma rota\" para planejar viagens futuras com a capacidade de criar segmentos de trilha usando diferentes tipos de navegação\n• Adicionada uma opção para habilitar uma bússola sobre a ferramenta \"Régua de raio\"\n• Adicionada opção \"Sobreposições de rótulos de POI\" que permite mostrar nomes de favoritos, rastrear pontos de passagem e marcadores no mapa\n• Adicionadas novas ações rápidas para visibilidade de curvas de nível e terreno no mapa, alterando um perfil de aplicação, excluindo um ponto intermediário mais próximo\n• Corrigidos problemas com a falta da categoria de pesquisa da Wikipedia\n• Importação de configurações: bugs corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n• Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário de registro de mudanças\n";
-"ios_release_3_80" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados\n";
+"ios_release_3_80" = "• Adicionados \"Perfis da aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfis\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
 
 
 // Release Notes
@@ -2105,3 +2105,5 @@
 "shared_string_enable" = "Ativar";
 "search_poi_types_descr" = "Você pode combinar tipos de POI de diferentes categorias.";
 "add_custom_category" = "Adicionar categoria personalizada";
+"ios_release_4_00" = "• Novo! Tela \"Adicionar favorito\" com opções para selecionar o ícone, cor e forma personalizados\n• Adicionado novo \"widget de Coordenadas\" com coordenadas da localização atual\n• Capacidade de importar plug-ins personalizados definidos pelo utilizador\n• Funcionalidade de importação / exportação melhorada significativamente\n• \"Distância por toque\" movida da régua de raio para uma opção separada\n• Corrigido o bloqueio da aplicação CarPlay quando o ecrã do iPhone é desligado\n• A tela de plug-ins foi movido de \"Mapas e recursos\" para o \"Menu principal\"\n• Adicionada localização finlandesa\n• Correção da interface no modo paisagem na tela \"Planear uma rota\"\n• Adicionado suporte para roteamento personalizado e ficheiros de renderização\n• Corrigido o desempenho da linha de direção dos marcadores\n• Corrigido problema com a importação de ficheiros GPX com extensões em maiúsculas\n• Corrigido problema com o menu \"Seguir trilho\"\n• Corrigida importação de arquivos OBF\n";
+"approximate_file_size" = "Tamanho aproximado do arquivo: %@";

@@ -60,10 +60,13 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeOsmEdits,
     EOAImportDataTypeActiveMarkers,
     EOAImportDataTypeHistoryMarkers,
-    EOAImportDataTypeSearchHistory
+    EOAImportDataTypeSearchHistory,
+    EOAImportDataTypeGlobal
 };
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, assign) BOOL needRestart;
 
 @end
 
@@ -121,7 +124,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     __block NSInteger markersCount = 0;
     __block NSInteger historyMarkersCount = 0;
     __block NSInteger searchHistoryCount = 0;
-    
+    __block NSInteger globalCount = 0;
+
     [_itemsMap enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull settings, BOOL * _Nonnull stop) {
         if (type == OAExportSettingsType.PROFILE)
             profilesCount += settings.count;
@@ -153,6 +157,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             historyMarkersCount += settings.count;
         else if (type == OAExportSettingsType.SEARCH_HISTORY)
             searchHistoryCount += settings.count;
+        else if (type == OAExportSettingsType.GLOBAL)
+            globalCount += settings.count;
     }];
     
     if (profilesCount > 0)
@@ -305,6 +311,17 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             }
          ];
     }
+    if (globalCount > 0)
+    {
+        _needRestart = YES;
+        [_data addObject: @{
+            @"label": OALocalizedString(@"general_settings_2"),
+            @"iconName": @"left_menu_icon_settings",
+            @"count": [NSString stringWithFormat:@"%ld", globalCount],
+            @"category" : @(EOAImportDataTypeGlobal)
+            }
+         ];
+    }
 }
  
 - (void) applyLocalization
@@ -338,6 +355,14 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     OAMapActions *mapActions = [[OAMapActions alloc] init];
     OAApplicationMode *currentRoutingMode = [mapActions getRouteMode];
     [OARoutingHelper.sharedInstance setAppMode:currentRoutingMode];
+}
+
+- (NSString *)getTitleForSection
+{
+    NSString *headerText = OALocalizedString(@"import_complete_description");
+    if (_needRestart)
+        headerText = [NSString stringWithFormat:@"%@\n\n%@", headerText, OALocalizedString(@"app_restart_required")];
+    return headerText;
 }
 
 #pragma mark - Actions
@@ -380,12 +405,12 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:[self getTitleForSection] boldFragment:_fileName forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:[self getTitleForSection] boldFragment:_fileName inSection:section];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -463,6 +488,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     else if (dataType == EOAImportDataTypeSearchHistory)
     {
         [rootController.mapPanel openSearch];
+    }
+    else if (dataType == EOAImportDataTypeGlobal)
+    {
+        OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] init];
+        [rootController.navigationController pushViewController:settingsVC animated:NO];
     }
 }
 

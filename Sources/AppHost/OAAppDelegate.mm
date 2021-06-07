@@ -403,7 +403,8 @@
 - (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
     _app.carPlayActive = NO;
-    [OAAppSettings sharedManager].applicationMode = [OAApplicationMode DEFAULT];
+    
+    OAAppSettings.sharedManager.applicationMode = OAAppSettings.sharedManager.defaultApplicationMode;
     [OARootViewController.instance.mapPanel onCarPlayDisconnected:^{
         [_carPlayMapController detachFromCarPlayWindow];
         _carPlayDashboardController = nil;

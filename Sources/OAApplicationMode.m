@@ -554,7 +554,7 @@ static OAApplicationMode *_CARPLAY;
 + (void) onApplicationStart
 {
     [self initCustomModes];
-//    [self initModesParams];
+    [self initModesParams];
     [self initRegVisibility];
     [self reorderAppModes];
     [OAAppSettings.sharedManager setupAppMode];
@@ -571,6 +571,11 @@ static OAApplicationMode *_CARPLAY;
         OAApplicationMode *m = [OAApplicationMode buildApplicationModeByKey:appModeKey];
         [_values addObject:m];
     }
+}
+
++ (void) initModesParams
+{
+    [_CARPLAY setParent:_CAR];
 }
 
 + (NSComparisonResult) compareModes:(OAApplicationMode *)obj1 obj2:(OAApplicationMode *) obj2

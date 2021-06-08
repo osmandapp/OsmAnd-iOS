@@ -717,7 +717,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 //        layer.setTapsDisabled(true);
         OASnapTrackWarningViewController *bottomSheet = [[OASnapTrackWarningViewController alloc] init];
         bottomSheet.delegate = self;
-        [bottomSheet show];
+        [bottomSheet presentInViewController:self animated:YES];
 //        AndroidUiHelper.setVisibility(mapActivity, View.GONE, R.id.map_ruler_container);
     }
 }
@@ -1767,7 +1767,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
     OAGpxApproximationViewController *bottomSheet = [[OAGpxApproximationViewController alloc] initWithMode:_editingContext.appMode routePoints:[_editingContext getRoutePoints]];
     bottomSheet.delegate = self;
-    [bottomSheet show];
+    [bottomSheet presentInViewController:self animated:YES];
 }
 
 #pragma mark - OAGpxApproximationBottomSheetDelegate

@@ -9,17 +9,18 @@
 #import "OAGpxApproximationViewController.h"
 #import "OATitleSliderRoundCell.h"
 #import "OAIconTitleIconRoundCell.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kThresholdSection @"thresholdSection"
 #define kProfilesSection @"profilesSection"
 
-@interface OAGpxApproximationBottomSheetScreen ()
+@interface OAGpxApproximationViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAGpxApproximationBottomSheetScreen
+@implementation OAGpxApproximationViewController
 {
     OAGpxApproximationViewController *vwController;
     NSDictionary<NSString *, NSArray *> *_data;
@@ -35,30 +36,57 @@
     UIProgressView *_progressBarView;
 }
 
-@synthesize tableData, tblView, vwController;
-
-- (id)initWithTable:(UITableView *)tableView viewController:(OAGpxApproximationViewController *)viewController param:(id)param;
+- (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OAGpxRtePt *> *> *)routePoints
 {
     self = [super init];
     if (self)
     {
-        NSDictionary *customParam = (NSDictionary *) param;
-        _snapToRoadAppMode = [customParam.allKeys containsObject:@"mode"] ? customParam[@"mode"] : OAApplicationMode.CAR;
-        _routePoints = customParam[@"routePoints"];
+        _snapToRoadAppMode = OAApplicationMode.CAR;
+        _routePoints = routePoints;
         _distanceThreshold = 50;
-        [self initOnConstruct:tableView viewController:viewController];
     }
     return self;
 }
 
-- (void)initOnConstruct:(UITableView *)tableView viewController:(OAGpxApproximationViewController *)viewController
+- (void)viewDidLoad
 {
-    vwController = viewController;
-    tblView = tableView;
-    tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [self setHeaderViewVisibility:YES];
+}
 
+- (CGFloat)initialHeight
+{
+    return DeviceScreenHeight * 0.6;
+}
+
+- (void)applyLocalization
+{
+    [self.leftButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.rightButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
+}
+
+- (void) commonInit
+{
+    [self setupView];
     [self initData];
 }
+
+- (void)onRightButtonPressed
+{
+    if (self.delegate)
+        [self.delegate onApplyGpxApproximation];
+}
+
+- (void) onBottomSheetDismissed
+{
+    if (self.delegate)
+        [self.delegate onCancelGpxApproximation];
+}
+
 
 - (void)setupView
 {
@@ -135,23 +163,6 @@
             _progressBarView.hidden = NO;
         _progressBarView.progress = progress;
     }
-}
-
-- (BOOL)cancelButtonPressed
-{
-    /*if (gpxApproximator != null) {
-        gpxApproximator.cancelApproximation();
-    }*/
-    return YES;
-}
-
-- (void)doneButtonPressed
-{
-    /*if (gpxApproximator != null) {
-        gpxApproximator.cancelApproximation();
-    }*/
-    [vwController setApply:YES];
-    [vwController dismiss];
 }
 
 - (void)start/*:(OAGpxApproximator *)approximator*/
@@ -414,80 +425,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 16.;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    view.tintColor = UIColorFromRGB(color_bottom_sheet_background);
-}
-
-@end
-
-@interface OAGpxApproximationViewController ()
-
-@end
-
-@implementation OAGpxApproximationViewController
-{
-    BOOL _apply;
-}
-
-- (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OAGpxRtePt *> *> *)routePoints
-{
-    NSMutableDictionary *customParam = [NSMutableDictionary new];
-    customParam[@"mode"] = mode;
-    customParam[@"routePoints"] = routePoints;
-    return [super initWithParam:customParam];
-}
-
-- (void)setupView
-{
-    if (!self.screenObj)
-        self.screenObj = [[OAGpxApproximationBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
-
-    [super setupView];
-}
-
-- (void)additionalSetup
-{
-    [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-}
-
-- (void)applyLocalization
-{
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
-}
-
-- (void)dismiss
-{
-    [super dismiss];
-    if (self.delegate)
-    {
-        if (_apply)
-            [self.delegate onApplyGpxApproximation];
-        else
-            [self.delegate onCancelGpxApproximation];
-    }
-}
-
-- (void)dismiss:(id)sender
-{
-    [super dismiss:sender];
-    if (self.delegate)
-    {
-        if (_apply)
-            [self.delegate onApplyGpxApproximation];
-        else
-            [self.delegate onCancelGpxApproximation];
-    }
-}
-
-- (void)setApply:(BOOL)apply
-{
-    _apply = apply;
 }
 
 @end

@@ -6,9 +6,7 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABottomSheetViewController.h"
-#import "OABottomSheetTwoButtonsViewController.h"
-#import "OAGPXDocument.h"
+#import "OABaseBottomSheetViewController.h"
 
 @protocol OAGpxApproximationBottomSheetDelegate <NSObject>
 
@@ -19,18 +17,12 @@
 
 @end
 
-@interface OAGpxApproximationBottomSheetScreen : NSObject<OABottomSheetScreen>
+@class OAGpxRtePt, OAApplicationMode;
 
-- (instancetype)initWithTable:(UITableView *)tableView viewController:(OABottomSheetTwoButtonsViewController *)viewController param:(id)param;
-
-@end
-
-@interface OAGpxApproximationViewController : OABottomSheetTwoButtonsViewController
+@interface OAGpxApproximationViewController : OABaseBottomSheetViewController
 
 @property (nonatomic) id<OAGpxApproximationBottomSheetDelegate> delegate;
 
 - (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OAGpxRtePt *> *> *)routePoints;
-
-- (void)setApply:(BOOL)apply;
 
 @end

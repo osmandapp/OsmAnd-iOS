@@ -327,7 +327,7 @@ static OAApplicationMode *_CARPLAY;
 
 - (BOOL) isCustomProfile
 {
-    return _parent != nil;
+    return self == _CARPLAY ? NO : _parent != nil;
 }
 
 - (OAApplicationMode *) getParent
@@ -580,6 +580,10 @@ static OAApplicationMode *_CARPLAY;
 
 + (NSComparisonResult) compareModes:(OAApplicationMode *)obj1 obj2:(OAApplicationMode *) obj2
 {
+    if (obj1 == _CARPLAY)
+        return NSOrderedDescending;
+    else if (obj2 == _CARPLAY)
+        return NSOrderedAscending;
     return (obj1.getOrder < obj2.getOrder) ? NSOrderedAscending : ((obj1.getOrder == obj2.getOrder) ? NSOrderedSame : NSOrderedDescending);
 }
 

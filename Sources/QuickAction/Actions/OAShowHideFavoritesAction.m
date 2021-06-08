@@ -27,7 +27,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [OAAppSettings sharedManager].mapSettingShowFavorites;
+    return [OAAppSettings sharedManager].mapSettingShowFavorites.get;
 }
 
 - (NSString *)getActionStateName

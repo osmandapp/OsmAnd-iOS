@@ -2896,9 +2896,8 @@
     OADayNightHelper *_dayNightHelper;
 }
 
-@synthesize settingShowMapRulet=_settingShowMapRulet, appearanceMode=_appearanceMode;
+@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits, mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, mapSettingTrackRecording=_mapSettingTrackRecording;
-@synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
 
 + (OAAppSettings*) sharedManager
 {
@@ -3796,12 +3795,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingMapLanguageShowLocal forKey:settingMapLanguageShowLocalKey];
 }
 
-- (void) setAppearanceMode:(int)appearanceMode
-{
-    [_appearanceMode set:appearanceMode];
-    [_dayNightHelper forceUpdate];
-}
-
 - (void) setFirstMapIsDownloaded:(BOOL)firstMapIsDownloaded
 {
     _firstMapIsDownloaded = firstMapIsDownloaded;
@@ -4234,15 +4227,19 @@
 - (void) setOverlayOpacitySliderVisibility:(BOOL)visibility
 {
     if (visibility)
+    {
         if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL];
         else
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
+    }
    else
+   {
         if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY];
         else
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
+    }
 }
 
 - (BOOL) getUnderlayOpacitySliderVisibility
@@ -4253,15 +4250,19 @@
 - (void) setUnderlayOpacitySliderVisibility:(BOOL)visibility
 {
     if (visibility)
+    {
         if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL];
         else
-            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY];
+    }
    else
+    {
         if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
         else
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
+    }
 }
 
 - (BOOL) nightMode

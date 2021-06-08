@@ -47,8 +47,8 @@
     _searchHelper = OAQuickSearchHelper.instance;
     _searchUICore = _searchHelper.getCore;
     
-    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage;
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     OASearchSettings *settings = [[_searchUICore getSearchSettings] setOriginalLocation:OsmAndApp.instance.locationServices.lastKnownLocation];
     settings = [settings setLang:locale ? locale : @"" transliterateIfMissing:transliterate];
     [_searchUICore updateSettings:settings];

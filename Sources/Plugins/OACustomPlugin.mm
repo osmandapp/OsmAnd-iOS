@@ -110,8 +110,7 @@
 
 - (NSString *)getDescription
 {
-    NSString *descr = [OAJsonHelper getLocalizedResFromMap:_descriptions defValue:nil];
-    return descr != nil ? descr : @"";
+    return [OAJsonHelper getLocalizedResFromMap:_descriptions defValue:@""];
 }
 
 - (NSArray<OAWorldRegion *> *)getDownloadMaps

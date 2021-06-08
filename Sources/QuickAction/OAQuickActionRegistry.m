@@ -190,7 +190,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     _disabledQuickActionTypesStr = [NSDictionary dictionaryWithDictionary:disabledQuickActionTypesStr];
 
     // reparse to get new quick actions
-    _quickActions = [self parseActiveActionsList:_settings.quickActionsList];
+    _quickActions = [self parseActiveActionsList:_settings.quickActionsList.get];
 }
 
 -(NSArray<OAQuickAction *> *) getQuickActions
@@ -201,7 +201,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
 -(void) addQuickAction:(OAQuickAction *) action
 {
     [_quickActions addObject:action];
-    [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
+    [_settings.quickActionsList set:[self quickActionListToString:_quickActions]];
 }
 
 -(void) updateQuickAction:(OAQuickAction *) action
@@ -213,19 +213,19 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
         [mutableActions setObject:action atIndexedSubscript:index];
         _quickActions = [NSMutableArray arrayWithArray:mutableActions];
     }
-    [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
+    [_settings.quickActionsList set:[self quickActionListToString:_quickActions]];
 }
 
 -(void) updateQuickActions:(NSArray<OAQuickAction *> *) quickActions
 {
     _quickActions = [NSMutableArray arrayWithArray:quickActions];
-    [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
+    [_settings.quickActionsList set:[self quickActionListToString:_quickActions]];
 }
 
 - (void)deleteQuickAction:(OAQuickAction *)action
 {
     [_quickActions removeObject:action];
-    [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
+    [_settings.quickActionsList set:[self quickActionListToString:_quickActions]];
 }
 
 -(OAQuickAction *) getQuickAction:(long)identifier

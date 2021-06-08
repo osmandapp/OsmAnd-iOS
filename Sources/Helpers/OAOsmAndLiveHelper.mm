@@ -124,7 +124,7 @@
 
 + (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager
 {
-    if (![OAAppSettings sharedManager].settingOsmAndLiveEnabled || ![OAIAPHelper sharedInstance].subscribedToLiveUpdates)
+    if (![OAAppSettings sharedManager].settingOsmAndLiveEnabled.get || ![OAIAPHelper sharedInstance].subscribedToLiveUpdates)
         return;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

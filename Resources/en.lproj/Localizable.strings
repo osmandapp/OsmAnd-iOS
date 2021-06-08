@@ -503,6 +503,9 @@
 "shared_string_preparing" = "Preparing";
 "shared_string_min" = "Min.";
 "shared_string_max" = "Max.";
+"shared_string_wifi_only" = "Only on Wi-Fi";
+
+"restart" = "Restart";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -656,6 +659,15 @@
 "poi_clear" = "Clear";
 "poi_list" = "POI list";
 
+"gpxup_public" = "Public";
+"gpxup_identifiable" = "Identifiable";
+"gpxup_trackable" = "Trackable";
+"gpxup_private" = "Private";
+
+"gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
+"gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
+"gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
+"gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
 
 "track_during_nav" = "Auto-record track";
 "track_during_nav_descr" = "Turn on to automatically save a track during navigation";
@@ -672,6 +684,7 @@
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Cycling";
 "m_style_pulic_transport" = "Public transport";
+"m_style_carplay" = "CarPlay";
 
 "map_settings_map" = "Map";
 "layer_amenity_label" = "POI overlay labels";
@@ -825,6 +838,7 @@
 
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
+"app_restart_required" = "Application restart required to apply some settings.";
 "shared_string_finish" = "Finish";
 "added_items" = "Added items: %@";
 
@@ -849,6 +863,7 @@
 "position_icon_while_moving" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
+"base_profile_descr_carplay" = "Driving with CarPlay mode";
 "base_profile_descr_bicycle" = "Mountain bike, moped, horse";
 "base_profile_descr_pedestrian" = "Walking, hiking, running";
 "base_profile_descr_public_transport" = "Public transport types";
@@ -2215,7 +2230,7 @@
 
 "latest_version" = "You have the latest version: %@";
 
-"ios_release_3_80" = "• Introduced \“Application Profiles\" with independent settings\n
+"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n
 • New arrangement of settings by profiles and types: navigation, general, map and screen\n
 • Ability to import or export profile settings\n
 • Added data sources for Online photos\n
@@ -2229,3 +2244,18 @@
 • Fixed issues with missing Wikipedia search category\n
 • Settings Import: fixed bugs, added support for all data types available in OsmAnd\n
 • OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
+
+"ios_release_4_00" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n
+• Added new \"Coordinates widget\" with coordinates of the current location\n
+• Added ability to import custom user-defined plugins\n
+• Significantly extended the import/export functionality\n
+• Distance by tap moved from the Radius ruler into a separate option\n
+• Fixed CarPlay app freezes when iPhone screen is turned off\n
+• Plugins screen moved from the Maps & Resources to the main menu\n
+• Added Finnish localization\n
+• Fixed UI in landscape orientation for \"Plan a route\" screen\n
+• Added support for custom routing and rendering files\n
+• Fixed performance of markers direction line\n 
+• Fixed issue with importing GPX files with uppercase extensions\n
+• Fixed issue with \"Follow track\" menu\n
+• Fixed import of OBF files\n";

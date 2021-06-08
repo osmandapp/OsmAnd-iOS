@@ -46,8 +46,8 @@ static OATransportRouteToolbarViewController *toolbarController;
     if (self)
     {
         _transportRoute = transportRoute;
-        _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-        _transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+        _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+        _transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
         _lang = QString::fromNSString(_prefLang);
         
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
@@ -140,8 +140,8 @@ static OATransportRouteToolbarViewController *toolbarController;
 
 + (NSString *) getTitle:(OATransportStopRoute *)transportRoute
 {
-    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     const auto& lang = QString::fromNSString(prefLang);
 
     if (transportRoute.refStop && transportRoute.refStop->getName(lang, transliterate).length() > 0)

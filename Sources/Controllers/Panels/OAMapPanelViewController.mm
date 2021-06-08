@@ -1744,7 +1744,7 @@ typedef enum
     NSMutableArray *paths = [NSMutableArray array];
     
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    for (NSString *filePath in settings.mapSettingVisibleGpx)
+    for (NSString *filePath in settings.mapSettingVisibleGpx.get)
     {
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
@@ -1850,9 +1850,9 @@ typedef enum
     if (_activeTargetType == OATargetGPXEdit)
         wptViewController.navBarBackground.backgroundColor = UIColorFromRGB(0x4caf50);
 
-    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
     {
-        [OAAppSettings sharedManager].mapSettingShowRecordingTrack = YES;
+        [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
         [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
 }
@@ -2405,10 +2405,10 @@ typedef enum
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
-    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if (!lang)
         lang = @"";
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     
     NSString *caption = name.length == 0 ? [address getName:lang transliterate:transliterate] : name;
     NSString *description = typeName.length == 0 ?  [address getAddressTypeName] : typeName;
@@ -3678,7 +3678,8 @@ typedef enum
             //app.logEvent(mapActivity, "start_navigation");
             _settings.applicationMode = [_routingHelper getAppMode];
             [_mapViewTrackingUtilities backToLocationImpl:17 forceZoom:YES];
-            _settings.followTheRoute = YES;
+            [_settings.followTheRoute set:YES];
+            [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
             [_routingHelper setFollowingMode:true];
             [_routingHelper setRoutePlanningMode:false];
             [_mapViewTrackingUtilities switchToRoutePlanningMode];

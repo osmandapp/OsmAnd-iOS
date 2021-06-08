@@ -749,8 +749,8 @@
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OAProfileSetting *obj = notification.object;
-    OAProfileBoolean *centerPositionOnMap = [OAAppSettings sharedManager].centerPositionOnMap;
+    OACommonPreference *obj = notification.object;
+    OACommonBoolean *centerPositionOnMap = [OAAppSettings sharedManager].centerPositionOnMap;
     if (obj)
     {
         if (obj == centerPositionOnMap)

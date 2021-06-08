@@ -139,7 +139,6 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> IOAMapTiledCollectionProvider::b
             if (intr)
             {
                 img = getImageBitmap(i, false);
-                img = OsmAnd::SkiaUtilities::scaleBitmap(img, 0.5f, 0.5f);
                 builder.setBaseOrder(builder.getBaseOrder() + 1);
             }
             else if (showCaptions && !getCaption(i).isEmpty())

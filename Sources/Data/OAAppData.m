@@ -44,24 +44,24 @@
     
     NSMutableArray<OARTargetPoint *> *_intermediates;
     
-    OAProfileMapSource *_lastMapSourceProfile;
-    OAProfileMapSource *_overlayMapSourceProfile;
-    OAProfileMapSource *_lastOverlayMapSourceProfile;
-    OAProfileMapSource *_underlayMapSourceProfile;
-    OAProfileMapSource  *_lastUnderlayMapSourceProfile;
-    OAProfileDouble *_overlayAlphaProfile;
-    OAProfileDouble *_underlayAlphaProfile;
-    OAProfileTerrain *_terrainTypeProfile;
-    OAProfileTerrain *_lastTerrainTypeProfile;
-    OAProfileDouble *_hillshadeAlphaProfile;
-    OAProfileInteger *_hillshadeMinZoomProfile;
-    OAProfileInteger *_hillshadeMaxZoomProfile;
-    OAProfileDouble *_slopeAlphaProfile;
-    OAProfileInteger *_slopeMinZoomProfile;
-    OAProfileInteger *_slopeMaxZoomProfile;
-    OAProfileBoolean *_mapillaryProfile;
+    OACommonMapSource *_lastMapSourceProfile;
+    OACommonMapSource *_overlayMapSourceProfile;
+    OACommonMapSource *_lastOverlayMapSourceProfile;
+    OACommonMapSource *_underlayMapSourceProfile;
+    OACommonMapSource  *_lastUnderlayMapSourceProfile;
+    OACommonDouble *_overlayAlphaProfile;
+    OACommonDouble *_underlayAlphaProfile;
+    OACommonTerrain *_terrainTypeProfile;
+    OACommonTerrain *_lastTerrainTypeProfile;
+    OACommonDouble *_hillshadeAlphaProfile;
+    OACommonInteger *_hillshadeMinZoomProfile;
+    OACommonInteger *_hillshadeMaxZoomProfile;
+    OACommonDouble *_slopeAlphaProfile;
+    OACommonInteger *_slopeMinZoomProfile;
+    OACommonInteger *_slopeMaxZoomProfile;
+    OACommonBoolean *_mapillaryProfile;
     
-    NSMapTable<NSString *, OAProfileSetting *> *_registeredPreferences;
+    NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
 }
 
 @synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration;
@@ -161,23 +161,23 @@
                                                             andObserve:_applicationModeChangedObservable];
     _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings
-    _lastMapSourceProfile = [OAProfileMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                                                                                              andVariant:@"type_default"]];
-    _overlayMapSourceProfile = [OAProfileMapSource withKey:kOverlaySourceKey defValue:nil];
-    _underlayMapSourceProfile = [OAProfileMapSource withKey:kUnderlaySourceKey defValue:nil];
-    _lastOverlayMapSourceProfile = [OAProfileMapSource withKey:kLastOverlayKey defValue:nil];
-    _lastUnderlayMapSourceProfile = [OAProfileMapSource withKey:kLastUnderlayKey defValue:nil];
-    _overlayAlphaProfile = [OAProfileDouble withKey:kOverlayAlphaKey defValue:0.5];
-    _underlayAlphaProfile = [OAProfileDouble withKey:kUnderlayAlphaKey defValue:0.5];
-    _terrainTypeProfile = [OAProfileTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
-    _lastTerrainTypeProfile = [OAProfileTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
-    _hillshadeAlphaProfile = [OAProfileDouble withKey:kHillshadeAlphaKey defValue:0.45];
-    _slopeAlphaProfile = [OAProfileDouble withKey:kSlopeAlphaKey defValue:0.35];
-    _hillshadeMinZoomProfile = [OAProfileInteger withKey:kHillshadeMinZoomKey defValue:3];
-    _hillshadeMaxZoomProfile = [OAProfileInteger withKey:kHillshadeMaxZoomKey defValue:16];
-    _slopeMinZoomProfile = [OAProfileInteger withKey:kSlopeMinZoomKey defValue:3];
-    _slopeMaxZoomProfile = [OAProfileInteger withKey:kSlopeMaxZoomKey defValue:16];
-    _mapillaryProfile = [OAProfileBoolean withKey:kMapillaryKey defValue:NO];
+    _lastMapSourceProfile = [OACommonMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
+                                                                                                             andVariant:@"type_default"]];
+    _overlayMapSourceProfile = [OACommonMapSource withKey:kOverlaySourceKey defValue:nil];
+    _underlayMapSourceProfile = [OACommonMapSource withKey:kUnderlaySourceKey defValue:nil];
+    _lastOverlayMapSourceProfile = [OACommonMapSource withKey:kLastOverlayKey defValue:nil];
+    _lastUnderlayMapSourceProfile = [OACommonMapSource withKey:kLastUnderlayKey defValue:nil];
+    _overlayAlphaProfile = [OACommonDouble withKey:kOverlayAlphaKey defValue:0.5];
+    _underlayAlphaProfile = [OACommonDouble withKey:kUnderlayAlphaKey defValue:0.5];
+    _terrainTypeProfile = [OACommonTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
+    _lastTerrainTypeProfile = [OACommonTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
+    _hillshadeAlphaProfile = [OACommonDouble withKey:kHillshadeAlphaKey defValue:0.45];
+    _slopeAlphaProfile = [OACommonDouble withKey:kSlopeAlphaKey defValue:0.35];
+    _hillshadeMinZoomProfile = [OACommonInteger withKey:kHillshadeMinZoomKey defValue:3];
+    _hillshadeMaxZoomProfile = [OACommonInteger withKey:kHillshadeMaxZoomKey defValue:16];
+    _slopeMinZoomProfile = [OACommonInteger withKey:kSlopeMinZoomKey defValue:3];
+    _slopeMaxZoomProfile = [OACommonInteger withKey:kSlopeMaxZoomKey defValue:16];
+    _mapillaryProfile = [OACommonBoolean withKey:kMapillaryKey defValue:NO];
 
     _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
     [_registeredPreferences setObject:_overlayMapSourceProfile forKey:@"map_overlay_previous"];
@@ -806,7 +806,7 @@
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode
 {
-    for (OAProfileSetting *value in [_registeredPreferences objectEnumerator].allObjects)
+    for (OACommonPreference *value in [_registeredPreferences objectEnumerator].allObjects)
     {
         [value resetModeToDefault:mode];
     }

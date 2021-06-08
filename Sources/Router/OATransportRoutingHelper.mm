@@ -209,7 +209,7 @@
         std::string vl;
         if (pr.type == RoutingParameterType::BOOLEAN)
         {
-            OAProfileBoolean *pref = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:pr.defaultBoolean];
+            OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:pr.defaultBoolean];
             BOOL b = [pref get:params.mode];
             vl = b ? "true" : "";
         }

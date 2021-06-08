@@ -41,15 +41,16 @@ static OAApplicationMode *_PEDESTRIAN;
 static OAApplicationMode *_AIRCRAFT;
 static OAApplicationMode *_BOAT;
 static OAApplicationMode *_SKI;
+static OAApplicationMode *_CARPLAY;
 
 + (void)initRegVisibility
 {
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI];
+    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI, _CARPLAY];
     
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
-    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI];
+    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _CARPLAY];
     NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
     
     // left
@@ -65,8 +66,8 @@ static OAApplicationMode *_SKI;
     [self regWidgetVisibility:@"distance" am:all];
     [self regWidgetVisibility:@"time" am:all];
     [self regWidgetVisibility:@"intermediate_time" am:all];
-    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT]];
-    [self regWidgetVisibility:@"max_speed" am:@[_CAR]];
+    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT, _CARPLAY]];
+    [self regWidgetVisibility:@"max_speed" am:@[_CAR, _CARPLAY]];
     [self regWidgetVisibility:@"altitude" am:@[_PEDESTRIAN, _BICYCLE]];
     [self regWidgetVisibility:@"gps_info" am:none];
     
@@ -81,7 +82,7 @@ static OAApplicationMode *_SKI;
     [self regWidgetVisibility:@"config" am:none];
     [self regWidgetVisibility:@"layers" am:none];
     [self regWidgetVisibility:@"compass" am:none];
-    [self regWidgetVisibility:@"street_name" am:@[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT]];
+    [self regWidgetVisibility:@"street_name" am:@[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _CARPLAY]];
     [self regWidgetVisibility:@"back_to_location" am:all];
     [self regWidgetVisibility:@"monitoring_services" am:none];
     [self regWidgetVisibility:@"bgService" am:none];
@@ -139,6 +140,12 @@ static OAApplicationMode *_SKI;
     _SKI.baseMinSpeed = 0.42;
     _SKI.baseMaxSpeed = 62.5;
     [_values addObject:_SKI];
+    
+    _CARPLAY = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_carplay") stringKey:@"carplay"];
+    _CARPLAY.descr = OALocalizedString(@"base_profile_descr_carplay");
+    _CARPLAY.baseMinSpeed = 2.78;
+    _CARPLAY.baseMaxSpeed = 54.17;
+    [_values addObject:_CARPLAY];
 }
 
 + (OAApplicationMode *) DEFAULT
@@ -179,6 +186,11 @@ static OAApplicationMode *_SKI;
 + (OAApplicationMode *) SKI
 {
     return _SKI;
+}
+
++ (OAApplicationMode *) CARPLAY
+{
+    return _CARPLAY;
 }
 
 + (OAApplicationMode *) buildApplicationModeByKey:(NSString *)key
@@ -227,11 +239,13 @@ static OAApplicationMode *_SKI;
                                                   withHandler:@selector(onAvailableAppModesChanged)
                                                    andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
         }
-        NSString *available = settings.availableApplicationModes;
+        NSString *available = settings.availableApplicationModes.get;
         _cachedFilteredValues = [NSMutableArray array];
         for (OAApplicationMode *v in _values)
+        {
             if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
                 [_cachedFilteredValues addObject:v];
+        }
     }
     return [NSArray arrayWithArray:_cachedFilteredValues];
 }
@@ -540,7 +554,7 @@ static OAApplicationMode *_SKI;
 + (void) onApplicationStart
 {
     [self initCustomModes];
-//    [self initModesParams];
+    [self initModesParams];
     [self initRegVisibility];
     [self reorderAppModes];
     [OAAppSettings.sharedManager setupAppMode];
@@ -549,7 +563,7 @@ static OAApplicationMode *_SKI;
 + (void) initCustomModes
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if (settings.customAppModes.length == 0)
+    if (settings.customAppModes.get.length == 0)
         return;
     
     for (NSString *appModeKey in [settings getCustomAppModesKeys])
@@ -557,6 +571,11 @@ static OAApplicationMode *_SKI;
         OAApplicationMode *m = [OAApplicationMode buildApplicationModeByKey:appModeKey];
         [_values addObject:m];
     }
+}
+
++ (void) initModesParams
+{
+    [_CARPLAY setParent:_CAR];
 }
 
 + (NSComparisonResult) compareModes:(OAApplicationMode *)obj1 obj2:(OAApplicationMode *) obj2
@@ -596,8 +615,8 @@ static OAApplicationMode *_SKI;
             [res appendString:@","];
     }];
     
-    if (![res isEqualToString:settings.customAppModes])
-        settings.customAppModes = res;
+    if (![res isEqualToString:settings.customAppModes.get])
+        [settings.customAppModes set:res];
 }
 
 + (NSArray<OAApplicationMode *> *) getCustomAppModes
@@ -693,7 +712,8 @@ static OAApplicationMode *_SKI;
             [str appendString:m.stringKey];
             [str appendString:@","];
         }
-        [settings setAvailableApplicationModes:str];
+        [settings.availableApplicationModes set:str];
+        [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
 }
 

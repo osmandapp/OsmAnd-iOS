@@ -9,6 +9,7 @@
 #import "OADayNightModeAction.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionType.h"
+#import "OADayNightHelper.h"
 
 static OAQuickActionType *TYPE;
 
@@ -23,9 +24,10 @@ static OAQuickActionType *TYPE;
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (settings.nightMode)
-        [settings setAppearanceMode:APPEARANCE_MODE_DAY];
+        [settings.appearanceMode set:APPEARANCE_MODE_DAY];
     else
-        [settings setAppearanceMode:APPEARANCE_MODE_NIGHT];
+        [settings.appearanceMode set:APPEARANCE_MODE_NIGHT];
+    [[OADayNightHelper instance] forceUpdate];
 }
 
 - (NSString *)getIconResName

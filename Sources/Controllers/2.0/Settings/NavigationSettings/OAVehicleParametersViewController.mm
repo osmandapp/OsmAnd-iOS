@@ -99,7 +99,7 @@
             NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             if (!(p.type == RoutingParameterType::BOOLEAN))
             {
-                OAProfileString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue: @"0"];
+                OACommonString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue:@"0"];
                 NSString *value = [stringParam get:self.appMode];
                 int index = -1;
                 

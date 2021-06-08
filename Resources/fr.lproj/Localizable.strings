@@ -420,7 +420,7 @@
 "search_location" = "Recherche de la position…";
 "first_usage_greeting" = "Visualisez les cartes hors ligne, laissez-vous guider sur vos itinéraires sans connexion Internet et découvrez de nouveaux lieux.";
 "search_my_location" = "Rechercher ma position";
-"get_started" = "Démarrer";
+"get_started" = "Démarrons ensemble";
 "shared_string_is_open_24_7" = "Ouvert 24/7";
 // Shared Strings
 "shared_string_select" = "Sélectionner";
@@ -517,10 +517,10 @@
 "sort_by_distance" = "Trier par distance";
 "sort_by_name" = "Trier par nom";
 "map_markers_other" = "Autres marques";
-"stop_routing_confirm" = "Êtes-vous certain de vouloir arrêter la navigation \?";
+"stop_routing_confirm" = "Êtes-vous certain de vouloir arrêter le guidage ?";
 "cancel_route" = "Arrêter la navigation";
 "route_is_too_long_v2" = "Cet itinéraire risque d'être très long à calculer. Merci d'ajouter des points de passage intermédiaires.";
-"navigation_over_track" = "Démarrer la navigation en suivant cette trace ?";
+"navigation_over_track" = "Démarrer le guidage en suivant cette trace ?";
 "use_displayed_track_for_navigation" = "Souhaitez-vous suivre la trace affichée à l'écran ?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Sélectionnez sur la carte";
@@ -531,7 +531,7 @@
 "gpx_option_reverse_route" = "Inverser l'itinéraire GPX";
 "use_points_as_intermediates" = "Calculer un itinéraire entre des points";
 "calculate_osmand_route_without_internet" = "Calculer un itinéraire OsmAnd hors-ligne";
-"routing_settings_2" = "Paramètres de navigation";
+"routing_settings_2" = "Paramètres de guidage";
 "gpx_navigation" = "Suivre la trace";
 "impassable_road" = "Éviter les routes";
 "impassable_road_desc" = "Sélectionnez les routes à éviter";
@@ -549,7 +549,7 @@
 "choose_auto_follow_route" = "Centrer automatiquement la carte";
 "auto_zoom_map" = "Zoom automatique de la carte";
 "auto_zoom_map_descr" = "Zoom de la carte adapté à la vitesse (lorsque que votre position figure sur la carte)";
-"guidance_preferences_descr" = "Paramètres de navigation";
+"guidance_preferences_descr" = "Paramètres de guidage";
 "routing_preferences_descr" = "Paramètres d\'itinéraire";
 "routing_settings" = "Navigation";
 "app_mode_train" = "Train";
@@ -595,7 +595,7 @@
 "show_warnings_descr" = "Paramétrer les avertissements de circulation (limites de vitesse, stops, ralentisseurs, tunnels), les radars et les informations sur les voies de circulation";
 "speak_title" = "Annoncer…";
 "speak_descr" = "Annoncer les noms de rue, les avertissements (stops, ralentisseurs, radars), les limites de vitesse";
-"keep_informing" = "Répéter les instructions de navigation";
+"keep_informing" = "Répéter les instructions de guidage";
 "keep_informing_descr" = "Répéter les instructions de navigation à intervalles réguliers.";
 "arrival_distance" = "Annonce d\'arrivée";
 "arrival_distance_descr" = "Quand souhaitez-vousêtre informé de l\'arrivée à destination ?";
@@ -677,7 +677,7 @@
 "map_widget_next_turn_small" = "Prochaine bifurcation (petit)";
 "map_widget_next_next_turn" = "Bifurcation suivante (2e)";
 "settings_preset" = "Profil par défaut";
-"settings_preset_descr" = "Les paramètres d’affichage et de navigation sont mémorisés dans un profil. Définissez votre profil par défaut ici.";
+"settings_preset_descr" = "Les paramètres d’affichage et de guidage sont mémorisés dans un profil. Définissez votre profil par défaut ici.";
 "unit_of_length" = "Unités de longueur";
 "unit_of_length_descr" = "Modifie l'unité de mesure de distance.";
 "coords_format" = "Format des coordonnées";
@@ -751,7 +751,7 @@
 "switch_start_finish" = "Inverser départ & arrivée";
 "clear_all_intermediates" = "Effacer toutes lesétapes";
 "shared_string_options" = "Options";
-"cancel_navigation" = "Arrêter la navigation";
+"cancel_navigation" = "Arrêter le guidage";
 "transport_nearby_routes_within" = "Lignesà moins de";
 "transport_nearby_routes" = "À moins de";
 "shared_string_previous" = "Précédent";
@@ -1611,7 +1611,7 @@
 "select_color" = "Sélectionnez la couleur";
 "no_active_route" = "Pas d'itinéraire actif";
 "change_map_behavior" = "Modifier le comportement de la carte pendant la navigation";
-"map_during_navigation" = "Carte pendant la navigation";
+"map_during_navigation" = "Carte pendant le guidage";
 "nav_type_title" = "Type de navigation";
 "appearance_on_map" = "Apparence sur la carte";
 "arrows_on_map" = "Flèches sur la carte";
@@ -1809,7 +1809,7 @@
 "menu" = "Menu";
 "profile_type_osmand_string" = "Profil OsmAnd";
 "configure_map_descr" = "Apparence de la carte";
-"quick_action_remove_next_destination_descr" = "Supprime la prochaineétape de votre route. S\'il s\'agit de la destination finale, la navigation s\'arrêtera.";
+"quick_action_remove_next_destination_descr" = "Supprime la prochaine étape de votre route. S'il s'agit de la destination finale, le guidage s'arrêtera.";
 "num_stops" = "arrêts";
 "help_nav_profiles" = "Profils de navigation";
 "vessel_width_limit_description" = "Définir la largeur du navire pour éviter les ponts étroits";
@@ -2077,5 +2077,4 @@
 "track_is_saved" = "%@\nest enregistré !";
 "ios_release_3_90" = "- Introduction d'une fonction \"Planifier un itinéraire\" pour planifier de futurs voyages avec la possibilité de créer des segments de parcours en utilisant différents types de navigation\n- Ajout d'une option permettant d'activer une boussole sur l'outil \"Règle de rayon\"\n- Ajout de l'option \"Superposition des étiquettes de PI\" qui permet d'afficher les noms des favoris, des points de repère et des marqueurs sur la carte\n- Ajout de nouvelles actions rapides pour la visibilité des courbes de niveau et du relief sur la carte, la modification d'un profil d'application, la suppression d'un point intermédiaire le plus proche\n- Correction des problèmes liés à la catégorie de recherche Wikipédia manquante\n- Importation de paramètres : correction de bugs, ajout du support pour tous les types de données disponibles dans OsmAnd\n- Edition d'OpenStreetMap : correction du sélecteur de temps et de l'impossibilité de modifier le commentaire de l'ensemble des modifications\n";
 "ios_release_3_80" = "- Introduction de \"profils d'application\" avec des paramètres indépendants\n- Nouvelle disposition des paramètres par profils et types : navigation, général, carte et écran\n- Possibilité d'importer ou d'exporter les paramètres des profils\n- Ajout de sources de données pour les photos en ligne\n- Ajout de la possibilité de télécharger des cartes en ligne dans la mémoire cache\n- Algorithmes de \"recherche\" améliorés\n";
-
 "units_nm" = "mn";

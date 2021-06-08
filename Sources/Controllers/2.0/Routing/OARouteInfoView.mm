@@ -187,6 +187,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _appModeView = [NSBundle.mainBundle loadNibNamed:@"OAAppModeView" owner:nil options:nil].firstObject;
     _appModeView.frame = CGRectMake(0., 0., _appModeViewContainer.frame.size.width, _appModeViewContainer.frame.size.height);
     _appModeView.showDefault = NO;
+    _appModeView.showCarPlay = NO;
     _appModeView.delegate = self;
     [_appModeViewContainer addSubview:_appModeView];
     
@@ -2086,7 +2087,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
-    OAAppSettings.sharedManager.gpxRouteSegment = position;
+    [OAAppSettings.sharedManager.gpxRouteSegment set:position];
     
     [[OARootViewController instance].mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
     [_routingHelper recalculateRouteDueToSettingsChange];

@@ -170,7 +170,7 @@
     if (![_appModeBeanPrefsIds containsObject:key])
     {
         OsmAndAppInstance app = OsmAndApp.instance;
-        OAProfileSetting *setting = [settings getSettingById:key];
+        OACommonPreference *setting = [settings getPreferenceByKey:key];
         if (setting)
         {
             if ([key isEqualToString:@"voice_provider"])
@@ -336,11 +336,11 @@
     MutableOrderedDictionary *res = [MutableOrderedDictionary new];
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
-    for (NSString *key in settings.getRegisteredSettings)
+    for (NSString *key in [settings getPreferences:NO].keyEnumerator)
     {
         if ([appModeBeanPrefsIds containsObject:key])
             continue;
-        OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
+        OACommonPreference *setting = [settings getPreferenceByKey:key];
         if (setting)
         {
             if ([setting.key isEqualToString:@"voice_provider"])
@@ -383,12 +383,12 @@
         {
             if (p.type == RoutingParameterType::BOOLEAN)
             {
-                OAProfileBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
+                OACommonBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
                 res[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [boolSetting toStringValue:self.appMode];
             }
             else
             {
-                OAProfileString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
                 res[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
                 
             }

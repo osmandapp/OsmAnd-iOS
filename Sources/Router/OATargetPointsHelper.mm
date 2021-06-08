@@ -119,7 +119,7 @@
 - (NSArray<OARTargetPoint *> *) getIntermediatePointsNavigation
 {
     NSMutableArray<OARTargetPoint *> *intermediatePoints = [NSMutableArray array];
-    if (_settings.useIntermediatePointsNavigation)
+    if (_settings.useIntermediatePointsNavigation.get)
     {
         for (OARTargetPoint *t in _intermediatePoints)
             [intermediatePoints addObject:t];
@@ -139,7 +139,7 @@
 - (NSArray<CLLocation *> *) getIntermediatePointsLatLonNavigation
 {
     NSMutableArray<CLLocation *> *intermediatePointsLatLon = [NSMutableArray array];
-    if (_settings.useIntermediatePointsNavigation)
+    if (_settings.useIntermediatePointsNavigation.get)
     {
         for (OARTargetPoint *t in _intermediatePoints)
             [intermediatePointsLatLon addObject:t.point];

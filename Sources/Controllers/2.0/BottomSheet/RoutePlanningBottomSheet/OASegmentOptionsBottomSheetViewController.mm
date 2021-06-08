@@ -94,7 +94,7 @@
     
     for (OAApplicationMode *mode in OAApplicationMode.values)
     {
-        if ([mode.getRoutingProfile isEqualToString:@"public_transport"] || mode == OAApplicationMode.DEFAULT)
+        if ([mode.getRoutingProfile isEqualToString:@"public_transport"] || mode == OAApplicationMode.DEFAULT || mode == OAApplicationMode.CARPLAY)
             continue;
         
         [sectionData addObject:

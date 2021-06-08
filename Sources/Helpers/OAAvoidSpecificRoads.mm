@@ -175,8 +175,8 @@
     NSString *name = nil;
     if (road)
     {
-        string locale = [_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage].UTF8String : "";
-        bool transliterate = [_settings settingMapLanguageTranslit];
+        string locale = _settings.settingPrefMapLanguage.get ? _settings.settingPrefMapLanguage.get.UTF8String : "";
+        bool transliterate = _settings.settingMapLanguageTranslit.get;
         
         string rStreetName = road->getName(locale, transliterate);
         string rRefName = road->getRef(locale, transliterate, true);

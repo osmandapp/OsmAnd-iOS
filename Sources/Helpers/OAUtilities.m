@@ -916,7 +916,7 @@
 
 + (NSString *) preferredLang
 {
-    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if (!prefLang)
         prefLang = [OAUtilities currentLang];
     

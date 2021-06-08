@@ -9,7 +9,22 @@
 #import "OABaseTableViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
+#define kFavoritePointKey @"kFavoritePointKey"
+#define kGpxWptPointKey @"kGpxWptPointKey"
+
 @class OAFavoriteItem;
+@class OAGpxWptItem;
+
+@protocol OAGpxWptEditingHandlerDelegate <NSObject>
+
+@required
+
+- (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName;
+- (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
+- (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath;
+- (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem;
+
+@end
 
 @interface OAEditPointViewController : OABaseTableViewController
 
@@ -20,12 +35,16 @@
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *desc;
 @property (nonatomic, copy) NSString *address;
+@property (nonatomic, copy) NSString *gpxFileName;
 @property (nonatomic, assign) NSInteger savedColorIndex;
 @property (nonatomic, copy) NSString *savedGroupName;
 @property (nonatomic, copy) NSString *groupTitle;
 @property (nonatomic, copy) UIColor *groupColor;
 
-- (id) initWithItem:(OAFavoriteItem *)favorite;
-- (id) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)title address:(NSString*)address;
+@property (nonatomic, weak) id<OAGpxWptEditingHandlerDelegate> gpxWptDelegate;
+
+- (id)initWithFavorite:(OAFavoriteItem *)favorite;
+- (id)initWithGpxWpt:(OAGpxWptItem *)gpxWpt;
+- (id)initWithLocation:(CLLocationCoordinate2D)location title:(NSString *)formattedTitle customParam:(NSString *)customParam pointType:(NSString *)pointType;
 
 @end

@@ -204,6 +204,9 @@ struct RouteDataBundle;
 - (void) fillWithWpt:(OAGpxWpt *)gpxWpt;
 - (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt;
 
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key;
+- (void)setExtension:(NSString *)key value:(NSString *)value;
+
 @end
 
 @interface OAGpxTrkPt : OATrackPoint

@@ -132,7 +132,7 @@
 
 - (void) selectSwitchMapDirectionToCompass:(NSDictionary *)item
 {
-    [_settings.switchMapDirectionToCompass set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
+    [_settings.switchMapDirectionToCompass set:[item[@"name"] doubleValue] mode:self.appMode];
     [self dismissViewController];
 }
 

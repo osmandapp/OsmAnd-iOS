@@ -10,6 +10,9 @@
 #import "OALocationPoint.h"
 #include <OsmAndCore/IFavoriteLocation.h>
 
+#define ADDRESS_EXTENSION @"address"
+#define EXTENSION_HIDDEN @"hidden"
+
 @class OAGpxWpt;
 
 @interface OASpecialPointType : NSObject

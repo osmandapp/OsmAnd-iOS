@@ -1837,9 +1837,13 @@
     
     if ([self.trackRecording isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:@"add_waypoint_to_track.png"];
-        addon.sortIndex = 1;
-        [arr addObject:addon];
+        OAFunctionalAddon *addonEdit = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Edit_Waypoint titleShort:OALocalizedString(@"edit_waypoint_short") titleWide:OALocalizedString(@"context_menu_item_edit_waypoint") imageName:@"icon_edit"];
+        addonEdit.sortIndex = 1;
+        [arr addObject:addonEdit];
+
+        OAFunctionalAddon *addonAdd = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:@"add_waypoint_to_track"];
+        addonAdd.sortIndex = 1;
+        [arr addObject:addonAdd];
     }
     
     if ([self.osmEditing isPurchased])

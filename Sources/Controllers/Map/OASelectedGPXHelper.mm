@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
+#import "OAGPXDocument.h"
 
 #define kBackupSuffix @"_osmand_backup"
 
@@ -96,6 +97,17 @@
             ++it;
     }
     return loading;
+}
+
+- (OAGPXDocument *)getSelectedGpx:(OAGpxWpt *)gpxWpt
+{
+    for (auto it = _activeGpx.begin(); it != _activeGpx.end(); ++it)
+    {
+        OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:it.key().toNSString()];
+        if ([[gpxDoc locationMarks] containsObject:gpxWpt])
+            return gpxDoc;
+    }
+    return nil;
 }
 
 -(BOOL) isShowingAnyGpxFiles

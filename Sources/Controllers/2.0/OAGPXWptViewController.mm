@@ -208,7 +208,7 @@
 
 - (UIColor *) getItemColor
 {
-    return self.wpt.color;
+    return self.wpt.color ? self.wpt.color : ((OAFavoriteColor *) OADefaultFavorite.builtinColors.firstObject).color;
 }
 
 - (void) setItemColor:(UIColor *)color

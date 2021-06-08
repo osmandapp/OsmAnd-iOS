@@ -95,6 +95,20 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.titleGradient.frame = self.navBar.frame;
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self applySafeAreaMargins];
+        self.titleGradient.frame = self.navBar.frame;
+    } completion:nil];
+}
+
 - (NSString *) getGpxFileName
 {
     return [[_gpxFileName lastPathComponent] stringByDeletingPathExtension];

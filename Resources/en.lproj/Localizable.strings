@@ -1202,6 +1202,7 @@
 "add_map_marker" = "Add map marker";
 "select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
+"context_menu_item_edit_waypoint" = "Edit GPX waypoint";
 "toggle_fav" = "Show/hide favorites";
 "fav_show" = "Show favorites";
 "fav_hide" = "Hide favorites";

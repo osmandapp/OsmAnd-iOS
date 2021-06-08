@@ -11,7 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class OAPointEditingData;
+@class OAGpxWptItem;
 
+@protocol OAGpxWptEditingHandlerDelegate;
 
 @interface OAPointEditingData : NSObject
 
@@ -27,17 +29,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OABasePointEditingHandler : NSObject
 
-- (UIColor *) getColor;
-- (NSString *) getGroupTitle;
-- (NSString *) getIcon;
-- (NSString *) getBackgroundIcon;
-- (NSString *) getName;
-- (BOOL) isSpecialPoint;
+@property (nonatomic, weak) id<OAGpxWptEditingHandlerDelegate> gpxWptDelegate;
 
-- (void) deleteItem;
+- (UIColor *)getColor;
+- (NSString *)getGroupTitle;
+- (NSString *)getIcon;
+- (NSString *)getBackgroundIcon;
+- (NSString *)getName;
+- (BOOL)isSpecialPoint;
+
+- (void)deleteItem;
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group;
 
-- (void) savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint;
+- (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint;
 
 @end
 

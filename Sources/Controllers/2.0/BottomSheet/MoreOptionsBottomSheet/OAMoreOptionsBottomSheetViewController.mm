@@ -34,6 +34,8 @@
 #import "OADownloadMapViewController.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMenuSimpleCell.h"
+#import "OASelectedGPXHelper.h"
+#import "OAGpxWptItem.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -125,7 +127,14 @@
     {
         for (OAFunctionalAddon *addon in _iapHelper.functionalAddons)
         {
-            if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
+            if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Edit_Waypoint]
+                && (_targetPoint.type == OATargetWpt) && [_targetPoint.targetObj isKindOfClass:[OAGpxWptItem class]] && [[OASelectedGPXHelper instance] getSelectedGpx:((OAGpxWptItem *)_targetPoint.targetObj).point] != nil) {
+                [arr addObject:@{ @"title" : addon.titleShort,
+                                  @"key" : @"addon_edit_waypoint",
+                                  @"img" : addon.imageName,
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+            }
+            else if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
                 && (_targetPoint.type != OATargetWpt && _targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXEdit)
                 && _iapHelper.trackRecording.isActive) {
                 [arr addObject:@{ @"title" : addon.titleShort,
@@ -307,6 +316,9 @@
             [vwController.menuViewDelegate targetHide];
             [vwController.menuViewDelegate navigateFrom:_targetPoint];
         }
+
+        else if ([key isEqualToString:@"addon_edit_waypoint"])
+            [vwController.menuViewDelegate targetPointEditWaypoint:_targetPoint.targetObj];
         else if ([key isEqualToString:@"addon_add_waypoint"])
             [vwController.menuViewDelegate targetPointAddWaypoint];
         

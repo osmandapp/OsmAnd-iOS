@@ -18,7 +18,7 @@
 #define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.75
 
-@class OATargetPoint, OAFavoriteItem;
+@class OATargetPoint, OAFavoriteItem, OAGpxWptItem;
 
 @protocol OATargetPointViewDelegate;
 
@@ -102,6 +102,7 @@
 // Addons
 - (void) targetPointParking;
 - (void) targetPointAddWaypoint;
+- (void) targetPointEditWaypoint:(OAGpxWptItem *)item;
 
 - (void) targetHideContextPinMarker;
 - (void) targetHide;

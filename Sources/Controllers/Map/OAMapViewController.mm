@@ -2973,7 +2973,7 @@
 {
     if (items.count == 0)
         return NO;
-    
+
     BOOL found = NO;
     
     auto activeGpx = _selectedGpxHelper.activeGpx;

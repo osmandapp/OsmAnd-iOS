@@ -2019,8 +2019,7 @@ static const NSInteger _buttonsCount = 4;
         [self showFullMenu];
         [self.customController activateEditing];
         
-        OAFavoriteItem *item = ((OAFavoriteViewController *)self.customController).favorite;
-        
+        OAFavoriteItem *item = self.targetPoint.targetObj;
         [self.menuViewDelegate targetPointEditFavorite:item];
         return;
     }

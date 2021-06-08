@@ -569,7 +569,7 @@
         if (!_isFavoritePoint && !_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
-        if (_isNewItemAdding || ![self.name isEqualToString:_initialName] || ![self.groupTitle isEqualToString:_initialGroupName])
+        if (_isNewItemAdding || ![self.name isEqualToString:_initialName] || ([self.name isEqualToString:_initialName] && ![self.groupTitle isEqualToString:_initialGroupName]))
         {
             NSString *savingName = [self.name trim];
             NSDictionary *checkingResult = [_pointHandler checkDuplicates:savingName group:savingGroup];
@@ -1099,6 +1099,7 @@
     _selectedBackgroundIndex = (int)tag;
     [self updateHeaderIcon];
     [self generateData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAColorsTableViewCellDelegate

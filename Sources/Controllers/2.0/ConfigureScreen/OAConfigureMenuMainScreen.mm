@@ -287,6 +287,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAppModeCell getCellIdentifier] owner:self options:nil];
             _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
             _appModeCell.showDefault = YES;
+            _appModeCell.showCarPlay = NO;
             _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
             _appModeCell.delegate = self;
         }

@@ -59,6 +59,15 @@
     }
 }
 
+- (void) setShowCarPlay:(BOOL)showCarPlay
+{
+    if (_showCarPlay != showCarPlay)
+    {
+        _showCarPlay = showCarPlay;
+        [self setupModeButtons];
+    }
+}
+
 - (void) setupModeButtons
 {
     if (_modeButtons)
@@ -77,6 +86,8 @@
     {
         OAApplicationMode *mode = availableModes[i];
         if (mode == [OAApplicationMode DEFAULT] && !_showDefault)
+            continue;
+        if (mode == [OAApplicationMode CARPLAY] && !_showCarPlay)
             continue;
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];

@@ -1172,11 +1172,14 @@ static BOOL _lackOfResources;
         _resourcesSection = -1;
         _localSqliteSection = -1;
         _localOnlineTileSourcesSection = -1;
+        _freeMemorySection = -1;
         
         if (_displayBanner)
             _bannerSection = _lastUnusedSectionIndex++;
         
-        _freeMemorySection = _lastUnusedSectionIndex++;
+        if (![self.region isKindOfClass:OACustomRegion.class])
+            _freeMemorySection = _lastUnusedSectionIndex++;
+        
         if (_displaySubscribeEmailView)
             _subscribeEmailSection = _lastUnusedSectionIndex++;
 

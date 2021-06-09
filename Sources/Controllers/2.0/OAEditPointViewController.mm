@@ -1312,7 +1312,7 @@
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
         if (self.gpxWptDelegate)
-            [self.gpxWptDelegate deleteGpxWpt:waypointItem docPath:_gpxFileName];
+            [self.gpxWptDelegate deleteGpxWpt:waypointItem docPath:[(OAGpxWptEditingHandler *)_pointHandler getGpxDocument].path];
 
         [_pointHandler savePoint:data newPoint:_isNewItemAdding];
         [self dismissViewController];

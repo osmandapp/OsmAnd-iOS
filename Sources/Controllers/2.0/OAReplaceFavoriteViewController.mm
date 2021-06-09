@@ -288,7 +288,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void)setDistanceAndDirections:(OAGpxWptItem *)itemData
 {
     OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
-    const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    const auto wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
     const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
     const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
     CLLocation* newLocation = _app.locationServices.lastKnownLocation;

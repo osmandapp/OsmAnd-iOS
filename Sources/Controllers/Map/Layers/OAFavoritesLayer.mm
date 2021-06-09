@@ -141,30 +141,28 @@
 - (UIImage *) getFavoriteImage:(const OsmAnd::IFavoriteLocation *)fav
 {
     UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
-    return [self getImageWithColor:color
+    return [self.class getImageWithColor:color
                         background:fav->getBackground().toNSString()
-                 defaultBackground:@"circle"
-                              icon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]
-                       defaultIcon:@"mx_special_star"];
+                              icon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]];
 }
 
-- (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background defaultBackground:(NSString *)defaultBackground icon:(NSString *)icon defaultIcon:(NSString *)defaultIcon
++ (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon
 {
     UIImage *shadowImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_bottom", background]];
     if (!shadowImage)
-        shadowImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:defaultBackground] color:color];
+        shadowImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"circle"] color:color];
     
     UIImage *colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:[NSString stringWithFormat:@"ic_bg_point_%@_center", background]] color:color];
     if (!colorFilledImage)
-        colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:defaultBackground] color:color];
+        colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"circle"] color:color];
     
     UIImage *innerImage = [OAUtilities tintImageWithColor:[OATargetInfoViewController getIcon:icon] color:UIColor.whiteColor];
     if (!innerImage)
-        innerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:defaultIcon] color:UIColor.whiteColor];
+        innerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"mx_special_star"] color:UIColor.whiteColor];
     
     UIImage *topImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_top", background]];
     if (!topImage)
-        topImage = [OATargetInfoViewController getIcon:defaultIcon];
+        topImage = [OATargetInfoViewController getIcon:@"mx_special_star"];
     
     CGFloat scale = [[UIScreen mainScreen] scale];
     CGFloat outerImageSide = 36 * scale;

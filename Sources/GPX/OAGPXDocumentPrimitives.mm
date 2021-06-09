@@ -367,6 +367,54 @@
     return [OAUtilities colorFromString:self.color];
 }
 
+- (NSString *)getIcon
+{
+    NSString *value = [self getExtensionByKey:ICON_NAME_EXTENSION].value;
+    return value ? value : @"special_star";
+}
+
+- (NSString *)getBackgroundIcon
+{
+    NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
+    return value ? value : @"circle";
+}
+
+- (NSString *)getAddress
+{
+    NSString *value = [self getExtensionByKey:ADDRESS_EXTENSION].value;
+    return value ? value : @"";
+}
+
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key
+{
+    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
+    {
+        if ([e.name isEqualToString:key])
+            return e;
+    }
+    return nil;
+}
+
+- (void)setExtension:(NSString *)key value:(NSString *)value
+{
+    if (!self.extraData)
+        self.extraData = [[OAGpxExtensions alloc] init];
+    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
+    OAGpxExtension *e = [self getExtensionByKey:key];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = key;
+        e.value = value;
+        if (![exts containsObject:e])
+            ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
+    }
+    else
+    {
+        e.value = value;
+    }
+}
+
 @end
 
 @implementation OAGpxTrk

@@ -19,10 +19,8 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 #include <OsmAndCore/Utilities.h>
-#define kPersonalCategory @"personal"
 
-#define EXTENSION_HIDDEN @"hidden"
-#define ADDRESS_EXTENSION @"address"
+#define kPersonalCategory @"personal"
 
 @implementation OASpecialPointType
 {

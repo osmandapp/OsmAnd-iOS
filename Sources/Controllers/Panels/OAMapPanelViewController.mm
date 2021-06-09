@@ -114,7 +114,8 @@
 #import "OASizes.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OAHistoryViewController.h"
-#import "OAEditFavoriteViewController.h"
+#import "OAEditPointViewController.h"
+#import "OAGPXDocument.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -129,7 +130,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
@@ -1651,7 +1652,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditFavoriteViewController *controller = [[OAEditFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title address:self.targetMenuView.targetPoint.titleAddress];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:self.targetMenuView.targetPoint.titleAddress pointType:EOAEditPointTypeFavorite];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
@@ -1659,7 +1660,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditFavoriteViewController *controller = [[OAEditFavoriteViewController alloc] initWithItem:item];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithFavorite:item];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
@@ -1827,34 +1828,21 @@ typedef enum
 
 - (void) targetPointAddWaypoint:(NSString *)gpxFileName
 {
-    OAGPXWptViewController *wptViewController = [[OAGPXWptViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title gpxFileName:gpxFileName];
-    
-    wptViewController.mapViewController = self.mapViewController;
-    wptViewController.wptDelegate = self;
-    
-    [_mapViewController addNewWpt:wptViewController.wpt.point gpxFileName:gpxFileName];
-    wptViewController.wpt.groups = _mapViewController.foundWptGroups;
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:gpxFileName pointType:EOAEditPointTypeWaypoint];
+    controller.gpxWptDelegate = self;
+    [self presentViewController:controller animated:YES completion:nil];
+}
 
-    UIColor* color = wptViewController.wpt.color;
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    
-    self.targetMenuView.targetPoint.type = OATargetWpt;
-    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-    self.targetMenuView.targetPoint.targetObj = wptViewController.wpt;
-    
-    [wptViewController activateEditing];
-    
-    [self.targetMenuView setCustomViewController:wptViewController needFullMenu:YES];
-    [self.targetMenuView updateTargetPointType:OATargetWpt];
-    
-    if (_activeTargetType == OATargetGPXEdit)
-        wptViewController.navBarBackground.backgroundColor = UIColorFromRGB(0x4caf50);
-
-    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
-    {
-        [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
-    }
+- (void) targetPointEditWaypoint:(OAGpxWptItem *)item
+{
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    item.groups = _mapViewController.foundWptGroups;
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithGpxWpt:item];
+    controller.gpxWptDelegate = self;
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (void) targetHideContextPinMarker
@@ -2020,8 +2008,6 @@ typedef enum
             [self.targetMenuView doInit:showFullMenu];
             
             OAGPXWptViewController *wptViewController = (OAGPXWptViewController *) controller;
-            if (_activeTargetType == OATargetGPXEdit)
-                [wptViewController activateEditing];
             
             wptViewController.mapViewController = self.mapViewController;
             wptViewController.wptDelegate = self;
@@ -3800,6 +3786,51 @@ typedef enum
         if (onComplete)
             onComplete();
     }];
+}
+
+#pragma mark - OAGpxWptEditingHandlerDelegate
+
+- (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
+{
+    [_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName];
+
+    gpxWpt.groups = _mapViewController.foundWptGroups;
+
+    UIColor* color = gpxWpt.color;
+    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+
+    self.targetMenuView.targetPoint.type = OATargetWpt;
+    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+    self.targetMenuView.targetPoint.targetObj = gpxWpt;
+
+    [self.targetMenuView updateTargetPointType:OATargetWpt];
+    [self.targetMenuView applyTargetObjectChanges];
+
+    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    {
+        [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+}
+
+- (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+{
+    [_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap];
+    [self.targetMenuView applyTargetObjectChanges];
+}
+
+- (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath
+{
+    [_mapViewController deleteWpts:@[gpxWptItem] docPath:docPath];
+}
+
+- (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
+{
+    if (gpxWptItem.point.wpt != nullptr)
+    {
+        [OAGPXDocument fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
+        [_mapViewController saveFoundWpt];
+    }
 }
 
 @end

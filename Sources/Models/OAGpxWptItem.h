@@ -23,4 +23,6 @@
 
 @property (nonatomic) NSString *docPath;
 
+- (UIImage *) getCompositeIcon;
+
 @end

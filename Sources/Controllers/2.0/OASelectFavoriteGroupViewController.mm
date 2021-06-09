@@ -29,6 +29,7 @@
 {
     NSString *_selectedGroupName;
     NSArray<OAFavoriteGroup *> *_groupedFavorites;
+    NSArray<NSDictionary<NSString *, NSString *> *> *_groupedGpxWpts;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
@@ -38,7 +39,19 @@
     if (self)
     {
         _selectedGroupName = selectedGroupName;
-        [self reloadData];
+        [self reloadData:[OAFavoritesHelper getFavoriteGroups] isFavorite:YES];
+        [self generateData];
+    }
+    return self;
+}
+
+- (instancetype) initWithSelectedGroupName:(NSString *)selectedGroupName gpxWptGroups:(NSArray *)gpxWptGroups;
+{
+    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
+    if (self)
+    {
+        _selectedGroupName = selectedGroupName;
+        [self reloadData:gpxWptGroups isFavorite:NO];
         [self generateData];
     }
     return self;
@@ -59,9 +72,10 @@
     self.titleLabel.text = OALocalizedString(@"select_group");
 }
 
-- (void) reloadData
+- (void) reloadData:(NSArray *)data isFavorite:(BOOL)isFavorite
 {
-    _groupedFavorites = [OAFavoritesHelper getFavoriteGroups];
+    _groupedFavorites = isFavorite ? data : nil;
+    _groupedGpxWpts = isFavorite ? nil : data;
 }
 
 - (void) generateData
@@ -76,35 +90,53 @@
     ]];
     
     NSMutableArray *cellFoldersData = [NSMutableArray new];
-    
-    if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
+
+    if (_groupedFavorites)
     {
-        [cellFoldersData addObject:@{
-            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
-            @"header" : OALocalizedString(@"available_groups"),
-            @"title" : OALocalizedString(@"favorites"),
-            @"description" :@"0",
-            @"isSelected" : [NSNumber numberWithBool:[@"" isEqualToString: _selectedGroupName]],
-            @"color" : [OADefaultFavorite getDefaultColor],
-            @"img" : @"ic_custom_folder"
-        }];
+        if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
+        {
+            [cellFoldersData addObject:@{
+                    @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+                    @"header" : OALocalizedString(@"available_groups"),
+                    @"title" : OALocalizedString(@"favorites"),
+                    @"description" :@"0",
+                    @"isSelected" : @([@"" isEqualToString:_selectedGroupName]),
+                    @"color" : [OADefaultFavorite getDefaultColor],
+                    @"img" : @"ic_custom_folder"
+            }];
+        }
+
+        for (OAFavoriteGroup *group in _groupedFavorites)
+        {
+            NSString *name = [OAFavoriteGroup getDisplayName:group.name];
+
+            [cellFoldersData addObject:@{
+                    @"type": [OAMultiIconTextDescCell getCellIdentifier],
+                    @"header": OALocalizedString(@"available_groups"),
+                    @"title": name,
+                    @"description": [NSString stringWithFormat:@"%ld", (unsigned long) group.points.count],
+                    @"isSelected": @([name isEqualToString:_selectedGroupName]),
+                    @"color": group.color,
+                    @"img": @"ic_custom_folder"
+            }];
+        }
     }
-    
-    for (OAFavoriteGroup *group in _groupedFavorites)
+    else if (_groupedGpxWpts)
     {
-        NSString *name = [OAFavoriteGroup getDisplayName:group.name];
-        
-        [cellFoldersData addObject:@{
-            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
-            @"header" : OALocalizedString(@"available_groups"),
-            @"title" : name,
-            @"description" : [NSString stringWithFormat:@"%ld", (unsigned long)group.points.count],
-            @"isSelected" : [NSNumber numberWithBool:[name isEqualToString: _selectedGroupName]],
-            @"color" : group.color,
-            @"img" : @"ic_custom_folder"
-        }];
+        for (NSDictionary<NSString *, NSString *> *group in _groupedGpxWpts)
+        {
+            [cellFoldersData addObject:@{
+                    @"type": [OAMultiIconTextDescCell getCellIdentifier],
+                    @"header": OALocalizedString(@"available_groups"),
+                    @"title": group[@"title"],
+                    @"description": [NSString stringWithFormat:@"%i", group[@"count"].intValue],
+                    @"isSelected": @([group[@"title"] isEqualToString:_selectedGroupName]),
+                    @"color": group[@"color"] ? group[@"color"] : UIColorFromRGB(color_primary_purple).toHexString,
+                    @"img": @"ic_custom_folder"
+            }];
+        }
     }
-    
+
     [data addObject: [NSArray arrayWithArray:cellFoldersData]];
     _data = data;
 }
@@ -122,7 +154,7 @@
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            cell = nib[0];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
@@ -135,11 +167,11 @@
    
     else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
+            cell = nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.numberOfLines = 3;
             cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -150,7 +182,10 @@
             [cell.textView setText:item[@"title"]];
             [cell.descView setText:item[@"description"]];
             [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            cell.iconView.tintColor = item[@"color"];
+            UIColor *color;
+            if (item[@"color"])
+                color = [item[@"color"] isKindOfClass:NSString.class] ? [OAUtilities colorFromString:item[@"color"]] : item[@"color"];
+            cell.iconView.tintColor = color ? color : UIColorFromRGB(color_primary_purple);
             
             if ([item[@"isSelected"] boolValue])
             {

@@ -130,20 +130,17 @@
 
 - (NSString *)getIcon
 {
-    NSString *value = [_gpxWpt.point getExtensionByKey:ICON_NAME_EXTENSION].value;
-    return value ? value : @"special_star";
+    return [_gpxWpt.point getIcon];
 }
 
 - (NSString *)getBackgroundIcon
 {
-    NSString *value = [_gpxWpt.point getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
-    return value ? value : @"circle";
+    return [_gpxWpt.point getBackgroundIcon];
 }
 
 - (NSString *)getAddress
 {
-    NSString *value = [_gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION].value;
-    return value ? value : @"";
+    return [_gpxWpt.point getAddress];
 }
 
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save

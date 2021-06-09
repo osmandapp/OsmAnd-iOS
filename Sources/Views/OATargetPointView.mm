@@ -858,10 +858,7 @@ static const NSInteger _buttonsCount = 4;
             [self updateTransportView];
             [self updateDescriptionLabel];
             
-            UIColor* color = item.color;
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-            _imageView.image = _targetPoint.icon;
+            _imageView.image = item.getCompositeIcon;
         }
         else
         {

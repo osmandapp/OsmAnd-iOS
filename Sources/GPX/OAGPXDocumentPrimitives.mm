@@ -367,6 +367,24 @@
     return [OAUtilities colorFromString:self.color];
 }
 
+- (NSString *)getIcon
+{
+    NSString *value = [self getExtensionByKey:ICON_NAME_EXTENSION].value;
+    return value ? value : @"special_star";
+}
+
+- (NSString *)getBackgroundIcon
+{
+    NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
+    return value ? value : @"circle";
+}
+
+- (NSString *)getAddress
+{
+    NSString *value = [self getExtensionByKey:ADDRESS_EXTENSION].value;
+    return value ? value : @"";
+}
+
 - (OAGpxExtension *)getExtensionByKey:(NSString *)key
 {
     for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)

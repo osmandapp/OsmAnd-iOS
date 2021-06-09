@@ -37,6 +37,7 @@
 #import "OAPointDescription.h"
 
 #include "Localization.h"
+#import "OAGPXDocument.h"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -57,7 +58,7 @@
 #define kFullHeaderHeight 100
 #define kCompressedHeaderHeight 62
 
-@interface OAEditPointViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplaceFavoriteDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
+@interface OAEditPointViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
 
@@ -65,11 +66,11 @@
 {
     OsmAndAppInstance _app;
     BOOL _isNewItemAdding;
-    BOOL _isFavoritePoint;
     BOOL _wasChanged;
     BOOL _isUnsaved;
     NSString *_initialName;
     NSString *_initialGroupName;
+    EOAEditPointType _editPointType;
     
     OABasePointEditingHandler *_pointHandler;
     
@@ -108,7 +109,7 @@
     self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
     {
-        _isFavoritePoint = YES;
+        _editPointType = EOAEditPointTypeFavorite;
         _app = [OsmAndApp instance];
         _isNewItemAdding = NO;
         _isUnsaved = YES;
@@ -123,12 +124,12 @@
     return self;
 }
 
-- (id)initWithGpxWpt:(OAGpxWptItem *)gpxWpt
+- (instancetype)initWithGpxWpt:(OAGpxWptItem *)gpxWpt
 {
     self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
     {
-        _isFavoritePoint = NO;
+        _editPointType = EOAEditPointTypeWaypoint;
         _app = [OsmAndApp instance];
         _isNewItemAdding = NO;
         _isUnsaved = YES;
@@ -142,35 +143,32 @@
     return self;
 }
 
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString *)formattedTitle customParam:(NSString *)customParam pointType:(NSString *)pointType
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString *)formattedTitle customParam:(NSString *)customParam pointType:(EOAEditPointType)pointType
 {
     self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
     {
-        _isFavoritePoint = [pointType isEqualToString:kFavoritePointKey];
+        _editPointType = pointType;
         _isNewItemAdding = YES;
         _isUnsaved = YES;
         _app = [OsmAndApp instance];
 
-        if (_isFavoritePoint)
+        if (_editPointType == EOAEditPointTypeFavorite)
+        {
             _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:customParam];
-        else
+            self.address = customParam ? customParam : @"";
+        }
+        else if (_editPointType == EOAEditPointTypeWaypoint)
+        {
             _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle gpxFileName:customParam];
+            self.gpxFileName = customParam ? customParam : @"";
+            self.address = ((OAGpxWptEditingHandler *)_pointHandler).getAddress;
+        }
         
         self.name = formattedTitle ? formattedTitle : @"";
         self.desc = @"";
         self.groupTitle = [self getGroupTitle];
         self.groupColor = [_pointHandler getColor];
-
-        if (_isFavoritePoint)
-        {
-            self.address = customParam ? customParam : @"";
-        }
-        else
-        {
-            self.gpxFileName = customParam ? customParam : @"";
-            self.address = ((OAGpxWptEditingHandler *)_pointHandler).getAddress;
-        }
 
         _selectedIconCategoryName = @"special";
         _selectedIconName = @"special_star";
@@ -207,9 +205,17 @@
 - (void)setupHeaderName
 {
     if (self.name.length > 0)
+    {
         self.titleLabel.text = self.name;
+    }
     else
-        self.titleLabel.text = _isFavoritePoint ? (_isNewItemAdding ? OALocalizedString(@"add_favorite") : OALocalizedString(@"ctx_mnu_edit_fav")) : (_isNewItemAdding ? OALocalizedString(@"add_waypoint_short") : OALocalizedString(@"edit_waypoint_short"));
+    {
+        if (_editPointType == EOAEditPointTypeFavorite)
+            self.titleLabel.text = _isNewItemAdding ? OALocalizedString(@"add_favorite") : OALocalizedString(@"ctx_mnu_edit_fav");
+        else if (_editPointType == EOAEditPointTypeWaypoint)
+            self.titleLabel.text = _isNewItemAdding ? OALocalizedString(@"add_waypoint_short") : OALocalizedString(@"edit_waypoint_short");
+
+    }
 }
 
 - (void) setupGroups
@@ -218,7 +224,7 @@
     NSMutableArray *sizes = [NSMutableArray new];
     NSMutableArray *colors = [NSMutableArray new];
 
-    if (_isFavoritePoint)
+    if (_editPointType == EOAEditPointTypeFavorite)
     {
         if (![OAFavoritesHelper isFavoritesLoaded])
             [OAFavoritesHelper loadFavorites];
@@ -237,7 +243,7 @@
             [colors addObject:group.color];
         }
     }
-    else
+    else if (_editPointType == EOAEditPointTypeWaypoint)
     {
         for (NSDictionary<NSString *, NSString *> *group in [(OAGpxWptEditingHandler *) _pointHandler getGroups])
         {
@@ -566,7 +572,7 @@
         data.backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
         data.icon = _selectedIconName;
 
-        if (!_isFavoritePoint && !_pointHandler.gpxWptDelegate)
+        if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
         if (_isNewItemAdding || ![self.name isEqualToString:_initialName] || ([self.name isEqualToString:_initialName] && ![self.groupTitle isEqualToString:_initialGroupName]))
@@ -619,14 +625,14 @@
 
 - (void) deleteItemWithAlertView
 {
-    if (!_isFavoritePoint && !_pointHandler.gpxWptDelegate)
-        _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
-
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"fav_remove_q") preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
     
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
+            _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
+
         [_pointHandler deleteItem];
         [self dismissViewControllerAnimated:YES completion:nil];
     }]];
@@ -940,29 +946,54 @@
     }
     else if ([key isEqualToString:kSelectGroupKey])
     {
-        OASelectFavoriteGroupViewController *selectGroupConroller = _isFavoritePoint ? [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle] : [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
-        selectGroupConroller.delegate = self;
-        [self presentViewController:selectGroupConroller animated:YES completion:nil];
+        OASelectFavoriteGroupViewController *selectGroupController;
+        if (_editPointType == EOAEditPointTypeFavorite)
+            selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
+        else if (_editPointType == EOAEditPointTypeWaypoint)
+            selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
+
+        selectGroupController.delegate = self;
+        [self presentViewController:selectGroupController animated:YES completion:nil];
     }
     else if ([key isEqualToString:kReplaceKey])
     {
-        if ([OAFavoritesHelper getFavoriteItems].count > 0)
+        OAReplaceFavoriteViewController *replaceScreen;
+        if (_editPointType == EOAEditPointTypeFavorite)
         {
-            OAReplaceFavoriteViewController *replaceScreen = [[OAReplaceFavoriteViewController alloc] init];
-            replaceScreen.delegate = self;
-            [self presentViewController:replaceScreen animated:YES completion:nil];
+            if ([OAFavoritesHelper getFavoriteItems].count > 0)
+                replaceScreen = [[OAReplaceFavoriteViewController alloc] initWithItemType:EOAReplacePointTypeFavorite gpxDocument:nil];
+            else
+                return [self showAlertNotFoundReplaceItem];
         }
-        else
+        else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"fav_points_not_exist") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
+            OAGPXDocument *gpxDocument = [(OAGpxWptEditingHandler *)_pointHandler getGpxDocument];
+            if (gpxDocument.locationMarks.count > 0)
+                replaceScreen = [[OAReplaceFavoriteViewController alloc] initWithItemType:EOAReplacePointTypeWaypoint gpxDocument:gpxDocument];
+            else
+                return [self showAlertNotFoundReplaceItem];
         }
+
+        replaceScreen.delegate = self;
+        [self presentViewController:replaceScreen animated:YES completion:nil];
     }
     else if ([key isEqualToString:kDeleteKey])
     {
         [self deleteItemWithAlertView];
     }
+}
+
+- (void)showAlertNotFoundReplaceItem
+{
+    NSString *message = @"";
+    if (_editPointType == EOAEditPointTypeFavorite)
+        message = OALocalizedString(@"fav_points_not_exist");
+    else if (_editPointType == EOAEditPointTypeWaypoint)
+        message = OALocalizedString(@"no_waypoints_found");
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1116,21 +1147,21 @@
 
 #pragma mark - OAFolderCardsCellDelegate
 
-- (void) onItemSelected:(NSInteger)index //todo
+- (void) onItemSelected:(NSInteger)index
 {
     _wasChanged = YES;
     self.groupTitle = _groupNames[index];
 
     UIColor *selectedColor;
     NSString *groupName;
-    if (_isFavoritePoint)
+    if (_editPointType == EOAEditPointTypeFavorite)
     {
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:_groupNames[index]];
         OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:groupName]];
         if (group)
             selectedColor = group.color;
     }
-    else
+    else if (_editPointType == EOAEditPointTypeWaypoint)
     {
         selectedColor = [OAUtilities colorFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][self.groupTitle]];
     }
@@ -1165,13 +1196,13 @@
     self.groupTitle = selectedGroupName;
 
     UIColor *selectedColor;
-    if (_isFavoritePoint)
+    if (_editPointType == EOAEditPointTypeFavorite)
     {
         OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:selectedGroupName]];
         if (group)
             selectedColor = group.color;
     }
-    else
+    else if (_editPointType == EOAEditPointTypeWaypoint)
     {
         selectedColor = [OAUtilities colorFromString:[(OAGpxWptEditingHandler *)_pointHandler getGroupsWithColors][selectedGroupName]];
     }
@@ -1198,13 +1229,13 @@
     _wasChanged = YES;
     NSString *editedGroupName = [[OAFavoritesHelper checkEmoticons:groupName] trim];
 
-    if (_isFavoritePoint)
+    if (_editPointType == EOAEditPointTypeFavorite)
     {
         [OAFavoritesHelper addEmptyCategory:editedGroupName color:color visible:YES];
     }
-    else
+    else if (_editPointType == EOAEditPointTypeWaypoint)
     {
-        if (!_isFavoritePoint && !_pointHandler.gpxWptDelegate)
+        if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
         [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
@@ -1228,13 +1259,10 @@
     [self addGroup:groupName color:color];
 }
 
-#pragma mark - OAReplaceFavoriteDelegate
+#pragma mark - OAReplacePointDelegate
 
-- (void) onReplaced:(OAFavoriteItem *)favoriteItem; //todo
+- (void)onFavoriteReplaced:(OAFavoriteItem *)favoriteItem;
 {
-    if (!_isFavoritePoint && !_pointHandler.gpxWptDelegate)
-        _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
-
     NSString *message = [NSString stringWithFormat:OALocalizedString(@"replace_favorite_confirmation"), [favoriteItem getDisplayName]];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_replace") message:message preferredStyle:UIAlertControllerStyleAlert];
     
@@ -1258,6 +1286,39 @@
     }]];
     
     
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) onWaypointReplaced:(OAGpxWptItem *)waypointItem
+{
+    NSString *message = [NSString stringWithFormat:OALocalizedString(@"replace_waypoint_confirmation"), waypointItem.point.name];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_replace") message:message preferredStyle:UIAlertControllerStyleAlert];
+
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
+
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+        OAPointEditingData *data = [[OAPointEditingData alloc] init];
+
+        data.descr = waypointItem.point.desc;
+        data.address = [waypointItem.point getAddress];
+        data.color = waypointItem.color ? waypointItem.color : [OAUtilities colorFromString:waypointItem.point.color];
+        data.backgroundIcon = [waypointItem.point getBackgroundIcon];
+        data.icon = [waypointItem.point getIcon];
+        data.category = waypointItem.point.type;
+        data.name = waypointItem.point.name;
+
+        if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
+            _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
+
+        if (self.gpxWptDelegate)
+            [self.gpxWptDelegate deleteGpxWpt:waypointItem docPath:_gpxFileName];
+
+        [_pointHandler savePoint:data newPoint:_isNewItemAdding];
+        [self dismissViewController];
+    }]];
+
+
     [self presentViewController:alert animated:YES completion:nil];
 }
 

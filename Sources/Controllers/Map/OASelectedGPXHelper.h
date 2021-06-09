@@ -11,8 +11,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/GeoInfoDocument.h>
 
-@class OAGPXDocument;
-@class OAGpxWpt;
+@class OAGPXDocument, OAGpxWpt;
 
 @interface OASelectedGPXHelper : NSObject
 

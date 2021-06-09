@@ -18,6 +18,7 @@
 #import "OsmAndApp.h"
 #import "OAPointTableViewCell.h"
 #import "OASegmentTableViewCell.h"
+#import "OAGPXDocument.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -43,16 +44,21 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     OsmAndAppInstance _app;
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<OAFavoriteItem *> *_allFavorites;
+    NSArray<OAGpxWptItem *> *_allWaypoints;
     EOASortingMode _sortingMode;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     NSTimeInterval _lastUpdateTime;
+    OAGPXDocument *_gpxDocument;
+    EOAReplacePointType _replaceItemType;
 }
 
-- (instancetype) init
+- (instancetype)initWithItemType:(EOAReplacePointType)replaceItemType gpxDocument:(OAGPXDocument *)gpxDocument
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
+        _replaceItemType = replaceItemType;
+        _gpxDocument = gpxDocument;
         [self commonInit];
     }
     return self;
@@ -61,7 +67,23 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) commonInit
 {
     _app = [OsmAndApp instance];
-    _allFavorites = [OAFavoritesHelper getFavoriteItems];
+    if (_replaceItemType == EOAReplacePointTypeFavorite)
+    {
+        _allFavorites = [OAFavoritesHelper getFavoriteItems];
+    }
+    else if (_replaceItemType == EOAReplacePointTypeWaypoint)
+    {
+        NSMutableArray *arr = [NSMutableArray array];
+        for (OAGpxWpt *point in _gpxDocument.locationMarks)
+        {
+            OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];
+            itemData.point = point;
+            [self setDistanceAndDirections:itemData];
+            [arr addObject:itemData];
+        }
+
+        _allWaypoints = arr;
+    }
     [self updateDistanceAndDirection:YES];
 }
 
@@ -89,43 +111,60 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray new];
-    NSMutableArray *favoritesSection = [NSMutableArray new];
+    NSMutableArray *pointsSection = [NSMutableArray new];
 
-    [favoritesSection addObject:@{
+    [pointsSection addObject:@{
         @"type" : [OASegmentTableViewCell getCellIdentifier],
         @"title0" : OALocalizedString(@"by_dist"),
         @"title1" : OALocalizedString(@"shared_a_z"),
         @"title2" : OALocalizedString(@"shared_z_a"),
         @"key" : @"segment_control"
     }];
-    
-    NSArray *sortedFavorites = [self sortData:_allFavorites];
-    for (OAFavoriteItem *favorite in sortedFavorites)
+
+    if (_replaceItemType == EOAReplacePointTypeFavorite)
     {
-        NSString *name = [favorite getDisplayName];
-        NSString *distance = favorite.distance;
-        
-        [favoritesSection addObject:@{
-                @"type" : [OAPointTableViewCell getCellIdentifier],
-                @"title" : name ? name : @"",
-                @"distance" : distance ? distance : @"",
-                @"direction" : [NSNumber numberWithFloat:favorite.direction],
-                @"favoriteItem" : favorite,
+        NSArray *sortedFavorites = [self sortFavoritesData:_allFavorites];
+        for (OAFavoriteItem *favorite in sortedFavorites) {
+            NSString *name = [favorite getDisplayName];
+            NSString *distance = favorite.distance;
+
+            [pointsSection addObject:@{
+                    @"type": [OAPointTableViewCell getCellIdentifier],
+                    @"title": name ? name : @"",
+                    @"distance": distance ? distance : @"",
+                    @"direction": [NSNumber numberWithFloat:favorite.direction],
+                    @"item": favorite,
             }];
+        }
     }
-    
-    [data addObject:favoritesSection];
+    else if (_replaceItemType == EOAReplacePointTypeWaypoint)
+    {
+        NSArray *sortedWaypoints = [self sortWaypointsData:_allWaypoints];
+        for (OAGpxWptItem *waypoint in sortedWaypoints) {
+            NSString *name = waypoint.point.name;
+            NSString *distance = waypoint.distance;
+
+            [pointsSection addObject:@{
+                    @"type": [OAPointTableViewCell getCellIdentifier],
+                    @"title": name ? name : @"",
+                    @"distance": distance ? distance : @"",
+                    @"direction": [NSNumber numberWithFloat:waypoint.direction],
+                    @"item": waypoint,
+            }];
+        }
+    }
+    [data addObject:pointsSection];
     _data = data;
 }
 
-- (NSArray<OAFavoriteItem *> *) sortData:(NSArray<OAFavoriteItem *> *)data
+- (NSArray<OAFavoriteItem *> *)sortFavoritesData:(NSArray<OAFavoriteItem *> *)data
 {
     NSArray *sortedData = [data sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
         switch (_sortingMode) {
             case EOADistance:
             {
-                NSNumber *distance1 = [NSNumber numberWithDouble:obj1.distanceMeters];
-                NSNumber *distance2 = [NSNumber numberWithDouble:obj2.distanceMeters];
+                NSNumber *distance1 = @(obj1.distanceMeters);
+                NSNumber *distance2 = @(obj2.distanceMeters);
                 return [distance1 compare:distance2];
             }
             case EOANameAscending:
@@ -138,6 +177,35 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             {
                 NSString *title1 = [obj1 getDisplayName];
                 NSString *title2 = [obj2 getDisplayName];
+                return [title2 compare:title1 options:NSCaseInsensitiveSearch];
+            }
+            default:
+                break;
+        }
+    }];
+    return sortedData;
+}
+
+- (NSArray<OAGpxWptItem *> *)sortWaypointsData:(NSArray<OAGpxWptItem *> *)data
+{
+    NSArray *sortedData = [data sortedArrayUsingComparator:^NSComparisonResult(OAGpxWptItem *obj1, OAGpxWptItem *obj2) {
+        switch (_sortingMode) {
+            case EOADistance:
+            {
+                NSNumber *distance1 = @(obj1.distanceMeters);
+                NSNumber *distance2 = @(obj2.distanceMeters);
+                return [distance1 compare:distance2];
+            }
+            case EOANameAscending:
+            {
+                NSString *title1 = obj1.point.name;
+                NSString *title2 = obj2.point.name;
+                return [title1 compare:title2 options:NSCaseInsensitiveSearch];
+            }
+            case EOANameDescending:
+            {
+                NSString *title1 = obj1.point.name;
+                NSString *title2 = obj2.point.name;
                 return [title2 compare:title1 options:NSCaseInsensitiveSearch];
             }
             default:
@@ -187,25 +255,56 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
         ? newLocation.course
         : newHeading;
-        
-        [_allFavorites enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
-            const auto& favoritePosition31 = itemData.favorite->getPosition31();
-            const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-            const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-                
-            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                                newLocation.coordinate.latitude,
-                                                                favoriteLon, favoriteLat);
-            
-            itemData.distance = [_app getFormattedDistance:distance];
-            itemData.distanceMeters = distance;
-            CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
-            itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-         }];
+        if (_replaceItemType == EOAReplacePointTypeFavorite)
+        {
+            [_allFavorites enumerateObjectsUsingBlock:^(OAFavoriteItem *itemData, NSUInteger idx, BOOL *stop) {
+                const auto &favoritePosition31 = itemData.favorite->getPosition31();
+                const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+                const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+
+                const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                        newLocation.coordinate.latitude,
+                        favoriteLon, favoriteLat);
+
+                itemData.distance = [_app getFormattedDistance:distance];
+                itemData.distanceMeters = distance;
+                CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
+                itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+            }];
+        }
+        else
+        if (_replaceItemType == EOAReplacePointTypeWaypoint)
+        {
+            [_allWaypoints enumerateObjectsUsingBlock:^(OAGpxWptItem *itemData, NSUInteger idx, BOOL *stop) {
+                [self setDistanceAndDirections:itemData];
+            }];
+        }
         
         [self generateData];
         [self.tableView reloadData];
     });
+}
+
+- (void)setDistanceAndDirections:(OAGpxWptItem *)itemData
+{
+    OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
+    const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
+    const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
+    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+    const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+            newLocation.coordinate.latitude,
+            wptLon, wptLat);
+
+    itemData.distance = [_app getFormattedDistance:distance];
+    itemData.distanceMeters = distance;
+    CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
+    CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection =
+            (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+                    ? newLocation.course
+                    : newHeading;
+    itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
 }
 
 #pragma mark - TableViewDataSource
@@ -221,7 +320,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASegmentTableViewCell *)[nib objectAtIndex:0];
+            cell = (OASegmentTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
             [cell.segmentControl insertSegmentWithTitle:item[@"title2"] atIndex:2 animated:NO];
@@ -237,21 +336,17 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
     else if ([type isEqualToString:[OAPointTableViewCell getCellIdentifier]])
     {
-        OAPointTableViewCell* cell;
-        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+        OAPointTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+            cell = (OAPointTableViewCell *) nib[0];
         }
         
         if (cell)
         {
-            NSDictionary* item = _data[indexPath.section][indexPath.row];
-            OAFavoriteItem *favorite = item[@"favoriteItem"];
-
             [cell.titleView setText:item[@"title"]];
-            cell = [self setupPoiIconForCell:cell withFavaoriteItem:favorite];
+            cell = [self setupPoiIconForCell:cell withPointItem:item[@"item"]];
             
             [cell.distanceView setText:item[@"distance"]];
             cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
@@ -265,9 +360,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     return nil;
 }
 
-- (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavaoriteItem:(OAFavoriteItem*)item
+- (OAPointTableViewCell *)setupPoiIconForCell:(OAPointTableViewCell *)cell withPointItem:(id)item
 {
-    cell.titleIcon.image = [item getCompositeIcon];
+    if ([item isKindOfClass:[OAFavoriteItem class]])
+        cell.titleIcon.image = [(OAFavoriteItem *)item getCompositeIcon];
+    else if ([item isKindOfClass:[OAGpxWptItem class]])
+        cell.titleIcon.image = [(OAGpxWptItem *)item getCompositeIcon];
     return cell;
 }
 
@@ -290,10 +388,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    OAFavoriteItem *favorite = item[@"favoriteItem"];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:^{
-        [self.delegate onReplaced:favorite];
+        if (self.delegate)
+        {
+            if (_replaceItemType == EOAReplacePointTypeFavorite)
+                [self.delegate onFavoriteReplaced:item[@"item"]];
+            else if (_replaceItemType == EOAReplacePointTypeWaypoint)
+                [self.delegate onWaypointReplaced:item[@"item"]];
+        }
     }];
 }
 

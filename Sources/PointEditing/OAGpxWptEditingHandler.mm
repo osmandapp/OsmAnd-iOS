@@ -13,9 +13,9 @@
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
 #import "OAEditPointViewController.h"
 #import "OASavingTrackHelper.h"
+#import "OAGPXDocument.h"
 
 @implementation OAGpxWptEditingHandler
 {
@@ -87,6 +87,10 @@
 - (NSString *)getGroupTitle
 {
     return _gpxWpt.point.type ? _gpxWpt.point.type : @"";
+}
+- (OAGPXDocument *)getGpxDocument
+{
+    return _gpxDocument;
 }
 
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups

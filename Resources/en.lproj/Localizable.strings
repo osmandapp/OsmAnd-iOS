@@ -1338,6 +1338,8 @@
 "add_waypoint" = "Add waypoint to track";
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
+"replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
+"no_waypoints_found" = "No waypoints found";
 "modify_poi_short" = "Modify POI";
 "create_poi_short" = "Create POI";
 "modify_edit_short" = "Modify OSM change";

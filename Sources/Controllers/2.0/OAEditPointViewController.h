@@ -9,11 +9,12 @@
 #import "OABaseTableViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
-#define kFavoritePointKey @"kFavoritePointKey"
-#define kGpxWptPointKey @"kGpxWptPointKey"
+typedef NS_ENUM(NSInteger, EOAEditPointType) {
+    EOAEditPointTypeFavorite = 0,
+    EOAEditPointTypeWaypoint
+};
 
-@class OAFavoriteItem;
-@class OAGpxWptItem;
+@class OAFavoriteItem, OAGpxWptItem;
 
 @protocol OAGpxWptEditingHandlerDelegate <NSObject>
 
@@ -45,6 +46,6 @@
 
 - (id)initWithFavorite:(OAFavoriteItem *)favorite;
 - (id)initWithGpxWpt:(OAGpxWptItem *)gpxWpt;
-- (id)initWithLocation:(CLLocationCoordinate2D)location title:(NSString *)formattedTitle customParam:(NSString *)customParam pointType:(NSString *)pointType;
+- (id)initWithLocation:(CLLocationCoordinate2D)location title:(NSString *)formattedTitle customParam:(NSString *)customParam pointType:(EOAEditPointType)pointType;
 
 @end

@@ -1652,7 +1652,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:self.targetMenuView.targetPoint.titleAddress pointType:kFavoritePointKey];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:self.targetMenuView.targetPoint.titleAddress pointType:EOAEditPointTypeFavorite];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
@@ -1830,7 +1830,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:gpxFileName pointType:kGpxWptPointKey];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:gpxFileName pointType:EOAEditPointTypeWaypoint];
     controller.gpxWptDelegate = self;
     [self presentViewController:controller animated:YES completion:nil];
 }

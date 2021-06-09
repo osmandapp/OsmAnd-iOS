@@ -16,6 +16,8 @@
 #import "OASettingsCategoryItems.h"
 #import "OATableViewCustomHeaderView.h"
 
+#define kDefaultArchiveName @"OsmAnd_Settings"
+
 @implementation OAExportItemsViewController
 {
     NSString *_descriptionText;
@@ -129,7 +131,8 @@
 
     OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
     NSArray<OASettingsItem *> *settingsItems = [settingsHelper prepareSettingsItems:self.getSelectedItems settingsItems:@[] doExport:YES];
-    [settingsHelper exportSettings:NSTemporaryDirectory() fileName:_appMode.toHumanString items:settingsItems exportItemFiles:YES delegate:self];
+    NSString *fileName = _appMode != nil ? _appMode.toHumanString : kDefaultArchiveName;
+    [settingsHelper exportSettings:NSTemporaryDirectory() fileName:fileName items:settingsItems exportItemFiles:YES delegate:self];
 }
 
 - (long)getItemSize:(NSString *)item

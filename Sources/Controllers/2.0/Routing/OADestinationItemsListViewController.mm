@@ -395,7 +395,6 @@ typedef NS_ENUM(NSInteger, EOASortType)
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
                     [c.titleView setText:item.favorite->getTitle().toNSString()];
-                    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
                     c.titleIcon.image = item.getCompositeIcon;
                     
                     [c.distanceView setText:item.distance];

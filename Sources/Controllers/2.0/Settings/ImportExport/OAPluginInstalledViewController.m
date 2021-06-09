@@ -128,8 +128,8 @@
         }
         if (cell)
         {
-            NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:17];
-            cell.textView.attributedText = attrString;
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:17];
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }
         return cell;
@@ -156,7 +156,7 @@
     NSAttributedString *attrString;
     if (boldFragment && boldFragment.length > 0)
     {
-        attrString = [OAUtilities getStringWithBoldPart:descriptionText mainString:text boldString:boldFragment lineSpacing:4. fontSize:17. boldFontSize:34. boldColor:UIColor.blackColor mainColor:UIColorFromRGB(color_text_footer)];
+        attrString = [OAUtilities getStringWithBoldPart:descriptionText mainString:text boldString:boldFragment lineSpacing:0. fontSize:17. boldFontSize:34. boldColor:UIColor.blackColor mainColor:UIColorFromRGB(color_text_footer)];
     }
     else
     {
@@ -164,7 +164,7 @@
         [style setLineSpacing:6];
         attrString = [[NSAttributedString alloc] initWithString:descriptionText attributes:@{NSParagraphStyleAttributeName : style}];
     }
-    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:UIColorFromRGB(color_primary_purple) iconContentMode:UIViewContentModeScaleAspectFit];
+    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:UIColorFromRGB(color_primary_purple) iconContentMode:UIViewContentModeScaleAspectFit iconYOffset:48.];
 }
 
 @end

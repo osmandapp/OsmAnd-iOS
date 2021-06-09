@@ -1172,11 +1172,14 @@ static BOOL _lackOfResources;
         _resourcesSection = -1;
         _localSqliteSection = -1;
         _localOnlineTileSourcesSection = -1;
+        _freeMemorySection = -1;
         
         if (_displayBanner)
             _bannerSection = _lastUnusedSectionIndex++;
         
-        _freeMemorySection = _lastUnusedSectionIndex++;
+        if (![self.region isKindOfClass:OACustomRegion.class])
+            _freeMemorySection = _lastUnusedSectionIndex++;
+        
         if (_displaySubscribeEmailView)
             _subscribeEmailSection = _lastUnusedSectionIndex++;
 
@@ -2306,8 +2309,8 @@ static BOOL _lackOfResources;
     else if ([cellTypeId isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
     {
         OATextViewSimpleCell *textViewCell = (OATextViewSimpleCell *) cell;
-        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17];
-        textViewCell.textView.attributedText = attrString;
+        textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17];
+        textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
         [textViewCell.textView sizeToFit];
     }
     else if ([cellTypeId isEqualToString:descriptionButtonIconCell])

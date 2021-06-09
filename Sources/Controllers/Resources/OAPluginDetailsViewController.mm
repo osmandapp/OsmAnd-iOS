@@ -17,6 +17,7 @@
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAPlugin.h"
+#import "OAColors.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -222,7 +223,10 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     if (desc)
         self.descTextView.text = desc;
     else if (attrDesc)
+    {
         self.descTextView.attributedText = attrDesc;
+        self.descTextView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
+    }
     
     BOOL purchased = NO;
     BOOL disabled = YES;

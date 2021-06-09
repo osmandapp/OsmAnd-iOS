@@ -15,6 +15,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OAEditPointViewController.h"
+#import "OASavingTrackHelper.h"
 
 @implementation OAGpxWptEditingHandler
 {
@@ -75,7 +76,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _gpxDocument = [[OAGPXDocument alloc] initWithGpxFile:_gpxFileName];
+    _gpxDocument = _gpxFileName.length > 0 ? [[OAGPXDocument alloc] initWithGpxFile:_gpxFileName] : (OAGPXDocument *) [[OASavingTrackHelper sharedInstance] currentTrack];
 }
 
 - (UIColor *)getColor
@@ -97,7 +98,7 @@
         NSMutableDictionary<NSString *, NSString *> *newGroup = [NSMutableDictionary new];
         newGroup[@"title"] = _newGroupTitle;
         newGroup[@"color"] = _newGroupColor.toHexString;
-        newGroup[@"count"] = @"1";
+        newGroup[@"count"] = @"0";
 
         NSMutableArray *newGroups = [NSMutableArray arrayWithArray:groups];
         [newGroups addObject:newGroup];

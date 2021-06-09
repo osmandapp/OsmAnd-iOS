@@ -749,8 +749,16 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
     {
-        [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
-        [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+        if (_targetPoint.type == OATargetWpt && ![self newItem])
+        {
+            [_buttonFavorite setTitle:OALocalizedString(@"edit_waypoint_short") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+        }
+        else
+        {
+            [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+        }
     }
     else
     {
@@ -1697,7 +1705,7 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
-        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt);
+        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt && ![self newItem]);
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
     
@@ -2023,7 +2031,14 @@ static const NSInteger _buttonsCount = 4;
         [self.menuViewDelegate targetPointEditFavorite:item];
         return;
     }
-    
+
+    if (self.targetPoint.type == OATargetWpt)
+    {
+        OAGpxWptItem *item = self.targetPoint.targetObj;
+        [self.menuViewDelegate targetPointEditWaypoint:item];
+        return;
+    }
+
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
     {
         [self.menuViewDelegate targetPointAddWaypoint];

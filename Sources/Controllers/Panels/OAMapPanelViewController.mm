@@ -2008,8 +2008,6 @@ typedef enum
             [self.targetMenuView doInit:showFullMenu];
             
             OAGPXWptViewController *wptViewController = (OAGPXWptViewController *) controller;
-            if (_activeTargetType == OATargetGPXEdit)
-                [wptViewController activateEditing];
             
             wptViewController.mapViewController = self.mapViewController;
             wptViewController.wptDelegate = self;

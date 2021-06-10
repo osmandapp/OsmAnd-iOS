@@ -17,6 +17,9 @@
 #import "OAResourcesUIHelper.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAImagesTableViewCell.h"
+
+#define imageViewHeight 200.0
 
 @interface OACustomSourceDetailsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -33,9 +36,8 @@
     OACustomRegion *_region;
     
     NSArray<NSDictionary *> *_data;
-    
-    UIImage *_downloadedImage;
-    BOOL _queriedImage;
+    __block NSMutableArray<UIImage *> *_downloadedImages;
+    BOOL _queriedImages;
     
     OADownloadActionButton *_downloadButton;
 }
@@ -58,26 +60,38 @@
 
 - (void)queryImage
 {
-    if (_item.descriptionInfo.imageUrls.count > 0 && !_queriedImage)
+    _downloadedImages = [NSMutableArray new];
+    if (_item.descriptionInfo.imageUrls.count > 0 && !_queriedImages)
     {
-        NSURLSession *imageDownload = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-        // TODO: load more images
-        [[imageDownload dataTaskWithURL:[NSURL URLWithString:_item.descriptionInfo.imageUrls.firstObject] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            if (((NSHTTPURLResponse *)response).statusCode == 200) {
-                if (data)
+        NSURLSession *imageDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        
+        __block int processedUrlsCount = 0;
+        for (NSString *imageUrl in _item.descriptionInfo.imageUrls)
+        {
+            [[imageDownloadSession dataTaskWithURL:[NSURL URLWithString:imageUrl] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                
+                processedUrlsCount++;
+                if (((NSHTTPURLResponse *)response).statusCode == 200)
                 {
-                    _downloadedImage = [UIImage imageWithData:data];
-                    if (_downloadedImage)
+                    if (data)
                     {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self generateData];
-                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-                        });
+                        UIImage *img = [UIImage imageWithData:data];
+                        if (img)
+                        {
+                            [_downloadedImages addObject:img];
+                            if (processedUrlsCount == _item.descriptionInfo.imageUrls.count)
+                            {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self generateData];
+                                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                    _queriedImages = YES;
+                                });
+                            }
+                        }
                     }
                 }
-                _queriedImage = YES;
-            }
-        }] resume];
+            }] resume];
+        }
     }
 }
 
@@ -85,10 +99,16 @@
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
     
-    if (_downloadedImage)
+    if (_downloadedImages.count == 1)
     {
         [data addObject:@{
             @"type" : [OAOnlyImageViewCell getCellIdentifier]
+        }];
+    }
+    else if (_downloadedImages.count > 1)
+    {
+        [data addObject:@{
+            @"type" : [OAImagesTableViewCell getCellIdentifier]
         }];
     }
     
@@ -120,6 +140,11 @@
     
     [self queryImage];
     [self setupActionButtons];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [_tableView reloadData];
 }
 
 - (void) setupActionButtons
@@ -246,7 +271,25 @@
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
-            cell.imageView.image = _downloadedImage;
+            cell.imageView.image = _downloadedImages.firstObject;
+        return cell;
+    }
+    else if ([type isEqualToString:[OAImagesTableViewCell getCellIdentifier]])
+    {
+        OAImagesTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAImagesTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImagesTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAImagesTableViewCell *)[nib objectAtIndex:0];;
+        }
+        if (cell)
+        {
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsZero;
+            cell.collectionViewWidth.constant = self.view.frame.size.width;
+            cell.collectionViewHeight.constant = imageViewHeight;
+            cell.images = _downloadedImages;
+        }
         return cell;
     }
     else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
@@ -275,6 +318,15 @@
         return cell;
     }
     return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.row];
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:[OAImagesTableViewCell getCellIdentifier]])
+        return imageViewHeight;
+    return UITableViewAutomaticDimension;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

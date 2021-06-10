@@ -46,7 +46,7 @@
 
 @property (nonatomic, readonly) BOOL showFull;
 @property (nonatomic, readonly) BOOL showFullScreen;
-@property (nonatomic, readonly) BOOL skipOpenRouteSettings;
+@property (nonatomic) BOOL skipOpenRouteSettings;
 
 - (void) setMapViewInstance:(UIView *)mapView;
 - (void) setNavigationController:(UINavigationController *)controller;

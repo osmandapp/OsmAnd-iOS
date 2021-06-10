@@ -177,12 +177,12 @@
     // Plan route
     [arr addObject:@{ @"title" : OALocalizedString(@"plan_route"),
             @"key" : @"plan_route",
-            @"img" : @"ic_action_ruler_line", //ic_custom_plan_route
+            @"img" : @"ic_custom_route",
             @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     // Avoid road
     [arr addObject:@{ @"title" : OALocalizedString(@"avoid_road"),
             @"key" : @"avoid_road",
-            @"img" : @"ic_custom_alert", //ic_custom_road_works
+            @"img" : @"ic_custom_road_works",
             @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     if (arr.count > 2)
         [arr insertObject:@{ @"type" : [OADividerCell getCellIdentifier] } atIndex:2];

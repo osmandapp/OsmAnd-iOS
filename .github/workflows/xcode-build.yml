@@ -119,7 +119,7 @@ jobs:
     - name: Upload maps archive zip
       uses: actions/upload-artifact@v2
       with:
-         name: OsmAndMaps-${{ github.event.inputs.buildversion }}.${{ github.event.inputs.releaseversion }}.xcarchive.zip
+         name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.xcarchive.zip
          path: OsmAndMaps.xcarchive.zip
     # - name: Download iOS archive
     #   run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive.zip" -O OsmAndMaps.xcarchive.zip'
@@ -134,7 +134,7 @@ jobs:
     - name: Upload maps archive
       uses: actions/upload-artifact@v2
       with:
-        name: OsmAndMaps-${{ github.event.inputs.buildversion }}.${{ github.event.inputs.releaseversion }}.ipa
+        name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.ipa
         path: 'OsmAnd Maps.ipa'
     - name: Publish TestFlight
       env:

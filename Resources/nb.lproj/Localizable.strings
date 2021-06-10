@@ -1443,7 +1443,7 @@
 "rendering_attr_tracktype_grade3_name" = "For det meste hard";
 "rendering_value_dark_brown_name" = "Mørkebrun";
 "rendering_attr_surface_ground_name" = "Jord";
-"rendering_attr_highway_class_state_road_name" = "Fylkesvei";
+"rendering_attr_highway_class_state_road_name" = "Riks- eller primær fylkesvei";
 "rendering_attr_piste_type_sleigh_name" = "Slede";
 "routing_attr_avoid_ferry_name" = "Ingen ferger";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Flatt";
@@ -1866,7 +1866,6 @@
 "visible" = "Synlig";
 "only_manually" = "Kun manuelt";
 "repeat_after" = "Gjenta etter";
-
 "join_segments" = "Bind sammen segmenter";
 "shared_string_disable" = "Deaktiver";
 "plan_route_change_folder" = "Endre mappe";

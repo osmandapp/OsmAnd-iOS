@@ -114,7 +114,7 @@
                           @"img" : @"ic_custom_update",
                           @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     }
-    // Change marker psition
+    // Change marker position
     if ([OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer isObjectMovable:_targetPoint.targetObj])
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"change_object_posiotion"),
@@ -174,6 +174,16 @@
             }
         }
     }
+    // Plan route
+    [arr addObject:@{ @"title" : OALocalizedString(@"plan_route"),
+            @"key" : @"plan_route",
+            @"img" : @"ic_action_ruler_line", //ic_custom_plan_route
+            @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+    // Avoid road
+    [arr addObject:@{ @"title" : OALocalizedString(@"avoid_road"),
+            @"key" : @"avoid_road",
+            @"img" : @"ic_custom_alert", //ic_custom_road_works
+            @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     if (arr.count > 2)
         [arr insertObject:@{ @"type" : [OADividerCell getCellIdentifier] } atIndex:2];
     _data = [NSArray arrayWithArray:arr];
@@ -392,6 +402,11 @@
                 }];
             }]];
             [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        }
+        else if ([key isEqualToString:@"plan_route"])
+            [vwController.menuViewDelegate targetOpenPlanRoute];
+        else if ([key isEqualToString:@"avoid_road"]) {
+            [vwController.menuViewDelegate targetOpenAvoidRoad];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

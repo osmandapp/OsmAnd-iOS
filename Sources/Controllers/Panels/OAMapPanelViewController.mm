@@ -116,6 +116,7 @@
 #import "OAHistoryViewController.h"
 #import "OAEditPointViewController.h"
 #import "OAGPXDocument.h"
+#import "OARoutePlanningHudViewController.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -1874,7 +1875,17 @@ typedef enum
 - (void) targetOpenRouteSettings
 {
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showRoutePreferences];
+    if (!self.targetMenuView.skipOpenRouteSettings)
+        [self showRoutePreferences];
+    else
+        self.targetMenuView.skipOpenRouteSettings = NO;
+}
+
+- (void) targetOpenPlanRoute
+{
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude]]];
 }
 
 - (void) targetGoToPoint
@@ -2173,6 +2184,13 @@ typedef enum
 - (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left
 {
     [self.hudViewController updateRulerPosition:bottom left:left];
+}
+
+- (void) targetOpenAvoidRoad
+{
+    [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude] skipWritingSettings:NO appModeKey:nil];
+    self.targetMenuView.skipOpenRouteSettings = YES;
+    [self openTargetViewWithImpassableRoadSelection];
 }
 
 - (void) hideTargetPointMenu

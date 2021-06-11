@@ -1754,7 +1754,8 @@
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    return [[self get:mode] componentsJoinedByString:@","];
+    NSArray<NSString *> *value = [self get:mode];
+    return value ? [value componentsJoinedByString:@","] : @"";
 }
 
 @end

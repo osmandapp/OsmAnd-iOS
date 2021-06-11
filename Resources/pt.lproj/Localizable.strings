@@ -993,7 +993,7 @@
 "shared_string_password" = "Palavra-passe";
 "poi_category_and_type" = "Categoria e tipo de POI";
 "poi_select_type" = "Selecionar o tipo";
-"show_something_on_map" = "Ver %@ no mapa";
+"show_something_on_map" = "Ver '%@' no mapa";
 "shared_string_street_intersection" = "Cruzamento de rua";
 "do_not_show_discount" = "Não mostrar promoções";
 "do_not_send_anonymous_data" = "Não enviar dados anônimos";
@@ -2094,3 +2094,8 @@
 "restart" = "Reiniciar";
 "shared_string_wifi_only" = "Só em Wi-Fi";
 "app_restart_required" = "Necessário reiniciar a aplicação para aplicar algumas configurações.";
+"no_waypoints_found" = "Não há pontos de rota";
+"replace_waypoint_confirmation" = "Quer mesmo substituir o ponto %@?";
+"context_menu_item_edit_waypoint" = "Editar ponto GPX";
+"base_profile_descr_carplay" = "Conduzir com modo CarPlay";
+"m_style_carplay" = "CarPlay";

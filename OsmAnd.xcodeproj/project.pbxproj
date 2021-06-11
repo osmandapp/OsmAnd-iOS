@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0A2A7C6F262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2A7C6E262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib */; };
+		0A6B69D326725D1F00778353 /* ic_custom_road_works@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A6B69D126725D1E00778353 /* ic_custom_road_works@2x.png */; };
+		0A6B69D426725D1F00778353 /* ic_custom_road_works@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A6B69D226725D1F00778353 /* ic_custom_road_works@3x.png */; };
 		0A86D5DF262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A86D5DE262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib */; };
 		0A8F544D263949FC0020F5CF /* ic_custom_search_categories@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */; };
 		0A8F544E263949FC0020F5CF /* ic_custom_search_categories@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */; };
@@ -3754,6 +3756,8 @@
 
 /* Begin PBXFileReference section */
 		0A2A7C6E262B7F120005F1BF /* OADeleteCustomFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OADeleteCustomFiltersViewController.xib; path = Sources/Controllers/2.0/OADeleteCustomFiltersViewController.xib; sourceTree = "<group>"; };
+		0A6B69D126725D1E00778353 /* ic_custom_road_works@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_road_works@2x.png"; path = "Resources/Icons/ic_custom_road_works@2x.png"; sourceTree = "<group>"; };
+		0A6B69D226725D1F00778353 /* ic_custom_road_works@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_road_works@3x.png"; path = "Resources/Icons/ic_custom_road_works@3x.png"; sourceTree = "<group>"; };
 		0A86D5DE262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OARearrangeCustomFiltersViewController.xib; path = Sources/Controllers/2.0/OARearrangeCustomFiltersViewController.xib; sourceTree = "<group>"; };
 		0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@2x.png"; path = "Resources/Icons/ic_custom_search_categories@2x.png"; sourceTree = "<group>"; };
 		0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@3x.png"; path = "Resources/Icons/ic_custom_search_categories@3x.png"; sourceTree = "<group>"; };
@@ -8641,6 +8645,8 @@
 		3AC639A61A1CF54F001D5E57 /* IntroImages */ = {
 			isa = PBXGroup;
 			children = (
+				0A6B69D126725D1E00778353 /* ic_custom_road_works@2x.png */,
+				0A6B69D226725D1F00778353 /* ic_custom_road_works@3x.png */,
 				846F431C1FE5209B00AFEA8E /* img_splash_osmand_logo.png */,
 				846F431A1FE5209A00AFEA8E /* img_splash_osmand_logo@2x.png */,
 				846F431B1FE5209B00AFEA8E /* img_splash_osmand_logo@3x.png */,
@@ -16621,6 +16627,7 @@
 				847C0FB11FC5D6F4003891F3 /* zoom_out_button_night@3x.png in Resources */,
 				845E060B1B5956E800DFC2A7 /* ic_destination_pin_4_small.png in Resources */,
 				84EE2DB81AFCC4F5007C9A94 /* bt_bought_addon_disabled@2x.png in Resources */,
+				0A6B69D326725D1F00778353 /* ic_custom_road_works@2x.png in Resources */,
 				DA2DC41523B2116300F40D1D /* ic_custom_arrow_up@3x.png in Resources */,
 				8476E1EE1F6BB66700EC274F /* OARoutingProgressView.xib in Resources */,
 				845E06021B5956E800DFC2A7 /* ic_arrow_open.png in Resources */,
@@ -16985,6 +16992,7 @@
 				DA2DC41923B2116300F40D1D /* ic_custom_arrow_down.png in Resources */,
 				84185AD71AAA11B600F70328 /* ic_favorite_6.png in Resources */,
 				DA13A0112345FA0100C1A1A8 /* ic_custom_altitude_and_slope.png in Resources */,
+				0A6B69D426725D1F00778353 /* ic_custom_road_works@3x.png in Resources */,
 				DA84E85221D77EEA006954D0 /* ic_action_close_banner@2x.png in Resources */,
 				8454DA571B31774F00E5A5C5 /* ic_mode_pedestrian.png in Resources */,
 				155AC6BE253ECEEC00703073 /* OAActivityViewWithTitleCell.xib in Resources */,

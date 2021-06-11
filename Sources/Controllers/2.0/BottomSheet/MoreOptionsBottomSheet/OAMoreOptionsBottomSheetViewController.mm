@@ -327,15 +327,20 @@
             [vwController.menuViewDelegate targetHide];
             [vwController.menuViewDelegate navigateFrom:_targetPoint];
         }
-
         else if ([key isEqualToString:@"addon_edit_waypoint"])
+        {
             [vwController.menuViewDelegate targetPointEditWaypoint:_targetPoint.targetObj];
+        }
         else if ([key isEqualToString:@"addon_add_waypoint"])
+        {
             [vwController.menuViewDelegate targetPointAddWaypoint];
-        
+        }
         else if ([key isEqualToString:@"addon_add_parking"])
+        {
             [vwController.menuViewDelegate targetPointParking];
-        else if ([key isEqualToString:@"nearby_search"]) {
+        }
+        else if ([key isEqualToString:@"nearby_search"])
+        {
             [vwController.menuViewDelegate targetHide];
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
         }
@@ -365,7 +370,6 @@
                         [mapPanel.navigationController pushViewController:editingScreen animated:YES];
                     });
                 });
-                
             }
             else if (_targetPoint.type == OATargetOsmEdit)
             {
@@ -404,8 +408,11 @@
             [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
         }
         else if ([key isEqualToString:@"plan_route"])
+        {
             [vwController.menuViewDelegate targetOpenPlanRoute];
-        else if ([key isEqualToString:@"avoid_road"]) {
+        }
+        else if ([key isEqualToString:@"avoid_road"])
+        {
             [vwController.menuViewDelegate targetOpenAvoidRoad];
         }
     }

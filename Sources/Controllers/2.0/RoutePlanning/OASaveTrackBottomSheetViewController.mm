@@ -60,15 +60,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self.iconImageView setImage:[UIImage templateImageNamed:@"ic_custom_save_complete.png"]];
     self.iconImageView.tintColor = UIColorFromRGB(color_primary_purple);
     self.openSavedTrackButton.layer.cornerRadius = 9.;
     self.createNewRouteButton.layer.cornerRadius = 9.;
     self.shareButton.layer.cornerRadius = 9.;
-    
+
     self.isFullScreenAvailable = NO;
-    
+
     NSString *gpxTitle = _fileName.lastPathComponent.stringByDeletingPathExtension;
     NSString *titleString = [NSString stringWithFormat:OALocalizedString(@"track_is_saved"), gpxTitle];
     self.titleLabel.attributedText = [OAUtilities getColoredString:titleString highlightedString:gpxTitle highlightColor:UIColorFromRGB(color_primary_purple) fontSize:17. centered:YES];
@@ -79,7 +79,7 @@
     [self.openSavedTrackButton setTitle:OALocalizedString(@"open_saved_track") forState:UIControlStateNormal];
     [self.createNewRouteButton setTitle:OALocalizedString(@"plan_route_create_new_route") forState:UIControlStateNormal];
     [self.shareButton setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
-    
+
     [self.leftButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
 }
 
@@ -115,12 +115,12 @@
     NSString* tempFolderPath = [NSTemporaryDirectory() stringByAppendingString:[_fileName lastPathComponent]];
     NSURL* destinationGpxUrl = [NSURL fileURLWithPath:tempFolderPath];
     [[NSData dataWithContentsOfURL:sourceGpxUrl] writeToURL:destinationGpxUrl options:NSDataWritingAtomic error:nil];
-    
+
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:destinationGpxUrl];
-    _exportController.UTI = @"net.osmand.gpx";
+    _exportController.UTI = @"com.topografix.gpx";
     _exportController.delegate = self;
     _exportController.name = [tempFolderPath.lastPathComponent stringByDeletingPathExtension];
-    
+
     [_exportController presentOptionsMenuFromRect:self.shareButton.frame
                                            inView:[self.shareButton superview]
                                          animated:YES];

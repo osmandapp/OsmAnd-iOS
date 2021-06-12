@@ -721,6 +721,16 @@ static OAApplicationMode *_CARPLAY;
     }
 }
 
++ (BOOL)exist:(NSString *)key
+{
+    for (OAApplicationMode *p in _values) {
+        if ([p.stringKey isEqualToString:key]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def
 {
     for (OAApplicationMode *p in _values)

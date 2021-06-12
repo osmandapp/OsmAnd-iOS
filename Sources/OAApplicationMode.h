@@ -57,6 +57,7 @@
 + (NSArray<OAApplicationMode *> *) values;
 + (NSArray<OAApplicationMode *> *) allPossibleValues;
 + (NSArray<OAApplicationMode *> *) getModesDerivedFrom:(OAApplicationMode *)am;
++ (BOOL)exist:(NSString *)key;
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def;
 
 + (void) onApplicationStart;

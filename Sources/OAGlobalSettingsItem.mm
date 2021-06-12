@@ -101,7 +101,33 @@
         return NO;
     }
 
-    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
+    NSMutableDictionary<NSString *, NSString *> *settings = [NSMutableDictionary dictionaryWithDictionary: json];
+    NSMutableArray<NSString *> *customAppModesKeys = [NSMutableArray new];
+    if (settings[@"custom_app_modes_keys"])
+        customAppModesKeys = [NSMutableArray arrayWithArray:[settings[@"custom_app_modes_keys"] componentsSeparatedByString:@","]];
+
+    NSMutableArray<NSString *> *nonexistentCustomAppModesKeys = [NSMutableArray new];
+    for (NSString *customAppModeKey in customAppModesKeys) {
+        if (![OAApplicationMode exist:customAppModeKey])
+            [nonexistentCustomAppModesKeys addObject:customAppModeKey];
+    }
+    [customAppModesKeys removeObjectsInArray:nonexistentCustomAppModesKeys];
+    [nonexistentCustomAppModesKeys removeAllObjects];
+    settings[@"custom_app_modes_keys"] = customAppModesKeys.count > 0 ? [customAppModesKeys componentsJoinedByString:@","] : @"";
+
+    NSMutableArray<NSString *> *availableAppModesKeys = [NSMutableArray new];
+    if (settings[@"available_application_modes"])
+        availableAppModesKeys = [NSMutableArray arrayWithArray:[settings[@"available_application_modes"] componentsSeparatedByString:@","]];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^.*_\\d{10,13}$"];
+    for (NSString *availableAppModeKey in availableAppModesKeys) {
+        if ([predicate evaluateWithObject:availableAppModeKey] && ![customAppModesKeys containsObject:availableAppModeKey])
+            [nonexistentCustomAppModesKeys addObject:availableAppModeKey];
+    }
+    if (nonexistentCustomAppModesKeys.count != 0)
+        [availableAppModesKeys removeObjectsInArray:nonexistentCustomAppModesKeys];
+
+    settings[@"available_application_modes"] = availableAppModesKeys.count > 0 ? [availableAppModesKeys componentsJoinedByString:@","] : @"";
 
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         [self.item readPreferenceFromJson:key value:obj];

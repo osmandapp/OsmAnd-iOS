@@ -90,14 +90,13 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        cell.textLeftMargin.constant -= 8.;
     }
     
     if (cell) {
-        
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][indexPath.row];
         [cell.textView setText:favCol.name];
         [cell.iconView setImage:favCol.icon];
-        cell.textLeftMargin.constant -= 8.;
         [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
         cell.arrowIconView.hidden = indexPath.row != self.colorIndex;
     }

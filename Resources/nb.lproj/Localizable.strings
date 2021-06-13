@@ -533,7 +533,7 @@
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "coordinates_example" = "Eksempel";
 "utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
-"coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
+"coordinates_copy_descr" = "Trykk for å kopiere koordinater til utklippstavle.";
 "sett_lang_local" = "Lokale";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";

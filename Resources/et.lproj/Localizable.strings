@@ -321,7 +321,7 @@
 "si_m_s" = "Meetrit sekundis";
 "si_min_km" = "Minutit kilomeetri kohta";
 "si_min_m" = "Minutit miili kohta";
-"si_nm_h" = "Meremiili tunnis (sõlm)";
+"si_nm_h" = "Meremiili tunnis (sõlme)";
 "nm" = "M";
 "nm_h" = "sõlme";
 "min_mile" = "min/m";

@@ -2191,6 +2191,8 @@ typedef enum
     [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude] skipWritingSettings:NO appModeKey:nil];
     self.targetMenuView.skipOpenRouteSettings = YES;
     [self openTargetViewWithImpassableRoadSelection];
+    if (self.targetMenuView.customController.delegate)
+        [self.targetMenuView.customController.delegate requestFullMode];
 }
 
 - (void) hideTargetPointMenu

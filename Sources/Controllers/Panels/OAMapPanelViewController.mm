@@ -888,23 +888,28 @@ typedef enum
 
 - (void) showRouteInfo
 {
+    [self showRouteInfo:YES];
+}
+
+- (void) showRouteInfo:(BOOL)fullMenu
+{
     [OAAnalyticsHelper logEvent:@"route_info_open"];
-    
+
     [self removeGestureRecognizers];
-    
+
     if (self.targetMenuView.superview)
     {
         [self hideTargetPointMenu:.2 onComplete:^{
-            [self showRouteInfoInternal];
+            [self showRouteInfoInternal:fullMenu];
         }];
     }
     else
     {
-        [self showRouteInfoInternal];
+        [self showRouteInfoInternal:fullMenu];
     }
 }
 
-- (void) showRouteInfoInternal
+- (void) showRouteInfoInternal:(BOOL)fullMenu
 {
     CGRect frame = self.routeInfoView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
@@ -917,7 +922,7 @@ typedef enum
     [self.view addSubview:self.routeInfoView];
     
     self.sidePanelController.recognizesPanGesture = NO;
-    [self.routeInfoView show:YES onComplete:^{
+    [self.routeInfoView show:YES fullMenu:fullMenu onComplete:^{
         [_hudViewController.quickActionController updateViewVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
@@ -1253,7 +1258,7 @@ typedef enum
             }
 
             [self hideTargetPointMenu];
-            [self showRouteInfo];
+            [self showRouteInfo:NO];
             
             return NO;
         }

@@ -19,7 +19,7 @@
 #import "OAColors.h"
 #import "OAImagesTableViewCell.h"
 
-#define imageViewHeight 200.0
+#define kImageViewHeight 200.0
 
 @interface OACustomSourceDetailsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -140,11 +140,6 @@
     
     [self queryImage];
     [self setupActionButtons];
-}
-
-- (void)viewWillLayoutSubviews
-{
-    [_tableView reloadData];
 }
 
 - (void) setupActionButtons
@@ -286,9 +281,9 @@
         {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
-            cell.collectionViewWidth.constant = self.view.frame.size.width;
-            cell.collectionViewHeight.constant = imageViewHeight;
+            cell.collectionViewHeight.constant = kImageViewHeight;
             cell.images = _downloadedImages;
+            [cell layoutIfNeeded];
         }
         return cell;
     }
@@ -325,7 +320,7 @@
     NSDictionary *item = _data[indexPath.row];
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OAImagesTableViewCell getCellIdentifier]])
-        return imageViewHeight;
+        return kImageViewHeight;
     return UITableViewAutomaticDimension;
 }
 

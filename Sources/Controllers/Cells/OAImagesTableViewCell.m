@@ -14,15 +14,25 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:[OAImagesCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAImagesCollectionViewCell getCellIdentifier]];
+    _collectionView.delegate = self;
+    _collectionView.dataSource = self;
+    [_collectionView registerNib:[UINib nibWithNibName:[OAImagesCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAImagesCollectionViewCell getCellIdentifier]];
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    layout.minimumInteritemSpacing = 0;
+    layout.minimumLineSpacing = 0;
+    layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    [_collectionView setCollectionViewLayout:layout];
+    [_collectionView setShowsHorizontalScrollIndicator:NO];
+    [_collectionView setShowsVerticalScrollIndicator:NO];
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.collectionView.frame = CGRectMake(-OAUtilities.getLeftMargin, 0, self.collectionView.frame.size.width, self.collectionView.frame.size.height);
+    self.contentView.frame = CGRectMake(0, 0, self.superview.frame.size.width, self.superview.frame.size.height);
+    _collectionViewWidth.constant = self.superview.frame.size.width;
+    _collectionView.contentOffset = CGPointMake(0, 0);
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -56,17 +66,13 @@
     return CGSizeMake(_collectionViewWidth.constant, _collectionViewHeight.constant);
 }
 
+- (CGPoint)collectionView:(UICollectionView *)collectionView targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset
+{
+    return CGPointMake(0, 0);
+}
+
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 0.1;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    self.collectionView.frame = CGRectMake(-OAUtilities.getLeftMargin, 0, self.collectionView.frame.size.width, self.collectionView.frame.size.height);
 }
 
 @end

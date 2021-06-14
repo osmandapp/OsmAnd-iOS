@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewWidth;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewLeftOffset;
 
 @property (nonatomic) NSArray<UIImage *> *images;
 

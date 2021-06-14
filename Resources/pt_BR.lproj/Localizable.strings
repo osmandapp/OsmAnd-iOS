@@ -2120,3 +2120,6 @@
 "gpxup_public" = "Público";
 "restart" = "Somente com Wi-Fi";
 "shared_string_wifi_only" = "Somente com WiFi";
+"no_waypoints_found" = "Não há pontos de rota";
+"replace_waypoint_confirmation" = "Quer mesmo substituir o ponto %@?";
+"context_menu_item_edit_waypoint" = "Editar ponto GPX";

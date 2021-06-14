@@ -1363,7 +1363,7 @@
 "rendering_attr_noAdminboundaries_description" = "Esconder limites regionais (níveis administrativos 5-9).";
 "rendering_attr_surface_cobblestone_name" = "Pavimento de pedras irregulares";
 "routing_attr_avoid_share_taxi_description" = "Evita usar táxi coletivo";
-"rendering_attr_piste_difficulty_aerialway_name" = "Maneira aérea";
+"rendering_attr_piste_difficulty_aerialway_name" = "Via aérea";
 "rendering_attr_hideWaterPolygons_name" = "Ocultarágua";
 "rendering_attr_piste_type_nordic_name" = "Nórdico";
 "routing_attr_avoid_ferry_description" = "Evita usar balsas";
@@ -1409,7 +1409,7 @@
 "routing_attr_avoid_train_name" = "Sem trens";
 "routing_attr_piste_type_downhill_description" = "Pistas de esqui alpino ou de declínio e acesso a teleféricos.";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
-"rendering_attr_piste_type_sleigh_name" = "Trenó";
+"rendering_attr_piste_type_sleigh_name" = "Trenó puxado por animais";
 "routing_attr_allow_intermediate_description" = "Rotas mais difíceis com seções mais íngremes. Geralmente alguns obstáculos que devem ser evitados.";
 "rendering_attr_hidePOILabels_name" = "Rótulos POI";
 "rendering_attr_surface_paved_name" = "Pavimentado";

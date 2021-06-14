@@ -451,7 +451,7 @@
 "poi_filter_custom_filter" = "Egyéni szűrő";
 "poi_filter_closest_poi" = "Legközelebbi POI-k";
 "shared_string_is_open_24_7" = "Éjjel-nappal nyitva";
-"shared_string_is_open" = "Nyitva van";
+"shared_string_is_open" = "Most nyitva van";
 "poi_filter_by_name" = "Név szerinti keresés";
 "subcategories" = "Alkategóriák";
 "select_all" = "Minden kijelölése";
@@ -673,7 +673,7 @@
 "shared_string_close" = "Bezárás";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
-"osm_live_enter_email" = "Kérjük, érvényes e-mail címet adjon meg";
+"osm_live_enter_email" = "Kérjük, érvényes e-mail-címet adjon meg";
 "osm_live_enter_user_name" = "Kérjük, nyilvános nevet adjon meg";
 "osm_live_ask_for_purchase" = "Először kérjük, vásároljon OsmAnd Live előfizetést";
 "poi_opening_hours" = "Nyitva tartás";
@@ -739,7 +739,7 @@
 "cancel_navigation" = "Navigáció megállítása";
 "transport_nearby_routes_within" = "Közeli útvonalak ezen belül:";
 "purchase_dialog_title" = "Konstrukció kiválasztása";
-"purchase_dialog_travel_description" = "Az offlineútikalauz funkció használatához vásárolja meg az alábbiak egyikét:";
+"purchase_dialog_travel_description" = "Az offline útikalauz funkció használatához vásárolja meg az alábbiak egyikét:";
 "osm_live_subscription" = "OsmAnd Live előfizetés";
 "wikivoyage_offline" = "Offline Wikivoyage";
 "unlimited_downloads" = "Korlátlan letöltés";
@@ -748,8 +748,8 @@
 "index_item_depth_contours_osmand_ext" = "Tengeri mélységvonalak";
 "donation_to_osm" = "Adomány az OpenStreetMap közösségnek";
 "in_app_purchase_desc_ex" = "Ha egyszer megvette, mindig elérhető lesz.";
-"unlock_all_features" = "Az OsmAndösszes funkciójának feloldása";
-"shared_string_email_address" = "E-mail cím";
+"unlock_all_features" = "Az OsmAnd összes funkciójának feloldása";
+"shared_string_email_address" = "E-mail-cím";
 "shared_string_unexpected_error" = "Váratlan hiba";
 "shared_string_io_error" = "Be-/kimeneti hiba";
 "osm_live_hide_user_name" = "Ne jelenjék meg a nevem a jelentésekben";
@@ -1032,7 +1032,7 @@
 "rendering_attr_smoothness_very_bad_name" = "Nagyon rossz";
 "rendering_attr_piste_difficulty_extreme_name" = "Extrém";
 "rendering_attr_surface_wood_name" = "Fa";
-"rendering_attr_winter_road_name" = "Havasút";
+"rendering_attr_winter_road_name" = "Havas út";
 "routeInfo_piste_type_name" = "Sípálya típusa";
 "rendering_attr_showAccess_name" = "Behajtási korlátozások és útdíj megjelenítése";
 "routing_attr_avoid_subway_name" = "Metró nélkül";
@@ -1081,7 +1081,7 @@
 "rendering_attr_surface_cobblestone_name" = "Nagy kavics (görgeteg)";
 "routing_attr_piste_type_sled_description" = "Szánkópályák";
 "routing_attr_weight_name" = "Súlykorlátozás";
-"rendering_attr_streetLightingNight_name" = "Csakéjszaka jelenjék meg";
+"rendering_attr_streetLightingNight_name" = "Csak éjszaka jelenjék meg";
 "rendering_attr_roadColors_name" = "Útszín sémája";
 "rendering_value_black_name" = "Fekete";
 "rendering_attr_hideWoodScrubs_name" = "Erdő és bozót";
@@ -1098,7 +1098,7 @@
 "rendering_attr_highway_class_state_road_name" = "Főút";
 "rendering_value_purple_name" = "Lila";
 "routing_attr_avoid_shuttle_train_description" = "Elkerüli az autószállító vonatokat";
-"rendering_attr_ice_road_name" = "Jegesút";
+"rendering_attr_ice_road_name" = "Jeges út";
 "rendering_value_translucent_red_name" = "Átlátszó piros";
 "rendering_value_default_name" = "Alapértelmezett";
 "rendering_attr_horseRoutes_name" = "Lovaglóutak";
@@ -1172,7 +1172,7 @@
 "rendering_attr_surface_stone_name" = "Kő";
 "rendering_attr_smoothness_horrible_name" = "Szörnyű";
 "rendering_value_translucent_lightgreen_name" = "Átlátszó világoszöld";
-"routing_attr_avoid_ice_roads_fords_name" = "Jegesút és gázló nélkül";
+"routing_attr_avoid_ice_roads_fords_name" = "Jeges út és gázló nélkül";
 "rendering_attr_highway_class_track_grade1_name" = "1. osztály (burkolt)";
 "rendering_attr_highway_class_cycleway_name" = "Kerékpárút";
 "rendering_attr_noAdminboundaries_description" = "Regionális határok megjelenítésének kikapcsolása (5–9 közigazgatási szint).";
@@ -1200,7 +1200,7 @@
 "rendering_attr_contourWidth_name" = "Szintvonalak vastagsága";
 "rendering_value_darkyellow_name" = "Sötétsárga";
 "rendering_value_translucent_blue_name" = "Átlátszó kék";
-"routing_attr_max_num_changes_description" = "Azátszállások legnagyobb számának megadása";
+"routing_attr_max_num_changes_description" = "Az átszállások legnagyobb számának megadása";
 "routing_attr_avoid_share_taxi_description" = "Elkerüli az iránytaxikat";
 "rendering_attr_contourDensity_description" = "Szintvonalak sűrűsége";
 "rendering_attr_highway_class_service_name" = "Szervizút";
@@ -1247,7 +1247,7 @@
 "rendering_value_pink_name" = "Rózsaszín";
 "routing_attr_width_name" = "Szélességkorlátozás";
 "routing_attr_allow_skating_only_name" = "Csak korcsolyázó mozgással futható utak engedélyezése";
-"routeInfo_winter_ice_road_name" = "Havasés jeges utak";
+"routeInfo_winter_ice_road_name" = "Havas és jeges utak";
 "routing_attr_height_description" = "Adja meg azútvonalakon a járművekre vonatkozó magasságkorlátozást.";
 "routing_attr_allow_motorway_name" = "Autópálya használata";
 "rendering_attr_showSurfaces_name" = "Útfelszín megjelenítése";
@@ -1285,7 +1285,7 @@
 "app_mode_shuttle_bus" = "Shuttle bus (ingajárat)";
 "app_mode_monowheel" = "Egykerekű";
 "app_mode_ufo" = "UFO (azonosítatlan repülő tárgy)";
-"online_webpage_warning" = "Az oldal csak onlineérhető el. Megnyitja böngészőben\?";
+"online_webpage_warning" = "Az oldal csak online érhető el. Megnyitja böngészőben?";
 "map_settings_color_scheme" = "Színséma";
 "app_mode_osm" = "OSM";
 "app_mode_camper" = "Lakókocsi";
@@ -1326,7 +1326,7 @@
 "configure_profile" = "Profil testreszabása";
 "profile_type_base_string" = "Alapprofil";
 "export_profile" = "Profil exportálása";
-"default_speed_dialog_msg" = "Azérkezési időt becsüli ismeretlen úttípus esetén, valamint korlátozza a sebességet valamennyi úttípusnál (az útvonalat befolyásolhatja)";
+"default_speed_dialog_msg" = "Az érkezési időt becsüli ismeretlen úttípus esetén, valamint korlátozza a sebességet valamennyi úttípusnál (az útvonalat befolyásolhatja)";
 "selected_profile" = "Kiválasztott profil";
 "profile_appearance" = "Profil megjelenése";
 "profile_type_custom_string" = "Egyéni profil";
@@ -1353,7 +1353,7 @@
 "shared_string_quick_actions" = "Gyorsműveletek";
 "shared_string_profiles" = "Profilok";
 "replace_all_desc" = "Az jelenlegi elemek lecserélésre kerülnek a fájlban lévőkre";
-"replace_all" = "Azösszes cseréje";
+"replace_all" = "Az összes cseréje";
 "keep_both_desc" = "Az importált elemek előtaggal lesznek hozzáadva";
 "keep_both" = "Mindkettő megtartása";
 "import_duplicates_description" = "Az OsmAnd már tartalmaz az importálttal megegyező nevű elemeket.\n\nVálasszon egy műveletet.";
@@ -1491,10 +1491,9 @@
 "nearest_point" = "Legközelebbi pont";
 "attach_to_the_roads" = "Utakhoz igazítás";
 "simplified_track" = "Egyszerűsített nyomvonal";
-"simplified_track_description" = "Csak azút vonala lesz elmentve, az útpontok törlődnek.";
+"simplified_track_description" = "Csak az út vonala lesz elmentve, az útpontok törlődnek.";
 "open_saved_track" = "Elmentett nyomvonal megnyitása";
 "vk" = "VKontakte";
-
 "group_name" = "Csoport megnevezése";
 "track_save_descr" = "Jelenlegi nyomvonal mentése GPX fájlba most.";
 "icon" = "Ikon";
@@ -1551,3 +1550,13 @@
 "start_of_track" = "Nyomvonal kezdete";
 "gpx_navigation" = "Nyomvonal követése";
 "shared_string_gpx_points" = "Pontok";
+"context_menu_item_edit_waypoint" = "GPX útpont szerkesztése";
+"no_waypoints_found" = "Nem találhatók útpontok";
+"shared_string_wifi_only" = "Csak Wi-Fin";
+"profile_alert_delete_msg" = "Biztosan törölni szeretné a(z) „%@” profilt?";
+"gpx_upload_public_visibility_descr" = "A nyilvános azt jelenti, hogy a nyomvonal nyilvánosan megjelenik az Ön GPS-nyomvonalai között és a nyilvános GPS-nyomvonal-listákban, valamint a nyilvános nyomvonal-listában, időbélyegekkel, nyers formában. Az API-n keresztül szolgáltatott adatok nem hivatkoznak az Ön nyomvonal-oldalára. A nyomvonalpont időbélyegei nem érhetők el a nyilvános GPS API-n keresztül, a nyomvonalpontok pedig nincsenek időrendben.";
+"gpx_upload_private_visibility_descr" = "A privát azt jelenti, hogy a nyomvonal semmilyen nyilvános listán nem jelenik meg, de az abból származó nyomvonalpontok (nem időrendben) továbbra is elérhetők lesznek a nyilvános GPS API-n időbélyegzők nélkül.";
+"gpx_upload_identifiable_visibility_descr" = "Az azonosítható azt jelenti, hogy a nyomvonal nyilvánosan megjelenik az Ön GPS-nyomvonalai között és a GPS-nyomvonalak nyilvános listáin, vagyis más felhasználók letölthetik a nyers nyomvonalat, és társíthatják azt a felhasználónévvel. A nyomvonalpont-API-n keresztül kiszolgált GPS API-ból származó nyilvános időbélyegzővel ellátott nyomvonalpont-adatok hivatkoznak az Ön eredeti nyomvonaloldalára.";
+"gpx_upload_trackable_visibility_descr" = "A követhető azt jelenti, hogy a nyomvonal egyetlen nyilvános listában sem jelenik meg, de a belőle származó, időbélyeggel ellátott, feldolgozott nyomvonalpontok (amelyek közvetlenül nem kapcsolhatók Önhöz) igen, mégpedig a nyilvános GPS API-ról történő letöltések révén.";
+"restart" = "Újraindítás";
+"app_restart_required" = "Egyes beállítások alkalmazásához újra kell indítani az alkalmazást.";

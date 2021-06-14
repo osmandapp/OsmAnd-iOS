@@ -3095,7 +3095,7 @@
         _availableApplicationModes = [[[OACommonString withKey:availableApplicationModesKey defValue:@"car,bicycle,pedestrian,public_transport,"] makeGlobal] makeShared];
         [_globalPreferences setObject:_availableApplicationModes forKey:@"available_application_modes"];
 
-        _customAppModes = [[[OACommonString withKey:customAppModesKey defValue:@""] makeGlobal] makeShared];
+        _customAppModes = [[OACommonString withKey:customAppModesKey defValue:@""] makeGlobal];
         [_globalPreferences setObject:_customAppModes forKey:@"custom_app_modes_keys"];
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];

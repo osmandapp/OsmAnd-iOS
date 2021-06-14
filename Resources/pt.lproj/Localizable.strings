@@ -321,7 +321,7 @@
 "shared_string_remove" = "Remover";
 "device_memory" = "Memória do aparelho";
 "free_memory" = "%@ livre";
-"map_orientation_change_in_accordance_with_speed" = "Limiar de orientação do mapa";
+"map_orientation_change_in_accordance_with_speed" = "Limite para orientação do mapa";
 "map_orientation_change_in_accordance_with_speed_descr" = "Selecione abaixo em qual velocidade a orientação do mapa alterna de 'Na direção do movimento' para 'Na direção da bússola'";
 "today" = "Hoje";
 "yesterday" = "Ontem";
@@ -405,11 +405,11 @@
 "traffic_warning_pedestrian" = "Passadeira";
 "unit_of_length" = "Unidades de comprimento";
 "driving_region" = "Região de condução";
-"show_traffic_warnings" = "Informações de circulação";
+"show_traffic_warnings" = "Avisos de moderação de velocidade";
 "speak_street_names" = "Nomes das ruas (TTS)";
 "speak_speed_limit" = "Limite de velocidade";
 "speak_cameras" = "Radares de velocidade";
-"speak_traffic_warnings" = "Informações de circulação";
+"speak_traffic_warnings" = "Avisos de moderação de velocidade";
 "towards" = "para";
 "poi_filter_closest_poi" = "POIs mais próximos";
 "facebook" = "Facebook";
@@ -482,13 +482,13 @@
 "fast_route_mode" = "Caminho mais rápido";
 "avoid_in_routing_title" = "Evitar…";
 "prefer_in_routing_title" = "Preferir…";
-"choose_auto_follow_route" = "Auto-centrar visualização do mapa";
+"choose_auto_follow_route" = "Centrar automaticamente o mapa após";
 "auto_zoom_map" = "Ampliação automática do mapa";
-"snap_to_road" = "Ajustar à estrada";
-"speak_title" = "Anunciar…";
+"snap_to_road" = "Posicionar na estrada mais próxima";
+"speak_title" = "Avisar por voz…";
 "keep_informing" = "Repetir as instruções de navegação";
-"arrival_distance" = "Anúncio da chegada";
-"arrival_distance_descr" = "Quão cedo quer o anúncio da chegada\?";
+"arrival_distance" = "Aviso por voz da chegada";
+"arrival_distance_descr" = "Quão cedo quer ouvir o aviso por voz da chegada?";
 "speed_limit_exceed" = "Tolerância do limite de velocidade";
 "speed_limit_exceed_message" = "Selecione a margem de tolerância de limite de velocidade, acima do qual receberá um aviso de voz.";
 "voice_pref_title" = "Voz";
@@ -545,7 +545,7 @@
 "traffic_warning_stop" = "Sinal de stop";
 "traffic_warning_calming" = "Redutor de velocidade";
 "traffic_warning_speed_camera" = "Radar de velocidade";
-"traffic_warning" = "Aviso de tráfego";
+"traffic_warning" = "Aviso de moderação de velocidade";
 "traffic_warning_railways" = "Passagem de nível";
 "traffic_warning_hazard" = "Perigo";
 "driving_region_japan" = "Japão";
@@ -777,9 +777,9 @@
 "choose_auto_follow_route_descr" = "Tempo até o mapa ser centrado na posição atual";
 "auto_zoom_map_descr" = "Nível de zoom automático de acordo com a sua velocidade (enquanto o mapa é sincronizado com a posição atual)";
 "snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação";
-"show_warnings_descr" = "Configure avisos de trânsito (limites de velocidade, portagens, lombas, passadeiras, túneis), radares e a faixa de rodagem";
-"speak_descr" = "Configure as indicações sobre nomes de ruas, avisos de trânsito (portagens, lombas, passadeiras), radares e limites de velocidade";
-"keep_informing_descr" = "Repetir as instruções de navegação em intervalos regulares.";
+"show_warnings_descr" = "Configure avisos de moderação de velocidade (limites de velocidade, portagens, lombas, passadeiras, túneis), radares e a faixa de rodagem";
+"speak_descr" = "Configure os avisos por voz de nomes de ruas, avisos de moderação de velocidade (portagens, lombas, passadeiras), radares e limites de velocidade";
+"keep_informing_descr" = "Repetir as instruções de navegação por voz em intervalos regulares";
 "default_speed_system_descr" = "Definir unidade de velocidade.";
 "wake_on_voice_descr" = "Ligar o ecrã do aparelho (se estiver desligado) ao fazer a aproximação à próxima viragem.";
 "voice_provider_descr" = "Selecione a orientação por voz para navegação";
@@ -1328,7 +1328,7 @@
 "rendering_attr_piste_type_skitour_name" = "Passeio de esqui";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Nós da rede de ciclovias";
 "routing_attr_height_name" = "Altura máxima";
-"routing_attr_avoid_ice_roads_fords_name" = "Evitar estradas de gelo ou vaus";
+"routing_attr_avoid_ice_roads_fords_name" = "Evitar estradas de gelo e vaus";
 "rendering_attr_contourColorScheme_description" = "Esquema de cores das curvas de nível";
 "routing_attr_width_description" = "Especifique o limite permitido de largura do veículo nas rotas.";
 "routing_attr_max_num_changes_description" = "Especificar o limite máximo de transbordos";
@@ -1364,7 +1364,7 @@
 "routing_attr_driving_style_prefer_unpaved_description" = "Preferir estradas não pavimentadas sobre as pavimentadas para o roteamento.";
 "rendering_attr_depthContours_description" = "Mostrar pontos e contornos de profundidade.";
 "rendering_attr_noPolygons_description" = "Tornar transparentes todas as características do terreno no mapa.";
-"rendering_attr_contourDensity_description" = "Densidade das curvas de nível";
+"rendering_attr_contourDensity_description" = "Quantidade de curvas de nível";
 "rendering_attr_piste_type_downhill_name" = "Descida";
 "rendering_value_thin_name" = "Fino";
 "rendering_attr_highway_class_street_name" = "Rua";
@@ -1528,7 +1528,7 @@
 "rendering_value_highContrastRoads_name" = "Estradas em alto contraste";
 "rendering_value_low_name" = "Baixo";
 "rendering_attr_publicTransportMode_name" = "Rotas de autocarros, troleicarros e transportes vaivém";
-"rendering_attr_buildings15zoom_name" = "Edifícios no zoom 15";
+"rendering_attr_buildings15zoom_name" = "Edifícios no nível de ampliação 15";
 "rendering_attr_surface_gravel_name" = "Cascalho";
 "rendering_attr_hideText_name" = "Texto";
 "rendering_value_yellow_name" = "Amarelo";
@@ -1538,7 +1538,7 @@
 "routing_attr_avoid_sett_name" = "Sem pedras irregulares ou paralelos";
 "rendering_attr_hideWaterPolygons_name" = "Corpos de água largos";
 "rendering_value_black_name" = "Preto";
-"rendering_attr_contourDensity_name" = "Densidade das curvas de nível";
+"rendering_attr_contourDensity_name" = "Quantidade de curvas de nível";
 "rendering_attr_piste_type_snow_park_name" = "Parque de neve";
 "rendering_value_default_name" = "Predefinido";
 "routeInfo_steepness_name" = "Inclinação";
@@ -1610,7 +1610,7 @@
 "base_profile_descr_bicycle" = "Bicicleta de montanha, ciclomotor, cavalo";
 "base_profile_descr_car" = "Carro, camião, motocicleta";
 "new_profile" = "Novo perfil";
-"screen_alerts" = "Alertas de ecrã";
+"screen_alerts" = "Alertas no ecrã";
 "vehicle_parameters" = "Parâmetros do veículo";
 "select_nav_profile_dialog_message" = "O 'Tipo de navegação' controla como as rotas são calculadas.";
 "select_color" = "Selecionar a cor";
@@ -1629,7 +1629,7 @@
 "profile_type_base_string" = "Perfil de base";
 "copy_from_other_profile" = "Copiar de outro perfil";
 "profile_type_custom_string" = "Perfil personalizado";
-"gpx_parse_error" = "OsmAnd GPX não está correto, por favor contacte a nossa equipa de suporte para podermos investigar o problema.";
+"gpx_parse_error" = "O ficheiro GPX do OsmAnd não está correto. Contacte a nossa equipa de suporte para podermos investigar o problema.";
 "shared_string_next" = "Seguinte";
 "quick_action_map_source_title" = "Origens dos mapas";
 "configure_screen_quick_action" = "Botão de ação rápida";

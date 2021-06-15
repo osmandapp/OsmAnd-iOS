@@ -1573,7 +1573,6 @@
 "osmand_settings" = "OsmAnd設定";
 "street_level_imagery" = "街道級照片";
 "map_widget_distance_by_tap" = "點擊距離";
-
 "follow_track" = "跟隨軌跡";
 "start_of_track" = "軌跡開始";
 "group_name" = "群組名稱";
@@ -1639,3 +1638,12 @@
 "reverse_track_dir" = "反轉軌跡方向";
 "searching_gps" = "正在搜尋 GPS";
 "search_history" = "搜尋歷史紀錄";
+"get_free_trial_title" = "開始您的 %d %@ 免費體驗版。";
+"get_discount_title" = "在 %d%% off 取得 %d %@";
+"years_short" = "年";
+"year_short" = "年";
+"months_short" = "月";
+"month_short" = "月";
+"weeks_short" = "週";
+"week_short" = "週";
+"day_short" = "日";

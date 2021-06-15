@@ -90,7 +90,6 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-        cell.textLeftMargin.constant -= 8.;
     }
     
     if (cell) {

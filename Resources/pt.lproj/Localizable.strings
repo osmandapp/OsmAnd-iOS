@@ -708,7 +708,7 @@
 "osm_live_payment_renews_annually" = "Renova anualmente";
 "osm_live_payment_header" = "Selecione o período de pagamento conveniente para si:";
 "purchase_dialog_title" = "Escolher plano";
-"purchase_dialog_travel_description" = "Compre uma das opções seguintes para receber a funcionalidade da guia de viagem offline:";
+"purchase_dialog_travel_description" = "Compre uma das seguintes opções para receber a funcionalidade do guia de viagem offline:";
 "osm_live_subscription" = "Subscrição do OsmAnd Live";
 "wikivoyage_offline" = "Wikivoyage offline";
 "wikipedia_offline" = "Wikipédia offline";
@@ -718,7 +718,7 @@
 "in_app_purchase" = "Compra na aplicação";
 "in_app_purchase_desc" = "Pagamento de uma só vez";
 "in_app_purchase_desc_ex" = "Uma vez comprado, estará sempre disponível para si.";
-"unlock_all_features" = "Desbloquear todas as características de OsmAnd";
+"unlock_all_features" = "Desbloquear todas as características do OsmAnd";
 "osm_live_subscribe_btn" = "Subscrever";
 "shared_string_email_address" = "Endereço de email";
 "osm_live_enter_email" = "Favor introduzir um endereço de email válido";
@@ -1057,9 +1057,9 @@
 "week" = "Semana";
 "weeks_2_4" = "Semanas";
 "weeks_5" = "Semanas";
-"month" = "Semana";
-"months_2_4" = "Semanas";
-"months_5" = "Semanas";
+"month" = "Mês";
+"months_2_4" = "Meses";
+"months_5" = "Meses";
 "year" = "Ano";
 "years_2_4" = "Anos";
 "years_5" = "Anos";
@@ -1237,7 +1237,7 @@
 "gpx_slope" = "Declive";
 "simulate_navigation" = "Simular navegação";
 "select_avoid_descr" = "Selecione as estradas que quer evitar durante a navegação. Pode selecionar uma estrada no mapa ou escolher um tipo na lista abaixo.";
-"route_parameters" = "Parâmetros de rota";
+"route_parameters" = "Parâmetros da rota";
 "by_dist" = "Pela distância";
 "sort_by" = "Ordenar";
 "swap_points" = "Inverter partida e destino";
@@ -1248,8 +1248,8 @@
 "parking_place" = "Lugar de estacionamento";
 "add_start" = "Adicionar ponto de partida";
 "add_intermediate" = "Adicionar ponto intermédio";
-"add_home" = "Adicionar casa";
-"add_work" = "Adicionar trabalho";
+"add_home" = "Adicionar morada de casa";
+"add_work" = "Adicionar morada do trabalho";
 "home_pt" = "Início";
 "work_pt" = "Trabalho";
 "shared_string_clear_all" = "Limpar tudo";
@@ -1280,7 +1280,7 @@
 "region_others" = "Outros mapas";
 "res_url" = "URL";
 "res_elliptic_mercator" = "Mercator elíptico";
-"rendering_attr_smoothness_bad_name" = "Mau";
+"rendering_attr_smoothness_bad_name" = "Má";
 "rendering_value_translucent_orange_name" = "Laranja translúcido";
 "rendering_attr_highway_class_track_grade4_name" = "Grau 4";
 "rendering_attr_surface_cobblestone_name" = "Pedras irregulares";
@@ -1390,7 +1390,7 @@
 "routeInfo_piste_type_name" = "Tipo de pista";
 "rendering_attr_piste_type_connection_name" = "Conexão";
 "rendering_attr_piste_type_hike_name" = "Caminhada";
-"rendering_attr_smoothness_good_name" = "Bom";
+"rendering_attr_smoothness_good_name" = "Boa";
 "rendering_value_translucent_blue_name" = "Azul translúcido";
 "routing_attr_avoid_share_taxi_description" = "Evita táxis partilhados";
 "rendering_attr_surface_wood_name" = "Madeira";
@@ -1427,12 +1427,12 @@
 "routing_attr_avoid_tram_description" = "Evita elétricos";
 "routeInfo_road_types_name" = "Tipos de estrada";
 "rendering_attr_highway_class_track_grade3_name" = "Grau 3";
-"rendering_attr_smoothness_intermediate_name" = "Intermédio";
+"rendering_attr_smoothness_intermediate_name" = "Intermédia";
 "rendering_value_pedestrian_name" = "A pé";
 "rendering_attr_highway_class_footway_name" = "Via pedonal";
 "routing_attr_width_name" = "Largura máxima";
 "rendering_attr_surface_metal_name" = "Metal";
-"rendering_attr_surface_paving_stones_name" = "Pedras de pavimentação";
+"rendering_attr_surface_paving_stones_name" = "Blocos de pavimentação";
 "routing_attr_avoid_bus_name" = "Evitar autocarros";
 "routing_attr_avoid_stairs_name" = "Evitar escadas";
 "rendering_attr_piste_difficulty_connection_name" = "Conexão";
@@ -1472,7 +1472,7 @@
 "routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora o roteamento sobre pistas mais difíceis ou mais fáceis ainda seja possível se for mais curto.";
 "rendering_value_light_brown_name" = "Castanho claro";
 "rendering_attr_surface_ice_name" = "Gelo";
-"rendering_attr_smoothness_very_bad_name" = "Muito mau";
+"rendering_attr_smoothness_very_bad_name" = "Muito má";
 "routing_attr_allow_classic_only_name" = "Permitir apenas rotas clássicas";
 "routing_attr_avoid_unpaved_name" = "Evitar estradas não pavimentadas";
 "rendering_attr_showAccess_name" = "Mostrar restrições de acesso e portagens";

@@ -22,7 +22,7 @@
 + (int) getDirectionInfo;
 + (BOOL) isVisible;
 
-- (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete;
+- (void) show:(BOOL)animated fullMenu:(BOOL)fullMenu onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 - (void) switchStartAndFinish;
 

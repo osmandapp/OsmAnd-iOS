@@ -79,6 +79,7 @@
 - (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode;
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
+- (void) showRouteInfo:(BOOL)fullMenu;
 - (void) closeRouteInfo;
 - (void) closeRouteInfo:(void (^)(void))onComplete;
 - (void) updateRouteInfo;

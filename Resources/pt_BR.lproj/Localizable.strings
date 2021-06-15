@@ -1248,8 +1248,8 @@
 "parking_place" = "Vaga de estacionamento";
 "add_start" = "Adicionar ponto de partida";
 "add_intermediate" = "Adicionar ponto intermediário";
-"add_home" = "Adicionar casa";
-"add_work" = "Adicionar trabalho";
+"add_home" = "Adicionar endereço da casa";
+"add_work" = "Adicionar endereço do trabalho";
 "home_pt" = "Casa";
 "work_pt" = "Trabalho";
 "shared_string_clear_all" = "Limpar tudo";
@@ -1457,7 +1457,7 @@
 "rendering_value_yellow_name" = "Amarelo";
 "rendering_attr_hideWaterPolygons_description" = "Água";
 "routing_attr_avoid_subway_name" = "Evitar metrô";
-"rendering_attr_highway_class_state_road_name" = "Rodovia";
+"rendering_attr_highway_class_state_road_name" = "Rodovia estadual";
 "routing_attr_avoid_borders_name" = "Sem passagem por fronteira";
 "rendering_attr_piste_type_skitour_name" = "Passeio de esqui";
 "rendering_attr_whiteWaterSports_name" = "Esportes em corredeiras";
@@ -1505,7 +1505,7 @@
 "rendering_value_translucent_red_name" = "Vermelho translúcido";
 "rendering_attr_surface_unpaved_name" = "Não pavimentado";
 "rendering_attr_piste_difficulty_undefined_name" = "Indefinido";
-"rendering_attr_highway_class_footway_name" = "Passeio";
+"rendering_attr_highway_class_footway_name" = "Via pedestre";
 "rendering_value_green_name" = "Verde";
 "routeInfo_road_types_name" = "Tipos de estrada";
 "rendering_attr_showLez_name" = "Mostrar zonas de baixa emissão";
@@ -1593,7 +1593,7 @@
 "rendering_attr_smoothness_good_name" = "Boa";
 "routing_attr_driving_style_balance_name" = "Equilibrado";
 "rendering_attr_tramTrainRoutes_name" = "Linhas de bonde e trem";
-"rendering_attr_highway_class_road_name" = "Avenida/Estrada";
+"rendering_attr_highway_class_road_name" = "Estrada";
 "routing_attr_allow_expert_description" = "Rotas extremamente difíceis, com obstáculos perigosos e arredores.";
 "rendering_attr_showRoadMaps_description" = "Escolher quando exibir somente vias no mapa:";
 "rendering_value_lightgreen_name" = "Verde claro";

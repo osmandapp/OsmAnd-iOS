@@ -10,6 +10,9 @@
 #import "OAImagesCollectionViewCell.h"
 
 @implementation OAImagesTableViewCell
+{
+    int _imageIndex;
+}
 
 - (void)awakeFromNib
 {
@@ -25,6 +28,7 @@
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
+    _imageIndex = 0;
 }
 
 - (void)layoutSubviews
@@ -32,7 +36,7 @@
     [super layoutSubviews];
     self.contentView.frame = CGRectMake(0, 0, self.superview.frame.size.width, self.superview.frame.size.height);
     _collectionViewWidth.constant = self.superview.frame.size.width;
-    _collectionView.contentOffset = CGPointMake(0, 0);
+    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_imageIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -68,7 +72,24 @@
 
 - (CGPoint)collectionView:(UICollectionView *)collectionView targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset
 {
-    return CGPointMake(0, 0);
+    return CGPointMake(_imageIndex * _collectionView.frame.size.width, 0);
+}
+
+#pragma mark UIScrollViewDelegate
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    _imageIndex = [self getCurrentIndex];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    _imageIndex = [self getCurrentIndex];
+}
+
+- (int) getCurrentIndex
+{
+    return (int) _collectionView.contentOffset.x / _collectionView.frame.size.width;
 }
 
 @end

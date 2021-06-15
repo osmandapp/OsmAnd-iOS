@@ -71,9 +71,5 @@
     return CGPointMake(0, 0);
 }
 
-- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-}
-
 @end
 

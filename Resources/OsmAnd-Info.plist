@@ -265,8 +265,6 @@
 			<string>GPS Exchange Format (GPX)</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.topografix.gpx</string>
-			<key>UTTypeReferenceURL</key>
-			<string>www.topografix.com/GPX/1/1</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -404,8 +402,6 @@
 			<string>GPS Exchange Format (GPX)</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.topografix.gpx</string>
-			<key>UTTypeReferenceURL</key>
-			<string>www.topografix.com/GPX/1/1</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

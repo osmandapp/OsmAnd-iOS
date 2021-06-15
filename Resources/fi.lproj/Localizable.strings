@@ -1234,7 +1234,7 @@
 "toggle_contour_lines" = "Show/Hide contour lines";
 "toggle_hillshade" = "Show/Hide terrain";
 "display_starting_at_zoom_level" = "Näytä alkaen zoomaustasolta";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
+"quick_action_contour_lines_descr" = "Tämän toimintopainikkeen napauttaminen näyttää tai piilottaa korkeuskäyrien tason.";
 "hide_contour_lines" = "Hide contour lines";
 "show_contour_lines" = "Näytä korkeuskäyrät";
 "enable_contour_lines" = "Enable to view contour lines on the map";
@@ -1785,10 +1785,10 @@
 "rendering_attr_streetLighting_name" = "Katuvalaistus";
 "rendering_attr_appMode_name" = "Hahmotustila";
 "routing_attr_avoid_subway_description" = "Avoids subways and lightweight rail transport";
-"routing_attr_driving_style_prefer_unpaved_description" = "Prefer unpaved over paved roads for routing.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Suosi päällystämätöntä tietä päällystettyjen teiden sijaan reitityksessä.";
 "rendering_value_light_brown_name" = "Vaaleanruskea";
 "rendering_attr_surface_ice_name" = "Jää";
-"routing_attr_piste_type_sled_name" = "Sled";
+"routing_attr_piste_type_sled_name" = "Kelkka";
 "rendering_attr_smoothness_bad_name" = "Huono";
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
@@ -1809,8 +1809,8 @@
 "routing_attr_freeride_policy_name" = "Off-piste";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Flat";
 "rendering_attr_surface_concrete_name" = "Betoni";
-"rendering_attr_piste_difficulty_intermediate_name" = "Intermediate";
-"routeInfo_piste_difficulty_name" = "Piste difficulty";
+"rendering_attr_piste_difficulty_intermediate_name" = "Keskitasoinen";
+"routeInfo_piste_difficulty_name" = "Ladun vaikeustaso";
 "routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
 "rendering_attr_highway_class_track_grade3_name" = "Grade 3";
 "routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
@@ -1830,7 +1830,7 @@
 "rendering_attr_contourWidth_name" = "Korkeuskäyräviivojen leveys";
 "routing_attr_piste_type_sled_description" = "Rinteitä kelkka käyttöön.";
 "rendering_attr_currentTrackWidth_description" = "GPX:n leveys";
-"rendering_attr_piste_type_sleigh_name" = "Sleigh";
+"rendering_attr_piste_type_sleigh_name" = "Reki";
 "rendering_attr_surface_paved_name" = "Päällystetty";
 "routing_attr_difficulty_preference_name" = "Preferred difficulty";
 "routing_attr_avoid_subway_name" = "No subways";
@@ -1838,7 +1838,7 @@
 "rendering_attr_surfaceIntegrity_name" = "Tienpinnan eheys";
 "routing_attr_allow_intermediate_description" = "More difficult routes with steeper sections. Generally some obstacles that should be avoided.";
 "rendering_attr_coloredBuildings_name" = "Värikoodaa rakennukset tyypeittäin";
-"rendering_attr_piste_difficulty_advanced_name" = "Advanced";
+"rendering_attr_piste_difficulty_advanced_name" = "Edistynyt";
 "routeInfo_road_types_name" = "Tietyypit";
 "rendering_attr_showRoadMaps_description" = "Valitse koska näyttää \"ainoastaan tiet\" kartta:";
 "rendering_value_translucent_blue_name" = "Läpikuultava sininen";
@@ -1883,9 +1883,9 @@
 "routing_attr_avoid_borders_description" = "Vältä rajan ylitystä toiseen valtioon";
 "rendering_attr_highway_class_steps_name" = "Portaat";
 "routing_attr_avoid_tram_name" = "No trams";
-"rendering_attr_piste_type_downhill_name" = "Downhill";
+"rendering_attr_piste_type_downhill_name" = "Alamäki";
 "rendering_attr_moreDetailed_name" = "Lisää yksityiskohtia";
-"rendering_attr_piste_difficulty_undefined_name" = "Undefined";
+"rendering_attr_piste_difficulty_undefined_name" = "Määrittelemätön";
 "routing_attr_allow_motorway_name" = "Salli moottoritiet";
 "rendering_value_black_name" = "Musta";
 "routeInfo_winter_ice_road_name" = "Talvi- ja jäätiet";
@@ -1945,7 +1945,7 @@
 "rendering_attr_piste_difficulty_novice_name" = "Noviisi";
 "rendering_attr_hideUnderground_name" = "Maanalaiset objektit";
 "rendering_value_dark_brown_name" = "Tummanruskea";
-"routeInfo_piste_type_name" = "Pistetyyppi";
+"routeInfo_piste_type_name" = "Latutyyppi";
 "routing_attr_driving_style_safety_name" = "Suosi sivuteitä";
 "rendering_attr_surface_paving_stones_name" = "Kivetty";
 "rendering_attr_depthContours_name" = "Merelliset syvyyskäyrät";
@@ -1979,7 +1979,7 @@
 "rendering_attr_highway_class_track_grade1_name" = "Grade 1";
 "rendering_attr_transportStops_name" = "Pysäkit";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Solmuverkot";
-"rendering_attr_piste_difficulty_expert_name" = "Expert";
+"rendering_attr_piste_difficulty_expert_name" = "Asiantuntija";
 "rendering_attr_buildings15zoom_name" = "Rakennukset zoomaustasolla 15";
 "rendering_attr_tracktype_grade1_name" = "Kiinteä (päällystetty)";
 "routing_attr_avoid_train_description" = "Avoids trains";
@@ -1988,7 +1988,7 @@
 "rendering_value_boldOutline_name" = "Tummennettu ääriviiva";
 "routing_attr_avoid_toll_description" = "Vältä tietulleja";
 "rendering_attr_noPolygons_name" = "Monikulmiot";
-"rendering_attr_piste_difficulty_easy_name" = "Easy";
+"rendering_attr_piste_difficulty_easy_name" = "Helppo";
 "routing_attr_weight_description" = "Määrittele ajoneuvon sallittu paino reiteille.";
 "rendering_attr_surface_salt_name" = "Suola";
 "rendering_value_yellow_name" = "Keltainen";
@@ -1997,7 +1997,7 @@
 "rendering_attr_highway_class_bridleway_name" = "Ratsutie";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
 "rendering_attr_pisteRoutes_name" = "Laskettelurinteet";
-"rendering_attr_piste_type_sled_name" = "Sled";
+"rendering_attr_piste_type_sled_name" = "Kelkka";
 "rendering_attr_noPolygons_description" = "Tee kaikki maankäyttöominaisuudet läpikuultaviksi kartalla.";
 "routing_attr_allow_classic_only_description" = "Routes groomed for classic style only without skating trails. This includes routes groomed by a smaller snowmobile with looser piste and tracks made manually by skiers.";
 "routing_attr_allow_skating_only_name" = "Allow skating only routes";
@@ -2013,7 +2013,7 @@
 "rendering_attr_hmRendered_description" = "Lisää kartan näytettävien yksityiskohtien määrää.";
 "rendering_attr_tramRoutes_name" = "Raitiovaunureitit";
 "rendering_attr_tracktype_grade2_name" = "Kiinteä (päällystämätön)";
-"rendering_attr_piste_type_hike_name" = "Hike";
+"rendering_attr_piste_type_hike_name" = "Vaellus";
 "rendering_value_medium_name" = "Keskipaksu";
 "rendering_attr_piste_type_snow_park_name" = "Terrain park";
 "rendering_attr_highway_class_footway_name" = "Jalkakäytävä";
@@ -2023,12 +2023,12 @@
 "rendering_attr_whiteWaterSports_name" = "Whitewater sports";
 "routeInfo_roadClass_name" = "Road type";
 "routing_attr_allow_skating_only_description" = "Routes groomed for freestyle or skating only without classic tracks.";
-"rendering_attr_piste_type_nordic_name" = "Nordic";
+"rendering_attr_piste_type_nordic_name" = "Pohjoismainen";
 "rendering_attr_trainLightrailRoutes_name" = "Junareitit";
 "rendering_value_pedestrian_name" = "Jalan";
 "rendering_attr_highway_class_track_grade5_name" = "Grade 5";
 "routing_attr_height_name" = "Sallittu korkeus";
-"rendering_attr_piste_type_connection_name" = "Connection";
+"rendering_attr_piste_type_connection_name" = "Yhteys";
 "routing_attr_relief_smoothness_factor_name" = "Valitse korkeuden vaihtelu";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_value_darkyellow_name" = "Tummankeltainen";

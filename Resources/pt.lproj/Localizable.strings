@@ -1361,7 +1361,7 @@
 "routing_attr_allow_intermediate_description" = "Rotas mais difíceis com secções mais íngremes. Geralmente, contém alguns obstáculos que deviam ser evitados.";
 "routeInfo_tracktype_name" = "Dureza da superfície";
 "rendering_attr_showLez_description" = "Mostrar zonas de baixas emissões (proibida circulação de veículos poluentes) no mapa. Não afeta o roteamento.";
-"routing_attr_driving_style_prefer_unpaved_description" = "Preferir estradas não pavimentadas sobre as pavimentadas para o roteamento.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Preferir estradas não pavimentadas em vez das pavimentadas para o roteamento.";
 "rendering_attr_depthContours_description" = "Mostrar pontos e contornos de profundidade.";
 "rendering_attr_noPolygons_description" = "Tornar transparentes todas as características do terreno no mapa.";
 "rendering_attr_contourDensity_description" = "Quantidade de curvas de nível";
@@ -1480,7 +1480,7 @@
 "routing_attr_piste_type_skitour_description" = "Rotas para passeios de esqui.";
 "routing_attr_short_way_name" = "Percurso económico";
 "routing_attr_avoid_train_description" = "Evitar comboios";
-"rendering_attr_piste_type_sleigh_name" = "Trenó";
+"rendering_attr_piste_type_sleigh_name" = "Trenó puxado por animais";
 "rendering_attr_surface_pebblestone_name" = "Seixos";
 "routing_attr_allow_motorway_name" = "Utilizar autoestradas";
 "routing_attr_piste_type_downhill_name" = "Esqui alpino/descendente";
@@ -1498,7 +1498,7 @@
 "routing_attr_max_num_changes_name" = "Número de transbordos";
 "routing_attr_relief_smoothness_factor_hills_name" = "Inclinado";
 "routing_attr_avoid_ice_roads_fords_description" = "Evitar estradas de gelo e vaus (passagens em riachos baixos).";
-"rendering_attr_piste_difficulty_novice_name" = "Novato";
+"rendering_attr_piste_difficulty_novice_name" = "Iniciante";
 "rendering_value_purple_name" = "Roxo";
 "routing_attr_avoid_toll_name" = "Evitar portagens";
 "rendering_attr_lessDetailed_name" = "Menos detalhes";
@@ -1616,13 +1616,13 @@
 "select_color" = "Selecionar a cor";
 "routing_attr_length_name" = "Limite de comprimento";
 "export_profile" = "Exportar";
-"default_speed_dialog_msg" = "Estima a hora de chegada de categorias de estradas desconhecidas e limita a velocidade para todas as estradas (pode afetar o roteamento)";
+"default_speed_dialog_msg" = "Estima a hora de chegada em tipos de estradas desconhecidos e limita a velocidade para todas as estradas (pode afetar o roteamento)";
 "width_limit_description" = "Forneça a largura do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos largos.";
 "height_limit_description" = "Forneça a altura do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos altos.";
 "weight_limit_description" = "Forneça o peso do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos pesados.";
 "configure_profile" = "Configurar o perfil";
 "selected_profile" = "Perfil selecionado";
-"profile_appearance" = "Aspeto do perfil";
+"profile_appearance" = "Aparência do perfil";
 "reset_to_default" = "Restaurar valores predefinidos";
 "shared_string_copy" = "Copiar";
 "profile_alert_delete_title" = "Eliminar perfil";
@@ -1773,7 +1773,7 @@
 "special" = "Especial";
 "service" = "Serviço";
 "emergency" = "Emergência";
-"vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Tenha em mente, se a ponte for móvel, o cálculo utiliza a sua altura no estado aberto.";
+"vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Tenha em conta que se a ponte for móvel, o cálculo utiliza a altura da ponte no estado aberto.";
 "lenght_limit_description" = "Forneça o comprimento do seu veículo, podem ser aplicadas algumas restrições de rota a veículos longos.";
 "touting_specified_vehicle_parameters_descr" = "Os parâmetros definidos do veículo podem afetar a navegação.";
 "key_hint_recenter_map" = "Recentrar mapa";

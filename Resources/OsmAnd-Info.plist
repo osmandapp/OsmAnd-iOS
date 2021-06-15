@@ -266,7 +266,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>com.topografix.gpx</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://www.topografix.com/GPX/1/</string>
+			<string>www.topografix.com/GPX/1/1</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -405,7 +405,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>com.topografix.gpx</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://www.topografix.com/GPX/1/</string>
+			<string>www.topografix.com/GPX/1/1</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

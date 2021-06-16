@@ -166,7 +166,7 @@
     OAApplicationMode *mode = _settings.defaultApplicationMode.get;
     if (selected != [OAApplicationMode DEFAULT])
     {
-        mode = selected == [OAApplicationMode CARPLAY] ? [OAApplicationMode CAR] : selected;
+        mode = selected;
     }
     else if (mode == [OAApplicationMode DEFAULT])
     {

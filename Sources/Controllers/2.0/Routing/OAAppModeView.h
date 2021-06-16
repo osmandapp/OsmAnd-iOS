@@ -17,7 +17,6 @@
 
 @property (nonatomic) OAApplicationMode *selectedMode;
 @property (nonatomic) BOOL showDefault;
-@property (nonatomic) BOOL showCarPlay;
 
 - (void) setupModeButtons;
 

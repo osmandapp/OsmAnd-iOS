@@ -28,7 +28,6 @@
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
-    _pageControl.hidesForSinglePage = YES;
     _imageIndex = 0;
 }
 
@@ -38,13 +37,6 @@
     self.contentView.frame = CGRectMake(0, 0, self.superview.frame.size.width, self.superview.frame.size.height);
     _collectionViewWidth.constant = self.superview.frame.size.width;
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_imageIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-    _pageControl.frame = CGRectMake(0, _collectionViewHeight.constant - 30, self.superview.frame.size.width, 30);
-}
-
-- (void)setImages:(NSArray<UIImage *> *)images
-{
-    _images = images;
-    _pageControl.numberOfPages = _images.count;
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -88,13 +80,11 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     _imageIndex = [self getCurrentIndex];
-    _pageControl.currentPage = _imageIndex;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     _imageIndex = [self getCurrentIndex];
-    _pageControl.currentPage = _imageIndex;
 }
 
 - (int) getCurrentIndex

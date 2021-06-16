@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewWidth;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewLeftOffset;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 
 @property (nonatomic) NSArray<UIImage *> *images;
 

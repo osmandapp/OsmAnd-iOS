@@ -729,8 +729,12 @@
                 OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
                 cell.iconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+
                 NSString *title = [buttonItem getName];
-                [cell.button setTitle:title ? title : @"" forState:UIControlStateNormal];
+                UIFont *font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+                NSMutableAttributedString *attrTitle = [[NSMutableAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName: font}];
+                [cell.button setAttributedTitle:attrTitle forState:UIControlStateNormal];
+
                 [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.button addTarget:buttonItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
                 return cell;

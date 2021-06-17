@@ -35,19 +35,12 @@ static OAQuickActionType *TYPE;
 
 - (void)commonInit
 {
-    if (self.getParams[@"stringKeys"])
-    {
-        NSMutableDictionary *newParams = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
-        newParams[KEY_PROFILES] = self.getParams[@"stringKeys"];
-        [newParams removeObjectForKey:@"stringKeys"];
-        [self setParams:newParams];
-    }
 }
 
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSArray<NSString *> *profiles = self.getParams[KEY_PROFILES];
+    NSArray<NSString *> *profiles = self.getParams[kSwitchProfileStringKeys];
     
     if (profiles.count == 0)
         return;
@@ -127,7 +120,7 @@ static OAQuickActionType *TYPE;
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
     NSArray<NSString *> *names = self.getParams[kSwitchProfileNames];
-    NSArray<NSString *> *stringKeys = self.getParams[KEY_PROFILES];
+    NSArray<NSString *> *stringKeys = self.getParams[kSwitchProfileStringKeys];
     NSArray<NSString *> *iconNames = self.getParams[kSwitchProfileIconNames];
     NSArray<NSString *> *iconColors = self.getParams[kSwitchProfileIconColors];
     NSMutableArray *arr = [NSMutableArray new];
@@ -137,7 +130,7 @@ static OAQuickActionType *TYPE;
         [arr addObject:@{
                          @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : names[i] ? names[i] : @"",
-                         @"profile" : stringKeys[i] ? stringKeys[i] : @"",
+                         @"stringKey" : stringKeys[i] ? stringKeys[i] : @"",
                          @"img" : iconNames[i] ? iconNames[i] : @"",
                          @"iconColor" : iconColors[i] ? iconColors[i] : @(color_chart_orange)
                          }];
@@ -169,14 +162,14 @@ static OAQuickActionType *TYPE;
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
             {
                 [names addObject:item[@"title"]];
-                [stringKeys addObject:item[@"profile"]];
+                [stringKeys addObject:item[@"stringKey"]];
                 [iconNames addObject:item[@"img"]];
                 [iconColors addObject:item[@"iconColor"]];
             }
         }
     }
     [params setObject:names forKey:kSwitchProfileNames];
-    [params setObject:stringKeys forKey:KEY_PROFILES];
+    [params setObject:stringKeys forKey:kSwitchProfileStringKeys];
     [params setObject:iconNames forKey:kSwitchProfileIconNames];
     [params setObject:iconColors forKey:kSwitchProfileIconColors];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];

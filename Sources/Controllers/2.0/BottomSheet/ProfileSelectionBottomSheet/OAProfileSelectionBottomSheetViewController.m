@@ -67,7 +67,7 @@
     
     NSDictionary *profileParams = [_action getParams];
     NSArray *names = profileParams[@"names"] ? profileParams[@"names"] : @[];
-    NSArray *stringKeys = profileParams[@"profiles"] ? profileParams[@"profiles"] : @[];
+    NSArray *stringKeys = profileParams[@"stringKeys"] ? profileParams[@"stringKeys"] : @[];
     NSArray *iconNames = profileParams[@"iconsNames"] ? profileParams[@"iconsNames"] : @[];
     NSArray *iconColors = profileParams[@"iconsColors"] ? profileParams[@"iconsColors"] : @[];
     for (int i = 0; i < stringKeys.count; i++)

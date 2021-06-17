@@ -151,9 +151,9 @@
                 if (stringKeys)
                     params[kSwitchProfileStringKeys] = [NSJSONSerialization JSONObjectWithData:[stringKeys dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
 
-                [self readSwitchProfileAction:kSwitchProfileNames listKey:quickAction.getListKey params:params];
-                [self readSwitchProfileAction:kSwitchProfileIconNames listKey:quickAction.getListKey params:params];
-                [self readSwitchProfileAction:kSwitchProfileIconColors listKey:quickAction.getListKey params:params];
+                [self readSwitchProfileAction:kSwitchProfileNames params:params];
+                [self readSwitchProfileAction:kSwitchProfileIconNames params:params];
+                [self readSwitchProfileAction:kSwitchProfileIconColors params:params];
             }
             else
             {
@@ -299,7 +299,7 @@
     return [NSData new];
 }
 
-- (void)readSwitchProfileAction:(NSString *)key listKey:(NSString *)listKey params:(NSMutableDictionary *)params
+- (void)readSwitchProfileAction:(NSString *)key params:(NSMutableDictionary *)params
 {
     NSMutableString *values = params[key];
     if (values)
@@ -312,9 +312,9 @@
         NSArray *stringKeys = params[kSwitchProfileStringKeys];
         if (stringKeys && stringKeys.count > 0)
         {
-            for (NSString *profile in profiles)
+            for (NSString *stringKey in stringKeys)
             {
-                OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:profile def:OAApplicationMode.DEFAULT];
+                OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
                 if ([key isEqualToString:kSwitchProfileNames])
                     [values appendString:mode.name];
                 else if ([key isEqualToString:kSwitchProfileIconNames])
@@ -322,7 +322,7 @@
                 else if ([key isEqualToString:kSwitchProfileIconColors])
                     [values appendString:@(mode.getIconColor).stringValue];
 
-                if (![profile isEqualToString:profiles.lastObject])
+                if (![stringKey isEqualToString:stringKeys.lastObject])
                     [values appendString:@","];
             }
         }

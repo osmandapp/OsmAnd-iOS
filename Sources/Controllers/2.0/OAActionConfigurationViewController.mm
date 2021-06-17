@@ -391,7 +391,7 @@
 
 - (void) addProfile
 {
-    NSArray *arr = [_action getParams][@"profiles"] ? [NSMutableArray arrayWithArray:(NSArray *)[_action getParams][@"profiles"]] : @[];
+    NSArray *arr = [_action getParams][@"stringKeys"] ? [NSMutableArray arrayWithArray:(NSArray *)[_action getParams][@"stringKeys"]] : @[];
     OAActionAddProfileViewController *profilesScreen = [[OAActionAddProfileViewController alloc] initWithNames:arr];
     profilesScreen.delegate = self;
     [self.navigationController pushViewController:profilesScreen animated:YES];
@@ -1099,7 +1099,7 @@
         [newItems addObject:@{
                               @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item[@"name"],
-                              @"profile" : item[@"profile"],
+                              @"stringKey" : item[@"stringKey"],
                               @"img" : item[@"img"],
                               @"iconColor" : item[@"iconColor"]
                               }];

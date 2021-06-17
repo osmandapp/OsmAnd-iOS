@@ -16,12 +16,13 @@
 #import "OAUnsupportedAction.h"
 #import "OAMapStyleAction.h"
 #import "OASwitchableAction.h"
+#import "OASwitchProfileAction.h"
 
 @interface OAQuickActionsSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAQuickAction *> *items;
 @property (nonatomic) NSMutableArray<OAQuickAction *> *appliedItems;
-@property (nonatomic) NSMutableArray<OAAvoidRoadInfo *> *existingItems;
+@property (nonatomic) NSMutableArray<OAQuickAction *> *existingItems;
 @property (nonatomic) NSMutableArray<NSString *> *warnings;
 
 @end
@@ -36,7 +37,7 @@
 - (void) initialization
 {
     [super initialization];
-    
+
     _actionsRegistry = [OAQuickActionRegistry sharedInstance];
     self.existingItems = [_actionsRegistry getQuickActions].mutableCopy;
 }
@@ -68,14 +69,20 @@
             if (self.shouldReplace)
             {
                 for (OAQuickAction *duplicateItem in self.duplicateItems)
+                {
                     for (OAQuickAction *savedAction in self.existingItems)
+                    {
                         if ([duplicateItem.getName isEqualToString:savedAction.getName])
                             [newActions removeObject:savedAction];
+                    }
+                }
             }
             else
             {
                 for (OAQuickAction * duplicateItem in self.duplicateItems)
+                {
                     [self renameItem:duplicateItem];
+                }
             }
             [self.appliedItems addObjectsFromArray:self.duplicateItems];
         }
@@ -111,7 +118,7 @@
     NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
     if (itemsJson.count == 0)
         return;
-    
+
     for (id object in itemsJson)
     {
         NSString *name = object[@"name"];
@@ -122,33 +129,45 @@
             quickAction = [_actionsRegistry newActionByStringType:actionType];
         else if (type)
             quickAction = [_actionsRegistry newActionByType:type.integerValue];
-        
+
         if (!quickAction && actionType)
             quickAction = [[OAUnsupportedAction alloc] initWithActionTypeId:actionType];
-        
+
         if (quickAction)
         {
             NSString *paramsString = object[@"params"];
             NSError *jsonError;
             NSData* paramsData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
             NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:paramsData options:kNilOptions error:&jsonError]];
-            if ([quickAction isKindOfClass:OAMapStyleAction.class])
+
+            if ([quickAction isKindOfClass:OASwitchProfileAction.class])
             {
-                NSString *styles = params[quickAction.getListKey];
-                if (styles)
-                    params[quickAction.getListKey] = [styles componentsSeparatedByString:@","];
+                id profiles = params[quickAction.getListKey];
+                if (profiles)
+                    params[quickAction.getListKey] = [NSJSONSerialization JSONObjectWithData:[profiles dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
+
+                [self readSwitchProfileAction:kSwitchProfileNames listKey:quickAction.getListKey params:params];
+                [self readSwitchProfileAction:kSwitchProfileIconNames listKey:quickAction.getListKey params:params];
+                [self readSwitchProfileAction:kSwitchProfileIconColors listKey:quickAction.getListKey params:params];
             }
-            else if ([quickAction isKindOfClass:OASwitchableAction.class])
+            else
             {
                 NSString *values = params[quickAction.getListKey];
                 if (values)
-                    params[quickAction.getListKey] = [self parseParamsFromString:values];
+                {
+                    if ([quickAction isKindOfClass:OAMapStyleAction.class])
+                        params[quickAction.getListKey] = [values componentsSeparatedByString:@","];
+                    else if ([quickAction isKindOfClass:OASwitchableAction.class])
+                        params[quickAction.getListKey] = [self parseParamsFromString:values];
+                }
             }
             if (name.length > 0)
                 [quickAction setName:name];
             [quickAction setParams:params];
             [self.items addObject:quickAction];
-        } else {
+        }
+        else
+        {
             [self.warnings addObject:OALocalizedString(@"settings_item_read_error", self.name)];
         }
     }
@@ -181,29 +200,34 @@
     if ([action isKindOfClass:OAMapStyleAction.class])
     {
         NSMutableDictionary *paramsCopy = [NSMutableDictionary dictionaryWithDictionary:params];
-        NSArray<NSString *> *styles = params[action.getListKey];
+        NSArray<NSString *> *values = params[action.getListKey];
         NSMutableString *res = [NSMutableString new];
-        if (styles)
+        if (values && values.count > 0)
         {
-            for (NSInteger i = 0; i < (NSInteger) styles.count - 1; i++)
+            for (NSString *value in values)
             {
-                [res appendString:styles[i]];
-                [res appendString:@","];
+                [res appendString:value];
+                if (![value isEqualToString:values.lastObject])
+                    [res appendString:@","];
             }
-            [res appendString:styles.lastObject];
-            paramsCopy[action.getListKey] = res;
         }
+        paramsCopy[action.getListKey] = res;
         return paramsCopy;
     }
     else if ([action isKindOfClass:OASwitchableAction.class])
     {
         NSMutableDictionary *paramsCopy = [NSMutableDictionary dictionaryWithDictionary:params];
-        NSArray<NSArray<NSString *> *> *values = params[action.getListKey];
-        if (values)
+        NSArray *values = params[action.getListKey];
+        if (values && values.count > 0)
+            paramsCopy[action.getListKey] = [[NSString alloc] initWithData:[self paramsToExportArray:values] encoding:NSUTF8StringEncoding];
+
+        if ([action isKindOfClass:OASwitchProfileAction.class])
         {
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[self paramsToExportArray:values] options:0 error:nil];
-            paramsCopy[action.getListKey] = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [self writeSwitchProfileAction:kSwitchProfileNames params:params paramsCopy:paramsCopy];
+            [self writeSwitchProfileAction:kSwitchProfileIconNames params:params paramsCopy:paramsCopy];
+            [self writeSwitchProfileAction:kSwitchProfileIconColors params:params paramsCopy:paramsCopy];
         }
+
         return paramsCopy;
     }
     return params;
@@ -211,31 +235,96 @@
 
 - (NSArray<NSArray<NSString *> *> *) parseParamsFromString:(NSString *)params
 {
-    NSMutableArray<NSArray<NSString *> *> *res = [NSMutableArray new];
     NSData *jsonData = [params dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error;
     NSArray *jsonArr = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
     if (!error)
     {
-        for(NSDictionary *pair in jsonArr)
+        if ([jsonArr.firstObject isKindOfClass:[NSDictionary class]])
         {
-            NSString *first = pair[@"first"];
-            NSString *second = pair[@"second"];
-            if (first && second)
-                [res addObject:@[first, second]];
+            NSMutableArray<NSArray<NSString *> *> *res = [NSMutableArray new];
+            for (NSDictionary *pair in jsonArr)
+            {
+                NSString *first = pair[@"first"];
+                NSString *second = pair[@"second"];
+                if (first && second)
+                    [res addObject:@[first, second]];
+            }
+            return res;
         }
+        return jsonArr;
     }
-    return res;
+    return [NSArray new];
 }
 
-- (NSArray<NSDictionary *> *) paramsToExportArray:(NSArray<NSArray<NSString *> *> *)params
+- (NSData *) paramsToExportArray:(id)params
 {
-    NSMutableArray<NSDictionary *> *res = [NSMutableArray new];
-    for (NSArray<NSString *> *pair in params)
+    if ([params isKindOfClass:[NSArray class]])
     {
-        [res addObject:@{@"first" : pair.firstObject, @"second" : pair.lastObject}];
+        NSArray *array = params;
+        if (array.count > 0)
+        {
+            if ([array.firstObject isKindOfClass:[NSArray<NSString *> class]])
+            {
+                NSMutableArray<NSDictionary *> *res = [NSMutableArray new];
+                for (NSArray<NSString *> *pair in array)
+                {
+                    [res addObject:@{@"first": pair.firstObject, @"second": pair.lastObject}];
+                }
+                array = res;
+            }
+            else if ([array.firstObject isKindOfClass:[NSNumber class]])
+            {
+                NSMutableArray<NSString *> *res = [NSMutableArray new];
+                for (NSNumber *param in array)
+                {
+                    [res addObject:param.stringValue];
+                }
+                array = res;
+            }
+        }
+        return [NSJSONSerialization dataWithJSONObject:array options:0 error:nil];
+    };
+    return [NSData new];
+}
+
+- (void)readSwitchProfileAction:(NSString *)key listKey:(NSString *)listKey params:(NSMutableDictionary *)params
+{
+    NSMutableString *values = params[key];
+    if (values)
+    {
+        params[key] = [NSJSONSerialization JSONObjectWithData:[values dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
     }
-    return res;
+    else
+    {
+        values = [NSMutableString new];
+        NSArray *profiles = params[listKey];
+        if (profiles && profiles.count > 0)
+        {
+            for (NSString *profile in profiles)
+            {
+                OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:profile def:OAApplicationMode.DEFAULT];
+                if ([key isEqualToString:kSwitchProfileNames])
+                    [values appendString:mode.name];
+                else if ([key isEqualToString:kSwitchProfileIconNames])
+                    [values appendString:mode.getIconName];
+                else if ([key isEqualToString:kSwitchProfileIconColors])
+                    [values appendString:@(mode.getIconColor).stringValue];
+
+                if (![profile isEqualToString:profiles.lastObject])
+                    [values appendString:@","];
+            }
+        }
+        params[key] = [values componentsSeparatedByString:@","];
+    }
+}
+
+
+- (void)writeSwitchProfileAction:(NSString *)key params:(NSDictionary *)params paramsCopy:(NSMutableDictionary *)paramsCopy
+{
+    NSArray *values = params[key];
+    if (values && values.count > 0)
+        paramsCopy[key] = [[NSString alloc] initWithData:[self paramsToExportArray:values] encoding:NSUTF8StringEncoding];
 }
 
 @end

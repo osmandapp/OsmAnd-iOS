@@ -35,6 +35,13 @@ static OAQuickActionType *TYPE;
 
 - (void)commonInit
 {
+    if (self.getParams[@"stringKeys"])
+    {
+        NSMutableDictionary *newParams = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+        newParams[KEY_PROFILES] = self.getParams[@"stringKeys"];
+        [newParams removeObjectForKey:@"stringKeys"];
+        [self setParams:newParams];
+    }
 }
 
 - (void)execute

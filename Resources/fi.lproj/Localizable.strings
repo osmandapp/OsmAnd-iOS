@@ -2109,10 +2109,8 @@
 "replace_waypoint_confirmation" = "Haluatko varmasti korvata väyläpisteen %@?";
 "no_waypoints_found" = "Väyläpisteitä ei löytynyt";
 "context_menu_item_edit_waypoint" = "Muokkaa GPX-väyläpistettä";
-"base_profile_descr_carplay" = "Ajaminen CarPlay-tilassa";
 "app_restart_required" = "Joidenkin asetusten käyttäminen edellyttää sovelluksen uudelleenkäynnistystä.";
 "approximate_file_size" = "Likimääräinen tiedostonkoko: %@";
-"m_style_carplay" = "CarPlay";
 "gpxup_private" = "Yksityinen";
 "gpxup_trackable" = "Jäljitettävissä";
 "gpxup_identifiable" = "Tunnistettava";

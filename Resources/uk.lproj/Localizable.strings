@@ -2105,5 +2105,3 @@
 "no_waypoints_found" = "Маршрутні точки не знайдені";
 "context_menu_item_edit_waypoint" = "Змінити маршрутну точку GPX";
 "replace_waypoint_confirmation" = "Ви дійсно бажаєте замінити маршрутну точку %@?";
-"base_profile_descr_carplay" = "Водіння у режимі CarPlay";
-"m_style_carplay" = "CarPlay";

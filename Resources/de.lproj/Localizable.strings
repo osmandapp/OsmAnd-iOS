@@ -2108,6 +2108,4 @@
 "app_restart_required" = "Neustart der Anwendung erforderlich, um einige Einstellungen zu übernehmen.";
 "no_waypoints_found" = "Keine Wegpunkte gefunden";
 "context_menu_item_edit_waypoint" = "GPX-Wegpunkt bearbeiten";
-"base_profile_descr_carplay" = "Im CarPlay-Modus fahren";
-"m_style_carplay" = "CarPlay";
 "replace_waypoint_confirmation" = "Sind Sie sicher, dass Sie den Wegpunkt %@ ersetzen wollen?";

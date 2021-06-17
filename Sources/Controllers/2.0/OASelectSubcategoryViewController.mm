@@ -140,6 +140,15 @@
     self.tableBottomConstraint.constant = _searchMode ? 0 : 53 + OAUtilities.getBottomMargin;
 }
 
+- (BOOL)willUpdateApplyButton
+{
+    NSSet<NSString *> *acceptedSubtypes = [_filter getAcceptedSubtypes:_category];
+    NSArray<OAPOIType *> *types = _category.poiTypes;
+    if ((![[self getSelectedKeys] isEqualToSet:acceptedSubtypes] && acceptedSubtypes != [OAPOIBaseType nullSet]) || (acceptedSubtypes == [OAPOIBaseType nullSet] && _selectedItems.count != types.count))
+        return YES;
+    return NO;
+}
+
 - (NSMutableSet<NSString *> *)getSelectedKeys
 {
     NSMutableSet<NSString *> *selectedKeys = [NSMutableSet set];
@@ -173,7 +182,7 @@
     [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 
-    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
+    [self updateApplyButton:[self willUpdateApplyButton]];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
@@ -190,7 +199,7 @@
         [self.tableView endUpdates];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 
-        [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
+        [self updateApplyButton:[self willUpdateApplyButton]];
     }
 }
 

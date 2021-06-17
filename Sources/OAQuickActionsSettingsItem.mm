@@ -142,9 +142,14 @@
 
             if ([quickAction isKindOfClass:OASwitchProfileAction.class])
             {
-                id profiles = params[quickAction.getListKey];
-                if (profiles)
-                    params[quickAction.getListKey] = [NSJSONSerialization JSONObjectWithData:[profiles dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
+                id stringKeys = params[kSwitchProfileStringKeys];
+                if (!stringKeys || params[quickAction.getListKey])
+                {
+                    stringKeys = params[quickAction.getListKey];
+                    [params removeObjectForKey:quickAction.getListKey];
+                }
+                if (stringKeys)
+                    params[kSwitchProfileStringKeys] = [NSJSONSerialization JSONObjectWithData:[stringKeys dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
 
                 [self readSwitchProfileAction:kSwitchProfileNames listKey:quickAction.getListKey params:params];
                 [self readSwitchProfileAction:kSwitchProfileIconNames listKey:quickAction.getListKey params:params];
@@ -223,6 +228,12 @@
 
         if ([action isKindOfClass:OASwitchProfileAction.class])
         {
+            if (!values || paramsCopy[kSwitchProfileStringKeys])
+            {
+                values = paramsCopy[kSwitchProfileStringKeys];
+                [paramsCopy removeObjectForKey:kSwitchProfileStringKeys];
+                paramsCopy[action.getListKey] = [[NSString alloc] initWithData:[self paramsToExportArray:values] encoding:NSUTF8StringEncoding];
+            }
             [self writeSwitchProfileAction:kSwitchProfileNames params:params paramsCopy:paramsCopy];
             [self writeSwitchProfileAction:kSwitchProfileIconNames params:params paramsCopy:paramsCopy];
             [self writeSwitchProfileAction:kSwitchProfileIconColors params:params paramsCopy:paramsCopy];
@@ -298,8 +309,8 @@
     else
     {
         values = [NSMutableString new];
-        NSArray *profiles = params[listKey];
-        if (profiles && profiles.count > 0)
+        NSArray *stringKeys = params[kSwitchProfileStringKeys];
+        if (stringKeys && stringKeys.count > 0)
         {
             for (NSString *profile in profiles)
             {

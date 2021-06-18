@@ -30,7 +30,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *applyButton;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightPrimaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightSecondaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHeightPrimaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHeightSecondaryConstraint;
 
 @end
 
@@ -110,6 +113,20 @@
     [self updateApplyButton:NO];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
 -(void)applyLocalization
 {
     [self updateScreenTitle];
@@ -134,10 +151,6 @@
     [self.applyButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.applyButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.applyButton setUserInteractionEnabled:hasSelection];
-
-    self.bottomView.hidden = _searchMode;
-    self.applyButton.hidden = _searchMode;
-    self.tableBottomConstraint.constant = _searchMode ? 0 : 53 + OAUtilities.getBottomMargin;
 }
 
 - (BOOL)willUpdateApplyButton
@@ -255,7 +268,8 @@
                 for (OASearchResult *result in currentSearchResult.getCurrentSearchResults)
                 {
                     NSObject *poiObject = result.object;
-                    if ([poiObject isKindOfClass:[OAPOIType class]]) {
+                    if ([poiObject isKindOfClass:[OAPOIType class]])
+                    {
                         OAPOIType *poiType = (OAPOIType *) poiObject;
                         if (!poiType.isAdditional)
                         {
@@ -277,7 +291,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _searchResult = [NSMutableArray arrayWithArray:results];
                     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
+                    [self updateApplyButton:[self willUpdateApplyButton]];
                 });
             }
             return YES;
@@ -288,7 +302,7 @@
     self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
     [self updateScreenTitle];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self updateApplyButton:![[self getSelectedKeys] isEqualToSet:[_filter getAcceptedSubtypes:_category]]];
+    [self updateApplyButton:[self willUpdateApplyButton]];
 }
 
 #pragma mark - UITableViewDataSource
@@ -426,6 +440,59 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return _searchMode || (!_searchMode && indexPath.row != 0);
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void)keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary* userInfo = [notification userInfo];
+    CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGFloat keyboardHeight = keyboardRect.size.height;
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+    CGRect viewFrame = self.view.frame;
+    viewFrame.size.height = DeviceScreenHeight - keyboardHeight;
+
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        self.view.frame = viewFrame;
+        self.bottomViewHeightPrimaryConstraint.active = NO;
+        self.bottomViewHeightSecondaryConstraint.active = YES;
+        self.applyButtonHeightPrimaryConstraint.active = NO;
+        self.applyButtonHeightSecondaryConstraint.active = YES;
+    } completion:nil];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary* userInfo = [notification userInfo];
+    CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGFloat keyboardHeight = keyboardRect.size.height;
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+    CGRect viewFrame = self.view.frame;
+    viewFrame.size.height = DeviceScreenHeight;
+
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        self.view.frame = viewFrame;
+
+        self.bottomViewHeightPrimaryConstraint.active = YES;
+        self.bottomViewHeightSecondaryConstraint.active = NO;
+
+        self.applyButtonHeightPrimaryConstraint.active = YES;
+        self.applyButtonHeightSecondaryConstraint.active = NO;
+    } completion:nil];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.searchBar resignFirstResponder];
 }
 
 @end

@@ -474,7 +474,7 @@
 "map_widget_battery" = "Nível da bateria";
 "map_widget_plain_time" = "Hora atual";
 "map_widget_max_speed" = "Limite de velocidade";
-"max_speed_none" = "nenhum";
+"max_speed_none" = "nenhuma";
 "access_arrival_time" = "Hora de chegada";
 "shared_string_collapse" = "Contrair";
 "shared_string_topbar" = "Barra superior";
@@ -558,10 +558,10 @@
 "traffic_warning_border_control" = "Alfândega";
 "traffic_warning_payment" = "Pedágio";
 "traffic_warning_stop" = "Sinal de pare";
-"traffic_warning_calming" = "Moderação do trafego";
+"traffic_warning_calming" = "Moderação do tráfego";
 "traffic_warning_speed_camera" = "Radar";
 "traffic_warning" = "Aviso de tráfego";
-"traffic_warning_railways" = "Cruzamento de ferrovia";
+"traffic_warning_railways" = "Passagem em nível";
 "traffic_warning_pedestrian" = "Travessia de pedestres";
 "traffic_warning_hazard" = "Perigo";
 "driving_region" = "Região de direção";
@@ -596,10 +596,10 @@
 "no_inet_connection_desc_map" = "É necessário baixar os mapas.";
 "try_again" = "Tentar novamente";
 "search_location" = "Procurando localização…";
-"search_another_country" = "Selecione um outro local";
+"search_another_country" = "Selecione outra região";
 "skip_map_downloading" = "Pular download de mapas";
 "wiki_around" = "Artigos do Wikipédia próximos";
-"custom_search" = "Pesquisa personalizada";
+"custom_search" = "Busca personalizada";
 "shared_string_is_open_24_7" = "Aberto 24 horas";
 "shared_string_is_open" = "Aberto agora";
 "subcategories" = "Subcategorias";
@@ -636,7 +636,7 @@
 "starting_point" = "Ponto de partida";
 "shared_string_road" = "Via";
 "avoid_roads_msg" = "Você pode obter uma rota alternativa, selecionando quais vias evitar";
-"daynight_mode_auto" = "Nascer/Pôr do Sol";
+"daynight_mode_auto" = "Nascer/pôr do sol";
 "rotate_map_to_bearing" = "Orientação do mapa";
 "rotate_map_compass_opt" = "Na direção da bússola";
 "rotate_map_bearing_opt" = "Na direção do movimento";
@@ -1369,7 +1369,7 @@
 "routing_attr_avoid_ferry_description" = "Evita usar balsas";
 "rendering_attr_hmRendered_name" = "Mostrar mais detalhes do mapa";
 "rendering_attr_tramRoutes_name" = "Linhas de bonde";
-"routing_attr_prefer_motorway_name" = "Preferir Autoestradas";
+"routing_attr_prefer_motorway_name" = "Preferir autoestradas";
 "rendering_attr_surface_ground_name" = "Chão";
 "rendering_attr_streetLighting_name" = "Iluminação pública";
 "rendering_attr_currentTrackColor_name" = "Cor do GPX";
@@ -1407,7 +1407,7 @@
 "routing_attr_piste_type_skitour_description" = "Rotas para passeios de esqui.";
 "rendering_attr_transportStops_name" = "Paradas de transporte";
 "routing_attr_avoid_train_name" = "Sem trens";
-"routing_attr_piste_type_downhill_description" = "Pistas de esqui alpino ou de declínio e acesso a teleféricos.";
+"routing_attr_piste_type_downhill_description" = "Pistas de esqui alpino ou de downhill e acesso a teleféricos.";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "rendering_attr_piste_type_sleigh_name" = "Trenó puxado por animais";
 "routing_attr_allow_intermediate_description" = "Rotas mais difíceis com seções mais íngremes. Geralmente alguns obstáculos que devem ser evitados.";
@@ -1461,7 +1461,7 @@
 "routing_attr_avoid_borders_name" = "Sem passagem por fronteira";
 "rendering_attr_piste_type_skitour_name" = "Passeio de esqui";
 "rendering_attr_whiteWaterSports_name" = "Esportes em corredeiras";
-"rendering_attr_shareTaxiRoutes_name" = "Compartilhar rota de táxi";
+"rendering_attr_shareTaxiRoutes_name" = "Rotas de táxi compartilhado";
 "routing_attr_avoid_shuttle_train_name" = "Sem trem de conexão";
 "rendering_attr_piste_difficulty_novice_name" = "Novato";
 "rendering_attr_highway_class_track_grade5_name" = "Grau 5";
@@ -1584,7 +1584,7 @@
 "routing_attr_piste_type_skitour_name" = "Turismo de esqui";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferir estradas não pavimentadas";
 "routing_attr_avoid_motorway_name" = "Sem autoestradas";
-"rendering_value_pink_name" = "rosa";
+"rendering_value_pink_name" = "Rosa";
 "rendering_attr_surface_grass_paver_name" = "Pavimentadora de grama";
 "rendering_value_bicycle_name" = "Ciclismo";
 "rendering_value_boldOutline_name" = "Títulos com contornos";
@@ -1705,7 +1705,7 @@
 "appearance_on_map" = "Aparência no mapa";
 "choose_how_display_distance" = "Escolha como exibir a distância dos marcadores ativos";
 "specify_number_of_dir_indicators" = "Especifique o número de indicadores de direção, isso afeta todas as configurações abaixo.";
-"active_markers" = "Ativar marcadores";
+"active_markers" = "Marcadores ativos";
 "direction_lines" = "Linhas de direção";
 "arrows_on_map" = "Setas no mapa";
 "distance_indication" = "Indicação de distância";
@@ -2022,7 +2022,7 @@
 "shared_string_terrain" = "Terreno";
 "street_level_imagery" = "Imagens de rua";
 "mapillary" = "Mapillary";
-"map_mode" = "Modo mapa";
+"map_mode" = "Modo do mapa";
 "get_directions" = "Direções";
 "map_during_navigation" = "Mapa durante a navegação";
 "voice_announces" = "Instruções de voz";

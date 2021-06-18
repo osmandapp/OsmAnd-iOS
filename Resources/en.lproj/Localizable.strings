@@ -684,6 +684,7 @@
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Cycling";
 "m_style_pulic_transport" = "Public transport";
+"m_style_carplay" = "CarPlay";
 
 "map_settings_map" = "Map";
 "layer_amenity_label" = "POI overlay labels";
@@ -862,6 +863,7 @@
 "position_icon_while_moving" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
+"base_profile_descr_carplay" = "Driving with CarPlay mode";
 "base_profile_descr_bicycle" = "Mountain bike, moped, horse";
 "base_profile_descr_pedestrian" = "Walking, hiking, running";
 "base_profile_descr_public_transport" = "Public transport types";
@@ -1218,6 +1220,7 @@
 "add_map_marker" = "Add map marker";
 "select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
+"context_menu_item_edit_waypoint" = "Edit GPX waypoint";
 "toggle_fav" = "Show/hide favorites";
 "fav_show" = "Show favorites";
 "fav_hide" = "Hide favorites";
@@ -1338,6 +1341,8 @@
 "add_waypoint" = "Add waypoint to track";
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
+"replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
+"no_waypoints_found" = "No waypoints found";
 "modify_poi_short" = "Modify POI";
 "create_poi_short" = "Create POI";
 "modify_edit_short" = "Modify OSM change";

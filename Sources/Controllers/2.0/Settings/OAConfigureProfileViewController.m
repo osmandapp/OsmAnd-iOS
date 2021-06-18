@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     NSMutableArray<NSString *> *sectionHeaderTitles = [NSMutableArray array];
     NSMutableArray<NSString *> *sectionFooterTitles = [NSMutableArray array];
     NSMutableArray<NSArray *> *data = [NSMutableArray new];
-    if (_appMode != OAApplicationMode.DEFAULT)
+    if (_appMode != OAApplicationMode.DEFAULT && _appMode != OAApplicationMode.CARPLAY)
     {
         [data addObject:@[
             @{
@@ -390,7 +390,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    if (section == 0 && _appMode != OAApplicationMode.DEFAULT)
+    if (section == 0 && _appMode != OAApplicationMode.DEFAULT && _appMode != OAApplicationMode.CARPLAY)
         return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth yOffset:6. font:[UIFont systemFontOfSize:15.0]] + 10.;
     
     return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth];
@@ -398,7 +398,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == 0 && _appMode != OAApplicationMode.DEFAULT ? 0.01 : [OAUtilities calculateTextBounds:_sectionFooterTitles[section] width:DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2 font:[UIFont systemFontOfSize:13.]].height + 16.;
+    return section == 0 && _appMode != OAApplicationMode.DEFAULT && _appMode != OAApplicationMode.CARPLAY ? 0.01 : [OAUtilities calculateTextBounds:_sectionFooterTitles[section] width:DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2 font:[UIFont systemFontOfSize:13.]].height + 16.;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

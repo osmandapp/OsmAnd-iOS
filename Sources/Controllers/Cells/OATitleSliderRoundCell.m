@@ -19,11 +19,6 @@
     [super awakeFromNib];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-}
-
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -32,8 +27,6 @@
 
 - (void)applyCornerRadius
 {
-    CGFloat w = self.bounds.size.width;
-    _contentContainer.frame = CGRectMake(16.0, 0.0, w - 32.0, self.bounds.size.height);
     UIRectCorner corners;
     if (_topCorners && _bottomCorners)
         corners = UIRectCornerAllCorners;

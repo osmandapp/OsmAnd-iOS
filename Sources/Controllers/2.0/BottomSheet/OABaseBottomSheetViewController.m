@@ -125,9 +125,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (void) setHeaderViewVisibility:(BOOL)hidden
 {
     self.headerView.hidden = hidden;
-    self.headerViewCollapsedHeight.active = !hidden;
-    [self.contentContainer setNeedsLayout];
-    [self.contentContainer layoutIfNeeded];
+    self.headerViewCollapsedHeight.constant = hidden ? 0. : 57.;
+    [self.view setNeedsUpdateConstraints];
+    [self.view updateConstraintsIfNeeded];
 }
 
 - (CGFloat)initialHeight

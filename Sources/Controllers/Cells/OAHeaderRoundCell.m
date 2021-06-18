@@ -38,4 +38,10 @@
     [OAUtilities setMaskTo:_contentContainer byRoundingCorners:corners radius:12.];
 }
 
+- (void)prepareForReuse
+{
+	[super prepareForReuse];
+	_contentContainer.layer.mask = nil;
+}
+
 @end

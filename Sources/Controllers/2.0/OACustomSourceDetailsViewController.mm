@@ -230,6 +230,7 @@
         if (cell)
         {
             cell.textView.attributedText = item[@"attrText"];
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }
         return cell;

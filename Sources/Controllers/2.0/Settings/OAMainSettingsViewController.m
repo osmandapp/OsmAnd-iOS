@@ -119,13 +119,14 @@
         }
     ]];
     
-    NSMutableArray *profilesSection = [NSMutableArray new];    
+    NSMutableArray *profilesSection = [NSMutableArray new];
     for (int i = 0; i < OAApplicationMode.allPossibleValues.count; i++)
     {
+        BOOL isAlwaysEnabled = OAApplicationMode.allPossibleValues[i] == OAApplicationMode.DEFAULT || OAApplicationMode.allPossibleValues[i] == OAApplicationMode.CARPLAY;
         [profilesSection addObject:@{
             @"name" : @"profile_val",
             @"app_mode" : OAApplicationMode.allPossibleValues[i],
-            @"type" : i == 0 ? [OAMultiIconTextDescCell getCellIdentifier] : [OAIconTextDescSwitchCell getCellIdentifier],
+            @"type" : isAlwaysEnabled ? [OAMultiIconTextDescCell getCellIdentifier] : [OAIconTextDescSwitchCell getCellIdentifier],
             @"isColored" : @NO
         }];
     }

@@ -15,6 +15,7 @@
 
 #define ICON_NAME_EXTENSION @"icon"
 #define BACKGROUND_TYPE_EXTENSION @"background"
+#define ADDRESS_EXTENSION @"address"
 
 typedef enum
 {
@@ -203,6 +204,13 @@ struct RouteDataBundle;
 
 - (void) fillWithWpt:(OAGpxWpt *)gpxWpt;
 - (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt;
+
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key;
+- (void)setExtension:(NSString *)key value:(NSString *)value;
+
+- (NSString *)getIcon;
+- (NSString *)getBackgroundIcon;
+- (NSString *)getAddress;
 
 @end
 

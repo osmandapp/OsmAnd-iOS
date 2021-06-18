@@ -39,6 +39,7 @@
 #import "OAMovePointCommand.h"
 #import "OAClearPointsCommand.h"
 #import "OAReversePointsCommand.h"
+#import "OAApplyGpxApproximationCommand.h"
 #import "OASegmentOptionsBottomSheetViewController.h"
 #import "OAPlanningOptionsBottomSheetViewController.h"
 #import "OAExitRoutePlanningBottomSheetViewController.h"
@@ -53,7 +54,7 @@
 #import "OASavingTrackHelper.h"
 #import "QuadRect.h"
 #import "OASnapTrackWarningViewController.h"
-#import "OAGpxApproximationViewController.h"
+#import "OAGpxApproximationBottomSheetViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -725,16 +726,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)exitApproximationMode
 {
     _editingContext.inApproximationMode = NO;
-//    MapActivity mapActivity = getMapActivity();
-    if (_layer != nil/* && mapActivity != null*/)
-    {
-//        FragmentManager manager = mapActivity.getSupportFragmentManager();
-//        manager.beginTransaction()
-//                .show(this).commit();
-//        layer.setTapsDisabled(false);
-//        AndroidUiHelper.setVisibility(mapActivity, View.VISIBLE, R.id.map_ruler_container);
-//    }
-    }
 }
 
 - (IBAction)closePressed:(id)sender
@@ -1765,7 +1756,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_editingContext.appMode == OAApplicationMode.DEFAULT || [_editingContext.appMode.getRoutingProfile isEqualToString:@"public_transport"])
         _editingContext.appMode = nil;
 
-    OAGpxApproximationViewController *bottomSheet = [[OAGpxApproximationViewController alloc] initWithMode:_editingContext.appMode routePoints:[_editingContext getRoutePoints]];
+    OAGpxApproximationBottomSheetViewController *bottomSheet = [[OAGpxApproximationBottomSheetViewController alloc] initWithMode:_editingContext.appMode routePoints:[_editingContext getPointsSegments:YES route:NO]];
     bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self animated:YES];
 }
@@ -1777,7 +1768,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_editingContext.commandManager undo];
     [self exitApproximationMode];
     [self setMode:DIRECTION_MODE on:NO];
-//    updateSnapToRoadControls();
+	[self setupModeButton];
 //    updateToolbar();
 }
 
@@ -1786,12 +1777,30 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self exitApproximationMode];
     [self updateDistancePointsText];
 //    doAddOrMovePointCommonStuff();
-//    updateSnapToRoadControls();
+	[self setupModeButton];
     if ([self isDirectionMode] || [self isFollowTrackMode]) {
         [self setMode:DIRECTION_MODE on:NO];
         [self startTrackNavigation];
     }
     [self onCloseButtonPressed];
+}
+
+- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAGpxTrkPt *> *> *)pointsList mode:(OAApplicationMode *)mode
+{
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (_layer)
+		{
+			BOOL approximationMode = _editingContext.approximationMode;
+			_editingContext.approximationMode = YES;
+			OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc] initWithLayer:_layer approximations:gpxApproximations segmentPointsList:pointsList appMode:mode];
+			if (!approximationMode || ![_editingContext.commandManager update:command])
+			{
+				[_editingContext.commandManager execute:command];
+			}
+			[self goMinimized];
+			[self setupModeButton];
+		}
+	});
 }
 
 @end

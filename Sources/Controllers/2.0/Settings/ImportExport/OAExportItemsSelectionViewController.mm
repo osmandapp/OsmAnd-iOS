@@ -262,7 +262,7 @@
     return item;
 }
 
-- (NSString *) getFormattedSize:(NSString *)filePath
+- (NSString *) getFormattedSize:(NSString *)filePath
 {
     NSString *formattedSize = @"";
     if (_archiveItems.size() > 0)

@@ -317,7 +317,7 @@
 "make_call" = "Ligar";
 "sett_lang_trans" = "transliterar";
 "shared_string_edit" = "Editar";
-"shared_string_dismiss" = "Cancelar";
+"shared_string_dismiss" = "Rejeitar";
 "shared_string_remove" = "Remover";
 "device_memory" = "Memória do aparelho";
 "free_memory" = "%@ livre";
@@ -336,11 +336,11 @@
 "select_city" = "Selecionar cidade";
 "type_city_town" = "Digite a cidade, vila ou localidade";
 "select_postcode" = "Selecionar código postal";
-"type_postcode" = "Escreva código postal";
+"type_postcode" = "Digite o código postal";
 "coords_search" = "Pesquisa de coordenadas";
 "nearest_cities" = "Cidades próximas";
-"type_address" = "Morada a pesquisar";
-"change_color" = "Mudar cor";
+"type_address" = "Digite a morada";
+"change_color" = "Alterar cor";
 "first_usage_greeting" = "Obtenha direções e descubra novos lugares sem ser necessário estar ligado à Internet";
 "get_started" = "Começar";
 "first_usage_wizard_desc" = "Deixe o OsmAnd determinar a sua localização e sugerir mapas para descarregar para esta região.";
@@ -474,7 +474,7 @@
 "auto_zoom_close" = "Aproximar";
 "auto_zoom_far" = "Intermédia";
 "auto_zoom_farthest" = "Mais abrangente";
-"keep_informing_never" = "Nunca";
+"keep_informing_never" = "Apenas manualmente (tocar na seta)";
 "arrival_distance_factor_early" = "Adiantado";
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Atrasado";
@@ -538,7 +538,7 @@
 "route_tu" = "Faça inversão de marcha e continue em";
 "route_head" = "Comece em";
 "looking_up_address" = "A procurar o endereço";
-"no_address_found" = "Nenhum endereço definido";
+"no_address_found" = "Nenhum endereço encontrado";
 "traffic_warning_speed_limit" = "Limite de velocidade";
 "traffic_warning_border_control" = "Posto alfandegário";
 "traffic_warning_payment" = "Portagem";
@@ -593,7 +593,7 @@
 // OSM Editing actions
 "opening_changeset" = "A abrir o conjunto de alterações…";
 "closing_changeset" = "A fechar o conjunto de alterações…";
-"commiting_node" = "A alterar nó…";
+"commiting_node" = "A enviar o nó…";
 "loading_poi_obj" = "A carregar POI…";
 "osm_upload_failed_title" = "O envio falhou";
 "osm_editing_lost_changes_title" = "Sair sem guardar?";
@@ -694,7 +694,7 @@
 "shared_string_category" = "Categoria";
 "poi_select_category" = "Selecionar categoria";
 "city_type_suburb" = "Subúrbio";
-"city_type_hamlet" = "Aldeia;Lugar";
+"city_type_hamlet" = "Aldeia / lugar";
 "city_type_village" = "Sede de freguesia";
 "city_type_town" = "Sede de concelho";
 "city_type_city" = "Capital de distrito";
@@ -721,7 +721,7 @@
 "unlock_all_features" = "Desbloquear todas as características do OsmAnd";
 "osm_live_subscribe_btn" = "Subscrever";
 "shared_string_email_address" = "Endereço de email";
-"osm_live_enter_email" = "Favor introduzir um endereço de email válido";
+"osm_live_enter_email" = "Introduza um endereço de email válido";
 "osm_live_enter_user_name" = "Introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
 "osm_live_payment_desc" = "Pode gerir e cancelar as suas subscrições nas configurações da sua conta na App Store após a compra";
@@ -1274,7 +1274,7 @@
 "region_nautical" = "Mapas náuticos";
 "gpx_alt_range" = "Amplitude da altitude";
 "gpx_avg_altitude" = "Altitude média";
-"download_depth_countours" = "Contornos de profundidade náutica";
+"download_depth_countours" = "Curvas de profundidades náuticas";
 "hide_contour_lines" = "Ocultar curvas de nível";
 "gpx_descent" = "Descida";
 "region_others" = "Outros mapas";
@@ -1296,7 +1296,7 @@
 "routing_attr_avoid_subway_name" = "Evitar metropolitanos";
 "routing_attr_piste_type_nordic_name" = "Esqui de travessia e nórdico";
 "routeInfo_surface_name" = "Superfície";
-"rendering_attr_roadColors_name" = "Esquema de cores";
+"rendering_attr_roadColors_name" = "Esquema de cores das estradas";
 "rendering_attr_undefined_name" = "Indefinido";
 "routing_attr_avoid_share_taxi_name" = "Evitar táxis partilhados";
 "rendering_value_default13_name" = "Padrão (13)";
@@ -1381,7 +1381,7 @@
 "routing_attr_short_way_description" = "Utilizar percurso económico (geralmente mais curto).";
 "rendering_attr_surface_sand_name" = "Areia";
 "routing_attr_allow_private_name" = "Ativar acesso a vias privadas";
-"rendering_attr_hideNonVehicleHighways_name" = "Estradas não transitáveis";
+"rendering_attr_hideNonVehicleHighways_name" = "Estradas não aptas para veículos";
 "rendering_attr_piste_difficulty_undefined_name" = "Indefinido";
 "rendering_attr_showMtbRoutes_name" = "Trilhos de bicicletas BTT";
 "rendering_attr_tracktype_grade4_name" = "Maioritariamente macio";
@@ -1453,7 +1453,7 @@
 "rendering_value_translucent_yellow_name" = "Amarelo translúcido";
 "rendering_value_translucent_red_name" = "Vermelho translúcido";
 "rendering_attr_ice_road_name" = "Estrada de gelo";
-"routing_attr_freeride_policy_description" = "'Freerides' e 'fora da pista' são rotas e passagens não oficiais. Tipicamente sem serem preparados, sem manutenção e não verificados à noite. Entre por conta e risco próprios.";
+"routing_attr_freeride_policy_description" = "'Freerides' e 'fora de pista' são rotas e passagens não oficiais. Tipicamente sem preparação do piso, sem manutenção e não verificados à noite. Aceda a estas rotas por sua própria conta e risco.";
 "routing_attr_avoid_unpaved_description" = "Evitar estradas não pavimentadas";
 "routing_attr_avoid_ferries_description" = "Evita balsas/ferries";
 "routing_attr_allow_expert_name" = "Permitir rotas para especialistas";
@@ -1469,14 +1469,14 @@
 "routing_attr_piste_type_nordic_description" = "Trilhos para esqui nórdico ou cross-country.";
 "routing_attr_avoid_shuttle_train_name" = "Evitar comboios vaivém";
 "rendering_attr_showLez_name" = "Mostrar zonas de baixas emissões poluentes";
-"routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora o roteamento sobre pistas mais difíceis ou mais fáceis ainda seja possível se for mais curto.";
+"routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora seja possível o roteamento sobre pistas mais difíceis ou mais fáceis se forem mais curtas.";
 "rendering_value_light_brown_name" = "Castanho claro";
 "rendering_attr_surface_ice_name" = "Gelo";
 "rendering_attr_smoothness_very_bad_name" = "Muito má";
 "routing_attr_allow_classic_only_name" = "Permitir apenas rotas clássicas";
 "routing_attr_avoid_unpaved_name" = "Evitar estradas não pavimentadas";
 "rendering_attr_showAccess_name" = "Mostrar restrições de acesso e portagens";
-"routing_attr_relief_smoothness_factor_plains_name" = "Menos inclinado";
+"routing_attr_relief_smoothness_factor_plains_name" = "Menos montanhoso";
 "routing_attr_piste_type_skitour_description" = "Rotas para passeios de esqui.";
 "routing_attr_short_way_name" = "Percurso económico";
 "routing_attr_avoid_train_description" = "Evitar comboios";
@@ -1491,12 +1491,12 @@
 "rendering_attr_streetLighting_name" = "Iluminação pública";
 "rendering_value_lightblue_name" = "Azul claro";
 "routeInfo_piste_difficulty_name" = "Dificuldade da pista";
-"rendering_attr_depthContours_name" = "Contornos de profundidade náuticos";
+"rendering_attr_depthContours_name" = "Curvas de profundidades náuticas";
 "routing_attr_avoid_tram_name" = "Evitar elétricos";
 "rendering_attr_contourColorScheme_name" = "Esquema de cores das curvas de nível";
 "routing_attr_avoid_ferry_description" = "Evita balsas/ferries";
 "routing_attr_max_num_changes_name" = "Número de transbordos";
-"routing_attr_relief_smoothness_factor_hills_name" = "Inclinado";
+"routing_attr_relief_smoothness_factor_hills_name" = "Montanhoso";
 "routing_attr_avoid_ice_roads_fords_description" = "Evitar estradas de gelo e vaus (passagens em riachos baixos).";
 "rendering_attr_piste_difficulty_novice_name" = "Iniciante";
 "rendering_value_purple_name" = "Roxo";
@@ -1517,9 +1517,9 @@
 "rendering_attr_noAdminboundaries_name" = "Fronteiras regionais";
 "rendering_value_orange_name" = "Laranja";
 "routing_attr_piste_type_sled_name" = "Trenó";
-"routing_attr_allow_skating_only_description" = "Rotas preparadas para o estilo livre ou patinagem apenas sem trilhos clássicos.";
+"routing_attr_allow_skating_only_description" = "Rotas preparadas para o estilo livre ou apenas patinagem sem trilhos clássicos.";
 "rendering_value_medium_w_name" = "Médio";
-"rendering_attr_contourLines_description" = "Mostrar desde o zoom (requer dados de contorno):";
+"rendering_attr_contourLines_description" = "Mostrar desde a ampliação (requer dados de contorno):";
 "rendering_attr_hideWaterPolygons_description" = "Água";
 "rendering_value_fine_name" = "Mais fino";
 "rendering_attr_trolleybusRoutes_name" = "Rotas de troleicarros";
@@ -1558,7 +1558,7 @@
 "routing_attr_avoid_motorway_description" = "Evita autoestradas";
 "rendering_attr_roadStyle_name" = "Estilo das vias";
 "rendering_value_translucent_green_name" = "Verde translúcido";
-"routing_attr_weight_description" = "Especifique o limite de peso permitido para veículos em rotas.";
+"routing_attr_weight_description" = "Especifique o limite de peso permitido do veículo em rotas.";
 "rendering_attr_piste_difficulty_intermediate_name" = "Intermédio";
 "rendering_attr_roadStyle_description" = "Estilo de estrada";
 "rendering_value_green_name" = "Verde";

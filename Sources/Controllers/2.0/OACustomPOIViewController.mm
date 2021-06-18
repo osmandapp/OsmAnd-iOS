@@ -23,8 +23,6 @@
 #import "OAPOIFilterViewController.h"
 #import "OATableViewCustomHeaderView.h"
 
-#define titleWithDescrCellHeight 66.0
-
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
@@ -102,7 +100,6 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = titleWithDescrCellHeight;
 
     _searchMode = NO;
     self.searchBar.delegate = self;

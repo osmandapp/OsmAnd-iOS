@@ -97,8 +97,6 @@
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    self.tableView.rowHeight = kEstimatedRowHeight;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     [self.tableView beginUpdates];

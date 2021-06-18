@@ -205,7 +205,7 @@
 
 - (IBAction)onBackButtonClicked:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 
     if (_editMode && self.refreshDelegate)
         [self.refreshDelegate refreshList];
@@ -217,7 +217,7 @@
         UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
         UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
             [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self dismissViewController];
         }];
         [saveDialog addAction:actionSave];
         [self presentViewController:saveDialog animated:YES completion:nil];
@@ -232,7 +232,7 @@
     if (_editMode && self.refreshDelegate)
         [self.refreshDelegate refreshList];
 
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -380,10 +380,9 @@
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
 
             UIColor *selectedColor = accepted ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-            UIImage *poiIcon = [UIImage templateImageNamed:poiType.iconName];
-            cell.imgView.image = poiIcon ? poiIcon : [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            cell.imgView.image = [poiType.iconWithoutParent imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.imgView.tintColor = selectedColor;
-            if (poiIcon.size.width < cell.imgView.frame.size.width && poiIcon.size.height < cell.imgView.frame.size.height)
+            if (cell.imgView.image.size.width < cell.imgView.frame.size.width && cell.imgView.image.size.height < cell.imgView.frame.size.height)
                 cell.imgView.contentMode = UIViewContentModeCenter;
             else
                 cell.imgView.contentMode = UIViewContentModeScaleAspectFit;

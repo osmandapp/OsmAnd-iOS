@@ -1006,6 +1006,11 @@
     return segments;
 }
 
+- (BOOL) hasRoute
+{
+	return [self getNonEmptyTrkSegments:YES].count > 0;
+}
+
 - (NSArray<OAGpxRtePt *> *) getRoutePoints
 {
     NSMutableArray<OAGpxRtePt *> *points = [NSMutableArray new];

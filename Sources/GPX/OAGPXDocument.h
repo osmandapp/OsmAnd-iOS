@@ -58,6 +58,7 @@
 - (BOOL) hasRtePt;
 - (BOOL) hasWptPt;
 - (BOOL) hasTrkPt;
+- (BOOL) hasRoute;
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
 

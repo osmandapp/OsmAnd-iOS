@@ -134,6 +134,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     NSString *_fileName;
     CLLocation *_initialPoint;
+	
+	BOOL _showSnapWarning;
 }
 
 - (instancetype) init
@@ -177,12 +179,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
-- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode
+- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning
 {
     self = [super initWithNibName:@"OARoutePlanningHudViewController"
                            bundle:nil];
     if (self)
     {
+		_showSnapWarning = showSnapWarning;
         [self commonInit:editingCtx];
         [self setMode:FOLLOW_TRACK_MODE on:followTrackMode];
     }
@@ -271,6 +274,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self addNewGpxData:[self getGpxFile:_fileName]];
     else if (_editingContext.isApproximationNeeded && self.isFollowTrackMode)
         [self enterApproximationMode];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	if (_showSnapWarning)
+		[self enterApproximationMode];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -1566,9 +1576,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) saveChangesSelected
 {
-//    if (self.isFollowTrackMode)
-//        [self startTrackNavigation];
-//    else
+    if (self.isFollowTrackMode)
+        [self startTrackNavigation];
+    else
         [self saveChanges:SHOW_TOAST showDialog:YES];
 }
 
@@ -1783,6 +1793,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self startTrackNavigation];
     }
     [self onCloseButtonPressed];
+	if (_showSnapWarning)
+		[self dismiss];
 }
 
 - (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAGpxTrkPt *> *> *)pointsList mode:(OAApplicationMode *)mode

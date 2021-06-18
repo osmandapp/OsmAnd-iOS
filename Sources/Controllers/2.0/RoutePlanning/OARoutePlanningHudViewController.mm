@@ -1793,8 +1793,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self startTrackNavigation];
     }
     [self onCloseButtonPressed];
-	if (_showSnapWarning)
-		[self dismiss];
+    if (_showSnapWarning)
+        [self dismiss];
 }
 
 - (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAGpxTrkPt *> *> *)pointsList mode:(OAApplicationMode *)mode

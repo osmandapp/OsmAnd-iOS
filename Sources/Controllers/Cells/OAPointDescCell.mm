@@ -87,6 +87,12 @@
     else
     {
         auto parser = OpeningHoursParser::parseOpenedHours([_openingHoursView.text UTF8String]);
+        if (!parser)
+        {
+            _timeIcon.hidden = YES;
+            _openingHoursView.hidden = YES;
+            return;
+        }
         bool isOpened = parser->isOpened();
         
         UIColor *color;

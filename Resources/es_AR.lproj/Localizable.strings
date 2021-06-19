@@ -1640,7 +1640,7 @@
 "app_mode_campervan" = "Autocaravana (RV)";
 "app_mode_camper" = "Casa rodante (camper)";
 "app_mode_offroad" = "Todo terreno";
-"app_mode_ufo" = "OVNI";
+"app_mode_ufo" = "Ovni";
 "app_mode_scooter" = "Motoneta";
 "app_mode_monowheel" = "Monociclo";
 "app_mode_personal_transporter" = "Transportador personal";
@@ -2119,3 +2119,8 @@
 "gpxup_public" = "Público";
 "restart" = "Reiniciar";
 "shared_string_wifi_only" = "Sólo con Wi-Fi";
+"no_waypoints_found" = "No se encontraron puntos de referencia";
+"replace_waypoint_confirmation" = "¿Reemplazar el punto de referencia «%@»?";
+"context_menu_item_edit_waypoint" = "Editar punto de ruta GPX";
+"base_profile_descr_carplay" = "Conducir con el modo CarPlay";
+"m_style_carplay" = "CarPlay";

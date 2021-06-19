@@ -16,7 +16,7 @@
 #import "OASettingsCategoryItems.h"
 #import "OATableViewCustomHeaderView.h"
 
-#define kDefaultArchiveName @"OsmAnd_Settings"
+#define kDefaultArchiveName @"Export"
 
 @implementation OAExportItemsViewController
 {
@@ -131,7 +131,19 @@
 
     OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
     NSArray<OASettingsItem *> *settingsItems = [settingsHelper prepareSettingsItems:self.getSelectedItems settingsItems:@[] doExport:YES];
-    NSString *fileName = _appMode != nil ? _appMode.toHumanString : kDefaultArchiveName;
+    NSString *fileName;
+    if (_appMode)
+    {
+        fileName = _appMode.toHumanString;
+    }
+    else
+    {
+        NSDate *date = [NSDate date];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"dd-MM-yy"];
+        NSString *dateFormat = [formatter stringFromDate:date];
+        fileName = [NSString stringWithFormat:@"%@_%@", kDefaultArchiveName, dateFormat];
+    }
     [settingsHelper exportSettings:NSTemporaryDirectory() fileName:fileName items:settingsItems exportItemFiles:YES delegate:self];
 }
 

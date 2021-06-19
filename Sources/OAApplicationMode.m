@@ -41,16 +41,15 @@ static OAApplicationMode *_PEDESTRIAN;
 static OAApplicationMode *_AIRCRAFT;
 static OAApplicationMode *_BOAT;
 static OAApplicationMode *_SKI;
-static OAApplicationMode *_CARPLAY;
 
 + (void)initRegVisibility
 {
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI, _CARPLAY];
+    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI];
     
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
-    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _CARPLAY];
+    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI    ];
     NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
     
     // left
@@ -66,8 +65,8 @@ static OAApplicationMode *_CARPLAY;
     [self regWidgetVisibility:@"distance" am:all];
     [self regWidgetVisibility:@"time" am:all];
     [self regWidgetVisibility:@"intermediate_time" am:all];
-    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT, _CARPLAY]];
-    [self regWidgetVisibility:@"max_speed" am:@[_CAR, _CARPLAY]];
+    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT]];
+    [self regWidgetVisibility:@"max_speed" am:@[_CAR]];
     [self regWidgetVisibility:@"altitude" am:@[_PEDESTRIAN, _BICYCLE]];
     [self regWidgetVisibility:@"gps_info" am:none];
     
@@ -82,7 +81,7 @@ static OAApplicationMode *_CARPLAY;
     [self regWidgetVisibility:@"config" am:none];
     [self regWidgetVisibility:@"layers" am:none];
     [self regWidgetVisibility:@"compass" am:none];
-    [self regWidgetVisibility:@"street_name" am:@[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _CARPLAY]];
+    [self regWidgetVisibility:@"street_name" am:@[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT]];
     [self regWidgetVisibility:@"back_to_location" am:all];
     [self regWidgetVisibility:@"monitoring_services" am:none];
     [self regWidgetVisibility:@"bgService" am:none];
@@ -140,12 +139,6 @@ static OAApplicationMode *_CARPLAY;
     _SKI.baseMinSpeed = 0.42;
     _SKI.baseMaxSpeed = 62.5;
     [_values addObject:_SKI];
-    
-    _CARPLAY = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_carplay") stringKey:@"carplay"];
-    _CARPLAY.descr = OALocalizedString(@"base_profile_descr_carplay");
-    _CARPLAY.baseMinSpeed = 2.78;
-    _CARPLAY.baseMaxSpeed = 54.17;
-    [_values addObject:_CARPLAY];
 }
 
 + (OAApplicationMode *) DEFAULT
@@ -186,11 +179,6 @@ static OAApplicationMode *_CARPLAY;
 + (OAApplicationMode *) SKI
 {
     return _SKI;
-}
-
-+ (OAApplicationMode *) CARPLAY
-{
-    return _CARPLAY;
 }
 
 + (OAApplicationMode *) buildApplicationModeByKey:(NSString *)key
@@ -327,7 +315,7 @@ static OAApplicationMode *_CARPLAY;
 
 - (BOOL) isCustomProfile
 {
-    return self == _CARPLAY ? NO : _parent != nil;
+    return _parent != nil;
 }
 
 - (OAApplicationMode *) getParent
@@ -554,7 +542,7 @@ static OAApplicationMode *_CARPLAY;
 + (void) onApplicationStart
 {
     [self initCustomModes];
-    [self initModesParams];
+//    [self initModesParams];
     [self initRegVisibility];
     [self reorderAppModes];
     [OAAppSettings.sharedManager setupAppMode];
@@ -573,17 +561,8 @@ static OAApplicationMode *_CARPLAY;
     }
 }
 
-+ (void) initModesParams
-{
-    [_CARPLAY setParent:_CAR];
-}
-
 + (NSComparisonResult) compareModes:(OAApplicationMode *)obj1 obj2:(OAApplicationMode *) obj2
 {
-    if (obj1 == _CARPLAY)
-        return NSOrderedDescending;
-    else if (obj2 == _CARPLAY)
-        return NSOrderedAscending;
     return (obj1.getOrder < obj2.getOrder) ? NSOrderedAscending : ((obj1.getOrder == obj2.getOrder) ? NSOrderedSame : NSOrderedDescending);
 }
 

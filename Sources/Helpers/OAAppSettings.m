@@ -1754,7 +1754,8 @@
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    return [[self get:mode] componentsJoinedByString:@","];
+    NSArray<NSString *> *value = [self get:mode];
+    return value ? [value componentsJoinedByString:@","] : @"";
 }
 
 @end
@@ -3094,7 +3095,7 @@
         _availableApplicationModes = [[[OACommonString withKey:availableApplicationModesKey defValue:@"car,bicycle,pedestrian,public_transport,"] makeGlobal] makeShared];
         [_globalPreferences setObject:_availableApplicationModes forKey:@"available_application_modes"];
 
-        _customAppModes = [[[OACommonString withKey:customAppModesKey defValue:@""] makeGlobal] makeShared];
+        _customAppModes = [[OACommonString withKey:customAppModesKey defValue:@""] makeGlobal];
         [_globalPreferences setObject:_customAppModes forKey:@"custom_app_modes_keys"];
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
@@ -3119,7 +3120,6 @@
         [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
-        [_profileIconName setModeDefaultValue:@"ic_action_slope" mode:OAApplicationMode.CARPLAY];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];

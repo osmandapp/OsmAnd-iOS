@@ -116,6 +116,7 @@
 #import "OAHistoryViewController.h"
 #import "OAEditPointViewController.h"
 #import "OAGPXDocument.h"
+#import "OARoutePlanningHudViewController.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -887,23 +888,28 @@ typedef enum
 
 - (void) showRouteInfo
 {
+    [self showRouteInfo:YES];
+}
+
+- (void) showRouteInfo:(BOOL)fullMenu
+{
     [OAAnalyticsHelper logEvent:@"route_info_open"];
-    
+
     [self removeGestureRecognizers];
-    
+
     if (self.targetMenuView.superview)
     {
         [self hideTargetPointMenu:.2 onComplete:^{
-            [self showRouteInfoInternal];
+            [self showRouteInfoInternal:fullMenu];
         }];
     }
     else
     {
-        [self showRouteInfoInternal];
+        [self showRouteInfoInternal:fullMenu];
     }
 }
 
-- (void) showRouteInfoInternal
+- (void) showRouteInfoInternal:(BOOL)fullMenu
 {
     CGRect frame = self.routeInfoView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
@@ -916,7 +922,7 @@ typedef enum
     [self.view addSubview:self.routeInfoView];
     
     self.sidePanelController.recognizesPanGesture = NO;
-    [self.routeInfoView show:YES onComplete:^{
+    [self.routeInfoView show:YES fullMenu:fullMenu onComplete:^{
         [_hudViewController.quickActionController updateViewVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
@@ -1252,7 +1258,7 @@ typedef enum
             }
 
             [self hideTargetPointMenu];
-            [self showRouteInfo];
+            [self showRouteInfo:NO];
             
             return NO;
         }
@@ -1874,7 +1880,17 @@ typedef enum
 - (void) targetOpenRouteSettings
 {
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showRoutePreferences];
+    if (!self.targetMenuView.skipOpenRouteSettings)
+        [self showRoutePreferences];
+    else
+        self.targetMenuView.skipOpenRouteSettings = NO;
+}
+
+- (void) targetOpenPlanRoute
+{
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude]]];
 }
 
 - (void) targetGoToPoint
@@ -2173,6 +2189,15 @@ typedef enum
 - (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left
 {
     [self.hudViewController updateRulerPosition:bottom left:left];
+}
+
+- (void) targetOpenAvoidRoad
+{
+    [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude] skipWritingSettings:NO appModeKey:nil];
+    self.targetMenuView.skipOpenRouteSettings = YES;
+    [self openTargetViewWithImpassableRoadSelection];
+    if (self.targetMenuView.customController.delegate)
+        [self.targetMenuView.customController.delegate requestFullMode];
 }
 
 - (void) hideTargetPointMenu

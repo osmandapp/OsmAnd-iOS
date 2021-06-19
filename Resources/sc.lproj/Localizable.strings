@@ -2117,3 +2117,8 @@
 "gpx_upload_public_visibility_descr" = "\"Pùblicu\" cheret nàrrere chi sa rasta at a èssere ammustrada in manera pùblica in sas rastas GPS tuas, in sas listas de rastas GPS pùblicas e in sa lista de rastas pùblicas cun datas e oras in forma originale. Sos datos frunidos pro mèdiu de s'API non sunt ligados a sa pàgina de sa rasta tua. Sas datas e sas oras integradas in sos puntos de rasta no ant a èssere a disponimentu pro mèdiu de s'API GPS, e sos puntos no ant a èssere ordinados in manera cronològica.";
 "restart" = "Torra a incumintzare";
 "shared_string_wifi_only" = "Petzi cun su WiFi";
+"no_waypoints_found" = "Perunu puntu de coladòrgiu agatadu";
+"replace_waypoint_confirmation" = "Ses seguru de chèrrere modificare su puntu de coladòrgiu %@?";
+"context_menu_item_edit_waypoint" = "Modìfica su puntu de coladòrgiu GPX";
+"base_profile_descr_carplay" = "Ghiende cun sa modalidade CarPlay";
+"m_style_carplay" = "CarPlay";

@@ -232,7 +232,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setEditing:YES];
-    [self updateDistancePointsText];
     [self show:YES state:EOADraggableMenuStateInitial onComplete:nil];
 //    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     [_mapPanel setTopControlsVisible:NO customStatusBarStyle:UIStatusBarStyleLightContent];
@@ -260,6 +259,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self.view bringSubviewToFront:self.tableView];
     
     [self addInitialPoint];
+    [self updateDistancePointsText];
     
     OAGpxData *gpxData = _editingContext.gpxData;
     [self initMeasurementMode:gpxData addPoints:YES];

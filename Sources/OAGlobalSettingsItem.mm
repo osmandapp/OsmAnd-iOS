@@ -46,7 +46,23 @@
 
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
-    [OAAppSettings.sharedManager setGlobalPreference:value key:key];
+    if ([key isEqualToString:@"available_application_modes"])
+    {
+        NSMutableArray<NSString *> *appModesKeys = [[value componentsSeparatedByString:@","] mutableCopy];
+        NSMutableArray<NSString *> *nonexistentAppModesKeys = [NSMutableArray new];
+        for (NSString *appModeKey in appModesKeys)
+        {
+            if ([OAApplicationMode valueOfStringKey:appModeKey def: nil] == nil)
+                [nonexistentAppModesKeys addObject:appModeKey];
+        }
+        if (nonexistentAppModesKeys.count != 0)
+            [appModesKeys removeObjectsInArray:nonexistentAppModesKeys];
+
+        value = [appModesKeys componentsJoinedByString:@","];
+    }
+
+    if ([[OAAppSettings sharedManager] getGlobalPreference:key].shared)
+        [OAAppSettings.sharedManager setGlobalPreference:value key:key];
 }
 
 // MARK: OASettingsItemWriter

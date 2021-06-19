@@ -2106,3 +2106,6 @@
 "gpx_upload_trackable_visibility_descr" = "\"Verfolgbar\" bedeutet, dass die Spur nicht in öffentlichen Auflistungen auftaucht, aber verarbeitete Trackpunkte mit Zeitstempeln davon (die nicht direkt mit Ihnen in Verbindung gebracht werden können) durch Downloads von der öffentlichen GPS API.";
 "restart" = "Neustart";
 "app_restart_required" = "Neustart der Anwendung erforderlich, um einige Einstellungen zu übernehmen.";
+"no_waypoints_found" = "Keine Wegpunkte gefunden";
+"context_menu_item_edit_waypoint" = "GPX-Wegpunkt bearbeiten";
+"replace_waypoint_confirmation" = "Sind Sie sicher, dass Sie den Wegpunkt %@ ersetzen wollen?";

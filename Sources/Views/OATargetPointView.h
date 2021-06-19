@@ -46,6 +46,7 @@
 
 @property (nonatomic, readonly) BOOL showFull;
 @property (nonatomic, readonly) BOOL showFullScreen;
+@property (nonatomic) BOOL skipOpenRouteSettings;
 
 - (void) setMapViewInstance:(UIView *)mapView;
 - (void) setNavigationController:(UINavigationController *)controller;
@@ -107,6 +108,7 @@
 - (void) targetHideContextPinMarker;
 - (void) targetHide;
 - (void) targetOpenRouteSettings;
+- (void) targetOpenPlanRoute;
 - (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked onComplete:(void (^)(void))onComplete;
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;
@@ -117,6 +119,7 @@
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) targetStatusBarChanged;
 - (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left;
+- (void) targetOpenAvoidRoad;
 
 - (void) targetViewEnableMapInteraction;
 - (void) targetViewDisableMapInteraction;

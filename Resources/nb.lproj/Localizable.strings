@@ -533,7 +533,7 @@
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "coordinates_example" = "Eksempel";
 "utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
-"coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
+"coordinates_copy_descr" = "Trykk for å kopiere koordinater til utklippstavle.";
 "sett_lang_local" = "Lokale";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
@@ -1443,7 +1443,7 @@
 "rendering_attr_tracktype_grade3_name" = "For det meste hard";
 "rendering_value_dark_brown_name" = "Mørkebrun";
 "rendering_attr_surface_ground_name" = "Jord";
-"rendering_attr_highway_class_state_road_name" = "Fylkesvei";
+"rendering_attr_highway_class_state_road_name" = "Riks- eller primær fylkesvei";
 "rendering_attr_piste_type_sleigh_name" = "Slede";
 "routing_attr_avoid_ferry_name" = "Ingen ferger";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Flatt";
@@ -1866,7 +1866,6 @@
 "visible" = "Synlig";
 "only_manually" = "Kun manuelt";
 "repeat_after" = "Gjenta etter";
-
 "join_segments" = "Bind sammen segmenter";
 "shared_string_disable" = "Deaktiver";
 "plan_route_change_folder" = "Endre mappe";

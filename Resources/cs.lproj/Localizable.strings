@@ -2073,3 +2073,18 @@
 
 // Resources
 "shared_string_resources" = "Zdroje";
+"no_waypoints_found" = "Nenalezeny žádné body cesty";
+"replace_waypoint_confirmation" = "Opravdu chcete nahradit bod %@?";
+"context_menu_item_edit_waypoint" = "Upravit bod GPX";
+"app_restart_required" = "Některá nastavení vyžadují restart aplikace.";
+"approximate_file_size" = "Přibližná velikost souboru: %@";
+"gpx_upload_private_visibility_descr" = "„Soukromá“ znamená, že trasa se neobjeví v žádném veřejném seznamu, ale body trasy budou dostupné prostřednictvím veřejného GPS API, bez časových razítek a nebudou chronologicky seřazeny.";
+"gpx_upload_trackable_visibility_descr" = "„Sledovatelná“ znamená, že trasa se neobjeví v žádném veřejném seznamu, ale zpracované body trasy s časovými razítky (které nelze přímo spojit s vámi) budou dostupné prostřednictvím veřejného GPS API.";
+"gpxup_trackable" = "Sledovatelná";
+"gpx_upload_identifiable_visibility_descr" = "„Identifikovatelná“ znamená, že trasa bude veřejně dostupná ve vašich GPS trasách a veřejných seznamech GPS tras, tzn. ostatní uživatelé si budou moci stáhnout nezpracovanou trasu a propojit ji s vaším uživatelským jménem. Veřejná data bodů trasy s časovými razítky poskytnutá prostřednictvím GPS API se budou odkazovat na vaši původní stránku s trasou.";
+"gpxup_private" = "Soukromá";
+"gpxup_identifiable" = "Identifikovatelná";
+"gpxup_public" = "Veřejná";
+"gpx_upload_public_visibility_descr" = "„Veřejná“ znamená, že trasa je veřejně dostupná ve vašich GPS trasách, ve veřejných seznamech GPS tras a také ve veřejném seznamu stop s nezpracovanými časovými razítky. Data poskytnutá prostřednictvím API nebudou odkazovat na vaši stránku s trasou. Časová razítka bodů trasy nebudou dostupná prostřednictvím veřejného GPS API a body nebudou chronologicky seřazeny.";
+"restart" = "Restartovat";
+"shared_string_wifi_only" = "Pouze na Wi-Fi";

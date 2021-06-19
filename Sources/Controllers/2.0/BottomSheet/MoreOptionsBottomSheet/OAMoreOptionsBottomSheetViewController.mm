@@ -114,7 +114,7 @@
                           @"img" : @"ic_custom_update",
                           @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     }
-    // Change marker psition
+    // Change marker position
     if ([OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer isObjectMovable:_targetPoint.targetObj])
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"change_object_posiotion"),
@@ -174,6 +174,16 @@
             }
         }
     }
+    // Plan route
+    [arr addObject:@{ @"title" : OALocalizedString(@"plan_route"),
+            @"key" : @"plan_route",
+            @"img" : @"ic_custom_route",
+            @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+    // Avoid road
+    [arr addObject:@{ @"title" : OALocalizedString(@"avoid_road"),
+            @"key" : @"avoid_road",
+            @"img" : @"ic_custom_road_works",
+            @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     if (arr.count > 2)
         [arr insertObject:@{ @"type" : [OADividerCell getCellIdentifier] } atIndex:2];
     _data = [NSArray arrayWithArray:arr];
@@ -317,15 +327,20 @@
             [vwController.menuViewDelegate targetHide];
             [vwController.menuViewDelegate navigateFrom:_targetPoint];
         }
-
         else if ([key isEqualToString:@"addon_edit_waypoint"])
+        {
             [vwController.menuViewDelegate targetPointEditWaypoint:_targetPoint.targetObj];
+        }
         else if ([key isEqualToString:@"addon_add_waypoint"])
+        {
             [vwController.menuViewDelegate targetPointAddWaypoint];
-        
+        }
         else if ([key isEqualToString:@"addon_add_parking"])
+        {
             [vwController.menuViewDelegate targetPointParking];
-        else if ([key isEqualToString:@"nearby_search"]) {
+        }
+        else if ([key isEqualToString:@"nearby_search"])
+        {
             [vwController.menuViewDelegate targetHide];
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
         }
@@ -355,7 +370,6 @@
                         [mapPanel.navigationController pushViewController:editingScreen animated:YES];
                     });
                 });
-                
             }
             else if (_targetPoint.type == OATargetOsmEdit)
             {
@@ -392,6 +406,14 @@
                 }];
             }]];
             [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        }
+        else if ([key isEqualToString:@"plan_route"])
+        {
+            [vwController.menuViewDelegate targetOpenPlanRoute];
+        }
+        else if ([key isEqualToString:@"avoid_road"])
+        {
+            [vwController.menuViewDelegate targetOpenAvoidRoad];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

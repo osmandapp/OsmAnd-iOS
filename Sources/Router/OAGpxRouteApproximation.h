@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OACommonTypes.h"
+
+#include <CommonCollections.h>
+#include <commonOsmAndCore.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -141,7 +141,6 @@
 {
     NSMutableArray<OAApplicationMode *> *profiles = [NSMutableArray arrayWithArray:OAApplicationMode.values];
     [profiles removeObject:OAApplicationMode.DEFAULT];
-	[profiles removeObject:OAApplicationMode.CARPLAY];
 	NSMutableArray<OAApplicationMode *> *toRemove = [NSMutableArray array];
     [profiles enumerateObjectsUsingBlock:^(OAApplicationMode *profile, NSUInteger ids, BOOL *stop) {
         if ([profile.getRoutingProfile isEqualToString:@"public_transport"])

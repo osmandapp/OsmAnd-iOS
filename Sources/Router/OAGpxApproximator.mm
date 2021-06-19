@@ -67,7 +67,6 @@
 	@synchronized (_approximator)
 	{
 		_approximator.approximationTask = self;
-//		_helper.waitingNextJob = _prevRunningJob != nil;
 	}
 	
 	if (self.previousTask)
@@ -80,7 +79,6 @@
 	@synchronized (_approximator)
 	{
 		_approximator.approximationTask = self;
-//			_helper.waitingNextJob = false;
 	}
 	[OARoutingHelper.sharedInstance calculateGpxApproximation:_env gctx:_gctx points:_points resultMatcher:_resultMatcher];
 	@synchronized (_approximator)

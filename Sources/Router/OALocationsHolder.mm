@@ -12,9 +12,8 @@
 #import <CoreLocation/CoreLocation.h>
 
 #define LOCATION_TYPE_UNKNOWN -1
-#define LOCATION_TYPE_LATLON 0
-#define LOCATION_TYPE_LOCATION 1
-#define LOCATION_TYPE_WPTPT 2
+#define LOCATION_TYPE_LOCATION 0
+#define LOCATION_TYPE_WPTPT 1
 
 @interface OALocationsHolder ()
 
@@ -24,7 +23,6 @@
 
 @implementation OALocationsHolder
 {
-//	NSArray<CLLocation *> *_latLonList;
 	NSArray<CLLocation *> *_locationList;
 	NSArray<OAGpxTrkPt *> *_wptPtList;
 }
@@ -36,9 +34,6 @@
 	{
 		_locationType = [self resolveLocationType:locations];
 		switch (_locationType) {
-//			case LOCATION_TYPE_LATLON:
-//				_latLonList = [NSArray arrayWithArray:locations];
-//				break;
 			case LOCATION_TYPE_LOCATION:
 			{
 				_locationList = [NSArray arrayWithArray:locations];
@@ -61,9 +56,6 @@
 	if (locations.count > 0)
 	{
 		id locationObj = locations.firstObject;
-//		if (locationObj instanceof LatLon) {
-//			return LOCATION_TYPE_LATLON;
-//		} else
 		if ([locationObj isKindOfClass:OAGpxTrkPt.class])
 			return LOCATION_TYPE_WPTPT;
 		else if ([locationObj isKindOfClass:CLLocation.class])
@@ -78,10 +70,6 @@
 {
 	switch (_locationType)
 	{
-//		case LOCATION_TYPE_LATLON:
-//		{
-//			return _latLonList[index].getLatitude;
-//		}
 		case LOCATION_TYPE_LOCATION:
 		{
 			if (index < _locationList.count)
@@ -103,10 +91,6 @@
 {
 	switch (_locationType)
 	{
-//		case LOCATION_TYPE_LATLON:
-//		{
-//			return _latLonList[index].getLatitude;
-//		}
 		case LOCATION_TYPE_LOCATION:
 		{
 			if (index < _locationList.count)
@@ -133,9 +117,6 @@
 		{
 			switch (_locationType)
 			{
-//				case LOCATION_TYPE_LATLON:
-//					[res addObject:[self getLatLon:i]];
-//					break;
 				case LOCATION_TYPE_LOCATION:
 					[res addObject:[self getLocation:i]];
 					break;
@@ -186,11 +167,7 @@
 
 - (std::pair<double, double>) getLatLon:(NSInteger)index
 {
-//	if (_locationType == LOCATION_TYPE_LATLON)
-//		return latLonList.get(index);
-//	else
 	return std::pair<double, double>([self getLatitude:index], [self getLongitude:index]);
-//	}
 }
 
 - (OAGpxTrkPt *) getWptPt:(NSInteger)index

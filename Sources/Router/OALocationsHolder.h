@@ -28,7 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<OAGpxTrkPt *> *)getWptPtList;
 - (NSArray<CLLocation *> *) getLocationsList;
 
-//public LatLon getLatLon(int index)
 - (OAGpxTrkPt *) getWptPt:(NSInteger)index;
 - (CLLocation *) getLocation:(NSInteger)index;
 

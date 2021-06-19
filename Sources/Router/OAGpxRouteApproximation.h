@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "OACommonTypes.h"
 
-#include <vector>
-
 NS_ASSUME_NONNULL_BEGIN
 
 struct GpxRouteApproximation;

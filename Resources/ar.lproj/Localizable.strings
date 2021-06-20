@@ -2098,3 +2098,6 @@
 "gpxup_public" = "عام";
 "restart" = "اعاده تشغيل";
 "shared_string_wifi_only" = "فقط على شبكة Wi-Fi";
+"no_waypoints_found" = "لم يتم العثور على إحداثيات";
+"context_menu_item_edit_waypoint" = "تحرير إحداثيات GPX";
+"replace_waypoint_confirmation" = "هل تريد بالتأكيد استبدال إحداثية النقطة ٪@؟";

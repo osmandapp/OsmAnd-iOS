@@ -33,10 +33,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *showButton;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightPrimaryConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightSecondaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *showBottomViewHeightPrimaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *showBottomViewHeightSecondaryConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *showButtonHeightPrimaryConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *showButtonHeightSecondaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *addBottomViewHeightPrimaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *addBottomViewHeightSecondaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *addButtonHeightSecondaryConstraint;
 
 @end
 
@@ -47,9 +50,11 @@
     OAPOIUIFilter *_filter;
     NSArray<OAPOICategory *> *_categories;
     NSMutableArray<OAPOIType *> *_searchResult;
+    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *_searchResultSelected;
     NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *_acceptedTypes;
     BOOL _editMode;
     BOOL _searchMode;
+    BOOL _keyboardVisible;
     NSInteger _countShowCategories;
 }
 
@@ -62,6 +67,7 @@
         _filterHelper = [OAPOIFiltersHelper sharedInstance];
         _filter = filter;
         _editMode = _filter != [_filterHelper getCustomPOIFilter];
+        _searchResultSelected = [NSMapTable new];
         [self initData];
     }
     return self;
@@ -149,36 +155,60 @@
 
 - (void)updateTextShowButton
 {
-    _countShowCategories = 0;
-    for (OAPOICategory *category in _acceptedTypes.keyEnumerator)
+    if (!_searchMode)
     {
-        if ([_filter isTypeAccepted:category])
+        _countShowCategories = 0;
+        for (OAPOICategory *category in _acceptedTypes.keyEnumerator)
         {
-            NSSet<NSString *> *acceptedSubtypes = [_acceptedTypes objectForKey:category];
-            NSInteger count = acceptedSubtypes != [OAPOIBaseType nullSet] ? acceptedSubtypes.count : category.poiTypes.count;
-            _countShowCategories += count;
+            if ([_filter isTypeAccepted:category])
+            {
+                NSSet<NSString *> *acceptedSubtypes = [_acceptedTypes objectForKey:category];
+                NSInteger count = acceptedSubtypes != [OAPOIBaseType nullSet] ? acceptedSubtypes.count : category.poiTypes.count;
+                _countShowCategories += count;
+            }
         }
+
+        NSString *textShow = OALocalizedString(@"sett_show");
+        UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+        UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
+        NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
+
+        NSString *textCategories = [NSString stringWithFormat:@"\n%@: %li", OALocalizedString(@"categories"), _countShowCategories];
+        UIFont *fontCategories = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+        UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : UIColorFromRGB(color_text_footer);
+        NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
+
+        [attrShow appendAttributedString:attrCategories];
+
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        [style setLineSpacing:2.0];
+        [style setAlignment:NSTextAlignmentCenter];
+        [attrShow addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attrShow.string.length)];
+
+        [self.showButton setAttributedTitle:attrShow forState:UIControlStateNormal];
+        [self updateShowButton:_countShowCategories != 0];
+
+        self.showBottomViewHeightPrimaryConstraint.active = !_keyboardVisible;
+        self.showBottomViewHeightSecondaryConstraint.active = _keyboardVisible;
+        self.showButtonHeightPrimaryConstraint.active = !_keyboardVisible;
+        self.showButtonHeightSecondaryConstraint.active = _keyboardVisible;
     }
+    else
+    {
+        NSString *textShow = OALocalizedString(@"shared_string_add");
+        UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+        UIColor *colorShow = UIColor.whiteColor;
+        NSMutableAttributedString *attrAdd = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
-    NSString *textShow = OALocalizedString(@"sett_show");
-    UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
-    UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
-    NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
+        [self.showButton setAttributedTitle:attrAdd forState:UIControlStateNormal];
+        [self updateShowButton:YES];
 
-    NSString *textCategories = [NSString stringWithFormat:@"\n%@: %li", OALocalizedString(@"categories"), _countShowCategories];
-    UIFont *fontCategories = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
-    UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : UIColorFromRGB(color_text_footer);
-    NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
-
-    [attrShow appendAttributedString:attrCategories];
-
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:2.0];
-    [style setAlignment:NSTextAlignmentCenter];
-    [attrShow addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attrShow.string.length)];
-
-    [self.showButton setAttributedTitle:attrShow forState:UIControlStateNormal];
-    [self updateShowButton:_countShowCategories != 0];
+        self.addBottomViewHeightPrimaryConstraint.active = !_keyboardVisible;
+        self.addBottomViewHeightSecondaryConstraint.active = _keyboardVisible;
+        self.showButtonHeightSecondaryConstraint.active = !_keyboardVisible;
+        self.addButtonHeightSecondaryConstraint.active = _keyboardVisible;
+        self.showBottomViewHeightSecondaryConstraint.active = NO;
+    }
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
@@ -186,30 +216,23 @@
     if (_searchMode)
     {
         OAPOIType *searchType = _searchResult[indexPath.row];
-        OAPOICategory *searchCategory = searchType.category;
-        BOOL containsCategory = [_acceptedTypes.keyEnumerator.allObjects containsObject:searchCategory];
-        NSMutableSet<NSString *> *types = [_acceptedTypes objectForKey:searchCategory];
-        BOOL containsType = [types containsObject:searchType.name];
+        NSString *searchTypeName = searchType.name;
+        OAPOICategory *searchTypeCategory = searchType.category;
 
-        if (containsCategory) {
-            if (containsType)
-                [types removeObject:searchType.name];
+        if ([_searchResultSelected.keyEnumerator.allObjects containsObject:searchTypeCategory])
+        {
+            NSMutableSet<NSString *> *searchTypes = [_searchResultSelected objectForKey:searchTypeCategory];
+            if ([searchTypes containsObject:searchTypeName])
+                [searchTypes removeObject:searchTypeName];
             else
-                [types addObject:searchType.name];
-        } else {
-            types = [NSMutableSet setWithObject:searchType.name];
-            [_acceptedTypes setObject:types forKey:searchCategory];
+                [searchTypes addObject:searchTypeName];
+        }
+        else
+        {
+            [_searchResultSelected setObject:[NSMutableSet setWithObject:searchTypeName] forKey:searchTypeCategory];
         }
 
-        if (types.count == searchCategory.poiTypes.count)
-            [_filter selectSubTypesToAccept:searchCategory accept:[OAPOIBaseType nullSet]];
-        else if (types.count == 0)
-            [_filter setTypeToAccept:searchCategory b:NO];
-        else
-            [_filter selectSubTypesToAccept:searchCategory accept:types];
-        [_filterHelper editPoiFilter:_filter];
-
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -223,7 +246,8 @@
 
 - (IBAction)onSaveButtonClicked:(id)sender
 {
-    if (self.delegate) {
+    if (self.delegate)
+    {
         UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
         UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
             [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
@@ -236,13 +260,36 @@
 
 - (IBAction)onShowButtonClicked:(id)sender
 {
-    if (self.delegate)
-        [self.delegate searchByUIFilter:_filter newName:nil willSaved:NO];
+    if (!_searchMode)
+    {
+        if (self.delegate)
+            [self.delegate searchByUIFilter:_filter newName:nil willSaved:NO];
 
-    if (_editMode && self.refreshDelegate)
-        [self.refreshDelegate refreshList];
+        if (_editMode && self.refreshDelegate)
+            [self.refreshDelegate refreshList];
 
-    [self dismissViewController];
+        [self dismissViewController];
+    }
+    else
+    {
+        for (OAPOICategory *poiCategory in _searchResultSelected)
+        {
+            NSMutableSet *selectedSubtypes = [_searchResultSelected objectForKey:poiCategory];
+            if (![[_acceptedTypes objectForKey:poiCategory] isEqualToSet:selectedSubtypes])
+            {
+                if (selectedSubtypes.count == poiCategory.poiTypes.count)
+                    [_filter selectSubTypesToAccept:poiCategory accept:[OAPOIBaseType nullSet]];
+                else if (selectedSubtypes.count == 0)
+                    [_filter setTypeToAccept:poiCategory b:NO];
+                else
+                    [_filter selectSubTypesToAccept:poiCategory accept:selectedSubtypes];
+            }
+        }
+
+        [_filterHelper editPoiFilter:_filter];
+        _acceptedTypes = _filter.getAcceptedTypes;
+        [self searchBarCancelButtonClicked:self.searchBar];
+    }
 }
 
 #pragma mark - UISearchBarDelegate
@@ -251,7 +298,8 @@
 {
     searchBar.text = @"";
     _searchMode = NO;
-    _searchResult = [NSMutableArray new];
+    [_searchResult removeAllObjects];
+    [_searchResultSelected removeAllObjects];
     self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
     [self updateScreenTitle];
     [self updateTextShowButton];
@@ -263,7 +311,8 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    _searchResult = [NSMutableArray new];
+    [_searchResult removeAllObjects];
+    [_searchResultSelected removeAllObjects];
     if (searchBar.text.length == 0)
     {
         _searchMode = NO;
@@ -287,19 +336,32 @@
             {
                 OASearchResultCollection *currentSearchResult = [_core getCurrentSearchResult];
                 NSMutableArray<OAPOIType *> *results = [NSMutableArray new];
+                NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *resultsSelected = [NSMapTable new];
                 for (OASearchResult *result in currentSearchResult.getCurrentSearchResults)
                 {
                     NSObject *poiObject = result.object;
                     if ([poiObject isKindOfClass:[OAPOIType class]])
                     {
                         OAPOIType *poiType = (OAPOIType *) poiObject;
+                        NSString *poiTypeName = poiType.name;
+                        OAPOICategory *poiTypeCategory = poiType.category;
                         if (!poiType.isAdditional)
                             [results addObject:poiType];
+                        if ([[_acceptedTypes objectForKey:poiTypeCategory] containsObject:poiTypeName])
+                        {
+                            if ([resultsSelected objectForKey:poiTypeCategory])
+                                [[resultsSelected objectForKey:poiTypeCategory] addObject:poiTypeName];
+                            else
+                                [resultsSelected setObject:[NSMutableSet setWithObject:poiTypeName] forKey:poiTypeCategory];
+                        }
                     }
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _searchResult = [NSMutableArray arrayWithArray:results];
+                    for (OAPOICategory *category in resultsSelected)
+                        [_searchResultSelected setObject:[resultsSelected objectForKey:category] forKey:category];
                     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [self updateTextShowButton];
                 });
             }
             return YES;
@@ -343,8 +405,7 @@
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
+        cell = (OAMenuSimpleCell *) nib[0];
         if (_searchMode)
         {
             cell.tintColor = UIColorFromRGB(color_primary_purple);
@@ -357,6 +418,8 @@
     {
         if (!_searchMode)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 70.0, 0.0, 0.0);
+
             OAPOICategory *category = _categories[indexPath.row];
             NSSet<NSString *> *subtypes = [_acceptedTypes objectForKey:category];
             NSInteger countAcceptedTypes = subtypes.count;
@@ -382,9 +445,10 @@
         }
         else
         {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
+
             OAPOIType *poiType = _searchResult[indexPath.row];
-            NSSet<NSString *> *acceptedSubtypes = [_acceptedTypes objectForKey:poiType.category];
-            BOOL accepted = [acceptedSubtypes containsObject:poiType.name];
+            BOOL accepted = [[_searchResultSelected objectForKey:poiType.category] containsObject:poiType.name];
             cell.accessoryType = UITableViewCellAccessoryNone;
 
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
@@ -411,8 +475,7 @@
     if (_searchMode)
     {
         OAPOIType *poiType = _searchResult[indexPath.row];
-        NSSet<NSString *> *acceptedSubtypes = [_acceptedTypes objectForKey:poiType.category];
-        BOOL accepted = [acceptedSubtypes containsObject:poiType.name];
+        BOOL accepted = [[_searchResultSelected objectForKey:poiType.category] containsObject:poiType.name];
         [cell setSelected:accepted animated:NO];
         if (accepted)
             [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -473,16 +536,14 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0 && !_searchMode) {
-        return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"search_poi_types_descr") width:tableView.bounds.size.width] + 24;
-    }
-    return 0.01;
+    return section == 0 && !_searchMode ? [OATableViewCustomHeaderView getHeight:OALocalizedString(@"search_poi_types_descr") width:tableView.bounds.size.width] + 24 : 0.01;
 }
 
 #pragma mark - Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notification;
 {
+    _keyboardVisible = YES;
     NSDictionary* userInfo = [notification userInfo];
     CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
@@ -495,15 +556,27 @@
 
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         self.view.frame = viewFrame;
-        self.bottomViewHeightPrimaryConstraint.active = NO;
-        self.bottomViewHeightSecondaryConstraint.active = YES;
-        self.showButtonHeightPrimaryConstraint.active = NO;
-        self.showButtonHeightSecondaryConstraint.active = YES;
+
+        if (!_searchMode)
+        {
+            self.showBottomViewHeightPrimaryConstraint.active = NO;
+            self.showBottomViewHeightSecondaryConstraint.active = YES;
+            self.showButtonHeightPrimaryConstraint.active = NO;
+            self.showButtonHeightSecondaryConstraint.active = YES;
+        }
+        else
+        {
+            self.addBottomViewHeightPrimaryConstraint.active = NO;
+            self.addBottomViewHeightSecondaryConstraint.active = YES;
+            self.showButtonHeightSecondaryConstraint.active = NO;
+            self.addButtonHeightSecondaryConstraint.active = YES;
+        }
     } completion:nil];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification;
 {
+    _keyboardVisible = NO;
     NSDictionary* userInfo = [notification userInfo];
     CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
@@ -517,11 +590,20 @@
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         self.view.frame = viewFrame;
 
-        self.bottomViewHeightPrimaryConstraint.active = YES;
-        self.bottomViewHeightSecondaryConstraint.active = NO;
-
-        self.showButtonHeightPrimaryConstraint.active = YES;
-        self.showButtonHeightSecondaryConstraint.active = NO;
+        if (!_searchMode)
+        {
+            self.showBottomViewHeightPrimaryConstraint.active = YES;
+            self.showBottomViewHeightSecondaryConstraint.active = NO;
+            self.showButtonHeightPrimaryConstraint.active = YES;
+            self.showButtonHeightSecondaryConstraint.active = NO;
+        }
+        else
+        {
+            self.addBottomViewHeightPrimaryConstraint.active = YES;
+            self.addBottomViewHeightSecondaryConstraint.active = NO;
+            self.showButtonHeightSecondaryConstraint.active = YES;
+            self.addButtonHeightSecondaryConstraint.active = NO;
+        }
     } completion:nil];
 }
 

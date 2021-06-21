@@ -236,8 +236,15 @@
     }
 }
 
+- (void)resetSearchTypes
+{
+    [_core updateSettings:[[_core getSearchSettings] resetSearchTypes]];
+}
+
 - (IBAction)onBackButtonClicked:(id)sender
 {
+    [self resetSearchTypes];
+    [OAQuickSearchHelper.instance refreshCustomPoiFilters];
     [self dismissViewController];
 
     if (_editMode && self.refreshDelegate)
@@ -251,6 +258,7 @@
         UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
         UIAlertAction *actionSave = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
             [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
+            [self resetSearchTypes];
             [self dismissViewController];
         }];
         [saveDialog addAction:actionSave];
@@ -262,12 +270,15 @@
 {
     if (!_searchMode)
     {
+        [_filterHelper editPoiFilter:_filter];
         if (self.delegate)
             [self.delegate searchByUIFilter:_filter newName:nil willSaved:NO];
 
         if (_editMode && self.refreshDelegate)
             [self.refreshDelegate refreshList];
 
+        [self resetSearchTypes];
+        [OAQuickSearchHelper.instance refreshCustomPoiFilters];
         [self dismissViewController];
     }
     else
@@ -289,6 +300,7 @@
         [_filterHelper editPoiFilter:_filter];
         _acceptedTypes = _filter.getAcceptedTypes;
         [self searchBarCancelButtonClicked:self.searchBar];
+        [self resetSearchTypes];
     }
 }
 
@@ -319,7 +331,7 @@
         self.saveButton.hidden = NO;
         [self.tableView setEditing:NO];
         self.tableView.allowsMultipleSelectionDuringEditing = NO;
-        [_core updateSettings:_core.getSearchSettings.resetSearchTypes];
+        [self resetSearchTypes];
     }
     else
     {

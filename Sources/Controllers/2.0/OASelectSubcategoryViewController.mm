@@ -214,11 +214,17 @@
     }
 }
 
+- (void)resetSearchTypes
+{
+    [_core updateSettings:[[_core getSearchSettings] resetSearchTypes]];
+}
+
 - (IBAction)onBackButtonClicked:(id)sender
 {
     if (self.delegate)
         [self.delegate selectSubcategoryCancel];
 
+    [self resetSearchTypes];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -227,6 +233,7 @@
     if (self.delegate)
         [self.delegate selectSubcategoryDone:_category keys:[self getSelectedKeys] allSelected:_selectedItems.count == _items.count];
 
+    [self resetSearchTypes];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -250,6 +257,7 @@
     {
         _searchMode = NO;
         [_core updateSettings:_core.getSearchSettings.resetSearchTypes];
+        [self resetSearchTypes];
     }
     else
     {

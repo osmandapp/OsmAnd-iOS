@@ -3673,7 +3673,7 @@ typedef enum
     {
         [self switchToRouteFollowingLayout];
         if (_settings.applicationMode != [_routingHelper getAppMode])
-            _settings.applicationMode = [_routingHelper getAppMode];
+            [_settings setApplicationMode:[_routingHelper getAppMode] markAsLastUsed:NO];
 
         if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
             [_app.locationServices.locationSimulation startStopRouteAnimation];
@@ -3687,7 +3687,7 @@ typedef enum
         else
         {
             //app.logEvent(mapActivity, "start_navigation");
-            _settings.applicationMode = [_routingHelper getAppMode];
+            [_settings setApplicationMode:[_routingHelper getAppMode] markAsLastUsed:NO];
             [_mapViewTrackingUtilities backToLocationImpl:17 forceZoom:YES];
             [_settings.followTheRoute set:YES];
             [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];

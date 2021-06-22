@@ -101,6 +101,8 @@
 
 #define applicationModeKey @"applicationMode"
 #define defaultApplicationModeKey @"default_application_mode_string"
+#define defaultCarplayModeKey @"default_carplay_mode_string"
+#define carPlayModeIsDefaultKey @"carplay_mode_is_default_string"
 #define availableApplicationModesKey @"available_application_modes"
 #define customAppModesKey @"customAppModes"
 
@@ -1270,6 +1272,10 @@
             stringKey = settings.lastUsedApplicationMode.get;
         else
             stringKey = self.defValue.stringKey;
+    }
+    else if (self.key == defaultCarplayModeKey && settings.carPlayModeIsDefault.get)
+    {
+        return OAApplicationMode.CAR;
     }
     else
     {
@@ -3091,6 +3097,12 @@
 
         _defaultApplicationMode = [[[OACommonAppMode withKey:defaultApplicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
         [_globalPreferences setObject:_defaultApplicationMode forKey:@"default_application_mode_string"];
+        
+        _defaultCarPlayMode = [[[OACommonAppMode withKey:defaultCarplayModeKey defValue:OAApplicationMode.CAR] makeGlobal] makeShared];
+        [_globalPreferences setObject:_defaultCarPlayMode forKey:@"default_carplay_mode_string"];
+        
+        _carPlayModeIsDefault = [[[OACommonBoolean withKey:carPlayModeIsDefaultKey defValue:YES] makeGlobal] makeShared];
+        [_globalPreferences setObject:_defaultCarPlayMode forKey:@"carplay_mode_is_default_string"];
 
         _availableApplicationModes = [[[OACommonString withKey:availableApplicationModesKey defValue:@"car,bicycle,pedestrian,public_transport,"] makeGlobal] makeShared];
         [_globalPreferences setObject:_availableApplicationModes forKey:@"available_application_modes"];

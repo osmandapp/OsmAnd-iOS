@@ -107,7 +107,7 @@
                 @{
                 @"name" : @"carplay_profile",
                 @"title" : OALocalizedString(@"carplay_profile"),
-                @"value" : _settings.defaultCarPlayMode.get.toHumanString,
+                @"value" : _settings.carPlayMode.get.toHumanString,
                 @"description" : OALocalizedString(@"carplay_profile_descr"),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : [OASettingsTableViewCell getCellIdentifier] },
@@ -146,7 +146,7 @@
         }
         case EOACarplayProfile:
         {
-            _isDefaultProfile = _settings.carPlayModeIsDefault.get;
+            _isDefaultProfile = _settings.isCarPlayModeDefault.get;
             NSMutableArray *arr = [NSMutableArray array];
             [arr addObject: @{
                 @"name" : @"carplay_mode_is_default_string",
@@ -165,7 +165,7 @@
                             @"name" : mode.toHumanString,
                             @"descr" : mode.stringKey,
                             @"mode" : mode,
-                            @"isSelected" : @(_settings.defaultCarPlayMode.get == mode),
+                            @"isSelected" : @(_settings.carPlayMode.get == mode),
                             @"type" : [OAMultiIconTextDescCell getCellIdentifier] }];
                     }
                 }
@@ -297,7 +297,7 @@
             {
                 NSDictionary *item = [self getItem:indexPath];
                 OAApplicationMode *am = item[@"mode"];
-                [_settings.defaultCarPlayMode set:am];
+                [_settings.carPlayMode set:am];
                 [self backButtonClicked:nil];
                 break;
             }
@@ -415,7 +415,7 @@
                 [_settings.settingUseAnalytics set:isChecked];
             else if ([name isEqualToString:@"carplay_mode_is_default_string"])
             {
-                [_settings.carPlayModeIsDefault set:isChecked];
+                [_settings.isCarPlayModeDefault set:isChecked];
                 [self setupView];
                 [self updateTableView];
             }

@@ -1207,7 +1207,7 @@
     settings.lastRoutingApplicationMode = settings.applicationMode;
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
-        settings.applicationMode = _carPlayActive ? [OAAppSettings.sharedManager.defaultCarPlayMode get] : [settings.defaultApplicationMode get];
+        settings.applicationMode = _carPlayActive ? [OAAppSettings.sharedManager.carPlayMode get] : [settings.defaultApplicationMode get];
     });
 }
 

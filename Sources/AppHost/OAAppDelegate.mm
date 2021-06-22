@@ -397,7 +397,7 @@
         return;
     }
     [self presentInCarPlay:interfaceController window:window];
-    OAAppSettings.sharedManager.applicationMode = [OAAppSettings.sharedManager.defaultCarPlayMode get];
+    OAAppSettings.sharedManager.applicationMode = [OAAppSettings.sharedManager.carPlayMode get];
 }
 
 - (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))

@@ -194,7 +194,7 @@
 "carplay_profile" = "CarPlay profile";
 "carplay_profile_descr" = "Profile that will be used after connection to Carplay.";
 
-"show_traffic_warnings" = "Traffic warFnings";
+"show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
 "show_cameras" = "Speed cameras";
 "show_lanes" = "Lanes";

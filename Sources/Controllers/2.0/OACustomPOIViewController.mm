@@ -105,7 +105,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
 
     _searchMode = NO;
     self.searchBar.delegate = self;
@@ -430,6 +429,7 @@
     {
         if (!_searchMode)
         {
+            [cell changeHeight:YES];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 70.0, 0.0, 0.0);
 
             OAPOICategory *category = _categories[indexPath.row];
@@ -457,6 +457,7 @@
         }
         else
         {
+            [cell changeHeight:NO];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
 
             OAPOIType *poiType = _searchResult[indexPath.row];

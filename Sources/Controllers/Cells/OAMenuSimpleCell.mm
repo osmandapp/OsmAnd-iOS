@@ -47,4 +47,12 @@
     // Configure the view for the selected state
 }
 
+- (void)changeHeight:(BOOL)higher
+{
+    self.textTopPrimaryMargin.active = !higher;
+    self.textTopSecondaryMargin.active = higher;
+    self.textBottomPrimaryMargin.active = !higher;
+    self.textBottomSecondaryMargin.active = higher;
+}
+
 @end

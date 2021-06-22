@@ -279,6 +279,7 @@
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
+    settings.simulateRouting = NO;
     settings.applicationMode = settings.defaultApplicationMode.get;
     [_data setLastMapSourceVariant:settings.applicationMode.variantKey];
     

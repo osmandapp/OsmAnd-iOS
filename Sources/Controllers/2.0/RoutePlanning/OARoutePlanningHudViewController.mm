@@ -28,7 +28,6 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OALocationServices.h"
 #import "OAGpxData.h"
-#import "OAGPXDocument.h"
 #import "OAGPXMutableDocument.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXTrackAnalysis.h"
@@ -40,6 +39,7 @@
 #import "OAMovePointCommand.h"
 #import "OAClearPointsCommand.h"
 #import "OAReversePointsCommand.h"
+#import "OAApplyGpxApproximationCommand.h"
 #import "OASegmentOptionsBottomSheetViewController.h"
 #import "OAPlanningOptionsBottomSheetViewController.h"
 #import "OAExitRoutePlanningBottomSheetViewController.h"
@@ -53,6 +53,8 @@
 #import "OAOpenAddTrackViewController.h"
 #import "OASavingTrackHelper.h"
 #import "QuadRect.h"
+#import "OASnapTrackWarningViewController.h"
+#import "OAGpxApproximationBottomSheetViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -82,7 +84,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 @interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate,
     OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate, OASnapToRoadProgressDelegate, OAPlanningOptionsDelegate,
-    OAOpenAddTrackDelegate, OASaveTrackViewControllerDelegate, OAExitRoutePlanningDelegate>
+    OAOpenAddTrackDelegate, OASaveTrackViewControllerDelegate, OAExitRoutePlanningDelegate, OASnapTrackWarningBottomSheetDelegate, OAGpxApproximationBottomSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -132,6 +134,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     NSString *_fileName;
     CLLocation *_initialPoint;
+	
+	BOOL _showSnapWarning;
 }
 
 - (instancetype) init
@@ -175,12 +179,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
-- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode
+- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning
 {
     self = [super initWithNibName:@"OARoutePlanningHudViewController"
                            bundle:nil];
     if (self)
     {
+		_showSnapWarning = showSnapWarning;
         [self commonInit:editingCtx];
         [self setMode:FOLLOW_TRACK_MODE on:followTrackMode];
     }
@@ -267,8 +272,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     if (_fileName)
         [self addNewGpxData:[self getGpxFile:_fileName]];
-//    else if (editingCtx.isApproximationNeeded() && isFollowTrackMode())
-//        enterApproximationMode(mapActivity);
+    else if (_editingContext.isApproximationNeeded && self.isFollowTrackMode)
+        [self enterApproximationMode];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	if (_showSnapWarning)
+		[self enterApproximationMode];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -533,7 +545,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) initMeasurementMode:(OAGpxData *)gpxData addPoints:(BOOL)addPoints
 {
     [_editingContext.commandManager setMeasurementLayer:_layer];
-//    [self enterMeasurementMode];
+    [self enterMeasurementMode];
     if (gpxData != nil && addPoints)
     {
         if (!self.isUndoMode)
@@ -552,6 +564,37 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self setupModeButton];
     [self setMode:UNDO_MODE on:NO];
 }
+
+- (void)enterMeasurementMode
+{
+    if (_layer)
+    {
+        [_mapPanel refreshMap];
+        [self updateDistancePointsText];
+    }
+}
+
+//private void enterMeasurementMode() {
+//    MapActivity mapActivity = getMapActivity();
+//    MeasurementToolLayer measurementLayer = getMeasurementLayer();
+//    if (mapActivity != null && measurementLayer != null) {
+//        measurementLayer.setInMeasurementMode(true);
+//        mapActivity.refreshMap();
+//        mapActivity.disableDrawer();
+//
+//        mainView.getViewTreeObserver().addOnGlobalLayoutListener(getWidgetsLayoutListener());
+//
+//        View collapseButton = mapActivity.findViewById(R.id.map_collapse_button);
+//        if (collapseButton != null && collapseButton.getVisibility() == View.VISIBLE) {
+//            wasCollapseButtonVisible = true;
+//            collapseButton.setVisibility(View.INVISIBLE);
+//        } else {
+//            wasCollapseButtonVisible = false;
+//        }
+//        updateMainIcon();
+//        updateDistancePointsText();
+//    }
+//}
 
 - (void) setAppMode:(OAApplicationMode *)appMode
 {
@@ -677,6 +720,24 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
 }
 
+- (void)enterApproximationMode
+{
+    if (_layer != nil) {
+//        FragmentManager manager = mapActivity.getSupportFragmentManager();
+//        manager.beginTransaction().hide(this).commit();
+//        layer.setTapsDisabled(true);
+        OASnapTrackWarningViewController *bottomSheet = [[OASnapTrackWarningViewController alloc] init];
+        bottomSheet.delegate = self;
+        [bottomSheet presentInViewController:self animated:YES];
+//        AndroidUiHelper.setVisibility(mapActivity, View.GONE, R.id.map_ruler_container);
+    }
+}
+
+- (void)exitApproximationMode
+{
+    _editingContext.inApproximationMode = NO;
+}
+
 - (IBAction)closePressed:(id)sender
 {
     if (_editingContext.hasChanges)
@@ -747,9 +808,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)showSegmentRouteOptions
 {
-    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeWholeRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeAll appMode:_editingContext.appMode];
-    bottomSheet.delegate = self;
-    [bottomSheet presentInViewController:self];
+    [_mapPanel refreshMap];
+    if (_editingContext.isApproximationNeeded)
+    {
+        [self enterApproximationMode];
+    }
+    else
+    {
+        OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeWholeRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeAll appMode:_editingContext.appMode];
+        bottomSheet.delegate = self;
+        [bottomSheet presentInViewController:self];
+    }
 }
 
 - (IBAction)modeButtonPressed:(id)sender
@@ -1507,9 +1576,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) saveChangesSelected
 {
-//    if (self.isFollowTrackMode)
-//        [self startTrackNavigation];
-//    else
+    if (self.isFollowTrackMode)
+        [self startTrackNavigation];
+    else
         [self saveChanges:SHOW_TOAST showDialog:YES];
 }
 
@@ -1563,19 +1632,24 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 //                }
             }
             // TODO: add approximation
-//            else
-//            {
-//                if (editingCtx.isApproximationNeeded()) {
-//                    setMode(DIRECTION_MODE, true);
-//                    enterApproximationMode(mapActivity);
-//                } else {
-//                    GPXFile gpx = new GPXFile(Version.getFullVersion(requireMyApplication()));
-//                    gpx.addRoutePoints(points, true);
-//                    dismiss(mapActivity);
-//                    targetPointsHelper.clearAllPoints(false);
-//                    mapActions.enterRoutePlanningModeGivenGpx(gpx, appMode, null, null, true, true, MenuState.HEADER_ONLY);
-//                }
-//            }
+            else
+            {
+                if (_editingContext.isApproximationNeeded) {
+                    [self setMode:DIRECTION_MODE on:YES];
+                    [self enterApproximationMode];
+                } else {
+                    OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
+                    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+                    NSMutableArray<OAGpxRtePt *> *pointsRte = [NSMutableArray new];
+                    for (OAGpxTrkPt *trkPt in points)
+                        [pointsRte addObject:[[OAGpxRtePt alloc] initWithTrkPt:trkPt]];
+                    [gpx addRoutePoints:pointsRte addRoute:NO];
+                    [self onCloseButtonPressed];
+                    [targetPointsHelper clearAllPoints:NO];
+                    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
+                    [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+                }
+            }
         }
     }
     else
@@ -1675,6 +1749,70 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onSaveResultPressed
 {
     [self openSaveAsNewTrackMenu];
+}
+
+#pragma mark - OASnapTrackWarningBottomSheetDelegate
+
+- (void)onCancelSnapApproximation
+{
+//    toolBarController.setSaveViewVisible(true);
+    [self setMode:DIRECTION_MODE on:NO];
+    [self exitApproximationMode];
+//    updateToolbar();
+}
+
+- (void)onContinueSnapApproximation
+{
+    if (_editingContext.appMode == OAApplicationMode.DEFAULT || [_editingContext.appMode.getRoutingProfile isEqualToString:@"public_transport"])
+        _editingContext.appMode = nil;
+
+    OAGpxApproximationBottomSheetViewController *bottomSheet = [[OAGpxApproximationBottomSheetViewController alloc] initWithMode:_editingContext.appMode routePoints:[_editingContext getPointsSegments:YES route:NO]];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self animated:YES];
+}
+
+#pragma mark - OAGpxApproximationBottomSheetDelegate
+
+- (void)onCancelGpxApproximation
+{
+    [_editingContext.commandManager undo];
+    [self exitApproximationMode];
+    [self setMode:DIRECTION_MODE on:NO];
+	[self setupModeButton];
+//    updateToolbar();
+}
+
+- (void)onApplyGpxApproximation
+{
+    [self exitApproximationMode];
+    [self updateDistancePointsText];
+//    doAddOrMovePointCommonStuff();
+	[self setupModeButton];
+    if ([self isDirectionMode] || [self isFollowTrackMode]) {
+        [self setMode:DIRECTION_MODE on:NO];
+        [self startTrackNavigation];
+    }
+    [self onCloseButtonPressed];
+    if (_showSnapWarning)
+        [self dismiss];
+}
+
+- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAGpxTrkPt *> *> *)pointsList mode:(OAApplicationMode *)mode
+{
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (_layer)
+		{
+			BOOL approximationMode = _editingContext.approximationMode;
+			_editingContext.approximationMode = YES;
+			OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc] initWithLayer:_layer approximations:gpxApproximations segmentPointsList:pointsList appMode:mode];
+			if (!approximationMode || ![_editingContext.commandManager update:command])
+			{
+				[_editingContext.commandManager execute:command];
+			}
+			[self goMinimized];
+			[self setupModeButton];
+		}
+	});
 }
 
 @end

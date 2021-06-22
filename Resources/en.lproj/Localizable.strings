@@ -950,6 +950,7 @@
 "plan_route_open_existing_track" = "Open existing track";
 "plan_route_last_modified" = "Last modified";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
+"route_between_points_warning_desc" = "Next, snap your track to the nearest allowed road with one of your navigation profiles to use this option.";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
 "none_point_error" = "Please add at least one point.";
@@ -977,6 +978,8 @@
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segment %d";
 "some_of" = "%d of %d";
+"threshold_distance" = "Threshold distance";
+"select_profile" = "Select profile";
 
 // Resources
 "shared_string_resources" = "Resources";

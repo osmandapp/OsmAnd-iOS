@@ -16,7 +16,7 @@
 
 - (instancetype) initWithFileName:(NSString *)fileName;
 - (instancetype) initWithInitialPoint:(CLLocation *)latLon;
-- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode;
+- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning;
 
 - (void) cancelModes;
 

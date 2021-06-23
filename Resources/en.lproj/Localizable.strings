@@ -190,6 +190,8 @@
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
 
+"last_used" = "Last used";
+
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";

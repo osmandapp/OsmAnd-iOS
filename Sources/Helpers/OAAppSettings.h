@@ -822,6 +822,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
 
+- (void) setApplicationMode:(OAApplicationMode *)applicationMode;
+- (void) setApplicationMode:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
+
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
 

@@ -1282,7 +1282,11 @@
         stringKey = [[NSUserDefaults standardUserDefaults] objectForKey:[self getKey:mode]];
     }
 //    return [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
-    NSObject *cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+
+    NSObject *cachedValue;
+    if (!(self.key == defaultApplicationModeKey && settings.useLastApplicationModeByDefault.get))
+        cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+    
     if (!cachedValue) {
 //        NSString *key = [self getModeKey:self.key mode:mode];
 //        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
@@ -4034,11 +4038,18 @@
 
 - (void) setApplicationMode:(OAApplicationMode *)applicationMode
 {
+    [self setApplicationMode:applicationMode markAsLastUsed:YES];
+}
+
+- (void) setApplicationMode:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed
+{
     OAApplicationMode *prevAppMode = _applicationMode;
     _applicationMode = applicationMode;
     if (prevAppMode != _applicationMode)
     {
         [[NSUserDefaults standardUserDefaults] setObject:applicationMode.stringKey forKey:applicationModeKey];
+        if (markAsLastUsed)
+            [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
     }
 }

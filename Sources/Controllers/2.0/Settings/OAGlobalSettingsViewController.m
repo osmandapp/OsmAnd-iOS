@@ -12,7 +12,6 @@
 #import "OASwitchTableViewCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OATableViewCustomHeaderView.h"
-
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -28,6 +27,7 @@
     NSArray<NSDictionary *> *_data;
     NSArray<OAApplicationMode *> * _profileList;
     BOOL _isDefaultProfile;
+    BOOL _isUsingLastAppMode;
 }
 
 - (instancetype) initWithSettingsType:(EOAGlobalSettingsScreen)settingsType
@@ -100,7 +100,7 @@
             NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
                 @"name" : @"settings_preset",
                 @"title" : OALocalizedString(@"settings_preset"),
-                @"value" : _settings.defaultApplicationMode.get.toHumanString,
+                @"value" : _settings.useLastApplicationModeByDefault.get ? OALocalizedString(@"last_used") : _settings.defaultApplicationMode.get.toHumanString,
                 @"description" : OALocalizedString(@"default_profile_descr"),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : [OASettingsTableViewCell getCellIdentifier] },
@@ -131,15 +131,26 @@
         }
         case EOADefaultProfile:
         {
+            _isUsingLastAppMode = _settings.useLastApplicationModeByDefault.get;
             NSMutableArray *arr = [NSMutableArray array];
-            for (OAApplicationMode *mode in _profileList)
+            [arr addObject: @{
+                @"name" : @"last_used",
+                @"title" : OALocalizedString(@"last_used"),
+                @"value" : @(_isUsingLastAppMode),
+                @"img" : @"menu_cell_pointer.png",
+                @"type" : [OASwitchTableViewCell getCellIdentifier] }];
+            
+            if (!_isUsingLastAppMode)
             {
-                [arr addObject: @{
-                    @"name" : mode.toHumanString,
-                    @"descr" : mode.stringKey,
-                    @"mode" : mode,
-                    @"isSelected" : @(_settings.defaultApplicationMode.get == mode),
-                    @"type" : [OAMultiIconTextDescCell getCellIdentifier] }];
+                for (OAApplicationMode *mode in _profileList)
+                {
+                    [arr addObject: @{
+                        @"name" : mode.toHumanString,
+                        @"descr" : mode.stringKey,
+                        @"mode" : mode,
+                        @"isSelected" : @(_settings.defaultApplicationMode.get == mode),
+                        @"type" : [OAMultiIconTextDescCell getCellIdentifier] }];
+                }
             }
             _data = [NSArray arrayWithArray:arr];
             break;
@@ -311,6 +322,8 @@
 {
     if (_settingsType == EOAGlobalSettingsMain)
         return 1;
+    else if (_settingsType == EOADefaultProfile)
+        return _isUsingLastAppMode ? 1 : _data.count;
     else if (_settingsType == EOACarplayProfile)
         return _isDefaultProfile ? 1 : _data.count;
     else
@@ -378,23 +391,41 @@
 
 #pragma mark - Switch
 
-#pragma mark - Switch
-
 - (void) updateTableView
 {
-    if (!_isDefaultProfile)
+    if (_settingsType == EOADefaultProfile)
     {
-        [self.tableView beginUpdates];
-        for (int i = 1; i < _profileList.count; i++)
-            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
+        if (!_isUsingLastAppMode)
+        {
+            [self.tableView beginUpdates];
+            for (NSInteger i = 1; i <= _profileList.count; i++)
+                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView endUpdates];
+        }
+        else
+        {
+            [self.tableView beginUpdates];
+            for (NSInteger i = 1; i <= _profileList.count; i++)
+                [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView endUpdates];
+        }
     }
-    else
+    else if (_settingsType == EOACarplayProfile)
     {
-        [self.tableView beginUpdates];
-        for (int i = 1; i < _profileList.count; i++)
-            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
+        if (!_isDefaultProfile)
+        {
+            [self.tableView beginUpdates];
+            for (NSInteger i = 1; i < _profileList.count; i++)
+                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView endUpdates];
+        }
+        else
+        {
+            [self.tableView beginUpdates];
+            for (NSInteger i = 1; i < _profileList.count; i++)
+                [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView endUpdates];
+        }
     }
 }
 
@@ -413,6 +444,12 @@
                 [_settings.settingDoNotShowPromotions set:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
                 [_settings.settingUseAnalytics set:isChecked];
+            else if ([name isEqualToString:@"last_used"])
+            {
+                [_settings.useLastApplicationModeByDefault set:isChecked];
+                [self setupView];
+                [self updateTableView];
+            }
             else if ([name isEqualToString:@"carplay_mode_is_default_string"])
             {
                 [_settings.isCarPlayModeDefault set:isChecked];

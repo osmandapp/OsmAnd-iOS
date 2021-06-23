@@ -34,7 +34,7 @@
     if (_destinationsHelper.sortedDestinations.count > 0)
     {
         [_destinationsHelper.sortedDestinations enumerateObjectsUsingBlock:^(OADestination * _Nonnull destination, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSString *imageName = destination.parking ? @"ic_parking_pin_small" : [destination.markerResourceName stringByAppendingString:@"_small"];
+            NSString *imageName = [destination.markerResourceName stringByAppendingString:@"_small"];
             CPListItem *item = [[CPListItem alloc] initWithText:destination.desc detailText:nil image:[UIImage imageNamed:imageName]];
             item.userInfo = destination;
             [items addObject:item];

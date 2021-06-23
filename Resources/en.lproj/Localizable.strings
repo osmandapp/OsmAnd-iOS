@@ -1247,6 +1247,7 @@
 "add_work" = "Add work";
 "home_pt" = "Home";
 "work_pt" = "Work";
+"map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";

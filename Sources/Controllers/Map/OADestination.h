@@ -16,11 +16,6 @@
 @property (nonatomic) double longitude;
 @property (nonatomic) NSString *markerResourceName;
 
-@property (nonatomic) BOOL parking;
-@property (nonatomic) BOOL carPickupDateEnabled;
-@property (nonatomic) NSDate *carPickupDate;
-@property (nonatomic) NSString *eventIdentifier;
-
 @property (nonatomic) NSInteger index;
 
 @property (nonatomic) BOOL routePoint;

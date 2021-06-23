@@ -284,12 +284,6 @@
         if (!_markerView.superview)
             [_directionsView addSubview:self.markerView];
     }
-    else if (((OADestination *)_destinations[0]).parking)
-    {
-        [_markerImage setImage:[UIImage imageNamed:@"destination_parking_place"]];
-        if (!_markerView.superview)
-            [_directionsView addSubview:self.markerView];
-    }
     else
     {
         [_markerView removeFromSuperview];
@@ -305,12 +299,12 @@
     [self updateMapCenterArrow:mapCenterArrow];
 }
 
-+ (NSString *)parkingTimeStr:(OADestination *)destination shortText:(BOOL)shortText
++ (NSString *)parkingTimeStr:(NSDate *)pickupDate shortText:(BOOL)shortText
 {
-    if (!destination.carPickupDate)
+    if (!pickupDate)
         return nil;
     
-    NSTimeInterval timeInterval = [destination.carPickupDate timeIntervalSinceNow];
+    NSTimeInterval timeInterval = [pickupDate timeIntervalSinceNow];
     int hours, minutes, seconds;
     [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
     
@@ -346,14 +340,14 @@
     }
 }
 
-+ (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label shortText:(BOOL)shortText
++ (void)setParkingTimerStr:(NSDate *)pickupDate label:(UILabel *)label shortText:(BOOL)shortText
 {
-    if (!destination.carPickupDate)
+    if (!pickupDate)
         return;
     
-    NSTimeInterval timeInterval = [destination.carPickupDate timeIntervalSinceNow];
+    NSTimeInterval timeInterval = [pickupDate timeIntervalSinceNow];
     
-    label.text = [OADestinationCell parkingTimeStr:destination shortText:shortText];
+    label.text = [OADestinationCell parkingTimeStr:pickupDate shortText:shortText];
     
     if (timeInterval > 0.0)
         label.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
@@ -376,25 +370,11 @@
                 
                 [self updateMapCenterArrow:self.mapCenterArrow];
 
-                if (destination.parking)
-                {
-                    if (!_markerView.superview)
-                        [_directionsView addSubview:self.markerView];
-                }
-
                 [self updateDirection:destination imageView:self.compassImage];
                 [self updateDistanceLabel:destination];
                 [self updateOkButton:destination];
                 
-                if (destination.parking && destination.carPickupDate)
-                {
-                    [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
-                    self.infoLabel.hidden = !_firstRow;
-                }
-                else
-                {
-                    self.infoLabel.hidden = YES;
-                }
+                self.infoLabel.hidden = YES;
                 self.descLabel.lineBreakMode = NSLineBreakByTruncatingTail;
                 self.descLabel.text = destination.desc;
                 break;
@@ -419,14 +399,7 @@
     NSString *text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
     if (!_firstRow)
     {
-        if (destination.parking && destination.carPickupDate)
-        {
-            text = [text stringByAppendingString:[NSString stringWithFormat:@" — %@ (%@)", OALocalizedString(@"parking"), [OADestinationCell parkingTimeStr:destination shortText:YES]]];
-        }
-        else
-        {
-            text = [text stringByAppendingString:[NSString stringWithFormat:@" — %@", destination.desc]];
-        }
+        text = [text stringByAppendingString:[NSString stringWithFormat:@" — %@", destination.desc]];
     }
 
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text];
@@ -486,8 +459,6 @@
                 [self updateDirection:destination imageView:self.compassImage];
                 [self updateDistanceLabel:destination];
                 [self updateOkButton:destination];
-                
-                [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                 break;
             }
                 

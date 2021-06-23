@@ -42,6 +42,8 @@
 #import "OAFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -327,15 +329,6 @@ static const NSInteger _buttonsCount = 4;
             : newHeading;
             
             [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
-        }
-        
-        if (_targetPoint.type == OATargetParking && _targetPoint.targetObj)
-        {
-            OADestination *d = _targetPoint.targetObj;
-            if (d && d.carPickupDateEnabled)
-            {
-                [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
-            }
         }
     });
 }
@@ -1660,10 +1653,9 @@ static const NSInteger _buttonsCount = 4;
     {
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
         [self updateAddressLabel];
-        
-        id d = _targetPoint.targetObj;
-        if (d && [d isKindOfClass:[OADestination class]] && ((OADestination *)d).carPickupDateEnabled)
-            [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin && plugin.getParkingType)
+            [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] label:self.coordinateLabel shortText:NO];
     }
     else if (_targetPoint.type == OATargetGPXRoute)
     {
@@ -1719,6 +1711,12 @@ static const NSInteger _buttonsCount = 4;
         {
             OAFavoriteViewController *favoriteController = (OAFavoriteViewController *)self.customController;
             _imageView.image = [favoriteController getIcon];
+        }
+        else if (_targetPoint.type == OATargetParking)
+        {
+            OAFavoriteItem *item = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType PARKING]];
+            if (item)
+                _imageView.image = [item getCompositeIcon];
         }
         else
         {

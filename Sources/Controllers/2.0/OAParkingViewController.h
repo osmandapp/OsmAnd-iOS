@@ -17,7 +17,6 @@
 
 @optional
 - (void)addParking:(OAParkingViewController *)sender;
-- (void)saveParking:(OAParkingViewController *)sender parking:(OADestination *)parking;
 - (void)cancelParking:(OAParkingViewController *)sender;
 
 @end
@@ -35,7 +34,7 @@
 
 @property (weak, nonatomic) id<OAParkingDelegate> parkingDelegate;
 
-- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate;
-- (id)initWithParking:(OADestination *)parking;
+- (instancetype)initWithCoordinate:(CLLocationCoordinate2D)coordinate;
+- (instancetype)initWithParking;
 
 @end

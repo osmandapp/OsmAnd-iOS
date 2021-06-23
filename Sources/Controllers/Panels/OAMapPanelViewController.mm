@@ -52,6 +52,8 @@
 #import "OAMainSettingsViewController.h"
 #import "OABaseScrollableHudViewController.h"
 #import "OATopCoordinatesWidget.h"
+#import "OAParkingPositionPlugin.h"
+#import "OAFavoritesHelper.h"
 
 #import <EventKit/EventKit.h>
 
@@ -1697,11 +1699,21 @@ typedef enum
     {
         if (self.targetMenuView.targetPoint.type != OATargetDestination && self.targetMenuView.targetPoint.type != OATargetParking)
             return;
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[OADestinationsHelper instance] addHistoryItem:_targetDestination];
-            [[OADestinationsHelper instance] removeDestination:_targetDestination];
-        });
+        
+        if (self.targetMenuView.targetPoint.type == OATargetParking)
+        {
+            OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+            if (plugin)
+                [plugin clearParkingPosition];
+            [self targetHideContextPinMarker];
+        }
+        else
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[OADestinationsHelper instance] addHistoryItem:_targetDestination];
+                [[OADestinationsHelper instance] removeDestination:_targetDestination];
+            });
+        }
     }
     else if (self.targetMenuView.targetPoint.type == OATargetImpassableRoad)
     {
@@ -1713,7 +1725,7 @@ typedef enum
             [_mapViewController hideContextPinMarker];
         }
     }
-    else
+    else if (self.targetMenuView.targetPoint.type != OATargetParking)
     {
         OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
 
@@ -3384,52 +3396,27 @@ typedef enum
 
 - (void) addParking:(OAParkingViewController *)sender
 {
-    OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:sender.coord.latitude longitude:sender.coord.longitude];
-    
-    destination.parking = YES;
-    destination.carPickupDateEnabled = sender.timeLimitActive;
-    if (sender.timeLimitActive)
-        destination.carPickupDate = sender.date;
-    else
-        destination.carPickupDate = nil;
-    
-    UIColor *color = [_destinationViewController addDestination:destination];
-    if (color)
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getEnabledPlugin:OAParkingPositionPlugin.class];
+    if (plugin)
     {
+        [plugin addOrRemoveParkingEvent:sender.addToCalActive];
+        [plugin setParkingTime:sender.timeLimitActive ? ([sender.date timeIntervalSince1970] * 1000) : -1];
+        [plugin setParkingPosition:sender.coord.latitude longitude:sender.coord.longitude limited:sender.timeLimitActive];
+        
         if (sender.timeLimitActive && sender.addToCalActive)
-            [OADestinationsHelper addParkingReminderToCalendar:destination];
+            [OAFavoritesHelper addParkingReminderToCalendar];
+        
+        [OAFavoritesHelper setSpecialPoint:[OASpecialPointType PARKING] lat:sender.coord.latitude lon:sender.coord.longitude address:nil];
         
         [_mapViewController hideContextPinMarker];
         [self hideTargetPointMenu];
     }
-    else
-    {
-        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_marker") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
-         ] show];
-    }
-}
-
-- (void) saveParking:(OAParkingViewController *)sender parking:(OADestination *)parking
-{
-    parking.carPickupDateEnabled = sender.timeLimitActive;
-    if (sender.timeLimitActive)
-        parking.carPickupDate = sender.date;
-    else
-        parking.carPickupDate = nil;
-    
-    if (parking.eventIdentifier)
-        [OADestinationsHelper removeParkingReminderFromCalendar:parking];
-    
-    if (sender.timeLimitActive && sender.addToCalActive)
-        [OADestinationsHelper addParkingReminderToCalendar:parking];
-    
-    [_destinationViewController updateDestinations];
-    [self hideTargetPointMenu];
 }
 
 - (void) cancelParking:(OAParkingViewController *)sender
 {
     [self hideTargetPointMenu];
+    
 }
 
 #pragma mark - OAGPXWptViewControllerDelegate
@@ -3583,10 +3570,7 @@ typedef enum
     NSString *caption = destination.desc;
     UIImage *icon = [UIImage imageNamed:destination.markerResourceName];
     
-    if (destination.parking)
-        targetPoint.type = OATargetParking;
-    else
-        targetPoint.type = OATargetDestination;
+    targetPoint.type = OATargetDestination;
     
     targetPoint.targetObj = destination;
     

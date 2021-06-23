@@ -204,6 +204,8 @@
         
         OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
         targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
+        if (storedItem && storedItem.specialPointType == [OASpecialPointType PARKING])
+            targetPoint.type = OATargetParking;
         
         targetPoint.icon = [self getFavoriteImage:favLoc];
         

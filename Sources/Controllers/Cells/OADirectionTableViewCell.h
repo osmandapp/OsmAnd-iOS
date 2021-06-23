@@ -15,4 +15,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *descIcon;
 @property (weak, nonatomic) IBOutlet UILabel *descLabel;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLabelTopConstraint;
+
+- (void) setTitle:(NSString *)title andDescription:(NSString *)description;
+
 @end

@@ -145,7 +145,6 @@
     if (destItem.destination.parking)
     {
         dirCell.leftIcon.image = [UIImage imageNamed:@"ic_parking_pin_small"];
-        [dirCell.titleLabel setText:destItem.destination.desc];
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
         
         NSMutableString *descText = [NSMutableString string];
@@ -161,16 +160,14 @@
             [descText appendString:parkingStr];
         }
         
-        [dirCell.descLabel setText:descText];
+        [dirCell setTitle:destItem.destination.desc andDescription:descText];
     }
     else
     {
         dirCell.leftIcon.image = [UIImage imageNamed:[destItem.destination.markerResourceName stringByAppendingString:@"_small"]];
-        [dirCell.titleLabel setText:destItem.destination.desc];
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
-        [dirCell.descLabel setText:destItem.distanceStr];
+        [dirCell setTitle:destItem.destination.desc andDescription:destItem.distanceStr];
     }
-    dirCell.descIcon.hidden = (destItem.distanceStr.length == 0);
 }
 
 - (void)updateDistanceAndDirection

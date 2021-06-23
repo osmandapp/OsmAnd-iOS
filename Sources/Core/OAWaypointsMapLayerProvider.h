@@ -1,5 +1,5 @@
 //
-//  OAFavoritesMapLayerProvider.h
+//  OAWaypointsMapLayerProvider.h
 //  OsmAnd
 //
 //  Created by Paul on 4/10/19.

@@ -130,7 +130,7 @@
 "sett_units" = "Unidades";
 "sett_km" = "Quilómetros";
 "sett_ml" = "Milhas";
-"sett_zoom" = "Botão de zoom";
+"sett_zoom" = "Botão de ampliação";
 "sett_show" = "Mostrar";
 "sett_notshow" = "Não mostrar";
 "sett_loc_fmt" = "Formato de localização";
@@ -326,9 +326,9 @@
 "today" = "Hoje";
 "yesterday" = "Ontem";
 "shared_string_widgets" = "Widgets";
-"relief_smoothness_factor_descr" = "Terreno preferido: plano ou inclinado.";
+"relief_smoothness_factor_descr" = "Terreno preferido: plano ou montanhoso.";
 "route_via" = "Via";
-"right_side_navigation" = "Circulação pela direita";
+"right_side_navigation" = "Condução pela direita";
 "si_mi_meters" = "Milhas/metros";
 "nothing_found" = "Não foi encontrado nada: %@";
 "nothing_found_descr" = "Altere a pesquisa ou aumente o raio dela";
@@ -775,7 +775,7 @@
 "avoid_in_routing_descr" = "Evitar estradas com portagem, não pavimentadas e balsas/ferries";
 "prefer_in_routing_descr" = "Preferir autoestradas";
 "choose_auto_follow_route_descr" = "Tempo até o mapa ser centrado na posição atual";
-"auto_zoom_map_descr" = "Nível de zoom automático de acordo com a sua velocidade (enquanto o mapa é sincronizado com a posição atual)";
+"auto_zoom_map_descr" = "Nível de ampliação automático de acordo com a velocidade (enquanto o mapa é sincronizado com a posição atual).";
 "snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação";
 "show_warnings_descr" = "Configure avisos de moderação de velocidade (limites de velocidade, portagens, lombas, passadeiras, túneis), radares e a faixa de rodagem";
 "speak_descr" = "Configure os avisos por voz de nomes de ruas, avisos de moderação de velocidade (portagens, lombas, passadeiras), radares e limites de velocidade";
@@ -795,7 +795,7 @@
 "directions_other" = "Outras direções";
 "shared_string_turn" = "Virar";
 "route_is_too_long_v2" = "Esta rota pode ser muito longa para calcular. Por favor, adicione destinos intermédios se nenhum resultado for encontrado dentro de 10 minutos.";
-"use_displayed_track_for_navigation" = "Quer usar o trilho mostrado para navegação?";
+"use_displayed_track_for_navigation" = "Usar o trajeto mostrado para a navegação?";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Erro no cálculo da rota";
@@ -1198,7 +1198,7 @@
 "quick_action_list_descr" = "Toque nas páginas deste botão de ação na lista abaixo";
 "add_map_style" = "Adicionar estilo do mapa";
 "toggle_local_edits" = "Alternar edições locais do OSM";
-"toggle_auto_zoom" = "Zoom automático ligado/desligado";
+"toggle_auto_zoom" = "Ampliação automática ligada/desligada";
 "search_results" = "Procurar resultados";
 "quick_action_name_alert" = "O nome da ação rápida foi alterado para %@ para evitar duplicação.";
 "quick_action_screen_header" = "Ecrã %ld";
@@ -1221,13 +1221,13 @@
 "quick_action_add_dest_descr" = "Tocar neste botão de ação define o destino para o centro do mapa. Qualquer destino previamente selecionado torna-se o último destino intermédio.";
 "quick_action_first_intermediate_descr" = "Tocar neste botão de ação adiciona o primeiro destino intermédio no ponto central do mapa.";
 "quick_action_replace_dest_descr" = "Tocar nesse botão de ação define o destino para o ponto central do mapa, descartando o destino definido anteriormente (se houver).";
-"quick_action_autozoom_descr" = "Tocar neste botão de ação liga/desliga o modo de zoom automático do mapa de acordo com a velocidade atual.";
+"quick_action_autozoom_descr" = "Tocar neste botão de ação liga/desliga o modo de ampliação automática do mapa de acordo com a velocidade atual.";
 "quick_action_toggle_notes_descr" = "Toque neste botão de ação para mostrar ou ocultar as notas online do OSM.";
 "quick_action_toggle_edits_descr" = "Toque neste botão de ação para mostrar ou ocultar edições offline do OSM.";
 "get_discount_first_few_parts" = "%@ para primeiro %@";
 "hide_poi_action" = "Ocultar POI";
-"auto_zoom_on" = "Zoom automático ativado";
-"auto_zoom_off" = "Zoom automático desativado";
+"auto_zoom_on" = "Ampliação automática ativada";
+"auto_zoom_off" = "Ampliação automática desativada";
 "show_gpx" = "Mostrar trilho";
 "hide_gpx" = "Ocultar trilho";
 "show_edits" = "Mostrar edições locais";
@@ -1698,7 +1698,7 @@
 "quick_action_remove_next_destination" = "Eliminar o ponto de destino mais próximo";
 "shared_string_terrain" = "Terreno";
 "announce" = "Anunciar";
-"profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem.";
+"profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem";
 "consider_limitations_param" = "Considerar limitações temporárias";
 "two" = "Dois";
 "shared_string_max" = "Máximo";
@@ -1746,7 +1746,7 @@
 "nav_type_direct_to" = "Direto ao ponto";
 "edit_profile_list" = "Editar lista de perfis";
 "vk" = "VK";
-"res_zoom_warning" = "O valor mínimo de zoom não pode ser igual ou superior ao zoom máximo";
+"res_zoom_warning" = "O valor mínimo de ampliação não pode ser igual ou superior ao nível de ampliação máximo";
 "map_settings_available_srtm_maps_descr" = "São necessários mapas adicionais para ver sombras de relevo no mapa";
 "nav_type_brouter" = "BRouter";
 "nav_type_osmand" = "OsmAnd (roteamento offline)";
@@ -1842,12 +1842,12 @@
 "osm_editing_settings_descr" = "As configurações deste plugin são globais e aplicam-se a todos os perfis.";
 "shared_string_loading" = "A carregar…";
 "res_offlineSQL_URL_warning" = "Não suportado para este tipo de mapa";
-"res_zoom_invalid_value" = "Os valores de zoom devem estar no intervalo 1 - 22";
+"res_zoom_invalid_value" = "Os valores de ampliação devem estar no intervalo 1 - 22";
 "res_expire_warning" = "O tempo de expiração deve ser um número entre 0 e 10000000";
 "res_url_warning" = "O URL não pode estar vazio";
 "res_name_warning" = "O nome do ficheiro não pode estar vazio";
 "res_expire_time_desc" = "Tempo de expiração em minutos. Os mosaicos em ficheiros temporários serão carregados novamente após um tempo especificado. Deixe este campo vazio se não precisar recarregar os mosaicos para esta origem.\nUm dia corresponde a 1440 minutos.\nUma semana corresponde a 10 080 minutos.\n30 dias correspondem a 43 200 minutos.";
-"res_zoom_levels_desc" = "Estes parâmetros irão afetar a visualização do mapa quando utilizado como um tipo de mapa ou mapa na camada superior/inferior\n\nTipo de mapa: o mapa será limitado aos zooms selecionados.\n\nCamada superior / inferior: níveis de zoom em que os mosaicos serão visíveis. A escala ascendente ou descendente ocorrerá acima ou abaixo dos valores definidos.";
+"res_zoom_levels_desc" = "Estes parâmetros irão afetar a visualização do mapa quando utilizado como um tipo de mapa ou mapa na camada superior / inferior.\n\nTipo de mapa: o mapa será limitado aos níveis de ampliação selecionados.\n\nCamada superior / inferior: níveis de ampliação em que os mosaicos serão visíveis. A escala ascendente ou descendente ocorrerá acima ou abaixo dos valores definidos.";
 "res_source_format" = "Formato da origem";
 "res_mercator" = "Projeção de Mercator";
 "res_expire_time" = "Tempo de validade";
@@ -1950,7 +1950,7 @@
 "do_not_rotate" = "Não rodar";
 "settings_app_theme" = "Tema da aplicação";
 "map_settings_line_density_slowdown_warning" = "A alta densidade de linhas pode abrandar a renderização do mapa";
-"map_settings_contour_zoom_level_descr" = "Selecione o nível de zoom, a partir do qual as curvas de nível serão mostradas";
+"map_settings_contour_zoom_level_descr" = "Selecione o nível de ampliação, a partir do qual as curvas de nível serão mostradas";
 "map_settings_line_density" = "Densidade da linha";
 "map_settings_line_width" = "Espessura da linha";
 "map_settings_add_maps_desc" = "Pode adicionar novos mapas com links, ou importando ficheiros SQLite.";
@@ -1958,7 +1958,7 @@
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_show_slider_map" = "Mostrar controlo deslizante no mapa";
 "map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo";
-"map_settings_zoom_level_description" = "Definir o nível mínimo e máximo de zoom para mostrar a camada";
+"map_settings_zoom_level_description" = "Definir o nível mínimo e máximo de ampliação para mostrar a camada";
 "map_settings_layer_transparency" = "Transparência da camada";
 "street_level_imagery" = "Imagens das ruas";
 "map_settings_install_more" = "Instalar mais...";
@@ -1980,7 +1980,7 @@
 "favorite_friends_category" = "Amigos";
 "default_color_descr" = "Esta cor será usada para todos os novos favoritos adicionados ao grupo.";
 "default_color" = "Cor predefinida";
-"fav_point_emoticons_message" = "O nome do favorito foi alterado para '%@' para guardar a expressão que contém os emoticons num ficheiro.";
+"fav_point_emoticons_message" = "O nome do favorito foi alterado para \"%@\" para poder guardar corretamente o texto com emoticons num ficheiro.";
 "fav_point_dublicate_message" = "O nome do favorito especificado já está a ser utilizado, foi alterado para '%@' para evitar a duplicação.";
 "fav_point_dublicate" = "Nome de favorito duplicado";
 "shape" = "Forma";
@@ -1996,10 +1996,10 @@
 "fav_add_new_group" = "Adicionar novo grupo";
 "map_update_warning" = "Quer recarregar os dados dos mosaicos a partir da Internet?";
 "use_of_downloaded_map" = "Agora pode usar este mapa offline como origem principal do mapa, numa camada superior ou inferior";
-"size_of_downloaded_data" = "A grande diferença entre os níveis de zoom pode aumentar o tamanho dos dados descarregados.";
+"size_of_downloaded_data" = "A grande diferença entre os níveis de ampliação pode aumentar o tamanho dos dados descarregados.";
 "online_sources" = "Origens online";
 "select_online_source" = "Selecionar origem";
-"preview_of_selected_zoom_levels" = "Vista prévia dos níveis de zoom selecionados";
+"preview_of_selected_zoom_levels" = "Vista prévia dos níveis de ampliação selecionados";
 "download_size" = "Tamanho do descarregamento";
 "number_of_tiles" = "Número de mosaicos";
 "move_map_to_select_area" = "Mover o mapa para selecionar a área necessária.";

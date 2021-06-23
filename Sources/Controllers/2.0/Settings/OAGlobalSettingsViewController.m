@@ -317,14 +317,14 @@
         if (!_isUsingLastAppMode)
         {
             [self.tableView beginUpdates];
-            for (int i = 1; i <= _profileList.count; i++)
+            for (NSInteger i = 1; i <= _profileList.count; i++)
                 [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView endUpdates];
         }
         else
         {
             [self.tableView beginUpdates];
-            for (int i = 1; i <= _profileList.count; i++)
+            for (NSInteger i = 1; i <= _profileList.count; i++)
                 [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView endUpdates];
         }
@@ -334,14 +334,14 @@
         if (!_isDefaultProfile)
         {
             [self.tableView beginUpdates];
-            for (int i = 1; i < _profileList.count; i++)
+            for (NSInteger i = 1; i < _profileList.count; i++)
                 [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView endUpdates];
         }
         else
         {
             [self.tableView beginUpdates];
-            for (int i = 1; i < _profileList.count; i++)
+            for (NSInteger i = 1; i < _profileList.count; i++)
                 [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView endUpdates];
         }

@@ -191,6 +191,8 @@
 "favorites_empty" = "You have not saved any favorite points";
 
 "carplay_active_message" = "Map is displayed via CarPlay";
+"carplay_profile" = "CarPlay profile";
+"carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
 
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
@@ -2191,6 +2193,7 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+"default" = "Default";
 
 
 //Poi catagories

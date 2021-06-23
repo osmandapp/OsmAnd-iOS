@@ -679,6 +679,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OAApplicationMode* applicationMode;
 @property (nonatomic) OACommonString* availableApplicationModes;
 @property (nonatomic) OACommonAppMode* defaultApplicationMode;
+@property (nonatomic) OACommonAppMode* carPlayMode;
+@property (nonatomic) OACommonBoolean *isCarPlayModeDefault;
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
 

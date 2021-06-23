@@ -2105,3 +2105,10 @@
 "no_waypoints_found" = "Маршрутні точки не знайдені";
 "context_menu_item_edit_waypoint" = "Змінити маршрутну точку GPX";
 "replace_waypoint_confirmation" = "Ви дійсно бажаєте замінити маршрутну точку %@?";
+"default" = "Типовий";
+"select_profile" = "Вибрати профіль";
+"threshold_distance" = "Обмеження відстані";
+"route_between_points_warning_desc" = "Потім зафіксуйте трек до найближчої дозволеної дороги за допомогою одного з навігаційних профілів, щоб скористатися цим параметром.";
+"carplay_profile_descr" = "Профіль, який застосовуватиметься для з'єднання з CarPlay.";
+"carplay_profile" = "Профіль CarPlay";
+"last_used" = "Востаннє використовувалось";

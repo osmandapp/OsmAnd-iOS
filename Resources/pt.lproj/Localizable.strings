@@ -1877,7 +1877,7 @@
 "empty_filename" = "O nome do ficheiro não pode estar vazio";
 "none_point_error" = "Acrescente pelo menos um ponto.";
 "gpx_saved_successfully" = "Ficheiro GPX guardado em %@";
-"plan_route_exit_message" = "Tens a certeza que quer fechar a rota do Plano sem o guardar? Vai perder todas as alterações.";
+"plan_route_exit_message" = "Tem a certeza que quer fechar a rota do Plano sem a guardar? Vai perder todas as alterações.";
 "route_between_points_add_track_desc" = "Selecione um ficheiro de trilho no qual será adicionado um novo segmento.";
 "plan_route_last_modified" = "Última alteração";
 "plan_route_open_existing_track" = "Abrir trilho existente";
@@ -2097,3 +2097,10 @@
 "no_waypoints_found" = "Não há pontos de rota";
 "replace_waypoint_confirmation" = "Quer mesmo substituir o ponto %@?";
 "context_menu_item_edit_waypoint" = "Editar ponto GPX";
+"default" = "Predefinido";
+"route_between_points_warning_desc" = "Em seguida, ajuste o trilho para a estrada mais próxima permitida com um dos seus perfis de navegação para usar esta opção.";
+"carplay_profile_descr" = "Perfil que será utilizado ao conectar-se ao CarPlay.";
+"carplay_profile" = "Perfil CarPlay";
+"last_used" = "Último usado";
+"select_profile" = "Selecionar perfil";
+"threshold_distance" = "Limite de distância";

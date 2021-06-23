@@ -13,7 +13,6 @@
 #import "OAMapPanelViewController.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OAAppSettings.h"
 
 #import <CarPlay/CarPlay.h>
 

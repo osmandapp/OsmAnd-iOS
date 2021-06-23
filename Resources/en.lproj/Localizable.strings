@@ -192,7 +192,7 @@
 
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
-"carplay_profile_descr" = "Profile that will be used after connection to Carplay.";
+"carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
 
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";

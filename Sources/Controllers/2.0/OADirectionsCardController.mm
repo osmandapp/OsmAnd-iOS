@@ -141,7 +141,6 @@
     OADestinationItem *destItem = item;
     
     dirCell.separatorInset = UIEdgeInsetsMake(0.0, dirCell.titleLabel.frame.origin.x, 0.0, 0.0);
-    
     dirCell.leftIcon.image = [UIImage imageNamed:[destItem.destination.markerResourceName stringByAppendingString:@"_small"]];
     [dirCell.titleLabel setText:destItem.destination.desc];
     dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);

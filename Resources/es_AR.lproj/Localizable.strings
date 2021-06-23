@@ -2124,3 +2124,10 @@
 "context_menu_item_edit_waypoint" = "Editar punto de ruta GPX";
 "base_profile_descr_carplay" = "Conducir con el modo CarPlay";
 "m_style_carplay" = "CarPlay";
+"default" = "Predefinido";
+"select_profile" = "Elegir perfil";
+"threshold_distance" = "Distancia de umbral";
+"route_between_points_warning_desc" = "A continuación, ajusta la traza al camino permitido más cercano con un perfil de navegación.";
+"carplay_profile_descr" = "Perfil usado al conectar con CarPlay.";
+"carplay_profile" = "Perfil de CarPlay";
+"last_used" = "Último usado";

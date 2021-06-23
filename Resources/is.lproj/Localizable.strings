@@ -223,9 +223,9 @@
 "other_options" = "Aðrir valkostir";
 "add_parking" = "Bæta við sem staðsetningu bílastæðis";
 "add_parking_short" = "Bæta við bílastæði";
-"add_waypoint" = "Bæta leiðarpunkti við feril";
-"add_waypoint_short" = "Bæta við leiðarpunkti";
-"edit_waypoint_short" = "Breyta leiðarpunkti";
+"add_waypoint" = "Bæta ferilpunkti við feril";
+"add_waypoint_short" = "Bæta við ferilpunkti";
+"edit_waypoint_short" = "Breyta ferilpunkti";
 "more" = "Meira";
 "parking_marker" = "Merki fyrir bílastæði";
 "time_limited" = "Með tímamörkum";
@@ -315,7 +315,7 @@
 "product_desc_track_recording" = "Virkjar eiginleikann að geta skráð og vistað ferlana þína";
 "product_desc_ext_track_recording" = "Skráðu ferlana þína og vistaðu þá handvirkt með OsmAnd ferilskráningar-viðbótinni. Flyttu út ferilinn þinn sem GPX-skrá, deildu henni eða jafnvel geturðu notað hana sem framlag í OpenStreetMap verkefnið. Notadrjúgt verkfæri fyrir hlaupara, hjólafólk, gangandi vegfarendur og hvern þann sem hefur áhuga á að skrá ferðir sínar.";
 "product_title_trip_planning" = "Skipulagning ferða";
-"product_desc_trip_planning" = "Skipulegðu ferðina þína, bættu við leiðarpunktum, mældu vegalengd á áfangastað - með aðstoð þessarar viðbótar";
+"product_desc_trip_planning" = "Skipulegðu ferðina þína, bættu við ferilpunktum, mældu vegalengd á áfangastað - með aðstoð þessarar viðbótar";
 "product_desc_ext_trip_planning" = "Viðbótin fyrir skipulagningu ferða gerir þér kleift að búa til þína eigin ferð á kortinu, vista hana, mæla vegalengdir, o.s.frv. Hún er hugsuð fyrir fljótlegan undirbúning ferðar frekar en nákvæma samsetningu leiða.";
 "product_title_africa" = "Afríka";
 "product_desc_africa" = "Ótakmörkuð niðurhöl korta af Afríku";
@@ -361,7 +361,7 @@
 "language_short" = "Tungumál";
 "open_url" = "Opna síðu í vafra";
 "no_other_translations" = "Það eru engar aðrar þýðingar";
-"wpt_remove_q" = "Fjarlægja leiðarpunkt?";
+"wpt_remove_q" = "Fjarlægja ferilpunkt?";
 "gpx_select_track" = "Veldu feril";
 "gpx_curr_new_track" = "Núverandi ferill";
 "enter_name" = "Settu inn heiti";
@@ -384,10 +384,10 @@
 "moving_time" = "Tími á ferðinni";
 "change_group" = "Skipta um hóp";
 "change_color" = "Breyta lit";
-"wpt_select" = "Veldu leiðarpunkta";
-"gpx_remove_wpts_q" = "Viltu fjarlægja valda leiðarpunkta?";
+"wpt_select" = "Veldu ferilpunkta";
+"gpx_remove_wpts_q" = "Viltu fjarlægja valda ferilpunkta?";
 "create_new_trip" = "Búa til nýjan feril";
-"editing_waypoints" = "Breytingar á leiðarpunktum";
+"editing_waypoints" = "Breytingar á ferilpunktum";
 "select_wpt_on_map" = "Veldu punkt á kortinu til að bæta í ferilinn";
 "gpx_rename_q" = "Endurnefna feril";
 "gpx_enter_new_name" = "Settu inn nýtt nafn fyrir ferilinn";
@@ -1908,10 +1908,10 @@
 "shared_string_preparing" = "Undirbý";
 "shared_string_import_complete" = "Innflutningi lokið";
 "shared_string_importing" = "Innflutningurí gangi";
-"ios_release_3_80" = "• Kynnt til sögunnar “Forritssnið\" með sjálfstæðum stillingum\n• Ný framsetning stillinga eftir sniðum og gerðum: leiðsögn, almennt, kort og skjár\n• Hægt að flytja stillingar inn/út\n• Bætt við gagnagjöfum fyrir myndir af netinu\n• Hægt að sækja nettengd kort í skyndiminni\n• Lagfærð reiknirit fyrir \"Leit\"\n";
+"ios_release_3_80" = "• Kynnt til sögunnar \"Forritssnið\" með sjálfstæðum stillingum\n• Ný framsetning stillinga eftir sniðum og gerðum: leiðsögn, almennt, kort og skjár\n• Hægt að flytja stillingar inn/út\n• Bætt við gagnagjöfum fyrir myndir af netinu\n• Hægt að sækja nettengd kort í skyndiminni\n• Lagfærð reiknirit fyrir \"Leit\"\n";
 "road_max_speed_descr" = "Setur hámarksferðahraða fyrir alla vegi á leiðinni. Lækkar forgang vega sem merktir eru með hraðamörkum sem eru hærri en hámarkið.";
 "road_min_speed_descr" = "Setur lágmarksferðahraða fyrir alla vegi á leiðinni. Hækkar forgang vega sem merktir eru með hraðamörkum sem eru lægri en lágmarkið.";
-"ios_release_3_90" = "• Kynnt til sögunnar “Skipuleggja leið\" aðgerðin til að skipuleggja ferðir í framtíðinni, þar sem hægt er að útbúa leiðarhluta með mismunandi gerðum leiðsagnar\n• Bætt við valkosti til að bæta áttavita ofan á mælistiku út frá miðju hrings\n• Bætt við valkostinum \"Merkingar á þekju merkisstaða\" sem gerir kleift að birta nöfn merkisstaða, leiðarpunkta og kortamerkja á kortinu\n• Bætt við flýtiaðgerðum fyrir sýnileika hæðarlína og yfirborðs á kortinu, breytingar á notkunarsniðum og til að eyðanæsta millipunkti\n• Lagfærð vandamál með leitarflokka Wikipedia sem vantaði\n• Innflutningur stillinga: lagfærðir gallar, bættur stuðningur við allar gerðir gagna sem tiltækar eru í OsmAnd\n• Breytingar í OpenStreetMap: lagfært val á tíma og það að ekki var hægt að breyta athugasemdum við breytingasett\n";
+"ios_release_3_90" = "• Kynnt til sögunnar “Skipuleggja leið\" aðgerðin til að skipuleggja ferðir í framtíðinni, þar sem hægt er að útbúa leiðarhluta með mismunandi gerðum leiðsagnar\n• Bætt við valkosti til að bæta áttavita ofan á mælistiku út frá miðju hrings\n• Bætt við valkostinum \"Merkingar á þekju merkisstaða\" sem gerir kleift að birta nöfn merkisstaða, ferilpunkta og kortamerkja á kortinu\n• Bætt við flýtiaðgerðum fyrir sýnileika hæðarlína og yfirborðs á kortinu, breytingar á notkunarsniðum og til að eyða næsta millipunkti\n• Lagfærð vandamál með leitarflokka Wikipedia sem vantaði\n• Innflutningur stillinga: lagfærðir gallar, bættur stuðningur við allar gerðir gagna sem tiltækar eru í OsmAnd\n• Breytingar í OpenStreetMap: lagfært val á tíma og það að ekki var hægt að breyta athugasemdum við breytingasett\n";
 "vk" = "VK";
 "road_speeds_descr" = "Þessi viðföng geta haft áhrif á útreikning leiða.";
 "road_speeds" = "Hraði á vegum";
@@ -2086,3 +2086,18 @@
 
 // Shared Strings
 "shared_string_enable" = "Virkja";
+"replace_waypoint_confirmation" = "Ertu viss um að þú viljir skipta út ferilpunktinum %@?";
+"no_waypoints_found" = "Engir ferilpunktar fundust";
+"context_menu_item_edit_waypoint" = "Breyta GPX-ferilpunkti";
+"app_restart_required" = "Endurræsingar forrits er krafist til að virkja sumar stillingar.";
+"approximate_file_size" = "Áætluð skráarstærð: %@";
+"gpx_upload_private_visibility_descr" = "\"Einka\" þýðir að ferillinn birtist ekki á neinum opinberum listum, en ferilpunktar í ótímasettri röð eru tiltækir í gegnum opinbert GPS API-forritsviðmót án tímamerkja.";
+"gpx_upload_trackable_visibility_descr" = "\"Rekjanlegt\" þýðir að ferillinn birtist ekki á neinum opinberum listum, en meðhöndlaðir ferilpunktar með tímamerkjum úr ferlinum (sem ekki er hægt að tengja beint við þig) munu birtast í gögnum sem eru sótt í gegnum opinbert GPS API-forritsviðmót.";
+"gpx_upload_identifiable_visibility_descr" = "\"Auðkennanlegt\" þýðir að ferillinn birtist í GPS-ferlunum þínum og á opinberum listum yfir GPS-ferla, sem þýðir að aðrir notendur geta sútt frumferilinn og tengt þær upplýsingar við notandanafnið þitt. Opinberir ferilpunktar með tímamerkjum sem eru sóttir í gegnum opinbera GPS API-forritsviðmótið vísa í ferlasíðuna þína.";
+"gpx_upload_public_visibility_descr" = "\"Opinbert\" þýðir að ferillinn birtist í GPS-ferlunum þínum og á opinberum listum yfir GPS-ferla, þar sem ferilpunktar eru með tímamerkjum á frumsniði. Gögn sem eru sótt í gegnum opinbert GPS API-forritsviðmót vísa ekki í ferlasíðuna þína. Tímamerki ferilpunkta eru ekki tiltæk í gegnum opinbera GPS API-forritsviðmótið og er ekki raðað í tímaröð.";
+"gpxup_private" = "Einka";
+"gpxup_trackable" = "Rekjanlegt";
+"gpxup_identifiable" = "Auðkennanlegt";
+"gpxup_public" = "Opinbert";
+"restart" = "Endurræsa";
+"shared_string_wifi_only" = "Einungis á Wi-Fi netum";

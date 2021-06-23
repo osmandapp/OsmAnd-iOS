@@ -67,7 +67,7 @@
         _filterHelper = [OAPOIFiltersHelper sharedInstance];
         _filter = filter;
         _editMode = _filter != [_filterHelper getCustomPOIFilter];
-        _searchResultSelected = [NSMapTable new];
+        _searchResultSelected = [NSMapTable weakToStrongObjectsMapTable];
         [self initData];
     }
     return self;
@@ -173,7 +173,7 @@
         NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
         NSString *textCategories = [NSString stringWithFormat:@"\n%@: %li", OALocalizedString(@"categories"), _countShowCategories];
-        UIFont *fontCategories = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+        UIFont *fontCategories = [UIFont systemFontOfSize:13];
         UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : UIColorFromRGB(color_text_footer);
         NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 

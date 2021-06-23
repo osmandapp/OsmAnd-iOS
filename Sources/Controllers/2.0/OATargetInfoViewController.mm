@@ -687,7 +687,13 @@
     
     _nearbyImagesRowInfo = nearbyImagesRowInfo;
 }
-	
+
+-(void)handleLongPressToCopy:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
+        [[UIPasteboard generalPasteboard] setString:[OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES]];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -716,7 +722,8 @@
             
             cell.collapsableView = coordinateView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
-            
+            [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopy:)]];
+
             return cell;
         }
         else if (info.collapsable)

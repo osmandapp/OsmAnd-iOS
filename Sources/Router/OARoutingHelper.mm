@@ -23,6 +23,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
 #import "OATransportRoutingHelper.h"
+#import "OAGpxRouteApproximation.h"
 
 #import <Reachability.h>
 #import <OsmAndCore/Utilities.h>
@@ -1276,6 +1277,24 @@ static BOOL _isDeviatedFromRoute = false;
 - (float) getCurrentMaxSpeed
 {
     return [_route getCurrentMaxSpeed];
+}
+
+- (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end
+{
+	return [_provider getRoutingEnvironment:mode start:start end:end];
+}
+
+- (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
+{
+	return [_provider generateGpxPoints:env gctx:gctx locationsHolder:locationsHolder];
+}
+
+- (SHARED_PTR<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
+														   gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
+														 points:(std::vector<SHARED_PTR<GpxPoint>> &)points
+												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+	return [_provider calculateGpxApproximation:env gctx:gctx points:points resultMatcher:resultMatcher];
 }
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards

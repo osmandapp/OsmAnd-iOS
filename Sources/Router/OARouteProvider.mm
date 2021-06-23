@@ -19,6 +19,9 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAMapUtils.h"
+#import "OALocationsHolder.h"
+#import "OAResultMatcher.h"
+#import "OAGpxRouteApproximation.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -793,26 +796,35 @@
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end
 {
-    OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
-        params.mode = mode;
-        params.start = start;
-        params.end = end;
-        return [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
+	OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
+	params.mode = mode;
+	params.start = start;
+	params.end = end;
+	return [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
 }
 
-// TODO: sync with Android in GPX task
-//public List<GpxPoint> generateGpxPoints(RoutingEnvironment env, GpxRouteApproximation gctx, LocationsHolder locationsHolder) {
-//    return env.router.generateGpxPoints(gctx, locationsHolder);
-//}
-//
-//public GpxRouteApproximation calculateGpxPointsApproximation(RoutingEnvironment env, GpxRouteApproximation gctx, List<GpxPoint> points) throws IOException, InterruptedException {
-//    if (points != null && points.size() > 1) {
-//        if (!Algorithms.isEmpty(points)) {
-//            return env.router.searchGpxRoute(gctx, points);
-//        }
-//    }
-//    return null;
-//}
+- (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(SHARED_PTR<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
+{
+    return env.router->generateGpxPoints(gctx, locationsHolder.getLatLonList);
+}
+
+- (SHARED_PTR<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
+														   gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
+														 points:(std::vector<SHARED_PTR<GpxPoint>> &)points
+												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+	const auto resultAcceptor =
+	[resultMatcher]
+	(SHARED_PTR<GpxRouteApproximation> approximation) -> bool
+	{
+		OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
+		[resultMatcher publish:approx];
+		return true;
+	};
+	
+	env.router->searchGpxRoute(gctx, points, resultAcceptor);
+	return gctx;
+}
 
 - (OARoutingEnvironment *) calculateRoutingEnvironment:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute skipComplex:(BOOL)skipComplex
 {

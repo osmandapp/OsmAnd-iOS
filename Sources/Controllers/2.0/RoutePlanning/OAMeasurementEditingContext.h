@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
     EOAAddPointModeAfter
 };
 
-@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxRtePt, OAGpxTrkSeg, OARoadSegmentData, OAGPXMutableDocument;
+@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxRtePt, OAGpxTrkSeg, OARoadSegmentData, OAGPXMutableDocument, OAGpxRouteApproximation;
 
 @protocol OASnapToRoadProgressDelegate
 
@@ -56,11 +56,13 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 @property (nonatomic) EOACalculationMode lastCalculationMode;
 
 @property (nonatomic) EOAAddPointMode addPointMode;
+@property (nonatomic, assign) BOOL approximationMode;
 
 @property (nonatomic) NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *roadSegmentData;
 
 - (NSArray<OAGpxTrkPt *> *) getAllPoints;
 - (NSArray<OAGpxTrkPt *> *) getPoints;
+- (NSArray<NSArray<OAGpxTrkPt *> *> *) getPointsSegments:(BOOL)plain route:(BOOL)route;
 - (NSArray<OAGpxTrkPt *> *) getBeforePoints;
 - (NSArray<OAGpxTrkPt *> *) getAfterPoints;
 - (NSInteger) getPointsCount;
@@ -84,6 +86,8 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) addPoint:(OAGpxTrkPt *)pt;
 - (void) addPoint:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode;
 - (void) addPoint:(NSInteger)position point:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode;
+
+- (NSArray<OAGpxTrkPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAGpxTrkPt *> *)originalPoints mode:(OAApplicationMode *)mode;
 
 - (double) getRouteDistance;
 - (BOOL) isNewData;
@@ -120,5 +124,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (BOOL) hasChanges;
 
 - (BOOL) canSplit:(BOOL)after;
+
+- (void) resetAppMode;
 
 @end

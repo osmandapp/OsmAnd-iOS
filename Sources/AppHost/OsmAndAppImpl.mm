@@ -279,6 +279,7 @@
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
+    settings.simulateRouting = NO;
     settings.applicationMode = settings.defaultApplicationMode.get;
     [_data setLastMapSourceVariant:settings.applicationMode.variantKey];
     
@@ -1207,7 +1208,7 @@
     settings.lastRoutingApplicationMode = settings.applicationMode;
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
-        settings.applicationMode = settings.defaultApplicationMode.get;
+        settings.applicationMode = _carPlayActive ? [OAAppSettings.sharedManager.carPlayMode get] : [settings.defaultApplicationMode get];
     });
 }
 

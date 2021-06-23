@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *headerViewCollapsedHeight;
 
 @end
 
@@ -119,6 +120,14 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (BOOL) animateShow
 {
     return YES;
+}
+
+- (void) setHeaderViewVisibility:(BOOL)hidden
+{
+    self.headerView.hidden = hidden;
+    self.headerViewCollapsedHeight.constant = hidden ? 0. : 57.;
+    [self.view setNeedsUpdateConstraints];
+    [self.view updateConstraintsIfNeeded];
 }
 
 - (CGFloat)initialHeight
@@ -298,11 +307,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     contentFrame.size.height -= contentFrame.origin.y;
     _contentContainer.frame = contentFrame;
     
-    _headerView.frame = CGRectMake(0., _headerView.frame.origin.y, contentFrame.size.width, _headerView.frame.size.height);
-    
-    CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);
-    _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
-    
     [self applyCornerRadius:self.headerView];
     [self applyCornerRadius:self.contentContainer];
 }
@@ -409,9 +413,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
             contentFrame.size.height = frame.size.height - buttonsFrame.size.height - contentFrame.origin.y;
             _contentContainer.frame = contentFrame;
-            
-            CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);
-            _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
             
             [self applyCornerRadius:self.headerView];
             [self applyCornerRadius:self.contentContainer];

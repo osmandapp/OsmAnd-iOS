@@ -170,6 +170,7 @@
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
         [dirCell.descLabel setText:destItem.distanceStr];
     }
+    dirCell.descIcon.hidden = (destItem.distanceStr.length == 0);
 }
 
 - (void)updateDistanceAndDirection

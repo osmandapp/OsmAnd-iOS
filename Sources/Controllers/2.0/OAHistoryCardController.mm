@@ -161,6 +161,7 @@
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(cardItem.direction);
         [dirCell.descLabel setText:cardItem.distanceStr];
     }
+    dirCell.descIcon.hidden = (cardItem.distanceStr.length == 0);
 }
 
 - (void)headerButtonPressed

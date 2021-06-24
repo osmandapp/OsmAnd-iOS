@@ -2255,7 +2255,7 @@
 • Settings Import: fixed bugs, added support for all data types available in OsmAnd\n
 • OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 
-"ios_release_4_00" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n
+"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n
 • Added new \"Coordinates widget\" with coordinates of the current location\n
 • Added ability to import custom user-defined plugins\n
 • Significantly extended the import/export functionality\n

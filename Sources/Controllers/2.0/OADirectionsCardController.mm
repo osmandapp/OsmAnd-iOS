@@ -141,35 +141,10 @@
     OADestinationItem *destItem = item;
     
     dirCell.separatorInset = UIEdgeInsetsMake(0.0, dirCell.titleLabel.frame.origin.x, 0.0, 0.0);
-    
-    if (destItem.destination.parking)
-    {
-        dirCell.leftIcon.image = [UIImage imageNamed:@"ic_parking_pin_small"];
-        [dirCell.titleLabel setText:destItem.destination.desc];
-        dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
-        
-        NSMutableString *descText = [NSMutableString string];
-        if (destItem.distanceStr)
-        {
-            [descText appendString:destItem.distanceStr];
-        }
-        NSString *parkingStr = [OADestinationCell parkingTimeStr:destItem.destination shortText:NO];
-        if (parkingStr)
-        {
-            if (descText.length > 0)
-                [descText appendString:@", "];
-            [descText appendString:parkingStr];
-        }
-        
-        [dirCell.descLabel setText:descText];
-    }
-    else
-    {
-        dirCell.leftIcon.image = [UIImage imageNamed:[destItem.destination.markerResourceName stringByAppendingString:@"_small"]];
-        [dirCell.titleLabel setText:destItem.destination.desc];
-        dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
-        [dirCell.descLabel setText:destItem.distanceStr];
-    }
+    dirCell.leftIcon.image = [UIImage imageNamed:[destItem.destination.markerResourceName stringByAppendingString:@"_small"]];
+    [dirCell.titleLabel setText:destItem.destination.desc];
+    dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
+    [dirCell.descLabel setText:destItem.distanceStr];
 }
 
 - (void)updateDistanceAndDirection

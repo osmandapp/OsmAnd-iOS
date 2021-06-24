@@ -130,7 +130,7 @@
 "sett_units" = "Unidades";
 "sett_km" = "Quilómetros";
 "sett_ml" = "Milhas";
-"sett_zoom" = "Botão de zoom";
+"sett_zoom" = "Botão de ampliação";
 "sett_show" = "Mostrar";
 "sett_notshow" = "Não mostrar";
 "sett_loc_fmt" = "Formato de localização";
@@ -317,7 +317,7 @@
 "make_call" = "Ligar";
 "sett_lang_trans" = "transliterar";
 "shared_string_edit" = "Editar";
-"shared_string_dismiss" = "Cancelar";
+"shared_string_dismiss" = "Rejeitar";
 "shared_string_remove" = "Remover";
 "device_memory" = "Memória do aparelho";
 "free_memory" = "%@ livre";
@@ -326,9 +326,9 @@
 "today" = "Hoje";
 "yesterday" = "Ontem";
 "shared_string_widgets" = "Widgets";
-"relief_smoothness_factor_descr" = "Terreno preferido: plano ou inclinado.";
+"relief_smoothness_factor_descr" = "Terreno preferido: plano ou montanhoso.";
 "route_via" = "Via";
-"right_side_navigation" = "Circulação pela direita";
+"right_side_navigation" = "Condução pela direita";
 "si_mi_meters" = "Milhas/metros";
 "nothing_found" = "Não foi encontrado nada: %@";
 "nothing_found_descr" = "Altere a pesquisa ou aumente o raio dela";
@@ -336,11 +336,11 @@
 "select_city" = "Selecionar cidade";
 "type_city_town" = "Digite a cidade, vila ou localidade";
 "select_postcode" = "Selecionar código postal";
-"type_postcode" = "Escreva código postal";
+"type_postcode" = "Digite o código postal";
 "coords_search" = "Pesquisa de coordenadas";
 "nearest_cities" = "Cidades próximas";
-"type_address" = "Morada a pesquisar";
-"change_color" = "Mudar cor";
+"type_address" = "Digite a morada";
+"change_color" = "Alterar cor";
 "first_usage_greeting" = "Obtenha direções e descubra novos lugares sem ser necessário estar ligado à Internet";
 "get_started" = "Começar";
 "first_usage_wizard_desc" = "Deixe o OsmAnd determinar a sua localização e sugerir mapas para descarregar para esta região.";
@@ -474,7 +474,7 @@
 "auto_zoom_close" = "Aproximar";
 "auto_zoom_far" = "Intermédia";
 "auto_zoom_farthest" = "Mais abrangente";
-"keep_informing_never" = "Nunca";
+"keep_informing_never" = "Apenas manualmente (tocar na seta)";
 "arrival_distance_factor_early" = "Adiantado";
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Atrasado";
@@ -538,7 +538,7 @@
 "route_tu" = "Faça inversão de marcha e continue em";
 "route_head" = "Comece em";
 "looking_up_address" = "A procurar o endereço";
-"no_address_found" = "Nenhum endereço definido";
+"no_address_found" = "Nenhum endereço encontrado";
 "traffic_warning_speed_limit" = "Limite de velocidade";
 "traffic_warning_border_control" = "Posto alfandegário";
 "traffic_warning_payment" = "Portagem";
@@ -593,7 +593,7 @@
 // OSM Editing actions
 "opening_changeset" = "A abrir o conjunto de alterações…";
 "closing_changeset" = "A fechar o conjunto de alterações…";
-"commiting_node" = "A alterar nó…";
+"commiting_node" = "A enviar o nó…";
 "loading_poi_obj" = "A carregar POI…";
 "osm_upload_failed_title" = "O envio falhou";
 "osm_editing_lost_changes_title" = "Sair sem guardar?";
@@ -694,7 +694,7 @@
 "shared_string_category" = "Categoria";
 "poi_select_category" = "Selecionar categoria";
 "city_type_suburb" = "Subúrbio";
-"city_type_hamlet" = "Aldeia;Lugar";
+"city_type_hamlet" = "Aldeia / lugar";
 "city_type_village" = "Sede de freguesia";
 "city_type_town" = "Sede de concelho";
 "city_type_city" = "Capital de distrito";
@@ -721,7 +721,7 @@
 "unlock_all_features" = "Desbloquear todas as características do OsmAnd";
 "osm_live_subscribe_btn" = "Subscrever";
 "shared_string_email_address" = "Endereço de email";
-"osm_live_enter_email" = "Favor introduzir um endereço de email válido";
+"osm_live_enter_email" = "Introduza um endereço de email válido";
 "osm_live_enter_user_name" = "Introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
 "osm_live_payment_desc" = "Pode gerir e cancelar as suas subscrições nas configurações da sua conta na App Store após a compra";
@@ -775,7 +775,7 @@
 "avoid_in_routing_descr" = "Evitar estradas com portagem, não pavimentadas e balsas/ferries";
 "prefer_in_routing_descr" = "Preferir autoestradas";
 "choose_auto_follow_route_descr" = "Tempo até o mapa ser centrado na posição atual";
-"auto_zoom_map_descr" = "Nível de zoom automático de acordo com a sua velocidade (enquanto o mapa é sincronizado com a posição atual)";
+"auto_zoom_map_descr" = "Nível de ampliação automático de acordo com a velocidade (enquanto o mapa é sincronizado com a posição atual).";
 "snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação";
 "show_warnings_descr" = "Configure avisos de moderação de velocidade (limites de velocidade, portagens, lombas, passadeiras, túneis), radares e a faixa de rodagem";
 "speak_descr" = "Configure os avisos por voz de nomes de ruas, avisos de moderação de velocidade (portagens, lombas, passadeiras), radares e limites de velocidade";
@@ -795,7 +795,7 @@
 "directions_other" = "Outras direções";
 "shared_string_turn" = "Virar";
 "route_is_too_long_v2" = "Esta rota pode ser muito longa para calcular. Por favor, adicione destinos intermédios se nenhum resultado for encontrado dentro de 10 minutos.";
-"use_displayed_track_for_navigation" = "Quer usar o trilho mostrado para navegação?";
+"use_displayed_track_for_navigation" = "Usar o trajeto mostrado para a navegação?";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Erro no cálculo da rota";
@@ -1198,7 +1198,7 @@
 "quick_action_list_descr" = "Toque nas páginas deste botão de ação na lista abaixo";
 "add_map_style" = "Adicionar estilo do mapa";
 "toggle_local_edits" = "Alternar edições locais do OSM";
-"toggle_auto_zoom" = "Zoom automático ligado/desligado";
+"toggle_auto_zoom" = "Ampliação automática ligada/desligada";
 "search_results" = "Procurar resultados";
 "quick_action_name_alert" = "O nome da ação rápida foi alterado para %@ para evitar duplicação.";
 "quick_action_screen_header" = "Ecrã %ld";
@@ -1221,13 +1221,13 @@
 "quick_action_add_dest_descr" = "Tocar neste botão de ação define o destino para o centro do mapa. Qualquer destino previamente selecionado torna-se o último destino intermédio.";
 "quick_action_first_intermediate_descr" = "Tocar neste botão de ação adiciona o primeiro destino intermédio no ponto central do mapa.";
 "quick_action_replace_dest_descr" = "Tocar nesse botão de ação define o destino para o ponto central do mapa, descartando o destino definido anteriormente (se houver).";
-"quick_action_autozoom_descr" = "Tocar neste botão de ação liga/desliga o modo de zoom automático do mapa de acordo com a velocidade atual.";
+"quick_action_autozoom_descr" = "Tocar neste botão de ação liga/desliga o modo de ampliação automática do mapa de acordo com a velocidade atual.";
 "quick_action_toggle_notes_descr" = "Toque neste botão de ação para mostrar ou ocultar as notas online do OSM.";
 "quick_action_toggle_edits_descr" = "Toque neste botão de ação para mostrar ou ocultar edições offline do OSM.";
 "get_discount_first_few_parts" = "%@ para primeiro %@";
 "hide_poi_action" = "Ocultar POI";
-"auto_zoom_on" = "Zoom automático ativado";
-"auto_zoom_off" = "Zoom automático desativado";
+"auto_zoom_on" = "Ampliação automática ativada";
+"auto_zoom_off" = "Ampliação automática desativada";
 "show_gpx" = "Mostrar trilho";
 "hide_gpx" = "Ocultar trilho";
 "show_edits" = "Mostrar edições locais";
@@ -1274,7 +1274,7 @@
 "region_nautical" = "Mapas náuticos";
 "gpx_alt_range" = "Amplitude da altitude";
 "gpx_avg_altitude" = "Altitude média";
-"download_depth_countours" = "Contornos de profundidade náutica";
+"download_depth_countours" = "Curvas de profundidades náuticas";
 "hide_contour_lines" = "Ocultar curvas de nível";
 "gpx_descent" = "Descida";
 "region_others" = "Outros mapas";
@@ -1296,7 +1296,7 @@
 "routing_attr_avoid_subway_name" = "Evitar metropolitanos";
 "routing_attr_piste_type_nordic_name" = "Esqui de travessia e nórdico";
 "routeInfo_surface_name" = "Superfície";
-"rendering_attr_roadColors_name" = "Esquema de cores";
+"rendering_attr_roadColors_name" = "Esquema de cores das estradas";
 "rendering_attr_undefined_name" = "Indefinido";
 "routing_attr_avoid_share_taxi_name" = "Evitar táxis partilhados";
 "rendering_value_default13_name" = "Padrão (13)";
@@ -1381,7 +1381,7 @@
 "routing_attr_short_way_description" = "Utilizar percurso económico (geralmente mais curto).";
 "rendering_attr_surface_sand_name" = "Areia";
 "routing_attr_allow_private_name" = "Ativar acesso a vias privadas";
-"rendering_attr_hideNonVehicleHighways_name" = "Estradas não transitáveis";
+"rendering_attr_hideNonVehicleHighways_name" = "Estradas não aptas para veículos";
 "rendering_attr_piste_difficulty_undefined_name" = "Indefinido";
 "rendering_attr_showMtbRoutes_name" = "Trilhos de bicicletas BTT";
 "rendering_attr_tracktype_grade4_name" = "Maioritariamente macio";
@@ -1453,7 +1453,7 @@
 "rendering_value_translucent_yellow_name" = "Amarelo translúcido";
 "rendering_value_translucent_red_name" = "Vermelho translúcido";
 "rendering_attr_ice_road_name" = "Estrada de gelo";
-"routing_attr_freeride_policy_description" = "'Freerides' e 'fora da pista' são rotas e passagens não oficiais. Tipicamente sem serem preparados, sem manutenção e não verificados à noite. Entre por conta e risco próprios.";
+"routing_attr_freeride_policy_description" = "'Freerides' e 'fora de pista' são rotas e passagens não oficiais. Tipicamente sem preparação do piso, sem manutenção e não verificados à noite. Aceda a estas rotas por sua própria conta e risco.";
 "routing_attr_avoid_unpaved_description" = "Evitar estradas não pavimentadas";
 "routing_attr_avoid_ferries_description" = "Evita balsas/ferries";
 "routing_attr_allow_expert_name" = "Permitir rotas para especialistas";
@@ -1469,14 +1469,14 @@
 "routing_attr_piste_type_nordic_description" = "Trilhos para esqui nórdico ou cross-country.";
 "routing_attr_avoid_shuttle_train_name" = "Evitar comboios vaivém";
 "rendering_attr_showLez_name" = "Mostrar zonas de baixas emissões poluentes";
-"routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora o roteamento sobre pistas mais difíceis ou mais fáceis ainda seja possível se for mais curto.";
+"routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora seja possível o roteamento sobre pistas mais difíceis ou mais fáceis se forem mais curtas.";
 "rendering_value_light_brown_name" = "Castanho claro";
 "rendering_attr_surface_ice_name" = "Gelo";
 "rendering_attr_smoothness_very_bad_name" = "Muito má";
 "routing_attr_allow_classic_only_name" = "Permitir apenas rotas clássicas";
 "routing_attr_avoid_unpaved_name" = "Evitar estradas não pavimentadas";
 "rendering_attr_showAccess_name" = "Mostrar restrições de acesso e portagens";
-"routing_attr_relief_smoothness_factor_plains_name" = "Menos inclinado";
+"routing_attr_relief_smoothness_factor_plains_name" = "Menos montanhoso";
 "routing_attr_piste_type_skitour_description" = "Rotas para passeios de esqui.";
 "routing_attr_short_way_name" = "Percurso económico";
 "routing_attr_avoid_train_description" = "Evitar comboios";
@@ -1491,12 +1491,12 @@
 "rendering_attr_streetLighting_name" = "Iluminação pública";
 "rendering_value_lightblue_name" = "Azul claro";
 "routeInfo_piste_difficulty_name" = "Dificuldade da pista";
-"rendering_attr_depthContours_name" = "Contornos de profundidade náuticos";
+"rendering_attr_depthContours_name" = "Curvas de profundidades náuticas";
 "routing_attr_avoid_tram_name" = "Evitar elétricos";
 "rendering_attr_contourColorScheme_name" = "Esquema de cores das curvas de nível";
 "routing_attr_avoid_ferry_description" = "Evita balsas/ferries";
 "routing_attr_max_num_changes_name" = "Número de transbordos";
-"routing_attr_relief_smoothness_factor_hills_name" = "Inclinado";
+"routing_attr_relief_smoothness_factor_hills_name" = "Montanhoso";
 "routing_attr_avoid_ice_roads_fords_description" = "Evitar estradas de gelo e vaus (passagens em riachos baixos).";
 "rendering_attr_piste_difficulty_novice_name" = "Iniciante";
 "rendering_value_purple_name" = "Roxo";
@@ -1517,9 +1517,9 @@
 "rendering_attr_noAdminboundaries_name" = "Fronteiras regionais";
 "rendering_value_orange_name" = "Laranja";
 "routing_attr_piste_type_sled_name" = "Trenó";
-"routing_attr_allow_skating_only_description" = "Rotas preparadas para o estilo livre ou patinagem apenas sem trilhos clássicos.";
+"routing_attr_allow_skating_only_description" = "Rotas preparadas para o estilo livre ou apenas patinagem sem trilhos clássicos.";
 "rendering_value_medium_w_name" = "Médio";
-"rendering_attr_contourLines_description" = "Mostrar desde o zoom (requer dados de contorno):";
+"rendering_attr_contourLines_description" = "Mostrar desde a ampliação (requer dados de contorno):";
 "rendering_attr_hideWaterPolygons_description" = "Água";
 "rendering_value_fine_name" = "Mais fino";
 "rendering_attr_trolleybusRoutes_name" = "Rotas de troleicarros";
@@ -1558,7 +1558,7 @@
 "routing_attr_avoid_motorway_description" = "Evita autoestradas";
 "rendering_attr_roadStyle_name" = "Estilo das vias";
 "rendering_value_translucent_green_name" = "Verde translúcido";
-"routing_attr_weight_description" = "Especifique o limite de peso permitido para veículos em rotas.";
+"routing_attr_weight_description" = "Especifique o limite de peso permitido do veículo em rotas.";
 "rendering_attr_piste_difficulty_intermediate_name" = "Intermédio";
 "rendering_attr_roadStyle_description" = "Estilo de estrada";
 "rendering_value_green_name" = "Verde";
@@ -1698,7 +1698,7 @@
 "quick_action_remove_next_destination" = "Eliminar o ponto de destino mais próximo";
 "shared_string_terrain" = "Terreno";
 "announce" = "Anunciar";
-"profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem.";
+"profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem";
 "consider_limitations_param" = "Considerar limitações temporárias";
 "two" = "Dois";
 "shared_string_max" = "Máximo";
@@ -1746,7 +1746,7 @@
 "nav_type_direct_to" = "Direto ao ponto";
 "edit_profile_list" = "Editar lista de perfis";
 "vk" = "VK";
-"res_zoom_warning" = "O valor mínimo de zoom não pode ser igual ou superior ao zoom máximo";
+"res_zoom_warning" = "O valor mínimo de ampliação não pode ser igual ou superior ao nível de ampliação máximo";
 "map_settings_available_srtm_maps_descr" = "São necessários mapas adicionais para ver sombras de relevo no mapa";
 "nav_type_brouter" = "BRouter";
 "nav_type_osmand" = "OsmAnd (roteamento offline)";
@@ -1842,12 +1842,12 @@
 "osm_editing_settings_descr" = "As configurações deste plugin são globais e aplicam-se a todos os perfis.";
 "shared_string_loading" = "A carregar…";
 "res_offlineSQL_URL_warning" = "Não suportado para este tipo de mapa";
-"res_zoom_invalid_value" = "Os valores de zoom devem estar no intervalo 1 - 22";
+"res_zoom_invalid_value" = "Os valores de ampliação devem estar no intervalo 1 - 22";
 "res_expire_warning" = "O tempo de expiração deve ser um número entre 0 e 10000000";
 "res_url_warning" = "O URL não pode estar vazio";
 "res_name_warning" = "O nome do ficheiro não pode estar vazio";
 "res_expire_time_desc" = "Tempo de expiração em minutos. Os mosaicos em ficheiros temporários serão carregados novamente após um tempo especificado. Deixe este campo vazio se não precisar recarregar os mosaicos para esta origem.\nUm dia corresponde a 1440 minutos.\nUma semana corresponde a 10 080 minutos.\n30 dias correspondem a 43 200 minutos.";
-"res_zoom_levels_desc" = "Estes parâmetros irão afetar a visualização do mapa quando utilizado como um tipo de mapa ou mapa na camada superior/inferior\n\nTipo de mapa: o mapa será limitado aos zooms selecionados.\n\nCamada superior / inferior: níveis de zoom em que os mosaicos serão visíveis. A escala ascendente ou descendente ocorrerá acima ou abaixo dos valores definidos.";
+"res_zoom_levels_desc" = "Estes parâmetros irão afetar a visualização do mapa quando utilizado como um tipo de mapa ou mapa na camada superior / inferior.\n\nTipo de mapa: o mapa será limitado aos níveis de ampliação selecionados.\n\nCamada superior / inferior: níveis de ampliação em que os mosaicos serão visíveis. A escala ascendente ou descendente ocorrerá acima ou abaixo dos valores definidos.";
 "res_source_format" = "Formato da origem";
 "res_mercator" = "Projeção de Mercator";
 "res_expire_time" = "Tempo de validade";
@@ -1877,7 +1877,7 @@
 "empty_filename" = "O nome do ficheiro não pode estar vazio";
 "none_point_error" = "Acrescente pelo menos um ponto.";
 "gpx_saved_successfully" = "Ficheiro GPX guardado em %@";
-"plan_route_exit_message" = "Tens a certeza que quer fechar a rota do Plano sem o guardar? Vai perder todas as alterações.";
+"plan_route_exit_message" = "Tem a certeza que quer fechar a rota do Plano sem a guardar? Vai perder todas as alterações.";
 "route_between_points_add_track_desc" = "Selecione um ficheiro de trilho no qual será adicionado um novo segmento.";
 "plan_route_last_modified" = "Última alteração";
 "plan_route_open_existing_track" = "Abrir trilho existente";
@@ -1950,7 +1950,7 @@
 "do_not_rotate" = "Não rodar";
 "settings_app_theme" = "Tema da aplicação";
 "map_settings_line_density_slowdown_warning" = "A alta densidade de linhas pode abrandar a renderização do mapa";
-"map_settings_contour_zoom_level_descr" = "Selecione o nível de zoom, a partir do qual as curvas de nível serão mostradas";
+"map_settings_contour_zoom_level_descr" = "Selecione o nível de ampliação, a partir do qual as curvas de nível serão mostradas";
 "map_settings_line_density" = "Densidade da linha";
 "map_settings_line_width" = "Espessura da linha";
 "map_settings_add_maps_desc" = "Pode adicionar novos mapas com links, ou importando ficheiros SQLite.";
@@ -1958,7 +1958,7 @@
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_show_slider_map" = "Mostrar controlo deslizante no mapa";
 "map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo";
-"map_settings_zoom_level_description" = "Definir o nível mínimo e máximo de zoom para mostrar a camada";
+"map_settings_zoom_level_description" = "Definir o nível mínimo e máximo de ampliação para mostrar a camada";
 "map_settings_layer_transparency" = "Transparência da camada";
 "street_level_imagery" = "Imagens das ruas";
 "map_settings_install_more" = "Instalar mais...";
@@ -1980,7 +1980,7 @@
 "favorite_friends_category" = "Amigos";
 "default_color_descr" = "Esta cor será usada para todos os novos favoritos adicionados ao grupo.";
 "default_color" = "Cor predefinida";
-"fav_point_emoticons_message" = "O nome do favorito foi alterado para '%@' para guardar a expressão que contém os emoticons num ficheiro.";
+"fav_point_emoticons_message" = "O nome do favorito foi alterado para \"%@\" para poder guardar corretamente o texto com emoticons num ficheiro.";
 "fav_point_dublicate_message" = "O nome do favorito especificado já está a ser utilizado, foi alterado para '%@' para evitar a duplicação.";
 "fav_point_dublicate" = "Nome de favorito duplicado";
 "shape" = "Forma";
@@ -1996,10 +1996,10 @@
 "fav_add_new_group" = "Adicionar novo grupo";
 "map_update_warning" = "Quer recarregar os dados dos mosaicos a partir da Internet?";
 "use_of_downloaded_map" = "Agora pode usar este mapa offline como origem principal do mapa, numa camada superior ou inferior";
-"size_of_downloaded_data" = "A grande diferença entre os níveis de zoom pode aumentar o tamanho dos dados descarregados.";
+"size_of_downloaded_data" = "A grande diferença entre os níveis de ampliação pode aumentar o tamanho dos dados descarregados.";
 "online_sources" = "Origens online";
 "select_online_source" = "Selecionar origem";
-"preview_of_selected_zoom_levels" = "Vista prévia dos níveis de zoom selecionados";
+"preview_of_selected_zoom_levels" = "Vista prévia dos níveis de ampliação selecionados";
 "download_size" = "Tamanho do descarregamento";
 "number_of_tiles" = "Número de mosaicos";
 "move_map_to_select_area" = "Mover o mapa para selecionar a área necessária.";
@@ -2097,3 +2097,10 @@
 "no_waypoints_found" = "Não há pontos de rota";
 "replace_waypoint_confirmation" = "Quer mesmo substituir o ponto %@?";
 "context_menu_item_edit_waypoint" = "Editar ponto GPX";
+"default" = "Predefinido";
+"route_between_points_warning_desc" = "Em seguida, ajuste o trilho para a estrada mais próxima permitida com um dos seus perfis de navegação para usar esta opção.";
+"carplay_profile_descr" = "Perfil que será utilizado ao conectar-se ao CarPlay.";
+"carplay_profile" = "Perfil CarPlay";
+"last_used" = "Último usado";
+"select_profile" = "Selecionar perfil";
+"threshold_distance" = "Limite de distância";

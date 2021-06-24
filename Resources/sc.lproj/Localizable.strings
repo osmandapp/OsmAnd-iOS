@@ -166,7 +166,7 @@
 "gpx_max_speed" = "Lestresa màssima";
 "gpx_speed" = "Lestresa";
 "prch_nau_q2_wifi" = "S'iscarrigamentu tenet bisòngiu de %@ in sa retza WiFi.";
-"prch_nau_q3" = "As a lu pòdere installare prus a tardu dae Mapas & Resursas.";
+"prch_nau_q3" = "As a lu pòdere installare prus a tardu dae Mapas e Resursas.";
 "proceed_q" = "Sighire?";
 "download" = "Iscàrriga";
 "nothanks" = "No, gràtzias";
@@ -174,7 +174,7 @@
 "prch_failed" = "Sa còmpora de \"%@\" est faddida";
 "prch_items_failed" = "Sos elementos non sunt istados ripristinados. Torra a proare prus a tardu.";
 // Resources
-"res_mapsres" = "Mapas & Resursas";
+"res_mapsres" = "Mapas e Resursas";
 "res_installed" = "Installadas";
 "res_banner_free_maps_title" = "Tenes %d mapas de badas!";
 "res_banner_free_maps_desc" = "Podes iscarrigare %d mapas de badas, chene sos agiornamentos";
@@ -2122,3 +2122,11 @@
 "context_menu_item_edit_waypoint" = "Modìfica su puntu de coladòrgiu GPX";
 "base_profile_descr_carplay" = "Ghiende cun sa modalidade CarPlay";
 "m_style_carplay" = "CarPlay";
+"ios_release_4_00" = "• Nou! Ischermada \"Annanghe unu preferidu\" cun optziones pro ischertare iconas, colores e forma personalizados\n• Annanghidura de su widget nou new \"Widget de sas coordinadas\" cun coordinadas pro sa positzione de su momentu\n• Annanghidura de sa possibilidade de importare estensiones personalizadas definidas dae s'impreadore\n• Funtzionalidade de importatzione e esportatzione megiorada meda\n• \"Distàntzia pro tocu\" tramudada dae sa medidura cun su raju a un'optzione a banda\n• Blocu de s'aplicatzione CarPlay cando s'ischermu de s'iPhone est istudadu acontzada\n• Ischermada de sas estensiones tramudada dae \"Mapas e Resursas\" a su menù printzipale\n• Annanghidura de sa tradutzione in finlandesu\n• Acontzadura de s'interfache de s'impreadore pro s'orientamentu in orizontale pro s'ischermada \"Pranìfica un'àndala\"\n• Annanghidura de su suportu pro su càrculu de s'àndala e sa renderizatzione de sos documentos personalizados\n• Acontzadura de sas prestatziones de sa lìnia de diretzione de sos marcadores\n • Acontzadura de unu problema cun s'importatzione de documentos GPX cun estensiones in maiùsculu\n• Acontzadura de unu problema cun su menù \"Sighi sa rasta\"\n• Acontzadura de s'importatzione de documentos OBF\n";
+"default" = "Predefinidu";
+"select_profile" = "Ischerta su profilu";
+"threshold_distance" = "Lìmite de distàntzia";
+"route_between_points_warning_desc" = "In su passu chi benit liga sa rasta tua a su caminu permìtidu prus a curtzu cun unu de sos profilos de navigatzione tuos pro impreare custa optzione.";
+"carplay_profile_descr" = "Profilu chi s'at a impreare cun sa connessione cun CarPlay.";
+"carplay_profile" = "Profilu de CarPlay";
+"last_used" = "Ùrtimu impreu";

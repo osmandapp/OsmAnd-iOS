@@ -190,8 +190,6 @@
                      @"description" : @""
                      }];
     
-    OADestination *parking = _destinationsHelper.getParkingPoint;
-    
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_search"),
@@ -206,21 +204,9 @@
         @"title" : OALocalizedString(@"shared_string_address"),
         @"img" : @"ic_custom_home",
         @"key" : @"address_search",
-        @"round_bottom" : @(parking == nil),
+        @"round_bottom" : @(YES),
         @"round_top" : @(NO)
     }];
-    
-    if (parking)
-    {
-        [arr addObject:@{
-            @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"parking_place"),
-            @"img" : @"parking_position",
-            @"key" : @"parking",
-            @"round_bottom" : @(YES),
-            @"round_top" : @(NO)
-        }];
-    }
     [model setObject:[NSArray arrayWithArray:arr] forKey:@(0)];
     
     [arr removeAllObjects];
@@ -469,10 +455,6 @@
         selectionDone = YES;
         [_pointsHelper clearStartPoint:YES];
         [_app.data backupTargetPoints];
-    }
-    else if ([item[@"key"] isEqualToString:@"parking"])
-    {
-        [self onDestinationSelected:_destinationsHelper.getParkingPoint];
     }
     else if ([item[@"key"] isEqualToString:@"select_on_map"])
     {

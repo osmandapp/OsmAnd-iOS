@@ -101,6 +101,8 @@
 
 #define applicationModeKey @"applicationMode"
 #define defaultApplicationModeKey @"default_application_mode_string"
+#define defaultCarplayModeKey @"default_carplay_mode_string"
+#define carPlayModeIsDefaultKey @"carplay_mode_is_default_string"
 #define availableApplicationModesKey @"available_application_modes"
 #define customAppModesKey @"customAppModes"
 
@@ -1271,12 +1273,20 @@
         else
             stringKey = self.defValue.stringKey;
     }
+    else if (self.key == defaultCarplayModeKey && settings.isCarPlayModeDefault.get)
+    {
+        return OAApplicationMode.CAR;
+    }
     else
     {
         stringKey = [[NSUserDefaults standardUserDefaults] objectForKey:[self getKey:mode]];
     }
 //    return [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
-    NSObject *cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+
+    NSObject *cachedValue;
+    if (!(self.key == defaultApplicationModeKey && settings.useLastApplicationModeByDefault.get))
+        cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+    
     if (!cachedValue) {
 //        NSString *key = [self getModeKey:self.key mode:mode];
 //        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
@@ -3091,6 +3101,12 @@
 
         _defaultApplicationMode = [[[OACommonAppMode withKey:defaultApplicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
         [_globalPreferences setObject:_defaultApplicationMode forKey:@"default_application_mode_string"];
+        
+        _carPlayMode = [[[OACommonAppMode withKey:defaultCarplayModeKey defValue:OAApplicationMode.CAR] makeGlobal] makeShared];
+        [_globalPreferences setObject:_carPlayMode forKey:@"default_carplay_mode_string"];
+        
+        _isCarPlayModeDefault = [[[OACommonBoolean withKey:carPlayModeIsDefaultKey defValue:YES] makeGlobal] makeShared];
+        [_globalPreferences setObject:_carPlayMode forKey:@"carplay_mode_is_default_string"];
 
         _availableApplicationModes = [[[OACommonString withKey:availableApplicationModesKey defValue:@"car,bicycle,pedestrian,public_transport,"] makeGlobal] makeShared];
         [_globalPreferences setObject:_availableApplicationModes forKey:@"available_application_modes"];
@@ -4022,11 +4038,18 @@
 
 - (void) setApplicationMode:(OAApplicationMode *)applicationMode
 {
+    [self setApplicationMode:applicationMode markAsLastUsed:YES];
+}
+
+- (void) setApplicationMode:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed
+{
     OAApplicationMode *prevAppMode = _applicationMode;
     _applicationMode = applicationMode;
     if (prevAppMode != _applicationMode)
     {
         [[NSUserDefaults standardUserDefaults] setObject:applicationMode.stringKey forKey:applicationModeKey];
+        if (markAsLastUsed)
+            [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
     }
 }

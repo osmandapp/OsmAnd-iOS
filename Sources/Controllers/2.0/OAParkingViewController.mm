@@ -16,13 +16,13 @@
 #import "OANativeUtilities.h"
 #import "OADestination.h"
 #import "OAIconTextTableViewCell.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
 @interface OAParkingViewController ()
-
-@property (nonatomic) OADestination *parking;
 
 @end
 
@@ -31,12 +31,11 @@
     NSDateFormatter *_timeFmt;
 }
 
-- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate
+- (instancetype)initWithCoordinate:(CLLocationCoordinate2D)coordinate
 {
     self = [super init];
     if (self)
     {
-        _isNew = YES;
         _coord = coordinate;
         _timeLimitActive = NO;
         _addToCalActive = YES;
@@ -48,24 +47,26 @@
     return self;
 }
 
-- (id)initWithParking:(OADestination *)parking
+- (instancetype)initWithParking
 {
     self = [super init];
     if (self)
     {
-        _isNew = NO;
-        self.parking = parking;
-        _coord = CLLocationCoordinate2DMake(parking.latitude, parking.longitude);
-        _timeLimitActive = parking.carPickupDateEnabled;
-        _addToCalActive = (parking.eventIdentifier != nil);
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin)
+        {
+            _coord = plugin.getParkingPosition ? plugin.getParkingPosition.coordinate : CLLocationCoordinate2DMake(0., 0.);
+            _timeLimitActive = plugin.getParkingType;
+            _addToCalActive = plugin.isParkingEventAdded;
 
-        _timeFmt = [[NSDateFormatter alloc] init];
-        [_timeFmt setDateStyle:NSDateFormatterNoStyle];
-        [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
-        if (parking.carPickupDate)
-            _date = parking.carPickupDate;
-        else
-            _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
+            _timeFmt = [[NSDateFormatter alloc] init];
+            [_timeFmt setDateStyle:NSDateFormatterNoStyle];
+            [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
+            if (plugin.getParkingTime > 0)
+                _date = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
+            else
+                _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
+        }
     }
     return self;
 }
@@ -159,16 +160,8 @@
 
 - (void) okPressed
 {
-    if (_isNew)
-    {
         if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(addParking:)])
             [self.parkingDelegate addParking:self];
-    }
-    else
-    {
-        if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(saveParking:parking:)])
-            [self.parkingDelegate saveParking:self parking:self.parking];
-    }
 }
 
 - (void) cancelPressed

@@ -190,7 +190,11 @@
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
 
+"last_used" = "Last used";
+
 "carplay_active_message" = "Map is displayed via CarPlay";
+"carplay_profile" = "CarPlay profile";
+"carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
 
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
@@ -950,6 +954,7 @@
 "plan_route_open_existing_track" = "Open existing track";
 "plan_route_last_modified" = "Last modified";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
+"route_between_points_warning_desc" = "Next, snap your track to the nearest allowed road with one of your navigation profiles to use this option.";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
 "none_point_error" = "Please add at least one point.";
@@ -977,6 +982,8 @@
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segment %d";
 "some_of" = "%d of %d";
+"threshold_distance" = "Threshold distance";
+"select_profile" = "Select profile";
 
 // Resources
 "shared_string_resources" = "Resources";
@@ -1240,6 +1247,7 @@
 "add_work" = "Add work";
 "home_pt" = "Home";
 "work_pt" = "Work";
+"map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
@@ -2188,6 +2196,7 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+"default" = "Default";
 
 
 //Poi catagories

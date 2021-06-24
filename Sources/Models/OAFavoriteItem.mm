@@ -14,6 +14,8 @@
 #import "OAColors.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -80,8 +82,11 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if (self == _parking)
     {
-        //TODO: parking plugin code here
-        return @"special_parking_time_limited";
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin && plugin.getParkingType)
+            return @"special_parking_time_limited";
+        else
+            return @"amenity_parking";
     }
     return _iconName;
 }
@@ -119,7 +124,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     self = [super init];
     if (self) {
-        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:0 timestamp:nil name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
+        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:0 timestamp:NSDate.date name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
         
         if (!name)
             [self setName:name];
@@ -152,15 +157,15 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     locationPoint.x = OsmAnd::Utilities::get31TileNumberX(lon);
     locationPoint.y = OsmAnd::Utilities::get31TileNumberY(lat);
 
-    QString qElevation = altitude ? QString::fromNSString([self toStringAltitude:altitude]) : QString::null;
-    QString qTime = timestamp ? QString::fromNSString([self.class toStringDate:timestamp]) : QString::null;
+    QString qElevation = altitude > 0 ? QString::fromNSString([self toStringAltitude:altitude]) : QString();
+    QString qTime = timestamp ? QString::fromNSString([self.class toStringDate:timestamp]) : QString();
     
-    QString qName = name ? QString::fromNSString(name) : QString::null;
-    QString qDescription = description ? QString::fromNSString(description) : QString::null;
-    QString qAddress = address ? QString::fromNSString(address) : QString::null;
-    QString qCategory = category ? QString::fromNSString(category) : QString::null;
-    QString qIconName = iconName ? QString::fromNSString(iconName) : QString::null;
-    QString qBackgroundIconName = backgroundIconName ? QString::fromNSString(backgroundIconName) : QString::null;
+    QString qName = name ? QString::fromNSString(name) : QString();
+    QString qDescription = description ? QString::fromNSString(description) : QString();
+    QString qAddress = address ? QString::fromNSString(address) : QString();
+    QString qCategory = category ? QString::fromNSString(category) : QString();
+    QString qIconName = iconName ? QString::fromNSString(iconName) : QString();
+    QString qBackgroundIconName = backgroundIconName ? QString::fromNSString(backgroundIconName) : QString();
     
     UIColor *iconColor = color ? color : ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
     CGFloat r,g,b,a;

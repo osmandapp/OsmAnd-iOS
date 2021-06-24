@@ -660,7 +660,7 @@
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "mapillary" = "Mapillary";
-"street_level_imagery" = "Street-level imagery";
+"street_level_imagery" = "Katutason kuvat";
 "shared_string_terrain" = "Maasto";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
@@ -753,12 +753,12 @@
 "custom_osmand_plugin_name" = "Muokattu OsmAnd-laajennus";
 "custom_plugins" = "Custom plugins";
 "extra_maps" = "Lisäkartat";
-"import_duplicates_title" = "Some items already exist";
-"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
+"import_duplicates_title" = "Joitakin kohteita on jo olemassa";
+"import_duplicates_description" = "OsmAndissa on jo elementtejä, joilla on samat nimet kuin tuoduilla elementeillä.\n\nValitse toiminto.";
 "keep_both" = "Pidä molemmat";
-"keep_both_desc" = "Imported items will be added with prefix";
+"keep_both_desc" = "Tuodut kohteet lisätään etuliitteen kanssa";
 "replace_all" = "Korvaa kaikki";
-"replace_all_desc" = "Current items will be replaced with items from the file";
+"replace_all_desc" = "Nykyiset kohteet korvataan tiedostosta löytyvillä kohteilla";
 "shared_string_profiles" = "Profiilit";
 "shared_string_quick_actions" = "Pikatoiminnot";
 "shared_string_poi_types" = "KP-tyypit";
@@ -875,8 +875,8 @@
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Päinvastainen reitti";
 "join_segments" = "Yhdistä segmentit";
-"simplified_track" = "Simplified track";
-"simplified_track_description" = "Only the route line will be saved, the waypoints will be deleted.";
+"simplified_track" = "Yksinkertaistettu jälki";
+"simplified_track_description" = "Vain reittiviiva tallennetaan, väyläpisteet poistetaan.";
 "open_saved_track" = "Avaa tallennettu rata";
 "plan_route_create_new_route" = "Luo uusi reitti";
 "track_is_saved" = "%@\nis saved!";
@@ -896,7 +896,7 @@
 "track" = "Polku";
 "select_another_track" = "Valitse toinen jälki";
 "select_track_to_follow" = "Select track to follow";
-"attach_to_the_roads" = "Attach to the roads";
+"attach_to_the_roads" = "Kiinnitä teihin";
 "reverse_track_dir" = "Käännä GPX:n suunta";
 "point_to_navigate" = "Navigate to";
 "start_of_track" = "Start of the track";

@@ -66,11 +66,6 @@
 #define kDestinationMarkerName @"destination_marker_name"
 #define kDestinationIndexName @"destination_index"
 
-#define kDestinationParking @"destination_parking"
-#define kDestinationParkingCarPickupDateEnabled @"destination_car_pickup_date_enabled"
-#define kDestinationParkingCarPickupDate @"destination_car_pickup_date"
-#define kDestinationParkingEventId @"destination_event_id"
-
 #define kDestinationRoutePointName @"destination_route_point"
 #define kDestinationRouteTargetPointName @"destination_route_target_point"
 #define kDestinationRoutePointIndexName @"destination_route_point_index"
@@ -87,10 +82,6 @@
     [aCoder encodeObject:[NSNumber numberWithDouble:_latitude] forKey:kDestinationLatitude];
     [aCoder encodeObject:[NSNumber numberWithDouble:_longitude] forKey:kDestinationLongitude];
     [aCoder encodeObject:_markerResourceName forKey:kDestinationMarkerName];
-    [aCoder encodeObject:[NSNumber numberWithBool:_parking] forKey:kDestinationParking];
-    [aCoder encodeObject:[NSNumber numberWithBool:_carPickupDateEnabled] forKey:kDestinationParkingCarPickupDateEnabled];
-    [aCoder encodeObject:_carPickupDate forKey:kDestinationParkingCarPickupDate];
-    [aCoder encodeObject:_eventIdentifier forKey:kDestinationParkingEventId];
     [aCoder encodeObject:[NSNumber numberWithInteger:_index] forKey:kDestinationIndexName];
     [aCoder encodeObject:[NSNumber numberWithBool:_routePoint] forKey:kDestinationRoutePointName];
     [aCoder encodeObject:[NSNumber numberWithBool:_routeTargetPoint] forKey:kDestinationRouteTargetPointName];
@@ -109,10 +100,6 @@
         _latitude = [[aDecoder decodeObjectForKey:kDestinationLatitude] doubleValue];
         _longitude = [[aDecoder decodeObjectForKey:kDestinationLongitude] doubleValue];
         _markerResourceName = [aDecoder decodeObjectForKey:kDestinationMarkerName];
-        _parking = [[aDecoder decodeObjectForKey:kDestinationParking] boolValue];
-        _carPickupDateEnabled = [[aDecoder decodeObjectForKey:kDestinationParkingCarPickupDateEnabled] boolValue];
-        _carPickupDate = [aDecoder decodeObjectForKey:kDestinationParkingCarPickupDate];
-        _eventIdentifier = [aDecoder decodeObjectForKey:kDestinationParkingEventId];
         _index = [[aDecoder decodeObjectForKey:kDestinationIndexName] integerValue];
         _routePoint = [[aDecoder decodeObjectForKey:kDestinationRoutePointName] boolValue];
         _routeTargetPoint = [[aDecoder decodeObjectForKey:kDestinationRouteTargetPointName] boolValue];
@@ -131,10 +118,6 @@
     OADestination* clone = [[OADestination alloc] initWithDesc:_desc latitude:_latitude longitude:_longitude];
     clone.color = _color;
     clone.markerResourceName = _markerResourceName;
-    clone.parking = _parking;
-    clone.carPickupDateEnabled = _carPickupDateEnabled;
-    clone.carPickupDate = _carPickupDate;
-    clone.eventIdentifier = _eventIdentifier;
     clone.index = _index;
     clone.routePoint = _routePoint;
     clone.routeTargetPoint = _routeTargetPoint;

@@ -56,6 +56,9 @@
 
 + (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints;
 
++ (void) addParkingReminderToCalendar;
++ (void) removeParkingReminderFromCalendar;
+
 @end
 
 @interface OAFavoriteGroup : NSObject

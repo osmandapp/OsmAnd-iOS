@@ -143,7 +143,6 @@
     if (cardItem.item.hType == OAHistoryTypeParking)
     {
         dirCell.leftIcon.image = [UIImage imageNamed:@"ic_parking_pin_small"];
-        [dirCell.titleLabel setText:cardItem.item.name];
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(cardItem.direction);
         
         NSMutableString *descText = [NSMutableString string];
@@ -152,14 +151,13 @@
             [descText appendString:cardItem.distanceStr];
         }
         
-        [dirCell.descLabel setText:descText];
+        [dirCell setTitle:cardItem.item.name andDescription:descText];
     }
     else
     {
         dirCell.leftIcon.image = [UIImage imageNamed:@"ic_map_pin_small"];
-        [dirCell.titleLabel setText:cardItem.item.name];
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(cardItem.direction);
-        [dirCell.descLabel setText:cardItem.distanceStr];
+        [dirCell setTitle:cardItem.item.name andDescription:cardItem.distanceStr];
     }
 }
 

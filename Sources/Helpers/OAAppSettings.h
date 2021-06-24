@@ -679,6 +679,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OAApplicationMode* applicationMode;
 @property (nonatomic) OACommonString* availableApplicationModes;
 @property (nonatomic) OACommonAppMode* defaultApplicationMode;
+@property (nonatomic) OACommonAppMode* carPlayMode;
+@property (nonatomic) OACommonBoolean *isCarPlayModeDefault;
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
 
@@ -819,6 +821,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
+
+- (void) setApplicationMode:(OAApplicationMode *)applicationMode;
+- (void) setApplicationMode:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
 
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;

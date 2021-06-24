@@ -318,6 +318,7 @@
     view.backgroundColor = UIColorFromRGB(0xffffff);
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
+    [self.tableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
     _calculatedWidth = 0;
     [self buildRowsInternal];
 }
@@ -787,7 +788,6 @@
             
             cell.collapsableView = coordinateView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
-            [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
 
             return cell;
         }
@@ -813,7 +813,6 @@
 
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
-            [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
 
             return cell;
         }
@@ -838,7 +837,6 @@
             cell.textView.textColor = info.textColor;
             cell.textView.font = [info getFont];
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
-            [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
 
             return cell;
         }

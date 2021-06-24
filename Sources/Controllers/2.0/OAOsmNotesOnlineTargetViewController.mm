@@ -130,11 +130,6 @@
     return NO;
 }
 
-- (BOOL) showNearestPoi
-{
-    return NO;
-}
-
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];

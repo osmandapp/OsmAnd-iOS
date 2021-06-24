@@ -78,11 +78,6 @@
     return YES;
 }
 
-- (BOOL) showNearestPoi
-{
-    return NO;
-}
-
 - (BOOL) hasTopToolbar
 {
     return YES;

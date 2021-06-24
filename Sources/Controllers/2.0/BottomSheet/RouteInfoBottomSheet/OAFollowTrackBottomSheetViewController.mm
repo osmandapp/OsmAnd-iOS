@@ -248,6 +248,11 @@
     }
 }
 
+- (void) openPlanRoute
+{
+    [self openPlanRoute:NO];
+}
+
 - (void) openPlanRoute:(BOOL)showSnapWarning
 {
     if (_gpx)

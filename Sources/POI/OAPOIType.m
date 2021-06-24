@@ -32,20 +32,6 @@
     return self;
 }
 
-- (UIImage *)iconWithoutParent
-{
-    UIImage *img = [super icon];
-    if (!img)
-    {
-        img = [UIImage imageNamed:[self iconName]];
-        if (img)
-            return [OAUtilities applyScaleFactorToImage:img];
-        else
-            img = [UIImage imageNamed:@"ic_custom_search_categories"];
-    }
-    return img;
-}
-
 - (UIImage *) icon
 {
     UIImage *img = [super icon];

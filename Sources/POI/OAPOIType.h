@@ -46,7 +46,6 @@
 - (void)setAdditional:(OAPOIBaseType *)parentType;
 
 - (UIImage *)mapIcon;
-- (UIImage *)iconWithoutParent;
 
 - (NSString *) getEditOsmTag;
 -(NSString *) getEditOsmValue;

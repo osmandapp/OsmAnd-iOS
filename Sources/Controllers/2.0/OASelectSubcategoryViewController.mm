@@ -20,6 +20,7 @@
 #import "OASearchSettings.h"
 #import "OAQuickSearchHelper.h"
 #import "OATableViewCustomHeaderView.h"
+#import "OACustomPOIViewController.h"
 
 @interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
@@ -369,7 +370,7 @@
             BOOL selected = [_selectedItems containsObject:poiType];
 
             UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-            cell.imgView.image = [poiType.iconWithoutParent imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [OACustomPOIViewController getPoiIcon:poiType];
             cell.imgView.tintColor = selectedColor;
             if (cell.imgView.image.size.width < cell.imgView.frame.size.width && cell.imgView.image.size.height < cell.imgView.frame.size.height)
                 cell.imgView.contentMode = UIViewContentModeCenter;

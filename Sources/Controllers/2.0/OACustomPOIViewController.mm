@@ -10,7 +10,6 @@
 #import "OAPOIHelper.h"
 #import "OAPOICategory.h"
 #import "OASelectSubcategoryViewController.h"
-#import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
 #import "OASizes.h"
@@ -240,6 +239,19 @@
     [_core updateSettings:[[_core getSearchSettings] resetSearchTypes]];
 }
 
++ (UIImage *)getPoiIcon:(OAPOIType *)poiType
+{
+    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", poiType.name]]];
+    if (!img)
+        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", [poiType getOsmTag], [poiType getOsmValue]]]];
+    if (img)
+        img = [OAUtilities applyScaleFactorToImage:img];
+    else
+        img = [UIImage imageNamed:@"ic_custom_search_categories"];
+
+    return [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
+
 - (IBAction)onBackButtonClicked:(id)sender
 {
     [self resetSearchTypes];
@@ -467,7 +479,7 @@
             cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
 
             UIColor *selectedColor = accepted ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-            cell.imgView.image = [poiType.iconWithoutParent imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [OACustomPOIViewController getPoiIcon:poiType];
             cell.imgView.tintColor = selectedColor;
             if (cell.imgView.image.size.width < cell.imgView.frame.size.width && cell.imgView.image.size.height < cell.imgView.frame.size.height)
                 cell.imgView.contentMode = UIViewContentModeCenter;

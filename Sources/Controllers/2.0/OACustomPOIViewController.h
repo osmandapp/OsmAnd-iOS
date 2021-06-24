@@ -9,6 +9,8 @@
 #import "OACompoundViewController.h"
 
 @class OAPOIUIFilter;
+@class OAPOIType;
+
 @protocol OAPOIFilterViewDelegate;
 @protocol OAPOIFilterRefreshDelegate;
 
@@ -18,5 +20,7 @@
 @property (weak, nonatomic) id<OAPOIFilterRefreshDelegate> _Nullable refreshDelegate;
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter;
+
++ (UIImage *)getPoiIcon:(OAPOIType *)poiType;
 
 @end

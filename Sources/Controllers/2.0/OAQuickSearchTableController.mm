@@ -51,6 +51,7 @@
 #import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
 #import "OAButtonRightIconCell.h"
+#import "OADividerCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -70,6 +71,7 @@
     BOOL _decelerating;
     
     BOOL _showResult;
+    UITableViewCell *_lastPOICell;
 }
 
 - (instancetype) initWithTableView:(UITableView *)tableView
@@ -679,6 +681,7 @@
                         icon = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *) filter];
                     OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
                     cell.iconView.tintColor = UIColorFromRGB(color_osmand_orange);
+                    _lastPOICell = cell;
                     return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOIBaseType class]])
@@ -716,7 +719,24 @@
     }
     else
     {
-        if ([item getType] == ACTION_BUTTON)
+        if ([item getType] == SEPARATOR_ITEM)
+        {
+            OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
+                cell = (OADividerCell *) nib[0];
+            }
+            if (cell) {
+                cell.backgroundColor = UIColor.whiteColor;
+                cell.dividerColor = UIColorFromRGB(color_tint_gray);
+                cell.dividerInsets = UIEdgeInsetsMake(0., 0., 0., 0.);
+                cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
+                cell.dividerHight = 0.5;
+            }
+            return cell;
+        }
+        else if ([item getType] == ACTION_BUTTON)
         {
             OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OAButtonRightIconCell"];
             if (cell == nil)
@@ -736,7 +756,7 @@
                 return cell;
             }
         }
-        if ([item getType] == BUTTON)
+        else if ([item getType] == BUTTON)
         {
             OAIconButtonCell* cell;
             cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
@@ -809,6 +829,19 @@
         }
     }
     return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAQuickSearchListItem *item = _dataGroups[indexPath.section][indexPath.row];
+    if (item && [item getType] == SEPARATOR_ITEM && _lastPOICell)
+    {
+//        _lastPOICell.separatorInset = UIEdgeInsetsMake(0., [[UIScreen mainScreen] bounds].size.width, 0., 0.);
+//        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+    }
+
+    return UITableViewAutomaticDimension;
 }
 
 + (NSString *) applySynonyms:(OASearchResult *)res

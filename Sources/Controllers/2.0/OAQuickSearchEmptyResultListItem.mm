@@ -10,6 +10,9 @@
 #import "Localization.h"
 
 @implementation OAQuickSearchEmptyResultListItem
+{
+    BOOL _separatorItem;
+}
 
 - (instancetype)init
 {
@@ -22,9 +25,19 @@
     return self;
 }
 
+- (instancetype)initSeparator
+{
+    self = [super init];
+    if (self)
+    {
+        _separatorItem = YES;
+    }
+    return self;
+}
+
 - (EOAQuickSearchListItemType) getType
 {
-    return EMPTY_SEARCH;
+    return _separatorItem ? SEPARATOR_ITEM : EMPTY_SEARCH;
 }
 
 @end

@@ -16,6 +16,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAPOIFiltersHelper.h"
+#import "OAQuickSearchEmptyResultListItem.h"
 
 @interface OACategoriesTableViewController ()
 
@@ -63,6 +64,9 @@
     {
         for (OASearchResult *sr in [res getCurrentSearchResults])
             [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
+
+        if (rows.count > 0)
+            [rows addObject:[[OAQuickSearchEmptyResultListItem alloc] initSeparator]];
 
         [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_add"] text:OALocalizedString(@"add_custom_category") actionButton:YES onClickFunction:^(id sender) {
             if (self.delegate)

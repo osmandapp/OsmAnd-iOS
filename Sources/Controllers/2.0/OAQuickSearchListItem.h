@@ -19,7 +19,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
     BUTTON,
     SEARCH_MORE,
     EMPTY_SEARCH,
-    ACTION_BUTTON
+    ACTION_BUTTON,
+    SEPARATOR_ITEM
     //SELECT_ALL,
 };
 

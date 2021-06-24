@@ -2123,3 +2123,10 @@
 "no_waypoints_found" = "Não há pontos de rota";
 "replace_waypoint_confirmation" = "Quer mesmo substituir o ponto %@?";
 "context_menu_item_edit_waypoint" = "Editar ponto GPX";
+"default" = "Padrão";
+"select_profile" = "Selecionar perfil";
+"threshold_distance" = "Limite de distância";
+"route_between_points_warning_desc" = "Em seguida, ajuste seu caminho para a estrada permitida mais próxima com um de seus perfis de navegação para usar esta opção.";
+"carplay_profile_descr" = "Perfil que será utilizado ao conectar-se ao CarPlay.";
+"carplay_profile" = "Perfil no CarPlay";
+"last_used" = "Usado por último";

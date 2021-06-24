@@ -97,7 +97,6 @@
     {
         case 1:
         {
-            BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
             _backgroundView2.hidden = YES;
 
             CGFloat textWidth = _directionsView.frame.size.width - 68.0 - (self.buttonOkVisible ? 40.0 : 0.0);
@@ -106,11 +105,11 @@
             
             _colorView.frame = CGRectMake(iconLeftOffset, 5.0, 40.0, 40.0);
             _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-            _distanceLabel.frame = CGRectMake(textLeftOffset, 7.0, textWidth - (isParking ? self.infoLabelWidth : 0.0), 21.0);
+            _distanceLabel.frame = CGRectMake(textLeftOffset, 7.0, textWidth, 21.0);
             _distanceLabel.textAlignment = NSTextAlignmentNatural;
             _infoLabel.frame = CGRectMake(textLeftOffset + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
             _infoLabel.textAlignment = [self.contentView isDirectionRTL] ? NSTextAlignmentLeft : NSTextAlignmentRight;
-            _infoLabel.hidden = !isParking;
+            _infoLabel.hidden = YES;
             _descLabel.frame = CGRectMake(textLeftOffset, 24.0, textWidth, 21.0);
             _descLabel.hidden = NO;
             _descLabel.textAlignment = NSTextAlignmentNatural;
@@ -156,9 +155,6 @@
         }
         case 2:
         {
-            BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
-            BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled;
-            
             CGFloat icon1LeftOffset = [self.contentView isDirectionRTL] ? dirViewWidth / 2 - 45 : 5;
             CGFloat text1LeftOffset = [self.contentView isDirectionRTL] ? 10 : 55.;
             CGFloat icon2LeftOffset = [self.contentView isDirectionRTL] ? dirViewWidth - 45 : (dirViewWidth / 2) + 5;
@@ -172,7 +168,7 @@
             _colorView.frame = CGRectMake(icon1LeftOffset, 5.0, 40.0, 40.0);
             _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
             CGFloat textWidth = dirViewWidth / 2.0 - 62.0 - (self.buttonOkVisible ? 40.0 : 0.0);
-            if (textWidth > 60.0 + self.infoLabelWidth && isParking)
+            if (textWidth > 60.0 + self.infoLabelWidth)
             {
                 _distanceLabel.frame = CGRectMake(text1LeftOffset, 7.0, textWidth - self.infoLabelWidth, 21.0);
                 _infoLabel.frame = CGRectMake(text1LeftOffset + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
@@ -184,19 +180,9 @@
             else if (textWidth > 80.0)
             {
                 _distanceLabel.frame = CGRectMake(text1LeftOffset, 7.0, textWidth, 21.0);
-                if (isParking)
-                {
-                    _infoLabel.frame = CGRectMake(text1LeftOffset, 24.0, self.infoLabelWidth, 21.0);
-                    _infoLabel.textAlignment = NSTextAlignmentNatural;
-                    _infoLabel.hidden = NO;
-                    _descLabel.hidden = YES;
-                }
-                else
-                {
-                    _descLabel.frame = CGRectMake(text1LeftOffset, 24.0, textWidth, 21.0);
-                    _infoLabel.hidden = YES;
-                    _descLabel.hidden = NO;
-                }
+                _descLabel.frame = CGRectMake(text1LeftOffset, 24.0, textWidth, 21.0);
+                _infoLabel.hidden = YES;
+                _descLabel.hidden = NO;
             }
             else
             {
@@ -223,7 +209,7 @@
             _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
             _markerView2.hidden = NO;
             
-            if (textWidth > 60.0 + self.infoLabelWidth && isParking2)
+            if (textWidth > 60.0 + self.infoLabelWidth)
             {
                 _distanceLabel2.frame = CGRectMake(text2LeftOffset, 7.0, textWidth - self.infoLabelWidth, 21.0);
                 _distanceLabel2.hidden = NO;
@@ -237,19 +223,9 @@
             {
                 _distanceLabel2.frame = CGRectMake(text2LeftOffset, 7.0, textWidth, 21.0);
                 _distanceLabel2.hidden = NO;
-                if (isParking2)
-                {
-                    _infoLabel2.frame = CGRectMake(text2LeftOffset, 24.0, self.infoLabelWidth, 21.0);
-                    _infoLabel2.textAlignment = NSTextAlignmentNatural;
-                    _infoLabel2.hidden = NO;
-                    _descLabel2.hidden = YES;
-                }
-                else
-                {
-                    _descLabel2.frame = CGRectMake(text2LeftOffset, 24.0, textWidth, 21.0);
-                    _infoLabel2.hidden = YES;
-                    _descLabel2.hidden = NO;
-                }
+                _descLabel2.frame = CGRectMake(text2LeftOffset, 24.0, textWidth, 21.0);
+                _infoLabel2.hidden = YES;
+                _descLabel2.hidden = NO;
             }
             else
             {
@@ -289,10 +265,6 @@
         {
             CGFloat width = _directionsView.bounds.size.width / 3.0;
             
-            BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled && width > 260.0;
-            BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled && width > 260.0;
-            BOOL isParking3 = ((OADestination *)self.destinations[2]).parking && ((OADestination *)self.destinations[2]).carPickupDateEnabled && width > 260.0;
-            
             _backgroundView2.frame = CGRectMake(dirViewWidth / 3, 0.0, dirViewWidth / 3, h);
             _backgroundView2.hidden = NO;
             
@@ -300,52 +272,33 @@
                 CGFloat textWidth = width - 60.0;
                 _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
                 _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-                _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth - (isParking ? self.infoLabelWidth : 0.0), 21.0);
+                _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth, 21.0);
                 _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
                 _distanceLabel.textAlignment = NSTextAlignmentNatural;
                 _descLabel.hidden = NO;
-                
-                if (isParking) {
-                    _infoLabel.frame = CGRectMake(55.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                    _infoLabel.hidden = NO;
-                } else {
-                    _infoLabel.hidden = YES;
-                }
+                _infoLabel.hidden = YES;
                 
                 _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
                 _colorView2.hidden = NO;
                 _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
                 _markerView2.hidden = NO;
-                _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth - (isParking2 ? self.infoLabelWidth : 0.0), 21.0);
+                _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
                 _distanceLabel2.textAlignment = NSTextAlignmentNatural;
                 _distanceLabel2.hidden = NO;
                 _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
                 _descLabel2.hidden = NO;
-                
-                if (isParking2) {
-                    _infoLabel2.frame = CGRectMake(_distanceLabel2.frame.origin.x + _distanceLabel2.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                    _infoLabel2.hidden = NO;
-                } else {
-                    _infoLabel2.hidden = YES;
-                }
+                _infoLabel2.hidden = YES;
                 
                 _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
                 _colorView3.hidden = NO;
                 _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
                 _markerView3.hidden = NO;
-                _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 7.0, textWidth - (isParking3 ? self.infoLabelWidth : 0.0), 21.0);
+                _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
                 _distanceLabel3.textAlignment = NSTextAlignmentNatural;
                 _distanceLabel3.hidden = NO;
                 _descLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
                 _descLabel3.hidden = NO;
-                
-                if (isParking3) {
-                    _infoLabel3.frame = CGRectMake(_distanceLabel3.frame.origin.x + _distanceLabel3.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                    _infoLabel3.hidden = NO;
-                } else {
-                    _infoLabel3.hidden = YES;
-                }
-                
+                _infoLabel3.hidden = YES;
             }
             else if (width >= 140)
             {
@@ -686,12 +639,6 @@
                     if (!self.markerView.superview)
                         [self.directionsView addSubview:self.markerView];
                 }
-                else if (destination.parking)
-                {
-                    [self.markerImage setImage:[UIImage imageNamed:@"destination_parking_place"]];
-                    if (!self.markerView.superview)
-                        [self.directionsView addSubview:self.markerView];
-                }
                 else
                 {
                     [self.markerView removeFromSuperview];
@@ -704,12 +651,6 @@
                     if (!self.markerView2.superview)
                         [self.directionsView addSubview:self.markerView2];
                 }
-                else if (destination.parking)
-                {
-                    [self.markerImage2 setImage:[UIImage imageNamed:@"destination_parking_place"]];
-                    if (!self.markerView2.superview)
-                        [self.directionsView addSubview:self.markerView2];
-                }
                 else
                 {
                     [self.markerView2 removeFromSuperview];
@@ -719,12 +660,6 @@
                 if (arrow)
                 {
                     [self.markerImage3 setImage:[UIImage imageNamed:@"destination_map_center"]];
-                    if (!self.markerView3.superview)
-                        [self.directionsView addSubview:self.markerView3];
-                }
-                else if (destination.parking)
-                {
-                    [self.markerImage3 setImage:[UIImage imageNamed:@"destination_parking_place"]];
                     if (!self.markerView3.superview)
                         [self.directionsView addSubview:self.markerView3];
                 }
@@ -777,27 +712,10 @@
                 _compassImage.alpha = 1.0;
                 [self updateDirection:destination imageView:self.compassImage];
                 
-                if (destination.parking)
-                {
-                    [self.markerImage setImage:[UIImage imageNamed:@"destination_parking_place"]];
-                    if (!self.markerView.superview)
-                        [self.directionsView addSubview:self.markerView];
-
-                    if (destination.carPickupDate)
-                        [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
-                    else
-                        self.infoLabel.hidden = YES;
-
-                    self.descLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-                    self.descLabel.text = destination.desc;
-                }
-                else
-                {
-                    [self.markerView removeFromSuperview];
-                    self.infoLabel.hidden = YES;
-                    self.descLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-                    self.descLabel.text = destination.desc;
-                }
+                [self.markerView removeFromSuperview];
+                self.infoLabel.hidden = YES;
+                self.descLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+                self.descLabel.text = destination.desc;
                 
                 [self updateDistanceLabel:self.distanceLabel destination:destination];
 
@@ -808,28 +726,10 @@
 
                 _compassImage2.alpha = 1.0;
                 [self updateDirection:destination imageView:self.compassImage2];
-                
-                if (destination.parking)
-                {
-                    [self.markerImage2 setImage:[UIImage imageNamed:@"destination_parking_place"]];
-                    if (!self.markerView2.superview)
-                        [self.directionsView addSubview:self.markerView2];
-
-                    if (destination.carPickupDate)
-                        [OADestinationCell setParkingTimerStr:destination label:self.infoLabel2 shortText:YES];
-                    else
-                        self.infoLabel2.hidden = YES;
-
-                    self.descLabel2.lineBreakMode = NSLineBreakByTruncatingTail;
-                    self.descLabel2.text = destination.desc;
-                }
-                else
-                {
-                    [self.markerView2 removeFromSuperview];
-                    self.infoLabel2.hidden = YES;
-                    self.descLabel2.lineBreakMode = NSLineBreakByTruncatingTail;
-                    self.descLabel2.text = destination.desc;
-                }
+                [self.markerView2 removeFromSuperview];
+                self.infoLabel2.hidden = YES;
+                self.descLabel2.lineBreakMode = NSLineBreakByTruncatingTail;
+                self.descLabel2.text = destination.desc;
                 [self updateDistanceLabel:self.distanceLabel2 destination:destination];
 
                 break;
@@ -840,27 +740,11 @@
                 _compassImage3.alpha = 1.0;
                 [self updateDirection:destination imageView:self.compassImage3];
                 
-                if (destination.parking)
-                {
-                    [self.markerImage3 setImage:[UIImage imageNamed:@"destination_parking_place"]];
-                    if (!self.markerView3.superview)
-                        [self.directionsView addSubview:self.markerView3];
-                    
-                    if (destination.carPickupDate)
-                        [OADestinationCell setParkingTimerStr:destination label:self.infoLabel3 shortText:YES];
-                    else
-                        self.infoLabel3.hidden = YES;
-
-                    self.descLabel3.lineBreakMode = NSLineBreakByTruncatingTail;
-                    self.descLabel3.text = destination.desc;
-                }
-                else
-                {
-                    [self.markerView3 removeFromSuperview];
-                    self.infoLabel3.hidden = YES;
-                    self.descLabel3.lineBreakMode = NSLineBreakByTruncatingTail;
-                    self.descLabel3.text = destination.desc;
-                }
+                [self.markerView3 removeFromSuperview];
+                self.infoLabel3.hidden = YES;
+                self.descLabel3.lineBreakMode = NSLineBreakByTruncatingTail;
+                self.descLabel3.text = destination.desc;
+                
                 [self updateDistanceLabel:self.distanceLabel3 destination:destination];
 
                 break;
@@ -888,19 +772,16 @@
                 [self updateDirection:destination imageView:self.compassImage];
                 [self updateDistanceLabel:self.distanceLabel destination:destination];
                 [self updateOkButton:destination];
-                [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                 break;
             case 1:
                 [self updateDirection:destination imageView:self.compassImage2];
                 [self updateDistanceLabel:self.distanceLabel2 destination:destination];
                 [self updateOkButton2:destination];
-                [OADestinationCell setParkingTimerStr:destination label:self.infoLabel2 shortText:YES];
                 break;
             case 2:
                 [self updateDirection:destination imageView:self.compassImage3];
                 [self updateDistanceLabel:self.distanceLabel3 destination:destination];
                 [self updateOkButton3:destination];
-                [OADestinationCell setParkingTimerStr:destination label:self.infoLabel3 shortText:YES];
                 break;
                 
             default:

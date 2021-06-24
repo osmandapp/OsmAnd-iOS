@@ -349,11 +349,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
                     NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"ctx_mnu_direction");
-                    NSString *imageName;
-                    if (item.destination.parking)
-                        imageName = @"ic_parking_pin_small";
-                    else
-                        imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
+                    NSString *imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
                     
                     [c.titleView setText:title];
                     c.titleIcon.image = [UIImage imageNamed:imageName];

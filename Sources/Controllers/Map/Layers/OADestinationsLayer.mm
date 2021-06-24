@@ -498,16 +498,8 @@
         targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
         targetPoint.title = destination.desc;
         
-        if (destination.parking)
-        {
-            targetPoint.icon = [UIImage imageNamed:@"map_parking_pin"];
-            targetPoint.type = OATargetParking;
-        }
-        else
-        {
-            targetPoint.icon = [UIImage imageNamed:destination.markerResourceName];
-            targetPoint.type = OATargetDestination;
-        }
+        targetPoint.icon = [UIImage imageNamed:destination.markerResourceName];
+        targetPoint.type = OATargetDestination;
         
         targetPoint.targetObj = destination;
         

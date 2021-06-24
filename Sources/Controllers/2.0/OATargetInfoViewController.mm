@@ -749,14 +749,17 @@
     {
         CGPoint p = [gestureRecognizer locationInView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:p];
-        OARowInfo *info = _rows[indexPath.row];
-        NSString *textToCopy;
-        if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
-            textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
-        else
-            textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+        if (indexPath)
+        {
+            OARowInfo *info = _rows[indexPath.row];
+            NSString *textToCopy;
+            if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
+                textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
+            else
+                textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
 
-        [[UIPasteboard generalPasteboard] setString:textToCopy];
+            [[UIPasteboard generalPasteboard] setString:textToCopy];
+        }
     }
 }
 

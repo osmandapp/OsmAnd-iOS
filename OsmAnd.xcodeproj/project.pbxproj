@@ -1730,7 +1730,7 @@
 		84AB9D9220738455009DA206 /* OABottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84AB9D8F20738455009DA206 /* OABottomSheetViewController.xib */; };
 		84ACE1AF1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84ACE1AC1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib */; };
 		84ACE1B31DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ACE1B21DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m */; };
-		84AD39E21DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AD39E11DFDA5DB00DDB466 /* OACollapsableWikiView.mm */; };
+		84AD39E21DFDA5DB00DDB466 /* OACollapsableNearestPoiWikiView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AD39E11DFDA5DB00DDB466 /* OACollapsableNearestPoiWikiView.mm */; };
 		84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
 		84B0AE2B1AC82ED3005E1F78 /* OAPOIFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE281AC82ED3005E1F78 /* OAPOIFilter.m */; };
 		84B30AD11B9DF2B0008E5A43 /* ic_list.png in Resources */ = {isa = PBXBuildFile; fileRef = 84B30ACC1B9DF2B0008E5A43 /* ic_list.png */; };
@@ -5856,8 +5856,8 @@
 		84ACE1AC1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetInfoCollapsableViewCell.xib; path = Resources/Controllers/Cells/OATargetInfoCollapsableViewCell.xib; sourceTree = "<group>"; };
 		84ACE1B11DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetInfoCollapsableViewCell.h; path = Controllers/Cells/OATargetInfoCollapsableViewCell.h; sourceTree = "<group>"; };
 		84ACE1B21DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetInfoCollapsableViewCell.m; path = Controllers/Cells/OATargetInfoCollapsableViewCell.m; sourceTree = "<group>"; };
-		84AD39E01DFDA5DB00DDB466 /* OACollapsableWikiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableWikiView.h; path = Sources/Controllers/2.0/OACollapsableWikiView.h; sourceTree = "<group>"; };
-		84AD39E11DFDA5DB00DDB466 /* OACollapsableWikiView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableWikiView.mm; path = Sources/Controllers/2.0/OACollapsableWikiView.mm; sourceTree = "<group>"; };
+		84AD39E01DFDA5DB00DDB466 /* OACollapsableNearestPoiWikiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableNearestPoiWikiView.h; path = Sources/Controllers/2.0/OACollapsableNearestPoiWikiView.h; sourceTree = "<group>"; };
+		84AD39E11DFDA5DB00DDB466 /* OACollapsableNearestPoiWikiView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableNearestPoiWikiView.mm; path = Sources/Controllers/2.0/OACollapsableNearestPoiWikiView.mm; sourceTree = "<group>"; };
 		84B0AE221AC69D33005E1F78 /* OATargetPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetPoint.h; path = Data/OATargetPoint.h; sourceTree = "<group>"; };
 		84B0AE231AC69D33005E1F78 /* OATargetPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetPoint.m; path = Data/OATargetPoint.m; sourceTree = "<group>"; };
 		84B0AE271AC82ED3005E1F78 /* OAPOIFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIFilter.h; sourceTree = "<group>"; };
@@ -11782,8 +11782,8 @@
 				DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */,
 				847A20AA1DF9E150003C1246 /* OACollapsableLabelView.h */,
 				847A20AB1DF9E150003C1246 /* OACollapsableLabelView.m */,
-				84AD39E01DFDA5DB00DDB466 /* OACollapsableWikiView.h */,
-				84AD39E11DFDA5DB00DDB466 /* OACollapsableWikiView.mm */,
+				84AD39E01DFDA5DB00DDB466 /* OACollapsableNearestPoiWikiView.h */,
+				84AD39E11DFDA5DB00DDB466 /* OACollapsableNearestPoiWikiView.mm */,
 				8A8128F120F8D4F1001B954A /* OACollapsableTransportStopRoutesView.h */,
 				8A8128F220F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm */,
 				DA9A06192297E9ED000A80F1 /* OACollapsableCardsView.h */,
@@ -18099,7 +18099,7 @@
 				DACBB9A925D6BBC000378C47 /* OACarPlayFavoritesListController.mm in Sources */,
 				844E07BB1E3F97F000EFC525 /* OAStreet.mm in Sources */,
 				848300B81CFAD7A50018B27B /* OATargetDestinationViewController.m in Sources */,
-				84AD39E21DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */,
+				84AD39E21DFDA5DB00DDB466 /* OACollapsableNearestPoiWikiView.mm in Sources */,
 				DA6D51EC21F35B6700EC84E2 /* OAEntity.m in Sources */,
 				DA86AF7B264BFF4900627B66 /* OAXmlImportHandler.mm in Sources */,
 				8AE1C8AB21D60D1300434F07 /* OASubscribeEmailView.m in Sources */,

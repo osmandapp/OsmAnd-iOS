@@ -727,6 +727,11 @@
     return NO; // override
 }
 
+- (BOOL) showNearestPoi;
+{
+    return NO; // override
+}
+
 - (BOOL) supportFullMenu
 {
     return YES; // override

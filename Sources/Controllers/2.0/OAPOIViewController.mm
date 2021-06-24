@@ -187,6 +187,11 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
     return YES;
 }
 
+- (BOOL) showNearestPoi
+{
+    return YES;
+}
+
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *prefLang = [OAUtilities preferredLang];

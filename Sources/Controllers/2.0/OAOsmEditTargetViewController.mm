@@ -156,6 +156,11 @@
     return NO;
 }
 
+- (BOOL) showNearestPoi
+{
+    return NO;
+}
+
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *prefLang = [OAUtilities preferredLang];

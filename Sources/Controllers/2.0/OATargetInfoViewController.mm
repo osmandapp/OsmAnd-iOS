@@ -17,7 +17,7 @@
 #import "Localization.h"
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
-#import "OACollapsableWikiView.h"
+#import "OACollapsableNearestPoiWikiView.h"
 #import "OATransportStopRoute.h"
 #import "OACollapsableTransportStopRoutesView.h"
 #import "OACollapsableCardsView.h"
@@ -97,7 +97,9 @@
     CGFloat _contentHeight;
     UIColor *_contentColor;
     NSArray<OAPOI *> *_nearestWiki;
+    NSArray<OAPOI *> *_nearestPoi;
     BOOL _hasOsmWiki;
+    BOOL _hasPoiTypes;
     CGFloat _calculatedWidth;
     
     OARowInfo *_nearbyImagesRowInfo;
@@ -206,7 +208,7 @@
             return NSOrderedDescending;
         }
     }];
-    
+
     if ([self showNearestWiki])
     {
         [self processNearestWiki];
@@ -216,12 +218,27 @@
             OARowInfo *wikiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:[NSString stringWithFormat:@"%@ (%d)", OALocalizedString(@"wiki_around"), (int)_nearestWiki.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             wikiRowInfo.collapsable = YES;
             wikiRowInfo.collapsed = YES;
-            wikiRowInfo.collapsableView = [[OACollapsableWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            [((OACollapsableWikiView *)wikiRowInfo.collapsableView) setWikiArray:_nearestWiki hasOsmWiki:_hasOsmWiki latitude:self.location.latitude longitude:self.location.longitude];
+            wikiRowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            [((OACollapsableNearestPoiWikiView *) wikiRowInfo.collapsableView) setData:_nearestWiki hasItems:_hasOsmWiki latitude:self.location.latitude longitude:self.location.longitude];
             [_rows addObject:wikiRowInfo];
         }
     }
-    
+
+    if ([self showNearestPoi])
+    {
+        [self processNearestPoi];
+        if (_nearestPoi.count > 0)
+        {
+            OAPOI *poi = (OAPOI *) [self getTargetObj];
+            OARowInfo *poiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:poi.icon textPrefix:nil text:[NSString stringWithFormat:@"%@ \"%@\" (%d)", OALocalizedString(@"speak_poi"), poi.type.nameLocalized, (int)_nearestPoi.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            poiRowInfo.collapsable = YES;
+            poiRowInfo.collapsed = YES;
+            poiRowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            [((OACollapsableNearestPoiWikiView *) poiRowInfo.collapsableView) setData:_nearestPoi hasItems:_hasPoiTypes latitude:self.location.latitude longitude:self.location.longitude];
+            [_rows addObject:poiRowInfo];
+        }
+    }
+
     if ([self needCoords])
     {
         OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
@@ -336,9 +353,8 @@
     
     [wiki sortUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
      {
-         double distance1 = obj1.distanceMeters;
-         double distance2 = obj2.distanceMeters;
-         
+        const auto distance1 = OsmAnd::Utilities::distance(obj1.longitude, obj1.latitude, self.location.longitude, self.location.latitude);
+        const auto distance2 = OsmAnd::Utilities::distance(obj2.longitude, obj2.latitude, self.location.longitude, self.location.latitude);
          return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
      }];
     
@@ -359,7 +375,45 @@
     _nearestWiki = [NSArray arrayWithArray:wiki];
 }
 
+- (void)processNearestPoi
+{
+    NSMutableArray<OAPOI *> *poiTypes = [NSMutableArray new];
+
+    id targetObj = [self getTargetObj];
+    if (targetObj && [targetObj isKindOfClass:[OAPOI class]])
+    {
+        OAPOI *poi = targetObj;
+        if (!poi.type.category.isWiki)
+        {
+            OAPOIType *poiType = poi.type;
+            OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
+            poiTypes = [NSMutableArray arrayWithArray:[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:poiType.category.name poiTypeName:poiType.name radius:250]];
+
+            [poiTypes sortUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2) {
+                const auto distance1 = OsmAnd::Utilities::distance(obj1.longitude, obj1.latitude, self.location.longitude, self.location.latitude);
+                const auto distance2 = OsmAnd::Utilities::distance(obj2.longitude, obj2.latitude, self.location.longitude, self.location.latitude);
+                return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
+            }];
+
+            for (OAPOI *p in poiTypes) {
+                if (poi.obfId != 0 && p.obfId == poi.obfId) {
+                    [poiTypes removeObject:p];
+                    break;
+                }
+            }
+        }
+    }
+
+    _hasPoiTypes = poiTypes.count > 0;
+    _nearestPoi = [NSArray arrayWithArray:poiTypes];
+}
+
 - (BOOL) showNearestWiki
+{
+    return YES;
+}
+
+- (BOOL) showNearestPoi
 {
     return YES;
 }
@@ -688,10 +742,21 @@
     _nearbyImagesRowInfo = nearbyImagesRowInfo;
 }
 
--(void)handleLongPressToCopy:(UILongPressGestureRecognizer *)gestureRecognizer
+-(void)handleLongPressToCopyText:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
-        [[UIPasteboard generalPasteboard] setString:[OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES]];
+    {
+        CGPoint p = [gestureRecognizer locationInView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:p];
+        OARowInfo *info = _rows[indexPath.row];
+        NSString *textToCopy;
+        if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
+            textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
+        else
+            textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+
+        [[UIPasteboard generalPasteboard] setString:textToCopy];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -722,7 +787,7 @@
             
             cell.collapsableView = coordinateView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
-            [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopy:)]];
+            [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
 
             return cell;
         }
@@ -748,7 +813,8 @@
 
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
-            
+            [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
+
             return cell;
         }
         else
@@ -772,6 +838,7 @@
             cell.textView.textColor = info.textColor;
             cell.textView.font = [info getFont];
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
+            [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
 
             return cell;
         }

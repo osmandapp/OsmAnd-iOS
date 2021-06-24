@@ -1,12 +1,12 @@
 //
-//  OACollapsableWikiView.m
+//  OACollapsableNearestPoiWikiView.m
 //  OsmAnd
 //
 //  Created by Alexey Kulish on 11/12/2016.
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OACollapsableWikiView.h"
+#import "OACollapsableNearestPoiWikiView.h"
 #import "OAPOI.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -32,7 +32,7 @@
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
-@implementation OACollapsableWikiView
+@implementation OACollapsableNearestPoiWikiView
 {
     UIView *_bannerView;
     UILabel *_bannerLabel;
@@ -56,10 +56,10 @@
     return self;
 }
 
--(void) setWikiArray:(NSArray<OAPOI *> *)nearestWiki hasOsmWiki:(BOOL)hasOsmWiki latitude:(double)latitude longitude:(double)longitude
+-(void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude
 {
-    _nearestWiki = nearestWiki;
-    _hasOsmWiki = hasOsmWiki;
+    _nearestItems = nearestItems;
+    _hasItems = hasItems;
     _latitude = latitude;
     _longitude = longitude;
     [self buildViews];
@@ -77,7 +77,7 @@
 
 - (void) buildViews
 {
-    if (!self.hasOsmWiki)
+    if (!self.hasItems)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
         _worldRegion = [app.worldRegion findAtLat:_latitude lon:_longitude];
@@ -153,12 +153,14 @@
         }
     }
     
-    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestWiki.count];
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestItems.count];
     int i = 0;
-    for (OAPOI *w in self.nearestWiki)
+    for (OAPOI *w in self.nearestItems)
     {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        [btn setTitle:w.nameLocalized forState:UIControlStateNormal];
+        const auto distance = OsmAnd::Utilities::distance(w.longitude, w.latitude, _longitude, _latitude);
+        NSString *title = [NSString stringWithFormat:@"%@ (%@)", w.nameLocalized, [[OsmAndApp instance] getFormattedDistance:distance]];
+        [btn setTitle:title forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
         btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -215,7 +217,7 @@
     CGFloat y = 0;
     CGFloat viewHeight = 0;
     
-    if (!self.hasOsmWiki && _bannerView)
+    if (!self.hasItems && _bannerView)
     {
         CGSize labelSize = [OAUtilities calculateTextBounds:_bannerLabel.text width:width - 65.0 - 10.0 - 10.0 font:_bannerLabel.font];
         _bannerView.frame = CGRectMake(kMarginLeft, 0.0, width - kMarginLeft - kMarginRight, 12.0 + labelSize.height + 10.0 + _bannerButton.bounds.size.height + 10.0);
@@ -247,11 +249,11 @@
 {
     UIButton *btn = sender;
     NSInteger index = btn.tag;
-    if (index >= 0 && index < self.nearestWiki.count)
+    if (index >= 0 && index < self.nearestItems.count)
     {
-        OAPOI *w = self.nearestWiki[index];
-        if (w)
-            [self goToPoint:w];
+        OAPOI *item = self.nearestItems[index];
+        if (item)
+            [self goToPoint:item];
     }
 }
 

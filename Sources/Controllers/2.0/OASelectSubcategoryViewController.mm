@@ -370,7 +370,7 @@
             BOOL selected = [_selectedItems containsObject:poiType];
 
             UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-            cell.imgView.image = [OACustomPOIViewController getPoiIcon:poiType];
+            cell.imgView.image = self.delegate ? [self.delegate getPoiIcon:poiType] : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             cell.imgView.tintColor = selectedColor;
             if (cell.imgView.image.size.width < cell.imgView.frame.size.width && cell.imgView.image.size.height < cell.imgView.frame.size.height)
                 cell.imgView.contentMode = UIViewContentModeCenter;

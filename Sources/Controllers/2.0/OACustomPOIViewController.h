@@ -21,6 +21,4 @@
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter;
 
-+ (UIImage *)getPoiIcon:(OAPOIType *)poiType;
-
 @end

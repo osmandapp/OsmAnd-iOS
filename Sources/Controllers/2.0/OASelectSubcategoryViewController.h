@@ -10,6 +10,7 @@
 
 @class OAPOICategory;
 @class OAPOIUIFilter;
+@class OAPOIType;
 
 @protocol OASelectSubcategoryDelegate
 
@@ -17,6 +18,7 @@
 
 - (void)selectSubcategoryCancel;
 - (void)selectSubcategoryDone:(OAPOICategory *)category keys:(NSMutableSet<NSString *> *)keys allSelected:(BOOL)allSelected;
+- (UIImage *)getPoiIcon:(OAPOIType *)poiType;
 
 @end
 

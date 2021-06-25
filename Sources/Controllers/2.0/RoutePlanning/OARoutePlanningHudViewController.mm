@@ -790,6 +790,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (IBAction)onUndoButtonPressed:(id)sender
 {
     [_editingContext.commandManager undo];
+    
+    if (_editingContext.getPointsCount == 0)
+        [OARootViewController.instance.mapPanel.mapViewController.mapLayers.routePlanningLayer resetLayer];
+    
     [self onPointsListChanged];
     [self setupModeButton];
 }

@@ -348,7 +348,8 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [_app shutdown];
-    
+    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+    [mapVc onApplicationDestroyed];
     // Release OsmAnd core
     OsmAnd::ReleaseCore();
     

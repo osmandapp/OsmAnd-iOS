@@ -115,7 +115,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self applySafeAreaMargins];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -873,23 +872,10 @@
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        _buttonBackgroundView.frame = CGRectMake(0, DeviceScreenHeight - keyboardHeight - 44.0, _buttonBackgroundView.frame.size.width, 44.0);
-        [self applyHeight:32.0 cornerRadius:4.0 toView:_btnApply];
-        UIEdgeInsets insets = [self.tableView contentInset];
-        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
-        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
-        [[self view] layoutIfNeeded];
+        self.view.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight - keyboardHeight);
+        [self.view setNeedsUpdateConstraints];
+        [self.view updateConstraintsIfNeeded];
     } completion:nil];
-}
-
-- (void)applySafeAreaMargins
-{
-    [super applySafeAreaMargins];
-    CGRect applyFrame = _btnApply.frame;
-    CGFloat marginLeft = OAUtilities.getLeftMargin;
-    applyFrame.origin.x = marginLeft + 16.0;
-    applyFrame.size.width = DeviceScreenWidth - 32.0 - marginLeft * 2;
-    _btnApply.frame = applyFrame;
 }
 
 - (void) keyboardWillHide:(NSNotification *)notification;
@@ -898,12 +884,9 @@
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        [self applySafeAreaMargins];
-        [self applyHeight:42.0 cornerRadius:9.0 toView:_btnApply];
-        UIEdgeInsets insets = [self.tableView contentInset];
-        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
-        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
-        [[self view] layoutIfNeeded];
+        self.view.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight);
+        [self.view setNeedsUpdateConstraints];
+        [self.view updateConstraintsIfNeeded];
     } completion:nil];
 }
 

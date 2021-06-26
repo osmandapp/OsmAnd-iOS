@@ -79,7 +79,7 @@
 "shared_string_never" = "هرگز";
 "general_settings_2" = "تنظیمات کلی";
 "general_settings_descr" = "Configure display and common settings for the application";
-"routing_settings_descr" = "Specify options for navigation";
+"routing_settings_descr" = "جهت‌یابی را پیکربندی کنید";
 "auto_zoom_none" = "زوم خودکار غیرفعال";
 "auto_zoom_close" = "نمای نزدیک";
 "auto_zoom_far" = "نمای میانه";
@@ -140,7 +140,7 @@
 "calculate_osmand_route_without_internet" = "محاسبهٔ مسیر بدون استفاده از اینترنت";
 "routing_settings_2" = "تنظیمات ناوبری";
 "gpx_navigation" = "دنبال‌کردن رد";
-"impassable_road" = "پرهیز از راه‌های…";
+"impassable_road" = "پرهیز از جاده‌ها";
 "impassable_road_desc" = "جاده‌هایی که می‌خواهید در مسیریابی نباشند را انتخاب کنید.";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "مکث موسیقی";
@@ -162,9 +162,9 @@
 "shared_string_select_on_map" = "انتخاب روی نقشه";
 "shared_string_my_location" = "موقعیت من";
 "route_descr_select_destination" = "انتخاب مقصد";
-"route_to" = "به:";
-"route_via" = "گذر از:";
-"route_from" = "از:";
+"route_to" = "به";
+"route_via" = "گذر از";
+"route_from" = "از";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "خطا در محاسبهٔ مسیر";
@@ -309,16 +309,16 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "برون‌برد";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Import trip";
+"gpx_import_title" = "واردکردن ردها";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
-"gpx_export_title" = "Export trip";
+"gpx_export_title" = "برون‌برد از ردها";
 "gpx_export_select_track" = "Please select trip for Export";
 "gpx_import_desc" = "You can import your GPX files (common GPS data format)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function";
 "gpx_no_tracks" = "There are no trips";
-"gpx_remove" = "Remove trip?";
+"gpx_remove" = "رد حذف‌شود؟";
 "gpx_stat" = "Statistics";
 "gpx_route" = "مسیر";
 "gpx_route_time" = "Route time";
@@ -428,7 +428,7 @@
 "res_region_map" = "Region map";
 "res_updates_avail" = "Updates available";
 "res_maps_inst" = "map(s)";
-"res_deleting" = "Deleting...";
+"res_deleting" = "درحال حذف…";
 "res_wsea_map" = "World seamarks basemap";
 "res_wmap" = "Worldwide overview map";
 "res_dmap" = "Detailed overview map";
@@ -456,7 +456,7 @@
 "res_updates_exp" = "Please purchase continent(s) to update the maps";
 // Menu
 "menu_my_places" = "مکان‌های من";
-"menu_my_trips" = "My Trips";
+"menu_my_trips" = "ردهای من";
 "menu_my_directions" = "My Directions";
 "menu_feedback" = "بازخورد";
 "menu_about" = "About";
@@ -506,7 +506,7 @@
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
 "ctx_mnu_share" = "هم‌رسانی";
-"ctx_mnu_direction" = "نشانهٔ نقشه";
+"ctx_mnu_direction" = "نشانگر نقشه";
 // Location Services
 "loc_access_denied" = "Access denied";
 "loc_access_denied_desc" = "Access to location service has been denied";
@@ -551,7 +551,7 @@
 "product_title_skimap" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
-"product_title_track_recording" = "Trip recording";
+"product_title_track_recording" = "ضبط رد";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
 "product_title_trip_planning" = "Trip planning";
@@ -592,7 +592,7 @@
 "enter_description" = "Enter description";
 "description" = "توضیحات";
 "enter_fav_name" = "Enter favorite name";
-"res_installing" = "Installing...";
+"res_installing" = "درحال نصب…";
 "res_roads" = "جاده‌ها";
 "res_srtm" = "منحنی‌های میزان";
 "res_wiki" = "ویکی‌پدیا";
@@ -602,7 +602,7 @@
 "open_url" = "Open page in browser";
 "no_other_translations" = "There are no other translations";
 "wpt_remove_q" = "Remove waypoint?";
-"gpx_select_track" = "Select trip";
+"gpx_select_track" = "رد را انتخاب کنید";
 "gpx_curr_new_track" = "رد فعلی";
 "enter_name" = "نام";
 "not_selected" = "انتخاب نشده";
@@ -619,7 +619,7 @@
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
 "menu_active_trips" = "فعال";
-"menu_all_trips" = "All Trips";
+"menu_all_trips" = "همه ردها";
 "total_time" = "Total time";
 "moving_time" = "مدت حرکت";
 "change_group" = "Change group";
@@ -629,7 +629,7 @@
 "create_new_trip" = "Create new trip";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the trip";
-"gpx_rename_q" = "تغییر نام رد";
+"gpx_rename_q" = "تغییرنام رد";
 "gpx_enter_new_name" = "Please enter new name for the trip";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "غیرفعال";
@@ -772,7 +772,7 @@
 "logging_interval_navigation_descr" = "بازهٔ زمانی ثبت داده‌های ضبط مسیر در هنگام راهبری";
 "logging_min_distance" = "کمترین جابجایی";
 "logging_min_distance_descr" = "فیلتر: کمترین مسافت تا ثبت یک نقطهٔ جدید";
-"logging_min_accuracy" = "کمترین صحت";
+"logging_min_accuracy" = "کمترین دقت";
 "logging_min_accuracy_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این دقت برسد";
 "logging_min_speed" = "کمترین سرعت";
 "logging_min_speed_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این سرعت برسد";
@@ -1057,7 +1057,7 @@
 "routeInfo_piste_difficulty_name" = "دشواری پیست";
 "routing_attr_avoid_toll_name" = "جادهٔ عوارضی‌دار";
 "rendering_value_dark_brown_name" = "قهوه‌ای تیره";
-"rendering_value_bicycle_name" = "دوچرخه";
+"rendering_value_bicycle_name" = "دوچرخه‌سواری";
 "rendering_value_pedestrian_name" = "پیاده";
 "rendering_attr_highway_class_track_grade4_name" = "سطح ۴";
 "rendering_value_brown_name" = "قهوه‌ای";
@@ -1240,7 +1240,7 @@
 "routeInfo_roadClass_name" = "نوع جاده";
 "rendering_attr_piste_difficulty_novice_name" = "مبتدی";
 "rendering_value_defaultTranslucentCyan_name" = "پیش‌فرض (فیروزه‌ای شفاف)";
-"rendering_value_car_name" = "خودرو";
+"rendering_value_car_name" = "رانندگی";
 "routeInfo_tracktype_name" = "سِفتی سطح";
 "rendering_value_translucent_blue_name" = "آبی شفاف";
 "rendering_attr_hideAccess_name" = "محدودیت‌های دسترسی";
@@ -1371,7 +1371,7 @@
 "reset_to_default" = "بازنشانی به پیشفرض";
 "units_and_formats" = "یکاها و قالب‌ها";
 "configure_profile" = "پیکربندی پروفایل";
-"export_profile" = "برون‌برد پروفایل";
+"export_profile" = "برون‌برد";
 "default_speed_dialog_msg" = "هنگام پیمودن راه‌های ناشناخته زمان رسیدن را تخمین می‌زند و سرعت را برای همهٔ راه‌ها محدود می‌کند (ممکن است بر مسیریابی اثر بگذارد)";
 "selected_profile" = "پروفایل انتخاب‌شده";
 "profile_appearance" = "ظاهر پروفایل";
@@ -1526,7 +1526,6 @@
 
 // Resources
 "shared_string_resources" = "منابع";
-
 "default_color" = "رنگ پیش‌فرض";
 "fav_point_dublicate" = "نام علاقه‌مندی تکراری است";
 "coordinates" = "مختصات";
@@ -1588,3 +1587,75 @@
 "osm_created" = "ایجادشده";
 "years_short" = "سال‌ها";
 "year_short" = "سال";
+"quick_action_add_tag" = "افزودن تگ";
+"quick_action_template_name" = "نام قالب";
+"add_group" = "افزودن گروه";
+"quick_action_screen_header" = "صفحه‌نمایش %ld";
+"search_results" = "نتایج جستجو";
+"toggle_fav" = "نمایان/پنهان کردن موارد دلخواه";
+"show_hide_gpx" = "نمایان/پنهان کردن ردها";
+"add_destination" = "مقصد را اضافه کنید";
+"download_pending" = "بارگیری درانتظار است";
+"key_hint_zoom_out" = "کوچک‌نمایی";
+"key_hint_zoom_in" = "بزرگنمایی";
+"osm_upload_complete" = "آپلود کامل شد";
+"mapil_select_user" = "انتخاب کاربر";
+"shared_string_not_set" = "تنظیم نشده";
+"shared_string_end_date" = "تاریخ پایان";
+"shared_string_start_date" = "تاریخ شروع";
+"mapil_images_nearby" = "تصاویر در نزدیکی";
+"osm_poi_id_label" = "شناسه POI:";
+"osm_edits_poi" = "ویرایش‌های POI";
+"osm_edits_all" = "همه ویرایش‌ها";
+"osm_note_upload_immediately" = "بلافاصله بارگذاری کنید";
+"osm_upload_failed_title" = "بارگذاری انجام نشد";
+"poi_select_type" = "نوع را انتخاب کنید";
+"poi_select_category" = "دسته‌بندی را انتخاب کنید";
+"product_title_osm_editing" = "ویرایش نقشه اوپن‌استریت‌مپ";
+"osm_confirm_delete" = "POI حذف‌شود؟";
+"osm_modify_place" = "ویرایش مکان";
+"osm_add_place" = "افزودن مکان";
+"osm_building_num" = "شماره ساختمان";
+"osm_closes_at" = "بسته‌می‌شود در:";
+"osm_opens_at" = "بازمی‌شود در:";
+"osm_pass" = "رمز ورود اوپن‌استریت‌مپ";
+"osm_name" = "نام‌کاربری اوپن‌استریت‌مپ";
+"privacy_policy" = "سیاست حفظ حریم‌خصوصی";
+"osmand_live_donation_header" = "تنظیمات دونیت";
+"default_price_currency_format" = "%@ %@";
+"osm_live_payment_discount_descr" = "ذخیره %@!";
+"osm_live_payment_monthly_title" = "پرداخت ماهانه";
+"help_contact_us" = "تماس با ما";
+"help_search" = "جستجوی نقشه";
+
+// Help
+"help_first_steps" = "اولین مراحل";
+"track_during_nav" = "ضبط خودکار رد";
+"default" = "پیش‌فرض";
+"gpxup_private" = "خصوصی";
+"gpxup_trackable" = "قابل ردیابی";
+"gpxup_public" = "عمومی";
+"restart" = "راه‌اندازی مجدد";
+"shape" = "شکل";
+"plan_route_folder" = "پوشه";
+"shared_string_loading" = "درحال بارگذاری…";
+"vk" = "VK";
+"shared_string_email" = "ایمیل";
+"shared_string_required" = "ضروری";
+"email_example_hint" = "user@example.com";
+"downloading" = "درحال بارگیری";
+"desert" = "کویر";
+"transfers" = "نقل و انتقالات:";
+"shared_string_maximum" = "بیشترین";
+"gpx_analyze" = "آنالیز";
+"calculating_progress" = "محاسبه...";
+"units_sec_short" = "s";
+"sort_by" = "مرتب‌سازی";
+"quick_action_dialog" = "گفتگو";
+"reddit" = "ردیت";
+"osm_edit_uploading" = "درحال بارگذاری...";
+"osm_failed_uploads" = "ناموفق";
+"osm_succsessful_uploads" = "موفقیت‌آمیز";
+"osm_reopened" = "دوباره بازشد";
+"osmand_live_reports" = "گزارش‌ها";
+"twitter" = "توییتر";

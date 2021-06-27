@@ -15,6 +15,6 @@
 @property (nonatomic, readonly) NSArray<OAPOI *> *nearestItems;
 @property (nonatomic, readonly) BOOL hasItems;
 
-- (void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude;
+- (void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude target:(id)target isWiki:(BOOL)isWiki;
 
 @end

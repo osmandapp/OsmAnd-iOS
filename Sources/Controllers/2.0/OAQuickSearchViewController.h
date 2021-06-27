@@ -11,7 +11,16 @@
 
 #include <OsmAndCore.h>
 
+typedef NS_ENUM(NSInteger, BarActionType)
+{
+    BarActionNone = 0,
+    BarActionShowOnMap,
+    BarActionEditHistory,
+    BarActionSelectTarget,
+};
+
 @class OAQuickSearchListItem;
+@class OAPOIUIFilter;
 
 @protocol OAQuickSearchDelegate <NSObject>
 
@@ -31,6 +40,7 @@
 
 @property (nonatomic, weak) id<OAQuickSearchDelegate> delegate;
 
-- (void) resetSearch;
+- (void) setupBarActionView:(BarActionType)type title:(NSString *)title;
+- (void) showToolbar:(OAPOIUIFilter *)filter;
 
 @end

@@ -101,6 +101,9 @@
 #import "OAFavoritesLayer.h"
 #import "OAImpassableRoadsLayer.h"
 #import "OACarPlayActiveViewController.h"
+#import "OASearchUICore.h"
+#import "OASearchPhrase.h"
+#import "OAQuickSearchHelper.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -119,6 +122,7 @@
 #import "OAEditPointViewController.h"
 #import "OAGPXDocument.h"
 #import "OARoutePlanningHudViewController.h"
+#import "OAPOIUIFilter.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -953,6 +957,11 @@ typedef enum
     [self openSearch:OAQuickSearchType::REGULAR];
 }
 
+- (void) openSearch:(NSObject *)object location:(CLLocation *)location
+{
+    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:@"" object:object];
+}
+
 - (void) openSearch:(OAQuickSearchType)searchType
 {
     [self openSearch:searchType location:nil tabIndex:-1];
@@ -960,10 +969,10 @@ typedef enum
 
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex
 {
-    [self openSearch:searchType location:location tabIndex:tabIndex searchQuery:nil];
+    [self openSearch:searchType location:location tabIndex:tabIndex searchQuery:nil object:nil];
 }
 
-- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object
 {
     [OAAnalyticsHelper logEvent:@"search_open"];
     
@@ -1017,16 +1026,50 @@ typedef enum
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
     _searchViewController.searchType = searchType;
+
+    if (object)
+    {
+        NSString *objectLocalizedName = searchQuery;
+        OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
+        OASearchResult *sr;
+        OASearchPhrase *phrase;
+
+        if ([object isKindOfClass:[OAPOICategory class]])
+        {
+            objectLocalizedName = ((OAPOICategory *) object).nameLocalized;
+            phrase = [searchUICore resetPhrase:[NSString stringWithFormat:@"%@ ", objectLocalizedName]];
+        }
+        else if ([object isKindOfClass:[OAPOIUIFilter class]])
+        {
+            objectLocalizedName = ((OAPOIUIFilter *) object).name;
+            phrase = [searchUICore resetPhrase];
+        }
+
+        if (phrase)
+        {
+            sr = [[OASearchResult alloc] initWithPhrase:phrase];
+            sr.localeName = objectLocalizedName;
+            sr.object = object;
+            sr.priority = SEARCH_AMENITY_TYPE_PRIORITY;
+            sr.priorityDistance = 0;
+            sr.objectType = POI_TYPE;
+            [searchUICore selectSearchResult:sr];
+        }
+
+        searchQuery = [NSString stringWithFormat:@"%@ ", objectLocalizedName.trim];
+    }
+
     if (searchQuery)
         _searchViewController.searchQuery = searchQuery;
+
     if (tabIndex != -1)
         _searchViewController.tabIndex = tabIndex;
-    
+
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchViewController];
     navController.navigationBarHidden = YES;
     navController.automaticallyAdjustsScrollViewInsets = NO;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
-    
+
     [self presentViewController:navController animated:YES completion:nil];
 }
 
@@ -3295,6 +3338,24 @@ typedef enum
 {
     [_toolbars removeObject:toolbarController];
     [self updateToolbar];
+}
+
+- (void)showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude
+{
+    BOOL searchNearMapCenter = NO;
+    OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latitude, longitude));
+    OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
+    double distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
+
+    if (!_searchViewController)
+        _searchViewController = [[OAQuickSearchViewController alloc] init];
+
+    _searchViewController.myLocation = myLocation;
+    _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
+    _searchViewController.searchNearMapCenter = searchNearMapCenter;
+
+    [_searchViewController setupBarActionView:BarActionShowOnMap title:filter.name];
+    [_searchViewController showToolbar:filter];
 }
 
 #pragma mark - OAToolbarViewControllerProtocol

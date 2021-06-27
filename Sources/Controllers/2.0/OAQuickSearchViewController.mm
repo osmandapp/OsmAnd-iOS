@@ -70,14 +70,6 @@
 #define kCancelButtonY 5.0
 #define kLeftImageButtonY -2.0
 
-typedef NS_ENUM(NSInteger, BarActionType)
-{
-    BarActionNone = 0,
-    BarActionShowOnMap,
-    BarActionEditHistory,
-    BarActionSelectTarget,
-};
-
 typedef NS_ENUM(NSInteger, QuickSearchTab)
 {
     HISTORY = 0,
@@ -456,6 +448,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             break;
     }
     _barActionType = type;
+    [self.view setNeedsLayout];
 }
 
 - (void)updateTabsVisibility:(BOOL)show
@@ -586,7 +579,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [mapVC updatePoiLayer];
-                [self showToolbar];
+                [self showToolbar:nil];
                 [self dismissViewControllerAnimated:YES completion:nil];
             }
             else
@@ -680,14 +673,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self setBottomViewVisible:NO];
 }
 
-- (void) showToolbar
+- (void)showToolbar:(OAPOIUIFilter *)filter
 {
     if (!_searchToolbarViewController)
     {
         _searchToolbarViewController = [[OASearchToolbarViewController alloc] initWithNibName:@"OASearchToolbarViewController" bundle:nil];
         _searchToolbarViewController.searchDelegate = self;
     }
-    _searchToolbarViewController.toolbarTitle = [_textField.text trim];
+    [_searchToolbarViewController setFilter:filter];
+    _searchToolbarViewController.toolbarTitle = filter ? filter.name : [_textField.text trim];
     [[OARootViewController instance].mapPanel showToolbar:_searchToolbarViewController];
 }
 
@@ -723,8 +717,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         {
             [self setupBarActionView:BarActionNone title:nil];
         }
-
-        [self.view setNeedsLayout];
     }
 }
 
@@ -766,7 +758,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     _historyEditing = NO;
     [self setupBarActionView:BarActionNone title:nil];
-    [self.view setNeedsLayout];
 }
 
 -(void)setSearchNearMapCenter:(BOOL)searchNearMapCenter
@@ -1901,7 +1892,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     _historyEditing = YES;
     [self setupBarActionView:BarActionEditHistory title:@""];
-    [self.view setNeedsLayout];
 }
 
 - (void) exitHistoryEditingMode
@@ -1997,9 +1987,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - OASearchToolbarViewControllerProtocol
 
-- (void)searchToolbarOpenSearch
+- (void)searchToolbarOpenSearch:(OAPOIUIFilter *)filter
 {
-    [[OARootViewController instance].mapPanel openSearch];
+    if (filter)
+    {
+        [[OARootViewController instance].mapPanel hideToolbar:_searchToolbarViewController];
+        [[OARootViewController instance].mapPanel openSearch:filter location:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel openSearch];
+    }
 }
 
 - (void)searchToolbarClose

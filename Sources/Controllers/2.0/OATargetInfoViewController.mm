@@ -219,7 +219,7 @@
             wikiRowInfo.collapsable = YES;
             wikiRowInfo.collapsed = YES;
             wikiRowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            [((OACollapsableNearestPoiWikiView *) wikiRowInfo.collapsableView) setData:_nearestWiki hasItems:_hasOsmWiki latitude:self.location.latitude longitude:self.location.longitude];
+            [((OACollapsableNearestPoiWikiView *) wikiRowInfo.collapsableView) setData:_nearestWiki hasItems:_hasOsmWiki latitude:self.location.latitude longitude:self.location.longitude target:[self getTargetObj] isWiki:YES];
             [_rows addObject:wikiRowInfo];
         }
     }
@@ -234,7 +234,7 @@
             poiRowInfo.collapsable = YES;
             poiRowInfo.collapsed = YES;
             poiRowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            [((OACollapsableNearestPoiWikiView *) poiRowInfo.collapsableView) setData:_nearestPoi hasItems:_hasPoiTypes latitude:self.location.latitude longitude:self.location.longitude];
+            [((OACollapsableNearestPoiWikiView *) poiRowInfo.collapsableView) setData:_nearestPoi hasItems:_hasPoiTypes latitude:self.location.latitude longitude:self.location.longitude target:poi isWiki:NO];
             [_rows addObject:poiRowInfo];
         }
     }

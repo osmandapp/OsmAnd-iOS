@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OAPOIUIFilter.h"
 #import "OACommonTypes.h"
 #import "OAUtilities.h"
 #import "OAIAPHelper.h"
@@ -24,6 +25,7 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWikiArticleHelper.h"
+#import "OAPOIFiltersHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -37,13 +39,17 @@
     UIView *_bannerView;
     UILabel *_bannerLabel;
     UIButton *_bannerButton;
- 
+
     NSArray<UIButton *> *_buttons;
     double _latitude;
     double _longitude;
-    
+    OAPOIUIFilter *_targetFilter;
+    BOOL _isWiki;
+
     OAWorldRegion *_worldRegion;
     OARepositoryResourceItem *_resourceItem;
+    NSInteger _buttonShowOnMapIndex;
+    NSInteger _buttonSearchMoreIndex;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -56,12 +62,15 @@
     return self;
 }
 
--(void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude
+-(void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude target:(id)target isWiki:(BOOL)isWiki
 {
     _nearestItems = nearestItems;
     _hasItems = hasItems;
     _latitude = latitude;
     _longitude = longitude;
+    if ([target isKindOfClass:OAPOI.class])
+        _targetFilter = [self getPoiFilterForType:target];
+    _isWiki = isWiki;
     [self buildViews];
 }
 
@@ -153,30 +162,47 @@
         }
     }
     
-    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestItems.count];
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestItems.count + 2];
     int i = 0;
-    for (OAPOI *w in self.nearestItems)
+    for (OAPOI *poi in self.nearestItems)
     {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        const auto distance = OsmAnd::Utilities::distance(w.longitude, w.latitude, _longitude, _latitude);
-        NSString *title = [NSString stringWithFormat:@"%@ (%@)", w.nameLocalized, [[OsmAndApp instance] getFormattedDistance:distance]];
-        [btn setTitle:title forState:UIControlStateNormal];
-        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
-        btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
-        btn.layer.cornerRadius = 4.0;
-        btn.layer.masksToBounds = YES;
-        btn.layer.borderWidth = 0.8;
-        btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
-        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
-        btn.tintColor = UIColorFromRGB(0x1b79f8);
+        const auto distance = OsmAnd::Utilities::distance(poi.longitude, poi.latitude, _longitude, _latitude);
+        NSString *title = [NSString stringWithFormat:@"%@ (%@)", poi.nameLocalized, [[OsmAndApp instance] getFormattedDistance:distance]];
+        UIButton *btn = [self createButton:title];
         btn.tag = i++;
-        [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
         [buttons addObject:btn];
     }
+
+    UIButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")];
+    showOnMapButton.tag = _buttonShowOnMapIndex = i++;
+    [self addSubview:showOnMapButton];
+    [buttons addObject:showOnMapButton];
+
+    UIButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")];
+    searchMoreButton.tag = _buttonSearchMoreIndex = i++;
+    [self addSubview:searchMoreButton];
+    [buttons addObject:searchMoreButton];
+
     _buttons = [NSArray arrayWithArray:buttons];
+}
+
+- (UIButton *)createButton:(NSString *)title
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [btn setTitle:title forState:UIControlStateNormal];
+    btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
+    btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
+    btn.layer.cornerRadius = 4.0;
+    btn.layer.masksToBounds = YES;
+    btn.layer.borderWidth = 0.8;
+    btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
+    [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
+    btn.tintColor = UIColorFromRGB(0x1b79f8);
+    [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+    return btn;
 }
 
 - (void) updateButton
@@ -255,6 +281,41 @@
         if (item)
             [self goToPoint:item];
     }
+    else
+    {
+        [[OARootViewController instance].mapPanel hideContextMenu];
+        if (index == _buttonShowOnMapIndex)
+        {
+            [[OARootViewController instance].mapPanel showPoiToolbar:_targetFilter latitude:_latitude longitude:_longitude];
+            OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+            [helper clearSelectedPoiFilters];
+            [helper addSelectedPoiFilter:_targetFilter];
+            [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
+        }
+        else if (index == _buttonSearchMoreIndex)
+        {
+            [[OARootViewController instance].mapPanel openSearch:_targetFilter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
+        }
+    }
+}
+
+- (OAPOIUIFilter *) getPoiFilterForType:(OAPOI *)target
+{
+    if (target)
+    {
+        OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+        if (_isWiki)
+        {
+            return [helper getTopWikiPoiFilter];
+        }
+        else
+        {
+            OAPOICategory *category = target.type.category;
+            OAPOIType *poiType = [category getPoiTypeByKeyName:target.type.name];
+            return [helper getFilterById:[NSString stringWithFormat:@"std_%@", poiType.name]];
+        }
+    }
+    return nil;
 }
 
 - (void) goToPoint:(OAPOI *)poi

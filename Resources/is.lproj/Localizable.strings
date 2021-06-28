@@ -67,7 +67,7 @@
 "gpx_waypoint" = "Ferilpunktur";
 "gpx_waypoints" = "Ferilpunktar";
 "gpx_points" = "Punkt(ur/ar)";
-"shared_string_export" = "Flytjaút";
+"shared_string_export" = "Flytja út";
 "import_export" = "Flytja inn/út";
 "gpx_import_title" = "Flytja inn ferla";
 "gpx_import_already_exists" = "Tiltekna ferlaskráin er þegar á listanum. Veldu einhverja aðgerð.";
@@ -1892,7 +1892,7 @@
 "shared_string_deselect_all" = "Afvelja allt";
 "shared_string_settings" = "Stillingar";
 "avoid_road" = "Forðast veg";
-"shared_string_continue" = "Haldaáfram";
+"shared_string_continue" = "Halda áfram";
 "shared_string_finish" = "Ljúka";
 "shared_string_routing" = "Leiðagerð";
 "import_duplicates_title" = "Sum atriðin eru þegar til staðar";
@@ -2082,7 +2082,7 @@
 "extra_maps" = "Aukakort";
 "custom_plugins" = "Sérsniðnar viðbætur";
 "custom_osmand_plugin_name" = "Sérsniðin OsmAnd-viðbót";
-"shared_string_disable" = "Geraóvirkt";
+"shared_string_disable" = "Gera óvirkt";
 
 // Shared Strings
 "shared_string_enable" = "Virkja";

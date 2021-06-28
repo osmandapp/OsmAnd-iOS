@@ -2109,3 +2109,11 @@
 "no_waypoints_found" = "Keine Wegpunkte gefunden";
 "context_menu_item_edit_waypoint" = "GPX-Wegpunkt bearbeiten";
 "replace_waypoint_confirmation" = "Sind Sie sicher, dass Sie den Wegpunkt %@ ersetzen wollen?";
+"default" = "Standard";
+"map_widget_parking" = "Parkplatz";
+"select_profile" = "Profil auswählen";
+"threshold_distance" = "Maximaler Abstand";
+"route_between_points_warning_desc" = "Als nächstes können Sie Ihren Track mit einem Ihrer Navigationsprofile auf die nächstgelegene erlaubte Straße einrasten lassen, um diese Option zu nutzen.";
+"carplay_profile_descr" = "Profil, das während der Verbindung mit CarPlay verwendet wird.";
+"carplay_profile" = "CarPlay Profil";
+"last_used" = "Zuletzt verwendet";

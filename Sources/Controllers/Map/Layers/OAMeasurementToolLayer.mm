@@ -411,6 +411,9 @@
 
 - (void) drawRouteSegments
 {
+    _collection->removeAllLines();
+    _lastLineCollection->removeAllLines();
+    
     NSArray<OAGpxTrkSeg *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
     NSArray<OAGpxTrkSeg *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
     for (OAGpxTrkSeg *seg in beforeSegs)

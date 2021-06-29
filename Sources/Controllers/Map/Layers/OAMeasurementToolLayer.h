@@ -37,7 +37,5 @@
 
 - (void) moveMapToPoint:(NSInteger)pos;
 
-- (void) resetLayer;
-
 @end
 

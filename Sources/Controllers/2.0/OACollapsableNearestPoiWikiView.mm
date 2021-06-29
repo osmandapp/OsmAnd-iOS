@@ -43,8 +43,7 @@
     NSArray<UIButton *> *_buttons;
     double _latitude;
     double _longitude;
-    OAPOIUIFilter *_targetFilter;
-    BOOL _isWiki;
+    OAPOIUIFilter *_filter;
 
     OAWorldRegion *_worldRegion;
     OARepositoryResourceItem *_resourceItem;
@@ -62,15 +61,13 @@
     return self;
 }
 
--(void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude target:(id)target isWiki:(BOOL)isWiki
+-(void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude filter:(OAPOIUIFilter *)filter
 {
     _nearestItems = nearestItems;
     _hasItems = hasItems;
     _latitude = latitude;
     _longitude = longitude;
-    if ([target isKindOfClass:OAPOI.class])
-        _targetFilter = [self getPoiFilterForType:target];
-    _isWiki = isWiki;
+    _filter = filter;
     [self buildViews];
 }
 
@@ -286,36 +283,17 @@
         [[OARootViewController instance].mapPanel hideContextMenu];
         if (index == _buttonShowOnMapIndex)
         {
-            [[OARootViewController instance].mapPanel showPoiToolbar:_targetFilter latitude:_latitude longitude:_longitude];
+            [[OARootViewController instance].mapPanel showPoiToolbar:_filter latitude:_latitude longitude:_longitude];
             OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
             [helper clearSelectedPoiFilters];
-            [helper addSelectedPoiFilter:_targetFilter];
+            [helper addSelectedPoiFilter:_filter];
             [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
         }
         else if (index == _buttonSearchMoreIndex)
         {
-            [[OARootViewController instance].mapPanel openSearch:_targetFilter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
+            [[OARootViewController instance].mapPanel openSearch:_filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
         }
     }
-}
-
-- (OAPOIUIFilter *) getPoiFilterForType:(OAPOI *)target
-{
-    if (target)
-    {
-        OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-        if (_isWiki)
-        {
-            return [helper getTopWikiPoiFilter];
-        }
-        else
-        {
-            OAPOICategory *category = target.type.category;
-            OAPOIType *poiType = [category getPoiTypeByKeyName:target.type.name];
-            return [helper getFilterById:[NSString stringWithFormat:@"std_%@", poiType.name]];
-        }
-    }
-    return nil;
 }
 
 - (void) goToPoint:(OAPOI *)poi

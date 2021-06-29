@@ -8,6 +8,7 @@
 
 #import "OAMapUtils.h"
 #import "OAPOI.h"
+#import "QuadRect.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -308,6 +309,26 @@
         }
     }
     return coordinates;
+}
+
++ (QuadRect *)calculateLatLonBbox:(double)latitude longitude:(double)longitude radiusMeters:(int)radiusMeters
+{
+    int zoom = 16;
+    float coeff = (float) (radiusMeters / OsmAnd::Utilities::getTileDistanceWidth(zoom));
+    double tx = OsmAnd::Utilities::getTileNumberX(zoom, longitude);
+    double ty = OsmAnd::Utilities::getTileNumberY(zoom, latitude);
+    double topLeftX = MAX(0, tx - coeff);
+    double topLeftY = MAX(0, ty - coeff);
+    int max = (1 << zoom)  - 1;
+    double bottomRightX = MIN(max, tx + coeff);
+    double bottomRightY = MIN(max, ty + coeff);
+    double pw = OsmAnd::Utilities::getPowZoom(31 - zoom);
+    QuadRect *rect = [[QuadRect alloc] initWithLeft:topLeftX * pw top:topLeftY * pw right:bottomRightX * pw bottom:bottomRightY * pw];
+    double left = OsmAnd::Utilities::get31LongitudeX((int) rect.left);
+    double top = OsmAnd::Utilities::get31LatitudeY((int) rect.top);
+    double right = OsmAnd::Utilities::get31LongitudeX((int) rect.right);
+    double bottom = OsmAnd::Utilities::get31LatitudeY((int) rect.bottom);
+    return [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
 }
 
 + (double) getAngleBetween:(CGPoint)start end:(CGPoint)end

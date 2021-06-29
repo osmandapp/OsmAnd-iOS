@@ -50,7 +50,7 @@
 #define KEY_MESSAGE @"message"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
-@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
+@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -66,6 +66,7 @@
 {
     OAQuickAction *_action;
     MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *_data;
+    NSString *_originalName;
     
     OAQuickActionRegistry *_actionRegistry;
     
@@ -127,17 +128,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+}
+
 -(void) commonInit
 {
-    MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
-    [dataModel setObject:@[@{
-                           @"type" : [OATextInputCell getCellIdentifier],
-                           @"title" : _action.getName
-                           }] forKey:OALocalizedString(@"quick_action_name_str")];
-    
-    OrderedDictionary *actionSpecific = _action.getUIModel;
-    [dataModel addEntriesFromDictionary:actionSpecific];
-    _data = [MutableOrderedDictionary dictionaryWithDictionary:dataModel];
+    _data = [self generateData];
+    _originalName = [_action getName];
 }
 
 -(void) setupView
@@ -159,6 +159,36 @@
 {
     NSString *key = _data.allKeys[indexPath.section];
     return _data[key][indexPath.row];
+}
+
+- (MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *)generateData
+{
+    MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
+    [dataModel setObject:@[@{
+            @"type" : [OATextInputCell getCellIdentifier],
+            @"title" : _action.getName
+    }] forKey:OALocalizedString(@"quick_action_name_str")];
+
+    OrderedDictionary *actionSpecific = _action.getUIModel;
+    [dataModel addEntriesFromDictionary:actionSpecific];
+    return dataModel;
+}
+
+- (BOOL)hasChanged
+{
+    BOOL paramChanged = ![_data isEqualToDictionary:[self generateData]];
+    BOOL nameChanged = ![_action.getName isEqualToString:_originalName];
+    return paramChanged || nameChanged;
+}
+
+- (void)showExitDialog
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -262,7 +292,7 @@
     return cellIndexPath;
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+- (void) clearButtonPressed:(UIButton *)sender
 {
     NSIndexPath *indexPath = [self indexPathForCellContainingView:sender inTableView:self.tableView];
     [self.tableView beginUpdates];
@@ -278,7 +308,10 @@
 
 - (IBAction)backPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self hasChanged])
+        [self showExitDialog];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)applyPressed:(id)sender
@@ -1280,6 +1313,20 @@
 - (IBAction)hintDonePressed:(id)sender
 {
     [self.view endEditing:YES];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer isEqual:[self.navigationController interactivePopGestureRecognizer]])
+    {
+        if ([self hasChanged])
+            [self showExitDialog];
+        else
+            [self.navigationController popViewControllerAnimated:YES];
+    }
+    return NO;
 }
 
 @end

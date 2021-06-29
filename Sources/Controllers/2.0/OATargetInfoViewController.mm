@@ -223,7 +223,8 @@
             OAPOI *poi = (OAPOI *) targetObj;
             OAPOIUIFilter *filter = [self getPoiFilterForType:poi isWiki:YES];
             [self processNearestWiki:poi];
-            if (_nearestWiki.count > 0) {
+            if (_nearestWiki.count > 0)
+            {
                 UIImage *icon = [UIImage imageNamed:[OAUtilities drawablePath:@"mx_wiki_place"]];
                 OARowInfo *wikiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:[NSString stringWithFormat:@"%@ (%d)", OALocalizedString(@"wiki_around"), (int) _nearestWiki.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
                 wikiRowInfo.collapsable = YES;
@@ -243,7 +244,8 @@
             OAPOI *poi = (OAPOI *) targetObj;
             OAPOIUIFilter *filter = [self getPoiFilterForType:poi isWiki:NO];
             [self processNearestPoi:poi filter:filter];
-            if (_nearestPoi.count > 0) {
+            if (_nearestPoi.count > 0)
+            {
                 OARowInfo *poiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:poi.icon textPrefix:nil text:[NSString stringWithFormat:@"%@ \"%@\" (%d)", OALocalizedString(@"speak_poi"), poi.type.nameLocalized, (int) _nearestPoi.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
                 poiRowInfo.collapsable = YES;
                 poiRowInfo.collapsed = YES;

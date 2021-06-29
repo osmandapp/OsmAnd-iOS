@@ -2092,3 +2092,10 @@
 "gpxup_trackable" = "Traçable";
 "gpxup_identifiable" = "Identifiable";
 "restart" = "Redémarrer";
+"default" = "Par défaut";
+"select_profile" = "Sélectionnez le profil";
+"threshold_distance" = "Seuil de distance";
+"route_between_points_warning_desc" = "Ensuite, sélectionnez le profil de navigation pour déplacer votre trace sur les routes les plus proches, autorisées par votre profil de navigation.";
+"carplay_profile_descr" = "Profil qui sera utilisé lorsque vous êtes connecté à CarPlay.";
+"carplay_profile" = "Profil CarPlay";
+"last_used" = "Dernier utilisé";

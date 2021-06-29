@@ -531,6 +531,11 @@
 
 - (void)releaseContext
 {
+    [self releaseContext:NO];
+}
+
+- (void)releaseContext:(BOOL)gpuContextLost
+{
     if (_glShareGroup == nil)
         return;
 
@@ -540,7 +545,7 @@
     [self suspendRendering];
     
     // Release map renderer
-    if (!_renderer->releaseRendering())
+    if (!_renderer->releaseRendering(gpuContextLost))
     {
         [NSException raise:NSGenericException
                     format:@"Failed to release OpenGLES2 map renderer 0x%08x", glGetError()];

@@ -2124,3 +2124,12 @@
 "context_menu_item_edit_waypoint" = "Editar punto de ruta GPX";
 "base_profile_descr_carplay" = "Conducir con el modo CarPlay";
 "m_style_carplay" = "CarPlay";
+"default" = "Predefinido";
+"select_profile" = "Elegir perfil";
+"threshold_distance" = "Distancia de umbral";
+"route_between_points_warning_desc" = "A continuación, ajusta la traza al camino permitido más cercano con un perfil de navegación.";
+"carplay_profile_descr" = "Perfil usado al conectar con CarPlay.";
+"carplay_profile" = "Perfil de CarPlay";
+"last_used" = "Último usado";
+"ios_release_4_0" = "- ¡Nuevo! Pantalla de «Añadir favorito» con opciones para elegir el icono, el color y la forma personalizada\n- Se ha añadido el nuevo «Widget de coordenadas» con las coordenadas de la ubicación actual\n- Se ha añadido la posibilidad de importar complementos personalizados definidos por el usuario\n- Se ha ampliado significativamente la funcionalidad de importar/exportar\n- La «distancia al pulsar» se ha movido de la regla radial a una opción separada\n- Se ha corregido el bloqueo de la aplicación CarPlay cuando se apaga la pantalla del iPhone\n- La pantalla de complementos se ha trasladado de Mapas y Recursos al menú principal\n- Se ha añadido el idioma finlandés.\n- Se ha corregido la interfaz de usuario en orientación horizontal para la pantalla «Planificar ruta».\n- Se ha añadido soporte para los archivos de navegación y visualización personalizados\n- Se ha corregido el rendimiento de la línea de dirección de los marcadores\n- Se ha corregido el problema con la importación de archivos GPX con extensiones en mayúsculas\n- Se ha corregido el problema con el menú «Seguir traza».\n- Se ha corregido la importación de archivos OBF\n";
+"map_widget_parking" = "Lugar del estacionamiento";

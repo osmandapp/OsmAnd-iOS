@@ -176,7 +176,7 @@
             }
         }
         
-        int baseOrder = self.baseOrder + 1;
+        int baseOrder = self.baseOrder;
         int lineId = 1;
         
         for (const auto& it : OsmAnd::rangeOf(OsmAnd::constOf(pointsList)))
@@ -232,7 +232,7 @@
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
         
-        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(locationMarks, self.baseOrder, hiddenPoints,
+        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(locationMarks, self.baseOrder - locationMarks.count() - 1, hiddenPoints,
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }

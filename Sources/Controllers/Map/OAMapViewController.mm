@@ -602,6 +602,17 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
 }
 
+- (void) onApplicationDestroyed
+{
+    if (self.mapViewLoaded)
+    {
+        [_mapView suspendSymbolsUpdate];
+        [_mapView releaseContext:YES];
+        [_mapView removeFromSuperview];
+        _mapView = nil;
+    }
+}
+
 - (void) showProgressHUD
 {
     if (_app.carPlayActive)

@@ -408,7 +408,7 @@
             @"label" : self.groupTitle,
             @"description" : OALocalizedString(@"all_group_points"),
             @"iconName" : @"ic_custom_folder",
-            @"iconColor" : self.groupColor
+            @"iconColor" : self.groupColor ? self.groupColor : ((OAFavoriteColor *)OADefaultFavorite.builtinColors.firstObject).color
         }];
     }
     else if ([self isKindOfClass:OAGPXWptViewController.class])

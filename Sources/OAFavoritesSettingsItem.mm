@@ -16,8 +16,6 @@
 
 #include <OsmAndCore/IFavoriteLocation.h>
 
-#define kPersonalGroupName @"personal"
-
 @interface OAFavoritesSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *items;
@@ -72,7 +70,7 @@
         QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *duplicate in self.duplicateItems)
         {
-            BOOL isPersonal = [duplicate.name isEqual:kPersonalGroupName];
+            BOOL isPersonal = [duplicate.name isEqual:kPersonalCategory];
             BOOL shouldReplace = [self shouldReplace] || isPersonal;
             if (shouldReplace)
             {
@@ -114,7 +112,7 @@
 - (BOOL) isDuplicate:(OAFavoriteGroup *)item
 {
     NSString *name = item.name;
-    if ([name isEqualToString:kPersonalGroupName])
+    if ([name isEqualToString:kPersonalCategory])
     {
         _personalGroup = item;
         return NO;

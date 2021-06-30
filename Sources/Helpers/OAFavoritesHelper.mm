@@ -23,8 +23,6 @@
 
 #include <OsmAndCore.h>
 
-#define kPersonalCategory @"personal"
-
 @implementation OAFavoritesHelper
 
 static NSMutableArray<OAFavoriteItem *> *_cachedFavoritePoints;

@@ -21,15 +21,18 @@
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *items;
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *appliedItems;
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *existingItems;
+@property (nonatomic) NSMutableArray<OAFavoriteGroup *> *duplicateItems;
 
 @end
 
 @implementation OAFavoritesSettingsItem
 {
     OAAppSettings *_settings;
+    
+    OAFavoriteGroup *_personalGroup;
 }
 
-@dynamic items, appliedItems, existingItems;
+@dynamic items, appliedItems, existingItems, duplicateItems;
 
 - (void) initialization
 {
@@ -59,13 +62,17 @@
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     NSArray<OAFavoriteGroup *> *newItems = [self getNewItems];
+    if (_personalGroup)
+        [self.duplicateItems addObject:_personalGroup];
     if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
         QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *duplicate in self.duplicateItems)
         {
-            if ([self shouldReplace])
+            BOOL isPersonal = [duplicate.name isEqual:kPersonalCategory];
+            BOOL shouldReplace = [self shouldReplace] || isPersonal;
+            if (shouldReplace)
             {
                 OAFavoriteGroup *existingGroup = [self getGroup:duplicate.name];
                 if (existingGroup)
@@ -78,7 +85,8 @@
                     }
                 }
             }
-            [self.appliedItems addObject:[self shouldReplace] ? duplicate : [self renameItem:duplicate]];
+            if (!isPersonal)
+                [self.appliedItems addObject:shouldReplace ? duplicate : [self renameItem:duplicate]];
         }
         app.favoritesCollection->removeFavoriteLocations(toDelete);
         NSArray<OAFavoriteItem *> *favourites = [NSArray arrayWithArray:[self getPointsFromGroups:self.appliedItems]];
@@ -87,6 +95,7 @@
             favoriteCollection->copyFavoriteLocation(favorite.favorite);
         app.favoritesCollection->mergeFrom(favoriteCollection);
         [app saveFavoritesToPermamentStorage];
+        [OAFavoritesHelper loadFavorites];
     }
 }
 
@@ -103,10 +112,15 @@
 - (BOOL) isDuplicate:(OAFavoriteGroup *)item
 {
     NSString *name = item.name;
-    for (OAFavoriteGroup *group in self.existingItems) {
-        if ([name isEqualToString:group.name]) {
-            return true;
-        }
+    if ([name isEqualToString:kPersonalCategory])
+    {
+        _personalGroup = item;
+        return NO;
+    }
+    for (OAFavoriteGroup *group in self.existingItems)
+    {
+        if ([name isEqualToString:group.name])
+            return YES;
     }
     return NO;
 }

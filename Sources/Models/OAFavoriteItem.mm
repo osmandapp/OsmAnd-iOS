@@ -22,8 +22,6 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 #include <OsmAndCore/Utilities.h>
 
-#define kPersonalCategory @"personal"
-
 @implementation OASpecialPointType
 {
     NSString *_typeName;

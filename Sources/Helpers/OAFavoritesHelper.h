@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 
+#define kPersonalCategory @"personal"
+
 @class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument;
 
 @interface OAFavoritesHelper : NSObject

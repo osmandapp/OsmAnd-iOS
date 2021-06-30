@@ -81,6 +81,10 @@
 
 - (NSDate *) getTimestamp;
 - (void) setTimestamp:(NSDate *)timestamp;
+
+- (bool) getCalendarEvent;
+- (void) setCalendarEvent:(BOOL)calendarEvent;
+
 + (NSString *) toStringDate:(NSDate *)date;
 
 - (OAGpxWpt *) toWpt;

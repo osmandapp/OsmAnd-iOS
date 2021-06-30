@@ -16,6 +16,7 @@
 #define ICON_NAME_EXTENSION @"icon"
 #define BACKGROUND_TYPE_EXTENSION @"background"
 #define ADDRESS_EXTENSION @"address"
+#define CALENDAR_EXTENSION @"calendar_event"
 
 typedef enum
 {

@@ -3406,7 +3406,7 @@ typedef enum
         if (sender.timeLimitActive && sender.addToCalActive)
             [OAFavoritesHelper addParkingReminderToCalendar];
         
-        [OAFavoritesHelper setSpecialPoint:[OASpecialPointType PARKING] lat:sender.coord.latitude lon:sender.coord.longitude address:nil];
+        [OAFavoritesHelper setParkingPoint:sender.coord.latitude lon:sender.coord.longitude address:nil pickupDate:sender.timeLimitActive ? sender.date : nil addToCalendar:sender.addToCalActive];
         
         [_mapViewController hideContextPinMarker];
         [self hideTargetPointMenu];

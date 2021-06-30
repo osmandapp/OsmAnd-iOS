@@ -50,7 +50,7 @@
 #define KEY_MESSAGE @"message"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
-@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
+@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -59,6 +59,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnApply;
 @property (strong, nonatomic) IBOutlet UIView *toolBarView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightPrimaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightSecondaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHeightPrimaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHeightSecondaryConstraint;
 
 @end
 
@@ -66,11 +70,12 @@
 {
     OAQuickAction *_action;
     MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *_data;
+    NSString *_originalName;
     
     OAQuickActionRegistry *_actionRegistry;
     
     BOOL _isNew;
-    
+
     OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
     
@@ -115,7 +120,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -127,17 +131,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+}
+
 -(void) commonInit
 {
-    MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
-    [dataModel setObject:@[@{
-                           @"type" : [OATextInputCell getCellIdentifier],
-                           @"title" : _action.getName
-                           }] forKey:OALocalizedString(@"quick_action_name_str")];
-    
-    OrderedDictionary *actionSpecific = _action.getUIModel;
-    [dataModel addEntriesFromDictionary:actionSpecific];
-    _data = [MutableOrderedDictionary dictionaryWithDictionary:dataModel];
+    _data = [self generateData];
+    _originalName = [_action getName];
 }
 
 -(void) setupView
@@ -159,6 +162,36 @@
 {
     NSString *key = _data.allKeys[indexPath.section];
     return _data[key][indexPath.row];
+}
+
+- (MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *)generateData
+{
+    MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
+    [dataModel setObject:@[@{
+            @"type" : [OATextInputCell getCellIdentifier],
+            @"title" : _action.getName
+    }] forKey:OALocalizedString(@"quick_action_name_str")];
+
+    OrderedDictionary *actionSpecific = _action.getUIModel;
+    [dataModel addEntriesFromDictionary:actionSpecific];
+    return dataModel;
+}
+
+- (BOOL)hasChanged
+{
+    BOOL paramChanged = ![_data isEqualToDictionary:[self generateData]];
+    BOOL nameChanged = ![_action.getName isEqualToString:_originalName];
+    return paramChanged || nameChanged;
+}
+
+- (void)showExitDialog
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -262,7 +295,7 @@
     return cellIndexPath;
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+- (void) clearButtonPressed:(UIButton *)sender
 {
     NSIndexPath *indexPath = [self indexPathForCellContainingView:sender inTableView:self.tableView];
     [self.tableView beginUpdates];
@@ -278,7 +311,10 @@
 
 - (IBAction)backPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self hasChanged])
+        [self showExitDialog];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)applyPressed:(id)sender
@@ -441,6 +477,7 @@
         _groupController = [[OAEditGroupViewController alloc] initWithGroupName:item[@"value"] groups:[self getItemGroups]];
         _groupController.delegate = self;
         [self.navigationController pushViewController:_groupController animated:YES];
+        [self.view endEditing:YES];
     }
     else if ([item[@"key"] isEqualToString:@"category_color"])
     {
@@ -448,12 +485,14 @@
         _colorController = [[OAEditColorViewController alloc] initWithColor:favCol.color];
         _colorController.delegate = self;
         [self.navigationController pushViewController:_colorController animated:YES];
+        [self.view endEditing:YES];
     }
     else if ([item[@"key"] isEqualToString:@"key_category"])
     {
         OAPoiTypeSelectionViewController *poiTypeSelection = [[OAPoiTypeSelectionViewController alloc] initWithType:POI_TYPE_SCREEN];
         poiTypeSelection.delegate = self;
         [self.navigationController pushViewController:poiTypeSelection animated:YES];
+        [self.view endEditing:YES];
     }
     else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
@@ -863,39 +902,46 @@
 
 #pragma mark - Keyboard Notifications
 
-- (void) keyboardWillShow:(NSNotification *)notification;
+- (void)keyboardWillShow:(NSNotification *)notification;
 {
-    NSDictionary *userInfo = [notification userInfo];
-    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
-    
-    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    NSDictionary* userInfo = [notification userInfo];
+    CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGFloat keyboardHeight = keyboardRect.size.height;
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+    CGRect viewFrame = self.view.frame;
+    viewFrame.size.height = DeviceScreenHeight - keyboardHeight;
+
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        self.view.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight - keyboardHeight);
-        [self.view setNeedsUpdateConstraints];
-        [self.view updateConstraintsIfNeeded];
+        self.view.frame = viewFrame;
+        self.bottomViewHeightPrimaryConstraint.active = NO;
+        self.bottomViewHeightSecondaryConstraint.active = YES;
+        self.applyButtonHeightPrimaryConstraint.active = NO;
+        self.applyButtonHeightSecondaryConstraint.active = YES;
     } completion:nil];
 }
 
-- (void) keyboardWillHide:(NSNotification *)notification;
+- (void)keyboardWillHide:(NSNotification *)notification;
 {
-    NSDictionary *userInfo = [notification userInfo];
-    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        self.view.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight);
-        [self.view setNeedsUpdateConstraints];
-        [self.view updateConstraintsIfNeeded];
-    } completion:nil];
-}
+    NSDictionary* userInfo = [notification userInfo];
+    CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGFloat keyboardHeight = keyboardRect.size.height;
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
 
--(void) applyHeight:(CGFloat)height cornerRadius:(CGFloat)radius toView:(UIView *)button
-{
-    CGRect buttonFrame = button.frame;
-    buttonFrame.size.height = height;
-    button.frame = buttonFrame;
-    button.layer.cornerRadius = radius;
+    CGRect viewFrame = self.view.frame;
+    viewFrame.size.height = DeviceScreenHeight;
+
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        self.view.frame = viewFrame;
+        self.bottomViewHeightPrimaryConstraint.active = YES;
+        self.bottomViewHeightSecondaryConstraint.active = NO;
+        self.applyButtonHeightPrimaryConstraint.active = YES;
+        self.applyButtonHeightSecondaryConstraint.active = NO;
+    } completion:nil];
 }
 
 #pragma mark - OAEditColorViewControllerDelegate
@@ -1280,6 +1326,20 @@
 - (IBAction)hintDonePressed:(id)sender
 {
     [self.view endEditing:YES];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer isEqual:[self.navigationController interactivePopGestureRecognizer]])
+    {
+        if ([self hasChanged])
+            [self showExitDialog];
+        else
+            [self.navigationController popViewControllerAnimated:YES];
+    }
+    return NO;
 }
 
 @end

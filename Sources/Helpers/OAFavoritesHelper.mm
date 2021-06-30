@@ -124,6 +124,30 @@ static BOOL _favoritesLoaded = NO;
     return nil;
 }
 
++ (void) setParkingPoint:(double)lat lon:(double)lon address:(NSString *)address pickupDate:(NSDate *)pickupDate addToCalendar:(BOOL)addToCalendar
+{
+    OASpecialPointType *specialType = OASpecialPointType.PARKING;
+    OAFavoriteItem *point = [OAFavoritesHelper getSpecialPoint:specialType];
+    if (point)
+    {
+        [point setIcon:[specialType getIconName]];
+        [point setAddress:address];
+        [point setTimestamp:pickupDate];
+        [point setCalendarEvent:addToCalendar];
+        [OAFavoritesHelper editFavorite:point lat:lat lon:lon description:[point getDescription]];
+    }
+    else
+    {
+        OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:[specialType getName] category:[specialType getCategory]];
+        [point setAddress:address];
+        [point setIcon:[specialType getIconName]];
+        [point setColor:[specialType getIconColor]];
+        [point setTimestamp:pickupDate];
+        [point setCalendarEvent:addToCalendar];
+        [self addFavorite:point];
+    }
+}
+
 + (void) setSpecialPoint:(OASpecialPointType *)specialType lat:(double)lat lon:(double)lon address:(NSString *)address
 {
     OAFavoriteItem *point = [OAFavoritesHelper getSpecialPoint:specialType];

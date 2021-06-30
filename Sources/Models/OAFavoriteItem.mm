@@ -438,10 +438,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!self.favorite->getTime().isNull())
     {
         NSString *timeString = self.favorite->getTime().toNSString();
-        timeString = [timeString stringByReplacingOccurrencesOfString:@"T" withString:@" "];
-        timeString = [timeString stringByReplacingOccurrencesOfString:@"Z" withString:@""];
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
         return [dateFormat dateFromString:timeString];
     }
     else
@@ -453,15 +451,28 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 - (void) setTimestamp:(NSDate *)timestamp
 {
     NSString *savingString = [self.class toStringDate:timestamp];
-    self.favorite->setTime(QString::fromNSString(savingString));
+    if (savingString)
+        self.favorite->setTime(QString::fromNSString(savingString));
+    else
+        self.favorite->setTime(QString());
+}
+
+- (bool) getCalendarEvent
+{
+    return self.favorite->getCalendarEvent();
+}
+- (void) setCalendarEvent:(BOOL)calendarEvent
+{
+    self.favorite->setCalendarEvent(calendarEvent);
 }
 
 - (OAGpxWpt *) toWpt
 {
     OAGpxWpt *pt = [[OAGpxWpt alloc] init];
     pt.position = CLLocationCoordinate2DMake(self.getLatitude, self.getLongitude);
-    pt.elevation = self.getAltitude;
-    pt.time = self.getTimestamp.timeIntervalSince1970 * 1000;
+    if (self.getAltitude > 0)
+        pt.elevation = self.getAltitude;
+    pt.time = self.getTimestamp ? self.getTimestamp.timeIntervalSince1970 : 0;
     if (!pt.extraData)
         pt.extraData = [[OAGpxExtensions alloc] init];
     NSMutableArray<OAGpxExtension *> *exts = [NSMutableArray arrayWithArray:((OAGpxExtensions *)pt.extraData).extensions];
@@ -497,6 +508,14 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     {
         [pt setColor:self.getColor.toHexString];
     }
+    if (self.getCalendarEvent)
+    {
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = CALENDAR_EXTENSION;
+        e.value = @"true";
+        [exts addObject:e];
+    }
+    ((OAGpxExtensions *)pt.extraData).extensions = exts;
     pt.name = self.getName;
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)
@@ -510,6 +529,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 + (NSString *) toStringDate:(NSDate *)date
 {
+    if (!date)
+        return nil;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *dateString = [dateFormatter stringFromDate:date];

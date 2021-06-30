@@ -70,7 +70,7 @@
         QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *duplicate in self.duplicateItems)
         {
-            BOOL isPersonal = [duplicate.name isEqual:kPersonalCategory];
+            BOOL isPersonal = duplicate.isPersonal;
             BOOL shouldReplace = [self shouldReplace] || isPersonal;
             if (shouldReplace)
             {
@@ -112,7 +112,7 @@
 - (BOOL) isDuplicate:(OAFavoriteGroup *)item
 {
     NSString *name = item.name;
-    if ([name isEqualToString:kPersonalCategory])
+    if (item.isPersonal)
     {
         _personalGroup = item;
         return NO;

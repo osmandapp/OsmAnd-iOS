@@ -666,8 +666,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name
 {
-    NSLog(OALocalizedString(@"personal_category_name"));
-    return [name isEqualToString:OALocalizedString(@"personal_category_name")] || [name isEqualToString:kPersonalCategory];
+    return [name isEqualToString:kPersonalCategory];
 }
 
 + (NSString *) getDisplayName:(NSString *)name

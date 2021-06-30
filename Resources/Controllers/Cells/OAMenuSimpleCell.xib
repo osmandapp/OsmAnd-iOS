@@ -45,9 +45,11 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="law-Oa-FEW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="1cO-DM-Bi7"/>
+                    <constraint firstAttribute="bottom" secondItem="w3O-3E-SaM" secondAttribute="bottom" priority="999" constant="12" id="2Xm-wA-wja"/>
                     <constraint firstAttribute="trailingMargin" secondItem="4zh-tm-rJ3" secondAttribute="trailing" id="2fx-K4-4sI"/>
                     <constraint firstAttribute="bottom" secondItem="4zh-tm-rJ3" secondAttribute="bottom" priority="751" constant="9" id="3jB-hu-Udu"/>
                     <constraint firstItem="w3O-3E-SaM" firstAttribute="top" secondItem="4zh-tm-rJ3" secondAttribute="bottom" constant="2" id="Nxa-NC-rEt"/>
+                    <constraint firstItem="4zh-tm-rJ3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" priority="999" constant="12" id="S0L-xh-v3j"/>
                     <constraint firstAttribute="trailingMargin" secondItem="w3O-3E-SaM" secondAttribute="trailing" id="WfC-WU-Vku"/>
                     <constraint firstItem="w3O-3E-SaM" firstAttribute="leading" secondItem="law-Oa-FEW" secondAttribute="trailing" constant="20" id="cnt-Rt-CML"/>
                     <constraint firstItem="4zh-tm-rJ3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="g2Q-bX-Hpp"/>
@@ -63,8 +65,12 @@
                 <outlet property="imgView" destination="law-Oa-FEW" id="wZy-eK-bit"/>
                 <outlet property="imgWidthPrimary" destination="go7-aJ-1PM" id="2ax-c5-SLu"/>
                 <outlet property="textBottomMargin" destination="3jB-hu-Udu" id="0au-kc-1ry"/>
+                <outlet property="textBottomPrimaryMargin" destination="rzR-MC-hVX" id="on2-i6-7Jo"/>
+                <outlet property="textBottomSecondaryMargin" destination="2Xm-wA-wja" id="3eH-oh-JRn"/>
                 <outlet property="textHeightPrimary" destination="lO1-Le-no6" id="IU7-Is-4JW"/>
                 <outlet property="textHeightSecondary" destination="vIO-Ub-ALl" id="rK3-pC-bNj"/>
+                <outlet property="textTopPrimaryMargin" destination="g2Q-bX-Hpp" id="p3O-WQ-N6l"/>
+                <outlet property="textTopSecondaryMargin" destination="S0L-xh-v3j" id="G0L-gV-dMl"/>
                 <outlet property="textView" destination="4zh-tm-rJ3" id="r48-k2-qqb"/>
             </connections>
             <point key="canvasLocation" x="31.884057971014496" y="2.0089285714285712"/>

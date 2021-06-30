@@ -9,6 +9,8 @@
 #import "OACompoundViewController.h"
 
 @class OAPOIUIFilter;
+@class OAPOIType;
+
 @protocol OAPOIFilterViewDelegate;
 @protocol OAPOIFilterRefreshDelegate;
 

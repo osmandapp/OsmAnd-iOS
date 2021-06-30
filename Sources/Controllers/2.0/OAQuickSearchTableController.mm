@@ -741,12 +741,14 @@
                 cell = nib[0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             }
-            if (cell) {
+            if (cell)
+            {
                 OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
                 cell.iconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-                NSString *title = [buttonItem getName];
-                [cell.button setTitle:title ? title : @"" forState:UIControlStateNormal];
+
+                [cell.button setTitle:[buttonItem getName] forState:UIControlStateNormal];
+
                 [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.button addTarget:buttonItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
                 return cell;

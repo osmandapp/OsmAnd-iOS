@@ -100,7 +100,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setupView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView setEditing:YES];
@@ -141,11 +140,6 @@
 {
     _data = [self generateData];
     _originalName = [_action getName];
-}
-
--(void) setupView
-{
-    _btnApply.layer.cornerRadius = 9.0;
 }
 
 - (void)applyLocalization

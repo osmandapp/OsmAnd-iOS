@@ -214,7 +214,7 @@
         if (self.terrainType != EOATerrainTypeDisabled)
             [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
         [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
-        [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.variantKey];
+        [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.get.variantKey];
     });
 }
 

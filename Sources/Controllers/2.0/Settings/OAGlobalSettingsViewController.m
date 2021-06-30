@@ -300,7 +300,7 @@
                 NSDictionary *item = [self getItem:indexPath];
                 OAApplicationMode *am = item[@"mode"];
                 [_settings.defaultApplicationMode set:am];
-                _settings.applicationMode = am;
+                [_settings.applicationMode set:am];
                 [self backButtonClicked:nil];
                 break;
             }

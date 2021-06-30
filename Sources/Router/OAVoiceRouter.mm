@@ -142,7 +142,7 @@ std::string preferredLanguage;
 
 - (void) updateAppMode
 {
-    OAApplicationMode *appMode = _router.getAppMode == nil ? _settings.applicationMode : _router.getAppMode;
+    OAApplicationMode *appMode = _router.getAppMode == nil ? _settings.applicationMode.get : _router.getAppMode;
     // could be changed in future as others by default in settings is 45 kmh
     if ([appMode isDerivedRoutingFrom:[OAApplicationMode CAR]])
     {
@@ -662,7 +662,7 @@ std::string preferredLanguage;
 {
     // TODO check for announcement settings if we should anounce streeet names
     NSMutableDictionary *result = [NSMutableDictionary new];
-    if (next == nil || ![_settings.speakStreetNames get:_settings.applicationMode]) {
+    if (next == nil || ![_settings.speakStreetNames get:_settings.applicationMode.get]) {
         return result;
     }
     if (player != nil) {

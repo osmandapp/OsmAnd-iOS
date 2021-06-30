@@ -85,7 +85,7 @@
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {
         title = OALocalizedString(@"map_settings_map_magnifier");
-        double value = [_settings.mapDensity get:_settings.applicationMode];
+        double value = [_settings.mapDensity get:_settings.applicationMode.get];
         
         data = @[
                  @{
@@ -133,7 +133,7 @@
     else if ([settingKeyName isEqualToString:textSizeKey])
     {
         title = OALocalizedString(@"map_settings_text_size");
-        double value = [_settings.textSize get:_settings.applicationMode];
+        double value = [_settings.textSize get:_settings.applicationMode.get];
         
         data = @[
                  @{
@@ -224,13 +224,13 @@
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {
         NSDictionary *item = data[indexPath.row];
-        [_settings.mapDensity set:[item[@"val"] doubleValue] mode:_settings.applicationMode];
+        [_settings.mapDensity set:[item[@"val"] doubleValue] mode:_settings.applicationMode.get];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
     else if ([settingKeyName isEqualToString:textSizeKey])
     {
         NSDictionary *item = data[indexPath.row];
-        [_settings.textSize set:[item[@"val"] doubleValue] mode:_settings.applicationMode];
+        [_settings.textSize set:[item[@"val"] doubleValue] mode:_settings.applicationMode.get];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
     

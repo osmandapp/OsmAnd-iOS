@@ -162,7 +162,7 @@
 
 - (OAApplicationMode *) getRouteMode
 {
-    OAApplicationMode *selected = _settings.applicationMode;
+    OAApplicationMode *selected = _settings.applicationMode.get;
     OAApplicationMode *mode = _settings.defaultApplicationMode.get;
     if (selected != [OAApplicationMode DEFAULT])
     {

@@ -110,7 +110,7 @@
         _lastAnnouncedAlarms = [NSMapTable strongToStrongObjectsMapTable];
         _deletedPoints = [NSMutableArray array];
         
-        _appMode = [OAAppSettings sharedManager].applicationMode;
+        _appMode = [OAAppSettings sharedManager].applicationMode.get;
         
     }
     return self;
@@ -661,7 +661,7 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL all = type == -1;
-    _appMode = settings.applicationMode;
+    _appMode = settings.applicationMode.get;
     if (route && ![route isEmpty])
     {
         BOOL showWaypoints = settings.showGpxWpt.get; // global

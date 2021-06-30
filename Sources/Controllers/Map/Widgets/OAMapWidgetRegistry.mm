@@ -202,14 +202,14 @@
 
 - (BOOL) isVisible:(NSString *)key
 {
-    OAApplicationMode *mode = _settings.applicationMode;
+    OAApplicationMode *mode = _settings.applicationMode.get;
     NSMutableSet<NSString *> *elements = [_visibleElementsFromSettings objectForKey:mode];
     return elements && ([elements containsObject:key] || [elements containsObject:[COLLAPSED_PREFIX stringByAppendingString:key]]);
 }
 
 - (void) setVisibility:(OAMapWidgetRegInfo *)m visible:(BOOL)visible collapsed:(BOOL)collapsed
 {
-    OAApplicationMode *mode = _settings.applicationMode;
+    OAApplicationMode *mode = _settings.applicationMode.get;
     [self setVisibility:mode m:m visible:visible collapsed:collapsed];
 }
 
@@ -291,7 +291,7 @@
 
 - (void) resetToDefault
 {
-    OAApplicationMode *appMode = _settings.applicationMode;
+    OAApplicationMode *appMode = _settings.applicationMode.get;
     [self resetToDefault: appMode];
 }
 

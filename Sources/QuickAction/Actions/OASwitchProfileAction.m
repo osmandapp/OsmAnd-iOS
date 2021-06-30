@@ -54,7 +54,7 @@ static OAQuickActionType *TYPE;
     }
     
     int index = -1;
-    NSString *currentProfile = settings.applicationMode.stringKey;
+    NSString *currentProfile = settings.applicationMode.get.stringKey;
     
     for (int idx = 0; idx < profiles.count; idx++)
     {
@@ -77,7 +77,7 @@ static OAQuickActionType *TYPE;
     OAApplicationMode *appMode = [self getModeForKey:params];
     if (appMode)
     {
-        [OAAppSettings sharedManager].applicationMode = appMode;
+        [[OAAppSettings sharedManager].applicationMode set:appMode];
     }
 }
 

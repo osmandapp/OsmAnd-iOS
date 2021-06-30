@@ -1125,7 +1125,7 @@
 - (void) updateMapSettingsButton
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
-    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
     [_mapSettingsButton setImage:mode.getIcon forState:UIControlStateNormal];
     _mapSettingsButton.tintColor = isNight ? UIColor.whiteColor : UIColorFromRGB(color_on_map_icon_color);
 }

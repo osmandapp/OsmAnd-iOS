@@ -81,7 +81,7 @@
         if (localResource->type == OsmAnd::ResourcesManager::ResourceType::MapStyle)
             mapStylesResources.push_back(localResource);
     }
-    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
     
     for(const auto& resource : mapStylesResources)
     {

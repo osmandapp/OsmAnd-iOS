@@ -738,7 +738,7 @@
 "intermediate_items_sort_by_distance" = "Rendezés háztól-házig";
 "cancel_navigation" = "Navigáció megállítása";
 "transport_nearby_routes_within" = "Közeli útvonalak ezen belül:";
-"purchase_dialog_title" = "Konstrukció kiválasztása";
+"purchase_dialog_title" = "Csomag kiválasztása";
 "purchase_dialog_travel_description" = "Az offline útikalauz funkció használatához vásárolja meg az alábbiak egyikét:";
 "osm_live_subscription" = "OsmAnd Live előfizetés";
 "wikivoyage_offline" = "Offline Wikivoyage";

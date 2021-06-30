@@ -553,7 +553,7 @@
         OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
         customHeader.label.text = OALocalizedString(@"search_poi_types_descr");
         customHeader.label.font = [UIFont systemFontOfSize:15];
-        [customHeader setYOffset:10];
+        [customHeader setYOffset:12];
         return customHeader;
     }
     return nil;
@@ -561,7 +561,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return section == 0 && !_searchMode ? [OATableViewCustomHeaderView getHeight:OALocalizedString(@"search_poi_types_descr") width:tableView.bounds.size.width] + 2 : 0.01;
+    return section == 0 && !_searchMode ? [OATableViewCustomHeaderView getHeight:OALocalizedString(@"search_poi_types_descr") width:tableView.bounds.size.width yOffset:12 font:[UIFont systemFontOfSize:15]] + 9 : 0.01;
 }
 
 #pragma mark - Keyboard Notifications

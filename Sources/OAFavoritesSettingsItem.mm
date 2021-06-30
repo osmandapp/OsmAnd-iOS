@@ -13,6 +13,8 @@
 #import "OsmAndApp.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
 
@@ -86,7 +88,28 @@
                 }
             }
             if (!isPersonal)
+            {
                 [self.appliedItems addObject:shouldReplace ? duplicate : [self renameItem:duplicate]];
+            }
+            else
+            {
+                for (OAFavoriteItem *item in duplicate.points)
+                {
+                    if (item.specialPointType == OASpecialPointType.PARKING)
+                    {
+                        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+                        if (plugin)
+                        {
+                            BOOL isTimeRestricted = item.getTimestamp != nil;
+                            [plugin setParkingType:isTimeRestricted];
+                            [plugin setParkingTime:isTimeRestricted ? item.getTimestamp.timeIntervalSince1970 * 1000 : 0];
+                            [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
+                            if (item.getCalendarEvent)
+                                [OAFavoritesHelper addParkingReminderToCalendar];
+                        }
+                    }
+                }
+            }
         }
         app.favoritesCollection->removeFavoriteLocations(toDelete);
         NSArray<OAFavoriteItem *> *favourites = [NSArray arrayWithArray:[self getPointsFromGroups:self.appliedItems]];

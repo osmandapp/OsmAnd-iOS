@@ -7,12 +7,16 @@
 //
 
 #import "OASearchToolbarViewController.h"
+#import "OAPOIUIFilter.h"
 
 @interface OASearchToolbarViewController ()
 
 @end
 
 @implementation OASearchToolbarViewController
+{
+    OAPOIUIFilter *_filter;
+}
 
 - (void)viewDidLoad
 {
@@ -49,16 +53,21 @@
     [self.delegate toolbarLayoutDidChange:self animated:animated];
 }
 
+- (void) setFilter:(OAPOIUIFilter *)filter
+{
+    _filter = filter;
+}
+
 - (IBAction)backPress:(id)sender
 {
     if (self.searchDelegate)
-        [self.searchDelegate searchToolbarOpenSearch];
+        [self.searchDelegate searchToolbarOpenSearch:_filter];
 }
 
 - (IBAction)titlePress:(id)sender
 {
     if (self.searchDelegate)
-        [self.searchDelegate searchToolbarOpenSearch];
+        [self.searchDelegate searchToolbarOpenSearch:_filter];
 }
 
 - (IBAction)closePress:(id)sender

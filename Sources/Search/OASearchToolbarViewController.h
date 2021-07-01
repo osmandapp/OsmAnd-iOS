@@ -8,11 +8,13 @@
 
 #import "OAToolbarViewController.h"
 
+@class OAPOIUIFilter;
+
 @protocol OASearchToolbarViewControllerProtocol
 @required
 
-- (void) searchToolbarOpenSearch;
-- (void) searchToolbarClose;
+- (void)searchToolbarOpenSearch:(OAPOIUIFilter *)filter;
+- (void)searchToolbarClose;
 
 @end
 
@@ -25,5 +27,7 @@
 @property (nonatomic) NSString *toolbarTitle;
 
 @property (weak, nonatomic) id<OASearchToolbarViewControllerProtocol> searchDelegate;
+
+- (void)setFilter:(OAPOIUIFilter *)filter;
 
 @end

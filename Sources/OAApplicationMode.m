@@ -654,8 +654,8 @@ static OAApplicationMode *_SKI;
     [_values removeObjectsInArray:modes];
     
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if ([modes containsObject:settings.applicationMode])
-        [settings setApplicationMode:_DEFAULT];
+    if ([modes containsObject:settings.applicationMode.get])
+        [settings setApplicationModePref:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
     
@@ -685,9 +685,9 @@ static OAApplicationMode *_SKI;
         else
         {
             [selectedModes removeObject:mode];
-            if (settings.applicationMode == mode)
+            if (settings.applicationMode.get == mode)
             {
-                [settings setApplicationMode:_DEFAULT];
+                [settings setApplicationModePref:_DEFAULT];
             }
         }
         for (OAApplicationMode *m in selectedModes)

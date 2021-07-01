@@ -154,7 +154,7 @@
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected"]];
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
-            BOOL isActive = [item[@"stringKey"] isEqualToString:[OAAppSettings sharedManager].applicationMode.stringKey];
+            BOOL isActive = [item[@"stringKey"] isEqualToString:[OAAppSettings sharedManager].applicationMode.get.stringKey];
             cell.accessoryView.hidden = !isActive;
         }
         return cell;

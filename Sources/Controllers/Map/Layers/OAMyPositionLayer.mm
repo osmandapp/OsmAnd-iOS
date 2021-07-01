@@ -400,7 +400,7 @@ typedef enum {
     
     [self.mapViewController runWithRenderSync:^{
     
-        OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode;
+        OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
         for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
         {
             OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
@@ -420,7 +420,7 @@ typedef enum {
 
 - (void) updateMode
 {
-    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
     OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
     [self updateMode:c];
 }
@@ -468,7 +468,7 @@ typedef enum {
     if (!_initDone)
         return;
     
-    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
     OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
     [self updateLocation:c];
 }

@@ -43,7 +43,7 @@
     if (self)
     {
         [self commonInit];
-        _am = _settings.applicationMode;
+        _am = _settings.applicationMode.get;
     }
     return self;
 }

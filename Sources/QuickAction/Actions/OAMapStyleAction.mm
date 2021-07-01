@@ -47,7 +47,7 @@ static OAQuickActionType *TYPE;
     
     OsmAndAppInstance app = [OsmAndApp instance];
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
-    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStyles;
     const auto localResources = app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)

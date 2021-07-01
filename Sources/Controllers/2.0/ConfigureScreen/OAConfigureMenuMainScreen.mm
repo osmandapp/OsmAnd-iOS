@@ -102,7 +102,7 @@
                      @"cells" : controlsList,
                      } ];
     
-    [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode];
+    [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode.get];
     
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
@@ -113,7 +113,7 @@
                      @"cells" : controlsList,
                      } ];
     
-    [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode];
+    [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode.get];
     
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
@@ -188,7 +188,7 @@
     NSString *key = data[@"key"];
     
     OASettingSwitchCell *cell = [self.tblView cellForRowAtIndexPath:indexPath];
-    cell.imgView.tintColor = sw.on ? UIColorFromRGB(_settings.applicationMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+    cell.imgView.tintColor = sw.on ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
     
     if ([key isEqualToString:@"quick_action"])
     {
@@ -254,7 +254,7 @@
 
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
-    _settings.applicationMode = mode;
+    [_settings.applicationMode set:mode];
     [self setupView];
 }
 
@@ -287,7 +287,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAppModeCell getCellIdentifier] owner:self options:nil];
             _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
             _appModeCell.showDefault = YES;
-            _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
+            _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode.get;
             _appModeCell.delegate = self;
         }
         
@@ -342,7 +342,7 @@
     if (imgName)
     {
         cell.imgView.image = [UIImage templateImageNamed:imgName];
-        cell.imgView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+        cell.imgView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
     }
     else
     {

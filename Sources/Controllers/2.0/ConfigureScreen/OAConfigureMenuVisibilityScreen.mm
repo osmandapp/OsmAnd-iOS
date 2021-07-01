@@ -76,7 +76,7 @@
 {
     if (_r)
     {
-        OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+        OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
         
         _data = [NSMutableDictionary dictionary];
         NSMutableArray *standardList = [NSMutableArray array];

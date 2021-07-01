@@ -253,7 +253,7 @@ static BOOL _isDeviatedFromRoute = false;
         _voiceRouter = [[OAVoiceRouter alloc] initWithHelper:self];
         [_voiceRouter setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:_voiceRouter voiceProvider:[_settings.voiceProvider get]]];
         _provider = [[OARouteProvider alloc] init];
-        [self setAppMode:_settings.applicationMode];
+        [self setAppMode:_settings.applicationMode.get];
         _progressRoutes = [NSMutableArray new];
         _transportRoutingHelper = OATransportRoutingHelper.sharedInstance;
     }
@@ -513,7 +513,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (double) getArrivalDistance
 {
-    OAApplicationMode *m = _mode == nil ? _settings.applicationMode : _mode;
+    OAApplicationMode *m = _mode == nil ? _settings.applicationMode.get : _mode;
     float defaultSpeed = MAX(0.3f, [m getDefaultSpeed]);
 
     /// Used to be: car - 90 m, bicycle - 50 m, pedestrian - 20 m

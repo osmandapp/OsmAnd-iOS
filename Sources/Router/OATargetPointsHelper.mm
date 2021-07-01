@@ -588,7 +588,7 @@
 
 - (BOOL) hasTooLongDistanceToNavigate
 {
-    OAApplicationMode *mode = _settings.applicationMode;
+    OAApplicationMode *mode = _settings.applicationMode.get;
     if ([_settings.routerService get:mode] != EOARouteService::OSMAND)
         return false;
     

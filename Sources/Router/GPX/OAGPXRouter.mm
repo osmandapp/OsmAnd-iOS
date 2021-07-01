@@ -106,7 +106,7 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
     [[OAAppSettings sharedManager] setMapSettingActiveRouteFilePath:gpx.gpxFilePath];
     
-    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
     if (mode == [OAApplicationMode CAR])
         self.routeVariantType = OAGPXRouteVariantCar;
     else if (mode == [OAApplicationMode PEDESTRIAN])

@@ -210,7 +210,7 @@
 {
     if (_isChanged)
     {
-        OAApplicationMode *appMode = _settings.applicationMode;
+        OAApplicationMode *appMode = _settings.applicationMode.get;
         if (_hiddenModified)
             [_filtersHelper saveInactiveFilters:appMode filterIds:_hiddenFiltersKeys];
         else if (_wasReset)

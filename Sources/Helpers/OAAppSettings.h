@@ -676,12 +676,13 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 
 @property (nonatomic) NSArray<NSString *> *appModeBeanPrefsIds;
-@property (nonatomic) OAApplicationMode* applicationMode;
-@property (nonatomic) OACommonString* availableApplicationModes;
-@property (nonatomic) OACommonAppMode* defaultApplicationMode;
-@property (nonatomic) OACommonAppMode* carPlayMode;
+@property (nonatomic) OAApplicationMode *currentMode;
+@property (nonatomic) OACommonAppMode *applicationMode;
+@property (nonatomic) OACommonString *availableApplicationModes;
+@property (nonatomic) OACommonAppMode *defaultApplicationMode;
+@property (nonatomic) OACommonAppMode *carPlayMode;
 @property (nonatomic) OACommonBoolean *isCarPlayModeDefault;
-@property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
+@property (nonatomic) OAApplicationMode *lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
 
 // Application mode related settings
@@ -822,8 +823,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
 
-- (void) setApplicationMode:(OAApplicationMode *)applicationMode;
-- (void) setApplicationMode:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
+- (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
+- (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
 
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
@@ -863,7 +864,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences;
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key;
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
-- (void)resetPreferences:(OAApplicationMode *)appMode;
+- (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
 - (void) setupAppMode;
 

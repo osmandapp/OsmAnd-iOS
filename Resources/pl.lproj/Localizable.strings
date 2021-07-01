@@ -151,7 +151,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Przeglądaj mapę";
 "m_style_car" = "Jazda";
-"m_style_walk" = "Pieszo";
+"m_style_walk" = "Chodzenie";
 "m_style_bicycle" = "Kolarstwo";
 "map_settings_overunder" = "Nakładka/Podkład";
 "map_settings_under" = "Podkład";
@@ -625,7 +625,7 @@
 "intermediate_point_too_far" = "Cel pośredni %1$s jest zbyt daleko od najbliższej ulicy.";
 "route_roundabout" = "Na rondzie wybierz %1$d zjazd";
 "route_roundabout_short" = "Zjedź %d zjazdem";
-"driving_region_europe_asia" = "Europa i Azja, Ameryka Łaciński i podobne";
+"driving_region_europe_asia" = "Europa, Azja, Ameryka Łacińska i podobne";
 "prch_nau_q1" = "Włącz styl \"Morski\" w Ustawieniach mapy i zainstaluj morską światową mapę bazową.";
 "prch_nau_q3" = "Możesz zainstalować ją później używając Map i Zasobów.";
 "res_maps_inst" = "map(y)";
@@ -1097,7 +1097,7 @@
 "navigate_point_format_OLC" = "Kod Open Location Code (OLC)";
 "coordinates_example" = "Przykład";
 "utm_description" = "Należy pamiętać, że OsmAnd używa formatu UTM Standard, który jest podobny, ale nie taki sam, jak format USM NATO.";
-"coordinates_copy_descr" = "Kliknij, aby skopiować współrzędne do schowka.";
+"coordinates_copy_descr" = "Naciśnij, aby skopiować współrzędne do schowka.";
 "months_3" = "Trzy miesiące";
 "configure_map" = "Wygląd mapy";
 // Rendering attributes
@@ -1619,7 +1619,7 @@
 "res_zoom_levels_desc" = "Te parametry będą miały wpływ na wyświetlanie mapy, gdy są używane jako typ mapy lub nakładka/podkład.\n\nTyp mapy: mapa będzie ograniczona do wybranych powiększeń.\n\nNakładka/Podkład: Poziomy powiększenia, na których będą widoczne kafelki. Powiększanie lub pomniejszanie nastąpi powyżej lub poniżej ustawionych wartości.";
 "app_mode_subway" = "Metro";
 "app_mode_ufo" = "UFO";
-"app_mode_car" = "Samochód";
+"app_mode_car" = "Jazda";
 "map_settings_appearance" = "Wygląd";
 "app_mode_offroad" = "off-road";
 "map_settings_base_transp" = "Przezroczystość warstwy bazowej";
@@ -1638,9 +1638,9 @@
 "app_mode_monowheel" = "Monocykl";
 "app_mode_shuttle_bus" = "Autobus wahadłowy";
 "app_mode_skiing" = "Jazda na nartach";
-"app_mode_pedestrian" = "Pieszo";
+"app_mode_pedestrian" = "Chodzenie";
 "app_mode_campervan" = "Samochód kempingowy";
-"app_mode_bicycle" = "Rower";
+"app_mode_bicycle" = "Kolarstwo";
 "app_mode_helicopter" = "Śmigłowiec";
 "app_mode_horse" = "Konie";
 "change_position_descr" = "Przesuń mapę by zmienić położenie obiektu";
@@ -1718,7 +1718,7 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_direct_to" = "Bezpośrednio do punktu";
 "nav_type_straight_line" = "Linia prosta";
-"nav_type_osmand" = "OsmAnd (nawigowanie offline)";
+"nav_type_osmand" = "OsmAnd (wyznaczanie tras w trybie offline)";
 "nav_type_descr" = "Wybierz sposób obliczania trasy dla tego profilu";
 "change_map_behavior" = "Zmienia zachowanie się mapy podczas nawigacji";
 "map_during_navigation" = "Mapa podczas nawigacji";
@@ -1766,7 +1766,7 @@
 "profile_import_success" = "Profil aplikacji został zaimportowany pomyślnie";
 "err_profile_import" = "Błąd odczytu danych elementu: %@";
 "empty_profile_name_warning" = "Nazwa profilu nie może być pusta.";
-"after_tapping_done" = "Po dotknięciu przycisku Gotowe, usunięte profile zostaną całkowicie utracone.";
+"after_tapping_done" = "Po naciśnięciu Wykonane, usunięte profile zostaną całkowicie utracone.";
 "all_application_profiles" = "Wszystkie profile aplikacji";
 "rearrange_profile_descr" = "Domyślnych profili OsmAnd nie można usunąć, ale można je wyłączyć na poprzednim ekranie lub przeciągnąć na dół listy.";
 "profile_sett_descr" = "Wpływa na wybrany profil aplikacji";

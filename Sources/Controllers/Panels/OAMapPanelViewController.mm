@@ -3344,7 +3344,7 @@ typedef enum
 {
     BOOL searchNearMapCenter = NO;
     OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latitude, longitude));
-    OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
+    OAMapRendererView* mapView = _mapViewController.mapView;
     double distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
 
     if (!_searchViewController)

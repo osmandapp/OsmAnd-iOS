@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 @property (nonatomic, weak) id<OAQuickSearchDelegate> delegate;
 
 - (void) setupBarActionView:(BarActionType)type title:(NSString *)title;
+- (void) showToolbar;
 - (void) showToolbar:(OAPOIUIFilter *)filter;
 
 @end

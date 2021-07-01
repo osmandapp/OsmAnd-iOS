@@ -579,7 +579,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [mapVC updatePoiLayer];
-                [self showToolbar:nil];
+                [self showToolbar];
                 [self dismissViewControllerAnimated:YES completion:nil];
             }
             else
@@ -671,6 +671,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (IBAction)bottomImageButtonPress:(id)sender
 {
     [self setBottomViewVisible:NO];
+}
+
+- (void)showToolbar
+{
+    [self showToolbar:nil];
 }
 
 - (void)showToolbar:(OAPOIUIFilter *)filter

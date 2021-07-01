@@ -25,7 +25,6 @@
 + (CLLocation *) calculateMidPoint:(CLLocation *) s1 s2:(CLLocation *) s2;
 + (NSValue *) calculateIntersection:(CGFloat)inx iny:(CGFloat)iny outx:(CGFloat)outx outy:(CGFloat)outy leftX:(CGFloat)leftX rightX:(CGFloat)rightX bottomY:(CGFloat)bottomY topY:(CGFloat)topY;
 + (NSArray<NSValue *> *) calculateLineInRect:(CGRect)rect start:(CGPoint)start end:(CGPoint)end;
-+ (QuadRect *)calculateLatLonBbox:(double)latitude longitude:(double)longitude radiusMeters:(int)radiusMeters;
 
 + (double) getAngleBetween:(CGPoint)start end:(CGPoint)end;
 

@@ -104,6 +104,7 @@
                             [plugin setParkingType:isTimeRestricted];
                             [plugin setParkingTime:isTimeRestricted ? item.getTimestamp.timeIntervalSince1970 * 1000 : 0];
                             [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
+                            [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
                             if (item.getCalendarEvent)
                                 [OAFavoritesHelper addParkingReminderToCalendar];
                         }

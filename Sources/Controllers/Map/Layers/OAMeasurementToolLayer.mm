@@ -407,6 +407,10 @@
         else
             _selectedMarkerCollection->removeAllMarkers();
     }
+    else
+    {
+        _lastLineCollection->removeAllLines();
+    }
 }
 
 - (void) drawRouteSegments

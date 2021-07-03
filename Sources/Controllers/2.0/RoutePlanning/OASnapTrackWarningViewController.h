@@ -6,19 +6,8 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseBottomSheetViewController.h"
+#import "OAPlanningPopupBaseViewController.h"
 
-@protocol OASnapTrackWarningBottomSheetDelegate <NSObject>
-
-@required
-
-- (void)onCancelSnapApproximation;
-- (void)onContinueSnapApproximation;
-
-@end
-
-@interface OASnapTrackWarningViewController : OABaseBottomSheetViewController
-
-@property (nonatomic) id<OASnapTrackWarningBottomSheetDelegate> delegate;
+@interface OASnapTrackWarningViewController : OAPlanningPopupBaseViewController
 
 @end

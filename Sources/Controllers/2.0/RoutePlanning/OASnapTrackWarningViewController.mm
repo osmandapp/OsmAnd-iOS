@@ -7,6 +7,10 @@
 //
 
 #import "OASnapTrackWarningViewController.h"
+#import "OAGpxApproximationViewController.h"
+#import "OAApplicationMode.h"
+#import "OAMeasurementEditingContext.h"
+#import "OAGpxApproximationViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -24,7 +28,6 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_attach_track"]];
     self.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
-    self.buttonsSectionDividerView.hidden = YES;
     
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
 }
@@ -38,22 +41,26 @@
 
 - (CGFloat)initialHeight
 {
-    return OAUtilities.getBottomMargin + 75. + [OAUtilities calculateTextBounds:OALocalizedString(@"route_between_points_warning_desc") width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.]].height + 16. + self.headerView.frame.size.height;
+    return OAUtilities.getBottomMargin + 75. + [OAUtilities calculateTextBounds:OALocalizedString(@"route_between_points_warning_desc") width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.]].height + 16. + self.headerView.frame.size.height + 60.;
 }
 
 - (void)onRightButtonPressed
 {
-    [self dismissViewControllerAnimated:NO completion:^{
-        if (self.delegate)
-            [self.delegate onContinueSnapApproximation];
-    }];
-    
+    OAMeasurementEditingContext *editingCtx = self.delegate.getCurrentEditingContext;
+    if (editingCtx.appMode == OAApplicationMode.DEFAULT || [editingCtx.appMode.getRoutingProfile isEqualToString:@"public_transport"])
+        editingCtx.appMode = nil;
+    OAGpxApproximationViewController *approximationVC = [[OAGpxApproximationViewController alloc] initWithMode:editingCtx.appMode routePoints:[editingCtx getPointsSegments:YES route:NO]];
+    approximationVC.delegate = self.delegate;
+    if (self.delegate)
+        [self.delegate onContinueSnapApproximation:approximationVC];
+    [self.navigationController pushViewController:approximationVC animated:YES];
 }
 
 - (void) onBottomSheetDismissed
 {
     if (self.delegate)
-        [self.delegate onCancelSnapApproximation];
+        [self.delegate onCancelSnapApproximation:NO];
+    [self dismiss];
 }
 
 #pragma mark - UITableViewDataSource

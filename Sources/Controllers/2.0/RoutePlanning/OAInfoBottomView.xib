@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,7 +24,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="363"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CfP-pT-gLi">
+                <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CfP-pT-gLi">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="303"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9KH-Oe-Bsr" userLabel="headerView">
@@ -68,7 +68,7 @@
                                             </connections>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="E5l-P8-lOD" secondAttribute="bottom" constant="17" id="08Z-Vk-Gnk"/>
                                         <constraint firstAttribute="bottom" secondItem="MYf-5X-Eur" secondAttribute="bottom" constant="13" id="DnI-95-cgC"/>
@@ -87,7 +87,7 @@
                                     </constraints>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstItem="vUX-o5-qve" firstAttribute="top" secondItem="35g-Ec-YaE" secondAttribute="bottom" id="03c-r6-49x"/>
                                 <constraint firstItem="vUX-o5-qve" firstAttribute="leading" secondItem="9KH-Oe-Bsr" secondAttribute="leading" id="0oW-3H-VL7"/>
@@ -106,7 +106,7 @@
                             <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
                         </tableView>
                     </subviews>
-                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="0LQ-wU-CWL" firstAttribute="leading" secondItem="CfP-pT-gLi" secondAttribute="leading" id="5AW-dF-C3z"/>
                         <constraint firstAttribute="trailing" secondItem="0LQ-wU-CWL" secondAttribute="trailing" id="6Za-rQ-fRY"/>
@@ -156,7 +156,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="6TG-KX-JXg"/>
-            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="6TG-KX-JXg" firstAttribute="bottom" secondItem="OpM-9D-PZT" secondAttribute="top" priority="750" constant="60" id="1nT-5U-Us9"/>
                 <constraint firstItem="OpM-9D-PZT" firstAttribute="top" secondItem="CfP-pT-gLi" secondAttribute="bottom" id="3RX-vz-8dc"/>
@@ -164,8 +164,8 @@
                 <constraint firstItem="OpM-9D-PZT" firstAttribute="bottom" secondItem="LSa-Ha-hV2" secondAttribute="bottom" id="ERp-a2-F20"/>
                 <constraint firstItem="CfP-pT-gLi" firstAttribute="trailing" secondItem="6TG-KX-JXg" secondAttribute="trailing" id="N0V-5D-NVX"/>
                 <constraint firstItem="CfP-pT-gLi" firstAttribute="leading" secondItem="6TG-KX-JXg" secondAttribute="leading" id="cfK-Fg-xOR"/>
-                <constraint firstItem="OpM-9D-PZT" firstAttribute="trailing" secondItem="LSa-Ha-hV2" secondAttribute="trailingMargin" id="h9V-vf-uZU"/>
-                <constraint firstItem="OpM-9D-PZT" firstAttribute="leading" secondItem="LSa-Ha-hV2" secondAttribute="leadingMargin" id="jq3-Jc-TyK"/>
+                <constraint firstItem="OpM-9D-PZT" firstAttribute="trailing" secondItem="6TG-KX-JXg" secondAttribute="trailing" constant="-20" id="h9V-vf-uZU"/>
+                <constraint firstItem="OpM-9D-PZT" firstAttribute="leading" secondItem="6TG-KX-JXg" secondAttribute="leading" constant="20" id="jq3-Jc-TyK"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>

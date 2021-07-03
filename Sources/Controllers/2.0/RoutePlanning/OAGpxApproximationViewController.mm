@@ -1,12 +1,12 @@
 //
-//  OAGpxApproximationBottomSheetViewController.mm
+//  OAGpxApproximationViewController.mm
 //  OsmAnd
 //
 //  Created by Skalii on 31.05.2021.
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OAGpxApproximationBottomSheetViewController.h"
+#import "OAGpxApproximationViewController.h"
 #import "OATitleSliderRoundCell.h"
 #import "OAIconTitleIconRoundCell.h"
 #import "OAApplicationMode.h"
@@ -25,13 +25,13 @@
 #define kApproximationMinDistance 0
 #define kApproximationMaxDistance 100
 
-@interface OAGpxApproximationBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAGpxApproximationProgressDelegate>
+@interface OAGpxApproximationViewController () <UITableViewDelegate, UITableViewDataSource, OAGpxApproximationProgressDelegate>
 
 @end
 
-@implementation OAGpxApproximationBottomSheetViewController
+@implementation OAGpxApproximationViewController
 {
-    OAGpxApproximationBottomSheetViewController *vwController;
+    OAGpxApproximationViewController *vwController;
     NSDictionary<NSString *, NSArray *> *_data;
 
     OAApplicationMode *_snapToRoadAppMode;
@@ -79,13 +79,13 @@
 	_progressBarView.hidden = YES;
 	_progressBarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_progressBarView.progressTintColor = UIColorFromRGB(color_primary_purple);
-	_progressBarView.frame = CGRectMake(0., -3., self.bottomSheetView.frame.size.width, 3.);
+	_progressBarView.frame = CGRectMake(0., -3., self.view.frame.size.width, 3.);
 	[self.buttonsView addSubview:_progressBarView];
 }
 
 - (CGFloat)initialHeight
 {
-    return DeviceScreenHeight * 0.4;
+    return DeviceScreenHeight * 0.45;
 }
 
 - (void)applyLocalization
@@ -101,10 +101,11 @@
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) onBottomSheetDismissed
+- (void)onLeftButtonPressed
 {
     if (self.delegate)
-        [self.delegate onCancelGpxApproximation];
+        [self.delegate onCancelSnapApproximation:YES];
+    [self dismiss];
 }
 
 - (void)initData

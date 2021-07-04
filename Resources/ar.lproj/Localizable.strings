@@ -2101,3 +2101,12 @@
 "no_waypoints_found" = "لم يتم العثور على إحداثيات";
 "context_menu_item_edit_waypoint" = "تحرير إحداثيات GPX";
 "replace_waypoint_confirmation" = "هل تريد بالتأكيد استبدال إحداثية النقطة ٪@؟";
+"default" = "افتراضي";
+"map_widget_parking" = "مكان للوقوف";
+"select_profile" = "تحديد ملف التعريف";
+"threshold_distance" = "بداية المسافة";
+"route_between_points_warning_desc" = "بعد ذلك، قم بمحاذاة المسار إلى أقرب طريق مسموح به باستخدام أحد ملفات تعريف التنقل لاستخدام هذا الخيار.";
+"carplay_profile_descr" = "الملف الشخصي الذي سيتم استخدامه أثناء الاتصال ب CarPlay.";
+"carplay_profile" = "ملف تعريف CarPlay";
+"last_used" = "آخر أستخدام";
+"search_more" = "بحث عن المزيد…";

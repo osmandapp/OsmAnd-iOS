@@ -260,7 +260,7 @@
 "res_updates_no_space" = "Za mało miejsca, aby zainstalować aktualizacje %d. %@ jest potrzebne. Proszę zwolnić trochę miejsca.";
 "res_updates_avail_q" = "aktualizacje są dostępne.";
 // Menu
-"menu_my_places" = "Miejsca";
+"menu_my_places" = "Moje miejsca";
 "menu_my_trips" = "Moje trasy";
 "menu_my_directions" = "Nawigacja";
 "other_options" = "Inne opcje";
@@ -538,7 +538,7 @@
 "rotate_map_compass_opt" = "Względem kompasu";
 "rotate_map_bearing_opt" = "Względem kierunku ruchu";
 "rotate_map_none_opt" = "Bez obracania (północ na górze)";
-"driving_region_descr" = "Wybiera region poruszania się: Stany Zjednoczone, Europa, Wielka Brytania, Azja oraz inne.";
+"driving_region_descr" = "Wybierz region jazdy: USA, Europa, Wielka Brytania, Azja i inne.";
 "driving_region_automatic" = "Automatyczny";
 "map_widget_magnetic_bearing" = "Orientacja magnetyczna";
 "map_widget_bearing" = "Orientacja względna";
@@ -614,7 +614,7 @@
 "voice_provider_descr" = "Wybierz wskazówki głosowe do nawigacji";
 "choose_audio_stream" = "Wyjście dźwięku nawigacji głosowej";
 "choose_audio_stream_descr" = "Wybierz głośnik, aby odtwarzać wskazówki głosowe";
-"interrupt_music_descr" = "W pełni zatrzymaj muzykę podczas podpowiedzi głosowych (nie tylko zmniejsz jej głośność)";
+"interrupt_music_descr" = "W pełni wstrzymuj dowolną muzykę podczas komunikatów głosowych (nie tylko zmniejszaj jej głośność)";
 "select_route_start_on_map" = "Wybierz początkowy punkt trasy";
 "select_route_finish_on_map" = "Wybierz końcowy punkt trasy";
 "directions_other" = "Inne kierunki";
@@ -736,7 +736,7 @@
 "gpx_rename_q" = "Zmień nazwę trasy";
 "gpx_enter_new_name" = "Wprowadź nową nazwę trasy";
 "gpx_cancel_route_q" = "Chcesz anulować tę trasę?";
-"gpx_deactivated" = "Kopia zapasowa";
+"gpx_deactivated" = "Nieaktywny";
 "gpx_trip_groups" = "Grupy tras";
 "gpx_group_select" = "Wybierz grupę";
 "plugin_popup_wiki_title" = "Pobierz Wikipedię";
@@ -995,7 +995,7 @@
 "osm_note_close" = "Zamknij uwagę OSM";
 "osm_note_comment" = "Komentarz";
 "osm_note_reopen" = "Otwórz ponownie";
-"my_places" = "Miejsca";
+"my_places" = "Moje miejsca";
 "osm_confirm_bulk_delete" = "Usunąć %d zmiany?";
 "osm_edits_basic" = "Podstawowe";
 "osm_edits_advanced" = "Zaawansowane";

@@ -18306,7 +18306,6 @@
 				B0D61365006F70CE9BE5A92C /* OAGpxApproximationBottomSheetViewController.mm in Sources */,
 				B0D61A1252D305F9C6ABAF61 /* OATitleSliderRoundCell.m in Sources */,
 				B0D6167C4FD3ECD7736A0EAD /* OAGpxWptEditingHandler.mm in Sources */,
-				B0D61D81493066C38559E1E6 /* OAMapSettingsWikipediaScreen.mm in Sources */,
 				B0D617D7EC855E1492984383 /* OAWikipediaPlugin.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

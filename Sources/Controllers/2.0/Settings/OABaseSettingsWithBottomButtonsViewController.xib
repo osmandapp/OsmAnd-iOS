@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,6 +17,7 @@
                 <outlet property="bottomViewHeigh" destination="EeE-6d-k0f" id="8Xa-dF-YLC"/>
                 <outlet property="cancelButtonLeftMarginNoIcon" destination="WDL-fk-eK7" id="tZd-sT-1QL"/>
                 <outlet property="cancelButtonLeftMarginWithIcon" destination="1vg-Pu-W0u" id="VAS-be-C5b"/>
+                <outlet property="navBarView" destination="z1H-Xh-Vqx" id="Aoj-R8-MfJ"/>
                 <outlet property="primaryBottomButton" destination="BaW-Xn-8jB" id="UMw-gs-His"/>
                 <outlet property="primaryButtonHeight" destination="7Vi-jr-tCz" id="vGk-kb-WYP"/>
                 <outlet property="primaryButtonTopMarginNoSecondary" destination="U2a-dE-yCx" id="Lka-60-l4U"/>
@@ -27,6 +28,7 @@
                 <outlet property="tableView" destination="047-sX-bmi" id="BJ7-yw-FRF"/>
                 <outlet property="tableViewBottomMarginNoView" destination="lBv-pO-4t0" id="FF6-SZ-VIy"/>
                 <outlet property="tableViewBottomMarginYesView" destination="3zT-Ng-etm" id="CRx-Fg-UHq"/>
+                <outlet property="titleLabel" destination="j9D-Qp-mxe" id="i6r-DA-TrB"/>
                 <outlet property="view" destination="mrf-Nc-zcj" id="7ep-ym-Z3s"/>
             </connections>
         </placeholder>
@@ -68,6 +70,15 @@
                         <action selector="backImageButtonPressed:" destination="-1" eventType="touchUpInside" id="BQt-UI-rbS"/>
                     </connections>
                 </button>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create profile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j9D-Qp-mxe">
+                    <rect key="frame" x="152.5" y="44" width="109" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="oV9-hp-idC"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Emr-yd-xz4">
                     <rect key="frame" x="325" y="44" width="73" height="44"/>
                     <constraints>
@@ -149,8 +160,10 @@
                 <constraint firstItem="kXa-gs-sfl" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="MGh-G1-cob"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="top" secondItem="mrf-Nc-zcj" secondAttribute="top" id="MyA-mE-gyB"/>
                 <constraint firstItem="Emr-yd-xz4" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="QGK-dX-Ucy"/>
+                <constraint firstItem="j9D-Qp-mxe" firstAttribute="bottom" secondItem="z1H-Xh-Vqx" secondAttribute="bottom" id="Ts8-PM-dju"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="VCk-ht-Nj5"/>
                 <constraint firstItem="kXa-gs-sfl" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" priority="999" constant="16" id="WDL-fk-eK7"/>
+                <constraint firstItem="j9D-Qp-mxe" firstAttribute="centerX" secondItem="z1H-Xh-Vqx" secondAttribute="centerX" id="bAB-Fr-jmb"/>
                 <constraint firstItem="VY7-at-aSe" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" constant="6" id="dgD-TD-aFT"/>
                 <constraint firstAttribute="bottom" secondItem="L3y-hy-OUi" secondAttribute="bottom" id="gjD-G8-rb0"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="iu1-97-N7o"/>

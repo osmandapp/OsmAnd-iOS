@@ -162,7 +162,8 @@ typedef enum
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _mapillaryChangeObserver;
-    
+    OAAutoObserverProxy* _wikipediaChangeObserver;
+
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
     OsmAnd::PointI _mainMapTarget31;
@@ -228,7 +229,11 @@ typedef enum
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onMapillaryChanged)
                                                           andObserve:_app.data.mapillaryChangeObservable];
-    
+
+    _wikipediaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onWikipediaChanged)
+                                                          andObserve:_app.data.wikipediaChangeObservable];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
     [_routingHelper addListener:self];
@@ -460,6 +465,10 @@ typedef enum
 {
     if (!_app.data.mapillary)
         [_mapillaryController hideMapillaryView];
+}
+
+- (void) onWikipediaChanged
+{
 }
 
 - (BOOL) hasGpxActiveTargetType

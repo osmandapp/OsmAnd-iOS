@@ -810,6 +810,43 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     [self saveSelectedPoiFilters];
 }
 
+- (void)clearSelectedPoiFilters:(NSArray<OAPOIUIFilter *> *)filtersToExclude
+{
+    NSMutableSet<OAPOIUIFilter *> *selectedPoiFilters = [NSMutableSet setWithSet:_selectedPoiFilters];
+    if (filtersToExclude && filtersToExclude.count > 0)
+    {
+        NSMutableArray *filtersToRemove = [NSMutableArray new];
+        for (OAPOIUIFilter *selectedFilter in selectedPoiFilters)
+        {
+            BOOL skip = NO;
+            for (OAPOIUIFilter *filterToExclude in filtersToExclude)
+            {
+                NSString *filterToExcludeId = filterToExclude.filterId;
+                if (filterToExcludeId && [filterToExcludeId isEqualToString:selectedFilter.filterId])
+                {
+                    skip = YES;
+                    break;
+                }
+            }
+            if (!skip)
+                [filtersToRemove addObject:selectedFilter];
+        }
+        if (filtersToRemove.count > 0)
+        {
+            for (OAPOIUIFilter *filterToRemove in filtersToRemove)
+            {
+                [selectedPoiFilters removeObject:filterToRemove];
+            }
+        }
+    }
+    else
+    {
+        [selectedPoiFilters removeAllObjects];
+    }
+    [self saveSelectedPoiFilters:selectedPoiFilters];
+    [_selectedPoiFilters setSet:selectedPoiFilters];
+}
+
 - (NSString *) getFiltersName:(NSSet<OAPOIUIFilter *> *)filters
 {
     if (filters.count == 0)
@@ -858,6 +895,17 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return [_selectedPoiFilters containsObject:filter];
 }
 
+- (BOOL)isTopWikiFilterSelected
+{
+    NSString *wikiFilterId = [[self getTopWikiPoiFilter] getFilterId];
+    for (OAPOIUIFilter *filter in _selectedPoiFilters)
+    {
+        if ([wikiFilterId isEqualToString:[filter getFilterId]])
+            return YES;
+    }
+    return NO;
+}
+
 - (BOOL) isPoiFilterSelectedByFilterId:(NSString *)filterId
 {
     for (OAPOIUIFilter *filter in _selectedPoiFilters)
@@ -895,6 +943,16 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             [filtersStr appendString:@","];
     }
     [[OAAppSettings sharedManager].selectedPoiFilters set:filtersStr];
+}
+
+- (void)saveSelectedPoiFilters:(NSSet<OAPOIUIFilter *> *)selectedPoiFilters
+{
+    NSMutableSet<NSString *> *filters = [NSMutableSet new];
+    for (OAPOIUIFilter *filter in selectedPoiFilters)
+    {
+        [filters addObject:filter.filterId];
+    }
+    [[[OAAppSettings sharedManager] selectedPoiFilters] set:[filters.allObjects componentsJoinedByString:@","]];
 }
 
 @end

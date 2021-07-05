@@ -53,6 +53,11 @@
 @property (nonatomic) BOOL mapillary;
 @property (readonly) OAObservable* mapillaryChangeObservable;
 
+@property (nonatomic) BOOL wikipedia;
+@property (readonly) OAObservable* wikipediaChangeObservable;
+@property (readonly) OACommonBoolean *wikipediaGlobalProfile;
+@property (readonly) OACommonStringList *wikipediaLanguagesProfile;
+
 @property (readonly) OAObservable* mapLayerChangeObservable;
 
 @property (readonly) OAObservable* lastMapSourceChangeObservable;

@@ -77,6 +77,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters;
 - (OAPOICategory *) getOsmwiki;
+- (NSArray<NSString *> *)getAllAvailableWikiLocales;
 
 - (void) setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 

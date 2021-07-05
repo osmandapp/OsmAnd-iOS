@@ -74,7 +74,7 @@ static const NSInteger panoImageFilterSection = 3;
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        settingsScreen = EMapSettingsScreenPOI;
+        settingsScreen = EMapSettingsScreenMapillaryFilter;
         vwController = viewController;
         tblView = tableView;
         

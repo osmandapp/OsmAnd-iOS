@@ -537,6 +537,22 @@
     return nil;
 }
 
+- (NSArray<NSString *> *)getAllAvailableWikiLocales
+{
+    NSMutableArray<NSString *> *availableWikiLocales = [NSMutableArray new];
+    for (OAPOIType *type in [[self getOsmwiki] getPoiTypeByKeyName:@"wiki_place"].poiAdditionals)
+    {
+        NSString *name = type.name;
+        NSString *wikiLang = [NSString stringWithFormat:@"wiki_lang%@", @":"];
+        if (name && [name hasPrefix:wikiLang])
+        {
+            NSString *locale = [name substringFromIndex:wikiLang.length];
+            [availableWikiLocales addObject:locale];
+        }
+    }
+    return availableWikiLocales;
+}
+
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters
 {
     NSMutableArray<OAPOIBaseType *> *lf = [NSMutableArray array];

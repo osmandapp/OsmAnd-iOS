@@ -224,6 +224,16 @@
     [self updateFilterResults];
 }
 
+- (BOOL)isWikiFilter
+{
+    return [self.filterId hasPrefix:[NSString stringWithFormat:@"%@%@", STD_PREFIX, @"wiki_place"]] || [self isTopWikiFilter];
+}
+
+- (BOOL)isTopWikiFilter
+{
+    return [self.filterId isEqualToString:[NSString stringWithFormat:@"%@%@", STD_PREFIX, OSM_WIKI_CATEGORY]];
+}
+
 -(void)setSavedFilterByName:(NSString *)savedFilterByName
 {
     _savedFilterByName = savedFilterByName;

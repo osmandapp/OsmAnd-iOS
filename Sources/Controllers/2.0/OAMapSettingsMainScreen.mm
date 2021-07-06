@@ -752,8 +752,6 @@
         {
             if (indexPath.row == 1)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
-//            else if (indexPath.row == wikipediaRow)
-//                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWikipedia];
             else if (indexPath.row == tripsRow)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             else if (indexPath.row == mapillaryRow)

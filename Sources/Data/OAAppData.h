@@ -55,8 +55,6 @@
 
 @property (nonatomic) BOOL wikipedia;
 @property (readonly) OAObservable* wikipediaChangeObservable;
-@property (readonly) OACommonBoolean *wikipediaGlobalProfile;
-@property (readonly) OACommonStringList *wikipediaLanguagesProfile;
 
 @property (readonly) OAObservable* mapLayerChangeObservable;
 
@@ -114,5 +112,16 @@
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode;
 - (void) copyAppDataFrom:(OAApplicationMode *)sourceMode toMode:(OAApplicationMode *)targetMode;
+
+- (BOOL)getWikipediaAllLanguages;
+- (BOOL)getWikipediaAllLanguages:(OAApplicationMode *)mode;
+- (void)setWikipediaAllLanguages:(BOOL)allLanguages;
+- (void)setWikipediaAllLanguages:(BOOL)allLanguages mode:(OAApplicationMode *)mode;
+
+- (NSArray<NSString *> *)getWikipediaLanguages;
+- (NSArray<NSString *> *)getWikipediaLanguages:(OAApplicationMode *)mode;
+- (void)setWikipediaLanguages:(NSArray<NSString *> *)languages;
+- (void)setWikipediaLanguages:(NSArray<NSString *> *)languages mode:(OAApplicationMode *)mode;
+
 
 @end

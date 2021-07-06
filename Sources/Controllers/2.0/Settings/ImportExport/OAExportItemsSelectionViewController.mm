@@ -481,6 +481,8 @@
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
             [cell.selectionButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.selectDeselectButtonTouchableArea removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.selectDeselectButtonTouchableArea addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
             
             NSInteger selectedAmount = _selectedItems.count;
             if (selectedAmount > 0)

@@ -72,16 +72,10 @@
 - (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
-    [self enterRoutePlanningModeGivenGpx:gpxFile appMode:nil path:path from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
-}
-
-- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile appMode:(OAApplicationMode *)appMode path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
-         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
-{
     [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     
-    OAApplicationMode *mode = appMode ? appMode : [self getRouteMode];
+    OAApplicationMode *mode = [self getRouteMode];
     [_routingHelper setAppMode:mode];
     [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
     // save application mode controls

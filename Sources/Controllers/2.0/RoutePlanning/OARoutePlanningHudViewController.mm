@@ -1695,7 +1695,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     else
     {
         [mapPanel.mapActions stopNavigationWithoutConfirm];
-        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx appMode:appMode path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+//        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
     }
 }
 

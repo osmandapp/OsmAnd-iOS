@@ -19,7 +19,7 @@
         self.url = imageUrl;
         self.imageHiresUrl = self.url;
         self.imageUrl = self.url;
-        self.topIcon = @"ic_custom_logo_openplacereviews";
+        self.topIcon = @"ic_custom_logo_openplacereviews.png";
     }
     return self;
 }

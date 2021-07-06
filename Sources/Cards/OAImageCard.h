@@ -11,7 +11,7 @@
 
 @interface OAImageCard : OAAbstractCard
 
-@property (nonatomic, readonly) NSString *type;
+@property (nonatomic) NSString *type;
 // Image location
 @property (nonatomic, readonly) double latitude;
 @property (nonatomic, readonly) double longitude;
@@ -22,19 +22,19 @@
 // Image key
 @property (nonatomic, readonly) NSString *key;
 // Image title
-@property (nonatomic, readonly) NSString *title;
+@property (nonatomic) NSString *title;
 // User name
 @property (nonatomic, readonly) NSString *userName;
 // Image viewer url
-@property (nonatomic, readonly) NSString *url;
+@property (nonatomic) NSString *url;
 // Image bitmap url
-@property (nonatomic, readonly) NSString *imageUrl;
+@property (nonatomic) NSString *imageUrl;
 // Image high resolution bitmap url
-@property (nonatomic, readonly) NSString *imageHiresUrl;
+@property (nonatomic) NSString *imageHiresUrl;
 // true if external browser should to be opened, open webview otherwise
 @property (nonatomic, readonly) BOOL externalLink;
 
-@property (nonatomic, readonly) NSString *topIcon;
+@property (nonatomic) NSString *topIcon;
 
 @property (nonatomic) UIImage *image;
 

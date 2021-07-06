@@ -347,7 +347,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OARepositoryResourceItem *mapItem = [self getMapItem:indexPath];
         if (mapItem.downloadTask != nil)
         {
-            [OAResourcesUIHelper offerCancelDownloadOf:mapItem];
+            [OAResourcesUIHelper offerCancelDownloadOf:mapItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
+                [self presentViewController:alert animated:YES completion:nil];
+            }];
         }
         else if ([mapItem isKindOfClass:[OARepositoryResourceItem class]])
         {

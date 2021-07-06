@@ -1022,6 +1022,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop
 {
+    [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:onTaskStop completionHandler:nil];
+}
+
++ (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler
+{
     BOOL isUpdate = NO;
     std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
     if ([item_ isKindOfClass:[OALocalResourceItem class]])
@@ -1071,7 +1076,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.class cancelDownloadOf:item_ onTaskStop:onTaskStop];
     }]];
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    
+    if (completionHandler)
+        completionHandler(alert);
+    else
+        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
 }
 
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_

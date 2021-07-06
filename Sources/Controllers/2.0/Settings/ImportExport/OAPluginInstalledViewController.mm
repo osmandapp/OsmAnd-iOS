@@ -136,9 +136,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateAvailableMaps
 {
-        _suggestedMaps = [_plugin getSuggestedMaps];
-        [self generateData];
-        [self.tableView reloadData];
+    _suggestedMaps = [_plugin getSuggestedMaps];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -200,7 +200,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             mapItem.disabled = YES;
         }
         NSString *title = mapItem.title;
-        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        NSString *subtitle = [NSString stringWithFormat:@"%@ • %@", [OAResourcesUIHelper resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
 
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
         if (cell == nil)
@@ -353,9 +353,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             OARepositoryResourceItem* item = (OARepositoryResourceItem*)mapItem;
             
-            [OAResourcesUIHelper offerDownloadAndInstallOf:item viewController:self onTaskCreated:^(id<OADownloadTask> task) {
+            [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
                 [self updateAvailableMaps];
-            } onTaskResumed:nil];
+            } onTaskResumed:nil completionHandler:^(UIAlertController *alert) {
+                [self presentViewController:alert animated:YES completion:nil];
+            }];
         }
 }
 

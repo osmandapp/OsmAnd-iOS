@@ -846,10 +846,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
-    [OAResourcesUIHelper offerDownloadAndInstallOf:item viewController:OARootViewController.instance onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:nil];
 }
 
-+ (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item viewController:(UIViewController *)viewController onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler
 {
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
         return;
@@ -894,7 +894,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }]];
     
-    [viewController presentViewController:alert animated:YES completion:nil];
+    if (completionHandler)
+        completionHandler(alert);
+    else
+        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
 }
 
 + (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed

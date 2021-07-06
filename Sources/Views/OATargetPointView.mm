@@ -42,6 +42,8 @@
 #import "OAFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -327,15 +329,6 @@ static const NSInteger _buttonsCount = 4;
             : newHeading;
             
             [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
-        }
-        
-        if (_targetPoint.type == OATargetParking && _targetPoint.targetObj)
-        {
-            OADestination *d = _targetPoint.targetObj;
-            if (d && d.carPickupDateEnabled)
-            {
-                [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
-            }
         }
     });
 }
@@ -749,8 +742,16 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
     {
-        [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
-        [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+        if (_targetPoint.type == OATargetWpt && ![self newItem])
+        {
+            [_buttonFavorite setTitle:OALocalizedString(@"edit_waypoint_short") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+        }
+        else
+        {
+            [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+        }
     }
     else
     {
@@ -850,10 +851,7 @@ static const NSInteger _buttonsCount = 4;
             [self updateTransportView];
             [self updateDescriptionLabel];
             
-            UIColor* color = item.color;
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-            _imageView.image = _targetPoint.icon;
+            _imageView.image = item.getCompositeIcon;
         }
         else
         {
@@ -1655,10 +1653,9 @@ static const NSInteger _buttonsCount = 4;
     {
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
         [self updateAddressLabel];
-        
-        id d = _targetPoint.targetObj;
-        if (d && [d isKindOfClass:[OADestination class]] && ((OADestination *)d).carPickupDateEnabled)
-            [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin && plugin.getParkingType)
+            [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] label:self.coordinateLabel shortText:NO];
     }
     else if (_targetPoint.type == OATargetGPXRoute)
     {
@@ -1697,7 +1694,7 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
-        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt);
+        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt && ![self newItem]);
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
     
@@ -1714,6 +1711,12 @@ static const NSInteger _buttonsCount = 4;
         {
             OAFavoriteViewController *favoriteController = (OAFavoriteViewController *)self.customController;
             _imageView.image = [favoriteController getIcon];
+        }
+        else if (_targetPoint.type == OATargetParking)
+        {
+            OAFavoriteItem *item = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType PARKING]];
+            if (item)
+                _imageView.image = [item getCompositeIcon];
         }
         else
         {
@@ -2019,12 +2022,18 @@ static const NSInteger _buttonsCount = 4;
         [self showFullMenu];
         [self.customController activateEditing];
         
-        OAFavoriteItem *item = ((OAFavoriteViewController *)self.customController).favorite;
-        
+        OAFavoriteItem *item = self.targetPoint.targetObj;
         [self.menuViewDelegate targetPointEditFavorite:item];
         return;
     }
-    
+
+    if (self.targetPoint.type == OATargetWpt)
+    {
+        OAGpxWptItem *item = self.targetPoint.targetObj;
+        [self.menuViewDelegate targetPointEditWaypoint:item];
+        return;
+    }
+
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
     {
         [self.menuViewDelegate targetPointAddWaypoint];

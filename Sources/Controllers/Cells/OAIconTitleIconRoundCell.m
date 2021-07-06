@@ -16,41 +16,60 @@
     BOOL _topCorners;
 }
 
-- (void) awakeFromNib
+- (void) updateConstraints
 {
-    [super awakeFromNib];
+    _leftTextPrimaryConstraint.active = !self.iconView.hidden;
+    _leftTextSecondaryConstraint.active = self.iconView.hidden;
+    _leftSeparatorPrimaryConstraint.active = !self.iconView.hidden;
+    _leftSeparatorSecondaryConstraint.active = self.iconView.hidden;
+
+    [super updateConstraints];
 }
 
-- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+- (BOOL) needsUpdateConstraints
 {
-    [super setSelected:selected animated:animated];
-}
-
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    
-    for (UIView *view in self.subviews) {
-        if ([view isEqual:self.contentView]) continue;
-        view.hidden = view.bounds.size.width == self.bounds.size.width;
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        res = res || self.leftTextPrimaryConstraint.active != self.iconView.hidden;
+        res = res || self.leftTextSecondaryConstraint.active != !self.iconView.hidden;
+        res = res || self.leftSeparatorPrimaryConstraint.active != self.iconView.hidden;
+        res = res || self.leftSeparatorSecondaryConstraint.active != !self.iconView.hidden;
     }
-    CGFloat w = self.bounds.size.width;
-    _contentContainer.frame = CGRectMake(16.0, 0.0, w - 32.0, self.bounds.size.height);
-    
-    UIRectCorner corners;
-    if (_topCorners && _bottomCorners)
-        corners = UIRectCornerAllCorners;
-    else
-        corners = _topCorners ? UIRectCornerTopRight | UIRectCornerTopLeft : UIRectCornerBottomLeft | UIRectCornerBottomRight;
-     
-    if (_topCorners || _bottomCorners)
-        [OAUtilities setMaskTo:_contentContainer byRoundingCorners:corners radius:12.];
+    return res;
+}
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+	[self applyCornerRadius];
+}
+
+- (void) applyCornerRadius
+{
+	CGFloat width = self.bounds.size.width - 40.;
+	CGFloat height = self.bounds.size.height;
+	_contentContainer.frame = CGRectMake(20., 0., width, height);
+	UIRectCorner corners;
+	if (_topCorners && _bottomCorners)
+		corners = UIRectCornerAllCorners;
+	else
+		corners = _topCorners ? UIRectCornerTopRight | UIRectCornerTopLeft : UIRectCornerBottomLeft | UIRectCornerBottomRight;
+	 
+	if (_topCorners || _bottomCorners)
+		[OAUtilities setMaskTo:_contentContainer byRoundingCorners:corners radius:12.];
 }
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners
 {
     _bottomCorners = bottomCorners;
     _topCorners = topCorners;
+}
+
+- (void)prepareForReuse
+{
+	[super prepareForReuse];
+	_contentContainer.layer.mask = nil;
 }
 
 @end

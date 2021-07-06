@@ -19,6 +19,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAWaypointsMapLayerProvider.h"
+#import "OAFavoritesLayer.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -231,7 +232,7 @@
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
         
-        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(locationMarks, self.baseOrder + 1, hiddenPoints,
+        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(locationMarks, self.baseOrder - locationMarks.count() - 1, hiddenPoints,
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }
@@ -250,9 +251,7 @@
         targetPoint.location = item.point.position;
         targetPoint.targetObj = item;
 
-        UIColor* color = item.color;
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+        targetPoint.icon = item.getCompositeIcon;
         targetPoint.title = item.point.name;
         
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
@@ -331,8 +330,7 @@
     if (object && [self isObjectMovable:object])
     {
         OAGpxWptItem *point = (OAGpxWptItem *)object;
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:point.color];
-        return favCol.icon;
+        return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundIcon icon:[@"mx_" stringByAppendingString:point.point.getIcon]];
     }
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }

@@ -166,7 +166,7 @@
 "gpx_max_speed" = "Lestresa màssima";
 "gpx_speed" = "Lestresa";
 "prch_nau_q2_wifi" = "S'iscarrigamentu tenet bisòngiu de %@ in sa retza WiFi.";
-"prch_nau_q3" = "As a lu pòdere installare prus a tardu dae Mapas & Resursas.";
+"prch_nau_q3" = "As a lu pòdere installare prus a tardu dae Mapas e Resursas.";
 "proceed_q" = "Sighire?";
 "download" = "Iscàrriga";
 "nothanks" = "No, gràtzias";
@@ -174,7 +174,7 @@
 "prch_failed" = "Sa còmpora de \"%@\" est faddida";
 "prch_items_failed" = "Sos elementos non sunt istados ripristinados. Torra a proare prus a tardu.";
 // Resources
-"res_mapsres" = "Mapas & Resursas";
+"res_mapsres" = "Mapas e Resursas";
 "res_installed" = "Installadas";
 "res_banner_free_maps_title" = "Tenes %d mapas de badas!";
 "res_banner_free_maps_desc" = "Podes iscarrigare %d mapas de badas, chene sos agiornamentos";
@@ -1924,7 +1924,7 @@
 "road_speeds_descr" = "Custos paràmetros diant pòdere influentzare su càrculu de s'àndala.";
 "maximum_speed" = "Lestresa màssima";
 "ios_release_3_90" = "• Introdutzione de sa funtzionalidade \"Pranìfica un'àndala\" pro pranificare biàgios in su tempus benidore e cun s'abilidade de creare segmentos de rastas impreende castas diferentes de navigatzione\n• Annanghidura de un'optzione pro abilitare una bùssola in s'aina \"Medidura cun su raju\"\n• Annanghidura de s'optzione \"istratos superiores de sas etichetas de sos PDI\", chi permitit de ammustrare sos nùmenes pro sos preferidos, sos puntos de coladòrgiu de sas rastas e sos marcadores in sa mapa\n• Annanghidura sas atziones lestras pro sa visibilidade de sas curvas de livellu e de su terrinu in sa mapa, mudare unu profilu de s'aplicatzione, iscantzellare unu puntu mesanu a curtzu\n• Acontzadura de problemas cun una categoria de chirca Wikipedia chi mancaiat\n• Importatzione de sas Impostatziones: faddinas acontzadas, suportu pro totu sas castas de datos a disponimentu in OsmAnd annànghidu\n• Modìfica de OpenStreetMap: acontzadura de s'ischertadore de tempus e de s'inabilidade de mudare su cummentu de modìfica\n";
-"ios_release_3_80" = "• Introdutzione de “Profilos de s'aplicatziones\" cun impostatziones indipendentes\n• Organizatzione noa de sas impostatziones pro profilu e casta: navigatzione, generales, mapa e ischermu\n• Possibilidade de importare o esportare sas impostatziones de profilu\n• Annanghidura de fontes de datos pro sas fotografias in lìnia\n• Annanghidura de sa possibilidade de iscarrigare mapas in lìnia in sa memòria temporànea\n• Algoritmu de chirca megioradu\n";
+"ios_release_3_80" = "• Introdutzione de \"Profilos de s'aplicatzione\" cun impostatziones indipendentes\n• Organizatzione noa de sas impostatziones pro profilu e casta: navigatzione, generales, mapa e ischermu\n• Possibilidade de importare o esportare sas impostatziones de profilu\n• Annanghidura de fontes de datos pro sas fotografias in lìnia\n• Annanghidura de sa possibilidade de iscarrigare mapas in lìnia in sa memòria temporànea\n• Algoritmu de chirca megioradu\n";
 
 
 // Release Notes
@@ -2105,3 +2105,30 @@
 "shared_string_enable" = "Abìlita";
 "search_poi_types_descr" = "Podes cumbinare castas de PDI dae categorias diferentes.";
 "add_custom_category" = "Annanghe una categoria personalizada";
+"app_restart_required" = "Pro aplicare unas cantas impostatziones diat pòdere èssere netzessàriu torrare a allùghere s'aplicatzione.";
+"approximate_file_size" = "Mannària aprossimativa de su documentu: %@";
+"gpx_upload_private_visibility_descr" = "\"Privadu\" cheret nàrrere chi sa rasta no at a èssere ammustrada in peruna lista, ma sos puntos suos ant a èssere a disponimentu su matessi, in òrdine cronològicu, pro mèdiu de s'API GPS pùblica chene datas e oras.";
+"gpx_upload_trackable_visibility_descr" = "\"Arrastàbile\" cheret nàrrere chi sa rasta no at a èssere ammustrada in peruna lista pùblica, ma sos puntos suos cun sas datas (no ant a èssere assotziados diretamente cun tie) l'ant a èssere pro mèdiu de iscarrigamentos dae s'API GPS pùblica.";
+"gpxup_private" = "Privadu";
+"gpxup_public" = "Pùblicu";
+"gpxup_trackable" = "Arrastàbile";
+"gpxup_identifiable" = "Identificàbile";
+"gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
+"gpx_upload_public_visibility_descr" = "\"Pùblicu\" cheret nàrrere chi sa rasta at a èssere ammustrada in manera pùblica in sas rastas GPS tuas, in sas listas de rastas GPS pùblicas e in sa lista de rastas pùblicas cun datas e oras in forma originale. Sos datos frunidos pro mèdiu de s'API non sunt ligados a sa pàgina de sa rasta tua. Sas datas e sas oras integradas in sos puntos de rasta no ant a èssere a disponimentu pro mèdiu de s'API GPS, e sos puntos no ant a èssere ordinados in manera cronològica.";
+"restart" = "Torra a incumintzare";
+"shared_string_wifi_only" = "Petzi cun su WiFi";
+"no_waypoints_found" = "Perunu puntu de coladòrgiu agatadu";
+"replace_waypoint_confirmation" = "Ses seguru de chèrrere modificare su puntu de coladòrgiu %@?";
+"context_menu_item_edit_waypoint" = "Modìfica su puntu de coladòrgiu GPX";
+"base_profile_descr_carplay" = "Ghiende cun sa modalidade CarPlay";
+"m_style_carplay" = "CarPlay";
+"ios_release_4_00" = "• Nou! Ischermada \"Annanghe unu preferidu\" cun optziones pro ischertare iconas, colores e forma personalizados\n• Annanghidura de su widget nou new \"Widget de sas coordinadas\" cun coordinadas pro sa positzione de su momentu\n• Annanghidura de sa possibilidade de importare estensiones personalizadas definidas dae s'impreadore\n• Funtzionalidade de importatzione e esportatzione megiorada meda\n• \"Distàntzia pro tocu\" tramudada dae sa medidura cun su raju a un'optzione a banda\n• Blocu de s'aplicatzione CarPlay cando s'ischermu de s'iPhone est istudadu acontzada\n• Ischermada de sas estensiones tramudada dae \"Mapas e Resursas\" a su menù printzipale\n• Annanghidura de sa tradutzione in finlandesu\n• Acontzadura de s'interfache de s'impreadore pro s'orientamentu in orizontale pro s'ischermada \"Pranìfica un'àndala\"\n• Annanghidura de su suportu pro su càrculu de s'àndala e sa renderizatzione de sos documentos personalizados\n• Acontzadura de sas prestatziones de sa lìnia de diretzione de sos marcadores\n • Acontzadura de unu problema cun s'importatzione de documentos GPX cun estensiones in maiùsculu\n• Acontzadura de unu problema cun su menù \"Sighi sa rasta\"\n• Acontzadura de s'importatzione de documentos OBF\n";
+"default" = "Predefinidu";
+"select_profile" = "Ischerta su profilu";
+"threshold_distance" = "Lìmite de distàntzia";
+"route_between_points_warning_desc" = "In su passu chi benit liga sa rasta tua a su caminu permìtidu prus a curtzu cun unu de sos profilos de navigatzione tuos pro impreare custa optzione.";
+"carplay_profile_descr" = "Profilu chi s'at a impreare cun sa connessione cun CarPlay.";
+"carplay_profile" = "Profilu de CarPlay";
+"last_used" = "Ùrtimu impreu";
+"ios_release_4_0" = "• Nou! Ischermada \"Annanghe unu preferidu\" cun optziones pro ischertare iconas, colores e forma personalizados\n• Annanghidura de su widget nou new \"Widget de sas coordinadas\" cun coordinadas pro sa positzione de su momentu\n• Annanghidura de sa possibilidade de importare estensiones personalizadas definidas dae s'impreadore\n• Funtzionalidade de importatzione e esportatzione megiorada meda\n• \"Distàntzia pro tocu\" tramudada dae sa medidura cun su raju a un'optzione a banda\n• Blocu de s'aplicatzione CarPlay cando s'ischermu de s'iPhone est istudadu acontzada\n• Ischermada de sas estensiones tramudada dae \"Mapas e Resursas\" a su menù printzipale\n• Annanghidura de sa tradutzione in finlandesu\n• Acontzadura de s'interfache de s'impreadore pro s'orientamentu in orizontale pro s'ischermada \"Pranìfica un'àndala\"\n• Annanghidura de su suportu pro su càrculu de s'àndala e sa renderizatzione de sos documentos personalizados\n• Acontzadura de sas prestatziones de sa lìnia de diretzione de sos marcadores\n • Acontzadura de unu problema cun s'importatzione de documentos GPX cun estensiones in maiùsculu\n• Acontzadura de unu problema cun su menù \"Sighi sa rasta\"\n• Acontzadura de s'importatzione de documentos OBF\n";
+"map_widget_parking" = "Logu de parchègiu";

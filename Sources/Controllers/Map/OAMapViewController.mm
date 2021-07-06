@@ -602,6 +602,17 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
 }
 
+- (void) onApplicationDestroyed
+{
+    if (self.mapViewLoaded)
+    {
+        [_mapView suspendSymbolsUpdate];
+        [_mapView releaseContext:YES];
+        [_mapView removeFromSuperview];
+        _mapView = nil;
+    }
+}
+
 - (void) showProgressHUD
 {
     if (_app.carPlayActive)
@@ -1668,8 +1679,8 @@
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
-        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
@@ -1751,12 +1762,12 @@
             else if (settings.settingMapLanguageShowLocal &&
                      settings.settingMapLanguageTranslit.get)
                 langId = @"en";
-            double mapDensity = [settings.mapDensity get:settings.applicationMode];
+            double mapDensity = [settings.mapDensity get:settings.applicationMode.get];
             [_mapView setVisualZoomShift:mapDensity];
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
                                                                                      mapDensity,
-                                                                                     [settings.textSize get:settings.applicationMode],
+                                                                                     [settings.textSize get:settings.applicationMode.get],
                                                                                      QString::fromNSString(langId),
                                                                                      langPreferences));
             
@@ -1773,7 +1784,7 @@
 
                 QHash< QString, QString > newSettings;
                 
-                OAApplicationMode *am = settings.applicationMode;
+                OAApplicationMode *am = settings.applicationMode.get;
                 NSString *appMode = am.stringKey;
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
                 NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
@@ -2973,7 +2984,7 @@
 {
     if (items.count == 0)
         return NO;
-    
+
     BOOL found = NO;
     
     auto activeGpx = _selectedGpxHelper.activeGpx;

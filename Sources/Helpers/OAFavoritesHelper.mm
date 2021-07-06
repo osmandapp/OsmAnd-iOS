@@ -16,10 +16,12 @@
 #import "OADefaultFavorite.h"
 #import "OAAppSettings.h"
 #import "OAGPXMutableDocument.h"
+#import "OAParkingPositionPlugin.h"
+#import "OAPlugin.h"
+
+#import <EventKit/EventKit.h>
 
 #include <OsmAndCore.h>
-
-#define kPersonalCategory @"personal"
 
 @implementation OAFavoritesHelper
 
@@ -120,6 +122,30 @@ static BOOL _favoritesLoaded = NO;
             return item;
     }
     return nil;
+}
+
++ (void) setParkingPoint:(double)lat lon:(double)lon address:(NSString *)address pickupDate:(NSDate *)pickupDate addToCalendar:(BOOL)addToCalendar
+{
+    OASpecialPointType *specialType = OASpecialPointType.PARKING;
+    OAFavoriteItem *point = [OAFavoritesHelper getSpecialPoint:specialType];
+    if (point)
+    {
+        [point setIcon:[specialType getIconName]];
+        [point setAddress:address];
+        [point setTimestamp:pickupDate];
+        [point setCalendarEvent:addToCalendar];
+        [OAFavoritesHelper editFavorite:point lat:lat lon:lon description:[point getDescription]];
+    }
+    else
+    {
+        OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:[specialType getName] category:[specialType getCategory]];
+        [point setAddress:address];
+        [point setIcon:[specialType getIconName]];
+        [point setColor:[specialType getIconColor]];
+        [point setTimestamp:pickupDate];
+        [point setCalendarEvent:addToCalendar];
+        [self addFavorite:point];
+    }
 }
 
 + (void) setSpecialPoint:(OASpecialPointType *)specialType lat:(double)lat lon:(double)lon address:(NSString *)address
@@ -552,6 +578,66 @@ static BOOL _favoritesLoaded = NO;
     return gpx;
 }
 
++ (void) addParkingReminderToCalendar
+{
+    EKEventStore *eventStore = [[EKEventStore alloc] init];
+    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error)
+            {
+                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+            }
+            else if (!granted)
+            {
+                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:OALocalizedString(@"reminder_not_set_text") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+            }
+            else
+            {
+                EKEvent *event = [EKEvent eventWithEventStore:eventStore];
+                event.title = OALocalizedString(@"pickup_car");
+                
+                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
+                if (plugin)
+                {
+                    if (plugin.getEventIdentifier)
+                        [self.class removeParkingReminderFromCalendar];
+                    NSDate *pickupDate = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
+                    event.startDate = pickupDate;
+                    event.endDate = pickupDate;
+                    
+                    [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
+                    
+                    [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+                    NSError *err;
+                    [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                    if (err)
+                        [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                    else
+                        [plugin setEventIdentifier:[event.eventIdentifier copy]];
+                }
+            }
+        });
+    }];
+}
+
++ (void) removeParkingReminderFromCalendar
+{
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
+    if (plugin)
+    {
+        if (plugin.getEventIdentifier)
+        {
+            EKEventStore *eventStore = [[EKEventStore alloc] init];
+            EKEvent *event = [eventStore eventWithIdentifier:plugin.getEventIdentifier];
+            NSError *error;
+            if (![eventStore removeEvent:event span:EKSpanFutureEvents error:&error])
+                NSLog(@"%@", [error localizedDescription]);
+            else
+                [plugin setEventIdentifier:nil];
+        }
+    }
+}
+
 @end
 
 @implementation OAFavoriteGroup
@@ -604,8 +690,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name
 {
-    NSLog(OALocalizedString(@"personal_category_name"));
-    return [name isEqualToString:OALocalizedString(@"personal_category_name")] || [name isEqualToString:kPersonalCategory];
+    return [name isEqualToString:kPersonalCategory];
 }
 
 + (NSString *) getDisplayName:(NSString *)name

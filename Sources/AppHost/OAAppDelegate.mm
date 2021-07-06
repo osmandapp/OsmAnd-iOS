@@ -348,7 +348,8 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [_app shutdown];
-    
+    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+    [mapVc onApplicationDestroyed];
     // Release OsmAnd core
     OsmAnd::ReleaseCore();
     
@@ -397,11 +398,13 @@
         return;
     }
     [self presentInCarPlay:interfaceController window:window];
+    [OAAppSettings.sharedManager.applicationMode set: [OAAppSettings.sharedManager.carPlayMode get]];
 }
 
 - (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
     _app.carPlayActive = NO;
+    [OAAppSettings.sharedManager.applicationMode set:[OAAppSettings.sharedManager.defaultApplicationMode get]];
     [OARootViewController.instance.mapPanel onCarPlayDisconnected:^{
         [_carPlayMapController detachFromCarPlayWindow];
         _carPlayDashboardController = nil;

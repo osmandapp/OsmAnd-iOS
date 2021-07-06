@@ -529,9 +529,15 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             NSString *filePath = object;
             if ([filePath.lowercaseString hasSuffix:GPX_FILE_EXT])
+            {
                 [result addObject:[[OAGpxSettingsItem alloc] initWithFilePath:filePath error:nil]];
+            }
             else
-                [result addObject:[[OAFileSettingsItem alloc] initWithFilePath:filePath error:nil]];
+            {
+                OAFileSettingsItem *toExport = [[OAFileSettingsItem alloc] initWithFilePath:filePath error:nil];
+                if (toExport)
+                    [result addObject:toExport];
+            }
         }
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:object];

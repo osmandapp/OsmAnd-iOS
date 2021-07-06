@@ -349,6 +349,13 @@
     }
 }
 
+- (void) setupDeleteButtonIcon
+{
+    if (self.editing)
+        [self.deleteButton setImage:[UIImage imageNamed:@"icon_remove"] forState:UIControlStateNormal];
+    else
+        [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+}
 
 - (void) setupView
 {
@@ -378,11 +385,8 @@
         self.buttonOK.hidden = YES;
         self.deleteButton.hidden = ![self supportEditing];
     }
-    
-    if (self.editing)
-        [self.deleteButton setImage:[UIImage imageNamed:@"icon_remove"] forState:UIControlStateNormal];
-    else
-        [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+
+    [self setupDeleteButtonIcon];
 }
 
 - (void) generateData
@@ -404,7 +408,7 @@
             @"label" : self.groupTitle,
             @"description" : OALocalizedString(@"all_group_points"),
             @"iconName" : @"ic_custom_folder",
-            @"iconColor" : self.groupColor
+            @"iconColor" : self.groupColor ? self.groupColor : ((OAFavoriteColor *)OADefaultFavorite.builtinColors.firstObject).color
         }];
     }
     else if ([self isKindOfClass:OAGPXWptViewController.class])
@@ -833,7 +837,7 @@
 
 - (void) colorChanged
 {
-    OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
+    OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][_colorController.colorIndex];
     [self setItemColor:favCol.color];
     
     _wasEdited = YES;

@@ -349,11 +349,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
                     NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"ctx_mnu_direction");
-                    NSString *imageName;
-                    if (item.destination.parking)
-                        imageName = @"ic_parking_pin_small";
-                    else
-                        imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
+                    NSString *imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
                     
                     [c.titleView setText:title];
                     c.titleIcon.image = [UIImage imageNamed:imageName];
@@ -395,11 +391,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
                     [c.titleView setText:item.favorite->getTitle().toNSString()];
-                    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
-                    
-                    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-                    c.titleIcon.image = favCol.icon;
-                    c.titleIcon.tintColor = favCol.color;
+                    c.titleIcon.image = item.getCompositeIcon;
                     
                     [c.distanceView setText:item.distance];
                     c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);

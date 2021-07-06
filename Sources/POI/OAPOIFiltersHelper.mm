@@ -597,7 +597,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (NSArray<OAPOIUIFilter *> *) getSortedPoiFilters:(BOOL) onlyActive
 {
-    OAApplicationMode *selectedAppMode = OAAppSettings.sharedManager.applicationMode;
+    OAApplicationMode *selectedAppMode = OAAppSettings.sharedManager.applicationMode.get;
     return [self getSortedPoiFilters:selectedAppMode onlyActive:onlyActive];
 }
 

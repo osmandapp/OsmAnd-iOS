@@ -48,4 +48,6 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 - (CGFloat) additionalLandscapeOffset;
 - (void) updateShowingState:(EOADraggableMenuState)state;
 
+- (void) updateViewAnimated;
+
 @end

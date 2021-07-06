@@ -279,9 +279,10 @@
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
-    settings.applicationMode = settings.defaultApplicationMode.get;
-    [_data setLastMapSourceVariant:settings.applicationMode.variantKey];
-    
+    settings.simulateRouting = NO;
+    [settings.applicationMode set:settings.defaultApplicationMode.get];
+    [_data setLastMapSourceVariant:settings.applicationMode.get.variantKey];
+
     // Get location of a shipped world mini-basemap and it's version stamp
     _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                                 ofType:@"obf"
@@ -1204,10 +1205,10 @@
     [routingHelper clearCurrentRoute:nil newIntermediatePoints:@[]];
     [routingHelper setRoutePlanningMode:false];
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    settings.lastRoutingApplicationMode = settings.applicationMode;
+    settings.lastRoutingApplicationMode = settings.applicationMode.get;
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
-        settings.applicationMode = settings.defaultApplicationMode.get;
+        [settings.applicationMode set:_carPlayActive ? [OAAppSettings.sharedManager.carPlayMode get] : [settings.defaultApplicationMode get]];
     });
 }
 

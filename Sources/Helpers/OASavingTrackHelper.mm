@@ -581,7 +581,7 @@
             if ([self isPointAccurateForRouting:location])
             {
                 OAAppSettings *settings = [OAAppSettings sharedManager];
-                if ([settings.saveTrackToGPX get:settings.applicationMode]
+                if ([settings.saveTrackToGPX get:settings.applicationMode.get]
                     && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackInterval get]
                     && [[OARoutingHelper sharedInstance] isFollowingMode]) {
                     record = true;

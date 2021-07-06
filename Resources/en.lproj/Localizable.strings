@@ -75,6 +75,7 @@
 "targets" = "Destinations";
 "search_radius_proximity" = "Within";
 "poi" = "POI";
+"search_more" = "Search more…";
 
 "day_off_label" = "off";
 "open_from" = "Open from";
@@ -190,7 +191,11 @@
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
 
+"last_used" = "Last used";
+
 "carplay_active_message" = "Map is displayed via CarPlay";
+"carplay_profile" = "CarPlay profile";
+"carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
 
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
@@ -950,6 +955,7 @@
 "plan_route_open_existing_track" = "Open existing track";
 "plan_route_last_modified" = "Last modified";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
+"route_between_points_warning_desc" = "Next, snap your track to the nearest allowed road with one of your navigation profiles to use this option.";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
 "none_point_error" = "Please add at least one point.";
@@ -977,6 +983,8 @@
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segment %d";
 "some_of" = "%d of %d";
+"threshold_distance" = "Threshold distance";
+"select_profile" = "Select profile";
 
 // Resources
 "shared_string_resources" = "Resources";
@@ -1215,6 +1223,7 @@
 "add_map_marker" = "Add map marker";
 "select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
+"context_menu_item_edit_waypoint" = "Edit GPX waypoint";
 "toggle_fav" = "Show/hide favorites";
 "fav_show" = "Show favorites";
 "fav_hide" = "Hide favorites";
@@ -1239,6 +1248,7 @@
 "add_work" = "Add work";
 "home_pt" = "Home";
 "work_pt" = "Work";
+"map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
@@ -1335,6 +1345,8 @@
 "add_waypoint" = "Add waypoint to track";
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
+"replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
+"no_waypoints_found" = "No waypoints found";
 "modify_poi_short" = "Modify POI";
 "create_poi_short" = "Create POI";
 "modify_edit_short" = "Modify OSM change";
@@ -2188,6 +2200,7 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+"default" = "Default";
 
 
 //Poi catagories
@@ -2246,7 +2259,7 @@
 • Settings Import: fixed bugs, added support for all data types available in OsmAnd\n
 • OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 
-"ios_release_4_00" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n
+"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n
 • Added new \"Coordinates widget\" with coordinates of the current location\n
 • Added ability to import custom user-defined plugins\n
 • Significantly extended the import/export functionality\n

@@ -12,12 +12,12 @@
 			<key>CFBundleTypeIconFiles</key>
 			<array/>
 			<key>CFBundleTypeName</key>
-			<string>GPS eXchange format</string>
+			<string>GPS Exchange Format (GPX)</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>net.osmand.gpx</string>
+				<string>com.topografix.gpx</string>
 			</array>
 		</dict>
 		<dict>
@@ -139,9 +139,11 @@
 				<string>public.xml</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>GPX eXchange format</string>
+			<string>GPS Exchange Format (GPX)</string>
 			<key>UTTypeIdentifier</key>
-			<string>net.osmand.gpx</string>
+			<string>com.topografix.gpx</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.topografix.com/GPX/1/</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -150,7 +152,9 @@
 					<string>GPX</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/gpx+xml</string>
+				<array>
+					<string>application/gpx+xml</string>
+				</array>
 			</dict>
 		</dict>
 		<dict>
@@ -185,9 +189,11 @@
 				<string>public.xml</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>GPS eXchange format</string>
+			<string>GPS Exchange Format (GPX)</string>
 			<key>UTTypeIdentifier</key>
-			<string>net.osmand.gpx</string>
+			<string>com.topografix.gpx</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.topografix.com/GPX/1/</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -196,7 +202,9 @@
 					<string>GPX</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/gpx+xml</string>
+				<array>
+					<string>application/gpx+xml</string>
+				</array>
 			</dict>
 		</dict>
 		<dict>

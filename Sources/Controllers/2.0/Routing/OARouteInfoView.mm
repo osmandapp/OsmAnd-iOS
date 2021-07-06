@@ -980,7 +980,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] updateRoute:YES intermediate:-1 historyName:[start getPointDescription]];
         }
 
-        [self show:NO onComplete:nil];
+        [self show:NO fullMenu:NO onComplete:nil];
     }
 }
 
@@ -1004,12 +1004,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
 }
 
-- (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
+- (void)show:(BOOL)animated fullMenu:(BOOL)fullMenu onComplete:(void (^)(void))onComplete
 {
     visible = YES;
     [_appModeView setupModeButtons];
     [_tableView setContentOffset:CGPointZero];
-    _currentState = EOARouteInfoMenuStateFullScreen;
+    _currentState = fullMenu ? EOARouteInfoMenuStateFullScreen : _currentState;
     [_tableView setScrollEnabled:YES];
     _historyItemsLimit = kHistoryItemLimitDefault;
     
@@ -1152,7 +1152,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) updateMenu
 {
     if ([self superview])
-        [self show:NO onComplete:nil];
+        [self show:NO fullMenu:YES onComplete:nil];
 }
 
 - (OAGPXTrackAnalysis *) getTrackAnalysis
@@ -1173,9 +1173,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) appModeChanged:(OAApplicationMode *)next
 {
     OAApplicationMode *am = [_routingHelper getAppMode];
-    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode.get;
     if ([_routingHelper isFollowingMode] && appMode == am)
-        [OAAppSettings sharedManager].applicationMode = next;
+        [[OAAppSettings sharedManager].applicationMode set:next];
     
     _hasEmptyTransportRoute = NO;
     [_routingHelper setAppMode:next];

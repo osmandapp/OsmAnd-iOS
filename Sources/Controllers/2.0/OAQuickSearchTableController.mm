@@ -507,6 +507,17 @@
     return cell;
 }
 
+- (NSInteger) getPoiFiltersCount:(NSArray<OAQuickSearchListItem *> *)dataArray
+{
+    NSInteger count = 0;
+    for (OAQuickSearchListItem *res in dataArray)
+    {
+        if (res.getSearchResult.objectType == POI_TYPE)
+            count++;
+    }
+    return count;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -664,6 +675,7 @@
             }
             case POI_TYPE:
             {
+                BOOL isLast = [dataArray indexOfObject:item] == [self getPoiFiltersCount:dataArray] - 1;
                 if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
                 {
                     OACustomSearchPoiFilter *filter = (OACustomSearchPoiFilter *) res.object;
@@ -679,6 +691,7 @@
                         icon = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *) filter];
                     OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
                     cell.iconView.tintColor = UIColorFromRGB(color_osmand_orange);
+                    cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
                     return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOIBaseType class]])
@@ -687,7 +700,9 @@
                     NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
                     UIImage *icon = [((OAPOIBaseType *)res.object) icon];
                     
-                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
+                    OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
+                    cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
+                    return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
@@ -706,6 +721,7 @@
                         [cell.textView setTextColor:[UIColor blackColor]];
                         [cell.textView setText:[item getName]];
                         [cell.iconView setImage:[((OAPOICategory *)res.object) icon]];
+                        cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
                     }
                     return cell;
                 }
@@ -725,12 +741,14 @@
                 cell = nib[0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             }
-            if (cell) {
+            if (cell)
+            {
                 OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
                 cell.iconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-                NSString *title = [buttonItem getName];
-                [cell.button setTitle:title ? title : @"" forState:UIControlStateNormal];
+
+                [cell.button setTitle:[buttonItem getName] forState:UIControlStateNormal];
+
                 [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.button addTarget:buttonItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
                 return cell;

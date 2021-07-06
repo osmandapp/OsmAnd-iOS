@@ -503,12 +503,14 @@
 
 - (void) goExpanded
 {
-    [self goExpanded:YES];
+	if (_currentState != EOADraggableMenuStateExpanded)
+		[self goExpanded:YES];
 }
 
 - (void) goMinimized
 {
-    [self goMinimized:YES];
+	if (_currentState != EOADraggableMenuStateInitial)
+		[self goMinimized:YES];
 }
 
 - (void) goFullScreen

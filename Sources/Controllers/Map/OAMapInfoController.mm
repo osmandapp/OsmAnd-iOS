@@ -185,7 +185,7 @@
     [_dayNightHelper isNightMode];
     
     [self updateColorShadowsOfText];
-    [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];    
+    [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
     [_streetNameView updateInfo];
     [_lanesControl updateInfo];
     [_alarmControl updateInfo];
@@ -429,7 +429,7 @@
 
 - (void) recreateControls
 {
-    OAApplicationMode *appMode = _settings.applicationMode;
+    OAApplicationMode *appMode = _settings.applicationMode.get;
 
     [_streetNameView removeFromSuperview];
     [_widgetsView addSubview:_streetNameView];
@@ -648,7 +648,7 @@
 - (void) widgetClicked:(OATextInfoWidget *)widget
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+        [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
     });
 }
 

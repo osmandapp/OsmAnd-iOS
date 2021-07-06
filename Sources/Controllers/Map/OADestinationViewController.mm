@@ -571,31 +571,13 @@
 
 - (UIColor *) addDestination:(OADestination *)destination
 {
-    if (destination.parking)
-    {
-        for (OADestination *dest in _app.data.destinations)
-            if (dest.parking)
-            {
-                [[OADestinationsHelper instance] removeDestination:dest];
-                break;
-            }
-    }
-    
     CLLocationCoordinate2D location;
     CLLocationDirection direction;
     [self obtainCurrentLocationDirection:&location direction:&direction];
     
-    if (destination.parking)
-    {
-        destination.color = _parkingColor;
-        destination.markerResourceName = @"map_parking_pin";
-    }
-    else
-    {
-        int colorIndex = [self getFreeColorIndex];
-        destination.color = _colors[colorIndex];
-        destination.markerResourceName = _markerNames[colorIndex];
-    }
+    int colorIndex = [self getFreeColorIndex];
+    destination.color = _colors[colorIndex];
+    destination.markerResourceName = _markerNames[colorIndex];
 
     [[OADestinationsHelper instance] addDestination:destination];
 
@@ -640,7 +622,7 @@
         UIColor *c = _colors[i];
         BOOL colorExists = NO;
         for (OADestination *destination in _app.data.destinations)
-            if (!destination.parking && !destination.routePoint && [OAUtilities areColorsEqual:destination.color color2:c])
+            if (!destination.routePoint && [OAUtilities areColorsEqual:destination.color color2:c])
             {
                 colorExists = YES;
                 break;
@@ -654,7 +636,7 @@
     for (long i = (long) _app.data.destinations.count - 1; i >= 0; i--)
     {
         OADestination *destination = _app.data.destinations[i];
-        if (destination.color && !destination.parking && !destination.routePoint)
+        if (destination.color && !destination.routePoint)
         {
             lastUsedColor = destination.color;
             break;

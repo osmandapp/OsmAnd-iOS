@@ -37,7 +37,7 @@
     UIImage *img = [super icon];
     if (!img)
     {
-        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.getOsmTag, self.getOsmValue]]];
+        img = [UIImage imageNamed:[self iconName]];
         if (img)
         {
             return [OAUtilities applyScaleFactorToImage:img];

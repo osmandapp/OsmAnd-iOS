@@ -248,11 +248,11 @@
                                     @"type": [OASettingsTableViewCell getCellIdentifier]}];
         
         [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_map_magnifier"),
-                                    @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode]],
+                                    @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode.get]],
                                     @"type": [OASettingsTableViewCell getCellIdentifier]}];
         
         [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_text_size"),
-                                    @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode]],
+                                    @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
                                     @"type": [OASettingsTableViewCell getCellIdentifier]}];
         
         for (NSString *cName in categories)
@@ -388,7 +388,7 @@
 
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
-    _settings.applicationMode = mode;
+    [_settings.applicationMode set:mode];
     
     [self setupView];
 }
@@ -423,7 +423,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAppModeCell getCellIdentifier] owner:self options:nil];
             _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
             _appModeCell.showDefault = YES;
-            _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
+            _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode.get;
             _appModeCell.delegate = self;
         }
         

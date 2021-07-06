@@ -79,6 +79,7 @@
 - (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode;
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
+- (void) showRouteInfo:(BOOL)fullMenu;
 - (void) closeRouteInfo;
 - (void) closeRouteInfo:(void (^)(void))onComplete;
 - (void) updateRouteInfo;
@@ -144,11 +145,13 @@
 
 - (void) showToolbar:(OAToolbarViewController *)toolbarController;
 - (void) hideToolbar:(OAToolbarViewController *)toolbarController;
+- (void) showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude;
 
 - (void) openSearch;
+- (void) openSearch:(NSObject *)object location:(CLLocation *)location;
 - (void) openSearch:(OAQuickSearchType)searchType;
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex;
-- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery;
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object;
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription;
 

@@ -1,12 +1,12 @@
 //
-//  OACollapsableWikiView.m
+//  OACollapsableNearestPoiWikiView.m
 //  OsmAnd
 //
 //  Created by Alexey Kulish on 11/12/2016.
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OACollapsableWikiView.h"
+#import "OACollapsableNearestPoiWikiView.h"
 #import "OAPOI.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OAPOIUIFilter.h"
 #import "OACommonTypes.h"
 #import "OAUtilities.h"
 #import "OAIAPHelper.h"
@@ -24,6 +25,7 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWikiArticleHelper.h"
+#import "OAPOIFiltersHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -32,18 +34,21 @@
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
-@implementation OACollapsableWikiView
+@implementation OACollapsableNearestPoiWikiView
 {
     UIView *_bannerView;
     UILabel *_bannerLabel;
     UIButton *_bannerButton;
- 
+
     NSArray<UIButton *> *_buttons;
     double _latitude;
     double _longitude;
-    
+    OAPOIUIFilter *_filter;
+
     OAWorldRegion *_worldRegion;
     OARepositoryResourceItem *_resourceItem;
+    NSInteger _buttonShowOnMapIndex;
+    NSInteger _buttonSearchMoreIndex;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -56,12 +61,13 @@
     return self;
 }
 
--(void) setWikiArray:(NSArray<OAPOI *> *)nearestWiki hasOsmWiki:(BOOL)hasOsmWiki latitude:(double)latitude longitude:(double)longitude
+- (void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude filter:(OAPOIUIFilter *)filter
 {
-    _nearestWiki = nearestWiki;
-    _hasOsmWiki = hasOsmWiki;
+    _nearestItems = nearestItems;
+    _hasItems = hasItems;
     _latitude = latitude;
     _longitude = longitude;
+    _filter = filter;
     [self buildViews];
 }
 
@@ -77,7 +83,7 @@
 
 - (void) buildViews
 {
-    if (!self.hasOsmWiki)
+    if (!self.hasItems)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
         _worldRegion = [app.worldRegion findAtLat:_latitude lon:_longitude];
@@ -153,28 +159,47 @@
         }
     }
     
-    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestWiki.count];
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestItems.count + 2];
     int i = 0;
-    for (OAPOI *w in self.nearestWiki)
+    for (OAPOI *poi in self.nearestItems)
     {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        [btn setTitle:w.nameLocalized forState:UIControlStateNormal];
-        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
-        btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
-        btn.layer.cornerRadius = 4.0;
-        btn.layer.masksToBounds = YES;
-        btn.layer.borderWidth = 0.8;
-        btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
-        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
-        btn.tintColor = UIColorFromRGB(0x1b79f8);
+        const auto distance = OsmAnd::Utilities::distance(poi.longitude, poi.latitude, _longitude, _latitude);
+        NSString *title = [NSString stringWithFormat:@"%@ (%@)", poi.nameLocalized, [[OsmAndApp instance] getFormattedDistance:distance]];
+        UIButton *btn = [self createButton:title];
         btn.tag = i++;
-        [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
         [buttons addObject:btn];
     }
+
+    UIButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")];
+    showOnMapButton.tag = _buttonShowOnMapIndex = i++;
+    [self addSubview:showOnMapButton];
+    [buttons addObject:showOnMapButton];
+
+    UIButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")];
+    searchMoreButton.tag = _buttonSearchMoreIndex = i++;
+    [self addSubview:searchMoreButton];
+    [buttons addObject:searchMoreButton];
+
     _buttons = [NSArray arrayWithArray:buttons];
+}
+
+- (UIButton *)createButton:(NSString *)title
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [btn setTitle:title forState:UIControlStateNormal];
+    btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
+    btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
+    btn.layer.cornerRadius = 4.0;
+    btn.layer.masksToBounds = YES;
+    btn.layer.borderWidth = 0.8;
+    btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
+    [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
+    btn.tintColor = UIColorFromRGB(0x1b79f8);
+    [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+    return btn;
 }
 
 - (void) updateButton
@@ -215,7 +240,7 @@
     CGFloat y = 0;
     CGFloat viewHeight = 0;
     
-    if (!self.hasOsmWiki && _bannerView)
+    if (!self.hasItems && _bannerView)
     {
         CGSize labelSize = [OAUtilities calculateTextBounds:_bannerLabel.text width:width - 65.0 - 10.0 - 10.0 font:_bannerLabel.font];
         _bannerView.frame = CGRectMake(kMarginLeft, 0.0, width - kMarginLeft - kMarginRight, 12.0 + labelSize.height + 10.0 + _bannerButton.bounds.size.height + 10.0);
@@ -247,11 +272,27 @@
 {
     UIButton *btn = sender;
     NSInteger index = btn.tag;
-    if (index >= 0 && index < self.nearestWiki.count)
+    if (index >= 0 && index < self.nearestItems.count)
     {
-        OAPOI *w = self.nearestWiki[index];
-        if (w)
-            [self goToPoint:w];
+        OAPOI *item = self.nearestItems[index];
+        if (item)
+            [self goToPoint:item];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel hideContextMenu];
+        if (index == _buttonShowOnMapIndex)
+        {
+            [[OARootViewController instance].mapPanel showPoiToolbar:_filter latitude:_latitude longitude:_longitude];
+            OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+            [helper clearSelectedPoiFilters];
+            [helper addSelectedPoiFilter:_filter];
+            [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
+        }
+        else if (index == _buttonSearchMoreIndex)
+        {
+            [[OARootViewController instance].mapPanel openSearch:_filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
+        }
     }
 }
 

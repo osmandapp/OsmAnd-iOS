@@ -58,6 +58,7 @@
 - (BOOL) hasRtePt;
 - (BOOL) hasWptPt;
 - (BOOL) hasTrkPt;
+- (BOOL) hasRoute;
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
 
@@ -88,6 +89,11 @@
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
 - (NSInteger) getNonEmptySegmentsCount;
+
+- (NSArray<NSString *> *)getWaypointCategories:(BOOL)withDefaultCategory;
+- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithColors:(BOOL)withDefaultCategory;
+- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithCount:(BOOL)withDefaultCategory;
+- (NSArray<NSDictionary<NSString *, NSString *> *> *)getWaypointCategoriesWithAllData:(BOOL)withDefaultCategory;
 
 @end
 

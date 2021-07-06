@@ -10,6 +10,8 @@
 #import "OALocationPoint.h"
 #include <OsmAndCore/IFavoriteLocation.h>
 
+#define EXTENSION_HIDDEN @"hidden"
+
 @class OAGpxWpt;
 
 @interface OASpecialPointType : NSObject
@@ -79,6 +81,10 @@
 
 - (NSDate *) getTimestamp;
 - (void) setTimestamp:(NSDate *)timestamp;
+
+- (bool) getCalendarEvent;
+- (void) setCalendarEvent:(BOOL)calendarEvent;
+
 + (NSString *) toStringDate:(NSDate *)date;
 
 - (OAGpxWpt *) toWpt;

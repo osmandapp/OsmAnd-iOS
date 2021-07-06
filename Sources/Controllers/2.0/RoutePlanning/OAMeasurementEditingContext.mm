@@ -18,6 +18,7 @@
 #import "OARoutingHelper.h"
 #import "OARouteCalculationParams.h"
 #import "OARouteExporter.h"
+#import "OAGpxRouteApproximation.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -220,6 +221,34 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (NSArray<OAGpxTrkPt *> *) getPoints
 {
     return [self getBeforePoints];
+}
+
+- (NSArray<NSArray<OAGpxTrkPt *> *> *) getPointsSegments:(BOOL)plain route:(BOOL)route
+{
+	NSMutableArray<NSArray<OAGpxTrkPt *> *> *res = [NSMutableArray array];
+	NSArray<OAGpxTrkPt *> *allPoints = self.getPoints;
+	NSMutableArray<OAGpxTrkPt *> *segment = [NSMutableArray array];
+	NSString *prevProfileType = nil;
+	for (OAGpxTrkPt *point in allPoints)
+	{
+		NSString *profileType = point.getProfileType;
+		BOOL isGap = point.isGap;
+		BOOL plainPoint = profileType.length == 0 || (isGap && prevProfileType.length == 0);
+		BOOL routePoint = !plainPoint;
+		if ((plain && plainPoint) || (route && routePoint))
+		{
+			[segment addObject:point];
+			if (isGap)
+			{
+				[res addObject:segment];
+				segment = [NSMutableArray array];
+			}
+		}
+		prevProfileType = profileType;
+	}
+	if (segment.count > 0)
+		[res addObject:segment];
+	return res;
 }
 
 - (NSArray<OAGpxTrkPt *> *) getBeforePoints
@@ -775,90 +804,149 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     }
 }
 
-//- (void) setPoints(GpxRouteApproximation gpxApproximation, ApplicationMode mode) {
-//    if (gpxApproximation == null || Algorithms.isEmpty(gpxApproximation.finalPoints) || Algorithms.isEmpty(gpxApproximation.result)) {
-//        return;
-//    }
-//    roadSegmentData.clear();
-//    List<WptPt> routePoints = new ArrayList<>();
-//    List<GpxPoint> gpxPoints = gpxApproximation.finalPoints;
-//    for (int i = 0; i < gpxPoints.size(); i++) {
-//        GpxPoint gp1 = gpxPoints.get(i);
-//        boolean lastGpxPoint = isLastGpxPoint(gpxPoints, i);
-//        List<WptPt> points = new ArrayList<>();
-//        List<RouteSegmentResult> segments = new ArrayList<>();
-//        for (int k = 0; k < gp1.routeToTarget.size(); k++) {
-//            RouteSegmentResult seg = gp1.routeToTarget.get(k);
-//            if (seg.getStartPointIndex() != seg.getEndPointIndex()) {
-//                segments.add(seg);
-//            }
-//        }
-//        for (int k = 0; k < segments.size(); k++) {
-//            RouteSegmentResult seg = segments.get(k);
-//            fillPointsArray(points, seg, lastGpxPoint && k == segments.size() - 1);
-//        }
-//        if (!points.isEmpty()) {
-//            WptPt wp1 = new WptPt();
-//            wp1.lat = gp1.loc.getLatitude();
-//            wp1.lon = gp1.loc.getLongitude();
-//            wp1.setProfileType(mode.getStringKey());
-//            routePoints.add(wp1);
-//            WptPt wp2 = new WptPt();
-//            if (lastGpxPoint) {
-//                wp2.lat = points.get(points.size() - 1).getLatitude();
-//                wp2.lon = points.get(points.size() - 1).getLongitude();
-//                routePoints.add(wp2);
-//            } else {
-//                GpxPoint gp2 = gpxPoints.get(i + 1);
-//                wp2.lat = gp2.loc.getLatitude();
-//                wp2.lon = gp2.loc.getLongitude();
-//            }
-//            wp2.setProfileType(mode.getStringKey());
-//            Pair<WptPt, WptPt> pair = new Pair<>(wp1, wp2);
-//            roadSegmentData.put(pair, new RoadSegmentData(appMode, pair.first, pair.second, points, segments));
-//        }
-//        if (lastGpxPoint) {
-//            break;
-//        }
-//    }
-//    addPoints(routePoints);
-//}
-
-- (BOOL) isLastGpxPoint:(NSArray<OAGpxTrkPt *> *)gpxPoints index:(NSInteger)index
+- (NSArray<OAGpxTrkPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAGpxTrkPt *> *)originalPoints mode:(OAApplicationMode *)mode
 {
-    if (index == gpxPoints.count - 1)
-    {
-        return YES;
-    }
-    else
-    {
-//        for (NSInteger i = index + 1; i < gpxPoints.count; i++)
-//        {
-//            GpxPoint gp = gpxPoints.get(i);
-//            for (int k = 0; k < gp.routeToTarget.size(); k++) {
-//                RouteSegmentResult seg = gp.routeToTarget.get(k);
-//                if (seg.getStartPointIndex() != seg.getEndPointIndex()) {
-//                    return false;
-//                }
-//            }
-//
-//        }
-    }
-    return YES;
+	if (gpxApproximation == nil || gpxApproximation.gpxApproximation->finalPoints.size() == 0 || gpxApproximation.gpxApproximation->result.size() == 0)
+		return nil;
+	
+	NSMutableArray<OAGpxTrkPt *> *routePoints = [NSMutableArray array];
+	const auto gpxPoints = gpxApproximation.gpxApproximation->finalPoints;
+	for (NSInteger i = 0; i < gpxPoints.size(); i++)
+	{
+		const auto& gp1 = gpxPoints[i];
+		BOOL lastGpxPoint = [self isLastGpxPoint:gpxPoints index:i];
+		NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray array];
+		vector<SHARED_PTR<RouteSegmentResult>> segments;
+		for (NSInteger k = 0; k < gp1->routeToTarget.size(); k++)
+		{
+			const auto& seg = gp1->routeToTarget[k];
+			if (seg->getStartPointIndex() != seg->getEndPointIndex())
+			{
+				segments.push_back(seg);
+			}
+		}
+		for (NSInteger k = 0; k < segments.size(); k++)
+		{
+			const auto& seg = segments[k];
+			[self fillPointsArray:points seg:seg includeEndPoint:lastGpxPoint && k == segments.size() - 1];
+		}
+		if (points.count > 0)
+		{
+			OAGpxTrkPt *wp1 = [[OAGpxTrkPt alloc] init];
+			wp1.position = CLLocationCoordinate2DMake(gp1->lat, gp1->lon);
+			[wp1 setProfileType:mode.stringKey];
+			[routePoints addObject:wp1];
+			OAGpxTrkPt *wp2 = [[OAGpxTrkPt alloc] init];
+			if (lastGpxPoint)
+			{
+				wp2.position = points.lastObject.position;
+				[routePoints addObject:wp2];
+			}
+			else
+			{
+				const auto& gp2 = gpxPoints[i + 1];
+				wp2.position = CLLocationCoordinate2DMake(gp2->lat, gp2->lon);
+			}
+			[wp2 setProfileType:mode.stringKey];
+			NSArray<OAGpxTrkPt *> *pair = @[wp1, wp2];
+			_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:_appMode start:pair.firstObject end:pair.lastObject points:points segments:segments];
+		}
+		if (lastGpxPoint)
+		{
+			break;
+		}
+	}
+	OAGpxTrkPt *lastOriginalPoint = originalPoints.lastObject;
+	OAGpxTrkPt *lastRoutePoint = routePoints.lastObject;
+	if (lastOriginalPoint.isGap)
+		[lastRoutePoint setGap];
+	
+	[self replacePoints:originalPoints points:routePoints];
+	return routePoints;
 }
 
-//- (void) fillPointsArray:(List<WptPt> points, RouteSegmentResult seg, boolean includeEndPoint) {
-//    int ind = seg.getStartPointIndex();
-//    boolean plus = seg.isForwardDirection();
-//    float[] heightArray = seg.getObject().calculateHeightArray();
-//    while (ind != seg.getEndPointIndex()) {
-//        addPointToArray(points, seg, ind, heightArray);
-//        ind = plus ? ind + 1 : ind - 1;
-//    }
-//    if (includeEndPoint) {
-//        addPointToArray(points, seg, ind, heightArray);
-//    }
-//}
+- (void) replacePoints:(NSArray<OAGpxTrkPt *> *)originalPoints points:(NSArray<OAGpxTrkPt *> *)points
+{
+	if (originalPoints.count > 1)
+	{
+		NSInteger firstPointIndex = [_before.points indexOfObject:originalPoints.firstObject];
+		NSInteger lastPointIndex = [_before.points indexOfObject:originalPoints.lastObject];
+		NSMutableArray<OAGpxTrkPt *> *newPoints = [NSMutableArray array];
+		if (firstPointIndex != NSNotFound && lastPointIndex != NSNotFound)
+		{
+			[newPoints addObjectsFromArray:[_before.points subarrayWithRange:NSMakeRange(0, firstPointIndex)]];
+			[newPoints addObjectsFromArray:points];
+			if (_before.points.count > lastPointIndex + 1)
+			{
+				[newPoints addObjectsFromArray:[_before.points subarrayWithRange:NSMakeRange(lastPointIndex + 1,  _before.points.count - (lastPointIndex + 1))]];
+			}
+		}
+		else
+		{
+			[newPoints addObjectsFromArray:points];
+		}
+		_before.points = newPoints;
+	}
+	else
+	{
+		_before.points = points;
+	}
+	[self updateSegmentsForSnap:NO];
+}
+
+- (BOOL) isLastGpxPoint:(std::vector<SHARED_PTR<GpxPoint>>)gpxPoints index:(NSInteger)index
+{
+	if (index == gpxPoints.size() - 1)
+	{
+		return YES;
+	}
+	else
+	{
+		for (NSInteger i = index + 1; i < gpxPoints.size(); i++)
+		{
+			const auto& gp = gpxPoints[i];
+			for (NSInteger k = 0; k < gp->routeToTarget.size(); k++)
+			{
+				const auto& seg = gp->routeToTarget[k];
+				if (seg->getStartPointIndex() != seg->getEndPointIndex())
+				{
+					return NO;
+				}
+			}
+			
+		}
+	}
+	return YES;
+}
+
+- (void) fillPointsArray:(NSMutableArray<OAGpxTrkPt *> *)points
+					 seg:(const SHARED_PTR<RouteSegmentResult> &)seg
+		 includeEndPoint:(BOOL)includeEndPoint
+{
+	NSInteger ind = seg->getStartPointIndex();
+	BOOL plus = seg->isForwardDirection();
+	const auto& heightArray = seg->object->calculateHeightArray();
+	while (ind != seg->getEndPointIndex())
+	{
+		[self addPointToArray:points seg:seg index:ind heightArray:heightArray];
+		ind = plus ? ind + 1 : ind - 1;
+	}
+	if (includeEndPoint)
+		[self addPointToArray:points seg:seg index:ind heightArray:heightArray];
+}
+
+- (void) addPointToArray:(NSMutableArray<OAGpxTrkPt *> *)points
+					 seg:(const SHARED_PTR<RouteSegmentResult> &)seg
+				   index:(NSInteger)index
+			 heightArray:(const std::vector<double>&)heightArray
+{
+	LatLon l = seg->getPoint((int)index);
+	OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+	if (heightArray.size() > index * 2 + 1)
+		pt.elevation = heightArray[index * 2 + 1];
+	pt.position = CLLocationCoordinate2DMake(l.lat, l.lon);
+	[points addObject:pt];
+}
 
 - (BOOL) canSplit:(BOOL)after
 {

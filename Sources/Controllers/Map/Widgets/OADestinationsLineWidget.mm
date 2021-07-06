@@ -298,7 +298,7 @@
     
 - (double) getStrokeWidth
 {
-    double scaleFactor = [_settings.mapDensity get:_settings.applicationMode];
+    double scaleFactor = [_settings.mapDensity get:_settings.applicationMode.get];
     float strokeWidth = _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 6.0;
     return scaleFactor < 1.0 ? 1.0 : 2 * strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
 }

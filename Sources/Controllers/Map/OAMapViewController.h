@@ -174,4 +174,6 @@
 - (void) disableRotationAnd3DView:(BOOL)disabled;
 - (void) resetViewAngle;
 
+- (void) onApplicationDestroyed;
+
 @end

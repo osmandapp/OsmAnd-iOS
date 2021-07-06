@@ -15,14 +15,17 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OALocationPoint.h"
 #import "OAAppSettings.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore.h>
 
-@class OAGPXDocument, OARouteCalculationResult, OAApplicationMode;
+@class OAGPXDocument, OARouteCalculationResult, OAApplicationMode, OALocationsHolder, OAGpxRouteApproximation;
 struct RoutingConfiguration;
 struct RoutingConfigurationBuilder;
 struct GeneralRouter;
 struct RoutePlannerFrontEnd;
+struct GpxPoint;
+struct GpxRouteApproximation;
 struct RoutingContext;
 struct PrecalculatedRouteDirection;
 
@@ -99,5 +102,13 @@ struct RouteSegmentResult;
 - (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY;
 
 - (std::shared_ptr<RoutingConfiguration>) initOsmAndRoutingConfig:(std::shared_ptr<RoutingConfigurationBuilder>)config params:(OARouteCalculationParams *)params generalRouter:(std::shared_ptr<GeneralRouter>)generalRouter;
+
+- (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
+- (std::vector<std::shared_ptr<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder;
+
+- (std::shared_ptr<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
+														   gctx:(std::shared_ptr<GpxRouteApproximation>)gctx
+														 points:(std::vector<std::shared_ptr<GpxPoint>> &)points
+												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 @end

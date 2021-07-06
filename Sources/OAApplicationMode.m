@@ -49,7 +49,7 @@ static OAApplicationMode *_SKI;
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
-    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI];
+    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI    ];
     NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
     
     // left
@@ -230,8 +230,10 @@ static OAApplicationMode *_SKI;
         NSString *available = settings.availableApplicationModes.get;
         _cachedFilteredValues = [NSMutableArray array];
         for (OAApplicationMode *v in _values)
+        {
             if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
                 [_cachedFilteredValues addObject:v];
+        }
     }
     return [NSArray arrayWithArray:_cachedFilteredValues];
 }
@@ -652,8 +654,8 @@ static OAApplicationMode *_SKI;
     [_values removeObjectsInArray:modes];
     
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if ([modes containsObject:settings.applicationMode])
-        [settings setApplicationMode:_DEFAULT];
+    if ([modes containsObject:settings.applicationMode.get])
+        [settings setApplicationModePref:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
     
@@ -683,9 +685,9 @@ static OAApplicationMode *_SKI;
         else
         {
             [selectedModes removeObject:mode];
-            if (settings.applicationMode == mode)
+            if (settings.applicationMode.get == mode)
             {
-                [settings setApplicationMode:_DEFAULT];
+                [settings setApplicationModePref:_DEFAULT];
             }
         }
         for (OAApplicationMode *m in selectedModes)

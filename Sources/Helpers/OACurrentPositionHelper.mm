@@ -198,7 +198,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized(_roadLocatorSync)
         {
-            OAApplicationMode *appMode = _settings.applicationMode;
+            OAApplicationMode *appMode = _settings.applicationMode.get;
             if (!_ctx || _am != appMode)
             {
                 [self initCtx:appMode];

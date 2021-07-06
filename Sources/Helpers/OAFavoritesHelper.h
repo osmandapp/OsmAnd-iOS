@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 
+#define kPersonalCategory @"personal"
+
 @class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument;
 
 @interface OAFavoritesHelper : NSObject
@@ -19,6 +21,7 @@
 
 + (OAFavoriteItem *) getSpecialPoint:(OASpecialPointType *)specialType;
 + (void) setSpecialPoint:(OASpecialPointType *)specialType lat:(double)lat lon:(double)lon address:(NSString *)address;
++ (void) setParkingPoint:(double)lat lon:(double)lon address:(NSString *)address pickupDate:(NSDate *)pickupDate addToCalendar:(BOOL)addToCalendar;
 
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems;
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
@@ -55,6 +58,9 @@
 + (NSArray<NSString *> *) getFlatBackgroundContourIconNamesList;
 
 + (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints;
+
++ (void) addParkingReminderToCalendar;
++ (void) removeParkingReminderFromCalendar;
 
 @end
 

@@ -375,8 +375,7 @@
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:[item.point getColor]];
-            [cell.titleIcon setImage:favCol.icon];
+            [cell.titleIcon setImage:item.getCompositeIcon];
             
             if (![cell.directionImageView.tintColor isEqual:UIColorFromRGB(color_elevation_chart)])
             {

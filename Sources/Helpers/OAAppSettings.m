@@ -101,6 +101,8 @@
 
 #define applicationModeKey @"applicationMode"
 #define defaultApplicationModeKey @"default_application_mode_string"
+#define defaultCarplayModeKey @"default_carplay_mode_string"
+#define carPlayModeIsDefaultKey @"carplay_mode_is_default_string"
 #define availableApplicationModesKey @"available_application_modes"
 #define customAppModesKey @"customAppModes"
 
@@ -1086,7 +1088,7 @@
 
 @synthesize global=_global, shared=_shared;
 
-+ (instancetype) withKey:(NSString *)key
++ (instancetype)withKey:(NSString *)key
 {
     OACommonPreference *obj = [[OACommonPreference alloc] init];
     if (obj)
@@ -1097,21 +1099,21 @@
     return obj;
 }
 
-- (id) makeGlobal
+- (id)makeGlobal
 {
     _global = YES;
     return self;
 }
 
-- (id) makeShared
+- (id)makeShared
 {
     _shared = YES;
     return self;
 }
 
-- (OAApplicationMode *) appMode
+- (OAApplicationMode *)appMode
 {
-    return [OAAppSettings sharedManager].applicationMode;
+    return [OAAppSettings sharedManager].currentMode;
 }
 
 - (NSString *)getKey:(OAApplicationMode *)mode
@@ -1119,12 +1121,12 @@
     return self.global ? self.key : [NSString stringWithFormat:@"%@_%@", self.key, mode.stringKey];
 }
 
-- (NSObject *) getValue
+- (NSObject *)getValue
 {
     return [self getValue:self.global ? nil : self.appMode];
 }
 
-- (NSObject *) getValue:(OAApplicationMode *)mode
+- (NSObject *)getValue:(OAApplicationMode *)mode
 {
     NSObject *cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
     if (!cachedValue)
@@ -1143,12 +1145,12 @@
     return cachedValue;
 }
 
-- (void) setValue:(NSObject *)value
+- (void)setValue:(NSObject *)value
 {
     [self setValue:value mode:self.global ? nil : self.appMode];
 }
 
-- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+- (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
 {
     if (self.global)
         self.cachedValue = value;
@@ -1159,7 +1161,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
 }
 
-- (void) setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode
+- (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode
 {
     if (self.global)
     {
@@ -1174,18 +1176,27 @@
     }
 }
 
-- (void) resetModeToDefault:(OAApplicationMode *)mode
+- (void)resetModeToDefault:(OAApplicationMode *)mode
 {
+    if (_global)
+    {
+        [self resetToDefault];
+    }
+    else
+    {
+        NSObject *defValue = [self getProfileDefaultValue:mode];
+        [self setValue:defValue mode:mode];
+    }
+}
+
+- (void)resetToDefault
+{
+    OAApplicationMode *mode = [OAAppSettings sharedManager].currentMode;
     NSObject *defValue = [self getProfileDefaultValue:mode];
     [self setValue:defValue mode:mode];
 }
 
-- (void) resetToDefault
-{
-    [self resetModeToDefault:self.appMode];
-}
-
-- (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
 {
 
     if (self.global)
@@ -1205,19 +1216,19 @@
             return [self getProfileDefaultValue:pt];
     }
 
-    return nil;
+    return self.defaultValue;
 }
 
-- (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
 }
 
-- (NSString *) toStringValue:(OAApplicationMode *)mode
+- (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return @"";
 }
 
-- (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
+- (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
 {
     [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];
 }
@@ -1232,7 +1243,7 @@
 
 @implementation OACommonAppMode
 
-+ (instancetype) withKey:(NSString *)key defValue:(OAApplicationMode *)defValue
++ (instancetype)withKey:(NSString *)key defValue:(OAApplicationMode *)defValue
 {
     OACommonAppMode *obj = [[OACommonAppMode alloc] init];
     if (obj)
@@ -1243,41 +1254,58 @@
     return obj;
 }
 
-- (OAApplicationMode *)get {
+- (OAApplicationMode *)get
+{
     return [self get:self.appMode];
 }
 
-- (OAApplicationMode *)get:(OAApplicationMode *)mode {
+- (OAApplicationMode *)get:(OAApplicationMode *)mode
+{
     NSObject *value = [self getValue:mode];
     return value ? (OAApplicationMode *)value : self.defValue;
 }
 
-- (void)set:(OAApplicationMode *)appMode {
+- (void)set:(OAApplicationMode *)appMode
+{
     [self set:appMode mode:self.appMode];
 }
 
-- (void)set:(OAApplicationMode *)appMode mode:(OAApplicationMode *)mode {
+- (void)set:(OAApplicationMode *)appMode mode:(OAApplicationMode *)mode
+{
     [self setValue:appMode mode:mode];
 }
 
-- (NSObject *) getValue:(OAApplicationMode *)mode
+- (NSObject *)getValue:(OAApplicationMode *)mode
 {
     NSString *stringKey;
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (self.key == defaultApplicationModeKey)
+    if ([self.key isEqualToString:applicationModeKey])
+    {
+        stringKey = [OAAppSettings sharedManager].currentMode.stringKey;
+    }
+    else if ([self.key isEqualToString:defaultApplicationModeKey])
     {
         if (settings.useLastApplicationModeByDefault.get)
             stringKey = settings.lastUsedApplicationMode.get;
         else
             stringKey = self.defValue.stringKey;
     }
+    else if ([self.key isEqualToString:defaultCarplayModeKey] && settings.isCarPlayModeDefault.get)
+    {
+        return OAApplicationMode.CAR;
+    }
     else
     {
         stringKey = [[NSUserDefaults standardUserDefaults] objectForKey:[self getKey:mode]];
     }
 //    return [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
-    NSObject *cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
-    if (!cachedValue) {
+
+    NSObject *cachedValue;
+    if (!([self.key isEqualToString:defaultApplicationModeKey] && settings.useLastApplicationModeByDefault.get))
+        cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+
+    if (!cachedValue)
+    {
 //        NSString *key = [self getModeKey:self.key mode:mode];
 //        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
         cachedValue = [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
@@ -1293,11 +1321,12 @@
     return cachedValue;
 }
 
-- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+- (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
 {
     OAApplicationMode *appMode = (OAApplicationMode *) value;
-    if (self.key == defaultApplicationModeKey)
-        [[OAAppSettings sharedManager] setApplicationMode:appMode];
+
+    if ([self.key isEqualToString:applicationModeKey])
+        [OAAppSettings sharedManager].currentMode = appMode;
 
     if (self.global)
         self.cachedValue = appMode;
@@ -1308,14 +1337,21 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
 }
 
-- (void) resetToDefault
+- (void)resetToDefault
 {
-    OAApplicationMode * defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (OAApplicationMode *)pDefault;
+    if ([self.key isEqualToString:applicationModeKey])
+    {
+        [self set:OAApplicationMode.DEFAULT];
+    }
+    else
+    {
+        OAApplicationMode *defaultValue = self.defValue;
+        NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+        if (pDefault)
+            defaultValue = (OAApplicationMode *) pDefault;
 
-    [self set:defaultValue];
+        [self set:defaultValue];
+    }
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
@@ -1745,6 +1781,17 @@
         defaultValue = (NSArray<NSString *> *)pDefault;
 
     [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:[strValue componentsSeparatedByString:@","] mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    NSArray<NSString *> *value = [self get:mode];
+    return value ? [value componentsJoinedByString:@","] : @"";
 }
 
 @end
@@ -2920,6 +2967,9 @@
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
 
+        _applicationMode = [[[OACommonAppMode withKey:applicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
+        [_globalPreferences setObject:_applicationMode forKey:@"application_mode"];
+
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
 
         _mapLanguages = @[@"af", @"ar", @"az", @"be", @"bg", @"bn", @"br", @"bs", @"ca", @"ceb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"id", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hr", @"hsb", @"ht", @"hu", @"hy", @"is", @"it", @"ja", @"ka", @"kn", @"ko", @"ku", @"la", @"lb", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"os", @"pl", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh"];
@@ -3065,6 +3115,7 @@
             _lastSearchedPoint = [[CLLocation alloc] initWithLatitude:lastSearchedPointLat longitude:lastSearchedPointLon];
         }
 
+        // profile setting
         _appModeBeanPrefsIds = [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] :
         @[
             @"app_mode_icon_color",
@@ -3080,11 +3131,17 @@
 
         _defaultApplicationMode = [[[OACommonAppMode withKey:defaultApplicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
         [_globalPreferences setObject:_defaultApplicationMode forKey:@"default_application_mode_string"];
+        
+        _carPlayMode = [[[OACommonAppMode withKey:defaultCarplayModeKey defValue:OAApplicationMode.CAR] makeGlobal] makeShared];
+        [_globalPreferences setObject:_carPlayMode forKey:@"default_carplay_mode_string"];
+        
+        _isCarPlayModeDefault = [[[OACommonBoolean withKey:carPlayModeIsDefaultKey defValue:YES] makeGlobal] makeShared];
+        [_globalPreferences setObject:_carPlayMode forKey:@"carplay_mode_is_default_string"];
 
         _availableApplicationModes = [[[OACommonString withKey:availableApplicationModesKey defValue:@"car,bicycle,pedestrian,public_transport,"] makeGlobal] makeShared];
         [_globalPreferences setObject:_availableApplicationModes forKey:@"available_application_modes"];
 
-        _customAppModes = [[[OACommonString withKey:customAppModesKey defValue:@""] makeGlobal] makeShared];
+        _customAppModes = [[OACommonString withKey:customAppModesKey defValue:@""] makeGlobal];
         [_globalPreferences setObject:_customAppModes forKey:@"custom_app_modes_keys"];
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
@@ -3109,12 +3166,13 @@
         [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
-
+        
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
         _parentAppMode = [OACommonString withKey:parentAppModeKey defValue:nil];
 
         _routerService = [OACommonInteger withKey:routerServiceKey defValue:0]; // OSMAND
+
         // 2 = STRAIGHT
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.DEFAULT];
@@ -3277,7 +3335,7 @@
         _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
         _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
-        _settingGeoFormat = [[OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES] makeGlobal];
+        _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
 
         [_profilePreferences setObject:_settingAllow3DView forKey:@"enable_3d_view"];
@@ -3285,7 +3343,7 @@
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
-        [_globalPreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
+        [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
 
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
@@ -3755,32 +3813,32 @@
     [_registeredPreferences setObject:preference forKey:key];
 }
 
-- (void)resetPreferences:(OAApplicationMode *)appMode
+- (void)resetPreferencesForProfile:(OAApplicationMode *)mode
 {
-    for (OACommonPreference *value in [_registeredPreferences objectEnumerator].allObjects)
+    for (OACommonPreference *value in [_profilePreferences objectEnumerator].allObjects)//todo
     {
-        [value resetModeToDefault:appMode];
+        [value resetModeToDefault:mode];
     }
 
     for (OACommonBoolean *value in [_customBooleanRoutingProps objectEnumerator].allObjects)
     {
-        [value resetModeToDefault:appMode];
+        [value resetModeToDefault:mode];
     }
 
     for (OACommonString *value in [_customRoutingProps objectEnumerator].allObjects)
     {
-        [value resetModeToDefault:appMode];
+        [value resetModeToDefault:mode];
     }
 
-    if (!appMode.isCustomProfile)
+    if (!mode.isCustomProfile)
     {
-        [self.userProfileName resetModeToDefault:appMode];
-        [self.profileIconName resetModeToDefault:appMode];
-        [self.profileIconColor resetModeToDefault:appMode];
+        [self.userProfileName resetModeToDefault:mode];
+        [self.profileIconName resetModeToDefault:mode];
+        [self.profileIconColor resetModeToDefault:mode];
     }
 
-    [OAAppData.defaults resetProfileSettingsForMode:appMode];
-    [[[OsmAndApp instance] widgetSettingResetObservable] notifyEventWithKey:appMode];
+    [OAAppData.defaults resetProfileSettingsForMode:mode];
+    [[[OsmAndApp instance] widgetSettingResetObservable] notifyEventWithKey:mode];
 }
 
 // Common Settings
@@ -4008,15 +4066,16 @@
     }
 }
 
-- (void) setApplicationMode:(OAApplicationMode *)applicationMode
+- (void)setApplicationModePref:(OAApplicationMode *)applicationMode
 {
-    OAApplicationMode *prevAppMode = _applicationMode;
-    _applicationMode = applicationMode;
-    if (prevAppMode != _applicationMode)
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:applicationMode.stringKey forKey:applicationModeKey];
-        [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
-    }
+    [self setApplicationModePref:applicationMode markAsLastUsed:YES];
+}
+
+- (void)setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed
+{
+    [_applicationMode set:applicationMode];
+    if (markAsLastUsed)
+        [_lastUsedApplicationMode set:applicationMode.stringKey];
 }
 
 - (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update
@@ -4356,7 +4415,7 @@
 
 - (void) setupAppMode
 {
-    _applicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:applicationModeKey] def:[OAApplicationMode DEFAULT]];
+    [_applicationMode setValueFromString:[[NSUserDefaults standardUserDefaults] objectForKey:applicationModeKey] appMode:nil];
     [_defaultApplicationMode setValueFromString:[[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey] appMode:nil];
 }
 

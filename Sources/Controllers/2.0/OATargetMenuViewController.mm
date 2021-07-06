@@ -118,7 +118,7 @@
         case OATargetParking:
         {
             if (targetPoint.targetObj)
-                controller = [[OAParkingViewController alloc] initWithParking:targetPoint.targetObj];
+                controller = [[OAParkingViewController alloc] initWithParking];
             else
                 controller = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon)];
             break;
@@ -723,6 +723,11 @@
 }
 
 - (BOOL) showNearestWiki;
+{
+    return NO; // override
+}
+
+- (BOOL) showNearestPoi;
 {
     return NO; // override
 }

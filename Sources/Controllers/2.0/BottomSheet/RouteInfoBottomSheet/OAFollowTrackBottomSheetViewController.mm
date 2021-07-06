@@ -163,36 +163,43 @@
             time = [app getFormattedTimeInterval:[OAGPXUIHelper getSegmentTime:seg] shortFormat:YES];
         }
     }
-    
-    [data addObject:@[
-        @{
-            @"type" : [OAGPXTrackCell getCellIdentifier],
-            @"title" : title,
-            @"distance" : distance,
-            @"time" : time,
-            @"wpt" : gpxData && !isSegment ? [NSString stringWithFormat:@"%d", gpxData.wptPoints] : @"",
-            @"key" : @"gpx_route"
-        },
-        @{
-            @"type" : [OAIconTextDescCell getCellIdentifier],
-            @"title" : OALocalizedString(@"select_another_track"),
-            @"img" : @"ic_custom_folder",
-            @"key" : @"select_another"
-        },
-        @{
-            @"type" : [OASettingSwitchCell getCellIdentifier],
-            @"title" : OALocalizedString(@"reverse_track_dir"),
-            @"img" : @"ic_custom_swap",
-            @"key" : @"reverse_track"
-        },
-        /*@{
-            @"type" : [OAIconTextDescCell getCellIdentifier],
-            @"title" : OALocalizedString(@"attach_to_the_roads"),
-            @"img" : @"ic_custom_attach_track",
-            @"key" : @"attach_to_roads"
-        }*/
-    ]];
-
+	
+	NSMutableArray *items = [NSMutableArray array];
+	
+	[items addObject:@{
+		@"type" : [OAGPXTrackCell getCellIdentifier],
+		@"title" : title,
+		@"distance" : distance,
+		@"time" : time,
+		@"wpt" : gpxData && !isSegment ? [NSString stringWithFormat:@"%d", gpxData.wptPoints] : @"",
+		@"key" : @"gpx_route"
+	}];
+	
+	[items addObject:@{
+		@"type" : [OAIconTextDescCell getCellIdentifier],
+		@"title" : OALocalizedString(@"select_another_track"),
+		@"img" : @"ic_custom_folder",
+		@"key" : @"select_another"
+	}];
+	
+	[items addObject:@{
+		@"type" : [OASettingSwitchCell getCellIdentifier],
+		@"title" : OALocalizedString(@"reverse_track_dir"),
+		@"img" : @"ic_custom_swap",
+		@"key" : @"reverse_track"
+	}];
+	
+	if (!_gpx.hasRtePt && !_gpx.hasRoute)
+	{
+		[items addObject:@{
+			@"type" : [OAIconTextDescCell getCellIdentifier],
+			@"title" : OALocalizedString(@"attach_to_the_roads"),
+			@"img" : @"ic_custom_attach_track",
+			@"key" : @"attach_to_roads"
+		}];
+	}
+	
+	[data addObject:items];
     [data addObject:@[
         @{
             @"type" : [OATitleRightIconCell getCellIdentifier],
@@ -243,6 +250,11 @@
 
 - (void) openPlanRoute
 {
+    [self openPlanRoute:NO];
+}
+
+- (void) openPlanRoute:(BOOL)showSnapWarning
+{
     if (_gpx)
     {
         OAGPXMutableDocument *mutableGpx = nil;
@@ -257,7 +269,7 @@
         editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
         [self dismissViewControllerAnimated:NO completion:^{
             [[OARootViewController instance].mapPanel closeRouteInfo];
-            [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES]];
+            [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES showSnapWarning:showSnapWarning]];
         }];
     }
 }
@@ -451,7 +463,7 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return indexPath.section == 0 && indexPath.row == 1 ? indexPath : nil;
+    return indexPath.section == 0 && (indexPath.row == 1 || indexPath.row > 2) ? indexPath : nil;
 }
 
 - (void)presentOpenTrackViewController:(BOOL)animated
@@ -476,10 +488,16 @@
     }
     else if ([key isEqualToString:@"gpx_route"])
     {
-        [self openPlanRoute];
+        [self openPlanRoute:NO];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         return;
     }
+	else if ([key isEqualToString:@"attach_to_roads"])
+	{
+		[self openPlanRoute:YES];
+		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+		return;
+	}
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

@@ -297,7 +297,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) setCurrentModeActive:(EOADashboardScreenType)type
 {
-    OAAppSettings.sharedManager.applicationMode = _appMode;
+    [OAAppSettings.sharedManager.applicationMode set:_appMode];
     if (![OAApplicationMode.values containsObject:_appMode])
     {
         _screenToOpen = type;
@@ -571,7 +571,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) onPluginSettingsReset
 {
-    [self resetAppModePrefs: _appMode];
+    [self resetAppModePrefs:_appMode];
 }
 
 - (void) resetAppModePrefs:(OAApplicationMode *)appMode
@@ -580,14 +580,14 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         if (appMode.isCustomProfile)
         {
-            [OAAppSettings.sharedManager resetPreferences:appMode];
+            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
             NSString *fileName = [self getBackupFileForCustomMode: appMode.stringKey];
             if ([[NSFileManager defaultManager] fileExistsAtPath:fileName])
                 [self restoreCustomModeFromFile:fileName];
         }
         else
         {
-            [OAAppSettings.sharedManager resetPreferences:appMode];
+            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
             [self resetMapStylesForBaseProfile:appMode];
             [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
             [self updateCopiedOrResetPrefs];

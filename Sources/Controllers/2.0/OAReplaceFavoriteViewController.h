@@ -8,15 +8,26 @@
 
 #import "OABaseTableViewController.h"
 #import "OAFavoriteItem.h"
+#import "OAGpxWptItem.h"
 
-@protocol OAReplaceFavoriteDelegate <NSObject>
+@class OAGPXDocument;
 
-- (void) onReplaced:(OAFavoriteItem *)favoriteItem;
+typedef NS_ENUM(NSInteger, EOAReplacePointType) {
+    EOAReplacePointTypeFavorite = 0,
+    EOAReplacePointTypeWaypoint
+};
+
+@protocol OAReplacePointDelegate <NSObject>
+
+- (void)onFavoriteReplaced:(OAFavoriteItem *)favoriteItem;
+- (void)onWaypointReplaced:(OAGpxWptItem *)waypointItem;
 
 @end
 
 @interface OAReplaceFavoriteViewController : OABaseTableViewController
 
-@property (nonatomic, weak) id<OAReplaceFavoriteDelegate> delegate;
+@property (nonatomic, weak) id<OAReplacePointDelegate> delegate;
+
+- (instancetype)initWithItemType:(EOAReplacePointType)replaceItemType gpxDocument:(OAGPXDocument *)gpxDocument;
 
 @end

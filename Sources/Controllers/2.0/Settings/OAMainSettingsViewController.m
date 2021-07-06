@@ -98,7 +98,7 @@
 - (void) setupView
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    OAApplicationMode *appMode = settings.applicationMode;
+    OAApplicationMode *appMode = settings.applicationMode.get;
     NSMutableArray *data = [NSMutableArray new];
     
     [data addObject:@[
@@ -119,7 +119,7 @@
         }
     ]];
     
-    NSMutableArray *profilesSection = [NSMutableArray new];    
+    NSMutableArray *profilesSection = [NSMutableArray new];
     for (int i = 0; i < OAApplicationMode.allPossibleValues.count; i++)
     {
         [profilesSection addObject:@{

@@ -664,7 +664,10 @@
     if (updateRoutingFiles)
         [app loadRoutingFiles];
     if (updateResources)
+    {
+        app.resourcesManager->rescanUnmanagedStoragePaths();
         [app.localResourcesChangedObservable notifyEvent];
+    }
 }
 
 - (void) onPostExecute:(BOOL)success

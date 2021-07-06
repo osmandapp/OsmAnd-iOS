@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         OAGpxWptItem *item = (OAGpxWptItem *) data;
         _docPath = item.docPath;
         _currentWpt = item.point;
-        _data = [OARootViewController.instance.mapPanel.mapViewController getLocationMarksOf:item.docPath];
+        _data = [OARootViewController.instance.mapPanel.mapViewController getLocationMarksOf:_docPath];
         _type = EOAWaypointGPX;
     }
     else if ([data isKindOfClass:OAFavoriteItem.class])

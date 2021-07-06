@@ -18,7 +18,7 @@
 #define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.75
 
-@class OATargetPoint, OAFavoriteItem;
+@class OATargetPoint, OAFavoriteItem, OAGpxWptItem;
 
 @protocol OATargetPointViewDelegate;
 
@@ -46,6 +46,7 @@
 
 @property (nonatomic, readonly) BOOL showFull;
 @property (nonatomic, readonly) BOOL showFullScreen;
+@property (nonatomic) BOOL skipOpenRouteSettings;
 
 - (void) setMapViewInstance:(UIView *)mapView;
 - (void) setNavigationController:(UINavigationController *)controller;
@@ -102,10 +103,12 @@
 // Addons
 - (void) targetPointParking;
 - (void) targetPointAddWaypoint;
+- (void) targetPointEditWaypoint:(OAGpxWptItem *)item;
 
 - (void) targetHideContextPinMarker;
 - (void) targetHide;
 - (void) targetOpenRouteSettings;
+- (void) targetOpenPlanRoute;
 - (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked onComplete:(void (^)(void))onComplete;
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;
@@ -116,6 +119,7 @@
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) targetStatusBarChanged;
 - (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left;
+- (void) targetOpenAvoidRoad;
 
 - (void) targetViewEnableMapInteraction;
 - (void) targetViewDisableMapInteraction;

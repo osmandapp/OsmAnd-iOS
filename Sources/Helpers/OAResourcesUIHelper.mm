@@ -28,6 +28,7 @@
 #import "OAIndexConstants.h"
 #import "OAResourcesInstaller.h"
 #import "OAPlugin.h"
+#import "OAWorldRegion.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -54,6 +55,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 - (void) updateSize
 {
     // override
+}
+
+- (BOOL) isInstalled
+{
+    NSString *path = [[OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"] stringByAppendingPathComponent:self.resourceId.toNSString()];
+    return [NSFileManager.defaultManager fileExistsAtPath:path];
 }
 
 @end
@@ -186,6 +193,80 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         default:
             return OALocalizedString(@"res_unknown");
     }
+}
+
++ (OsmAnd::ResourcesManager::ResourceType) resourceTypeByScopeId:(NSString *)scopeId
+{
+    if ([scopeId isEqualToString:@"map"])
+        return OsmAnd::ResourcesManager::ResourceType::MapRegion;
+    else if ([scopeId isEqualToString:@"voice"])
+        return OsmAnd::ResourcesManager::ResourceType::VoicePack;
+//    else if ([scopeId isEqualToString:@"fonts"])
+//        return OsmAnd::ResourcesManager::ResourceType::Unknown;
+    else if ([scopeId isEqualToString:@"road_map"])
+        return OsmAnd::ResourcesManager::ResourceType::RoadMapRegion;
+    else if ([scopeId isEqualToString:@"srtm_map"])
+        return OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion;
+    else if ([scopeId isEqualToString:@"depth"])
+        return OsmAnd::ResourcesManager::ResourceType::DepthContourRegion;
+    else if ([scopeId isEqualToString:@"hillshade"])
+        return OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
+    else if ([scopeId isEqualToString:@"slope"])
+        return OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
+    else if ([scopeId isEqualToString:@"wikimap"])
+        return OsmAnd::ResourcesManager::ResourceType::WikiMapRegion;
+//    else if ([scopeId isEqualToString:@"wikivoyage"])
+//        return OsmAnd::ResourcesManager::ResourceType::MapRegion;
+//    else if ([scopeId isEqualToString:@"travel"])
+//        return OsmAnd::ResourcesManager::ResourceType::MapRegion;
+    else if ([scopeId isEqualToString:@"live_updates"])
+        return OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion;
+    else if ([scopeId isEqualToString:@"gpx"])
+        return OsmAnd::ResourcesManager::ResourceType::GpxFile;
+    else if ([scopeId isEqualToString:@"sqlite"])
+        return OsmAnd::ResourcesManager::ResourceType::SqliteFile;
+    
+    //TODO: add another types from ResourcesManager.h
+    //HeightmapRegion,
+    //MapStyle,
+    //MapStylesPresets,
+    //OnlineTileSources,
+    
+    return OsmAnd::ResourcesManager::ResourceType::Unknown;
+}
+
++ (NSString *) iconNameByResourseType:(OsmAnd::ResourcesManager::ResourceType)type
+{
+    if (type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        return @"ic_custom_map";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+        return @"ic_custom_map";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+        return @"ic_custom_contour_lines";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::DepthContourRegion)
+        return @"ic_custom_contour_lines";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion)
+        return @"ic_custom_wikipedia";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::HillshadeRegion)
+        return @"ic_custom_hillshade";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::SlopeRegion)
+        return @"ic_action_slope";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion)
+        return @"ic_custom_upload"; //ic_custom_online
+    else if (type == OsmAnd::ResourcesManager::ResourceType::VoicePack)
+        return @"ic_custom_sound";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::MapStyle)
+        return @"ic_custom_map_style";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::MapStylesPresets)
+        return @"ic_custom_options";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)
+        return @"ic_custom_map_online";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::GpxFile)
+        return @"ic_custom_route";
+    else if (type == OsmAnd::ResourcesManager::ResourceType::SqliteFile)
+        return @"ic_custom_overlay_map";
+    else
+        return @"ic_custom_map";
 }
 
 + (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)resource
@@ -453,103 +534,199 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return items;
 }
 
-+ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
++ (NSArray<OAResourceItem *> *) findIndexItemsAt:(NSArray<NSString *> *)names type:(OsmAnd::ResourcesManager::ResourceType)type includeDownloaded:(BOOL)includeDownloaded limit:(NSInteger)limit
+{
+    NSMutableArray<OAResourceItem *>* res = [NSMutableArray new];
+    OAWorldRegion *worldRegion = OsmAndApp.instance.worldRegion;
+    
+    for (NSString *name in names)
+    {
+        OAWorldRegion *downloadRegion = [worldRegion getRegionDataByDownloadName:name];
+        
+        if (downloadRegion && (includeDownloaded || ![OAResourcesUIHelper isIndexItemDownloaded:type downloadRegion:downloadRegion res:res]))
+        {
+            [self addIndexItem:type downloadRegion:downloadRegion res:res];
+        }
+        
+        if (limit != -1 && res.count == limit)
+            break;
+    }
+    return res;
+}
+
++ (BOOL) isIndexItemDownloaded:(OsmAnd::ResourcesManager::ResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion res:(NSMutableArray<OAResourceItem *>*)res
+{
+    CLLocationCoordinate2D regionCenter = CLLocationCoordinate2DMake((downloadRegion.bboxTopLeft.latitude + downloadRegion.bboxBottomRight.latitude) / 2, (downloadRegion.bboxTopLeft.longitude + downloadRegion.bboxBottomRight.longitude) / 2);
+    NSArray<OAResourceItem *> *otherIndexItems = [self requestMapDownloadInfo:regionCenter resourceType:type];
+    
+    for (OAResourceItem *indexItem in otherIndexItems)
+    {
+        if (indexItem.resourceType == type && [indexItem isInstalled])
+        {
+            return YES;
+        }
+    }
+    return downloadRegion.superregion != nil && [self addIndexItem:type downloadRegion:downloadRegion.superregion res:res];
+}
+
++ (BOOL) addIndexItem:(OsmAnd::ResourcesManager::ResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion res:(NSMutableArray<OAResourceItem *>*)res
+{
+    CLLocationCoordinate2D regionCenter = CLLocationCoordinate2DMake((downloadRegion.bboxTopLeft.latitude + downloadRegion.bboxBottomRight.latitude) / 2, (downloadRegion.bboxTopLeft.longitude + downloadRegion.bboxBottomRight.longitude) / 2);
+    NSArray<OAResourceItem *> *otherIndexItems = [self requestMapDownloadInfo:regionCenter resourceType:type];
+    
+    for (OAResourceItem *indexItem in otherIndexItems)
+    {
+        if (indexItem.resourceType == type && ![res containsObject:indexItem])
+        {
+            [res addObject:indexItem];
+            return YES;
+        }
+    }
+    return downloadRegion.superregion != nil && [self addIndexItem:type downloadRegion:downloadRegion.superregion res:res];
+}
+
++ (NSArray<OAResourceItem *> *) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType
 {
     NSMutableArray<OAResourceItem *>* res;
     res = [NSMutableArray new];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *sortedSelectedRegions;
-        OsmAndAppInstance app = [OsmAndApp instance];
-        NSMutableArray<OAWorldRegion *> *mapRegions = [[app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
-        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:mapRegions];
-        if (mapRegions.count > 0)
-        {
-            [copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (![region contain:coordinate.latitude lon:coordinate.longitude])
-                    [mapRegions removeObject:region];
-            }];
-        }
+ 
+    NSArray *sortedSelectedRegions;
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSMutableArray<OAWorldRegion *> *mapRegions = [[app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
+    NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:mapRegions];
+    if (mapRegions.count > 0)
+    {
+        [copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (![region contain:coordinate.latitude lon:coordinate.longitude])
+                [mapRegions removeObject:region];
+        }];
+    }
+    
+    if (mapRegions.count > 0)
+    {
+        sortedSelectedRegions = [mapRegions sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
+            NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
+            return [first compare:second];
+        }];
         
-        if (mapRegions.count > 0)
+        for (OAWorldRegion *region in sortedSelectedRegions)
         {
-            sortedSelectedRegions = [mapRegions sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-                NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
-                NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
-                return [first compare:second];
-            }];
-            
-            for (OAWorldRegion *region in sortedSelectedRegions)
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
+            if (ids.count > 0)
             {
-                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
-                if (ids.count > 0)
+                for (NSString *resourceId in ids)
                 {
-                    for (NSString *resourceId in ids)
+                    const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                    // Speacial case for Saudi Arabia Rahal map
+                    if (resource == nullptr)
                     {
-                        const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                        // Speacial case for Saudi Arabia Rahal map
-                        if (resource == nullptr)
+                        const auto installedResource = app.resourcesManager->getResource(QString::fromNSString(resourceId));
+                        if (installedResource && installedResource->type == resourceType)
                         {
-                            const auto installedResource = app.resourcesManager->getResource(QString::fromNSString(resourceId));
-                            if (installedResource && installedResource->type == resourceType)
-                            {
-                                OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-                                item.resourceId = installedResource->id;
-                                item.resourceType = installedResource->type;
-                                item.title = [self.class titleOfResource:installedResource
-                                                                inRegion:region
-                                                          withRegionName:YES
-                                                        withResourceType:NO];
-                                item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
-                                item.worldRegion = region;
-                                [res addObject:item];
-                                continue;
-                            }
+                            OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+                            item.resourceId = installedResource->id;
+                            item.resourceType = installedResource->type;
+                            item.title = [self.class titleOfResource:installedResource
+                                                            inRegion:region
+                                                      withRegionName:YES
+                                                    withResourceType:NO];
+                            item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+                            item.worldRegion = region;
+                            [res addObject:item];
+                            continue;
                         }
-                        else if (resource->type == resourceType)
+                    }
+                    else if (resource->type == resourceType)
+                    {
+                        if (app.resourcesManager->isResourceInstalled(resource->id))
                         {
-                            if (app.resourcesManager->isResourceInstalled(resource->id))
-                            {
-                                OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-                                item.resourceId = resource->id;
-                                item.resourceType = resource->type;
-                                item.title = [self.class titleOfResource:resource
-                                                                         inRegion:region
-                                                                   withRegionName:YES
-                                                                 withResourceType:NO];
-                                item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
-                                item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                                item.size = resource->size;
-                                item.worldRegion = region;
-                                [res addObject:item];
-                            }
-                            else
-                            {
-                                OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
-                                item.resourceId = resource->id;
-                                item.resourceType = resource->type;
-                                item.title = [self.class titleOfResource:resource
-                                                                         inRegion:region
-                                                                   withRegionName:YES
-                                                                 withResourceType:NO];
-                                item.resource = resource;
-                                item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                                item.size = resource->size;
-                                item.sizePkg = resource->packageSize;
-                                item.worldRegion = region;
-                                [res addObject:item];
-                            }
-                            
+                            OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+                            item.resourceId = resource->id;
+                            item.resourceType = resource->type;
+                            item.title = [self.class titleOfResource:resource
+                                                                     inRegion:region
+                                                               withRegionName:YES
+                                                             withResourceType:NO];
+                            item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+                            item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                            item.size = resource->size;
+                            item.worldRegion = region;
+                            [res addObject:item];
+                        }
+                        else
+                        {
+                            OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
+                            item.resourceId = resource->id;
+                            item.resourceType = resource->type;
+                            item.title = [self.class titleOfResource:resource
+                                                                     inRegion:region
+                                                               withRegionName:YES
+                                                             withResourceType:NO];
+                            item.resource = resource;
+                            item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                            item.size = resource->size;
+                            item.sizePkg = resource->packageSize;
+                            item.worldRegion = region;
+                            [res addObject:item];
                         }
                     }
                 }
             }
         }
-        
+    }
+    return [NSArray arrayWithArray:res];
+}
+
++ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray<OAResourceItem *> * res = [OAResourcesUIHelper requestMapDownloadInfo:coordinate resourceType:resourceType];
         dispatch_async(dispatch_get_main_queue(), ^{
            if (onComplete)
                onComplete(res);
         });
     });
+}
+
++ (NSArray<OARepositoryResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon
+{
+    NSMutableArray<OARepositoryResourceItem *> *availableItems = [NSMutableArray array];
+    NSArray<OAResourceItem *> * res = [OAResourcesUIHelper requestMapDownloadInfo:latLon resourceType:type];
+    if (res.count > 0)
+    {
+        for (OAResourceItem * item in res)
+        {
+            if ([item isKindOfClass:OARepositoryResourceItem.class])
+            {
+                OARepositoryResourceItem *resource = (OARepositoryResourceItem*)item;
+                [availableItems addObject:resource];
+            }
+        }
+    }
+    return [NSArray arrayWithArray:availableItems];
+}
+
++ (void) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon onComplete:(void (^)(NSArray<OARepositoryResourceItem *> *))onComplete
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray<OARepositoryResourceItem *> *res = [OAResourcesUIHelper getMapsForType:type latLon:latLon];
+        dispatch_async(dispatch_get_main_queue(), ^{
+           if (onComplete)
+               onComplete(res);
+        });
+    });
+}
+
++ (NSArray<OAResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type names:(NSArray<NSString *> *)names limit:(NSInteger)limit
+{
+    return [OAResourcesUIHelper findIndexItemsAt:names type:type includeDownloaded:NO limit:limit];
+}
+
++ (CLLocationCoordinate2D) getMapLocation
+{
+    CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+    return loc.coordinate;
 }
 
 + (NSString *) getCountryName:(OAResourceItem *)item
@@ -669,6 +846,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
+    [OAResourcesUIHelper offerDownloadAndInstallOf:item viewController:OARootViewController.instance onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+}
+
++ (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item viewController:(UIViewController *)viewController onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
         return;
 
@@ -711,7 +893,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }]];
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    
+    [viewController presentViewController:alert animated:YES completion:nil];
 }
 
 + (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed

@@ -30,31 +30,9 @@
 #import "OACustomRegion.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAQuickSearchHelper.h"
+#import "OASuggestedDownloadsItem.h"
 
 #include <OsmAndCore/ResourcesManager.h>
-
-@implementation OASuggestedDownloadItem
-{
-    NSString *_scopeId;
-    NSString *_searchType;
-    NSArray<NSString *> *_names;
-    NSInteger _limit;
-}
-
-- (instancetype) initWithScopeId:(NSString *)scopeId searchType:(NSString *)searchType names:(NSArray<NSString *> *)names limit:(NSInteger)limit
-{
-    self = [super init];
-    if (self)
-    {
-        _scopeId = scopeId;
-        _limit = limit;
-        _searchType = searchType;
-        _names = names;
-    }
-    return self;
-}
-
-@end
 
 @interface OACustomPlugin () <OASettingsImportExportDelegate>
 
@@ -74,7 +52,7 @@
     UIImage *_icon;
     UIImage *_image;
     
-    NSArray<OASuggestedDownloadItem *> *_suggestedDownloadItems;
+    NSArray<OASuggestedDownloadsItem *> *_suggestedDownloadItems;
     NSArray<OAWorldRegion *> *_customRegions;
 }
 
@@ -182,40 +160,34 @@
 
 - (NSArray<OAResourceItem *> *) getSuggestedMaps
 {
-    // TODO: implement suggested maps
-//    List<IndexItem> suggestedMaps = new ArrayList<>();
-//
-//    DownloadIndexesThread downloadThread = app.getDownloadThread();
-//    if (!downloadThread.getIndexes().isDownloadedFromInternet && app.getSettings().isInternetConnectionAvailable()) {
-//        downloadThread.runReloadIndexFiles();
-//    }
-//
-//    boolean downloadIndexes = app.getSettings().isInternetConnectionAvailable()
-//    && !downloadThread.getIndexes().isDownloadedFromInternet
-//    && !downloadThread.getIndexes().downloadFromInternetFailed;
-//
-//    if (!downloadIndexes) {
-//        for (SuggestedDownloadItem item : suggestedDownloadItems) {
-//            DownloadActivityType type = DownloadActivityType.getIndexType(item.scopeId);
-//            if (type != null) {
-//                List<IndexItem> foundMaps = new ArrayList<>();
-//                String searchType = item.getSearchType();
-//                if ("latlon".equalsIgnoreCase(searchType)) {
-//                    LatLon latLon = app.getMapViewTrackingUtilities().getMapLocation();
-//                    foundMaps.addAll(getMapsForType(latLon, type));
-//                } else if ("worldregion".equalsIgnoreCase(searchType)) {
-//                    LatLon latLon = app.getMapViewTrackingUtilities().getMapLocation();
-//                    foundMaps.addAll(getMapsForType(latLon, type));
-//                }
-//                if (!Algorithms.isEmpty(item.getNames())) {
-//                    foundMaps.addAll(getMapsForType(item.getNames(), type, item.getLimit()));
-//                }
-//                suggestedMaps.addAll(foundMaps);
-//            }
-//        }
-//    }
-//
-//    return suggestedMaps;
+    NSMutableArray<OAResourceItem *> *suggestedMaps = [NSMutableArray new];
+        
+    for (OASuggestedDownloadsItem *item in _suggestedDownloadItems)
+    {
+        OsmAnd::ResourcesManager::ResourceType type = [OAResourcesUIHelper resourceTypeByScopeId:item.scopeId];
+
+        if (type != OsmAnd::ResourcesManager::ResourceType::Unknown)
+        {
+            NSMutableArray<OAResourceItem *> *foundMaps = [NSMutableArray new];
+            NSString *searchType = item.searchType;
+            if ([searchType isEqualToString:@"latlon"])
+            {
+                CLLocationCoordinate2D latLon = [OAResourcesUIHelper getMapLocation];
+                [foundMaps addObjectsFromArray: [OAResourcesUIHelper getMapsForType:type latLon:latLon]];
+            }
+            else if ([searchType isEqualToString:@"worldregion"])
+            {
+                CLLocationCoordinate2D latLon = [OAResourcesUIHelper getMapLocation];
+                [foundMaps addObjectsFromArray:[OAResourcesUIHelper getMapsForType:type latLon:latLon]];
+            }
+            if (item.names && item.names.count > 0)
+            {
+                [foundMaps addObjectsFromArray:[OAResourcesUIHelper getMapsForType:type names:item.names limit:item.limit]];
+            }
+            [suggestedMaps addObjectsFromArray:foundMaps];
+        }
+    }
+    return [NSArray arrayWithArray:suggestedMaps];
 }
 
 - (void) addPluginItemsFromFile:(NSString *)file
@@ -502,7 +474,7 @@
     }
 }
 
-- (void) updateSuggestedDownloads:(NSArray<OASuggestedDownloadItem *> *)items
+- (void) updateSuggestedDownloads:(NSArray<OASuggestedDownloadsItem *> *)items
 {
     _suggestedDownloadItems = [NSArray arrayWithArray:items];
 }

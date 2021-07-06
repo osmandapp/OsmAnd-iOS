@@ -53,6 +53,7 @@
 - (BOOL) containsSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getPrimarySuperregion;
+- (OAWorldRegion *) getRegionDataByDownloadName:(NSString *)downloadName;
 - (OAProduct *) getProduct;
 
 - (void) addSubregion:(OAWorldRegion *)subregion;

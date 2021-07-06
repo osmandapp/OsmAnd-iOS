@@ -34,6 +34,8 @@
             return @"MAP_SOURCES";
         case EOASettingsItemTypeAvoidRoads:
             return @"AVOID_ROADS";
+        case EOASettingsItemTypeSuggestedDownloads:
+            return @"SUGGESTED_DOWNLOADS";
         case EOASettingsItemTypeFavorites:
             return @"FAVOURITES";
         case EOASettingsItemTypeOsmNotes:
@@ -77,6 +79,8 @@
         return EOASettingsItemTypeMapSources;
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOASettingsItemTypeAvoidRoads;
+    if ([typeName isEqualToString:@"SUGGESTED_DOWNLOADS"])
+        return EOASettingsItemTypeSuggestedDownloads;
     if ([typeName isEqualToString:@"FAVOURITES"])
         return EOASettingsItemTypeFavorites;
     if ([typeName isEqualToString:@"OSM_NOTES"])

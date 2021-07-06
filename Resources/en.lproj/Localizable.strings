@@ -1727,6 +1727,9 @@
 
 "first_usage_wizard_desc" = "Let OsmAnd determine your location and suggest maps to download for that region.";
 
+"suggested_maps" = "Suggested maps";
+"suggested_maps_descr" = "These maps are required for the plugin";
+
 "location_not_found" = "Location not found";
 "search_my_location" = "Search my location";
 

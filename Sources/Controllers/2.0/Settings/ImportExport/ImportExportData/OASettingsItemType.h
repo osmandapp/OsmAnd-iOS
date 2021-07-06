@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypePoiUIFilters,
     EOASettingsItemTypeMapSources,
     EOASettingsItemTypeAvoidRoads,
+    EOASettingsItemTypeSuggestedDownloads,
     EOASettingsItemTypeFavorites,
     EOASettingsItemTypeOsmNotes,
     EOASettingsItemTypeOsmEdits,

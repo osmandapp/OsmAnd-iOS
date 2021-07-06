@@ -228,6 +228,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return @[];
 }
 
+- (NSArray<OAResourceItem *> *) getSuggestedMaps
+{
+    return @[];
+}
+
 /*
  * Return true in case if plugin should fill the map context menu with buildContextMenuRows method.
  */

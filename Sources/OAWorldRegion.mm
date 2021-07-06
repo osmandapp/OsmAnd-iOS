@@ -636,4 +636,25 @@
     return nil;
 }
 
+- (OAWorldRegion *) getRegionDataByDownloadName:(NSString *)downloadName
+{
+    if (!downloadName)
+    {
+        return nil;
+    }
+    else
+    {
+        for (OAWorldRegion *region in _flattenedSubregions)
+        {
+            NSString *regionDownloadId = region.downloadsIdPrefix;
+            if ([regionDownloadId hasSuffix:@"."])
+                regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
+            
+            if ([regionDownloadId isEqualToString:downloadName.lowercaseString])
+                return region;
+        }
+        return nil;
+    }
+}
+
 @end

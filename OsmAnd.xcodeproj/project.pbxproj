@@ -346,6 +346,7 @@
 		15DF4052242B3437004AF26B /* OASettingsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15DF4051242B3437004AF26B /* OASettingsHelper.mm */; };
 		15E3DD7425B6F6DD00D22DC4 /* OAExitRoutePlanningBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15E3DD7325B6F6DD00D22DC4 /* OAExitRoutePlanningBottomSheetViewController.m */; };
 		15EC0ED3256FA49F00F1F03C /* OAFavoritesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15EC0ED2256FA49E00F1F03C /* OAFavoritesSettingsItem.mm */; };
+		3202DBF526700F5500E69910 /* OASuggestedDownloadsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3202DBF426700F5500E69910 /* OASuggestedDownloadsItem.m */; };
 		32196FF825F0CE1300C3FED6 /* OAFoldersCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32196FF425F0CE1200C3FED6 /* OAFoldersCell.xib */; };
 		32196FF925F0CE1300C3FED6 /* OAFolderCardCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32196FF525F0CE1200C3FED6 /* OAFolderCardCollectionViewCell.xib */; };
 		32196FFA25F0CE1300C3FED6 /* OAFoldersCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32196FF625F0CE1200C3FED6 /* OAFoldersCollectionViewCell.xib */; };
@@ -3361,7 +3362,7 @@
 		DAB2A55121F1E4FC00D9F01A /* OAOsmEditingPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB2A55021F1E4FC00D9F01A /* OAOsmEditingPlugin.mm */; };
 		DAB2A55721F1FDCD00D9F01A /* OAOsmEditsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB2A55421F1FDCB00D9F01A /* OAOsmEditsLayer.mm */; };
 		DAB2A55921F1FDCD00D9F01A /* OAOsmBugsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB2A55621F1FDCC00D9F01A /* OAOsmBugsLayer.mm */; };
-		DAB2E67D2631816F00E153FD /* OAPluginInstalledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB2E67C2631816F00E153FD /* OAPluginInstalledViewController.m */; };
+		DAB2E67D2631816F00E153FD /* OAPluginInstalledViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB2E67C2631816F00E153FD /* OAPluginInstalledViewController.mm */; };
 		DAB2E6802631A63600E153FD /* OATextViewSimpleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB2E67F2631A63500E153FD /* OATextViewSimpleCell.xib */; };
 		DAB2E6842631A6A700E153FD /* OATextViewSimpleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB2E6822631A6A700E153FD /* OATextViewSimpleCell.m */; };
 		DAB2E68A2632B23900E153FD /* OAPluginInstalledViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB2E6892632B23800E153FD /* OAPluginInstalledViewController.xib */; };
@@ -4166,6 +4167,8 @@
 		15EC0ED1256FA49300F1F03C /* OAFavoritesSettingsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesSettingsItem.h; sourceTree = "<group>"; };
 		15EC0ED2256FA49E00F1F03C /* OAFavoritesSettingsItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesSettingsItem.mm; sourceTree = "<group>"; };
 		2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
+		3202DBF326700EFE00E69910 /* OASuggestedDownloadsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASuggestedDownloadsItem.h; path = Helpers/OASuggestedDownloadsItem.h; sourceTree = "<group>"; };
+		3202DBF426700F5500E69910 /* OASuggestedDownloadsItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASuggestedDownloadsItem.m; path = Helpers/OASuggestedDownloadsItem.m; sourceTree = "<group>"; };
 		32196FF425F0CE1200C3FED6 /* OAFoldersCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAFoldersCell.xib; path = Resources/Controllers/Cells/OAFoldersCell.xib; sourceTree = "<group>"; };
 		32196FF525F0CE1200C3FED6 /* OAFolderCardCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAFolderCardCollectionViewCell.xib; path = Resources/Controllers/Cells/OAFolderCardCollectionViewCell.xib; sourceTree = "<group>"; };
 		32196FF625F0CE1200C3FED6 /* OAFoldersCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAFoldersCollectionViewCell.xib; path = Resources/Controllers/Cells/OAFoldersCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -7904,7 +7907,7 @@
 		DAB2A55521F1FDCC00D9F01A /* OAOsmEditsLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmEditsLayer.h; sourceTree = "<group>"; };
 		DAB2A55621F1FDCC00D9F01A /* OAOsmBugsLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmBugsLayer.mm; sourceTree = "<group>"; };
 		DAB2E67B2631816F00E153FD /* OAPluginInstalledViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPluginInstalledViewController.h; sourceTree = "<group>"; };
-		DAB2E67C2631816F00E153FD /* OAPluginInstalledViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPluginInstalledViewController.m; sourceTree = "<group>"; };
+		DAB2E67C2631816F00E153FD /* OAPluginInstalledViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPluginInstalledViewController.mm; sourceTree = "<group>"; };
 		DAB2E67F2631A63500E153FD /* OATextViewSimpleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewSimpleCell.xib; path = Resources/Controllers/Cells/OATextViewSimpleCell.xib; sourceTree = "<group>"; };
 		DAB2E6822631A6A700E153FD /* OATextViewSimpleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATextViewSimpleCell.m; path = Controllers/Cells/OATextViewSimpleCell.m; sourceTree = "<group>"; };
 		DAB2E6832631A6A700E153FD /* OATextViewSimpleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATextViewSimpleCell.h; path = Controllers/Cells/OATextViewSimpleCell.h; sourceTree = "<group>"; };
@@ -8482,6 +8485,8 @@
 				DA74670B2634303D00DBA863 /* OADownloadsItem.mm */,
 				B0D6115DA512EEFB8779E3C2 /* OAHistoryMarkersSettingsItem.mm */,
 				B0D617E2F1BED00DEA088AB5 /* OAHistoryMarkersSettingsItem.h */,
+				3202DBF326700EFE00E69910 /* OASuggestedDownloadsItem.h */,
+				3202DBF426700F5500E69910 /* OASuggestedDownloadsItem.m */,
 			);
 			name = ImportExport;
 			sourceTree = "<group>";
@@ -14237,7 +14242,7 @@
 				DAFD0A0F261F2675003B108A /* OAExportItemsViewController.h */,
 				DAFD0A10261F2675003B108A /* OAExportItemsViewController.mm */,
 				DAB2E67B2631816F00E153FD /* OAPluginInstalledViewController.h */,
-				DAB2E67C2631816F00E153FD /* OAPluginInstalledViewController.m */,
+				DAB2E67C2631816F00E153FD /* OAPluginInstalledViewController.mm */,
 				DAB2E6892632B23800E153FD /* OAPluginInstalledViewController.xib */,
 			);
 			path = ImportExport;
@@ -17888,6 +17893,7 @@
 				DA09D00F22C3807500557FFF /* OAProgressBarCell.mm in Sources */,
 				3AFEEE691A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				DA2FA6F023029C47006DB2E5 /* OAMapSourceAction.mm in Sources */,
+				3202DBF526700F5500E69910 /* OASuggestedDownloadsItem.m in Sources */,
 				DA6D51E721F33B2800EC84E2 /* OAOsmPoint.m in Sources */,
 				84BFA3171B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				848B28D31EED9A6200F1A19D /* OAUnderlayMapLayer.mm in Sources */,
@@ -18066,7 +18072,7 @@
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				DAF06701238FE94A00210E60 /* OAMapSettingsOnlineSourcesScreen.mm in Sources */,
 				1580F6A62590CB2F002608E9 /* OAJoinPointsCommand.mm in Sources */,
-				DAB2E67D2631816F00E153FD /* OAPluginInstalledViewController.m in Sources */,
+				DAB2E67D2631816F00E153FD /* OAPluginInstalledViewController.mm in Sources */,
 				8417664C1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */,
 				15720BEE24BF36B400BFC84F /* OAGlobalSettingsViewController.m in Sources */,
 				84B4FD561A90F74800A147BA /* OAGPXDocumentPrimitives.mm in Sources */,

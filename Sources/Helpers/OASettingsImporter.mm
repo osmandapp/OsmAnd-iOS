@@ -35,6 +35,7 @@
 #import "OASearchHistorySettingsItem.h"
 #import "OADownloadsItem.h"
 #import "OAResourcesSettingsItem.h"
+#import "OASuggestedDownloadsItem.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -338,6 +339,9 @@
             break;
         case EOASettingsItemTypeAvoidRoads:
             item = [[OAAvoidRoadsSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeSuggestedDownloads:
+            item = [[OASuggestedDownloadsItem alloc] initWithJson:json error:&error];
             break;
         case EOASettingsItemTypeFavorites:
             item = [[OAFavoritesSettingsItem alloc] initWithJson:json error:&error];

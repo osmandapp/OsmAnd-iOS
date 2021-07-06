@@ -365,28 +365,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateAvailableMaps
 {
-    CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-    CLLocationCoordinate2D loca = loc.coordinate;
-    [OAResourcesUIHelper requestMapDownloadInfo:loca resourceType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion onComplete:^(NSArray<OAResourceItem *>* res) {
-        @synchronized(_dataLock)
-        {
-            NSMutableArray<OARepositoryResourceItem *> *availableItems = [NSMutableArray array];
-            if (res.count > 0)
-            {
-                for (OAResourceItem * item in res)
-                {
-                    if ([item isKindOfClass:OARepositoryResourceItem.class])
-                    {
-                        OARepositoryResourceItem *resource = (OARepositoryResourceItem*)item;
-                        [availableItems addObject:resource];
-                    }
-                }
-                _mapItems = availableItems;
-            }
-            
-            [self generateData];
-            [tblView reloadData];
-        }
+    CLLocationCoordinate2D loca = [OAResourcesUIHelper getMapLocation];
+    [OAResourcesUIHelper getMapsForType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion latLon:loca onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
+        _mapItems = res;
+        [self generateData];
+        [tblView reloadData];
     }];
 }
 
@@ -611,7 +594,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [UIImage templateImageNamed:@"ic_custom_contour_lines"];
+        cell.imageView.image = [UIImage templateImageNamed: [OAResourcesUIHelper iconNameByResourseType:mapItem.resourceType]];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)

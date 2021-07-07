@@ -11,7 +11,7 @@
 
 @interface OAImageCard : OAAbstractCard
 
-@property (nonatomic) NSString *type;
+@property (nonatomic, readonly) NSString *type;
 // Image location
 @property (nonatomic, readonly) double latitude;
 @property (nonatomic, readonly) double longitude;

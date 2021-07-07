@@ -97,10 +97,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                             {
                                 NSString *imageName = records.firstObject[@"mainsnak"][@"datavalue"][@"value"];
                                 if (imageName)
-                                {
-                                    resultCard = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:imageName]];
-                                    resultCard.type = @"wikidata-photo";
-                                }
+                                    resultCard = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:imageName] type:@"wikidata-photo"];
                             }
                         }
                         catch(NSException *e)
@@ -132,10 +129,9 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     if (wikiMediaTagContent && [wikiMediaTagContent hasPrefix:WIKIMEDIA_FILE])
     {
         NSString *fileName = [wikiMediaTagContent stringByReplacingOccurrencesOfString:WIKIMEDIA_FILE withString:@""];
-        OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:fileName]];
+        OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:fileName] type:@"wikimedia-photo"];
         if (card)
         {
-            card.type = @"wikimedia-photo";
             [cards addObject:card];
             _wikimediaCardsReady = YES;
             if (_wikidataCardsReady)
@@ -163,12 +159,9 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                             NSString *imageName = imageDict[@"title"];
                             if (imageName)
                             {
-                                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:imageName]];
+                                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:imageName] type:@"wikimedia-photo"];
                                 if (card)
-                                {
-                                    card.type = @"wikimedia-photo";
                                     [resultCards addObject:card];
-                                }
                             }
                         }
                     }

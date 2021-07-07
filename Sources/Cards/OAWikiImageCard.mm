@@ -39,6 +39,7 @@
 
 @interface OAWikiImageCard ()
 
+@property (nonatomic) NSString *type;
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *imageUrl;
@@ -51,13 +52,14 @@
     NSString *_urlWithCommonAttributions;
 }
 
-@dynamic title, url, imageUrl, topIcon;
+@dynamic type, title, url, imageUrl, topIcon;
 
-- (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage
+- (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage type:(NSString *)type
 {
     self = [super init];
     if (self)
     {
+        self.type = type;
         _urlWithCommonAttributions = [wikiImage getUrlWithCommonAttributions];
         if (self.topIcon.length == 0)
             self.topIcon = @"ic_custom_logo_wikimedia.png";

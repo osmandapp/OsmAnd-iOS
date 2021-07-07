@@ -27,6 +27,6 @@
 
 @interface OAWikiImageCard : OAImageCard
 
-- (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage;
+- (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage type:(NSString *)type;
 
 @end

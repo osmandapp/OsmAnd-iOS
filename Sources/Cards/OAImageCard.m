@@ -18,6 +18,7 @@
 @interface OAImageCard ()
 
 @property (nonatomic) OAImageCardCell *collectionCell;
+@property (nonatomic) NSString *type;
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *imageUrl;

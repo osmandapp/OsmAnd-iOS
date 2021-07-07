@@ -65,15 +65,16 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     NSString *imageName = [imageFileName stringByRemovingPercentEncoding];
     imageFileName = [imageName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     imageName = [imageName substringToIndex:[imageName lastIndexOf:@"."]];
+    NSString *urlSafeFileName = [imageFileName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 
     NSString *hash = [CocoaSecurity md5:imageFileName].hexLower;
     NSString *hashFirstPart = [hash substringWithRange:NSMakeRange(0, 1)];
     NSString *hashSecondPart = [hash substringWithRange:NSMakeRange(0, 2)];
 
-    NSString *imageHiResUrl = [NSString stringWithFormat:@"%@%@/%@/%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, imageFileName];
-    NSString *imageStubUrl = [NSString stringWithFormat:@"%@thumb/%@/%@/%@/%ipx-%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, imageFileName, THUMB_SIZE, imageFileName];
+    NSString *imageHiResUrl = [NSString stringWithFormat:@"%@%@/%@/%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, urlSafeFileName];
+    NSString *imageStubUrl = [NSString stringWithFormat:@"%@thumb/%@/%@/%@/%ipx-%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, urlSafeFileName, THUMB_SIZE, urlSafeFileName];
 
-    return [[OAWikiImage alloc] initWithWikiMediaTag:imageFileName imageName:imageName imageStubUrl:imageStubUrl imageHiResUrl:imageHiResUrl];
+    return [[OAWikiImage alloc] initWithWikiMediaTag:urlSafeFileName imageName:imageName imageStubUrl:imageStubUrl imageHiResUrl:imageHiResUrl];
 }
 
 - (void)addWikidataCards:(NSString *)wikidataTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo

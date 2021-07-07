@@ -7,6 +7,8 @@
 //
 
 #import "OAIPFSImageCard.h"
+#import "OAWebViewController.h"
+#import "OAMapPanelViewController.h"
 
 @interface OAIPFSImageCard ()
 
@@ -38,8 +40,8 @@
 - (void)onCardPressed:(OAMapPanelViewController *) mapPanel
 {
     NSString *cardUrl = [self getSuitableUrl];
-    if (cardUrl && cardUrl.length > 0)
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:cardUrl]];
+    OAWebViewController *viewController = [[OAWebViewController alloc] initWithUrlAndTitle:cardUrl title:mapPanel.getCurrentTargetPoint.title];
+    [mapPanel.navigationController pushViewController:viewController animated:YES];
 }
 
 @end

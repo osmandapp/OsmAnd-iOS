@@ -71,7 +71,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     NSString *hashSecondPart = [hash substringWithRange:NSMakeRange(0, 2)];
 
     NSString *imageHiResUrl = [NSString stringWithFormat:@"%@%@/%@/%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, imageFileName];
-    NSString *imageStubUrl = [NSString stringWithFormat:@"%@thumb/%@/%@/%@/%lipx-%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, imageFileName, THUMB_SIZE, imageFileName];
+    NSString *imageStubUrl = [NSString stringWithFormat:@"%@thumb/%@/%@/%@/%ipx-%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, imageFileName, THUMB_SIZE, imageFileName];
 
     return [[OAWikiImage alloc] initWithWikiMediaTag:imageFileName imageName:imageName imageStubUrl:imageStubUrl imageHiResUrl:imageHiResUrl];
 }

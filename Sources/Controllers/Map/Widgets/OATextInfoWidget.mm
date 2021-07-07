@@ -198,7 +198,8 @@
 
 - (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext
 {
-    [self setContentDescription:[self combine:text subtext:subtext]];
+    if ([_text isEqualToString:text] && [subtext isEqualToString:subtext])
+        return;
     //        if(this.text != null && this.text.length() > 7) {
     //            this.text = this.text.substring(0, 6) +"..";
     //        }

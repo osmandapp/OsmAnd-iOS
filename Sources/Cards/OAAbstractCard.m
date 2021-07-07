@@ -10,7 +10,6 @@
 
 @implementation OAAbstractCard
 
-
 - (void) build:(UICollectionViewCell *) cell
 {
     cell.clipsToBounds = NO;
@@ -20,6 +19,12 @@
     cell.layer.shadowOffset = CGSizeMake(0, 1);
     cell.layer.shadowOpacity = 0.3;
     cell.layer.shadowRadius = 2.0;
+    [self update];
+}
+
+- (void) update
+{
+    // not implemented
 }
 
 - (void) onCardPressed:(OAMapPanelViewController *) mapPanel

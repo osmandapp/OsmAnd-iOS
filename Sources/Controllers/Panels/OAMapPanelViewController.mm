@@ -3718,7 +3718,7 @@ typedef enum
     {
         [self switchToRouteFollowingLayout];
         if (_settings.applicationMode.get != [_routingHelper getAppMode])
-            [_settings setApplicationModePref:[_routingHelper getAppMode] markAsLastUsed:NO];
+            [_settings setApplicationModePref:[_routingHelper getAppMode]];
 
         if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
             [_app.locationServices.locationSimulation startStopRouteAnimation];

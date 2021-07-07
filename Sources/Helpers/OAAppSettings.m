@@ -1288,7 +1288,7 @@
         if (settings.useLastApplicationModeByDefault.get)
             stringKey = settings.lastUsedApplicationMode.get;
         else
-            stringKey = self.defValue.stringKey;
+            stringKey = [[NSUserDefaults standardUserDefaults] objectForKey:[self getKey:mode]];
     }
     else if ([self.key isEqualToString:defaultCarplayModeKey] && settings.isCarPlayModeDefault.get)
     {

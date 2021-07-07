@@ -37,12 +37,23 @@
 
 @end
 
+@interface OAWikiImageCard ()
+
+@property (nonatomic) NSString *title;
+@property (nonatomic) NSString *url;
+@property (nonatomic) NSString *imageUrl;
+@property (nonatomic) NSString *topIcon;
+
+@end
+
 @implementation OAWikiImageCard
 {
     NSString *_urlWithCommonAttributions;
 }
 
-- (id)initWithWikiImage:(OAWikiImage *)wikiImage
+@dynamic title, url, imageUrl, topIcon;
+
+- (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage
 {
     self = [super init];
     if (self)

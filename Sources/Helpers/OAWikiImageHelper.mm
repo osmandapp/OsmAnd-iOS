@@ -16,11 +16,17 @@
 #import "OAPOI.h"
 #import "OAAbstractCard.h"
 
+@interface OAWikiImageHelper ()
+
+typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *cards);
+@property OAWikiImageHelperOtherImages addOtherImagesFunction;
+
+@end
+
 @implementation OAWikiImageHelper
 {
     BOOL _wikidataCardsReady;
     BOOL _wikimediaCardsReady;
-    void (^addOtherImages)(NSMutableArray <OAAbstractCard *> *cards);
 }
 
 + (OAWikiImageHelper *)sharedInstance
@@ -38,7 +44,7 @@
     if (!nearbyImagesRowInfo)
         return;
 
-    addOtherImages = addOtherImagesOnComplete;
+    _addOtherImagesFunction = addOtherImagesOnComplete;
     NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
     NSString *wikimediaTagContent = nil;
     NSString *wikidataTagContent = nil;
@@ -109,7 +115,7 @@
                     [cards addObject:resultCard];
                 _wikidataCardsReady = YES;
                 if (_wikimediaCardsReady)
-                    addOtherImages(cards);
+                    _addOtherImagesFunction(cards);
             });
         }] resume];
     }
@@ -117,7 +123,7 @@
     {
         _wikidataCardsReady = YES;
         if (_wikimediaCardsReady)
-            addOtherImages(cards);
+            _addOtherImagesFunction(cards);
     }
 }
 
@@ -133,7 +139,7 @@
             [cards addObject:card];
             _wikimediaCardsReady = YES;
             if (_wikidataCardsReady)
-                addOtherImages(cards);
+                _addOtherImagesFunction(cards);
         }
     }
     else if (wikiMediaTagContent && [wikiMediaTagContent hasPrefix:WIKIMEDIA_CATEGORY])
@@ -172,7 +178,7 @@
                 [cards addObjectsFromArray:resultCards];
                 _wikimediaCardsReady = YES;
                 if (_wikidataCardsReady)
-                    addOtherImages(cards);
+                    _addOtherImagesFunction(cards);
             });
         }] resume];
     }
@@ -180,7 +186,7 @@
     {
         _wikimediaCardsReady = YES;
         if (_wikidataCardsReady)
-            addOtherImages(cards);
+            _addOtherImagesFunction(cards);
     }
 }
 

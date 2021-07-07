@@ -8,9 +8,20 @@
 
 #import "OAIPFSImageCard.h"
 
+@interface OAIPFSImageCard ()
+
+@property (nonatomic) NSString *url;
+@property (nonatomic) NSString *imageUrl;
+@property (nonatomic) NSString *imageHiresUrl;
+@property (nonatomic) NSString *topIcon;
+
+@end
+
 @implementation OAIPFSImageCard
 
-- (id)initWithData:(NSDictionary *)data
+@dynamic url, imageUrl, imageHiresUrl, topIcon;
+
+- (instancetype)initWithData:(NSDictionary *)data
 {
     self = [super initWithData:data];
     if (self)

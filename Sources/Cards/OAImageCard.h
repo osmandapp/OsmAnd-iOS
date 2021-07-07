@@ -22,19 +22,19 @@
 // Image key
 @property (nonatomic, readonly) NSString *key;
 // Image title
-@property (nonatomic) NSString *title;
+@property (nonatomic, readonly) NSString *title;
 // User name
 @property (nonatomic, readonly) NSString *userName;
 // Image viewer url
-@property (nonatomic) NSString *url;
+@property (nonatomic, readonly) NSString *url;
 // Image bitmap url
-@property (nonatomic) NSString *imageUrl;
+@property (nonatomic, readonly) NSString *imageUrl;
 // Image high resolution bitmap url
-@property (nonatomic) NSString *imageHiresUrl;
+@property (nonatomic, readonly) NSString *imageHiresUrl;
 // true if external browser should to be opened, open webview otherwise
 @property (nonatomic, readonly) BOOL externalLink;
 
-@property (nonatomic) NSString *topIcon;
+@property (nonatomic, readonly) NSString *topIcon;
 
 @property (nonatomic) UIImage *image;
 

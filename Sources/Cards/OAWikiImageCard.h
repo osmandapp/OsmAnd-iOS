@@ -15,9 +15,9 @@
 
 @interface OAWikiImage : NSObject
 
-@property (nonatomic) NSString *imageName;
-@property (nonatomic) NSString *imageStubUrl;
-@property (nonatomic) NSString *imageHiResUrl;
+@property (nonatomic, readonly) NSString *imageName;
+@property (nonatomic, readonly) NSString *imageStubUrl;
+@property (nonatomic, readonly) NSString *imageHiResUrl;
 
 - (instancetype)initWithWikiMediaTag:(NSString *)wikiMediaTag imageName:(NSString *)imageName imageStubUrl:(NSString *)imageStubUrl imageHiResUrl:(NSString *)imageHiResUrl;
 
@@ -27,6 +27,6 @@
 
 @interface OAWikiImageCard : OAImageCard
 
-- (id)initWithWikiImage:(OAWikiImage *)wikiImage;
+- (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage;
 
 @end

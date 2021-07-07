@@ -3138,6 +3138,7 @@
 		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
 		DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; platformFilter = ios; };
 		DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA7FA55D2695DCFB0044F05A /* fi_tts.js */; };
 		DA80939E226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80939D226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm */; };
 		DA8093A32260789900A1479F /* OAOsmNotesOnlineTargetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA8093A12260789900A1479F /* OAOsmNotesOnlineTargetViewController.mm */; };
 		DA8093A52260789900A1479F /* OAOsmNotesOnlineTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA8093A22260789900A1479F /* OAOsmNotesOnlineTargetViewController.xib */; };
@@ -7657,6 +7658,7 @@
 		DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveViewController.mm; path = Controllers/Resources/OAOsmAndLiveViewController.mm; sourceTree = "<group>"; };
 		DA7A9F0E21B0014D005763B0 /* OAOsmAndLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveViewController.h; path = Controllers/Resources/OAOsmAndLiveViewController.h; sourceTree = "<group>"; };
 		DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
+		DA7FA55D2695DCFB0044F05A /* fi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fi_tts.js; path = ../resources/voice/fi/fi_tts.js; sourceTree = "<group>"; };
 		DA80939C226070BD00A1479F /* OAOnlineOsmNoteWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOnlineOsmNoteWrapper.h; sourceTree = "<group>"; };
 		DA80939D226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOnlineOsmNoteWrapper.mm; sourceTree = "<group>"; };
 		DA8093A02260789900A1479F /* OAOsmNotesOnlineTargetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmNotesOnlineTargetViewController.h; path = Sources/Controllers/2.0/OAOsmNotesOnlineTargetViewController.h; sourceTree = "<group>"; };
@@ -14234,6 +14236,7 @@
 				DAC588622108995B008B7763 /* fr_tts.js */,
 				DAC5885921089929008B7763 /* de_tts.js */,
 				DAC5885C21089938008B7763 /* en_tts.js */,
+				DA7FA55D2695DCFB0044F05A /* fi_tts.js */,
 			);
 			name = voice;
 			sourceTree = "<group>";
@@ -14800,6 +14803,7 @@
 				843257AC1A9DAE9400A7964E /* ic_map_resources@2x.png in Resources */,
 				DA8A928025DE8B4A00F5320A /* ic_carplay_search@2x.png in Resources */,
 				8454DA1B1B2F16D700E5A5C5 /* ic_coordinates.png in Resources */,
+				DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */,
 				8431E7AA1B386CEC0063C9AF /* ic_tabbar_active_trip_selected.png in Resources */,
 				8AFC2C0D24334A4E0095BA9F /* map_location_default_top@3x.png in Resources */,
 				DA13A02D2345FA0100C1A1A8 /* ic_custom_motorways.png in Resources */,

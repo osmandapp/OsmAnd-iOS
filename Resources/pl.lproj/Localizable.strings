@@ -162,7 +162,7 @@
 "region_africa" = "Afryka";
 "region_asia" = "Azja";
 "region_ausralia_and_oceania" = "Australia i Oceania";
-"region_central_america" = "AmerykaŚrodkowa";
+"region_central_america" = "Ameryka Środkowa";
 "region_europe" = "Europa";
 "region_north_america" = "Ameryka Północna";
 "region_russia" = "Rosja";
@@ -171,7 +171,7 @@
 "product_desc_africa" = "Nieograniczone pobieranie map dla Afryki";
 "product_title_australia" = "Australia";
 "product_desc_australia" = "Nieograniczone pobieranie map dla Australii";
-"product_title_centralamerica" = "AmerykaŚrodkowa";
+"product_title_centralamerica" = "Ameryka Środkowa";
 "product_desc_centralamerica" = "Nieograniczone pobieranie map dla Ameryki Środkowej";
 "product_title_europe" = "Europa";
 "product_desc_europe" = "Nieograniczone pobieranie map dla Europy";
@@ -243,7 +243,7 @@
 "prch_items_failed" = "elementy nie zostały przywrócone. Proszę spróbować ponownie.";
 "res_banner_free_maps_desc" = "Możesz pobrać %d darmowe mapy, bez aktualizacji";
 "res_banner_no_free_maps_desc" = "Należy zakupić mapy regionów lub mapy całego świata";
-"res_wsea_map" = "Żeglugowy znak orientacyjny";
+"res_wsea_map" = "Mapa bazowa światowych znaków nawigacyjnych";
 "res_wmap" = "Podstawowa mapa świata";
 "res_map_of_region" = "Regiony";
 "res_install_no_space" = "Za mało miejsca, aby zainstalować";
@@ -308,7 +308,7 @@
 "help_quiz" = "Quiz";
 "cannot_access_calendar" = "Nie można uzyskać dostępu do kalendarza";
 //inapps
-"product_title_nautical" = "Widok morski";
+"product_title_nautical" = "Mapa morska";
 "product_desc_nautical" = "Morskie mapy całego świata";
 "product_title_parking" = "Położenie zaparkowanego samochodu";
 "postcode" = "Kod pocztowy";
@@ -352,8 +352,8 @@
 "units_minutes_short" = "min";
 "product_title_track_recording" = "Nagrywanie trasy";
 "product_title_wiki" = "Wikipedia";
-"product_title_srtm" = "Poziomice";
-"product_desc_srtm" = "Wyświetlaj poziomice";
+"product_title_srtm" = "Izolinie";
+"product_desc_srtm" = "Wyświetlaj izolinie";
 "my_location" = "Aktualne położenie";
 "all_categories" = "Wszystkie kategorie";
 "latitude" = "Szerokość";
@@ -363,7 +363,7 @@
 "enter_fav_name" = "Wprowadź nazwę";
 "res_installing" = "Instalowanie…";
 "res_roads" = "Drogi";
-"res_srtm" = "Poziomice";
+"res_srtm" = "Izolinie";
 "res_wiki" = "Wikipedia";
 "select_language" = "Wybór języka";
 "language_short" = "Język";
@@ -372,7 +372,7 @@
 "not_selected" = "Nie wybrano";
 "language" = "Język";
 "purchase_get" = "Pobierz";
-"srtm_disabled" = "Wyłączone poziomice";
+"srtm_disabled" = "Wyłączone izolinie";
 "time_open" = "Otwarte";
 "time_closed" = "Zamknięte";
 "time_will_close" = "Zostanie zamknięte za";
@@ -386,7 +386,7 @@
 "pedestrian" = "Pieszy";
 "sorting" = "Sortowanie";
 "plugins" = "Wtyczki";
-"plugin_popup_ski_title" = "Włącz mapę narciarską";
+"plugin_popup_ski_title" = "Włącz styl Mapy tras narciarskich";
 "restore" = "Przywróć";
 "no_internet_avail" = "Brak połączenia z Internetem";
 "show_region_on_map_title" = "Pobrano mapę";
@@ -564,8 +564,8 @@
 "shared_string_widgets" = "Widżety";
 "map_widget_right" = "Prawy panel";
 "map_widget_left" = "Lewy panel";
-"layer_map_appearance" = "Wygląd ekranu";
-"map_markers" = "Znaczniki";
+"layer_map_appearance" = "Skonfiguruj ekran";
+"map_markers" = "Znaczniki mapy";
 "select_gpx" = "Wybierz ślad GPX…";
 "confirm_usage_speed_cameras" = "W wielu krajach (Niemcy, Francja, Włochy i inne) prawo zabrania korzystania z ostrzeżeń o fotoradarach. Twórcy aplikacji nie biorą odpowiedzialności za łamanie prawa przez użytkowników. Proszę wybrać „Tak”, tylko jeśli wolno używać tej funkcji.";
 "show_traffic_warnings" = "Ostrzeżenia drogowe";
@@ -584,7 +584,7 @@
 "shared_string_never" = "Nigdy";
 "general_settings_2" = "Ogólne";
 "general_settings_descr" = "Styl aplikacji, jednostki, region";
-"routing_settings_descr" = "Konfiguruje nawigację";
+"routing_settings_descr" = "Skonfiguruj nawigację";
 "auto_zoom_none" = "Brak automatycznego przybliżania";
 "auto_zoom_close" = "Zbliżenie";
 "auto_zoom_far" = "Widok pośredni";
@@ -626,7 +626,7 @@
 "route_roundabout" = "Na rondzie wybierz %1$d zjazd";
 "route_roundabout_short" = "Zjedź %d zjazdem";
 "driving_region_europe_asia" = "Europa, Azja, Ameryka Łacińska i podobne";
-"prch_nau_q1" = "Włącz styl \"Morski\" w Ustawieniach mapy i zainstaluj morską światową mapę bazową.";
+"prch_nau_q1" = "Włącz styl \"Morski\" w ustawieniach mapy i zainstaluj mapę bazową światowych znaków nawigacyjnych.";
 "prch_nau_q3" = "Możesz zainstalować ją później używając Map i Zasobów.";
 "res_maps_inst" = "map(y)";
 "res_dmap" = "Mapa szczegółowa";
@@ -645,7 +645,7 @@
 "units_seconds_short" = "sek";
 "reminder_not_set_text" = "Przypomnienie nie zostało ustawione, ponieważ nie masz praw dostępu do kalendarza";
 "do_not_send_anonymous_data_desc" = "Nie zbieramy danych o lokalizacji, tylko wykorzystanie aplikacji i statystyki pobierania map.";
-"product_title_skimap" = "Mapa narciarska";
+"product_title_skimap" = "Mapa tras narciarskich";
 "product_title_trip_planning" = "Planowanie podróży";
 "product_desc_wiki" = "Dane z Wikipedii";
 "get_unlimited_access" = "Uzyskaj nieograniczony dostęp";
@@ -786,19 +786,19 @@
 "twitter" = "Twitter";
 "show_alt_in_drive" = "Pokaż wysokość w trybie jazdy";
 "help_about" = "Informacje";
-"product_desc_ext_skimap" = "OsmAnd Mapy narciarskie to wtyczka do aplikacji OsmAnd Mapy i nawigacja zaprojektowana do nawigacji w miejscach sportów zimowych. Daje on informacje o trasach narciarskich, znacznikach narciarskich, a nawet kolorowych liniach wskazujących na złożoność każdego toru. Otrzymasz informacje o trasach narciarskich, a także o otaczającej infrastrukturze.\n\nInstrukcje dotyczące użytkowania: Włącz wtyczkę w aplikacji OsmAnd, dotknij przycisku mapy i ustaw typ mapy na Mapy narciarskie.";
+"product_desc_ext_skimap" = "OsmAnd Mapy tras narciarskich to wtyczka do aplikacji OsmAnd Mapy i Nawigacja zaprojektowana do nawigacji w miejscach sportów zimowych. Daje on informacje o trasach narciarskich, znacznikach narciarskich, a nawet kolorowych liniach wskazujących na złożoność każdego toru. Otrzymasz informacje o trasach narciarskich, a także o otaczającej infrastrukturze.\n\nInstrukcje dotyczące użytkowania: Włącz wtyczkę w aplikacji OsmAnd, naciśnij przycisk mapy i ustaw typ mapy na Mapy tras narciarskich.";
 "product_desc_trip_planning" = "Zaplanuj podróż, dodaj waypointy, zmierz odległość do miejsca docelowego za pomocą tej wtyczki";
 "product_desc_ext_trip_planning" = "Wtyczka planowania podróży umożliwia tworzenie podróży na mapie, zapisywanie jej, mierzenie odległości między punktami połączonymi liniami prostymi itp. Została stworzona do wstępnego planowania podróży, a nie do dokładnego budowania trasy.";
 "product_desc_ext_wiki" = "Uzyskaj informacje o ciekawych miejscach z Wikipedii. Jest to kieszonkowy przewodnik offline - wystarczy włączyć wtyczkę do Wikipedii i przeczytać artykuły o obiektach wokół ciebie.";
 "prch_wiki_info" = "Dodatek do Wikipedii udostępnia informacje na temat Wikipedii dla map, do których jesteś uprawniony, kupowany lub pobierany w ramach bezpłatnego limitu.";
-"prch_srtm_info" = "Dodatek linii konturu umożliwia wykonywanie konturów map, do których masz prawo, które zostały zakupione lub pobrane w ramach limitu bezpłatnego.";
+"prch_srtm_info" = "Dodatek izolinii włącza izolinie dla map, do których masz prawo, a które zostały zakupione lub pobrane w ramach limitu bezpłatnego.";
 "directions_more_options" = "Nawiguj z";
 "nearby_search" = "Szukaj w pobliżu";
 "plugin_popup_wiki_desc" = "Aby rozpocząć korzystanie z wtyczki Wikipedii, najpierw pobierz dane z Wikipedii regionu";
 "plugin_popup_wiki_ask" = "Aby pobrać dane z Wikipedii, musisz aktywować wtyczkę: <b>Wikipedia</b>";
-"plugin_popup_srtm_title" = "Pobierz linie konturowe";
-"plugin_popup_srtm_desc" = "Aby rozpocząć korzystanie z funkcji linii konturu, pobierz najpierw linie konturów regionu";
-"plugin_popup_srtm_ask" = "Aby pobrać linie konturów, musisz aktywować wtyczkę: <b>Linie konturowe</b>";
+"plugin_popup_srtm_title" = "Pobierz izolinie";
+"plugin_popup_srtm_desc" = "Aby rozpocząć korzystanie z funkcji izolinii, pobierz najpierw Izolinie regionu";
+"plugin_popup_srtm_ask" = "Aby pobrać izolinie, musisz aktywować wtyczkę: <b>Izolinie</b>";
 "plugin_popup_nautical_title" = "Pobierz mapy morskie";
 "no_internet_avail_desc_first" = "Włącz połączenie internetowe, aby pobrać listę map";
 "sqlitedb_import_title" = "Import pliku mapy rastrowej";
@@ -809,8 +809,8 @@
 "gpx_edit_mode" = "Tryb edycji";
 "wiki_download_description" = "Aby przeczytać pełne artykuły - pobierz dane Wikipedii %@";
 "product_desc_ext_srtm" = "Ta wtyczka zapewnia linie konturowe i zbocza, które mogą być wyświetlane na mapach offline OsmAnd. Linie konturowe dostarczają informacji o wysokościach obszaru, podczas gdy podbicie jest ich wizualizacją. Zobacz nazwy górskich szczytów i specyficzne cechy terenu za pomocą tej wtyczki.\n\nDane globalne (od 70 stopni na północ do 70 stopni na południe) są oparte na pomiarach przeprowadzanych przez SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), instrument obrazujący na pokładzie Terra, flagowego satelity NASA Earth Observing System. ASTER to wspólny wysiłek NASA, Japońskiego Ministerstwa Gospodarki, Handlu i Przemysłu (METI) oraz Japan Space Systems (J-spacesystems).";
-"plugin_popup_ski_desc" = "Aby włączyć styl <b>Mapa narciarska</b> przejdź do <b>Ustawienia mapy</b> > <b>Typ mapy</b>";
-"plugin_popup_nautical_desc" = "Najpierw pobierz mapy morskie.\nNastępnie przejdź do <b>Ustawienia mapy</b> > <b>Typ mapy</b> i włącz styl <b>Morski</b>";
+"plugin_popup_ski_desc" = "Aby włączyć styl <b>Mapa tras narciarskich</b>, przejdź do <b>Skonfiguruj mapę</b> > <b>Rodzaj mapy</b>";
+"plugin_popup_nautical_desc" = "Najpierw pobierz Mapy morskie.\nNastępnie przejdź do <b>Skonfiguruj mapę</b> > <b>Rodzaj mapy</b> i włącz styl <b>Morski</b>";
 "plugin_popup_trip_planning_ask" = "Aby rozpocząć planowanie podróży, musisz aktywować wtyczkę: <b>Planowanie podróży</b>";
 "show_region_on_map_desc" = "Mapa %@ została pobrana. Przejdź do mapy, aby rozpocząć korzystanie z niej.";
 "wiki_buy_description" = "Aby przeczytać pełne artykuły - kup Wikipedię i pobierz dane z Wikipedii %@";
@@ -850,18 +850,18 @@
 "product_title_wikivoyage" = "Przewodnik podróży";
 "product_desc_wikivoyage" = "Bezpłatny przewodnik po świecie, który każdy może edytować.";
 "product_desc_ext_wikivoyage" = "Przewodniki po najciekawszych miejscach naświecie w aplikacji OsmAnd, bez połączenia z Internetem.";
-"product_title_sea_depth_contours" = "Morskie kontury głębokości";
-"product_desc_sea_depth_contours" = "Głębokości i linie brzegowe głębokości morza";
+"product_title_sea_depth_contours" = "Izobaty";
+"product_desc_sea_depth_contours" = "Izolinie głębokości morza i znaki orientacyjne";
 "free_version_message" = "Możesz pobrać lub zaktualizować %d mapy";
 "get_osmand_live" = "Uzyskaj OsmAnd Live, aby odblokować wszystkie funkcje:";
 "osm_live_subscription" = "Subskrypcja OsmAnd Live";
 "wikivoyage_offline" = "Wikipodróże offline";
 "unlimited_downloads" = "Nieograniczone pobieranie";
 "wikipedia_offline" = "Wikipedia offline";
-"contour_lines_hillshade_maps" = "Linie konturowe i mapy cieniowania rzeźby terenu";
+"contour_lines_hillshade_maps" = "Mapy izolinii i cieniowania wzniesień";
 "monthly_map_updates" = "Aktualizacje map: co miesiąc";
 "daily_map_updates" = "Aktualizacje map: co godzinę";
-"index_item_depth_contours_osmand_ext" = "Morskie kontury głębokości";
+"index_item_depth_contours_osmand_ext" = "Izobaty";
 "donation_to_osm" = "Darowizna dla społeczności OpenStreetMap";
 "purchase_unlim_title" = "Kup - %@";
 "in_app_purchase" = "Zakupy w aplikacji";
@@ -1099,7 +1099,7 @@
 "utm_description" = "Należy pamiętać, że OsmAnd używa formatu UTM Standard, który jest podobny, ale nie taki sam, jak format USM NATO.";
 "coordinates_copy_descr" = "Naciśnij, aby skopiować współrzędne do schowka.";
 "months_3" = "Trzy miesiące";
-"configure_map" = "Wygląd mapy";
+"configure_map" = "Skonfiguruj mapę";
 // Rendering attributes
 "get_discount_title" = "Uzyskaj %d %@ %d%% taniej.";
 "get_free_trial_title" = "Rozpocznij okres próbny na %d %@.";
@@ -1139,7 +1139,7 @@
 "map_sources" = "Zasoby map";
 "map_styles" = "Style map";
 "add_action" = "Dodaj czynność";
-"create_items" = "Tworzenie elementów";
+"create_items" = "Utwórz elementy";
 "add_map_marker" = "Dodaj znacznik mapy";
 "add_gpx_waypoint" = "Dodaj punkt do GPX";
 "toggle_fav" = "Wyświetl/Ukryj ulubione";
@@ -1213,7 +1213,7 @@
 "start_navigation" = "Rozpocznij nawigację";
 "fav_show" = "Wyświetl ulubione";
 "fav_hide" = "Ukryj ulubione";
-"hide_poi_action" = "Ukryj UM";
+"hide_poi_action" = "Ukryj użyteczne miejsca";
 "auto_zoom_on" = "Włącz auto-przybliżenie";
 "auto_zoom_off" = "Wyłącz auto-przybliżenie";
 "resume_nav" = "Kontynuuj nawigację";
@@ -1269,14 +1269,14 @@
 "map_settings_install_more" = "Zainstaluj więcej...";
 "tile_data" = "Dane kafelków";
 "calculating_progress" = "Obliczanie...";
-"toggle_contour_lines" = "Pokaż/Ukryj poziomice";
+"toggle_contour_lines" = "Pokaż/Ukryj izolinie";
 "display_starting_at_zoom_level" = "Wyświetlaj, zaczynając od stopnia przybliżenia";
-"hide_contour_lines" = "Ukryj poziomice";
-"show_contour_lines" = "Poziomice";
+"hide_contour_lines" = "Ukryj izolinie";
+"show_contour_lines" = "Wyświetl izolinie";
 // World Regions
 "region_antarctica" = "Antarktyda";
 "region_others" = "Inne mapy";
-"download_depth_countours" = "Mapy batymetryczne";
+"download_depth_countours" = "Izobaty";
 // Route info
 "gpx_avg_altitude" = "Średnia wysokość";
 "gpx_alt_range" = "Zakres wysokości";
@@ -1295,7 +1295,7 @@
 "routing_attr_allow_motorway_description" = "Zezwala na autostrady.";
 "routing_attr_prefer_motorway_name" = "Preferuj autostrady";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Sieci węzłów";
-"rendering_attr_contourWidth_name" = "Szerokość poziomic";
+"rendering_attr_contourWidth_name" = "Szerokość izolinii";
 "rendering_attr_highway_class_track_grade2_name" = "Klasa 2";
 "rendering_attr_surface_grass_paver_name" = "Bruk z trawą";
 "rendering_attr_tracktype_grade2_name" = "Stałe (nieutwardzone)";
@@ -1327,7 +1327,7 @@
 "rendering_value_pink_name" = "Różowy";
 "routing_attr_prefer_unpaved_description" = "Preferuj drogi nieutwardzone.";
 "routing_attr_allow_motorway_name" = "Używanie autostrad";
-"rendering_attr_contourDensity_description" = "Gęstość poziomic";
+"rendering_attr_contourDensity_description" = "Gęstość izolinii";
 "routeInfo_winter_ice_road_name" = "Drogi zimowe i lodowe";
 "routing_attr_difficulty_preference_name" = "Preferowana trudność";
 "routing_attr_freeride_policy_description" = "Freeride i offpiste to nieoficjalne trasy i przejścia. Zazwyczaj nieprzygotowane i niesprawdzone. Wchodzisz na własne ryzyko.";
@@ -1336,7 +1336,7 @@
 "routing_attr_allow_private_description" = "Zezwala na dostęp do prywatnych obszarów.";
 "routing_attr_no_new_routing_name" = "Bez reguł wyznaczania tras z wersji 1.9";
 "rendering_attr_surface_unpaved_name" = "Nieutwardzona";
-"rendering_attr_contourWidth_description" = "Szerokość poziomic";
+"rendering_attr_contourWidth_description" = "Szerokość izolinii";
 "rendering_attr_tracktype_grade5_name" = "Miękkie";
 "routing_attr_height_description" = "Określa dozwoloną wysokość pojazdu na trasach.";
 "rendering_attr_surface_sett_name" = "Bruk";
@@ -1373,7 +1373,7 @@
 "rendering_attr_currentTrackWidth_name" = "Szerokość trasy GPX";
 "rendering_attr_surface_asphalt_name" = "Asfalt";
 "rendering_attr_tracktype_grade1_name" = "Stałe (utwardzone)";
-"rendering_attr_contourColorScheme_name" = "Zestaw kolorów poziomic";
+"rendering_attr_contourColorScheme_name" = "Zestaw kolorów izolinii";
 "routing_attr_relief_smoothness_factor_hills_name" = "Górzysty";
 "routing_attr_weight_name" = "Ograniczenie wagi";
 "rendering_attr_piste_type_sled_name" = "Sanki";
@@ -1388,7 +1388,7 @@
 "rendering_attr_showAccess_name" = "Ograniczenia dostępu i opłaty";
 "routing_attr_allow_private_name" = "Uwzględnianie prywatnych obszarów";
 "rendering_value_thick_name" = "Gruby";
-"rendering_attr_contourColorScheme_description" = "Zestaw kolorów poziomic";
+"rendering_attr_contourColorScheme_description" = "Zestaw kolorów izolinii";
 "routing_attr_piste_type_nordic_description" = "Trasy do narciarstwa klasycznego lub biegowego.";
 "rendering_attr_smoothness_impassable_name" = "Nieprzejezdna";
 "rendering_value_light_brown_name" = "Jasnobrązowy";
@@ -1435,7 +1435,7 @@
 "routing_attr_avoid_ferry_name" = "Unikanie promów";
 "rendering_attr_smoothness_very_bad_name" = "Bardzo zła";
 "rendering_attr_smoothness_good_name" = "Dobra";
-"rendering_attr_contourLines_description" = "Wyświetlanie od stopnia przybliżenia (wymaga danych poziomic):";
+"rendering_attr_contourLines_description" = "Wyświetl od stopnia przybliżenia (wymaga danych poziomic):";
 "rendering_attr_showSurfaceGrade_name" = "Jakość dróg";
 "rendering_attr_surface_pebblestone_name" = "Tłuczeń żwirowy";
 "routeInfo_smoothness_name" = "Gładkość";
@@ -1459,7 +1459,7 @@
 "rendering_attr_surfaceIntegrity_name" = "Spójność nawierzchni dróg";
 "rendering_value_blue_name" = "Niebieski";
 "rendering_attr_transportStops_name" = "Przystanki transportu miejskiego";
-"rendering_attr_depthContours_name" = "Morskie kontury głębokości";
+"rendering_attr_depthContours_name" = "Izobaty";
 "rendering_attr_highway_class_steps_name" = "Schody";
 "rendering_attr_buildings15zoom_name" = "Budynki na przybliżeniu 15";
 "rendering_attr_subwayMode_name" = "Linie metra";
@@ -1467,7 +1467,7 @@
 "routing_attr_avoid_borders_description" = "Omijaj przejścia graniczne";
 "rendering_attr_moreDetailed_name" = "Więcej szczegółów";
 "routing_attr_avoid_stairs_name" = "Omijanie schodów";
-"rendering_attr_hikingRoutesOSMC_name" = "Szlaki turystyczne";
+"rendering_attr_hikingRoutesOSMC_name" = "Nakładka symboli szlaków turystycznych";
 "rendering_attr_piste_difficulty_advanced_name" = "Zaawansowane";
 "routing_attr_avoid_subway_description" = "Unikaj metra i lekkiego transportu kolejowego";
 "rendering_attr_highway_class_track_grade1_name" = "Klasa 1";
@@ -1513,10 +1513,10 @@
 "rendering_attr_coloredBuildings_name" = "Różne kolory typów budynków";
 "rendering_attr_surface_wood_name" = "Drewno";
 "rendering_attr_piste_type_snow_park_name" = "Park terenowy";
-"rendering_attr_contourDensity_name" = "Gęstość poziomic";
+"rendering_attr_contourDensity_name" = "Gęstość izolinii";
 "routing_attr_piste_type_nordic_name" = "Narty biegowe/nordic ski";
 "rendering_attr_surface_stone_name" = "Kamień";
-"rendering_attr_contourLines_name" = "Poziomice";
+"rendering_attr_contourLines_name" = "Wyświetl izolinie";
 "routing_attr_allow_classic_only_description" = "Trasy przystosowane do klasycznego stylu tylko bez trasłyżwiarskich. Obejmuje trasy przygotowywane przez mniejszy skuter śnieżny z luźniejszą trasą i tory wykonane ręcznie przez narciarzy.";
 "routing_attr_width_description" = "Określa dozwoloną szerokość pojazdu na trasach.";
 "rendering_attr_tramRoutes_name" = "Trasy tramwajowe";
@@ -1529,7 +1529,7 @@
 "rendering_attr_showSurfaces_name" = "Nawierzchnia dróg";
 "routing_attr_width_name" = "Ograniczenie szerokości";
 "rendering_attr_showRoadMaps_name" = "Tylko mapy samochodowe";
-"rendering_attr_depthContours_description" = "Wyświetla kontury i punkty głębi.";
+"rendering_attr_depthContours_description" = "Wyświetl izobaty i punkty głębokości.";
 "routing_attr_height_obstacles_name" = "Używanie danych wysokościowych";
 "routing_attr_prefer_unpaved_name" = "Preferowanie nieutwardzonych dróg";
 "rendering_value_default13_name" = "Domyślny (13)";
@@ -1603,7 +1603,7 @@
 "all_group_points" = "Wszystkie punkty w grupie";
 "trip_hint" = "Wprowadź nazwę trasy";
 "trip_name" = "Nazwa trasy";
-"quick_action_contour_lines_descr" = "Naciśnięcie tego przycisku czynności powoduje wyświetlenie lub ukrycie warstwy linii konturowych.";
+"quick_action_contour_lines_descr" = "Naciśnięcie tego przycisku czynności powoduje wyświetlenie lub ukrycie warstwy izolinii.";
 "toggle_hillshade" = "Pokaż/ukryj teren";
 "hide_hillshade" = "Ukryj cieniowanie terenu";
 "show_hillshade" = "Pokaż cieniowanie terenu";
@@ -1637,7 +1637,7 @@
 "app_mode_camper" = "Kamper";
 "app_mode_monowheel" = "Monocykl";
 "app_mode_shuttle_bus" = "Autobus wahadłowy";
-"app_mode_skiing" = "Jazda na nartach";
+"app_mode_skiing" = "Narciarstwo";
 "app_mode_pedestrian" = "Chodzenie";
 "app_mode_campervan" = "Samochód kempingowy";
 "app_mode_bicycle" = "Kolarstwo";
@@ -1657,10 +1657,10 @@
 "public_transport_ped_route_title" = "Długość trasy pieszej wynosi około %1$s i może być ona szybsza niż transport publiczny.";
 "product_desc_antarctica" = "Nieograniczone pobieranie map dla Antarktydy";
 "product_title_antarctica" = "Antarktyda";
-"enable_contour_lines" = "Włącz, aby wyświetlić poziomice na mapie";
+"enable_contour_lines" = "Włącz, aby wyświetlić izolinie na mapie";
 "map_settings_available_srtm_maps_descr" = "Dodatkowe mapy są potrzebne do wyświetlania cieniowania terenu na mapie";
 "map_settings_line_density_slowdown_warning" = "Duża gęstość linii może spowolnić rysowanie map";
-"map_settings_contour_zoom_level_descr" = "Wybierz poziom powiększenia, od którego poziomice będą wyświetlane";
+"map_settings_contour_zoom_level_descr" = "Wybierz poziom powiększenia, od którego izolinie będą wyświetlane";
 "map_settings_line_density" = "Gęstość linii";
 "map_settings_line_width" = "Szerokość linii";
 "m_style_pulic_transport" = "Transport publiczny";
@@ -1681,7 +1681,7 @@
 "base_profile_descr_aircraft" = "Samolot, szybownictwo";
 "base_profile_descr_boat" = "Statek, wioślarstwo, żeglarstwo";
 "base_profile_descr_public_transport" = "Rodzaje transportu publicznego";
-"base_profile_descr_pedestrian" = "Spacer, wędrówka piesza, bieganie";
+"base_profile_descr_pedestrian" = "Chodzenie, wędrówki, bieganie";
 "base_profile_descr_bicycle" = "Rower górski, motorower, koń";
 "base_profile_descr_car" = "Samochód, ciężarówka, motocykl";
 "new_profile" = "Nowy profil";
@@ -1892,7 +1892,7 @@
 "add_one_more_pnt" = "Dodaj jeszcze jeden punkt";
 "add_after" = "Dodaj punkty po";
 "add_before" = "Dodaj punkty przed";
-"layer_amenity_label" = "Etykiety punktów";
+"layer_amenity_label" = "Etykiety nakładek użytecznych miejsc";
 "personal_category_name" = "Osobiste";
 "road_speeds_descr" = "Te parametry mogą mieć wpływ na obliczanie trasy.";
 "shared_string_add_profile" = "Dodaj profil";

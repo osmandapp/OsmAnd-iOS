@@ -398,13 +398,14 @@
         return;
     }
     [self presentInCarPlay:interfaceController window:window];
-    [OAAppSettings.sharedManager.applicationMode set: [OAAppSettings.sharedManager.carPlayMode get]];
+    OAApplicationMode *carPlayMode = OAAppSettings.sharedManager.isCarPlayModeDefault ? OAApplicationMode.CAR : [OAAppSettings.sharedManager.carPlayMode get];
+    [OAAppSettings.sharedManager setApplicationModePref:carPlayMode markAsLastUsed:NO];
 }
 
 - (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
     _app.carPlayActive = NO;
-    [OAAppSettings.sharedManager.applicationMode set:[OAAppSettings.sharedManager.defaultApplicationMode get]];
+    [OAAppSettings.sharedManager setApplicationModePref:[OAAppSettings.sharedManager.defaultApplicationMode get] markAsLastUsed:NO];
     [OARootViewController.instance.mapPanel onCarPlayDisconnected:^{
         [_carPlayMapController detachFromCarPlayWindow];
         _carPlayDashboardController = nil;

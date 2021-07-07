@@ -77,7 +77,7 @@ static OAQuickActionType *TYPE;
     OAApplicationMode *appMode = [self getModeForKey:params];
     if (appMode)
     {
-        [[OAAppSettings sharedManager].applicationMode set:appMode];
+        [OAAppSettings.sharedManager setApplicationModePref:appMode];
     }
 }
 

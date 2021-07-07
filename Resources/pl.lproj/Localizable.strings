@@ -1708,7 +1708,7 @@
 "select_distance_for_recalculation" = "Wybierz odległość, po której trasa zostanie ponownie obliczona.";
 "route_recalculation_descr" = "Trasa zostanie ponownie obliczona, jeśli odległość od trasy do bieżącej lokalizacji jest większa niż wybrana wartość.";
 "recalculate_route" = "Przelicz trasę ponownie po zboczeniu z trasy";
-"avoid_routes_and_road" = "Unika określonych tras i typów dróg";
+"avoid_routes_and_road" = "Unikaj określonych tras i rodzajów dróg";
 "import_routing_file_descr" = "Możesz zaimportować plik routingu z dowolnej aplikacji do przechowywania danych w chmurze, otwierając go w OsmAnd.";
 "special_routing" = "Wyznacza trasy specjalne";
 "osmand_routing" = "Wyznacza trasy przez OsmAnd";

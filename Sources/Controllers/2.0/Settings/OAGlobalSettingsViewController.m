@@ -107,7 +107,7 @@
                 @{
                 @"name" : @"carplay_profile",
                 @"title" : OALocalizedString(@"carplay_profile"),
-                @"value" : _settings.carPlayMode.get.toHumanString,
+                @"value" : _settings.isCarPlayModeDefault.get ? OALocalizedString(@"settings_preset") : _settings.carPlayMode.get.toHumanString,
                 @"description" : OALocalizedString(@"carplay_profile_descr"),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : [OASettingsTableViewCell getCellIdentifier] },
@@ -161,7 +161,7 @@
             NSMutableArray *arr = [NSMutableArray array];
             [arr addObject: @{
                 @"name" : @"carplay_mode_is_default_string",
-                @"title" : OALocalizedString(@"default"),
+                @"title" : OALocalizedString(@"settings_preset"),
                 @"value" : @(_isDefaultProfile),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : [OASwitchTableViewCell getCellIdentifier] }];
@@ -363,10 +363,8 @@
 {
     NSString *title = [self tableView:tableView titleForHeaderInSection:section];
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    vw.label.text = [title upperCase];
+    vw.label.text = title;
     vw.label.textColor = UIColorFromRGB(color_text_footer);
-    if (_settingsType == EOACarplayProfile)
-        [vw setYOffset:kCarplayHeaderTopMargin];
     return vw;
 }
 

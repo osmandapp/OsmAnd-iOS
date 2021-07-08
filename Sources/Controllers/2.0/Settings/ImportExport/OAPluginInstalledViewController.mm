@@ -14,6 +14,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAIconTextDescSwitchCell.h"
 
 #define kSidePadding 20.0
 #define kTopPadding 6
@@ -40,6 +41,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     NSArray<NSArray<NSMutableDictionary *> *> *_data;
     NSArray<OAResourceItem *> *_suggestedMaps;
+    NSArray<OAApplicationMode *> *_addedAppModes;
     
     OAIAPHelper *_iapHelper;
     
@@ -59,6 +61,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _app = OsmAndApp.instance;
         _dataLock = [[NSObject alloc] init];
         _suggestedMaps = @[];
+        _addedAppModes = @[];
     }
     return self;
 }
@@ -131,6 +134,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (suggestedMapsSection.count > 0)
         [data addObject:suggestedMapsSection];
     
+    _addedAppModes = [_plugin getAddedAppModes];
+    NSMutableArray *addedAppModesSection = [NSMutableArray new];
+    for (OAApplicationMode* mode in _addedAppModes)
+    {
+        [OAApplicationMode changeProfileAvailability:mode isSelected:YES];
+        [addedAppModesSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
+            @"type" : [OAIconTextDescSwitchCell getCellIdentifier],
+            @"mode" : mode
+        }]];
+    }
+    if (addedAppModesSection.count > 0)
+        [data addObject:addedAppModesSection];
+    
     _data = [NSArray arrayWithArray:data];
 }
 
@@ -148,6 +164,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         self.tableView.tableHeaderView = [self getHeaderForTableView:self.tableView withFirstSectionText:self.descriptionText boldFragment:self.descriptionBoldText];
         [self.tableView reloadData];
     } completion:nil];
+}
+
+- (NSString *) getProfileDescription:(OAApplicationMode *)am
+{
+    return am.isCustomProfile ? OALocalizedString(@"profile_type_custom_string") : OALocalizedString(@"profile_type_base_string");
+}
+
+- (void) onAppModeSwitchChanged:(UISwitch *)sender
+{
+    OAApplicationMode *am = _addedAppModes[sender.tag];
+    [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
 }
 
 - (IBAction)onDisablePressed:(UIButton *)sender
@@ -267,6 +294,36 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         return cell;
     }
+    
+    else if ([item[@"type"] isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+    {
+        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDescSwitchCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescSwitchCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
+        }
+        OAApplicationMode *am = item[@"mode"];
+        BOOL isEnabled = [OAApplicationMode.values containsObject:am];
+        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        UIImage *img = am.getIcon;
+        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
+        cell.titleLabel.text = am.toHumanString;
+        cell.descLabel.text = [self getProfileDescription:am];
+        cell.switchView.tag = indexPath.row;
+        BOOL isDefault = am == OAApplicationMode.DEFAULT;
+        [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        if (!isDefault)
+        {
+            [cell.switchView setOn:isEnabled];
+            [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        }
+        cell.switchView.hidden = isDefault;
+        cell.dividerView.hidden = isDefault;
+        return cell;
+    }
      
     return nil;
 }
@@ -303,21 +360,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 1)
+    if ([_data[section][0][@"type"] isEqualToString:kCellTypeMap])
         return OALocalizedString(@"suggested_maps");
+    else if ([_data[section][0][@"type"] isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+        return OALocalizedString(@"added_profiles");
+        
     return @"";
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (section == 1)
+    if ([_data[section][0][@"type"] isEqualToString:kCellTypeMap])
         return OALocalizedString(@"suggested_maps_descr");
+    else if ([_data[section][0][@"type"] isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+        return OALocalizedString(@"added_profiles_descr");
+    
     return @"";
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self onItemClicked:indexPath];
+    NSString *type = _data[indexPath.section][indexPath.row][@"type"];
+    if ([type isEqualToString:kCellTypeMap])
+        [self onItemClicked:indexPath];
+
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 

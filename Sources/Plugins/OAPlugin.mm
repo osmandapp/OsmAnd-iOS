@@ -25,6 +25,9 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAMapillaryPlugin.h"
+#import "OASkiMapsPlugin.h"
+#import "OANauticalMapsPlugin.h"
+#import "OASRTMPlugin.h"
 
 @implementation OAPlugin
 {
@@ -282,6 +285,9 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
+    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
     
     [self loadCustomPlugins];
     [self activatePlugins:enabledPlugins];
@@ -386,6 +392,10 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
     [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
     [plugin updateLayers];
+    
+    if (enable)
+        [plugin showInstalledScreen];
+    
     return true;
 }
 

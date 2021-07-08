@@ -495,7 +495,7 @@ static NSMutableArray *activePopups;
 
 + (NSString *) styledHTMLwithHTML:(NSString *)HTML
 {
-    NSString *style = @"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: 12; color:#727272} b {font-family: -apple-system; font-weight: bolder; font-size: 12; color:#727272 }</style>";
+    NSString *style = @"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: 12px; color:#727272} b {font-family: -apple-system; font-weight: bolder; font-size: 12px; color:#727272 }</style>";
     
     return [NSString stringWithFormat:@"%@%@", style, HTML];
 }

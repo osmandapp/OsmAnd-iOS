@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,7 +24,10 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UkP-Ph-Y9c">
-                        <rect key="frame" x="112" y="12" width="282" height="20.5"/>
+                        <rect key="frame" x="112" y="12" width="282" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="Pgn-8b-yKX"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -38,13 +41,14 @@
                     </imageView>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="bottom" secondItem="UkP-Ph-Y9c" secondAttribute="bottom" constant="12" id="7M6-mX-qen"/>
                     <constraint firstItem="MtN-sG-bto" firstAttribute="centerY" secondItem="s6l-ln-XeN" secondAttribute="centerY" id="IW4-Gg-1bV"/>
                     <constraint firstAttribute="trailingMargin" secondItem="UkP-Ph-Y9c" secondAttribute="trailing" id="Nng-1R-Ma3"/>
                     <constraint firstItem="MtN-sG-bto" firstAttribute="leading" secondItem="s6l-ln-XeN" secondAttribute="leadingMargin" id="OeZ-82-dHL"/>
-                    <constraint firstItem="UkP-Ph-Y9c" firstAttribute="centerY" secondItem="s6l-ln-XeN" secondAttribute="centerY" id="Zig-Yi-brb"/>
                     <constraint firstItem="UkP-Ph-Y9c" firstAttribute="leading" secondItem="eqV-1l-p8u" secondAttribute="trailing" constant="16" id="bEN-v1-8yQ"/>
                     <constraint firstItem="eqV-1l-p8u" firstAttribute="centerY" secondItem="s6l-ln-XeN" secondAttribute="centerY" id="pNg-iD-n30"/>
                     <constraint firstItem="eqV-1l-p8u" firstAttribute="leading" secondItem="MtN-sG-bto" secondAttribute="trailing" constant="16" id="tJO-AX-tmj"/>
+                    <constraint firstItem="UkP-Ph-Y9c" firstAttribute="top" secondItem="s6l-ln-XeN" secondAttribute="top" constant="12" id="wDh-hY-HQM"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

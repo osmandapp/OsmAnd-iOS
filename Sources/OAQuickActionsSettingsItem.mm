@@ -224,7 +224,11 @@
         NSMutableDictionary *paramsCopy = [NSMutableDictionary dictionaryWithDictionary:params];
         NSArray *values = params[action.getListKey];
         if (values && values.count > 0)
-            paramsCopy[action.getListKey] = [[NSString alloc] initWithData:[self paramsToExportArray:values] encoding:NSUTF8StringEncoding];
+        {
+            NSData *data = [self paramsToExportArray:values];
+            if (data)
+                paramsCopy[action.getListKey] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        }
 
         if ([action isKindOfClass:OASwitchProfileAction.class])
         {
@@ -295,8 +299,8 @@
             }
         }
         return [NSJSONSerialization dataWithJSONObject:array options:0 error:nil];
-    };
-    return [NSData new];
+    }
+    return nil;
 }
 
 - (void)readSwitchProfileAction:(NSString *)key params:(NSMutableDictionary *)params
@@ -335,7 +339,11 @@
 {
     NSArray *values = params[key];
     if (values && values.count > 0)
-        paramsCopy[key] = [[NSString alloc] initWithData:[self paramsToExportArray:values] encoding:NSUTF8StringEncoding];
+    {
+        NSData *data = [self paramsToExportArray:values];
+        if (data)
+            paramsCopy[key] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
 }
 
 @end

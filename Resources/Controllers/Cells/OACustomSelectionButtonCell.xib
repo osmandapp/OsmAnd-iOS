@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -41,12 +41,17 @@
                             <constraint firstAttribute="width" constant="24" id="ZUI-ox-IcM"/>
                         </constraints>
                     </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rvq-f6-BVv">
+                        <rect key="frame" x="0.0" y="0.0" width="64" height="48"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="grl-0r-JnU" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" id="Epb-wh-lNK"/>
                     <constraint firstItem="p63-ib-lPh" firstAttribute="centerY" secondItem="H0e-1h-kDC" secondAttribute="centerY" id="JhN-0f-5w4"/>
                     <constraint firstItem="grl-0r-JnU" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" id="OgE-yE-Hqi"/>
                     <constraint firstAttribute="bottom" secondItem="grl-0r-JnU" secondAttribute="bottom" id="Q3V-fC-YTe"/>
+                    <constraint firstItem="grl-0r-JnU" firstAttribute="leading" secondItem="Rvq-f6-BVv" secondAttribute="trailing" id="Vgi-pL-1j3"/>
                     <constraint firstAttribute="trailingMargin" secondItem="grl-0r-JnU" secondAttribute="trailing" id="aq5-yR-ge2"/>
                     <constraint firstItem="p63-ib-lPh" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leadingMargin" id="fEL-bx-UDf"/>
                     <constraint firstItem="dQc-CQ-9rt" firstAttribute="centerY" secondItem="H0e-1h-kDC" secondAttribute="centerY" id="fQw-I5-TJz"/>
@@ -55,10 +60,16 @@
                     <constraint firstAttribute="bottom" secondItem="grl-0r-JnU" secondAttribute="bottom" id="xtU-sG-kVm"/>
                 </constraints>
             </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="Rvq-f6-BVv" firstAttribute="top" secondItem="dep-4w-liH" secondAttribute="top" id="0g6-fA-f5Z"/>
+                <constraint firstAttribute="bottom" secondItem="Rvq-f6-BVv" secondAttribute="bottom" id="Xer-Ue-3Ld"/>
+                <constraint firstItem="Rvq-f6-BVv" firstAttribute="leading" secondItem="dep-4w-liH" secondAttribute="leading" id="nEW-gA-SuU"/>
+            </constraints>
             <connections>
                 <outlet property="checkboxHeightContainer" destination="ts3-gm-GPk" id="V5M-PE-Uen"/>
                 <outlet property="checkboxWidthContainer" destination="GgD-sX-KM2" id="M6V-cW-GVI"/>
                 <outlet property="selectDeselectButton" destination="grl-0r-JnU" id="d0n-1F-mic"/>
+                <outlet property="selectDeselectButtonTouchableArea" destination="Rvq-f6-BVv" id="WFU-Qe-nwA"/>
                 <outlet property="selectionButton" destination="p63-ib-lPh" id="O1Z-gz-c95"/>
                 <outlet property="selectionButtonContainer" destination="dQc-CQ-9rt" id="SJa-gY-2eF"/>
             </connections>

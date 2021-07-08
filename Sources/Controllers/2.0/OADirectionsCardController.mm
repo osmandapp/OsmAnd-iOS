@@ -142,9 +142,8 @@
     
     dirCell.separatorInset = UIEdgeInsetsMake(0.0, dirCell.titleLabel.frame.origin.x, 0.0, 0.0);
     dirCell.leftIcon.image = [UIImage imageNamed:[destItem.destination.markerResourceName stringByAppendingString:@"_small"]];
-    [dirCell.titleLabel setText:destItem.destination.desc];
     dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
-    [dirCell.descLabel setText:destItem.distanceStr];
+    [dirCell setTitle:destItem.destination.desc andDescription:destItem.distanceStr];
 }
 
 - (void)updateDistanceAndDirection

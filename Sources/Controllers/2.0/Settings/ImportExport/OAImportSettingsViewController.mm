@@ -125,6 +125,7 @@
 {
     _headerLabel = label;
     [super setTableHeaderView:label];
+    self.titleLabel.text = label;
 }
 
 - (NSString *) getTableHeaderTitle

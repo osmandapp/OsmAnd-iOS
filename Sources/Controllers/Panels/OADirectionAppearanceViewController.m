@@ -114,32 +114,23 @@
     NSMutableArray *activeMarkersArr = [NSMutableArray array];
     NSMutableArray *distanceIndicationArr = [NSMutableArray array];
     NSMutableArray *appearanceOnMapArr = [NSMutableArray array];
-    
-    EOAActiveMarkerConstant activeMarkers = [_settings.activeMarkers get];
-    EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
 
     [activeMarkersArr addObject:@{
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kOneActiveMarker,
-                        @"value" : activeMarkers == ONE_ACTIVE_MARKER ? @YES : @NO,
                         @"title" : OALocalizedString(@"one"),
-                        @"fg_img" : @"ic_custom_direction_topbar_one.png",
-                        @"fg_color" : UIColorFromRGB(color_primary_purple),
-                        @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : activeMarkers == ONE_ACTIVE_MARKER ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray)
+                        @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
     
     [activeMarkersArr addObject:@{
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kTwoActiveMarkers,
-                        @"value" : activeMarkers == TWO_ACTIVE_MARKERS ? @YES : @NO,
                         @"title" : OALocalizedString(@"two"),
-                        @"fg_img" : @"ic_custom_direction_topbar_two.png",
-                        @"fg_color" : UIColorFromRGB(color_primary_purple),
-                        @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : activeMarkers == TWO_ACTIVE_MARKERS ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray)
+                        @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_two"  bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
 
     [distanceIndicationArr addObject:@{
@@ -153,26 +144,22 @@
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kDistanceIndication,
                         @"key" : kTopBarDisplay,
-                        @"value" : distanceIndication == TOP_BAR_DISPLAY ? @YES : @NO,
                         @"title" : OALocalizedString(@"shared_string_topbar"),
-                        @"fg_img" : activeMarkers == ONE_ACTIVE_MARKER ? @"ic_custom_direction_topbar_one.png" : @"ic_custom_direction_topbar_two.png",
-                        @"fg_color" : UIColorFromRGB(color_primary_purple),
-                        @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : distanceIndication == TOP_BAR_DISPLAY ? UIColorFromRGB(color_chart_orange) :
-                            UIColorFromRGB(color_tint_gray)
+                        @"img_one" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_one_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_tint_gray)],
+                        @"img_two" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_two_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
     
     [distanceIndicationArr addObject:@{
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kDistanceIndication,
                         @"key" : kWidgetDisplay,
-                        @"value" : distanceIndication == WIDGET_DISPLAY ? @YES : @NO,
                         @"title" : OALocalizedString(@"shared_string_widgets"),
-                        @"fg_img" : activeMarkers == ONE_ACTIVE_MARKER ? @"ic_custom_direction_widget_one.png" : @"ic_custom_direction_widget_two.png",
-                        @"fg_color" : UIColorFromRGB(color_primary_purple),
-                        @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : distanceIndication == WIDGET_DISPLAY ? UIColorFromRGB(color_chart_orange) :
-                        UIColorFromRGB(color_tint_gray)
+                        @"img_one" : [self drawDeviceImage:@"ic_custom_direction_widget_one" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_one_inactive" : [self drawDeviceImage:@"ic_custom_direction_widget_one" bgColor:UIColorFromRGB(color_tint_gray)],
+                        @"img_two" : [self drawDeviceImage:@"ic_custom_direction_widget_two" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_two_inactive" : [self drawDeviceImage:@"ic_custom_direction_widget_two" bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
    
     [appearanceOnMapArr addObject:@{
@@ -206,14 +193,17 @@
      _titleView.frame = titleFrame;
  }
 
-- (UIImage *) drawImage:(UIImage*) fgImage inImage:(UIImage*) bgImage bgColor:(UIColor *)bgColor fgColor:(UIColor *)fgColor
+- (UIImage *) drawDeviceImage:(NSString *)fgImage bgColor:(UIColor *)bgColor
  {
-     UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);
+     UIImage *fgImg = [UIImage templateImageNamed:fgImage];
+     UIImage *bgImg = [UIImage templateImageNamed:@"ic_custom_direction_device"];
+     UIColor *fgColor = UIColorFromRGB(color_primary_purple);
+     UIGraphicsBeginImageContextWithOptions(bgImg.size, NO, 0.0);
      
      [bgColor setFill];
-     [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
+     [bgImg drawInRect:CGRectMake(0.0, 0.0, bgImg.size.width, bgImg.size.height)];
      [fgColor setFill];
-     [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
+     [fgImg drawInRect:CGRectMake(0.0, 0.0, fgImg.size.width, fgImg.size.height)];
      
      UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
      UIGraphicsEndImageContext();
@@ -248,11 +238,38 @@
             cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
         }
-        UIImage *fgImage = [UIImage templateImageNamed:item[@"fg_img"]];
-        UIImage *bgImage = [UIImage templateImageNamed:item[@"bg_img"]];
-        cell.iconImageView.image = [self drawImage:fgImage inImage:bgImage bgColor:item[@"bg_color"] fgColor:item[@"fg_color"]];
+        NSString *key = item[@"key"];
+        EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
+        EOAActiveMarkerConstant activeMarkers = [_settings.activeMarkers get];
+        BOOL selected = NO;
+        if ([key isEqualToString:kOneActiveMarker])
+        {
+            selected = activeMarkers == ONE_ACTIVE_MARKER;
+            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
+        }
+        else if ([key isEqualToString:kTwoActiveMarkers])
+        {
+            selected = activeMarkers == TWO_ACTIVE_MARKERS;
+            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
+        }
+        else if ([key isEqualToString:kTopBarDisplay])
+        {
+            selected = distanceIndication == TOP_BAR_DISPLAY;
+            if (activeMarkers == ONE_ACTIVE_MARKER)
+                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
+            else
+                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
+        }
+        else if ([key isEqualToString:kWidgetDisplay])
+        {
+            selected = distanceIndication == WIDGET_DISPLAY;
+            if (activeMarkers == ONE_ACTIVE_MARKER)
+                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
+            else
+                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
+        }
         cell.titleLabel.text = item[@"title"];
-        cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];
+        cell.checkmarkImageView.hidden = !selected;
         return cell;
     }
     else
@@ -397,7 +414,6 @@
             [self setWidgetVisibility:YES collapsed:NO];
         }
     }
-    [self setupView];
     if ([_settings.distanceIndicationVisibility get])
         [tableView reloadRowsAtIndexPaths:[[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0], [NSIndexPath indexPathForRow:1 inSection:1], [NSIndexPath indexPathForRow:2 inSection:1], nil] withRowAnimation:UITableViewRowAnimationFade];
     else

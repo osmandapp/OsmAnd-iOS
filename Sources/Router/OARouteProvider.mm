@@ -22,6 +22,7 @@
 #import "OALocationsHolder.h"
 #import "OAResultMatcher.h"
 #import "OAGpxRouteApproximation.h"
+#import "OATargetPointsHelper.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -34,6 +35,8 @@
 #define MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT 60
 #define ADDITIONAL_DISTANCE_FOR_START_POINT 300
 #define MIN_STRAIGHT_DIST 50000
+
+#define GPX_CALC_DIST_THRESHOLD 1000000
 
 @interface OARouteProvider()
 
@@ -152,7 +155,6 @@
     OAGPXDocument *file = builder.file;
     _reverse = builder.reverse;
     self.passWholeRoute = builder.passWholeRoute;
-    self.calculateOsmAndRouteParts = builder.calculateOsmAndRouteParts;
     self.useIntermediatePointsRTE = builder.useIntermediatePointsRTE;
     builder.calculateOsmAndRoute = NO; // Disabled temporary builder.calculateOsmAndRoute;
     if (file.locationMarks.count > 0)
@@ -231,7 +233,25 @@
             _segmentEndPoints = [[_segmentEndPoints reverseObjectEnumerator] allObjects];
         }
     }
+    self.calculateOsmAndRouteParts = builder.calculateOsmAndRouteParts && [self isStartPointClose];
     return self;
+}
+
+- (BOOL) isStartPointClose
+{
+    if (self.points.count > 0)
+    {
+        OARTargetPoint *start = OATargetPointsHelper.sharedInstance.getPointToStart;
+        CLLocation *startLocation;
+        if (start)
+            startLocation = start.point;
+        else
+            startLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
+        
+        if (startLocation)
+            return [_points.firstObject distanceFromLocation:startLocation] < GPX_CALC_DIST_THRESHOLD;
+    }
+    return YES;
 }
 
 @end

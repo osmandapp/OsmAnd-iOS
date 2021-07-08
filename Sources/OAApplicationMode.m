@@ -545,7 +545,6 @@ static OAApplicationMode *_SKI;
 //    [self initModesParams];
     [self initRegVisibility];
     [self reorderAppModes];
-    [OAAppSettings.sharedManager setupAppMode];
 }
 
 + (void) initCustomModes

@@ -240,6 +240,8 @@
     {
         [self commonInit];
         self.name = [filePath stringByReplacingOccurrencesOfString:_docPath withString:@""];
+        if ([self.name hasPrefix:_libPath])
+            self.name = [@"/" stringByAppendingString:self.name.lastPathComponent];
         if (error)
         {
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];

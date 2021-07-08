@@ -2101,3 +2101,12 @@
 "gpxup_public" = "Opinbert";
 "restart" = "Endurræsa";
 "shared_string_wifi_only" = "Einungis á Wi-Fi netum";
+"route_between_points_warning_desc" = "Í næsta skrefi þarftu að velja leiðsagnarsnið svo hægt sé að finna hvaða vegir séu leyfilegir og hvaða þolvik vegalengdar eigi að miða við til að nálga ferilinn þinn við fyrirliggjandi vegi.";
+"default" = "Sjálfgefið";
+"map_widget_parking" = "Bílastæði";
+"select_profile" = "Veldu snið";
+"threshold_distance" = "Þolvik vegalengdar";
+"carplay_profile_descr" = "Notkunarsnið sem verður notað á meðan tengst er við CarPlay.";
+"carplay_profile" = "CarPlay-snið";
+"last_used" = "Síðast notað";
+"search_more" = "Leita áfram…";

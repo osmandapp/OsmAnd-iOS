@@ -404,7 +404,7 @@
 
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
-    [_settings.applicationMode set:mode];
+    [_settings setApplicationModePref:mode];
     
     [self setupView];
 }

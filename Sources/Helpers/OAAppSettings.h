@@ -866,8 +866,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
-- (void) setupAppMode;
-
 // Direction Appearance
 
 @property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;

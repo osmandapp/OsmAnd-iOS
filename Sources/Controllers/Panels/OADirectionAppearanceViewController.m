@@ -241,30 +241,35 @@
         NSString *key = item[@"key"];
         EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
         EOAActiveMarkerConstant activeMarkers = [_settings.activeMarkers get];
+        BOOL selected = NO;
         if ([key isEqualToString:kOneActiveMarker])
         {
-            cell.iconImageView.image = activeMarkers == ONE_ACTIVE_MARKER ? item[@"img"] : item[@"img_inactive"];
+            selected = activeMarkers == ONE_ACTIVE_MARKER;
+            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
         }
         else if ([key isEqualToString:kTwoActiveMarkers])
         {
-            cell.iconImageView.image = activeMarkers == TWO_ACTIVE_MARKERS ? item[@"img"] : item[@"img_inactive"];
+            selected = activeMarkers == TWO_ACTIVE_MARKERS;
+            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
         }
         else if ([key isEqualToString:kTopBarDisplay])
         {
+            selected = distanceIndication == TOP_BAR_DISPLAY;
             if (activeMarkers == ONE_ACTIVE_MARKER)
-                cell.iconImageView.image = distanceIndication == TOP_BAR_DISPLAY ? item[@"img_one"] : item[@"img_one_inactive"];
+                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
             else
-                cell.iconImageView.image = distanceIndication == TOP_BAR_DISPLAY ? item[@"img_two"] : item[@"img_two_inactive"];
+                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
         }
         else if ([key isEqualToString:kWidgetDisplay])
         {
+            selected = distanceIndication == WIDGET_DISPLAY;
             if (activeMarkers == ONE_ACTIVE_MARKER)
-                cell.iconImageView.image = distanceIndication == WIDGET_DISPLAY ? item[@"img_one"] : item[@"img_one_inactive"];
+                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
             else
-                cell.iconImageView.image = distanceIndication == WIDGET_DISPLAY ? item[@"img_two"] : item[@"img_two_inactive"];
+                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
         }
         cell.titleLabel.text = item[@"title"];
-        cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];
+        cell.checkmarkImageView.hidden = !selected;
         return cell;
     }
     else

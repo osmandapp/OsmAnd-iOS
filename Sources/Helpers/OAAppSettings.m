@@ -1277,48 +1277,8 @@
 
 - (NSObject *)getValue:(OAApplicationMode *)mode
 {
-    NSString *stringKey;
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    if ([self.key isEqualToString:applicationModeKey])
-    {
-        stringKey = [OAAppSettings sharedManager].currentMode.stringKey;
-    }
-    else if ([self.key isEqualToString:defaultApplicationModeKey])
-    {
-        if (settings.useLastApplicationModeByDefault.get)
-            stringKey = settings.lastUsedApplicationMode.get;
-        else
-            stringKey = self.defValue.stringKey;
-    }
-    else if ([self.key isEqualToString:defaultCarplayModeKey] && settings.isCarPlayModeDefault.get)
-    {
-        return OAApplicationMode.CAR;
-    }
-    else
-    {
-        stringKey = [[NSUserDefaults standardUserDefaults] objectForKey:[self getKey:mode]];
-    }
-//    return [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
-
-    NSObject *cachedValue;
-    if (!([self.key isEqualToString:defaultApplicationModeKey] && settings.useLastApplicationModeByDefault.get))
-        cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
-
-    if (!cachedValue)
-    {
-//        NSString *key = [self getModeKey:self.key mode:mode];
-//        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        cachedValue = [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
-        if (self.global)
-            self.cachedValue = cachedValue;
-        else
-            [self.cachedValues setObject:cachedValue forKey:mode];
-    }
-    if (!cachedValue)
-    {
-        cachedValue = [self getProfileDefaultValue:mode];
-    }
-    return cachedValue;
+    NSString *stringKey = [[NSUserDefaults standardUserDefaults] objectForKey:[self getKey:mode]];
+    return [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
 }
 
 - (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
@@ -2976,7 +2936,7 @@
 
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
 
-        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"hu", @"hu-formal", @"it", @"ja", @"nl", @"pl", @"pt", @"pt-br", @"ru", @"zh", @"zh-hk", @"ar", @"cs", @"da", @"en-gb", @"el", @"et", @"es-ar", @"fa", @"hi", @"hr", @"ko", @"ro", @"sk", @"sv", @"nb", @"tr"];
+        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"hu", @"hu-formal", @"it", @"ja", @"nl", @"pl", @"pt", @"pt-br", @"ru", @"zh", @"zh-hk", @"ar", @"cs", @"da", @"en-gb", @"el", @"et", @"es-ar", @"fa", @"hi", @"fi", @"hr", @"ko", @"ro", @"sk", @"sv", @"nb", @"tr"];
 
         // Common Settings
         _settingMapLanguage = [[[OACommonInteger withKey:settingMapLanguageKey defValue:0] makeGlobal] makeShared];
@@ -4073,9 +4033,14 @@
 
 - (void)setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed
 {
+    OAApplicationMode *prevAppMode = [_applicationMode get];
     [_applicationMode set:applicationMode];
-    if (markAsLastUsed)
-        [_lastUsedApplicationMode set:applicationMode.stringKey];
+    if (prevAppMode != _applicationMode.get)
+    {
+        if (markAsLastUsed)
+            [_lastUsedApplicationMode set:applicationMode.stringKey];
+        [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+    }
 }
 
 - (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update
@@ -4411,12 +4376,6 @@
     NSString *appModeKeys = self.customAppModes.get;
     NSArray<NSString *> *keysArr = [appModeKeys componentsSeparatedByString:@","];
     return [NSSet setWithArray:keysArr];
-}
-
-- (void) setupAppMode
-{
-    [_applicationMode setValueFromString:[[NSUserDefaults standardUserDefaults] objectForKey:applicationModeKey] appMode:nil];
-    [_defaultApplicationMode setValueFromString:[[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey] appMode:nil];
 }
 
 @end

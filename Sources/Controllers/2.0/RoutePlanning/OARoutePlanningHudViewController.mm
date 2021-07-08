@@ -54,7 +54,7 @@
 #import "OASavingTrackHelper.h"
 #import "QuadRect.h"
 #import "OASnapTrackWarningViewController.h"
-#import "OAGpxApproximationBottomSheetViewController.h"
+#import "OAGpxApproximationViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 @interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate,
     OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate, OASnapToRoadProgressDelegate, OAPlanningOptionsDelegate,
-    OAOpenAddTrackDelegate, OASaveTrackViewControllerDelegate, OAExitRoutePlanningDelegate, OASnapTrackWarningBottomSheetDelegate, OAGpxApproximationBottomSheetDelegate>
+    OAOpenAddTrackDelegate, OASaveTrackViewControllerDelegate, OAExitRoutePlanningDelegate, OAPlanningPopupDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -129,6 +129,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     EOAHudMode _hudMode;
     
     OAInfoBottomView *_infoView;
+    
+    UINavigationController *_approximationController;
+    __weak OAPlanningPopupBaseViewController *_currentPopupController;
     
     int _modes;
     
@@ -283,12 +286,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 		[self enterApproximationMode];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [self goMinimized:NO];
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-}
-
 - (void) doAdditionalLayout
 {
     if ([self isLeftSidePresentation])
@@ -304,11 +301,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         _landscapeHeaderLeftContainerConstraint.constant = self.scrollableView.frame.size.width;
         CGFloat offset = self.currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight : 0;
         self.tableView.frame = CGRectMake(0, offset, self.scrollableView.frame.size.width, buttonsViewY);
+        _infoView.frame = self.tableView.frame;
+        if (_approximationController)
+            _approximationController.view.frame = self.tableView.frame;
         self.scrollableView.frame = CGRectMake(self.scrollableView.frame.origin.x, offset, self.scrollableView.frame.size.width, self.scrollableView.frame.size.height);
         [self adjustActionButtonsPosition:self.getViewHeight];
     }
     else
     {
+        _infoView.frame = self.scrollableView.bounds;
+        if (_approximationController)
+            _approximationController.view.frame = self.scrollableView.bounds;
         self.topHeaderContainerView.hidden = NO;
         self.toolBarView.hidden = NO;
         self.landscapeHeaderContainerView.hidden = YES;
@@ -321,7 +324,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     BOOL isLandscape = [self isLeftSidePresentation];
     if (isLandscape)
     {
-        if (self.currentState == EOADraggableMenuStateInitial)
+        if (self.currentState == EOADraggableMenuStateInitial && !_editingContext.isInAddPointMode && !_editingContext.originalPointToMove && !_currentPopupController)
             [self goMinimized:NO];
         else
             [self goFullScreen:NO];
@@ -355,6 +358,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CGFloat)initialMenuHeight
 {
+    if (_currentPopupController)
+        return _currentPopupController.initialHeight;
+    
     CGFloat fullToolbarHeight = kToolbarHeight +  [OAUtilities getBottomMargin];
     return _hudMode == EOAHudModeRoutePlanning ? kHeaderSectionHeigh + fullToolbarHeight : _infoView.getViewHeight;
 }
@@ -403,7 +409,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) changeMapRulerPosition
 {
     CGFloat bottomMargin = [self isLeftSidePresentation] ? (-kToolbarHeight - 25.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width + 16;
+    CGFloat leftMargin = (_actionButtonsContainer.isHidden && ![self isLeftSidePresentation] ? 0 : _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width) + 16;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
@@ -722,15 +728,19 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)enterApproximationMode
 {
-    if (_layer != nil) {
-//        FragmentManager manager = mapActivity.getSupportFragmentManager();
-//        manager.beginTransaction().hide(this).commit();
-//        layer.setTapsDisabled(true);
-        OASnapTrackWarningViewController *bottomSheet = [[OASnapTrackWarningViewController alloc] init];
-        bottomSheet.delegate = self;
-        [bottomSheet presentInViewController:self animated:YES];
-//        AndroidUiHelper.setVisibility(mapActivity, View.GONE, R.id.map_ruler_container);
-    }
+    OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
+    warningController.delegate = self;
+    _currentPopupController = warningController;
+    _approximationController = [[UINavigationController alloc] initWithRootViewController:warningController];
+    _approximationController.navigationBarHidden = YES;
+    _approximationController.view.frame = self.scrollableView.bounds;
+    _approximationController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.scrollableView addSubview:_approximationController.view];
+    [self addChildViewController:_approximationController];
+    [self updateViewAnimated];
+    
+    self.actionButtonsContainer.hidden = YES;
+    [self changeMapRulerPosition];
 }
 
 - (void)exitApproximationMode
@@ -1304,6 +1314,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _editingContext.originalPointToMove = pt;
     [_layer enterMovingPointMode];
     [self onPointsListChanged];
+    if (OAUtilities.isLandscapeIpadAware)
+        [self goFullScreen];
 }
 
 - (void) onClearPoints:(EOAClearPointsMode)mode
@@ -1434,6 +1446,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_layer updateLayer];
     _hudMode = EOAHudModeRoutePlanning;
     [self onPointsListChanged];
+    [self goMinimized];
 }
 
 - (void)exitAddPointMode
@@ -1682,8 +1695,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     else
     {
         [mapPanel.mapActions stopNavigationWithoutConfirm];
-        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
-//        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx appMode:appMode path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
     }
 }
 
@@ -1751,35 +1763,42 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self openSaveAsNewTrackMenu];
 }
 
-#pragma mark - OASnapTrackWarningBottomSheetDelegate
+// MARK: OAPlanningPopupDelegate
 
-- (void)onCancelSnapApproximation
+- (void)onPopupDismissed
 {
-//    toolBarController.setSaveViewVisible(true);
-    [self setMode:DIRECTION_MODE on:NO];
-    [self exitApproximationMode];
-//    updateToolbar();
+    if (_approximationController)
+    {
+        [_approximationController.view removeFromSuperview];
+        [_approximationController removeFromParentViewController];
+        _currentPopupController = nil;
+        _approximationController = nil;
+        [self updateViewAnimated];
+    }
+    self.actionButtonsContainer.hidden = NO;
+    [self changeMapRulerPosition];
 }
 
-- (void)onContinueSnapApproximation
+- (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
 {
-    if (_editingContext.appMode == OAApplicationMode.DEFAULT || [_editingContext.appMode.getRoutingProfile isEqualToString:@"public_transport"])
-        _editingContext.appMode = nil;
-
-    OAGpxApproximationBottomSheetViewController *bottomSheet = [[OAGpxApproximationBottomSheetViewController alloc] initWithMode:_editingContext.appMode routePoints:[_editingContext getPointsSegments:YES route:NO]];
-    bottomSheet.delegate = self;
-    [bottomSheet presentInViewController:self animated:YES];
+    [self setMode:DIRECTION_MODE on:NO];
+    [self exitApproximationMode];
+    if (hasApproximationStarted)
+    {
+        [_editingContext.commandManager undo];
+        [self setupModeButton];
+    }
 }
 
-#pragma mark - OAGpxApproximationBottomSheetDelegate
-
-- (void)onCancelGpxApproximation
+- (void)onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController
 {
-    [_editingContext.commandManager undo];
-    [self exitApproximationMode];
-    [self setMode:DIRECTION_MODE on:NO];
-	[self setupModeButton];
-//    updateToolbar();
+    _currentPopupController = approximationController;
+    [self updateViewAnimated];
+}
+
+- (OAMeasurementEditingContext *)getCurrentEditingContext
+{
+    return _editingContext;
 }
 
 - (void)onApplyGpxApproximation
@@ -1788,6 +1807,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self updateDistancePointsText];
 //    doAddOrMovePointCommonStuff();
 	[self setupModeButton];
+    [self onPopupDismissed];
     if ([self isDirectionMode] || [self isFollowTrackMode]) {
         [self setMode:DIRECTION_MODE on:NO];
         [self startTrackNavigation];

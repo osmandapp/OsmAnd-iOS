@@ -280,7 +280,6 @@
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
     settings.simulateRouting = NO;
-    [settings.applicationMode set:settings.defaultApplicationMode.get];
     [_data setLastMapSourceVariant:settings.applicationMode.get.variantKey];
 
     // Get location of a shipped world mini-basemap and it's version stamp
@@ -498,6 +497,10 @@
     [OAPlugin initPlugins];
     
     [OAApplicationMode onApplicationStart];
+    OAApplicationMode *initialAppMode = [settings.useLastApplicationModeByDefault get] ?
+        [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
+                                                                                    settings.defaultApplicationMode.get;
+    [settings setApplicationModePref:initialAppMode];
     
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
@@ -1208,7 +1211,8 @@
     settings.lastRoutingApplicationMode = settings.applicationMode.get;
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [settings.applicationMode set:_carPlayActive ? [OAAppSettings.sharedManager.carPlayMode get] : [settings.defaultApplicationMode get]];
+        OAApplicationMode *carPlayMode = settings.isCarPlayModeDefault ? OAApplicationMode.CAR : [OAAppSettings.sharedManager.carPlayMode get];
+        [settings setApplicationModePref:_carPlayActive ? carPlayMode : [settings.defaultApplicationMode get] markAsLastUsed:NO];
     });
 }
 

@@ -12,6 +12,7 @@
 
 
 @property (weak, nonatomic) IBOutlet UIButton *selectDeselectButton;
+@property (weak, nonatomic) IBOutlet UIButton *selectDeselectButtonTouchableArea;
 @property (weak, nonatomic) IBOutlet UIView *selectionButtonContainer;
 @property (weak, nonatomic) IBOutlet UIButton *selectionButton;
 

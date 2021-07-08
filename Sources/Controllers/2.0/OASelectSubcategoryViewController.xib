@@ -34,7 +34,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="414" height="144"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNL-k6-ler">
-                            <rect key="frame" x="16" y="51.5" width="28" height="28"/>
+                            <rect key="frame" x="16" y="52" width="28" height="28"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="28" id="4AP-dU-dhN"/>
                                 <constraint firstAttribute="height" constant="28" id="Qaa-jK-zwB"/>
@@ -46,13 +46,19 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subcategory" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3qR-w7-ZwS">
-                            <rect key="frame" x="155.5" y="55" width="103" height="21"/>
+                            <rect key="frame" x="155.5" y="55" width="103" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="fPD-cL-2oS"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <searchBar contentMode="redraw" searchBarStyle="minimal" text="" translatesAutoresizingMaskIntoConstraints="NO" id="YKV-im-CVL">
-                            <rect key="frame" x="10" y="90" width="394" height="51"/>
+                            <rect key="frame" x="10" y="94" width="394" height="36"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="36" id="oHA-d0-Wue"/>
+                            </constraints>
                             <color key="tintColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="barTintColor" red="0.9882352941176471" green="0.4823529411764706" blue="0.031372549019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <textInputTraits key="textInputTraits"/>
@@ -77,11 +83,11 @@
                         <constraint firstItem="MNL-k6-ler" firstAttribute="leading" secondItem="tTv-fb-Ygd" secondAttribute="leading" constant="16" id="8Ym-Av-h8A"/>
                         <constraint firstItem="3qR-w7-ZwS" firstAttribute="centerX" secondItem="tTv-fb-Ygd" secondAttribute="centerX" id="WN5-L9-9gL"/>
                         <constraint firstAttribute="trailing" secondItem="CA1-7s-Fdq" secondAttribute="trailing" id="kGL-d3-Vk9"/>
-                        <constraint firstItem="YKV-im-CVL" firstAttribute="top" secondItem="3qR-w7-ZwS" secondAttribute="bottom" constant="14" id="ldT-p0-5lJ"/>
+                        <constraint firstItem="YKV-im-CVL" firstAttribute="top" secondItem="3qR-w7-ZwS" secondAttribute="bottom" constant="17" id="ldT-p0-5lJ"/>
                         <constraint firstItem="YKV-im-CVL" firstAttribute="leading" secondItem="tTv-fb-Ygd" secondAttribute="leading" constant="10" id="qIn-FG-tMa"/>
                         <constraint firstAttribute="bottom" secondItem="CA1-7s-Fdq" secondAttribute="bottom" id="r4s-oM-MYH"/>
                         <constraint firstAttribute="trailing" secondItem="YKV-im-CVL" secondAttribute="trailing" constant="10" id="xcw-E7-Uqc"/>
-                        <constraint firstAttribute="bottom" secondItem="YKV-im-CVL" secondAttribute="bottom" constant="3" id="ydw-Mh-DWC"/>
+                        <constraint firstAttribute="bottom" secondItem="YKV-im-CVL" secondAttribute="bottom" constant="14" id="ydw-Mh-DWC"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="48" estimatedRowHeight="48" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="OoE-bw-UtS">
@@ -142,7 +148,7 @@
                 <constraint firstAttribute="bottom" secondItem="OoE-bw-UtS" secondAttribute="bottom" constant="85" id="Cap-BO-Dmq"/>
                 <constraint firstItem="OoE-bw-UtS" firstAttribute="trailing" secondItem="gcm-X9-SiY" secondAttribute="trailing" id="Ian-4J-qLq"/>
                 <constraint firstItem="tTv-fb-Ygd" firstAttribute="leading" secondItem="gcm-X9-SiY" secondAttribute="leading" id="Pah-bc-tyq"/>
-                <constraint firstItem="tTv-fb-Ygd" firstAttribute="bottom" secondItem="S3n-Nf-j9A" secondAttribute="top" priority="750" constant="100" id="QaU-kd-Mvq"/>
+                <constraint firstItem="OoE-bw-UtS" firstAttribute="top" secondItem="S3n-Nf-j9A" secondAttribute="top" constant="100" id="QaU-kd-Mvq"/>
                 <constraint firstItem="S3n-Nf-j9A" firstAttribute="bottom" secondItem="Lh9-fF-Ev6" secondAttribute="top" priority="750" constant="41" id="TAM-EJ-f1q"/>
                 <constraint firstItem="Lh9-fF-Ev6" firstAttribute="trailing" secondItem="gcm-X9-SiY" secondAttribute="trailing" id="UaB-tI-qRQ"/>
                 <constraint firstAttribute="bottom" secondItem="OoE-bw-UtS" secondAttribute="bottom" priority="999" constant="51" id="XeP-BO-Dmq"/>

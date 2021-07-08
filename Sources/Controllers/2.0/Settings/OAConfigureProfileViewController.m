@@ -297,7 +297,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) setCurrentModeActive:(EOADashboardScreenType)type
 {
-    [OAAppSettings.sharedManager.applicationMode set:_appMode];
+    [OAAppSettings.sharedManager setApplicationModePref:_appMode];
     if (![OAApplicationMode.values containsObject:_appMode])
     {
         _screenToOpen = type;

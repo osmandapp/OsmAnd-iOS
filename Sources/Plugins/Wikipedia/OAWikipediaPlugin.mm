@@ -24,28 +24,47 @@
 
 @implementation OAWikipediaPlugin {
 
+    OsmAndAppInstance _app;
     OAPOIUIFilter *_topWikiPoiFilter;
 
 }
 
-- (NSString *) getId
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+    }
+    return self;
+}
+
+- (NSString *)getId
 {
     return PLUGIN_ID;
 }
 
-- (NSString *) getLogoResourceId
+- (NSString *)getLogoResourceId
 {
     return @"ic_plugin_wikipedia";
 }
 
-- (NSString *) getName
+- (NSString *)getName
 {
     return OALocalizedString(@"product_title_wiki");
 }
 
-- (NSString *) getDescription
+- (NSString *)getDescription
 {
     return OALocalizedString(@"plugin_wikipedia_description");
+}
+
+- (void)updateLayers
+{
+    if (!self.isActive)
+        [self toggleWikipediaPoi:NO];
+    else
+        [self toggleWikipediaPoi:_app.data.wikipedia];
 }
 
 /*@Override
@@ -174,52 +193,52 @@ protected void registerLayerContextMenuActions(OsmandMapTileView mapView,
 
 - (BOOL)hasLanguagesFilter
 {
-    return [[OsmAndApp instance].data.wikipediaLanguagesProfile.get isEqualToArray:@[]];
+    return [[_app.data getWikipediaLanguages] isEqualToArray:@[]];
 }
 
 - (BOOL)hasLanguagesFilter:(OAApplicationMode *)profile
 {
-    return ![[[OsmAndApp instance].data.wikipediaLanguagesProfile get:profile] isEqualToArray:@[]];
+    return ![[_app.data getWikipediaLanguages:profile] isEqualToArray:@[]];
 }
 
 - (BOOL)isShowAllLanguages
 {
-    return [OsmAndApp instance].data.wikipediaGlobalProfile.get;
+    return [_app.data getWikipediaAllLanguages];
 }
 
 - (BOOL)isShowAllLanguages:(OAApplicationMode *)mode
 {
-    return [[OsmAndApp instance].data.wikipediaGlobalProfile get:mode];
+    return [_app.data getWikipediaAllLanguages:mode];
 }
 
 - (void)setShowAllLanguages:(BOOL)showAllLanguages
 {
-    [[OsmAndApp instance].data.wikipediaGlobalProfile set:showAllLanguages];
+    [_app.data setWikipediaAllLanguages:showAllLanguages];
 }
 
 - (void)setShowAllLanguages:(OAApplicationMode *)mode showAllLanguages:(BOOL)showAllLanguages
 {
-    [[OsmAndApp instance].data.wikipediaGlobalProfile set:showAllLanguages mode:mode];
+    [_app.data setWikipediaAllLanguages:showAllLanguages mode:mode];
 }
 
 - (NSArray<NSString *> *)getLanguagesToShow
 {
-    return [OsmAndApp instance].data.wikipediaLanguagesProfile.get;
+    return [_app.data getWikipediaLanguages];
 }
 
 - (NSArray<NSString *> *)getLanguagesToShow:(OAApplicationMode *)mode
 {
-    return [[OsmAndApp instance].data.wikipediaLanguagesProfile get:mode];
+    return [_app.data getWikipediaLanguages:mode];
 }
 
 - (void)setLanguagesToShow:(NSArray<NSString *> *)languagesToShow
 {
-    [[OsmAndApp instance].data.wikipediaLanguagesProfile set:languagesToShow];
+    [_app.data setWikipediaLanguages:languagesToShow];
 }
 
 - (void)setLanguagesToShow:(OAApplicationMode *)mode languagesToShow:(NSArray<NSString *> *)languagesToShow
 {
-    [[OsmAndApp instance].data.wikipediaLanguagesProfile set:languagesToShow mode:mode];
+    [_app.data setWikipediaLanguages:languagesToShow mode:mode];
 }
 
 - (void)toggleWikipediaPoi:(BOOL)enable /*CallbackWithObject<Boolean> callback*/

@@ -29,6 +29,7 @@
     BOOL _exportStarted;
     long _itemsSize;
     NSString *_fileSize;
+    NSString *_headerLabel;
 }
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode
@@ -191,6 +192,18 @@
         return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + 8;
     }
     return UITableViewAutomaticDimension;
+}
+
+- (void) setTableHeaderView:(NSString *)label
+{
+    _headerLabel = label;
+    [super setTableHeaderView:label];
+    self.titleLabel.text = label;
+}
+
+- (NSString *) getTableHeaderTitle
+{
+    return _headerLabel;
 }
 
 #pragma mark - OASettingItemsSelectionDelegate

@@ -711,7 +711,7 @@
 "daynight_mode_auto" = "Схід/захід сонця";
 "route_simulation" = "Імітація маршруту";
 "save_global_track_interval" = "Загальний інтервал запису треку";
-"save_global_track_interval_descr" = "Виберіть інтервал загального запису поїздки (вмикається через віджет запису GPX на мапі).";
+"save_global_track_interval_descr" = "Укажіть інтервал для загального записування подорожі (увімкнено через віджет записування GPX на мапі).";
 "rotate_map_to_bearing" = "Орієнтація мапи";
 "rotate_map_to_bearing_descr" = "Виберіть спосіб обертання мапи.";
 "rotate_map_compass_opt" = "За компасом";
@@ -2113,3 +2113,4 @@
 "carplay_profile" = "Профіль CarPlay";
 "last_used" = "Востаннє використовувалось";
 "map_widget_parking" = "Місце для стоянки";
+"search_more" = "Шукати ще…";

@@ -182,8 +182,6 @@
 
 - (void) onDraw
 {
-    [_dayNightHelper isNightMode];
-    
     [self updateColorShadowsOfText];
     [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
     [_streetNameView updateInfo];

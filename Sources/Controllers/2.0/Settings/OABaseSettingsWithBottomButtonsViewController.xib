@@ -70,8 +70,8 @@
                         <action selector="backImageButtonPressed:" destination="-1" eventType="touchUpInside" id="BQt-UI-rbS"/>
                     </connections>
                 </button>
-                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create profile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j9D-Qp-mxe">
-                    <rect key="frame" x="152.5" y="44" width="109" height="44"/>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j9D-Qp-mxe" userLabel="navbar title label">
+                    <rect key="frame" x="207" y="44" width="0.0" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="oV9-hp-idC"/>
                     </constraints>

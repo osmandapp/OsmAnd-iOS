@@ -704,7 +704,7 @@
 "res_worldwide" = "Cały świat";
 "cancel_navigation" = "Zakończ nawigację";
 "intermediate_items_sort_by_distance" = "Posortuj wg odległości";
-"switch_start_finish" = "Odwróć punkt początkowy i cel podróży";
+"switch_start_finish" = "Zamień punkt początkowy i cel trasy";
 "clear_all_intermediates" = "Wyczyść wszystkie punkty pośrednie";
 "shared_string_options" = "Opcje";
 "shared_string_previous" = "Poprzedni";

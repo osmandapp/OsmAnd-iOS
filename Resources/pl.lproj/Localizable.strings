@@ -704,7 +704,7 @@
 "res_worldwide" = "Cały świat";
 "cancel_navigation" = "Zakończ nawigację";
 "intermediate_items_sort_by_distance" = "Posortuj wg odległości";
-"switch_start_finish" = "Odwróć punkt początkowy i cel podróży";
+"switch_start_finish" = "Zamień punkt początkowy i cel trasy";
 "clear_all_intermediates" = "Wyczyść wszystkie punkty pośrednie";
 "shared_string_options" = "Opcje";
 "shared_string_previous" = "Poprzedni";
@@ -1708,7 +1708,7 @@
 "select_distance_for_recalculation" = "Wybierz odległość, po której trasa zostanie ponownie obliczona.";
 "route_recalculation_descr" = "Trasa zostanie ponownie obliczona, jeśli odległość od trasy do bieżącej lokalizacji jest większa niż wybrana wartość.";
 "recalculate_route" = "Przelicz trasę ponownie po zboczeniu z trasy";
-"avoid_routes_and_road" = "Unika określonych tras i typów dróg";
+"avoid_routes_and_road" = "Unikaj określonych tras i rodzajów dróg";
 "import_routing_file_descr" = "Możesz zaimportować plik routingu z dowolnej aplikacji do przechowywania danych w chmurze, otwierając go w OsmAnd.";
 "special_routing" = "Wyznacza trasy specjalne";
 "osmand_routing" = "Wyznacza trasy przez OsmAnd";

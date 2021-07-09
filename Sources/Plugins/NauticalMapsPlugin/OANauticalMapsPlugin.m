@@ -14,16 +14,6 @@
 
 @implementation OANauticalMapsPlugin
 
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        [OAApplicationMode regWidgetVisibility:PLUGIN_ID am:nil];
-    }
-    return self;
-}
-
 - (NSString *) getId
 {
     return PLUGIN_ID;

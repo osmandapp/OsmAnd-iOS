@@ -59,7 +59,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (BOOL) isInstalled
 {
-    NSString *path = [[OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"] stringByAppendingPathComponent:self.resourceId.toNSString()];
+    NSString *path = [[OsmAndApp.instance.dataPath stringByAppendingPathComponent:RESOURCES_DIR] stringByAppendingPathComponent:self.resourceId.toNSString()];
     return [NSFileManager.defaultManager fileExistsAtPath:path];
 }
 
@@ -237,11 +237,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (NSString *) iconNameByResourseType:(OsmAnd::ResourcesManager::ResourceType)type
 {
-    if (type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-        return @"ic_custom_map";
-    else if (type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
-        return @"ic_custom_map";
-    else if (type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+    if (type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
         return @"ic_custom_contour_lines";
     else if (type == OsmAnd::ResourcesManager::ResourceType::DepthContourRegion)
         return @"ic_custom_contour_lines";

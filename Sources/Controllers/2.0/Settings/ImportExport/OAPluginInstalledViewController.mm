@@ -21,6 +21,10 @@
 #define kBottomPadding 32
 #define kIconWidth 48
 
+#define kSectionTypeDescription 0
+#define kSectionTypeSuggestedMaps 1
+#define kSectionTypeSuggestedProfiles 2
+
 #define kCellTypeMap @"MapCell"
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -119,6 +123,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     NSMutableArray *descriptionSection = [NSMutableArray new];
     [descriptionSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
+        @"sectionType" : [NSNumber numberWithInt:kSectionTypeDescription],
         @"type" : [OATextViewSimpleCell getCellIdentifier],
         @"text" : _plugin.getDescription
     }]];
@@ -128,7 +133,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     for (OARepositoryResourceItem* item in _suggestedMaps)
     {
         [suggestedMapsSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
-            @"type" : kCellTypeMap,
+            @"sectionType" : [NSNumber numberWithInt:kSectionTypeSuggestedMaps],
+            @"type" : kCellTypeMap
         }]];
     }
     if (suggestedMapsSection.count > 0)
@@ -140,6 +146,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         [OAApplicationMode changeProfileAvailability:mode isSelected:YES];
         [addedAppModesSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
+            @"sectionType" : [NSNumber numberWithInt:kSectionTypeSuggestedProfiles],
             @"type" : [OAIconTextDescSwitchCell getCellIdentifier],
             @"mode" : mode
         }]];
@@ -302,11 +309,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         OAApplicationMode *am = item[@"mode"];
         BOOL isEnabled = [OAApplicationMode.values containsObject:am];
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
@@ -358,11 +365,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:UIColorFromRGB(color_primary_purple) iconContentMode:UIViewContentModeScaleAspectFit iconYOffset:48.];
 }
 
+- (NSInteger) getTypeForSection:(NSInteger)section
+{
+    if (_data[section])
+    {
+        NSDictionary *item = _data[section].firstObject;
+        if (item)
+        {
+            return [item[@"type"] integerValue];
+        }
+    }
+    return -1;
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if ([_data[section][0][@"type"] isEqualToString:kCellTypeMap])
+    NSInteger type = [self getTypeForSection:section];
+    
+    if (type == kSectionTypeSuggestedMaps)
         return OALocalizedString(@"suggested_maps");
-    else if ([_data[section][0][@"type"] isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+    else if (type == kSectionTypeSuggestedProfiles)
         return OALocalizedString(@"added_profiles");
         
     return @"";
@@ -370,9 +392,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if ([_data[section][0][@"type"] isEqualToString:kCellTypeMap])
+    NSInteger type = [self getTypeForSection:section];
+    
+    if (type == kSectionTypeSuggestedMaps)
         return OALocalizedString(@"suggested_maps_descr");
-    else if ([_data[section][0][@"type"] isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+    else if (type == kSectionTypeSuggestedProfiles)
         return OALocalizedString(@"added_profiles_descr");
     
     return @"";

@@ -33,7 +33,7 @@
 "angular_units_descr" = "Muuta atsimuutin mittayksiköitä.";
 "allow_3d" = "Salli 2.5D-näkymä";
 "allow_3d_descr" = "Ota tämä vaihtoehto käyttöön, jotta voit tarkastella karttaa 2.5D-perspektiivissä";
-"access_intermediate_arrival_time" = "Intermediate arrival time";
+"access_intermediate_arrival_time" = "Välietapin saapumisaika";
 "map_widget_intermediate_time" = "Väliaika";
 "shared_string_previous" = "Edellinen";
 "shared_string_next" = "Seuraava";
@@ -103,7 +103,7 @@
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to_bearing" = "Kartan orientaatio";
-"rotate_map_to_bearing_descr" = "Select the map screen alignment.";
+"rotate_map_to_bearing_descr" = "Valitse karttaruudun suunta.";
 "rotate_map_compass_opt" = "Kohti kompassia";
 "rotate_map_bearing_opt" = "Kohti menosuuntaa";
 "rotate_map_none_opt" = "Älä käännä (pohjoinen on ylhäällä)";

@@ -46,4 +46,12 @@
     return nil;
 }
 
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin
+{
+    if (_getAcceptedTypesFunction)
+        return _getAcceptedTypesFunction();
+
+    return nil;
+}
+
 @end

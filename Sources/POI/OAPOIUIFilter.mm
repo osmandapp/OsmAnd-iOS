@@ -754,6 +754,11 @@
     return acceptedTypes;
 }
 
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin
+{
+    return acceptedTypesOrigin;
+}
+
 - (void) selectSubTypesToAccept:(OAPOICategory *)t accept:(NSMutableSet<NSString *> *)accept
 {
     [acceptedTypes setObject:accept forKey:t];
@@ -847,7 +852,7 @@
         {
             for (NSString *s in values)
             {
-                OAPOIBaseType *subtype = [[OAPOIHelper sharedInstance] getAnyPoiTypeByName:s];
+                OAPOIBaseType *subtype = [[OAPOIHelper sharedInstance] getPoiTypeByKey:s];
                 if (subtype)
                 {
                     OAPOICategory *c = [(OAPOIFilter *)subtype category];

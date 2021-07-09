@@ -62,6 +62,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 + (UIImage *) getUserIcon;
 
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes;
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin;
 
 - (void) setFilterByName:(NSString *)filter;
 - (void) updateFilterResults;

@@ -48,6 +48,7 @@
 @interface OAPOIUIFilter ()
 
 @property (nonatomic) NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes;
+@property (nonatomic) NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypesOrigin;
 @property (nonatomic) NSMapTable<NSString *, OAPOIType *> *poiAdditionals;
 
 @end
@@ -59,7 +60,7 @@
     OsmAndAppInstance app;
 }
 
-@synthesize acceptedTypes, poiAdditionals, standardIconId, filterId, isStandardFilter, name, distanceInd, distanceToSearchValues, currentSearchResult;
+@synthesize acceptedTypes, acceptedTypesOrigin, poiAdditionals, standardIconId, filterId, isStandardFilter, name, distanceInd, distanceToSearchValues, currentSearchResult;
 
 // search by name standard
 - (instancetype)init
@@ -72,6 +73,7 @@
         distanceToSearchValues = @[@1, @2, @5, @10, @20, @50, @100, @200, @500];
         
         acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
+        acceptedTypesOrigin = [NSMapTable strongToStrongObjectsMapTable];
         poiAdditionals = [NSMapTable strongToStrongObjectsMapTable];
         poiHelper = [OAPOIHelper sharedInstance];
         filtersHelper = [OAPOIFiltersHelper sharedInstance];
@@ -136,6 +138,7 @@
         }
         
         [self updatePoiAdditionals];
+        [self updateAcceptedTypeOrigins];
     }
     return self;
 }
@@ -164,6 +167,7 @@
         poiAdditionals = filter.poiAdditionals;
         _filterByName = filter.filterByName;
         _savedFilterByName = filter.savedFilterByName;
+        [self updateAcceptedTypeOrigins];
     }
     return self;
 }
@@ -754,6 +758,7 @@
 {
     [acceptedTypes setObject:accept forKey:t];
     [self updatePoiAdditionals];
+    [self updateAcceptedTypeOrigins];
 }
 
 - (void) setTypeToAccept:(OAPOICategory *)poiCategory b:(BOOL)b
@@ -764,6 +769,7 @@
         [acceptedTypes removeObjectForKey:poiCategory];
 
     [self updatePoiAdditionals];
+    [self updateAcceptedTypeOrigins];
 }
 
 - (NSMapTable<NSString *, OAPOIType *> *) getPoiAdditionals
@@ -789,14 +795,19 @@
     if (![poiHelper isRegisteredType:type])
         type = poiHelper.otherPoiCategory;
 
-    NSMutableSet<NSString *> *set = [acceptedTypes objectForKey:type];
-    if (!set)
-        return NO;
-
-    if (set == [OAPOIBaseType nullSet])
-        return YES;
-
-    return [set containsObject:subcategory];
+    if ([[acceptedTypes keyEnumerator].allObjects containsObject:type])
+    {
+        NSMutableSet<NSString *> *acceptedTypesSet = [acceptedTypes objectForKey:type];
+        if (!acceptedTypesSet || [acceptedTypesSet containsObject:subcategory])
+            return YES;
+    }
+    if ([[acceptedTypesOrigin keyEnumerator].allObjects containsObject:type])
+    {
+        NSMutableSet<NSString *> *acceptedTypesSet = [acceptedTypesOrigin objectForKey:type];
+        if (acceptedTypesSet || [acceptedTypesSet containsObject:subcategory])
+            return YES;
+    }
+    return NO;
 }
 
 - (BOOL) isEmpty
@@ -823,6 +834,40 @@
 - (NSUInteger) hash
 {
     return [filterId hash];
+}
+
+- (void)updateAcceptedTypeOrigins
+{
+    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *newAcceptedTypesOrigin = [NSMapTable strongToStrongObjectsMapTable];
+
+    for (OAPOICategory *key in acceptedTypes)
+    {
+        NSMutableSet<NSString *> *values = [acceptedTypes objectForKey:key];
+        if (values)
+        {
+            for (NSString *s in values)
+            {
+                OAPOIBaseType *subtype = [[OAPOIHelper sharedInstance] getAnyPoiTypeByName:s];
+                if (subtype)
+                {
+                    OAPOICategory *c = [(OAPOIFilter *)subtype category];
+                    NSString *typeName = subtype.name;
+                    NSMutableSet<NSString *> *acceptedSubtypes = [[self getAcceptedSubtypes:c] mutableCopy];
+                    if (acceptedSubtypes && ![acceptedSubtypes containsObject:typeName])
+                    {
+                        NSMutableSet<NSString *> *typeNames = [newAcceptedTypesOrigin objectForKey:c];
+                        if (!typeNames)
+                        {
+                            typeNames = [NSMutableSet new];
+                            [newAcceptedTypesOrigin setObject:typeNames forKey:c];
+                        }
+                        [typeNames addObject:typeName];
+                    }
+                }
+            }
+        }
+    }
+    acceptedTypesOrigin = newAcceptedTypesOrigin;
 }
 
 @end

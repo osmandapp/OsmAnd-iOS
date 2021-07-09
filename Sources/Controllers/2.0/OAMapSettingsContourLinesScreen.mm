@@ -367,9 +367,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     CLLocationCoordinate2D loca = [OAResourcesUIHelper getMapLocation];
     [OAResourcesUIHelper getMapsForType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion latLon:loca onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
-        _mapItems = res;
-        [self generateData];
-        [tblView reloadData];
+        @synchronized(_dataLock)
+        {
+            _mapItems = res;
+            [self generateData];
+            [tblView reloadData];
+        }
     }];
 }
 

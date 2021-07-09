@@ -290,29 +290,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateAvailableMaps
 {
-    CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-    CLLocationCoordinate2D coord = loc.coordinate;
+    CLLocationCoordinate2D loca = [OAResourcesUIHelper getMapLocation];
     OsmAnd::ResourcesManager::ResourceType resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
     if (_app.data.terrainType == EOATerrainTypeSlope)
         resType = OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
     else if (_app.data.terrainType == EOATerrainTypeHillshade)
         resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
-    [OAResourcesUIHelper requestMapDownloadInfo:coord resourceType:resType onComplete:^(NSArray<OAResourceItem *>* res) {
+    
+    [OAResourcesUIHelper getMapsForType:resType latLon:loca onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
         @synchronized(_dataLock)
         {
-            NSMutableArray<OARepositoryResourceItem *> *availableItems = [NSMutableArray array];
-            if (res.count > 0)
-            {
-                for (OAResourceItem * item in res)
-                {
-                    if ([item isKindOfClass:OARepositoryResourceItem.class])
-                    {
-                        OARepositoryResourceItem *resource = (OARepositoryResourceItem*)item;
-                        [availableItems addObject:resource];
-                    }
-                }
-                _mapItems = availableItems;
-            }
+            _mapItems = res;
             
             if (![self isTerrainOn])
                 return;

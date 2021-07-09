@@ -69,8 +69,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)applyLocalization
 {
     [self.closeButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-    [self.enableButton setTitle:OALocalizedString(@"shared_string_enable") forState:UIControlStateNormal];
-    [self.disableButton setTitle:OALocalizedString(@"shared_string_disable") forState:UIControlStateNormal];
+    [self.enableButton setTitle:OALocalizedString(@"shared_string_ok") forState:UIControlStateNormal];
+    [self.disableButton setTitle:OALocalizedString(@"shared_string_turn_off") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad {

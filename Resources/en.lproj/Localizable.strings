@@ -509,6 +509,7 @@
 "shared_string_min" = "Min.";
 "shared_string_max" = "Max.";
 "shared_string_wifi_only" = "Only on Wi-Fi";
+"shared_string_turn_off" = "Turn off";
 
 "restart" = "Restart";
 

@@ -1214,6 +1214,9 @@
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     
     NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypes = [poiTypeFilter getAcceptedTypes];
+    NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypesOrigin = [poiTypeFilter getAcceptedTypesOrigin];
+    for (OAPOICategory *category in acceptedTypesOrigin)
+         [acceptedTypes setObject:[acceptedTypesOrigin objectForKey:category] forKey:category];
     if (acceptedTypes.count > 0)
     {
         auto categoriesFilter = QHash<QString, QStringList>();

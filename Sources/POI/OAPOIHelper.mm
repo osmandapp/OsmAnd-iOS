@@ -379,6 +379,18 @@
     return [_poiTypesByName objectForKey:name];
 }
 
+- (OAPOIType *) getPoiTypeByKey:(NSString *)name
+{
+    for (NSInteger i = 0; i < _poiCategories.count; i++)
+    {
+        OAPOICategory *pc = _poiCategories[i];
+        OAPOIType *pt = [pc getPoiTypeByKeyName:name];
+        if (pt != nil && !pt.reference)
+            return pt;
+    }
+    return nil;
+}
+
 - (OAPOIBaseType *) getAnyPoiTypeByName:(NSString *)name
 {
     for (OAPOICategory *pc in _poiCategories)

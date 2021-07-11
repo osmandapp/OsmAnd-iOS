@@ -2067,3 +2067,6 @@
 "shared_string_wifi_only" = "Только по Wi-Fi";
 "route_calc_progress" = "Вычисление: %d%%";
 "route_between_points_warning_desc" = "Далее необходимо выбрать профиль навигации для определения порогового расстояния и привязки маршрута к ближайшей разрешенной дороге.";
+"carplay_profile_descr" = "Профиль, который будет использоваться при подключении к CarPlay.";
+"carplay_profile" = "Профиль CarPlay";
+"search_more" = "Найти еще…";

@@ -713,7 +713,7 @@
 "go_to_map" = "Přejít na mapu";
 "device_memory" = "Paměť zařízení";
 "free_memory" = "%@ volných";
-"first_usage_greeting" = "Get directions and discover new places without Internet connection";
+"first_usage_greeting" = "Nechte se navigovat a objevte nová místa bez nutnosti připojení k Internetu";
 "get_started" = "Začít";
 "first_usage_wizard_desc" = "Povolit OsmAndu určit vaši polohu a navrhnout mapy pro tuto oblast.";
 "location_not_found" = "Poloha nenalezena";
@@ -2097,3 +2097,4 @@
 "carplay_profile" = "Profil CarPlay";
 "last_used" = "Naposledy použito";
 "map_widget_parking" = "Místo parkování";
+"search_more" = "Vyhledat další…";

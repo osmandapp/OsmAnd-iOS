@@ -571,12 +571,12 @@
 
 - (BOOL) isAlreadyPurchased
 {
-    return YES /*[[NSUserDefaults standardUserDefaults] boolForKey:self.productIdentifier]*/;
+    return [[NSUserDefaults standardUserDefaults] boolForKey:self.productIdentifier];
 }
 
 - (BOOL) isLiveUpdatesPurchased
 {
-    return YES /*[[NSUserDefaults standardUserDefaults] boolForKey:@"liveUpdatesPurchasedKey"]*/;
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"liveUpdatesPurchasedKey"];
 }
 
 - (NSString *) getDisabledId

@@ -528,7 +528,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 
 - (BOOL) subscribedToLiveUpdates
 {
-    return YES /*_settings.liveUpdatesPurchased*/;
+    return _settings.liveUpdatesPurchased.get;
 }
 
 - (OASubscription *) getCheapestMonthlySubscription

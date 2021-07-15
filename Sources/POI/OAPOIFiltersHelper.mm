@@ -20,6 +20,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAApplicationMode.h"
+#import "OAPlugin.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -432,7 +433,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (OAPOIUIFilter *) getTopWikiPoiFilter
 {
-    if (_topWikiPoiFilter == nil) {
+    if (_topWikiPoiFilter == nil)
+    {
         NSString *wikiFilterId = [STD_PREFIX stringByAppendingString:@"osmwiki"];
         for (OAPOIUIFilter *filter in [self getTopDefinedPoiFilters])
         {
@@ -572,9 +574,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             OAPOIUIFilter *f = [[OAPOIUIFilter alloc] initWithBasePoiType:t idSuffix:@""];
             [top addObject:f];
         }
+        [OAPlugin registerCustomPoiFilters:top];
         [top sortUsingComparator:[OAPOIUIFilter getComparator]];
-        OAPOIBaseType *osmWiki = _poiHelper.getOsmwiki;
-        [top addObject:[[OAPOIUIFilter alloc] initWithBasePoiType:osmWiki idSuffix:@""]];
         _cacheTopStandardFilters = top;
     }
     NSMutableArray<OAPOIUIFilter *> *result = [NSMutableArray array];
@@ -790,6 +791,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 - (void) addSelectedPoiFilter:(OAPOIUIFilter *)filter
 {
     [_selectedPoiFilters addObject:filter];
+    [OAPlugin onPrepareExtraTopPoiFilters:_selectedPoiFilters];
     [self saveSelectedPoiFilters];
 }
 
@@ -928,6 +930,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             if (filter)
                 [_selectedPoiFilters addObject:filter];
         }
+        [OAPlugin onPrepareExtraTopPoiFilters:_selectedPoiFilters];
     }
 }
 

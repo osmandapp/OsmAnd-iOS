@@ -3491,8 +3491,12 @@ typedef enum
 
 - (void)openWiki:(OAWikiMenuViewController *)sender
 {
-    OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithLocalizedContent:self.targetMenuView.targetPoint.localizedContent localizedNames:self.targetMenuView.targetPoint.localizedNames];
-    [self.navigationController pushViewController:wikiWeb animated:YES];
+    id obj = self.targetMenuView.targetPoint.targetObj;
+    if ([obj isKindOfClass:OAPOI.class])
+    {
+        OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithPoi:(OAPOI *) obj];
+        [self.navigationController pushViewController:wikiWeb animated:YES];
+    }
 }
 
 #pragma mark - OADestinationViewControllerProtocol

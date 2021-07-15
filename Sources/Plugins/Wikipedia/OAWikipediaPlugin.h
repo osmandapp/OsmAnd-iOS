@@ -11,7 +11,6 @@
 @interface OAWikipediaPlugin : OAPlugin
 
 - (void)updateWikipediaState;
-- (NSString *)getWikiLanguageTranslation:(NSString *)locale;
 - (BOOL)hasCustomSettings;
 - (BOOL)hasCustomSettings:(OAApplicationMode *)profile;
 - (BOOL)hasLanguagesFilter;

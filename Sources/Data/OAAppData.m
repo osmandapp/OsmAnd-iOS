@@ -123,6 +123,14 @@
         {
             [_mapillaryProfile setValueFromString:value appMode:mode];
         }
+        else if ([key isEqualToString:@"global_wikipedia_poi_enabled"])
+        {
+            [_wikipediaGlobalProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"wikipedia_poi_enabled_languages"])
+        {
+            [_wikipediaLanguagesProfile setValueFromString:value appMode:mode];
+        }
     }
 }
 
@@ -138,6 +146,8 @@
         prefs[@"slope_min_zoom"] = [_slopeMinZoomProfile toStringValue:mode];
         prefs[@"slope_max_zoom"] = [_slopeMaxZoomProfile toStringValue:mode];
         prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
+        prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
+        prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
     }
 }
 
@@ -162,7 +172,9 @@
     _destinationShowObservable = [[OAObservable alloc] init];
     _destinationHideObservable = [[OAObservable alloc] init];
     _mapLayersConfigurationChangeObservable = [[OAObservable alloc] init];
-    
+
+    _wikipediaChangeObservable = [[OAObservable alloc] init];
+
     _applicationModeChangedObservable = [[OAObservable alloc] init];
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
@@ -226,6 +238,7 @@
         if (self.terrainType != EOATerrainTypeDisabled)
             [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
         [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
+        [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(self.wikipedia)];
         [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.get.variantKey];
     });
 }
@@ -352,7 +365,6 @@
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
 @synthesize wikipediaChangeObservable = _wikipediaChangeObservable;
-@synthesize wikipedia = _wikipedia;
 
 - (OAMapSource*) overlayMapSource
 {
@@ -650,17 +662,21 @@
     }
 }
 
+- (BOOL)wikipedia
+{
+    @synchronized (_lock)
+    {
+        return [[OAPOIFiltersHelper sharedInstance] isTopWikiFilterSelected];
+    }
+}
+
 - (void)setWikipedia:(BOOL)wikipedia
 {
     @synchronized (_lock)
     {
-        if (![OAIAPHelper sharedInstance].wiki.isActive)
-            _wikipedia = NO;
-        else
-            _wikipedia = wikipedia;
         OAWikipediaPlugin *plugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
-        [plugin toggleWikipediaPoi:_wikipedia];
-        [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(_wikipedia)];
+        [plugin toggleWikipediaPoi:wikipedia];
+        [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(wikipedia)];
     }
 }
 
@@ -925,6 +941,8 @@
     [_slopeMinZoomProfile set:[_slopeMinZoomProfile get:sourceMode] mode:targetMode];
     [_slopeMaxZoomProfile set:[_slopeMaxZoomProfile get:sourceMode] mode:targetMode];
     [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
+    [_wikipediaGlobalProfile set:[_wikipediaGlobalProfile get:sourceMode] mode:targetMode];
+    [_wikipediaLanguagesProfile set:[_wikipediaLanguagesProfile get:sourceMode] mode:targetMode];
 }
 
 @end

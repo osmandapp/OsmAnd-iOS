@@ -165,6 +165,7 @@
     {
         [section0wikipedia setObject:OALocalizedString(@"product_title_wiki") forKey:@"name"];
         [section0wikipedia setObject:@"" forKey:@"value"];
+        [section0wikipedia setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
         [section0wikipedia setObject:[OASettingSwitchCell getCellIdentifier] forKey:@"type"];
         [section0wikipedia setObject:@"wikipedia_layer" forKey:@"key"];
     }
@@ -547,8 +548,7 @@
             }
             if ([data[@"key"] isEqualToString:@"wikipedia_layer"])
             {
-                BOOL enabled = [[OAPOIFiltersHelper sharedInstance] isTopWikiFilterSelected];
-                [cell.switchView setOn:enabled];
+                [cell.switchView setOn:_app.data.wikipedia];
                 [cell.switchView addTarget:self action:@selector(wikipediaChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];
@@ -756,6 +756,8 @@
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             else if (indexPath.row == mapillaryRow)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapillaryFilter];
+            else if (indexPath.row == wikipediaRow)
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWikipedia];
                 
             break;
         }

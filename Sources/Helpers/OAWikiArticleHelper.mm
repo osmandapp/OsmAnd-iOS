@@ -90,7 +90,7 @@
         }
         if (foundPoint)
         {
-            OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithLocalizedContent:foundPoint.localizedContent localizedNames:foundPoint.localizedNames];
+            OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithPoi:foundPoint];
             [OARootViewController.instance.mapPanel.navigationController pushViewController:wikiController animated:YES];
         }
         else

@@ -39,6 +39,8 @@
 #import "OAWikiImageHelper.h"
 #import "OAIPFSImageCard.h"
 #import "OAWikiImageCard.h"
+#import "OAWikipediaPlugin.h"
+#import "OAPlugin.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -362,32 +364,34 @@
 {
     int radius = kNearbyPoiMinRadius;
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
-    NSMutableArray<OAPOI *> *wiki = [NSMutableArray new];
     NSMutableArray<OAPOI *> *osmwiki = [NSMutableArray new];
-
-    while (wiki.count + osmwiki.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
+    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class];
+    NSMutableArray<NSString *> *languagesToShow = [[wikiPlugin getLanguagesToShow] mutableCopy];
+    if ([languagesToShow containsObject:@"en"])
     {
-        wiki = [[OAPOIHelper findPOIsByTagName:@"wikipedia" name:nil location:locI categoryName:nil poiTypeName:nil radius:radius] mutableCopy];
+        NSInteger index = [languagesToShow indexOfObject:@"en"];
+        [languagesToShow replaceObjectAtIndex:index withObject:@""];
+    }
+
+    while (osmwiki.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
+    {
         osmwiki = [[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:radius] mutableCopy];
         [osmwiki removeObject:poi];
 
-        OAPOI *prevW;
-        NSMutableArray<OAPOI *> *duplicateItems = [NSMutableArray new];
-        for (OAPOI *w in wiki)
+        NSMutableArray<OAPOI *> *itemsToRemove = [NSMutableArray new];
+        for (OAPOI *w in osmwiki)
         {
-            if ((prevW && prevW.obfId == w.obfId) || (poi.obfId != 0 && w.obfId == poi.obfId))
-                [duplicateItems addObject:w];
-            prevW = w;
+            if (![w.localizedContent.allKeys firstObjectCommonWithArray:languagesToShow])
+                [itemsToRemove addObject:w];
         }
-        [wiki removeObjectsInArray:duplicateItems];
+        [osmwiki removeObjectsInArray:itemsToRemove];
 
         radius *= kNearbyPoiSearchFactory;
     }
-    [wiki addObjectsFromArray:osmwiki];
-    wiki = [[OAMapUtils sortPOI:wiki lat:self.location.latitude lon:self.location.longitude] mutableCopy];
+    osmwiki = [[OAMapUtils sortPOI:osmwiki lat:self.location.latitude lon:self.location.longitude] mutableCopy];
 
-    _hasOsmWiki = osmwiki.count > 0 && [wiki firstObjectCommonWithArray:osmwiki];
-    _nearestWiki = [NSArray arrayWithArray:[wiki subarrayWithRange:NSMakeRange(0, MIN(kNearbyPoiMaxCount, wiki.count))]];
+    _hasOsmWiki = osmwiki.count > 0 && [osmwiki firstObjectCommonWithArray:osmwiki];
+    _nearestWiki = [NSArray arrayWithArray:[osmwiki subarrayWithRange:NSMakeRange(0, MIN(kNearbyPoiMaxCount, osmwiki.count))]];
 }
 
 - (void)processNearestPoi:(OAPOI *)poi filter:(OAPOIUIFilter *)filter

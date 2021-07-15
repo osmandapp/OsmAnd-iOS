@@ -16,11 +16,9 @@
 #import "OAPOIFiltersHelper.h"
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
+#import "OAPOI.h"
 
 #define PLUGIN_ID kInAppId_Addon_Wiki
-
-@interface OAWikipediaPlugin ()
-@end
 
 @implementation OAWikipediaPlugin {
 
@@ -61,90 +59,16 @@
 
 - (void)updateLayers
 {
-    if (!self.isActive)
-        [self toggleWikipediaPoi:NO];
-    else
-        [self toggleWikipediaPoi:_app.data.wikipedia];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self toggleWikipediaPoi:!self.isActive ? NO : _app.data.wikipedia];
+    });
 }
-
-/*@Override
-public void mapActivityResume(MapActivity activity) {
-    this.mapActivity = activity;
-}*/
-
-/*@Override
-public void mapActivityResumeOnTop(MapActivity activity) {
-    this.mapActivity = activity;
-}*/
-
-/*@Override
-public void mapActivityPause(MapActivity activity) {
-    this.mapActivity = null;
-}*/
-
-/*@Override
-public boolean init(@NonNull OsmandApplication app, Activity activity) {
-    if (activity instanceof MapActivity) {
-        mapActivity = (MapActivity) activity;
-    }
-    return true;
-}*/
-
-/*@Override
-protected void registerLayerContextMenuActions(OsmandMapTileView mapView,
-        ContextMenuAdapter adapter,
-        final MapActivity mapActivity) {
-    ContextMenuAdapter.ItemClickListener listener = new ContextMenuAdapter.OnRowItemClick() {
-
-        @Override
-        public boolean onRowItemClick(ArrayAdapter<ContextMenuItem> adapter, View view, int itemId, int position) {
-            if (itemId == R.string.shared_string_wikipedia) {
-                mapActivity.getDashboard().setDashboardVisibility(true,
-                        DashboardOnMap.DashboardType.WIKIPEDIA,
-                        AndroidUtils.getCenterViewCoordinates(view));
-            }
-            return false;
-        }
-
-        @Override
-        public boolean onContextMenuClick(final ArrayAdapter<ContextMenuItem> adapter, int itemId,
-                final int pos, boolean isChecked, int[] viewCoordinates) {
-            if (itemId == R.string.shared_string_wikipedia) {
-                toggleWikipediaPoi(isChecked, new CallbackWithObject<Boolean>() {
-                    @Override
-                    public boolean processResult(Boolean selected) {
-                        ContextMenuItem item = adapter.getItem(pos);
-                        if (item != null) {
-                            item.setSelected(selected);
-                            item.setColor(app, selected ?
-                                    R.color.osmand_orange : ContextMenuItem.INVALID_ID);
-                            item.setDescription(selected ? getLanguagesSummary() : null);
-                            adapter.notifyDataSetChanged();
-                        }
-                        return true;
-                    }
-                });
-            }
-            return false;
-        }
-    };
-
-    boolean selected = app.getPoiFilters().isTopWikiFilterSelected();
-    adapter.addItem(new ContextMenuItem.ItemBuilder()
-            .setId(WIKIPEDIA_ID)
-            .setTitleId(R.string.shared_string_wikipedia, mapActivity)
-            .setDescription(selected ? getLanguagesSummary() : null)
-            .setSelected(selected)
-            .setColor(app, selected ? R.color.osmand_orange : ContextMenuItem.INVALID_ID)
-            .setIcon(R.drawable.ic_plugin_wikipedia)
-            .setSecondaryIcon(R.drawable.ic_action_additional_option)
-            .setListener(listener).createItem());
-}*/
 
 - (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters
 {
     NSMutableArray<OAPOIUIFilter *> *poiFilters = [NSMutableArray new];
-    if (_topWikiPoiFilter == nil) {
+    if (_topWikiPoiFilter == nil)
+    {
         OAPOICategory *poiType = [OAPOIHelper sharedInstance].getOsmwiki;
         _topWikiPoiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiType idSuffix:@""];
     }
@@ -155,50 +79,29 @@ protected void registerLayerContextMenuActions(OsmandMapTileView mapView,
 
 - (void)updateWikipediaState
 {
-    if ([self isShowAllLanguages] || [self hasLanguagesFilter])
-        [self refreshWikiOnMap];
-    else
-        [self toggleWikipediaPoi:NO/* callback:nil*/];
+    [self toggleWikipediaPoi:[self isShowAllLanguages] || [self hasLanguagesFilter]];
+    [self refreshWikiOnMap];
 }
 
-- (NSString *)getWikiLanguageTranslation:(NSString *)locale
-{
-    NSString *translation = [OAUtilities translatedLangName:locale];
-    /*if ([translation caseInsensitiveCompare:locale])
-        translation = [self getTranslationFromPhrases:locale];*/
-    return translation;
-}
-
-/*- (NSString *)getTranslationFromPhrases:(NSString *)locale
-{
-    NSString *keyName = [NSString stringWithFormat:@"wiki_lang%@%@", "_", locale];
-    try {
-        Field f = R.string.class.getField("poi_" + keyName);
-        Integer in = (Integer) f.get(null);
-        return app.getString(in);
-    } catch (Throwable e) {
-        return locale;
-    }
-}*/
 
 - (BOOL)hasCustomSettings
 {
-    return ![self isShowAllLanguages] && ![[self getLanguagesToShow] isEqualToArray:@[]];
+    return ![self isShowAllLanguages] && [self getLanguagesToShow].count > 0;
 }
 
 - (BOOL)hasCustomSettings:(OAApplicationMode *)profile
 {
-    return ![self isShowAllLanguages:profile] && ![[self getLanguagesToShow:profile] isEqualToArray:@[]];
+    return ![self isShowAllLanguages:profile] && [self getLanguagesToShow:profile].count > 0;
 }
 
 - (BOOL)hasLanguagesFilter
 {
-    return [[_app.data getWikipediaLanguages] isEqualToArray:@[]];
+    return [_app.data getWikipediaLanguages].count > 0;
 }
 
 - (BOOL)hasLanguagesFilter:(OAApplicationMode *)profile
 {
-    return ![[_app.data getWikipediaLanguages:profile] isEqualToArray:@[]];
+    return [_app.data getWikipediaLanguages:profile].count > 0;
 }
 
 - (BOOL)isShowAllLanguages
@@ -241,18 +144,12 @@ protected void registerLayerContextMenuActions(OsmandMapTileView mapView,
     [_app.data setWikipediaLanguages:languagesToShow mode:mode];
 }
 
-- (void)toggleWikipediaPoi:(BOOL)enable /*CallbackWithObject<Boolean> callback*/
+- (void)toggleWikipediaPoi:(BOOL)enable
 {
     if (enable)
         [self showWikiOnMap];
     else
         [self hideWikiFromMap];
-
-    /*if (callback != null) {
-        callback.processResult(enable);
-    } else if (mapActivity != null) {
-        mapActivity.getDashboard().refreshContent(true);
-    }*/
 
     [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
     [[OARootViewController instance].mapPanel refreshMap];
@@ -260,11 +157,8 @@ protected void registerLayerContextMenuActions(OsmandMapTileView mapView,
 
 - (void)refreshWikiOnMap
 {
-    /*if (mapActivity == null) {
-        return;
-    }*/
     [[OAPOIFiltersHelper sharedInstance] loadSelectedPoiFilters];
-//    mapActivity.getDashboard().refreshContent(true);
+//    [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
     [[OARootViewController instance].mapPanel refreshMap];
 }
 
@@ -289,28 +183,19 @@ protected void registerLayerContextMenuActions(OsmandMapTileView mapView,
         NSMutableArray<NSString *> *translations = [NSMutableArray new];
         for (NSString *locale in [self getLanguagesToShow])
         {
-            [translations addObject:[self getWikiLanguageTranslation:locale]];
+            [translations addObject:[OAUtilities capitalizeFirstLetterAndLowercase:[OAUtilities translatedLangName:locale]]];
         }
         return [translations componentsJoinedByString:@", "];
     }
     return OALocalizedString(@"shared_string_all_languages");
 }
 
-/*@Override
-protected String getMapObjectsLocale(Amenity amenity, String preferredLocale) {
-    return getWikiArticleLanguage(amenity.getSupportedContentLocales(), preferredLocale);
-}*/
-
-/*@Override
-protected String getMapObjectPreferredLang(MapObject object, String defaultLanguage) {
-    if (object instanceof Amenity) {
-        Amenity amenity = (Amenity) object;
-        if (amenity.getType().isWiki()) {
-            return getWikiArticleLanguage(amenity.getSupportedContentLocales(), defaultLanguage);
-        }
-    }
-    return null;
-}*/
+- (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale
+{
+    if ([object isKindOfClass:OAPOI.class])
+        return [self getWikiArticleLanguage:[((OAPOI *)object) getSupportedContentLocales] preferredLanguage:preferredLocale];
+    return nil;
+}
 
 - (NSString *)getWikiArticleLanguage:(NSSet<NSString *> *)availableArticleLangs preferredLanguage:(NSString *)preferredLanguage
 {
@@ -333,83 +218,6 @@ protected String getMapObjectPreferredLang(MapObject object, String defaultLangu
     }
     return preferredLanguage;
 }
-
-/*public void showDownloadWikiMapsScreen() {
-    if (mapActivity != null) {
-        OsmandMapTileView mv = mapActivity.getMapView();
-        DownloadedRegionsLayer dl = mv.getLayerByClass(DownloadedRegionsLayer.class);
-        String filter = dl.getFilter(new StringBuilder());
-        final Intent intent = new Intent(app, app.getAppCustomization().getDownloadIndexActivity());
-        intent.putExtra(DownloadActivity.FILTER_KEY, filter);
-        intent.putExtra(DownloadActivity.FILTER_CAT, DownloadActivityType.WIKIPEDIA_FILE.getTag());
-        intent.putExtra(DownloadActivity.TAB_TO_OPEN, DownloadActivity.DOWNLOAD_TAB);
-        mapActivity.startActivity(intent);
-    }
-}*/
-
-/*public boolean hasMapsToDownload() {
-    try {
-        if (mapActivity == null) {
-            return false;
-        }
-        int mapsToDownloadCount = DownloadResources.findIndexItemsAt(
-                app, mapActivity.getMapLocation(), DownloadActivityType.WIKIPEDIA_FILE,
-                false, 1, false).size();
-        return mapsToDownloadCount > 0;
-    } catch (IOException e) {
-        return false;
-    }
-}*/
-
-/*@Override
-protected boolean searchFinished(final QuickSearchDialogFragment searchFragment, SearchPhrase phrase, boolean isResultEmpty) {
-    if (isResultEmpty && isSearchByWiki(phrase)) {
-        if (!Version.isPaidVersion(app)) {
-            searchFragment.addSearchListItem(new QuickSearchFreeBannerListItem(app));
-        } else {
-            final DownloadIndexesThread downloadThread = app.getDownloadThread();
-            if (!downloadThread.getIndexes().isDownloadedFromInternet) {
-                searchFragment.reloadIndexFiles();
-            } else {
-                addEmptyWikiBanner(searchFragment, phrase);
-            }
-        }
-        return true;
-    }
-    return false;
-}*/
-
-/*@Override
-protected void newDownloadIndexes(Fragment fragment) {
-    if (fragment instanceof QuickSearchDialogFragment) {
-        final QuickSearchDialogFragment f = (QuickSearchDialogFragment) fragment;
-        SearchPhrase phrase = app.getSearchUICore().getCore().getPhrase();
-        if (f.isResultEmpty() && isSearchByWiki(phrase)) {
-            addEmptyWikiBanner(f, phrase);
-        }
-    }
-}*/
-
-/*private void addEmptyWikiBanner(final QuickSearchDialogFragment fragment, SearchPhrase phrase) {
-    QuickSearchBannerListItem banner = new QuickSearchBannerListItem(app);
-    banner.addButton(QuickSearchListAdapter.getIncreaseSearchButtonTitle(app, phrase),
-            null, QuickSearchBannerListItem.INVALID_ID, new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            fragment.increaseSearchRadius();
-        }
-    });
-    if (hasMapsToDownload()) {
-        banner.addButton(app.getString(R.string.search_download_wikipedia_maps),
-                null, R.drawable.ic_world_globe_dark, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDownloadWikiMapsScreen();
-            }
-        });
-    }
-    fragment.addSearchListItem(banner);
-}*/
 
 - (void)prepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters
 {
@@ -457,26 +265,5 @@ protected void newDownloadIndexes(Fragment fragment) {
     }
     return NO;
 }
-
-/*@Override
-protected List<ImageCard> getContextMenuImageCards(@NonNull Map<String, String> params, @Nullable Map<String, String> additionalParams, @Nullable GetImageCardsListener listener) {
-    List<ImageCard> imageCards = new ArrayList<>();
-    if (mapActivity != null) {
-        if (additionalParams != null) {
-            String wikidataId = additionalParams.get(Amenity.WIKIDATA);
-            if (wikidataId != null) {
-                additionalParams.remove(Amenity.WIKIDATA);
-                WikiImageHelper.addWikidataImageCards(mapActivity, wikidataId, imageCards);
-            }
-            String wikimediaContent = additionalParams.get(Amenity.WIKIMEDIA_COMMONS);
-            if (wikimediaContent != null) {
-                additionalParams.remove(Amenity.WIKIMEDIA_COMMONS);
-                WikiImageHelper.addWikimediaImageCards(mapActivity, wikimediaContent, imageCards);
-            }
-            params.putAll(additionalParams);
-        }
-    }
-    return imageCards;
-}*/
 
 @end

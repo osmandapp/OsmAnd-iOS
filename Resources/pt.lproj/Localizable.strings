@@ -516,7 +516,7 @@
 "sort_by_distance" = "Ordenar por distância";
 "sort_by_name" = "Ordenar por nome";
 "map_markers_other" = "Outros marcadores";
-"stop_routing_confirm" = "Quer parar a navegação?";
+"stop_routing_confirm" = "Parar a navegação?";
 "cancel_route" = "Cancelar a rota";
 "navigation_over_track" = "Iniciar a navegação ao longo do trilho\?";
 "shared_string_ellipsis" = "…";

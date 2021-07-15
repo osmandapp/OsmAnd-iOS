@@ -484,7 +484,7 @@
 "driving_region_australia" = "Australie";
 "left_side_navigation" = "Conduite à gauche";
 "si_mi_feet" = "Miles/pieds";
-"si_mi_yard" = "Miles/yards";
+"si_mi_yard" = "Miles / yards";
 "si_km_m" = "Kilomètres/mètres";
 "no_address_found" = "Impossible de déterminer l\'adresse";
 "looking_up_address" = "Recherche de l\'adresse";
@@ -2099,3 +2099,4 @@
 "carplay_profile_descr" = "Profil qui sera utilisé lorsque vous êtes connecté à CarPlay.";
 "carplay_profile" = "Profil CarPlay";
 "last_used" = "Dernier utilisé";
+"search_more" = "Chercher plus …";

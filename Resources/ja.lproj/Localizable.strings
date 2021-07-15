@@ -2066,7 +2066,6 @@
 "coordinates_widget" = "座標ウィジェット";
 "osm_editing_access_descr" = "すべてのローカル編集とメモを%@で表示できます。すでにアップロードされたアイテムはOsmAndのリストに表示されません。";
 "shared_string_loading" = "読込中…";
-
 "add_custom_category" = "カスタムカテゴリーを追加";
 "some_of" = "%d中の%d";
 "new_plugin_added" = "新しいプラグインが追加されました";
@@ -2075,3 +2074,8 @@
 "shared_string_enable" = "有効化";
 "custom_osmand_plugin_name" = "OsmAndプラグインのカスタマイズ";
 "extra_maps" = "追加マップ";
+"search_more" = "さらに検索…";
+"gpx_upload_public_visibility_descr" = "\"公開\"とはトレース内容がGPSトレースと公的GPSトレースリストに公開され、タイムスタンプが生の形式で公開トレースリストに表示されることを意味します。 APIを介して提供されるデータは、トレースページを参照しません。トレースポイントのタイムスタンプは、公的GPS APIからは利用できません。また、トレースポイントは時系列で並べられていません。";
+"gpx_upload_trackable_visibility_descr" = "\"追跡可能\"は、トレース状況が公開リストに表示されないことを意味しますが、タイムスタンプ付きで処理済みの(直接関連付けされない)経路ポイントは、公的GPS APIからのダウンロードを介して行われます。";
+"gpx_upload_identifiable_visibility_descr" = "\"識別可能\"は、経路がGPS経路およびパブリックGPS経路リストに表示されることを示唆しています。他のユーザーは現在の経路をダウンロードして、ユーザー名とリンクできます。経路ポイント APIを介して配信されるデータは、元の経路追跡ページを参照します。経路ポイントのタイムスタンプは、公的GPS APIを通じて入手できます。";
+"gpx_upload_private_visibility_descr" = "\"プライベート\"は、経路が公開リストに表示されないことを示唆しています。経路ポイントはタイムスタンプなしで公的GPS APIを介して引き続き利用できますが、時系列で並べられることはありません。";

@@ -504,7 +504,7 @@
 "coords_search" = "Пошук координат";
 "nearest_cities" = "Найближчі міста";
 "type_address" = "Введіть адресу";
-"search_poi_category_hint" = "Введіть запит для пошуку всіх";
+"search_poi_category_hint" = "Введіть пошуковий запит";
 "nothing_found" = "Нічого не знайдено: %@";
 "nothing_found_descr" = "Змініть пошуковий запит або ж розширте радіус пошуку";
 "driving_region" = "Регіон водіння";

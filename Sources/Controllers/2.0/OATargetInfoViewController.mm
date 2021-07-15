@@ -378,13 +378,16 @@
         osmwiki = [[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:radius] mutableCopy];
         [osmwiki removeObject:poi];
 
-        NSMutableArray<OAPOI *> *itemsToRemove = [NSMutableArray new];
-        for (OAPOI *w in osmwiki)
+        if (![wikiPlugin isShowAllLanguages] && [wikiPlugin hasLanguagesFilter])
         {
-            if (![w.localizedContent.allKeys firstObjectCommonWithArray:languagesToShow])
-                [itemsToRemove addObject:w];
+            NSMutableArray<OAPOI *> *itemsToRemove = [NSMutableArray new];
+            for (OAPOI *w in osmwiki)
+            {
+                if (![w.localizedContent.allKeys firstObjectCommonWithArray:languagesToShow])
+                    [itemsToRemove addObject:w];
+            }
+            [osmwiki removeObjectsInArray:itemsToRemove];
         }
-        [osmwiki removeObjectsInArray:itemsToRemove];
 
         radius *= kNearbyPoiSearchFactory;
     }

@@ -70,7 +70,7 @@
                                 <color key="backgroundColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="1LP-5L-xCP" userLabel="tableView">
-                                <rect key="frame" x="0.0" y="64" width="375" height="553"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="604"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
@@ -156,7 +156,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="outdatedResourcesSubmenuCell" textLabel="Iuf-YW-Fq0" detailTextLabel="tZN-sY-UAX" style="IBUITableViewCellStyleSubtitle" id="VZF-Hd-TvM">
-                                        <rect key="frame" x="0.0" y="199.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="200" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VZF-Hd-TvM" id="8Qv-4X-vf2">
                                             <rect key="frame" x="0.0" y="0.0" width="349.5" height="50"/>
@@ -215,41 +215,6 @@
                                     <outlet property="delegate" destination="Lhe-yk-sVD" id="CVK-wc-517"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xZm-qX-Rbq">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zlr-Vo-anF" userLabel="Maps">
-                                        <rect key="frame" x="40" y="0.0" width="123" height="61"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
-                                        <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="MAPS" image="ic_tabbar_maps_active.png">
-                                            <color key="titleColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarMapsClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="P2P-HS-mYh"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQA-Ui-rQr" userLabel="Purchases">
-                                        <rect key="frame" x="211" y="0.0" width="124" height="61"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="PURCHASES" image="ic_tabbar_purchases_normal.png">
-                                            <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarPurchasesClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="jh4-aY-ul2"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.96055269241333008" green="0.96052390336990356" blue="0.96054017543792725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8Qu-hJ-JfY"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -257,14 +222,11 @@
                     <navigationItem key="navigationItem" id="yAv-az-HE4"/>
                     <connections>
                         <outlet property="backButton" destination="wjg-kr-sCO" id="rCy-d6-qg0"/>
-                        <outlet property="btnToolbarMaps" destination="zlr-Vo-anF" id="Yja-0I-eOi"/>
-                        <outlet property="btnToolbarPurchases" destination="MQA-Ui-rQr" id="44B-cL-EBf"/>
                         <outlet property="doneButton" destination="B0H-ih-pIM" id="fdl-X0-QbS"/>
                         <outlet property="searchButton" destination="yS2-Tu-WpJ" id="8Zc-qe-cWd"/>
                         <outlet property="tableView" destination="1LP-5L-xCP" id="ZQA-zh-0uy"/>
                         <outlet property="titlePanelView" destination="jf8-2d-2JK" id="Ntx-so-aJh"/>
                         <outlet property="titleView" destination="C5O-TM-N7e" id="6x8-to-3em"/>
-                        <outlet property="toolbarView" destination="xZm-qX-Rbq" id="Bs1-3u-vja"/>
                         <outlet property="updateButton" destination="cJ3-RS-lHc" id="uwf-YY-0Qi"/>
                     </connections>
                 </viewController>
@@ -316,7 +278,7 @@
                                 <color key="backgroundColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="vN3-1c-cfU" userLabel="tableView">
-                                <rect key="frame" x="0.0" y="64" width="375" height="533"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="584"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
@@ -324,41 +286,6 @@
                                     <outlet property="delegate" destination="w8S-Nb-zGN" id="8pt-ys-4kw"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d4h-lq-AnZ">
-                                <rect key="frame" x="0.0" y="597" width="375" height="50"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1eq-9l-zUI" userLabel="Maps">
-                                        <rect key="frame" x="40" y="0.0" width="123" height="61"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
-                                        <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="MAPS" image="ic_tabbar_maps_active.png">
-                                            <color key="titleColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarMapsClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="z1N-Lb-GzF"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4We-Xn-5pF" userLabel="Purchases">
-                                        <rect key="frame" x="211" y="0.0" width="124" height="61"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="PURCHASES" image="ic_tabbar_purchases_normal.png">
-                                            <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarPurchasesClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="IFN-P5-OOb"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.96055269241333008" green="0.96052390336990356" blue="0.96054017543792725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="gzt-J4-M2N"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -367,12 +294,9 @@
                     <navigationItem key="navigationItem" id="lU9-tG-nZJ"/>
                     <connections>
                         <outlet property="backButton" destination="eVA-G5-Cns" id="J8w-tj-Tun"/>
-                        <outlet property="btnToolbarMaps" destination="1eq-9l-zUI" id="0s9-RN-A0C"/>
-                        <outlet property="btnToolbarPurchases" destination="4We-Xn-5pF" id="mef-ar-BXT"/>
                         <outlet property="navBarView" destination="mgw-15-BJP" id="d91-ws-BCT"/>
                         <outlet property="tableView" destination="vN3-1c-cfU" id="sSL-OD-y2i"/>
                         <outlet property="titleView" destination="kUw-kt-nW2" id="ZpA-Om-jnB"/>
-                        <outlet property="toolbarView" destination="d4h-lq-AnZ" id="IlV-RP-AhW"/>
                         <outlet property="updateAllButton" destination="rRv-lm-sff" id="1om-qB-soG"/>
                     </connections>
                 </viewController>
@@ -424,7 +348,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" estimatedRowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-LD-cxr">
-                                <rect key="frame" x="0.0" y="44" width="375" height="520"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="603"/>
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OALocalResourceInfoCell" rowHeight="50" id="OAZ-lO-cSC" customClass="OALocalResourceInfoCell">
@@ -473,79 +397,26 @@
                                     <outlet property="delegate" destination="huq-qE-lWI" id="ZSJ-Nu-T0U"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hct-yH-a0T">
-                                <rect key="frame" x="0.0" y="564" width="375" height="83"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p2T-4g-Lw7">
-                                        <rect key="frame" x="40" y="0.0" width="124" height="61"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="124" id="UxK-Ls-QIx"/>
-                                            <constraint firstAttribute="height" constant="61" id="kmY-Me-3RE"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-25" minY="26" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="28" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Maps" image="ic_tabbar_maps_active.png">
-                                            <color key="titleColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarMapsClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="zgp-F9-p7R"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kxo-08-WBh" userLabel="Purchases">
-                                        <rect key="frame" x="211" y="0.0" width="124" height="61"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="124" id="1oU-25-pwL"/>
-                                            <constraint firstAttribute="height" constant="61" id="Ft7-WS-t5T"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="tintColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="titleEdgeInsets" minX="-22" minY="26" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="60" minY="-11" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Plugins" image="ic_tabbar_purchases_normal.png">
-                                            <color key="titleColor" red="0.37153923511505127" green="0.37152808904647827" blue="0.37153446674346924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="btnToolbarPurchasesClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="Z59-6f-UaR"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.96055269241333008" green="0.96052390336990356" blue="0.96054017543792725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="Kxo-08-WBh" firstAttribute="top" secondItem="Hct-yH-a0T" secondAttribute="top" id="S7b-Zt-KMo"/>
-                                    <constraint firstAttribute="height" constant="83" id="mSc-hP-bCt"/>
-                                    <constraint firstItem="p2T-4g-Lw7" firstAttribute="leading" secondItem="Hct-yH-a0T" secondAttribute="leading" constant="40" id="nwI-hj-V7q"/>
-                                    <constraint firstAttribute="trailing" secondItem="Kxo-08-WBh" secondAttribute="trailing" constant="40" id="qH7-YK-p7K"/>
-                                    <constraint firstItem="p2T-4g-Lw7" firstAttribute="top" secondItem="Hct-yH-a0T" secondAttribute="top" id="yIy-Hs-Lml"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Q8Y-qg-2ES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Hct-yH-a0T" firstAttribute="bottom" secondItem="eW4-T7-AN9" secondAttribute="bottom" id="73j-Nc-DR1"/>
                             <constraint firstItem="byH-du-rhi" firstAttribute="bottom" secondItem="Q8Y-qg-2ES" secondAttribute="top" priority="750" constant="44" id="Fff-bE-Gwm"/>
                             <constraint firstItem="byH-du-rhi" firstAttribute="trailing" secondItem="eW4-T7-AN9" secondAttribute="trailing" id="UEU-Gq-x8T"/>
                             <constraint firstItem="kbN-LD-cxr" firstAttribute="leading" secondItem="eW4-T7-AN9" secondAttribute="leading" id="WLQ-ch-Eo9"/>
-                            <constraint firstItem="Hct-yH-a0T" firstAttribute="trailing" secondItem="eW4-T7-AN9" secondAttribute="trailing" id="alT-si-9kB"/>
+                            <constraint firstItem="Q8Y-qg-2ES" firstAttribute="bottom" secondItem="kbN-LD-cxr" secondAttribute="bottom" id="Z7x-eF-4gg"/>
                             <constraint firstItem="kbN-LD-cxr" firstAttribute="trailing" secondItem="eW4-T7-AN9" secondAttribute="trailing" id="bv3-nz-ZQt"/>
                             <constraint firstItem="kbN-LD-cxr" firstAttribute="top" secondItem="byH-du-rhi" secondAttribute="bottom" id="ddB-Zx-aEs"/>
-                            <constraint firstItem="Hct-yH-a0T" firstAttribute="leading" secondItem="eW4-T7-AN9" secondAttribute="leading" id="gXo-36-Us3"/>
                             <constraint firstItem="byH-du-rhi" firstAttribute="top" secondItem="eW4-T7-AN9" secondAttribute="top" id="jdO-k1-sRG"/>
                             <constraint firstItem="byH-du-rhi" firstAttribute="leading" secondItem="eW4-T7-AN9" secondAttribute="leading" id="oR4-gz-qb6"/>
-                            <constraint firstItem="kbN-LD-cxr" firstAttribute="bottom" secondItem="Hct-yH-a0T" secondAttribute="top" id="ocn-Mx-Z5I"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="jWw-QT-aqz"/>
                     <connections>
                         <outlet property="backButton" destination="FTj-dM-Wp5" id="Prn-xp-r0j"/>
-                        <outlet property="btnToolbarMaps" destination="p2T-4g-Lw7" id="lfF-AX-geD"/>
-                        <outlet property="btnToolbarPurchases" destination="Kxo-08-WBh" id="cL4-WX-yMj"/>
                         <outlet property="navBarView" destination="byH-du-rhi" id="fGr-fE-9Qw"/>
                         <outlet property="tableView" destination="kbN-LD-cxr" id="hiu-I4-xHY"/>
                         <outlet property="titleView" destination="wnu-D6-guC" id="80o-FT-faj"/>
-                        <outlet property="toolbarView" destination="Hct-yH-a0T" id="KW7-aZ-TsZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6t8-o6-bo5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -641,8 +512,6 @@
     <resources>
         <image name="HUD_search_icon.png" width="25" height="25"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
-        <image name="ic_tabbar_maps_active.png" width="25" height="25"/>
-        <image name="ic_tabbar_purchases_normal.png" width="25" height="25"/>
         <image name="ic_update.png" width="25" height="25"/>
         <image name="left_menu_icon_settings.png" width="30" height="30"/>
     </resources>

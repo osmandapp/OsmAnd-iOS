@@ -11,6 +11,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OARoutePlanningHudViewController">
             <connections>
                 <outlet property="actionButtonsContainer" destination="8b4-dc-g4J" id="shW-oV-g8p"/>
+                <outlet property="addButtonLandscapeWidthConstraint" destination="3FW-FJ-Muj" id="Ruu-ax-TUI"/>
+                <outlet property="addButtonWidthConstraint" destination="aDN-iQ-IYF" id="nbM-yo-1We"/>
                 <outlet property="addPointButton" destination="EvX-Tp-Ber" id="S3h-JD-9vk"/>
                 <outlet property="buttonsViewTailingConstraint" destination="A8e-0K-65B" id="UHg-Ax-Mfh"/>
                 <outlet property="centerImageView" destination="Lff-A9-ANx" id="dxe-VS-K1c"/>
@@ -21,15 +23,19 @@
                 <outlet property="doneButton" destination="fzm-by-GwC" id="TLk-p8-YWs"/>
                 <outlet property="doneButtonContainerView" destination="cZ1-QP-9LE" id="GN4-eV-3m1"/>
                 <outlet property="expandButton" destination="1a9-hh-9hN" id="qtD-HP-Bpb"/>
+                <outlet property="landscapeAddPointButton" destination="4Jq-MM-wpZ" id="ONX-oB-6si"/>
                 <outlet property="landscapeExpandButton" destination="V78-cH-ojd" id="JGk-mx-5XT"/>
                 <outlet property="landscapeHeaderContainerView" destination="rgr-DA-wDw" id="Gol-Fd-dfA"/>
                 <outlet property="landscapeHeaderDescriptionView" destination="ECv-Po-Jy3" id="mD6-Sb-C8Q"/>
                 <outlet property="landscapeHeaderLeftContainerConstraint" destination="Aje-d2-X66" id="iGF-dH-1mR"/>
                 <outlet property="landscapeHeaderTitleView" destination="yyL-Uz-qJh" id="UKT-Hl-tJ2"/>
+                <outlet property="landscapeOptionsButton" destination="qiS-X2-6O3" id="ttW-hx-93C"/>
                 <outlet property="leftImageVIew" destination="Aod-ON-ikl" id="hEe-Rf-FRm"/>
                 <outlet property="modeButton" destination="oTM-Ht-rdV" id="FkB-ug-cZZ"/>
                 <outlet property="navbarLeadingConstraint" destination="1gI-y2-IBh" id="kvc-d3-gnf"/>
                 <outlet property="navbarView" destination="7MD-Wz-F5G" id="1fQ-OZ-X3X"/>
+                <outlet property="optionButtonLandscapeWidthConstraint" destination="xgf-Cq-zUb" id="cM8-RD-n1w"/>
+                <outlet property="optionButtonWidthConstraint" destination="gfH-ec-zQl" id="FSc-PZ-ETM"/>
                 <outlet property="optionsButton" destination="OjE-FK-TpN" id="2Sa-49-Amu"/>
                 <outlet property="progressView" destination="zFE-tM-QGM" id="rQT-Gg-kRR"/>
                 <outlet property="redoButton" destination="FIz-se-4BK" id="Tju-by-mBp"/>
@@ -254,10 +260,14 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vno-eG-MGA">
-                                    <rect key="frame" x="24" y="16" width="366" height="60"/>
+                                    <rect key="frame" x="24" y="16" width="366" height="44"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OjE-FK-TpN">
-                                            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="44"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="100" id="gfH-ec-zQl"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="Options">
                                                 <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -267,10 +277,10 @@
                                             </connections>
                                         </button>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4TX-Bk-D9c">
-                                            <rect key="frame" x="134.5" y="0.0" width="90" height="60"/>
+                                            <rect key="frame" x="138" y="0.0" width="90" height="44"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v2b-cF-R7u">
-                                                    <rect key="frame" x="0.0" y="15" width="30" height="30"/>
+                                                    <rect key="frame" x="0.0" y="7" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="CZT-0E-coL"/>
                                                         <constraint firstAttribute="height" constant="30" id="s69-nV-pwI"/>
@@ -282,7 +292,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FIz-se-4BK">
-                                                    <rect key="frame" x="60" y="15" width="30" height="30"/>
+                                                    <rect key="frame" x="60" y="7" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="L3S-DU-QsV"/>
                                                         <constraint firstAttribute="width" constant="30" id="lHU-3X-sPK"/>
@@ -305,7 +315,11 @@
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvX-Tp-Ber">
-                                            <rect key="frame" x="292" y="0.0" width="74" height="60"/>
+                                            <rect key="frame" x="266" y="0.0" width="100" height="44"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="100" id="aDN-iQ-IYF"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="Add point">
                                                 <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -315,6 +329,10 @@
                                             </connections>
                                         </button>
                                     </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="bKS-1S-7Wf"/>
+                                    </constraints>
                                 </stackView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VkI-Al-pSd">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
@@ -407,6 +425,9 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qiS-X2-6O3">
                                     <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="60" id="xgf-Cq-zUb"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <state key="normal" title="Options">
                                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -416,7 +437,7 @@
                                     </connections>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MMl-BG-nAO">
-                                    <rect key="frame" x="69" y="0.0" width="90" height="60"/>
+                                    <rect key="frame" x="75.5" y="0.0" width="90" height="60"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRK-Fo-r6a">
                                             <rect key="frame" x="0.0" y="15" width="30" height="30"/>
@@ -454,7 +475,10 @@
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Jq-MM-wpZ">
-                                    <rect key="frame" x="167" y="0.0" width="74" height="60"/>
+                                    <rect key="frame" x="181" y="0.0" width="60" height="60"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="60" id="3FW-FJ-Muj"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <state key="normal" title="Add point">
                                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>

@@ -111,6 +111,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderTitleView;
 @property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderDescriptionView;
 @property (weak, nonatomic) IBOutlet UIButton *landscapeExpandButton;
+@property (weak, nonatomic) IBOutlet UIButton *landscapeOptionsButton;
+@property (weak, nonatomic) IBOutlet UIButton *landscapeAddPointButton;
 
 @end
 
@@ -220,6 +222,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
+    _optionButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:CGFLOAT_MAX height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    _addButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"add_point") width:CGFLOAT_MAX height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    [_landscapeOptionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
+    [_landscapeAddPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
+    _optionButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:CGFLOAT_MAX height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    _addButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"add_point") width:CGFLOAT_MAX height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    
     _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
     [_expandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
     _landscapeExpandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);

@@ -854,4 +854,15 @@ typedef enum : NSUInteger {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark JASidePanelController
+
+- (void)_addPanGestureToView:(UIView *)view {
+        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_handlePan:)];
+    panGesture.delegate = self;
+    panGesture.maximumNumberOfTouches = 1;
+    panGesture.minimumNumberOfTouches = 1;
+    panGesture.name = kLeftPannelGestureRecognizer;
+    [view addGestureRecognizer:panGesture];
+}
+
 @end

@@ -14,6 +14,7 @@
 #import "OAMapRendererView.h"
 #import "OAQuickActionsSheetView.h"
 #import "OAColors.h"
+#import "OAHudButton.h"
 
 #import <AudioToolbox/AudioServices.h>
 
@@ -22,7 +23,7 @@
 
 @interface OAQuickActionHudViewController () <OAQuickActionsSheetDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *quickActionFloatingButton;
+@property (weak, nonatomic) IBOutlet OAHudButton *quickActionFloatingButton;
 @property (weak, nonatomic) IBOutlet UIImageView *quickActionPin;
 
 @end
@@ -35,6 +36,7 @@
     
     UILongPressGestureRecognizer *_buttonDragRecognizer;
     OAQuickActionsSheetView *_actionsView;
+    BOOL _isActionsViewVisible;
     
     CGFloat _cachedYViewPort;
 }
@@ -47,6 +49,7 @@
     {
         _mapHudController = mapHudController;
         _settings = [OAAppSettings sharedManager];
+        _isActionsViewVisible = NO;
     }
     return self;
 }
@@ -55,9 +58,13 @@
 {
     [super viewDidLoad];
     
-    [_quickActionFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_quick_action"]
-                                forState:UIControlStateNormal];
-    _quickActionFloatingButton.hidden = ![_settings.quickActionIsOn get];
+    _quickActionFloatingButton.alpha = [_settings.quickActionIsOn get] ? 1 : 0;
+    _quickActionFloatingButton.userInteractionEnabled = [_settings.quickActionIsOn get];
+    _quickActionFloatingButton.tintColorDay =  UIColorFromRGB(color_primary_purple);
+    _quickActionFloatingButton.tintColorNight =  UIColorFromRGB(color_primary_light_blue);
+    [_quickActionFloatingButton updateColorsForPressedState:NO];
+    [self updateColors:NO];
+    
     _buttonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonDragged:)];
     [_buttonDragRecognizer setMinimumPressDuration:0.5];
     [_quickActionFloatingButton addGestureRecognizer:_buttonDragRecognizer];
@@ -81,8 +88,11 @@
 
 - (void) updateColors:(BOOL)isNight
 {
-    [_quickActionFloatingButton setBackgroundImage:[UIImage imageNamed:isNight ? @"bg_circle_button_night" : @"bg_circle_button_day"] forState:UIControlStateNormal];
-    [_quickActionFloatingButton setTintColor:isNight ? UIColor.whiteColor : UIColorFromRGB(color_primary_purple)];
+    [_quickActionFloatingButton updateColorsForPressedState:NO];
+    if (_isActionsViewVisible)
+        [_quickActionFloatingButton setImage:[UIImage templateImageNamed:@"ic_action_close_banner"] forState:UIControlStateNormal];
+    else
+        [_quickActionFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_quick_action"] forState:UIControlStateNormal];
 }
 
 - (void)adjustMapViewPort
@@ -116,7 +126,17 @@
     [self setupQuickActionBtnVisibility];
 }
 
+- (void) updateViewVisibilityAnimated:(BOOL)isAnimated
+{
+    [self setupQuickActionBtnVisibilityAnimated:isAnimated];
+}
+
 - (void) setupQuickActionBtnVisibility
+{
+    [self setupQuickActionBtnVisibilityAnimated:YES];
+}
+
+- (void) setupQuickActionBtnVisibilityAnimated:(BOOL)isAnimated
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     //    contextMenuLayer.isInChangeMarkerPositionMode() ||
@@ -125,7 +145,20 @@
     [mapPanel isContextMenuVisible] ||
     [mapPanel gpxModeActive] ||
     [mapPanel isRouteInfoVisible];
-    _quickActionFloatingButton.hidden = hideQuickButton;
+    
+    [UIView animateWithDuration:.25 animations:^{
+        _quickActionFloatingButton.alpha = hideQuickButton ? 0 : 1;
+        if (isAnimated)
+        {
+            [self setQuickActionButtonPosition];
+            if (hideQuickButton)
+            {
+                _quickActionFloatingButton.frame = CGRectMake(_quickActionFloatingButton.frame.origin.x + DeviceScreenWidth, _quickActionFloatingButton.frame.origin.y, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
+            }
+        }
+    } completion:^(BOOL finished) {
+        _quickActionFloatingButton.userInteractionEnabled = !hideQuickButton;
+    }];
 }
 
 
@@ -150,13 +183,13 @@
     {
         if (isLandscape)
         {
-            x = _mapHudController.mapModeButton.frame.origin.x - w;
+            x = _mapHudController.mapModeButton.frame.origin.x - w - 16.0;
             y = _mapHudController.mapModeButton.frame.origin.y;
         }
         else
         {
             x = _mapHudController.zoomButtonsView.frame.origin.x;
-            y = _mapHudController.zoomButtonsView.frame.origin.y - h;
+            y = _mapHudController.zoomButtonsView.frame.origin.y - h - 16.0;
         }
     }
     _quickActionFloatingButton.frame = CGRectMake(x, y, w, h);
@@ -217,18 +250,39 @@
     }
 }
 
+- (void)showActionsSheetAnimated
+{
+    _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.frame.size.width, _actionsView.frame.size.height);
+    [UIView animateWithDuration:.3 animations:^{
+        _quickActionPin.hidden = NO;
+        [[UIApplication sharedApplication].keyWindow addSubview:_actionsView];
+        [_actionsView layoutSubviews];
+        _cachedYViewPort = [OARootViewController instance].mapPanel.mapViewController.mapView.viewportYScale;
+        [self adjustMapViewPort];
+    }];
+    [self setPinPosition];
+    [_mapHudController hideTopControls];
+    _isActionsViewVisible = YES;
+    [self updateColors:NO];
+}
+
 - (void)hideActionsSheetAnimated
 {
     if (_actionsView.hidden || !_actionsView.superview)
         return;
+    
+        [_mapHudController showTopControls];
+    
     [UIView animateWithDuration:.3 animations:^{
         _quickActionPin.hidden = YES;
         _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.bounds.size.width, _actionsView.bounds.size.height);
         [self restoreMapViewPort];
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
+        [_mapHudController showTopControls];
     }];
-    [_mapHudController showTopControls];
+    _isActionsViewVisible = NO;
+    [self updateColors:NO];
 }
 
 - (IBAction)quickActionButtonPressed:(id)sender
@@ -239,22 +293,9 @@
         _actionsView.delegate = self;
     }
     if (_actionsView.superview)
-    {
         [self hideActionsSheetAnimated];
-    }
     else
-    {
-        _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.frame.size.width, _actionsView.frame.size.height);
-        [UIView animateWithDuration:.3 animations:^{
-            _quickActionPin.hidden = NO;
-            [[UIApplication sharedApplication].keyWindow addSubview:_actionsView];
-            [_actionsView layoutSubviews];
-            _cachedYViewPort = [OARootViewController instance].mapPanel.mapViewController.mapView.viewportYScale;
-            [self adjustMapViewPort];
-        }];
-        [self setPinPosition];
-        [_mapHudController hideTopControls];
-    }
+        [self showActionsSheetAnimated];
 }
 
 #pragma mark - OAQuickActionBottomSheetDelegate

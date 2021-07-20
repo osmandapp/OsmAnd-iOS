@@ -46,6 +46,7 @@
 #import "Reachability.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
+#import "OAMapHudViewController.h"
 #import "OADownloadMapViewController.h"
 
 #include <OsmAndCore.h>
@@ -525,7 +526,7 @@
 {
     CGRect buttonFrame = self.buttonBack.frame;
     buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
-    buttonFrame.origin.y = [OAUtilities getStatusBarHeight] + 7.;
+    buttonFrame.origin.y = [[OARootViewController instance].mapPanel.hudViewController getHudButtonsMinTopOffset];
     self.buttonBack.frame = buttonFrame;
 }
 
@@ -836,14 +837,21 @@
 {
     if ([self hasTopToolbar])
     {
-        CGFloat backButtonAlpha = alpha;
+        CGFloat backButtonAlpha = alpha * 2;
+        backButtonAlpha = backButtonAlpha > 1 ? 1 : backButtonAlpha;
+        
+        
         if (self.topToolbarType != ETopToolbarTypeFloating)
             backButtonAlpha = 0;
         if (self.topToolbarType == ETopToolbarTypeFloatingFixedButton)
             backButtonAlpha = 1;
         
         if (self.buttonBack.alpha != backButtonAlpha)
+        {
             self.buttonBack.alpha = backButtonAlpha;
+            if (!OAUtilities.isLandscape)
+                [OARootViewController.instance.mapPanel.hudViewController setTopControlsAlpha:1 - backButtonAlpha];
+        }
         
         if (self.topToolbarType == ETopToolbarTypeMiddleFixed)
         {
@@ -859,6 +867,9 @@
             }
         }
     }
+    
+    if (self.navBar.alpha > 0)
+        self.buttonBack.alpha = 1 - self.navBar.alpha;
 }
 
 - (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha

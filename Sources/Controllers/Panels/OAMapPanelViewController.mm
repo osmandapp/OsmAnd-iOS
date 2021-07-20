@@ -779,6 +779,25 @@ typedef enum
     }
 }
 
+- (void) closeRouteInfoForSelectPoint:(void (^)(void))onComplete
+{
+    if (self.routeInfoView.superview)
+    {
+        [self setBottomControlsVisible:YES menuHeight:0 animated:YES];
+        
+        [self.routeInfoView hide:YES duration:.2 onComplete:^{
+            [self setTopControlsVisible:YES];
+            [_hudViewController.quickActionController updateViewVisibility];
+            if (onComplete)
+                onComplete();
+        }];
+        
+        [self destroyShadowButton];
+        
+        self.sidePanelController.recognizesPanGesture = NO; //YES;
+    }
+}
+
 - (CGRect) shadowButtonRect
 {
     return self.view.frame;
@@ -786,8 +805,11 @@ typedef enum
 
 - (void) removeGestureRecognizers
 {
-    while (self.view.gestureRecognizers.count > 0)
-        [self.view removeGestureRecognizer:self.view.gestureRecognizers[0]];
+    for (UIGestureRecognizer *recognizer in self.view.gestureRecognizers)
+    {
+        if (![recognizer.name isEqualToString:kLeftPannelGestureRecognizer])
+            [self.view removeGestureRecognizer:recognizer];
+    }
 }
 
 - (void) mapSettingsButtonClick:(id)sender
@@ -928,8 +950,8 @@ typedef enum
     [self.view addSubview:self.routeInfoView];
     
     self.sidePanelController.recognizesPanGesture = NO;
+    [_hudViewController.quickActionController updateViewVisibility];
     [self.routeInfoView show:YES fullMenu:fullMenu onComplete:^{
-        [_hudViewController.quickActionController updateViewVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
     
@@ -2185,8 +2207,8 @@ typedef enum
         onComplete();
     
     self.sidePanelController.recognizesPanGesture = NO;
+    [_hudViewController.quickActionController updateViewVisibility];
     [self.targetMenuView show:YES onComplete:^{
-        [_hudViewController.quickActionController updateViewVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
 }
@@ -2982,7 +3004,7 @@ typedef enum
 - (void) openTargetViewWithRouteTargetSelection:(OATargetPointType)type
 {
     [_mapViewController hideContextPinMarker];
-    [self closeRouteInfo];
+    [self closeRouteInfoForSelectPoint:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];

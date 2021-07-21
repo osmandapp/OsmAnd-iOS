@@ -526,7 +526,7 @@
 {
     CGRect buttonFrame = self.buttonBack.frame;
     buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
-    buttonFrame.origin.y = [[OARootViewController instance].mapPanel.hudViewController getHudButtonsMinTopOffset];
+    buttonFrame.origin.y = [[OARootViewController instance].mapPanel.hudViewController getHudMinTopOffset];
     self.buttonBack.frame = buttonFrame;
 }
 

@@ -323,7 +323,7 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applyCorrectViewSize];
         [self setupBottomContolMarginsForHeight:0];
-        [self updateControlsLayout:[self getHudButtonsTopOffset]];
+        [self updateControlsLayout:[self getHudTopOffset]];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     }  ];
@@ -827,7 +827,10 @@
     [self updateButtonsLayoutY:y];
     
     if (_widgetsView)
-        _widgetsView.frame = CGRectMake([self getExtraScreenOffset], y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2 - [self getExtraScreenOffset] * 2, 10.0);
+    {
+        CGFloat widgetsOffset = 2.0;
+        _widgetsView.frame = CGRectMake(widgetsOffset, y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2 - widgetsOffset * 2, 10.0);
+    }
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)
@@ -850,7 +853,7 @@
     CGFloat sX = [self getExtraScreenOffset] + kButtonWidth + kButtonOffset;
     CGSize sSize = _searchButton.frame.size;
     
-    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY];
+    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY] + kButtonOffset;
     
     if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, buttonsY, size.width, size.height)))
     {
@@ -860,14 +863,14 @@
     }
 }
 
-- (CGFloat) getHudButtonsMinTopOffset
+- (CGFloat) getHudMinTopOffset
 {
-    return [OAUtilities getStatusBarHeight] + kButtonOffset;
+    return [OAUtilities getStatusBarHeight];
 }
 
-- (CGFloat) getHudButtonsTopOffset
+- (CGFloat) getHudTopOffset
 {
-    CGFloat offset = [self getHudButtonsMinTopOffset];
+    CGFloat offset = [self getHudMinTopOffset];
     
     BOOL isMarkersWidgetVisible = _toolbarViewController.view.alpha != 0;
     CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
@@ -891,7 +894,7 @@
 
 - (void) updateToolbarLayout:(BOOL)animated;
 {
-    CGFloat y = [self getHudButtonsTopOffset];
+    CGFloat y = [self getHudTopOffset];
     if (animated)
     {
         [UIView animateWithDuration:.2 animations:^{
@@ -906,7 +909,7 @@
 
 - (void) updateButtonsLayout:(BOOL)animated
 {
-    CGFloat y = [self getHudButtonsTopOffset];
+    CGFloat y = [self getHudTopOffset];
     if (animated)
     {
         [UIView animateWithDuration:.2 animations:^{
@@ -955,7 +958,7 @@
 
 - (CGRect) getDownloadViewFrame
 {
-    CGFloat y = [self getHudButtonsTopOffset];
+    CGFloat y = [self getHudTopOffset];
     CGFloat leftMargin = self.searchButton.frame.origin.x + kButtonWidth + kButtonOffset;
     CGFloat rightMargin = _rightWidgetsView ? _rightWidgetsView.bounds.size.width + 2 * kButtonOffset : kButtonOffset;
     return CGRectMake(leftMargin, y + 12.0, self.view.bounds.size.width - leftMargin - rightMargin, 28.0);
@@ -967,7 +970,7 @@
     if (_downloadView)
         y = _downloadView.frame.origin.y + _downloadView.frame.size.height;
     else
-        y = [self getHudButtonsTopOffset];
+        y = [self getHudTopOffset];
     
     return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
 }
@@ -1081,7 +1084,7 @@
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.alpha = alphaEx;
 
-        [self updateControlsLayout:[self getHudButtonsTopOffset]];
+        [self updateControlsLayout:[self getHudTopOffset]];
 
     } completion:^(BOOL finished) {
         

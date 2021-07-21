@@ -316,8 +316,8 @@
         if (container == _rightWidgetsView)
         {
             hasRightWidgets = widgetsHeight > 0;
-            CGFloat rightOffset = (OAUtilities.isLandscape && OAUtilities.getLeftMargin > 0) ? 0.0 : 32;
-            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth - rightOffset, yPos, maxWidth, containerHeight);
+            CGFloat rightOffset = 2.0;
+            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth - 2 * rightOffset, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, rightContainerFrame))
             {
                 container.frame = rightContainerFrame;

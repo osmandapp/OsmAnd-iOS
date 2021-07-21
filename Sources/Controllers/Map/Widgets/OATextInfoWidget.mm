@@ -13,7 +13,7 @@
 
 #define textHeight 22
 #define minTextWidth 64
-#define fullTextWidth 108
+#define fullTextWidth 90
 
 @interface OATextInfoWidget ()
 

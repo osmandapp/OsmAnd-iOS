@@ -74,8 +74,8 @@
 - (void) hideTopControls;
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
-- (CGFloat) getHudButtonsMinTopOffset;
-- (CGFloat) getHudButtonsTopOffset;
+- (CGFloat) getHudMinTopOffset;
+- (CGFloat) getHudTopOffset;
 
 - (void) onRoutingProgressChanged:(int)progress;
 - (void) onRoutingProgressFinished;

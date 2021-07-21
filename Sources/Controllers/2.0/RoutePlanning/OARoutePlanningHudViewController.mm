@@ -440,7 +440,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)adjustMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if ([self isLeftSidePresentation])
+    if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
+    {
+        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
+    }
+    else if ([self isLeftSidePresentation])
     {
         mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
         mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
@@ -796,6 +801,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             [self goMinimized];
             [button setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
         }
+        [self adjustMapViewPort];
     }
 }
 - (IBAction)onOptionsButtonPressed:(id)sender

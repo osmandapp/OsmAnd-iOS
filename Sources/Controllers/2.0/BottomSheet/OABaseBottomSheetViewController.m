@@ -376,6 +376,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             _initialTouchPoint = [recognizer locationInView:_bottomSheetView].y;
         case UIGestureRecognizerStateChanged:
         {
+            if (touchPoint.y <= self.tableView.frame.origin.y) 
+                return;
+            
             CGFloat newY = touchPoint.y - _initialTouchPoint;
             if (_bottomSheetView.frame.origin.y > OAUtilities.getStatusBarHeight
                 || (_initialTouchPoint < _tableView.frame.origin.y && _tableView.contentOffset.y > 0))

@@ -227,7 +227,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [_tableView setContentOffset:CGPointZero];
     _isHiding = NO;
     _currentState = EOAScrollableMenuStateInitial;
-    [_tableView setScrollEnabled:_currentState == EOAScrollableMenuStateFullScreen];
     [self generateData];
     [self adjustFrame];
     [self.tableView reloadData];
@@ -298,8 +297,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     if (_isHiding || _isDragging)
         return;
     [self adjustFrame];
-
-    [_tableView setScrollEnabled:_currentState == EOAScrollableMenuStateFullScreen];
 
     CGRect contentFrame = _contentContainer.frame;
     contentFrame.size.width = _bottomSheetView.bounds.size.width;

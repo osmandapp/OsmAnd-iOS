@@ -113,6 +113,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIButton *landscapeExpandButton;
 @property (weak, nonatomic) IBOutlet UIButton *landscapeOptionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *landscapeAddPointButton;
+@property (weak, nonatomic) IBOutlet UIProgressView *landscapeProgressView;
 
 @end
 
@@ -1566,6 +1567,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)hideProgressBar
 {
     _progressView.hidden = YES;
+    _landscapeProgressView.hidden = YES;
 }
 
 - (void)refresh
@@ -1577,11 +1579,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)showProgressBar
 {
     _progressView.hidden = NO;
+    _landscapeProgressView.hidden = NO;
 }
 
 - (void)updateProgress:(int)progress
 {
     [_progressView setProgress:progress / 100.];
+    [_landscapeProgressView setProgress:progress / 100.];
 }
 
 #pragma mark - OAPlanningOptionsDelegate

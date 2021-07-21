@@ -342,7 +342,7 @@
             [self.delegate onApplicationModeChanged:item[@"mode"] dialogType:_dialogType dialogMode:_dialogMode];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self hide:YES];
 }
 
 @end

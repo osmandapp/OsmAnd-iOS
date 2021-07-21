@@ -298,48 +298,48 @@
     }
     else if ([key isEqualToString:@"change_route_before"])
     {
-        [self dismissViewControllerAnimated:NO completion:nil];
+        [self hide:YES];
         if (self.delegate)
             [self.delegate onChangeRouteTypeBefore];
         return;
     }
     else if ([key isEqualToString:@"change_route_after"])
     {
-        [self dismissViewControllerAnimated:NO completion:nil];
+        [self hide:YES];
         if (self.delegate)
             [self.delegate onChangeRouteTypeAfter];
         return;
     }
     else if ([key isEqualToString:@"new_segment"])
     {
-        [self dismissViewControllerAnimated:NO completion:nil];
+        [self hide:YES];
         if (self.delegate)
             [self.delegate onSplitPointsAfter];
         return;
     }
     else if ([key isEqualToString:@"join_segments"])
     {
-        [self dismissViewControllerAnimated:NO completion:nil];
+        [self hide:YES];
         if (self.delegate)
             [self.delegate onJoinPoints];
         return;
     }
     else if ([key isEqualToString:@"split_before"])
     {
-        [self dismissViewControllerAnimated:NO completion:nil];
+        [self hide:YES];
         if (self.delegate)
             [self.delegate onSplitPointsBefore];
         return;
     }
     else if ([key isEqualToString:@"split_after"])
     {
-        [self dismissViewControllerAnimated:NO completion:nil];
+        [self hide:YES];
         if (self.delegate)
             [self.delegate onSplitPointsAfter];
         return;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self hide:YES];
 }
 
 @end

@@ -249,7 +249,7 @@
     NSString *key = item[@"key"];
     if ([key isEqualToString:@"create_new_route"])
     {
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self hide:YES];
         [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
         return;
     }
@@ -263,7 +263,7 @@
     else if ([key isEqualToString:@"gpx_route"])
     {
         OAGPX* track = item[@"track"];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self hide:YES];
         [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
         return;
     }

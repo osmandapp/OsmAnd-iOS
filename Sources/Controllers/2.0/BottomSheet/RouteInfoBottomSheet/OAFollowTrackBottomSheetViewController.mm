@@ -499,7 +499,7 @@
 		return;
 	}
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self hide:YES];
 }
 
 #pragma mark - UITapGestureRecognizer

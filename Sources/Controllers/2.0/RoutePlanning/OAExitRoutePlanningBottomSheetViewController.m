@@ -129,14 +129,14 @@
 
 - (void) exitButtonPressed
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self hide:YES];
     if (_delegate)
         [_delegate onExitRoutePlanningPressed];
 }
 
 - (void) saveButtonPressed
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self hide:YES];
     if (_delegate)
         [_delegate onSaveResultPressed];
 }

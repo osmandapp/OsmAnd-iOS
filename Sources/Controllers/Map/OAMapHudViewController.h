@@ -57,6 +57,7 @@
 - (void) enterContextMenuMode;
 - (void) restoreFromContextMenuMode;
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left;
+- (void) resetToDefaultRulerLayout;
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController;
 - (void) updateToolbarLayout:(BOOL)animated;

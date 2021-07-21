@@ -336,6 +336,12 @@
     [self.rulerLabel layoutIfNeeded];
 }
 
+- (void) resetToDefaultRulerLayout
+{
+    CGFloat bottomMargin = OAUtilities.getBottomMargin > 0 ? 0 : kButtonOffset;
+    [self updateRulerPosition:-bottomMargin left:_driveModeButton.frame.origin.x + _driveModeButton.frame.size.width + kButtonOffset];
+}
+
 - (BOOL) shouldShowCompass
 {
     return [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
@@ -1140,11 +1146,15 @@
 
 - (void) setupBottomContolMarginsForHeight:(CGFloat)menuHeight
 {
-    CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    _optionsMenuButton.frame = CGRectMake([self getExtraScreenOffset], DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
-    _driveModeButton.frame = CGRectMake([self getExtraScreenOffset] + 66.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-    _mapModeButton.frame = CGRectMake(self.view.bounds.size.width - 116.0 - [self getExtraScreenOffset], DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-    _zoomButtonsView.frame = CGRectMake(self.view.bounds.size.width - 50.0 - [self getExtraScreenOffset], DeviceScreenHeight - 130.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+    CGFloat bottomMargin = [OAUtilities getBottomMargin] > 0 ? [OAUtilities getBottomMargin] : kButtonOffset;
+    CGFloat topSpace = DeviceScreenHeight - bottomMargin;
+    
+    _optionsMenuButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _optionsMenuButton.bounds.size.height, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
+    _driveModeButton.frame = CGRectMake([self getExtraScreenOffset] + kButtonWidth + kButtonOffset, topSpace - _driveModeButton.bounds.size.height, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
+    _mapModeButton.frame = CGRectMake(self.view.bounds.size.width - 2 * kButtonWidth - kButtonOffset - [self getExtraScreenOffset], topSpace - _mapModeButton.bounds.size.height, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+    _zoomButtonsView.frame = CGRectMake(self.view.bounds.size.width - kButtonWidth - [self getExtraScreenOffset], topSpace - _zoomButtonsView.bounds.size.height, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+    
+    [self resetToDefaultRulerLayout];
 }
 
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated

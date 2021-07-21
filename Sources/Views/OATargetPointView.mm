@@ -51,9 +51,7 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
 #define kButtonsViewHeight 44.0
-
-#define kDefaultMapRulerMarginBottom -17.0
-#define kDefaultMapRulerMarginLeft 120.0
+#define kDefaultMapRulerMarginBottom 0
 
 @interface OATargetPointZoomView ()
 
@@ -1057,7 +1055,7 @@ static const NSInteger _buttonsCount = 4;
                 [self removeFromSuperview];
                 
                 if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
-                    [self.menuViewDelegate targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+                    [self.menuViewDelegate targetResetMapRulerPosition];
             
                 [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
@@ -1080,7 +1078,7 @@ static const NSInteger _buttonsCount = 4;
             [self removeFromSuperview];
             
             if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
-                [self.menuViewDelegate targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+                [self.menuViewDelegate targetResetMapRulerPosition];
             
             [self clearCustomControllerIfNeeded];
             [self restoreTargetType];

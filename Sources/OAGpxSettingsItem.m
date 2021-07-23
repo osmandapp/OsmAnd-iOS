@@ -77,16 +77,20 @@
 - (NSString *)fileNameWithFolder
 {
     NSString *folderName = @"";
+    NSString *fileName = self.fileName;
     NSArray<NSString *> *pathComponents = self.filePath.pathComponents;
     if (pathComponents.count > 1)
+    {
         folderName = pathComponents[pathComponents.count - 2];
+        fileName = pathComponents[pathComponents.count - 1];
+    }
     
     NSString *tracksName = @"/tracks";
     if ([folderName isEqualToString:@"GPX"])
         folderName = tracksName;
     else
         folderName = [tracksName stringByAppendingPathComponent:folderName];
-    return [folderName stringByAppendingPathComponent:self.fileName];
+    return [folderName stringByAppendingPathComponent:fileName];
 }
 
 - (void) writeToJson:(id)json

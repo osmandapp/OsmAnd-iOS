@@ -2079,7 +2079,7 @@
 "ios_release_3_80" = "- Introduction de \"profils d'application\" avec des paramètres indépendants\n- Nouvelle disposition des paramètres par profils et types : navigation, général, carte et écran\n- Possibilité d'importer ou d'exporter les paramètres des profils\n- Ajout de sources de données pour les photos en ligne\n- Ajout de la possibilité de télécharger des cartes en ligne dans la mémoire cache\n- Algorithmes de \"recherche\" améliorés\n";
 "units_nm" = "mn";
 "approximate_file_size" = "Taille approximative du fichier : %@";
-"gpxup_private" = "privée";
+"gpxup_private" = "Privée";
 "gpxup_public" = "publique";
 "shared_string_wifi_only" = "Seulement en Wi-Fi";
 "by_type" = "Par %@";

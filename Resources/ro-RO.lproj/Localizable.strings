@@ -816,7 +816,6 @@
 "routing_attr_length_name" = "Limită lungime";
 "shared_string_done" = "Gata";
 "routing_attr_height_obstacles_name" = "Utilizare date altitudine";
-
 "logging_min_speed" = "Viteza minimă";
 "quick_action_remove_next_destination" = "Ștergeți următorul punct de destinație";
 "enter_profile_name" = "Introduceți numele profilului";
@@ -931,7 +930,6 @@
 "units_t" = "t";
 "personal_category_name" = "Personal";
 "position_icon_at_rest" = "Poziționare icoană în timpul repausului";
-
 "coordinates" = "Coordonate";
 "fav_points_not_exist" = "Nu există puncte favorite";
 "download_tab_local" = "Local";
@@ -980,3 +978,31 @@
 "group_name" = "Numele grupului";
 "shared_string_enable" = "Permite";
 "service" = "Service";
+"route_between_points_warning_desc" = "Apoi, pentru a utiliza această opțiune, fixați pista pe cel mai apropiat drum permis cu unul dintre profilurile de navigație.";
+"select_another_track" = "Selectați o altă pistă";
+"nearest_point" = "Punctul cel mai apropiat";
+"attach_to_the_roads" = "Atașați la drumuri";
+"simplified_track_description" = "Va fi salvată doar linia de rută, iar punctele de trecere vor fi șterse.";
+"monitoring_control_start" = "REC";
+"open_saved_track" = "Deschideți pista salvată";
+"markers_history" = "Istoria marcajelor";
+"gpx_upload_public_visibility_descr" = "\"Public\" înseamnă că urma este afișată public în urmele GPS și în listele publice de urme GPS, precum și în lista publică de urme cu marcajele de timp în formă brută. Datele furnizate prin intermediul API nu fac trimitere la pagina dvs. de traseu. Nu sunt disponibile timestamps ale punctelor de urmărire prin intermediul API GPS publice, iar punctele de urmărire nu sunt ordonate cronologic.";
+"gpx_upload_private_visibility_descr" = "\"Privat\" înseamnă că urmărirea nu apare în nicio listă publică, dar punctele de urmărire din aceasta, în ordine necronologică, sunt disponibile prin intermediul API GPS public fără marcaje temporale.";
+"gpx_upload_identifiable_visibility_descr" = "\"Identificabilă\" înseamnă că urma va fi afișată public în urmele GPS și în listele publice de urme GPS, adică alți utilizatori vor putea descărca urma brută și o vor putea asocia cu numele dvs. de utilizator. Datele publice cu marcaj orar ale punctelor de urmărire din API GPS, furnizate prin intermediul trackpoints API, vor face trimitere la pagina dvs. de urmărire originală.";
+"gpx_upload_trackable_visibility_descr" = "\"Trackable\" înseamnă că urmărirea nu apare în nicio listă publică, dar punctele de urmărire procesate cu marcaje de timp (care nu pot fi asociate direct cu dvs.) apar prin descărcări din API-ul GPS public.";
+
+// Resources
+"shared_string_resources" = "Resurse";
+"profile_type_osmand_string" = "OsmAnd profil";
+"profile_type_user_string" = "Profilul utilizatorului";
+"shared_string_turn" = "Întoarceți";
+"quick_action_remove_next_destination_descr" = "Șterge următoarea destinație de pe traseu. Dacă aceasta este destinația finală, navigația se va opri.";
+"restart" = "Reporniți";
+"app_restart_required" = "Este necesară repornirea aplicației pentru a aplica anumite setări.";
+"map_widget_distance_by_tap" = "Distanța prin atingere";
+"purchases" = "Achiziții";
+"search_more" = "Căutați mai multe…";
+"threshold_distance" = "Distanța de prag";
+"street_level_imagery" = "Imagini la nivel de stradă";
+"follow_track" = "Urmează pista";
+"simplified_track" = "Pista simplificată";

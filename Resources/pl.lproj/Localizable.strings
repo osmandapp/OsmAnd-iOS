@@ -195,7 +195,7 @@
 "apply_filters" = "Zastosuj filtry";
 "save_filter" = "Zapisz filtr";
 "delete_filter" = "Usuń filtr";
-"new_filter_desc" = "Proszę wprowadzić nazwę nowego filtra. Zostanie on dodany do karty kategorii.";
+"new_filter_desc" = "Wprowadź nazwę nowego filtra. Zostanie on dodany do karty „Kategorie”.";
 "skip_map_downloading" = "Pomiń pobieranie map";
 "search_another_country" = "Proszę wybrać inny region";
 "first_usage_wizard_desc" = "Program OsmAnd określi aktualne położenie i zasugeruje pobranie mapy dla tego regionu.";
@@ -240,7 +240,7 @@
 "prch_nau_q2_cell" = "Pobieranie wymaga %@ za pośrednictwem sieci komórkowej.";
 "incur_high_charges" = "Może to wiązać się z wysokimi opłatami.";
 "prch_nau_q2_wifi" = "Pobieranie wymaga %@ za pośrednictwem sieci Wi-Fi.";
-"prch_items_failed" = "elementy nie zostały przywrócone. Proszę spróbować ponownie.";
+"prch_items_failed" = "element(y/ów) nie został(y/o) przywrócony(-e/-ych). Spróbuj ponownie.";
 "res_banner_free_maps_desc" = "Możesz pobrać %d darmowe mapy, bez aktualizacji";
 "res_banner_no_free_maps_desc" = "Należy zakupić mapy regionów lub mapy całego świata";
 "res_wsea_map" = "Mapa bazowa światowych znaków nawigacyjnych";
@@ -257,8 +257,8 @@
 "res_unknown" = "Nieznany";
 "res_size" = "Rozmiar";
 "res_update_all" = "Aktualizuj wszystko";
-"res_updates_no_space" = "Za mało miejsca, aby zainstalować aktualizacje %d. %@ jest potrzebne. Proszę zwolnić trochę miejsca.";
-"res_updates_avail_q" = "aktualizacje są dostępne.";
+"res_updates_no_space" = "Za mało miejsca, aby zainstalować %d aktualizację(-e/-i). Jest potrzebne %@. Zwolnij trochę miejsca.";
+"res_updates_avail_q" = "aktualizacja(-e/-i) jest/są dostępna(-e/-ych).";
 // Menu
 "menu_my_places" = "Moje miejsca";
 "menu_my_trips" = "Moje trasy";
@@ -340,7 +340,7 @@
 "sett_arr_map" = "Środek mapy";
 "sett_lang_show_trans" = "Transliteracja nazw";
 "res_banner_no_free_maps_title" = "Nie masz darmowych map!";
-"res_type" = "Typ";
+"res_type" = "Rodzaj";
 "add_parking_short" = "Dodaj Parking";
 "add_waypoint_short" = "Dodaj punkt trasy";
 "time_left" = "pozostało";
@@ -520,7 +520,7 @@
 "shared_string_info" = "Informacje";
 "simulate_routing" = "Symulowanie położenia";
 "simulate_routing_descr" = "Zasymuluj położenie używając wyznaczonej trasy";
-"day_night_info_description" = "Wschód: %1$s \nZachód: %2$s";
+"day_night_info_description" = "Wschód Słońca: %@\nZachód Słońca: %@";
 "day_night_info" = "Informacja o dniu/nocy";
 "daynight_mode_auto" = "Wschód/zachód Słońca";
 "route_simulation" = "Symulacja trasy";
@@ -582,8 +582,8 @@
 "speak_pedestrian" = "Przejścia dla pieszych";
 "int_seconds" = "sekund";
 "shared_string_never" = "Nigdy";
-"general_settings_2" = "Ogólne";
-"general_settings_descr" = "Styl aplikacji, jednostki, region";
+"general_settings_2" = "Ustawienia ogólne";
+"general_settings_descr" = "Motyw aplikacji, jednostki, region";
 "routing_settings_descr" = "Skonfiguruj nawigację";
 "auto_zoom_none" = "Brak automatycznego przybliżania";
 "auto_zoom_close" = "Zbliżenie";
@@ -628,7 +628,7 @@
 "driving_region_europe_asia" = "Europa, Azja, Ameryka Łacińska i podobne";
 "prch_nau_q1" = "Włącz styl \"Morski\" w ustawieniach mapy i zainstaluj mapę bazową światowych znaków nawigacyjnych.";
 "prch_nau_q3" = "Możesz zainstalować ją później używając Map i Zasobów.";
-"res_maps_inst" = "map(y)";
+"res_maps_inst" = "map(a/y)";
 "res_dmap" = "Mapa szczegółowa";
 "res_cancel_upd_q" = "Zamierzasz anulować aktualizację %@.";
 "res_cancel_inst_q" = "Zamierzasz anulować instalację %@.";
@@ -885,7 +885,7 @@
 "osmand_live_cancel_descr" = "Odnów subskrypcję, aby nadal korzystać z pełnej funkcjonalności:";
 "osm_live_enter_email" = "Proszę wprowadzić prawidłowy adres e-mail";
 "shared_string_unexpected_error" = "Nieoczekiwany błąd";
-"osm_live_payment_desc" = "Opłata za subskrypcję na miesiąc. Anuluj ją w App Store w dowolnym momencie";
+"osm_live_payment_desc" = "Możesz zarządzać swoimi subskrypcjami i anulować je w ustawieniach konta App Store po zakupie";
 "osm_live_unlock_all" = "Odblokuj wszystkie funkcje";
 "osm_live_unlock_updates" = "Odblokuj cogodzinną aktualizację map";
 "osmand_live_update_now" = "Uaktualnij";
@@ -1330,7 +1330,7 @@
 "rendering_attr_contourDensity_description" = "Gęstość izolinii";
 "routeInfo_winter_ice_road_name" = "Drogi zimowe i lodowe";
 "routing_attr_difficulty_preference_name" = "Preferowana trudność";
-"routing_attr_freeride_policy_description" = "Freeride i offpiste to nieoficjalne trasy i przejścia. Zazwyczaj nieprzygotowane i niesprawdzone. Wchodzisz na własne ryzyko.";
+"routing_attr_freeride_policy_description" = "„Freeride” i „poza trasą” to nieoficjalne trasy i przejścia. Zazwyczaj nieprzygotowane, nieutrzymywane i niesprawdzane wieczorem. Wchodzisz na własne ryzyko.";
 "rendering_attr_noAdminboundaries_name" = "Granice";
 "rendering_value_thin_name" = "Cienki";
 "routing_attr_allow_private_description" = "Zezwala na dostęp do prywatnych obszarów.";
@@ -1468,7 +1468,7 @@
 "rendering_attr_moreDetailed_name" = "Więcej szczegółów";
 "routing_attr_avoid_stairs_name" = "Omijanie schodów";
 "rendering_attr_hikingRoutesOSMC_name" = "Nakładka symboli szlaków turystycznych";
-"rendering_attr_piste_difficulty_advanced_name" = "Zaawansowane";
+"rendering_attr_piste_difficulty_advanced_name" = "Zaawansowana";
 "routing_attr_avoid_subway_description" = "Unikaj metra i lekkiego transportu kolejowego";
 "rendering_attr_highway_class_track_grade1_name" = "Klasa 1";
 "routeInfo_road_types_name" = "Rodzaje dróg";
@@ -1480,13 +1480,13 @@
 "routeInfo_roadClass_name" = "Rodzaj drogi";
 "routing_attr_short_way_name" = "Ekonomiczna trasa";
 "routing_attr_avoid_ice_roads_fords_name" = "Omijanie lodowych dróg i brodów";
-"routing_attr_difficulty_preference_description" = "Preferuj trasy o tej trudności, chociaż wyznaczanie tras na trudniejsze lub łatwiejsze jest nadal możliwe, jeśli jest krótsza.";
+"routing_attr_difficulty_preference_description" = "Preferuj trasy o tej trudności, chociaż wyznaczanie tras przez trudniejsze lub łatwiejsze jest nadal możliwe, jeśli są krótsze.";
 "rendering_value_translucent_pink_name" = "Przezroczysty różowy";
 "rendering_attr_hideUnderground_name" = "Podziemne obiekty";
 "rendering_attr_streetLighting_name" = "Oświetlenie ulicy";
 "routing_attr_prefer_motorway_description" = "Preferuj autostrady";
 "rendering_attr_surface_concrete_name" = "Beton";
-"rendering_attr_piste_difficulty_connection_name" = "Połączenia";
+"rendering_attr_piste_difficulty_connection_name" = "Połączenie";
 "routing_attr_driving_style_speed_name" = "Krótsze trasy";
 "routing_attr_avoid_bus_description" = "Unikanie autobusów i trolejbusów";
 "rendering_attr_tramTrainRoutes_name" = "Linie tramwajowe i kolejowe";
@@ -1538,8 +1538,8 @@
 "routing_attr_driving_style_name" = "Styl jazdy";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Pokaż trasy rowerowe z sieci węzłów";
 "rendering_attr_piste_type_nordic_name" = "Skandynawski";
-"routeInfo_piste_difficulty_name" = "Trudność stoku";
-"rendering_attr_piste_difficulty_freeride_name" = "Bardzo trudna";
+"routeInfo_piste_difficulty_name" = "Trudność trasy";
+"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "rendering_attr_piste_difficulty_novice_name" = "Nowicjusz";
 "rendering_attr_surface_fine_gravel_name" = "Drobnyżwir";
 "routing_attr_piste_type_downhill_description" = "Stoki narciarskie do narciarstwa alpejskiego i zjazdowego oraz dostęp do wyciągów narciarskich.";
@@ -1621,7 +1621,7 @@
 "app_mode_ufo" = "UFO";
 "app_mode_car" = "Jazda";
 "map_settings_appearance" = "Wygląd";
-"app_mode_offroad" = "off-road";
+"app_mode_offroad" = "Off-road";
 "map_settings_base_transp" = "Przezroczystość warstwy bazowej";
 "map_settings_color_scheme" = "Zestaw kolorów";
 "app_mode_osm" = "OSM";

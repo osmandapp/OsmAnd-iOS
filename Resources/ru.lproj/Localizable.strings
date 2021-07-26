@@ -893,8 +893,8 @@
 "poi_opening_hours" = "Рабочие часы";
 "poi_select_category" = "Выбор категории";
 "poi_select_type" = "Выбор типа";
-"access_intermediate_arrival_time" = "Промежуточное время прибытия";
-"map_widget_intermediate_time" = "Прибытие в промежуточный пункт";
+"access_intermediate_arrival_time" = "Прибытие в промежуточный пункт";
+"map_widget_intermediate_time" = "Время до промежуточного пункта";
 "shared_string_milliradians" = "Миллирадианы";
 "angular_units_descr" = "Сменить единицы измерения азимута.";
 "mapillary_image" = "Фотография Mapillary";
@@ -1566,7 +1566,7 @@
 "rendering_value_dark_brown_name" = "Темно-коричневый";
 "routeInfo_roadClass_name" = "Класс дороги";
 "rendering_value_medium_w_name" = "Средняя";
-"routeInfo_winter_ice_road_name" = "Зимние и ледовые дороги";
+"routeInfo_winter_ice_road_name" = "Зимние и ледовые дороги";
 "rendering_attr_smoothness_very_bad_name" = "Очень плохая";
 "rendering_attr_highway_class_bridleway_name" = "Конная";
 "rendering_attr_smoothness_intermediate_name" = "Средняя";
@@ -1983,7 +1983,7 @@
 "search_preogress" = "Поиск…";
 "units_nm" = "мор. миля";
 "map_widget_distance_by_tap" = "Расстояние по нажатию";
-"simplified_track_description" = "Будет сохранена только линия маршрута, путевые точки будут удалены.";
+"simplified_track_description" = "Будет сохранена только линия маршрута, без путевых точек.";
 "open_saved_track" = "Открыть сохраненный трек";
 "nearest_point" = "Ближайшая точка";
 "simplified_track" = "Упрощенный трек";

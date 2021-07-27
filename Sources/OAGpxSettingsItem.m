@@ -86,7 +86,7 @@
         folderName = tracksName;
     else
         folderName = [tracksName stringByAppendingPathComponent:folderName];
-    return [folderName stringByAppendingPathComponent:self.fileName];
+    return [folderName stringByAppendingPathComponent:self.fileName.lastPathComponent];
 }
 
 - (void) writeToJson:(id)json

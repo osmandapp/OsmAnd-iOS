@@ -300,7 +300,7 @@ static BOOL dataInvalidated = NO;
 
 - (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
 {
-    [OAResourcesUIHelper startDownloadOf:resource resourceName:name onTaskCreated:^(id<OADownloadTask>  _Nonnull task) {
+    [OAResourcesUIHelper startDownloadOf:resource resourceName:name onTaskCreated:^(id<OADownloadTask> _Nonnull task) {
         [self updateContent];
     } onTaskResumed:^(id<OADownloadTask>  _Nonnull task) {
         [self showDownloadViewForTask:task];
@@ -317,7 +317,12 @@ static BOOL dataInvalidated = NO;
 
 - (void) offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
 {
-    [OAResourcesUIHelper offerDeleteResourceOf:item viewController:self progressHUD:_deleteResourceProgressHUD executeAfterSuccess:block];
+    dispatch_block_t block_ = ^{
+        [self.region.superregion updateGroupItems:self.region type:[OAResourceType toValue:item.resourceType]];
+        if (block)
+            block();
+    };
+    [OAResourcesUIHelper offerDeleteResourceOf:item viewController:self progressHUD:_deleteResourceProgressHUD executeAfterSuccess:block_];
 }
 
 - (void) offerDeleteResourceOf:(OALocalResourceItem *)item
@@ -460,7 +465,7 @@ static BOOL dataInvalidated = NO;
     // Skip all downloads that are not resources
     if (![task.key hasPrefix:@"resource:"])
         return;
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
@@ -468,12 +473,31 @@ static BOOL dataInvalidated = NO;
             return;
         }
 
+        NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
+        const auto resourceId = QString::fromNSString(nsResourceId);
+        const auto resource = _app.resourcesManager->getResource(resourceId);
+        if (resource)
+        {
+            OAWorldRegion *foundRegion;
+            for (OAWorldRegion *region in self.region.subregions)
+            {
+                if (resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
+                {
+                    foundRegion = region;
+                    break;
+                }
+            }
+            if (foundRegion)
+                [self.region updateGroupItems:foundRegion type:[OAResourceType toValue:resource->type]];
+        }
+
         if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
             [self.downloadView removeFromSuperview];
         
         if (task.progressCompleted < 1.0)
         {
-            if ([_app.downloadsManager.keysOfDownloadTasks count] > 0) {
+            if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+            {
                 id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
                 [nextTask resume];
 

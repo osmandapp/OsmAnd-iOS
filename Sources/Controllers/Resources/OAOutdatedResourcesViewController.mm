@@ -396,9 +396,9 @@
     if (cell.detailTextLabel != nil)
     {
         if (item.sizePkg > 0)
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
         else
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourceType resourceTypeLocalized:item.resourceType]];
     }
     
     //[NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType]

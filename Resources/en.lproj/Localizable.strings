@@ -509,6 +509,7 @@
 "shared_string_min" = "Min.";
 "shared_string_max" = "Max.";
 "shared_string_wifi_only" = "Only on Wi-Fi";
+"shared_strings_all_regions" = "All regions";
 
 "restart" = "Restart";
 
@@ -1079,6 +1080,7 @@
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
 "res_online_source_cache_alert" = "Applying these changes will clear the cached data for this tile source";
+"welmode_download_maps" = "Download maps";
 
 // Menu
 "menu" = "Menu";

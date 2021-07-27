@@ -15,20 +15,45 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/IncrementalChangesManager.h>
 
+typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+
 @class OADownloadDescriptionInfo;
 
+@interface OAResourceType : NSObject
+
+@property (nonatomic, readonly) OsmAndResourceType type;
+
++ (instancetype)withType:(OsmAndResourceType)type;
++ (NSString *)resourceTypeLocalized:(OsmAndResourceType)type;
++ (UIImage *)getIcon:(OsmAndResourceType)type;
++ (NSArray<NSNumber *> *)groupValues;
++ (NSArray<NSNumber *> *)allValues;
++ (OsmAndResourceType)unknown;
++ (OsmAndResourceType)toResourceType:(NSNumber *)value isGroup:(BOOL)isGroup;
++ (NSNumber *)toValue:(OsmAndResourceType)type;
+
+@end
+
 @interface OAResourceItem : NSObject
+
 @property NSString* title;
 @property QString resourceId;
-@property OsmAnd::ResourcesManager::ResourceType resourceType;
+@property OsmAndResourceType resourceType;
 @property uint64_t size;
 @property uint64_t sizePkg;
+@property NSDate *date;
 @property id<OADownloadTask> __weak downloadTask;
 @property OAWorldRegion* worldRegion;
 @property BOOL disabled;
 
-- (void) updateSize;
+- (void)updateSize;
+- (NSString *)getDate;
 
+@end
+
+@interface OAMultipleResourceItem : OAResourceItem
+@property (nonatomic, readonly) NSArray<OAResourceItem *> *items;
+- (instancetype)initWithType:(OsmAndResourceType)resourceType items:(NSArray<OAResourceItem *> *)items;
 @end
 
 @interface OARepositoryResourceItem : OAResourceItem
@@ -84,38 +109,50 @@
 
 @end
 
+@interface OAResourceGroupItem : NSObject
+
+@property (nonatomic, readonly) NSString *key;
+@property (nonatomic, readonly) OAWorldRegion *region;
+
++ (instancetype)withParent:(OAWorldRegion *)parentRegion;
+- (BOOL)isEmpty;
+- (BOOL)hasItems:(OsmAndResourceType)key;
+- (NSArray<OAResourceItem *> *)getItems:(OsmAndResourceType)key;
+- (void)addItem:(OAResourceItem *)item key:(OsmAndResourceType)key;
+- (void)addItems:(NSArray<OAResourceItem *> *)items key:(OsmAndResourceType)key;
+- (void)removeItem:(OsmAndResourceType)key subregion:(OAWorldRegion *)subregion;
+- (NSArray<NSNumber *> *)getTypes;
+- (void)sort;
+
+@end
+
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
+typedef void (^OASimpleCallback)(UIAlertController *alert);
 
 @class MBProgressHUD;
 
 @interface OAResourcesUIHelper : NSObject
 
-+ (NSString *) resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type;
-
-+ (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
-                      inRegion:(OAWorldRegion*)region
-                withRegionName:(BOOL)includeRegionName
-              withResourceType:(BOOL)includeResourceType;
++ (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource inRegion:(OAWorldRegion*)region withRegionName:(BOOL)includeRegionName withResourceType:(BOOL)includeResourceType;
++ (NSString *)titleOfResourceType:(OsmAndResourceType)type inRegion:(OAWorldRegion *)region withRegionName:(BOOL)includeRegionName withResourceType:(BOOL)includeResourceType;
 
 + (BOOL) isSpaceEnoughToDownloadAndUnpackOf:(OAResourceItem*)item;
 + (BOOL) isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
-+ (BOOL) verifySpaceAvailableToDownloadAndUnpackOf:(OAResourceItem*)item
-                                          asUpdate:(BOOL)isUpdate;
-+ (BOOL) verifySpaceAvailableDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
-                                      withResourceName:(NSString*)resourceName
-                                              asUpdate:(BOOL)isUpdate;
-+ (void) showNotEnoughSpaceAlertFor:(NSString*)resourceName
-                           withSize:(unsigned long long)size
-                           asUpdate:(BOOL)isUpdate;
++ (BOOL) verifySpaceAvailableToDownloadAndUnpackOf:(OAResourceItem*)item asUpdate:(BOOL)isUpdate;
++ (BOOL) verifySpaceAvailableDownloadAndUnpackResource:(uint64_t)spaceNeeded withResourceName:(NSString*)resourceName asUpdate:(BOOL)isUpdate;
++ (void) showNotEnoughSpaceAlertFor:(NSString*)resourceName withSize:(unsigned long long)size asUpdate:(BOOL)isUpdate;
 
 + (void) startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name;
 + (void) startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate>&)resource;
 + (void) startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name;
 
-+ (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (NSString *)messageResourceStartDownload:(NSString *)resourceName stringifiedSize:(NSString *)stringifiedSize isOutdated:(BOOL)isOutdated;
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem selectedItems:(NSArray<OAResourceItem *> *)selectedItems onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed onAlertPresent:(OASimpleCallback)onAlertPresent;
++ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
 + (void) startDownloadOfItem:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (void)startDownloadOfItems:(NSArray<OAResourceItem *> *)items onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 + (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 + (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
@@ -131,12 +168,13 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 + (void) offerClearCacheOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block;
 + (void) clearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
 
-+ (OAWorldRegion *) findRegionOrAnySubregionOf:(OAWorldRegion*)region
-                          thatContainsResource:(const QString&)resourceId;
++ (OAWorldRegion *) findRegionOrAnySubregionOf:(OAWorldRegion*)region thatContainsResource:(const QString&)resourceId;
 + (NSString *) getCountryName:(OAResourceItem *)item;
 + (BOOL) checkIfDownloadAvailable;
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region;
-+ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete;
++ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAndResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete;
++ (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(NSArray<OAWorldRegion *> *)subregions resourceTypes:(NSArray<NSNumber *> *)resourceTypes isGroup:(BOOL)isGroup;
++ (NSArray<OAResourceItem *> *) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAndResourceType)resourceType subregions:(NSArray<OAWorldRegion *> *)subregions;
 + (void) clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(float)zoom onComplete:(void (^)(void))onComplete;
 
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
@@ -146,6 +184,6 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 + (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles;
 
-+ (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAnd::ResourcesManager::ResourceType>)resourceTypes;
++ (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAndResourceType>)resourceTypes;
 
 @end

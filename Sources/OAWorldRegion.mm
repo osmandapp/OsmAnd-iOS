@@ -23,6 +23,7 @@
 #import "OAUtilities.h"
 
 #import "OAWorldRegion+Protected.h"
+#import "OAResourcesUIHelper.h"
 
 @implementation OAWorldRegion
 {
@@ -634,6 +635,71 @@
             return region;
     }
     return nil;
+}
+
+- (void)buildResourceGroupItem
+{
+    NSArray<OAWorldRegion *> *subregions = self.subregions;
+    if (!subregions || subregions.count == 0)
+        return;
+
+    NSMutableArray<NSNumber *> *resourceGroupTypes = [[OAResourceType groupValues] mutableCopy];
+    [resourceGroupTypes removeObjectsInArray:self.resourceTypes];
+
+    if (![self hasGroupItems] && resourceGroupTypes.count > 0)
+    {
+        OAResourceGroupItem *group = [OAResourceGroupItem withParent:self];
+        NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:subregions resourceTypes:resourceGroupTypes isGroup:YES];
+        for (OAResourceItem *item in items)
+        {
+            if ([item isKindOfClass:OARepositoryResourceItem.class])
+                item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:((OARepositoryResourceItem *) item).resource->id.toNSString()]] firstObject];
+
+            [group addItem:item key:item.resourceType];
+        }
+        [group sort];
+        self.groupItem = group;
+    }
+
+    for (OAWorldRegion *subregion in subregions)
+    {
+        [subregion buildResourceGroupItem];
+        if ([subregion hasGroupItems] && [self.flattenedSubregions containsObject:subregion])
+        {
+            NSInteger indexOfSubregion = [self.flattenedSubregions indexOfObject:subregion];
+            if (indexOfSubregion != NSNotFound)
+            {
+                if (![self.flattenedSubregions[indexOfSubregion] hasGroupItems])
+                    self.flattenedSubregions[indexOfSubregion].groupItem = subregion.groupItem;
+            }
+        }
+    }
+}
+
+- (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type
+{
+    if ([self hasGroupItems])
+    {
+        OsmAndResourceType key = [OAResourceType toResourceType:type isGroup:YES];
+        [self.groupItem removeItem:key subregion:subregion];
+
+        NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:@[subregion] resourceTypes:@[type] isGroup:YES];
+        OAResourceItem *duplicate = [[self.groupItem getItems:key] firstObjectCommonWithArray:items];
+        if (!duplicate)
+        {
+            [self.groupItem addItems:items key:key];
+        }
+        [self.groupItem sort];
+    }
+    else
+    {
+        [self buildResourceGroupItem];
+    }
+}
+
+-(BOOL)hasGroupItems
+{
+    return self.groupItem && ![self.groupItem isEmpty];
 }
 
 @end

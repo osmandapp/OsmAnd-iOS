@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAProduct;
+@class OAProduct, OAResourceGroupItem;
 
 @interface OAWorldRegion : NSObject
 
@@ -32,6 +32,7 @@
 @property (readonly) CLLocationCoordinate2D bboxBottomRight;
 
 @property (nonatomic) NSArray *resourceTypes;
+@property (nonatomic) OAResourceGroupItem *groupItem;
 
 // Hierarchy:
 @property (readonly, weak) OAWorldRegion* superregion;
@@ -58,5 +59,9 @@
 - (void) addSubregion:(OAWorldRegion *)subregion;
 
 + (OAWorldRegion *) loadFrom:(NSString *)ocbfFilename;
+
+- (void)buildResourceGroupItem;
+- (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type;
+- (BOOL)hasGroupItems;
 
 @end

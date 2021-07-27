@@ -791,7 +791,7 @@
 "unlimited_downloads" = "دانلود نامحدود";
 "wikipedia_offline" = "ویکی‌پدیای آفلاین";
 "contour_lines_hillshade_maps" = "منحنی‌های میزان و نقشه‌های سایه‌روشن";
-"index_item_depth_contours_osmand_ext" = "منحنی‌های میزان عمق دریا";
+"index_item_depth_contours_osmand_ext" = "منحنی‌های میزان عمق دریایی";
 "donation_to_osm" = "کمک مالی به جامعهٔ OpenStreetMap";
 "in_app_purchase" = "خرید درون‌برنامه‌ای";
 "in_app_purchase_desc" = "یک بار پرداخت";
@@ -971,7 +971,7 @@
 "quick_action_no_overlay" = "بدون لایهٔ رویی";
 "shared_string_retry" = "تلاش مجدد";
 "translucent_orange" = "نارنجی شفاف";
-"download_depth_countours" = "منحنی‌های میزان عمق دریا";
+"download_depth_countours" = "منحنی‌های میزان عمق دریایی";
 "shared_string_filter" = "پالایه";
 "help_about" = "درباره";
 "traffic_warning_tunnel" = "تونل";
@@ -1108,7 +1108,7 @@
 "rendering_value_yellow_name" = "زرد";
 "rendering_attr_undefined_name" = "نامشخص";
 "rendering_attr_piste_type_skitour_name" = "تور اسکی";
-"rendering_attr_depthContours_name" = "منحنی‌های میزان عمق دریا";
+"rendering_attr_depthContours_name" = "منحنی‌های میزان عمق دریایی";
 "rendering_attr_roadColors_name" = "رنگ‌بندی راه";
 "routing_attr_allow_intermediate_description" = "مسیرهای سخت‌تر با سراشیبی‌های تندتر. معمولاً موانعی هست که باید مراقبشان باشید.";
 "rendering_attr_surface_paving_stones_name" = "سنگفرش";
@@ -1659,3 +1659,11 @@
 "osm_reopened" = "دوباره بازشد";
 "osmand_live_reports" = "گزارش‌ها";
 "twitter" = "توییتر";
+"route_between_points_warning_desc" = "در ادامه، رد خود را به نزدیک‌ترین جادهٔ مجاز متناسب با یکی از پروفایل‌های ناوبری‌تان بچسبانید، تا از این گزینه استفاده کنید.";
+"threshold_distance" = "فاصلهٔ آستانه";
+"gpx_upload_public_visibility_descr" = "«عمومی» یا Public به این معنی است که رد به‌صورت عمومی در ردهای جی‌پی‌اس شما و لیست ردهای عمومی جی‌پی‌اس در قالب خام نمایش داده می‌شود. دادهٔ نقاط رد که از طریق API در دسترس قرار می‌گیرد، به صفحهٔ ردهای شما ارجاع نمی‌دهد. مهر زمان نقاط رد از طریق API جی‌پی‌اس‌های عمومی دست‌یافتنی نیست و نقاط رد بر اساس زمان مرتب نیستند.";
+"gpx_upload_private_visibility_descr" = "«خصوصی» یا Private به این معنی است که رد در هیچ لیست عمومی‌ای نشان داده نمی‌شود اما نقاط رد از طریق API جی‌پی‌اس‌های عمومی بدون مهر زمان و بدون ترتیب زمانی دست‌یافتنی است.";
+"gpx_upload_identifiable_visibility_descr" = "«قابل‌شناسایی» یا Identifiable به این معنی است که رد به‌صورت عمومی در لیست ردهای جی‌پی‌اس شما و لیست عمومی ردهای جی‌پی‌اس نمایش داده می‌شود، یعنی سایر کاربران می‌توانند رد خام را دانلود کنند و بدانند که مربوط به نام کاربری شماست. دادهٔ نقاط رد همراه با مهر زمان از طریق API به‌طور عمومی در دسترس است و به صفحهٔ ردهای شما ارجاع می‌دهد.";
+"gpx_upload_trackable_visibility_descr" = "«قابل‌ردیابی» یا Trackable به این معنی است که رد در هیچ لیست عمومی‌ای نشان داده نمی‌شود اما نقاط پردازش‌شدهٔ رد + مهر زمان نقاط (که مستقیماً امکان ارجاع به نام کاربری شما ندارد) از طریق API جی‌پی‌اس‌های عمومی قابل‌دانلود است.";
+"app_restart_required" = "برای به کار بستن برخی تنظیمات، لازم است برنامه باز و بسته شود.";
+"search_more" = "بیشتر بگرد…";

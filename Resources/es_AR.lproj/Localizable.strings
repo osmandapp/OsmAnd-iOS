@@ -1471,7 +1471,7 @@
 "rendering_attr_appMode_description" = "Optimizar mapa para";
 "rendering_attr_smoothness_very_bad_name" = "Muy malo";
 "rendering_attr_transportStops_name" = "Paradas de transporte";
-"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5–9).";
+"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5 – 9).";
 "rendering_attr_surface_asphalt_name" = "Asfalto";
 "routeInfo_smoothness_name" = "Suavidad";
 "rendering_attr_pisteRoutes_name" = "Pistas de esquí";

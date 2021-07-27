@@ -418,6 +418,9 @@
                                            ];
     }
     [self hideTagToolbar];
+
+    OATextInputFloatingCellWithIcon *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [cell.textField.textView setText:@""];
     [self.tableView endUpdates];
 }
 

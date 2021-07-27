@@ -129,12 +129,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    if (self.delegate)
-        [self.delegate closeBottomSheet];
-}
-
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray new];
@@ -396,7 +390,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             if (self.delegate)
                 [self.delegate closeBottomSheet];
             [self dismissViewControllerAnimated:YES completion:nil];
-            [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFileName]];
+            [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
             break;
         }
         case EOAAddToATrack:
@@ -467,7 +461,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
     if (self.delegate)
+    {
         [self.delegate onSegmentSelected:position gpx:gpx];
+        [OARootViewController.instance dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - OAFoldersCellDelegate

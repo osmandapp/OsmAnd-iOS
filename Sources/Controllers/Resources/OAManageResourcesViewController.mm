@@ -3130,8 +3130,6 @@ static BOOL _lackOfResources;
         [self updateContent];
     } onTaskResumed:^(id<OADownloadTask> task) {
         [self showDownloadViewForTask:task];
-    } onAlertPresent:^(UIAlertController *alert) {
-        [self presentViewController:alert animated:YES completion:nil];
     }];
 }
 

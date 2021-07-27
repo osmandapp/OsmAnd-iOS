@@ -970,7 +970,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return [NSString stringWithString:message];
 }
 
-+ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem selectedItems:(NSArray<OAResourceItem *> *)selectedItems onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed onAlertPresent:(OASimpleCallback)onAlertPresent
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem selectedItems:(NSArray<OAResourceItem *> *)selectedItems onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     NSMutableArray<OAResourceItem *> *items = [selectedItems mutableCopy];
     for (OAResourceItem *item in selectedItems)

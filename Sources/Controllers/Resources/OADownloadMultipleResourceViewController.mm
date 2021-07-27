@@ -34,7 +34,12 @@
     if (self)
     {
         _multipleItem = resource;
-        _selectedItems = [NSMutableArray arrayWithArray:resource.items];
+        _selectedItems = [NSMutableArray new];
+        for (OAResourceItem *item in resource.items)
+        {
+            if (![OsmAndApp instance].resourcesManager->isResourceInstalled(item.resourceId))
+                [_selectedItems addObject:item];
+        }
         _type = [OAResourceType withType:resource.resourceType];
     }
     return self;

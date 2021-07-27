@@ -147,7 +147,7 @@ typedef void (^OASimpleCallback)(UIAlertController *alert);
 + (void) startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name;
 
 + (NSString *)messageResourceStartDownload:(NSString *)resourceName stringifiedSize:(NSString *)stringifiedSize isOutdated:(BOOL)isOutdated;
-+ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem selectedItems:(NSArray<OAResourceItem *> *)selectedItems onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed onAlertPresent:(OASimpleCallback)onAlertPresent;
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem selectedItems:(NSArray<OAResourceItem *> *)selectedItems onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 + (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 

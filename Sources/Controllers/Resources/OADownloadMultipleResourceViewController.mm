@@ -48,8 +48,6 @@
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    self.tableView.rowHeight = kEstimatedRowHeight;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 
     [self updateDownloadButtonView];
 }
@@ -95,14 +93,15 @@
         else
             [_selectedItems addObject:item];
         [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _multipleItem.items.count] upperCase];
-        [self.tableView endUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
     }
     [self updateDownloadButtonView];
 }
 
 - (void)selectDeselectGroup:(id)sender
 {
+    [self.tableView beginUpdates];
     BOOL shouldSelect = _selectedItems.count == 0;
     if (!shouldSelect)
         [_selectedItems removeAllObjects];
@@ -116,10 +115,9 @@
         else
             [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO];
     }
-    [self.tableView beginUpdates];
     [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _multipleItem.items.count] upperCase];
-    [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
     [self updateDownloadButtonView];
 }
 
@@ -219,15 +217,16 @@
             cell.imgView.contentMode = UIViewContentModeCenter;
 
             cell.textView.text = item.title;
-            cell.descriptionView.hidden = NO;
-            NSString *size = 0;
 
+            NSString *size = 0;
             if ([item isKindOfClass:OARepositoryResourceItem.class])
                 size = [NSByteCountFormatter stringFromByteCount:((OARepositoryResourceItem *) item).resource->packageSize countStyle:NSByteCountFormatterCountStyleFile];
             else
                 size = [NSByteCountFormatter stringFromByteCount:[OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId)->packageSize countStyle:NSByteCountFormatterCountStyleFile];
 
+            cell.descriptionView.hidden = NO;
             cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", size, [item getDate]];
+            cell.descriptionView.font = [UIFont systemFontOfSize:13.0];
 
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];

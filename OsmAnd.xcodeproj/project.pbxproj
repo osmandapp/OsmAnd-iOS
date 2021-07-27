@@ -15,6 +15,8 @@
 		0A86D5DF262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A86D5DE262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib */; };
 		0A8F544D263949FC0020F5CF /* ic_custom_search_categories@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */; };
 		0A8F544E263949FC0020F5CF /* ic_custom_search_categories@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */; };
+		0A95D66426B01B6A00DEDD0B /* ic_custom_multi_download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A95D66226B01B6900DEDD0B /* ic_custom_multi_download@3x.png */; };
+		0A95D66526B01B6A00DEDD0B /* ic_custom_multi_download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A95D66326B01B6A00DEDD0B /* ic_custom_multi_download@2x.png */; };
 		0AE3942D26A0B4E40052E09B /* OADownloadMultipleResourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AE3942C26A0B4E40052E09B /* OADownloadMultipleResourceViewController.xib */; };
 		0CBDD08D245038EB00C94BC2 /* map_marker_direction_arrow_p1_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD078245038C800C94BC2 /* map_marker_direction_arrow_p1_light.png */; };
 		0CBDD08F245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD079245038CA00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4.png */; };
@@ -3785,6 +3787,8 @@
 		0A86D5DE262DEF4B000EA3DB /* OARearrangeCustomFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OARearrangeCustomFiltersViewController.xib; path = Sources/Controllers/2.0/OARearrangeCustomFiltersViewController.xib; sourceTree = "<group>"; };
 		0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@2x.png"; path = "Resources/Icons/ic_custom_search_categories@2x.png"; sourceTree = "<group>"; };
 		0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@3x.png"; path = "Resources/Icons/ic_custom_search_categories@3x.png"; sourceTree = "<group>"; };
+		0A95D66226B01B6900DEDD0B /* ic_custom_multi_download@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_multi_download@3x.png"; path = "Resources/Icons/ic_custom_multi_download@3x.png"; sourceTree = SOURCE_ROOT; };
+		0A95D66326B01B6A00DEDD0B /* ic_custom_multi_download@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_multi_download@2x.png"; path = "Resources/Icons/ic_custom_multi_download@2x.png"; sourceTree = SOURCE_ROOT; };
 		0AE3942C26A0B4E40052E09B /* OADownloadMultipleResourceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OADownloadMultipleResourceViewController.xib; path = Controllers/Resources/OADownloadMultipleResourceViewController.xib; sourceTree = "<group>"; };
 		0CBDD078245038C800C94BC2 /* map_marker_direction_arrow_p1_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_marker_direction_arrow_p1_light.png; path = Resources/Icons/map_marker_direction_arrow_p1_light.png; sourceTree = "<group>"; };
 		0CBDD079245038CA00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_marker_direction_arrow_p2_color_pin_4.png; path = Resources/Icons/map_marker_direction_arrow_p2_color_pin_4.png; sourceTree = "<group>"; };
@@ -13769,6 +13773,8 @@
 		DA4C50EA25DD604E0096B60A /* CarPlay */ = {
 			isa = PBXGroup;
 			children = (
+				0A95D66326B01B6A00DEDD0B /* ic_custom_multi_download@2x.png */,
+				0A95D66226B01B6900DEDD0B /* ic_custom_multi_download@3x.png */,
 				DA8A927825DE8B4800F5320A /* ic_carplay_favorites@2x.png */,
 				DA8A927525DE8B4700F5320A /* ic_carplay_favorites@3x.png */,
 				DA8A927D25DE8B4900F5320A /* ic_carplay_map_markers@2x.png */,
@@ -14914,6 +14920,7 @@
 				847C0F9B1FC5D6F4003891F3 /* map_compass_white.png in Resources */,
 				DA68B3F2233B824D00F5ACCC /* ic_custom_destination.png in Resources */,
 				32A0017E2610B43700ABE0D2 /* widget_coordinates_latitude_north_night@3x.png in Resources */,
+				0A95D66426B01B6A00DEDD0B /* ic_custom_multi_download@3x.png in Resources */,
 				843394C11FF54A19006205A5 /* list_warnings_pedestrian@2x.png in Resources */,
 				15C428D424A76EE500B21005 /* img_help_height_limit_day@3x.png in Resources */,
 				847F8FC71EDFF7AF00CF5EA5 /* ic_action_marker@2x.png in Resources */,
@@ -16329,6 +16336,7 @@
 				DA68B3CE233B821A00F5ACCC /* ic_profile_car@2x.png in Resources */,
 				845E061A1B5956E800DFC2A7 /* ic_destination_pin_4@3x.png in Resources */,
 				84C41DEC1AB8600D0089EABB /* ic_destination_pin_1@2x.png in Resources */,
+				0A95D66526B01B6A00DEDD0B /* ic_custom_multi_download@2x.png in Resources */,
 				8A755A7D21CBF92400E42699 /* ic_live_wikivoyage@3x.png in Resources */,
 				8466964E207CD7E000BA971B /* ic_action_sort_door_to_door.png in Resources */,
 				0CF585912440745F0081238D /* ic_custom_direction_topbar_two@3x.png in Resources */,

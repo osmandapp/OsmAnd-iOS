@@ -1657,26 +1657,36 @@ static BOOL _lackOfResources;
 {
     if ([senderItem isKindOfClass:OAMultipleResourceItem.class])
     {
-        BOOL downloading = NO;
-        OAMultipleResourceItem * multipleItem = (OAMultipleResourceItem *) senderItem;
-        for (OAResourceItem *item in multipleItem.items)
+        OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) senderItem;
+        if ((multipleItem.resourceType == OsmAndResourceType::SrtmMapRegion || multipleItem.resourceType == OsmAndResourceType::HillshadeRegion || multipleItem.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
         {
-            if (item.downloadTask != nil)
-            {
-                downloading = YES;
-                break;
-            }
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
         }
-
-        if (downloading)
+        else if (multipleItem.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
         {
-            [OAResourcesUIHelper offerCancelDownloadOf:multipleItem];
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
         }
         else
         {
-            OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:multipleItem];
-            controller.delegate = self;
-            [self presentViewController:controller animated:YES completion:nil];
+            BOOL downloading = NO;
+            for (OAResourceItem *item in multipleItem.items)
+            {
+                if (item.downloadTask != nil)
+                {
+                    downloading = YES;
+                    break;
+                }
+            }
+            if (downloading)
+            {
+                [OAResourcesUIHelper offerCancelDownloadOf:multipleItem];
+            }
+            else
+            {
+                OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:multipleItem];
+                controller.delegate = self;
+                [self presentViewController:controller animated:YES completion:nil];
+            }
         }
     }
     else

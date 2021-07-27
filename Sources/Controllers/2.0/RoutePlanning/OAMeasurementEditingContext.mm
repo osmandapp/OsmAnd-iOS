@@ -392,6 +392,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     [self updateSegmentsForSnap:NO];
 }
 
+- (void) setPoints:(NSArray<OAGpxTrkPt *> *)points
+{
+    _before.points = points;
+}
+
 - (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad
 {
     if (position < 0 || position >= _before.points.count)

@@ -47,9 +47,11 @@
 
 - (void)reorder:(NSInteger)from to:(NSInteger)to
 {
-    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:self.getEditingCtx.getPoints];
+    OAMeasurementEditingContext *editingCtx = self.getEditingCtx;
+    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:editingCtx.getPoints];
     [points exchangeObjectAtIndex:from withObjectAtIndex:to];
-    [self.getEditingCtx updateSegmentsForSnap];
+    [editingCtx setPoints:points];
+    [editingCtx updateSegmentsForSnap];
     [self.measurementLayer updateLayer];
 }
 

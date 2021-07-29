@@ -682,7 +682,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
             {
                 NSArray<OAGpxTrkPt *> *pair = @[segment.points[i], segment.points[i + 1]];
                 OARoadSegmentData *data = _roadSegmentData[pair];
-                NSArray<OAGpxTrkPt *> *pts = data != nil ? data.points : nil;
+                NSArray<OAGpxTrkPt *> *pts = data != nil ? data.gpxPoints : nil;
                 if (pts != nil)
                 {
                     segmentForSnap.points = [segmentForSnap.points arrayByAddingObjectsFromArray:pts];
@@ -1125,7 +1125,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     {
         NSArray<OAGpxTrkPt *> *pair = @[_before.points[i], _before.points[i + 1]];
         OARoadSegmentData *data = _roadSegmentData[pair];
-        NSArray<OAGpxTrkPt *> *dataPoints = data != nil ? data.points : nil;
+        NSArray<OAGpxTrkPt *> *dataPoints = data != nil ? data.gpxPoints : nil;
         std::vector<std::shared_ptr<RouteSegmentResult>> dataSegments;
         if (data)
             dataSegments = data.segments;

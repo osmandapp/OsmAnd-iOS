@@ -179,6 +179,7 @@ static const NSInteger sectionCount = 2;
     for (OALocalResourceItem *item : _localIndexes)
     {
         if (item.resourceType != OsmAnd::ResourcesManager::ResourceType::MapRegion
+            || !item.resource->localPath.startsWith(_app.resourcesManager->localStoragePath)
             || item.resourceId.compare(QString(kWorldSeamarksKey)) == 0
             || item.resourceId.compare(QString(kWorldBasemapKey)) == 0)
             continue;

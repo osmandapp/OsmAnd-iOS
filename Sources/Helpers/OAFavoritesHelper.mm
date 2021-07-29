@@ -394,9 +394,9 @@ static BOOL _favoritesLoaded = NO;
         {
             OAFavoriteGroup *group = _flatGroups[[item getCategory]];
             if (group)
-                [group.points removeObject:item];
+                [group.points removeObjectAtIndex:[group.points indexOfObject:item]];
             
-            [_cachedFavoritePoints removeObject:item];
+            [_cachedFavoritePoints removeObjectAtIndex:[_cachedFavoritePoints indexOfObject:item]];
             [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(item.favorite);
         }
     }

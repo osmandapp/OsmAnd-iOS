@@ -271,7 +271,7 @@
 "rendering_category_routes" = "Útvonalak";
 "rendering_category_details" = "Részletek";
 "rendering_category_transport" = "Tömegközlekedés";
-"rendering_category_others" = "Egyéb térképjellemzők";
+"rendering_category_others" = "Egyéb térképtulajdonságok";
 // Rendering attributes
 "units_minutes_short" = "perc";
 "units_seconds_short" = "mp.";

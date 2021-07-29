@@ -679,7 +679,7 @@
 "plugins" = "Moduly";
 "open_map_settings" = "Otevřít nastavení mapy";
 "plugin_popup_ski_title" = "Zapnout lyžařský mapový styl";
-"plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
+"plugin_popup_ski_desc" = "Pro zapnutí <b>lyžařského</b> stylu mapy, přejděte prosím do <b>Nastavení mapy</b> > <b>Typ mapy</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
 "plugin_popup_wiki_desc" = "Chcete-li začít používat modul Wikipedie, stáhněte si prosím nejdříve data z Wikipedie pro daný region";
 "plugin_popup_wiki_ask" = "Abyste mohli stahovat data z Wikipedie, musíte aktivovat modul <b>Wikipedie</b>";

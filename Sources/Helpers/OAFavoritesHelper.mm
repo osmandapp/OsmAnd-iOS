@@ -394,7 +394,11 @@ static BOOL _favoritesLoaded = NO;
         {
             OAFavoriteGroup *group = _flatGroups[[item getCategory]];
             if (group)
-                [group.points removeObjectAtIndex:[group.points indexOfObject:item]];
+            {
+                NSInteger indexItem = [group.points indexOfObject:item];
+                if (indexItem != NSNotFound)
+                    [group.points removeObjectAtIndex:indexItem];
+            }
             
             [_cachedFavoritePoints removeObjectAtIndex:[_cachedFavoritePoints indexOfObject:item]];
             [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(item.favorite);

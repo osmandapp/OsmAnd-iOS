@@ -399,8 +399,9 @@ static BOOL _favoritesLoaded = NO;
                 if (indexItem != NSNotFound)
                     [group.points removeObjectAtIndex:indexItem];
             }
-            
-            [_cachedFavoritePoints removeObjectAtIndex:[_cachedFavoritePoints indexOfObject:item]];
+            NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:item];
+            if (cachedIndexItem != NSNotFound)
+                [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
             [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(item.favorite);
         }
     }

@@ -555,7 +555,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             mapItem.disabled = YES;
         }
         NSString *title = mapItem.title;
-        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
 
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
         if (cell == nil)

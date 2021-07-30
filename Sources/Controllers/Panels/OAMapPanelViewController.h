@@ -103,6 +103,8 @@
 
 - (OATargetPoint *) getCurrentTargetPoint;
 
+- (void) hideTargetPointMenu;
+
 - (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
 - (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed saveState:(BOOL)saveState;
 - (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed;

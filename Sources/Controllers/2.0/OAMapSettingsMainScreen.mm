@@ -173,6 +173,7 @@
         [section0notes setObject:@"osm_notes_online_layer" forKey:@"key"];
     }
     
+    BOOL hasMapillary = [_iapHelper.mapillary isActive];
     NSMutableDictionary *section0mapillary = [NSMutableDictionary dictionary];
     [section0mapillary setObject:OALocalizedString(@"street_level_imagery") forKey:@"name"];
     [section0mapillary setObject:@"" forKey:@"description"];
@@ -194,8 +195,11 @@
         [section0 addObject:section0edits];
         [section0 addObject:section0notes];
     }
-    [section0 addObject:section0mapillary];
-    mapillaryRow = section0.count - 1;
+    if (hasMapillary)
+    {
+        [section0 addObject:section0mapillary];
+        mapillaryRow = section0.count - 1;
+    }
     tripsRow = -1;
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
     {

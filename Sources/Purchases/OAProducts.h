@@ -41,9 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Parking @"net.osmand.maps.inapp.addon.parking"
 #define kInAppId_Addon_Wiki @"net.osmand.maps.inapp.addon.wiki"
 #define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
-#define kInAppId_Addon_TripPlanning @"net.osmand.maps.inapp.addon.trip_planning"
 #define kInAppId_Addon_OsmEditing @"net.osmand.maps.inapp.addon.osm_editing"
 #define kInAppId_Addon_Mapillary @"net.osmand.maps.inapp.addon.mapillary"
+#define kInAppId_Addon_OpenPlaceReview @"net.osmand.maps.inapp.addon.openplacereviews"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -52,8 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_Parking_Default_Price 0.0
 #define kInApp_Addon_Wiki_Default_Price 0.0
 #define kInApp_Addon_Srtm_Default_Price 3.49
-#define kInApp_Addon_TripPlanning_Default_Price 0.0
 #define kInApp_Addon_OsmEditing_Default_Price 0.0
+#define kInApp_Addon_Mapillary_Default_Price 0.0
+#define kInApp_Addon_OpenPlaceReviews_Default_Price 0.0
 
 #define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.monthly"
 #define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.3months"
@@ -271,10 +272,13 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OASrtmProduct : OAProduct
 @end
 
-@interface OATripPlanningProduct : OAProduct
+@interface OAOsmEditingProduct : OAProduct
 @end
 
-@interface OAOsmEditingProduct : OAProduct
+@interface OAMapillaryProduct : OAProduct
+@end
+
+@interface OAOpenPlaceReviewsProduct : OAProduct
 @end
 
 // Map regions
@@ -318,8 +322,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *parking;
 @property (nonatomic, readonly) OAProduct *wiki;
 @property (nonatomic, readonly) OAProduct *srtm;
-@property (nonatomic, readonly) OAProduct *tripPlanning;
 @property (nonatomic, readonly) OAProduct *osmEditing;
+@property (nonatomic, readonly) OAProduct *mapillary;
+@property (nonatomic, readonly) OAProduct *openPlaceReviews;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;

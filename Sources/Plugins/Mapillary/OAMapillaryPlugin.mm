@@ -12,6 +12,7 @@
 #import "OAAppSettings.h"
 #import "OAPlugin.h"
 #import "OAProducts.h"
+#import "OAIAPHelper.h"
 #import "OAMapHudViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -20,6 +21,12 @@
 #import "OAMapInfoController.h"
 #import "OAInstallMapillaryBottomSheetViewController.h"
 #import "OAShowHideMapillaryAction.h"
+#import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapInfoController.h"
+#import "OAMapLayers.h"
+#import "OAMapLayer.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -63,14 +70,41 @@
 
 - (void) registerLayers
 {
+    [self createLayers];
     [self registerWidget];
+}
+
+- (void) createLayers
+{
+    _mapillaryControl = [self createMapillaryInfoControl];
 }
 
 - (void) updateLayers
 {
+    [self updateMapLayers];
+}
+
+- (void) updateMapLayers
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_mapillaryControl)
+            [self createLayers];
+        
+        OAMapLayer *mapillaryLayer = [OARootViewController instance].mapPanel.mapViewController.mapLayers.mapillaryLayer;
+        OAAppData *data = [OsmAndApp instance].data;
+
+        OAMapInfoController *mapInfoController = [self getMapInfoController];
+        if (OAIAPHelper.sharedInstance.mapillary.disabled)
+        {
+            [mapInfoController removeSideWidget:_mapillaryControl];
+            [mapInfoController recreateControls];
+            [data setMapillary:NO];
+        }
+        else
+        {
             [self registerWidget];
+            [data setMapillary:YES];
+        }
     });
 }
 
@@ -84,8 +118,6 @@
     OAMapInfoController *mapInfoController = [self getMapInfoController];
     if (mapInfoController)
     {
-        _mapillaryControl = [self createMapillaryInfoControl];
-        
         [mapInfoController registerSideWidget:_mapillaryControl imageId:@"ic_custom_mapillary_symbol" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:19];
         [mapInfoController recreateControls];
     }

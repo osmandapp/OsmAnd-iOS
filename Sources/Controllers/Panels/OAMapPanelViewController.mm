@@ -3029,12 +3029,6 @@ typedef enum
 
 - (void) openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
 {
-    if (![[OAIAPHelper sharedInstance].tripPlanning isActive])
-    {
-        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_TripPlanning];
-        return;
-    }
-
     [_mapViewController hideContextPinMarker];
  
     BOOL useCurrentRoute = (item == nil);

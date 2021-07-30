@@ -797,6 +797,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *osmUseDevUrl;
 
 // Mapillary
+@property (nonatomic) OACommonBoolean *showMapillary;
 @property (nonatomic) OACommonBoolean *onlinePhotosRowCollapsed;
 @property (nonatomic) OACommonBoolean *mapillaryFirstDialogShown;
 

@@ -170,4 +170,6 @@
 #define nav_bar_night 0x222526
 #define text_primary_night 0xE6E6E6
 
+#define plugin_icon_green 0x67AC5B
+
 #endif /* OAColors_h */

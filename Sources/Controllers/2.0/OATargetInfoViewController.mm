@@ -460,18 +460,30 @@
         imageTagContent = poi.values[@"image"];
         mapillaryTagContent = poi.values[@"mapillary"];
     }
-    _openPlaceCardsReady = NO;
+    
+    if (!OAIAPHelper.sharedInstance.openPlaceReviews.disabled && ![openPlaceReviewsTagContent isEqualToString:@"0"])
+    {
+        _openPlaceCardsReady = NO;
+        [self addOpenPlaceCards:openPlaceReviewsTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
+    }
+    else
+    {
+        _openPlaceCardsReady = YES;
+    }
+    
     _otherCardsReady = NO;
-    [self addOpenPlaceCards:openPlaceReviewsTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
     [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
 }
 
 - (OAAbstractCard *)getCard:(NSDictionary *) feature
 {
     NSString *type = feature[@"type"];
-    if ([TYPE_MAPILLARY_PHOTO isEqualToString:type])
+    
+    BOOL isMaplillaryEnabled = !OAIAPHelper.sharedInstance.mapillary.disabled;
+    
+    if ([TYPE_MAPILLARY_PHOTO isEqualToString:type] && isMaplillaryEnabled)
         return [[OAMapillaryImageCard alloc] initWithData:feature];
-    else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type])
+    else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type] && isMaplillaryEnabled)
         return [[OAMapillaryContributeCard alloc] init];
     else if ([TYPE_URL_PHOTO isEqualToString:type])
         return [[OAUrlImageCard alloc] initWithData:feature];

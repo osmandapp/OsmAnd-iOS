@@ -104,7 +104,10 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     {
         NSString *iconName = [_product productIconName];
         if (iconName)
-            logo = [UIImage imageNamed:iconName];
+        {
+            logo = [UIImage templateImageNamed:iconName];
+            self.icon.tintColor = UIColorFromRGB(plugin_icon_green);
+        }
         self.icon.contentMode = UIViewContentModeCenter;
     }
     else if (_screenType == EOAPluginScreenTypeCustomPlugin)

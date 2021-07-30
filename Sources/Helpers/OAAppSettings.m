@@ -214,6 +214,7 @@
 #define offlineEditingKey @"offline_editing"
 #define osmUseDevUrlKey @"use_dev_url"
 
+#define showMapillaryKey @"show_mapillary"
 #define onlinePhotosRowCollapsedKey @"onlinePhotosRowCollapsed"
 #define mapillaryFirstDialogShownKey @"mapillaryFirstDialogShown"
 #define useMapillaryFilterKey @"useMapillaryFilter"
@@ -3433,6 +3434,7 @@
         [_globalPreferences setObject:_offlineEditing forKey:@"offline_osm_editing"];
         [_globalPreferences setObject:_osmUseDevUrl forKey:@"use_dev_url"];
 
+        _showMapillary = [[[OACommonBoolean withKey:showMapillaryKey defValue:YES] makeGlobal] makeShared];
         _mapillaryFirstDialogShown = [[OACommonBoolean withKey:mapillaryFirstDialogShownKey defValue:NO] makeGlobal];
         _onlinePhotosRowCollapsed = [[[OACommonBoolean withKey:onlinePhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
         _useMapillaryFilter = [[[OACommonBoolean withKey:useMapillaryFilterKey defValue:NO] makeGlobal] makeShared];
@@ -3442,6 +3444,7 @@
         _mapillaryFilterEndDate = [[[OACommonDouble withKey:mapillaryFilterEndDateKey defValue: 0] makeGlobal] makeShared];
         _mapillaryFilterPano = [[[OACommonBoolean withKey:mapillaryFilterPanoKey defValue:NO] makeGlobal] makeShared];
 
+        [_globalPreferences setObject:_showMapillary forKey:@"show_mapillary"];
         [_globalPreferences setObject:_mapillaryFirstDialogShown forKey:@"mapillary_first_dialog_shown"];
         [_globalPreferences setObject:_onlinePhotosRowCollapsed forKey:@"mapillary_menu_collapsed"];
         [_globalPreferences setObject:_useMapillaryFilter forKey:@"use_mapillary_filters"];

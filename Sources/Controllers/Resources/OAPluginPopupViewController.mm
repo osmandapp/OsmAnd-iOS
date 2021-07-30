@@ -15,6 +15,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAPluginsViewController.h"
 #import "OAWorldRegion.h"
+#import "OAColors.h"
 
 static NSMutableArray *activePopups;
 
@@ -337,18 +338,6 @@ static NSMutableArray *activePopups;
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
-    else if ([kInAppId_Addon_TripPlanning isEqualToString:productIdentifier])
-    {
-        needShow = YES;
-        product = helper.tripPlanning;
-        
-        title = OALocalizedString(@"turn_on_plugin");
-        descText = OALocalizedString(@"plugin_popup_trip_planning_ask");
-        okButtonName = OALocalizedString(@"plugins");
-        cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        
-        [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
-    }
     else if ([kInAppId_Addon_OsmEditing isEqualToString:productIdentifier])
     {
         needShow = YES;
@@ -368,7 +357,8 @@ static NSMutableArray *activePopups;
         
         UIViewController *top = [OARootViewController instance].navigationController.topViewController;
         
-        popup.icon.image = [UIImage imageNamed:iconName];
+        popup.icon.image = [UIImage templateImageNamed:iconName];
+        popup.icon.tintColor = UIColorFromRGB(plugin_icon_green);
         popup.titleLabel.text = title;
         
         NSString *styledText = [self.class styledHTMLwithHTML:descText];
@@ -479,7 +469,8 @@ static NSMutableArray *activePopups;
 
         UIViewController *top = [OARootViewController instance].navigationController.topViewController;
         
-        popup.icon.image = [UIImage imageNamed:iconName];
+        popup.icon.image = [UIImage templateImageNamed:iconName];
+        popup.icon.tintColor = UIColorFromRGB(plugin_icon_green);
         popup.titleLabel.text = title;
         
         NSString *styledText = [self.class styledHTMLwithHTML:descText];

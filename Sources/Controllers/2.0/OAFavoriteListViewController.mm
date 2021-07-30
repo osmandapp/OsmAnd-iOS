@@ -1068,12 +1068,18 @@ static UIViewController *parentController;
 - (void)removeItemFromSortedFavoriteItems:(NSIndexPath *)indexPath
 {
     OAFavoriteItem *item = self.sortedFavoriteItems[indexPath.row];
-
-    [self.favoriteTableView beginUpdates];
-    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[[self.sortedFavoriteItems indexOfObject:item]]]];
-    [self.sortedFavoriteItems removeObjectAtIndex:[self.sortedFavoriteItems indexOfObject:item]];
-    [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    [self.favoriteTableView endUpdates];
+    if (item)
+    {
+        NSInteger itemIndex = [self.sortedFavoriteItems indexOfObject:item];
+        if (itemIndex != NSNotFound)
+        {
+            [self.favoriteTableView beginUpdates];
+            [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[itemIndex]]];
+            [self.sortedFavoriteItems removeObjectAtIndex:itemIndex];
+            [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+            [self.favoriteTableView endUpdates];
+        }
+    }
 }
 
 - (void)removeItemFromUnsortedFavoriteItems:(NSIndexPath *)indexPath
@@ -1082,12 +1088,20 @@ static UIViewController *parentController;
     NSDictionary *groupData = _data[indexPath.section][0];
     FavoriteTableGroup *group = groupData[@"group"];
     OAFavoriteItem *item = group.favoriteGroup.points[dataIndex];
-
-    [self.favoriteTableView beginUpdates];
-    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[group.favoriteGroup.points[[group.favoriteGroup.points indexOfObject:item]]]];
-    [self.sortedFavoriteItems removeObjectAtIndex:[self.sortedFavoriteItems indexOfObject:item]];
-    [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    [self.favoriteTableView endUpdates];
+    if (item)
+    {
+        NSInteger itemIndex = [group.favoriteGroup.points indexOfObject:item];
+        if (itemIndex != NSNotFound)
+        {
+            [self.favoriteTableView beginUpdates];
+            [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[group.favoriteGroup.points[itemIndex]]];
+            NSInteger sortedItemIndex = [self.sortedFavoriteItems indexOfObject:item];
+            if (sortedItemIndex != NSNotFound)
+                [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
+            [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+            [self.favoriteTableView endUpdates];
+        }
+    }
 }
 
 - (void)removeItemsFromSortedFavoriteItems
@@ -1096,16 +1110,22 @@ static UIViewController *parentController;
     NSSortDescriptor *sectionDescriptor = [[NSSortDescriptor alloc] initWithKey:@"section" ascending:NO];
     NSArray<NSIndexPath *> *sortedArray = [_selectedItems sortedArrayUsingDescriptors:@[sectionDescriptor, rowDescriptor]];
 
-    [self.favoriteTableView beginUpdates];
     for (NSIndexPath *selectedItem in sortedArray)
     {
-        NSInteger dataIndex = selectedItem.row;
-        OAFavoriteItem* item = self.sortedFavoriteItems[dataIndex];
-        [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[[self.sortedFavoriteItems indexOfObject:item]]]];
-        [self.sortedFavoriteItems removeObjectAtIndex:[self.sortedFavoriteItems indexOfObject:item]];
+        OAFavoriteItem* item = self.sortedFavoriteItems[selectedItem.row];
+        if (item)
+        {
+            NSInteger itemIndex = [self.sortedFavoriteItems indexOfObject:item];
+            if (itemIndex != NSNotFound)
+            {
+                [self.favoriteTableView beginUpdates];
+                [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[itemIndex]]];
+                [self.sortedFavoriteItems removeObjectAtIndex:itemIndex];
+                [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
+                [self.favoriteTableView endUpdates];
+            }
+        }
     }
-    [self.favoriteTableView deleteRowsAtIndexPaths:sortedArray withRowAnimation:UITableViewRowAnimationLeft];
-    [self.favoriteTableView endUpdates];
     [self finishEditing];
 }
 
@@ -1115,7 +1135,6 @@ static UIViewController *parentController;
     NSSortDescriptor *sectionDescriptor = [[NSSortDescriptor alloc] initWithKey:@"section" ascending:NO];
     NSArray<NSIndexPath *> *sortedArray = [_selectedItems sortedArrayUsingDescriptors:@[sectionDescriptor, rowDescriptor]];
 
-    [self.favoriteTableView beginUpdates];
     for (NSIndexPath *selectedItem in sortedArray)
     {
         if (selectedItem.row == 0)
@@ -1124,19 +1143,25 @@ static UIViewController *parentController;
         }
         else
         {
-            NSInteger dataIndex = selectedItem.row - 1;
             NSDictionary *groupData = _data[selectedItem.section][0];
-            FavoriteTableGroup* group = groupData[@"group"];
-            OAFavoriteItem* item = group.favoriteGroup.points[dataIndex];
-            if (group.isOpen)
+            FavoriteTableGroup *group = groupData[@"group"];
+            OAFavoriteItem* item = group.favoriteGroup.points[selectedItem.row - 1];
+            if (item)
             {
-                [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[[self.sortedFavoriteItems indexOfObject:item]]]];
-                [self.sortedFavoriteItems removeObjectAtIndex:[self.sortedFavoriteItems indexOfObject:item]];
+                NSInteger itemIndex = [group.favoriteGroup.points indexOfObject:item];
+                if (itemIndex != NSNotFound && group.isOpen)
+                {
+                    [self.favoriteTableView beginUpdates];
+                    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[group.favoriteGroup.points[itemIndex]]];
+                    NSInteger sortedItemIndex = [self.sortedFavoriteItems indexOfObject:item];
+                    if (sortedItemIndex != NSNotFound)
+                        [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
+                    [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
+                    [self.favoriteTableView endUpdates];
+                }
             }
         }
     }
-    [self.favoriteTableView deleteRowsAtIndexPaths:sortedArray withRowAnimation:UITableViewRowAnimationLeft];
-    [self.favoriteTableView endUpdates];
     [self finishEditing];
 }
 

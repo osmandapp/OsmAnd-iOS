@@ -219,7 +219,7 @@
         }
     }];
 
-    if ([self showNearestWiki])
+    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled)
         [self buildRowsPoi:YES];
 
     if ([self showNearestPoi])

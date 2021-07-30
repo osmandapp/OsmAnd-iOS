@@ -362,7 +362,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 + (void)registerCustomPoiFilters:(NSMutableArray<OAPOIUIFilter *> *)poiUIFilters
 {
-    for (OAPlugin *p in [self getEnabledPlugins])
+    for (OAPlugin *p in [self.class getAvailablePlugins])
     {
         [poiUIFilters addObjectsFromArray:[p getCustomPoiFilters]];
     }

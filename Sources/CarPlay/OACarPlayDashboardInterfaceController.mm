@@ -109,9 +109,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeDirections]];
     
     _mapTemplate.mapButtons = @[[self createMapButton:EOACarPlayButtonTypeCenterMap], [self createMapButton:EOACarPlayButtonTypeZoomIn], [self createMapButton:EOACarPlayButtonTypeZoomOut]];
-    
-    // Always show the NavigationBar
-    _mapTemplate.automaticallyHidesNavigationBar = NO;
 }
 
 - (void) enterRoutePreviewMode

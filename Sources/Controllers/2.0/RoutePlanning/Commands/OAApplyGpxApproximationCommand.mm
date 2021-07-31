@@ -32,7 +32,7 @@
 	if (self) {
 		_approximations = approximations;
 		_segmentPointsList = [NSMutableArray arrayWithArray:segmentPointsList];
-		_originalSegmentPointsList = [NSArray arrayWithArray:_originalSegmentPointsList];
+		_originalSegmentPointsList = [NSArray arrayWithArray:segmentPointsList];
 		_mode = appMode;
 	}
 	return self;
@@ -75,6 +75,10 @@
 	ctx.roadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_roadSegmentData];
 	[ctx addPoints:_points];
 	_segmentPointsList = [NSMutableArray arrayWithCapacity:_originalSegmentPointsList.count];
+    // Populate with empty data
+    NSArray<OAGpxTrkPt *> *emptyArr = [NSArray array];
+    for (NSInteger i = 0; i < _originalSegmentPointsList.count; i++)
+        [_segmentPointsList addObject:emptyArr];
 	[self refreshMap];
 }
 

@@ -26,9 +26,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 + (instancetype)withType:(OsmAndResourceType)type;
 + (NSString *)resourceTypeLocalized:(OsmAndResourceType)type;
 + (UIImage *)getIcon:(OsmAndResourceType)type;
-+ (NSArray<NSNumber *> *)groupValues;
-+ (NSArray<NSNumber *> *)allValues;
-+ (OsmAndResourceType)unknown;
++ (NSInteger)getOrderIndex:(NSNumber *)type;
++ (NSArray<NSNumber *> *)allResourceTypes;
++ (NSArray<NSNumber *> *)mapResourceTypes;
++ (BOOL)isMapResourceType:(OsmAndResourceType)type;
++ (OsmAndResourceType)unknownType;
 + (OsmAndResourceType)toResourceType:(NSNumber *)value isGroup:(BOOL)isGroup;
 + (NSNumber *)toValue:(OsmAndResourceType)type;
 

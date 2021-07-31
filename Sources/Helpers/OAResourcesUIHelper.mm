@@ -115,12 +115,49 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (OsmAndResourceType)unknown
++ (NSInteger)getOrderIndex:(NSNumber *)type
+{
+    switch ([self.class toResourceType:type isGroup:NO])
+    {
+        case OsmAndResourceType::MapRegion:
+            return 10;
+        case OsmAndResourceType::VoicePack:
+            return 20;
+//        case FONT_FILE:
+//            return 25;
+        case OsmAndResourceType::RoadMapRegion:
+            return 30;
+        case OsmAndResourceType::SrtmMapRegion:
+            return 40;
+        case OsmAndResourceType::DepthContourRegion:
+            return 45;
+        case OsmAndResourceType::HillshadeRegion:
+            return 50;
+        case OsmAndResourceType::SlopeRegion:
+            return 55;
+        case OsmAndResourceType::WikiMapRegion:
+            return 60;
+//        case WIKIVOYAGE_FILE:
+//            return 65;
+//        case TRAVEL_FILE:
+//            return 66;
+        case OsmAndResourceType::LiveUpdateRegion:
+            return 70;
+        case OsmAndResourceType::GpxFile:
+            return 75;
+        case OsmAndResourceType::SqliteFile:
+            return 80;
+        default:
+            return 1000; //HeightmapRegion, MapStyle, MapStylesPresets, OnlineTileSources
+    }
+}
+
++ (OsmAndResourceType)unknownType
 {
     return OsmAndResourceType::Unknown;
 }
 
-+ (NSArray<NSNumber *> *)allValues
++ (NSArray<NSNumber *> *)allResourceTypes
 {
     return @[
             [self.class toValue:OsmAndResourceType::MapRegion],
@@ -141,7 +178,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     ];
 }
 
-+ (NSArray<NSNumber *> *)groupValues
++ (NSArray<NSNumber *> *)mapResourceTypes
 {
     return @[
             [self.class toValue:OsmAndResourceType::MapRegion],
@@ -153,10 +190,15 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     ];
 }
 
++ (BOOL)isMapResourceType:(OsmAndResourceType)type
+{
+    return [[self.class mapResourceTypes] containsObject:[self.class toValue:type]];
+}
+
 + (OsmAndResourceType)toResourceType:(NSNumber *)value isGroup:(BOOL)isGroup;
 {
-    if (![isGroup ? [self.class groupValues] : [OAResourceType allValues] containsObject:value])
-        return [OAResourceType unknown];
+    if (![isGroup ? [self.class mapResourceTypes] : [self.class allResourceTypes] containsObject:value])
+        return [self.class unknownType];
 
     return (OsmAndResourceType) value.intValue;
 }
@@ -701,7 +743,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     for (NSNumber *resourceType in resourceTypes)
     {
         OsmAndResourceType type = [OAResourceType toResourceType:resourceType isGroup:isGroup];
-        if (type != [OAResourceType unknown])
+        if (type != [OAResourceType unknownType])
             [resources addObjectsFromArray:[OAResourcesUIHelper requestMapDownloadInfo:kCLLocationCoordinate2DInvalid resourceType:type subregions:subregions]];
     }
     return [NSArray arrayWithArray:resources];

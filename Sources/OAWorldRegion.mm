@@ -643,7 +643,7 @@
     if (!subregions || subregions.count == 0)
         return;
 
-    NSMutableArray<NSNumber *> *resourceGroupTypes = [[OAResourceType groupValues] mutableCopy];
+    NSMutableArray<NSNumber *> *resourceGroupTypes = [[OAResourceType mapResourceTypes] mutableCopy];
     [resourceGroupTypes removeObjectsInArray:self.resourceTypes];
 
     if (![self hasGroupItems] && resourceGroupTypes.count > 0)

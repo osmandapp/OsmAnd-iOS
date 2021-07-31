@@ -1083,14 +1083,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:outFile];
-    if ([_settings.mapSettingVisibleGpx.get containsObject:gpxFilePath])
+    if (gpxFilePath && [_settings.mapSettingVisibleGpx.get containsObject:gpxFilePath])
     {
         // Refresh track if visible
         [_settings hideGpx:@[gpxFilePath] update:YES];
         helper.activeGpx.remove(QString::fromNSString(outFile));
         [helper buildGpxList];
     }
-    if (showOnMap)
+    if (gpxFilePath && showOnMap)
     {
         [_settings showGpx:@[gpxFilePath]];
     }

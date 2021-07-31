@@ -1892,7 +1892,7 @@
 "add_one_more_pnt" = "Dodaj jeszcze jeden punkt";
 "add_after" = "Dodaj punkty po";
 "add_before" = "Dodaj punkty przed";
-"layer_amenity_label" = "Etykiety nakładek użytecznych miejsc";
+"layer_amenity_label" = "Etykiety punktów (POI, Ulubione)";
 "personal_category_name" = "Osobiste";
 "road_speeds_descr" = "Te parametry mogą mieć wpływ na obliczanie trasy.";
 "shared_string_add_profile" = "Dodaj profil";

@@ -1928,7 +1928,7 @@
 "latest_version" = "У вас найновіша версія: %@";
 "vk" = "VK";
 "help_what_is_new" = "Що нового";
-"layer_amenity_label" = "Підписи до цікавих місць (POI, Закладки)";
+"layer_amenity_label" = "Мітки точок (POI, Закладки)";
 "osm_notes" = "Примітки OSM";
 "plugin_popup_osm_editing_ask" = "Увімкніть розширення редагування OpenStreetMap, щоб додавати та керувати редагуванням мапи та примітками";
 "plugin_popup_osm_editing_title" = "Увімкнути редагування OpenStreetMap";

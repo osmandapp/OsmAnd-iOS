@@ -1472,7 +1472,7 @@
 "shared_string_preparing" = "正在準備";
 "shared_string_import_complete" = "匯入完成";
 "shared_string_importing" = "正在匯入";
-"layer_amenity_label" = "POI覆蓋標籤";
+"layer_amenity_label" = "POI 標籤（POI、收藏）";
 "osm_notes" = "OSM註記";
 "personal_category_name" = "個人";
 "whole_track" = "整個軌道";

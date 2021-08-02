@@ -543,10 +543,10 @@
 "rendering_attr_hideAccess_name" = "Restricții de acces";
 "routing_attr_avoid_train_description" = "Evită trenurile";
 "rendering_attr_highway_class_track_grade3_name" = "Gradul 3";
-"routing_attr_prefer_unpaved_description" = "Prefer drumurile neasfaltate.";
+"routing_attr_prefer_unpaved_description" = "Prefer drumurile nepavate.";
 "rendering_value_germanRoadAtlas_name" = "Atlas rutier german";
 "rendering_value_darkyellow_name" = "Galbenînchis";
-"rendering_attr_piste_difficulty_aerialway_name" = "Aerian";
+"rendering_attr_piste_difficulty_aerialway_name" = "Calea aeriană";
 "rendering_attr_roadStyle_name" = "Stil drum";
 "routing_attr_height_description" = "Specificați înălțimea vehiculului care va fi permisă pe rute.";
 "rendering_attr_highway_class_motorway_name" = "Autostradă";
@@ -579,7 +579,7 @@
 "routing_attr_avoid_ferry_name" = "Evită feriboturile";
 "rendering_attr_trainLightrailRoutes_name" = "Rute tren";
 "routing_attr_allow_intermediate_name" = "Permiteți rute intermediare";
-"routing_attr_avoid_ice_roads_fords_description" = "Evită drumurile cu polei și traversarile râurilor.";
+"routing_attr_avoid_ice_roads_fords_description" = "Fără drumuri cu polei și vaduri.";
 "rendering_attr_moreDetailed_name" = "Mai multe detalii";
 "rendering_attr_contourLines_description" = "Afișează începând de la nivelul de zoom (necesită fișier SRTM):";
 "routing_attr_driving_style_balance_name" = "Echilibrat";
@@ -658,7 +658,7 @@
 "rendering_attr_currentTrackWidth_description" = "Grosime GPX";
 "rendering_value_medium_w_name" = "Mediu";
 "rendering_attr_transportStops_name" = "Staţii de transport";
-"routing_attr_avoid_ice_roads_fords_name" = "Evită drumurile cu polei și traversarile râurilor";
+"routing_attr_avoid_ice_roads_fords_name" = "Fără drumuri de gheață sau vaduri";
 "rendering_attr_piste_type_connection_name" = "Conexiune";
 "rendering_attr_piste_difficulty_advanced_name" = "Avansat";
 "rendering_attr_surface_wood_name" = "Lemn";
@@ -744,9 +744,9 @@
 "rendering_attr_surface_dirt_name" = "Pământ";
 "rendering_attr_piste_difficulty_easy_name" = "Uşor";
 "rendering_attr_surface_salt_name" = "Sare";
-"routing_attr_avoid_shuttle_train_name" = "Evită rutele de tren";
+"routing_attr_avoid_shuttle_train_name" = "Fără tren navetă";
 "rendering_attr_showRoadMaps_name" = "Hărți doar pentru drumuri";
-"routing_attr_allow_motorway_name" = "Permiteți autostrăzile";
+"routing_attr_allow_motorway_name" = "Folosiți autostrăzile";
 "routing_attr_avoid_stairs_name" = "Evită treptele";
 "rendering_value_blue_name" = "Albastru";
 "rendering_attr_currentTrackWidth_name" = "Lățime GPX";
@@ -817,7 +817,7 @@
 "shared_string_done" = "Gata";
 "routing_attr_height_obstacles_name" = "Utilizare date altitudine";
 "logging_min_speed" = "Viteza minimă";
-"quick_action_remove_next_destination" = "Ștergeți următorul punct de destinație";
+"quick_action_remove_next_destination" = "Ștergerea celui mai apropiat punct de destinație";
 "enter_profile_name" = "Introduceți numele profilului";
 "public_transport_warning_title" = "În prezent, navigația pentru transportul public este în testare beta, așteptați erori și inexactități.";
 "quick_action_mapillary_show" = "Afișare Mapillary";
@@ -829,7 +829,7 @@
 "special_routing" = "Rutare specială";
 "public_transport_empty_warning_descr" = "Încercați să modificați setările.";
 "shared_string_finish" = "Sfârşit";
-"new_profile" = "Profil nou";
+"new_profile" = "profil nou";
 "one" = "Una";
 "app_theme_light" = "Deschisă";
 "public_transport_menu" = "Transport";
@@ -891,7 +891,7 @@
 "appearance_on_map" = "Aspectul pe hartă";
 "profile_type_base_string" = "Profil de bază";
 "arrival_announcement_frequency" = "Cât de repede vrei să se anunțe sosirea\?";
-"base_profile_descr_public_transport" = "Toate tipurile de transport public";
+"base_profile_descr_public_transport" = "Tipuri de transport public";
 "m_style_pulic_transport" = "Transport public";
 "shared_string_max" = "Maxim";
 "meters" = "metrii";
@@ -901,7 +901,7 @@
 "shared_string_profiles" = "Profiluri";
 "selected_profile" = "Profil selectat";
 "screen_alerts" = "Alerte ecran";
-"osm_notes" = "Note OSM";
+"osm_notes" = "note OSM";
 "shared_string_importing" = "Se importă";
 "configure_screen_quick_action" = "Acțiune rapidă";
 "import_profile_select_descr" = "Selectați datele care vor fi importate.";
@@ -922,7 +922,7 @@
 "res_pseudo_mercator" = "Proiecție pseudo-Mercator";
 "edit_profile_list" = "Editează lista de profiluri";
 "shared_string_next" = "Următorul";
-"default_speed_dialog_msg" = "Utilizat pentru estimarea timpului de sosire pentru tipul necunoscut de drumuriși pentru a limita viteza pentru toate drumurile (ar putea schimba ruta)";
+"default_speed_dialog_msg" = "Estimarea timpului de sosire pentru tipurile de drumuri necunoscute și limitarea vitezei pe toate drumurile (poate afecta traseul)";
 "update_map" = "Actualizează hartă";
 "profile_prefs_reset_successful" = "Toate setările profilului restaurate la starea implicită.";
 "tones" = "tone";

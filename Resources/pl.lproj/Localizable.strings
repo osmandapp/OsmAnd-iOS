@@ -111,7 +111,7 @@
 "intro_promo" = "Globalne mapy offline";
 "intro_placeholder" = "Proszę wprowadzić nazwę swojego regionu";
 // Settings
-"sett_settings" = "Opcje";
+"sett_settings" = "Ustawienia";
 "sett_units" = "Jednostki";
 "sett_lang" = "Język mapy";
 "sett_km" = "Kilometry";
@@ -243,7 +243,7 @@
 "prch_items_failed" = "element(y/ów) nie został(y/o) przywrócony(-e/-ych). Spróbuj ponownie.";
 "res_banner_free_maps_desc" = "Możesz pobrać %d darmowe mapy, bez aktualizacji";
 "res_banner_no_free_maps_desc" = "Należy zakupić mapy regionów lub mapy całego świata";
-"res_wsea_map" = "Mapa bazowa światowych znaków nawigacyjnych";
+"res_wsea_map" = "Mapa podstawowa światowych znaków nawigacyjnych";
 "res_wmap" = "Podstawowa mapa świata";
 "res_map_of_region" = "Regiony";
 "res_install_no_space" = "Za mało miejsca, aby zainstalować";
@@ -757,7 +757,7 @@
 "shared_setting_always_ask" = "Ponawianie pytania";
 "recording_preferences_descr" = "Ustawienia nagrywania trasy";
 "traffic_warning_tunnel" = "Zbliżasz się do tunelu";
-"poi_overlay" = "Nakładka użytecznych miejsc";
+"poi_overlay" = "Nakładka użytecznego miejsca";
 "track_save_descr" = "Zapisz bieżącą trasę jako plik GPX.";
 "track_during_nav" = "Automatycznie rejestruj ścieżkę";
 "track_during_nav_descr" = "Włącz, aby automatycznie zapisywać trasę podczas nawigacji";
@@ -1411,7 +1411,7 @@
 "rendering_attr_highway_class_track_grade3_name" = "Klasa 3";
 "routing_attr_height_obstacles_description" = "Używa danych wysokościowych (dane z SRTM, ASTER i EU-DEM).";
 "rendering_value_walkingRoutesOSMC_name" = "Linia w kolorze oznakowania OSMC";
-"rendering_attr_shareTaxiRoutes_name" = "Udostępniaj trasy taxi";
+"rendering_attr_shareTaxiRoutes_name" = "Trasy taksówek zbiorowych";
 "rendering_attr_horseRoutes_name" = "Szlaki konne";
 "routing_attr_avoid_toll_description" = "Unika płatnych dróg";
 "rendering_attr_roadStyle_description" = "Styl dróg";
@@ -1622,11 +1622,11 @@
 "app_mode_car" = "Jazda";
 "map_settings_appearance" = "Wygląd";
 "app_mode_offroad" = "Off-road";
-"map_settings_base_transp" = "Przezroczystość warstwy bazowej";
+"map_settings_base_transp" = "Przezroczystość mapy podstawowej";
 "map_settings_color_scheme" = "Zestaw kolorów";
 "app_mode_osm" = "OSM";
 "app_mode_personal_transporter" = "Transporter osobisty";
-"app_mode_taxi" = "Taxi";
+"app_mode_taxi" = "Taksówka";
 "app_mode_pickup_truck" = "Pickup";
 "app_mode_wagon" = "Wóz";
 "open_wiki_online" = "Otwórz artykuł online";
@@ -1798,7 +1798,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Wyszukaj";
 "configure_screen_quick_action" = "Szybka czynność";
-"shared_string_settings" = "Opcje";
+"shared_string_settings" = "Ustawienia";
 "avoid_road" = "Omiń drogę";
 "shared_string_routing" = "Wyznaczanie trasy";
 "quick_action_map_source_title" = "Zasoby map";
@@ -1836,7 +1836,7 @@
 "units_t" = "t";
 "public_transport_hide" = "Ukryj transport publiczny";
 "public_transport_show" = "Pokaż transport publiczny";
-"configure_map_descr" = "Konfiguruje wygląd mapy";
+"configure_map_descr" = "Wygląd mapy";
 "delete_point" = "Usuń punkt";
 "move_point" = "Przesuń punkt";
 "add_to_track" = "Dodaj do trasy";

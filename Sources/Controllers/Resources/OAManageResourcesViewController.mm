@@ -2123,7 +2123,6 @@ static BOOL _lackOfResources;
                     if (item.resourceTypes.count > 0)
                     {
                         NSMutableOrderedSet<NSNumber *> *typesSet = [NSMutableOrderedSet orderedSetWithArray:item.resourceTypes];
-
                         NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
                             NSInteger orderValue1 = [OAResourceType getOrderIndex:type1];
                             NSInteger orderValue2 = [OAResourceType getOrderIndex:type2];
@@ -2134,12 +2133,10 @@ static BOOL _lackOfResources;
                             else
                                 return NSOrderedSame;
                         }] mutableCopy];
-
                         NSMutableArray<NSString *> *typesLocalized = [NSMutableArray new];
                         [sortedTypesWithoutDuplicate enumerateObjectsUsingBlock:^(NSNumber *type, NSUInteger idx, BOOL *stop) {
                             [typesLocalized addObject:[OAResourceType resourceTypeLocalized:[OAResourceType toResourceType:type isGroup:NO]]];
                         }];
-
                         subtitle = [typesLocalized componentsJoinedByString:@", "];
                     }
                     else
@@ -2227,37 +2224,27 @@ static BOOL _lackOfResources;
                 NSArray<OAResourceItem *> *items = ((OAMultipleResourceItem *) item).items;
                 for (OAResourceItem *resourceItem in items)
                 {
+                    if ([OAResourceType isSRTMResourceItem:resourceItem])
+                    {
+                        if (([OAResourceType isSRTMFSettingOn] && [OAResourceType isSRTMF:resourceItem]) || (![OAResourceType isSRTMFSettingOn] && ![OAResourceType isSRTMF:resourceItem]))
+                        {
+                            if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
+                                _sizePkg += ((OARepositoryResourceItem *) resourceItem).sizePkg;
+                            else if ([resourceItem isKindOfClass:OALocalResourceItem.class] && [OAResourceType isSingleSRTMResourceItem:(OAMultipleResourceItem *) item])
+                                _sizePkg += ((OALocalResourceItem *) resourceItem).size;
+                        }
+                    }
+                    else
+                    {
+                        if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
+                            _sizePkg += ((OARepositoryResourceItem *) resourceItem).sizePkg;
+                    }
                     if (resourceItem.downloadTask != nil)
                     {
                         downloadingMultipleItem = resourceItem;
                         hasTask = YES;
                         break;
                     }
-                        if ([OAResourceType isSRTMResourceItem:resourceItem])
-                        {
-                            if (([OAResourceType isSRTMFSettingOn] && [OAResourceType isSRTMF:resourceItem]) || (![OAResourceType isSRTMFSettingOn] && ![OAResourceType isSRTMF:resourceItem]))
-                            {
-                                if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
-                                {
-                                    OARepositoryResourceItem *repositoryItem = (OARepositoryResourceItem *) resourceItem;
-                                    _sizePkg += repositoryItem.resource->packageSize + repositoryItem.resource->size;
-                                }
-                                else if ([resourceItem isKindOfClass:OALocalResourceItem.class] && [OAResourceType isSingleSRTMResourceItem:(OAMultipleResourceItem *) item])
-                                {
-                                    OALocalResourceItem *localItem = (OALocalResourceItem *) resourceItem;
-                                    const auto repositoryResource = _app.resourcesManager->getResourceInRepository(localItem.resourceId);
-                                    _sizePkg += repositoryResource->packageSize + repositoryResource->size;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
-                            {
-                                OARepositoryResourceItem *repositoryItem = (OARepositoryResourceItem *) resourceItem;
-                                _sizePkg += repositoryItem.resource->packageSize + repositoryItem.resource->size;
-                            }
-                        }
                 }
                 cellTypeId = hasTask ? downloadingResourceCell : repositoryResourceCell;
             }
@@ -2356,7 +2343,7 @@ static BOOL _lackOfResources;
                 else
                 {
                     NSString *srtmFormat = @"";
-                    if (item.resourceType == OsmAndResourceType::SrtmMapRegion)
+                    if ([OAResourceType isSRTMResourceItem:item])
                         srtmFormat = [NSString stringWithFormat:@" (%@)", [OAResourceType getSRTMFormatItem:item longFormat:NO]];
 
                     subtitle = [NSString stringWithFormat:@"%@%@  •  %@", subtitle, srtmFormat, [item getDate]];

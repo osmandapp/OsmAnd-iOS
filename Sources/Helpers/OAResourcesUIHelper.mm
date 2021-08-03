@@ -1057,9 +1057,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }]];
-//    if (onAlertPresent)
-//        onAlertPresent(alert);
-//    else
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 

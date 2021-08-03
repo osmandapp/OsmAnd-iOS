@@ -632,10 +632,7 @@ static BOOL _lackOfResources;
         for (OAResourceItem *item in _multipleItems)
         {
             if (_app.resourcesManager->isResourceInstalled(item.resourceId))
-            {
                 [itemsToRemove addObject:item];
-                [self.region updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
-            }
         }
         [multipleRepositoryItems removeObjectsInArray:itemsToRemove];
         _multipleItems = multipleRepositoryItems.count > 0 ? [NSArray arrayWithArray:multipleRepositoryItems] : nil;
@@ -2079,14 +2076,22 @@ static BOOL _lackOfResources;
                 {
                     if (item.resourceTypes.count > 0)
                     {
-                        NSMutableString *str = [NSMutableString string];
-                        for (NSNumber *typeNum in item.resourceTypes)
-                        {
-                            if (str.length > 0)
-                                [str appendString:@", "];
-                            [str appendString:[OAResourceType resourceTypeLocalized:(OsmAndResourceType)[typeNum intValue]]];
-                        }
-                        subtitle = str;
+                        NSMutableOrderedSet<NSNumber *> *typesSet = [NSMutableOrderedSet orderedSetWithArray:item.resourceTypes];
+                        NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
+                            NSInteger orderValue1 = [OAResourceType getOrderIndex:type1];
+                            NSInteger orderValue2 = [OAResourceType getOrderIndex:type2];
+                            if (orderValue1 < orderValue2)
+                                return NSOrderedAscending;
+                            else if (orderValue1 > orderValue2)
+                                return NSOrderedDescending;
+                            else
+                                return NSOrderedSame;
+                        }] mutableCopy];
+                        NSMutableArray<NSString *> *typesLocalized = [NSMutableArray new];
+                        [sortedTypesWithoutDuplicate enumerateObjectsUsingBlock:^(NSNumber *type, NSUInteger idx, BOOL *stop) {
+                            [typesLocalized addObject:[OAResourceType resourceTypeLocalized:[OAResourceType toResourceType:type isGroup:NO]]];
+                        }];
+                        subtitle = [typesLocalized componentsJoinedByString:@", "];
                     }
                     else
                     {
@@ -2172,16 +2177,14 @@ static BOOL _lackOfResources;
                 BOOL hasTask = NO;
                 for (OAResourceItem *resourceItem in ((OAMultipleResourceItem *) item).items)
                 {
+                    if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
+                        _sizePkg += ((OARepositoryResourceItem *) resourceItem).resource->packageSize;
+
                     if (resourceItem.downloadTask != nil)
                     {
                         downloadingMultipleItem = resourceItem;
                         hasTask = YES;
                         break;
-                    }
-                    if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
-                    {
-                        OARepositoryResourceItem *repositoryItem = (OARepositoryResourceItem *) resourceItem;
-                        _sizePkg += repositoryItem.resource->packageSize + repositoryItem.resource->size;
                     }
                 }
                 cellTypeId = hasTask ? downloadingResourceCell : repositoryResourceCell;

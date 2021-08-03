@@ -78,7 +78,7 @@
     if (item && app.resourcesManager->isResourceInstalled(item.resourceId))
     {
         OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
-        NSArray<OAPOI *> *wiki = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:250];
+        NSArray<OAPOI *> *wiki = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:250];
         OAPOI *foundPoint = nil;
         for (OAPOI *poi in wiki)
         {

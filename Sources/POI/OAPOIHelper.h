@@ -14,6 +14,7 @@
 #include <OsmAndCore/Data/Amenity.h>
 
 #define OSM_WIKI_CATEGORY @"osmwiki"
+#define WIKI_LANG @"wiki:lang:"
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};

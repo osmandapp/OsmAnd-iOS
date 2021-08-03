@@ -375,7 +375,7 @@
 
     while (osmwiki.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
     {
-        osmwiki = [[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:radius] mutableCopy];
+        osmwiki = [[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:radius] mutableCopy];
         [osmwiki removeObject:poi];
 
         if (![wikiPlugin isShowAllLanguages] && [wikiPlugin hasLanguagesFilter])

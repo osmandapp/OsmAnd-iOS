@@ -229,7 +229,7 @@
             if ([self hasCustomSettings])
             {
                 prepareByDefault = NO;
-                NSString *wikiLang = @"wiki:lang:";
+                NSString *wikiLang = WIKI_LANG;
                 NSMutableString *sb = [NSMutableString new];
                 for (NSString *lang in [self getLanguagesToShow])
                 {

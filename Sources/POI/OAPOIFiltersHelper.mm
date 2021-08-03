@@ -435,7 +435,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 {
     if (_topWikiPoiFilter == nil)
     {
-        NSString *wikiFilterId = [STD_PREFIX stringByAppendingString:@"osmwiki"];
+        NSString *wikiFilterId = [STD_PREFIX stringByAppendingString:OSM_WIKI_CATEGORY];
         for (OAPOIUIFilter *filter in [self getTopDefinedPoiFilters])
         {
             if ([wikiFilterId isEqualToString:filter.getFilterId])

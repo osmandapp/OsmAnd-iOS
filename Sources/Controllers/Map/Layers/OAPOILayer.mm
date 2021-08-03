@@ -140,7 +140,7 @@
          {
              bool res = true;
              OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
-             if (_poiUiNameFilter)
+             if (_poiUiNameFilter && (([poi.type.tag isEqualToString:OSM_WIKI_CATEGORY] && [_poiUiFilter.filterByName containsString:WIKI_LANG]) || (![poi.type.tag isEqualToString:OSM_WIKI_CATEGORY] && ![_poiUiFilter.filterByName containsString:WIKI_LANG])))
                  res = [_poiUiNameFilter accept:poi];
              else
                  res = ![poi isClosed];

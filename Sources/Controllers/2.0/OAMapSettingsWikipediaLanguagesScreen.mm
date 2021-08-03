@@ -209,7 +209,6 @@ static const NSInteger availableSection = 2;
         [self.tableView beginUpdates];
         UISwitch *sw = (UISwitch *) sender;
         _isGlobalWikiPoiEnabled = sw.on;
-        [self applyPreference:NO];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:preferredSection] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:availableSection] withRowAnimation:UITableViewRowAnimationFade];

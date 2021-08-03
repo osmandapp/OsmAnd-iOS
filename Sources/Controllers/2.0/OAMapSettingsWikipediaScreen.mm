@@ -70,8 +70,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _dataLock = [[NSObject alloc] init];
         _wikipediaEnabled = [[OAPOIFiltersHelper sharedInstance] isTopWikiFilterSelected];
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        [self setupView];
-        [self generateData];
+        [self commonInit];
+        [self initData];
     }
     return self;
 }
@@ -95,28 +95,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void)initData
-{
-}
-
-- (void)setupView
+- (void)commonInit
 {
     _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:) andObserve:_app.downloadsManager.progressCompletedObservable];
     _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
     _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocalResourcesChanged:withKey:) andObserve:_app.localResourcesChangedObservable];
-
-    title = OALocalizedString(@"product_title_wiki");
-
-    [self.tblView.tableFooterView removeFromSuperview];
-    self.tblView.tableFooterView = nil;
-    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    tblView.estimatedRowHeight = kEstimatedRowHeight;
-    tblView.estimatedRowHeight = kEstimatedRowWithDescriptionHeight;
-
-    [self updateAvailableMaps];
 }
 
-- (void)generateData
+- (void)initData
 {
     NSMutableArray *dataArr = [@[
             @[
@@ -151,6 +137,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _data = [NSArray arrayWithArray:dataArr];
 }
 
+- (void)setupView
+{
+    title = OALocalizedString(@"product_title_wiki");
+
+    [self.tblView.tableFooterView removeFromSuperview];
+    self.tblView.tableFooterView = nil;
+    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    tblView.estimatedRowHeight = kEstimatedRowHeight;
+    tblView.estimatedRowHeight = kEstimatedRowWithDescriptionHeight;
+
+    [self updateAvailableMaps];
+}
+
 - (void)updateAvailableMaps
 {
     CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
@@ -171,15 +170,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 }
                 _mapItems = availableItems;
             }
-            [self generateData];
+            [self initData];
             [tblView reloadData];
         }
     }];
-}
-
-- (void)onRotation
-{
-    [self.tblView reloadData];
 }
 
 - (void)applyParameter:(id)sender

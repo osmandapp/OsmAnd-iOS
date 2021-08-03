@@ -336,17 +336,17 @@ static const NSInteger availableSection = 2;
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             [cell setSelectedBackgroundView:bgColorView];
-        }
-        if (cell)
-        {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-            cell.textView.text = [OAUtilities capitalizeFirstLetterAndLowercase:language.title];
             cell.descriptionView.hidden = YES;
 
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];
-            return cell;
         }
+        if (cell)
+        {
+            cell.textView.text = [OAUtilities capitalizeFirstLetterAndLowercase:language.title];
+        }
+        return cell;
     }
 
     return nil;

@@ -54,7 +54,7 @@
 
 - (NSString *)getDescription
 {
-    return OALocalizedString(@"plugin_wikipedia_description");
+    return OALocalizedString(@"product_desc_ext_wiki");
 }
 
 - (void)updateLayers

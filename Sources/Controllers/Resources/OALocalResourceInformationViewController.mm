@@ -424,16 +424,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     return nil;
 }
 
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
-}
 
 #pragma mark - OATilesEditingViewControllerDelegate
 

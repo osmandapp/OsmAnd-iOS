@@ -1471,7 +1471,7 @@
 "rendering_attr_appMode_description" = "Optimizar mapa para";
 "rendering_attr_smoothness_very_bad_name" = "Muy malo";
 "rendering_attr_transportStops_name" = "Paradas de transporte";
-"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5–9).";
+"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5 – 9).";
 "rendering_attr_surface_asphalt_name" = "Asfalto";
 "routeInfo_smoothness_name" = "Suavidad";
 "rendering_attr_pisteRoutes_name" = "Pistas de esquí";
@@ -1938,7 +1938,7 @@
 "osm_notes" = "Notas de OSM";
 "plugin_popup_osm_editing_ask" = "Activa el complemento de edición de OpenStreetMap para añadir y gestionar ediciones y notas de mapas";
 "plugin_popup_osm_editing_title" = "Activar la edición de OpenStreetMap";
-"layer_amenity_label" = "Nombres de PDI superpuestos";
+"layer_amenity_label" = "Nombres de puntos (PDI, favoritos)";
 "personal_category_name" = "Personal";
 "next_seg_dist" = "Siguiente segmento %@";
 "whole_track" = "Traza completa";

@@ -46,7 +46,7 @@
     _contextMenuLayer = [[OAContextMenuLayer alloc] initWithMapViewController:_mapViewController baseOrder:-210000];
     [self addLayer:_contextMenuLayer];
 
-    _poiLayer = [[OAPOILayer alloc] initWithMapViewController:_mapViewController];
+    _poiLayer = [[OAPOILayer alloc] initWithMapViewController:_mapViewController baseOrder:-180000];
     [self addLayer:_poiLayer];
 
     _terrainMapLayer = [[OATerrainMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:4];
@@ -57,11 +57,11 @@
 
     _underlayMapLayer = [[OAUnderlayMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:-5];
     [self addLayer:_underlayMapLayer];
-    
-    _gpxMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController baseOrder:-130000];
+
+    _gpxMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController baseOrder:-100000];
     [self addLayer:_gpxMapLayer];
 
-    _gpxRecMapLayer = [[OAGPXRecLayer alloc] initWithMapViewController:_mapViewController baseOrder:-140000];
+    _gpxRecMapLayer = [[OAGPXRecLayer alloc] initWithMapViewController:_mapViewController baseOrder:-110000];
     [self addLayer:_gpxRecMapLayer];
 
     _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:-150000];
@@ -72,7 +72,7 @@
 
     _routePointsLayer = [[OARoutePointsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-209000];
     [self addLayer:_routePointsLayer];
-    
+
     _impassableRoadsLayer = [[OAImpassableRoadsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-206000];
     [self addLayer:_impassableRoadsLayer];
     

@@ -12,6 +12,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
+#import "OAMapLayers.h"
 
 @interface OAPointOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -87,14 +88,14 @@
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_before"),
             @"img" : @"ic_custom_trim_before",
-            @"key" : @"trim",
+            @"key" : @"trim_before",
             @"value" : @(EOAClearPointsModeBefore)
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_after"),
             @"img" : @"ic_custom_trim_after",
-            @"key" : @"trim",
+            @"key" : @"trim_after",
             @"value" : @(EOAClearPointsModeAfter)
         }
     ]];
@@ -210,6 +211,25 @@
     return icon;
 }
 
+- (BOOL)isActiveCell:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"key"] isEqualToString:@"trim_before"])
+        return ![_editingCtx isFirstPointSelected:NO];
+    else if ([item[@"key"] isEqualToString:@"trim_after"])
+        return ![_editingCtx isLastPointSelected:NO];
+    else if ([item[@"key"] isEqualToString:@"split_after"])
+        return [_editingCtx canSplit:YES];
+    else if ([item[@"key"] isEqualToString:@"split_before"])
+        return [_editingCtx canSplit:NO];
+    else if ([item[@"key"] isEqualToString:@"change_route_before"])
+        return ![_editingCtx isFirstPointSelected:NO] && ![_editingCtx isApproximationNeeded];
+    else if ([item[@"key"] isEqualToString:@"change_route_after"])
+        return ![_editingCtx isLastPointSelected:NO] && ![_editingCtx isApproximationNeeded];
+
+    return YES;
+}
+
 - (void) onBottomSheetDismissed
 {
     if (self.delegate)
@@ -236,8 +256,7 @@
         {
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
-            
-            
+
             UIColor *tintColor = item[@"custom_color"];
             if (tintColor)
             {
@@ -247,9 +266,10 @@
             }
             else
             {
-                cell.textColorNormal = nil;
-                cell.iconView.image = [UIImage imageNamed:item[@"img"]];
-                cell.titleView.textColor = UIColor.blackColor;
+                BOOL isActiveCell =  [self isActiveCell:indexPath];
+                cell.iconColorNormal = isActiveCell ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                cell.textColorNormal = isActiveCell ? [UIColor blackColor] : [UIColor lightGrayColor];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             }
         }
@@ -270,6 +290,11 @@
 
 #pragma mark - UItableViewDelegate
 
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self isActiveCell:indexPath] ? indexPath : nil;
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
@@ -279,7 +304,7 @@
         if (self.delegate)
             [self.delegate onMovePoint:_pointIndex];
     }
-    else if ([key isEqualToString:@"trim"])
+    else if ([key hasPrefix:@"trim"])
     {
         EOAClearPointsMode mode = (EOAClearPointsMode) [item[@"value"] integerValue];
         if (self.delegate)

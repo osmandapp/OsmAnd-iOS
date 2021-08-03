@@ -551,7 +551,7 @@
 "map_widget_max_speed" = "Ограничение скорости";
 "max_speed_none" = "нет";
 "access_arrival_time" = "Время прибытия";
-"map_widget_time" = "Время в пути";
+"map_widget_time" = "Время до прибытия";
 "shared_string_collapse" = "Свернуть";
 "shared_string_topbar" = "Верхняя панель";
 "shared_string_widgets" = "Виджеты";
@@ -893,8 +893,8 @@
 "poi_opening_hours" = "Рабочие часы";
 "poi_select_category" = "Выбор категории";
 "poi_select_type" = "Выбор типа";
-"access_intermediate_arrival_time" = "Промежуточное время прибытия";
-"map_widget_intermediate_time" = "Прибытие в промежуточный пункт";
+"access_intermediate_arrival_time" = "Прибытие в промежуточный пункт";
+"map_widget_intermediate_time" = "Время до промежуточного пункта";
 "shared_string_milliradians" = "Миллирадианы";
 "angular_units_descr" = "Сменить единицы измерения азимута.";
 "mapillary_image" = "Фотография Mapillary";
@@ -1516,7 +1516,7 @@
 "rendering_attr_hideWoodScrubs_name" = "Леса и кустарники";
 "rendering_value__name" = "По умолчанию";
 "routing_attr_allow_skating_only_description" = "Маршруты, подготовленные для фристайла или катания только на коньках без классических треков.";
-"routing_attr_piste_type_downhill_description" = "Склоны для катания и спуска на горных лыжах и доступ к подъемникам.";
+"routing_attr_piste_type_downhill_description" = "Склоны для катания и спуска на горных лыжах и доступ к подъёмникам.";
 "rendering_value_bicycle_name" = "Велосипед";
 "rendering_attr_surface_ice_name" = "Лед";
 "routeInfo_piste_difficulty_name" = "Сложность горнолыжной трассы";
@@ -1566,7 +1566,7 @@
 "rendering_value_dark_brown_name" = "Темно-коричневый";
 "routeInfo_roadClass_name" = "Класс дороги";
 "rendering_value_medium_w_name" = "Средняя";
-"routeInfo_winter_ice_road_name" = "Зимние и ледовые дороги";
+"routeInfo_winter_ice_road_name" = "Зимние и ледовые дороги";
 "rendering_attr_smoothness_very_bad_name" = "Очень плохая";
 "rendering_attr_highway_class_bridleway_name" = "Конная";
 "rendering_attr_smoothness_intermediate_name" = "Средняя";
@@ -1975,15 +1975,15 @@
 "quick_action_remove_next_destination_descr" = "Следующая точка маршрута будет удалена. Если это конечный пункт, навигация завершится.";
 "gpx_export_failed" = "Не удалось сохранить созданный маршрут";
 "visible" = "Видимые";
-"hide_compass_ruler" = "Скрыть компас линейку";
-"show_compass_ruler" = "Показать компас линейку";
+"hide_compass_ruler" = "Скрыть компас-линейку";
+"show_compass_ruler" = "Показать компас-линейку";
 "address_search" = "Поиск по адресу";
 "shared_z_a" = "Я - А";
 "shared_a_z" = "А - Я";
 "search_preogress" = "Поиск…";
 "units_nm" = "мор. миля";
 "map_widget_distance_by_tap" = "Расстояние по нажатию";
-"simplified_track_description" = "Будет сохранена только линия маршрута, путевые точки будут удалены.";
+"simplified_track_description" = "Будет сохранена только линия маршрута, без путевых точек.";
 "open_saved_track" = "Открыть сохраненный трек";
 "nearest_point" = "Ближайшая точка";
 "simplified_track" = "Упрощенный трек";

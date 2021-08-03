@@ -343,10 +343,12 @@
                 gpx.locationEnd = wpt;
             }
         }
-            
+        NSString *gpxFolderPath = OsmAndApp.instance.gpxPath;
+        // Make compatible with old database data
+        NSString *filePath = [gpx.gpxFilePath hasPrefix:gpxFolderPath] ? gpx.gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpx.gpxFilePath];
         if (!gpx.gpxFilePath)
              gpx.gpxFilePath = gpx.gpxFileName;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]])
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
              [res addObject:gpx];
     }
     gpxList = res;

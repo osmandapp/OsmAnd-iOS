@@ -790,16 +790,22 @@
     
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
     search->performSearch(*searchCriteria,
-                          [&arr, &tagName, &name, &location]
+                          [&arr, &tagName, &name, &location, &processedPoi]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                              OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
-                              if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.nameLocalized isEqualToString:name]))
+                              const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                              if (![processedPoi containsObject:@(am->id.id)])
                               {
-                                  const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                  poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, amenity->position31);
-                                  [arr addObject:poi];
+                                  [processedPoi addObject:@(am->id.id)];
+                                  OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
+                                  if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.nameLocalized isEqualToString:name]))
+                                  {
+                                      const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                      poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, amenity->position31);
+                                      [arr addObject:poi];
+                                  }
                               }
                           },
                           ctrl);
@@ -983,23 +989,27 @@
         OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
         OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
         searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
-        
+        NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
         const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
         search->performSearch(*searchCriteria,
-                              [&arr, &filter, &matcher]
+                              [&arr, &filter, &matcher, &processedPoi]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
-                                  const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                  OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
-                                  if (type && [filter accept:type.category subcategory:type.name])
+                                  const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                  if (![processedPoi containsObject:@(amenity->id.id)])
                                   {
-                                      OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity type:type];
-                                      if (poi)
+                                      [processedPoi addObject:@(amenity->id.id)];
+                                      OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
+                                      if (type && [filter accept:type.category subcategory:type.name])
                                       {
-                                          if (matcher)
-                                              [matcher publish:poi];
-                                          
-                                          [arr addObject:poi];
+                                          OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity type:type];
+                                          if (poi)
+                                          {
+                                              if (matcher)
+                                                  [matcher publish:poi];
+                                              
+                                              [arr addObject:poi];
+                                          }
                                       }
                                   }
                               },

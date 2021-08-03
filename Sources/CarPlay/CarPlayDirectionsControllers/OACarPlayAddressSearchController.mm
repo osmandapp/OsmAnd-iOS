@@ -33,10 +33,13 @@
     NSArray<OAQuickSearchListItem *> *_searchItems;
     
     NSString *_currentSearchPhrase;
+    
+    dispatch_queue_t _searchQueue;
 }
 
 - (void) commonInit
 {
+    _searchQueue = dispatch_queue_create("carPlay_searchQueue", DISPATCH_QUEUE_SERIAL);
     _searchHelper = OAQuickSearchHelper.instance;
     _searchUICore = _searchHelper.getCore;
     
@@ -142,7 +145,7 @@
     [_searchUICore cancelSearch];
     [_searchUICore resetPhrase];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(_searchQueue, ^{
         OASearchResultCollection *results = [_searchUICore shallowSearch:OASearchAddressByNameAPI.class text:searchText matcher:nil resortAll:YES removeDuplicates:YES];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateSearchResult:results];

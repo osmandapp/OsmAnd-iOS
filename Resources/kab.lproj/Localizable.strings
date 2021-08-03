@@ -453,7 +453,7 @@
 "week_short" = "mls";
 "day_short" = "S";
 "nm_h" = "nmi/h";
-"shared_string_password" = "Awal-ik uffir n OSM";
+"shared_string_password" = "Awal uffir";
 "by_name" = "S yisem";
 "si_mi_meters" = "Amayel / Amitr";
 "si_km_m" = "Ikilumitren/imitren";
@@ -516,7 +516,6 @@
 "layer_map_appearance" = "Swel agdil";
 "map_widget_right" = "Agalis ayeffus";
 "map_widget_appearance_rem" = "Iferdisen i d-iqqimen";
-
 "osm_notes" = "Tizmilin";
 "help_osmand_live" = "Ajerred - OsmAnd Srid";
 "help_nav_profiles" = "Imuɣna n tunigin";
@@ -581,7 +580,6 @@
 "res_slope" = "Taseksert";
 "edit_profile_list" = "Ẓreg amaɣnu";
 "keep_both" = "Ḥrez";
-
 "shared_string_import" = "Ssekcem";
 "icon" = "D tignit n wesnas";
 "sport" = "Addal";
@@ -616,3 +614,4 @@
 "searching_gps" = "Anadi...";
 "default_color" = "Fren ini n lexṣas";
 "shared_string_enable" = "Rmed";
+"shared_string_account" = "Amiḍan";

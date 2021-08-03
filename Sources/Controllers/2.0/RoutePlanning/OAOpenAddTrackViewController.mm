@@ -56,6 +56,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     int _selectedFolderIndex;
     NSArray<NSString *> *_allFolders;
     OACollectionViewCellState *_scrollCellsState;
+    OAFoldersCell *_foldersCell;
 }
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
@@ -317,7 +318,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
     else if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
     {
-        OAFoldersCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFoldersCell getCellIdentifier]];
+        OAFoldersCell* cell = _foldersCell;
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCell getCellIdentifier] owner:self options:nil];
@@ -333,6 +334,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
+        _foldersCell = cell;
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])

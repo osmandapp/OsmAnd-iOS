@@ -682,13 +682,8 @@
     {
         OsmAndResourceType key = [OAResourceType toResourceType:type isGroup:YES];
         [self.groupItem removeItem:key subregion:subregion];
-
-        NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:@[subregion] resourceTypes:@[type] isGroup:YES];
-        OAResourceItem *duplicate = [[self.groupItem getItems:key] firstObjectCommonWithArray:items];
-        if (!duplicate)
-        {
-            [self.groupItem addItems:items key:key];
-        }
+        NSArray<OAResourceItem *> *newItems = [OAResourcesUIHelper requestMapDownloadInfo:@[subregion] resourceTypes:@[type] isGroup:YES];
+        [self.groupItem addItems:newItems key:key];
         [self.groupItem sort];
     }
     else

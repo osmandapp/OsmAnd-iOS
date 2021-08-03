@@ -1699,7 +1699,7 @@
 "move_map_to_select_area" = "Przesuń mapę do potrzebnego terenu.";
 "announce" = "Zapowiedź";
 "update_map" = "Uaktualnij mapę";
-"meters" = "metry";
+"shared_string_meters" = "metry";
 "tones" = "tony";
 "instructions_repeat" = "Naciśnij widżet \"Następny zakręt\", aby powtórzyć instrukcje";
 "only_manually" = "Tylko ręcznie";

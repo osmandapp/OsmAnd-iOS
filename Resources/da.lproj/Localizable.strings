@@ -1796,7 +1796,7 @@
 "number_of_tiles" = "Antal fliser";
 "move_map_to_select_area" = "Flyt kortet for at vælge det nødvendige område.";
 "shared_string_copy" = "Kopier";
-"meters" = "meter";
+"shared_string_meters" = "meter";
 "tones" = "toner";
 "announce" = "Annoncere";
 "only_manually" = "Kun manuelt";

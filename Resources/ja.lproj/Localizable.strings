@@ -1686,7 +1686,7 @@
 "map_during_navigation" = "ナビゲーション中のマップ表示";
 "tones" = "トーン";
 "lenght_limit_description" = "車の長さを入力してください。一部のルートにおいては、長い車両では通行できない場合があります。";
-"meters" = "メートル";
+"shared_string_meters" = "メートル";
 "default_speed_dialog_msg" = "すべての道路の移動速度を制限し、種別や制限速度が不明な道路が多い場合の到着時間予測に役立ちます(ルート計算に影響します)";
 "default_speed" = "予想標準速度";
 "touting_specified_vehicle_parameters_descr" = "指定した車両パラメーターはルート計算に影響を与える可能性があります。";

@@ -1633,7 +1633,7 @@
 "osmand_routing" = "Navigácia OsmAnd";
 "app_profiles" = "Profily aplikácie";
 "m_style_pulic_transport" = "Verejná doprava";
-"meters" = "metre";
+"shared_string_meters" = "metre";
 "maximum_speed" = "Maximálna rýchlosť";
 "quick_action_mapillary_show" = "Zobraziť Mapillary";
 "one" = "Jedna";

@@ -137,7 +137,7 @@
     if ([parameter isEqualToString:@"weight"])
         return OALocalizedString(@"tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
-        return OALocalizedString(@"meters");
+        return OALocalizedString(@"shared_string_meters");
     return @"";
 }
 

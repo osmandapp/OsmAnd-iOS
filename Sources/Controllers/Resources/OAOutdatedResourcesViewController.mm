@@ -172,6 +172,7 @@
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
         item.size = resourceInRepository->size;
         item.sizePkg = resourceInRepository->packageSize;
+        item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
 
         if (item.title == nil)
             continue;

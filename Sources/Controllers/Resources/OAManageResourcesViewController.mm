@@ -632,10 +632,7 @@ static BOOL _lackOfResources;
         for (OAResourceItem *item in _multipleItems)
         {
             if (_app.resourcesManager->isResourceInstalled(item.resourceId))
-            {
                 [itemsToRemove addObject:item];
-                [self.region updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
-            }
         }
         [multipleRepositoryItems removeObjectsInArray:itemsToRemove];
         _multipleItems = multipleRepositoryItems.count > 0 ? [NSArray arrayWithArray:multipleRepositoryItems] : nil;
@@ -851,36 +848,38 @@ static BOOL _lackOfResources;
     if (citRegionResources == _resourcesByRegions.cend())
         return;
     const auto& regionResources = *citRegionResources;
-    
+
     BOOL nauticalRegion = region == self.region && [region.regionId isEqualToString:_nauticalRegionId];
-    
+
     NSMutableArray<OAResourceItem *> *regionMapArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
-    
+    NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
+
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
         if (item_)
         {
             if (nauticalRegion)
+            {
                 [allResourcesArray addObject:item_];
+            }
             else if (region == self.region)
-                [regionMapArray addObject:item_];
+            {
+                if ([OAResourceType isSRTMResourceItem:item_])
+                    [srtmResourcesArray addObject:item_];
+                else
+                    [regionMapArray addObject:item_];
+            }
             else
+            {
                 [allResourcesArray addObject:item_];
+            }
         }
     }
-    
-    for (OAResourceItem *regItem in regionMapArray)
-        for (OAResourceItem *resItem in _allResourceItems)
-            if (resItem.resourceId == regItem.resourceId)
-            {
-                [_allResourceItems removeObject:regItem];
-                break;
-            }
-    
+
     [_regionMapItems addObjectsFromArray:regionMapArray];
-    
+
     NSString *northAmericaRegionId = OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString();
     NSString *russiaRegionId = OsmAnd::WorldRegions::RussiaRegionId.toNSString();
     NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
@@ -906,7 +905,45 @@ static BOOL _lackOfResources;
             }
         }
     }
-    
+
+    if (srtmResourcesArray.count > 0)
+    {
+        OAMultipleResourceItem *multipleResourceItem = [[OAMultipleResourceItem alloc] initWithType:OsmAndResourceType::SrtmMapRegion items:srtmResourcesArray];
+        multipleResourceItem.worldRegion = self.region;
+        if (![OAResourceType isSingleSRTMResourceItem:multipleResourceItem])
+        {
+            [_regionMapItems addObject:multipleResourceItem];
+        }
+        else
+        {
+            BOOL isInstalled = NO;
+            for (OAResourceItem *resourceItem in srtmResourcesArray)
+            {
+                isInstalled = _app.resourcesManager->isResourceInstalled(resourceItem.resourceId);
+                if (isInstalled)
+                {
+                    [regionMapArray addObject:resourceItem];
+                    [_regionMapItems addObject:resourceItem];
+                    break;
+                }
+            }
+            if (!isInstalled)
+                [_regionMapItems addObject:multipleResourceItem];
+        }
+    }
+
+    for (OAResourceItem *regItem in regionMapArray)
+    {
+        for (OAResourceItem *resItem in _allResourceItems)
+        {
+            if (resItem.resourceId == regItem.resourceId)
+            {
+                [_allResourceItems removeObject:regItem];
+                break;
+            }
+        }
+    }
+
     if (nauticalRegion)
     {
         [_allResourceItems addObjectsFromArray:allResourcesArray];
@@ -1168,7 +1205,9 @@ static BOOL _lackOfResources;
         item.size = resource->size;
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:resource->localPath.toNSString() error:NULL] fileModificationDate];;
         item.worldRegion = match;
-        
+        NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
+
         _totalInstalledSize += resource->size;
         
         if (item.title != nil)
@@ -1498,6 +1537,7 @@ static BOOL _lackOfResources;
                         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
                         item.size = resourceInRepository->size;
                         item.sizePkg = resourceInRepository->packageSize;
+                        item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
 
                         if (item.title == nil)
                             continue;
@@ -1516,6 +1556,8 @@ static BOOL _lackOfResources;
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                         item.worldRegion = region;
+                        NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
+                        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
 
                         item.size = resource->size;
 
@@ -1539,6 +1581,7 @@ static BOOL _lackOfResources;
                     item.worldRegion = region;
                     item.size = resource->size;
                     item.sizePkg = resource->packageSize;
+                    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
 
                     if (item.title == nil)
                         continue;
@@ -2079,14 +2122,25 @@ static BOOL _lackOfResources;
                 {
                     if (item.resourceTypes.count > 0)
                     {
-                        NSMutableString *str = [NSMutableString string];
-                        for (NSNumber *typeNum in item.resourceTypes)
-                        {
-                            if (str.length > 0)
-                                [str appendString:@", "];
-                            [str appendString:[OAResourceType resourceTypeLocalized:(OsmAndResourceType)[typeNum intValue]]];
-                        }
-                        subtitle = str;
+                        NSMutableOrderedSet<NSNumber *> *typesSet = [NSMutableOrderedSet orderedSetWithArray:item.resourceTypes];
+
+                        NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
+                            NSInteger orderValue1 = [OAResourceType getOrderIndex:type1];
+                            NSInteger orderValue2 = [OAResourceType getOrderIndex:type2];
+                            if (orderValue1 < orderValue2)
+                                return NSOrderedAscending;
+                            else if (orderValue1 > orderValue2)
+                                return NSOrderedDescending;
+                            else
+                                return NSOrderedSame;
+                        }] mutableCopy];
+
+                        NSMutableArray<NSString *> *typesLocalized = [NSMutableArray new];
+                        [sortedTypesWithoutDuplicate enumerateObjectsUsingBlock:^(NSNumber *type, NSUInteger idx, BOOL *stop) {
+                            [typesLocalized addObject:[OAResourceType resourceTypeLocalized:[OAResourceType toResourceType:type isGroup:NO]]];
+                        }];
+
+                        subtitle = [typesLocalized componentsJoinedByString:@", "];
                     }
                     else
                     {
@@ -2170,7 +2224,8 @@ static BOOL _lackOfResources;
             {
                 _sizePkg = 0;
                 BOOL hasTask = NO;
-                for (OAResourceItem *resourceItem in ((OAMultipleResourceItem *) item).items)
+                NSArray<OAResourceItem *> *items = ((OAMultipleResourceItem *) item).items;
+                for (OAResourceItem *resourceItem in items)
                 {
                     if (resourceItem.downloadTask != nil)
                     {
@@ -2178,11 +2233,31 @@ static BOOL _lackOfResources;
                         hasTask = YES;
                         break;
                     }
-                    if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
-                    {
-                        OARepositoryResourceItem *repositoryItem = (OARepositoryResourceItem *) resourceItem;
-                        _sizePkg += repositoryItem.resource->packageSize + repositoryItem.resource->size;
-                    }
+                        if ([OAResourceType isSRTMResourceItem:resourceItem])
+                        {
+                            if (([OAResourceType isSRTMFSettingOn] && [OAResourceType isSRTMF:resourceItem]) || (![OAResourceType isSRTMFSettingOn] && ![OAResourceType isSRTMF:resourceItem]))
+                            {
+                                if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
+                                {
+                                    OARepositoryResourceItem *repositoryItem = (OARepositoryResourceItem *) resourceItem;
+                                    _sizePkg += repositoryItem.resource->packageSize + repositoryItem.resource->size;
+                                }
+                                else if ([resourceItem isKindOfClass:OALocalResourceItem.class] && [OAResourceType isSingleSRTMResourceItem:(OAMultipleResourceItem *) item])
+                                {
+                                    OALocalResourceItem *localItem = (OALocalResourceItem *) resourceItem;
+                                    const auto repositoryResource = _app.resourcesManager->getResourceInRepository(localItem.resourceId);
+                                    _sizePkg += repositoryResource->packageSize + repositoryResource->size;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if ([resourceItem isKindOfClass:OARepositoryResourceItem.class])
+                            {
+                                OARepositoryResourceItem *repositoryItem = (OARepositoryResourceItem *) resourceItem;
+                                _sizePkg += repositoryItem.resource->packageSize + repositoryItem.resource->size;
+                            }
+                        }
                 }
                 cellTypeId = hasTask ? downloadingResourceCell : repositoryResourceCell;
             }
@@ -2253,17 +2328,38 @@ static BOOL _lackOfResources;
                 title = [OAResourceType resourceTypeLocalized:item.resourceType];
 
                 if (_sizePkg > 0)
-                {
                     subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-                }
-                if ([item isKindOfClass:OAMultipleResourceItem.class] && [self.region hasGroupItems])
+
+                if ([item isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || [OAResourceType isSRTMResourceItem:item]))
                 {
-                    NSString *allRegions = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"shared_strings_all_regions"), [self.region.groupItem getItems:item.resourceType].count];
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@", allRegions, subtitle];
+                    OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) item;
+                    if ([self.region.resourceTypes containsObject:[OAResourceType toValue:multipleItem.resourceType]])
+                    {
+                        for (OAResourceItem *resItem in multipleItem.items)
+                        {
+                            if (([OAResourceType isSRTMFSettingOn] && [OAResourceType isSRTMF:resItem]) || (![OAResourceType isSRTMFSettingOn] && ![OAResourceType isSRTMF:resItem]))
+                            {
+                                subtitle = [NSString stringWithFormat:@"%@ (%@)  •  %@", subtitle, [OAResourceType getSRTMFormatItem:resItem longFormat:NO], [resItem getDate]];
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        NSInteger allRegionsCount = [self.region.groupItem getItems:multipleItem.resourceType].count;
+                        if ([OAResourceType isSRTMResourceItem:multipleItem])
+                            allRegionsCount /= 2;
+                        NSString *allRegions = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"shared_strings_all_regions"), allRegionsCount];
+                        subtitle = [NSString stringWithFormat:@"%@  •  %@", allRegions, subtitle];
+                    }
                 }
-                else if (item.date)
+                else
                 {
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@", subtitle, [item getDate]];
+                    NSString *srtmFormat = @"";
+                    if (item.resourceType == OsmAndResourceType::SrtmMapRegion)
+                        srtmFormat = [NSString stringWithFormat:@" (%@)", [OAResourceType getSRTMFormatItem:item longFormat:NO]];
+
+                    subtitle = [NSString stringWithFormat:@"%@%@  •  %@", subtitle, srtmFormat, [item getDate]];
                 }
             }
             else
@@ -2335,8 +2431,7 @@ static BOOL _lackOfResources;
             cell.textLabel.font = [UIFont systemFontOfSize:17.0];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
-
-            NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] ? @"ic_custom_multi_download" : @"ic_custom_download";
+            NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
             UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
@@ -2379,7 +2474,7 @@ static BOOL _lackOfResources;
         if (!disabled)
         {
             cell.textLabel.textColor = [UIColor blackColor];
-            NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] ? @"ic_custom_multi_download" : @"ic_custom_download";
+            NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
             UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
@@ -2424,11 +2519,12 @@ static BOOL _lackOfResources;
         }
     }
 
-    if ([item_ isKindOfClass:OAMultipleResourceItem.class] && [self.region hasGroupItems])
+    if ([item_ isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || ((OAResourceItem *) item_).resourceType == OsmAndResourceType::SrtmMapRegion))
     {
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
         UIColor *color = UIColorFromRGB(color_tint_gray);
-        for (OAResourceItem *resourceItem in [self.region.groupItem getItems:item.resourceType])
+        NSArray<OAResourceItem *> *items = [self.region hasGroupItems] ? [self.region.groupItem getItems:item.resourceType] : item.items;
+        for (OAResourceItem *resourceItem in items)
         {
             if (_app.resourcesManager->isResourceInstalled(resourceItem.resourceId))
             {
@@ -3117,6 +3213,32 @@ static BOOL _lackOfResources;
     } onTaskResumed:^(id<OADownloadTask> task) {
         [self showDownloadViewForTask:task];
     }];
+}
+
+- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceItem *> *)itemsToCheck
+{
+    NSMutableArray<OALocalResourceItem *> *itemsToRemove = [NSMutableArray new];
+    OAResourceItem *prevItem;
+    for (OAResourceItem *itemToCheck in itemsToCheck)
+    {
+        QString srtmMapName = itemToCheck.resourceId.remove(QLatin1String([OAResourceType isSRTMF:itemToCheck] ? ".srtmf.obf" : ".srtm.obf"));
+        if (prevItem && prevItem.resourceId.startsWith(srtmMapName))
+        {
+            BOOL prevItemInstalled = _app.resourcesManager->isResourceInstalled(prevItem.resourceId);
+            if (prevItemInstalled && prevItem.resourceId.compare(itemToCheck.resourceId) != 0)
+            {
+                [itemsToRemove addObject:(OALocalResourceItem *) prevItem];
+            }
+            else
+            {
+                BOOL itemToCheckInstalled = _app.resourcesManager->isResourceInstalled(itemToCheck.resourceId);
+                if (itemToCheckInstalled && itemToCheck.resourceId.compare(prevItem.resourceId) != 0)
+                    [itemsToRemove addObject:(OALocalResourceItem *) itemToCheck];
+            }
+        }
+        prevItem = itemToCheck;
+    }
+    [self offerSilentDeleteResourcesOf:itemsToRemove];
 }
 
 - (void)clearMultipleResources

@@ -1446,7 +1446,7 @@
 "create_profile_descr" = "A létrehozandó egyedi profil az alkalmazás egyik alapprofilján fog alapulni, ez határozza meg az alapvető beállításokat, mint például a widgetek láthatóságát vagy a sebesség és távolság mértékegységeit. Ezek az alapprofilok, néhány pédával az egyedi profilokra, amikre kiterjeszthetők:";
 "tones" = "tonna";
 "total" = "Összesen";
-"meters" = "méter";
+"shared_string_meters" = "méter";
 "plugin_settings_reset" = "Bővítménybeállítások visszaállítása alapértelmezettre";
 "shared_string_terrain" = "Domborzat";
 "public_transport_menu" = "Tömegközlekedés";

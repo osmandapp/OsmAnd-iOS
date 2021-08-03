@@ -1495,7 +1495,7 @@
 "keep_both" = "Manter os dous";
 "map_settings_legend" = "Lenda";
 "width_limit_description" = "Fornece a largura do teu vehículo. Algunhas restricións de ruta poden ser aplicadas a vehículos largos.";
-"meters" = "metros";
+"shared_string_meters" = "metros";
 "public_transport_hide" = "Agochar transporte público";
 "res_source_one_per_tile" = "Un ficheiro de imaxe por tesela";
 "route_recalculation_descr" = "A ruta será recalculada se a distancia á localización actual é maior que o valor escollido.";

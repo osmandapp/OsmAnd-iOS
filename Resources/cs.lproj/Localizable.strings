@@ -1471,7 +1471,7 @@
 "help_osmand_live" = "Předplatné - OsmAnd Live";
 "create_profile_descr" = "Vlastní profil založte na jednom ze základních profilů. Ten určí základní nastavení jako viditelnost nástrojů, jednotky rychlosti a vzdálenosti. Toto jsou základní profily aplikace a návrhy vlastních profilů, na které mohou být rozšířeny:";
 "route_recalculation_descr" = "Trasa bude přepočítána, pokud vzdálenost od trasy k aktuální poloze je větší než zvolená hodnota.";
-"meters" = "metry";
+"shared_string_meters" = "metry";
 "reverse_route" = "Otočit trasu";
 "distance_indication" = "Indikace vzdálenosti";
 "configure_profile" = "Upravit profil";

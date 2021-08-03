@@ -651,6 +651,7 @@ typedef enum
                         item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
                         item.size = resource->size;
                         item.sizePkg = resource->packageSize;
+                        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
                         item.worldRegion = selectedRegion;
                         _localMapIndexItem = item;
                         break;
@@ -672,7 +673,8 @@ typedef enum
         item.size = resource->size;
         item.sizePkg = resource->packageSize;
         item.worldRegion = _app.worldRegion;
-        
+        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+
         _baseMapIndexItem = item;
         
         if (_localMapIndexItem || _baseMapIndexItem)

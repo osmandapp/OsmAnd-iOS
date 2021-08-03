@@ -1386,7 +1386,7 @@
 "gpx_parse_error" = "‏OsmAnd GPX قالب درستی ندارد. لطفاً برای بررسی بیشتر با گروه پشتیبانی تماس بگیرید.";
 "public_transport_menu" = "حمل‌ونقل";
 "profile_prefs_reset_successful" = "همهٔ تنظیمات افزونه به حالت پیشفرض بازگشت.";
-"meters" = "متر";
+"shared_string_meters" = "متر";
 "ltr_or_rtl_combine_via_space" = "‪%@ %@‬‏";
 "shared_string_importing" = "در حال درون‌برد";
 "shared_string_import_complete" = "درون‌برد کامل شد";

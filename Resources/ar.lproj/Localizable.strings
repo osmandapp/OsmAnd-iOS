@@ -1771,7 +1771,7 @@
 "do_not_rotate" = "عدم تدوير";
 "app_theme_light" = "نهاري";
 "settings_app_theme" = "نمط الخريطة";
-"meters" = "أمتار";
+"shared_string_meters" = "أمتار";
 "tones" = "نغمات";
 "announce" = "أعلن";
 "instructions_repeat" = "انقر على \"المنعطف التالي\" لتكرار التعليمات";

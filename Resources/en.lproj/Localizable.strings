@@ -436,7 +436,6 @@
 "min_km" = "min/km";
 "m_s" = "m/s";
 "tones" = "tones";
-"meters" = "meters";
 
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Nothing found";
@@ -1081,6 +1080,13 @@
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
 "res_online_source_cache_alert" = "Applying these changes will clear the cached data for this tile source";
 "welmode_download_maps" = "Download maps";
+"srtm_unit_format" = "Contour lines unit format";
+"srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
+"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
+"shared_string_meters" = "meters";
+"shared_string_feet" = "feet";
+"foot" = "ft";
+"m" = "m";
 
 // Menu
 "menu" = "Menu";

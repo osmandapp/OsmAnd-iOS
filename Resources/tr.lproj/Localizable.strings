@@ -1784,7 +1784,7 @@
 "do_not_rotate" = "Döndürme";
 "app_theme_light" = "Açık";
 "settings_app_theme" = "Uygulama teması";
-"meters" = "metre";
+"shared_string_meters" = "metre";
 "tones" = "ton";
 "announce" = "Duyuru";
 "instructions_repeat" = "Talimatları tekrarlamak için \"Sonraki dönüş\" aracına dokunun";

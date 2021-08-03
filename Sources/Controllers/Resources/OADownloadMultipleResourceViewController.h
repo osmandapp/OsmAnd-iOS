@@ -15,6 +15,7 @@
 @required
 
 - (void)downloadResources:(OAMultipleResourceItem *)item selectedItems:(NSArray<OAResourceItem *> *)selectedItems;
+- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceItem *> *)itemsToCheck;
 - (void)clearMultipleResources;
 
 @end

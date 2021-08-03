@@ -894,7 +894,7 @@
 "base_profile_descr_public_transport" = "Toate tipurile de transport public";
 "m_style_pulic_transport" = "Transport public";
 "shared_string_max" = "Maxim";
-"meters" = "metrii";
+"shared_string_meters" = "metrii";
 "save_changes" = "Salvați modificările";
 "base_profile_descr_aircraft" = "Avion, Planor";
 "profile_type_custom_string" = "Profil personalizat";

@@ -1839,7 +1839,7 @@
 "osmand_settings" = "Настройки OsmAnd";
 "angular_measurment_units" = "Угловые единицы измерения";
 "units_of_speed" = "Единицы скорости";
-"meters" = "метры";
+"shared_string_meters" = "метры";
 "tones" = "тонны";
 "announce" = "Объявлять";
 "instructions_repeat" = "Нажмите на виджет \"Следующий поворот\", чтобы повторить инструкции";

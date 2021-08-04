@@ -182,7 +182,7 @@
             cell.imgView.contentMode = UIViewContentModeCenter;
 
             cell.textView.text = filter.getName ? filter.getName : @"";
-            cell.descriptionView.hidden = true;
+            cell.descriptionView.hidden = YES;
 
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];

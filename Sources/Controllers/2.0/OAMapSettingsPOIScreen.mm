@@ -72,7 +72,11 @@
     if (res)
     {
         for (OASearchResult *sr in [res getCurrentSearchResults])
+        {
+            if (sr.objectType == POI_TYPE && sr.object == [[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter])
+                continue;
             [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
+        }
     }
 }
 
@@ -272,7 +276,7 @@
             filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
     } else if ([item getType] == BUTTON) {
-        [helper clearSelectedPoiFilters];
+        [helper clearSelectedPoiFilters:@[[[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter]]];
     }
     [mapVC updatePoiLayer];
     [tblView reloadData];

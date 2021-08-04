@@ -25,6 +25,8 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAMapillaryPlugin.h"
+#import "OAWikipediaPlugin.h"
+#import "OAPOIUIFilter.h"
 
 @implementation OAPlugin
 {
@@ -273,11 +275,12 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     allPlugins.add(new OsmEditingPlugin(app));
     allPlugins.add(new OsmandDevelopmentPlugin(app));
     */
-    
+
     [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
-    
+    [allPlugins addObject:[[OAWikipediaPlugin alloc] init]];
+
     [self loadCustomPlugins];
     [self activatePlugins:enabledPlugins];
 }
@@ -334,6 +337,47 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     for (OAPlugin *plugin in self.getEnabledPlugins)
         [list addObjectsFromArray:plugin.getDownloadMaps];
     return list;
+}
+
+- (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale
+{
+    return nil;
+}
+
++ (NSString *)onGetMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale
+{
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        NSString *locale = [plugin getMapObjectsLocale:object preferredLocale:preferredLocale];
+        if (locale)
+            return locale;
+    }
+    return preferredLocale;
+}
+
+- (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters
+{
+    return [NSArray new];
+}
+
++ (void)registerCustomPoiFilters:(NSMutableArray<OAPOIUIFilter *> *)poiUIFilters
+{
+    for (OAPlugin *p in [self.class getAvailablePlugins])
+    {
+        [poiUIFilters addObjectsFromArray:[p getCustomPoiFilters]];
+    }
+}
+
+- (void)prepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters
+{
+}
+
++ (void)onPrepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters
+{
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        [plugin prepareExtraTopPoiFilters:poiUIFilters];
+    }
 }
 
 /*

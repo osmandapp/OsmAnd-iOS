@@ -13,6 +13,10 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OrderedDictionary.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAWikipediaPlugin.h"
+#import "OAPlugin.h"
+#import "OAIAPHelper.h"
 
 #include <objc/runtime.h>
 
@@ -34,6 +38,8 @@
 #define kSlopeMinZoomKey @"slopeMinZoom"
 #define kSlopeMaxZoomKey @"slopeMaxZoom"
 #define kMapillaryKey @"mapillary"
+#define kWikipediaLanguagesKey @"wikipediaLanguages"
+#define kWikipediaGlobalKey @"wikipediaGlobal"
 
 @implementation OAAppData
 {
@@ -60,7 +66,9 @@
     OACommonInteger *_slopeMinZoomProfile;
     OACommonInteger *_slopeMaxZoomProfile;
     OACommonBoolean *_mapillaryProfile;
-    
+    OACommonBoolean *_wikipediaGlobalProfile;
+    OACommonStringList *_wikipediaLanguagesProfile;
+
     NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
 }
 
@@ -115,6 +123,14 @@
         {
             [_mapillaryProfile setValueFromString:value appMode:mode];
         }
+        else if ([key isEqualToString:@"global_wikipedia_poi_enabled"])
+        {
+            [_wikipediaGlobalProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"wikipedia_poi_enabled_languages"])
+        {
+            [_wikipediaLanguagesProfile setValueFromString:value appMode:mode];
+        }
     }
 }
 
@@ -130,6 +146,8 @@
         prefs[@"slope_min_zoom"] = [_slopeMinZoomProfile toStringValue:mode];
         prefs[@"slope_max_zoom"] = [_slopeMaxZoomProfile toStringValue:mode];
         prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
+        prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
+        prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
     }
 }
 
@@ -154,7 +172,9 @@
     _destinationShowObservable = [[OAObservable alloc] init];
     _destinationHideObservable = [[OAObservable alloc] init];
     _mapLayersConfigurationChangeObservable = [[OAObservable alloc] init];
-    
+
+    _wikipediaChangeObservable = [[OAObservable alloc] init];
+
     _applicationModeChangedObservable = [[OAObservable alloc] init];
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
@@ -178,6 +198,8 @@
     _slopeMinZoomProfile = [OACommonInteger withKey:kSlopeMinZoomKey defValue:3];
     _slopeMaxZoomProfile = [OACommonInteger withKey:kSlopeMaxZoomKey defValue:16];
     _mapillaryProfile = [OACommonBoolean withKey:kMapillaryKey defValue:NO];
+    _wikipediaGlobalProfile = [OACommonBoolean withKey:kWikipediaGlobalKey defValue:NO];
+    _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
 
     _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
     [_registeredPreferences setObject:_overlayMapSourceProfile forKey:@"map_overlay_previous"];
@@ -193,6 +215,8 @@
     [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:@"slope_max_zoom"];
     [_registeredPreferences setObject:_mapillaryProfile forKey:@"show_mapillary"];
     [_registeredPreferences setObject:_terrainTypeProfile forKey:@"terrain_mode"];
+    [_registeredPreferences setObject:_wikipediaGlobalProfile forKey:@"global_wikipedia_poi_enabled"];
+    [_registeredPreferences setObject:_wikipediaLanguagesProfile forKey:@"wikipedia_poi_enabled_languages"];
 }
 
 - (void) dealloc
@@ -214,6 +238,7 @@
         if (self.terrainType != EOATerrainTypeDisabled)
             [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
         [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
+        [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(self.wikipedia)];
         [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.get.variantKey];
     });
 }
@@ -339,6 +364,7 @@
 @synthesize terrainAlphaChangeObservable = _terrainAlphaChangeObservable;
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
+@synthesize wikipediaChangeObservable = _wikipediaChangeObservable;
 
 - (OAMapSource*) overlayMapSource
 {
@@ -636,6 +662,88 @@
     }
 }
 
+- (BOOL)wikipedia
+{
+    @synchronized (_lock)
+    {
+        return [[OAPOIFiltersHelper sharedInstance] isTopWikiFilterSelected];
+    }
+}
+
+- (void)setWikipedia:(BOOL)wikipedia
+{
+    @synchronized (_lock)
+    {
+        OAWikipediaPlugin *plugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
+        [plugin toggleWikipediaPoi:wikipedia];
+        [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(wikipedia)];
+    }
+}
+
+- (BOOL)getWikipediaAllLanguages
+{
+    @synchronized (_lock)
+    {
+        return _wikipediaGlobalProfile.get;
+    }
+}
+
+- (BOOL)getWikipediaAllLanguages:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_wikipediaGlobalProfile get:mode];
+    }
+}
+
+- (void)setWikipediaAllLanguages:(BOOL)allLanguages
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaGlobalProfile set:allLanguages];
+    }
+}
+
+- (void)setWikipediaAllLanguages:(BOOL)allLanguages mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaGlobalProfile set:allLanguages mode:mode];
+    }
+}
+
+- (NSArray<NSString *> *)getWikipediaLanguages
+{
+    @synchronized (_lock)
+    {
+        return _wikipediaLanguagesProfile.get;
+    }
+}
+
+- (NSArray<NSString *> *)getWikipediaLanguages:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_wikipediaLanguagesProfile get:mode];
+    }
+}
+
+- (void)setWikipediaLanguages:(NSArray<NSString *> *)languages
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaLanguagesProfile set:languages];
+    }
+}
+
+- (void)setWikipediaLanguages:(NSArray<NSString *> *)languages mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaLanguagesProfile set:languages mode:mode];
+    }
+}
+
 @synthesize mapLastViewedState = _mapLastViewedState;
 
 - (void) backupTargetPoints
@@ -833,6 +941,8 @@
     [_slopeMinZoomProfile set:[_slopeMinZoomProfile get:sourceMode] mode:targetMode];
     [_slopeMaxZoomProfile set:[_slopeMaxZoomProfile get:sourceMode] mode:targetMode];
     [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
+    [_wikipediaGlobalProfile set:[_wikipediaGlobalProfile get:sourceMode] mode:targetMode];
+    [_wikipediaLanguagesProfile set:[_wikipediaLanguagesProfile get:sourceMode] mode:targetMode];
 }
 
 @end

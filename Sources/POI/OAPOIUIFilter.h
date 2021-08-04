@@ -99,5 +99,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (BOOL) isEmpty;
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius;
 - (void) removeUnsavedFilterByName;
+- (BOOL) isWikiFilter;
+- (BOOL) isTopWikiFilter;
 - (void) updateAcceptedTypeOrigins;
 @end

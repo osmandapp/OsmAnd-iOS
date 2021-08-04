@@ -2989,19 +2989,6 @@ static BOOL _lackOfResources;
 
 #pragma mark -
 
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    [OAAnalyticsHelper logEvent:@"purchases_open"];
-
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
-}
-
 - (void) doSubscribe:(NSString *)email
 {
     [_refreshRepositoryProgressHUD show:YES];

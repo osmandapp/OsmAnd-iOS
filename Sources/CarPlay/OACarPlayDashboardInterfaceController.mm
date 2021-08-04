@@ -109,9 +109,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeDirections]];
     
     _mapTemplate.mapButtons = @[[self createMapButton:EOACarPlayButtonTypeCenterMap], [self createMapButton:EOACarPlayButtonTypeZoomIn], [self createMapButton:EOACarPlayButtonTypeZoomOut]];
-    
-    // Always show the NavigationBar
-    _mapTemplate.automaticallyHidesNavigationBar = NO;
 }
 
 - (void) enterRoutePreviewMode
@@ -442,10 +439,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:turnImage darkContentImage:turnImage];
                 
                 maneuver.initialTravelEstimates = estimates;
-                if (nextTurn.directionInfo.getDescriptionRoutePart && nextTurn.directionInfo.getDescriptionRoutePart.length > 0)
-                    maneuver.instructionVariants = @[nextTurn.directionInfo.getDescriptionRoute, nextTurn.directionInfo.getDescriptionRoutePart];
-                else
-                    maneuver.instructionVariants = @[nextTurn.directionInfo.getDescriptionRoute];
+                if (nextTurn.directionInfo.streetName)
+                    maneuver.instructionVariants = @[nextTurn.directionInfo.streetName];
                 _navigationSession.upcomingManeuvers = @[maneuver];
                 _currentDirectionInfo = nextTurn;
             }

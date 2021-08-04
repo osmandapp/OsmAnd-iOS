@@ -82,8 +82,6 @@
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
 }
 
 - (void)viewWillAppear:(BOOL)animated

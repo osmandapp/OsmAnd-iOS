@@ -440,6 +440,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         NSString *timeString = self.favorite->getTime().toNSString();
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         return [dateFormat dateFromString:timeString];
     }
     else
@@ -532,9 +533,10 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!date)
         return nil;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *dateString = [dateFormatter stringFromDate:date];
-    [dateFormatter setDateFormat:@"hh:mm:ss"];
+    [dateFormatter setDateFormat:@"HH:mm:ss"];
     NSString *timeString = [dateFormatter stringFromDate:date];
     return [NSString stringWithFormat:@"%@T%@Z",dateString, timeString];
 }

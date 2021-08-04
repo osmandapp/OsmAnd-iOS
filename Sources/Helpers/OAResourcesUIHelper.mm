@@ -1023,10 +1023,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (items.count == 0)
         return;
 
-    uint64_t spaceNeeded = 0;
+    uint64_t totalSpaceNeeded = 0;
+    uint64_t downloadSpaceNeeded = 0;
     if (items.count == multipleItem.items.count)
     {
-        spaceNeeded = multipleItem.sizePkg + multipleItem.size;
+        totalSpaceNeeded = multipleItem.sizePkg + multipleItem.size;
+        downloadSpaceNeeded = multipleItem.sizePkg;
     }
     else
     {
@@ -1034,22 +1036,25 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         {
             if ([item isKindOfClass:OALocalResourceItem.class])
             {
-                spaceNeeded += [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId)->packageSize + ((OALocalResourceItem *) item).resource->size;
+                const auto repositoryResource = [OsmAndApp instance].resourcesManager->getResourceInRepository(((OALocalResourceItem *) item).resourceId);
+                totalSpaceNeeded += repositoryResource->packageSize + repositoryResource->size;
+                downloadSpaceNeeded += repositoryResource->packageSize;
             }
             else if ([item isKindOfClass:OARepositoryResourceItem.class])
             {
                 OARepositoryResourceItem *repositoryItem = (OARepositoryResourceItem *) item;
-                spaceNeeded += repositoryItem.resource->packageSize + repositoryItem.resource->size;
+                totalSpaceNeeded += repositoryItem.sizePkg + repositoryItem.size;
+                downloadSpaceNeeded += repositoryItem.sizePkg;
             }
         }
     }
 
     NSString* resourceName = [self.class titleOfResourceType:multipleItem.resourceType inRegion:multipleItem.worldRegion withRegionName:YES withResourceType:YES];
 
-    if (![self.class verifySpaceAvailableDownloadAndUnpackResource:spaceNeeded withResourceName:resourceName asUpdate:YES])
+    if (![self.class verifySpaceAvailableDownloadAndUnpackResource:totalSpaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
 
-    NSString *stringifiedSize = [NSByteCountFormatter stringFromByteCount:spaceNeeded countStyle:NSByteCountFormatterCountStyleFile];
+    NSString *stringifiedSize = [NSByteCountFormatter stringFromByteCount:downloadSpaceNeeded countStyle:NSByteCountFormatterCountStyleFile];
     NSString *message = [self messageResourceStartDownload:resourceName stringifiedSize:stringifiedSize isOutdated:NO];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];

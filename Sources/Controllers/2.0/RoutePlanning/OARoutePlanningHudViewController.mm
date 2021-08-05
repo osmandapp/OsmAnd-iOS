@@ -449,8 +449,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
         mapView.viewportYScale = _landscapeHeaderContainerView.frame.size.height / DeviceScreenHeight;
-        
-        NSLog(@"!! 1 %f", mapView.viewportYScale);
     }
     else if ([self isLeftSidePresentation])
     {

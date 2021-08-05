@@ -125,7 +125,7 @@
     if (!route.empty())
     {
         // Take ownership over region only for one RouteDataObject
-        (*route.begin())->object->ownsRegion = true;
+        route.back()->object->ownsRegion = true;
     }
     return route;
 }

@@ -14,8 +14,6 @@
 
 @implementation OARoadSegmentData
 
-@synthesize points = _points;
-
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode start:(OAGpxTrkPt *)start end:(OAGpxTrkPt *)end points:(NSArray<OAGpxTrkPt *> *)points segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments
 {
     self = [super init];
@@ -24,7 +22,7 @@
         _appMode = appMode;
         _start = start;
         _end = end;
-        _points = points;
+        _gpxPoints = points;
         _segments = segments;
         double distance = 0;
         if (points != nil && points.count > 1)
@@ -49,7 +47,7 @@
 
 - (NSArray<OAGpxTrkPt *> *) points
 {
-    return _points ? [NSArray arrayWithArray:_points] : nil;
+    return self.gpxPoints ? [NSArray arrayWithArray:self.gpxPoints] : nil;
 }
 
 @end

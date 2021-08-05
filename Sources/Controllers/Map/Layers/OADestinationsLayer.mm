@@ -387,16 +387,16 @@
     const auto& line = [self getLine:lineId];
     const auto& outline = [self getLine:outlineId];
 
-    double strokeWidth = _destinationLayerWidget.getStrokeWidth * 3.5;
+    double strokeWidth = _destinationLayerWidget.getStrokeWidth * 5.;
     std::vector<double> outlinePattern;
-    outlinePattern.push_back(75);
-    outlinePattern.push_back(25);
+    outlinePattern.push_back(95);
+    outlinePattern.push_back(35);
     OsmAnd::FColorARGB outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);
 
     std::vector<double> inlinePattern;
     inlinePattern.push_back(-strokeWidth);
-    inlinePattern.push_back(75 - strokeWidth * 2);
-    inlinePattern.push_back(25 + strokeWidth * 2);
+    inlinePattern.push_back(95 - strokeWidth * 1.5);
+    inlinePattern.push_back(35 + strokeWidth * 1.5);
 
     if (line == nullptr || outline == nullptr)
     {
@@ -404,7 +404,7 @@
         outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId + 1)
         .setIsHidden(false)
         .setLineId(outlineId)
-        .setLineWidth(strokeWidth * 2)
+        .setLineWidth(strokeWidth * 1.5)
         .setLineDash(outlinePattern)
         .setPoints(points)
         .setFillColor(outlineColor);

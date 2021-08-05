@@ -1928,7 +1928,7 @@
 "osm_notes" = "ملاحظات OSM";
 "plugin_popup_osm_editing_ask" = "يرجى تمكين برنامج OpenStreetMap تحرير البرنامج المساعد لإضافة وإدارة التعديلات خريطة والملاحظات";
 "plugin_popup_osm_editing_title" = "تشغيل تحرير OpenStreetMap";
-"layer_amenity_label" = "عرض أسماء المفضلة";
+"layer_amenity_label" = "تسميات النقاط ، أسماء المفضلة";
 "personal_category_name" = "شخصي";
 "next_segs_recalc_descr" = "سيتم إعادة حساب كافة الشرائح اللاحقة باستخدام ملف التعريف المحدد";
 "selected_seg_recalc_descr" = "سيتم إعادة حساب المقطع التالي فقط باستخدام ملف التعريف المحدد";

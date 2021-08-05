@@ -44,11 +44,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"res_details");
-    
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 -(void)viewDidLoad
@@ -57,8 +52,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
 }
 
 -(void)viewWillLayoutSubviews
@@ -87,11 +80,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(UIView *) getMiddleView
 {
     return _tableView;
-}
-
--(UIView *) getBottomView
-{
-    return _toolbarView;
 }
 
 -(CGFloat) getToolBarHeight
@@ -424,16 +412,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     return nil;
 }
 
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
-}
 
 #pragma mark - OATilesEditingViewControllerDelegate
 

@@ -70,6 +70,13 @@
     [self addShadows];
 }
 
+- (void)dealloc
+{
+    if (_webView.isLoading)
+        [_webView stopLoading];
+    _webView.navigationDelegate = nil;
+}
+
 - (void) adjustNavBarWidth
 {
     CGRect frame = _navBarView.frame;

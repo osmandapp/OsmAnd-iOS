@@ -228,6 +228,16 @@
     [self updateFilterResults];
 }
 
+- (BOOL)isWikiFilter
+{
+    return [self.filterId hasPrefix:[NSString stringWithFormat:@"%@%@", STD_PREFIX, @"wiki_place"]] || [self isTopWikiFilter];
+}
+
+- (BOOL)isTopWikiFilter
+{
+    return [self.filterId isEqualToString:[NSString stringWithFormat:@"%@%@", STD_PREFIX, OSM_WIKI_CATEGORY]];
+}
+
 -(void)setSavedFilterByName:(NSString *)savedFilterByName
 {
     _savedFilterByName = savedFilterByName;
@@ -432,14 +442,15 @@
             for (OAPOIType *pt in poiAdds)
             {
                 NSString *category = pt.poiAdditionalCategory;
+                if (!category)
+                    category = @"";
                 NSMutableArray<OAPOIType *> *types = [poiAdditionalCategoriesMap objectForKey:category];
                 if (!types)
-                {
                     types = [NSMutableArray array];
-                    [poiAdditionalCategoriesMap setObject:types forKey:category ? category : @""];
-                }
-                [types addObject:pt];
                 
+                [types addObject:pt];
+                [poiAdditionalCategoriesMap setObject:types forKey:category];
+
                 NSString *osmTag = pt.tag;
                 if (osmTag.length < pt.name.length)
                 {

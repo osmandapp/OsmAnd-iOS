@@ -49,6 +49,8 @@
 - (NSString *)iconName;
 
 - (BOOL) isClosed;
+- (NSSet<NSString *> *)getSupportedContentLocales;
+- (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSString *) getTagContent:(NSString *)tag lang:(NSString *)lang;
 
 - (NSDictionary<NSString *, NSString *> *) getAdditionalInfo;

@@ -637,7 +637,7 @@
 "speak_pedestrian" = "Пішохідні переходи";
 "int_seconds" = "секунд(и)";
 "shared_string_never" = "Ніколи";
-"general_settings_2" = "Загальні параметри";
+"general_settings_2" = "Загальні налаштування";
 "general_settings_descr" = "Тема застосунку, одиниці вимірювання, регіон";
 "routing_settings_descr" = "Налаштування навігації";
 "auto_zoom_none" = "Без автоматичного масштабування";
@@ -1456,7 +1456,7 @@
 "rendering_attr_showLez_description" = "Показати на мапі зони низьких викидів. Не впливає на маршрутизацію.";
 "rendering_attr_surface_compacted_name" = "Ущільнена";
 "routing_attr_allow_expert_name" = "Дозволити експертні маршрути";
-"rendering_value_walkingRoutesOSMC_name" = "Розмальовування відповідно пішій символіці OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "Забарвлення відповідно до пішої символіки OSMC";
 "rendering_attr_piste_type_connection_name" = "З\'єднання";
 "rendering_value_translucent_orange_name" = "Напівпрозорий жовтогарячий";
 "rendering_value_light_brown_name" = "Світло-коричневий";
@@ -1538,7 +1538,7 @@
 "rendering_attr_highway_class_motorway_name" = "Автомагістраль";
 "rendering_attr_hideWaterPolygons_description" = "Воду";
 "routing_attr_avoid_tram_name" = "Уникати трамваїв";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Забарвлення згідно приналежності мережі";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Забарвлення згідно з належністю до мережі";
 "rendering_attr_surface_dirt_name" = "Бруд";
 "rendering_attr_surface_snow_name" = "Сніг";
 "rendering_attr_contourColorScheme_name" = "Колірна схема горизонталей";
@@ -1928,7 +1928,7 @@
 "latest_version" = "У вас найновіша версія: %@";
 "vk" = "VK";
 "help_what_is_new" = "Що нового";
-"layer_amenity_label" = "Підписи до цікавих місць";
+"layer_amenity_label" = "Мітки точок (POI, Закладки)";
 "osm_notes" = "Примітки OSM";
 "plugin_popup_osm_editing_ask" = "Увімкніть розширення редагування OpenStreetMap, щоб додавати та керувати редагуванням мапи та примітками";
 "plugin_popup_osm_editing_title" = "Увімкнути редагування OpenStreetMap";

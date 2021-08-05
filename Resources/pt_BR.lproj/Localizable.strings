@@ -1937,7 +1937,7 @@
 "osm_notes" = "Notas OSM";
 "plugin_popup_osm_editing_ask" = "Ativar o plugin de edição do OpenStreetMap para adicionar e gerenciar edições e notas de mapas";
 "plugin_popup_osm_editing_title" = "Ativar a edição do OpenStreetMap";
-"layer_amenity_label" = "Rótulos de POIs";
+"layer_amenity_label" = "Rótulos de pontos (POI, favoritos)";
 "personal_category_name" = "Pessoal";
 "prev_segs_recalc_descr" = "Todos os segmentos anteriores serão recalculados usando o perfil selecionado";
 "next_segs_recalc_descr" = "Todos os segmentos subsequentes serão recalculados usando o perfil selecionado";

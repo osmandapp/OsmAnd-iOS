@@ -25,6 +25,8 @@
 #import "OAPOIUIFilter.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "Reachability.h"
+#import "OAPlugin.h"
+#import "OAWikipediaPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -55,6 +57,7 @@
     NSInteger tripsRow;
     NSInteger mapillaryRow;
     NSInteger contourLinesRow;
+    NSInteger wikipediaRow;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -155,13 +158,23 @@
     [section0labels setObject:@"" forKey:@"value"];
     [section0labels setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
     [section0labels setObject:@"layer_amenity_label" forKey:@"key"];
-    
+
+    BOOL hasWiki = [_iapHelper.wiki isActive];
+    NSMutableDictionary *section0wikipedia = [NSMutableDictionary dictionary];
+    if (hasWiki)
+    {
+        [section0wikipedia setObject:OALocalizedString(@"product_title_wiki") forKey:@"name"];
+        [section0wikipedia setObject:@"" forKey:@"value"];
+        [section0wikipedia setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
+        [section0wikipedia setObject:[OASettingSwitchCell getCellIdentifier] forKey:@"type"];
+        [section0wikipedia setObject:@"wikipedia_layer" forKey:@"key"];
+    }
+
     BOOL hasOsmEditing = [_iapHelper.osmEditing isActive];
     NSMutableDictionary *section0edits = [NSMutableDictionary dictionary];
     NSMutableDictionary *section0notes = [NSMutableDictionary dictionary];
     if (hasOsmEditing)
     {
-        
         [section0edits setObject:OALocalizedString(@"osm_edits_offline_layer") forKey:@"name"];
         [section0edits setObject:@"" forKey:@"value"];
         [section0edits setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
@@ -190,6 +203,12 @@
     [section0 addObject:section0fav];
     [section0 addObject:section0poi];
     [section0 addObject:section0labels];
+    wikipediaRow = -1;
+    if (hasWiki)
+    {
+        [section0 addObject:section0wikipedia];
+        wikipediaRow = section0.count - 1;
+    }
     if (hasOsmEditing)
     {
         [section0 addObject:section0edits];
@@ -305,13 +324,11 @@
                                  }
                                ];
 
-        
         tableData = [arr arrayByAddingObjectsFromArray:arrStyles];
     }
-
     
     NSMutableArray *arrOverlayUnderlay = [NSMutableArray array];
-    
+
     if ([_iapHelper.srtm isActive])
     {
         NSMutableDictionary *terrain = [NSMutableDictionary dictionary];
@@ -338,7 +355,6 @@
     [underlay setObject:[OASettingSwitchCell getCellIdentifier] forKey:@"type"];
     [underlay setObject:@"underlay_layer" forKey:@"key"];
     [arrOverlayUnderlay addObject: underlay];
-
 
     NSArray *arrOverlayUnderlaySection = @[@{@"groupName": OALocalizedString(@"map_settings_overunder"),
                                              @"cells": arrOverlayUnderlay,
@@ -368,7 +384,8 @@
 - (NSString *) getPOIDescription
 {
     NSMutableString *descr = [[NSMutableString alloc] init];
-    NSArray<OAPOIUIFilter *> *selectedFilters = [[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects];
+    NSMutableArray<OAPOIUIFilter *> *selectedFilters = [[[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects] mutableCopy];
+    [selectedFilters removeObject:[[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter]];
     NSUInteger size = [selectedFilters count];
     if (size > 0)
     {
@@ -408,7 +425,6 @@
 {
     return [((NSDictionary*)tableData[section]) objectForKey:@"groupName"];
 }
-
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -534,6 +550,11 @@
                 [cell.switchView setOn: [_styleSettings isCategoryEnabled:@"transport"]];
                 [cell.switchView addTarget:self action:@selector(transportChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            if ([data[@"key"] isEqualToString:@"wikipedia_layer"])
+            {
+                [cell.switchView setOn:_app.data.wikipedia];
+                [cell.switchView addTarget:self action:@selector(wikipediaChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             cell.textView.text = data[@"name"];
             NSString *desc = data[@"description"];
             NSString *secondaryImg = data[@"secondaryImg"];
@@ -561,6 +582,16 @@
             OAFirstMapillaryBottomSheetViewController *screen = [[OAFirstMapillaryBottomSheetViewController alloc] init];
             [screen show];
         }
+    }
+}
+
+- (void)wikipediaChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+    {
+        BOOL wikipediaOn = switchView.isOn;
+        [[OsmAndApp instance].data setWikipedia:wikipediaOn];
     }
 }
 
@@ -660,7 +691,6 @@
             _app.data.terrainType = EOATerrainTypeDisabled;
         }
     }
-    
 }
 
 - (void) showFavoriteChanged:(id)sender
@@ -705,7 +735,6 @@
     }
 }
 
-
 #pragma mark - UITableViewDelegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -731,6 +760,8 @@
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             else if (indexPath.row == mapillaryRow)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapillaryFilter];
+            else if (indexPath.row == wikipediaRow)
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWikipedia];
                 
             break;
         }
@@ -810,7 +841,6 @@
     
     if (mapSettingsViewController)
             [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }

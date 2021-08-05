@@ -1450,7 +1450,7 @@
 "configure_screen_quick_action" = "کنش فوری";
 "public_transport_hide" = "مخفی‌کردن حمل‌ونقل عمومی";
 "shared_string_add_profile" = "افزودن پروفایل";
-"layer_amenity_label" = "برچسب‌های لایهٔ POI";
+"layer_amenity_label" = "نام نقطه‌ها (نقاط توجه، علاقه‌مندی‌ها)";
 "import_duplicates_title" = "برخی موارد وجود دارند";
 "import_profile_select_descr" = "دادهٔ موردنظر را برای درون‌برد انتخاب کنید.";
 "quick_action_showhide_mapillary_title" = "آشکار/پنهان کردن مپیلاری";

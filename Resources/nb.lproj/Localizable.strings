@@ -1787,7 +1787,7 @@
 "quick_action_mapillary_show" = "Vis Mapillary";
 "import_duplicates_title" = "Noen elementer finnes allerede";
 "units_t" = "t";
-"layer_amenity_label" = "Overleggspåskrifter for interessepunkter";
+"layer_amenity_label" = "Punktpåskrifter (interessepunkter, favoritter)";
 "announce" = "Kunngjør";
 
 

@@ -18,6 +18,7 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAAutoObserverProxy.h"
+#import "OAPurchasesViewController.h"
 
 #import "OACreateProfileViewController.h"
 #import "OARearrangeProfilesViewController.h"
@@ -103,11 +104,19 @@
     
     [data addObject:@[
         @{
-        @"name" : @"osmand_settings",
-        @"title" : OALocalizedString(@"osmand_settings"),
-        @"description" : OALocalizedString(@"global_settings_descr"),
-        @"img" : @"left_menu_icon_settings",
-        @"type" : [OAIconTitleValueCell getCellIdentifier] }
+            @"name" : @"osmand_settings",
+            @"title" : OALocalizedString(@"osmand_settings"),
+            @"description" : OALocalizedString(@"global_settings_descr"),
+            @"img" : @"left_menu_icon_settings",
+            @"type" : [OAIconTitleValueCell getCellIdentifier]
+        },
+        @{
+            @"name" : @"purchases",
+            @"title" : OALocalizedString(@"purchases"),
+            @"description" : OALocalizedString(@"global_settings_descr"),
+            @"img" : @"ic_custom_shop_bag",
+            @"type" : [OAIconTitleValueCell getCellIdentifier]
+        }
     ]];
     
     [data addObject:@[
@@ -337,6 +346,12 @@
     {
         OAGlobalSettingsViewController* globalSettingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAGlobalSettingsMain];
         [self.navigationController pushViewController:globalSettingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"purchases"])
+    {
+        OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+        purchasesViewController.openFromSplash = NO;
+        [self.navigationController pushViewController:purchasesViewController animated:YES];
     }
     else if ([name isEqualToString:@"profile_val"] || [name isEqualToString:@"current_profile"])
     {

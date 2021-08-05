@@ -1936,7 +1936,7 @@
 "osm_notes" = "OSM-Hinweise";
 "plugin_popup_osm_editing_ask" = "Bitte aktivieren Sie die Erweiterung OpenStreetMap-Bearbeitung, um Kartenbearbeitungen und OSM-Hinweise hinzuzufügen und zu verwalten";
 "plugin_popup_osm_editing_title" = "OpenStreetMap Bearbeitung einschalten";
-"layer_amenity_label" = "POI-Overlay-Bezeichnungen";
+"layer_amenity_label" = "Punktbeschriftungen (POI, Favoriten)";
 "personal_category_name" = "Persönlich";
 "prev_segs_recalc_descr" = "Alle vorherigen Segmente werden unter Verwendung des ausgewählten Profils neu errechnet";
 "next_segs_recalc_descr" = "Alle weiteren Segmente werden unter Verwendung des gewählten Profils neu berechnet";

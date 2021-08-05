@@ -1937,7 +1937,7 @@
 "osm_notes" = "Notas OSM";
 "plugin_popup_osm_editing_ask" = "Abìlita s'estensione de modìfica de OpenStreetMap pro annànghere e amministrare sas modìficas e sas notas";
 "plugin_popup_osm_editing_title" = "Allughe sa modìfica de OpenStreetMap";
-"layer_amenity_label" = "Etichetas de s\'istratu de sos PDI";
+"layer_amenity_label" = "Etichetas de sos puntos (PDI, preferidos)";
 "personal_category_name" = "Personale";
 "prev_segs_recalc_descr" = "Totu sos segmentos antepostos s'ant a torrare a carculare impreende su profilu ischertadu";
 "next_segs_recalc_descr" = "Totu sos segmentos imbenientes s'ant a torrare a carculare impreende su profilu ischertadu";

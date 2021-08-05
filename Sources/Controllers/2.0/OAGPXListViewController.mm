@@ -1431,11 +1431,17 @@ static UIViewController *parentController;
                 if (select)
                 {
                     [self addIndexPathToSelectedCellsArray:indexPath];
-                    [self.gpxTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                    if (groupData.isOpen)
+                    {
+                        [self.gpxTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                    }
                 }
                 else
                 {
-                    [self.gpxTableView deselectRowAtIndexPath:indexPath animated:YES];
+                    if (groupData.isOpen)
+                    {
+                        [self.gpxTableView deselectRowAtIndexPath:indexPath animated:YES];
+                    }
                     [self removeIndexPathFromSelectedCellsArray:indexPath];
                 }
             }

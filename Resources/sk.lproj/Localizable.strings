@@ -1608,7 +1608,7 @@
 "shared_string_preparing" = "Pripravujem";
 "shared_string_deselect_all" = "Zrušiť výber všetkých";
 "shared_string_continue" = "Pokračovať";
-"layer_amenity_label" = "Prekrývacie popisy bodov";
+"layer_amenity_label" = "Popisy bodov (Body záujmu, Obľúbené)";
 "osm_notes" = "OSM poznámky";
 "personal_category_name" = "Osobné";
 "whole_track" = "Celá stopa";
@@ -1730,7 +1730,6 @@
 "map_during_navigation" = "Mapa počas navigácie";
 "markers_history" = "História značiek";
 "coordinates" = "Súradnice";
-
 "units_nm" = "nmi";
 "favorite_places_category" = "Miesta";
 "square" = "Štvorec";

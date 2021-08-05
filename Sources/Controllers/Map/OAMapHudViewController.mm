@@ -1139,9 +1139,9 @@
     }];
 }
 
-- (void) addToView:(UIView *)view xOffset:(CGFloat)xOffset yOffset:(CGFloat)yOffset
+- (void) addOffsetToView:(UIView *)view x:(CGFloat)x y:(CGFloat)y
 {
-    view.frame = CGRectMake(view.frame.origin.x + xOffset, view.frame.origin.y + yOffset, view.frame.size.width, view.frame.size.height);
+    view.frame = CGRectMake(view.frame.origin.x + x, view.frame.origin.y + y, view.frame.size.width, view.frame.size.height);
 }
 
 - (void) setupBottomContolMarginsForHeight:(CGFloat)menuHeight
@@ -1203,10 +1203,10 @@
             [self setupBottomContolMarginsForHeight:menuHeight];
             
             CGFloat offsetValue = DeviceScreenWidth;
-            [self addToView:_optionsMenuButton xOffset:-offsetValue yOffset:0];
-            [self addToView:_driveModeButton xOffset:-offsetValue yOffset:0];
-            [self addToView:_mapModeButton xOffset:offsetValue yOffset:0];
-            [self addToView:_zoomButtonsView xOffset:offsetValue yOffset:0];
+            [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0];
+            [self addOffsetToView:_driveModeButton x:-offsetValue y:0];
+            [self addOffsetToView:_mapModeButton x:offsetValue y:0];
+            [self addOffsetToView:_zoomButtonsView x:offsetValue y:0];
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){

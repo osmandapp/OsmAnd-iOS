@@ -840,7 +840,6 @@
         CGFloat backButtonAlpha = alpha * 2;
         backButtonAlpha = backButtonAlpha > 1 ? 1 : backButtonAlpha;
         
-        
         if (self.topToolbarType != ETopToolbarTypeFloating)
             backButtonAlpha = 0;
         if (self.topToolbarType == ETopToolbarTypeFloatingFixedButton)

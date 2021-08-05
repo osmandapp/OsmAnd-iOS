@@ -20,6 +20,7 @@
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
+#define kHudButtonsOffset 16.0f
 
 @interface OAQuickActionHudViewController () <OAQuickActionsSheetDelegate>
 
@@ -60,8 +61,8 @@
     
     _quickActionFloatingButton.alpha = [_settings.quickActionIsOn get] ? 1 : 0;
     _quickActionFloatingButton.userInteractionEnabled = [_settings.quickActionIsOn get];
-    _quickActionFloatingButton.tintColorDay =  UIColorFromRGB(color_primary_purple);
-    _quickActionFloatingButton.tintColorNight =  UIColorFromRGB(color_primary_light_blue);
+    _quickActionFloatingButton.tintColorDay = UIColorFromRGB(color_primary_purple);
+    _quickActionFloatingButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
     [_quickActionFloatingButton updateColorsForPressedState:NO];
     [self updateColors:NO];
     
@@ -183,13 +184,13 @@
     {
         if (isLandscape)
         {
-            x = _mapHudController.mapModeButton.frame.origin.x - w - 16.0;
+            x = _mapHudController.mapModeButton.frame.origin.x - w - kHudButtonsOffset;
             y = _mapHudController.mapModeButton.frame.origin.y;
         }
         else
         {
             x = _mapHudController.zoomButtonsView.frame.origin.x;
-            y = _mapHudController.zoomButtonsView.frame.origin.y - h - 16.0;
+            y = _mapHudController.zoomButtonsView.frame.origin.y - h - kHudButtonsOffset;
         }
     }
     _quickActionFloatingButton.frame = CGRectMake(x, y, w, h);

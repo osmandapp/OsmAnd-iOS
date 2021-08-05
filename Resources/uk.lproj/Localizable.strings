@@ -1456,7 +1456,7 @@
 "rendering_attr_showLez_description" = "Показати на мапі зони низьких викидів. Не впливає на маршрутизацію.";
 "rendering_attr_surface_compacted_name" = "Ущільнена";
 "routing_attr_allow_expert_name" = "Дозволити експертні маршрути";
-"rendering_value_walkingRoutesOSMC_name" = "Розмальовування відповідно пішій символіці OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "Забарвлення відповідно до пішої символіки OSMC";
 "rendering_attr_piste_type_connection_name" = "З\'єднання";
 "rendering_value_translucent_orange_name" = "Напівпрозорий жовтогарячий";
 "rendering_value_light_brown_name" = "Світло-коричневий";
@@ -1538,7 +1538,7 @@
 "rendering_attr_highway_class_motorway_name" = "Автомагістраль";
 "rendering_attr_hideWaterPolygons_description" = "Воду";
 "routing_attr_avoid_tram_name" = "Уникати трамваїв";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Забарвлення згідно приналежності мережі";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Забарвлення згідно з належністю до мережі";
 "rendering_attr_surface_dirt_name" = "Бруд";
 "rendering_attr_surface_snow_name" = "Сніг";
 "rendering_attr_contourColorScheme_name" = "Колірна схема горизонталей";

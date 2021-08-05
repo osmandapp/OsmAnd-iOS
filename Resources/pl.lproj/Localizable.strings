@@ -144,7 +144,7 @@
 "device_memory" = "Pamięć urządzenia";
 "free_memory" = "Wolne %@";
 "gpx_waypoint" = "Punkt trasy";
-"gpx_start" = "Start";
+"gpx_start" = "Rozpocznij";
 "gpx_finish" = "Koniec trasy";
 "gpx_max_speed" = "Prędkość maksymalna";
 "gpx_speed" = "Prędkość";
@@ -218,7 +218,7 @@
 "edit_filter_delete_dialog_title" = "Usunąć zaznaczony filtr?";
 "try_again" = "Spróbuj ponownie";
 "track_save" = "Zapisz bieżącą trasę";
-"track_continue_rec" = "Kontynuuj zapis";
+"track_continue_rec" = "Kontynuuj nagrywanie";
 "shared_string_of" = "od";
 "gpx_remove" = "Usunąć trasę?";
 "gpx_uphldownhl" = "podjazdy/zjazdy";
@@ -226,7 +226,7 @@
 "gpx_updown" = "Góra/Dół";
 "track_recording" = "Nagrywanie trasy";
 "track_recording_name" = "Aktualnie nagrywana trasa";
-"track_stop_rec" = "Wstrzymaj zapis";
+"track_stop_rec" = "Zatrzymaj nagrywanie";
 "track_new_segment" = "Rozpocznij nowy segment";
 "track_continue_rec_q" = "Czy chcesz kontynuować nagrywanie?";
 "rec_interval" = "Częstość rejestrowania";
@@ -442,7 +442,7 @@
 "shared_string_sound" = "Dźwięk";
 "sort_by_distance" = "Sortuj wg odległości";
 "sort_by_name" = "Sortuj wg nazwy";
-"stop_routing_confirm" = "Na pewno zatrzymać nawigację\?";
+"stop_routing_confirm" = "Czy na pewno chcesz zakończyć nawigację?";
 "cancel_route" = "Odrzucenie trasy";
 "route_is_too_long_v2" = "Ta trasa może być zbyt długa do wyznaczenia. Prosimy dodać punkty pośrednie, jeżeli nie otrzymasz wyniku w ciągu 10 minut.";
 "navigation_over_track" = "Rozpocząć nawigację wzdłuż trasy?";
@@ -533,7 +533,7 @@
 "coords_format" = "Format współrzędnych";
 "do_not_show_discount_desc" = "Ogranicza wyświetlanie rabatów aplikacji i wiadomości o specjalnych wydarzeniach lokalnych.";
 "save_global_track_interval" = "Ogólna częstość rejestrowania";
-"save_global_track_interval_descr" = "Wybierz interwał rejestrowania trasy (włączonego przez widżet rejestrowania GPX na mapie).";
+"save_global_track_interval_descr" = "Wybierz interwał dla nagrywania trasy (włączonego przez widżet nagrywania GPX na mapie).";
 "rotate_map_to_bearing" = "Orientacja mapy";
 "rotate_map_compass_opt" = "Względem kompasu";
 "rotate_map_bearing_opt" = "Względem kierunku ruchu";
@@ -712,7 +712,7 @@
 "transport_routes" = "Trasy";
 "transport_nearby_routes_within" = "Najbliższe trasy w obrębie";
 "transport_nearby_routes" = "W ciągu";
-"transport_stop" = "Wyłącz";
+"transport_stop" = "Przystanek";
 "shared_string_turn" = "Zakręt";
 "track_rec_addon_q" = "Aktywuj dodatek Nagrywanie trasy, aby nagrywać i zapisywać swoje trasy";
 "res_free_exp" = "Pobrałeś wszystkie bezpłatne pliki do pobrania. Kup kontynent, aby pobrać / zaktualizować mapy.";
@@ -743,7 +743,7 @@
 "restore_all_purchases" = "Przywróć wszystkie zakupy";
 "show_region_on_map_go" = "Przejdź do mapy";
 "logging_interval_navigation" = "Częstość rejestrowania podczas nawigacji";
-"logging_interval_navigation_descr" = "Wybierz interwał rejestrowania trasy podczas nawigacji";
+"logging_interval_navigation_descr" = "Wybierz interwał dla nagrywania trasy podczas nawigacji";
 "logging_min_distance" = "Minimalne przemieszczenie";
 "logging_min_distance_descr" = "Filtr: minimalna odległość do zarejestrowania nowego punktu";
 "logging_min_accuracy" = "Minimalna dokładność";
@@ -754,7 +754,7 @@
 "auto_split_gap" = "Automatyczne dzielenie nagrań po przerwie";
 "auto_split_gap_descr" = "Rozpocznij nowy segment po 6-minutowej przerwie, nową trasę po 2-godzinnej przerwie lub nowy plik po dłuższej przerwie";
 "speak_tunnels" = "Tunele";
-"shared_setting_always_ask" = "Ponawianie pytania";
+"shared_setting_always_ask" = "Zawsze pytaj";
 "recording_preferences_descr" = "Ustawienia nagrywania trasy";
 "traffic_warning_tunnel" = "Zbliżasz się do tunelu";
 "poi_overlay" = "Nakładka użytecznego miejsca";
@@ -829,7 +829,7 @@
 "osmand_live_weekly" = "Co tydzień";
 "osmand_live_reports" = "Raporty";
 "osmand_live_server_date" = "Ostatnia aktualizacja serwera: %@";
-"osm_live_plan_pricing" = "Plan i ceny";
+"osm_live_plan_pricing" = "Plany i ceny";
 "osm_live_payment_monthly_title" = "Płać co miesiąc";
 "osm_live_payment_3_months_title" = "Zapłać raz na 3 miesiące";
 "osm_live_payment_annual_title" = "Zapłać raz w roku";
@@ -1158,7 +1158,7 @@
 "add_destination" = "Dodaj cel trasy";
 "add_first_inermediate" = "Dodaj pierwszy pośredni cel trasy";
 "toggle_auto_zoom" = "Włącz/Wyłącz auto-przybliżenie";
-"pause_resume_nav" = "Zatrzymaj/wznów nawigację";
+"pause_resume_nav" = "Wstrzymaj/wznów nawigację";
 "toggle_nav" = "Rozpocznij/zakończ nawigację";
 "toggle_day_night" = "Zmień tryb dzienny/nocny";
 "show_hide_gpx" = "Wyświetl/Ukryj trasy";
@@ -1985,7 +1985,7 @@
 "show_compass_ruler" = "Wyświetl linijkę kompasu";
 "coordinates" = "Współrzędne";
 "address_search" = "Wyszukiwanie adresu";
-"travel" = "Podróże";
+"travel" = "Podróż";
 "symbols" = "Symbole";
 "sport" = "Sport";
 "shared_z_a" = "Z - A";

@@ -41,8 +41,6 @@
 #define kCellTypeSlider @"sliderCell"
 #define kCellTypeMap @"mapCell"
 #define kCellTypeSegment @"segmentCell"
-#define kCellTypeImageDesc @"imageDescCell"
-#define kCellTypeImageTextView @"imageTextViewCell"
 #define kCellTypeButton @"buttonIconCell"
 
 #define kZoomSection 2
@@ -185,7 +183,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (_app.data.terrainType == EOATerrainTypeSlope)
     {
         [slopeLegendArr addObject:@{
-            @"type" : kCellTypeImageTextView,
+            @"type" : [OAImageTextViewCell getCellIdentifier],
             @"descr" : OALocalizedString(@"map_settings_slopes_legend"),
             @"img" : @"img_legend_slope",
             @"url" : @"https://en.wikipedia.org/wiki/Grade_(slope)",
@@ -242,7 +240,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSMutableArray *imageArr = [NSMutableArray array];
     [imageArr addObject:@{
-        @"type" : kCellTypeImageDesc,
+        @"type" : [OAImageDescTableViewCell getCellIdentifier],
         @"desc" : OALocalizedString(@"enable_hillshade"),
         @"img" : @"img_empty_state_terrain"
     }];
@@ -269,7 +267,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) setupView
 {
-    title = OALocalizedString(@"map_settings_terrain");
+    title = OALocalizedString(@"shared_string_terrain");
 
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     _possibleZoomValues = [self getPossibleZoomValues];
@@ -512,11 +510,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString: kCellTypeSwitch])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.descriptionView.hidden = YES;
@@ -525,7 +522,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             cell.textView.text = [self isTerrainOn] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = [self isTerrainOn] ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [UIImage templateImageNamed:imgName];
             cell.imgView.tintColor = [self isTerrainOn] ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -537,12 +534,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString: kCellTypeValue])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -558,13 +554,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
-        static NSString* const identifierCell = @"OATitleRightIconCell";
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleView.text = item[@"title"];
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
@@ -574,12 +569,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypePicker])
     {
-        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
         OACustomPickerTableViewCell* cell;
-        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _possibleZoomValues;
@@ -592,12 +586,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeSlider])
     {
-        static NSString* const identifierCell = @"OATitleSliderTableViewCell";
         OATitleSliderTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleSliderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
@@ -614,16 +607,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeSegment])
     {
-        static NSString* const identifierCell = @"OASegmentTableViewCell";
         OASegmentTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASegmentTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {
+            [cell.segmentControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
             [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];
@@ -631,13 +624,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeImageDesc])
+    else if ([item[@"type"] isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAImageDescTableViewCell";
-        OAImageDescTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAImageDescTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAImageDescTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageDescTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageDescTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -652,13 +644,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeImageTextView])
+    else if ([item[@"type"] isEqualToString:[OAImageTextViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAImageTextViewCell";
-        OAImageTextViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAImageTextViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageTextViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAImageTextViewCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -758,8 +749,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [[UIImage imageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")]
-                                imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imageView.image = [UIImage templateImageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)

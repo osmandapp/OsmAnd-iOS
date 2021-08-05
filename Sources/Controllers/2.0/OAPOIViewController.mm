@@ -187,6 +187,11 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
     return YES;
 }
 
+- (BOOL) showNearestPoi
+{
+    return YES;
+}
+
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *prefLang = [OAUtilities preferredLang];
@@ -252,14 +257,17 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         else if ([key isEqualToString:@"opening_hours"])
         {
             iconId = @"ic_working_time.png";
+            collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            collapsable = YES;
+            collapsed = YES;
             
             auto parser = OpeningHoursParser::parseOpenedHours([value UTF8String]);
-            bool isOpened = parser->isOpened();
-            textColor = isOpened ? UIColorFromRGB(0x2BBE31) : UIColorFromRGB(0xDA3A3A);
+            if (parser != nullptr)
+            {
+                bool isOpened = parser->isOpened();
+                textColor = isOpened ? UIColorFromRGB(0x2BBE31) : UIColorFromRGB(0xDA3A3A);
+            }
 
-            collapsable = YES;
-            collapsed = YES;            
-            collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             ((OACollapsableLabelView *)collapsableView).label.text = value;
         }
         else if ([kContactPhoneTags containsObject:key])
@@ -457,8 +465,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
 {
     NSMutableArray<OATransportStopRoute *> *routes = [NSMutableArray array];
 
-    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     BOOL isSubwayEntrance = [self.poi.type.name isEqualToString:@"subway_entrance"];
 
     const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);

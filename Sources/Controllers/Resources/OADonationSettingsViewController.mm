@@ -108,7 +108,7 @@
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     
     [self initCountries];
-    NSString *countryDownloadName = _settings.billingUserCountryDownloadName;
+    NSString *countryDownloadName = _settings.billingUserCountryDownloadName.get;
     if (countryDownloadName.length == 0 || [countryDownloadName isEqualToString:kBillingUserDonationNone])
         _selectedCountryItem = _countryItems[0];
     else
@@ -118,29 +118,29 @@
 
     if (_settingsType == EDonationSettingsScreenMain)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
         _donationSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         _donationSwitch.textView.numberOfLines = 0;
         _donationSwitch.textView.text = OALocalizedString(@"osmand_live_donation_switch_title");
         _donationSwitch.switchView.on = _donation;
         [_donationSwitch.switchView addTarget:self action:@selector(donationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
         _hideNameSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         _hideNameSwitch.textView.numberOfLines = 0;
         _hideNameSwitch.textView.text = OALocalizedString(@"osm_live_hide_user_name");
-        _hideNameSwitch.switchView.on = _settings.billingHideUserName;
+        _hideNameSwitch.switchView.on = _settings.billingHideUserName.get;
         
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
         _emailCell = (OATextInputCell *)[nib objectAtIndex:0];
-        _emailCell.inputField.text = _settings.billingUserEmail;
+        _emailCell.inputField.text = _settings.billingUserEmail.get;
         _emailCell.inputField.placeholder = OALocalizedString(@"osmand_live_donations_enter_email");
         _emailCell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
         _emailCell.inputField.delegate = self;
 
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
         _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
-        _userNameCell.inputField.text = _settings.billingUserName;
+        _userNameCell.inputField.text = _settings.billingUserName.get;
         _userNameCell.inputField.placeholder = OALocalizedString(@"osmand_live_public_name");
         _userNameCell.inputField.delegate = self;
 
@@ -382,16 +382,16 @@
         
         [_progressHUD show:YES];
         
-        NSString *userId = _settings.billingUserId;
+        NSString *userId = _settings.billingUserId.get;
         if (userId.length != 0)
         {
             NSDictionary<NSString *, NSString *> *params = @{
                                                              @"os" : @"ios",
-                                                             @"visibleName" : _settings.billingHideUserName ? @"" : _settings.billingUserName,
-                                                             @"preferredCountry" : _settings.billingUserCountryDownloadName,
-                                                             @"email" : _settings.billingUserEmail,
+                                                             @"visibleName" : _settings.billingHideUserName.get ? @"" : _settings.billingUserName.get,
+                                                             @"preferredCountry" : _settings.billingUserCountryDownloadName.get,
+                                                             @"email" : _settings.billingUserEmail.get,
                                                              @"userid" : userId,
-                                                             @"token" : _settings.billingUserToken,
+                                                             @"token" : _settings.billingUserToken.get,
                                                              };
             [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/update" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
              {
@@ -413,25 +413,25 @@
                                      NSLog(@"UserId = %@", userId);
                                      if (userId.length > 0)
                                      {
-                                         _settings.billingUserId = userId;
+                                         [_settings.billingUserId set:userId];
 
                                          NSObject *email = [map objectForKey:@"email"];
                                          if (email)
-                                             _settings.billingUserEmail = [email isKindOfClass:[NSString class]] ? (NSString *)email : @"";
+                                             [_settings.billingUserEmail set:[email isKindOfClass:[NSString class]] ? (NSString *)email : @""];
 
                                          NSObject *visibleName = [map objectForKey:@"visibleName"];
                                          if (visibleName && [visibleName isKindOfClass:[NSString class]] && ((NSString *)visibleName).length > 0)
                                          {
-                                             _settings.billingUserName = (NSString *)visibleName;
-                                             _settings.billingHideUserName = NO;
+                                             [_settings.billingUserName set:(NSString *)visibleName];
+                                             [_settings.billingHideUserName set:NO];
                                          }
                                          else
                                          {
-                                             _settings.billingHideUserName = YES;
+                                             [_settings.billingHideUserName set:YES];
                                          }
                                          NSObject *preferredCountryObj = [map objectForKey:@"preferredCountry"];
                                          if (preferredCountryObj && [preferredCountryObj isKindOfClass:[NSString class]])
-                                             _settings.billingUserCountryDownloadName = (NSString *)preferredCountryObj;
+                                             [_settings.billingUserCountryDownloadName set:(NSString *)preferredCountryObj];
                                      }
                                      hasError = NO;
                                      [self.navigationController popViewControllerAnimated:YES];
@@ -480,18 +480,18 @@
             [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_enter_email") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
             return NO;
         }
-        if (userName.length == 0 && !_settings.billingHideUserName)
+        if (userName.length == 0 && !_settings.billingHideUserName.get)
         {
             [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_enter_user_name") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
             return NO;
         }
     }
     
-    [_settings setBillingUserName:userName];
-    [_settings setBillingUserEmail:email];
-    [_settings setBillingUserCountry:countryName];
-    [_settings setBillingUserCountryDownloadName:countryDownloadName];
-    [_settings setBillingHideUserName:hideUserName];
+    [_settings.billingUserName set:userName];
+    [_settings.billingUserEmail set:email];
+    [_settings.billingUserCountry set:countryName];
+    [_settings.billingUserCountryDownloadName set:countryDownloadName];
+    [_settings.billingHideUserName set:hideUserName];
     
     return YES;
 }
@@ -530,13 +530,11 @@
     }
     else if ([type isEqualToString:kCellTypeSingleSelectionList])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -557,13 +555,11 @@
     }
     else if ([type isEqualToString:kCellTypeCheck])
     {
-        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
         OASettingsTitleTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
         }
         

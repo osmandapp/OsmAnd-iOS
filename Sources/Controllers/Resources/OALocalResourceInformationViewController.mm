@@ -44,13 +44,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"res_details");
-    
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 -(void)viewDidLoad
@@ -59,8 +52,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
 }
 
 -(void)viewWillLayoutSubviews
@@ -89,11 +80,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(UIView *) getMiddleView
 {
     return _tableView;
-}
-
--(UIView *) getBottomView
-{
-    return _toolbarView;
 }
 
 -(CGFloat) getToolBarHeight
@@ -340,20 +326,17 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (OAButtonCell *) getButtonCell:(NSString *)type
 {
-    static NSString* const identifierCell = @"OAButtonCell";
-    OAButtonCell* cell = nil;
-    
-    cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
         [cell showImage:NO];
         [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     }
     if (cell)
     {
-        [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         if ([type isEqual:@"delete"])
         {
             [cell.button setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
@@ -400,16 +383,14 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     if (indexPath.section == 0)
     {
-        static NSString* const detailsCell = @"detailsCell";
-        
         NSString* title = [tableKeys objectAtIndex:indexPath.row];
         NSString* subtitle = [tableValues objectAtIndex:indexPath.row];
         
         // Obtain reusable cell or create one
-        OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:detailsCell];
+        OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:[OALocalResourceInfoCell getCellIdentifier]];
         if (cell == nil)
         {
-            cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:detailsCell];
+            cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[OALocalResourceInfoCell getCellIdentifier]];
         }
             
         // Fill cell content
@@ -431,23 +412,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     return nil;
 }
 
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPluginsClicked:(id)sender
-{
-    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-    pluginsViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:pluginsViewController animated:NO];
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
-}
 
 #pragma mark - OATilesEditingViewControllerDelegate
 

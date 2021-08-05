@@ -18,14 +18,27 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *bottomSheetView;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
+@property (weak, nonatomic) IBOutlet UIView *headerDividerView;
+@property (weak, nonatomic) IBOutlet UIView *buttonsSectionDividerView;
+@property (weak, nonatomic) IBOutlet UIView *buttonsView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewRightConstraint;
 
 - (void) presentInViewController:(UIViewController *)viewController;
+- (void) presentInViewController:(UIViewController *)viewController animated:(BOOL)animated;
 
 @property (nonatomic, readonly) CGFloat initialHeight;
 @property (nonatomic, readonly) CGFloat buttonsViewHeight;
 @property (nonatomic) BOOL isFullScreenAvailable;
+@property (nonatomic, readonly) BOOL isDraggingUpAvailable;
 
+- (void) adjustFrame;
 - (void) onRightButtonPressed;
+
+- (void) goFullScreen;
+- (void) goMinimized;
+
+- (void) setHeaderViewVisibility:(BOOL)hidden;
 
 @end
 

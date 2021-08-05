@@ -199,9 +199,8 @@
 - (vector<SHARED_PTR<TransportRouteResult>>) calculateRouteImpl:(OATransportRouteCalculationParams *)params
 {
     vector<SHARED_PTR<TransportRouteResult>> res;
-    auto config = _app.defaultRoutingConfig;
     MAP_STR_STR paramsRes;
-    auto router = [OARouteProvider getRouter:params.mode];
+    auto router = [_app getRouter:params.mode];
     auto paramsMap = router->getParameters();
     for (auto it = paramsMap.begin(); it != paramsMap.end(); ++it)
     {
@@ -210,7 +209,7 @@
         std::string vl;
         if (pr.type == RoutingParameterType::BOOLEAN)
         {
-            OAProfileBoolean *pref = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:pr.defaultBoolean];
+            OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:pr.defaultBoolean];
             BOOL b = [pref get:params.mode];
             vl = b ? "true" : "";
         }
@@ -786,12 +785,16 @@
         _walkingRouteSegments = nil;
         [OAWaypointHelper.sharedInstance setNewRoute:[[OARouteCalculationResult alloc] initWithErrorMessage:@""]];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            for (id<OARouteInformationListener> listener in _listeners)
-            {
-                [listener routeWasCancelled];
-            }
-        });
+        // Do not reset route twice (e.g. if not in the pulic transport mode)
+        if (OARoutingHelper.sharedInstance.isPublicTransportMode)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                for (id<OARouteInformationListener> listener in _listeners)
+                {
+                    [listener routeWasCancelled];
+                }
+            });
+        }
         
         
         _endLocation = newFinalLocation;

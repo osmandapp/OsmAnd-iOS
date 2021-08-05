@@ -8,6 +8,7 @@
 
 #import "OAMapUtils.h"
 #import "OAPOI.h"
+#import "QuadRect.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

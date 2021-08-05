@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,6 +17,7 @@
                 <outlet property="menuButtonMyWaypoints" destination="gHQ-XJ-7Qe" id="UnE-Kl-KBd"/>
                 <outlet property="menuButtonNavigation" destination="B2U-hE-piW" id="88T-ih-2Fw"/>
                 <outlet property="menuButtonPlanRoute" destination="Lef-Z2-TN6" id="h1e-KS-met"/>
+                <outlet property="menuButtonPlugins" destination="hOI-w6-rzF" id="Gp2-Tp-l6k"/>
                 <outlet property="menuButtonSettings" destination="zr6-Nz-cFS" id="ImA-9d-6Mf"/>
                 <outlet property="scrollView" destination="HYb-RD-p6J" id="KRQ-bS-TD0"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="Hny-hu-xSL"/>
@@ -159,8 +160,26 @@
                                 <action selector="configureScreenButtonClicked:" destination="-1" eventType="touchUpInside" id="R3V-4e-Cyi"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hOI-w6-rzF">
+                            <rect key="frame" x="0.0" y="348" width="375" height="50"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                            <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
+                            <state key="normal" title="Plugins" image="left_menu_icon_plugins.png">
+                                <color key="titleColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="highlighted">
+                                <color key="titleColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="pluginsButtonClicked:" destination="-1" eventType="touchUpInside" id="FMV-ll-vZg"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zr6-Nz-cFS">
-                            <rect key="frame" x="0.0" y="350" width="375" height="50"/>
+                            <rect key="frame" x="0.0" y="395" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -178,7 +197,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VoA-wi-Z36">
-                            <rect key="frame" x="0.0" y="400" width="375" height="50"/>
+                            <rect key="frame" x="0.0" y="440" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -208,6 +227,7 @@
         <image name="left_menu_icon_about.png" width="30" height="30"/>
         <image name="left_menu_icon_map.png" width="30" height="30"/>
         <image name="left_menu_icon_navigation.png" width="30" height="30"/>
+        <image name="left_menu_icon_plugins.png" width="30" height="30"/>
         <image name="left_menu_icon_resources.png" width="30" height="30"/>
         <image name="left_menu_icon_settings.png" width="30" height="30"/>
         <image name="left_menu_icon_waypoints.png" width="30" height="30"/>

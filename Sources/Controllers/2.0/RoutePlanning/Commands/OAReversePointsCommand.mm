@@ -36,7 +36,7 @@
     _oldRoadSegmentData = editingCtx.roadSegmentData;
     NSMutableArray<OAGpxTrkPt *> *newPoints = [[NSMutableArray alloc] initWithCapacity:_oldPoints.count];
     
-    for (NSInteger i = _oldPoints.count - 1; i >= 0; i--)
+    for (NSInteger i = (NSInteger) _oldPoints.count - 1; i >= 0; i--)
     {
         OAGpxTrkPt *point = _oldPoints[i];
         OAGpxTrkPt *prevPoint = i > 0 ? _oldPoints[i - 1] : nil;

@@ -269,12 +269,12 @@ static NSString * const C_SET_MODE = @"setMode";
     return [self addCommand:C_LOCATION_RECOVERED];
 }
 
-- (OACommandBuilder *) newRouteCalculated:(double)dist time:(int)time
+- (OACommandBuilder *) newRouteCalculated:(double)dist time:(long)time
 {
     return [self addCommand:C_ROUTE_NEW_CALC args:@[@(dist), @(time)]];
 }
 
-- (OACommandBuilder *) routeRecalculated:(double)dist time:(int)time
+- (OACommandBuilder *) routeRecalculated:(double)dist time:(long)time
 {
     return [self addCommand:C_ROUTE_RECALC args:@[@(dist), @(time)]];
 }

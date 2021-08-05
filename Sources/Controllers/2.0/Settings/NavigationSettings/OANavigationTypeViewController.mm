@@ -11,6 +11,7 @@
 #import "OAProfileDataObject.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OAApplicationMode.h"
+#import "OAProfileDataUtils.h"
 #import "OAAppSettings.h"
 
 #import "Localization.h"
@@ -56,7 +57,7 @@
 
 - (void) setupView
 {
-    _sortedRoutingProfiles = [OAProfileNavigationSettingsViewController getSortedRoutingProfiles];
+    _sortedRoutingProfiles = [OAProfileDataUtils getSortedRoutingProfiles];
     NSMutableArray *tableData = [NSMutableArray new];
     NSString *lastFileName = _sortedRoutingProfiles.firstObject.fileName;
     NSMutableArray *sectionData = [NSMutableArray new];
@@ -67,7 +68,7 @@
         if ((lastFileName == nil && profile.fileName == nil) || [lastFileName isEqualToString:profile.fileName])
         {
             [sectionData addObject:@{
-                @"type" : @"OAIconTextCell",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
                 @"title" : profile.name,
                 @"profile_ind" : @(i),
                 @"icon" : profile.iconName,
@@ -80,7 +81,7 @@
             lastFileName = profile.fileName;
             [fileNames addObject:lastFileName];
             [sectionData addObject:@{
-                @"type" : @"OAIconTextCell",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
                 @"title" : profile.name,
                 @"profile_ind" : @(i),
                 @"icon" : profile.iconName,
@@ -115,22 +116,21 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OAIconTextCell"])
+    if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAIconTextCell";
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.arrowIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
-            cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             BOOL isSelected = [_sortedRoutingProfiles[[item[@"profile_ind"] integerValue]].stringKey isEqualToString:_currentSelectedKey];
             cell.arrowIconView.hidden = !isSelected;
             cell.iconView.tintColor = isSelected ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);

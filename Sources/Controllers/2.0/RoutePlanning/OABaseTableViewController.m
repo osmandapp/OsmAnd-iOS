@@ -36,7 +36,22 @@
 
 - (IBAction)cancelButtonPressed:(id)sender
 {
+    [self onCancelButtonPressed];
     [self dismissViewController];
+}
+
+- (IBAction)doneButtonPressed:(id)sender
+{
+    [self onDoneButtonPressed];
+    [self dismissViewController];
+}
+
+- (void)onCancelButtonPressed
+{
+}
+
+- (void)onDoneButtonPressed
+{
 }
 
 - (IBAction)backButtonPressed:(id)sender

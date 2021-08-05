@@ -453,9 +453,9 @@
     return (int)_intermediatePoints.count - _nextIntermediate;
 }
 
-- (int) getLeftTime:(CLLocation *)fromLoc
+- (long) getLeftTime:(CLLocation *)fromLoc
 {
-    int time = 0;
+    long time = 0;
     if (_currentDirectionInfo < _directions.count)
     {
         OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
@@ -474,7 +474,7 @@
     return time;
 }
 
-- (int) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc
+- (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc
 {
     if (_nextIntermediate >= _intermediatePoints.count)
         return 0;
@@ -499,12 +499,17 @@
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex
 {
+    return [self getOriginalRoute:startIndex endIndex:(int)_segments.size()];
+}
+
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex
+{
     if (_segments.size() == 0)
         return std::vector<std::shared_ptr<RouteSegmentResult>>();
     
     std::vector<std::shared_ptr<RouteSegmentResult>> list;
     list.push_back(_segments[startIndex++]);
-    for (int i = startIndex; i < _segments.size(); i++)
+    for (int i = startIndex; i < endIndex; i++)
         if (_segments[i - 1] != _segments[i])
             list.push_back(_segments[i]);
     
@@ -517,7 +522,7 @@
  */
 + (void) checkForDuplicatePoints:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
 {
-    for (int i = 0; i < locations.count - 1;)
+    for (int i = 0; i < (int) locations.count - 1;)
     {
         if ([locations[i] distanceFromLocation:locations[i + 1]] == 0)
         {
@@ -594,7 +599,7 @@
     double previousBearing = 0;
     int startTurnPoint = 0;
     
-    for (int i = 1; i < locations.count - 1; i++)
+    for (int i = 1; i < (int) locations.count - 1; i++)
     {
         CLLocation *next = locations[i + 1];
         CLLocation *current = locations[i];
@@ -764,7 +769,7 @@
         }
     }
     
-    int sum = 0;
+    long sum = 0;
     for (int i = (int)originalDirections.count - 1; i >= 0; i--)
     {
         originalDirections[i].afterLeftTime = sum;
@@ -802,12 +807,12 @@
             auto lastSegmentResult = segs[segs.size() - 1];
             auto routeDataObject = lastSegmentResult->object;
             
-            NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
             if (!lang)
                 lang = [OAUtilities currentLang];
             
             auto locale = std::string([lang UTF8String]);
-            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
             info.routeDataObject = routeDataObject;
             info.ref = [NSString stringWithUTF8String:routeDataObject->getRef(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
             info.streetName = [NSString stringWithUTF8String:routeDataObject->getName(locale, transliterate).c_str()];
@@ -918,7 +923,7 @@
  */
 + (void) updateDirectionsTime:(NSMutableArray<OARouteDirectionInfo *> *)directions listDistance:(NSMutableArray<NSNumber *> *)listDistance
 {
-    int sum = 0;
+    long sum = 0;
     for (int i = (int)directions.count - 1; i >= 0; i--)
     {
         directions[i].afterLeftTime = sum;
@@ -1174,12 +1179,12 @@
                 }
                 auto next = list[lind];
                 
-                NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+                NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
                 if (!lang)
                     lang = [OAUtilities currentLang];
                 
                 auto locale = std::string([lang UTF8String]);
-                BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+                BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
                 
                 NSString *ref = [NSString stringWithUTF8String:next->object->getRef(locale,
                                             transliterate, next->isForwardDirection()).c_str()];
@@ -1312,7 +1317,7 @@
     return self;
 }
 
-- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode
+- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint
 {
     self = [[OARouteCalculationResult alloc] init];
     if (self)
@@ -1327,7 +1332,8 @@
         NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
         NSMutableArray<OAAlarmInfo *> *alarms = [NSMutableArray array];
         std::vector<std::shared_ptr<RouteSegmentResult>> segments = [self.class convertVectorResult:computeDirections locations:locations list:list alarms:alarms];
-        [self.class introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
+        if (calculateFirstAndLastPoint)
+            [self.class introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
         
         _locations = locations;
         _segments = segments;

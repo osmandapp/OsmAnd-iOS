@@ -107,8 +107,8 @@
 {
     NSMutableArray<OATransportStopRoute *> *routes = [NSMutableArray array];
     
-    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     auto transportStop = _transportStop.stop;
     
     const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);

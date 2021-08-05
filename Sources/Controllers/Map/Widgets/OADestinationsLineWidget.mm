@@ -48,6 +48,7 @@
     
     NSDictionary<NSString *, NSNumber *> *_lineAttrs;
     NSDictionary<UIColor *, NSString *> *_markerColors;
+    BOOL _attrsChanged;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -71,10 +72,12 @@
     
     [self updateAttributes];
     _markerColors = @{ UIColorFromRGB(marker_pin_color_orange) : @"map_marker_direction_arrow_p2_color_pin_1",
-                       UIColorFromRGB(marker_pin_color_blue) : @"map_marker_direction_arrow_p2_color_pin_2",
+                       UIColorFromRGB(marker_pin_color_teal) : @"map_marker_direction_arrow_p2_color_pin_2",
                        UIColorFromRGB(marker_pin_color_green) : @"map_marker_direction_arrow_p2_color_pin_3",
                        UIColorFromRGB(marker_pin_color_red) : @"map_marker_direction_arrow_p2_color_pin_4",
-                       UIColorFromRGB(marker_pin_color_light_green) : @"map_marker_direction_arrow_p2_color_pin_5" };
+                       UIColorFromRGB(marker_pin_color_light_green) : @"map_marker_direction_arrow_p2_color_pin_5",
+                       UIColorFromRGB(marker_pin_color_purple) : @"map_marker_direction_arrow_p2_color_pin_6",
+                       UIColorFromRGB(marker_pin_color_blue) : @"map_marker_direction_arrow_p2_color_pin_7" };
     
     self.hidden = NO;
     self.opaque = NO;
@@ -96,9 +99,20 @@
     }
 }
 
-- (void) updateAttributes
+- (BOOL) updateAttributes
 {
-    _lineAttrs = [_mapViewController getLineRenderingAttributes:@"measureDistanceLine"];
+    NSDictionary<NSString *, NSNumber *> *lineAttrs = [_mapViewController getLineRenderingAttributes:@"measureDistanceLine"];
+    BOOL changed = ![_lineAttrs isEqualToDictionary:lineAttrs];
+    _lineAttrs = lineAttrs;
+    _attrsChanged = changed;
+    return changed;
+}
+
+- (BOOL) areAttributesChanged
+{
+    BOOL changed = _attrsChanged;
+    _attrsChanged = NO;
+    return changed;
 }
 
 #pragma mark - Layer
@@ -125,6 +139,11 @@
 }
 
 - (BOOL) updateLayer
+{
+    return [self updateAttributes];
+}
+
+- (BOOL) drawLayer
 {
     if (_destinationLineSublayer.superlayer != self.layer)
         [self.layer insertSublayer:_destinationLineSublayer above:self.layer];
@@ -166,9 +185,9 @@
                 if (currLoc)
                 {
                     if (firstMarkerDestination)
-                        [self drawLine:firstMarkerDestination fromLocation:currLoc inContext:ctx];
+                        [self drawDistanceTo:firstMarkerDestination fromLocation:currLoc inContext:ctx];
                     if (secondMarkerDestination && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
-                        [self drawLine:secondMarkerDestination fromLocation:currLoc inContext:ctx];
+                        [self drawDistanceTo:secondMarkerDestination fromLocation:currLoc inContext:ctx];
                 }
             }
             
@@ -184,9 +203,7 @@
     }
 }
 
-#pragma mark - Lines
-
-- (void) drawLine:(OADestination *)marker fromLocation:(CLLocation *)currLoc inContext:(CGContextRef)ctx
+- (void) drawDistanceTo:(OADestination *)marker fromLocation:(CLLocation *)currLoc inContext:(CGContextRef)ctx
 {
     CLLocationCoordinate2D startCoord = currLoc.coordinate;
     CLLocationCoordinate2D finishCoord;
@@ -208,40 +225,8 @@
         double angle = [OAMapUtils getAngleBetween:b end:a];
         NSString *distance = [_app getFormattedDistance:dist];
         
-        [self drawLineBetweenPoints:a end:b distance:distance color:marker.color inContext:ctx];
         [self drawDistance:ctx distance:distance angle:angle start:b end:a];
     }
-}
-
-- (void) drawLineBetweenPoints:(CGPoint)start end:(CGPoint)end distance:(NSString *)distance color:(UIColor *)lineColor inContext:(CGContextRef)ctx
-{
-    [self updateAttributes];
-    UIColor *color = lineColor;
-    CGFloat dashPattern[] = {3, 10};
-    CGContextSaveGState(ctx);
-    {
-        BOOL hasAttributes = _lineAttrs != nil;
-        double scaleFactor = [_settings.mapDensity get:_settings.applicationMode];
-        float strokeWidth = hasAttributes && _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 2.0;
-        strokeWidth = scaleFactor < 1.0 ? 1.0 : 2 * strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
-        CGContextSetLineWidth(ctx, strokeWidth * 2);
-        CGContextSetLineCap(ctx, kCGLineCapRound);
-        CGContextBeginPath(ctx);
-        CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
-        CGContextSetLineDash(ctx, 10.0, dashPattern , 2);
-        CGContextMoveToPoint(ctx, start.x, start.y);
-        CGContextAddLineToPoint(ctx, end.x, end.y);
-        CGContextStrokePath(ctx);
-
-        [color set];
-        CGContextSetLineWidth(ctx, strokeWidth);
-        CGContextSetLineCap(ctx, kCGLineCapRound);
-        CGContextSetLineDash(ctx, 10.0, dashPattern , 2);
-        CGContextMoveToPoint(ctx, start.x, start.y);
-        CGContextAddLineToPoint(ctx, end.x, end.y);
-        CGContextStrokePath(ctx);
-    }
-    CGContextRestoreGState(ctx);
 }
 
 - (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end
@@ -311,6 +296,13 @@
     }
 }
     
+- (double) getStrokeWidth
+{
+    double scaleFactor = [_settings.mapDensity get:_settings.applicationMode.get];
+    float strokeWidth = _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 6.0;
+    return scaleFactor < 1.0 ? 1.0 : 2 * strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
+}
+
 - (UIImage *) getArrowImage:(UIImage*) fgImage inImage:(UIImage*) bgImage withShadow:(UIImage*)shadow
 {
     UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);

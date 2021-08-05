@@ -105,14 +105,14 @@
     NSMutableArray *arr = [NSMutableArray array];
     NSString *title = [self getTitle];
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderCell",
+                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : title,
                      @"description" : @""
                      }];
     if (_screenType == TYPE_UPLOAD)
     {
         [arr addObject:@{
-                         @"type" : @"OADescrTitleCell",
+                         @"type" : [OADescrTitleCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_note_upload_info"),
                          @"description" : @""
                          }];
@@ -121,7 +121,7 @@
     {
         
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCell",
+                         @"type" : [OATextInputFloatingCell getCellIdentifier],
                          @"name" : @"osm_message",
                          @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
@@ -129,7 +129,7 @@
         if (_screenType == TYPE_CREATE)
         {
             [arr addObject:@{
-                             @"type" : @"OASwitchCell",
+                             @"type" : [OASwitchTableViewCell getCellIdentifier],
                              @"name" : @"upload_immediately",
                              @"title" : OALocalizedString(@"osm_note_upload_immediately"),
                              @"value" : @(_uploadImmediately)
@@ -139,10 +139,10 @@
     
     if (_screenType != TYPE_CREATE || _uploadImmediately)
     {
-        [arr addObject:@{ @"type" : @"OADividerCell" } ];
+        [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
         
         [arr addObject:@{
-                         @"type" : @"OASwitchCell",
+                         @"type" : [OASwitchTableViewCell getCellIdentifier],
                          @"name" : @"upload_anonymously",
                          @"title" : OALocalizedString(@"osm_note_upload_anonymously"),
                          @"value" : @(_uploadAnonymously)
@@ -151,15 +151,15 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCell",
+                         @"type" : [OATextInputFloatingCell getCellIdentifier],
                          @"name" : @"osm_user",
-                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_name") text:settings.osmUserName roundedCorners:UIRectCornerTopLeft | UIRectCornerTopRight hideUnderline:NO floatingTextFieldControllers:_floatingTextFieldControllers]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_name") text:settings.osmUserName.get roundedCorners:UIRectCornerTopLeft | UIRectCornerTopRight hideUnderline:NO floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
         
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCell",
+                         @"type" : [OATextInputFloatingCell getCellIdentifier],
                          @"name" : @"osm_pass",
-                         @"cell" : [OAOsmNoteBottomSheetViewController getPasswordCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getPasswordCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword.get roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
     }
     
@@ -244,15 +244,15 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 16.0, 5.0, 0.0)];
     }
-    else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
-    else if ([item[@"type"] isEqualToString:@"OASwitchCell"] || [item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:@"OADescrTitleCell"])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -278,13 +278,12 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
@@ -293,13 +292,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    else if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderCell";
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -312,15 +310,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OASwitchCell"])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -331,22 +327,23 @@
             [cell.textView setText: item[@"title"]];
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         return item[@"cell"];
     }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
+    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:@"OADescrTitleCell"];
+        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADescrTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
         }
         
@@ -444,7 +441,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:@"OASwitchCell"])
+    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
         return indexPath;
     else
         return nil;
@@ -453,7 +450,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         OATextInputFloatingCell *cell = item[@"cell"];
         EOATextInputBottomSheetType type = [item[@"name"] isEqualToString:@"osm_message"] ?
@@ -518,7 +515,7 @@
 
 + (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide floatingTextFieldControllers:(NSMutableArray *)floatingControllers
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCell getCellIdentifier] owner:self options:nil];
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     resultCell.backgroundColor = [UIColor clearColor];
     MDCMultilineTextField *textField = resultCell.inputField;
@@ -528,8 +525,8 @@
     textField.userInteractionEnabled = NO;
     textField.font = [UIFont systemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
     
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
     fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
@@ -543,7 +540,7 @@
 
 + (OAPasswordInputFieldCell *)getPasswordCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide floatingTextFieldControllers:(NSMutableArray *)floatingControllers
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPasswordInputFieldCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPasswordInputFieldCell getCellIdentifier] owner:self options:nil];
     OAPasswordInputFieldCell *resultCell = (OAPasswordInputFieldCell *)[nib objectAtIndex:0];
     resultCell.backgroundColor = [UIColor clearColor];
     MDCTextField *textField = resultCell.inputField;

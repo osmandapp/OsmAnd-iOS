@@ -79,7 +79,7 @@
         NSString *trackName = [fileName stringByDeletingPathExtension];
         OAGPXDocument *gpx = [self generateGpxFile:trackName gpx:[[OAGPXMutableDocument alloc] init]];
         success = [gpx saveTo:_outFile];
-        gpx.fileName = _outFile;
+        gpx.path = _outFile;
         _savedGpxFile = gpx;
         //            if (showOnMap) {
         //                MeasurementToolFragment.showGpxOnMap(app, gpx, true);
@@ -113,7 +113,8 @@
 {
     OAGPXTrackAnalysis *analysis = [_savedGpxFile getAnalysis:0];
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OAGPX *gpx = [gpxDb buildGpxItem:[_outFile lastPathComponent] title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds analysis:analysis];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];;
+    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds analysis:analysis];
     [gpxDb replaceGpxItem:gpx];
     [gpxDb save];
 }
@@ -128,19 +129,19 @@
         {
             OAGpxTrk *track = [[OAGpxTrk alloc] init];
             track.name = trackName;
+            [gpx addTrack:track];
             for (OAGpxTrkSeg *s in before)
             {
                 OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
                 segment.points = s.points;
-                track.segments = [track.segments arrayByAddingObject:segment];
+                [gpx addTrackSegment:segment track:track];
             }
             for (OAGpxTrkSeg *s in after)
             {
                 OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
                 segment.points = s.points;
-                track.segments = [track.segments arrayByAddingObject:segment];
+                [gpx addTrackSegment:segment track:track];
             }
-            [gpx addTrack:track];
         }
         else
         {
@@ -154,7 +155,7 @@
                 NSArray<NSArray<OAGpxRtePt *> *> *routePoints = [_editingCtx getRoutePoints];
                 for (NSArray<OAGpxRtePt *> *points in routePoints)
                 {
-                    [gpx addRoutePoints:points];
+                    [gpx addRoutePoints:points addRoute:YES];
                 }
                 if (gpxPoints.count > 0)
                     [gpx addWpts:gpxPoints];

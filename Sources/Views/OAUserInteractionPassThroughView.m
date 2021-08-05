@@ -10,6 +10,23 @@
 
 @implementation OAUserInteractionPassThroughView
 
+@synthesize didLayoutObservable = _didLayoutObservable;
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        _didLayoutObservable = [[OAObservable alloc] init];
+    }
+    return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [_didLayoutObservable notifyEvent];
+}
+
 - (BOOL) pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
     for (UIView* view in [self subviews])

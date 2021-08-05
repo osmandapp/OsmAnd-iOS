@@ -29,6 +29,7 @@ static const double TIMEOUT_BETWEEN_CHARS = 0.7;  // seconds
 static const double TIMEOUT_BEFORE_SEARCH = 0.05; // seconds
 static const double TIMEOUT_BEFORE_FILTER = 0.02; // seconds
 static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
+static const NSSet<NSString *> *FILTER_DUPLICATE_POI_SUBTYPE = [NSSet setWithArray: @[@"building", @"internet_access_yes"]];
 
 typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
     EOATopVisible = 0,
@@ -201,9 +202,20 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             }
             else if (am1 && am2)
             {
+                // here 2 points are amenity
                 const auto& a1 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o1.amenity);
                 const auto& a2 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o2.amenity);
-                NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
+                
+                NSComparisonResult cmp = NSOrderedSame;
+                BOOL subtypeFilter1 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a1->subType.toNSString()];
+                BOOL subtypeFilter2 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a2->subType.toNSString()];
+                if (subtypeFilter1 != subtypeFilter2)
+                {
+                    // to filter second
+                    return subtypeFilter1 ? NSOrderedDescending : NSOrderedAscending;
+                }
+                
+                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
                 if (cmp != NSOrderedSame)
                     return cmp;
                 
@@ -396,10 +408,10 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             if (a1 && a2)
             {
                 // here 2 points are amenity
-                if (a1->id.id == a2->id.id && (a1->subType == QStringLiteral("building") || a2->subType == QStringLiteral("building")))
+                BOOL isEqualId = a1->id.id == a2->id.id;
+                if (isEqualId && ([FILTER_DUPLICATE_POI_SUBTYPE containsObject:a1->subType.toNSString()] || [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a2->subType.toNSString()]))
                     return true;
-                
-                if (a1->type != a2->type)
+                else if (a1->type != a2->type)
                     return false;
                 
                 if (a1->type == QStringLiteral("natural"))
@@ -476,6 +488,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
 
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
+    return [self shallowSearch:cl text:text matcher:matcher resortAll:YES removeDuplicates:YES];
+}
+
+- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
+{
     OASearchCoreAPI *api = [self getApiByClass:cl];
     if (api)
     {
@@ -486,7 +503,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
         [api search:sphrase resultMatcher:rm];
         
         OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:sphrase];
-        [collection addSearchResults:[rm getRequestResults] resortAll:YES removeDuplicates:YES];
+        [collection addSearchResults:[rm getRequestResults] resortAll:resortAll removeDuplicates:removeDuplicates];
 
         NSLog(@">> Shallow Search phrase %@ %d", [_phrase toString], (int)([rm getRequestResults].count));
 

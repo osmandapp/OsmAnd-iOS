@@ -45,7 +45,6 @@
     OAAutoObserverProxy *_locationServicesStatusObserver;
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     OAAutoObserverProxy *_mapModeObserver;
-    OAAutoObserverProxy *_applicaionModeObserver;
     
     OAMapMode _lastMapMode;
     bool _lastPositionTrackStateCaptured;
@@ -112,10 +111,6 @@
                                                                     withHandler:@selector(onLocationServicesUpdate)
                                                                      andObserve:_app.locationServices.updateObserver];
 
-        _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                            withHandler:@selector(onApplicationModeChanged:)
-                                                             andObserve:_app.data.applicationModeChangedObservable];
-
         //addTargetPointListener(app);
         //addMapMarkersListener(app);
         //[[OARoutingHelper sharedInstance] addListener:self];
@@ -125,13 +120,6 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
-}
-
-- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateSettings];
-    });
 }
 
 - (void) onMapModeChanged
@@ -329,10 +317,13 @@
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
         
+        bool sameLocation = newLocation && [newLocation isEqual:_myLocation];
+        bool sameHeading = _heading == newHeading;
+
         _myLocation = newLocation;
         _heading = newHeading;
 
-        if (_mapViewController)
+        if (_mapViewController && (!sameLocation || !sameHeading))
         {
             // Wait for Map Mode changing animation if any, to prevent animation lags
             if (!newLocation || (CACurrentMediaTime() - _startChangingMapModeTime < kOneSecondAnimatonTime))
@@ -392,22 +383,25 @@
                 }
                 
                 // Update target
-                if (targetAnimation)
+                if (!sameLocation)
                 {
-                    _mapView.animator->cancelAnimation(targetAnimation);
-                    
-                    double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
-                    _mapView.animator->animateTargetTo(newTarget31,
-                                                       duration,
-                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                       kLocationServicesAnimationKey);
-                }
-                else
-                {
-                    _mapView.animator->animateTargetTo(newTarget31,
-                                                       kFastAnimationTime,
-                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                       kLocationServicesAnimationKey);
+                    if (targetAnimation)
+                    {
+                        _mapView.animator->cancelAnimation(targetAnimation);
+                        
+                        double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
+                        _mapView.animator->animateTargetTo(newTarget31,
+                                                           duration,
+                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                           kLocationServicesAnimationKey);
+                    }
+                    else
+                    {
+                        _mapView.animator->animateTargetTo(newTarget31,
+                                                           kFastAnimationTime,
+                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                           kLocationServicesAnimationKey);
+                    }
                 }
                 
                 // Update zoom
@@ -755,8 +749,8 @@
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OAProfileSetting *obj = notification.object;
-    OAProfileBoolean *centerPositionOnMap = [OAAppSettings sharedManager].centerPositionOnMap;
+    OACommonPreference *obj = notification.object;
+    OACommonBoolean *centerPositionOnMap = [OAAppSettings sharedManager].centerPositionOnMap;
     if (obj)
     {
         if (obj == centerPositionOnMap)

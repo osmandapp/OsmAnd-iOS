@@ -49,16 +49,6 @@
 #define CENTER_CONSTANT 0
 #define BOTTOM_CONSTANT 1
 
-#if defined(OSMAND_IOS_DEV)
-typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
-{
-    OAVisualMetricsModeOff = 0,
-    OAVisualMetricsModeBinaryMapData,
-    OAVisualMetricsModeBinaryMapPrimitives,
-    OAVisualMetricsModeBinaryMapRasterize
-};
-#endif // defined(OSMAND_IOS_DEV)
-
 @class OAGpxWpt;
 @class OAGpxMetadata;
 @class OAGPXRouteDocument;
@@ -100,14 +90,6 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 @property(readonly) BOOL zoomingByGesture;
 @property(readonly) BOOL movingByGesture;
 @property(readonly) BOOL rotatingByGesture;
-
-#if defined(OSMAND_IOS_DEV)
-@property(nonatomic) BOOL hideStaticSymbols;
-@property(nonatomic) OAVisualMetricsMode visualMetricsMode;
-
-@property(nonatomic) BOOL forceDisplayDensityFactor;
-@property(nonatomic) CGFloat forcedDisplayDensityFactor;
-#endif // defined(OSMAND_IOS_DEV)
 
 @property (atomic, readonly) BOOL mapViewLoaded;
 
@@ -161,8 +143,8 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void) showRouteGpxTrack;
 - (void) hideRouteGpxTrack;
 
-- (void) showTempGpxTrack:(NSString *)fileName update:(BOOL)update;
-- (void) showTempGpxTrack:(NSString *)fileName;
+- (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update;
+- (void) showTempGpxTrack:(NSString *)filePath;
 - (void) hideTempGpxTrack:(BOOL)update;
 - (void) hideTempGpxTrack;
 - (void) keepTempGpxTrackVisible;
@@ -191,5 +173,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 
 - (void) disableRotationAnd3DView:(BOOL)disabled;
 - (void) resetViewAngle;
+
+- (void) onApplicationDestroyed;
 
 @end

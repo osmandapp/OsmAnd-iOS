@@ -301,6 +301,7 @@
             cell.descIcon.image = [UIImage imageNamed:@"ic_trip_location"];
             
             [cell hideRightButton:NO];
+            [cell.rightButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.rightButton addTarget:self action:@selector(callFirstPointMenu) forControlEvents:UIControlEventTouchUpInside];
             
             [cell hideDescIcon:NO];
@@ -454,13 +455,11 @@
 {
     if (indexPath.section == _sectionIndexGroups)
     {
-        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
-        
         OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 2;
         }
@@ -481,13 +480,11 @@
     }
     else
     {
-        static NSString* const reusableIdentifierPoint = @"OAGPXRouteWaypointTableViewCell";
-        
         OAGPXRouteWaypointTableViewCell* cell;
-        cell = (OAGPXRouteWaypointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAGPXRouteWaypointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAGPXRouteWaypointTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXRouteWaypointCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXRouteWaypointTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXRouteWaypointTableViewCell *)[nib objectAtIndex:0];
         }
         

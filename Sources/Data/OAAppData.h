@@ -53,6 +53,9 @@
 @property (nonatomic) BOOL mapillary;
 @property (readonly) OAObservable* mapillaryChangeObservable;
 
+@property (nonatomic) BOOL wikipedia;
+@property (readonly) OAObservable* wikipediaChangeObservable;
+
 @property (readonly) OAObservable* mapLayerChangeObservable;
 
 @property (readonly) OAObservable* lastMapSourceChangeObservable;
@@ -69,8 +72,6 @@
 
 @property (nonatomic) OARTargetPoint *pointToStart;
 @property (nonatomic) OARTargetPoint *pointToNavigate;
-@property (nonatomic) OARTargetPoint *homePoint;
-@property (nonatomic) OARTargetPoint *workPoint;
 @property (nonatomic) OARTargetPoint *myLocationToStart;
 @property (nonatomic) NSArray<OARTargetPoint *> *intermediatePoints;
 
@@ -111,5 +112,16 @@
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode;
 - (void) copyAppDataFrom:(OAApplicationMode *)sourceMode toMode:(OAApplicationMode *)targetMode;
+
+- (BOOL)getWikipediaAllLanguages;
+- (BOOL)getWikipediaAllLanguages:(OAApplicationMode *)mode;
+- (void)setWikipediaAllLanguages:(BOOL)allLanguages;
+- (void)setWikipediaAllLanguages:(BOOL)allLanguages mode:(OAApplicationMode *)mode;
+
+- (NSArray<NSString *> *)getWikipediaLanguages;
+- (NSArray<NSString *> *)getWikipediaLanguages:(OAApplicationMode *)mode;
+- (void)setWikipediaLanguages:(NSArray<NSString *> *)languages;
+- (void)setWikipediaLanguages:(NSArray<NSString *> *)languages mode:(OAApplicationMode *)mode;
+
 
 @end

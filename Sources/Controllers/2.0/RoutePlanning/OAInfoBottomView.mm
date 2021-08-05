@@ -73,7 +73,7 @@
         {
             _data = @[
                 @{
-                    @"type" : @"OATitleIconRoundCell",
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"add_one_more_pnt"),
                     @"img" : @"ic_custom_add_point_after"
                 }
@@ -84,7 +84,7 @@
         {
             _data = @[
                 @{
-                    @"type" : @"OATitleIconRoundCell",
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"add_one_more_pnt"),
                     @"img" : @"ic_custom_add_point_before"
                 }
@@ -130,15 +130,13 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OATitleIconRoundCell"])
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATitleIconRoundCell";
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }

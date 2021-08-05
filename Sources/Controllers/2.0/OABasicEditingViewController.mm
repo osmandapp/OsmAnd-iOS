@@ -25,10 +25,6 @@
 
 #include <openingHoursParser.h>
 
-#define kCellTypeTextInput @"text_input_cell"
-#define kCellTypeSetting @"settings_cell"
-#define kCellTypeButton @"button"
-
 @interface OABasicEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
 
 @end
@@ -77,7 +73,7 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text isFloating:(BOOL)isFloating tag:(NSInteger)tag
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCell getCellIdentifier] owner:self options:nil];
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
     MDCMultilineTextField *textField = resultCell.inputField;
@@ -88,11 +84,12 @@ static const NSInteger _contactInfoSectionCount = 5;
     textField.layoutDelegate = self;
     textField.textView.tag = tag;
     textField.clearButton.tag = tag;
+    [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont systemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
     if (isFloating)
@@ -107,7 +104,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     return resultCell;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 }
 
@@ -140,14 +138,14 @@ static const NSInteger _contactInfoSectionCount = 5;
                          @"title" : OALocalizedString(@"shared_string_category"),
                          @"value" : _poiData.getPoiCategory != [OAPOIHelper sharedInstance].otherPoiCategory ? _poiData.getPoiCategory.nameLocalized :
                              OALocalizedString(@"shared_string_select"),
-                         @"type" : kCellTypeSetting,
+                         @"type" : [OASettingsTableViewCell getCellIdentifier],
                          }];
     [dataArr addObject:@{
                          @"name" : @"poi_type",
                          @"title" : OALocalizedString(@"poi_type"),
                          @"value" : _poiData.getCurrentPoiType ? _poiData.getLocalizedTypeString :
                              OALocalizedString(@"shared_string_select"),
-                         @"type" : kCellTypeSetting,
+                         @"type" : [OASettingsTableViewCell getCellIdentifier],
                          }];
     _poiSectionItems = [NSArray arrayWithArray:dataArr];
 }
@@ -169,7 +167,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     NSMutableArray *dataArr = [NSMutableArray new];
     NSArray *hints = @[OALocalizedString(@"osm_str_name"), OALocalizedString(@"osm_building_num"),
                        OALocalizedString(@"osm_phone"), OALocalizedString(@"osm_website"), OALocalizedString(@"description")];
-    for (NSInteger i = 0; i < _contactInfoSectionCount; i++) {
+    for (NSInteger i = 0; i < _contactInfoSectionCount; i++)
+    {
         OATextInputFloatingCell *cell = [self getInputCellWithHint:hints[i] text:[self getDataForField:i] isFloating:YES tag:i];
         cell.inputField.contentScaleFactor = 0.5;
         [dataArr addObject:cell];
@@ -193,13 +192,13 @@ static const NSInteger _contactInfoSectionCount = 5;
         {
             [dataArr addObject:@{
                                  @"title" : [NSString stringWithUTF8String:rule->toLocalRuleString().c_str()],
-                                 @"type" : kCellTypeSetting
+                                 @"type" : [OASettingsTableViewCell getCellIdentifier]
                                  }];
         }
     }
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_add_timespan"),
-                         @"type" : kCellTypeButton
+                         @"type" : [OAButtonCell getCellIdentifier]
                          }];
     _hoursSectionItems = [NSArray arrayWithArray:dataArr];
 }
@@ -216,12 +215,15 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 4;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch (section) {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    switch (section)
+    {
         case _nameSectionIndex:
             return _nameSectionItemCount;
         case _poiSectionIndex:
@@ -236,14 +238,16 @@ static const NSInteger _contactInfoSectionCount = 5;
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == _nameSectionIndex && indexPath.row == 0)
         return _poiNameCell;
     else if (indexPath.section == _contactInfoSectionIndex)
     {
         OATextInputFloatingCell *cell = _contactInfoItems[indexPath.row];
-        switch (indexPath.row) {
+        switch (indexPath.row)
+        {
             case 1:
                 cell.inputField.textView.keyboardType = UIKeyboardTypeNumberPad;
                 break;
@@ -259,37 +263,35 @@ static const NSInteger _contactInfoSectionCount = 5;
         return cell;
     }
     
-    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
+        if (cell)
+        {
             [cell.textView setText:item[@"title"]];
             [cell.descriptionView setText:item[@"value"]];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeButton])
+    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAButtonCell";
-        OAButtonCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
             [cell showImage:NO];
         }
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchDown];
             [cell.button addTarget:self action:@selector(addOpeningHours) forControlEvents:UIControlEventTouchDown];
         }
         return cell;
@@ -304,11 +306,12 @@ static const NSInteger _contactInfoSectionCount = 5;
     [self.navigationController pushViewController:openingHoursSelection animated:YES];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == _nameSectionIndex)
         return MAX(_poiNameCell.inputField.intrinsicContentSize.height, 44.0);
-    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
         return UITableViewAutomaticDimension;
     else if (indexPath.section == _contactInfoSectionIndex)
         return MAX(((OATextInputFloatingCell *)_contactInfoItems[indexPath.row]).inputField.intrinsicContentSize.height, 60.0);
@@ -352,16 +355,17 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeSetting] && indexPath.section == _poiSectionIndex)
+    if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]] && indexPath.section == _poiSectionIndex)
     {
         OAPoiTypeSelectionViewController *detailViewController = [[OAPoiTypeSelectionViewController alloc]
                                                                   initWithType:(indexPath.row == 0 ? CATEGORY_SCREEN : POI_TYPE_SCREEN)];
         detailViewController.dataProvider = _dataProvider;
         [self.navigationController pushViewController:detailViewController animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSetting] && indexPath.section == _hoursSectionIndex)
+    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]] && indexPath.section == _hoursSectionIndex)
     {
         OAOpeningHoursSelectionViewController *openingHoursSelection = [[OAOpeningHoursSelectionViewController alloc] initWithEditData:_poiData openingHours:_openingHours ruleIndex:indexPath.row];
         [self.navigationController pushViewController:openingHoursSelection animated:YES];
@@ -377,7 +381,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
     UIEdgeInsets insets = [[self tableView] contentInset];
-    if (!_isKeyboardShown) {
+    if (!_isKeyboardShown)
+    {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
             [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
         } completion:nil];
@@ -401,11 +406,16 @@ static const NSInteger _contactInfoSectionCount = 5;
     _isKeyboardShown = NO;
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+-(void)clearButtonPressed:(UIButton *)sender
 {
-    NSString *tagName = sender.tag == -1 ? [OAOSMSettings getOSMKey:NAME] : _tagNames[sender.tag];
+    BOOL isNameSection = sender.tag == -1;
+    NSString *tagName = isNameSection ? [OAOSMSettings getOSMKey:NAME] : _tagNames[sender.tag];
     [_poiData removeTag:tagName];
-}
 
+    [self.tableView beginUpdates];
+    OATextInputFloatingCell *cell = isNameSection ? _poiNameCell : (OATextInputFloatingCell *) _contactInfoItems[sender.tag];
+    cell.inputField.text = @"";
+    [self.tableView endUpdates];
+}
 
 @end

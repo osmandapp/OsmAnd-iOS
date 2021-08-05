@@ -75,4 +75,9 @@
     return [_db getPointsHavingTypes:types limit:limit];
 }
 
+- (OAHistoryItem *)getPointByName:(NSString *)name
+{
+    return [_db getPointByName:name];
+}
+
 @end

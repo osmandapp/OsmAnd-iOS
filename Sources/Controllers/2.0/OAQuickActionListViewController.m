@@ -17,10 +17,10 @@
 #import "OAMultiselectableHeaderView.h"
 #import "OASizes.h"
 #import "OAColors.h"
+#import "OATableViewCustomHeaderView.h"
 
 #import <AudioToolbox/AudioServices.h>
 
-#define kHeaderId @"TableViewSectionHeader"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 #define toolbarHeight 64
 
@@ -36,7 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteAction;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 @property (weak, nonatomic) IBOutlet UIButton *btnDone;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeight;
 
 @end
 
@@ -58,10 +58,10 @@
     self.tableView.delegate = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 48.0;
-    [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [self.btnAdd setImage:[[UIImage imageNamed:@"ic_custom_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    [self.btnAdd setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
     [self.btnAdd setTintColor:UIColor.whiteColor];
-    [self.btnEdit setImage:[[UIImage imageNamed:@"ic_custom_edit"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.btnEdit setImage:[UIImage templateImageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];
     self.tableView.tableHeaderView = _tableHeaderView;
     _bottomViewHeight.constant = 0;
@@ -265,7 +265,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    OAMultiselectableHeaderView *vw = (OAMultiselectableHeaderView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OAMultiselectableHeaderView *vw = (OAMultiselectableHeaderView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     [vw setTitleText:[NSString stringWithFormat:OALocalizedString(@"quick_action_screen_header"), section + 1]];
     vw.section = section;
     vw.delegate = self;
@@ -313,10 +313,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAQuickAction *action = [self getAction:indexPath];
-    OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:@"OATitleDescrDraggableCell"];
+    OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:[OATitleDescrDraggableCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleDescrDraggableCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescrDraggableCell getCellIdentifier] owner:self options:nil];
         cell = (OATitleDescrDraggableCell *)[nib objectAtIndex:0];
         cell.descView.hidden = YES;
     }
@@ -331,7 +331,7 @@
         if (action.hasSecondaryIcon)
         {
             CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
-            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             [background setTintColor:UIColor.whiteColor];
             [cell.iconView addSubview:background];
@@ -342,7 +342,7 @@
         }
         cell.delegate = self;
         cell.allowsSwipeWhenEditing = NO;
-        [cell.overflowButton setImage:[[UIImage imageNamed:@"menu_cell_pointer.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [cell.overflowButton setImage:[UIImage templateImageNamed:@"menu_cell_pointer"] forState:UIControlStateNormal];
         [cell.overflowButton setTintColor:UIColorFromRGB(color_tint_gray)];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);

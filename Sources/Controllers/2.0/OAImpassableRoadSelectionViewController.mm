@@ -45,7 +45,7 @@
                                    @"roadId" : @((unsigned long long)r.roadId),
                                    @"descr"  : [OARouteAvoidSettingsViewController getDescr:r],
                                    @"header" : @"",
-                                   @"type"   : @"OAMenuSimpleCell"} ];
+                                   @"type"   : [OAMenuSimpleCell getCellIdentifier]} ];
         }
     }
     
@@ -138,7 +138,7 @@
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
 {
     button.layer.cornerRadius = 6.;
-    [button setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [button setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
     [button setTintColor:color];
 }
 
@@ -282,13 +282,12 @@
     NSDictionary *item = _data[indexPath.row];
     NSString *text = item[@"title"];
     NSString *value = item[@"descr"];
-    if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAMenuSimpleCell";
-        OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         }
         

@@ -41,7 +41,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"map_behavior");
+    self.titleLabel.text = OALocalizedString(@"map_during_navigation");
 }
 
 - (void) viewDidLoad
@@ -86,24 +86,24 @@
         mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_mph")];
 
     NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:@{
-                                    @"type" : @"OASettingsCell",
+                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"choose_auto_follow_route"),
                                     @"value" : autoCenterValue,
                                     @"key" : @"autoCenter"},
                                 @{
-                                    @"type" : @"OASettingsCell",
+                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"auto_zoom_map"),
                                     @"value" : autoZoomValue,
                                     @"key" : @"autoZoom",
                                },
                                @{
-                                    @"type" : @"OASettingsCell",
+                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"map_orientation_change_in_accordance_with_speed"),
                                     @"value" : mapOrientationValue,
                                     @"key" : @"mapOrientation",
                                },
                                @{
-                                    @"type" : @"OASettingSwitchCell",
+                                    @"type" : [OASettingSwitchCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"snap_to_road"),
                                     @"value" : _settings.snapToRoad
                                }, nil];
@@ -115,16 +115,15 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASettingsCell"])
+    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -134,13 +133,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OASettingSwitchCell"])
+    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
@@ -150,10 +148,10 @@
         {
             cell.textView.text = item[@"title"];
             id v = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
+                OACommonBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
             }
             else
@@ -239,9 +237,9 @@
 
     BOOL isChecked = ((UISwitch *) sender).on;
     id v = item[@"value"];
-    if ([v isKindOfClass:[OAProfileBoolean class]])
+    if ([v isKindOfClass:[OACommonBoolean class]])
     {
-        OAProfileBoolean *value = v;
+        OACommonBoolean *value = v;
         [value set:isChecked mode:self.appMode];
     }
     if (self.delegate)

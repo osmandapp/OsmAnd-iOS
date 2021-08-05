@@ -51,6 +51,9 @@
 #import "OATransportRoutingHelper.h"
 #import "OAMainSettingsViewController.h"
 #import "OABaseScrollableHudViewController.h"
+#import "OATopCoordinatesWidget.h"
+#import "OAParkingPositionPlugin.h"
+#import "OAFavoritesHelper.h"
 
 #import <EventKit/EventKit.h>
 
@@ -97,6 +100,10 @@
 #import "OAMapLayers.h"
 #import "OAFavoritesLayer.h"
 #import "OAImpassableRoadsLayer.h"
+#import "OACarPlayActiveViewController.h"
+#import "OASearchUICore.h"
+#import "OASearchPhrase.h"
+#import "OAQuickSearchHelper.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -112,6 +119,10 @@
 #import "OASizes.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OAHistoryViewController.h"
+#import "OAEditPointViewController.h"
+#import "OAGPXDocument.h"
+#import "OARoutePlanningHudViewController.h"
+#import "OAPOIUIFilter.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -126,7 +137,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
@@ -151,7 +162,7 @@ typedef enum
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _mapillaryChangeObserver;
-    
+
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
     OsmAnd::PointI _mainMapTarget31;
@@ -181,6 +192,8 @@ typedef enum
     
     BOOL _reopenSettings;
     OAApplicationMode *_targetAppMode;
+    
+    OACarPlayActiveViewController *_carPlayActiveController;
 }
 
 - (instancetype) init
@@ -215,7 +228,7 @@ typedef enum
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onMapillaryChanged)
                                                           andObserve:_app.data.mapillaryChangeObservable];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
     [_routingHelper addListener:self];
@@ -224,6 +237,12 @@ typedef enum
     
     _toolbars = [NSMutableArray array];
     _topControlsVisible = YES;
+}
+
+// Used if the app was initiated via CarPlay
+- (void) setMapViewController:(OAMapViewController *)mapViewController
+{
+    _mapViewController = mapViewController;
 }
 
 - (void) loadView
@@ -238,11 +257,14 @@ typedef enum
     self.routeInfoView = [[OARouteInfoView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
 
     // Instantiate map view controller
-    _mapViewController = [[OAMapViewController alloc] init];
-    [self addChildViewController:_mapViewController];
-    [self.view addSubview:_mapViewController.view];
-    _mapViewController.view.frame = self.view.frame;
-    _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    if (!_mapViewController)
+    {
+        _mapViewController = [[OAMapViewController alloc] init];
+        [self addChildViewController:_mapViewController];
+        [self.view addSubview:_mapViewController.view];
+        _mapViewController.view.frame = self.view.frame;
+        _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    }
 
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
@@ -278,8 +300,12 @@ typedef enum
     
     [self.targetMenuView setNavigationController:self.navigationController];
 
-    if ([_mapViewController parentViewController] != self)
+    BOOL carPlayActive = OsmAndApp.instance.carPlayActive;
+    if ([_mapViewController parentViewController] != self && !carPlayActive)
         [self doMapRestore];
+    
+    if (carPlayActive)
+        [self onCarPlayConnected];
     
     [[OADiscountHelper instance] checkAndDisplay];
 }
@@ -301,6 +327,9 @@ typedef enum
     
     if (_shadowButton)
         _shadowButton.frame = [self shadowButtonRect];
+    
+    if (_shadeView)
+        _shadeView.frame = CGRectMake(0 - OAUtilities.getLeftMargin, 0, DeviceScreenWidth, DeviceScreenHeight);
 }
  
 @synthesize mapViewController = _mapViewController;
@@ -729,15 +758,19 @@ typedef enum
 
 - (void) closeRouteInfo
 {
-    [self closeRouteInfoWithDuration:.3];
+    [self closeRouteInfo:nil];
 }
 
-- (void) closeRouteInfoWithDuration:(CGFloat)duration
+- (void) closeRouteInfo:(void (^)(void))onComplete
 {
     if (self.routeInfoView.superview)
     {
-        [self.routeInfoView hide:YES duration:duration onComplete:^{
+        [self.routeInfoView hide:YES duration:.2 onComplete:^{
+            [self setTopControlsVisible:YES];
+            [self setBottomControlsVisible:YES menuHeight:0 animated:YES];
             [_hudViewController.quickActionController updateViewVisibility];
+            if (onComplete)
+                onComplete();
         }];
         
         [self destroyShadowButton];
@@ -861,23 +894,28 @@ typedef enum
 
 - (void) showRouteInfo
 {
+    [self showRouteInfo:YES];
+}
+
+- (void) showRouteInfo:(BOOL)fullMenu
+{
     [OAAnalyticsHelper logEvent:@"route_info_open"];
-    
+
     [self removeGestureRecognizers];
-    
+
     if (self.targetMenuView.superview)
     {
         [self hideTargetPointMenu:.2 onComplete:^{
-            [self showRouteInfoInternal];
+            [self showRouteInfoInternal:fullMenu];
         }];
     }
     else
     {
-        [self showRouteInfoInternal];
+        [self showRouteInfoInternal:fullMenu];
     }
 }
 
-- (void) showRouteInfoInternal
+- (void) showRouteInfoInternal:(BOOL)fullMenu
 {
     CGRect frame = self.routeInfoView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
@@ -890,7 +928,7 @@ typedef enum
     [self.view addSubview:self.routeInfoView];
     
     self.sidePanelController.recognizesPanGesture = NO;
-    [self.routeInfoView show:YES onComplete:^{
+    [self.routeInfoView show:YES fullMenu:fullMenu onComplete:^{
         [_hudViewController.quickActionController updateViewVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
@@ -919,6 +957,11 @@ typedef enum
     [self openSearch:OAQuickSearchType::REGULAR];
 }
 
+- (void) openSearch:(NSObject *)object location:(CLLocation *)location
+{
+    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:@"" object:object];
+}
+
 - (void) openSearch:(OAQuickSearchType)searchType
 {
     [self openSearch:searchType location:nil tabIndex:-1];
@@ -926,10 +969,10 @@ typedef enum
 
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex
 {
-    [self openSearch:searchType location:location tabIndex:tabIndex searchQuery:nil];
+    [self openSearch:searchType location:location tabIndex:tabIndex searchQuery:nil object:nil];
 }
 
-- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object
 {
     [OAAnalyticsHelper logEvent:@"search_open"];
     
@@ -983,17 +1026,51 @@ typedef enum
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
     _searchViewController.searchType = searchType;
+
+    if (object)
+    {
+        NSString *objectLocalizedName = searchQuery;
+        OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
+        OASearchResult *sr;
+        OASearchPhrase *phrase;
+
+        if ([object isKindOfClass:[OAPOICategory class]])
+        {
+            objectLocalizedName = ((OAPOICategory *) object).nameLocalized;
+            phrase = [searchUICore resetPhrase:[NSString stringWithFormat:@"%@ ", objectLocalizedName]];
+        }
+        else if ([object isKindOfClass:[OAPOIUIFilter class]])
+        {
+            objectLocalizedName = ((OAPOIUIFilter *) object).name;
+            phrase = [searchUICore resetPhrase];
+        }
+
+        if (phrase)
+        {
+            sr = [[OASearchResult alloc] initWithPhrase:phrase];
+            sr.localeName = objectLocalizedName;
+            sr.object = object;
+            sr.priority = SEARCH_AMENITY_TYPE_PRIORITY;
+            sr.priorityDistance = 0;
+            sr.objectType = POI_TYPE;
+            [searchUICore selectSearchResult:sr];
+        }
+
+        searchQuery = [NSString stringWithFormat:@"%@ ", objectLocalizedName.trim];
+    }
+
     if (searchQuery)
         _searchViewController.searchQuery = searchQuery;
+
     if (tabIndex != -1)
         _searchViewController.tabIndex = tabIndex;
-    
+
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchViewController];
     navController.navigationBarHidden = YES;
     navController.automaticallyAdjustsScrollViewInsets = NO;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
-    
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
+
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
@@ -1187,8 +1264,8 @@ typedef enum
         {
             if (isWaypoint)
             {
-                NSString *path = ((OAGPX *)_activeTargetObj).gpxFileName;
-                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+                NSString *path = ((OAGPX *)_activeTargetObj).gpxFilePath;
+                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:[path lastPathComponent]])
                 {
                     [_mapViewController hideContextPinMarker];
                     return NO;
@@ -1226,7 +1303,7 @@ typedef enum
             }
 
             [self hideTargetPointMenu];
-            [self showRouteInfo];
+            [self showRouteInfo:NO];
             
             return NO;
         }
@@ -1249,8 +1326,8 @@ typedef enum
             }
             else if (!isNone)
             {
-                NSString *path = [OAGPXRouter sharedInstance].gpx.gpxFileName;
-                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+                NSString *path = [OAGPXRouter sharedInstance].gpx.gpxFilePath;
+                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:[path lastPathComponent]])
                 {
                     [_mapViewController hideContextPinMarker];
                     return NO;
@@ -1466,7 +1543,7 @@ typedef enum
             OAGPXItemViewControllerState *gpxItemViewControllerState = (OAGPXItemViewControllerState *)([((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState]);
             gpxItemViewControllerState.showFull = self.targetMenuView.showFull;
             gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
+            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFilePath.length == 0);
             
             _activeViewControllerState = gpxItemViewControllerState;
             break;
@@ -1476,7 +1553,7 @@ typedef enum
         {
             OAGPXEditItemViewControllerState *gpxItemViewControllerState = (OAGPXEditItemViewControllerState *)([((OAGPXEditItemViewController *)self.targetMenuView.customController) getCurrentState]);
             gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
+            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFilePath.length == 0);
             
             _activeViewControllerState = gpxItemViewControllerState;
             break;
@@ -1486,7 +1563,7 @@ typedef enum
         {
             OAGPXRouteViewControllerState *gpxItemViewControllerState = (OAGPXRouteViewControllerState *)([((OAGPXRouteViewController *)self.targetMenuView.customController) getCurrentState]);
             gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
+            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFilePath.length == 0);
             
             _activeViewControllerState = gpxItemViewControllerState;
             break;
@@ -1624,20 +1701,18 @@ typedef enum
 
 - (void) targetPointAddFavorite
 {
-    if ([_mapViewController hasFavoriteAt:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)])
-        return;
-    
-    OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title headerOnly:NO];
-    
-    UIColor* color = [UIColor colorWithRed:favoriteViewController.favorite.favorite->getColor().r/255.0 green:favoriteViewController.favorite.favorite->getColor().g/255.0 blue:favoriteViewController.favorite.favorite->getColor().b/255.0 alpha:1.0];
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-    self.targetMenuView.targetPoint.type = OATargetFavorite;
-    
-    [favoriteViewController activateEditing];
-    
-    [self.targetMenuView setCustomViewController:favoriteViewController needFullMenu:YES];
-    [self.targetMenuView updateTargetPointType:OATargetFavorite];
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:self.targetMenuView.targetPoint.titleAddress pointType:EOAEditPointTypeFavorite];
+    [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (void) targetPointEditFavorite:(OAFavoriteItem *)item
+{
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithFavorite:item];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (void) targetPointShare
@@ -1667,11 +1742,21 @@ typedef enum
     {
         if (self.targetMenuView.targetPoint.type != OATargetDestination && self.targetMenuView.targetPoint.type != OATargetParking)
             return;
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[OADestinationsHelper instance] addHistoryItem:_targetDestination];
-            [[OADestinationsHelper instance] removeDestination:_targetDestination];
-        });
+        
+        if (self.targetMenuView.targetPoint.type == OATargetParking)
+        {
+            OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+            if (plugin)
+                [plugin clearParkingPosition];
+            [self targetHideContextPinMarker];
+        }
+        else
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[OADestinationsHelper instance] addHistoryItem:_targetDestination];
+                [[OADestinationsHelper instance] removeDestination:_targetDestination];
+            });
+        }
     }
     else if (self.targetMenuView.targetPoint.type == OATargetImpassableRoad)
     {
@@ -1683,7 +1768,7 @@ typedef enum
             [_mapViewController hideContextPinMarker];
         }
     }
-    else
+    else if (self.targetMenuView.targetPoint.type != OATargetParking)
     {
         OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
 
@@ -1721,12 +1806,13 @@ typedef enum
     NSMutableArray *paths = [NSMutableArray array];
     
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    for (NSString *fileName in settings.mapSettingVisibleGpx)
+    for (NSString *filePath in settings.mapSettingVisibleGpx.get)
     {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
         {
-            [names addObject:[fileName stringByDeletingPathExtension]];
+            [names addObject:[filePath.lastPathComponent stringByDeletingPathExtension]];
             [paths addObject:path];
         }
     }
@@ -1739,7 +1825,7 @@ typedef enum
             if (_activeTargetObj)
             {
                 OAGPX *gpx = (OAGPX *)_activeTargetObj;
-                NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
+                NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
                 [self targetPointAddWaypoint:path];
             }
             else
@@ -1803,34 +1889,21 @@ typedef enum
 
 - (void) targetPointAddWaypoint:(NSString *)gpxFileName
 {
-    OAGPXWptViewController *wptViewController = [[OAGPXWptViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title gpxFileName:gpxFileName];
-    
-    wptViewController.mapViewController = self.mapViewController;
-    wptViewController.wptDelegate = self;
-    
-    [_mapViewController addNewWpt:wptViewController.wpt.point gpxFileName:gpxFileName];
-    wptViewController.wpt.groups = _mapViewController.foundWptGroups;
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:gpxFileName pointType:EOAEditPointTypeWaypoint];
+    controller.gpxWptDelegate = self;
+    [self presentViewController:controller animated:YES completion:nil];
+}
 
-    UIColor* color = wptViewController.wpt.color;
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    
-    self.targetMenuView.targetPoint.type = OATargetWpt;
-    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-    self.targetMenuView.targetPoint.targetObj = wptViewController.wpt;
-    
-    [wptViewController activateEditing];
-    
-    [self.targetMenuView setCustomViewController:wptViewController needFullMenu:YES];
-    [self.targetMenuView updateTargetPointType:OATargetWpt];
-    
-    if (_activeTargetType == OATargetGPXEdit)
-        wptViewController.navBarBackground.backgroundColor = UIColorFromRGB(0x4caf50);
-
-    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
-    {
-        [OAAppSettings sharedManager].mapSettingShowRecordingTrack = YES;
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
-    }
+- (void) targetPointEditWaypoint:(OAGpxWptItem *)item
+{
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    item.groups = _mapViewController.foundWptGroups;
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithGpxWpt:item];
+    controller.gpxWptDelegate = self;
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (void) targetHideContextPinMarker
@@ -1862,7 +1935,17 @@ typedef enum
 - (void) targetOpenRouteSettings
 {
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showRoutePreferences];
+    if (!self.targetMenuView.skipOpenRouteSettings)
+        [self showRoutePreferences];
+    else
+        self.targetMenuView.skipOpenRouteSettings = NO;
+}
+
+- (void) targetOpenPlanRoute
+{
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude]]];
 }
 
 - (void) targetGoToPoint
@@ -1996,8 +2079,6 @@ typedef enum
             [self.targetMenuView doInit:showFullMenu];
             
             OAGPXWptViewController *wptViewController = (OAGPXWptViewController *) controller;
-            if (_activeTargetType == OATargetGPXEdit)
-                [wptViewController activateEditing];
             
             wptViewController.mapViewController = self.mapViewController;
             wptViewController.wptDelegate = self;
@@ -2163,6 +2244,15 @@ typedef enum
 - (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left
 {
     [self.hudViewController updateRulerPosition:bottom left:left];
+}
+
+- (void) targetOpenAvoidRoad
+{
+    [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude] skipWritingSettings:NO appModeKey:nil];
+    self.targetMenuView.skipOpenRouteSettings = YES;
+    [self openTargetViewWithImpassableRoadSelection];
+    if (self.targetMenuView.customController.delegate)
+        [self.targetMenuView.customController.delegate requestFullMode];
 }
 
 - (void) hideTargetPointMenu
@@ -2381,10 +2471,10 @@ typedef enum
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
-    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if (!lang)
         lang = @"";
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     
     NSString *caption = name.length == 0 ? [address getName:lang transliterate:transliterate] : name;
     NSString *description = typeName.length == 0 ?  [address getAddressTypeName] : typeName;
@@ -3116,11 +3206,26 @@ typedef enum
 
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset
 {
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom bottomInset:bottomInset leftInset:leftInset animated:YES];
+}
+
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset animated:(BOOL)animated
+{
     OAToolbarViewController *toolbar = [self getTopToolbar];
     CGFloat topInset = 0.0;
     if (toolbar && [toolbar.navBarView superview])
         topInset = toolbar.navBarView.frame.size.height;
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset animated:animated];
+}
 
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset
+{
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset animated:YES];
+}
+
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset animated:(BOOL)animated
+{
     OAGpxBounds bounds;
     bounds.topLeft = topLeft;
     bounds.bottomRight = bottomRight;
@@ -3131,8 +3236,7 @@ typedef enum
         return;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+	
     _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox] : zoom);
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     
@@ -3154,15 +3258,15 @@ typedef enum
     targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     if (bottomInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
     }
     else if (topInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
     }
     else if (leftInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:0 centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:0 centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
     }
 }
 
@@ -3236,6 +3340,24 @@ typedef enum
     [self updateToolbar];
 }
 
+- (void)showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude
+{
+    BOOL searchNearMapCenter = NO;
+    OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latitude, longitude));
+    OAMapRendererView* mapView = _mapViewController.mapView;
+    double distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
+
+    if (!_searchViewController)
+        _searchViewController = [[OAQuickSearchViewController alloc] init];
+
+    _searchViewController.myLocation = myLocation;
+    _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
+    _searchViewController.searchNearMapCenter = searchNearMapCenter;
+
+    [_searchViewController setupBarActionView:BarActionShowOnMap title:filter.name];
+    [_searchViewController showToolbar:filter];
+}
+
 #pragma mark - OAToolbarViewControllerProtocol
 
 - (CGFloat) toolbarTopPosition
@@ -3250,6 +3372,32 @@ typedef enum
 
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
+        BOOL isCoordinatesVisible = [self.hudViewController.topCoordinatesWidget isVisible];
+        
+        CGFloat coordinateWidgetHeight = self.hudViewController.topCoordinatesWidget.frame.size.height;
+        CGFloat markersLandscapeWidth = DeviceScreenWidth / 2;
+        
+        CGFloat coordinateWidgetTopOffset;
+        CGFloat markersHeaderLeftOffset;
+        CGFloat markersHeaderWidth;
+        
+        if (isCoordinatesVisible)
+        {
+            coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : coordinateWidgetHeight;
+            CGFloat horisontalLeftOffset = [toolbarController.view isDirectionRTL] ? OAUtilities.getLeftMargin : DeviceScreenWidth / 2;
+            markersHeaderLeftOffset = [OAUtilities isLandscape] ? horisontalLeftOffset : 0;
+            markersHeaderWidth = [OAUtilities isLandscape] ? (DeviceScreenWidth / 2 - OAUtilities.getLeftMargin) : DeviceScreenWidth;
+        }
+        else
+        {
+            coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : 0;
+            markersHeaderLeftOffset = [OAUtilities isLandscape] ? ((DeviceScreenWidth - markersLandscapeWidth) / 2) : 0;
+            markersHeaderWidth = [OAUtilities isLandscape] ? markersLandscapeWidth : DeviceScreenWidth;
+        }
+        
+        _destinationViewController.view.frame = CGRectMake( markersHeaderLeftOffset - OAUtilities.getLeftMargin, coordinateWidgetTopOffset + self.hudViewController.statusBarView.frame.size.height, markersHeaderWidth, 50);
+        _destinationViewController.titleLabel.frame = CGRectMake( 0, 0, markersHeaderWidth, 44);
+        
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
         
         CGFloat bottomMargin = [OAUtilities getBottomMargin];
@@ -3258,7 +3406,7 @@ typedef enum
         cardsController.rightTableViewPadding.constant = 8 + OAUtilities.getLeftMargin;
         cardsController.leftToolbarPadding.constant = OAUtilities.getLeftMargin;
         cardsController.rightToolbarPadding.constant = OAUtilities.getLeftMargin;
-        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
         CGFloat h = DeviceScreenHeight - y;
         CGFloat w = DeviceScreenWidth;
         
@@ -3270,7 +3418,7 @@ typedef enum
             cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
                 cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
-                _shadeView.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
+                _shadeView.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, 0, DeviceScreenWidth, DeviceScreenHeight);
                 _shadeView.alpha = 1.0;
                 [cardsController.tableView reloadData];
             }];
@@ -3309,52 +3457,27 @@ typedef enum
 
 - (void) addParking:(OAParkingViewController *)sender
 {
-    OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:sender.coord.latitude longitude:sender.coord.longitude];
-    
-    destination.parking = YES;
-    destination.carPickupDateEnabled = sender.timeLimitActive;
-    if (sender.timeLimitActive)
-        destination.carPickupDate = sender.date;
-    else
-        destination.carPickupDate = nil;
-    
-    UIColor *color = [_destinationViewController addDestination:destination];
-    if (color)
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getEnabledPlugin:OAParkingPositionPlugin.class];
+    if (plugin)
     {
+        [plugin addOrRemoveParkingEvent:sender.addToCalActive];
+        [plugin setParkingTime:sender.timeLimitActive ? ([sender.date timeIntervalSince1970] * 1000) : -1];
+        [plugin setParkingPosition:sender.coord.latitude longitude:sender.coord.longitude limited:sender.timeLimitActive];
+        
         if (sender.timeLimitActive && sender.addToCalActive)
-            [OADestinationsHelper addParkingReminderToCalendar:destination];
+            [OAFavoritesHelper addParkingReminderToCalendar];
+        
+        [OAFavoritesHelper setParkingPoint:sender.coord.latitude lon:sender.coord.longitude address:nil pickupDate:sender.timeLimitActive ? sender.date : nil addToCalendar:sender.addToCalActive];
         
         [_mapViewController hideContextPinMarker];
         [self hideTargetPointMenu];
     }
-    else
-    {
-        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_marker") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
-         ] show];
-    }
-}
-
-- (void) saveParking:(OAParkingViewController *)sender parking:(OADestination *)parking
-{
-    parking.carPickupDateEnabled = sender.timeLimitActive;
-    if (sender.timeLimitActive)
-        parking.carPickupDate = sender.date;
-    else
-        parking.carPickupDate = nil;
-    
-    if (parking.eventIdentifier)
-        [OADestinationsHelper removeParkingReminderFromCalendar:parking];
-    
-    if (sender.timeLimitActive && sender.addToCalActive)
-        [OADestinationsHelper addParkingReminderToCalendar:parking];
-    
-    [_destinationViewController updateDestinations];
-    [self hideTargetPointMenu];
 }
 
 - (void) cancelParking:(OAParkingViewController *)sender
 {
     [self hideTargetPointMenu];
+    
 }
 
 #pragma mark - OAGPXWptViewControllerDelegate
@@ -3368,8 +3491,12 @@ typedef enum
 
 - (void)openWiki:(OAWikiMenuViewController *)sender
 {
-    OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithLocalizedContent:self.targetMenuView.targetPoint.localizedContent localizedNames:self.targetMenuView.targetPoint.localizedNames];
-    [self.navigationController pushViewController:wikiWeb animated:YES];
+    id obj = self.targetMenuView.targetPoint.targetObj;
+    if ([obj isKindOfClass:OAPOI.class])
+    {
+        OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithPoi:(OAPOI *) obj];
+        [self.navigationController pushViewController:wikiWeb animated:YES];
+    }
 }
 
 #pragma mark - OADestinationViewControllerProtocol
@@ -3392,8 +3519,7 @@ typedef enum
     if (!cardsController.view.superview)
     {
         [self hideTargetPointMenu];
-
-        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
         CGFloat h = DeviceScreenHeight - y;
         CGFloat w = DeviceScreenWidth;
         CGFloat toolbarHeight = cardsController.toolBarHeight.constant;
@@ -3441,7 +3567,7 @@ typedef enum
     
     if (cardsController.view.superview)
     {
-        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
         CGFloat h = DeviceScreenHeight - y;
         CGFloat w = DeviceScreenWidth;
         CGFloat cardsTableHeight = h - cardsController.toolBarHeight.constant;
@@ -3509,10 +3635,7 @@ typedef enum
     NSString *caption = destination.desc;
     UIImage *icon = [UIImage imageNamed:destination.markerResourceName];
     
-    if (destination.parking)
-        targetPoint.type = OATargetParking;
-    else
-        targetPoint.type = OATargetDestination;
+    targetPoint.type = OATargetDestination;
     
     targetPoint.targetObj = destination;
     
@@ -3542,8 +3665,13 @@ typedef enum
 
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
+    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight animated:YES];
+}
+
+- (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight animated:(BOOL)animated
+{
     BOOL landscape = [self.targetMenuView isLandscape];
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0];
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0 animated:NO];
 }
 
 - (void) onNavigationClick:(BOOL)hasTargets
@@ -3593,8 +3721,8 @@ typedef enum
     if ([_routingHelper isFollowingMode])
     {
         [self switchToRouteFollowingLayout];
-        if (_settings.applicationMode != [_routingHelper getAppMode])
-            _settings.applicationMode = [_routingHelper getAppMode];
+        if (_settings.applicationMode.get != [_routingHelper getAppMode])
+            [_settings setApplicationModePref:[_routingHelper getAppMode]];
 
         if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
             [_app.locationServices.locationSimulation startStopRouteAnimation];
@@ -3608,9 +3736,10 @@ typedef enum
         else
         {
             //app.logEvent(mapActivity, "start_navigation");
-            _settings.applicationMode = [_routingHelper getAppMode];
+            [_settings setApplicationModePref:[_routingHelper getAppMode] markAsLastUsed:NO];
             [_mapViewTrackingUtilities backToLocationImpl:17 forceZoom:YES];
-            _settings.followTheRoute = YES;
+            [_settings.followTheRoute set:YES];
+            [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
             [_routingHelper setFollowingMode:true];
             [_routingHelper setRoutePlanningMode:false];
             [_mapViewTrackingUtilities switchToRoutePlanningMode];
@@ -3711,6 +3840,71 @@ typedef enum
 
 - (void) routeWasFinished
 {
+}
+
+#pragma mark - CarPlay related actions
+
+- (void) onCarPlayConnected
+{
+    if (_carPlayActiveController && _carPlayActiveController.presentingViewController == self)
+        return;
+    _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
+    _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:_carPlayActiveController animated:YES completion:nil];
+}
+
+- (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete
+{
+    [_carPlayActiveController dismissViewControllerAnimated:YES completion:^{
+        _carPlayActiveController = nil;
+        if (onComplete)
+            onComplete();
+    }];
+}
+
+#pragma mark - OAGpxWptEditingHandlerDelegate
+
+- (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
+{
+    [_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName];
+
+    gpxWpt.groups = _mapViewController.foundWptGroups;
+
+    UIColor* color = gpxWpt.color;
+    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+
+    self.targetMenuView.targetPoint.type = OATargetWpt;
+    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+    self.targetMenuView.targetPoint.targetObj = gpxWpt;
+
+    [self.targetMenuView updateTargetPointType:OATargetWpt];
+    [self.targetMenuView applyTargetObjectChanges];
+
+    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    {
+        [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+}
+
+- (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+{
+    [_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap];
+    [self.targetMenuView applyTargetObjectChanges];
+}
+
+- (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath
+{
+    [_mapViewController deleteWpts:@[gpxWptItem] docPath:docPath];
+}
+
+- (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
+{
+    if (gpxWptItem.point.wpt != nullptr)
+    {
+        [OAGPXDocument fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
+        [_mapViewController saveFoundWpt];
+    }
 }
 
 @end

@@ -379,6 +379,18 @@
     return [_poiTypesByName objectForKey:name];
 }
 
+- (OAPOIType *) getPoiTypeByKey:(NSString *)name
+{
+    for (NSInteger i = 0; i < _poiCategories.count; i++)
+    {
+        OAPOICategory *pc = _poiCategories[i];
+        OAPOIType *pt = [pc getPoiTypeByKeyName:name];
+        if (pt != nil && !pt.reference)
+            return pt;
+    }
+    return nil;
+}
+
 - (OAPOIBaseType *) getAnyPoiTypeByName:(NSString *)name
 {
     for (OAPOICategory *pc in _poiCategories)
@@ -537,6 +549,22 @@
     return nil;
 }
 
+- (NSArray<NSString *> *)getAllAvailableWikiLocales
+{
+    NSMutableArray<NSString *> *availableWikiLocales = [NSMutableArray new];
+    for (OAPOIType *type in [[self getOsmwiki] getPoiTypeByKeyName:@"wiki_place"].poiAdditionals)
+    {
+        NSString *name = type.name;
+        NSString *wikiLang = [NSString stringWithFormat:@"wiki_lang%@", @":"];
+        if (name && [name hasPrefix:wikiLang])
+        {
+            NSString *locale = [name substringFromIndex:wikiLang.length];
+            [availableWikiLocales addObject:locale];
+        }
+    }
+    return availableWikiLocales;
+}
+
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters
 {
     NSMutableArray<OAPOIBaseType *> *lf = [NSMutableArray array];
@@ -595,7 +623,7 @@
     
     _limitCounter = _searchLimit;
     
-    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     
     if (_radius == 0.0)
     {
@@ -680,7 +708,7 @@
         
         _limitCounter = _searchLimit;
         
-        _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+        _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         
         const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
         
@@ -762,16 +790,22 @@
     
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
     search->performSearch(*searchCriteria,
-                          [&arr, &tagName, &name, &location]
+                          [&arr, &tagName, &name, &location, &processedPoi]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                              OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
-                              if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.nameLocalized isEqualToString:name]))
+                              const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                              if (![processedPoi containsObject:@(am->id.id)])
                               {
-                                  const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                  poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, amenity->position31);
-                                  [arr addObject:poi];
+                                  [processedPoi addObject:@(am->id.id)];
+                                  OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
+                                  if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.nameLocalized isEqualToString:name]))
+                                  {
+                                      const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                      poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, amenity->position31);
+                                      [arr addObject:poi];
+                                  }
                               }
                           },
                           ctrl);
@@ -955,23 +989,27 @@
         OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
         OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
         searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
-        
+        NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
         const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
         search->performSearch(*searchCriteria,
-                              [&arr, &filter, &matcher]
+                              [&arr, &filter, &matcher, &processedPoi]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
-                                  const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                  OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
-                                  if (type && [filter accept:type.category subcategory:type.name])
+                                  const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                  if (![processedPoi containsObject:@(amenity->id.id)])
                                   {
-                                      OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity type:type];
-                                      if (poi)
+                                      [processedPoi addObject:@(amenity->id.id)];
+                                      OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
+                                      if (type && [filter accept:type.category subcategory:type.name])
                                       {
-                                          if (matcher)
-                                              [matcher publish:poi];
-                                          
-                                          [arr addObject:poi];
+                                          OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity type:type];
+                                          if (poi)
+                                          {
+                                              if (matcher)
+                                                  [matcher publish:poi];
+                                              
+                                              [arr addObject:poi];
+                                          }
                                       }
                                   }
                               },
@@ -1118,7 +1156,7 @@
 
     if (names.count == 0)
     {
-        NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+        NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         NSString *transliterated = type.nameLocalized && type.nameLocalized.length > 0 ? OsmAnd::ICU::transliterateToLatin(QString::fromNSString(type.nameLocalized)).toNSString() : @"";
         [names setObject:transliterated forKey:@""];
         [names setObject:type.nameLocalized forKey:lang ? lang : @""];
@@ -1127,6 +1165,36 @@
     poi.localizedNames = names;
     
     return poi;
+}
+
++ (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter
+{
+    UIImage *customFilterIcon = nil;
+    if (filter != nil)
+    {
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
+        NSArray<OAPOICategory *> *categories = [NSArray arrayWithArray:acceptedTypes.keyEnumerator.allObjects];
+        if (categories.count == 1)
+        {
+            OAPOICategory *category = categories[0];
+            NSMutableSet<NSString *> *filters = [acceptedTypes objectForKey:category];
+            if (filters != nil && filters.count == 1)
+            {
+                NSString *filterName = filters.allObjects[0];
+                OAPOIBaseType *customFilter = [[OAPOIHelper sharedInstance] getAnyPoiTypeByName:filterName];
+                customFilterIcon = customFilter.icon;
+            }
+            else
+            {
+                customFilterIcon = category.icon;
+            }
+        }
+        else
+        {
+            customFilterIcon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+        }
+    }
+    return customFilterIcon;
 }
 
 - (BOOL) breakSearch
@@ -1197,8 +1265,8 @@
 
 + (NSString *)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(QString)nativeName names:(NSMutableDictionary *)names
 {
-    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage;
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
 
     const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString::null);
     QString nameLocalized;

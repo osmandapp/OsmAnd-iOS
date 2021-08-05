@@ -17,7 +17,6 @@
 #import "OASizes.h"
 #import "OAUtilities.h"
 
-#define kHeaderId @"TableViewSectionHeader"
 #define kSidePadding 16
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 #define kDescriptionStringSection 1
@@ -162,16 +161,16 @@
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [otherArr addObject:@{
-        @"type" : @"OAOnlyImageViewCell",
+        @"type" : [OAOnlyImageViewCell getCellIdentifier],
         @"icon" : [self getParameterImage:parameter],
     }];
     [parametersArr addObject:@{
-        @"type" : @"OAInputCellWithTitle",
+        @"type" : [OAInputCellWithTitle getCellIdentifier],
         @"title" : [self getMeasurementUnit:parameter],
         @"value" : [_measurementValue isEqualToString:OALocalizedString(@"sett_no_ext_input")] ? @"0" : _measurementValue,
     }];
     [parametersArr addObject:@{
-        @"type" : @"OAHorizontalCollectionViewCell",
+        @"type" : [OAHorizontalCollectionViewCell getCellIdentifier],
         @"selectedValue" : _selectedParameter,
         @"values" : _measurementRangeStringArr,
     }];
@@ -201,7 +200,7 @@
     }
     if (_selectedParameter.intValue != -1)
         _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
-    OAProfileString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
+    OACommonString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
     [property set:_measurementValue mode:self.appMode];
     [self dismissViewController];
     if (self.delegate)
@@ -212,13 +211,12 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OAOnlyImageViewCell"])
+    if ([cellType isEqualToString:[OAOnlyImageViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAOnlyImageViewCell";
-        OAOnlyImageViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAOnlyImageViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAOnlyImageViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAOnlyImageViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAOnlyImageViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -228,14 +226,14 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OAInputCellWithTitle"])
+    else if ([cellType isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAInputCellWithTitle";
-        OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:[OAInputCellWithTitle getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputCellWithTitle getCellIdentifier] owner:self options:nil];
             cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
             cell.inputField.tintColor = UIColorFromRGB(color_primary_purple);
@@ -249,13 +247,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OAHorizontalCollectionViewCell"])
+    else if ([cellType isEqualToString:[OAHorizontalCollectionViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAHorizontalCollectionViewCell";
-        OAHorizontalCollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAHorizontalCollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAHorizontalCollectionViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHorizontalCollectionViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAHorizontalCollectionViewCell *)[nib objectAtIndex:0];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -342,7 +339,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OAInputCellWithTitle"])
+    if ([item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
     {
         OAInputCellWithTitle *cell = (OAInputCellWithTitle *) [tableView cellForRowAtIndexPath:indexPath];
         if (cell.inputField.isFirstResponder)

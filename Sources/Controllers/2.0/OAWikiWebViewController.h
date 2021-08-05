@@ -10,6 +10,8 @@
 
 #import <WebKit/WebKit.h>
 
+@class OAPOI;
+
 @interface OAWikiWebViewController : OACompoundViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
@@ -20,9 +22,6 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
 @property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 
-@property (nonatomic, readonly) NSDictionary *localizedNames;
-@property (nonatomic, readonly) NSDictionary *localizedContent;
-
-- (id)initWithLocalizedContent:(NSDictionary *)localizedContent localizedNames:(NSDictionary *)localizedNames;
+- (id)initWithPoi:(OAPOI *)poi;
 
 @end

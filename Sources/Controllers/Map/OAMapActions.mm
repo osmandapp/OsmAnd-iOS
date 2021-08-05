@@ -66,20 +66,33 @@
 - (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
-    _settings.useIntermediatePointsNavigation = useIntermediatePointsByDefault;
+    [self enterRoutePlanningModeGivenGpx:[self getGpxDocumentByGpx:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
+}
+
+- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
+{
+    [self enterRoutePlanningModeGivenGpx:gpxFile appMode:nil path:path from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
+}
+
+- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile appMode:(OAApplicationMode *)appMode path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
+{
+    [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     
-    OAApplicationMode *mode = [self getRouteMode];
+    OAApplicationMode *mode = appMode ? appMode : [self getRouteMode];
     [_routingHelper setAppMode:mode];
     [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
     // save application mode controls
-    _settings.followTheRoute = NO;
+    [_settings.followTheRoute set:NO];
+    [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
     [_routingHelper setFollowingMode:false];
     [_routingHelper setRoutePlanningMode:true];
     // reset start point
     [targets setStartPoint:from updateRoute:NO name:fromName];
     // then set gpx
-    [self setGPXRouteParams:gpxFile];
+    [self setGPXRouteParamsWithDocument:gpxFile path:path];
     // then update start and destination point
     [targets updateRouteAndRefresh:true];
     
@@ -94,61 +107,69 @@
     }
 }
 
-- (void) setGPXRouteParams:(OAGPX *)result
+- (void) setGPXRouteParamsWithDocument:(OAGPXDocument *)doc path:(NSString *)path
 {
-    if (!result)
+    if (!doc)
     {
         [_routingHelper setGpxParams:nil];
-        _settings.followTheGpxRoute = nil;
+        [_settings.followTheGpxRoute set:nil];
     }
     else
     {
-        const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:result.gpxFileName];
-        QString qPath = QString::fromNSString(path);
-        OAGPXDocument *doc = nil;
-        if (gpxMap.contains(qPath))
-        {
-            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(gpxMap[qPath]);
-            doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-            doc.fileName = result.gpxFileName;
-        }
-        else
-        {
-            doc = [[OAGPXDocument alloc] initWithGpxFile:path];
-        }
-
         OAGPXRouteParamsBuilder *params = [[OAGPXRouteParamsBuilder alloc] initWithDoc:doc];
         if ([doc hasRtePt] && ![doc hasTrkPt])
-            _settings.gpxCalculateRtept = true;
+            [_settings.gpxCalculateRtept set:YES];
         else
-            _settings.gpxCalculateRtept = false;
-
-        [params setCalculateOsmAndRouteParts:_settings.gpxRouteCalcOsmandParts];
-        [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept];
-        [params setCalculateOsmAndRoute:_settings.gpxRouteCalc];
+            [_settings.gpxCalculateRtept set:NO];
+        
+        [params setCalculateOsmAndRouteParts:_settings.gpxRouteCalcOsmandParts.get];
+        [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept.get];
+        [params setCalculateOsmAndRoute:_settings.gpxRouteCalc.get];
+        [params setSelectedSegment:_settings.gpxRouteSegment.get];
         NSArray<CLLocation *> *ps = [params getPoints];
         [_routingHelper setGpxParams:params];
-        _settings.followTheGpxRoute = path;
+        [_settings.followTheGpxRoute set:path];
         if (ps.count > 0)
         {
-            CLLocation *loc = ps[ps.count - 1];
             OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
+            [tg clearStartPoint:NO];
+            CLLocation *loc = ps.lastObject;
             [tg navigateToPoint:loc updateRoute:false intermediate:-1];
-//            if (![tg getPointToStart])
-//            {
-            loc = ps[0];
-            [tg setStartPoint:loc updateRoute:false name:nil];
-//            }
         }
     }
+}
+
+- (OAGPXDocument *) getGpxDocumentByGpx:(OAGPX *)gpx
+{
+    OAGPXDocument* doc = nil;
+    const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
+    NSString * path;
+    path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+    QString qPath = QString::fromNSString(path);
+    if (gpxMap.contains(qPath))
+    {
+        auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(gpxMap[qPath]);
+        doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+        doc.path = path;
+    }
+    else
+    {
+        doc = [[OAGPXDocument alloc] initWithGpxFile:path];
+    }
+    return doc;
+}
+
+- (void) setGPXRouteParams:(OAGPX *)result
+{
+    OAGPXDocument* doc = [self getGpxDocumentByGpx:result];
+    [self setGPXRouteParamsWithDocument:doc path:doc.path];
 }
 
 
 - (OAApplicationMode *) getRouteMode
 {
-    OAApplicationMode *selected = _settings.applicationMode;
-    OAApplicationMode *mode = _settings.defaultApplicationMode;
+    OAApplicationMode *selected = _settings.applicationMode.get;
+    OAApplicationMode *mode = _settings.defaultApplicationMode.get;
     if (selected != [OAApplicationMode DEFAULT])
     {
         mode = selected;

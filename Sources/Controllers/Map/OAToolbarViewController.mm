@@ -34,6 +34,11 @@
     return 0;
 }
 
+- (EOAToolbarAttentionLevel) getAttentionLevel
+{
+    return EOAToolbarAttentionLevelNormal;
+}
+
 - (void) onViewWillAppear:(EOAMapHudType)mapHudType
 {
 }

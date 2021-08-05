@@ -31,10 +31,6 @@
 
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
-#define kBottomSheetHeaderButtonCell @"OABottomSheetHeaderButtonCell"
-#define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
-#define kDescrTitleCell @"OADescrTitleCell"
-#define kDividerCell @"OADividerCell"
 
 @interface OAPluginResetBottomSheetScreen ()
 
@@ -78,7 +74,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-                     @"type" : kBottomSheetHeaderButtonCell,
+                     @"type" : [OABottomSheetHeaderButtonCell getCellIdentifier],
                      @"title" : OALocalizedString(@"reset_to_default"),
                      @"description" : @"",
                      @"img" : @"ic_custom_reset.png"
@@ -87,7 +83,7 @@
     
     [arr removeAllObjects];
     [arr addObject:@{
-           @"type" : kTitleTwoIconsRoundCell,
+           @"type" : [OATitleTwoIconsRoundCell getCellIdentifier],
            @"title" : _appMode.toHumanString,
            @"img" : _appMode.getIconName,
            @"color" : UIColorFromRGB(_appMode.getIconColor),
@@ -99,11 +95,11 @@
     
     [arr removeAllObjects];
     [arr addObject:@{
-                     @"type" : kDescrTitleCell,
+                     @"type" : [OADescrTitleCell getCellIdentifier],
                      @"title" : OALocalizedString(@"reset_profile_action_descr"),
                      @"description" : @""
                      }];
-    [arr addObject:@{ @"type" : kDividerCell } ];
+    [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     [model addObject:[NSArray arrayWithArray:arr]];
 
     _data = [NSArray arrayWithArray:model];
@@ -122,15 +118,15 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kBottomSheetHeaderButtonCell] || [type isEqualToString:kDescrTitleCell])
+    if ([type isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]] || [type isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([type isEqualToString:kTitleTwoIconsRoundCell])
+    else if ([type isEqualToString:[OATitleTwoIconsRoundCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([type isEqualToString:kDividerCell])
+    else if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(0, 0, 8, 0)];
     }
@@ -157,13 +153,13 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:kBottomSheetHeaderButtonCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetHeaderButtonCell;
+        NSString* const identifierCell = [OABottomSheetHeaderButtonCell getCellIdentifier];
         OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetHeaderButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -172,22 +168,20 @@
         if (cell)
         {
             cell.titleView.text = item[@"title"];
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             cell.iconView.hidden = !cell.iconView.image;
-            [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.closeButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.closeButton addTarget:self action:@selector(onCloseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleTwoIconsRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleTwoIconsRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleTwoIconsRoundCell;
         OATitleTwoIconsRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleTwoIconsRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleTwoIconsRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleTwoIconsRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleTwoIconsRoundCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
@@ -198,7 +192,7 @@
             cell.titleView.text = item[@"title"];
             if (![item[@"skip_tint"] boolValue])
             {
-                [cell.leftIconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                [cell.leftIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
                 cell.leftIconView.tintColor = item[@"color"];
                 cell.rightIconView.hidden = YES;
             }
@@ -211,13 +205,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kDescrTitleCell])
+    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:kDescrTitleCell];
+        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDescrTitleCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;
@@ -232,13 +226,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kDividerCell])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kDividerCell;
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDividerCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);

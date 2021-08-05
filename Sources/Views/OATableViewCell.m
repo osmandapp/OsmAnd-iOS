@@ -8,9 +8,6 @@
 
 #import "OATableViewCell.h"
 
-#define _(name) OATableViewCell__##name
-#define inflate _(inflate)
-
 @implementation OATableViewCell
 {
     UITableView* __weak _tableView;

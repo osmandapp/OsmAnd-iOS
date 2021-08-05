@@ -182,7 +182,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         [self showDiscountBanner];
     
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    if ([OAAppSettings sharedManager].settingDoNotShowPromotions || currentTime - _lastCheckTime < 60 * 60 * 24 || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if ([OAAppSettings sharedManager].settingDoNotShowPromotions.get || currentTime - _lastCheckTime < 60 * 60 * 24 || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
     {
         return;
     }
@@ -303,20 +303,20 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 int discountId = [self getDiscountId:message description:description start:start end:end];
-                BOOL discountChanged = settings.discountId != discountId;
+                BOOL discountChanged = settings.discountId.get != discountId;
                 if (discountChanged)
-                    settings.discountTotalShow = 0;
+                    [settings.discountTotalShow set:0];
                 
                 if (discountChanged
-                    || execCount - settings.discountShowNumberOfStarts >= showStartFrequency
-                    || [date timeIntervalSince1970] - settings.discountShowDatetime > 60 * 60 * 24 * showDayFrequency)
+                    || execCount - settings.discountShowNumberOfStarts.get >= showStartFrequency
+                    || [date timeIntervalSince1970] - settings.discountShowDatetime.get > 60 * 60 * 24 * showDayFrequency)
                 {
-                    if (settings.discountTotalShow < maxTotalShow)
+                    if (settings.discountTotalShow.get < maxTotalShow)
                     {
-                        settings.discountId = discountId;
-                        settings.discountTotalShow = settings.discountTotalShow + 1;
-                        settings.discountShowNumberOfStarts = execCount;
-                        settings.discountShowDatetime = [date timeIntervalSince1970];
+                        [settings.discountId set:discountId];
+                        [settings.discountTotalShow set:settings.discountTotalShow.get + 1];
+                        [settings.discountShowNumberOfStarts set:execCount];
+                        [settings.discountShowDatetime set:[date timeIntervalSince1970]];
                         
                         _title = message ? message : @"";
                         _description = description ? description : @"";
@@ -333,18 +333,13 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                             if (!product && inAppId && [identifier hasSuffix:inAppId])
                             {
                                 product = p;
-#if !defined(OSMAND_IOS_DEV)
                                 if ([p isPurchased])
                                     return;
-#endif
                             }
-                            
-#if !defined(OSMAND_IOS_DEV)
                             if (purchasedInApps)
                                 for (NSString *purchased in purchasedInApps)
                                     if ([identifier hasSuffix:purchased] && [p isPurchased])
                                         return;
-#endif
                         }
                         _product = product;
                         
@@ -413,7 +408,6 @@ const static NSString *URL = @"http://osmand.net/api/motd";
             if ([@"plugin" isEqualToString:discountType] && _product)
             {
                 OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProduct:_product];
-                pluginDetails.openFromCustomPlace = YES;
                 [[OARootViewController instance].navigationController pushViewController:pluginDetails animated:YES];
 
                 //OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
@@ -433,7 +427,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
             if ([query length] > 0)
             {
                 OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                [mapPanel openSearch:OAQuickSearchType::REGULAR location:nil tabIndex:1 searchQuery:query];
+                [mapPanel openSearch:OAQuickSearchType::REGULAR location:nil tabIndex:1 searchQuery:query object:nil];
             }
         }
         else if ([_url hasPrefix:@"osmand-show-poi:"])

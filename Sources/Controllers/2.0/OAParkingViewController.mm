@@ -16,13 +16,13 @@
 #import "OANativeUtilities.h"
 #import "OADestination.h"
 #import "OAIconTextTableViewCell.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
 @interface OAParkingViewController ()
-
-@property (nonatomic) OADestination *parking;
 
 @end
 
@@ -31,12 +31,11 @@
     NSDateFormatter *_timeFmt;
 }
 
-- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate
+- (instancetype)initWithCoordinate:(CLLocationCoordinate2D)coordinate
 {
     self = [super init];
     if (self)
     {
-        _isNew = YES;
         _coord = coordinate;
         _timeLimitActive = NO;
         _addToCalActive = YES;
@@ -48,24 +47,26 @@
     return self;
 }
 
-- (id)initWithParking:(OADestination *)parking
+- (instancetype)initWithParking
 {
     self = [super init];
     if (self)
     {
-        _isNew = NO;
-        self.parking = parking;
-        _coord = CLLocationCoordinate2DMake(parking.latitude, parking.longitude);
-        _timeLimitActive = parking.carPickupDateEnabled;
-        _addToCalActive = (parking.eventIdentifier != nil);
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin)
+        {
+            _coord = plugin.getParkingPosition ? plugin.getParkingPosition.coordinate : CLLocationCoordinate2DMake(0., 0.);
+            _timeLimitActive = plugin.getParkingType;
+            _addToCalActive = plugin.isParkingEventAdded;
 
-        _timeFmt = [[NSDateFormatter alloc] init];
-        [_timeFmt setDateStyle:NSDateFormatterNoStyle];
-        [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
-        if (parking.carPickupDate)
-            _date = parking.carPickupDate;
-        else
-            _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
+            _timeFmt = [[NSDateFormatter alloc] init];
+            [_timeFmt setDateStyle:NSDateFormatterNoStyle];
+            [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
+            if (plugin.getParkingTime > 0)
+                _date = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
+            else
+                _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
+        }
     }
     return self;
 }
@@ -159,16 +160,8 @@
 
 - (void) okPressed
 {
-    if (_isNew)
-    {
         if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(addParking:)])
             [self.parkingDelegate addParking:self];
-    }
-    else
-    {
-        if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(saveParking:parking:)])
-            [self.parkingDelegate saveParking:self parking:self.parking];
-    }
 }
 
 - (void) cancelPressed
@@ -233,20 +226,14 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
-    static NSString* const reusableIdentifierSwitch = @"OASwitchTableViewCell";
-    static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
-    static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
-    
     NSInteger index = indexPath.row;
     if (indexPath.row == [tableView numberOfRowsInSection:0] - 1)
     {
         OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
             cell.iconView.hidden = YES;
@@ -262,10 +249,10 @@
         case 0:
         {
             OASwitchTableViewCell* cell;
-            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierSwitch];
+            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             }
             [cell.switchView setOn:_timeLimitActive];
@@ -279,10 +266,10 @@
         case 1:
         {
             OATimeTableViewCell* cell;
-            cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
+            cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -294,10 +281,10 @@
         case 2:
         {
             OADateTimePickerTableViewCell* cell;
-            cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
+            cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADateTimePickerTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
                 cell.dateTimePicker.date = _date;
             }
@@ -310,10 +297,10 @@
         case 3:
         {
             OASwitchTableViewCell* cell;
-            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierSwitch];
+            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             }
             

@@ -52,8 +52,7 @@
     {
         _gpxFile = [[OAGPXDocument alloc] initWithGpxFile:_file];
         [self parseRoute];
-        
-//        _gpxFile.path = _file;
+        _gpxFile.path = _file;
     }
     return _route;
 }
@@ -86,7 +85,7 @@
     {
         routeSegment->fillNames(resources);
     }
-    _route.insert(_route.begin(), route.begin(), route.end());
+    _route.insert(_route.end(), route.begin(), route.end());
 }
 
 - (void) collectLocations:(std::shared_ptr<RouteDataResources> &)resources segment:(OAGpxTrkSeg *)segment
@@ -126,7 +125,7 @@
     if (!route.empty())
     {
         // Take ownership over region only for one RouteDataObject
-        (*route.begin())->object->ownsRegion = true;
+        route.back()->object->ownsRegion = true;
     }
     return route;
 }

@@ -12,27 +12,31 @@
 #import "OAMapillaryPlugin.h"
 #import "OAColors.h"
 
-#define kContributeCard @"OAMapillaryContributeCell"
+@interface OAMapillaryContributeCard ()
+
+@property (nonatomic) OAMapillaryContributeCell *collectionCell;
+
+@end
 
 @implementation OAMapillaryContributeCard
 
 - (void) build:(UICollectionViewCell *) cell
 {
-    [super build:cell];
-    
-    OAMapillaryContributeCell *contributeCell;
-    
     if (cell && [cell isKindOfClass:OAMapillaryContributeCell.class])
-        contributeCell = (OAMapillaryContributeCell *) cell;
-    
-    if (contributeCell)
+        _collectionCell = (OAMapillaryContributeCell *) cell;
+    [super build:cell];
+}
+
+- (void)update
+{
+    if (_collectionCell)
     {
-        contributeCell.contributeLabel.text = OALocalizedString(@"mapil_contribute");
-        [contributeCell.addPhotosButton setImage:[[UIImage imageNamed:@"ic_custom_mapillary_symbol.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        [contributeCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xCC458)] forState:UIControlStateNormal];
-        contributeCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
-        [contributeCell.addPhotosButton setTitle:OALocalizedString(@"mapil_add_photos") forState:UIControlStateNormal];
-        [contributeCell.addPhotosButton addTarget:self action:@selector(addPhotosButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _collectionCell.contributeLabel.text = OALocalizedString(@"mapil_contribute");
+        [_collectionCell.addPhotosButton setImage:[UIImage templateImageNamed:@"ic_custom_mapillary_symbol.png"] forState:UIControlStateNormal];
+        [_collectionCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xCC458)] forState:UIControlStateNormal];
+        _collectionCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
+        [_collectionCell.addPhotosButton setTitle:OALocalizedString(@"mapil_add_photos") forState:UIControlStateNormal];
+        [_collectionCell.addPhotosButton addTarget:self action:@selector(addPhotosButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
@@ -43,7 +47,7 @@
 
 + (NSString *) getCellNibId
 {
-    return kContributeCard;
+    return [OAMapillaryContributeCell getCellIdentifier];
 }
 
 @end

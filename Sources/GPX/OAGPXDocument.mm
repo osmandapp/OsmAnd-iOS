@@ -26,6 +26,7 @@
 {
     if (self = [super init])
     {
+        _path = @"";
         if ([self fetch:gpxDocument])
             return self;
         else
@@ -41,7 +42,7 @@
 {
     if (self = [super init])
     {
-        self.fileName = filename;
+        self.path = filename;
         if ([self loadFrom:filename])
             return self;
         else
@@ -976,6 +977,7 @@
             return UIColorFromARGB(color.argb);
         }
     }
+    return nil;
 }
 
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions
@@ -987,6 +989,7 @@
             return [e.value doubleValue];
         }
     }
+    return 0.;
 }
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly
@@ -1001,6 +1004,11 @@
         }
     }
     return segments;
+}
+
+- (BOOL) hasRoute
+{
+	return [self getNonEmptyTrkSegments:YES].count > 0;
 }
 
 - (NSArray<OAGpxRtePt *> *) getRoutePoints
@@ -1023,6 +1031,103 @@
         [points addObjectsFromArray:rt.points];
     }
     return points;
+}
+
+- (NSArray<NSString *> *)getWaypointCategories:(BOOL)withDefaultCategory
+{
+    NSMutableSet<NSString *> *categories = [NSMutableSet new];
+    for (OAGpxWpt *point in _locationMarks)
+    {
+        NSString *category = point.type == nil ? @"" : point.type;
+        if (withDefaultCategory || category.length != 0)
+            [categories addObject:category];
+    }
+    return categories.allObjects;
+}
+
+- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithColors:(BOOL)withDefaultCategory
+{
+    NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
+    for (OAGpxWpt *point in _locationMarks)
+    {
+        NSString *title = point.type == nil ? @"" : point.type;
+        NSString *color = point.type == nil ? @"" : point.color;
+        BOOL emptyCategory = title.length == 0;
+        if (!emptyCategory)
+        {
+            NSString *existingColor = categories[title];
+            if (!existingColor || (existingColor.length == 0 && color.length != 0))
+                categories[title] = color;
+        }
+        else if (withDefaultCategory)
+        {
+            categories[title] = color;
+        }
+    }
+    return categories;
+}
+
+- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithCount:(BOOL)withDefaultCategory
+{
+    NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
+    for (OAGpxWpt *point in _locationMarks)
+    {
+        NSString *title = point.type == nil ? @"" : point.type;
+        NSString *count = @"1";
+        BOOL emptyCategory = title.length == 0;
+        if (!emptyCategory)
+        {
+            NSString *existingCount = categories[title];
+            if (existingCount)
+                count = [NSString stringWithFormat:@"%i", existingCount.intValue + 1];
+            categories[title] = count;
+        }
+        else if (withDefaultCategory)
+        {
+            categories[title] = count;
+        }
+    }
+    return categories;
+}
+
+- (NSArray<NSDictionary<NSString *, NSString *> *> *)getWaypointCategoriesWithAllData:(BOOL)withDefaultCategory
+{
+    NSMapTable<NSString *, NSDictionary *> *map = [NSMapTable new];
+    for (OAGpxWpt *point in _locationMarks)
+    {
+        NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
+        NSString *title = point.type == nil ? @"" : point.type;
+        categories[@"title"] = title;
+        NSString *color = point.type == nil ? @"" : point.color;
+        NSString *count = @"1";
+        categories[@"count"] = count;
+
+        BOOL emptyCategory = title.length == 0;
+        if (!emptyCategory)
+        {
+            NSDictionary<NSString *, NSString *> *existing = [map objectForKey:title];
+            if (existing)
+            {
+                count = [NSString stringWithFormat:@"%i", existing[@"count"].intValue + 1];
+                color = existing[@"color"];
+                categories[@"count"] = count;
+                categories[@"color"] = color;
+            }
+
+            if (!existing || (existing[@"color"].length == 0 && color.length != 0))
+                categories[@"color"] = color;
+
+            [map setObject:categories forKey:title];
+        }
+        else if (withDefaultCategory)
+        {
+            categories[@"title"] = title;
+            categories[@"color"] = color;
+            categories[@"count"] = count;
+            [map setObject:categories forKey:title];
+        }
+    }
+    return map.objectEnumerator.allObjects;
 }
 
 @end

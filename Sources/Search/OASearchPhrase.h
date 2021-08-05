@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchPhrase.java
-//  git revision 3c9d940fbbb0be194b3f06d75e4151ab8a0b9913
+//  git revision 46b2782a7d94c8e4968ef488956dd4d96925be95
 
 #import <Foundation/Foundation.h>
 #import "OANameStringMatcher.h"
@@ -105,6 +105,13 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (BOOL) hasMoreThanOneUnknownSearchWord;
 
 + (NSComparisonResult) icompare:(int)x y:(int)y;
+
++ (OAPOIBaseType*) unselectedPoiType;
++ (NSMutableArray<NSString *> *) splitWords:(NSString *)w ws:(NSMutableArray<NSString *> *)ws;
+
+- (OAPOIBaseType *) getUnselectedPoiType;
+- (void) setUnselectedPoiType:(OAPOIBaseType *)unselectedPoiType;
++ (NSString *) getDelimiter;
 
 
 @end

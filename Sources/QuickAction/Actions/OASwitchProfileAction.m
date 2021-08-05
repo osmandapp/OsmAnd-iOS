@@ -13,11 +13,10 @@
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
 #import "OAProfileSelectionBottomSheetViewController.h"
+#import "OAButtonCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATitleDescrDraggableCell.h"
 
-#define kNames @"names"
-#define kStringKeys @"stringKeys"
-#define kIconNames @"iconsNames"
-#define kIconColors @"iconsColors"
 #define KEY_PROFILES @"profiles"
 
 static OAQuickActionType *TYPE;
@@ -41,7 +40,7 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSArray<NSString *> *profiles = self.getParams[kStringKeys];
+    NSArray<NSString *> *profiles = self.getParams[kSwitchProfileStringKeys];
     
     if (profiles.count == 0)
         return;
@@ -55,7 +54,7 @@ static OAQuickActionType *TYPE;
     }
     
     int index = -1;
-    NSString *currentProfile = settings.applicationMode.stringKey;
+    NSString *currentProfile = settings.applicationMode.get.stringKey;
     
     for (int idx = 0; idx < profiles.count; idx++)
     {
@@ -78,7 +77,7 @@ static OAQuickActionType *TYPE;
     OAApplicationMode *appMode = [self getModeForKey:params];
     if (appMode)
     {
-        [OAAppSettings sharedManager].applicationMode = appMode;
+        [OAAppSettings.sharedManager setApplicationModePref:appMode];
     }
 }
 
@@ -111,7 +110,7 @@ static OAQuickActionType *TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
@@ -120,16 +119,16 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
-    NSArray<NSString *> *names = self.getParams[kNames];
-    NSArray<NSString *> *stringKeys = self.getParams[kStringKeys];
-    NSArray<NSString *> *iconNames = self.getParams[kIconNames];
-    NSArray<NSString *> *iconColors = self.getParams[kIconColors];
+    NSArray<NSString *> *names = self.getParams[kSwitchProfileNames];
+    NSArray<NSString *> *stringKeys = self.getParams[kSwitchProfileStringKeys];
+    NSArray<NSString *> *iconNames = self.getParams[kSwitchProfileIconNames];
+    NSArray<NSString *> *iconColors = self.getParams[kSwitchProfileIconColors];
     NSMutableArray *arr = [NSMutableArray new];
 
     for (int i = 0; i < names.count; i++)
     {
         [arr addObject:@{
-                         @"type" : @"OATitleDescrDraggableCell",
+                         @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : names[i] ? names[i] : @"",
                          @"stringKey" : stringKeys[i] ? stringKeys[i] : @"",
                          @"img" : iconNames[i] ? iconNames[i] : @"",
@@ -138,7 +137,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"shared_string_add_profile"),
-                     @"type" : @"OAButtonCell",
+                     @"type" : [OAButtonCell getCellIdentifier],
                      @"target" : @"addProfile"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"app_profiles")];
@@ -160,7 +159,7 @@ static OAQuickActionType *TYPE;
             {
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
             }
-            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+            else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
             {
                 [names addObject:item[@"title"]];
                 [stringKeys addObject:item[@"stringKey"]];
@@ -169,10 +168,10 @@ static OAQuickActionType *TYPE;
             }
         }
     }
-    [params setObject:names forKey:kNames];
-    [params setObject:stringKeys forKey:kStringKeys];
-    [params setObject:iconNames forKey:kIconNames];
-    [params setObject:iconColors forKey:kIconColors];
+    [params setObject:names forKey:kSwitchProfileNames];
+    [params setObject:stringKeys forKey:kSwitchProfileStringKeys];
+    [params setObject:iconNames forKey:kSwitchProfileIconNames];
+    [params setObject:iconColors forKey:kSwitchProfileIconColors];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return names.count > 0;
 }
@@ -192,7 +191,7 @@ static OAQuickActionType *TYPE;
 
 - (NSArray *)loadListFromParams
 {
-    return [self getParams][kNames];
+    return [self getParams][kSwitchProfileNames];
 }
 
 - (OAApplicationMode *) getModeForKey:(NSString *)key
@@ -201,4 +200,3 @@ static OAQuickActionType *TYPE;
 }
 
 @end
-

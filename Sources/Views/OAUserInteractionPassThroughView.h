@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAObservable.h"
 
 @interface OAUserInteractionPassThroughView : UIView
+
+@property (readonly) OAObservable* didLayoutObservable;
 
 @end

@@ -38,7 +38,7 @@
 @property (nonatomic) NSString *version;
 @property (nonatomic) NSString *creator;
 
-@property (nonatomic, copy) NSString *fileName;
+@property (nonatomic, copy) NSString *path;
 
 @property (nonatomic) OAGpxTrk *generalTrack;
 @property (nonatomic) OAGpxTrkSeg *generalSegment;
@@ -58,6 +58,7 @@
 - (BOOL) hasRtePt;
 - (BOOL) hasWptPt;
 - (BOOL) hasTrkPt;
+- (BOOL) hasRoute;
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
 
@@ -87,6 +88,12 @@
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
+- (NSInteger) getNonEmptySegmentsCount;
+
+- (NSArray<NSString *> *)getWaypointCategories:(BOOL)withDefaultCategory;
+- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithColors:(BOOL)withDefaultCategory;
+- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithCount:(BOOL)withDefaultCategory;
+- (NSArray<NSDictionary<NSString *, NSString *> *> *)getWaypointCategoriesWithAllData:(BOOL)withDefaultCategory;
 
 @end
 

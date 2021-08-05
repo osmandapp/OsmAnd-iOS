@@ -15,6 +15,11 @@
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OAFavoriteItem.h"
+#import "OATransportStop.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
+#import "OAPOI.h"
 
 @implementation OATargetPointViewCell
 
@@ -44,9 +49,9 @@
         _iconView.image = [UIImage imageNamed:@"map_parking_pin"];
         [_titleView setText:OALocalizedString(@"parking_marker")];
         [self updateDescriptionView];
-        id d = _targetPoint.targetObj;
-        if (d && [d isKindOfClass:[OADestination class]] && ((OADestination *)d).carPickupDateEnabled)
-            [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.descriptionView shortText:NO];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin && plugin.getParkingType)
+            [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] label:self.descriptionView shortText:NO];
     }
     else if (_targetPoint.type == OATargetGPXRoute)
     {
@@ -57,7 +62,13 @@
     }
     else
     {
-        _iconView.image = _targetPoint.icon;
+        if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
+            _iconView.image = [((OAFavoriteItem *)_targetPoint.targetObj) getCompositeIcon];
+        else if ([_targetPoint.targetObj isKindOfClass:OATransportStop.class])
+            _iconView.image = ((OATransportStop *)_targetPoint.targetObj).poi.icon;
+        else
+            _iconView.image = _targetPoint.icon;
+        
         NSString *t;
         if (_targetPoint.titleSecond)
         {

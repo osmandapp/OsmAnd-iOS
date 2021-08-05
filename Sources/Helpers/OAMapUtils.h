@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 @class OAPOI;
+@class QuadRect;
 
 @interface OAMapUtils : NSObject
 

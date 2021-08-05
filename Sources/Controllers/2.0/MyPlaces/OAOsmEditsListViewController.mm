@@ -209,10 +209,10 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     NSDictionary *translatedNames = [_poiHelper getAllTranslatedNames:NO];
     OAPOIType *poiType = translatedNames[item[@"poi_type"]];
     OAMultiIconTextDescCell* cell;
-    cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMultiIconTextDescCell"];
+    cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
     }
     
@@ -221,9 +221,10 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [cell.textView setText:item[@"title"]];
         [cell.descView setText:item[@"description"]];
         [cell.iconView setImage:poiType ? poiType.icon : [UIImage imageNamed:@"ic_custom_osm_note_unresolved"]];
-        [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_custom_overflow_menu.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu.png"] forState:UIControlStateNormal];
         [cell.overflowButton setTintColor:UIColorFromRGB(color_icon_color_light)];
         [cell.overflowButton setTag:indexPath.row];
+        [cell.overflowButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.overflowButton addTarget:self action:@selector(overflowButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);

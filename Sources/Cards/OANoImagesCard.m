@@ -12,31 +12,33 @@
 #import "OAMapillaryPlugin.h"
 #import "OAColors.h"
 
-#define kNoImagesCard @"OANoImagesCell"
+@interface OANoImagesCard ()
+
+@property (nonatomic) OANoImagesCell *collectionCell;
+
+@end
 
 @implementation OANoImagesCard
 
 - (void) build:(UICollectionViewCell *) cell
 {
-    [super build:cell];
-    
-    OANoImagesCell *noImagesCell;
-    
     if (cell && [cell isKindOfClass:OANoImagesCell.class])
-        noImagesCell = (OANoImagesCell *) cell;
-    
-    if (noImagesCell)
+        _collectionCell = (OANoImagesCell *) cell;
+    [super build:cell];
+}
+
+- (void)update
+{
+    if (_collectionCell)
     {
-        noImagesCell.noImagesLabel.text = OALocalizedString(@"mapil_no_images");
-        [noImagesCell.imageView setImage:[[UIImage imageNamed:@"ic_custom_trouble.png"]
-                                  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        noImagesCell.imageView.tintColor = UIColorFromRGB(color_icon_color);
-        [noImagesCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0x007AFF)] forState:UIControlStateNormal];
-        [noImagesCell.addPhotosButton setImage:[[UIImage imageNamed:@"ic_custom_add.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        noImagesCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
-        [noImagesCell.addPhotosButton setTitle:OALocalizedString(@"mapil_add_photos") forState:UIControlStateNormal];
-        
-        [noImagesCell.addPhotosButton addTarget:self action:@selector(addPhotosButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _collectionCell.noImagesLabel.text = OALocalizedString(@"mapil_no_images");
+        [_collectionCell.imageView setImage:[UIImage templateImageNamed:@"ic_custom_trouble.png"]];
+        _collectionCell.imageView.tintColor = UIColorFromRGB(color_icon_color);
+        [_collectionCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0x007AFF)] forState:UIControlStateNormal];
+        [_collectionCell.addPhotosButton setImage:[UIImage templateImageNamed:@"ic_custom_add.png"] forState:UIControlStateNormal];
+        _collectionCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
+        [_collectionCell.addPhotosButton setTitle:OALocalizedString(@"mapil_add_photos") forState:UIControlStateNormal];
+        [_collectionCell.addPhotosButton addTarget:self action:@selector(addPhotosButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
@@ -47,7 +49,7 @@
 
 + (NSString *) getCellNibId
 {
-    return kNoImagesCard;
+    return [OANoImagesCell getCellIdentifier];
 }
 
 @end

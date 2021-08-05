@@ -82,8 +82,6 @@
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -145,14 +143,7 @@
     // Obtain all resources separately
 
     // IOS-199
-#if defined(OSMAND_IOS_DEV)
-    if (_app.debugSettings.setAllResourcesAsOutdated)
-        _outdatedResources = _app.resourcesManager->getLocalResources();
-    else
-        _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
-#else
     _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
-#endif
 }
 
 - (void)collectResourcesDataAndItems
@@ -376,8 +367,8 @@
             cell.textLabel.font = [UIFont systemFontOfSize:17.0];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
-            UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            UIImage* iconImage = [UIImage templateImageNamed:@"menu_item_update_icon.png"];
+            cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
@@ -480,24 +471,6 @@
             }
         }
     }
-}
-
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPluginsClicked:(id)sender
-{
-    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-    pluginsViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:pluginsViewController animated:NO];
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
 }
 
 @end

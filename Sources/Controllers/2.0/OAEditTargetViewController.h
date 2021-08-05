@@ -54,5 +54,6 @@
 - (void) setItemDesc:(NSString *)desc;
 
 - (void) setupCollapableViewsWithData:(id)data lat:(double)lat lon:(double)lon;
+- (void) setupDeleteButtonIcon;
 
 @end

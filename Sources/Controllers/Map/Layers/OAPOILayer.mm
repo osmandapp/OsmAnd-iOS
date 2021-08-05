@@ -46,13 +46,11 @@
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
 }
 
-- (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController
+- (void)initLayer
 {
-    self = [super initWithMapViewController:mapViewController];
-    if (self) {
-        _filtersHelper = [OAPOIFiltersHelper sharedInstance];
-    }
-    return self;
+    [super initLayer];
+
+    _filtersHelper = [OAPOIFiltersHelper sharedInstance];
 }
 
 - (NSString *) layerId
@@ -104,7 +102,7 @@
     _showPoiOnMap = YES;
     _poiUiFilter = uiFilter;
     _poiKeyword = keyword;
-    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self doShowPoiUiFilterOnMap];
@@ -142,7 +140,7 @@
          {
              bool res = true;
              OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
-             if (_poiUiNameFilter)
+             if (_poiUiNameFilter && (([poi.type.tag isEqualToString:OSM_WIKI_CATEGORY] && [_poiUiFilter.filterByName containsString:WIKI_LANG]) || (![poi.type.tag isEqualToString:OSM_WIKI_CATEGORY] && ![_poiUiFilter.filterByName containsString:WIKI_LANG])))
                  res = [_poiUiNameFilter accept:poi];
              else
                  res = ![poi isClosed];
@@ -156,19 +154,19 @@
         OAAppSettings *settings = OAAppSettings.sharedManager;
         BOOL nightMode = settings.nightMode;
         BOOL showLabels = settings.mapSettingShowPoiLabel.get;
-        NSString *lang = settings.settingPrefMapLanguage;
-        BOOL transliterate = settings.settingMapLanguageTranslit;
+        NSString *lang = settings.settingPrefMapLanguage.get;
+        BOOL transliterate = settings.settingMapLanguageTranslit.get;
         float textSize = settings.textSize.get;
 
         const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
         const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
         if (categoriesFilter.count() > 0)
         {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate)));
+            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.baseOrder));
         }
         else
         {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate)));
+            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.baseOrder));
         }
         
         [self.mapView addTiledSymbolsProvider:_amenitySymbolsProvider];

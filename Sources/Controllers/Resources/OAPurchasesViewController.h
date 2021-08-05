@@ -10,11 +10,6 @@
 
 @interface OAPurchasesViewController : OACompoundViewController
 
-@property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPlugins;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
-
 @property (nonatomic, assign) BOOL openFromSplash;
 @property (nonatomic, assign) BOOL openFromCustomPlace;
 

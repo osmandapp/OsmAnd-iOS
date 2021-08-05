@@ -13,6 +13,10 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OrderedDictionary.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAWikipediaPlugin.h"
+#import "OAPlugin.h"
+#import "OAIAPHelper.h"
 
 #include <objc/runtime.h>
 
@@ -34,6 +38,8 @@
 #define kSlopeMinZoomKey @"slopeMinZoom"
 #define kSlopeMaxZoomKey @"slopeMaxZoom"
 #define kMapillaryKey @"mapillary"
+#define kWikipediaLanguagesKey @"wikipediaLanguages"
+#define kWikipediaGlobalKey @"wikipediaGlobal"
 
 @implementation OAAppData
 {
@@ -44,24 +50,26 @@
     
     NSMutableArray<OARTargetPoint *> *_intermediates;
     
-    OAProfileMapSource *_lastMapSourceProfile;
-    OAProfileMapSource *_overlayMapSourceProfile;
-    OAProfileMapSource *_lastOverlayMapSourceProfile;
-    OAProfileMapSource *_underlayMapSourceProfile;
-    OAProfileMapSource  *_lastUnderlayMapSourceProfile;
-    OAProfileDouble *_overlayAlphaProfile;
-    OAProfileDouble *_underlayAlphaProfile;
-    OAProfileTerrain *_terrainTypeProfile;
-    OAProfileTerrain *_lastTerrainTypeProfile;
-    OAProfileDouble *_hillshadeAlphaProfile;
-    OAProfileInteger *_hillshadeMinZoomProfile;
-    OAProfileInteger *_hillshadeMaxZoomProfile;
-    OAProfileDouble *_slopeAlphaProfile;
-    OAProfileInteger *_slopeMinZoomProfile;
-    OAProfileInteger *_slopeMaxZoomProfile;
-    OAProfileBoolean *_mapillaryProfile;
-    
-    NSMapTable<NSString *, OAProfileSetting *> *_registeredPreferences;
+    OACommonMapSource *_lastMapSourceProfile;
+    OACommonMapSource *_overlayMapSourceProfile;
+    OACommonMapSource *_lastOverlayMapSourceProfile;
+    OACommonMapSource *_underlayMapSourceProfile;
+    OACommonMapSource  *_lastUnderlayMapSourceProfile;
+    OACommonDouble *_overlayAlphaProfile;
+    OACommonDouble *_underlayAlphaProfile;
+    OACommonTerrain *_terrainTypeProfile;
+    OACommonTerrain *_lastTerrainTypeProfile;
+    OACommonDouble *_hillshadeAlphaProfile;
+    OACommonInteger *_hillshadeMinZoomProfile;
+    OACommonInteger *_hillshadeMaxZoomProfile;
+    OACommonDouble *_slopeAlphaProfile;
+    OACommonInteger *_slopeMinZoomProfile;
+    OACommonInteger *_slopeMaxZoomProfile;
+    OACommonBoolean *_mapillaryProfile;
+    OACommonBoolean *_wikipediaGlobalProfile;
+    OACommonStringList *_wikipediaLanguagesProfile;
+
+    NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
 }
 
 @synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration;
@@ -115,6 +123,14 @@
         {
             [_mapillaryProfile setValueFromString:value appMode:mode];
         }
+        else if ([key isEqualToString:@"global_wikipedia_poi_enabled"])
+        {
+            [_wikipediaGlobalProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"wikipedia_poi_enabled_languages"])
+        {
+            [_wikipediaLanguagesProfile setValueFromString:value appMode:mode];
+        }
     }
 }
 
@@ -130,6 +146,8 @@
         prefs[@"slope_min_zoom"] = [_slopeMinZoomProfile toStringValue:mode];
         prefs[@"slope_max_zoom"] = [_slopeMaxZoomProfile toStringValue:mode];
         prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
+        prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
+        prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
     }
 }
 
@@ -154,30 +172,34 @@
     _destinationShowObservable = [[OAObservable alloc] init];
     _destinationHideObservable = [[OAObservable alloc] init];
     _mapLayersConfigurationChangeObservable = [[OAObservable alloc] init];
-    
+
+    _wikipediaChangeObservable = [[OAObservable alloc] init];
+
     _applicationModeChangedObservable = [[OAObservable alloc] init];
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:_applicationModeChangedObservable];
     _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings
-    _lastMapSourceProfile = [OAProfileMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                                                                                              andVariant:@"type_default"]];
-    _overlayMapSourceProfile = [OAProfileMapSource withKey:kOverlaySourceKey defValue:nil];
-    _underlayMapSourceProfile = [OAProfileMapSource withKey:kUnderlaySourceKey defValue:nil];
-    _lastOverlayMapSourceProfile = [OAProfileMapSource withKey:kLastOverlayKey defValue:nil];
-    _lastUnderlayMapSourceProfile = [OAProfileMapSource withKey:kLastUnderlayKey defValue:nil];
-    _overlayAlphaProfile = [OAProfileDouble withKey:kOverlayAlphaKey defValue:0.5];
-    _underlayAlphaProfile = [OAProfileDouble withKey:kUnderlayAlphaKey defValue:0.5];
-    _terrainTypeProfile = [OAProfileTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
-    _lastTerrainTypeProfile = [OAProfileTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
-    _hillshadeAlphaProfile = [OAProfileDouble withKey:kHillshadeAlphaKey defValue:0.45];
-    _slopeAlphaProfile = [OAProfileDouble withKey:kSlopeAlphaKey defValue:0.35];
-    _hillshadeMinZoomProfile = [OAProfileInteger withKey:kHillshadeMinZoomKey defValue:3];
-    _hillshadeMaxZoomProfile = [OAProfileInteger withKey:kHillshadeMaxZoomKey defValue:16];
-    _slopeMinZoomProfile = [OAProfileInteger withKey:kSlopeMinZoomKey defValue:3];
-    _slopeMaxZoomProfile = [OAProfileInteger withKey:kSlopeMaxZoomKey defValue:16];
-    _mapillaryProfile = [OAProfileBoolean withKey:kMapillaryKey defValue:NO];
+    _lastMapSourceProfile = [OACommonMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
+                                                                                                             andVariant:@"type_default"]];
+    _overlayMapSourceProfile = [OACommonMapSource withKey:kOverlaySourceKey defValue:nil];
+    _underlayMapSourceProfile = [OACommonMapSource withKey:kUnderlaySourceKey defValue:nil];
+    _lastOverlayMapSourceProfile = [OACommonMapSource withKey:kLastOverlayKey defValue:nil];
+    _lastUnderlayMapSourceProfile = [OACommonMapSource withKey:kLastUnderlayKey defValue:nil];
+    _overlayAlphaProfile = [OACommonDouble withKey:kOverlayAlphaKey defValue:0.5];
+    _underlayAlphaProfile = [OACommonDouble withKey:kUnderlayAlphaKey defValue:0.5];
+    _terrainTypeProfile = [OACommonTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
+    _lastTerrainTypeProfile = [OACommonTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
+    _hillshadeAlphaProfile = [OACommonDouble withKey:kHillshadeAlphaKey defValue:0.45];
+    _slopeAlphaProfile = [OACommonDouble withKey:kSlopeAlphaKey defValue:0.35];
+    _hillshadeMinZoomProfile = [OACommonInteger withKey:kHillshadeMinZoomKey defValue:3];
+    _hillshadeMaxZoomProfile = [OACommonInteger withKey:kHillshadeMaxZoomKey defValue:16];
+    _slopeMinZoomProfile = [OACommonInteger withKey:kSlopeMinZoomKey defValue:3];
+    _slopeMaxZoomProfile = [OACommonInteger withKey:kSlopeMaxZoomKey defValue:16];
+    _mapillaryProfile = [OACommonBoolean withKey:kMapillaryKey defValue:NO];
+    _wikipediaGlobalProfile = [OACommonBoolean withKey:kWikipediaGlobalKey defValue:NO];
+    _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
 
     _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
     [_registeredPreferences setObject:_overlayMapSourceProfile forKey:@"map_overlay_previous"];
@@ -193,6 +215,8 @@
     [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:@"slope_max_zoom"];
     [_registeredPreferences setObject:_mapillaryProfile forKey:@"show_mapillary"];
     [_registeredPreferences setObject:_terrainTypeProfile forKey:@"terrain_mode"];
+    [_registeredPreferences setObject:_wikipediaGlobalProfile forKey:@"global_wikipedia_poi_enabled"];
+    [_registeredPreferences setObject:_wikipediaLanguagesProfile forKey:@"wikipedia_poi_enabled_languages"];
 }
 
 - (void) dealloc
@@ -214,7 +238,8 @@
         if (self.terrainType != EOATerrainTypeDisabled)
             [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
         [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
-        [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.variantKey];
+        [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(self.wikipedia)];
+        [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.get.variantKey];
     });
 }
 
@@ -339,6 +364,7 @@
 @synthesize terrainAlphaChangeObservable = _terrainAlphaChangeObservable;
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
+@synthesize wikipediaChangeObservable = _wikipediaChangeObservable;
 
 - (OAMapSource*) overlayMapSource
 {
@@ -636,6 +662,88 @@
     }
 }
 
+- (BOOL)wikipedia
+{
+    @synchronized (_lock)
+    {
+        return [[OAPOIFiltersHelper sharedInstance] isTopWikiFilterSelected];
+    }
+}
+
+- (void)setWikipedia:(BOOL)wikipedia
+{
+    @synchronized (_lock)
+    {
+        OAWikipediaPlugin *plugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
+        [plugin toggleWikipediaPoi:wikipedia];
+        [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(wikipedia)];
+    }
+}
+
+- (BOOL)getWikipediaAllLanguages
+{
+    @synchronized (_lock)
+    {
+        return _wikipediaGlobalProfile.get;
+    }
+}
+
+- (BOOL)getWikipediaAllLanguages:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_wikipediaGlobalProfile get:mode];
+    }
+}
+
+- (void)setWikipediaAllLanguages:(BOOL)allLanguages
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaGlobalProfile set:allLanguages];
+    }
+}
+
+- (void)setWikipediaAllLanguages:(BOOL)allLanguages mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaGlobalProfile set:allLanguages mode:mode];
+    }
+}
+
+- (NSArray<NSString *> *)getWikipediaLanguages
+{
+    @synchronized (_lock)
+    {
+        return _wikipediaLanguagesProfile.get;
+    }
+}
+
+- (NSArray<NSString *> *)getWikipediaLanguages:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_wikipediaLanguagesProfile get:mode];
+    }
+}
+
+- (void)setWikipediaLanguages:(NSArray<NSString *> *)languages
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaLanguagesProfile set:languages];
+    }
+}
+
+- (void)setWikipediaLanguages:(NSArray<NSString *> *)languages mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaLanguagesProfile set:languages mode:mode];
+    }
+}
+
 @synthesize mapLastViewedState = _mapLastViewedState;
 
 - (void) backupTargetPoints
@@ -765,8 +873,6 @@
 #define kPointToNavigateBackup @"pointToNavigateBackup"
 #define kIntermediatePointsBackup @"intermediatePointsBackup"
 
-#define kHomePoint @"homePoint"
-#define kWorkPoint @"workPoint"
 #define kMyLocationToStart @"myLocationToStart"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
@@ -781,8 +887,6 @@
     [aCoder encodeObject:_pointToStartBackup forKey:kPointToStartBackup];
     [aCoder encodeObject:_pointToNavigateBackup forKey:kPointToNavigateBackup];
     [aCoder encodeObject:_intermediatePointsBackup forKey:kIntermediatePointsBackup];
-    [aCoder encodeObject:_homePoint forKey:kHomePoint];
-    [aCoder encodeObject:_workPoint forKey:kWorkPoint];
     [aCoder encodeObject:_myLocationToStart forKey:kMyLocationToStart];
 }
 
@@ -801,8 +905,6 @@
         _pointToStartBackup = [aDecoder decodeObjectForKey:kPointToStartBackup];
         _pointToNavigateBackup = [aDecoder decodeObjectForKey:kPointToNavigateBackup];
         _intermediatePointsBackup = [aDecoder decodeObjectForKey:kIntermediatePointsBackup];
-        _homePoint = [aDecoder decodeObjectForKey:kHomePoint];
-        _workPoint = [aDecoder decodeObjectForKey:kWorkPoint];
         _myLocationToStart = [aDecoder decodeObjectForKey:kMyLocationToStart];
         
         [self safeInit];
@@ -812,7 +914,7 @@
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode
 {
-    for (OAProfileSetting *value in [_registeredPreferences objectEnumerator].allObjects)
+    for (OACommonPreference *value in [_registeredPreferences objectEnumerator].allObjects)
     {
         [value resetModeToDefault:mode];
     }
@@ -839,6 +941,8 @@
     [_slopeMinZoomProfile set:[_slopeMinZoomProfile get:sourceMode] mode:targetMode];
     [_slopeMaxZoomProfile set:[_slopeMaxZoomProfile get:sourceMode] mode:targetMode];
     [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
+    [_wikipediaGlobalProfile set:[_wikipediaGlobalProfile get:sourceMode] mode:targetMode];
+    [_wikipediaLanguagesProfile set:[_wikipediaLanguagesProfile get:sourceMode] mode:targetMode];
 }
 
 @end

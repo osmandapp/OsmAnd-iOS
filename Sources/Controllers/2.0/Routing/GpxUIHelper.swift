@@ -479,7 +479,7 @@ public enum GPXDataSetAxisType: String {
         
         var colors = Array(repeating: NSUIColor(cgColor: UIColor.white.cgColor), count: segments?.count ?? 0)
         
-        for i in 0...(stacks.count - 1) {
+        for i in 0..<stacks.count {
             let segment: OARouteSegmentAttribute = segments![i]
             
             stacks[i] = Double(segment.distance) / divX
@@ -628,7 +628,7 @@ public enum GPXDataSetAxisType: String {
         var calculatedDist: Array<Double> = Array(repeating: 0, count: Int(totalDistance / step) + 1)
         var calculatedH: Array<Double> = Array(repeating: 0, count: Int(totalDistance / step) + 1)
         var nextW: Int = 0
-        for k in 0...(calculatedDist.count - 1) {
+        for k in 0..<calculatedDist.count {
             if (k > 0) {
                 calculatedDist[k] = calculatedDist[k - 1] + step
             }
@@ -652,7 +652,7 @@ public enum GPXDataSetAxisType: String {
         var calculatedSlopeDist: Array<Double> = Array(repeating: 0, count: Int(((totalDistance - slopeProximity) / step)) + 1)
         var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((totalDistance - slopeProximity) / step)) + 1)
         let index: Int = Int((slopeProximity / step) / 2)
-        for k in 0...(calculatedSlopeDist.count - 1) {
+        for k in 0..<calculatedSlopeDist.count {
             calculatedSlopeDist[k] = calculatedDist[index + k]
             calculatedSlope[k] = (calculatedH[ 2 * index + k] - calculatedH[k]) * 100 / slopeProximity
             if (calculatedSlope[k].isNaN) {
@@ -668,7 +668,7 @@ public enum GPXDataSetAxisType: String {
         var hasSameY = false
         var lastEntry: ChartDataEntry? = nil
         lastIndex = calculatedSlopeDist.count - 1
-        for i in 0...lastIndex {
+        for i in 0..<calculatedSlopeDist.count {
             x = calculatedSlopeDist[i] / divX
             slope = calculatedSlope[i]
             if (prevSlope != -80000) {
@@ -860,7 +860,7 @@ public enum GPXDataSetAxisType: String {
             divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
         }
         
-        let sps: OAProfileSpeedConstant = settings.speedSystem
+        let sps: OACommonSpeedConstant = settings.speedSystem
         var mulSpeed = Double.nan
         var divSpeed = Double.nan
         let mainUnitY = OASpeedConstant.toShortString(sps.get())

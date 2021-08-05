@@ -37,6 +37,8 @@
 #import "OASizes.h"
 #import "OAMapLayers.h"
 #import "OAAddDestinationBottomSheetViewController.h"
+#import "OAFollowTrackBottomSheetViewController.h"
+#import "OATrackSegmentsViewController.h"
 #import "OARoutingSettingsCell.h"
 #import "OAHomeWorkCell.h"
 #import "OAGPXDatabase.h"
@@ -60,11 +62,7 @@
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
 #define kHistoryItemLimitDefault 3
-
 #define kCellReuseIdentifier @"emptyCell"
-#define kHeaderId @"TableViewSectionHeader"
-#define kFooterId @"TableViewSectionFooter"
-
 #define MAX_PEDESTRIAN_ROUTE_DURATION (30 * 60)
 #define kSoundButtonRow 2
 #define kSoundButtonSection 0
@@ -79,7 +77,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuStateFullScreen
 };
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate, OASegmentSelectionDelegate>
 
 @end
 
@@ -175,13 +173,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [_tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    [_tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
     _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
     
     self.sliderView.layer.cornerRadius = 2.;
@@ -235,12 +233,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (!_routingHelper.isPublicTransportMode)
     {
         [_goButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
-        [_goButton setImage:[[UIImage imageNamed:@"ic_custom_navigation_arrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] forState:UIControlStateNormal];
     }
     else
     {
         [_goButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
-        [_goButton setImage:[[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_map"] forState:UIControlStateNormal];
     }
     [self layoutSubviews];
 }
@@ -286,18 +284,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     OASelectedGPXHelper *helper = [OASelectedGPXHelper instance];
     OAGPXDatabase *dbHelper = [OAGPXDatabase sharedDb];
+    NSMutableArray<OAGPXDocument *> *visibleGpxDocs = [NSMutableArray array];
     NSMutableArray<OAGPX *> *visibleGpx = [NSMutableArray array];
     
     auto activeGpx = helper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
-        OAGPX *gpx = [dbHelper getGPXItem:[it.key().toNSString() lastPathComponent]];
+        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
+        OAGPX *gpx = [dbHelper getGPXItem:gpxFilePath];
         if (gpx)
         {
             auto doc = it.value();
             if (doc != nullptr && (doc->hasRtePt() || doc->hasTrkPt()))
             {
                 [visibleGpx addObject:gpx];
+                [visibleGpxDocs addObject:[[OAGPXDocument alloc] initWithGpxFile:it.key().toNSString()]];
             }
         }
     }
@@ -306,30 +307,35 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return;
     
     [section addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(NO)
     }];
     
     for (NSInteger i = 0; i < visibleGpx.count; i++)
     {
         OAGPX *gpx = visibleGpx[i];
-        [section addObject:@{
-            @"cell" : @"OAMultiIconTextDescCell",
-            @"title" : gpx.getNiceTitle,
-            @"descr" : [OAGPXUIHelper getDescription:gpx],
-            @"img" : @"ic_custom_trip",
-            @"item" : gpx
-        }];
+        OAGPXDocument *doc = visibleGpxDocs[i];
+        if (gpx && doc)
+        {
+            [section addObject:@{
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
+                @"title" : gpx.getNiceTitle,
+                @"descr" : [OAGPXUIHelper getDescription:gpx],
+                @"img" : @"ic_custom_trip",
+                @"item" : doc
+            }];
+        }
+        
         if (i != visibleGpx.count - 1)
         {
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(YES)
             }];
         }
     }
     [section addObject:@{
-        @"cell" : @"OADividerCell",
+        @"cell" : [OADividerCell getCellIdentifier],
         @"custom_insets" : @(NO)
     }];
     _gpxTripSection = sectionIndex;
@@ -343,12 +349,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (destinationBackup != nil)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADescrTitleIconCell",
+            @"cell" : [OADescrTitleIconCell getCellIdentifier],
             @"title" : destinationBackup.pointDescription.name,
             @"descr" : startBackup ? startBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location"),
             @"img" : @"ic_custom_point_to_point",
@@ -356,7 +362,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _prevRouteSection = sectionIndex;
@@ -370,14 +376,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (markers.count > 0)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         for (NSInteger i = 0; i < markers.count; i++)
         {
             OADestination *item = markers[i];
             [section addObject:@{
-                @"cell" : @"OAMultiIconTextDescCell",
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : item.desc,
                 @"img" : [item.markerResourceName ? item.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"],
                 @"item" : item
@@ -385,13 +391,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if (i != markers.count - 1)
             {
                 [section addObject:@{
-                    @"cell" : @"OADividerCell",
+                    @"cell" : [OADividerCell getCellIdentifier],
                     @"custom_insets" : @(YES)
                 }];
             }
         }
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _mapMarkerSection = sectionIndex;
@@ -406,20 +412,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (allItems.count > 0)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         for (OAHistoryItem *item in allItems)
         {
             [section addObject:@{
-                @"cell" : @"OAMultiIconTextDescCell",
+                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : item.name,
                 @"img" : @"ic_custom_history",
                 @"item" : item
             }];
             
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(YES)
             }];
             
@@ -427,7 +433,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (allItems.count == _historyItemsLimit)
         {
             [section addObject:@{
-                @"cell" : @"OAButtonCell",
+                @"cell" : [OAButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_show_more")
             }];
         }
@@ -436,7 +442,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [section removeObjectAtIndex:section.count - 1];
         }
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         _historySection = sectionIndex;
@@ -453,21 +459,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     for (NSInteger i = 0; i < _transportHelper.getRoutes.size(); i++)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
         [section addObject:@{
-            @"cell" : @"OAPublicTransportShieldCell",
+            @"cell" : [OAPublicTransportShieldCell getCellIdentifier],
             @"route_index" : @(i)
         }];
         [section addObject:@{
-            @"cell" : @"OAPublicTransportRouteCell",
+            @"cell" : [OAPublicTransportRouteCell getCellIdentifier],
             @"route_index" : @(i)
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -489,7 +495,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (showPedestrianCard)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
@@ -501,20 +507,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [str setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]} range:range];
         
         [section addObject:@{
-            @"cell" : @"OADescrTitleIconCell",
+            @"cell" : [OADescrTitleIconCell getCellIdentifier],
             @"title" : str,
             @"img" : @"ic_profile_pedestrian",
             @"key" : @"pedestrian_short"
         }];
         
         [section addObject:@{
-            @"cell" : @"OAFilledButtonCell",
+            @"cell" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"calc_pedestrian_route"),
             @"key": @"calc_pedestrian"
         }];
         
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         
@@ -529,25 +535,36 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableArray *section = [[NSMutableArray alloc] init];
     [section addObject:@{
-        @"cell" : @"OARoutingTargetCell",
+        @"cell" : [OARoutingTargetCell getCellIdentifier],
         @"type" : @"start"
     }];
     
     if ([self hasIntermediatePoints])
     {
         [section addObject:@{
-            @"cell" : @"OARoutingTargetCell",
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
             @"type" : @"intermediate"
+        }];
+    }
+    else if (_routingHelper.getCurrentGPXRoute)
+    {
+        [section addObject:@{
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
+            @"type" : @"gpx_route"
+        }];
+    }
+    
+    if (![self isFinishPointFromTrack])
+    {
+        [section addObject:@{
+            @"cell" : [OARoutingTargetCell getCellIdentifier],
+            @"type" : @"finish"
         }];
     }
     
     [section addObject:@{
-        @"cell" : @"OARoutingTargetCell",
-        @"type" : @"finish"
-    }];
-    
-    [section addObject:@{
-        @"cell" : @"OARoutingSettingsCell"
+        @"cell" : [OARoutingSettingsCell getCellIdentifier]
+
     }];
     
     if (_hasEmptyTransportRoute)
@@ -561,7 +578,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ((![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated]) || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
     {
         [section addObject:@{
-            @"cell" : @"OARouteProgressBarCell"
+            @"cell" : [OARouteProgressBarCell getCellIdentifier]
         }];
     }
     [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -577,22 +594,22 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         else
         {
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(NO)
             }];
             [section addObject:@{
-                @"cell" : @"OARoutingInfoCell"
+                @"cell" : [OARoutingInfoCell getCellIdentifier]
             }];
             [section addObject:@{
                 @"cell" : kCellReuseIdentifier
             }];
             [section addObject:@{
-                @"cell" : @"OAFilledButtonCell",
+                @"cell" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"res_details"),
                 @"key" : @"route_details"
             }];
             [section addObject:@{
-                @"cell" : @"OADividerCell",
+                @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(NO)
             }];
             [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -609,14 +626,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if (!_routingHelper.isRouteBeingCalculated && !_transportHelper.isRouteBeingCalculated)
     {
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [section addObject:@{
-            @"cell" : @"OAHomeWorkCell"
+            @"cell" : [OAHomeWorkCell getCellIdentifier]
         }];
         [section addObject:@{
-            @"cell" : @"OADividerCell",
+            @"cell" : [OADividerCell getCellIdentifier],
             @"custom_insets" : @(NO)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
@@ -634,6 +651,30 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _data = [NSDictionary dictionaryWithDictionary:dictionary];
     
     [self setupGoButton];
+}
+
+- (BOOL) isFinishPointFromTrack
+{
+    OAGPXRouteParamsBuilder *routeParams = _routingHelper.getCurrentGPXRoute;
+    if (routeParams != nil)
+    {
+        OARTargetPoint *target = _pointsHelper.getPointToNavigate;
+        if (target != nil)
+        {
+            NSArray<CLLocation *> *points = routeParams.getPoints;
+            if (points.count > 0)
+            {
+                CLLocation *loc = points.lastObject;
+                return [OAUtilities isCoordEqual:loc.coordinate.latitude srcLon:loc.coordinate.longitude destLat:target.getLatitude destLon:target.getLongitude];
+            }
+        }
+    }
+    return NO;
+}
+
+- (BOOL) isGpxTrackFollowingMode
+{
+    return _routingHelper.getCurrentGPXRoute != nil;
 }
 
 - (NSAttributedString *) getFirstLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
@@ -881,10 +922,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     BOOL isPublicTransport = [_routingHelper isPublicTransportMode];
     if ([_pointsHelper getPointToNavigate] || isPublicTransport)
-        [[OARootViewController instance].mapPanel closeRouteInfo];
-    
-    if (!isPublicTransport)
-        [[OARootViewController instance].mapPanel startNavigation];
+    {
+        [[OARootViewController instance].mapPanel closeRouteInfo:^{
+            if (!isPublicTransport)
+                [[OARootViewController instance].mapPanel startNavigation];
+        }];
+    }
 }
 
 - (void) swapPressed:(id)sender
@@ -937,7 +980,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] updateRoute:YES intermediate:-1 historyName:[start getPointDescription]];
         }
 
-        [self show:NO onComplete:nil];
+        [self show:NO fullMenu:NO onComplete:nil];
     }
 }
 
@@ -961,12 +1004,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
 }
 
-- (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
+- (void)show:(BOOL)animated fullMenu:(BOOL)fullMenu onComplete:(void (^)(void))onComplete
 {
     visible = YES;
     [_appModeView setupModeButtons];
     [_tableView setContentOffset:CGPointZero];
-    _currentState = EOARouteInfoMenuStateFullScreen;
+    _currentState = fullMenu ? EOARouteInfoMenuStateFullScreen : _currentState;
     [_tableView setScrollEnabled:YES];
     _historyItemsLimit = kHistoryItemLimitDefault;
     
@@ -1032,10 +1075,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     visible = NO;
     _isHiding = YES;
-    
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel setTopControlsVisible:YES];
-    [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
 
     if (self.superview)
     {
@@ -1113,7 +1152,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) updateMenu
 {
     if ([self superview])
-        [self show:NO onComplete:nil];
+        [self show:NO fullMenu:YES onComplete:nil];
 }
 
 - (OAGPXTrackAnalysis *) getTrackAnalysis
@@ -1134,9 +1173,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) appModeChanged:(OAApplicationMode *)next
 {
     OAApplicationMode *am = [_routingHelper getAppMode];
-    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode.get;
     if ([_routingHelper isFollowingMode] && appMode == am)
-        [OAAppSettings sharedManager].applicationMode = next;
+        [[OAAppSettings sharedManager].applicationMode set:next];
     
     _hasEmptyTransportRoute = NO;
     [_routingHelper setAppMode:next];
@@ -1186,122 +1225,145 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] && [item[@"type"] isEqualToString:@"start"])
+    if ([item[@"cell"] isEqualToString:[OARoutingTargetCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingTargetCell* cell;
-        cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingTargetCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingTargetCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingTargetCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
         {
-            cell.finishPoint = NO;
-            OARTargetPoint *point = [_pointsHelper getPointToStart];
-            cell.titleLabel.text = OALocalizedString(@"route_from");
-            if (point)
+            NSString *type = item[@"type"];
+            if ([type isEqualToString:@"start"])
             {
-                [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_start_point"]];
-                NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
-                cell.addressLabel.text = oname;
+                cell.finishPoint = NO;
+                OARTargetPoint *point = [_pointsHelper getPointToStart];
+                cell.titleLabel.text = OALocalizedString(@"route_from");
+                if (point)
+                {
+                    [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_start_point"]];
+                    NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
+                    cell.addressLabel.text = oname;
+                }
+                else
+                {
+                    [cell.imgView setImage:[UIImage imageNamed:@"ic_action_location_color"]];
+                    cell.addressLabel.text = OALocalizedString(@"shared_string_my_location");
+                }
+                [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_swap"] forState:UIControlStateNormal];
+                [self setupButtonLayout:cell.routingCellButton];
+                [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                [cell.routingCellButton addTarget:self action:@selector(swapPressed:) forControlEvents:UIControlEventTouchUpInside];
+                cell.routingCellButton.hidden = self.isGpxTrackFollowingMode;
+                cell.routingCellButton.userInteractionEnabled = !cell.routingCellButton.isHidden;
             }
-            else
+            else if ([type isEqualToString:@"finish"])
             {
-                [cell.imgView setImage:[UIImage imageNamed:@"ic_action_location_color"]];
-                cell.addressLabel.text = OALocalizedString(@"shared_string_my_location");
+                cell.finishPoint = YES;
+                OARTargetPoint *point = [_pointsHelper getPointToNavigate];
+                [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_destination"]];
+                cell.titleLabel.text = OALocalizedString(@"route_to");
+                if (point)
+                {
+                    NSString *oname = [point getOnlyName];
+                    cell.addressLabel.text = oname;
+                }
+                else
+                {
+                    cell.addressLabel.text = OALocalizedString(@"route_descr_select_destination");
+                }
+                [cell setDividerVisibility:YES];
+                cell.routingCellButton.hidden = _routingHelper.isPublicTransportMode;
+                cell.routingCellButton.userInteractionEnabled = !cell.routingCellButton.isHidden;
+                UIImage *image = self.isGpxTrackFollowingMode ? [UIImage imageNamed:@"ic_navbar_close"] : [UIImage imageNamed:@"ic_custom_add"];
+                [cell.routingCellButton setImage:image forState:UIControlStateNormal];
+                [self setupButtonLayout:cell.routingCellButton];
+                [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                if (self.isGpxTrackFollowingMode)
+                    [cell.routingCellButton addTarget:self action:@selector(removeFinishDestination) forControlEvents:UIControlEventTouchUpInside];
+                else
+                    [cell.routingCellButton addTarget:self action:@selector(addDestinationPressed:) forControlEvents:UIControlEventTouchUpInside];
             }
-            [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_swap"] forState:UIControlStateNormal];
-            [self setupButtonLayout:cell.routingCellButton];
-            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.routingCellButton addTarget:self action:@selector(swapPressed:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        return cell;
-    }
-    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] && [item[@"type"] isEqualToString:@"finish"])
-    {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
-        OARoutingTargetCell* cell;
-        cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
-            cell = (OARoutingTargetCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            cell.finishPoint = YES;
-            OARTargetPoint *point = [_pointsHelper getPointToNavigate];
-            [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_destination"]];
-            cell.titleLabel.text = OALocalizedString(@"route_to");
-            if (point)
+            else if ([type isEqualToString:@"intermediate"])
             {
-                NSString *oname = [point getOnlyName];
-                cell.addressLabel.text = oname;
+                cell.finishPoint = NO;
+                [cell setDividerVisibility:NO];
+                NSArray<OARTargetPoint *> *points = [_pointsHelper getIntermediatePoints];
+                NSMutableString *via = [NSMutableString string];
+                for (OARTargetPoint *point in points)
+                {
+                    if (via.length > 0)
+                        [via appendString:@" "];
+                    
+                    NSString *description = [point getOnlyName];
+                    [via appendString:description];
+                }
+                [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_intermediate"]];
+                cell.titleLabel.text = OALocalizedString(@"route_via");
+                cell.addressLabel.text = via;
+                [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
+                [self setupButtonLayout:cell.routingCellButton];
+                [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                [cell.routingCellButton addTarget:self action:@selector(editDestinationsPressed:) forControlEvents:UIControlEventTouchUpInside];
+                if (cell.routingCellButton.isHidden)
+                {
+                    cell.routingCellButton.hidden = NO;
+                    cell.routingCellButton.userInteractionEnabled = YES;
+                }
             }
-            else
+            else if ([type isEqualToString:@"gpx_route"])
             {
-                cell.addressLabel.text = OALocalizedString(@"route_descr_select_destination");
-            }
-            [cell setDividerVisibility:YES];
-            cell.routingCellButton.hidden = _routingHelper.isPublicTransportMode;
-            [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
-            [self setupButtonLayout:cell.routingCellButton];
-            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.routingCellButton addTarget:self action:@selector(addDestinationPressed:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        return cell;
-    }
-    else if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] && [item[@"type"] isEqualToString:@"intermediate"])
-    {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
-        OARoutingTargetCell* cell;
-        cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
-            cell = (OARoutingTargetCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            cell.finishPoint = NO;
-            [cell setDividerVisibility:NO];
-            NSArray<OARTargetPoint *> *points = [_pointsHelper getIntermediatePoints];
-            NSMutableString *via = [NSMutableString string];
-            for (OARTargetPoint *point in points)
-            {
-                if (via.length > 0)
-                    [via appendString:@" "];
+                OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
+                OAGPXDocument *gpx = gpxParams.file;
+                NSString *fileName = @"";
+                if (gpx.path.length > 0)
+                    fileName = [gpx.path.lastPathComponent stringByDeletingPathExtension];
+                else if (gpx.tracks.count > 0)
+                    fileName = gpx.tracks.firstObject.name;
                 
-                NSString *description = [point getOnlyName];
-                [via appendString:description];
+                if (fileName.length == 0)
+                    fileName = OALocalizedString(@"track");
+                
+                if (gpx.getNonEmptySegmentsCount > 1 && gpxParams != nil && gpxParams.selectedSegment != -1)
+                {
+                    fileName = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"some_of"), gpxParams.selectedSegment + 1, gpx.getNonEmptySegmentsCount], fileName];
+                }
+                
+                cell.finishPoint = NO;
+                [cell setDividerVisibility:self.isFinishPointFromTrack];
+                [cell.imgView setImage:[UIImage templateImageNamed:@"ic_custom_trip"]];
+                cell.imgView.tintColor = UIColorFromRGB(color_icon_inactive);
+                cell.titleLabel.text = OALocalizedString(@"follow_track");
+                cell.addressLabel.text = fileName;
+                if (self.isGpxTrackFollowingMode && !self.isFinishPointFromTrack)
+                {
+                    cell.routingCellButton.hidden = YES;
+                    cell.routingCellButton.userInteractionEnabled = NO;
+                }
+                else
+                {
+                    cell.routingCellButton.hidden = NO;
+                    cell.routingCellButton.userInteractionEnabled = YES;
+                    [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+                    [self setupButtonLayout:cell.routingCellButton];
+                    [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                    [cell.routingCellButton addTarget:self action:@selector(addFinishDestination) forControlEvents:UIControlEventTouchUpInside];
+                }
             }
-            [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_intermediate"]];
-            cell.titleLabel.text = OALocalizedString(@"route_via");
-            cell.addressLabel.text = via;
-            [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
-            [self setupButtonLayout:cell.routingCellButton];
-            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.routingCellButton addTarget:self action:@selector(editDestinationsPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARoutingInfoCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingInfoCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingInfoCell* cell;
-        cell = (OARoutingInfoCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingInfoCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingInfoCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingInfoCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingInfoCell *)[nib objectAtIndex:0];
         }
         
@@ -1318,15 +1380,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         return _routeStatsCell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAFilledButtonCell* cell;
-        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
         }
         
@@ -1343,29 +1403,25 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OARoutingSettingsCell* cell;
-        cell = (OARoutingSettingsCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OARoutingSettingsCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingSettingsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingSettingsCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingSettingsCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    else if ([item[@"cell"] isEqualToString:[OAHomeWorkCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAHomeWorkCell *cell;
-        cell = (OAHomeWorkCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAHomeWorkCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAHomeWorkCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHomeWorkCell getCellIdentifier] owner:self options:nil];
             cell = (OAHomeWorkCell *)[nib objectAtIndex:0];
         }
         
@@ -1376,15 +1432,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
+    else if ([item[@"cell"] isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OAMultiIconTextDescCell* cell;
-        cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             [cell setOverflowVisibility:YES];
         }
@@ -1399,13 +1453,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell updateConstraints];
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1419,15 +1472,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OADescrTitleIconCell"])
+    else if ([item[@"cell"] isEqualToString:[OADescrTitleIconCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierPoint = item[@"cell"];
-        
         OADescrTitleIconCell* cell;
-        cell = (OADescrTitleIconCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OADescrTitleIconCell *)[tableView dequeueReusableCellWithIdentifier:[OADescrTitleIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleIconCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleIconCell *)[nib objectAtIndex:0];
         }
         
@@ -1436,7 +1487,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             NSString *key = item[@"key"];
             if ([key isEqualToString:@"pedestrian_short"])
             {
-                [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
                 cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
                 cell.textView.attributedText = item[@"title"];
                 cell.backgroundColor = UIColor.whiteColor;
@@ -1461,35 +1512,32 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAButtonCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
             [cell.button addTarget:self action:@selector(onHistoryButtonPressed:) forControlEvents:UIControlEventTouchDown];
             [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
             [cell showImage:NO];
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
+    else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OARouteProgressBarCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteProgressBarCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteProgressBarCell getCellIdentifier] owner:self options:nil];
             cell = (OARouteProgressBarCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1497,15 +1545,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportRouteCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportRouteCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportRouteCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportRouteCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportRouteCell *)[nib objectAtIndex:0];
         }
         
@@ -1527,15 +1573,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportShieldCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPublicTransportShieldCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportShieldCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportShieldCell *)[nib objectAtIndex:0];
         }
         
@@ -1555,9 +1599,28 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
         return nil;
     return indexPath;
+}
+
+- (void)addFinishDestination
+{
+    OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:EOADestinationTypeFinish];
+    addDest.delegate = self;
+    [addDest show];
+}
+
+- (void)removeFinishDestination
+{
+    if (_routingHelper.getCurrentGPXRoute != nil)
+    {
+        OAGPXRouteParamsBuilder *routeParams = _routingHelper.getCurrentGPXRoute;
+        CLLocation *finalPoint = routeParams.getPoints.lastObject;
+        
+        if (finalPoint)
+            [[OATargetPointsHelper sharedInstance] navigateToPoint:finalPoint updateRoute:YES intermediate:-1];
+    }
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1572,13 +1635,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     else if ([item[@"type"] isEqualToString:@"finish"])
     {
-        OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:EOADestinationTypeFinish];
-        addDest.delegate = self;
-        [addDest show];
+        [self addFinishDestination];
     }
     else if ([item[@"type"] isEqualToString:@"intermediate"])
     {
         [self editDestinationsPressed:nil];
+    }
+    else if ([item[@"type"] isEqualToString:@"gpx_route"])
+    {
+        OAFollowTrackBottomSheetViewController *bottomSheet = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:_routingHelper.getCurrentGPXRoute.file];
+        [bottomSheet presentInViewController:OARootViewController.instance];
     }
     else if ([item[@"key"] isEqualToString:@"prev_route"])
     {
@@ -1601,13 +1667,22 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [self updateData];
             [_tableView reloadData];
         }
-        else if ([obj isKindOfClass:OAGPX.class])
+        else if ([obj isKindOfClass:OAGPXDocument.class])
         {
-            OAGPX *gpx = (OAGPX *) obj;
+            OAGPXDocument *gpx = (OAGPXDocument *) obj;
             
-            [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:gpx];
-            [_routingHelper recalculateRouteDueToSettingsChange];
-            [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+            if (gpx.getNonEmptySegmentsCount > 1)
+            {
+                OATrackSegmentsViewController *segmentsController = [[OATrackSegmentsViewController alloc] initWithFile:gpx];
+                segmentsController.delegate = self;
+                [OARootViewController.instance presentViewController:segmentsController animated:YES completion:nil];
+            }
+            else
+            {
+                [[OARootViewController instance].mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
+                [_routingHelper recalculateRouteDueToSettingsChange];
+                [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+            }
         }
         else if ([obj isKindOfClass:OAHistoryItem.class])
         {
@@ -1646,15 +1721,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    if ([item[@"cell"] isEqualToString:[OAHomeWorkCell getCellIdentifier]])
         return 60.0;
-    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    else if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
         return 50.0;
-    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
-    else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
+    else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
         return 2.0;
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])
         return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
     return UITableViewAutomaticDimension;
 }
@@ -1662,9 +1737,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+    if ([item[@"cell"] isEqualToString:[OAPublicTransportRouteCell getCellIdentifier]])
         return 118.;
-    else if ([item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+    else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
         return 58.;
     
     return kEstimatedRowHeight;
@@ -1694,7 +1769,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = [self getTitleForSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     
     if (!title)
     {
@@ -1745,7 +1820,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute) && section == _data.count - 1)
     {
-        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
         NSAttributedString* res = _hasEmptyTransportRoute ? [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning];
         vw.label.attributedText = res;
         vw.label.delegate = self;
@@ -1925,7 +2000,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) onItemSelected:(NSString *)key overrideExisting:(BOOL)overrideExisting
 {
     BOOL isHome = [key isEqualToString:@"home"];
-    OARTargetPoint *targetPoint = isHome ? _app.data.homePoint : _app.data.workPoint;
+    OARTargetPoint *targetPoint = isHome ? [_pointsHelper getHomePoint] : [_pointsHelper getWorkPoint];
     
     if (targetPoint && !overrideExisting)
     {
@@ -2005,6 +2080,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
     }
     return YES;
+}
+
+#pragma mark - OASegmentSelectionDelegate
+
+- (void) onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+{
+    [OAAppSettings.sharedManager.gpxRouteSegment set:position];
+    
+    [[OARootViewController instance].mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
+    [_routingHelper recalculateRouteDueToSettingsChange];
+    [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+    
+    [self updateData];
+    [self.tableView reloadData];
 }
 
 @end

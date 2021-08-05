@@ -112,7 +112,7 @@
     _searchField.delegate = self;
     [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"search_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"search_icon"]];
     leftImageView.contentMode = UIViewContentModeCenter;
     leftImageView.frame = _searchField.leftView.frame;
     leftImageView.tintColor = [UIColor whiteColor];
@@ -133,13 +133,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
     OASettingsTitleTableViewCell* cell = nil;
     
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
     }
     

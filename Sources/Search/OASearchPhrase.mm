@@ -17,6 +17,7 @@
 #import "OAUtilities.h"
 #import "OALocationParser.h"
 #import <RegexKitLite.h>
+#import "OAAbbreviations.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -62,6 +63,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 @property (nonatomic) NSMutableArray<OANameStringMatcher *> *unknownWordsMatcher;
 
 @property (nonatomic) QuadRect *cache1kmRect;
+
+@property (nonatomic) OAPOIBaseType *unselectedPoiType;
 
 @end
 
@@ -117,7 +120,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
                         @"ct",
                         @"e.",
                         @"dr.",
-                        @"j.",		
+                        @"j.",
                         @"in",
                         @"al",
                         @"út",
@@ -177,12 +180,12 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             {
                 if (first)
                 {
-                    sp.firstUnknownSearchWord = wd;
+                    sp.firstUnknownSearchWord = [OAAbbreviations replace:wd];
                     first = false;
                 }
                 else
                 {
-                    [sp.otherUnknownWords addObject:wd];
+                    [sp.otherUnknownWords addObject:[OAAbbreviations replace:wd]];
                 }
             }
         }
@@ -278,6 +281,21 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         }
     }
     return cnt;
+}
+
++ (NSMutableArray<NSString *> *) splitWords:(NSString *)w ws:(NSMutableArray<NSString *> *)ws
+{
+    if (w && w.length > 0)
+    {
+        NSArray<NSString *> *wrs = [w componentsSeparatedByRegex:ALLDELIMITERS];
+        for (int i = 0; i < [wrs count]; i++)
+        {
+            NSString *wd = wrs[i].trim;
+            if (wd.length > 0)
+                [ws addObject:wd];
+        }
+    }
+    return ws;
 }
 
 - (OASearchPhrase *) selectWord:(OASearchResult *) res unknownWords:(NSArray<NSString *> *)unknownWords lastComplete:(BOOL)lastComplete
@@ -403,6 +421,16 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 - (NSString *) getFirstUnknownSearchWord
 {
     return _firstUnknownSearchWord;
+}
+
+- (OAPOIBaseType *) getUnselectedPoiType
+{
+    return _unselectedPoiType;
+}
+
+- (void) setUnselectedPoiType:(OAPOIBaseType *)unselectedPoiType
+{
+    _unselectedPoiType = unselectedPoiType;
 }
 
 - (OANameStringMatcher *) getFullUnknownNameMatcher
@@ -535,6 +563,11 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return self.settings;
 }
 
+- (NSString *) getDelimiter
+{
+    return DELIMITER;
+}
+
 
 - (int) getRadiusLevel
 {
@@ -604,7 +637,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (BOOL) isLastWord:(EOAObjectType)p
 {
-    for (NSInteger i = self.words.count - 1; i >= 0; i--)
+    for (NSInteger i = (NSInteger) self.words.count - 1; i >= 0; i--)
     {
         OASearchWord *sw = self.words[i];
         if ([sw getType] == p)
@@ -748,7 +781,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (CLLocation *) getWordLocation
 {
-    for (NSInteger i = self.words.count - 1; i >= 0; i--)
+    for (NSInteger i = (NSInteger) self.words.count - 1; i >= 0; i--)
     {
         OASearchWord *sw = self.words[i];
         if ([sw getLocation])
@@ -759,7 +792,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (CLLocation *) getLastTokenLocation
 {
-    for (NSInteger i = self.words.count - 1; i >= 0; i--)
+    for (NSInteger i = (NSInteger) self.words.count - 1; i >= 0; i--)
     {
         OASearchWord *sw = self.words[i];
         if ([sw getLocation])

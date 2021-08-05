@@ -38,12 +38,11 @@
 #import "OAPOIUIFilter.h"
 #import "OADefaultFavorite.h"
 #import "OAPOILocationType.h"
-#import "OAPOISearchHelper.h"
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
 #import "OAReverseGeocoder.h"
+#import "OAColors.h"
 
-#import "OAIconTextTableViewCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
@@ -51,6 +50,7 @@
 #import "OAIconButtonCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
+#import "OAButtonRightIconCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -164,8 +164,7 @@
             OsmAnd::LatLon latLon = point->getLatLon();
             if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude] && [item.name isEqualToString:point->getTitle().toNSString()])
             {
-                OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
-                fav.favorite = point;
+                OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:point];
                 [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO saveState:NO];
                 originFound = YES;
                 break;
@@ -301,8 +300,9 @@
             }
             case FAVORITE:
             {
-                OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
-                fav.favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
+                auto favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
+                OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+                
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
                     [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO saveState:NO];
@@ -450,13 +450,11 @@
 
 - (OAPointDescCell *) getPointDescCell
 {
-    static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-    
     OAPointDescCell* cell;
-    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointDescCell *)[nib objectAtIndex:0];
     }
     return cell;
@@ -482,10 +480,10 @@
 + (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
 {
     OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
         cell.textView.numberOfLines = 0;
     }
@@ -509,6 +507,17 @@
     return cell;
 }
 
+- (NSInteger) getPoiFiltersCount:(NSArray<OAQuickSearchListItem *> *)dataArray
+{
+    NSInteger count = 0;
+    for (OAQuickSearchListItem *res in dataArray)
+    {
+        if (res.getSearchResult.objectType == POI_TYPE)
+            count++;
+    }
+    return count;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -518,12 +527,12 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [OAPOISearchHelper getHeightForHeader];
+    return 16.0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == _dataGroups.count - 1 ? [OAPOISearchHelper getHeightForFooter] : 0.01;
+    return section == _dataGroups.count - 1 ? 16.0 : 0.01;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -558,7 +567,7 @@
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = [[UIImage imageNamed:@"ic_action_world_globe"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
@@ -666,6 +675,7 @@
             }
             case POI_TYPE:
             {
+                BOOL isLast = [dataArray indexOfObject:item] == [self getPoiFiltersCount:dataArray] - 1;
                 if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
                 {
                     OACustomSearchPoiFilter *filter = (OACustomSearchPoiFilter *) res.object;
@@ -677,10 +687,12 @@
                         NSString *iconName = (NSString *)res;
                         icon = [OAUtilities getMxIcon:iconName];
                     }
-                    if (!icon)
-                        icon = [OAUtilities getMxIcon:@"user_defined"];
-                    
-                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
+                    if (!icon && [filter isKindOfClass:[OAPOIUIFilter class]])
+                        icon = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *) filter];
+                    OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
+                    cell.iconView.tintColor = UIColorFromRGB(color_osmand_orange);
+                    cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
+                    return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOIBaseType class]])
                 {
@@ -688,15 +700,17 @@
                     NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
                     UIImage *icon = [((OAPOIBaseType *)res.object) icon];
                     
-                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
+                    OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
+                    cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
+                    return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
                     OAIconTextTableViewCell* cell;
-                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
                     if (cell == nil)
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
                         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                     }
                     if (cell)
@@ -707,6 +721,7 @@
                         [cell.textView setTextColor:[UIColor blackColor]];
                         [cell.textView setText:[item getName]];
                         [cell.iconView setImage:[((OAPOICategory *)res.object) icon]];
+                        cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
                     }
                     return cell;
                 }
@@ -717,13 +732,35 @@
     }
     else
     {
+        if ([item getType] == ACTION_BUTTON)
+        {
+            OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OAButtonRightIconCell"];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonRightIconCell" owner:self options:nil];
+                cell = nib[0];
+                cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            }
+            if (cell)
+            {
+                OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
+                cell.iconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+
+                [cell.button setTitle:[buttonItem getName] forState:UIControlStateNormal];
+
+                [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                [cell.button addTarget:buttonItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
+                return cell;
+            }
+        }
         if ([item getType] == BUTTON)
         {
             OAIconButtonCell* cell;
-            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconButtonCell"];
+            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconButtonCell *)[nib objectAtIndex:0];
             }
             
@@ -745,10 +782,10 @@
         else if ([item getType] == SEARCH_MORE)
         {
             OASearchMoreCell* cell;
-            cell = (OASearchMoreCell *)[tableView dequeueReusableCellWithIdentifier:@"OASearchMoreCell"];
+            cell = (OASearchMoreCell *)[tableView dequeueReusableCellWithIdentifier:[OASearchMoreCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASearchMoreCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASearchMoreCell getCellIdentifier] owner:self options:nil];
                 cell = (OASearchMoreCell *)[nib objectAtIndex:0];
             }
             cell.textView.text = [item getName];
@@ -757,10 +794,10 @@
         else if ([item getType] == EMPTY_SEARCH)
         {
             OAEmptySearchCell* cell;
-            cell = (OAEmptySearchCell *)[tableView dequeueReusableCellWithIdentifier:@"OAEmptySearchCell"];
+            cell = (OAEmptySearchCell *)[tableView dequeueReusableCellWithIdentifier:[OAEmptySearchCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAEmptySearchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAEmptySearchCell getCellIdentifier] owner:self options:nil];
                 cell = (OAEmptySearchCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -774,10 +811,10 @@
         else if ([item getType] == HEADER)
         {
             OAMenuSimpleCell *cell;
-            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCell"];
+            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             }
             
@@ -852,7 +889,7 @@
             {
                 ((OAQuickSearchMoreListItem *) item).onClickFunction(item);
             }
-            else if ([item getType] == BUTTON)
+            else if ([item getType] == BUTTON || [item getType] == ACTION_BUTTON)
             {
                 ((OAQuickSearchButtonListItem *) item).onClickFunction(item);
             }

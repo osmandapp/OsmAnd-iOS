@@ -66,7 +66,7 @@ static NSArray<NSString *> *nibNames;
 - (void) setCollapsed:(BOOL)collapsed
 {
     [super setCollapsed:collapsed];
-    [[OAAppSettings sharedManager] setOnlinePhotosRowCollapsed:collapsed];
+    [[OAAppSettings sharedManager].onlinePhotosRowCollapsed set:collapsed];
     if (!collapsed && self.delegate)
         [self.delegate onViewExpanded];
 }
@@ -162,6 +162,7 @@ static NSArray<NSString *> *nibNames;
 
 - (void) requestCardReload:(OAAbstractCard *)card
 {
+    [card update];
     NSInteger row = [_cards indexOfObject:card];
     NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
     [_cardCollection reloadItemsAtIndexPaths:@[path]];

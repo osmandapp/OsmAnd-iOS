@@ -22,6 +22,12 @@
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OAChoosePlanHelper.h"
+#import "OADownloadDescriptionInfo.h"
+#import "OAJsonHelper.h"
+#import "OATileSource.h"
+#import "OAIndexConstants.h"
+#import "OAResourcesInstaller.h"
+#import "OAPlugin.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -79,6 +85,82 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 @implementation OAMapStyleResourceItem
 @end
 
+@implementation OACustomResourceItem
+
+- (NSString *) getTargetFilePath
+{
+    if (self.downloadContent && ![self.downloadContent[@"sql"] boolValue])
+        return self.getBasePathByExtension;
+    
+    NSString *fileName = self.title;
+    if (self.subfolder && self.subfolder.length > 0)
+    {
+        fileName = [self.subfolder stringByAppendingPathComponent:fileName];
+    }
+    return [self.getBasePathByExtension stringByAppendingPathComponent:fileName];
+}
+
+- (NSString *) getBasePathByExtension
+{
+    NSString *titleWithoutExt = self.title;
+    if ([titleWithoutExt.pathExtension isEqualToString:@"gz"] ||
+        ([titleWithoutExt.pathExtension isEqualToString:@"zip"] && ![self.title hasSuffix:BINARY_MAP_INDEX_EXT_ZIP]))
+    {
+        titleWithoutExt = [titleWithoutExt stringByDeletingPathExtension];
+    }
+    if ([titleWithoutExt hasSuffix:SQLITE_EXT])
+    {
+        BOOL isSqlSource = YES;
+        if (self.downloadContent)
+            isSqlSource = [self.downloadContent[@"sql"] boolValue];
+        
+        if (isSqlSource)
+            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR];
+        else
+            return [OsmAndApp.instance.cachePath stringByAppendingPathComponent:self.downloadContent[@"name"]];
+    }
+    else if ([titleWithoutExt.lowercaseString hasSuffix:GPX_FILE_EXT])
+        return OsmAndApp.instance.gpxPath;
+    else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
+        return OsmAndApp.instance.documentsPath;
+    return OsmAndApp.instance.documentsPath;
+}
+
+- (NSString *) getVisibleName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_names defValue:@""];
+}
+
+- (NSString *) getSubName
+{
+    NSString *subName = [self getFirstSubName];
+    
+    NSString *secondSubName = [self getSecondSubName];
+    if (secondSubName)
+        subName = subName == nil ? secondSubName : [NSString stringWithFormat:@"%@ • %@", subName, secondSubName];
+    return subName;
+}
+
+- (NSString *) getFirstSubName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_firstSubNames defValue:nil];
+}
+
+- (NSString *) getSecondSubName
+{
+    return [OAJsonHelper getLocalizedResFromMap:_secondSubNames defValue:nil];
+}
+
+- (BOOL) isInstalled
+{
+    NSString *pathForUnzippedResource = self.getTargetFilePath;
+    if ([self.getTargetFilePath hasSuffix:@".zip"] || [self.getTargetFilePath hasSuffix:@".gz"])
+        pathForUnzippedResource = pathForUnzippedResource.stringByDeletingPathExtension;
+    return [NSFileManager.defaultManager fileExistsAtPath:pathForUnzippedResource];
+}
+
+@end
+
 @implementation OAResourcesUIHelper
 
 + (NSString *) resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
@@ -98,6 +180,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"res_hillshade");
         case OsmAnd::ResourcesManager::ResourceType::SlopeRegion:
             return OALocalizedString(@"res_slope");
+        case OsmAnd::ResourcesManager::ResourceType::SqliteFile:
+            return OALocalizedString(@"online_map");
             
         default:
             return OALocalizedString(@"res_unknown");
@@ -296,11 +380,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 }
 
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
-{
-#if defined(OSMAND_IOS_DEV)
-    return YES;
-#endif
-    
+{    
     NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
     
     if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))
@@ -356,6 +436,23 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return nil;
 }
 
++ (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAnd::ResourcesManager::ResourceType>)resourceTypes
+{
+    NSMutableArray<NSString *> *items = [NSMutableArray new];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    for (const auto& localResource : app.resourcesManager->getLocalResources())
+    {
+        if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed)
+            continue;
+        const auto& installedResource = std::static_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
+        if (resourceTypes.contains(installedResource->type))
+        {
+            [items addObject:installedResource->localPath.toNSString()];
+        }
+    }
+    return items;
+}
+
 + (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
 {
     NSMutableArray<OAResourceItem *>* res;
@@ -389,7 +486,26 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                     for (NSString *resourceId in ids)
                     {
                         const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                        if (resource->type == resourceType)
+                        // Speacial case for Saudi Arabia Rahal map
+                        if (resource == nullptr)
+                        {
+                            const auto installedResource = app.resourcesManager->getResource(QString::fromNSString(resourceId));
+                            if (installedResource && installedResource->type == resourceType)
+                            {
+                                OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+                                item.resourceId = installedResource->id;
+                                item.resourceType = installedResource->type;
+                                item.title = [self.class titleOfResource:installedResource
+                                                                inRegion:region
+                                                          withRegionName:YES
+                                                        withResourceType:NO];
+                                item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+                                item.worldRegion = region;
+                                [res addObject:item];
+                                continue;
+                            }
+                        }
+                        else if (resource->type == resourceType)
                         {
                             if (app.resourcesManager->isResourceInstalled(resource->id))
                             {
@@ -474,9 +590,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (BOOL) checkIfUpdateEnabled:(OAWorldRegion *)region
 {
-#if defined(OSMAND_IOS_DEV)
-    return YES;
-#endif
     if (region.regionId == nil || [region isInPurchasedArea])
     {
         return YES;
@@ -487,6 +600,70 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
         return NO;
+    }
+}
+
++ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    if (item.downloadUrl)
+    {
+        NSString* name = item.title;
+        if (item.subfolder && item.subfolder.length > 0)
+            name = [item.subfolder stringByAppendingPathComponent:name];
+        
+        if ([item.downloadUrl hasPrefix:@"@"])
+        {
+            NSString *relPath = [item.downloadUrl substringFromIndex:1];
+            NSString *pluginPath = [OAPlugin getAbsoulutePluginPathByRegion:item.worldRegion];
+            if (pluginPath.length > 0 && relPath.length > 0)
+            {
+                NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath nsResourceId:srcFilePath.lastPathComponent.lowerCase fileName:name];
+                if (!failed)
+                    [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
+            }
+        }
+        else
+        {
+            // Create download task
+            NSURL* url = [NSURL URLWithString:item.downloadUrl];
+            NSURLRequest* request = [NSURLRequest requestWithURL:url];
+            
+            NSLog(@"%@", url);
+            
+            OsmAndAppInstance app = [OsmAndApp instance];
+            id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
+                                                                             andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
+                                                                            andName:name];
+            if (onTaskCreated)
+                onTaskCreated(task);
+            
+            // Resume task only if it's other resource download tasks are not running
+            if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+            {
+                [task resume];
+                if (onTaskResumed)
+                    onTaskResumed(task);
+            }
+        }
+    }
+    else if (item.downloadContent)
+    {
+        OATileSource *tileSource = [OATileSource tileSourceWithParameters:item.downloadContent];
+        if (tileSource.isSql)
+        {
+            NSString *path = item.getTargetFilePath;
+            if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:tileSource.toSqlParams])
+                [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
+        }
+        else
+        {
+            OsmAndAppInstance app = OsmAndApp.instance;
+            const auto result = tileSource.toOnlineTileSource;
+            OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
+            app.resourcesManager->installTilesResource(result);
+        }
+        [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
     }
 }
 
@@ -1027,6 +1204,52 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [res setObject:i forKey:((OAMapSourceResourceItem *)i).mapSource];
     }
     return [NSDictionary dictionaryWithDictionary:res];
+}
+
++ (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles
+{
+    NSMutableArray<OAMapStyleResourceItem *> *res = [NSMutableArray new];
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto localResources = app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+    {
+        if (localResource->type == OsmAndResourceType::MapStyle && localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Builtin)
+            mapStylesResources.push_back(localResource);
+    }
+    
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
+    
+    // Process map styles
+    for(const auto& resource : mapStylesResources)
+    {
+        const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+        
+        NSString* resourceId = resource->id.toNSString();
+        
+        OAMapStyleResourceItem* item = [[OAMapStyleResourceItem alloc] init];
+        item.mapSource = [app.data lastMapSourceByResourceId:resourceId];
+        if (item.mapSource == nil)
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
+        
+        NSString *caption = mapStyle->title.toNSString();
+        
+        item.mapSource.name = caption;
+        item.resourceType = OsmAndResourceType::MapStyle;
+        item.resource = resource;
+        item.mapStyle = mapStyle;
+
+        [res addObject:item];
+    }
+
+    [res sortUsingComparator:^NSComparisonResult(OAMapStyleResourceItem* obj1, OAMapStyleResourceItem* obj2) {
+        if (obj1.sortIndex < obj2.sortIndex)
+            return NSOrderedAscending;
+        if (obj1.sortIndex > obj2.sortIndex)
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    return res;
 }
 
 @end

@@ -20,9 +20,6 @@
 
 #define kTime24_00 1440
 #define kNumberOfSections 2
-#define kCellTypeCheck @"check"
-#define kCellTypeSwitch @"switch"
-#define kCellTypeTimeRightDetail @"time_right_detail"
 
 static const NSInteger daysSectionIndex = 0;
 static const NSInteger timeSectionIndex = 1;
@@ -138,7 +135,7 @@ static const NSInteger timeSectionIndex = 1;
     for (int i = 0; i < [_dateFormatter weekdaySymbols].count; i++) {
         [dataArr addObject:@{
                              @"title" : [[self weekdayNameFromWeekdayNumber:i] capitalizedString],
-                             @"type" : kCellTypeCheck
+                             @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
                              }];
     }
     _weekdaysData = [NSArray arrayWithArray:dataArr];
@@ -148,19 +145,19 @@ static const NSInteger timeSectionIndex = 1;
     const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_around_the_clock"),
-                         @"type" : kCellTypeSwitch
+                         @"type" : [OASwitchTableViewCell getCellIdentifier]
                          }];
 
     _startDate = [self dateFromMinutes:rule->getStartTime()];
     _endDate = [self dateFromMinutes:rule->getEndTime()];
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_opens_at"),
-                         @"type" : kCellTypeTimeRightDetail,
+                         @"type" : [OATimeTableViewCell getCellIdentifier],
                          }];
     
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_closes_at"),
-                         @"type" : kCellTypeTimeRightDetail,
+                         @"type" : [OATimeTableViewCell getCellIdentifier],
                          }];
     _timeData = [NSArray arrayWithArray:dataArr];
 }
@@ -291,15 +288,13 @@ static const NSInteger timeSectionIndex = 1;
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeCheck])
+    if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
         OASettingsTitleTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -310,15 +305,13 @@ static const NSInteger timeSectionIndex = 1;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -328,18 +321,18 @@ static const NSInteger timeSectionIndex = 1;
             [cell.textView setText: item[@"title"]];
             cell.switchView.on = _isOpened24_7;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeTimeRightDetail])
+    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -351,12 +344,11 @@ static const NSInteger timeSectionIndex = 1;
     }
     else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
     {
-        static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
         OADateTimePickerTableViewCell* cell;
-        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
+        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADateTimePickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dateTimePicker.datePickerMode = UIDatePickerModeTime;
@@ -395,7 +387,7 @@ static const NSInteger timeSectionIndex = 1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeTimeRightDetail])
+    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
         
@@ -415,7 +407,7 @@ static const NSInteger timeSectionIndex = 1;
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeCheck])
+    else if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
         const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
         rule->getDays()[[self weekdayNumberFromIndex:indexPath.row]] = !rule->getDays()[[self weekdayNumberFromIndex:indexPath.row]];

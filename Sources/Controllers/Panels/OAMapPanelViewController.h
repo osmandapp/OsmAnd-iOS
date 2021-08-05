@@ -79,7 +79,9 @@
 - (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode;
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
+- (void) showRouteInfo:(BOOL)fullMenu;
 - (void) closeRouteInfo;
+- (void) closeRouteInfo:(void (^)(void))onComplete;
 - (void) updateRouteInfo;
 - (void) showWaypoints;
 - (void) showRoutePreferences;
@@ -95,6 +97,7 @@
 - (BOOL) isTopControlsVisible;
 - (void) setTopControlsVisible:(BOOL)visible;
 - (void) setTopControlsVisible:(BOOL)visible customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle;
+- (void) updateToolbar;
 - (void) updateOverlayUnderlayView;
 - (BOOL) isOverlayUnderlayViewVisible;
 
@@ -133,6 +136,7 @@
 - (BOOL) hasGpxActiveTargetType;
 - (void) displayGpxOnMap:(OAGPX *)item;
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset;
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset;
 - (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 
 - (void) applyTargetPoint:(OATargetPoint *)targetPoint;
@@ -141,11 +145,13 @@
 
 - (void) showToolbar:(OAToolbarViewController *)toolbarController;
 - (void) hideToolbar:(OAToolbarViewController *)toolbarController;
+- (void) showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude;
 
 - (void) openSearch;
+- (void) openSearch:(NSObject *)object location:(CLLocation *)location;
 - (void) openSearch:(OAQuickSearchType)searchType;
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex;
-- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery;
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object;
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription;
 
@@ -158,6 +164,7 @@
 
 // Navigation
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
+- (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight animated:(BOOL)animated;
 
 - (void) onNavigationClick:(BOOL)hasTargets;
 - (void) switchToRouteFollowingLayout;
@@ -168,5 +175,11 @@
 - (void) refreshToolbar;
 
 - (void) onHandleIncomingURL:(NSString *)ext;
+
+- (void) onCarPlayConnected;
+- (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete;
+
+// CarPlay
+- (void) setMapViewController:(OAMapViewController * _Nullable)mapViewController;
 
 @end

@@ -17,7 +17,6 @@
 #import "OAColors.h"
 
 #define kSidePadding 16
-#define kCellTypeSwitch @"OASwitchCell"
 
 @interface OAAvoidPreferParametersViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -62,7 +61,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    auto router = [OARouteProvider getRouter:self.appMode];
+    auto router = [OsmAndApp.instance getRouter:self.appMode];
     NSString *prefix = _isAvoid ? @"avoid_" : @"prefer_";
     if (router)
     {
@@ -74,14 +73,14 @@
             {
                 NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
                 NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
-                OAProfileBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
+                OACommonBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
 
                 [dataArr addObject:
                  @{
                    @"name" : param,
                    @"title" : title,
                    @"value" : value,
-                   @"type" : kCellTypeSwitch }
+                   @"type" : [OASwitchTableViewCell getCellIdentifier] }
                  ];
             }
         }
@@ -91,7 +90,7 @@
 
 + (BOOL) hasPreferParameters:(OAApplicationMode *)appMode
 {
-    auto router = [OARouteProvider getRouter:appMode];
+    auto router = [OsmAndApp.instance getRouter:appMode];
     if (router)
     {
         auto& parameters = router->getParametersList();
@@ -133,13 +132,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeSwitch])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSwitch;
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -147,13 +145,14 @@
         {
             cell.textView.text = item[@"title"];
             id v = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
+                OACommonBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
             }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
@@ -197,9 +196,9 @@
         NSDictionary *item = _data[indexPath.row];
         BOOL isChecked = ((UISwitch *) sender).on;
         id v = item[@"value"];
-        if ([v isKindOfClass:[OAProfileBoolean class]])
+        if ([v isKindOfClass:[OACommonBoolean class]])
         {
-            OAProfileBoolean *value = v;
+            OACommonBoolean *value = v;
             [value set:isChecked mode:self.appMode];
         }
         if (self.delegate)

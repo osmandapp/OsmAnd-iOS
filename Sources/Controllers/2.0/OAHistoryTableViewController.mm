@@ -7,7 +7,6 @@
 //
 
 #import "OAHistoryTableViewController.h"
-#import "OAPOISearchHelper.h"
 #import "OsmAndApp.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OAHistoryItem.h"
@@ -481,7 +480,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if (section == tableView.numberOfSections - 1)
-        return [OAPOISearchHelper getHeightForFooter];
+        return tableView.sectionFooterHeight;
     else
         return 0.01;
 }
@@ -500,13 +499,11 @@
 {
     SearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
     
-    static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-    
     OAPointDescCell* cell;
-    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointDescCell *)[nib objectAtIndex:0];
     }
     

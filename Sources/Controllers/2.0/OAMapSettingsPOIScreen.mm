@@ -72,7 +72,11 @@
     if (res)
     {
         for (OASearchResult *sr in [res getCurrentSearchResults])
+        {
+            if (sr.objectType == POI_TYPE && sr.object == [[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter])
+                continue;
             [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
+        }
     }
 }
 
@@ -134,10 +138,10 @@
             else if ([res.object isKindOfClass:[OAPOICategory class]])
             {
                 OAIconTextTableViewCell* cell;
-                cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+                cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
                     cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                     cell.textView.numberOfLines = 0;
                 }
@@ -180,10 +184,10 @@
         if ([item getType] == BUTTON)
         {
             OAIconButtonCell* cell;
-            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconButtonCell"];
+            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconButtonCell *)[nib objectAtIndex:0];
             }
             
@@ -272,7 +276,7 @@
             filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
     } else if ([item getType] == BUTTON) {
-        [helper clearSelectedPoiFilters];
+        [helper clearSelectedPoiFilters:@[[[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter]]];
     }
     [mapVC updatePoiLayer];
     [tblView reloadData];

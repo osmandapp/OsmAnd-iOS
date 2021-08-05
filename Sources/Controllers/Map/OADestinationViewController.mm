@@ -107,7 +107,7 @@
 {
     [super viewDidLoad];
     
-    self.titleLabel.text = OALocalizedString(@"menu_my_directions");
+    self.titleLabel.text = OALocalizedString(@"map_markers");
     
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {
@@ -479,6 +479,14 @@
         {
             CGRect frame = CGRectMake(0.0, 0.0, width, 50.0);
             [_multiCell updateLayout:frame];
+            CGFloat cornerRadius = [OAUtilities isLandscape] ? 3 : 0;
+            [OAUtilities setMaskTo:_multiCell.contentView byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:cornerRadius];
+            
+            self.view.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.7].CGColor;
+            self.view.layer.shadowOpacity = 1.0;
+            self.view.layer.shadowRadius = 1.0;
+            self.view.layer.shadowOffset = CGSizeMake(0.0, 1.0);
+            self.view.layer.masksToBounds = NO;
         }
     }
     else
@@ -563,31 +571,13 @@
 
 - (UIColor *) addDestination:(OADestination *)destination
 {
-    if (destination.parking)
-    {
-        for (OADestination *dest in _app.data.destinations)
-            if (dest.parking)
-            {
-                [[OADestinationsHelper instance] removeDestination:dest];
-                break;
-            }
-    }
-    
     CLLocationCoordinate2D location;
     CLLocationDirection direction;
     [self obtainCurrentLocationDirection:&location direction:&direction];
     
-    if (destination.parking)
-    {
-        destination.color = _parkingColor;
-        destination.markerResourceName = @"map_parking_pin";
-    }
-    else
-    {
-        int colorIndex = [self getFreeColorIndex];
-        destination.color = _colors[colorIndex];
-        destination.markerResourceName = _markerNames[colorIndex];
-    }
+    int colorIndex = [self getFreeColorIndex];
+    destination.color = _colors[colorIndex];
+    destination.markerResourceName = _markerNames[colorIndex];
 
     [[OADestinationsHelper instance] addDestination:destination];
 
@@ -632,7 +622,7 @@
         UIColor *c = _colors[i];
         BOOL colorExists = NO;
         for (OADestination *destination in _app.data.destinations)
-            if (!destination.parking && !destination.routePoint && [OAUtilities areColorsEqual:destination.color color2:c])
+            if (!destination.routePoint && [OAUtilities areColorsEqual:destination.color color2:c])
             {
                 colorExists = YES;
                 break;
@@ -643,10 +633,10 @@
     }
 
     UIColor *lastUsedColor;
-    for (long i = _app.data.destinations.count - 1; i >= 0; i--)
+    for (long i = (long) _app.data.destinations.count - 1; i >= 0; i--)
     {
         OADestination *destination = _app.data.destinations[i];
-        if (destination.color && !destination.parking && !destination.routePoint)
+        if (destination.color && !destination.routePoint)
         {
             lastUsedColor = destination.color;
             break;
@@ -791,6 +781,12 @@
     
     if (_multiCell)
         [_multiCell updateCloseButton];
+}
+
+- (CGFloat) getHeight
+{
+    NSUInteger extraCellsCount = _destinationCells.count > 0 ? _destinationCells.count - 1 : 0;
+    return [OAUtilities isLandscape] ? 50.0 : 50.0 + 35.0 * extraCellsCount;
 }
 
 @end

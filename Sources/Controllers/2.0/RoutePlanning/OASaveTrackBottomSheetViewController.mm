@@ -26,13 +26,14 @@
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
 
-@interface OASaveTrackBottomSheetViewController ()
+@interface OASaveTrackBottomSheetViewController () <UIDocumentInteractionControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UIButton *openSavedTrackButton;
 @property (strong, nonatomic) IBOutlet UIButton *createNewRouteButton;
 @property (strong, nonatomic) IBOutlet UIButton *shareButton;
+@property (strong, nonatomic) UIDocumentInteractionController* exportController;
 
 @end
 
@@ -59,15 +60,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self.iconImageView setImage:[[UIImage imageNamed:@"ic_custom_save_complete.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+
+    [self.iconImageView setImage:[UIImage templateImageNamed:@"ic_custom_save_complete.png"]];
     self.iconImageView.tintColor = UIColorFromRGB(color_primary_purple);
     self.openSavedTrackButton.layer.cornerRadius = 9.;
     self.createNewRouteButton.layer.cornerRadius = 9.;
     self.shareButton.layer.cornerRadius = 9.;
-    
+
     self.isFullScreenAvailable = NO;
-    
+
     NSString *gpxTitle = _fileName.lastPathComponent.stringByDeletingPathExtension;
     NSString *titleString = [NSString stringWithFormat:OALocalizedString(@"track_is_saved"), gpxTitle];
     self.titleLabel.attributedText = [OAUtilities getColoredString:titleString highlightedString:gpxTitle highlightColor:UIColorFromRGB(color_primary_purple) fontSize:17. centered:YES];
@@ -78,7 +79,7 @@
     [self.openSavedTrackButton setTitle:OALocalizedString(@"open_saved_track") forState:UIControlStateNormal];
     [self.createNewRouteButton setTitle:OALocalizedString(@"plan_route_create_new_route") forState:UIControlStateNormal];
     [self.shareButton setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
-    
+
     [self.leftButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
 }
 
@@ -94,7 +95,8 @@
 - (IBAction)openSavedTrackPressed:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    OAGPX *gpx = [OAGPXDatabase.sharedDb getGPXItem:_fileName.lastPathComponent];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_fileName];
+    OAGPX *gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
     if (gpx)
         [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx pushed:YES];
 }
@@ -109,15 +111,27 @@
 
 - (IBAction)shareButtonPressed:(id)sender
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
-    NSURL* gpxUrl = [NSURL fileURLWithPath:_fileName];
-    
-    UIDocumentInteractionController *exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
-    exportController.UTI = @"net.osmand.gpx";
-    exportController.name = [_fileName.lastPathComponent stringByDeletingPathExtension];
-    [exportController presentOptionsMenuFromRect:CGRectZero
-                                           inView:OARootViewController.instance.view
+    NSURL* sourceGpxUrl = [NSURL fileURLWithPath:_fileName];
+    NSString* tempFolderPath = [NSTemporaryDirectory() stringByAppendingString:[_fileName lastPathComponent]];
+    NSURL* destinationGpxUrl = [NSURL fileURLWithPath:tempFolderPath];
+    [[NSData dataWithContentsOfURL:sourceGpxUrl] writeToURL:destinationGpxUrl options:NSDataWritingAtomic error:nil];
+
+    _exportController = [UIDocumentInteractionController interactionControllerWithURL:destinationGpxUrl];
+    _exportController.UTI = @"com.topografix.gpx";
+    _exportController.delegate = self;
+    _exportController.name = [tempFolderPath.lastPathComponent stringByDeletingPathExtension];
+
+    [_exportController presentOptionsMenuFromRect:self.shareButton.frame
+                                           inView:[self.shareButton superview]
                                          animated:YES];
+}
+
+
+#pragma mark - UIDocumentInteractionControllerDelegate
+
+- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -23,6 +23,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OASwitchTableViewCell.h"
 
 #define kButtonsDividerTag 150
 
@@ -69,22 +70,22 @@
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderIconCell",
-                     @"title" : OALocalizedString(@"map_settings_mapillary"),
+                     @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
+                     @"title" : OALocalizedString(@"mapillary"),
                      @"description" : @"",
                      @"img" : @"ic_custom_mapillary_color_logo.png"
                      }];
     
     [arr addObject:@{
-                     @"type" : @"OADescrTitleCell",
+                     @"type" : [OADescrTitleCell getCellIdentifier],
                      @"title" : OALocalizedString(@"mapillary_descr"),
                      @"description" : @""
                      }];
     
-    [arr addObject:@{ @"type" : @"OADividerCell" } ];
+    [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     
     [arr addObject:@{
-                     @"type" : @"OASettingSwitchCell",
+                     @"type" : [OASettingSwitchCell getCellIdentifier],
                      @"name" : @"enable_mapil_widget",
                      @"title" : OALocalizedString(@"mapillary_turn_on_widget"),
                      @"description" : OALocalizedString(@"mapillary_turn_on_widget_descr"),
@@ -102,11 +103,11 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"] || [item[@"type"] isEqualToString:@"OADescrTitleCell"] || [item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0)];
     }
@@ -154,13 +155,12 @@
     NSDictionary *item = _data[indexPath.row];
     
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderIconCell";
-        OABottomSheetHeaderIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderIconCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderIconCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderIconCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -173,13 +173,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
+    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:@"OADescrTitleCell"];
+        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADescrTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
         }
         
@@ -192,13 +192,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
@@ -207,15 +206,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
         OASettingSwitchCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -229,6 +226,7 @@
             [cell.descriptionView setText:item[@"description"]];
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
@@ -246,7 +244,7 @@
     NSString *imgName = data[@"img"];
     NSString *secondaryImgName = data[@"secondaryImg"];
     if (imgName)
-        img = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        img = [UIImage templateImageNamed:imgName];
     
     cell.textView.text = data[@"title"];
     NSString *desc = data[@"description"];
@@ -290,7 +288,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:@"OASwitchCell"])
+    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

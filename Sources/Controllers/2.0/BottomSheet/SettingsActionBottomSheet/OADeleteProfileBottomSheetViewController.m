@@ -14,7 +14,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kBottomSheetHeaderButtonCell @"OABottomSheetHeaderButtonCell"
 #define kButtonsDividerTag 150
 #define kButtonsTag 1
 
@@ -57,7 +56,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-        @"type" : kBottomSheetHeaderButtonCell,
+        @"type" : [OABottomSheetHeaderButtonCell getCellIdentifier],
         @"title" : [NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")],
         @"img" : @"ic_custom_remove_outlined",
         @"description" : @""
@@ -105,13 +104,12 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kBottomSheetHeaderButtonCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetHeaderButtonCell;
-        OABottomSheetHeaderButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
@@ -121,8 +119,8 @@
         {
             cell.titleView.text = item[@"title"];
             cell.descrLabel.text = item[@"description"];
-            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+            [cell.closeButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.closeButton addTarget:self action:@selector(onCloseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
@@ -142,7 +140,7 @@
     CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionString width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
-    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString] boldString:_appMode.toHumanString lineSpacing:4.];
+    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), @""] boldString:_appMode.toHumanString lineSpacing:4. fontSize:15 highlightColor:UIColor.blackColor];
     description.numberOfLines = 0;
     description.lineBreakMode = NSLineBreakByWordWrapping;
     description.autoresizingMask = UIViewAutoresizingFlexibleWidth;

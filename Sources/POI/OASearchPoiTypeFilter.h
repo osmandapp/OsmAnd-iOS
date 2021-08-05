@@ -26,6 +26,7 @@ typedef NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *>* (^OASearchPoiTy
 - (BOOL) isEmpty;
 
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes;
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin;
 
 - (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction;
 

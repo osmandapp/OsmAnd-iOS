@@ -40,6 +40,10 @@
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 #import "OAFavoriteViewController.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -236,7 +240,7 @@ static const NSInteger _buttonsCount = 4;
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
     [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
     [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_info") upperCase] forState:UIControlStateNormal];
-    [_buttonRoute setTitle:[OALocalizedString(@"gpx_route") upperCase] forState:UIControlStateNormal];
+    [_buttonRoute setTitle:[OALocalizedString(@"get_directions") upperCase] forState:UIControlStateNormal];
 
     _backView4.hidden = YES;
     _buttonMore.hidden = YES;
@@ -325,15 +329,6 @@ static const NSInteger _buttonsCount = 4;
             : newHeading;
             
             [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
-        }
-        
-        if (_targetPoint.type == OATargetParking && _targetPoint.targetObj)
-        {
-            OADestination *d = _targetPoint.targetObj;
-            if (d && d.carPickupDateEnabled)
-            {
-                [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
-            }
         }
     });
 }
@@ -747,16 +742,29 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
     {
-        [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
-        [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+        if (_targetPoint.type == OATargetWpt && ![self newItem])
+        {
+            [_buttonFavorite setTitle:OALocalizedString(@"edit_waypoint_short") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+        }
+        else
+        {
+            [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+        }
     }
     else
     {
         if (_targetPoint.type == OATargetFavorite && ![self newItem])
+        {
             [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"ic_dialog_edit"] forState:UIControlStateNormal];
+        }
         else
+        {
             [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-        [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+        }
     }
     
     if (_targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXRoute)
@@ -843,10 +851,7 @@ static const NSInteger _buttonsCount = 4;
             [self updateTransportView];
             [self updateDescriptionLabel];
             
-            UIColor* color = item.color;
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-            _imageView.image = _targetPoint.icon;
+            _imageView.image = item.getCompositeIcon;
         }
         else
         {
@@ -1648,10 +1653,9 @@ static const NSInteger _buttonsCount = 4;
     {
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
         [self updateAddressLabel];
-        
-        id d = _targetPoint.targetObj;
-        if (d && [d isKindOfClass:[OADestination class]] && ((OADestination *)d).carPickupDateEnabled)
-            [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin && plugin.getParkingType)
+            [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] label:self.coordinateLabel shortText:NO];
     }
     else if (_targetPoint.type == OATargetGPXRoute)
     {
@@ -1690,7 +1694,7 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
-        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt);
+        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt && ![self newItem]);
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
     
@@ -1702,13 +1706,29 @@ static const NSInteger _buttonsCount = 4;
             [_controlButtonRight setTitle:self.customController.rightControlButton.title forState:UIControlStateNormal];
         if (self.customController.downloadControlButton)
             [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
-
-        UIImage *icon = [self.customController getIcon];
-        _imageView.image = icon ? icon : _targetPoint.icon;
+        
+        if ([self.customController isKindOfClass:OAFavoriteViewController.class])
+        {
+            OAFavoriteViewController *favoriteController = (OAFavoriteViewController *)self.customController;
+            _imageView.image = [favoriteController getIcon];
+        }
+        else if (_targetPoint.type == OATargetParking)
+        {
+            OAFavoriteItem *item = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType PARKING]];
+            if (item)
+                _imageView.image = [item getCompositeIcon];
+        }
+        else
+        {
+            UIImage *icon = [self.customController getIcon];
+            _imageView.image = icon ? icon : _targetPoint.icon;
+            _imageView.hidden = NO;
+        }
     }
     else
     {
         _imageView.image = _targetPoint.icon;
+        _imageView.hidden = NO;
     }
 }
 
@@ -1932,11 +1952,13 @@ static const NSInteger _buttonsCount = 4;
             UIColor* color = [UIColor colorWithRed:favoriteLocation->getColor().r/255.0 green:favoriteLocation->getColor().g/255.0 blue:favoriteLocation->getColor().b/255.0 alpha:1.0];
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
             
-            _targetPoint.title = favoriteLocation->getTitle().toNSString();
+            OAFavoriteItem *item = [OAFavoritesHelper getVisibleFavByLat:favoriteLocation->getLatLon().latitude lon:favoriteLocation->getLatLon().longitude];
+            _targetPoint.title = [item getDisplayName];
+            
             [_addressLabel setText:_targetPoint.title];
             [self updateAddressLabel];
             _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-            _imageView.image = _targetPoint.icon;
+            _imageView.image = [item getCompositeIcon];
         });
     }
 }
@@ -1999,9 +2021,19 @@ static const NSInteger _buttonsCount = 4;
         self.customController.topToolbarType = ETopToolbarTypeFixed;
         [self showFullMenu];
         [self.customController activateEditing];
+        
+        OAFavoriteItem *item = self.targetPoint.targetObj;
+        [self.menuViewDelegate targetPointEditFavorite:item];
         return;
     }
-    
+
+    if (self.targetPoint.type == OATargetWpt)
+    {
+        OAGpxWptItem *item = self.targetPoint.targetObj;
+        [self.menuViewDelegate targetPointEditWaypoint:item];
+        return;
+    }
+
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
     {
         [self.menuViewDelegate targetPointAddWaypoint];
@@ -2159,7 +2191,7 @@ static const NSInteger _buttonsCount = 4;
     if (_showFull || _showFullScreen)
         [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_collapse") upperCase] forState:UIControlStateNormal];
     else
-        [_buttonShowInfo setTitle:[OALocalizedString(@"description") upperCase] forState:UIControlStateNormal];
+        [_buttonShowInfo setTitle:[OALocalizedString(@"res_details") upperCase] forState:UIControlStateNormal];
 }
 
 - (void) applyMapInteraction:(CGFloat)height animated:(BOOL)animated

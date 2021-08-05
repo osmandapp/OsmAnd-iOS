@@ -73,7 +73,7 @@
 
 - (UITableViewCell *) getAnalyzeButtonCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAFilledButtonCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
     OAFilledButtonCell* cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
     
     if (cell)
@@ -88,7 +88,7 @@
 }
 
 - (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
     OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
@@ -110,7 +110,7 @@
     
     if (hasSlope)
     {
-        nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteStatisticsModeCell" owner:self options:nil];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
         OARouteStatisticsModeCell *modeCell = (OARouteStatisticsModeCell *)[nib objectAtIndex:0];
         modeCell.selectionStyle = UITableViewCellSelectionStyleNone;
         [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")] forState:UIControlStateNormal];
@@ -128,7 +128,7 @@
 }
 
 - (void)populateElevationSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoAltitudeCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoAltitudeCell getCellIdentifier] owner:self options:nil];
     OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
     altCell.avgAltitudeTitle.text = OALocalizedString(@"gpx_avg_altitude");
     altCell.altRangeTitle.text = OALocalizedString(@"gpx_alt_range");
@@ -152,7 +152,7 @@
         
         for (OARouteStatistics *stat in routeInfo)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoCell getCellIdentifier] owner:self options:nil];
             OARouteInfoCell *cell = (OARouteInfoCell *)[nib objectAtIndex:0];
             cell.detailsButton.tag = section;
             [cell.detailsButton addTarget:self action:@selector(detailsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -173,7 +173,7 @@
             
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
-            nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoLegendCell" owner:self options:nil];
+            nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoLegendCell getCellIdentifier] owner:self options:nil];
             OARouteInfoLegendCell *legend = (OARouteInfoLegendCell *)[nib objectAtIndex:0];
             
             for (NSString *key in stat.partition)
@@ -271,11 +271,11 @@
         NSMutableAttributedString *res = [NSMutableAttributedString new];
         
         NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
-        arrowUpAttachment.image = [[UIImage imageNamed:@"ic_small_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_arrow_up"];
         arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
         
         NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
-        arrowDownAttachment.image = [[UIImage imageNamed:@"ic_small_arrow_down"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_arrow_down"];
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
         
         [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
@@ -358,7 +358,7 @@
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
 {
     button.layer.cornerRadius = 9.;
-    [button setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [button setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
     [button setTintColor:color];
 }
 
@@ -442,7 +442,7 @@
 - (void) applyLocalization
 {
     self.titleView.text = OALocalizedString(@"gpx_route");
-    [self.doneButton setTitle:OALocalizedString(@"gpx_export") forState:UIControlStateNormal];
+    [self.doneButton setTitle:OALocalizedString(@"shared_string_export") forState:UIControlStateNormal];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.startButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
 }

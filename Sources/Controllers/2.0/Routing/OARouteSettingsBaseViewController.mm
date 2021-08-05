@@ -8,7 +8,6 @@
 
 #import "OARouteSettingsBaseViewController.h"
 #import "OARoutePreferencesParameters.h"
-#import "OARouteTripSettingsViewController.h"
 #import "OARouteSettingsParameterController.h"
 #import "OARouteAvoidTransportSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -25,8 +24,6 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
-#import "OASwitchTableViewCell.h"
-#import "OASettingsTableViewCell.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OABaseSettingsViewController.h"
@@ -35,9 +32,8 @@
 #import "OAGPXDatabase.h"
 #import "OAMapActions.h"
 #import "OAUtilities.h"
-#import "OASettingSwitchCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OARouteAvoidSettingsViewController.h"
+#import "OAFollowTrackBottomSheetViewController.h"
 
 #include <generalRouter.h>
 
@@ -109,7 +105,7 @@
 {
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     
-    auto rm = [OARouteProvider getRouter:am];
+    auto rm = [_app getRouter:am];
     if (rm == nullptr)
         return list;
     
@@ -149,7 +145,7 @@
 {
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     
-    auto rm = [OARouteProvider getRouter:am];
+    auto rm = [_app getRouter:am];
     if (rm == nullptr)
         return list;
     
@@ -348,9 +344,23 @@
 
 - (void) showTripSettingsScreen
 {
-    OARouteTripSettingsViewController *tripsController = [[OARouteTripSettingsViewController alloc] init];
-    tripsController.delegate = self;
-    [self presentViewController:tripsController animated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
+        OAGPXDocument *gpx = gpxParams ? gpxParams.file : nil;
+        OAFollowTrackBottomSheetViewController *followTrack = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:gpx];
+        
+        if (gpx)
+        {
+            followTrack.view.hidden = NO;
+            [followTrack presentInViewController:OARootViewController.instance animated:YES];
+            
+        }
+        else
+        {
+            followTrack.view.hidden = YES;
+            [followTrack presentInViewController:OARootViewController.instance animated:NO];
+        }
+    }];
 }
 
 - (void) showAvoidTransportScreen

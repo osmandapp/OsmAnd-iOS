@@ -15,13 +15,12 @@
 #import "OAAppData.h"
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
+#import "OATargetPointsHelper.h"
 
 #define defaultCellHeight 60.0
 #define titleTextWidthDelta 50.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
-
-#define kDestCell @"OAHomeWorkCollectionViewCell"
 
 @interface OAHomeWorkCell() <UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -41,7 +40,7 @@
     // Initialization code
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
-    [_collectionView registerNib:[UINib nibWithNibName:kDestCell bundle:nil] forCellWithReuseIdentifier:kDestCell];
+    [_collectionView registerNib:[UINib nibWithNibName:[OAHomeWorkCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAHomeWorkCollectionViewCell getCellIdentifier]];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.minimumInteritemSpacing = 0.;
@@ -62,8 +61,10 @@
 - (void) generateData
 {
     OAAppData *data = [OsmAndApp instance].data;
-    NSString *homeName = data.homePoint ? [data.homePoint.pointDescription getSimpleName:NO] : nil;
-    NSString *workName = data.workPoint ? [data.workPoint.pointDescription getSimpleName:NO] : nil;
+    OARTargetPoint *homePoint = [[OATargetPointsHelper sharedInstance] getHomePoint];
+    OARTargetPoint *workPoint = [[OATargetPointsHelper sharedInstance] getWorkPoint];
+    NSString *homeName = homePoint ? [homePoint.pointDescription getSimpleName:NO] : nil;
+    NSString *workName = workPoint ? [workPoint.pointDescription getSimpleName:NO] : nil;
     _data = @[
               @{
                     @"title" : OALocalizedString(@"home_pt"),
@@ -123,10 +124,10 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kDestCell forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAHomeWorkCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDestCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHomeWorkCollectionViewCell getCellIdentifier] owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
     if (cell && [cell isKindOfClass:OAHomeWorkCollectionViewCell.class])

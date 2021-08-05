@@ -12,7 +12,6 @@
 #import <StoreKit/StoreKit.h>
 #import "OALog.h"
 #import "OAResourcesUIHelper.h"
-#import "OAPluginsViewController.h"
 #import "OsmAndApp.h"
 #include "Localization.h"
 #import "OAUtilities.h"
@@ -52,13 +51,6 @@
 {
     _titleView.text = OALocalizedString(@"purchases");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-    
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void) viewDidLoad
@@ -81,21 +73,10 @@
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
     [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 
-    _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
-
     if (self.openFromSplash)
     {
         self.backButton.hidden = YES;
         self.doneButton.hidden = NO;
-    }
-    
-    if (self.openFromCustomPlace)
-    {
-        [_toolbarView removeFromSuperview];
-        _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height + _toolbarView.frame.size.height);
     }
 }
 
@@ -113,16 +94,6 @@
 - (UIView *) getMiddleView
 {
     return _tableView;
-}
-
-- (UIView *) getBottomView
-{
-    return _toolbarView;
-}
-
-- (CGFloat) getToolBarHeight
-{
-    return defaultToolBarHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -196,13 +167,11 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const inAppCellIdentifier = @"OAInAppCell";
-    
     OAInAppCell* cell;
-    cell = (OAInAppCell *)[tableView dequeueReusableCellWithIdentifier:inAppCellIdentifier];
+    cell = (OAInAppCell *)[tableView dequeueReusableCellWithIdentifier:[OAInAppCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAInAppCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInAppCell getCellIdentifier] owner:self options:nil];
         cell = (OAInAppCell *)[nib objectAtIndex:0];
     }
     
@@ -343,33 +312,6 @@
     [[OARootViewController instance] restorePurchasesWithProgress:NO];
 }
 
-- (void) backButtonClicked:(id)sender
-{
-    if (self.openFromCustomPlace)
-        [self.navigationController popViewControllerAnimated:YES];
-    else
-        [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (IBAction) btnToolbarMapsClicked:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:NO];
-}
-
-- (IBAction) btnToolbarPluginsClicked:(id)sender
-{
-    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-    pluginsViewController.openFromSplash = _openFromSplash;
-    
-    NSMutableArray *controllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
-    [controllers removeObject:self];
-    [controllers addObject:pluginsViewController];
-    [self.navigationController setViewControllers:controllers];
-}
-
-- (IBAction) btnToolbarPurchasesClicked:(id)sender
-{
-}
 
 #pragma mark - UIAlertViewDelegate
 

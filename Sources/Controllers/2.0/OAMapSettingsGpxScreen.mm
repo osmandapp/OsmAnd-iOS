@@ -91,12 +91,10 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableViewCell* cell;
-    static NSString* const reusableIdentifierPoint = @"OAGPXTableViewCell";
-    
-    cell = (OAGPXTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAGPXTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAGPXTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAGPXTableViewCell *)[nib objectAtIndex:0];
     }
 
@@ -108,7 +106,7 @@
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:helper.distance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", helper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
-            if (_settings.mapSettingShowRecordingTrack)
+            if (_settings.mapSettingShowRecordingTrack.get)
                 [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
             else
                 [cell.iconView setImage:nil];
@@ -123,9 +121,9 @@
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
-            NSArray *visible = _settings.mapSettingVisibleGpx;
+            NSArray *visible = _settings.mapSettingVisibleGpx.get;
             
-            if ([visible containsObject:item.gpxFileName])
+            if ([visible containsObject:item.gpxFilePath])
                 [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
             else
                 [cell.iconView setImage:nil];
@@ -152,13 +150,13 @@
 {
     if (hasCurrentTrack && indexPath.row == 0)
     {
-        if (_settings.mapSettingShowRecordingTrack)
+        if (_settings.mapSettingShowRecordingTrack.get)
         {
-            _settings.mapSettingShowRecordingTrack = NO;
+            [_settings.mapSettingShowRecordingTrack set:NO];
         }
         else
         {
-            _settings.mapSettingShowRecordingTrack = YES;
+            [_settings.mapSettingShowRecordingTrack set:YES];
             [helper.currentTrack applyBounds];
             OAGpxBounds bounds = helper.currentTrack.bounds;
 
@@ -168,15 +166,15 @@
     }
     else
     {
-        NSArray *visible = _settings.mapSettingVisibleGpx;
+        NSArray *visible = _settings.mapSettingVisibleGpx.get;
         OAGPX *gpx = gpxList[indexPath.row - (hasCurrentTrack ? 1 : 0)];
-        if ([visible containsObject:gpx.gpxFileName])
+        if ([visible containsObject:gpx.gpxFilePath])
         {
-            [_settings hideGpx:@[gpx.gpxFileName]];
+            [_settings hideGpx:@[gpx.gpxFilePath]];
         }
         else
         {
-            [_settings showGpx:@[gpx.gpxFileName]];
+            [_settings showGpx:@[gpx.gpxFilePath]];
 
             [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
         }

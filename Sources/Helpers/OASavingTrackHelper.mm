@@ -48,6 +48,8 @@
 
 #define ACCURACY_FOR_GPX_AND_ROUTING 50.0
 
+#define recordedTrackFolder @"/rec/"
+
 @implementation OASavingTrackHelper
 {
     OsmAndAppInstance _app;
@@ -345,7 +347,7 @@
         NSString *fout;
         for (NSString *f in data.allKeys)
         {
-            fout = [NSString stringWithFormat:@"%@/%@.gpx", _app.gpxPath, f];
+            fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, f];
             OAGPXMutableDocument *doc = data[f];
             if (![doc isEmpty])
             {
@@ -355,17 +357,23 @@
                 [simpleFormat setDateFormat:@"HH-mm_EEE"];
                 
                 NSString *fileName = [NSString stringWithFormat:@"%@_%@", f, [simpleFormat stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]]];
-                fout = [NSString stringWithFormat:@"%@/%@.gpx", _app.gpxPath, fileName];
+                fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, fileName];
                 int ind = 1;
                 while ([fileManager fileExistsAtPath:fout]) {
-                    fout = [NSString stringWithFormat:@"%@/%@_%d.gpx", _app.gpxPath, fileName, ++ind];
+                    fout = [NSString stringWithFormat:@"%@%@%@_%d.gpx", _app.gpxPath, recordedTrackFolder, fileName, ++ind];
                 }
             }
             
+            NSFileManager *fileManager = NSFileManager.defaultManager;
+            NSString *directory = [fout stringByDeletingLastPathComponent];
+            if (![fileManager fileExistsAtPath:directory])
+                [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
+
             [doc saveTo:fout];
             
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            NSString *gpxFilePath = [OAUtilities getGpxShortPath:fout];
+            [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
         }
         
@@ -489,12 +497,12 @@
                     long currentInterval = labs(pt.time - previousTime);
                     BOOL newInterval = (lat == 0.0 && lon == 0.0);
                     
-                    if (track && !newInterval && (![OAAppSettings sharedManager].autoSplitRecording || currentInterval < 6 * 60 || currentInterval < 10 * previousInterval))
+                    if (track && !newInterval && (![OAAppSettings sharedManager].autoSplitRecording.get || currentInterval < 6 * 60 || currentInterval < 10 * previousInterval))
                     {
                         // 6 minute - same segment
                         [gpx addTrackPoint:pt segment:segment];
                     }
-                    else if (track && [OAAppSettings sharedManager].autoSplitRecording && currentInterval < 2 * 60 * 60)
+                    else if (track && [OAAppSettings sharedManager].autoSplitRecording.get && currentInterval < 2 * 60 * 60)
                     {
                         // 2 hour - same track
                         segment = [[OAGpxTrkSeg alloc] init];
@@ -561,12 +569,11 @@
 
 - (void) updateLocation
 {
-    CLLocation* location = _app.locationServices.lastKnownLocation;
-
     dispatch_sync(syncQueue, ^{
-        
+        CLLocation* location = _app.locationServices.lastKnownLocation;
         if (location)
         {
+            location = [location copy];
             long locationTime = (long)[location.timestamp timeIntervalSince1970];
             
             BOOL record = NO;
@@ -575,7 +582,7 @@
             if ([self isPointAccurateForRouting:location])
             {
                 OAAppSettings *settings = [OAAppSettings sharedManager];
-                if ([settings.saveTrackToGPX get:settings.applicationMode]
+                if ([settings.saveTrackToGPX get:settings.applicationMode.get]
                     && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackInterval get]
                     && [[OARoutingHelper sharedInstance] isFollowingMode]) {
                     record = true;

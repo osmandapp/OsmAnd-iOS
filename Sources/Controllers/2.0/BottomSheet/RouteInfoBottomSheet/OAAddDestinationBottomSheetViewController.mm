@@ -32,9 +32,6 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kTitleIconRoundCell @"OATitleIconRoundCell"
-#define kCollectionViewCell @"OACollectionViewCell"
-
 @interface OAAddDestinationBottomSheetScreen () <OACollectionViewCellDelegate, OADestinationPointListDelegate>
 
 @end
@@ -84,9 +81,9 @@
         @"color" : UIColorFromRGB(color_primary_purple),
         @"img" : @"ic_custom_favorites"
     }];
-    if (_app.data.homePoint && _type != EOADestinationTypeHome)
+    if ([_pointsHelper getHomePoint] && _type != EOADestinationTypeHome)
     {
-        OARTargetPoint *home = _app.data.homePoint;
+        OARTargetPoint *home = [_pointsHelper getHomePoint];
         [arr addObject:@{
             @"title" : OALocalizedString(@"home_pt"),
             @"descr" : home.pointDescription.name,
@@ -96,9 +93,9 @@
         }];
     }
     
-    if (_app.data.workPoint && _type != EOADestinationTypeWork)
+    if ([_pointsHelper getWorkPoint] && _type != EOADestinationTypeWork)
     {
-        OARTargetPoint *work = _app.data.workPoint;
+        OARTargetPoint *work = [_pointsHelper getWorkPoint];
         [arr addObject:@{
             @"title" : OALocalizedString(@"work_pt"),
             @"descr" : work.pointDescription.name,
@@ -152,8 +149,7 @@
     
     for(const auto& favorite : allFavorites)
     {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-        favData.favorite = favorite;
+        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         [sortedFavoriteItems addObject:favData];
     }
     
@@ -189,15 +185,13 @@
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderCell",
+                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : [self getTitle],
                      @"description" : @""
                      }];
     
-    OADestination *parking = _destinationsHelper.getParkingPoint;
-    
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_search"),
         @"img" : @"ic_navbar_search",
         @"key" : @"regular_search",
@@ -206,32 +200,20 @@
     }];
     
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_address"),
         @"img" : @"ic_custom_home",
         @"key" : @"address_search",
-        @"round_bottom" : @(parking == nil),
+        @"round_bottom" : @(YES),
         @"round_top" : @(NO)
     }];
-    
-    if (parking)
-    {
-        [arr addObject:@{
-            @"type" : kTitleIconRoundCell,
-            @"title" : OALocalizedString(@"parking_place"),
-            @"img" : @"parking_position",
-            @"key" : @"parking",
-            @"round_bottom" : @(YES),
-            @"round_top" : @(NO)
-        }];
-    }
     [model setObject:[NSArray arrayWithArray:arr] forKey:@(0)];
     
     [arr removeAllObjects];
     if (_type == EOADestinationTypeStart)
     {
         [arr addObject:@{
-            @"type" : kTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_my_location"),
             @"img" : @"map_default_location",
             @"key" : @"my_location",
@@ -241,7 +223,7 @@
         }];
     }
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_select_on_map"),
         @"img" : @"ic_custom_show_on_map",
         @"key" : @"select_on_map",
@@ -252,7 +234,7 @@
     [arr removeAllObjects];
     
     [arr addObject:@{
-        @"type" : kCollectionViewCell,
+        @"type" : [OACollectionViewCell getCellIdentifier],
         @"key" : @"favorites"
     }];
     [model setObject:[NSArray arrayWithArray:arr] forKey:@(2)];
@@ -260,14 +242,14 @@
     [arr removeAllObjects];
     
     [arr addObject:@{
-        @"type" : kCollectionViewCell,
+        @"type" : [OACollectionViewCell getCellIdentifier],
         @"key" : @"markers"
     }];
     [model setObject:[NSArray arrayWithArray:arr] forKey:@(3)];
     
     [arr removeAllObjects];
     [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
+        @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"swap_points"),
         @"img" : @"ic_custom_swap",
         @"key" : @"swap_points",
@@ -287,11 +269,11 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:kCollectionViewCell])
+    else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
         return 60.0;
     }
@@ -318,10 +300,9 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderCell";
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderCell" owner:self options:nil];
@@ -338,15 +319,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
         }
         
@@ -356,7 +335,7 @@
             cell.titleView.text = item[@"title"];
             if (![item[@"skip_tint"] boolValue])
             {
-                [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             }
             else
@@ -369,15 +348,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCollectionViewCell])
+    else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCollectionViewCell;
-        OACollectionViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OACollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCollectionViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionViewCell getCellIdentifier] owner:self options:nil];
             cell = (OACollectionViewCell *)[nib objectAtIndex:0];
         }
         
@@ -436,7 +412,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if (![item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if (![item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
         return indexPath;
     else
         return nil;
@@ -479,10 +455,6 @@
         selectionDone = YES;
         [_pointsHelper clearStartPoint:YES];
         [_app.data backupTargetPoints];
-    }
-    else if ([item[@"key"] isEqualToString:@"parking"])
-    {
-        [self onDestinationSelected:_destinationsHelper.getParkingPoint];
     }
     else if ([item[@"key"] isEqualToString:@"select_on_map"])
     {
@@ -591,11 +563,11 @@
         [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:NO intermediate:(_type != EOADestinationTypeIntermediate ? -1 : (int)[_pointsHelper getIntermediatePoints].count) historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_MAP_MARKER name:title]];
     else if (_type == EOADestinationTypeHome)
     {
-        _app.data.homePoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
+        [_pointsHelper setHomePoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     else if (_type == EOADestinationTypeWork)
     {
-        _app.data.workPoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
+        [_pointsHelper setWorkPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     
     [vwController dismiss];

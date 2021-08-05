@@ -137,12 +137,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         itemMapSource = ((OAOnlineTilesResourceItem *) item).mapSource;
         caption = itemMapSource.name;
     }
-    static NSString* const identifierCell = @"OAMenuSimpleCell";
     OAMenuSimpleCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
         cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         cell.descriptionView.hidden = YES;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 61.0, 0.0, 0.0);

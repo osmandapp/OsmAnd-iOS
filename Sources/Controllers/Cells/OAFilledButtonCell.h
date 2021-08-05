@@ -11,5 +11,7 @@
 @interface OAFilledButtonCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topMarginConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomMarginConstraint;
 
 @end

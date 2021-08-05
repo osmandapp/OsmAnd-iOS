@@ -8,8 +8,6 @@
 
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OAAppSettings.h"
-#import "OABottomSheetHeaderDescrButtonCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OAIconTitleIconRoundCell.h"
 #import "OAUtilities.h"
 #import "OASettingsHelper.h"
@@ -24,9 +22,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASizes.h"
-
-#define kIconTitleIconRoundCell @"OAIconTitleIconRoundCell"
-
 
 @interface OACopyProfileBottomSheetViewControler()
 
@@ -86,7 +81,7 @@
         if ([am.stringKey isEqualToString:_targetAppMode.stringKey])
             continue;
         [dataArr addObject:@{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OAIconTitleIconRoundCell getCellIdentifier],
             @"app_mode" : am,
             @"selected" : @(_sourceAppMode == am),
         }];
@@ -109,9 +104,9 @@
 
 - (void) copyRegisteredPreferences
 {
-    for (NSString *key in _settings.getRegisteredSettings)
+    for (NSString *key in [_settings getPreferences:NO].keyEnumerator)
     {
-        OAProfileSetting *setting = [_settings.getRegisteredSettings objectForKey:key];
+        OACommonPreference *setting = [_settings getPreferenceByKey:key];
         if (setting)
             [setting copyValueFromAppMode:_sourceAppMode targetAppMode:_targetAppMode];
     }
@@ -119,7 +114,7 @@
 
 - (void) copyRoutingPreferences
 {
-    const auto router = [OARouteProvider getRouter:_sourceAppMode];
+    const auto router = [OsmAndApp.instance getRouter:_sourceAppMode];
     if (router)
     {
         const auto& parameters = router->getParametersList();
@@ -127,12 +122,12 @@
         {
             if (p.type == RoutingParameterType::BOOLEAN)
             {
-                OAProfileBoolean *boolSetting = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
+                OACommonBoolean *boolSetting = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
                 [boolSetting set:[boolSetting get:_sourceAppMode] mode:_targetAppMode];
             }
             else
             {
-                OAProfileString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                OACommonString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
                 [stringSetting set:[stringSetting get:_sourceAppMode] mode:_targetAppMode];
             }
         }
@@ -227,19 +222,18 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OAIconTitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
         OAIconTitleIconRoundCell* cell = nil;
         OAApplicationMode *am = item[@"app_mode"];
         
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.secondaryImageView.image = [[UIImage imageNamed:@"ic_checkmark_default"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.secondaryImageView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.secondaryImageView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

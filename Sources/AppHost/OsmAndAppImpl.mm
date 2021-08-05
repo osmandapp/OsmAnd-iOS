@@ -9,14 +9,11 @@
 #import "OsmAndAppImpl.h"
 
 #import <UIKit/UIKit.h>
-#import <QElement.h>
-#import <QElement+Appearance.h>
 
 #import "OsmAndApp.h"
 #import "OAResourcesInstaller.h"
 #import "OADaytimeAppearance.h"
 #import "OANighttimeAppearance.h"
-#import "OAQFlatAppearance.h"
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OALog.h"
@@ -41,6 +38,7 @@
 #import "OATTSCommandPlayerImpl.h"
 #import "OAOsmAndLiveHelper.h"
 #import "OAAvoidSpecificRoads.h"
+#import "OAIndexConstants.h"
 
 #include <algorithm>
 
@@ -91,7 +89,9 @@
     NSString *_unitsMph;
     
     BOOL _firstLaunch;
-    std::map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
+    UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
+    
+    BOOL _carPlayActive;
 }
 
 @synthesize dataPath = _dataPath;
@@ -129,9 +129,7 @@
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
-#if defined(OSMAND_IOS_DEV)
-@synthesize debugSettings = _debugSettings;
-#endif // defined(OSMAND_IOS_DEV)
+@synthesize carPlayActive = _carPlayActive;
 
 - (instancetype)init
 {
@@ -171,10 +169,6 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
-
-#if defined(OSMAND_IOS_DEV)
-        _debugSettings = [[OADebugSettings alloc] init];
-#endif // defined(OSMAND_IOS_DEV)
     }
     return self;
 }
@@ -233,7 +227,7 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (hideAllGPX)
     {
-        [settings setMapSettingVisibleGpx:@[]];
+        [settings.mapSettingVisibleGpx set:@[]];
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults synchronize];
     }
@@ -284,10 +278,10 @@
     
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
-    
-    settings.applicationMode = settings.defaultApplicationMode;
-    [_data setLastMapSourceVariant:settings.applicationMode.variantKey];
-    
+
+    settings.simulateRouting = NO;
+    [_data setLastMapSourceVariant:settings.applicationMode.get.variantKey];
+
     // Get location of a shipped world mini-basemap and it's version stamp
     _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                                 ofType:@"obf"
@@ -377,7 +371,7 @@
         }
         if (prevVersion < VERSION_3_14)
         {
-            OAAppSettings.sharedManager.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
+            [OAAppSettings.sharedManager.availableApplicationModes set:@"car,bicycle,pedestrian,public_transport,"];
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
@@ -446,12 +440,7 @@
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];
-    
-    [OAPOIHelper sharedInstance];
-    [OAQuickSearchHelper instance];
-    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-    [helper reloadAllPoiFilters];
-    [helper loadSelectedPoiFilters];
+    [self loadRoutingFiles];
     
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
@@ -489,7 +478,6 @@
 
     _appearance = [[OADaytimeAppearance alloc] init];
     _appearanceChangeObservable = [[OAObservable alloc] init];
-    QElement.appearance = [[OAQFlatAppearance alloc] init];
     
     [OAMapStyleSettings sharedInstance];
 
@@ -509,6 +497,16 @@
     [OAPlugin initPlugins];
     
     [OAApplicationMode onApplicationStart];
+    OAApplicationMode *initialAppMode = [settings.useLastApplicationModeByDefault get] ?
+        [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
+                                                                                    settings.defaultApplicationMode.get;
+    [settings setApplicationModePref:initialAppMode];
+    
+    [OAPOIHelper sharedInstance];
+    [OAQuickSearchHelper instance];
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+    [helper reloadAllPoiFilters];
+    [helper loadSelectedPoiFilters];
     
     [[Reachability reachabilityForInternetConnection] startNotifier];
     [self askReview];
@@ -546,18 +544,21 @@
     }
 }
 
+- (std::vector<std::shared_ptr<RoutingConfigurationBuilder>>) getAllRoutingConfigs
+{
+    std::vector<std::shared_ptr<RoutingConfigurationBuilder>> values;
+    for (auto it = _customRoutingConfigs.begin(); it != _customRoutingConfigs.end(); ++it)
+        values.push_back(it->second);
+    values.push_back(self.defaultRoutingConfig);
+    return values;
+}
+
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
 {
-    // TODO: sync with android
-    // return RoutingConfiguration.getDefault();
-    
     float tm = [[NSDate date] timeIntervalSince1970];
     @try
     {
-        NSString *customRoutingPath = [self.documentsPath stringByAppendingPathComponent:@"routing.xml"];
-        BOOL useCustomRouting = [[NSFileManager defaultManager] fileExistsAtPath:customRoutingPath];
-        return parseRoutingConfigurationFromXml(useCustomRouting ? [customRoutingPath UTF8String] :
-                                                [[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String]);
+        return parseRoutingConfigurationFromXml([[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String], "");
     }
     @finally
     {
@@ -565,6 +566,16 @@
         if (te - tm > 30)
             NSLog(@"Defalt routing config init took %f ms", (te - tm));
     }
+}
+
+- (UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>>) getCustomRoutingConfigs
+{
+    return _customRoutingConfigs;
+}
+
+- (std::shared_ptr<RoutingConfigurationBuilder>) getCustomRoutingConfig:(std::string &)key
+{
+    return _customRoutingConfigs[key];
 }
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode
@@ -582,6 +593,69 @@
         }
     }
     return builder;
+}
+
+- (void) loadRoutingFiles
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        const auto defaultAttributes = [self getDefaultAttributes];
+        UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> customConfigs;
+        
+        NSFileManager *fileManager = NSFileManager.defaultManager;
+        BOOL isDir = NO;
+        NSString *routingPath = [self.documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR];
+        BOOL exists = [fileManager fileExistsAtPath:routingPath isDirectory:&isDir];
+        if (exists && isDir)
+        {
+            NSArray<NSString *> *files = [fileManager contentsOfDirectoryAtPath:routingPath error:nil];
+            if (files != nil && files.count > 0)
+            {
+                for (NSString *f : files)
+                {
+                    NSString *fullPath = [routingPath stringByAppendingPathComponent:f];
+                    [fileManager fileExistsAtPath:fullPath isDirectory:&isDir];
+                    if (!isDir && [f.lastPathComponent hasSuffix:ROUTING_FILE_EXT])
+                    {
+                        NSString *fileName = fullPath.lastPathComponent;
+                        auto builder = parseRoutingConfigurationFromXml(fullPath.UTF8String, fullPath.lastPathComponent.UTF8String);
+                        if (builder)
+                        {
+                            for (auto it = defaultAttributes.begin(); it != defaultAttributes.end(); ++it)
+                                builder->addAttribute(it->first, it->second);
+                            
+                            customConfigs[fileName.UTF8String] = builder;
+                        }
+                    }
+                }
+            }
+        }
+        _customRoutingConfigs = customConfigs;
+    });
+}
+
+- (MAP_STR_STR) getDefaultAttributes
+{
+    MAP_STR_STR defaultAttributes;
+    for (auto it = self.defaultRoutingConfig->attributes.begin(); it != self.defaultRoutingConfig->attributes.end(); ++it)
+    {
+        if ("routerName" != it->first)
+            defaultAttributes[it->first] = it->second;
+    }
+    return defaultAttributes;
+}
+
+- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
+{
+    auto builder = [OsmAndApp.instance getRoutingConfigForMode:am];
+    return [self getRouter:builder mode:am];
+}
+
+- (std::shared_ptr<GeneralRouter>) getRouter:(std::shared_ptr<RoutingConfigurationBuilder> &)builder mode:(OAApplicationMode *)am
+{
+    auto router = builder->getRouter([am.getRoutingProfile UTF8String]);
+    if (!router && am.parent)
+        router = builder->getRouter([am.parent.stringKey UTF8String]);
+    return router;
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force
@@ -1134,10 +1208,11 @@
     [routingHelper clearCurrentRoute:nil newIntermediatePoints:@[]];
     [routingHelper setRoutePlanningMode:false];
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    settings.lastRoutingApplicationMode = settings.applicationMode;
+    settings.lastRoutingApplicationMode = settings.applicationMode.get;
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
-        settings.applicationMode = settings.defaultApplicationMode;
+        OAApplicationMode *carPlayMode = settings.isCarPlayModeDefault ? OAApplicationMode.CAR : [OAAppSettings.sharedManager.carPlayMode get];
+        [settings setApplicationModePref:_carPlayActive ? carPlayMode : [settings.defaultApplicationMode get] markAsLastUsed:NO];
     });
 }
 

@@ -29,13 +29,27 @@
 #import "OAExportSettingsType.h"
 #import "OAFavoritesHelper.h"
 #import "OAMarkersSettingsItem.h"
+#import "OAHistoryMarkersSettingsItem.h"
 #import "OADestination.h"
+#import "OAGpxSettingsItem.h"
+#import "OASearchHistorySettingsItem.h"
+#import "OADownloadsItem.h"
+#import "OAResourcesSettingsItem.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
-#define kTmpProfileFolder @"tmpProfileData"
 #define kVersion 1
+
+@interface OAImportItemsAsyncTask()
+
+@property (nonatomic) NSString *file;
+@property (nonatomic) NSArray<OASettingsItem *> *items;
+
+@property (nonatomic, copy) OAOnImportComplete onImportComplete;
+@property (nonatomic, weak) id<OASettingsImportExportDelegate> delegate;
+
+@end
 
 #pragma mark - OASettingsImporter
 
@@ -110,12 +124,32 @@
             NSError *err = nil;
             if (reader)
             {
-                NSString *tmpFileName = [_tmpFilesDir stringByAppendingPathComponent:archiveItem.name.toNSString()];
-                if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
+                NSString *fileName = archiveItem.name.toNSString();
+                NSString *tmpFileName = [_tmpFilesDir stringByAppendingString:[@"/" stringByAppendingString:fileName]];
+                BOOL isDir = [fileName hasSuffix:@"/"];
+                if (isDir)
                 {
-                    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-                    NSLog(@"Error processing items");
-                    continue;
+                    // Collect all items for this directory
+                    for (const auto& archiveItem : constOf(archiveItems))
+                    {
+                        NSString *itemName = archiveItem.name.toNSString();
+                        if ([itemName hasPrefix:fileName] && ![itemName isEqualToString:fileName])
+                        {
+                            if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString([_tmpFilesDir stringByAppendingPathComponent:itemName])))
+                            {
+                                NSLog(@"Error processing directory item");
+                                continue;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
+                    {
+                        NSLog(@"Error processing items");
+                        continue;
+                    }
                 }
                 [reader readFromFile:tmpFileName error:&err];
             }
@@ -208,47 +242,47 @@
         return;
     }
 
+    NSMutableDictionary<NSString *, NSMutableArray<OASettingsItem *> *> *pluginItems = [NSMutableDictionary new];
     for (NSDictionary* itemJSON in itemsJson)
-//    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
-    
     {
         //TODO: Remove after complete implementation of the classes
-        if (![itemJSON[@"type"] isEqualToString:@"POI_UI_FILTERS"] && ![itemJSON[@"type"] isEqualToString:@"PLUGIN"] && ![itemJSON[@"type"] isEqualToString:@"DATA"])
+        if (![itemJSON[@"type"] isEqualToString:@"DATA"])
         {
             OASettingsItem *item = [self createItem:itemJSON];
             if (item)
                 [_items addObject:item];
+
+            NSString *pluginId = item.pluginId;
+            if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
+            {
+                NSMutableArray<OASettingsItem *> *items = pluginItems[pluginId];
+                if (items != nil)
+                {
+                    [items addObject:item];
+                }
+                else {
+                    items = [NSMutableArray new];
+                    [items addObject:item];
+                    pluginItems[pluginId] = items;
+                }
+            }
         }
-        
-        // TODO: implement custom plugins
-//        NSString *pluginId = item.pluginId;
-//        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
-//        {
-//            List<SettingsItem> items = pluginItems.get(pluginId);
-//            if (items != null) {
-//                items.add(item);
-//            } else {
-//                items = new ArrayList<>();
-//                items.add(item);
-//                pluginItems.put(pluginId, items);
-//            }
-//        }
     }
     if ([_items count] == 0)
     {
         NSLog(@"No items");
         return;
     }
-    //    for (OASettingsItem *item in self.items)
-    //    {
-    //        if (item instanceof PluginSettingsItem) {
-    //            PluginSettingsItem pluginSettingsItem = ((PluginSettingsItem) item);
-    //            List<SettingsItem> pluginDependentItems = pluginItems.get(pluginSettingsItem.getName());
-    //            if (!Algorithms.isEmpty(pluginDependentItems)) {
-    //                pluginSettingsItem.getPluginDependentItems().addAll(pluginDependentItems);
-    //            }
-    //        }
-    //    }
+    for (OASettingsItem *item in _items)
+    {
+        if ([item isKindOfClass:OAPluginSettingsItem.class])
+        {
+            OAPluginSettingsItem *pluginSettingsItem = (OAPluginSettingsItem *) item;
+            NSMutableArray<OASettingsItem *> *pluginDependentItems = pluginItems[pluginSettingsItem.name];
+            if (pluginDependentItems.count > 0)
+                pluginSettingsItem.pluginDependentItems = [pluginSettingsItem.pluginDependentItems arrayByAddingObjectsFromArray:pluginDependentItems];
+        }
+    }
 }
 
 - (NSArray<OASettingsItem *> *) getItems
@@ -316,6 +350,21 @@
             break;
         case EOASettingsItemTypeActiveMarkers:
             item = [[OAMarkersSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeHistoryMarkers:
+            item = [[OAHistoryMarkersSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeGpx:
+            item = [[OAGpxSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeSearchHistory:
+            item = [[OASearchHistorySettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeDownloads:
+            item = [[OADownloadsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeResources:
+            item = [[OAResourcesSettingsItem alloc] initWithJson:json error:&error];
             break;
         default:
             item = nil;
@@ -398,11 +447,18 @@
 
 - (void) execute
 {
+    [self executeWithCompletionBlock:nil];
+}
+
+- (void) executeWithCompletionBlock:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
+{
     [self onPreExecute];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray<OASettingsItem *> *items = [self doInBackground];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self onPostExecute:items];
+            if (onComplete)
+                onComplete(YES, _items);
         });
     });
 }
@@ -410,8 +466,13 @@
 - (void) onPreExecute
 {
     OAImportAsyncTask* importTask = _settingsHelper.importTask;
-    if (importTask != nil && ![importTask isImportDone] && self.delegate)
-        [self.delegate onSettingsImportFinished:NO items:_items];
+    if (importTask != nil && ![importTask isImportDone] && (self.delegate || self.onImportComplete))
+    {
+        if (self.delegate)
+            [self.delegate onSettingsImportFinished:NO items:_items];
+        if (self.onImportComplete)
+            self.onImportComplete(NO, _items);
+    }
     
     _settingsHelper.importTask = self;
 }
@@ -446,11 +507,15 @@
             _importDone = YES;
             if (_delegate)
                 [_delegate onSettingsCollectFinished:YES empty:NO items:_items];
+            if (self.onSettingsCollected)
+                self.onSettingsCollected(YES, NO, _items);
             break;
         case EOAImportTypeCheckDuplicates:
             _importDone = YES;
             if (_delegate)
                 [_delegate onDuplicatesChecked:_duplicates items:_selectedItems];
+            if (self.onDuplicatesChecked)
+                self.onDuplicatesChecked(_duplicates, _selectedItems);
             break;
         case EOAImportTypeImport:
             if (items != nil && items.count > 0)
@@ -459,6 +524,7 @@
                     [item apply];
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
+                task.onImportComplete = self.onImportComplete;
                 [task execute];
             }
             break;
@@ -520,159 +586,9 @@
     return duplicateItems;
 }
 
-- (NSDictionary *) getSettingsToOperate:(NSArray <OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete
-{
-    NSMutableDictionary *settingsToOperate = [NSMutableDictionary dictionary];
-    NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
-    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
-    NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
-    NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
-    NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
-    NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
-    NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
-    NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
-    NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
-    NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
-    NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
-    NSMutableArray<OADestination *> *markers = [NSMutableArray array];
-    for (OASettingsItem *item in settingsItems)
-    {
-        switch (item.type)
-        {
-            case EOASettingsItemTypeProfile:
-            {
-                [profiles addObject:[(OAProfileSettingsItem *)item modeBean]];
-                break;
-            }
-            case EOASettingsItemTypeFile:
-            {
-                OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
-                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
-                    [renderFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
-                    [routingFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
-                    [gpxFilesList addObject:fileItem.filePath];
-                else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
-                    [mapFilesList addObject:fileItem];
-                break;
-            }
-            case EOASettingsItemTypeQuickActions:
-            {
-                OAQuickActionsSettingsItem *quickActionsItem = (OAQuickActionsSettingsItem *) item;
-                if (importComplete)
-                    [quickActions addObjectsFromArray:quickActionsItem.appliedItems];
-                else
-                    [quickActions addObjectsFromArray:quickActionsItem.items];
-                break;
-            }
-            case EOASettingsItemTypePoiUIFilters:
-            {
-                OAPoiUiFilterSettingsItem *poiUiFilterItem = (OAPoiUiFilterSettingsItem *) item;
-                if (importComplete)
-                    [poiUIFilters addObjectsFromArray:poiUiFilterItem.appliedItems];
-                else
-                    [poiUIFilters addObjectsFromArray:poiUiFilterItem.items];
-                break;
-            }
-            case EOASettingsItemTypeMapSources:
-            {
-                OAMapSourcesSettingsItem *mapSourcesItem = (OAMapSourcesSettingsItem *) item;
-                if (importComplete)
-                    [tileSourceTemplates addObjectsFromArray:mapSourcesItem.appliedItems];
-                else
-                    [tileSourceTemplates addObjectsFromArray:mapSourcesItem.items];
-                break;
-            }
-            case EOASettingsItemTypeAvoidRoads:
-            {
-                OAAvoidRoadsSettingsItem *avoidRoadsItem = (OAAvoidRoadsSettingsItem *) item;
-                if (importComplete)
-                    [avoidRoads addObjectsFromArray:avoidRoadsItem.appliedItems];
-                else
-                    [avoidRoads addObjectsFromArray:avoidRoadsItem.items];
-                break;
-            }
-            case EOASettingsItemTypeFavorites:
-            {
-                OAFavoritesSettingsItem *favoritesItem = (OAFavoritesSettingsItem *) item;
-                if (importComplete)
-                    [favorites addObjectsFromArray:favoritesItem.appliedItems];
-                else
-                    [favorites addObjectsFromArray:favoritesItem.items];
-                break;
-            }
-            case EOASettingsItemTypeOsmNotes:
-            {
-                OAOsmNotesSettingsItem *osmNotesItem = (OAOsmNotesSettingsItem *) item;
-                if (importComplete)
-                    [notesPointList addObjectsFromArray:osmNotesItem.appliedItems];
-                else
-                    [notesPointList addObjectsFromArray:osmNotesItem.items];
-                break;
-            }
-            case EOASettingsItemTypeOsmEdits:
-            {
-                OAOsmEditsSettingsItem *osmEditsItem = (OAOsmEditsSettingsItem *) item;
-                if (importComplete)
-                    [osmEditsPointList addObjectsFromArray:osmEditsItem.appliedItems];
-                else
-                    [osmEditsPointList addObjectsFromArray:osmEditsItem.items];
-                break;
-            }
-            case EOASettingsItemTypeActiveMarkers:
-            {
-                OAMarkersSettingsItem *markersItem = (OAMarkersSettingsItem *) item;
-                if (importComplete)
-                    [markers addObjectsFromArray:markersItem.appliedItems];
-                else
-                    [markers addObjectsFromArray:markersItem.items];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    if (profiles.count > 0)
-        [settingsToOperate setObject:profiles forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]];
-    if (quickActions.count > 0)
-        [settingsToOperate setObject:quickActions forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeQuickActions]];
-    if (poiUIFilters.count > 0)
-        [settingsToOperate setObject:poiUIFilters forKey:[OAExportSettingsType typeName:EOAExportSettingsTypePoiTypes]];
-    if (tileSourceTemplates.count > 0)
-        [settingsToOperate setObject:tileSourceTemplates forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapSources]];
-    if (renderFilesList.count > 0)
-        [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyles]];
-    if (routingFilesList.count > 0)
-        [settingsToOperate setObject:routingFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRouting]];
-    if (gpxFilesList.count > 0)
-        [settingsToOperate setObject:gpxFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeGPX]];
-    if (mapFilesList.count > 0)
-        [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
-    if (avoidRoads.count > 0)
-        [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
-    if (favorites.count > 0)
-        [settingsToOperate setObject:favorites forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeFavorites]];
-    if (notesPointList.count > 0)
-        [settingsToOperate setObject:notesPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmNotes]];
-    if (osmEditsPointList.count > 0)
-        [settingsToOperate setObject:osmEditsPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmEdits]];
-    if (markers.count > 0)
-        [settingsToOperate setObject:markers forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeActiveMarkers]];
-    return settingsToOperate;
-}
-
 @end
 
 #pragma mark - OAImportItemsAsyncTask
-
-@interface OAImportItemsAsyncTask()
-
-@property (nonatomic) NSString *file;
-@property (nonatomic) NSArray<OASettingsItem *> *items;
-
-@end
 
 @implementation OAImportItemsAsyncTask
 {
@@ -723,10 +639,41 @@
     return YES;
 }
  
+- (void)updateDataIfNeeded
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    BOOL updateRoutingFiles = NO;
+    BOOL updateResources = NO;
+    for (OASettingsItem *item in _items)
+    {
+        if ([item isKindOfClass:OAFileSettingsItem.class])
+        {
+            OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
+            updateResources = updateResources || fileItem.subtype != EOASettingsItemFileSubtypeUnknown;
+            updateRoutingFiles = updateRoutingFiles || fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig;
+            
+            if (updateResources && updateRoutingFiles)
+                break;
+        }
+    }
+    
+    if (updateRoutingFiles)
+        [app loadRoutingFiles];
+    if (updateResources)
+    {
+        app.resourcesManager->rescanUnmanagedStoragePaths();
+        [app.localResourcesChangedObservable notifyEvent];
+    }
+}
+
 - (void) onPostExecute:(BOOL)success
 {
+    [self updateDataIfNeeded];
+    
     if (_delegate)
         [_delegate onSettingsImportFinished:success items:_items];
+    if (self.onImportComplete)
+        self.onImportComplete(success, _items);
 }
 
 @end

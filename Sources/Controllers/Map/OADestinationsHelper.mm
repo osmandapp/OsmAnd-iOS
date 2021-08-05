@@ -16,8 +16,8 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OADestinationItem.h"
-
-#import <EventKit/EventKit.h>
+#import "OAGPXMutableDocument.h"
+#import "OAGPXDocumentPrimitives.h"
 
 
 @implementation OADestinationsHelper
@@ -65,9 +65,7 @@
 {
     @synchronized(_syncObj)
     {
-        NSMutableArray *allDestinations = [NSMutableArray arrayWithArray:_sortedDestinations];
-        [allDestinations removeObject:self.getParkingPoint];
-        return [NSArray arrayWithArray:allDestinations];
+        return [NSArray arrayWithArray:_sortedDestinations];
     }
 }
 
@@ -222,15 +220,6 @@
     return res;
 }
 
-- (OADestination *) getParkingPoint
-{
-    for (OADestination *destination in _app.data.destinations)
-        if (destination.parking)
-            return destination;
-    
-    return nil;
-}
-
 - (void) moveRoutePointOnTop:(NSInteger)pointIndex
 {
     for (OADestination *destination in self.sortedDestinations)
@@ -366,9 +355,6 @@
 {
     @synchronized(_syncObj)
     {
-        if (destination.parking)
-            [OADestinationsHelper removeParkingReminderFromCalendar:destination];
-
         if (destination == _dynamic2ndRowDestination)
             _dynamic2ndRowDestination = nil;
         
@@ -379,6 +365,7 @@
     }
     
     [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
+    [_app.data.destinationsChangeObservable notifyEvent];
 }
 
 - (void) showOnMap:(OADestination *)destination
@@ -420,60 +407,48 @@
     h.date = [NSDate date];
     
     if (!destination.routePoint)
-        h.hType = (destination.parking ?  OAHistoryTypeParking : OAHistoryTypeDirection);
+        h.hType = OAHistoryTypeDirection;
     else
         h.hType = OAHistoryTypeRouteWpt;
     
     [[OAHistoryHelper sharedInstance] addPoint:h];
 }
 
-+ (void) addParkingReminderToCalendar:(OADestination *)destination
+- (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
 {
-    EKEventStore *eventStore = [[EKEventStore alloc] init];
-    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (error)
-            {
-                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-            }
-            else if (!granted)
-            {
-                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:OALocalizedString(@"reminder_not_set_text") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-            }
-            else
-            {
-                EKEvent *event = [EKEvent eventWithEventStore:eventStore];
-                event.title = OALocalizedString(@"pickup_car");
-                
-                event.startDate = destination.carPickupDate;
-                event.endDate = destination.carPickupDate;
-                
-                [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
-                
-                [event setCalendar:[eventStore defaultCalendarForNewEvents]];
-                NSError *err;
-                [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
-                if (err)
-                    [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-                else
-                    destination.eventIdentifier = [event.eventIdentifier copy];
-            }
-        });
-    }];
-}
-
-+ (void) removeParkingReminderFromCalendar:(OADestination *)destination
-{
-    if (destination.eventIdentifier)
+    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
+    [doc setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd",
+                     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+    for (OADestination *marker in markers)
     {
-        EKEventStore *eventStore = [[EKEventStore alloc] init];
-        EKEvent *event = [eventStore eventWithIdentifier:destination.eventIdentifier];
-        NSError *error;
-        if (![eventStore removeEvent:event span:EKSpanFutureEvents error:&error])
-            OALog(@"%@", [error localizedDescription]);
-        else
-            destination.eventIdentifier = nil;
+        OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+        wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
+        wpt.name = marker.desc;
+        wpt.color = marker.color.toHexString;
+
+        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = @"creation_date";
+
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
+        e.value = [dateFormatter stringFromDate:marker.creationDate];;
+
+        ext.extensions = @[e];
+        wpt.extraData = ext;
+
+//        if (completeBackup)
+//        {
+//            if (marker.creationDate != 0) {
+//                wpt.getExtensionsToWrite().put(CREATION_DATE, format.format(new Date(marker.creationDate)));
+//            }
+//            if (marker.visitedDate != 0) {
+//                wpt.getExtensionsToWrite().put(VISITED_DATE, format.format(new Date(marker.visitedDate)));
+//            }
+//        }
+        [doc addWpt:wpt];
     }
+    return doc;
 }
 
 @end

@@ -75,6 +75,11 @@ static NSMutableArray *activePopups;
     } completion:nil];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    [self show];
+}
 - (void)doLayout
 {
     CGFloat w = self.view.frame.size.width;
@@ -129,7 +134,11 @@ static NSMutableArray *activePopups;
     
     [self doLayout];
     
-    _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    if (!_shadeView)
+        _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    else
+        _shadeView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
+    
     _shadeView.backgroundColor = UIColorFromRGBA(0x00000060);
     _shadeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _shadeView.alpha = 0.0;
@@ -495,7 +504,7 @@ static NSMutableArray *activePopups;
 
 + (NSString *) styledHTMLwithHTML:(NSString *)HTML
 {
-    NSString *style = @"<meta charset=\"UTF-8\"><style> body { font-family: 'AvenirNext-Medium'; font-size: 12px; color:#727272} b {font-family: 'AvenirNext-DemiBold'; font-size: 12px; color:#727272 }</style>";
+    NSString *style = @"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: 12px; color:#727272} b {font-family: -apple-system; font-weight: bolder; font-size: 12px; color:#727272 }</style>";
     
     return [NSString stringWithFormat:@"%@%@", style, HTML];
 }

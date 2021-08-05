@@ -18,4 +18,21 @@
 }
 */
 
+- (void) setTitle:(NSString *)title andDescription:(NSString *)description
+{
+    [_titleLabel setText:title];
+    [_descLabel setText:description];
+    
+    if (description.length > 0)
+    {
+        _descIcon.hidden = NO;
+        _titleLabelTopConstraint.constant = 6;
+    }
+    else
+    {
+        _descIcon.hidden = YES;
+        _titleLabelTopConstraint.constant = 8;
+    }
+}
+
 @end

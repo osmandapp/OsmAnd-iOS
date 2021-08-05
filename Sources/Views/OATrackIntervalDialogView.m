@@ -60,7 +60,7 @@
     _lbRemember.text = OALocalizedString(@"track_interval_remember");
     _lbShowOnMap.text = OALocalizedString(@"map_settings_show");
     
-    [_swShowOnMap setOn:_settings.mapSettingShowRecordingTrack];
+    [_swShowOnMap setOn:_settings.mapSettingShowRecordingTrack.get];
 }
 
 - (void)updateInterval
@@ -93,7 +93,7 @@
     if (interval < 0)
         interval = 0;
     else if (interval >= _settings.trackIntervalArray.count)
-        interval = _settings.trackIntervalArray.count - 1;
+        interval = (int) _settings.trackIntervalArray.count - 1;
     return interval;
 }
 

@@ -1,5 +1,5 @@
 //
-//  OAFavoritesMapLayerProvider.h
+//  OAWaypointsMapLayerProvider.h
 //  OsmAnd
 //
 //  Created by Paul on 4/10/19.
@@ -29,6 +29,11 @@ public:
 private:
     QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>> _locationMarks;
     QList<OsmAnd::PointI> _locationMarkPoints;
+    QHash<QString, std::shared_ptr<SkBitmap>> _iconsCache;
+    std::shared_ptr<SkBitmap> getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize);
+    std::shared_ptr<SkBitmap> createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize) const;
+    QString backgroundImageNameByType(const QString& type) const;
+    UIImage* getIcon(NSString* iconName, NSString* defaultIconName) const;
 protected:
 public:
     OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>>& locationMarks,
@@ -42,7 +47,7 @@ public:
 
     virtual OsmAnd::PointI getPoint31(const int index) const override;
     virtual int getPointsCount() const override;
-    virtual std::shared_ptr<SkBitmap> getImageBitmap(const int index) const override;
+    virtual std::shared_ptr<SkBitmap> getImageBitmap(const int index, bool isFullSize) override;
     virtual QString getCaption(const int index) const override;
     
     virtual OsmAnd::ZoomLevel getMinZoom() const override;

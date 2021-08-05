@@ -122,13 +122,16 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
  */
 + (BOOL) cstartsWith:(NSString *)fullTextP theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
 {
+    // FUTURE: This is not effective code, it runs on each comparision
+    // It would be more efficient to normalize all strings in file and normalize search string before collator
+    theStart = [self alignChars:theStart];
     NSString *searchIn = [self simplifyStringAndAlignChars:fullTextP];
     NSInteger searchInLength = searchIn.length;
     
     NSInteger startLength = theStart.length;
     if (startLength == 0)
         return YES;
-    // this is not correct because of Auhofstrasse != Auhofstraße
+    // this is not correct without (simplifyStringAndAlignChars) because of Auhofstrasse != Auhofstraße
     if (startLength > searchInLength)
         return NO;
 
@@ -187,8 +190,14 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
 
 + (NSString *) simplifyStringAndAlignChars:(NSString *)fullText
 {
-    int i;
     fullText = fullText.lowerCase;
+    fullText = [self alignChars:fullText];
+    return fullText;
+}
+
++ (NSString *) alignChars:(NSString *)fullText
+{
+    int i;
     while( (i = [fullText indexOf:@"ß"] ) != -1 ) {
         fullText = [NSString stringWithFormat:@"%@ss%@", [fullText substringToIndex:i], [fullText substringFromIndex:i+1]];
     }

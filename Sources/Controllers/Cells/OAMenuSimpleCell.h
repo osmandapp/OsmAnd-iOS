@@ -18,5 +18,14 @@
 @property (nonatomic) IBOutlet NSLayoutConstraint *descrTopMargin;
 @property (nonatomic) IBOutlet NSLayoutConstraint *textHeightPrimary;
 @property (nonatomic) IBOutlet NSLayoutConstraint *textHeightSecondary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imgHeightPrimary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imgWidthPrimary;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textTopPrimaryMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textTopSecondaryMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomPrimaryMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomSecondaryMargin;
+
+- (void)changeHeight:(BOOL)higher;
 
 @end

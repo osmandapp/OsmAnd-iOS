@@ -145,7 +145,6 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
 "shared_string_do_not_use" = "Do not use";
-"voice_provider" = "Voice guidance";
 "shared_string_sound" = "အသံ";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -202,7 +201,6 @@
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
-"driving_region" = "Driving region";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
@@ -309,7 +307,7 @@
 "gpx_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
-"gpx_export" = "Export";
+"shared_string_export" = "Export";
 "import_export" = "Import/Export";
 "gpx_import_title" = "Import trip";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
@@ -353,15 +351,15 @@
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
 // Map settings
-"m_style_overview" = "Overview";
+"rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
-"map_settings_day" = "Day";
+"map_mode" = "Application mode";
+"map_settings_day" = "နေ့";
 "map_settings_night" = "Night";
 "map_settings_style" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -417,7 +415,7 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
 "res_mapsres" = "Maps & Resources";
-"res_installed" = "Installed";
+"download_tab_local" = "Installed";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -520,7 +518,7 @@
 "col_gray" = "Gray";
 "col_red" = "Red";
 "col_blue" = "Blue";
-"col_magenta" = "Magenta";
+"col_magenta" = "ပန်းခရမ်းရောင်";
 // World Regions
 "region_africa" = "Africa";
 "region_asia" = "Asia";
@@ -638,7 +636,7 @@
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"directions" = "Directions";
+"get_directions" = "Directions";
 "parking" = "Parking";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -710,10 +708,10 @@
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
 "shared_string_save_as" = "Save As";
-"delete_filter" = "filter ကိုဖျက်ပါ";
-"save_filter" = "filter ကိုသိမ်းပါ";
+"delete_filter" = "filterကိုဖျက်ပါ";
+"save_filter" = "filterကိုသိမ်းပါ";
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
-"apply_filters" = "filter များကိုအသုံးပြုပါ";
+"apply_filters" = "filterများကိုအသုံးပြုပါ";
 "filter_poi_hint" = "Filter by name";
 "city_type_suburb" = "Suburb";
 "city_type_hamlet" = "Hamlet";
@@ -725,7 +723,7 @@
 "postcode" = "စာပို့သင်္ကေတ";
 "show_something_on_map" = "Show %@ on the map";
 "search_POI_level_btn" = "Increase search radius";
-"shared_string_street" = "Street";
+"shared_string_street" = "လမ်း";
 "shared_string_building" = "Building";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Address";
@@ -780,7 +778,7 @@
 "key_hint_select" = "ရွေးချယ်ပါ";
 "product_title_wikivoyage" = "ခရီးသွားသူလမ်းညွှန်များ";
 "get_discount_second_part" = "ပြီးရင် %@";
-"route_params" = "လမ်းကြောင်း parameters များ";
+"route_parameters" = "လမ်းကြောင်း parameters များ";
 "osm_edit_without_name" = "နာမည်မရှိဘဲ";
 "osm_deleted" = "ဖျက်လိုက်သည်";
 "purchase_unlim_title" = "၀ယ်ပါ - %@";
@@ -884,7 +882,7 @@
 "special_routing" = "အထူးလမ်းကြောင်း";
 "base_profile_descr_public_transport" = "ပြည်သူပို့ဆောင်ရေးအမျိုးအားလုံး";
 "public_transport_warning_title" = "ပြည်သူပို့ဆောင်ရေးလမ်းညွှန်သည်လက်ရှိတွင် beta စမ်းသပ်ခြင်းဖြစ်၍၊ အမှားအယွင်းများနှင့်အမှားများရှိနိင်သည်။";
-"voice_prompts" = "အသံကြေငြာချက်များ";
+"voice_announces" = "အသံကြေငြာ";
 "nav_type_title" = "လမ်းညွှန်အမျိုးအစား";
 "reset_to_default" = "မူလပုံမှန်ကိုပြန်ပြောင်းမြည်";
 "walk" = "လမ်းလျှောက်";
@@ -901,3 +899,11 @@
 "app_profiles" = "အက်ပလီကေးရှင်းပရိုဖိုင်းများ";
 "total" = "စုစုပေါင်း";
 "configure_map_descr" = "မြေပုံမျက်နှာပြင်";
+
+"coordinates_widget" = "Coordinatesဝစ်ဂျက်";
+"osmand_settings" = "OsmAအပြင်အဆင်များ";
+"show_compass_ruler" = "သံလိုက်အိမ်မြှောင်ကိုဖော်ပြ";
+"hide_compass_ruler" = "သံလိုက်အိမ်မြှောင်ကိုဖြောက်လိုက်";
+"map_during_navigation" = "လမ်းညွှန်နေစဉ်မြေပုံ";
+"searching_gps" = "GPSရှာဖွေခြင်း";
+"units_nm" = "nmi";

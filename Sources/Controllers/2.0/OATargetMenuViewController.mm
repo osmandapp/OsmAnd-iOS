@@ -47,6 +47,10 @@
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
 #import "OADownloadMapViewController.h"
+#import "OAPlugin.h"
+#import "OAWikipediaPlugin.h"
+#import "OAPOI.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -84,7 +88,7 @@
     {
         case OATargetFavorite:
         {
-            OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+            OAFavoriteItem *item;
             for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
             {
                 double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
@@ -92,7 +96,7 @@
                 
                 if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:favLat destLon:favLon])
                 {
-                    item.favorite = favLoc;
+                    item = [[OAFavoriteItem alloc] initWithFavorite:favLoc];
                     break;
                 }
             }
@@ -118,7 +122,7 @@
         case OATargetParking:
         {
             if (targetPoint.targetObj)
-                controller = [[OAParkingViewController alloc] initWithParking:targetPoint.targetObj];
+                controller = [[OAParkingViewController alloc] initWithParking];
             else
                 controller = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon)];
             break;
@@ -160,22 +164,15 @@
         }
         case OATargetWiki:
         {
-            NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-            if (!contentLocale)
-                contentLocale = [OAUtilities currentLang];
-            
-            NSString *content = [targetPoint.localizedContent objectForKey:contentLocale];
-            if (!content)
-            {
-                contentLocale = @"";
-                content = [targetPoint.localizedContent objectForKey:contentLocale];
-            }
-            if (!content && targetPoint.localizedContent.count > 0)
-            {
-                contentLocale = targetPoint.localizedContent.allKeys[0];
-                content = [targetPoint.localizedContent objectForKey:contentLocale];
-            }
-            
+            NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
+            if (!preferredMapLanguage || preferredMapLanguage.length == 0)
+                preferredMapLanguage = NSLocale.currentLocale.languageCode;
+
+            NSString *language = [OAPlugin onGetMapObjectsLocale:targetPoint.targetObj preferredLocale:preferredMapLanguage];
+            if ([language isEqualToString:@"en"])
+                language = @"";
+
+            NSString *content = targetPoint.localizedContent[language];
             if (content)
                 controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
             break;
@@ -444,12 +441,19 @@
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
+    return [self getAttributedTypeStr:group color:nil];
+}
+
+- (NSAttributedString *) getAttributedTypeStr:(NSString *)group color:(UIColor *)color
+{
+    UIColor *iconColor = color ? color : UIColorFromRGB(0x808080);
+    
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
     UIFont *font = [UIFont systemFontOfSize:15.0];
     
     NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
     NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];
-    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:UIColorFromRGB(0x808080)];
+    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:iconColor];
     
     NSAttributedString *groupStringWithImage = [NSAttributedString attributedStringWithAttachment:groupAttachment];
     [stringGroup replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:groupStringWithImage];
@@ -716,6 +720,11 @@
 }
 
 - (BOOL) showNearestWiki;
+{
+    return NO; // override
+}
+
+- (BOOL) showNearestPoi;
 {
     return NO; // override
 }

@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
+#import "OATopCoordinatesWidget.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -22,9 +23,6 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewController.h"
-#if defined(OSMAND_IOS_DEV)
-#   import "OADebugHudViewController.h"
-#endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
 #import "OAOverlayUnderlayView.h"
 #import "OAToolbarViewController.h"
@@ -82,10 +80,6 @@
     
     NSLayoutConstraint *_bottomRulerConstraint;
     NSLayoutConstraint *_leftRulerConstraint;
-    
-#if defined(OSMAND_IOS_DEV)
-    OADebugHudViewController* _debugHudViewController;
-#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -159,12 +153,6 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-	    
-#if defined(OSMAND_IOS_DEV)
-    UILongPressGestureRecognizer* debugLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                                 action:@selector(onDebugButtonLongClicked:)];
-    [_debugButton addGestureRecognizer:debugLongPress];
-#endif
 
     _mapInfoController = [[OAMapInfoController alloc] initWithHudViewController:self];
 
@@ -207,11 +195,6 @@
     [self updateColors];
 
     _mapInfoController.delegate = self;
-
-#if !defined(OSMAND_IOS_DEV)
-    _debugButton.hidden = YES;
-    _debugButton.userInteractionEnabled = NO;
-#endif // !defined(OSMAND_IOS_DEV)
 }
 
 - (void)applyCorrectViewSize
@@ -306,7 +289,6 @@
             _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame) - 16. - h, w, h);
         }
     }
-    
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -608,11 +590,6 @@
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 
-- (IBAction) onActionsMenuButtonClicked:(id)sender
-{
-    [self.sidePanelController showRightPanelAnimated:YES];
-}
-
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -624,9 +601,9 @@
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OAProfileSetting *obj = notification.object;
-    OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
-    OAProfileBoolean *transparentMapTheme = [OAAppSettings sharedManager].transparentMapTheme;
+    OACommonPreference *obj = notification.object;
+    OACommonInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
+    OACommonBoolean *transparentMapTheme = [OAAppSettings sharedManager].transparentMapTheme;
     if (obj)
     {
         if (obj == rotateMap)
@@ -680,7 +657,7 @@
 
 - (void) updateCompassButton
 {
-    OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
+    OACommonInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     BOOL showCompass = [self shouldShowCompass];
     if ([rotateMap get] == ROTATE_MAP_NONE)
@@ -709,7 +686,7 @@
     else
     {
         BOOL isNight = [OAAppSettings sharedManager].nightMode;
-        return isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+        return isNight || [_topCoordinatesWidget isVisible] ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     }
 }
 
@@ -728,7 +705,8 @@
     if (![self.view.subviews containsObject:_toolbarViewController.view])
     {
         [self.view addSubview:_toolbarViewController.view];
-        [self.view insertSubview:self.statusBarView aboveSubview:_toolbarViewController.view];
+        [self.view insertSubview:_topCoordinatesWidget aboveSubview:_toolbarViewController.view];
+        [self.view insertSubview:self.statusBarView aboveSubview:_topCoordinatesWidget];
         
         if (self.widgetsView && self.widgetsView.superview)
         {
@@ -747,6 +725,22 @@
     [self updateToolbarLayout:YES];
 }
 
+- (void) setCoordinatesWidget:(OATopCoordinatesWidget *)widget
+{
+    if (_topCoordinatesWidget.superview)
+        [_topCoordinatesWidget removeFromSuperview];
+
+    _topCoordinatesWidget = widget;
+    [_topCoordinatesWidget updateInfo];
+
+    if (![self.view.subviews containsObject:_topCoordinatesWidget])
+    {
+        [self.view addSubview:_topCoordinatesWidget];
+        [self.view insertSubview:_topCoordinatesWidget aboveSubview:_toolbarViewController.view];
+        [self.view insertSubview:self.statusBarView aboveSubview:_topCoordinatesWidget];
+    }
+}
+
 - (void) updateControlsLayout:(CGFloat)y
 {
     [self updateControlsLayout:y statusBarColor:[self getStatusBarBackgroundColor]];
@@ -757,7 +751,7 @@
     [self updateButtonsLayoutY:y];
     
     if (_widgetsView)
-        _widgetsView.frame = CGRectMake(0.0, y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2, 10.0);
+        _widgetsView.frame = CGRectMake(0.0, y + 2.0 + [self getCoordinateWigetTopOffset:y], DeviceScreenWidth - OAUtilities.getLeftMargin * 2, 10.0);
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)
@@ -780,7 +774,7 @@
     CGFloat sX = _searchButton.frame.origin.x;
     CGSize sSize = _searchButton.frame.size;
     
-    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY];
+    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY] + [self getCoordinateWigetTopOffset:y];
     
     if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, buttonsY, size.width, size.height)))
     {
@@ -789,6 +783,28 @@
         _searchButton.frame = CGRectMake(sX, buttonsY + 7.0, sSize.width, sSize.height);
     }
 }
+
+- (CGFloat) getCoordinateWigetTopOffset:(CGFloat)yOffset
+{
+    BOOL isCoordinatesVisible = [_topCoordinatesWidget isVisible];
+    BOOL isMarkersWidgetVisible = _toolbarViewController.view.alpha != 0;
+    CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
+    CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height;
+    if ([OAUtilities isLandscape])
+    {
+        if (isCoordinatesVisible && isMarkersWidgetVisible)
+            return 0;
+        else if (isMarkersWidgetVisible)
+            return -markersWidgetHeaderHeight;
+        else
+            return 0;
+    }
+    else
+    {
+        return isCoordinatesVisible ? coordinateWidgetHeight : 0;
+    }
+}
+    
 
 - (CGFloat) getControlsTopPosition
 {
@@ -856,6 +872,8 @@
     UIColor *statusBarColor;
     if (self.contextMenuMode && !_toolbarViewController)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
+    else if ([_topCoordinatesWidget isVisible])
+        return UIColorFromRGB(nav_bar_night);
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
     else
@@ -882,29 +900,6 @@
 }
 
 #pragma mark - debug
-
-- (void)onDebugButtonLongClicked:(id)sender
-{
-    _debugButton.hidden = YES;
-    _debugButton.userInteractionEnabled = NO;
-}
-
-- (IBAction)onDebugButtonClicked:(id)sender
-{
-#if defined(OSMAND_IOS_DEV)
-    
-    if (_debugHudViewController == nil)
-    {
-        _debugHudViewController = [OADebugHudViewController attachTo:self];
-    }
-    else
-    {
-        [_debugHudViewController.view removeFromSuperview];
-        [_debugHudViewController removeFromParentViewController];
-        _debugHudViewController = nil;
-    }
-#endif // defined(OSMAND_IOS_DEV)
-}
 
 - (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
@@ -993,6 +988,8 @@
         _widgetsView.alpha = alphaEx;
         if (self.toolbarViewController)
             self.toolbarViewController.view.alpha = alphaEx;
+        if (self.topCoordinatesWidget)
+            self.topCoordinatesWidget.alpha = alphaEx;
         
     } completion:^(BOOL finished) {
         
@@ -1004,6 +1001,8 @@
         _widgetsView.userInteractionEnabled = alphaEx > 0.0;
         if (self.toolbarViewController)
             self.toolbarViewController.view.userInteractionEnabled = alphaEx > 0.0;
+        if (self.topCoordinatesWidget)
+            self.topCoordinatesWidget.userInteractionEnabled = alphaEx > 0.0;
         
     }];
 }
@@ -1020,6 +1019,8 @@
         _widgetsView.alpha = 0.0;
         if (self.toolbarViewController)
             self.toolbarViewController.view.alpha = 0.0;
+        if (self.topCoordinatesWidget)
+            self.topCoordinatesWidget.alpha = 0.0;
         
     } completion:^(BOOL finished) {
         
@@ -1031,6 +1032,8 @@
         _widgetsView.userInteractionEnabled = NO;
         if (self.toolbarViewController)
             self.toolbarViewController.view.userInteractionEnabled = NO;
+        if (self.topCoordinatesWidget)
+            self.topCoordinatesWidget.userInteractionEnabled = NO;
         
     }];
 }
@@ -1122,7 +1125,7 @@
 - (void) updateMapSettingsButton
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
-    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
     [_mapSettingsButton setImage:mode.getIcon forState:UIControlStateNormal];
     _mapSettingsButton.tintColor = isNight ? UIColor.whiteColor : UIColorFromRGB(color_on_map_icon_color);
 }
@@ -1208,11 +1211,6 @@
         imageName = isNight ? @"icon_drive_mode_off_night" : @"icon_drive_mode_off";
 
     [_driveModeButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-}
-
-- (IBAction) expandClicked:(id)sender
-{
-    [_mapInfoController expandClicked:sender];
 }
 
 - (void) recreateControls

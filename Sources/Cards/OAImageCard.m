@@ -6,10 +6,26 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
+#import <CocoaSecurity.h>
 #import "OAImageCard.h"
 #import "OAImageCardCell.h"
+#import "OACollapsableCardsView.h"
+#import "OAMapillaryImageCard.h"
+#import "OAMapillaryContributeCard.h"
+#import "OAUrlImageCard.h"
+#import "OAWikiImageCard.h"
 
-#define kImageCardId @"OAImageCardCell"
+@interface OAImageCard ()
+
+@property (nonatomic) OAImageCardCell *collectionCell;
+@property (nonatomic) NSString *type;
+@property (nonatomic) NSString *title;
+@property (nonatomic) NSString *url;
+@property (nonatomic) NSString *imageUrl;
+@property (nonatomic) NSString *imageHiresUrl;
+@property (nonatomic) NSString *topIcon;
+
+@end
 
 @implementation OAImageCard
 {
@@ -20,7 +36,8 @@
 - (id) initWithData:(NSDictionary *)data
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _type = data[@"type"];
         _ca = [data[@"ca"] doubleValue];
         _latitude = [data[@"lat"] doubleValue];
@@ -78,55 +95,56 @@
     return (_imageHiresUrl && _imageHiresUrl.length > 0) ? _imageHiresUrl : _imageUrl;
 }
 
-- (void) build:(UICollectionViewCell *) cell
+- (void)build:(UICollectionViewCell *) cell
 {
-    [super build:cell];
-    
-    OAImageCardCell *imageCell;
     if (cell && [cell isKindOfClass:OAImageCardCell.class])
-        imageCell = (OAImageCardCell *) cell;
-    
-    if (imageCell)
+        _collectionCell = (OAImageCardCell *) cell;
+    [super build:cell];
+}
+
+- (void)update
+{
+    if (_collectionCell)
     {
-        imageCell.loadingIndicatorView.hidesWhenStopped = YES;
+        _collectionCell.loadingIndicatorView.hidesWhenStopped = YES;
         if (self.image)
         {
-            imageCell.imageView.hidden = NO;
-            [imageCell.imageView setImage:self.image];
-            [imageCell.urlTextView setHidden:YES];
-            imageCell.loadingIndicatorView.hidden = YES;
-            [imageCell.loadingIndicatorView stopAnimating];
+            _collectionCell.imageView.hidden = NO;
+            [_collectionCell.imageView setImage:self.image];
+            [_collectionCell.urlTextView setHidden:YES];
+            _collectionCell.loadingIndicatorView.hidden = YES;
+            [_collectionCell.loadingIndicatorView stopAnimating];
         }
         else
         {
-            [imageCell.imageView setImage:nil];
+            [_collectionCell.imageView setImage:nil];
             if (!_downloaded)
             {
-                [imageCell.loadingIndicatorView startAnimating];
-                imageCell.loadingIndicatorView.hidden = NO;
+                [_collectionCell.loadingIndicatorView startAnimating];
+                _collectionCell.loadingIndicatorView.hidden = NO;
                 [self downloadImage];
             }
             else
             {
-                imageCell.imageView.hidden = YES;
-                [imageCell.urlTextView setHidden:NO];
-                [imageCell.urlTextView setText:self.imageUrl];
-                imageCell.loadingIndicatorView.hidden = YES;
-                [imageCell.loadingIndicatorView stopAnimating];
+                _collectionCell.imageView.hidden = YES;
+                [_collectionCell.urlTextView setHidden:NO];
+                [_collectionCell.urlTextView setText:self.imageUrl];
+                _collectionCell.loadingIndicatorView.hidden = YES;
+                [_collectionCell.loadingIndicatorView stopAnimating];
             }
         }
-        [imageCell setUserName:self.userName];
-        
+        [_collectionCell setUserName:self.userName];
+
         if (self.topIcon && self.topIcon.length > 0)
-            [imageCell.logoView setImage:[UIImage imageNamed:self.topIcon]];
+            [_collectionCell.logoView setImage:[UIImage imageNamed:self.topIcon]];
         else
-            [imageCell.logoView setImage:nil];
+            [_collectionCell.logoView setImage:nil];
     }
 }
 
 + (NSString *) getCellNibId
 {
-    return kImageCardId;
+    return [OAImageCardCell getCellIdentifier];
 }
 
 @end

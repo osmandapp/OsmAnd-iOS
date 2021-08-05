@@ -11,6 +11,8 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/GeoInfoDocument.h>
 
+@class OAGPXDocument, OAGpxWpt;
+
 @interface OASelectedGPXHelper : NSObject
 
 // Active gpx
@@ -18,13 +20,14 @@
 
 + (OASelectedGPXHelper *)instance;
 
-- (BOOL) buildGpxList;
-- (BOOL) isShowingAnyGpxFiles;
+- (BOOL)buildGpxList;
+- (OAGPXDocument *)getSelectedGpx:(OAGpxWpt *)gpxWpt;
+- (BOOL)isShowingAnyGpxFiles;
 
--(void) clearAllGpxFilesToShow:(BOOL) backupSelection;
--(void) restoreSelectedGpxFiles;
+-(void)clearAllGpxFilesToShow:(BOOL) backupSelection;
+-(void)restoreSelectedGpxFiles;
 
-+ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *) newName;
++ (void)renameVisibleTrack:(NSString *)oldPath newPath:(NSString *) newPath;
 
 
 @end

@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="backButton" destination="G5Q-x1-dIo" id="SCL-to-Bh7"/>
                 <outlet property="cancelButton" destination="dj9-4i-jfO" id="3tL-vf-RvR"/>
+                <outlet property="doneButton" destination="SjJ-8f-vqm" id="xcN-37-6Tk"/>
                 <outlet property="navbarView" destination="Bs9-2L-ti4" id="ibU-c4-UdB"/>
                 <outlet property="tableView" destination="NrM-78-nBe" id="TGz-iw-9pj"/>
                 <outlet property="titleLabel" destination="krK-4A-igo" id="uhV-5C-3aD"/>
@@ -36,18 +37,33 @@
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kiz-Fv-xhW">
                             <rect key="frame" x="0.0" y="55" width="414" height="1"/>
-                            <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="SxM-yt-DGX"/>
                             </constraints>
                         </view>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SjJ-8f-vqm">
+                            <rect key="frame" x="356" y="13" width="42" height="31"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                            <state key="normal" title="Done">
+                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <state key="disabled">
+                                <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="doneButtonPressed:" destination="-1" eventType="touchUpInside" id="rxG-Rh-i5e"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="kiz-Fv-xhW" firstAttribute="top" secondItem="SjJ-8f-vqm" secondAttribute="bottom" constant="11" id="51Z-rg-GWJ"/>
                         <constraint firstItem="kiz-Fv-xhW" firstAttribute="leading" secondItem="Bs9-2L-ti4" secondAttribute="leading" id="5iD-6b-j0q"/>
                         <constraint firstItem="krK-4A-igo" firstAttribute="centerY" secondItem="Bs9-2L-ti4" secondAttribute="centerY" id="BAx-O8-Vb9"/>
                         <constraint firstItem="krK-4A-igo" firstAttribute="centerX" secondItem="Bs9-2L-ti4" secondAttribute="centerX" id="K8B-hV-g4s"/>
                         <constraint firstAttribute="trailing" secondItem="kiz-Fv-xhW" secondAttribute="trailing" id="TPn-m9-lbQ"/>
+                        <constraint firstItem="SjJ-8f-vqm" firstAttribute="top" secondItem="Bs9-2L-ti4" secondAttribute="top" constant="13" id="Yho-c8-Jps"/>
                         <constraint firstAttribute="bottom" secondItem="kiz-Fv-xhW" secondAttribute="bottom" id="qwC-N3-MSJ"/>
                         <constraint firstAttribute="height" constant="56" id="wa6-ai-q4w"/>
                     </constraints>
@@ -89,6 +105,7 @@
                 <constraint firstItem="G5Q-x1-dIo" firstAttribute="top" secondItem="Q3I-vz-wne" secondAttribute="top" constant="13" id="JQi-y5-VVQ"/>
                 <constraint firstItem="NrM-78-nBe" firstAttribute="trailing" secondItem="Q3I-vz-wne" secondAttribute="trailing" id="PQh-Rw-JQQ"/>
                 <constraint firstAttribute="bottom" secondItem="NrM-78-nBe" secondAttribute="bottom" id="Ppn-Kn-4sS"/>
+                <constraint firstItem="FS5-wo-05w" firstAttribute="trailing" secondItem="SjJ-8f-vqm" secondAttribute="trailing" constant="16" id="T1U-a8-sTb"/>
                 <constraint firstItem="Bs9-2L-ti4" firstAttribute="top" secondItem="Q3I-vz-wne" secondAttribute="top" id="VZR-b0-Unr"/>
                 <constraint firstItem="NrM-78-nBe" firstAttribute="top" secondItem="dj9-4i-jfO" secondAttribute="bottom" constant="11" id="bTU-Yk-Ij7"/>
                 <constraint firstItem="dj9-4i-jfO" firstAttribute="leading" secondItem="FS5-wo-05w" secondAttribute="leading" constant="16" id="ft1-MF-h5O"/>

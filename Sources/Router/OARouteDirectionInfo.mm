@@ -23,7 +23,7 @@
     {
         _routeEndPointOffset = 0;
         _descriptionRoute = @"";
-        _averageSpeed = averageSpeed == 0 ? 1 : averageSpeed;
+        _averageSpeed = averageSpeed == 0 || isnan(averageSpeed) ? 1 : averageSpeed;
         _turnType = turnType;
     }
     return self;
@@ -31,7 +31,7 @@
 
 -(void)setAverageSpeed:(float)averageSpeed
 {
-    _averageSpeed = averageSpeed == 0 ? 1 : averageSpeed;
+    _averageSpeed = averageSpeed == 0 || isnan(averageSpeed) ? 1 : averageSpeed;
 }
 
 - (NSString *) getDescriptionRoute
@@ -60,9 +60,9 @@
     _descriptionRoute = descriptionRoute;
 }
 
-- (int) getExpectedTime
+- (long) getExpectedTime
 {
-    return (int) round(self.distance / self.averageSpeed);
+    return (long) round(self.distance / self.averageSpeed);
 }
 
 @end

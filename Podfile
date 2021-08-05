@@ -13,7 +13,6 @@ def defaultPods
     pod 'UIActionSheet-Blocks', '~> 1.0.1'
     pod 'DACircularProgress', '~> 2.2.0'
     pod 'FFCircularProgressView', '~> 0.4'
-    pod 'QuickDialog', :subspecs => ["Core"], :git => 'https://github.com/escoz/QuickDialog.git'
     pod 'FormatterKit', '~> 1.8.0'
     pod 'SWTableViewCell', '~> 0.3.7'
     pod 'RegexKitLite', '~> 4.0'
@@ -21,7 +20,7 @@ def defaultPods
     pod 'CocoaSecurity', '~> 1.2.4'
     pod 'TPKeyboardAvoiding', '~> 1.2.6'
     pod 'HTAutocompleteTextField', '~> 1.3.1'
-    pod 'MaterialComponents/TextFields', '~> 84.0.0'
+    pod 'MaterialComponents/TextFields', '~> 120.0.0'
     pod 'BRCybertron', '~> 1.1.1'
     pod 'MCBinaryHeap', '~> 0.1'
     pod 'TTRangeSlider', '~> 1.0.6'
@@ -31,9 +30,6 @@ target 'OsmAnd Maps' do
     defaultPods
 end
 
-target 'OsmAnd Maps DEV' do
-    defaultPods
-end
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

@@ -111,7 +111,7 @@ void OAMapillaryTilesProvider::drawPoints(
         double tileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
         
         if (tileBBox31Enlarged.contains(tileX, tileY)) {
-            if ([OAAppSettings sharedManager].useMapillaryFilter && filtered(p->getUserData(), geometryTile))
+            if ([OAAppSettings sharedManager].useMapillaryFilter.get && filtered(p->getUserData(), geometryTile))
                     continue;
             
             SkScalar x = ((tileX - tileBBox31.left()) / tileSize31) * tileSize - bitmapHalfSize;
@@ -127,13 +127,13 @@ bool OAMapillaryTilesProvider::filtered(const QHash<uint8_t, QVariant> &userData
         return true;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    QString keys = QString::fromNSString(settings.mapillaryFilterUserKey);
+    QString keys = QString::fromNSString(settings.mapillaryFilterUserKey.get);
     QStringList userKeys = keys.split(QStringLiteral("$$$"));
     
     double capturedAt = userData[OsmAnd::MvtReader::getUserDataId("captured_at")].toDouble() / 1000;
-    double from = settings.mapillaryFilterStartDate;
-    double to = settings.mapillaryFilterEndDate;
-    bool pano = settings.mapillaryFilterPano;
+    double from = settings.mapillaryFilterStartDate.get;
+    double to = settings.mapillaryFilterEndDate.get;
+    bool pano = settings.mapillaryFilterPano.get;
     
     if (userKeys.count() > 0 && (keys.compare(QStringLiteral("")) != 0))
     {

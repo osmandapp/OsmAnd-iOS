@@ -12,8 +12,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
-
-#define kIconTitleIconRoundCell @"OATitleIconRoundCell"
+#import "OAMapLayers.h"
 
 @interface OAPointOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -51,7 +50,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), _pointIndex];
+    self.titleView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), _pointIndex + 1];
     [self.leftButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
@@ -60,7 +59,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"move_point"),
             @"img" : @"ic_custom_change_object_position",
             @"key" : @"move_point"
@@ -69,14 +68,14 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_before"),
             @"img" : @"ic_custom_add_point_before",
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeBefore)
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_after"),
             @"img" : @"ic_custom_add_point_after",
             @"key" : @"add_points",
@@ -86,30 +85,101 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_before"),
             @"img" : @"ic_custom_trim_before",
-            @"key" : @"trim",
+            @"key" : @"trim_before",
             @"value" : @(EOAClearPointsModeBefore)
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_after"),
             @"img" : @"ic_custom_trim_after",
-            @"key" : @"trim",
+            @"key" : @"trim_after",
             @"value" : @(EOAClearPointsModeAfter)
         }
     ]];
     
+    if ([_editingCtx isFirstPointSelected:YES])
+    {
+        // skip
+    }
+    else if ([_editingCtx isLastPointSelected:YES])
+    {
+        [data addObject:@[
+            @{
+                @"type" : [OATitleIconRoundCell getCellIdentifier],
+                @"title" : OALocalizedString(@"track_new_segment"),
+                @"img" : @"ic_custom_new_segment",
+                @"key" : @"new_segment"
+            }
+        ]];
+    }
+    else if ([_editingCtx isFirstPointSelected:NO] || [_editingCtx isLastPointSelected:NO])
+    {
+        [data addObject:@[
+            @{
+                @"type" : [OATitleIconRoundCell getCellIdentifier],
+                @"title" : OALocalizedString(@"join_segments"),
+                @"img" : @"ic_custom_join_segments",
+                @"key" : @"join_segments"
+            }
+        ]];
+    }
+    else
+    {
+        BOOL splitBefore = [_editingCtx canSplit:NO];
+        BOOL splitAfter = [_editingCtx canSplit:YES];
+        if (splitBefore && splitAfter)
+        {
+            [data addObject:@[
+                @{
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
+                    @"title" : OALocalizedString(@"split_before"),
+                    @"img" : @"ic_custom_split_before",
+                    @"key" : @"split_before"
+                },
+                @{
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
+                    @"title" : OALocalizedString(@"split_after"),
+                    @"img" : @"ic_custom_split_after",
+                    @"key" : @"split_after"
+                }
+            ]];
+        }
+        else if (splitBefore)
+        {
+            [data addObject:@[
+                @{
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
+                    @"title" : OALocalizedString(@"split_before"),
+                    @"img" : @"ic_custom_split_before",
+                    @"key" : @"split_before"
+                }
+            ]];
+        }
+        else if (splitAfter)
+        {
+            [data addObject:@[
+                @{
+                    @"type" : [OATitleIconRoundCell getCellIdentifier],
+                    @"title" : OALocalizedString(@"split_after"),
+                    @"img" : @"ic_custom_split_after",
+                    @"key" : @"split_after"
+                }
+            ]];
+        }
+    }
+    
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"change_route_type_before"),
             @"img" : [self getRouteTypeIcon:YES],
             @"key" : @"change_route_before",
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"change_route_type_after"),
             @"img" : [self getRouteTypeIcon:NO],
             @"key" : @"change_route_after",
@@ -119,7 +189,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"delete_point"),
             @"img" : @"ic_custom_remove_outlined",
             @"custom_color" : UIColorFromRGB(color_primary_red),
@@ -141,21 +211,44 @@
     return icon;
 }
 
+- (BOOL)isActiveCell:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"key"] isEqualToString:@"trim_before"])
+        return ![_editingCtx isFirstPointSelected:NO];
+    else if ([item[@"key"] isEqualToString:@"trim_after"])
+        return ![_editingCtx isLastPointSelected:NO];
+    else if ([item[@"key"] isEqualToString:@"split_after"])
+        return [_editingCtx canSplit:YES];
+    else if ([item[@"key"] isEqualToString:@"split_before"])
+        return [_editingCtx canSplit:NO];
+    else if ([item[@"key"] isEqualToString:@"change_route_before"])
+        return ![_editingCtx isFirstPointSelected:NO] && ![_editingCtx isApproximationNeeded];
+    else if ([item[@"key"] isEqualToString:@"change_route_after"])
+        return ![_editingCtx isLastPointSelected:NO] && ![_editingCtx isApproximationNeeded];
+
+    return YES;
+}
+
+- (void) onBottomSheetDismissed
+{
+    if (self.delegate)
+        [self.delegate onClearSelection];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }
@@ -163,21 +256,21 @@
         {
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
-            
-            
+
             UIColor *tintColor = item[@"custom_color"];
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
                 cell.textColorNormal = tintColor;
-                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             }
             else
             {
-                cell.textColorNormal = nil;
-                cell.iconView.image = [UIImage imageNamed:item[@"img"]];
-                cell.titleView.textColor = UIColor.blackColor;
-                cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+                BOOL isActiveCell =  [self isActiveCell:indexPath];
+                cell.iconColorNormal = isActiveCell ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                cell.textColorNormal = isActiveCell ? [UIColor blackColor] : [UIColor lightGrayColor];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             }
         }
         return cell;
@@ -197,6 +290,11 @@
 
 #pragma mark - UItableViewDelegate
 
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self isActiveCell:indexPath] ? indexPath : nil;
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
@@ -206,7 +304,7 @@
         if (self.delegate)
             [self.delegate onMovePoint:_pointIndex];
     }
-    else if ([key isEqualToString:@"trim"])
+    else if ([key hasPrefix:@"trim"])
     {
         EOAClearPointsMode mode = (EOAClearPointsMode) [item[@"value"] integerValue];
         if (self.delegate)
@@ -235,6 +333,34 @@
         [self dismissViewControllerAnimated:NO completion:nil];
         if (self.delegate)
             [self.delegate onChangeRouteTypeAfter];
+        return;
+    }
+    else if ([key isEqualToString:@"new_segment"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onSplitPointsAfter];
+        return;
+    }
+    else if ([key isEqualToString:@"join_segments"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onJoinPoints];
+        return;
+    }
+    else if ([key isEqualToString:@"split_before"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onSplitPointsBefore];
+        return;
+    }
+    else if ([key isEqualToString:@"split_after"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onSplitPointsAfter];
         return;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

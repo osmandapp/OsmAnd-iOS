@@ -95,7 +95,7 @@
     if (section == 0)
         return nil;
     else if (section == 1)
-        return OALocalizedString(@"route_params");
+        return OALocalizedString(@"route_parameters");
     else if (section == 2)
         return OALocalizedString(@"osm_edits_advanced");
     
@@ -131,13 +131,12 @@
     NSString *type = [param getCellType];
     OAApplicationMode *appMode = [self.routingHelper getAppMode];
     
-    if ([type isEqualToString:@"OASettingsCell"])
+    if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -148,19 +147,18 @@
         cell.backgroundColor = UIColor.redColor;
         return cell;
     }
-    else if ([type isEqualToString:@"OASettingSwitchCell"])
+    else if ([type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
         {
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
             cell.textView.text = text;
             cell.descriptionView.text = nil;
@@ -176,13 +174,12 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:@"OAIconTitleValueCell"])
+    else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAIconTitleValueCell";
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         if (cell)

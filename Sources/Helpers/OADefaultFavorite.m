@@ -21,7 +21,7 @@
         self.color = color;
         self.iconName = iconName;
         self.icon = [UIImage imageNamed:iconName];
-        self.cellIcon = [[UIImage imageNamed:@"ic_custom_favorites"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.cellIcon = [UIImage templateImageNamed:@"ic_custom_favorites"];
     }
     return self;
 }
@@ -62,6 +62,11 @@ static NSArray *colors;
                    ];
     
     return colors;
+}
+
++ (UIColor *) getDefaultColor
+{
+    return ((OAFavoriteColor *)colors[0]).color;
 }
 
 + (OAFavoriteColor *)nearestFavColor:(UIColor *)sourceColor

@@ -65,7 +65,7 @@
     [self.tableView setEditing:YES];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 48.;
-    [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
 }
 
@@ -166,13 +166,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAOnlineTilesResourceItem* item = [self getItem:indexPath];
-    static NSString* const identifierCell = @"OAMenuSimpleCell";
     OAMenuSimpleCell* cell = nil;
     
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
         cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         cell.descriptionView.hidden = YES;
     }

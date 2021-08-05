@@ -9,18 +9,15 @@
 #import "OACompoundViewController.h"
 
 @class OAPOIUIFilter;
+@class OAPOIType;
 
-@protocol OACustomPOIViewDelegate
-
-@required
-
-- (void) searchByUIFilter:(OAPOIUIFilter *)filter;
-
-@end
+@protocol OAPOIFilterViewDelegate;
+@protocol OAPOIFilterRefreshDelegate;
 
 @interface OACustomPOIViewController : OACompoundViewController
 
-@property (weak, nonatomic) id<OACustomPOIViewDelegate> delegate;
+@property (weak, nonatomic) id<OAPOIFilterViewDelegate> delegate;
+@property (weak, nonatomic) id<OAPOIFilterRefreshDelegate> _Nullable refreshDelegate;
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter;
 

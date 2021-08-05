@@ -27,7 +27,11 @@
 #define kImpassableRoadsLayerId @"impassable_map_roads"
 #define kTransportLayerId @"transport_map"
 #define kRoutePlanningLayerId @"route_planning_map"
+<<<<<<< HEAD
 #define kDownloadedRegionsLayerId @"downloaded_regions"
+=======
+#define kRulerByTapControlLayerId @"ruler_by_tap"
+>>>>>>> ad59fa714a1330de273b65c0ffb7e16da68c6b4c
 
 @interface OAMapLayersConfiguration : NSObject
 

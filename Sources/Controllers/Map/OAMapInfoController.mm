@@ -24,6 +24,7 @@
 #import "OARouteInfoWidgetsFactory.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OANextTurnWidget.h"
+#import "OATopCoordinatesWidget.h"
 #import "OALanesControl.h"
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
@@ -31,6 +32,8 @@
 #import "OATimeWidgetState.h"
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
+#import "OAUserInteractionPassThroughView.h"
+#import "OAToolbarViewController.h"
 
 @interface OATextState : NSObject
 
@@ -60,11 +63,11 @@
     UIView __weak *_widgetsView;
     UIView __weak *_leftWidgetsView;
     UIView __weak *_rightWidgetsView;
-    UIButton __weak *_expandButton;
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
     OATopTextView *_streetNameView;
+    OATopCoordinatesWidget *_topCoordinatesView;
     OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
@@ -76,6 +79,7 @@
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _mapSourceUpdatedObserver;
+    OAAutoObserverProxy* _rightWidgetSuperviewDidLayoutObserver;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
@@ -93,7 +97,6 @@
         _widgetsView = mapHudViewController.widgetsView;
         _leftWidgetsView = mapHudViewController.leftWidgetsView;
         _rightWidgetsView = mapHudViewController.rightWidgetsView;
-        _expandButton = mapHudViewController.expandButton;
 
         _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
         _expanded = NO;
@@ -121,7 +124,11 @@
         _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapSourceUpdated)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
-
+        
+        if (_rightWidgetsView.superview && [_rightWidgetsView.superview isKindOfClass:OAUserInteractionPassThroughView.class])
+            _rightWidgetSuperviewDidLayoutObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onRightWidgetSuperviewLayout)
+                                                          andObserve:((OAUserInteractionPassThroughView *)_rightWidgetsView.superview).didLayoutObservable];
     }
     return self;
 }
@@ -146,6 +153,14 @@
     [self updateRuler];
 }
 
+- (void) onRightWidgetSuperviewLayout
+{
+    _lastUpdateTime = CACurrentMediaTime();
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self onDraw];
+    });
+}
+
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -167,13 +182,12 @@
 
 - (void) onDraw
 {
-    [_dayNightHelper isNightMode];
-    
     [self updateColorShadowsOfText];
-    [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];    
+    [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
     [_streetNameView updateInfo];
     [_lanesControl updateInfo];
     [_alarmControl updateInfo];
+    [_topCoordinatesView updateInfo];
 }
 
 - (void) updateInfo
@@ -206,17 +220,7 @@
         _lanesControl.backgroundColor = ts.leftColor;
         [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
         //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
-        
-        if (ts.expand)
-            [_expandButton setBackgroundImage:[UIImage imageNamed:ts.expand] forState:UIControlStateNormal];
     }
-}
-
-- (void) layoutExpandButton
-{
-    CGRect f = _rightWidgetsView.frame;
-    CGRect bf = _expandButton.frame;
-    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height == 0 ? 0 : f.size.height + 2, bf.size.width, bf.size.height);
 }
 
 - (void) layoutWidgets:(OATextInfoWidget *)widget
@@ -308,8 +312,6 @@
         }
         
         CGFloat containerHeight = widgetsHeight;
-        if (maxWidth == 0)
-            maxWidth = _expandButton.frame.size.width + 8;
         
         if (container == _rightWidgetsView)
         {
@@ -319,7 +321,6 @@
             {
                 container.frame = rightContainerFrame;
             }
-            containerHeight += _expandButton.frame.size.height + 2;
         }
         else
         {
@@ -344,9 +345,6 @@
             v.frame = CGRectMake(0, y, maxWidth, h);
             y += h + 2;
         }
-        
-        if (container == _rightWidgetsView)
-            [self layoutExpandButton];
     }
     
     if (hasStreetName)
@@ -394,6 +392,25 @@
         CGRect f = _rightWidgetsView.superview.frame;
         _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
     }
+    
+    if (_topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden)
+    {
+        if (_lastUpdateTime == 0)
+            [[OARootViewController instance].mapPanel updateToolbar];
+        
+        BOOL hasTopWidgetsPanel = _mapHudViewController.toolbarViewController.view.alpha != 0;
+        if (portrait)
+        {
+            _topCoordinatesView.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
+        }
+        else
+        {
+            CGFloat widgetWidth = DeviceScreenWidth / 2 - [OAUtilities getLeftMargin];
+            CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];
+            CGFloat leftOffset = hasTopWidgetsPanel ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
+            _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
+        }
+    }
 }
 
 - (CGFloat) getLeftBottomY
@@ -410,7 +427,7 @@
 
 - (void) recreateControls
 {
-    OAApplicationMode *appMode = _settings.applicationMode;
+    OAApplicationMode *appMode = _settings.applicationMode.get;
 
     [_streetNameView removeFromSuperview];
     [_widgetsView addSubview:_streetNameView];
@@ -419,11 +436,13 @@
     [_widgetsView addSubview:_lanesControl];
     
     [_rulerControl removeFromSuperview];
-    [[OARootViewController instance].mapPanel.mapViewController.view addSubview:_rulerControl];
+    [[OARootViewController instance].mapPanel.mapViewController.view insertSubview:_rulerControl atIndex:0];
     [self updateRuler];
 
     [_alarmControl removeFromSuperview];
     [_mapHudViewController.view addSubview:_alarmControl];
+    
+    [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];
 
     for (UIView *widget in _leftWidgetsView.subviews)
         [widget removeFromSuperview];
@@ -447,23 +466,12 @@
     }
     
     [self layoutWidgets:nil];
-    
-    _expandButton.hidden = ![_mapWidgetRegistry hasCollapsibles:appMode];
-    [_expandButton setImage:[OAUtilities tintImageWithColor:(_expanded ? [UIImage imageNamed:@"ic_collapse"] : [UIImage imageNamed:@"ic_expand"]) color:UIColorFromRGB(0x505050)] forState:UIControlStateNormal];
 }
 
 - (void) expandClicked:(id)sender
 {
     _expanded = !_expanded;
     [self recreateControls];
-}
-
-- (NSString *) getRulerWidgetDistance
-{
-    if (_rulerControl && (_rulerControl.oneFingerDist || _rulerControl.twoFingersDist)) {
-        return _rulerControl.rulerDistance;
-    }
-    return nil;
 }
 
 - (OATextState *) calculateTextState
@@ -556,8 +564,10 @@
     _alarmControl = [ric createAlarmInfoControl];
     _alarmControl.delegate = self;
     
+    _topCoordinatesView = [[OATopCoordinatesWidget alloc] init];
+    _topCoordinatesView.delegate = self;
+    
     _rulerControl = [ric createRulerControl];
-    _rulerControl.delegate = self;
   
     /*
     topToolbarView = new TopToolbarView(map);
@@ -636,7 +646,7 @@
 - (void) widgetClicked:(OATextInfoWidget *)widget
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+        [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
     });
 }
 

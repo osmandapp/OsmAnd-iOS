@@ -13,7 +13,6 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #include "Localization.h"
-#import "OALocalResourceInfoCell.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAIconTextDescCell.h"
@@ -180,6 +179,7 @@ static const NSInteger sectionCount = 2;
     for (OALocalResourceItem *item : _localIndexes)
     {
         if (item.resourceType != OsmAnd::ResourcesManager::ResourceType::MapRegion
+            || !item.resource->localPath.startsWith(_app.resourcesManager->localStoragePath)
             || item.resourceId.compare(QString(kWorldSeamarksKey)) == 0
             || item.resourceId.compare(QString(kWorldBasemapKey)) == 0)
             continue;
@@ -458,10 +458,10 @@ static const NSInteger sectionCount = 2;
     NSDictionary *item = [self getItem:indexPath];
     
     OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
         
         cell.textView.numberOfLines = 0;
@@ -547,7 +547,7 @@ static const NSInteger sectionCount = 2;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
                 [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
-                [button setOn:_settings.settingOsmAndLiveEnabled && _iapHelper.subscribedToLiveUpdates];
+                [button setOn:_settings.settingOsmAndLiveEnabled.get && _iapHelper.subscribedToLiveUpdates];
                 [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [headerView addSubview:button];
                 [headerView addSubview:label];
@@ -578,13 +578,13 @@ static const NSInteger sectionCount = 2;
 - (void) sectionHeaderButtonPressed:(id)sender
 {
     UISwitch *btn = (UISwitch *)sender;
-    BOOL newValue = !_settings.settingOsmAndLiveEnabled;
+    BOOL newValue = !_settings.settingOsmAndLiveEnabled.get;
     if (!_iapHelper.subscribedToLiveUpdates)
     {
         newValue = NO;
         [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_ask_for_purchase") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
     }
-    [_settings setSettingOsmAndLiveEnabled:newValue];
+    [_settings.settingOsmAndLiveEnabled set:newValue];
     [btn setOn:newValue];
     if (newValue)
         [_app checkAndDownloadOsmAndLiveUpdates];

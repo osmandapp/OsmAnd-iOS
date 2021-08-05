@@ -47,23 +47,10 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-#define kTextInputCell @"OATextInputCell"
-#define kCellTypeSwitch @"OASwitchTableViewCell"
-#define kTextInputIconCell @"OATextInputIconCell"
-#define kIconTitleValueCell @"OAIconTitleValueCell"
-#define kBottomSheetActionCell @"OAMenuSimpleCell"
-#define kButtonCell @"OAButtonCell"
-#define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
-#define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
-#define kMultilineTextViewCell @"OAMultilineTextViewCell"
-
 #define KEY_MESSAGE @"message"
-
-#define kFooterId @"TableViewSectionFooter"
-#define kHeaderId @"TableViewSectionHeader"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
-@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
+@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -72,6 +59,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnApply;
 @property (strong, nonatomic) IBOutlet UIView *toolBarView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightPrimaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightSecondaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHeightPrimaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHeightSecondaryConstraint;
 
 @end
 
@@ -79,11 +70,12 @@
 {
     OAQuickAction *_action;
     MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *_data;
+    NSString *_originalName;
     
     OAQuickActionRegistry *_actionRegistry;
     
     BOOL _isNew;
-    
+
     OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
     
@@ -108,17 +100,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setupView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView setEditing:YES];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     self.tableView.allowsSelectionDuringEditing = YES;
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
     
     if (_action.getActionText)
@@ -128,8 +119,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self applySafeAreaMargins];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -141,22 +130,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
--(void) commonInit
+- (void)viewDidAppear:(BOOL)animated
 {
-    MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
-    [dataModel setObject:@[@{
-                           @"type" : kTextInputCell,
-                           @"title" : _action.getName
-                           }] forKey:OALocalizedString(@"quick_action_name_str")];
-    
-    OrderedDictionary *actionSpecific = _action.getUIModel;
-    [dataModel addEntriesFromDictionary:actionSpecific];
-    _data = [MutableOrderedDictionary dictionaryWithDictionary:dataModel];
+    [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
--(void) setupView
+-(void) commonInit
 {
-    _btnApply.layer.cornerRadius = 9.0;
+    _data = [self generateData];
+    _originalName = [_action getName];
 }
 
 - (void)applyLocalization
@@ -173,6 +156,37 @@
 {
     NSString *key = _data.allKeys[indexPath.section];
     return _data[key][indexPath.row];
+}
+
+- (MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *)generateData
+{
+    MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
+    [dataModel setObject:@[@{
+            @"type" : [OATextInputCell getCellIdentifier],
+            @"title" : _action.getName
+    }] forKey:OALocalizedString(@"quick_action_name_str")];
+
+    OrderedDictionary *actionSpecific = _action.getUIModel;
+    [dataModel addEntriesFromDictionary:actionSpecific];
+    return dataModel;
+}
+
+- (BOOL)hasChanged
+{
+    BOOL paramChanged = ![_data isEqualToDictionary:[self generateData]];
+    BOOL nameChanged = ![_action.getName isEqualToString:_originalName];
+    return paramChanged || nameChanged;
+}
+
+- (void)showExitDialog
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [_action setName:_originalName];
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -221,15 +235,16 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     OATextInputFloatingCellWithIcon *resultCell = nil;
-    resultCell = [self.tableView dequeueReusableCellWithIdentifier:kTextInputFloatingCellWithIcon];
+    resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OATextInputFloatingCellWithIcon getCellIdentifier]];
     if (resultCell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputFloatingCellWithIcon owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCellWithIcon getCellIdentifier] owner:self options:nil];
         resultCell = (OATextInputFloatingCellWithIcon *)[nib objectAtIndex:0];
     }
     if (item[@"img"] && ![item[@"img"] isEqualToString:@""]) {
         resultCell.buttonView.hidden = NO;
         [resultCell.buttonView setImage:[UIImage imageNamed:item[@"img"]] forState:UIControlStateNormal];
+        [resultCell.buttonView removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [resultCell.buttonView addTarget:self action:@selector(deleteTagPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     else
@@ -244,11 +259,12 @@
     [textField.textView setText:item[@"title"]];
     textField.textView.delegate = self;
     textField.layoutDelegate = self;
+    [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont systemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
     
     return resultCell;
 }
@@ -274,7 +290,7 @@
     return cellIndexPath;
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+- (void) clearButtonPressed:(UIButton *)sender
 {
     NSIndexPath *indexPath = [self indexPathForCellContainingView:sender inTableView:self.tableView];
     [self.tableView beginUpdates];
@@ -290,7 +306,10 @@
 
 - (IBAction)backPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self hasChanged])
+        [self showExitDialog];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)applyPressed:(id)sender
@@ -354,7 +373,7 @@
     NSMutableArray *arr = [NSMutableArray new];
     for (NSDictionary *item in _data[_data.allKeys.lastObject])
     {
-        if (![item[@"type"] isEqualToString:kButtonCell])
+        if (![item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
             [arr addObject:item[@"title"]];
     }
     return arr;
@@ -420,13 +439,13 @@
         NSDictionary *buttonModel = arr.lastObject;
         [arr removeLastObject];
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCellWithIcon",
+                         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                          @"hint" : OALocalizedString(@"osm_tag"),
                          @"title" : @"",
                          @"img" : @"ic_custom_delete"
                          }];
         [arr addObject:@{
-                         @"type" : @"OATextInputFloatingCellWithIcon",
+                         @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                          @"hint" : OALocalizedString(@"osm_value"),
                          @"title" : @"",
                          @"img" : @""
@@ -453,6 +472,7 @@
         _groupController = [[OAEditGroupViewController alloc] initWithGroupName:item[@"value"] groups:[self getItemGroups]];
         _groupController.delegate = self;
         [self.navigationController pushViewController:_groupController animated:YES];
+        [self.view endEditing:YES];
     }
     else if ([item[@"key"] isEqualToString:@"category_color"])
     {
@@ -460,14 +480,16 @@
         _colorController = [[OAEditColorViewController alloc] initWithColor:favCol.color];
         _colorController.delegate = self;
         [self.navigationController pushViewController:_colorController animated:YES];
+        [self.view endEditing:YES];
     }
     else if ([item[@"key"] isEqualToString:@"key_category"])
     {
         OAPoiTypeSelectionViewController *poiTypeSelection = [[OAPoiTypeSelectionViewController alloc] initWithType:POI_TYPE_SCREEN];
         poiTypeSelection.delegate = self;
         [self.navigationController pushViewController:poiTypeSelection animated:YES];
+        [self.view endEditing:YES];
     }
-    else if ([item[@"type"] isEqualToString:kTextInputFloatingCellWithIcon])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         if ([cell canBecomeFirstResponder])
@@ -481,12 +503,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kTextInputCell])
+    if ([item[@"type"] isEqualToString:[OATextInputCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:kTextInputCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
         }
         
@@ -495,6 +517,7 @@
             if (_action.isActionEditable)
             {
                 cell.inputField.text = item[@"title"];
+                [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventEditingChanged];
                 [cell.inputField addTarget:self action:@selector(onNameChanged:) forControlEvents:UIControlEventEditingChanged];
             }
             else
@@ -506,15 +529,13 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -524,16 +545,17 @@
             [cell.textView setText: item[@"title"]];
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTextInputIconCell])
+    else if ([item[@"type"] isEqualToString:[OATextInputIconCell getCellIdentifier]])
     {
-        OATextInputIconCell* cell = [tableView dequeueReusableCellWithIdentifier:kTextInputIconCell];
+        OATextInputIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTextInputIconCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputIconCell *)[nib objectAtIndex:0];
         }
         
@@ -542,24 +564,24 @@
             cell.inputField.text = item[@"title"];
             cell.inputField.placeholder = item[@"hint"];
             cell.inputField.tag = indexPath.section << 10 | indexPath.row;
+            [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(onTextFieldChanged:) forControlEvents:UIControlEventEditingChanged];
             NSString *imgName = item[@"img"];
             if (imgName && imgName.length > 0)
             {
-                [cell.iconView setImage:[[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                [cell.iconView setImage:[UIImage templateImageNamed:imgName]];
                 cell.iconView.tintColor = UIColorFromRGB(color_text_footer);
             }
         }
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kIconTitleValueCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleValueCell;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleValueCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -569,7 +591,7 @@
             if (item[@"img"])
             {
                 cell.leftImageView.layer.cornerRadius = 0.;
-                cell.leftImageView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.leftImageView.tintColor = color.color;
             }
             else if ([item[@"key"] isEqualToString:@"category_color"])
@@ -588,15 +610,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
+    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kBottomSheetActionCell;
         OAMenuSimpleCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         }
         
@@ -619,32 +639,30 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kButtonCell])
+    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kButtonCell;
-        OAButtonCell* cell = nil;
-        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchDown];
             [cell.button addTarget:self action:NSSelectorFromString(item[@"target"]) forControlEvents:UIControlEventTouchDown];
             [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
             [cell showImage:NO];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleDescrDraggableCell])
+    else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
     {
-        OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:kTitleDescrDraggableCell];
+        OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:[OATitleDescrDraggableCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleDescrDraggableCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescrDraggableCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescrDraggableCell *)[nib objectAtIndex:0];
         }
         
@@ -654,7 +672,7 @@
             cell.descView.hidden = YES;
             if (item[@"iconColor"])
             {
-                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.iconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
             }
             else
@@ -669,16 +687,16 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTextInputFloatingCellWithIcon])
+    else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
     {
         return [self getInputCellWithHint:indexPath];
     }
-    else if ([item[@"type"] isEqualToString:kMultilineTextViewCell])
+    else if ([item[@"type"] isEqualToString:[OAMultilineTextViewCell getCellIdentifier]])
     {
-        OAMultilineTextViewCell* cell = (OAMultilineTextViewCell *)[tableView dequeueReusableCellWithIdentifier:kMultilineTextViewCell];
+        OAMultilineTextViewCell* cell = (OAMultilineTextViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultilineTextViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMultilineTextViewCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultilineTextViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultilineTextViewCell *)[nib objectAtIndex:0];
         }
         
@@ -691,11 +709,12 @@
             [textField.textView setText:item[@"title"]];
             textField.textView.delegate = self;
             textField.layoutDelegate = self;
+            [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             textField.font = [UIFont systemFontOfSize:17.0];
             textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-            [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-            [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+            [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
+            [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
         }
         return cell;
     }
@@ -724,7 +743,7 @@
     else if (!text)
         text = @"";
     
-    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     if (url)
     {
         NSURL *URL = [NSURL URLWithString:url];
@@ -750,7 +769,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = _data.allKeys[section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = nil;
     
     if ([title hasPrefix:kSectionNoName])
@@ -786,7 +805,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kBottomSheetActionCell] || [item[@"type"] isEqualToString:kTitleDescrDraggableCell])
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
         return YES;
     return NO;
 }
@@ -800,7 +819,7 @@
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_data[key]];
         NSMutableArray *titles = [NSMutableArray new];
         NSMutableArray *oldtitles = [NSMutableArray new];
-        for (NSInteger i = 0; i < arr.count - 1; i++)
+        for (NSInteger i = 0; i < (NSInteger) arr.count - 1; i++)
         {
             NSDictionary *row = arr[i];
             NSString *title = row[@"title"];
@@ -828,7 +847,7 @@
     NSMutableArray *titles = [NSMutableArray new];
     for (NSDictionary *item in items)
     {
-        if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+        if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
             [titles addObject:item[@"title"]];
     }
     return [NSArray arrayWithArray:titles];
@@ -864,7 +883,7 @@
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    return [item[@"type"] isEqualToString:kTitleDescrDraggableCell];;
+    return [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]];;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
@@ -878,55 +897,46 @@
 
 #pragma mark - Keyboard Notifications
 
-- (void) keyboardWillShow:(NSNotification *)notification;
+- (void)keyboardWillShow:(NSNotification *)notification;
 {
-    NSDictionary *userInfo = [notification userInfo];
-    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
-    
-    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    NSDictionary* userInfo = [notification userInfo];
+    CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGFloat keyboardHeight = keyboardRect.size.height;
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+    CGRect viewFrame = self.view.frame;
+    viewFrame.size.height = DeviceScreenHeight - keyboardHeight;
+
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        _buttonBackgroundView.frame = CGRectMake(0, DeviceScreenHeight - keyboardHeight - 44.0, _buttonBackgroundView.frame.size.width, 44.0);
-        [self applyHeight:32.0 cornerRadius:4.0 toView:_btnApply];
-        UIEdgeInsets insets = [self.tableView contentInset];
-        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
-        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
-        [[self view] layoutIfNeeded];
+        self.view.frame = viewFrame;
+        self.bottomViewHeightPrimaryConstraint.active = NO;
+        self.bottomViewHeightSecondaryConstraint.active = YES;
+        self.applyButtonHeightPrimaryConstraint.active = NO;
+        self.applyButtonHeightSecondaryConstraint.active = YES;
     } completion:nil];
 }
 
-- (void)applySafeAreaMargins
+- (void)keyboardWillHide:(NSNotification *)notification;
 {
-    [super applySafeAreaMargins];
-    CGRect applyFrame = _btnApply.frame;
-    CGFloat marginLeft = OAUtilities.getLeftMargin;
-    applyFrame.origin.x = marginLeft + 16.0;
-    applyFrame.size.width = DeviceScreenWidth - 32.0 - marginLeft * 2;
-    _btnApply.frame = applyFrame;
-}
+    NSDictionary* userInfo = [notification userInfo];
+    CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGFloat keyboardHeight = keyboardRect.size.height;
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
 
-- (void) keyboardWillHide:(NSNotification *)notification;
-{
-    NSDictionary *userInfo = [notification userInfo];
-    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    CGRect viewFrame = self.view.frame;
+    viewFrame.size.height = DeviceScreenHeight;
+
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        [self applySafeAreaMargins];
-        [self applyHeight:42.0 cornerRadius:9.0 toView:_btnApply];
-        UIEdgeInsets insets = [self.tableView contentInset];
-        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
-        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
-        [[self view] layoutIfNeeded];
+        self.view.frame = viewFrame;
+        self.bottomViewHeightPrimaryConstraint.active = YES;
+        self.bottomViewHeightSecondaryConstraint.active = NO;
+        self.applyButtonHeightPrimaryConstraint.active = YES;
+        self.applyButtonHeightSecondaryConstraint.active = NO;
     } completion:nil];
-}
-
--(void) applyHeight:(CGFloat)height cornerRadius:(CGFloat)radius toView:(UIView *)button
-{
-    CGRect buttonFrame = button.frame;
-    buttonFrame.size.height = height;
-    button.frame = buttonFrame;
-    button.layer.cornerRadius = radius;
 }
 
 #pragma mark - OAEditColorViewControllerDelegate
@@ -1015,7 +1025,7 @@
             [newItems addObject:@{
                                   @"title" : filter.getName,
                                   @"value" : filter.filterId,
-                                  @"type" : @"OAMenuSimpleCell",
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier],
                                   @"img" : iconId
                                   }];
             [titles addObject:filter.getName];
@@ -1026,7 +1036,7 @@
             [newItems addObject:@{
                                   @"title" : filter.nameLocalized,
                                   @"value" : [STD_PREFIX stringByAppendingString:filter.name],
-                                  @"type" : @"OAMenuSimpleCell",
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier],
                                   @"img" : filter.name
                                   }];
             [titles addObject:filter.nameLocalized];
@@ -1051,7 +1061,7 @@
     for (NSDictionary *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item[@"name"],
                               @"img" : item[@"img"]
                               }];
@@ -1086,7 +1096,7 @@
     for (NSArray *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item.lastObject,
                               @"value" : item.firstObject,
                               @"img" : @"ic_custom_map_style"
@@ -1111,7 +1121,7 @@
     for (NSDictionary *item in items)
     {
         [newItems addObject:@{
-                              @"type" : @"OATitleDescrDraggableCell",
+                              @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                               @"title" : item[@"name"],
                               @"stringKey" : item[@"stringKey"],
                               @"img" : item[@"img"],
@@ -1311,6 +1321,20 @@
 - (IBAction)hintDonePressed:(id)sender
 {
     [self.view endEditing:YES];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer isEqual:[self.navigationController interactivePopGestureRecognizer]])
+    {
+        if ([self hasChanged])
+            [self showExitDialog];
+        else
+            [self.navigationController popViewControllerAnimated:YES];
+    }
+    return NO;
 }
 
 @end

@@ -531,7 +531,9 @@
                                       BOOL closestCitiesRequested = NO;
                                       if (address->addressType == OsmAnd::AddressType::Street)
                                       {
-                                          if ((locSpecified && ![streetBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:STREET])
+                                          // remove limitation by location
+                                          if (//(locSpecified && ![streetBbox contains:x top:y right:x bottom:y]) ||
+                                              ![phrase isSearchTypeAllowed:STREET])
                                               return NO;
                                           
                                           if (address->nativeName.startsWith("<"))
@@ -796,7 +798,7 @@
     if ([p hasObjectType:POI_TYPE])
         return -1;
     
-    if ([p getUnknownWordToSearch].length >= FIRST_WORD_MIN_LENGTH || [p getRadiusLevel] > 1)
+    if ([p getUnknownWordToSearch].length >= FIRST_WORD_MIN_LENGTH || [p isFirstUnknownSearchWordComplete])
         return SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR;
     
     return -1;
@@ -901,8 +903,9 @@
         if(res)
             results[res.pt.name] = res;
     }
-    if (nmAdditional)
-        [self addAditonals:nmAdditional results:results type:_types.otherMapCategory];
+    // don't spam results with unsearchable additionals like 'description', 'email', ...
+    //if (nmAdditional)
+    //    [self addAditonals:nmAdditional results:results type:_types.otherMapCategory];
     
     for (OAPOICategory *c in _categories)
     {
@@ -1012,7 +1015,7 @@
     else
     {
         BOOL includeAdditional = ![phrase hasMoreThanOneUnknownSearchWord];
-        OANameStringMatcher *nmAdditional = includeAdditional ? [[OANameStringMatcher alloc] initWithNamePart:phrase.getLastUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE] : nil;
+        OANameStringMatcher *nmAdditional = includeAdditional ? [[OANameStringMatcher alloc] initWithNamePart:phrase.getFirstUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE] : nil;
         NSDictionary<NSString *, OAPoiTypeResult *> *poiTypes = [self getPoiTypeResults:nm additionalMatcher:nmAdditional];
         for (OAPoiTypeResult *ptr in poiTypes.allValues)
         {
@@ -1115,6 +1118,7 @@
 @implementation OASearchAmenityByTypeAPI
 {
     int BBOX_RADIUS;
+    int BBOX_RADIUS_NEAREST;
     OASearchAmenityTypesAPI *_typesAPI;
     OAPOIHelper *_types;
     NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *_acceptedTypes;
@@ -1133,6 +1137,7 @@
     if (self)
     {
         BBOX_RADIUS = 10000;
+        BBOX_RADIUS_NEAREST = 1000;
         _types = [OAPOIHelper sharedInstance];
         _acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
         _typesAPI = typesAPI;
@@ -1190,7 +1195,14 @@
     _lang = QString::fromNSString([[phrase getSettings] getLang]);
     _transliterate = [[phrase getSettings] isTransliterate];
     
-    QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS];
+    int radius = BBOX_RADIUS;
+    if (phrase.getRadiusLevel == 1 && [poiTypeFilter isKindOfClass:OACustomSearchPoiFilter.class])
+    {
+        NSString *name = ((OACustomSearchPoiFilter *) poiTypeFilter).getFilterId;
+        if ([@"std_" isEqualToString:name])
+            radius = BBOX_RADIUS_NEAREST;
+    }
+    QuadRect *bbox = [phrase getRadiusBBoxToSearch:radius];
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
@@ -1202,6 +1214,9 @@
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     
     NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypes = [poiTypeFilter getAcceptedTypes];
+    NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypesOrigin = [poiTypeFilter getAcceptedTypesOrigin];
+    for (OAPOICategory *category in acceptedTypesOrigin)
+         [acceptedTypes setObject:[acceptedTypesOrigin objectForKey:category] forKey:category];
     if (acceptedTypes.count > 0)
     {
         auto categoriesFilter = QHash<QString, QStringList>();
@@ -1301,7 +1316,8 @@
                     if (countExtraWords - 1 < otherSearchWords.count)
                     {
                         nameFilter = @"";
-                        for(NSInteger k = countExtraWords - 1; k < otherSearchWords.count; k++) {
+                        for(NSInteger k = countExtraWords - 1; k < otherSearchWords.count; k++)
+                        {
                             if (nameFilter.length > 0)
                                 nameFilter = [nameFilter stringByAppendingString:@" "];
                             
@@ -1310,6 +1326,13 @@
                     }
                     poiTypeFilter = [self getPoiTypeFilter:poiTypeResult.pt poiAdditionals:poiAdditionals];
                     _unselectedPoiType = poiTypeResult.pt;
+                    int wordsInPoiType = [phrase countWords:foundName];
+                    int wordsInUnknownPart = [phrase countWords:phrase.getUnknownSearchPhrase];
+                    if (wordsInPoiType == wordsInUnknownPart)
+                    {
+                        // store only perfect match
+                        [phrase setUnselectedPoiType:_unselectedPoiType];
+                    }
                 }
             }
         }
@@ -1556,8 +1579,16 @@
             bool interpolation = b->belongsToInterpolation(lw);
             if ((![buildingMatch matches:b->nativeName.toNSString()] && !interpolation) || ![phrase isSearchTypeAllowed:HOUSE])
                 continue;
-            
-            res.localeName = b->getName(lang, transliterate).toNSString();
+            if (interpolation)
+            {
+                res.localeName = lw.toNSString();
+                res.location = [OASearchCoreFactory getLocation:b hno:lw];
+            }
+            else
+            {
+                res.localeName = b->getName(lang, transliterate).toNSString();
+                res.location = [OASearchCoreFactory getLocation:b->position31];
+            }
             res.otherNames = [OASearchCoreFactory getAllNames:b->localizedNames nativeName:b->nativeName];
             res.object = [[OABuilding alloc] initWithBuilding:b];
             res.resourceId = resId;
@@ -1567,15 +1598,6 @@
             res.relatedObject = [[OAStreet alloc] initWithStreet:s];
             res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
             res.objectType = HOUSE;
-            if (interpolation)
-            {
-                res.location = [OASearchCoreFactory getLocation:b hno:lw];
-                res.localeName = lw.toNSString();
-            }
-            else
-            {
-                res.location = [OASearchCoreFactory getLocation:b->position31];
-            }
             res.preferredZoom = 17;
             
             [resultMatcher publish:res];

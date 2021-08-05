@@ -7,7 +7,6 @@
 //
 
 #import "OAPOIFilterViewController.h"
-#import "OAPOISearchHelper.h"
 #import "OAPOIUIFilter.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
@@ -24,14 +23,6 @@
 #import "OAIconTextFieldCell.h"
 #import "OASizes.h"
 #import "OAColors.h"
-
-typedef enum
-{
-    EMenuStandard = 0,
-    EMenuCustom,
-    EMenuDelete,
-    
-} EMenuType;
 
 typedef enum
 {
@@ -80,7 +71,7 @@ typedef enum
 @end
 
 
-@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate>
+@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, OAPOIFilterRefreshDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
@@ -179,7 +170,7 @@ typedef enum
     
     _applyView.hidden = YES;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextFieldCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextFieldCell getCellIdentifier] owner:self options:nil];
     _textFieldCell = (OAIconTextFieldCell *)[nib objectAtIndex:0];
     _textFieldCell.backgroundColor = [UIColor whiteColor];
     _textFieldCell.iconView.image = [OAUtilities getTintableImageNamed:@"search_icon"];
@@ -303,31 +294,88 @@ typedef enum
 
 - (IBAction)morePress:(id)sender
 {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:_filter.name
+        message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    NSString *actionSaveTitle = @"";
+
     if (![_filter isStandardFilter])
     {
-        UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:_filter.name delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") destructiveButtonTitle:OALocalizedString(@"delete_filter") otherButtonTitles:OALocalizedString(@"edit_filter"), OALocalizedString(@"shared_string_save_as"), nil];
-        menu.tag = EMenuCustom;
-        [menu showInView:self.btnMore];
+        actionSaveTitle = OALocalizedString(@"shared_string_save_as");
+        UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:OALocalizedString(@"delete_filter")
+            style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                    [self showDeleteFilterScreen];
+        }];
+        UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:OALocalizedString(@"edit_filter")
+            style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self showEditCategoriesScreen];
+          }];
+        [alert addAction:actionDelete];
+        [alert addAction:actionEdit];
     }
-    else
-    {
-        UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:_filter.name delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") destructiveButtonTitle:nil otherButtonTitles:OALocalizedString(@"save_filter"), nil];
-        menu.tag = EMenuStandard;
-        [menu showInView:self.btnMore];
+    else {
+        actionSaveTitle = OALocalizedString(@"save_filter");
     }
+
+    UIAlertAction *actionSave = [UIAlertAction actionWithTitle:actionSaveTitle
+        style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if ([self hasChanges])
+            [self applyFilterFields];
+        if (self.delegate) {
+            UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];
+            UIAlertAction *actionSaveDialog = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+                [self.delegate searchByUIFilter:_filter newName:saveDialog.textFields[0].text willSaved:YES];
+                [self dismissViewController];
+            }];
+            [saveDialog addAction:actionSaveDialog];
+            [self presentViewController:saveDialog animated:YES completion:nil];
+        }
+    }];
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+        style:UIAlertActionStyleCancel handler:nil];
+
+    [alert addAction:actionSave];
+    [alert addAction:actionCancel];
+
+    [self setupPopover:alert];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) deleteFilter
+- (void)showDeleteFilterScreen
 {
-    UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:OALocalizedString(@"edit_filter_delete_dialog_title") delegate:self cancelButtonTitle:nil destructiveButtonTitle:OALocalizedString(@"shared_string_yes") otherButtonTitles:OALocalizedString(@"shared_string_no"), nil];
-    menu.tag = EMenuDelete;
-    [menu showInView:self.view];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"edit_filter_delete_dialog_title")
+        message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes")
+        style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        if (self.delegate && [self.delegate removeFilter: _filter]) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+      }];
+    UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no")
+        style:UIAlertActionStyleCancel handler:nil];
+
+    [alert addAction:actionDelete];
+    [alert addAction:actionCancel];
+
+    [self setupPopover:alert];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) editCategories
+- (void)setupPopover:(UIAlertController *)alert {
+    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
+    popPresenter.sourceView = self.view;
+    popPresenter.sourceRect = _btnMore.frame;
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
+}
+
+- (void)showEditCategoriesScreen
 {
-    OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:_filter];
-    [self.navigationController pushViewController:customPOI animated:YES];
+    OACustomPOIViewController *customPOIScreen = [[OACustomPOIViewController alloc] initWithFilter:_filter];
+    customPOIScreen.delegate = self.delegate;
+    customPOIScreen.refreshDelegate = self;
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:customPOIScreen];
+    navController.modalPresentationStyle = UIModalPresentationFullScreen;
+    navController.navigationBarHidden = YES;
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 - (void) applyFilterFields
@@ -499,6 +547,13 @@ typedef enum
     NSArray<NSString *> *categories = abstractPoiType.excludedPoiAdditionalCategories;
     if (categories)
         [excludedPoiAdditionalCategories addObjectsFromArray:categories];
+}
+
+- (void)refreshList
+{
+    [self initListItems];
+    [self updateGroups];
+    [self.tableView reloadData];
 }
 
 - (void) initListItems
@@ -772,7 +827,7 @@ typedef enum
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if (section == _groups.count - 1)
-        return [OAPOISearchHelper getHeightForFooter];
+        return tableView.sectionFooterHeight;
     else
         return 0.01;
 }
@@ -780,9 +835,9 @@ typedef enum
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return 51.0 + [OAPOISearchHelper getHeightForHeader];
+        return 51.0 + tableView.sectionHeaderHeight;
     else
-        return [OAPOISearchHelper getHeightForHeader];
+        return tableView.sectionHeaderHeight;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -827,10 +882,10 @@ typedef enum
         case GROUP_HEADER:
         {
             OAIconTextCollapseCell* cell;
-            cell = (OAIconTextCollapseCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextCollapseCell"];
+            cell = (OAIconTextCollapseCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextCollapseCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCollapseCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextCollapseCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconTextCollapseCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
@@ -859,10 +914,10 @@ typedef enum
         case SWITCH_ITEM:
         {
             OASettingSwitchCell* cell;
-            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OASettingSwitchCell"];
+            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
                 cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
                 cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.descriptionView.hidden = YES;
@@ -872,6 +927,7 @@ typedef enum
             {
                 [cell.switchView removeTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
                 cell.switchView.tag = (indexPath.section << 10) + indexPath.row;
+                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
                 [cell.switchView addTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
                 if (item.icon)
                 {
@@ -895,10 +951,10 @@ typedef enum
         case BUTTON_ITEM:
         {
             OAIconButtonCell* cell;
-            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconButtonCell"];
+            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAIconButtonCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.arrowIconView.hidden = YES;
@@ -969,54 +1025,6 @@ typedef enum
             }
             break;
         }
-        default:
-            break;
-    }
-}
-
-#pragma mark - UIActionSheetDelegate
-
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == actionSheet.cancelButtonIndex)
-        return;
-    
-    switch (actionSheet.tag)
-    {
-        case EMenuStandard:
-            if ([self hasChanges])
-                [self applyFilterFields];
-            if (self.delegate && [self.delegate saveFilter:_filter])
-                [self.navigationController popViewControllerAnimated:YES];
-            
-            break;
-            
-        case EMenuCustom:
-            if (buttonIndex == actionSheet.destructiveButtonIndex)
-            {
-                [self deleteFilter];
-            }
-            else if (buttonIndex == 1)
-            {
-                [self editCategories];
-            }
-            else if (buttonIndex == 2)
-            {
-                if ([self hasChanges])
-                    [self applyFilterFields];
-                if (self.delegate && [self.delegate saveFilter:_filter])
-                    [self.navigationController popViewControllerAnimated:YES];
-            }
-            break;
-            
-        case EMenuDelete:
-            if (buttonIndex == actionSheet.destructiveButtonIndex)
-            {
-                if (self.delegate && [self.delegate removeFilter:_filter])
-                    [self.navigationController popViewControllerAnimated:YES];
-            }
-            break;
-            
         default:
             break;
     }

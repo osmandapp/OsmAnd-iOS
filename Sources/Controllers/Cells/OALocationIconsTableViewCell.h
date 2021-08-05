@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, EOALocationType)
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 
 @property (nonatomic) NSArray<UIImage *> *dataArray;
 @property (nonatomic) NSInteger currentColor;

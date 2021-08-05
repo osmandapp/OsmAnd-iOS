@@ -24,9 +24,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
-#define kCellTypeIconText @"OAIconTextCell"
-
 @interface OAVehicleParametersViewController () <UITableViewDelegate, UITableViewDataSource, OAVehicleParametersSettingDelegate>
 
 @end
@@ -79,7 +76,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *defaultSpeedArr = [NSMutableArray array];
-    auto router = [OARouteProvider getRouter:self.appMode];
+    auto router = [OsmAndApp.instance getRouter:self.appMode];
     _otherParameters.clear();
     NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
     NSString *parentAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
@@ -102,7 +99,7 @@
             NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             if (!(p.type == RoutingParameterType::BOOLEAN))
             {
-                OAProfileString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue: @"0"];
+                OACommonString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue:@"0"];
                 NSString *value = [stringParam get:self.appMode];
                 int index = -1;
                 
@@ -140,13 +137,13 @@
                      @"possibleValues" : possibleValues,
                      @"possibleValuesDescr" : valueDescriptions,
                      @"setting" : stringParam,
-                     @"type" : kCellTypeIconTitleValue }
+                     @"type" : [OAIconTitleValueCell getCellIdentifier] }
                  ];
             }
         }
     }
     [defaultSpeedArr addObject:@{
-        @"type" : kCellTypeIconText,
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"default_speed"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
@@ -185,43 +182,41 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeIconTitleValue])
+    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftImageView.tintColor = [item[@"selectedItem"] intValue] == 0 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconText])
+    else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconText;
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.arrowIconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.iconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;

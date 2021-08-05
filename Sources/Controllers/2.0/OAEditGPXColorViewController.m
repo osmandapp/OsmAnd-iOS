@@ -13,8 +13,6 @@
 #import "OsmAndApp.h"
 #include "Localization.h"
 
-#define kCellTypeCheck @"OAIconTextCell"
-
 @implementation OAEditGPXColorViewController
 {
     OAGPXTrackColorCollection *_colorCollection;
@@ -90,13 +88,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierPoint = @"OAViewTextTableViewCell";
-    
     OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeCheck owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
         cell.iconViewWidthConstraint.constant = 20.;
         cell.iconViewHeightConstraint.constant = 20.;
@@ -109,7 +105,7 @@
         
         cell.iconView.layer.cornerRadius = cell.iconViewHeightConstraint.constant / 2;
         cell.iconView.backgroundColor = gpxColor.color;
-        cell.textLeftMarginNoImage.constant += cell.iconView.frame.size.width + 4.;
+        cell.textLeftMarginNoImage.constant = 50.;
         [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
         cell.arrowIconView.hidden = indexPath.row != self.colorIndex;
     }

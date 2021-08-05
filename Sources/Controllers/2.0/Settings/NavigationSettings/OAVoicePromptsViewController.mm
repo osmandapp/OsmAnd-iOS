@@ -25,11 +25,6 @@
 
 #include <OsmAndCore/Utilities.h>
 
-#define kCellTypeIconSwitch @"OASettingSwitchCell"
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
-#define kCellTypeSwitch @"OASwitchCell"
-#define kCellTypeTitleValue @"OASettingsCell"
-
 @interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -54,7 +49,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"voice_prompts");
+    self.titleLabel.text = OALocalizedString(@"voice_announces");
 }
 
 - (void) viewDidLoad
@@ -104,14 +99,14 @@
     NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
     
     [firstSection addObject:@{
-        @"type" : kCellTypeIconSwitch,
+        @"type" : [OASettingSwitchCell getCellIdentifier],
         @"title" : OALocalizedString(@"voice_provider"),
         @"icon" : @"ic_custom_sound",
         @"value" : _settings.voiceMute,
         @"key" : @"voiceGuidance",
     }];
     [firstSection addObject:@{
-        @"type" : kCellTypeIconTitleValue,
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"language"),
         @"value" : selectedLanguage,
         @"icon" : @"ic_custom_map_languge",
@@ -120,26 +115,26 @@
     }];
     
     [secondSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_street_names"),
         @"value" : _settings.speakStreetNames,
         @"key" : @"streetNames",
     }];
     [secondSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_traffic_warnings"),
         @"value" : _settings.speakTrafficWarnings,
         @"key" : @"trafficWarnings",
     }];
     [secondSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_pedestrian_warnings"),
         @"value" : _settings.speakPedestrian,
         @"key" : @"pedestrianCrosswalks",
     }];
     
     [thirdSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_speed_limit"),
         @"value" : _settings.speakSpeedLimit,
         @"key" : @"speedLimit",
@@ -157,38 +152,38 @@
             value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
     }
     [thirdSection addObject:@{
-        @"type" : kCellTypeTitleValue,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speed_limit_exceed"),
         @"value" : value,
         @"key" : @"speedLimitTolerance",
     }];
     
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_cameras"),
         @"value" : _settings.speakCameras,
         @"key" : @"speedCameras",
     }];
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_tunnels"),
         @"value" : _settings.speakTunnels,
         @"key" : @"tunnels",
     }];
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"announce_gpx_waypoints"),
         @"value" : _settings.announceWpt,
         @"key" : @"GPXWaypoints",
     }];
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_favorites"),
         @"value" : _settings.announceNearbyFavorites,
         @"key" : @"nearbyFavorites",
     }];
     [fourthSection addObject:@{
-        @"type" : kCellTypeSwitch,
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_poi"),
         @"value" : _settings.announceNearbyPoi,
         @"key" : @"nearbyPOI",
@@ -201,13 +196,13 @@
         val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"units_min")];
     
     [fifthSection addObject:@{
-        @"type" : kCellTypeTitleValue,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"keep_informing"),
         @"value" : val,
         @"key" : @"repeatInstructions",
     }];
     [fifthSection addObject:@{
-        @"type" : kCellTypeTitleValue,
+        @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"arrival_distance"),
         @"value" : arrivalAnnouncementValue,
         @"key" : @"arrivalAnnouncement",
@@ -225,13 +220,12 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeIconSwitch])
+    if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconSwitch;
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
@@ -240,14 +234,14 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.imgView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
                                   
             id v = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
+                OACommonBoolean *value = v;
                 cell.switchView.on = [[v key] isEqualToString:@"voiceMute"] ? ![value get:self.appMode] : [value get:self.appMode];
             }
             else
@@ -259,33 +253,32 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconTitleValue])
+    else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
+        static NSString* const identifierCell = [OAIconTitleValueCell getCellIdentifier];
         OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftImageView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeSwitch])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSwitch;
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -293,10 +286,10 @@
         {
             cell.textView.text = item[@"title"];
             id v = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
+                OACommonBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
             }
             else
@@ -308,16 +301,16 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitleValue])
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitleValue;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = [OASettingsTableViewCell getCellIdentifier];
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -414,9 +407,9 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     BOOL isChecked = ((UISwitch *) sender).on;
     id v = item[@"value"];
-    if ([v isKindOfClass:[OAProfileBoolean class]])
+    if ([v isKindOfClass:[OACommonBoolean class]])
     {
-        OAProfileBoolean *value = v;
+        OACommonBoolean *value = v;
         if ([[v key] isEqualToString:@"voiceMute"])
         {
             [value set:!isChecked mode:self.appMode];

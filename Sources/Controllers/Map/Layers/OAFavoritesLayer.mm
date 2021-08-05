@@ -15,6 +15,8 @@
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
 #import "OAFavoritesMapLayerProvider.h"
+#import "OAFavoritesHelper.h"
+#import "OATargetInfoViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -136,6 +138,49 @@
     });
 }
 
+- (UIImage *) getFavoriteImage:(const OsmAnd::IFavoriteLocation *)fav
+{
+    UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
+    return [self.class getImageWithColor:color
+                        background:fav->getBackground().toNSString()
+                              icon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]];
+}
+
++ (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon
+{
+    UIImage *shadowImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_bottom", background]];
+    if (!shadowImage)
+        shadowImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"circle"] color:color];
+    
+    UIImage *colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:[NSString stringWithFormat:@"ic_bg_point_%@_center", background]] color:color];
+    if (!colorFilledImage)
+        colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"circle"] color:color];
+    
+    UIImage *innerImage = [OAUtilities tintImageWithColor:[OATargetInfoViewController getIcon:icon] color:UIColor.whiteColor];
+    if (!innerImage)
+        innerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"mx_special_star"] color:UIColor.whiteColor];
+    
+    UIImage *topImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_top", background]];
+    if (!topImage)
+        topImage = [OATargetInfoViewController getIcon:@"mx_special_star"];
+    
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat outerImageSide = 36 * scale;
+    CGFloat innerImageSide = 27. / 2 * scale;
+    CGRect outerImageRect = CGRectMake(0, 0, outerImageSide, outerImageSide);
+    CGRect innerImageCenterRect = CGRectMake(((outerImageSide / 2) - (innerImageSide / 2)), ((outerImageSide / 2) - (innerImageSide / 2)), innerImageSide, innerImageSide);
+    
+    UIGraphicsBeginImageContext(outerImageRect.size);
+    [shadowImage drawInRect:outerImageRect];
+    [colorFilledImage drawInRect:outerImageRect];
+    [innerImage drawInRect:innerImageCenterRect blendMode:kCGBlendModeNormal alpha:1.0];
+    [topImage drawInRect:outerImageRect];
+    UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return finalImage;
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -152,19 +197,24 @@
         double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
         double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
         targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
+      
         
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        if (![OAFavoritesHelper isFavoritesLoaded])
+            [OAFavoritesHelper loadFavorites];
         
-        targetPoint.title = favLoc->getTitle().toNSString();
-        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+        OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
+        targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
+        if (storedItem && storedItem.specialPointType == [OASpecialPointType PARKING])
+            targetPoint.type = OATargetParking;
         
-        OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+        targetPoint.icon = [self getFavoriteImage:favLoc];
+        
+        OAFavoriteItem *item;
         for (const auto& favLocPtr : self.app.favoritesCollection->getFavoriteLocations())
         {
             if (favLoc->isEqual(favLocPtr.get()))
             {
-                item.favorite = favLocPtr;
+                item = [[OAFavoriteItem alloc] initWithFavorite:favLocPtr];
                 targetPoint.targetObj = item;
                 break;
             }
@@ -215,16 +265,26 @@
         const auto& favorite = item.favorite;
         if (favorite != nullptr)
         {
+            QString elevation = favorite->getElevation();
+            QString time = favorite->getTime();
             QString title = favorite->getTitle();
             QString description = favorite->getDescription();
+            QString address = favorite->getAddress();
             QString group = favorite->getGroup();
+            QString icon = favorite->getIcon();
+            QString background = favorite->getBackground();
             OsmAnd::ColorRGB color = favorite->getColor();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
             self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
+                                                            elevation,
+                                                            time,
                                                             title,
                                                             description,
+                                                            address,
                                                             group,
+                                                            icon,
+                                                            background,
                                                             color);
             [self.app saveFavoritesToPermamentStorage];
         }
@@ -236,10 +296,9 @@
     if (object && [self isObjectMovable:object])
     {
         OAFavoriteItem *item = (OAFavoriteItem *)object;
-        const auto& favLoc = item.favorite;
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        return favCol.icon;
+        const auto favLoc = item.favorite;
+        UIImage *img = [self getFavoriteImage:favLoc.get()];
+        return [OAUtilities resizeImage:img newSize:CGSizeMake(60., 60.)];
     }
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }

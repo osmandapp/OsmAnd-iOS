@@ -58,11 +58,41 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface UIImage (util)
+
++ (UIImage *) templateImageNamed:(NSString *)imageName;
+
+@end
+
 @interface UIView (util)
 
 - (BOOL) setConstant:(NSString *)identifier constant:(CGFloat)constant;
 - (CGFloat) getConstant:(NSString *)identifier;
 - (BOOL) isDirectionRTL;
+
+@end
+
+@interface UITableViewCell (util)
+
++ (NSString *) getCellIdentifier;
+
+@end
+
+@interface UICollectionViewCell (util)
+
++ (NSString *) getCellIdentifier;
+
+@end
+
+@interface UITableViewHeaderFooterView (util)
+
++ (NSString *) getCellIdentifier;
+
+@end
+
+@interface UIColor (util)
+
+- (NSString *) toHexString;
 
 @end
 
@@ -113,6 +143,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSString *) colorToString:(UIColor *)color;
 + (UIColor *) colorFromString:(NSString *)colorStr;
++ (int) colorToNumber:(UIColor *)color;
 + (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2;
 
 + (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
@@ -161,6 +192,9 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName;
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize;
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode;
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset;
 
 + (CGFloat) heightForHeaderViewText:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing;
 
@@ -169,7 +203,16 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize highlightColor:(UIColor *)highlightColor;
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize;
 + (NSAttributedString *) getColoredString:(NSString *)wholeString highlightedString:(NSString *)hs highlightColor:(UIColor *)highlightColor fontSize:(CGFloat)fontSize centered:(BOOL)centered;
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize boldFontSize:(CGFloat)boldFontSize boldColor:(UIColor *)boldColor mainColor:(UIColor *)mainColor;
 
 + (NSDate *) getFileLastModificationDate:(NSString *)fileName;
+
++ (NSString *) getGpxShortPath:(NSString *)fullFilePath;
+
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddTracksFolder:(BOOL)shouldAddTracksFolder;
+
++ (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize;
+
++ (NSString *) createNewFileName:(NSString *)oldName;
 
 @end

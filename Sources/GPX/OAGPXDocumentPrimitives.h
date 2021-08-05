@@ -13,6 +13,11 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/GpxDocument.h>
 
+#define ICON_NAME_EXTENSION @"icon"
+#define BACKGROUND_TYPE_EXTENSION @"background"
+#define ADDRESS_EXTENSION @"address"
+#define CALENDAR_EXTENSION @"calendar_event"
+
 typedef enum
 {
     Unknown = -1,
@@ -200,6 +205,13 @@ struct RouteDataBundle;
 
 - (void) fillWithWpt:(OAGpxWpt *)gpxWpt;
 - (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt;
+
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key;
+- (void)setExtension:(NSString *)key value:(NSString *)value;
+
+- (NSString *)getIcon;
+- (NSString *)getBackgroundIcon;
+- (NSString *)getAddress;
 
 @end
 

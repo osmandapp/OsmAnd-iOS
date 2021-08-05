@@ -9,6 +9,8 @@
 #import "OASelectedGPXHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAGPXDatabase.h"
+#import "OAGPXDocument.h"
 
 #define kBackupSuffix @"_osmand_backup"
 
@@ -59,14 +61,15 @@
     BOOL loading = NO;
     [_settings hideRemovedGpx];
 
-    for (NSString *fileName in _settings.mapSettingVisibleGpx)
+    for (NSString *filePath in _settings.mapSettingVisibleGpx.get)
     {
-        if ([fileName hasSuffix:kBackupSuffix])
+        if ([filePath hasSuffix:kBackupSuffix])
         {
-            [_selectedGPXFilesBackup addObject:fileName];
+            [_selectedGPXFilesBackup addObject:filePath];
             continue;
         }
-        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
         {
@@ -87,12 +90,24 @@
     }
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); )
     {
-        if (![_settings.mapSettingVisibleGpx containsObject:[it.key().toNSString() lastPathComponent]])
+        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
+        if (![_settings.mapSettingVisibleGpx.get containsObject:gpxFilePath])
             it = _activeGpx.erase(it);
         else
             ++it;
     }
     return loading;
+}
+
+- (OAGPXDocument *)getSelectedGpx:(OAGpxWpt *)gpxWpt
+{
+    for (auto it = _activeGpx.begin(); it != _activeGpx.end(); ++it)
+    {
+        OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:it.key().toNSString()];
+        if ([[gpxDoc locationMarks] containsObject:gpxWpt])
+            return gpxDoc;
+    }
+    return nil;
 }
 
 -(BOOL) isShowingAnyGpxFiles
@@ -105,14 +120,14 @@
     NSMutableArray *backedUp = [NSMutableArray new];
     if (backupSelection)
     {
-        NSArray *currentlyVisible = _settings.mapSettingVisibleGpx;
-        for (NSString *filename in currentlyVisible)
+        NSArray *currentlyVisible = _settings.mapSettingVisibleGpx.get;
+        for (NSString *filePath in currentlyVisible)
         {
-            [backedUp addObject:[filename stringByAppendingString:kBackupSuffix]];
+            [backedUp addObject:[filePath stringByAppendingString:kBackupSuffix]];
         }
     }
     _activeGpx.clear();
-    [_settings setMapSettingVisibleGpx:[NSArray arrayWithArray:backedUp]];
+    [_settings.mapSettingVisibleGpx set:[NSArray arrayWithArray:backedUp]];
     [_selectedGPXFilesBackup removeAllObjects];
     [_selectedGPXFilesBackup addObjectsFromArray:backedUp];
 }
@@ -129,26 +144,26 @@
             [restored addObject:[backedUp stringByReplacingOccurrencesOfString:kBackupSuffix withString:@""]];
         }
     }
-    [_settings setMapSettingVisibleGpx:[NSArray arrayWithArray:restored]];
+    [_settings.mapSettingVisibleGpx set:[NSArray arrayWithArray:restored]];
     [self buildGpxList];
     [_selectedGPXFilesBackup removeAllObjects];
 }
 
-+ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *) newName
++ (void) renameVisibleTrack:(NSString *)oldPath newPath:(NSString *)newPath
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx];
-    for (NSString *gpx in settings.mapSettingVisibleGpx)
+    NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx.get];
+    for (NSString *gpx in settings.mapSettingVisibleGpx.get)
     {
-        if ([gpx isEqualToString:oldName])
+        if ([gpx isEqualToString:oldPath])
         {
             [visibleGpx removeObject:gpx];
-            [visibleGpx addObject:newName];
+            [visibleGpx addObject:newPath];
             break;
         }
     }
     
-    settings.mapSettingVisibleGpx = [NSArray arrayWithArray:visibleGpx];
+    [settings.mapSettingVisibleGpx set:[NSArray arrayWithArray:visibleGpx]];
 }
 
 @end

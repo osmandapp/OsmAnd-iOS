@@ -17,10 +17,13 @@
 #import "OARootViewController.h"
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
+#import "OASettingsTableViewCell.h"
 #import "OAMapHudViewController.h"
 #import "OAQuickActionHudViewController.h"
 #import "OAQuickActionListViewController.h"
+#import "OADirectionAppearanceViewController.h"
 #import "OAColors.h"
+#import "OAMapLayers.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -71,7 +74,7 @@
 - (void) setupViewInternal
 {
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
-    [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
+    [sectionMapStyle setObject:[OAAppModeCell getCellIdentifier] forKey:@"type"];
     
     NSMutableArray *arr = [NSMutableArray array];
     
@@ -89,7 +92,7 @@
                                             @"img" : @"ic_custom_quick_action",
                                             @"selected" : @([_settings.quickActionIsOn get]),
                                             @"secondaryImg" : @"ic_action_additional_option",
-                                            @"type" : @"OASettingSwitchCell"}]
+                                            @"type" : [OASettingSwitchCell getCellIdentifier]}]
                             }];
     [arr addObjectsFromArray:controls];
     
@@ -99,7 +102,7 @@
                      @"cells" : controlsList,
                      } ];
     
-    [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode];
+    [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode.get];
     
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
@@ -110,7 +113,7 @@
                      @"cells" : controlsList,
                      } ];
     
-    [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode];
+    [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode.get];
     
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
@@ -121,16 +124,35 @@
                      @"cells" : controlsList,
                      } ];
     
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"coordinates_widget"),
+                               @"img" : @"ic_custom_coordinates",
+                               @"key" : @"coordinates_widget",
+                               @"selected" : @([_settings.showCoordinatesWidget get]),
+                               @"type" : [OASettingSwitchCell getCellIdentifier]} ];
+    
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_distance_by_tap"),
+                               @"img" : @"ic_action_ruler_line",
+                               @"key" : @"map_widget_distance_by_tap",
+                               @"selected" : @([_settings.showDistanceRuler get]),
+                               @"type" : [OASettingSwitchCell getCellIdentifier]} ];
+    
+    EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
+    NSString *markersAppeareance = distanceIndication == WIDGET_DISPLAY ? OALocalizedString(@"shared_string_widgets") : OALocalizedString(@"shared_string_topbar") ;
+    [controlsList addObject:@{ @"type" : [OASettingsTableViewCell getCellIdentifier],
+                               @"title" : OALocalizedString(@"map_markers"),
+                               @"value" : markersAppeareance,
+                               @"key" : @"map_markers"}];
+    
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
                                @"selected" : @([_settings.transparentMapTheme get]),
-                               @"type" : @"OASettingSwitchCell"} ];
+                               @"type" : [OASettingSwitchCell getCellIdentifier]} ];
     
     [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
                                @"key" : @"show_lanes",
                                @"selected" : @([_settings.showLanes get]),
     
-                               @"type" : @"OASettingSwitchCell"} ];
+                               @"type" : [OASettingSwitchCell getCellIdentifier]} ];
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
     
@@ -154,7 +176,7 @@
                                    @"selected" : @(selected),
                                    @"secondaryImg" : r.widget ? @"ic_action_additional_option" : @"",
                                    
-                                   @"type" : @"OASettingSwitchCell"} ];
+                                   @"type" : [OASettingSwitchCell getCellIdentifier]} ];
     }
 }
 
@@ -166,7 +188,7 @@
     NSString *key = data[@"key"];
     
     OASettingSwitchCell *cell = [self.tblView cellForRowAtIndexPath:indexPath];
-    cell.imgView.tintColor = sw.on ? UIColorFromRGB(_settings.applicationMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+    cell.imgView.tintColor = sw.on ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
     
     if ([key isEqualToString:@"quick_action"])
     {
@@ -195,6 +217,16 @@
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
         }
+        else if ([key isEqualToString:@"coordinates_widget"])
+        {
+            [_settings.showCoordinatesWidget set:visible];
+            [[[OsmAndApp instance].data mapLayerChangeObservable] notifyEvent];
+        }
+        else if ([key isEqualToString:@"map_widget_distance_by_tap"])
+        {
+            [_settings.showDistanceRuler set:visible];
+            [[OARootViewController instance].mapPanel.mapViewController.mapLayers.rulerByTapControlLayer updateLayer];
+        }
         else if ([key isEqualToString:@"map_widget_transparent"])
         {
             [_settings.transparentMapTheme set:visible];
@@ -212,7 +244,7 @@
     NSDictionary* data = tableData[section][@"cells"][0];
     if ([data[@"key"] isEqualToString:@"quick_action"])
         return 10.0;
-    else if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+    else if ([data[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
         return 0;
     else
         return 34.0;
@@ -222,7 +254,7 @@
 
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
-    _settings.applicationMode = mode;
+    [_settings setApplicationModePref:mode];
     [self setupView];
 }
 
@@ -248,26 +280,25 @@
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     
     UITableViewCell* outCell = nil;
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+    if ([data[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
     {
         if (!_appModeCell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAppModeCell getCellIdentifier] owner:self options:nil];
             _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
             _appModeCell.showDefault = YES;
-            _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
+            _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode.get;
             _appModeCell.delegate = self;
         }
         
         outCell = _appModeCell;
     }
-    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([data[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         
@@ -275,12 +306,31 @@
         {
             [self updateSettingSwitchCell:cell data:data];
             
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = ((NSNumber *)data[@"selected"]).boolValue;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
         }
         outCell = cell;
+    }
+    else if ([data[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    {
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+        }
+        if (cell)
+        {
+            cell.textView.text = data[@"title"];
+            cell.descriptionView.text = data[@"value"];
+        }
+        return cell;
     }
     
     return outCell;
@@ -291,8 +341,8 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.imgView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+        cell.imgView.image = [UIImage templateImageNamed:imgName];
+        cell.imgView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
     }
     else
     {
@@ -324,8 +374,15 @@
     {
         OAQuickActionListViewController *vc = [[OAQuickActionListViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        return;
     }
-    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    if ([data[@"key"] isEqualToString:@"map_markers"])
+    {
+        OADirectionAppearanceViewController *vc = [[OADirectionAppearanceViewController alloc] init];
+        [self.vwController.navigationController pushViewController:vc animated:YES];
+    }
+    else if ([data[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
         OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
         if (r && r.widget)

@@ -8,7 +8,6 @@
 
 #import "OATripRecordingSettingsViewController.h"
 #import "OAGPXListViewController.h"
-#import "OAIconTextDescSwitchCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
@@ -27,14 +26,6 @@
 
 #include <generalRouter.h>
 
-#define kCellTypeProfileSwitch @"OAIconTextDescSwitchCell"
-#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
-#define kCellTypeSettingSwitch @"OASettingSwitchCell"
-#define kCellTypeTitle @"OAIconTextCell"
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kCellTypeSwitch @"switch"
-#define kCellTypeSingleSelectionList @"single_selection_list"
-#define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeCheck @"check"
 #define kNavigationSection 4
 
@@ -139,7 +130,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"save_global_track_interval"),
                    @"description" : OALocalizedString(@"save_global_track_interval_descr"),
                    @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"shared_setting_always_ask") : recIntervalValue,
-                   @"type" : kCellTypeIconTitleValue }
+                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -148,7 +139,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"logging_min_distance"),
                    @"description" : OALocalizedString(@"logging_min_distance_descr"),
                    @"value" : minDistValue,
-                   @"type" : kCellTypeIconTitleValue }
+                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -157,7 +148,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"logging_min_accuracy"),
                    @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
                    @"value" : minPrecision,
-                   @"type" : kCellTypeIconTitleValue }
+                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -166,7 +157,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"logging_min_speed"),
                    @"description" : OALocalizedString(@"logging_min_speed_descr"),
                    @"value" : minSpeed,
-                   @"type" : kCellTypeIconTitleValue }
+                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -177,13 +168,13 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"track_during_nav_descr"), OALocalizedString(@"logging_interval_navigation_descr")],
                    @"value" : _settings.saveTrackToGPX,
                    @"img" : @"ic_custom_navigation",
-                   @"type" : kCellTypeSettingSwitch },
+                   @"type" : [OASettingSwitchCell getCellIdentifier] },
                @{
                    @"name" : @"logging_interval_navigation",
                    @"title" : OALocalizedString(@"logging_interval_navigation"),
                    @"value" : navIntervalValue,
                    @"img" : @"ic_custom_timer",
-                   @"type" : kCellTypeIconTitleValue,
+                   @"type" : [OAIconTitleValueCell getCellIdentifier],
                    @"key" : @"nav_interval"
                }
              ]];
@@ -196,7 +187,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"img" : @"menu_cell_pointer.png",
-                 @"type" : kCellTypeSwitch }]];
+                 @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
             
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
@@ -205,25 +196,25 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:@[
                 @{
-                    @"type" : kCellTypeTitle,
+                    @"type" : [OAIconTextTableViewCell getCellIdentifier],
                     @"title" : str,
                     @"header" : OALocalizedString(@"actions")
                 },
                 @{
-                    @"type" : kCellTypeAction,
+                    @"type" : [OATitleRightIconCell getCellIdentifier],
                     @"title" : OALocalizedString(@"tracks"),
                     @"img" : @"ic_custom_folder",
                     @"name" : @"open_trips"
                 },
                 @{
-                    @"type" : kCellTypeAction,
+                    @"type" : [OATitleRightIconCell getCellIdentifier],
                     @"title" : OALocalizedString(@"plugin_settings_reset"),
                     @"img" : @"ic_custom_reset",
                     @"name" : @"reset_plugin"
                 },
                 // TODO: add copy from profile
 //                @{
-//                    @"type" : kCellTypeAction,
+//                    @"type" : [OATitleRightIconCell getCellIdentifier],
 //                    @"title" : OALocalizedString(@"tracks"),
 //                    @"img" : @"ic_custom_folder",
 //                    @"key" : @"open_trips"
@@ -328,9 +319,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
         id v = item[@"value"];
         NSString *name = item[@"name"];
         
-        if ([v isKindOfClass:[OAProfileBoolean class]])
+        if ([v isKindOfClass:[OACommonBoolean class]])
         {
-            OAProfileBoolean *value = v;
+            OACommonBoolean *value = v;
             [value set:isChecked mode:self.appMode];
             if ([name isEqualToString:@"track_during_nav"])
             {
@@ -376,7 +367,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 {
     if (section == kNavigationSection)
     {
-        OAProfileBoolean *value = [self getItem:[NSIndexPath indexPathForRow:0 inSection:kNavigationSection]][@"value"];
+        OACommonBoolean *value = [self getItem:[NSIndexPath indexPathForRow:0 inSection:kNavigationSection]][@"value"];
         BOOL isAutoRecordOn = [value get:self.appMode];
         return isAutoRecordOn ? 2 : 1;
     }
@@ -397,15 +388,13 @@ static NSArray<NSString *> *minTrackSpeedNames;
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kCellTypeSwitch])
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -414,10 +403,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
         {
             [cell.textView setText: item[@"title"]];
             id v = item[@"value"];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
-                [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+                OACommonBoolean *value = v;
+                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 cell.switchView.on = [value get:self.appMode];
             }
             else
@@ -429,16 +418,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeIconTitleValue])
+    else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeIconTitleValue;
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -463,20 +451,18 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             NSString *img = item[@"img"];
             if (img)
-                cell.leftImageView.image = [[UIImage imageNamed:img] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftImageView.image = [UIImage templateImageNamed:img];
             
             [cell showImage:img != nil];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSettingSwitch])
+    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeSettingSwitch;
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeSettingSwitch owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
@@ -486,10 +472,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
         if (cell)
         {
             id v = item[@"value"];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            if ([v isKindOfClass:[OACommonBoolean class]])
             {
-                OAProfileBoolean *value = v;
-                [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+                OACommonBoolean *value = v;
+                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 cell.switchView.on = [value get:self.appMode];
             }
             else
@@ -501,17 +487,16 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             
             cell.textView.text = item[@"title"];
-            cell.imgView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeTitle])
+    else if ([type isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.arrowIconView.hidden = YES;
             cell.iconView.hidden = YES;
@@ -525,13 +510,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeAction])
+    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
@@ -539,18 +523,16 @@ static NSArray<NSString *> *minTrackSpeedNames;
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList])
+    else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]] || [type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -565,13 +547,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([type isEqualToString:kCellTypeCheck])
     {
-        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
         OASettingsTitleTableViewCell* cell = nil;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
         }
         

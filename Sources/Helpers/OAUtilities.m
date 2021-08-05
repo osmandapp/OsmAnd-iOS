@@ -159,6 +159,32 @@
 
 @end
 
+@implementation UIImage (util)
+
++ (UIImage *) templateImageNamed:(NSString *)imageName
+{
+    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
+
+@end
+
+@implementation UIColor (util)
+
+- (NSString *) toHexString
+{
+    const CGFloat *components = CGColorGetComponents(self.CGColor);
+    
+    CGFloat r = components[0];
+    CGFloat g = components[1];
+    CGFloat b = components[2];
+    return [NSString stringWithFormat:@"#%02lX%02lX%02lX",
+                 lroundf(r * 255),
+                 lroundf(g * 255),
+                 lroundf(b * 255)];
+}
+
+@end
+
 @implementation NSString (util)
 
 - (int) indexOf:(NSString *)text
@@ -269,6 +295,33 @@
 - (BOOL) isDirectionRTL
 {
     return [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft;
+}
+
+@end
+
+@implementation UITableViewCell (util)
+
++ (NSString *) getCellIdentifier
+{
+    return NSStringFromClass(self.class);
+}
+
+@end
+
+@implementation UICollectionViewCell (util)
+
++ (NSString *) getCellIdentifier
+{
+    return NSStringFromClass(self.class);
+}
+
+@end
+
+@implementation UITableViewHeaderFooterView (util)
+
++ (NSString *) getCellIdentifier
+{
+    return NSStringFromClass(self.class);
 }
 
 @end
@@ -716,6 +769,19 @@
     return [NSString stringWithFormat:@"#%.6x", (red << 16) + (green << 8) + blue];
 }
 
++ (int) colorToNumber:(UIColor *)color
+{
+    CGFloat r,g,b,a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    
+    uint32_t red = r * 255;
+    uint32_t green = g * 255;
+    uint32_t blue = b * 255;
+    
+    int result = (red << 16) + (green << 8) + blue;
+    return result;
+}
+
 + (NSString *) appendMeters:(float)value
 {
     NSString *formattedValue = [[OsmAndApp instance] getFormattedDistance:value];
@@ -850,7 +916,7 @@
 
 + (NSString *) preferredLang
 {
-    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if (!prefLang)
         prefLang = [OAUtilities currentLang];
     
@@ -1149,7 +1215,7 @@ static const double d180PI = 180.0 / M_PI_2;
     NSMutableArray<NSValue *> *secondControlPoints = [NSMutableArray array];
 
     //Number of Segments
-    NSInteger count = dataPoints.count - 1;
+    NSInteger count = (NSInteger) dataPoints.count - 1;
     
     //P0, P1, P2, P3 are the points for each segment, where P0 & P3 are the knots and P1, P2 are the control points.
     if (count == 1)
@@ -1319,7 +1385,6 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
         fileSize += [fileDictionary fileSize];
-        NSLog(@"file=%@ (%llu)", fileName, fileSize);
     }
     
     return fileSize;
@@ -1413,6 +1478,7 @@ static const double d180PI = 180.0 / M_PI_2;
     [label sizeToFit];
     CGRect frame = label.frame;
     frame.size.height = label.frame.size.height + (isTitle ? 0.0 : 30.0);
+    frame.size.width = textWidth;
     frame.origin.y = 8.0;
     label.frame = frame;
     UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];
@@ -1420,9 +1486,8 @@ static const double d180PI = 180.0 / M_PI_2;
     return tableHeaderView;
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize
 {
-    CGFloat iconFrameSize = 34;
     CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
     label.text = text;
@@ -1445,7 +1510,7 @@ static const double d180PI = 180.0 / M_PI_2;
     imageView.frame = CGRectMake(2, 2, 30, 30);
     imageView.contentMode = UIViewContentModeCenter;
     [imageView setTintColor:tintColor];
-    [imageView setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     
     [imageContainer insertSubview:imageView atIndex:0];
     imageContainer.layer.cornerRadius = iconFrameSize / 2;
@@ -1453,6 +1518,50 @@ static const double d180PI = 180.0 / M_PI_2;
     [tableHeaderView addSubview:imageContainer];
     
     return tableHeaderView;
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode
+{
+    return [self setupTableHeaderViewWithText:text tintColor:tintColor icon:icon iconFrameSize:iconFrameSize iconBackgroundColor:iconBackgroundColor iconContentMode:contentMode iconYOffset:0];
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset
+{
+    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    label.attributedText = text;
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [label sizeToFit];
+    CGRect frame = label.frame;
+    frame.size.height = label.frame.size.height;
+    frame.origin.y = 12.0;
+    label.frame = frame;
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 16)];
+    [tableHeaderView addSubview:label];
+    
+    CGFloat yOffset = iconYOffset == 0 ? tableHeaderView.frame.size.height / 2 - iconFrameSize / 2 : iconYOffset;
+    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 20 - OAUtilities.getLeftMargin - iconFrameSize, yOffset, iconFrameSize, iconFrameSize)];
+    imageContainer.backgroundColor = iconBackgroundColor;
+    
+    UIImageView *imageView = [[UIImageView alloc] init];
+    imageView.frame = CGRectMake(iconFrameSize / 2 - 15., iconFrameSize / 2 - 15., 30, 30);
+    imageView.contentMode = contentMode;
+    [imageView setTintColor:tintColor];
+    [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    
+    [imageContainer insertSubview:imageView atIndex:0];
+    imageContainer.layer.cornerRadius = iconFrameSize / 2;
+    
+    [tableHeaderView addSubview:imageContainer];
+    
+    return tableHeaderView;
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
+{
+    return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage imageNamed:iconName] iconFrameSize:34.];
 }
 
 + (CGFloat) heightForHeaderViewText:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing
@@ -1477,6 +1586,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize highlightColor:(UIColor *)highlightColor
 {
+    return [self getStringWithBoldPart:wholeString mainString:ms boldString:bs lineSpacing:lineSpacing fontSize:fontSize boldFontSize:0 boldColor:highlightColor mainColor:nil];
+}
+
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize boldFontSize:(CGFloat)boldFontSize boldColor:(UIColor *)boldColor mainColor:(UIColor *)mainColor
+{
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:lineSpacing];
     NSMutableAttributedString *descriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:wholeString
@@ -1486,9 +1600,11 @@ static const double d180PI = 180.0 / M_PI_2;
     NSRange boldRange = [wholeString rangeOfString:boldString];
     NSRange mainRange = [wholeString rangeOfString:mainString];
     [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
-    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:fontSize] range:boldRange];
-    if (highlightColor)
-        [descriptionAttributedString addAttribute: NSForegroundColorAttributeName value:highlightColor range:boldRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:boldFontSize > 0 ? boldFontSize : 15] range:boldRange];
+    if (boldColor)
+        [descriptionAttributedString addAttribute: NSForegroundColorAttributeName value:boldColor range:boldRange];
+    if (mainColor)
+        [descriptionAttributedString addAttribute:NSForegroundColorAttributeName value:mainColor range:mainRange];
     return descriptionAttributedString;
 }
 
@@ -1523,6 +1639,88 @@ static const double d180PI = 180.0 / M_PI_2;
         return [fileAttribs objectForKey:NSFileModificationDate];
     }
     return nil;
+}
+
++ (NSString *) getGpxShortPath:(NSString *)fullFilePath
+{
+    NSString *pathToDelete = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
+    NSString *trackFolderName =  [[fullFilePath stringByReplacingOccurrencesOfString:pathToDelete withString:@""] stringByDeletingLastPathComponent];
+    return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
+}
+
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddTracksFolder:(BOOL)shouldAddTracksFolder
+{
+    NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
+    NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
+    for (NSString *name in filesList)
+    {
+        if (![name hasPrefix:@"."] && ![name.lowerCase hasSuffix:@".gpx"])
+            [allFoldersNames addObject:name];
+    }
+    if (shouldAddTracksFolder)
+        [allFoldersNames addObject:OALocalizedString(@"tracks")];
+    
+    if (shouldSort)
+    {
+        return [allFoldersNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [obj1 compare:obj2];
+        }];
+    }
+    else
+    {
+        return [NSArray arrayWithArray:allFoldersNames];
+    }
+}
+
++ (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize
+{
+    NSString *modifiedFontHtml =
+    @" <style> \n"
+    @"   a { color: #5714CC; text-decoration: none;} \n"
+    @"   body { font-family: -apple-system, BlinkMacSystemFont, HelveticaNeue; font-size: %ld} \n"
+    @" </style> \n"
+    @" <p>%@</p>";
+    
+    modifiedFontHtml = [NSString stringWithFormat:modifiedFontHtml, fontSize, html];
+    
+    return [[NSMutableAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
+}
+
++ (NSString *) createNewFileName:(NSString *)oldName
+{
+    NSString *ext = oldName.pathExtension;
+    NSString *nameWithoutExt = oldName.stringByDeletingPathExtension;
+    
+    NSMutableString *numberSection = [NSMutableString string];
+    NSInteger i = nameWithoutExt.length - 1;
+    BOOL hasNameNumberSection = NO;
+    NSCharacterSet *numericSet = [NSCharacterSet decimalDigitCharacterSet];
+    do {
+        unichar c = [nameWithoutExt characterAtIndex:i];
+        if ([numericSet characterIsMember:c])
+        {
+            [numberSection insertString:[NSString stringWithFormat:@"%C", c] atIndex:0];
+        }
+        else if (c == ' ' && numberSection.length > 0)
+        {
+            hasNameNumberSection = YES;
+            break;
+        }
+        else
+        {
+            break;
+        }
+        i--;
+    } while (i >= 0);
+    NSInteger newNumberValue = (hasNameNumberSection ? [numberSection integerValue] : 0) + 1;
+    
+    NSString *newName;
+    if (newNumberValue == 1)
+        newName = [[NSString stringWithFormat:@"%@ %ld", nameWithoutExt, newNumberValue] stringByAppendingPathExtension:ext];
+    else
+        newName = [[NSString stringWithFormat:@"%@ %ld", [nameWithoutExt substringToIndex:i], newNumberValue] stringByAppendingPathExtension:ext];
+    
+    return newName;
 }
 
 @end

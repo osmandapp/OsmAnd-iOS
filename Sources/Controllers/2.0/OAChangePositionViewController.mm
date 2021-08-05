@@ -36,6 +36,7 @@
 #import "OASavingTrackHelper.h"
 #import "OAGPXDocument.h"
 #import "OAPointDescription.h"
+#import "OAFavoriteItem.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -96,9 +97,17 @@
     bottomDividerFrame.size.height = 0.5;
     _bottomToolBarDividerView.frame = bottomDividerFrame;
     
-    _iconView.image = _targetPoint.icon;
+    if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
+    {
+        OAFavoriteItem *favorite = (OAFavoriteItem *)_targetPoint.targetObj;
+        _iconView.image = [favorite getCompositeIcon];   
+    }
+    else
+    {
+        _iconView.image = _targetPoint.icon;
+    }
     
-    if (!self.isLandscape)
+    if (![OAUtilities isLandscapeIpadAware])
     {
         [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
@@ -162,7 +171,7 @@
 
 - (CGFloat) additionalContentOffset
 {
-    return [self isLandscape] ? 0. : [self contentHeight];
+    return [OAUtilities isLandscapeIpadAware] ? 0. : [self contentHeight];
 }
 
 - (BOOL)hasBottomToolbar
@@ -216,7 +225,7 @@
         if (self.delegate)
             [self.delegate contentChanged];
         
-        if (!self.isLandscape)
+        if (![OAUtilities isLandscapeIpadAware])
         {
             [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
             [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];

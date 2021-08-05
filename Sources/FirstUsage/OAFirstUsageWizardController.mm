@@ -47,9 +47,9 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *cardView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *progress1DivTopMarginConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *progress2DivTopMarginConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *heightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *progress1DivTopMarginConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *progress2DivTopMarginConstraint;
 
 @property (strong, nonatomic) IBOutlet UIView *viewLocationNotFound;
 @property (weak, nonatomic) IBOutlet UILabel *lbLocationNotFound;

@@ -56,7 +56,7 @@
     return self;
 }
 
-+ (NSString *) getId
+- (NSString *) getId
 {
     return PLUGIN_ID;
 }
@@ -412,8 +412,8 @@
                                              [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[[view getInterval]] intValue]];
                                              if (view.swRemember.isOn)
                                                  [_settings.mapSettingSaveTrackIntervalApproved set:YES];
-                                             
-                                             _settings.mapSettingShowRecordingTrack = view.swShowOnMap.isOn;
+
+                                             [_settings.mapSettingShowRecordingTrack set:view.swShowOnMap.isOn];
                                              
                                              _settings.mapSettingTrackRecording = YES;
                                          }

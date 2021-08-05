@@ -15,15 +15,9 @@
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "OAOsmEditsListViewController.h"
-#import "OATextInputCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
 #import "OAMenuSimpleCellNoIcon.h"
-
-#define kCellTypeTitle @"OAMenuSimpleCellNoIcon"
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kCellTypeSwitch @"switch"
-#define kCellTypeButton @"button"
 
 @interface OAOsmEditingSettingsViewController () <OAAccontSettingDelegate>
 
@@ -59,19 +53,17 @@ static const NSInteger actionsSectionIndex = 2;
 
 - (OAButtonCell *) getButtonCell
 {
-    static NSString* const identifierCell = @"OAButtonCell";
-    OAButtonCell* cell = nil;
-    
-    cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
         [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     }
     if (cell)
     {
-        [cell.button setTitle:_settings.osmUserName.length == 0 ? OALocalizedString(@"shared_string_account_add") : _settings.osmUserName forState:UIControlStateNormal];
+        [cell.button setTitle:_settings.osmUserName.get.length == 0 ? OALocalizedString(@"shared_string_account_add") : _settings.osmUserName.get forState:UIControlStateNormal];
+        [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
         [cell.button addTarget:self action:@selector(editPressed) forControlEvents:UIControlEventTouchDown];
         [cell showImage:NO];
     }
@@ -97,7 +89,7 @@ static const NSInteger actionsSectionIndex = 2;
     [dataArr addObject:
      @{
          @"name" : @"edit_credentials",
-         @"type" : kCellTypeButton
+         @"type" : [OAButtonCell getCellIdentifier]
      }];
     
     [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
@@ -107,9 +99,9 @@ static const NSInteger actionsSectionIndex = 2;
     [dataArr addObject:
      @{
          @"name" : @"offline_editing",
-         @"type" : kCellTypeSwitch,
+         @"type" : [OASwitchTableViewCell getCellIdentifier],
          @"title" : OALocalizedString(@"osm_offline_editing"),
-         @"value" : @(_settings.offlineEditing)
+         @"value" : @(_settings.offlineEditing.get)
      }];
     
     [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
@@ -123,13 +115,13 @@ static const NSInteger actionsSectionIndex = 2;
     
     [dataArr addObject:
      @{
-         @"type" : kCellTypeTitle,
+         @"type" : [OAMenuSimpleCellNoIcon getCellIdentifier],
          @"title" : str
      }];
     
     [dataArr addObject:
      @{
-         @"type" : kCellTypeAction,
+         @"type" : [OATitleRightIconCell getCellIdentifier],
          @"title" : OALocalizedString(@"osm_edits_title"),
          @"img" : @"ic_custom_folder",
          @"name" : @"open_edits"
@@ -160,7 +152,7 @@ static const NSInteger actionsSectionIndex = 2;
         NSString *name = item[@"name"];
         
         if ([name isEqualToString:@"offline_editing"])
-            [_settings setOfflineEditing:isChecked];
+            [_settings.offlineEditing set:isChecked];
     }
 }
 
@@ -188,15 +180,13 @@ static const NSInteger actionsSectionIndex = 2;
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kCellTypeSwitch])
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
@@ -208,17 +198,17 @@ static const NSInteger actionsSectionIndex = 2;
             
             cell.switchView.on = [v boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeTitle])
+    else if ([type isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
             cell.descriptionView.hidden = YES;
@@ -229,13 +219,12 @@ static const NSInteger actionsSectionIndex = 2;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeAction])
+    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
@@ -243,10 +232,10 @@ static const NSInteger actionsSectionIndex = 2;
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeButton])
+    else if ([type isEqualToString:[OAButtonCell getCellIdentifier]])
     {
         return [self getButtonCell];
     }

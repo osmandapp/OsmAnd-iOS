@@ -27,8 +27,6 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kTitleIconRoundCell @"OATitleIconRoundCell"
-
 @interface OAWikiLinkBottomSheetScreen ()
 
 @end
@@ -80,14 +78,14 @@
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary<NSNumber *, NSArray *> *dict = [NSMutableDictionary new];
     [dict setObject:@[@{
-                         @"type" : @"OABottomSheetHeaderDescrButtonCell",
+                         @"type" : [OABottomSheetHeaderDescrButtonCell getCellIdentifier],
                          @"title" : OALocalizedString(@"wiki_sheet_title"),
                          @"description" : _url,
                          @"img" : @"ic_custom_wikipedia"
     }] forKey:@(0)];
     
     [dict setObject:@[@{
-                          @"type" : kTitleIconRoundCell,
+                          @"type" : [OATitleIconRoundCell getCellIdentifier],
                           @"title" : [NSString stringWithFormat:OALocalizedString(@"download_wiki_data"), _regionName],
                           @"img" : @"ic_custom_download",
                           @"round_bottom" : @(NO),
@@ -95,7 +93,7 @@
                           @"key" : @"download_wiki_map"
                       },
                       @{
-                          @"type" : kTitleIconRoundCell,
+                          @"type" : [OATitleIconRoundCell getCellIdentifier],
                           @"title" : OALocalizedString(@"open_wiki_online"),
                           @"img" : @"ic_custom_online",
                           @"round_bottom" : @(YES),
@@ -132,13 +130,12 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderDescrButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderDescrButtonCell";
-        OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderDescrButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderDescrButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderDescrButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }
@@ -147,21 +144,19 @@
             cell.titleView.text = item[@"title"];
             cell.descrLabel.text = item[@"description"];
             cell.iconView.image = [UIImage imageNamed:item[@"img"]];
-            [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.closeButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.closeButton addTarget:self action:@selector(onCloseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
         }
         
@@ -170,7 +165,7 @@
             cell.backgroundColor = UIColor.clearColor;
             cell.titleView.text = item[@"title"];
             
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             cell.iconColorNormal = UIColorFromRGB(color_primary_purple);
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);

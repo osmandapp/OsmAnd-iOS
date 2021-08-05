@@ -10,6 +10,8 @@
 #import <Foundation/Foundation.h>
 #import "OAPOIUIFilter.h"
 
+@class OAApplicationMode;
+
 @interface OAPOIFiltersHelper : NSObject
 
 + (OAPOIFiltersHelper *)sharedInstance;
@@ -31,15 +33,20 @@
 - (void) removeSelectedPoiFilter:(OAPOIUIFilter *)filter;
 - (BOOL) isShowingAnyPoi;
 - (void) clearSelectedPoiFilters;
+- (void) clearSelectedPoiFilters:(NSArray<OAPOIUIFilter *> *)filtersToExclude;
 - (void) hidePoiFilters;
 - (NSString *) getFiltersName:(NSSet<OAPOIUIFilter *> *)filters;
 - (NSString *) getSelectedPoiFiltersName;
 - (BOOL) isPoiFilterSelected:(OAPOIUIFilter *)filter;
+- (BOOL) isTopWikiFilterSelected;
 - (BOOL) isPoiFilterSelectedByFilterId:(NSString *)filterId;
 - (void) loadSelectedPoiFilters;
 - (void) saveSelectedPoiFilters;
-- (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters;
+- (void) saveSelectedPoiFilters:(NSSet<OAPOIUIFilter *> *)selectedPoiFilters;
+- (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *)selectedFilters;
 - (NSArray<NSString *> *) getPoiFilterOrders:(BOOL)onlyActive;
-
+- (NSArray<OAPOIUIFilter *> *) getSortedPoiFilters:(BOOL) onlyActive;
+- (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds;
+- (void) saveInactiveFilters:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds;
 
 @end

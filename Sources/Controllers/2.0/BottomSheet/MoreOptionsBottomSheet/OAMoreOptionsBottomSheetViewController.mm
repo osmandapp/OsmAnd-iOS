@@ -11,7 +11,6 @@
 #import "OATargetPoint.h"
 #import "OATargetPointsHelper.h"
 #import "OAMenuSimpleCell.h"
-#import "OAWaypointHeaderCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
@@ -34,6 +33,10 @@
 #import "OAContextMenuLayer.h"
 #import "OADownloadMapViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "OAMenuSimpleCell.h"
+#import "OASelectedGPXHelper.h"
+#import "OAGpxWptItem.h"
+#import "OASavingTrackHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -92,32 +95,32 @@
     [arr addObject:@{ @"title" : OALocalizedString(@"directions_more_options"),
                       @"key" : @"directions_more_options",
                       @"img" : @"ic_action_directions_from",
-                      @"type" : @"OAMenuSimpleCell" } ];
+                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     // Search nearby
     [arr addObject:@{ @"title" : OALocalizedString(@"nearby_search"),
                       @"key" : @"nearby_search",
                       @"img" : @"ic_custom_search",
-                      @"type" : @"OAMenuSimpleCell" } ];
+                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     // Download/Update online map
     if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"] || [_app.data.lastMapSource.type isEqualToString:@"sqlitedb"])
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"download_map"),
                           @"key" : @"download_map",
                           @"img" : @"ic_custom_download",
-                          @"type" : @"OAMenuSimpleCell" } ];
+                          @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
 
         [arr addObject:@{ @"title" : OALocalizedString(@"update_map"),
                           @"key" : @"update_map",
                           @"img" : @"ic_custom_update",
-                          @"type" : @"OAMenuSimpleCell" } ];
+                          @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     }
-    // Change marker psition
+    // Change marker position
     if ([OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer isObjectMovable:_targetPoint.targetObj])
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"change_object_posiotion"),
                           @"key" : @"change_object_posiotion",
                           @"img" : @"ic_custom_change_object_position",
-                          @"type" : @"OAMenuSimpleCell" } ];
+                          @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     }
     // Plugins
     NSInteger addonsCount = _iapHelper.functionalAddons.count;
@@ -125,13 +128,20 @@
     {
         for (OAFunctionalAddon *addon in _iapHelper.functionalAddons)
         {
-            if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
+            if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Edit_Waypoint]
+                && (_targetPoint.type == OATargetWpt) && [_targetPoint.targetObj isKindOfClass:[OAGpxWptItem class]] && ([[OASelectedGPXHelper instance] getSelectedGpx:((OAGpxWptItem *)_targetPoint.targetObj).point] != nil || [[OASavingTrackHelper sharedInstance] hasData] || [[OAAppSettings sharedManager] mapSettingTrackRecording])) {
+                [arr addObject:@{ @"title" : addon.titleShort,
+                                  @"key" : @"addon_edit_waypoint",
+                                  @"img" : addon.imageName,
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+            }
+            else if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
                 && (_targetPoint.type != OATargetWpt && _targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXEdit)
                 && _iapHelper.trackRecording.isActive) {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_add_waypoint",
                                   @"img" : addon.imageName,
-                                  @"type" : @"OAMenuSimpleCell" } ];
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
             }
             else if ([addon.addonId isEqualToString:kId_Addon_Parking_Set]
                      && _targetPoint.type != OATargetParking
@@ -140,7 +150,7 @@
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_add_parking",
                                   @"img" : addon.imageName,
-                                  @"type" : @"OAMenuSimpleCell" } ];
+                                  @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
             }
             else if ([addon.addonId isEqualToString:kId_Addon_OsmEditing_Edit_POI])
             {
@@ -152,20 +162,30 @@
                                       OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
                                       @"key" : @"addon_edit_poi_modify",
                                       @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
-                                      @"type" : @"OAMenuSimpleCell" }];
+                                      @"type" : [OAMenuSimpleCell getCellIdentifier] }];
                     
                     BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
                     [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
                                       @"key" : @"addon_edit_poi_create_note",
                                       @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
-                                      @"type" : @"OAMenuSimpleCell" }];
+                                      @"type" : [OAMenuSimpleCell getCellIdentifier]}];
                 }
                 
             }
         }
     }
+    // Plan route
+    [arr addObject:@{ @"title" : OALocalizedString(@"plan_route"),
+            @"key" : @"plan_route",
+            @"img" : @"ic_custom_route",
+            @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+    // Avoid road
+    [arr addObject:@{ @"title" : OALocalizedString(@"avoid_road"),
+            @"key" : @"avoid_road",
+            @"img" : @"ic_custom_road_works",
+            @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     if (arr.count > 2)
-        [arr insertObject:@{ @"type" : @"OADividerCell" } atIndex:2];
+        [arr insertObject:@{ @"type" : [OADividerCell getCellIdentifier] } atIndex:2];
     _data = [NSArray arrayWithArray:arr];
 }
 
@@ -176,11 +196,11 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 70.0, 4.0, 0.0)];
     }
@@ -206,15 +226,13 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAMenuSimpleCell";
         OAMenuSimpleCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             [cell.descriptionView setEnabled:NO];
@@ -225,7 +243,7 @@
             UIImage *img = nil;
             NSString *imgName = item[@"img"];
             if (imgName)
-                img = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                img = [UIImage templateImageNamed:imgName];
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"description"];
@@ -239,13 +257,12 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
@@ -287,7 +304,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
         return indexPath;
     else
         return nil;
@@ -310,12 +327,20 @@
             [vwController.menuViewDelegate targetHide];
             [vwController.menuViewDelegate navigateFrom:_targetPoint];
         }
+        else if ([key isEqualToString:@"addon_edit_waypoint"])
+        {
+            [vwController.menuViewDelegate targetPointEditWaypoint:_targetPoint.targetObj];
+        }
         else if ([key isEqualToString:@"addon_add_waypoint"])
+        {
             [vwController.menuViewDelegate targetPointAddWaypoint];
-        
+        }
         else if ([key isEqualToString:@"addon_add_parking"])
+        {
             [vwController.menuViewDelegate targetPointParking];
-        else if ([key isEqualToString:@"nearby_search"]) {
+        }
+        else if ([key isEqualToString:@"nearby_search"])
+        {
             [vwController.menuViewDelegate targetHide];
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
         }
@@ -345,7 +370,6 @@
                         [mapPanel.navigationController pushViewController:editingScreen animated:YES];
                     });
                 });
-                
             }
             else if (_targetPoint.type == OATargetOsmEdit)
             {
@@ -382,6 +406,14 @@
                 }];
             }]];
             [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        }
+        else if ([key isEqualToString:@"plan_route"])
+        {
+            [vwController.menuViewDelegate targetOpenPlanRoute];
+        }
+        else if ([key isEqualToString:@"avoid_road"])
+        {
+            [vwController.menuViewDelegate targetOpenAvoidRoad];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

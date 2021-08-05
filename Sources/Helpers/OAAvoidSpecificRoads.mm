@@ -74,15 +74,18 @@
     {
         if (roadInfo.roadId != 0)
         {
-            if (force)
+            for (const auto& config : _app.getAllRoutingConfigs)
             {
-                _app.defaultRoutingConfig->removeImpassableRoad(roadInfo.roadId);
-            }
-            else
-            {
-                const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(roadInfo.location.coordinate.longitude),
-                                                OsmAnd::Utilities::get31TileNumberY(roadInfo.location.coordinate.latitude));
-                _app.defaultRoutingConfig->addImpassableRoad(roadInfo.roadId, position31.x, position31.y);
+                if (force)
+                {
+                    config->removeImpassableRoad(roadInfo.roadId);
+                }
+                else
+                {
+                    const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(roadInfo.location.coordinate.longitude),
+                                                    OsmAnd::Utilities::get31TileNumberY(roadInfo.location.coordinate.latitude));
+                    config->addImpassableRoad(roadInfo.roadId, position31.x, position31.y);
+                }
             }
         }
         if (force || roadInfo.roadId == 0)
@@ -153,13 +156,16 @@
 - (CLLocation *) getLocation:(int64_t)roadId
 {
     CLLocation *location = nil;
-    const auto& roadLocations = _app.defaultRoutingConfig->getImpassableRoadLocations();
-    const auto& it = roadLocations.find(roadId);
-    if (it != roadLocations.end())
+    for (const auto& config : _app.getAllRoutingConfigs)
     {
-        const auto& coordinate = it->second;
-        const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(coordinate.first, coordinate.second));
-        location = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+        const auto& roadLocations = config->getImpassableRoadLocations();
+        const auto& it = roadLocations.find(roadId);
+        if (it != roadLocations.end())
+        {
+            const auto& coordinate = it->second;
+            const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(coordinate.first, coordinate.second));
+            location = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+        }
     }
     return location;
 }
@@ -169,8 +175,8 @@
     NSString *name = nil;
     if (road)
     {
-        string locale = [_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage].UTF8String : "";
-        bool transliterate = [_settings settingMapLanguageTranslit];
+        string locale = _settings.settingPrefMapLanguage.get ? _settings.settingPrefMapLanguage.get.UTF8String : "";
+        bool transliterate = _settings.settingMapLanguageTranslit.get;
         
         string rStreetName = road->getName(locale, transliterate);
         string rRefName = road->getRef(locale, transliterate, true);
@@ -191,8 +197,12 @@
 {
     const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(roadInfo.location.coordinate.longitude),
                                     OsmAnd::Utilities::get31TileNumberY(roadInfo.location.coordinate.latitude));
-    
-    if (!_app.defaultRoutingConfig->addImpassableRoad(roadInfo.roadId, position31.x, position31.y))
+    BOOL roadAdded = NO;
+    for (const auto& builder : _app.getAllRoutingConfigs)
+    {
+        roadAdded |= builder->addImpassableRoad(roadInfo.roadId, position31.x, position31.y);
+    }
+    if (!roadAdded)
     {
         CLLocation *loc = [self getLocation:roadInfo.roadId];
         if (loc)
@@ -238,7 +248,8 @@
         [_settings removeImpassableRoad:location];
 
     [self removeImpassableRoadInternal:roadInfo];
-    _app.defaultRoutingConfig->removeImpassableRoad(roadInfo.roadId);
+    for (const auto& config : _app.getAllRoutingConfigs)
+        config->removeImpassableRoad(roadInfo.roadId);
 
     OARoutingHelper *rh = [OARoutingHelper sharedInstance];
     if ([rh isRouteCalculated] || [rh isRouteBeingCalculated])

@@ -496,7 +496,7 @@
         if (startInd != 0)
         {
             start.start = NO;
-            start.intermediate = startInd != allTargets.count - 1;
+            start.intermediate = startInd != (NSInteger) allTargets.count - 1;
             if (![_targetPointsHelper getPointToStart])
             {
                 [start.pointDescription setName:[OAPointDescription getLocationNamePlain:[start getLatitude] lon:[start getLongitude]]];
@@ -807,7 +807,7 @@
         cell.removeButton.hidden = targets && !_flat;
         cell.removeButton.enabled = canRemove;
         cell.removeButton.alpha = canRemove ? 1.0 : 0.5;
-        [cell.removeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.removeButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.removeButton.tag = [self encodePos:indexPath];
         [cell.removeButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -824,7 +824,7 @@
         cell.title.text = OALocalizedString(@"search_radius_proximity");
         NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
         [cell.button setTitle:desc forState:UIControlStateNormal];
-        [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.button.tag = [self encodePos:indexPath];
         cell.button.enabled = !_calculatingRoute;
         [cell.button addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -848,13 +848,13 @@
         NSString *descEx = [helper isShowingAnyPoi] ? OALocalizedString(@"poi") : [helper getSelectedPoiFiltersName];
         [cell setButtonRightTitle:[OALocalizedString(@"res_type") stringByAppendingString:@":"] description:descEx];
         
-        [cell.buttonLeft removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.buttonLeft removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.buttonLeft.tag = [self encodePos:indexPath];
         cell.buttonLeft.enabled = !inProgress;
         if (!inProgress)
             [cell.buttonLeft addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         
-        [cell.buttonRight removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.buttonRight removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.buttonRight.tag = [self encodePos:indexPath];
         cell.buttonRight.enabled = !_calculatingRoute;
         [cell.buttonRight addTarget:self action:@selector(onButtonExClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -885,7 +885,7 @@
         }
         
         cell.switchView.hidden = ![_waypointHelper isTypeConfigurable:type];
-        [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         BOOL checked = [_waypointHelper isTypeEnabled:type];
         if (!cell.switchView.hidden)
         {
@@ -901,7 +901,7 @@
         
         cell.imageButton.hidden = YES;
         UIButton *optionsBtn = cell.textButton;
-        [optionsBtn removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        [optionsBtn removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         if (type == LPW_TARGETS)
         {
             [optionsBtn setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
@@ -967,11 +967,10 @@
         int type = radiusItem.type;
         if (type == LPW_POI)
         {
-            static NSString* const identifierCell = @"OARadiusCellEx";
-            OARadiusCellEx* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OARadiusCellEx* cell = [tableView dequeueReusableCellWithIdentifier:[OARadiusCellEx getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARadiusCellEx" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCellEx getCellIdentifier] owner:self options:nil];
                 cell = (OARadiusCellEx *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -982,11 +981,10 @@
         }
         else
         {
-            static NSString* const identifierCell = @"OARadiusCell";
-            OARadiusCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OARadiusCell* cell = [tableView dequeueReusableCellWithIdentifier:[OARadiusCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARadiusCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCell getCellIdentifier] owner:self options:nil];
                 cell = (OARadiusCell *)[nib objectAtIndex:0];
             }
             if (cell)
@@ -999,11 +997,10 @@
     // Category item
     else if ([item isKindOfClass:[NSNumber class]])
     {
-        static NSString* const identifierCell = @"OAWaypointHeaderCell";
-        OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAWaypointHeaderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWaypointHeaderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAWaypointHeaderCell getCellIdentifier] owner:self options:nil];
             cell = (OAWaypointHeaderCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -1015,11 +1012,10 @@
     // Location point
     else if ([item isKindOfClass:[OALocationPointWrapper class]])
     {
-        static NSString* const identifierCell = @"OAWaypointCell";
-        OAWaypointCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAWaypointCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAWaypointCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWaypointCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAWaypointCell getCellIdentifier] owner:self options:nil];
             cell = (OAWaypointCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 50, 0., 0.);
         }

@@ -55,8 +55,7 @@
 {
     [super viewDidLoad];
     
-    [_quickActionFloatingButton setImage:[[UIImage imageNamed:@"ic_custom_quick_action"]
-                                          imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
+    [_quickActionFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_quick_action"]
                                 forState:UIControlStateNormal];
     _quickActionFloatingButton.hidden = ![_settings.quickActionIsOn get];
     _buttonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonDragged:)];
@@ -73,8 +72,11 @@
     CGFloat width = isLandscape ? DeviceScreenWidth * 1.5 : DeviceScreenWidth;
     CGFloat originX = width / 2 - pinFrame.size.width / 2;
     CGFloat originY = isLandscape ? (DeviceScreenHeight / 2 - pinFrame.size.height) : (DeviceScreenHeight * (1.0 - (_actionsView.frame.size.height / DeviceScreenHeight)) / 2 - pinFrame.size.height);
-    pinFrame.origin = CGPointMake(originX, originY);
-    _quickActionPin.frame = pinFrame;
+    if (!isnan(originX) && !isnan(originY))
+    {
+        pinFrame.origin = CGPointMake(originX, originY);
+        _quickActionPin.frame = pinFrame;
+    }
 }
 
 - (void) updateColors:(BOOL)isNight

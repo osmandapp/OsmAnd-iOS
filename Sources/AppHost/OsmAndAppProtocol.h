@@ -17,9 +17,6 @@
 #import "OADownloadsManager.h"
 #import "OAAppearanceProtocol.h"
 #import "OAApplicationMode.h"
-#if defined(OSMAND_IOS_DEV)
-#   import "OADebugSettings.h"
-#endif // defined(OSMAND_IOS_DEV)
 
 @protocol OsmAndAppProtocol <NSObject>
 @required
@@ -48,6 +45,8 @@
 @property(readonly) OAObservable* mapModeObservable;
 
 @property(nonatomic) OAMapViewState* initialURLMapState;
+
+@property (nonatomic) BOOL carPlayActive;
 
 - (void) loadWorldRegions;
 
@@ -102,10 +101,6 @@
 
 - (void)startRepositoryUpdateAsync:(BOOL)async;
 
-#if defined(OSMAND_IOS_DEV)
-@property(readonly) OADebugSettings* debugSettings;
-#endif // defined(OSMAND_IOS_DEV)
-
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force;
 - (void) stopNavigation;
 - (void) setupDrivingRegion:(OAWorldRegion *)reg;
@@ -114,6 +109,8 @@
 - (void) showShortToastMessage:(NSString *)message;
 
 - (void)checkAndDownloadOsmAndLiveUpdates;
+
+- (void) loadRoutingFiles;
 
 // Tests only
 - (BOOL) installTestResource:(NSString *)filePath;

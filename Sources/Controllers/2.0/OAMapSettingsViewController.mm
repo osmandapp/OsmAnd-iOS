@@ -8,8 +8,6 @@
 
 #import "OAMapSettingsViewController.h"
 
-#import "OASwitchTableViewCell.h"
-
 #import "OAAutoObserverProxy.h"
 #import "OANativeUtilities.h"
 #import "OAMapRendererView.h"
@@ -32,6 +30,7 @@
 #import "OAUtilities.h"
 #import "OAMapSettingsContourLinesScreen.h"
 #import "OAMapSettingsTerrainScreen.h"
+#import "OAMapSettingsWikipediaScreen.h"
 #import <CoreLocation/CoreLocation.h>
 
 #include <QtMath>
@@ -51,13 +50,6 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
-#if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
-#endif // defined(OSMAND_IOS_DEV)
-
-
 
 @interface OAMapSettingsViewController ()
 {
@@ -169,6 +161,10 @@
         case EMapSettingsScreenTerrain:
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsTerrainScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+        case EMapSettingsScreenWikipedia:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsWikipediaScreen alloc] initWithTable:self.tableView viewController:self];
             break;
         default:
             break;

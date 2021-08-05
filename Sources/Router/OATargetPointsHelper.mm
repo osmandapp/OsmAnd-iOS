@@ -16,6 +16,8 @@
 #import "OARouteProvider.h"
 #import "OAStateChangedListener.h"
 #import "OAReverseGeocoder.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
 
 @implementation OATargetPointsHelper
 {
@@ -117,7 +119,7 @@
 - (NSArray<OARTargetPoint *> *) getIntermediatePointsNavigation
 {
     NSMutableArray<OARTargetPoint *> *intermediatePoints = [NSMutableArray array];
-    if (_settings.useIntermediatePointsNavigation)
+    if (_settings.useIntermediatePointsNavigation.get)
     {
         for (OARTargetPoint *t in _intermediatePoints)
             [intermediatePoints addObject:t];
@@ -137,7 +139,7 @@
 - (NSArray<CLLocation *> *) getIntermediatePointsLatLonNavigation
 {
     NSMutableArray<CLLocation *> *intermediatePointsLatLon = [NSMutableArray array];
-    if (_settings.useIntermediatePointsNavigation)
+    if (_settings.useIntermediatePointsNavigation.get)
     {
         for (OARTargetPoint *t in _intermediatePoints)
             [intermediatePointsLatLon addObject:t.point];
@@ -406,6 +408,20 @@
     [self updateRouteAndRefresh:updateRoute];
 }
 
+- (OARTargetPoint *) getHomePoint
+{
+    if (![OAFavoritesHelper isFavoritesLoaded])
+        [OAFavoritesHelper loadFavorites];
+        
+    OAFavoriteItem *homeFavorite = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType HOME]];
+    if (homeFavorite)
+    {
+        OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:[homeFavorite getAddress]];
+        return [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:[homeFavorite getLatitude] longitude:[homeFavorite getLongitude]] name:pointDescription];
+    }
+    return nil;
+}
+
 - (void) setHomePoint:(CLLocation *) latLon description:(OAPointDescription *)name
 {
     OAPointDescription *pointDescription;
@@ -421,8 +437,22 @@
     {
         [pointDescription setName:[OAPointDescription getSearchAddressStr]];
     }
-    _app.data.homePoint = [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:latLon.coordinate.latitude longitude:latLon.coordinate.longitude] name:pointDescription];
+    [OAFavoritesHelper setSpecialPoint:[OASpecialPointType HOME] lat:latLon.coordinate.latitude lon:latLon.coordinate.longitude address:pointDescription.name];
     [self lookupAddressForHomePoint];
+}
+
+- (OARTargetPoint *) getWorkPoint
+{
+    if (![OAFavoritesHelper isFavoritesLoaded])
+        [OAFavoritesHelper loadFavorites];
+        
+    OAFavoriteItem *workFavorite = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType WORK]];
+    if (workFavorite)
+    {
+        OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:[workFavorite getAddress]];
+        return [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:[workFavorite getLatitude] longitude:[workFavorite getLongitude]] name:pointDescription];
+    }
+    return nil;
 }
 
 - (void) setWorkPoint:(CLLocation *) latLon description:(OAPointDescription *)name
@@ -439,20 +469,20 @@
     {
         [pointDescription setName:[OAPointDescription getSearchAddressStr]];
     }
-    _app.data.workPoint = [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:latLon.coordinate.latitude longitude:latLon.coordinate.longitude] name:pointDescription];
+    [OAFavoritesHelper setSpecialPoint:[OASpecialPointType WORK] lat:latLon.coordinate.latitude lon:latLon.coordinate.longitude address:pointDescription.name];
     [self lookupAddressForWorkPoint];
 }
 
 - (void) lookupAddressForHomePoint
 {
-    OARTargetPoint *homePoint = _app.data.homePoint;
+    OARTargetPoint *homePoint = [self getHomePoint];
     if (homePoint != nil && [homePoint isSearchingAddress] && !_isSearchingHome)
     {
         _isSearchingHome = YES;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:homePoint.point];
             [homePoint.pointDescription setName:pointName];
-            _app.data.homePoint = homePoint;
+            [OAFavoritesHelper setSpecialPoint:[OASpecialPointType HOME] lat:homePoint.getLatitude lon:homePoint.getLongitude address:pointName];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateListeners:NO];
                 _isSearchingHome = NO;
@@ -463,14 +493,14 @@
 
 - (void) lookupAddressForWorkPoint
 {
-    OARTargetPoint *workPoint = _app.data.workPoint;
+    OARTargetPoint *workPoint = [self getWorkPoint];
     if (workPoint != nil && [workPoint isSearchingAddress] && !_isSearchingWork)
     {
         _isSearchingWork = YES;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:workPoint.point];
             [workPoint.pointDescription setName:pointName];
-            _app.data.workPoint = workPoint;
+            [OAFavoritesHelper setSpecialPoint:[OASpecialPointType WORK] lat:workPoint.getLatitude lon:workPoint.getLongitude address:pointName];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateListeners:NO];
                 _isSearchingWork = NO;
@@ -558,7 +588,7 @@
 
 - (BOOL) hasTooLongDistanceToNavigate
 {
-    OAApplicationMode *mode = _settings.applicationMode;
+    OAApplicationMode *mode = _settings.applicationMode.get;
     if ([_settings.routerService get:mode] != EOARouteService::OSMAND)
         return false;
     

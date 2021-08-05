@@ -118,14 +118,14 @@
     } else {
         OAOpenStreetMapPoint *otherPoint = (OAOpenStreetMapPoint *)other;
         BOOL res = [self.getName isEqualToString:otherPoint.getName];
-        res = res || [OAUtilities isCoordEqual:self.getLatitude srcLon:self.getLongitude destLat:otherPoint.getLatitude destLon:otherPoint.getLongitude];
+        res = res && [OAUtilities isCoordEqual:self.getLatitude srcLon:self.getLongitude destLat:otherPoint.getLatitude destLon:otherPoint.getLongitude];
         if (self.getType)
-            res = res || [self.getType isEqualToString:otherPoint.getType];
+            res = res && [self.getType isEqualToString:otherPoint.getType];
         if (self.getSubType)
-            res = res || [self.getSubType isEqualToString:otherPoint.getSubType];
+            res = res && [self.getSubType isEqualToString:otherPoint.getSubType];
         if (self.getTagsString)
-            res = res || [self.getTagsString isEqualToString:otherPoint.getTagsString];
-        res = res || self.getId == otherPoint.getId;
+            res = res && [self.getTagsString isEqualToString:otherPoint.getTagsString];
+        res = res && self.getId == otherPoint.getId;
         return res;
     }
 }

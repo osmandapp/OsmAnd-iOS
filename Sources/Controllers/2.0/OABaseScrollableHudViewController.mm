@@ -20,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
-@property (weak, nonatomic) IBOutlet UIView *topHeaderContainerView;
 
 @end
 
@@ -111,8 +110,8 @@
     if (_isDragging || _isHiding)
         return;
     
-    BOOL isLandscape = [self isLandscape];
-    _currentState = isLandscape ? EOADraggableMenuStateFullScreen : (!self.supportsFullScreen && _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateExpanded : _currentState);
+    BOOL isLandscape = [self isLeftSidePresentation];
+    [self updateLayoutCurrentState];
     
     [_tableView setScrollEnabled:_currentState == EOADraggableMenuStateFullScreen || (!self.supportsFullScreen && EOADraggableMenuStateExpanded)];
     
@@ -162,20 +161,32 @@
     [self applyCornerRadius:!isLandscape && _currentState != EOADraggableMenuStateFullScreen];
     
     [self onViewHeightChanged:self.getViewHeight];
+    
+    [self doAdditionalLayout];
+}
+
+- (void) doAdditionalLayout
+{
+    //override
+}
+
+- (void) updateLayoutCurrentState
+{
+    _currentState = [self isLeftSidePresentation] ? EOADraggableMenuStateFullScreen : (!self.supportsFullScreen && _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateExpanded : _currentState);
 }
 
 - (CGFloat) additionalLandscapeOffset
 {
-    return 0.;
+    return OAUtilities.isIPad && !OAUtilities.isWindowed ? OAUtilities.getStatusBarHeight : 0.;
 }
 
 - (void) adjustFrame
 {
     CGRect f = _scrollableView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if ([self isLandscape])
+    if ([self isLeftSidePresentation])
     {
-        f.origin = CGPointMake(0., self.additionalLandscapeOffset);
+        f.origin = CGPointMake(0., [self getLandscapeYOffset]);
         f.size.height = DeviceScreenHeight - self.additionalLandscapeOffset;
         f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
         
@@ -186,7 +197,6 @@
         
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;
-        contentFrame.origin = f.origin;
         _contentContainer.frame = contentFrame;
     }
     else
@@ -206,6 +216,11 @@
         _contentContainer.frame = contentFrame;
     }
     _scrollableView.frame = f;
+}
+
+- (CGFloat) getLandscapeYOffset
+{
+    return self.additionalLandscapeOffset;
 }
 
 - (CGFloat)initialMenuHeight
@@ -262,6 +277,11 @@
     return OAUtilities.isLandscapeIpadAware;
 }
 
+- (BOOL) isLeftSidePresentation
+{
+    return OAUtilities.isLandscapeIpadAware;
+}
+
 - (CGFloat) getViewWidthForPad
 {
     return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
@@ -270,7 +290,7 @@
 - (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete
 {
     [_tableView setContentOffset:CGPointZero];
-    _currentState = self.isLandscape ? EOADraggableMenuStateFullScreen : state;
+    [self updateShowingState:state];
     [_tableView setScrollEnabled:YES];
     
     [self adjustFrame];
@@ -279,10 +299,11 @@
     if (animated)
     {
         CGRect frame = _scrollableView.frame;
-        if ([self isLandscape])
+        if ([self isLeftSidePresentation])
         {
             frame.origin.x = -_scrollableView.bounds.size.width;
             frame.origin.y = self.additionalLandscapeOffset;
+            frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
             frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
             _scrollableView.frame = frame;
             
@@ -308,7 +329,7 @@
     else
     {
         CGRect frame = _scrollableView.frame;
-        if ([self isLandscape])
+        if ([self isLeftSidePresentation])
             frame.origin.y = 0.0;
         else
             frame.origin.y = DeviceScreenHeight - _scrollableView.bounds.size.height;
@@ -318,6 +339,11 @@
         if (onComplete)
             onComplete();
     }
+}
+
+- (void) updateShowingState:(EOADraggableMenuState)state
+{
+    _currentState = self.isLeftSidePresentation ? EOADraggableMenuStateFullScreen : state;
 }
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -477,25 +503,45 @@
 
 - (void) goExpanded
 {
-    _currentState = EOADraggableMenuStateExpanded;
-    [self updateViewAnimated];
+	if (_currentState != EOADraggableMenuStateExpanded)
+		[self goExpanded:YES];
 }
 
 - (void) goMinimized
 {
-    _currentState = EOADraggableMenuStateInitial;
-    [self updateViewAnimated];
+	if (_currentState != EOADraggableMenuStateInitial)
+		[self goMinimized:YES];
 }
 
 - (void) goFullScreen
 {
+    [self goFullScreen:YES];
+}
+
+- (void) goExpanded:(BOOL)animated
+{
+    _currentState = EOADraggableMenuStateExpanded;
+    if (animated)
+        [self updateViewAnimated];
+}
+
+- (void) goMinimized:(BOOL)animated
+{
+    _currentState = EOADraggableMenuStateInitial;
+    if (animated)
+        [self updateViewAnimated];
+}
+
+- (void) goFullScreen:(BOOL)animated
+{
     _currentState = EOADraggableMenuStateFullScreen;
-    [self updateViewAnimated];
+    if (animated)
+        [self updateViewAnimated];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    return ![self isLandscape];
+    return ![self isLeftSidePresentation];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

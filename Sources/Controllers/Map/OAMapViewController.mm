@@ -106,12 +106,6 @@
 
 #include <OsmAndCore/QKeyValueIterator.h>
 
-#if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
-#endif // defined(OSMAND_IOS_DEV)
-
 #import "OANativeUtilities.h"
 #import "OALog.h"
 #include "Localization.h"
@@ -394,13 +388,6 @@
     
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
     [helper addListener:self];
-    
-#if defined(OSMAND_IOS_DEV)
-    _hideStaticSymbols = NO;
-    _visualMetricsMode = OAVisualMetricsModeOff;
-    _forceDisplayDensityFactor = NO;
-    _forcedDisplayDensityFactor = self.displayDensityFactor;
-#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (void) deinit
@@ -447,6 +434,11 @@
         [_mapLayers didReceiveMemoryWarning];
 }
 
+- (BOOL) isDisplayedInCarPlay
+{
+    return self.parentViewController != OARootViewController.instance.mapPanel;
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameRendered
@@ -458,23 +450,10 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Tell view to create context
-    _mapView.userInteractionEnabled = YES;
-    _mapView.multipleTouchEnabled = YES;
 
+    // Tell view to create context
     _mapView.displayDensityFactor = self.displayDensityFactor;
     [_mapView createContext];
-    
-    // Attach gesture recognizers:
-    [_mapView addGestureRecognizer:_grZoom];
-    [_mapView addGestureRecognizer:_grMove];
-    [_mapView addGestureRecognizer:_grRotate];
-    [_mapView addGestureRecognizer:_grZoomIn];
-    [_mapView addGestureRecognizer:_grZoomOut];
-    [_mapView addGestureRecognizer:_grElevation];
-    [_mapView addGestureRecognizer:_grSymbolContextMenu];
-    [_mapView addGestureRecognizer:_grPointContextMenu];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
     if (_app.initialURLMapState)
@@ -505,10 +484,6 @@
 {
     [super viewWillAppear:animated];
     
-    // Resume rendering only if in foreground
-    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-        [_mapView resumeRendering];
-    
     // Update map source (if needed)
     if (_mapSourceInvalidated)
     {
@@ -516,7 +491,6 @@
 
         _mapSourceInvalidated = NO;
     }
-    
     
     // IOS-208
     if (_app.resourcesManager->isRepositoryAvailable())
@@ -555,7 +529,7 @@
 {
     [super viewDidDisappear:animated];
     
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -580,6 +554,19 @@
         [rootViewController.mapPanel showContextMenu:targetPoint];
         _app.initialURLMapState = nil;
     }
+    
+    _mapView.userInteractionEnabled = YES;
+    _mapView.multipleTouchEnabled = YES;
+    
+    // Attach gesture recognizers:
+    [_mapView addGestureRecognizer:_grZoom];
+    [_mapView addGestureRecognizer:_grMove];
+    [_mapView addGestureRecognizer:_grRotate];
+    [_mapView addGestureRecognizer:_grZoomIn];
+    [_mapView addGestureRecognizer:_grZoomOut];
+    [_mapView addGestureRecognizer:_grElevation];
+    [_mapView addGestureRecognizer:_grSymbolContextMenu];
+    [_mapView addGestureRecognizer:_grPointContextMenu];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application
@@ -587,7 +574,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -596,7 +583,7 @@
 
 - (void) applicationWillEnterForeground:(UIApplication*)application
 {
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Resume rendering
         [_mapView resumeRendering];
@@ -615,8 +602,22 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
 }
 
+- (void) onApplicationDestroyed
+{
+    if (self.mapViewLoaded)
+    {
+        [_mapView suspendSymbolsUpdate];
+        [_mapView releaseContext:YES];
+        [_mapView removeFromSuperview];
+        _mapView = nil;
+    }
+}
+
 - (void) showProgressHUD
 {
+    if (_app.carPlayActive)
+        return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         BOOL wasVisible = NO;
         if (_progressHUD)
@@ -678,9 +679,9 @@
 {
     _mapPosition = mapPosition;
     
-    if (mapPosition == BOTTOM_CONSTANT)
+    if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != 1.5f)
         _mapView.viewportYScale = 1.5f;
-    else
+    else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != 1.f)
         _mapView.viewportYScale = 1.f;
 }
 
@@ -1207,6 +1208,9 @@
         OAQuickActionHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
         [quickAction hideActionsSheetAnimated];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
+        
+        // Handle route planning touch events
+        [_mapLayers.routePlanningLayer onMapPointSelected:CLLocationCoordinate2DMake(lat, lon) longPress:longPress];
         return YES;
     }
     return NO;
@@ -1504,7 +1508,7 @@
             return;
         }
 
-        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
         {
             if (!_recTrackShowing)
                 [self showRecGpxTrack:YES];
@@ -1533,7 +1537,7 @@
 
 - (void) onTrackRecordingChanged:(id)observable withKey:(id)key
 {
-    if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1625,7 +1629,7 @@
             
             [_gpxRouter.routeDoc buildRouteTrack];
             [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.gpxFileName];
+            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self refreshGpxTracks];
@@ -1675,8 +1679,8 @@
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
-        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
@@ -1728,7 +1732,7 @@
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
-            switch ([settings settingMapLanguage]) {
+            switch (settings.settingMapLanguage.get) {
                 case 0:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
@@ -1753,17 +1757,17 @@
             }
             
             NSString *langId = [OAUtilities currentLang];
-            if ([settings settingPrefMapLanguage])
-                langId = [settings settingPrefMapLanguage];
-            else if ([settings settingMapLanguageShowLocal] &&
-                     [settings settingMapLanguageTranslit])
+            if (settings.settingPrefMapLanguage.get)
+                langId = settings.settingPrefMapLanguage.get;
+            else if (settings.settingMapLanguageShowLocal &&
+                     settings.settingMapLanguageTranslit.get)
                 langId = @"en";
-            double mapDensity = [settings.mapDensity get:settings.applicationMode];
+            double mapDensity = [settings.mapDensity get:settings.applicationMode.get];
             [_mapView setVisualZoomShift:mapDensity];
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
                                                                                      mapDensity,
-                                                                                     [settings.textSize get:settings.applicationMode],
+                                                                                     [settings.textSize get:settings.applicationMode.get],
                                                                                      QString::fromNSString(langId),
                                                                                      langPreferences));
             
@@ -1780,7 +1784,7 @@
 
                 QHash< QString, QString > newSettings;
                 
-                OAApplicationMode *am = settings.applicationMode;
+                OAApplicationMode *am = settings.applicationMode.get;
                 NSString *appMode = am.stringKey;
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
                 NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
@@ -1815,55 +1819,13 @@
                     _mapPresentationEnvironment->setSettings(newSettings);
             }
         
-#if defined(OSMAND_IOS_DEV)
-            switch (_visualMetricsMode)
-            {
-                case OAVisualMetricsModeBinaryMapData:
-                    _rasterMapProvider.reset(new OsmAnd::ObfMapObjectsMetricsLayerProvider(_obfMapObjectsProvider,
-                                                                                           256 * _mapView.contentScaleFactor,
-                                                                                           _mapView.contentScaleFactor));
-                    break;
-
-                case OAVisualMetricsModeBinaryMapPrimitives:
-                    _rasterMapProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(_mapPrimitivesProvider,
-                                                                                           256 * _mapView.contentScaleFactor,
-                                                                                           _mapView.contentScaleFactor));
-                    break;
-
-                case OAVisualMetricsModeBinaryMapRasterize:
-                {
-                    std::shared_ptr<OsmAnd::MapRasterLayerProvider> backendProvider(
-                        new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-                    _rasterMapProvider.reset(new OsmAnd::MapRasterMetricsLayerProvider(backendProvider,
-                                                                                       256 * _mapView.contentScaleFactor,
-                                                                                       _mapView.contentScaleFactor));
-                    break;
-                }
-
-                case OAVisualMetricsModeOff:
-                default:
-                    _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-                    break;
-            }
-#else
           _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-#endif // defined(OSMAND_IOS_DEV)
             [_mapView setProvider:_rasterMapProvider
                         forLayer:0];
 
-#if defined(OSMAND_IOS_DEV)
-            if (!_hideStaticSymbols)
-            {
-                _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
-                                                                                       rasterTileSize));
-                [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
-            }
-#else
             _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
-#endif
-            
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
         {
@@ -1913,7 +1875,7 @@
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
-            switch ([settings settingMapLanguage]) {
+            switch (settings.settingMapLanguage.get) {
                 case 0:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
@@ -1938,10 +1900,10 @@
             }
             
             NSString *langId = [OAUtilities currentLang];
-            if ([settings settingPrefMapLanguage])
-                langId = [settings settingPrefMapLanguage];
+            if (settings.settingPrefMapLanguage.get)
+                langId = settings.settingPrefMapLanguage.get;
             else if ([settings settingMapLanguageShowLocal] &&
-                     [settings settingMapLanguageTranslit])
+                     settings.settingMapLanguageTranslit.get)
                 langId = @"en";
             
             
@@ -1968,14 +1930,14 @@
         
         [_mapLayers updateLayers];
 
-        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
             [self showRecGpxTrack:YES];
         
         if (_gpxRouter.gpx && !_gpxDocFileRoute)
         {
             [_gpxRouter.routeDoc buildRouteTrack];
             [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.gpxFileName];
+            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
         }
         
         [_selectedGpxHelper buildGpxList];
@@ -2026,10 +1988,6 @@
 
 - (CGFloat) displayDensityFactor
 {
-#if defined(OSMAND_IOS_DEV)
-    if (_forceDisplayDensityFactor)
-        return _forcedDisplayDensityFactor;
-#endif // defined(OSMAND_IOS_DEV)
 
     if (!self.mapViewLoaded || _contentScaleFactor == 0.0)
         return [UIScreen mainScreen].scale;
@@ -2210,12 +2168,12 @@
     }
 }
 
-- (void) showTempGpxTrack:(NSString *)fileName
+- (void) showTempGpxTrack:(NSString *)filePath
 {
-    [self showTempGpxTrack:fileName update:YES];
+    [self showTempGpxTrack:filePath update:YES];
 }
 
-- (void) showTempGpxTrack:(NSString *)fileName update:(BOOL)update
+- (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update
 {
     if (_recTrackShowing)
         [self hideRecGpxTrack];
@@ -2223,7 +2181,7 @@
     @synchronized(_rendererSync)
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        if ([settings.mapSettingVisibleGpx containsObject:fileName]) {
+        if ([settings.mapSettingVisibleGpx.get containsObject:filePath]) {
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = nil;
             return;
@@ -2231,10 +2189,11 @@
         
         _tempTrackShowing = YES;
 
-        if (![_gpxDocFileTemp isEqualToString:fileName] || _gpxDocsTemp.isEmpty()) {
+        if (![_gpxDocFileTemp isEqualToString:filePath] || _gpxDocsTemp.isEmpty()) {
             _gpxDocsTemp.clear();
-            _gpxDocFileTemp = [fileName copy];
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+            _gpxDocFileTemp = [filePath copy];
+            OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
@@ -2285,7 +2244,7 @@
                 _gpxDocsRec << doc;
                 
                 QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > gpxDocs;
-                gpxDocs[QString::fromNSString(helper.currentTrack.fileName)] = doc;
+                gpxDocs[QString::fromNSString(helper.currentTrack.path)] = doc;
                 [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs];
             }
         }];
@@ -2309,9 +2268,10 @@
         return;
 
     std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _gpxDocsTemp.first();
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpxDocFileTemp];
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]; 
     QString qPath = QString::fromNSString(path);
-    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx containsObject:_gpxDocFileTemp])
+    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:_gpxDocFileTemp])
     {
         _selectedGpxHelper.activeGpx[qPath] = doc;
 
@@ -2470,8 +2430,9 @@
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         const auto& doc = it.value();
-        for (auto& loc : doc->locationMarks)
+        for (auto locIt = doc->locationMarks.begin(); locIt != doc->locationMarks.end(); ++locIt)
         {
+            auto loc = *locIt;
             if (!loc->type.isEmpty())
                 groups.insert(loc->type);
 
@@ -3023,7 +2984,7 @@
 {
     if (items.count == 0)
         return NO;
-    
+
     BOOL found = NO;
     
     auto activeGpx = _selectedGpxHelper.activeGpx;
@@ -3115,7 +3076,7 @@
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
             if (it.value())
-                docs[QFileInfo(it.key()).fileName()] = it.value();
+                docs[it.key()] = it.value();
         }
         if (_gpxDocFileRoute && !_gpxDocsRoute.isEmpty())
             docs[QString::fromNSString(_gpxDocFileRoute)] = _gpxDocsRoute.first();
@@ -3195,90 +3156,6 @@
 
 @synthesize framePreparedObservable = _framePreparedObservable;
 
-#if defined(OSMAND_IOS_DEV)
-@synthesize hideStaticSymbols = _hideStaticSymbols;
-- (void)setHideStaticSymbols:(BOOL)hideStaticSymbols
-{
-    if (_hideStaticSymbols == hideStaticSymbols)
-        return;
-
-    _hideStaticSymbols = hideStaticSymbols;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateCurrentMapSource];
-        });
-    });
-}
-
-@synthesize visualMetricsMode = _visualMetricsMode;
-- (void)setVisualMetricsMode:(OAVisualMetricsMode)visualMetricsMode
-{
-    if (_visualMetricsMode == visualMetricsMode)
-        return;
-
-    _visualMetricsMode = visualMetricsMode;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateCurrentMapSource];
-        });
-    });
-}
-
-@synthesize forceDisplayDensityFactor = _forceDisplayDensityFactor;
-- (void)setForceDisplayDensityFactor:(BOOL)forceDisplayDensityFactor
-{
-    if (_forceDisplayDensityFactor == forceDisplayDensityFactor)
-        return;
-
-    _forceDisplayDensityFactor = forceDisplayDensityFactor;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateCurrentMapSource];
-        });
-    });
-}
-
-@synthesize forcedDisplayDensityFactor = _forcedDisplayDensityFactor;
-- (void)setForcedDisplayDensityFactor:(CGFloat)forcedDisplayDensityFactor
-{
-    _forcedDisplayDensityFactor = forcedDisplayDensityFactor;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateCurrentMapSource];
-        });
-    });
-}
-
-#endif // defined(OSMAND_IOS_DEV)
-
 - (BOOL) isMyLocationVisible
 {
     CLLocation *myLocation = _app.locationServices.lastKnownLocation;
@@ -3339,7 +3216,10 @@
     if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            if (![self isDisplayedInCarPlay])
+            {
+                [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) animated:NO];
+            }
         });
     }
 }

@@ -151,8 +151,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
             FavTableGroup* itemData = [[FavTableGroup alloc] init];
             itemData.groupName = groupName.toNSString();
             for(const auto& favorite : groupedFavorites[groupName]) {
-                OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-                favData.favorite = favorite;
+                OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
                 [itemData.groupItems addObject:favData];
                 [_sortedByNameFavoriteItems addObject:favData];
                 [_sortedByDistFavoriteItems addObject:favData];
@@ -183,8 +182,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         
         for (const auto& favorite : ungroupedFavorites)
         {
-            OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-            favData.favorite = favorite;
+            OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
             [itemData.groupItems addObject:favData];
             [_sortedByNameFavoriteItems addObject:favData];
             [_sortedByDistFavoriteItems addObject:favData];
@@ -351,11 +349,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
                     NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"ctx_mnu_direction");
-                    NSString *imageName;
-                    if (item.destination.parking)
-                        imageName = @"ic_parking_pin_small";
-                    else
-                        imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
+                    NSString *imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
                     
                     [c.titleView setText:title];
                     c.titleIcon.image = [UIImage imageNamed:imageName];
@@ -397,11 +391,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
                     [c.titleView setText:item.favorite->getTitle().toNSString()];
-                    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
-                    
-                    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-                    c.titleIcon.image = favCol.icon;
-                    c.titleIcon.tintColor = favCol.color;
+                    c.titleIcon.image = item.getCompositeIcon;
                     
                     [c.distanceView setText:item.distance];
                     c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
@@ -520,13 +510,11 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (UITableViewCell *) getMarkerCellForIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-    
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -542,7 +530,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
             cell.titleIcon.image = [UIImage imageNamed:imageName];
             
             [cell.distanceView setText:item.distanceStr];
-            cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         }
@@ -553,13 +541,11 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (UITableViewCell*) getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-    
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -575,7 +561,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         cell.titleIcon.tintColor = favCol.color;
         
         [cell.distanceView setText:item.distance];
-        cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
     }
@@ -587,14 +573,12 @@ typedef NS_ENUM(NSInteger, EOASortType)
 - (UITableViewCell*) getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FavTableGroup* groupData = [_groupsAndFavorites objectAtIndex:indexPath.section];
-    
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-    
+
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -609,7 +593,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         cell.titleIcon.tintColor = favCol.color;
         
         [cell.distanceView setText:item.distance];
-        cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
     }

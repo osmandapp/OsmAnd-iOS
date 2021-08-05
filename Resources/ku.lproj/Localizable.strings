@@ -28,7 +28,7 @@
 "gpx_overwrite" = "Li Ser Bi nivîsena";
 "gpx_stat" = "Amar (statîstîk)";
 "gpx_distance" = "Navbend";
-"gpx_finish" = "Dawî";
+"gpx_finish" = "Xilasek";
 "fav_replace_all" = "Hemûyan biguherîne";
 "gpx_updown" = "Jor/Jêr";
 "gpx_speed" = "Lez";
@@ -50,7 +50,7 @@
 "local_names" = "";
 "map_creator" = "Çêkirina Nexşe";
 "show_region_on_map_go" = "Here Nexşe";
-"show_region_on_map_title" = "Nexşa ku hatiya daxistin";
+"show_region_on_map_title" = "Nexşe hate daxistin";
 "no_internet_avail" = "Înternet Nîne";
 "plugin_popup_nautical_title" = "Nexşen deryavanî bi daxinin";
 "plugin_popup_wiki_title" = "Wîkîpediyayê daxe";
@@ -63,7 +63,7 @@
 "enter_name" = "Nav bi kevne";
 "language_short" = "Ziman";
 "res_wiki" = "Wîkîpediya";
-"res_roads" = "Rê";
+"res_roads" = "Riyan";
 "res_installing" = "Tê barkirin...";
 "description" = "Danasîn";
 "longitude" = "Hêlîlar";
@@ -156,7 +156,7 @@
 "shared_string_save_as" = "Bi awayekî cuda qeyd bike";
 "osm_working_days" = "Rojên Karê";
 "intro_next" = "Dû re";
-"transport_stop" = "Rawestgeh";
+"transport_stop" = "Bisekine";
 "transport_nearby_routes" = "NÊZÎK";
 "osm_deleted" = "Jêbirî";
 "poi_type" = "Cureya POIyê";
@@ -177,3 +177,4 @@
 "one" = "Yek";
 "shared_string_finish" = "Xilasek";
 "osm_notes" = "Notên OSMê";
+"group_name" = "Navê komê";

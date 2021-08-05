@@ -9,6 +9,8 @@
 #import "OACompoundViewController.h"
 
 @class OAPOICategory;
+@class OAPOIUIFilter;
+@class OAPOIType;
 
 @protocol OASelectSubcategoryDelegate
 
@@ -16,6 +18,7 @@
 
 - (void)selectSubcategoryCancel;
 - (void)selectSubcategoryDone:(OAPOICategory *)category keys:(NSMutableSet<NSString *> *)keys allSelected:(BOOL)allSelected;
+- (UIImage *)getPoiIcon:(OAPOIType *)poiType;
 
 @end
 
@@ -23,6 +26,6 @@
 
 @property (nonatomic, weak) id<OASelectSubcategoryDelegate> delegate;
 
-- (instancetype)initWithCategory:(OAPOICategory *)category subcategories:(NSSet<NSString *> *)subcategories selectAll:(BOOL)selectAll;
+- (instancetype)initWithCategory:(OAPOICategory *)category filter:(OAPOIUIFilter *)filter;
 
 @end

@@ -18,9 +18,6 @@
 #import "OAMeasurementToolLayer.h"
 #import "OAGPXDocumentPrimitives.h"
 
-#define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-#define kTitleDescrIconRoundCell @"OATitleDescriptionIconRoundCell"
-
 @interface OAPlanningOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -70,19 +67,18 @@
 {
     NSMutableArray *data = [NSMutableArray new];
     
-    // TODO: uncomment after implementing addNewSegement functionality
-    /*if (addNewSegmentAllowed)
+    if (addNewSegmentAllowed)
     {
         [data addObject:@[
             @{
-                @"type" : kIconTitleIconRoundCell,
+                @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : OALocalizedString(@"track_new_segment"),
                 @"img" : @"ic_custom_new_segment",
                 @"tintColor" : UIColorFromRGB(color_primary_purple),
                 @"key" : @"start_new_segment"
             }
         ]];
-    }*/
+    }
     
     NSString *descr;
     NSString *icon;
@@ -106,7 +102,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kTitleDescrIconRoundCell,
+            @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"route_betw_points"),
             @"img" : icon,
             @"descr" : descr,
@@ -115,21 +111,21 @@
     ]];
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"save_changes"),
             @"img" : @"ic_custom_save_to_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_changes"
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"save_new_track"),
             @"img" : @"ic_custom_save_as_new_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_new_track"
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_to_track"),
             @"img" : @"ic_custom_add_to_track",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
@@ -139,14 +135,14 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
-            @"title" : OALocalizedString(@"directions"),
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
+            @"title" : OALocalizedString(@"get_directions"),
             @"img" : @"left_menu_icon_navigation",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
-            @"key" : @"directions"
+            @"key" : @"get_directions"
         },
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"reverse_route"),
             @"img" : @"ic_custom_swap",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
@@ -156,7 +152,7 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_clear_all"),
             @"img" : @"ic_custom_remove",
             @"tintColor" : UIColorFromRGB(color_primary_red),
@@ -171,15 +167,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
         OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = UIColor.blackColor;
@@ -194,25 +188,23 @@
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
-                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             }
             else
             {
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
-            cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleDescrIconRoundCell])
+    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kTitleDescrIconRoundCell;
         OATitleDescriptionIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionIconRoundCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleDescrIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescriptionIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = UIColor.blackColor;
@@ -227,13 +219,13 @@
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
-                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             }
             else
             {
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
-            cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
         }
         return cell;
     }
@@ -283,7 +275,7 @@
             [self dismissViewControllerAnimated:NO completion:nil];
             [self.delegate addToTrackSelected];
         }
-        else if ([key isEqualToString:@"directions"])
+        else if ([key isEqualToString:@"get_directions"])
         {
             [self.delegate directionsSelected];
         }

@@ -49,7 +49,7 @@ static OAApplicationMode *_SKI;
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
-    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI];
+    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI    ];
     NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
     
     // left
@@ -94,7 +94,7 @@ static OAApplicationMode *_SKI;
     _values = [NSMutableArray array];
     _cachedFilteredValues = [NSMutableArray array];
     
-    _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
+    _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"rendering_value_browse_map_name") stringKey:@"default"];
     _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
     [_values addObject:_DEFAULT];
     
@@ -227,11 +227,13 @@ static OAApplicationMode *_SKI;
                                                   withHandler:@selector(onAvailableAppModesChanged)
                                                    andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
         }
-        NSString *available = settings.availableApplicationModes;
+        NSString *available = settings.availableApplicationModes.get;
         _cachedFilteredValues = [NSMutableArray array];
         for (OAApplicationMode *v in _values)
+        {
             if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
                 [_cachedFilteredValues addObject:v];
+        }
     }
     return [NSArray arrayWithArray:_cachedFilteredValues];
 }
@@ -298,10 +300,17 @@ static OAApplicationMode *_SKI;
 - (NSString *) toHumanString
 {
     NSString *userProfileName = [self getUserProfileName];
-    if (userProfileName.length == 0 && _name.length > 0)
-        return _name;
+    if (userProfileName.length == 0)
+    {
+        if (_name.length > 0)
+            return _name;
+        else
+            return _stringKey.capitalizedString;
+    }
     else
+    {
         return userProfileName;
+    }
 }
 
 - (BOOL) isCustomProfile
@@ -422,7 +431,7 @@ static OAApplicationMode *_SKI;
     return [OAAppSettings.sharedManager.routerService get:self];
 }
 
-- (void) setRouterService:(NSInteger) routerService
+- (void) setRouterService:(NSInteger)routerService
 {
     [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
 }
@@ -525,19 +534,23 @@ static OAApplicationMode *_SKI;
     return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"profile_type_custom_string");
 }
 
+- (OAApplicationModeBean *) toModeBean
+{
+    return [OAApplicationModeBean fromJson:self.toJson];
+}
+
 + (void) onApplicationStart
 {
     [self initCustomModes];
 //    [self initModesParams];
     [self initRegVisibility];
     [self reorderAppModes];
-    [OAAppSettings.sharedManager setupAppMode];
 }
 
 + (void) initCustomModes
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if (settings.customAppModes.length == 0)
+    if (settings.customAppModes.get.length == 0)
         return;
     
     for (NSString *appModeKey in [settings getCustomAppModesKeys])
@@ -584,8 +597,8 @@ static OAApplicationMode *_SKI;
             [res appendString:@","];
     }];
     
-    if (![res isEqualToString:settings.customAppModes])
-        settings.customAppModes = res;
+    if (![res isEqualToString:settings.customAppModes.get])
+        [settings.customAppModes set:res];
 }
 
 + (NSArray<OAApplicationMode *> *) getCustomAppModes
@@ -640,8 +653,8 @@ static OAApplicationMode *_SKI;
     [_values removeObjectsInArray:modes];
     
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if ([modes containsObject:settings.applicationMode])
-        [settings setApplicationMode:_DEFAULT];
+    if ([modes containsObject:settings.applicationMode.get])
+        [settings setApplicationModePref:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
     
@@ -671,9 +684,9 @@ static OAApplicationMode *_SKI;
         else
         {
             [selectedModes removeObject:mode];
-            if (settings.applicationMode == mode)
+            if (settings.applicationMode.get == mode)
             {
-                [settings setApplicationMode:_DEFAULT];
+                [settings setApplicationModePref:_DEFAULT];
             }
         }
         for (OAApplicationMode *m in selectedModes)
@@ -681,7 +694,8 @@ static OAApplicationMode *_SKI;
             [str appendString:m.stringKey];
             [str appendString:@","];
         }
-        [settings setAvailableApplicationModes:str];
+        [settings.availableApplicationModes set:str];
+        [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
 }
 
@@ -800,7 +814,8 @@ static OAApplicationMode *_SKI;
     res.locIcon = [self parseLocationIcon:jsonData[@"locIcon"]];
     res.navIcon = [self parseNavIcon:jsonData[@"navIcon"]];
     res.order = [jsonData[@"order"] intValue];
-    res.routeService = [jsonData[@"routeService"] integerValue];
+    NSInteger routerService = [self.class parseRouterService:jsonData[@"routeService"]];
+    res.routeService =  routerService;
     res.routingProfile = jsonData[@"routingProfile"];
     res.parent = jsonData[@"parent"];
     res.stringKey = jsonData[@"stringKey"];

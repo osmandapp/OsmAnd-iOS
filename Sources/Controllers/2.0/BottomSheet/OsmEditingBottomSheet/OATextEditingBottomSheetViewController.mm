@@ -9,8 +9,6 @@
 #import "OATextEditingBottomSheetViewController.h"
 #import "Localization.h"
 #import "OATextInputFloatingCell.h"
-#import "OASwitchTableViewCell.h"
-#import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAIAPHelper.h"
@@ -73,14 +71,14 @@
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     _data = [NSArray arrayWithObject:@{
-                                       @"type" : @"OATextInputFloatingCell",
+                                       @"type" : [OATextInputFloatingCell getCellIdentifier],
                                        @"cell" : [self getInputCellWithHint:_selectedCellData[@"placeholder"] text:_selectedCellData[@"title"]]
                                        }];
 }
 
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCell getCellIdentifier] owner:self options:nil];
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     resultCell.backgroundColor = [UIColor clearColor];
     MDCMultilineTextField *textField = resultCell.inputField;
@@ -92,8 +90,8 @@
     textField.layoutDelegate = self;
     textField.font = [UIFont systemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
     if (_inputType == USERNAME_INPUT || _inputType == PASSWORD_INPUT)
         textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     if (!_floatingTextFieldControllers)
@@ -117,14 +115,15 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OATextInputFloatingCell *cell = _data.firstObject[@"cell"];
+    [cell.inputField resignFirstResponder];
     switch (_inputType) {
         case USERNAME_INPUT:
-            [settings setOsmUserName:cell.inputField.text];
+            [settings.osmUserName set:cell.inputField.text];
             [vwController.messageDelegate refreshData];
             [vwController dismiss];
             break;
         case PASSWORD_INPUT:
-            [settings setOsmUserPassword:cell.inputField.text];
+            [settings.osmUserPassword set:cell.inputField.text];
             [vwController.messageDelegate refreshData];
             [vwController dismiss];
             break;
@@ -144,7 +143,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
@@ -169,7 +168,7 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
+    if ([item[@"type"] isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
         return item[@"cell"];
     else
         return nil;

@@ -257,13 +257,11 @@
 {
     if (self.unsortedPoints.count == 0)
     {
-        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
-        
         OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -276,13 +274,11 @@
     }
     else
     {
-        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-        
         OAPointTableViewCell* cell;
-        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -303,7 +299,7 @@
             
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:distanceStr];
-            cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
 

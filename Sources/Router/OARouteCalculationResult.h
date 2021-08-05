@@ -49,10 +49,11 @@
 
 - (instancetype) initWithLocations:(NSArray<CLLocation *> *)list directions:(NSArray<OARouteDirectionInfo *> *)directions params:(OARouteCalculationParams *)params waypoints:(NSArray<id<OALocationPoint>> *)waypoints addMissingTurns:(BOOL)addMissingTurns;
 
-- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode;
+- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint;
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute;
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex;
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex;
 - (QuadRect *) getLocationsRect;
 + (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName;
 
@@ -79,8 +80,8 @@
 - (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc;
 - (int) getIndexOfIntermediate:(int)countFromLast;
 - (int) getIntermediatePointsToPass;
-- (int) getLeftTime:(CLLocation *)fromLoc;
-- (int) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc;
+- (long) getLeftTime:(CLLocation *)fromLoc;
+- (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc;
 - (void) updateNextVisiblePoint:(int) nextPoint location:(CLLocation *) mp;
 - (int) getDistanceFromPoint:(int) locationIndex;
 - (BOOL) isPointPassed:(int)locationIndex;

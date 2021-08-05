@@ -167,6 +167,8 @@
     if (buttonEnabled)
     {
         _buttonClickHandler = buttonClickHandler;
+        [self.cardButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchDown];
+        [self.cardButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside];
         [self.cardButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [self.cardButton addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
         [self.cardButton addTarget:self action:@selector(onButtonDeselected) forControlEvents:UIControlEventTouchUpOutside];

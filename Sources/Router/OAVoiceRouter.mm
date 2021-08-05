@@ -76,7 +76,7 @@ std::string preferredLanguage;
         _router = router;
         _settings = [OAAppSettings sharedManager];
         
-        NSString *prefLang =  _settings.settingPrefMapLanguage == nil ? OALocalizedString(@"local_names") : _settings.settingPrefMapLanguage;
+        NSString *prefLang =  _settings.settingPrefMapLanguage.get == nil ? OALocalizedString(@"local_names") : _settings.settingPrefMapLanguage.get;
         preferredLanguage = std::string([prefLang UTF8String]);
         
         _voicePromptDelayDistance = 0.0;
@@ -142,7 +142,7 @@ std::string preferredLanguage;
 
 - (void) updateAppMode
 {
-    OAApplicationMode *appMode = _router.getAppMode == nil ? _settings.applicationMode : _router.getAppMode;
+    OAApplicationMode *appMode = _router.getAppMode == nil ? _settings.applicationMode.get : _router.getAppMode;
     // could be changed in future as others by default in settings is 45 kmh
     if ([appMode isDerivedRoutingFrom:[OAApplicationMode CAR]])
     {
@@ -662,7 +662,7 @@ std::string preferredLanguage;
 {
     // TODO check for announcement settings if we should anounce streeet names
     NSMutableDictionary *result = [NSMutableDictionary new];
-    if (next == nil || ![_settings.speakStreetNames get:_settings.applicationMode]) {
+    if (next == nil || ![_settings.speakStreetNames get:_settings.applicationMode.get]) {
         return result;
     }
     if (player != nil) {
@@ -680,14 +680,14 @@ std::string preferredLanguage;
             // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
             if (includeDest == true) {
                 const auto& obj = currentSegment->object;
-                result[@"fromRef"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]];
-                result[@"fromStreetName"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit).c_str()]];
-                result[@"fromDest"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getDestinationName(preferredLanguage, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]];
+                result[@"fromRef"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit.get, currentSegment->isForwardDirection()).c_str()]];
+                result[@"fromStreetName"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit.get).c_str()]];
+                result[@"fromDest"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getDestinationName(preferredLanguage, _settings.settingMapLanguageTranslit.get, currentSegment->isForwardDirection()).c_str()]];
             } else {
                 std::string val = std::string("en");
                 const auto& obj = currentSegment->object;
-                result[@"fromRef"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]];
-                result[@"fromStreetName"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit).c_str()]];
+                result[@"fromRef"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit.get, currentSegment->isForwardDirection()).c_str()]];
+                result[@"fromStreetName"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit.get).c_str()]];
                 result[@"fromDest"] = @"";
             }
         }

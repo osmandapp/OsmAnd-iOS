@@ -11,7 +11,6 @@
 #import "OACommonTypes.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
-#import "OAInAppCell.h"
 #import "OAColors.h"
 #import "OALocationConvert.h"
 #import "OAGpxWptItem.h"
@@ -69,7 +68,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         OAGpxWptItem *item = (OAGpxWptItem *) data;
         _docPath = item.docPath;
         _currentWpt = item.point;
-        _data = [OARootViewController.instance.mapPanel.mapViewController getLocationMarksOf:item.docPath];
+        _data = [OARootViewController.instance.mapPanel.mapViewController getLocationMarksOf:_docPath];
         _type = EOAWaypointGPX;
     }
     else if ([data isKindOfClass:OAFavoriteItem.class])
@@ -80,8 +79,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         {
             if (QString::compare(fav->getGroup(), _favorite.favorite->getGroup()) == 0)
             {
-                OAFavoriteItem *p = [[OAFavoriteItem alloc] init];
-                p.favorite = fav;
+                OAFavoriteItem *p = [[OAFavoriteItem alloc] initWithFavorite:fav];
                 [arr addObject:p];
             }
         }
@@ -123,7 +121,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }
         else if (_type == EOAWaypointFavorite)
         {
-            btn = [self createButton:((OAFavoriteItem *)_data[i]).favorite->getTitle().toNSString() tag:i];
+            btn = [self createButton:[((OAFavoriteItem *)_data[i]) getDisplayName] tag:i];
         }
         if ([_data[i] isEqual:_currentWpt] || [_data[i] isEqual:_favorite])
         {
@@ -155,7 +153,8 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         if (_docPath)
         {
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            gpx = [gpxDb getGPXItem:_docPath.lastPathComponent];
+            NSString *gpxFilePath = [OAUtilities getGpxShortPath:_docPath];
+            gpx = [gpxDb getGPXItem:gpxFilePath];
         }
         else
         {

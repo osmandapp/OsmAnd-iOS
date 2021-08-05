@@ -12,6 +12,7 @@
 
 @class OADestination;
 @class OADestinationItem;
+@class OAGPXDocument;
 
 @interface OADestinationsHelper : NSObject
 
@@ -33,14 +34,12 @@
 - (NSArray *) sortedDestinationsWithoutParking;
 
 - (NSInteger) pureDestinationsCount;
-- (OADestination *) getParkingPoint;
 
 - (void) showOnMap:(OADestination *)destination;
 - (void) hideOnMap:(OADestination *)destination;
 
 - (void) addHistoryItem:(OADestination *)destination;
 
-+ (void) addParkingReminderToCalendar:(OADestination *)destination;
-+ (void) removeParkingReminderFromCalendar:(OADestination *)destination;
+- (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup;
 
 @end

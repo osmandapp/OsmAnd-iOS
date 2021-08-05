@@ -28,7 +28,6 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OALocationServices.h"
 #import "OAGpxData.h"
-#import "OAGPXDocument.h"
 #import "OAGPXMutableDocument.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXTrackAnalysis.h"
@@ -40,24 +39,31 @@
 #import "OAMovePointCommand.h"
 #import "OAClearPointsCommand.h"
 #import "OAReversePointsCommand.h"
+#import "OAApplyGpxApproximationCommand.h"
 #import "OASegmentOptionsBottomSheetViewController.h"
 #import "OAPlanningOptionsBottomSheetViewController.h"
 #import "OAExitRoutePlanningBottomSheetViewController.h"
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
+#import "OASplitPointsCommand.h"
+#import "OAJoinPointsCommand.h"
 #import "OASaveGpxRouteAsyncTask.h"
 #import "OASaveTrackViewController.h"
 #import "OAOpenAddTrackViewController.h"
-#import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
 #import "QuadRect.h"
+#import "OASnapTrackWarningViewController.h"
+#import "OAGpxApproximationViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
 #define kDefaultMapRulerMarginBottom -17.0
 #define kDefaultMapRulerMarginLeft 120.0
+#define kPlanRouteMapRulerMarginLeft 70.0
+#define kToolbarHeight 60.0
+#define kHeaderSectionHeigh 60.0
 
 #define PLAN_ROUTE_MODE 0x1
 #define DIRECTION_MODE 0x2
@@ -78,7 +84,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 @interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate,
     OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate, OASnapToRoadProgressDelegate, OAPlanningOptionsDelegate,
-    OAOpenAddTrackDelegate, OASaveTrackViewControllerDelegate, OAExitRoutePlanningDelegate>
+    OAOpenAddTrackDelegate, OASaveTrackViewControllerDelegate, OAExitRoutePlanningDelegate, OAPlanningPopupDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -97,6 +103,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIView *actionButtonsContainer;
 @property (weak, nonatomic) IBOutlet UIButton *modeButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
+@property (weak, nonatomic) IBOutlet UIView *navbarView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewTailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *landscapeHeaderLeftContainerConstraint;
+@property (weak, nonatomic) IBOutlet UIView *landscapeHeaderContainerView;
+@property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderTitleView;
+@property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderDescriptionView;
+@property (weak, nonatomic) IBOutlet UIButton *landscapeExpandButton;
 
 @end
 
@@ -116,10 +130,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     OAInfoBottomView *_infoView;
     
+    UINavigationController *_approximationController;
+    __weak OAPlanningPopupBaseViewController *_currentPopupController;
+    
     int _modes;
     
     NSString *_fileName;
     CLLocation *_initialPoint;
+	
+	BOOL _showSnapWarning;
 }
 
 - (instancetype) init
@@ -163,7 +182,25 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
+- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning
+{
+    self = [super initWithNibName:@"OARoutePlanningHudViewController"
+                           bundle:nil];
+    if (self)
+    {
+		_showSnapWarning = showSnapWarning;
+        [self commonInit:editingCtx];
+        [self setMode:FOLLOW_TRACK_MODE on:followTrackMode];
+    }
+    return self;
+}
+
 - (void) commonInit
+{
+    [self commonInit:[[OAMeasurementEditingContext alloc] init]];
+}
+
+- (void) commonInit:(OAMeasurementEditingContext *)context
 {
     _app = OsmAndApp.instance;
     _settings = [OAAppSettings sharedManager];
@@ -171,7 +208,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _layer = _mapPanel.mapViewController.mapLayers.routePlanningLayer;
     _modes = 0x0;
     
-    _editingContext = [[OAMeasurementEditingContext alloc] init];
+    _editingContext = context;
     _editingContext.progressDelegate = self;
     _layer.editingCtx = _editingContext;
 }
@@ -184,11 +221,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
     _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
-    [_expandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    
-    [_undoButton setImage:[[UIImage imageNamed:@"ic_custom_undo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_redoButton setImage:[[UIImage imageNamed:@"ic_custom_redo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    
+    [_expandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
+    _landscapeExpandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
+    [_landscapeExpandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
+  
+    [_undoButton setImage:[UIImage templateImageNamed:@"ic_custom_undo"] forState:UIControlStateNormal];
+    [_redoButton setImage:[UIImage templateImageNamed:@"ic_custom_redo"] forState:UIControlStateNormal];
     _undoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     _redoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     
@@ -197,7 +235,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setEditing:YES];
-    [self updateDistancePointsText];
     [self show:YES state:EOADraggableMenuStateInitial onComplete:nil];
 //    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     [_mapPanel setTopControlsVisible:NO customStatusBarStyle:UIStatusBarStyleLightContent];
@@ -208,7 +245,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _closeButtonContainerView.layer.cornerRadius = 12.;
     _doneButtonContainerView.layer.cornerRadius = 12.;
     
-    [_closeButton setImage:[[UIImage imageNamed:@"ic_navbar_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_closeButton setImage:[UIImage templateImageNamed:@"ic_navbar_close"] forState:UIControlStateNormal];
     _closeButton.imageView.tintColor = UIColor.whiteColor;
     
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
@@ -219,16 +256,94 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self adjustMapViewPort];
     [self changeMapRulerPosition];
     [self adjustActionButtonsPosition:self.getViewHeight];
-    
+    [self adjustNavbarPosition];
+
     self.tableView.userInteractionEnabled = YES;
     [self.view bringSubviewToFront:self.tableView];
     
     [self addInitialPoint];
+    [self updateDistancePointsText];
+    
+    OAGpxData *gpxData = _editingContext.gpxData;
+    [self initMeasurementMode:gpxData addPoints:YES];
+    
+    if (gpxData)
+    {
+        OAGpxBounds bounds = gpxData.rect;
+        [self centerMapOnBBox:bounds];
+    }
     
     if (_fileName)
         [self addNewGpxData:[self getGpxFile:_fileName]];
-//    else if (editingCtx.isApproximationNeeded() && isFollowTrackMode())
-//        enterApproximationMode(mapActivity);
+    else if (_editingContext.isApproximationNeeded && self.isFollowTrackMode)
+        [self enterApproximationMode];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	if (_showSnapWarning)
+		[self enterApproximationMode];
+}
+
+- (void) doAdditionalLayout
+{
+    if ([self isLeftSidePresentation])
+    {
+        self.topHeaderContainerView.hidden = YES;
+        self.toolBarView.hidden = YES;
+        self.landscapeHeaderContainerView.hidden = NO;
+        
+        CGFloat buttonsViewHeight = kToolbarHeight + OAUtilities.getBottomMargin;
+        CGFloat buttonsViewY = DeviceScreenHeight - buttonsViewHeight;
+        
+        _landscapeHeaderContainerView.frame = CGRectMake(0, buttonsViewY, DeviceScreenWidth, buttonsViewHeight);
+        _landscapeHeaderLeftContainerConstraint.constant = self.scrollableView.frame.size.width;
+        CGFloat offset = self.currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight : 0;
+        self.tableView.frame = CGRectMake(0, offset, self.scrollableView.frame.size.width, buttonsViewY);
+        _infoView.frame = self.tableView.frame;
+        if (_approximationController)
+            _approximationController.view.frame = self.tableView.frame;
+        self.scrollableView.frame = CGRectMake(self.scrollableView.frame.origin.x, offset, self.scrollableView.frame.size.width, self.scrollableView.frame.size.height);
+        [self adjustActionButtonsPosition:self.getViewHeight];
+    }
+    else
+    {
+        _infoView.frame = self.scrollableView.bounds;
+        if (_approximationController)
+            _approximationController.view.frame = self.scrollableView.bounds;
+        self.topHeaderContainerView.hidden = NO;
+        self.toolBarView.hidden = NO;
+        self.landscapeHeaderContainerView.hidden = YES;
+    }
+    [self adjustNavbarPosition];
+}
+
+- (void) updateLayoutCurrentState
+{
+    BOOL isLandscape = [self isLeftSidePresentation];
+    if (isLandscape)
+    {
+        if (self.currentState == EOADraggableMenuStateInitial && !_editingContext.isInAddPointMode && !_editingContext.originalPointToMove && !_currentPopupController)
+            [self goMinimized:NO];
+        else
+            [self goFullScreen:NO];
+    }
+    else
+    {
+        if (self.currentState == EOADraggableMenuStateFullScreen)
+            [self goMinimized:NO];
+    }
+}
+
+- (CGFloat) getLandscapeYOffset
+{
+    return self.currentState == EOADraggableMenuStateInitial ? DeviceScreenHeight - self.additionalLandscapeOffset : self.additionalLandscapeOffset;
+}
+
+- (void) updateShowingState:(EOADraggableMenuState)state
+{
+    [self goMinimized:NO];
 }
 
 - (BOOL)supportsFullScreen
@@ -243,7 +358,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CGFloat)initialMenuHeight
 {
-    return _hudMode == EOAHudModeRoutePlanning ? 62. + self.toolBarView.frame.size.height : _infoView.getViewHeight;
+    if (_currentPopupController)
+        return _currentPopupController.initialHeight;
+    
+    CGFloat fullToolbarHeight = kToolbarHeight +  [OAUtilities getBottomMargin];
+    return _hudMode == EOAHudModeRoutePlanning ? kHeaderSectionHeigh + fullToolbarHeight : _infoView.getViewHeight;
 }
 
 - (CGFloat)expandedMenuHeight
@@ -256,9 +375,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return NO;
 }
 
-- (CGFloat) additionalLandscapeOffset
+- (BOOL) isLeftSidePresentation
 {
-    return 100.;
+    if (OAUtilities.isIPad)
+        return OAUtilities.isLandscape && _hudMode == EOAHudModeRoutePlanning && !OAUtilities.isWindowed;
+    return OAUtilities.isLandscape;
 }
 
 - (void) addInitialPoint
@@ -273,23 +394,28 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) adjustActionButtonsPosition:(CGFloat)height
 {
     CGRect buttonsFrame = _actionButtonsContainer.frame;
-    if (OAUtilities.isLandscapeIpadAware)
-        buttonsFrame.origin = CGPointMake(self.scrollableView.frame.size.width, DeviceScreenHeight - buttonsFrame.size.height - 15. - OAUtilities.getBottomMargin);
+    if ([self isLeftSidePresentation])
+    {
+        CGFloat leftMargin = self.currentState == EOADraggableMenuStateInitial ? OAUtilities.getLeftMargin : self.scrollableView.frame.size.width;
+        buttonsFrame.origin = CGPointMake(leftMargin, DeviceScreenHeight - buttonsFrame.size.height - 15. - self.toolBarView.frame.size.height);
+    }
     else
+    {
         buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
+    }
     _actionButtonsContainer.frame = buttonsFrame;
 }
 
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin = OAUtilities.isLandscapeIpadAware ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
+    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-kToolbarHeight - 25.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
+    CGFloat leftMargin = (_actionButtonsContainer.isHidden && ![self isLeftSidePresentation] ? 0 : _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width) + 16;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
 - (void) changeCenterOffset:(CGFloat)contentHeight
 {
-    if (OAUtilities.isLandscapeIpadAware)
+    if ([self isLeftSidePresentation])
     {
         _centerImageView.center = CGPointMake(DeviceScreenWidth * 0.75,
                                         self.view.frame.size.height * 0.5);
@@ -304,7 +430,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)adjustMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if ([OAUtilities isLandscapeIpadAware])
+    if ([self isLeftSidePresentation])
     {
         mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
         mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
@@ -325,12 +451,19 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         mapView.viewportYScale = _cachedYViewPort;
 }
 
+- (void) adjustNavbarPosition
+{
+    _navbarLeadingConstraint.constant = [self isLeftSidePresentation] && self.currentState != EOADraggableMenuStateInitial ? self.scrollableView.frame.size.width  : OAUtilities.getLeftMargin;
+}
+
 - (void) updateDistancePointsText
 {
     if (_layer != nil)
     {
         NSString *distanceStr = [_app getFormattedDistance:_editingContext.getRouteDistance];
-        self.titleLabel.text = [NSString stringWithFormat:@"%@, %@ %ld", distanceStr, OALocalizedString(@"points_count"), _editingContext.getPointsCount];
+        NSString *titleStr = [NSString stringWithFormat:@"%@, %@ %ld", distanceStr, OALocalizedString(@"points_count"), _editingContext.getPointsCount];
+        self.titleLabel.text = titleStr;
+        self.landscapeHeaderTitleView.text = titleStr;
     }
 }
 
@@ -345,7 +478,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-        img = [[UIImage imageNamed:@"ic_custom_straight_line"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        img = [UIImage templateImageNamed:@"ic_custom_straight_line"];
         tint = UIColorFromRGB(color_chart_orange);
     }
     [_modeButton setImage:img forState:UIControlStateNormal];
@@ -362,18 +495,21 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_layer exitMovingMode];
     [_layer updateLayer];
     _hudMode = EOAHudModeRoutePlanning;
+    
+    [self onPointsListChanged];
 }
 
 - (OAGPXMutableDocument *) getGpxFile:(NSString *)gpxFileName
 {
     OAGPXMutableDocument *gpxFile = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    const auto selectedFileConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName)]);
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFileName];
+    const auto selectedFileConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)]);
     const auto selectedFile = std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFileConst);
     if (selectedFile != nullptr)
         gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
     else
-        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpxFileName]];
+        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
     
     if (!gpxFile.routes)
         gpxFile.routes = [NSMutableArray new];
@@ -399,7 +535,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)centerMapOnBBox:(OAGpxBounds)routeBBox
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    BOOL landscape = [OAUtilities isLandscapeIpadAware];
+    BOOL landscape = [self isLeftSidePresentation];
     [mapPanel displayAreaOnMap:routeBBox.topLeft bottomRight:routeBBox.bottomRight zoom:0 bottomInset:!landscape ? self.getViewHeight : 0 leftInset:landscape ? self.tableView.frame.size.width : 0];
 }
 
@@ -415,7 +551,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) initMeasurementMode:(OAGpxData *)gpxData addPoints:(BOOL)addPoints
 {
     [_editingContext.commandManager setMeasurementLayer:_layer];
-//    [self enterMeasurementMode];
+    [self enterMeasurementMode];
     if (gpxData != nil && addPoints)
     {
         if (!self.isUndoMode)
@@ -434,6 +570,37 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self setupModeButton];
     [self setMode:UNDO_MODE on:NO];
 }
+
+- (void)enterMeasurementMode
+{
+    if (_layer)
+    {
+        [_mapPanel refreshMap];
+        [self updateDistancePointsText];
+    }
+}
+
+//private void enterMeasurementMode() {
+//    MapActivity mapActivity = getMapActivity();
+//    MeasurementToolLayer measurementLayer = getMeasurementLayer();
+//    if (mapActivity != null && measurementLayer != null) {
+//        measurementLayer.setInMeasurementMode(true);
+//        mapActivity.refreshMap();
+//        mapActivity.disableDrawer();
+//
+//        mainView.getViewTreeObserver().addOnGlobalLayoutListener(getWidgetsLayoutListener());
+//
+//        View collapseButton = mapActivity.findViewById(R.id.map_collapse_button);
+//        if (collapseButton != null && collapseButton.getVisibility() == View.VISIBLE) {
+//            wasCollapseButtonVisible = true;
+//            collapseButton.setVisibility(View.INVISIBLE);
+//        } else {
+//            wasCollapseButtonVisible = false;
+//        }
+//        updateMainIcon();
+//        updateDistancePointsText();
+//    }
+//}
 
 - (void) setAppMode:(OAApplicationMode *)appMode
 {
@@ -463,6 +630,124 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }];
 }
 
+- (void) handleMapTap:(CLLocationCoordinate2D)coord longPress:(BOOL)longPress
+{
+    if (!_editingContext.isInAddPointMode && _editingContext.selectedPointPosition == -1)
+        [self selectPoint:coord longPress:longPress];
+}
+
+- (double) getLowestDistance:(OAMapRendererView *)mapView
+{
+    CGPoint first = CGPointZero;
+    // 44 is the height of a point in px
+    CGPoint second = CGPointMake(0., 44.);
+    
+    OsmAnd::PointI firstPoint;
+    OsmAnd::PointI secondPoint;
+    
+    [mapView convert:first toLocation:&firstPoint];
+    [mapView convert:second toLocation:&secondPoint];
+    
+    OsmAnd::LatLon firstLatLon = OsmAnd::Utilities::convert31ToLatLon(firstPoint);
+    OsmAnd::LatLon secondLatLon = OsmAnd::Utilities::convert31ToLatLon(secondPoint);
+    
+    return getDistance(firstLatLon.latitude, firstLatLon.longitude, secondLatLon.latitude, secondLatLon.longitude);
+}
+
+- (void) selectPoint:(CLLocationCoordinate2D)location longPress:(BOOL)longPress
+{
+    OAMapRendererView *mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    
+    double lowestDistance = [self getLowestDistance:mapView];
+    for (NSInteger i = 0; i < _editingContext.getPointsCount; i++)
+    {
+        OAGpxTrkPt *pt = _editingContext.getPoints[i];
+        const auto latLon = OsmAnd::LatLon(pt.getLatitude, pt.getLongitude);
+        const auto point = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        
+        if (mapView.getVisibleBBox31.contains(point))
+        {
+            double distToPoint = getDistance(location.latitude, location.longitude, latLon.latitude, latLon.longitude);
+            if (distToPoint < lowestDistance)
+            {
+                lowestDistance = distToPoint;
+                _editingContext.selectedPointPosition = i;
+            }
+        }
+    }
+    if (_editingContext.selectedPointPosition != -1)
+    {
+        if (longPress)
+            [self onMovePoint:_editingContext.selectedPointPosition];
+        else
+            [self openSelectedPointMenu];
+    }
+    else if (!longPress)
+    {
+        _layer.pressPointLocation = [[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude];
+        [_editingContext.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:_layer center:NO]];
+        [self onPointsListChanged];
+    }
+}
+
+- (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint
+{
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    touchPoint.x *= mapViewController.mapView.contentScaleFactor;
+    touchPoint.y *= mapViewController.mapView.contentScaleFactor;
+    OsmAnd::PointI touchLocation;
+    [mapViewController.mapView convert:touchPoint toLocation:&touchLocation];
+    double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+    double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+    return CLLocationCoordinate2DMake(lat, lon);
+}
+
+- (void) startTrackNavigation
+{
+    if (_editingContext.hasRoute || _editingContext.hasChanges)
+    {
+        NSString *trackName = [self getSuggestedFileName];
+        OAGPXDocument *gpx = [_editingContext exportGpx:trackName];
+        if (gpx != nil)
+        {
+            [gpx applyBounds];
+            OAApplicationMode *appMode = _editingContext.appMode;
+            [self onCloseButtonPressed];
+            [self runNavigation:gpx appMode:appMode];
+        }
+        else
+        {
+            NSLog(@"An error occured while saving route planning track for navigation");
+        }
+    }
+    else
+    {
+        NSLog(@"An error occured while saving route planning track for navigation: no route to save");
+    }
+}
+
+- (void)enterApproximationMode
+{
+    OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
+    warningController.delegate = self;
+    _currentPopupController = warningController;
+    _approximationController = [[UINavigationController alloc] initWithRootViewController:warningController];
+    _approximationController.navigationBarHidden = YES;
+    _approximationController.view.frame = self.scrollableView.bounds;
+    _approximationController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.scrollableView addSubview:_approximationController.view];
+    [self addChildViewController:_approximationController];
+    [self updateViewAnimated];
+    
+    self.actionButtonsContainer.hidden = YES;
+    [self changeMapRulerPosition];
+}
+
+- (void)exitApproximationMode
+{
+    _editingContext.inApproximationMode = NO;
+}
+
 - (IBAction)closePressed:(id)sender
 {
     if (_editingContext.hasChanges)
@@ -479,10 +764,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (IBAction)donePressed:(id)sender
 {
-//    if ([self isFollowTrackMode])
-//        [self startTrackNavigation];
-//    else
-    [self saveChanges:SHOW_SNACK_BAR_AND_CLOSE showDialog:NO];
+    if ([self isFollowTrackMode])
+        [self startTrackNavigation];
+    else
+        [self saveChanges:SHOW_SNACK_BAR_AND_CLOSE showDialog:NO];
     [self dismiss];
 }
 
@@ -494,12 +779,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         if (self.currentState == EOADraggableMenuStateInitial)
         {
             [self goExpanded];
-            [button setImage:[[UIImage imageNamed:@"ic_custom_arrow_down"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+            [button setImage:[UIImage templateImageNamed:@"ic_custom_arrow_down"] forState:UIControlStateNormal];
         }
         else
         {
             [self goMinimized];
-            [button setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+            [button setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
         }
     }
 }
@@ -533,9 +818,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)showSegmentRouteOptions
 {
-    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeWholeRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeAll appMode:_editingContext.appMode];
-    bottomSheet.delegate = self;
-    [bottomSheet presentInViewController:self];
+    [_mapPanel refreshMap];
+    if (_editingContext.isApproximationNeeded)
+    {
+        [self enterApproximationMode];
+    }
+    else
+    {
+        OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeWholeRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeAll appMode:_editingContext.appMode];
+        bottomSheet.delegate = self;
+        [bottomSheet presentInViewController:self];
+    }
 }
 
 - (IBAction)modeButtonPressed:(id)sender
@@ -584,8 +877,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     NSString *displayedName = nil;
     if (gpxData != nil) {
         OAGPXDocument *gpxFile = gpxData.gpxFile;
-        if (gpxFile.fileName.length > 0)
-            displayedName = gpxFile.fileName.lastPathComponent.stringByDeletingPathExtension;
+        if (gpxFile.path.length > 0)
+            displayedName = gpxFile.path.lastPathComponent.stringByDeletingPathExtension;
         else if (gpxFile.tracks.count > 0)
             displayedName = gpxFile.tracks.firstObject.name;
     }
@@ -598,9 +891,18 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-        displayedName = gpxData.gpxFile.fileName.lastPathComponent.stringByDeletingPathExtension;
+        displayedName = gpxData.gpxFile.path.lastPathComponent.stringByDeletingPathExtension;
     }
     return displayedName;
+}
+
+- (NSString *) getSuggestedFilePath
+{
+    OAGpxData *gpxData = _editingContext.gpxData;
+    if (gpxData != nil && gpxData.gpxFile.path.length > 0)
+        return [OAUtilities getGpxShortPath:gpxData.gpxFile.path];
+    else
+        return [[self getSuggestedFileName] stringByAppendingPathExtension:@"gpx"];
 }
 
 - (NSString *) createUniqueFileName:(NSString *)fileName
@@ -652,7 +954,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (gpx != nil)
     {
         OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-        BOOL showOnMap = helper.activeGpx.find(QString::fromNSString(gpx.fileName)) != helper.activeGpx.end();
+        BOOL showOnMap = helper.activeGpx.find(QString::fromNSString(gpx.path)) != helper.activeGpx.end();
         [self saveExistingGpx:gpx showOnMap:showOnMap simplified:NO addToTrack:NO finalSaveAction:finalSaveAction];
     }
 }
@@ -660,7 +962,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) saveExistingGpx:(OAGPXDocument *)gpx showOnMap:(BOOL)showOnMap
                                  simplified:(BOOL)simplified addToTrack:(BOOL)addToTrack finalSaveAction:(EOAFinalSaveAction)finalSaveAction
 {
-    [self saveGpx:gpx.fileName gpxFile:gpx simplified:simplified addToTrack:addToTrack finalSaveAction:finalSaveAction showOnMap:showOnMap];
+    [self saveGpx:gpx.path gpxFile:gpx simplified:simplified addToTrack:addToTrack finalSaveAction:finalSaveAction showOnMap:showOnMap];
 }
 
 - (void) saveNewGpx:(NSString *)folderName fileName:(NSString *)fileName showOnMap:(BOOL)showOnMap
@@ -780,16 +1082,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
     }
     OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-    if ([_settings.mapSettingVisibleGpx containsObject:outFile.lastPathComponent])
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:outFile];
+    if (gpxFilePath && [_settings.mapSettingVisibleGpx.get containsObject:gpxFilePath])
     {
         // Refresh track if visible
-        [_settings hideGpx:@[outFile.lastPathComponent] update:YES];
+        [_settings hideGpx:@[gpxFilePath] update:YES];
         helper.activeGpx.remove(QString::fromNSString(outFile));
         [helper buildGpxList];
     }
-    if (showOnMap)
+    if (gpxFilePath && showOnMap)
     {
-        [_settings showGpx:@[outFile.lastPathComponent]];
+        [_settings showGpx:@[gpxFilePath]];
     }
 }
 
@@ -804,7 +1107,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (_editingContext.getPointsCount > 0)
     {
-        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithParams:[self getSuggestedFileName] showOnMap:YES simplifiedTrack:YES];
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:[self getSuggestedFileName] filePath:[self getSuggestedFilePath] showOnMap:YES simplifiedTrack:YES];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
@@ -826,10 +1129,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:OAUtilities.isLandscapeIpadAware ? 0. : (height - 30.) animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? kToolbarHeight : ( height - ([OAUtilities isIPad] ? 0. : OAUtilities.getBottomMargin)) animated:YES];
+    
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];
     [self adjustMapViewPort];
+    [self adjustNavbarPosition];
 }
 
 - (void) onPointsListChanged
@@ -867,11 +1172,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAMenuSimpleCellNoIcon";
-    OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
         cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
     }
     cell.textView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];
@@ -945,22 +1249,35 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return YES;
 }
 
+- (void)openSelectedPointMenu
+{
+    NSInteger selectedPos = _editingContext.selectedPointPosition;
+    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[selectedPos] index:selectedPos editingContext:_editingContext];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _editingContext.selectedPointPosition = indexPath.row;
-    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[indexPath.row] index:indexPath.row editingContext:_editingContext];
-    bottomSheet.delegate = self;
-    [bottomSheet presentInViewController:self];
+    [self openSelectedPointMenu];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - OAMeasurementLayerDelegate
 
-- (void)onMeasue:(double)distance bearing:(double)bearing
+- (void)onMeasure:(double)distance bearing:(double)bearing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
+        NSString *description = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
+        self.descriptionLabel.text = description;
+        self.landscapeHeaderDescriptionView.text = description;
     });
+}
+
+- (void)onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress
+{
+    [self handleMapTap:coordinate longPress:longPress];
 }
 
 #pragma mark - OAPointOptionsBottmSheetDelegate
@@ -996,6 +1313,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAGpxTrkPt *pt = _editingContext.getPoints[pointPosition];
     _editingContext.originalPointToMove = pt;
     [_layer enterMovingPointMode];
+    [self onPointsListChanged];
+    if (OAUtilities.isLandscapeIpadAware)
+        [self goFullScreen];
 }
 
 - (void) onClearPoints:(EOAClearPointsMode)mode
@@ -1026,11 +1346,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _infoView.clipsToBounds = NO;
     _infoView.layer.masksToBounds = YES;
     
-    //                measurementLayer.moveMapToPoint(editingCtx.getSelectedPointPosition());
+    [_layer moveMapToPoint:_editingContext.selectedPointPosition];
     _editingContext.addPointMode = type;
     [_editingContext splitSegments:_editingContext.selectedPointPosition + (type == EOAAddPointModeAfter ? 1 : 0)];
     
     [_layer updateLayer];
+    
+    [self onPointsListChanged];
     
     _infoView.delegate = self;
     [self.scrollableView addSubview:_infoView];
@@ -1046,6 +1368,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self.tableView endUpdates];
     [self updateDistancePointsText];
     _editingContext.selectedPointPosition = -1;
+}
+
+- (void)onClearSelection
+{
+    _editingContext.selectedPointPosition = -1;
+}
+
+- (void)onCloseMenu
+{
+    
 }
 
 #pragma mark - OAInfoBottomViewDelegate
@@ -1064,26 +1396,32 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                                                                                  oldPoint:_editingContext.originalPointToMove
                                                                                  newPoint:newPoint
                                                                                  position:_editingContext.selectedPointPosition]];
+        [_editingContext addPoint:newPoint];
+        [self exitMovePointMode:NO];
     }
     else if (_hudMode == EOAHudModeAddPoints)
     {
         [self onAddOneMorePointPressed:_editingContext.addPointMode];
+        [self exitAddPointMode];
     }
-    
-    [self onCloseButtonPressed];
+    [self hideInfoView];
 }
 
 - (void)onCloseButtonPressed
 {
-    _editingContext.selectedPointPosition = -1;
-    _editingContext.originalPointToMove = nil;
-    _editingContext.addPointMode = EOAAddPointModeUndefined;
-    [_editingContext splitSegments:_editingContext.getBeforePoints.count + _editingContext.getAfterPoints.count];
     if (_hudMode == EOAHudModeMovePoint)
-        [_layer exitMovingMode];
-    [_layer updateLayer];
-    _hudMode = EOAHudModeRoutePlanning;
-    
+    {
+        [self exitMovePointMode:YES];
+    }
+    else if (_hudMode == EOAHudModeAddPoints)
+    {
+        [self exitAddPointMode];
+    }
+    [self hideInfoView];
+}
+
+- (void)hideInfoView
+{
     [UIView animateWithDuration:.2 animations:^{
         _infoView.alpha = 0.;
         [self goMinimized];
@@ -1092,6 +1430,34 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_infoView removeFromSuperview];
         _infoView = nil;
     }];
+}
+
+- (void) exitMovePointMode:(BOOL)cancelled
+{
+    if (cancelled)
+    {
+        OAGpxTrkPt *pt = _editingContext.originalPointToMove;
+        [_editingContext addPoint:pt];
+    }
+    _editingContext.selectedPointPosition = -1;
+    _editingContext.originalPointToMove = nil;
+    [_editingContext splitSegments:_editingContext.getBeforePoints.count + _editingContext.getAfterPoints.count];
+    [_layer exitMovingMode];
+    [_layer updateLayer];
+    _hudMode = EOAHudModeRoutePlanning;
+    [self onPointsListChanged];
+    [self goMinimized];
+}
+
+- (void)exitAddPointMode
+{
+    _editingContext.selectedPointPosition = -1;
+    _editingContext.originalPointToMove = nil;
+    _editingContext.addPointMode = EOAAddPointModeUndefined;
+    [_editingContext splitSegments:_editingContext.getBeforePoints.count + _editingContext.getAfterPoints.count];
+    [_layer updateLayer];
+    _hudMode = EOAHudModeRoutePlanning;
+    [self onPointsListChanged];
 }
 
 - (void) onAddOneMorePointPressed:(EOAAddPointMode)mode
@@ -1121,6 +1487,33 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeNextRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeSingle appMode:_editingContext.getSelectedPointAppMode];
     bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self];
+}
+
+- (void) onSplitPointsAfter
+{
+    [_editingContext.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:_layer after:YES]];
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
+}
+
+- (void) onSplitPointsBefore
+{
+    [_editingContext.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:_layer after:NO]];
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
+}
+
+- (void) onJoinPoints
+{
+    [_editingContext.commandManager execute:[[OAJoinPointsCommand alloc] initWithLayer:_layer]];
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
 }
 
 #pragma mark - OASegmentOptionsDelegate
@@ -1191,14 +1584,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) addNewSegmentSelected
 {
-//    [self onSplitPointsAfter];
+    [self onSplitPointsAfter];
 }
 
 - (void) saveChangesSelected
 {
-//    if (self.isFollowTrackMode)
-//        [self startTrackNavigation];
-//    else
+    if (self.isFollowTrackMode)
+        [self startTrackNavigation];
+    else
         [self saveChanges:SHOW_TOAST showDialog:YES];
 }
 
@@ -1237,45 +1630,72 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
         else
         {
-//            NSString *trackName = [self getSuggestedFileName];
-//            if (_editingContext.hasRoute)
-//            {
-//                OAGPX *gpx = [_editingCtx exportGpx:trackName];
-//                if (gpx != nil)
-//                {
-//                    [self onCloseButtonPressed];
-//                    [self runNavigation:gpx appMode:appMode];
-//                }
+            NSString *trackName = [self getSuggestedFileName];
+            if (_editingContext.hasRoute)
+            {
+                OAGPXDocument *gpx = [_editingContext exportGpx:trackName];
+                if (gpx != nil)
+                {
+                    [self onCloseButtonPressed];
+                    [self runNavigation:gpx appMode:appMode];
+                }
 //                else
 //                {
-//                    NSLog(@"Trip planning error occured while saving gpx");
-////                    Toast.makeText(mapActivity, getString(R.string.error_occurred_saving_gpx), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mapActivity, getString(R.string.error_occurred_saving_gpx), Toast.LENGTH_SHORT).show();
 //                }
-//            }
-//            else
-//            {
-//                if (_editingCtx.isApproximationNeeded)
-//                {
-//                    self setMode:(DIRECTION_MODE, true);
-//                    self enterApproximationMode(mapActivity);
-//                }
-//                else
-//                {
-//                    OAGPX *gpx = [[OAGPX alloc] init];
-//                    gpx.poi
-//                    GPXFile gpx = new GPXFile(Version.getFullVersion(requireMyApplication()));
-//                    gpx.addRoutePoints(points, true);
-//                    dismiss(mapActivity);
-//                    targetPointsHelper.clearAllPoints(false);
-//                    mapActions.enterRoutePlanningModeGivenGpx(gpx, appMode, null, null, true, true, MenuState.HEADER_ONLY);
-//                }
-//            }
+            }
+            // TODO: add approximation
+            else
+            {
+                if (_editingContext.isApproximationNeeded) {
+                    [self setMode:DIRECTION_MODE on:YES];
+                    [self enterApproximationMode];
+                } else {
+                    OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
+                    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+                    NSMutableArray<OAGpxRtePt *> *pointsRte = [NSMutableArray new];
+                    for (OAGpxTrkPt *trkPt in points)
+                        [pointsRte addObject:[[OAGpxRtePt alloc] initWithTrkPt:trkPt]];
+                    [gpx addRoutePoints:pointsRte addRoute:NO];
+                    [self onCloseButtonPressed];
+                    [targetPointsHelper clearAllPoints:NO];
+                    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
+                    [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+                }
+            }
         }
     }
     else
     {
         // TODO: notify about the error
 //        Toast.makeText(mapActivity, getString(R.string.none_point_error), Toast.LENGTH_SHORT).show();
+    }
+}
+
+- (void) runNavigation:(OAGPXDocument *)gpx appMode:(OAApplicationMode *)appMode
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
+    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
+    if (routingHelper.isFollowingMode)
+    {
+        if ([self isFollowTrackMode])
+        {
+            [mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
+            [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
+            [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+        }
+        else
+        {
+            [mapPanel.mapActions stopNavigationWithoutConfirm];
+//            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+        }
+    }
+    else
+    {
+        [mapPanel.mapActions stopNavigationWithoutConfirm];
+        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx appMode:appMode path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
     }
 }
 
@@ -1303,43 +1723,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_editingContext cancelSnapToRoad];
     [self goMinimized];
 //    updateUndoRedoButton(false, redoBtn);
-    [self.tableView reloadData];
-    [self updateDistancePointsText];
-}
-
-- (void) runNavigation:(OAGPX *)gpx appMode:(OAApplicationMode *)appMode
-{
-    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-    OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    if (routingHelper.isFollowingMode)
-    {
-        if ([self isFollowTrackMode])
-        {
-            [mapPanel.mapActions setGPXRouteParams:gpx];
-            [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
-            [routingHelper recalculateRouteDueToSettingsChange];
-        }
-        else
-        {
-            
-            [mapPanel.mapActions stopNavigationActionConfirm];
-            // TODO
-//            mapActivity.getMapActions().stopNavigationActionConfirm(null , new Runnable() {
-//                @Override
-//                public void run() {
-//                    MapActivity mapActivity = getMapActivity();
-//                    if (mapActivity != null) {
-//                        mapActivity.getMapActions().enterRoutePlanningModeGivenGpx(gpx, appMode, null, null, true, true, MenuState.HEADER_ONLY);
-//                    }
-//                }
-//            });
-        }
-    }
-    else
-    {
-        [mapPanel.mapActions stopNavigationWithoutConfirm];
-        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
-    }
+    [self onPointsListChanged];
 }
 
 #pragma mark - OAOpenAddTrackDelegate
@@ -1356,7 +1740,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     else
         gpxFile = [self getGpxFile:gpxFileName];
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFileName)) != selectedGpxHelper.activeGpx.end();
+    BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFileName.lastPathComponent)) != selectedGpxHelper.activeGpx.end();
     [self saveExistingGpx:gpxFile showOnMap:showOnMap simplified:NO addToTrack:YES finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }
 
@@ -1377,6 +1761,78 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onSaveResultPressed
 {
     [self openSaveAsNewTrackMenu];
+}
+
+// MARK: OAPlanningPopupDelegate
+
+- (void)onPopupDismissed
+{
+    if (_approximationController)
+    {
+        [_approximationController.view removeFromSuperview];
+        [_approximationController removeFromParentViewController];
+        _currentPopupController = nil;
+        _approximationController = nil;
+        [self updateViewAnimated];
+    }
+    self.actionButtonsContainer.hidden = NO;
+    [self changeMapRulerPosition];
+}
+
+- (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
+{
+    [self setMode:DIRECTION_MODE on:NO];
+    [self exitApproximationMode];
+    if (hasApproximationStarted)
+    {
+        [_editingContext.commandManager undo];
+        [self setupModeButton];
+    }
+}
+
+- (void)onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController
+{
+    _currentPopupController = approximationController;
+    [self updateViewAnimated];
+}
+
+- (OAMeasurementEditingContext *)getCurrentEditingContext
+{
+    return _editingContext;
+}
+
+- (void)onApplyGpxApproximation
+{
+    [self exitApproximationMode];
+    [self updateDistancePointsText];
+//    doAddOrMovePointCommonStuff();
+	[self setupModeButton];
+    [self onPopupDismissed];
+    if ([self isDirectionMode] || [self isFollowTrackMode]) {
+        [self setMode:DIRECTION_MODE on:NO];
+        [self startTrackNavigation];
+    }
+    [self onCloseButtonPressed];
+    if (_showSnapWarning)
+        [self dismiss];
+}
+
+- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAGpxTrkPt *> *> *)pointsList mode:(OAApplicationMode *)mode
+{
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (_layer)
+		{
+			BOOL approximationMode = _editingContext.approximationMode;
+			_editingContext.approximationMode = YES;
+			OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc] initWithLayer:_layer approximations:gpxApproximations segmentPointsList:pointsList appMode:mode];
+			if (!approximationMode || ![_editingContext.commandManager update:command])
+			{
+				[_editingContext.commandManager execute:command];
+			}
+			[self goMinimized];
+			[self setupModeButton];
+		}
+	});
 }
 
 @end

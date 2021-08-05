@@ -60,10 +60,11 @@
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeRoadMap:
         case EOASettingsItemFileSubtypeSrtmMap:
-        case EOASettingsItemFileSubtypeRenderingStyle:
             return documentsPath;
+        case EOASettingsItemFileSubtypeRenderingStyle:
+            return [documentsPath stringByAppendingPathComponent:@"rendering"];
         case EOASettingsItemFileSubtypeTilesMap:
-            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];;
+            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];
         case EOASettingsItemFileSubtypeRoutingConfig:
             return [documentsPath stringByAppendingPathComponent:@"routing"];
         case EOASettingsItemFileSubtypeGpx:
@@ -139,7 +140,7 @@
             }
             case EOASettingsItemFileSubtypeTilesMap:
             {
-                if ([name hasSuffix:@".sqlitedb"])
+                if ([name hasSuffix:@".sqlitedb"] || name.pathExtension.length == 0)
                     return subtype;
                 break;
             }
@@ -178,6 +179,34 @@
     return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap;
 }
 
++ (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype
+{
+    switch (subtype)
+    {
+        case EOASettingsItemFileSubtypeObfMap:
+        case EOASettingsItemFileSubtypeTilesMap:
+        case EOASettingsItemFileSubtypeRoadMap:
+            return @"ic_custom_map";
+        case EOASettingsItemFileSubtypeSrtmMap:
+            return @"ic_custom_contour_lines";
+        case EOASettingsItemFileSubtypeWikiMap:
+            return @"ic_custom_wikipedia";
+        case EOASettingsItemFileSubtypeGpx:
+            return @"ic_custom_trip";
+        case EOASettingsItemFileSubtypeVoice:
+            return @"ic_custom_sound";
+        case EOASettingsItemFileSubtypeTravel:
+            return @"ic_custom_wikipedia";
+        case EOASettingsItemFileSubtypeRoutingConfig:
+            return @"ic_custom_route";
+        case EOASettingsItemFileSubtypeRenderingStyle:
+            return @"ic_custom_map_style";
+            
+        default:
+            return @"ic_custom_save_as_new_file";
+    }
+}
+
 @end
 
 @interface OAFileSettingsItem()
@@ -191,14 +220,17 @@
 @implementation OAFileSettingsItem
 {
     NSString *_name;
+    OsmAndAppInstance _app;
 }
 
 @dynamic name;
+@synthesize filePath = _filePath;
 
 - (void) commonInit
 {
-    _docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    _libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+    _app = OsmAndApp.instance;
+    _docPath = _app.documentsPath;
+    _libPath = _app.dataPath;
 }
 
 - (instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error
@@ -207,7 +239,9 @@
     if (self)
     {
         [self commonInit];
-        self.name = [filePath lastPathComponent];
+        self.name = [filePath stringByReplacingOccurrencesOfString:_docPath withString:@""];
+        if ([self.name hasPrefix:_libPath])
+            self.name = [@"/" stringByAppendingString:self.name.lastPathComponent];
         if (error)
         {
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
@@ -215,7 +249,7 @@
         }
             
         _filePath = filePath;
-        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath];
+        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
         if (self.subtype == EOASettingsItemFileSubtypeUnknown)
         {
             if (error)
@@ -249,6 +283,21 @@
                 *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFileSubtype userInfo:nil];
             return nil;
         }
+        else if (self.subtype == EOASettingsItemFileSubtypeGpx)
+        {
+            NSString *path = json[@"file"];
+            NSArray *pathComponents = [path pathComponents];
+            if (pathComponents.count > 2)
+            {
+                NSArray *filePathComponents = [pathComponents subarrayWithRange:NSMakeRange(2, pathComponents.count - 2)];
+                NSString *subfolderPath = [NSString pathWithComponents:filePathComponents];
+                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:subfolderPath];
+            }
+            else
+            {
+                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
+            }
+        }
         else
         {
             _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
@@ -266,7 +315,7 @@
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:destFilePath];
             [doc saveTo:destFilePath];
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[destFilePath lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
             break;
         }
@@ -373,6 +422,16 @@
     }
 }
 
+- (void) setFilePath:(NSString *)filePath
+{
+    _filePath = filePath;
+}
+
+- (NSString *)filePath
+{
+    return _filePath;
+}
+
 - (NSString *) getIconName
 {
     switch (_subtype)
@@ -389,7 +448,7 @@
 - (NSString *) getPluginPath
 {
     if (self.pluginId.length > 0)
-        return [[_libPath stringByAppendingPathComponent:@"Plugins"] stringByAppendingPathComponent:self.pluginId];
+        return [[_libPath stringByAppendingPathComponent:PLUGINS_DIR] stringByAppendingPathComponent:self.pluginId];
     
     return @"";
 }
@@ -456,14 +515,36 @@
         destFilePath = [self.item renameFile:destFilePath];
     
     NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *directory = [destFilePath stringByDeletingLastPathComponent];
-    if (![fileManager fileExistsAtPath:directory])
+    BOOL isDir = destFilePath.pathExtension.length == 0;
+    BOOL exists = [fileManager fileExistsAtPath:destFilePath];
+    if (isDir && !exists)
+    {
+        [fileManager createDirectoryAtPath:destFilePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    else if (!exists)
+    {
+        NSString *directory = [destFilePath stringByDeletingLastPathComponent];
         [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
-
-    NSError *copyError;
-    BOOL res = [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destFilePath error:&copyError];
-    if (error && copyError)
-        *error = copyError;
+    }
+    
+    BOOL res = NO;
+    if (!isDir)
+    {
+        NSError *copyError;
+        res = [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destFilePath error:&copyError];
+        if (error && copyError)
+            *error = copyError;
+    }
+    else
+    {
+        NSArray<NSString *> *files = [fileManager contentsOfDirectoryAtPath:filePath error:error];
+        for (NSString *file in files)
+        {
+            [fileManager moveItemAtPath:[filePath stringByAppendingPathComponent:file]
+                                 toPath:[destFilePath stringByAppendingPathComponent:file]
+                                  error:error];
+        }
+    }
     
     [self.item installItem:destFilePath];
     
@@ -478,8 +559,12 @@
 
 - (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *targetFolder = filePath.stringByDeletingLastPathComponent;
+    if (![fileManager fileExistsAtPath:targetFolder])
+        [fileManager createDirectoryAtPath:targetFolder withIntermediateDirectories:YES attributes:nil error:nil];
     NSError *copyError;
-    [[NSFileManager defaultManager] copyItemAtPath:self.item.fileName toPath:filePath error:&copyError];
+    [fileManager copyItemAtPath:self.item.filePath toPath:filePath error:&copyError];
     if (error && copyError)
     {
         *error = copyError;

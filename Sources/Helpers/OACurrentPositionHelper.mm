@@ -115,8 +115,8 @@
     OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
     params.mode = appMode;
     
-    auto config = _app.defaultRoutingConfig;
-    auto generalRouter = [_provider getRouter:params.mode];
+    auto config = [_app getRoutingConfigForMode:params.mode];
+    auto generalRouter = [_app getRouter:config mode:params.mode];
     if (generalRouter)
     {
         auto cf = [_provider initOsmAndRoutingConfig:config params:params generalRouter:generalRouter];
@@ -198,7 +198,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized(_roadLocatorSync)
         {
-            OAApplicationMode *appMode = _settings.applicationMode;
+            OAApplicationMode *appMode = _settings.applicationMode.get;
             if (!_ctx || _am != appMode)
             {
                 [self initCtx:appMode];

@@ -13,7 +13,11 @@
 @property (strong, nonatomic) IBOutlet UIView *navbarView;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UIButton *cancelButton;
+@property (strong, nonatomic) IBOutlet UIButton *doneButton;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
+
+- (void)onCancelButtonPressed;
+- (void)onDoneButtonPressed;
 
 @end

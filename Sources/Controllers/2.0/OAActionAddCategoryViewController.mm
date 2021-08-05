@@ -9,7 +9,6 @@
 #import "OAActionAddCategoryViewController.h"
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
-#import "OAIconTitleButtonCell.h"
 #import "OASizes.h"
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"
@@ -62,7 +61,7 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 55., 0.0, 0.0);
     self.tableView.tableHeaderView = _tableHeaderView;
     [self.tableView setEditing:YES];
-    [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
 }
 
@@ -108,7 +107,7 @@
     _searchField.delegate = self;
     [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"search_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"search_icon"]];
     leftImageView.contentMode = UIViewContentModeCenter;
     leftImageView.frame = _searchField.leftView.frame;
     leftImageView.tintColor = [UIColor whiteColor];
@@ -180,10 +179,10 @@
 {
     id category = [self getItem:indexPath];
     OATextLineViewCell* cell;
-    cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OATextLineViewCell"];
+    cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextLineViewCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
         cell = (OATextLineViewCell *)[nib objectAtIndex:0];
     }
     

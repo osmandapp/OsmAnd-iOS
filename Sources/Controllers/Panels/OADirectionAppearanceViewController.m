@@ -21,8 +21,6 @@
 #include "OASizes.h"
 #include "OAColors.h"
 
-#define kHeaderId @"TableViewSectionHeader"
-#define kFooterId @"TableViewSectionFooter"
 #define kActiveMarkers @"activeMarkers"
 #define kOneActiveMarker @"oneActiveMarker"
 #define kTwoActiveMarkers @"twoActiveMarkers"
@@ -62,8 +60,8 @@
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 }
 
 - (void) viewWillLayoutSubviews
@@ -116,76 +114,63 @@
     NSMutableArray *activeMarkersArr = [NSMutableArray array];
     NSMutableArray *distanceIndicationArr = [NSMutableArray array];
     NSMutableArray *appearanceOnMapArr = [NSMutableArray array];
-    
-    EOAActiveMarkerConstant activeMarkers = [_settings.activeMarkers get];
-    EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
 
     [activeMarkersArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kOneActiveMarker,
-                        @"value" : activeMarkers == ONE_ACTIVE_MARKER ? @YES : @NO,
                         @"title" : OALocalizedString(@"one"),
-                        @"fg_img" : @"ic_custom_direction_topbar_one.png",
-                        @"fg_color" : UIColorFromRGB(color_primary_purple),
-                        @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : activeMarkers == ONE_ACTIVE_MARKER ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray)
+                        @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
     
     [activeMarkersArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kTwoActiveMarkers,
-                        @"value" : activeMarkers == TWO_ACTIVE_MARKERS ? @YES : @NO,
                         @"title" : OALocalizedString(@"two"),
-                        @"fg_img" : @"ic_custom_direction_topbar_two.png",
-                        @"fg_color" : UIColorFromRGB(color_primary_purple),
-                        @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : activeMarkers == TWO_ACTIVE_MARKERS ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray)
+                        @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_two"  bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
 
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kDistanceIndication,
                         @"value" : @([_settings.distanceIndicationVisibility get]),
                         @"title" : OALocalizedString(@"distance_indication"),
                         }];
     
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kDistanceIndication,
                         @"key" : kTopBarDisplay,
-                        @"value" : distanceIndication == TOP_BAR_DISPLAY ? @YES : @NO,
                         @"title" : OALocalizedString(@"shared_string_topbar"),
-                        @"fg_img" : activeMarkers == ONE_ACTIVE_MARKER ? @"ic_custom_direction_topbar_one.png" : @"ic_custom_direction_topbar_two.png",
-                        @"fg_color" : UIColorFromRGB(color_primary_purple),
-                        @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : distanceIndication == TOP_BAR_DISPLAY ? UIColorFromRGB(color_chart_orange) :
-                            UIColorFromRGB(color_tint_gray)
+                        @"img_one" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_one_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_tint_gray)],
+                        @"img_two" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_two_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
     
     [distanceIndicationArr addObject:@{
-                        @"type" : @"OASettingsCheckmarkCell",
+                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kDistanceIndication,
                         @"key" : kWidgetDisplay,
-                        @"value" : distanceIndication == WIDGET_DISPLAY ? @YES : @NO,
                         @"title" : OALocalizedString(@"shared_string_widgets"),
-                        @"fg_img" : activeMarkers == ONE_ACTIVE_MARKER ? @"ic_custom_direction_widget_one.png" : @"ic_custom_direction_widget_two.png",
-                        @"fg_color" : UIColorFromRGB(color_primary_purple),
-                        @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : distanceIndication == WIDGET_DISPLAY ? UIColorFromRGB(color_chart_orange) :
-                        UIColorFromRGB(color_tint_gray)
+                        @"img_one" : [self drawDeviceImage:@"ic_custom_direction_widget_one" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_one_inactive" : [self drawDeviceImage:@"ic_custom_direction_widget_one" bgColor:UIColorFromRGB(color_tint_gray)],
+                        @"img_two" : [self drawDeviceImage:@"ic_custom_direction_widget_two" bgColor:UIColorFromRGB(color_chart_orange)],
+                        @"img_two_inactive" : [self drawDeviceImage:@"ic_custom_direction_widget_two" bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
    
     [appearanceOnMapArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kArrowsOnMap,
                         @"value" : @([_settings.arrowsOnMap get]),
                         @"title" : OALocalizedString(@"arrows_on_map"),
                         }];
     
     [appearanceOnMapArr addObject:@{
-                        @"type" : @"OASettingSwitchCell",
+                        @"type" : [OASettingSwitchCell getCellIdentifier],
                         @"key" : kLinesOnMap,
                         @"value" : @([_settings.directionLines get]),
                         @"title" : OALocalizedString(@"direction_lines"),
@@ -208,14 +193,17 @@
      _titleView.frame = titleFrame;
  }
 
-- (UIImage *) drawImage:(UIImage*) fgImage inImage:(UIImage*) bgImage bgColor:(UIColor *)bgColor fgColor:(UIColor *)fgColor
+- (UIImage *) drawDeviceImage:(NSString *)fgImage bgColor:(UIColor *)bgColor
  {
-     UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);
+     UIImage *fgImg = [UIImage templateImageNamed:fgImage];
+     UIImage *bgImg = [UIImage templateImageNamed:@"ic_custom_direction_device"];
+     UIColor *fgColor = UIColorFromRGB(color_primary_purple);
+     UIGraphicsBeginImageContextWithOptions(bgImg.size, NO, 0.0);
      
      [bgColor setFill];
-     [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
+     [bgImg drawInRect:CGRectMake(0.0, 0.0, bgImg.size.width, bgImg.size.height)];
      [fgColor setFill];
-     [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
+     [fgImg drawInRect:CGRectMake(0.0, 0.0, fgImg.size.width, fgImg.size.height)];
      
      UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
      UIGraphicsEndImageContext();
@@ -241,30 +229,55 @@
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OASettingsCheckmarkCell"])
+    if ([item[@"type"] isEqualToString:[OASettingsCheckmarkCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingsCheckmarkCell";
-        OASettingsCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingsCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsCheckmarkCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCheckmarkCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsCheckmarkCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
         }
-        UIImage *fgImage = [[UIImage imageNamed:item[@"fg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        UIImage *bgImage = [[UIImage imageNamed:item[@"bg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.iconImageView.image = [self drawImage:fgImage inImage:bgImage bgColor:item[@"bg_color"] fgColor:item[@"fg_color"]];
+        NSString *key = item[@"key"];
+        EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
+        EOAActiveMarkerConstant activeMarkers = [_settings.activeMarkers get];
+        BOOL selected = NO;
+        if ([key isEqualToString:kOneActiveMarker])
+        {
+            selected = activeMarkers == ONE_ACTIVE_MARKER;
+            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
+        }
+        else if ([key isEqualToString:kTwoActiveMarkers])
+        {
+            selected = activeMarkers == TWO_ACTIVE_MARKERS;
+            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
+        }
+        else if ([key isEqualToString:kTopBarDisplay])
+        {
+            selected = distanceIndication == TOP_BAR_DISPLAY;
+            if (activeMarkers == ONE_ACTIVE_MARKER)
+                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
+            else
+                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
+        }
+        else if ([key isEqualToString:kWidgetDisplay])
+        {
+            selected = distanceIndication == WIDGET_DISPLAY;
+            if (activeMarkers == ONE_ACTIVE_MARKER)
+                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
+            else
+                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
+        }
         cell.titleLabel.text = item[@"title"];
-        cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];
+        cell.checkmarkImageView.hidden = !selected;
         return cell;
     }
     else
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.descriptionView.hidden = YES;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -299,7 +312,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *title = [self getTitleForHeaderSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     if (!title)
     {
         vw.label.text = title;
@@ -333,7 +346,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     NSString *title = [self getTitleForFooterSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     vw.label.text = title;
     return vw;
 }
@@ -401,7 +414,6 @@
             [self setWidgetVisibility:YES collapsed:NO];
         }
     }
-    [self setupView];
     if ([_settings.distanceIndicationVisibility get])
         [tableView reloadRowsAtIndexPaths:[[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0], [NSIndexPath indexPathForRow:1 inSection:1], [NSIndexPath indexPathForRow:2 inSection:1], nil] withRowAnimation:UITableViewRowAnimationFade];
     else

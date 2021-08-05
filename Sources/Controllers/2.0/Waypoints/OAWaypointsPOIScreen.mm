@@ -200,10 +200,10 @@
     NSString *imgName = item[@"img"];
     
     OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+    cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
         cell.textView.numberOfLines = 0;
         cell.arrowIconView.hidden = YES;

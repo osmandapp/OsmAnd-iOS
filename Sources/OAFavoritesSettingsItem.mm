@@ -13,6 +13,8 @@
 #import "OsmAndApp.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
+#import "OAPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
 
@@ -21,15 +23,18 @@
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *items;
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *appliedItems;
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *existingItems;
+@property (nonatomic) NSMutableArray<OAFavoriteGroup *> *duplicateItems;
 
 @end
 
 @implementation OAFavoritesSettingsItem
 {
     OAAppSettings *_settings;
+    
+    OAFavoriteGroup *_personalGroup;
 }
 
-@dynamic items, appliedItems, existingItems;
+@dynamic items, appliedItems, existingItems, duplicateItems;
 
 - (void) initialization
 {
@@ -59,13 +64,17 @@
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     NSArray<OAFavoriteGroup *> *newItems = [self getNewItems];
+    if (_personalGroup)
+        [self.duplicateItems addObject:_personalGroup];
     if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
         QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *duplicate in self.duplicateItems)
         {
-            if ([self shouldReplace])
+            BOOL isPersonal = duplicate.isPersonal;
+            BOOL shouldReplace = [self shouldReplace] || isPersonal;
+            if (shouldReplace)
             {
                 OAFavoriteGroup *existingGroup = [self getGroup:duplicate.name];
                 if (existingGroup)
@@ -78,7 +87,30 @@
                     }
                 }
             }
-            [self.appliedItems addObject:[self shouldReplace] ? duplicate : [self renameItem:duplicate]];
+            if (!isPersonal)
+            {
+                [self.appliedItems addObject:shouldReplace ? duplicate : [self renameItem:duplicate]];
+            }
+            else
+            {
+                for (OAFavoriteItem *item in duplicate.points)
+                {
+                    if (item.specialPointType == OASpecialPointType.PARKING)
+                    {
+                        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+                        if (plugin)
+                        {
+                            BOOL isTimeRestricted = item.getTimestamp != nil;
+                            [plugin setParkingType:isTimeRestricted];
+                            [plugin setParkingTime:isTimeRestricted ? item.getTimestamp.timeIntervalSince1970 * 1000 : 0];
+                            [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
+                            [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
+                            if (item.getCalendarEvent)
+                                [OAFavoritesHelper addParkingReminderToCalendar];
+                        }
+                    }
+                }
+            }
         }
         app.favoritesCollection->removeFavoriteLocations(toDelete);
         NSArray<OAFavoriteItem *> *favourites = [NSArray arrayWithArray:[self getPointsFromGroups:self.appliedItems]];
@@ -87,6 +119,7 @@
             favoriteCollection->copyFavoriteLocation(favorite.favorite);
         app.favoritesCollection->mergeFrom(favoriteCollection);
         [app saveFavoritesToPermamentStorage];
+        [OAFavoritesHelper loadFavorites];
     }
 }
 
@@ -103,10 +136,15 @@
 - (BOOL) isDuplicate:(OAFavoriteGroup *)item
 {
     NSString *name = item.name;
-    for (OAFavoriteGroup *group in self.existingItems) {
-        if ([name isEqualToString:group.name]) {
-            return true;
-        }
+    if (item.isPersonal)
+    {
+        _personalGroup = item;
+        return NO;
+    }
+    for (OAFavoriteGroup *group in self.existingItems)
+    {
+        if ([name isEqualToString:group.name])
+            return YES;
     }
     return NO;
 }
@@ -131,7 +169,7 @@
     {
         number++;
         NSString *name = [NSString stringWithFormat:@"%@ (%d)", item.name, number];
-        OAFavoriteGroup *renamedItem = [[OAFavoriteGroup alloc] initWithPoints:item.points name:name isHidden:item.isHidden color:item.color];
+        OAFavoriteGroup *renamedItem = [[OAFavoriteGroup alloc] initWithPoints:item.points name:name isVisible:item.isVisible color:item.color];
         if (![self isDuplicate:renamedItem])
         {
             for (OAFavoriteItem *point in renamedItem.points)
@@ -147,6 +185,13 @@
 - (OASettingsItemReader *) getReader
 {
     return [[OAFavoritesSettingsItemReader alloc] initWithItem:self];
+}
+
+- (OASettingsItemWriter *)getWriter
+{
+    NSArray<OAFavoriteItem *> *favorites = [self getPointsFromGroups:self.items];
+    OAGPXDocument *doc = [OAFavoritesHelper asGpxFile:favorites];
+    return [self getGpxWriter:doc];
 }
 
 @end

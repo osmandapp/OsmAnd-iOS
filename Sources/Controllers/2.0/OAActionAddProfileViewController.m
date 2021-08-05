@@ -53,7 +53,7 @@
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 55., 0.0, 0.0);
     [self.tableView setEditing:YES];
-    [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
 }
 
@@ -98,14 +98,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAProfileDataObject *item = _data[indexPath.row];
-    static NSString* const identifierCell = @"OAMenuSimpleCell";
-    
     OAMenuSimpleCell* cell = nil;
     
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
         cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
     }
     
@@ -113,7 +111,7 @@
     {
         cell.textView.text = item.name;
         cell.descriptionView.text = item.descr;
-        cell.imgView.image = [[UIImage imageNamed:item.iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imgView.image = [UIImage templateImageNamed:item.iconName];
         cell.imgView.tintColor = UIColorFromRGB(item.iconColor);
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         if ([_initialValues containsObject:item.stringKey])

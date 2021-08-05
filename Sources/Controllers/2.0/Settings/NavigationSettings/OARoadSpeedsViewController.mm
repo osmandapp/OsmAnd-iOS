@@ -19,8 +19,6 @@
 #import "OASliderWithValuesCell.h"
 #import "OARangeSliderCell.h"
 
-#define kCellTypeSpeed @"time_cell"
-#define kCellTypeSlider @"OASliderWithValuesCell"
 #define kSidePadding 16
 #define kTopPadding 16
 
@@ -109,7 +107,7 @@
 
 - (void) generateData
 {
-    auto router = [OARouteProvider getRouter:self.appMode];
+    auto router = [OsmAndApp.instance getRouter:self.appMode];
     _units = [OASpeedConstant toShortString:[_settings.speedSystem get:self.appMode]];
     switch ([_settings.speedSystem get:self.appMode])
     {
@@ -151,17 +149,17 @@
 {
     NSMutableArray *tableData = [NSMutableArray array];
     [tableData addObject:@{
-        @"type" : kCellTypeSpeed,
+        @"type" : [OATimeTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"logging_min_speed"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _minValue, _units],
     }];
     [tableData addObject:@{
-        @"type" : kCellTypeSpeed,
+        @"type" : [OATimeTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"maximum_speed"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _maxValue, _units],
     }];
     [tableData addObject:@{
-        @"type" : kCellTypeSlider,
+        @"type" : [OASliderWithValuesCell getCellIdentifier],
         @"minValue" : [NSString stringWithFormat:@"%ld %@", _baseMinSpeed, _units],
         @"maxValue" : [NSString stringWithFormat:@"%ld %@", _baseMaxSpeed, _units],
     }];
@@ -184,14 +182,13 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeSpeed])
+    if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.lbTime.textColor = UIColor.blackColor;
@@ -200,14 +197,13 @@
         cell.lbTime.text = item[@"value"];
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeSlider])
+    else if ([cellType isEqualToString:[OASliderWithValuesCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OARangeSliderCell";
         OARangeSliderCell* cell = nil;
-        cell = (OARangeSliderCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OARangeSliderCell *)[tableView dequeueReusableCellWithIdentifier:[OARangeSliderCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARangeSliderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARangeSliderCell getCellIdentifier] owner:self options:nil];
             cell = (OARangeSliderCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.minLabel.text = OALocalizedString(@"shared_string_min");

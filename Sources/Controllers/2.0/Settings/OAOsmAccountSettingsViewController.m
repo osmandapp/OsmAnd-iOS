@@ -38,8 +38,8 @@
 {
     [super viewDidLoad];
     
-    _newUserName = _settings.osmUserName;
-    _newPassword = _settings.osmUserPassword;
+    _newUserName = _settings.osmUserName.get;
+    _newPassword = _settings.osmUserPassword.get;
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -69,7 +69,7 @@
 
 - (void)applyLocalization
 {
-    self.titleView.text = _settings.osmUserName.length > 0 ? OALocalizedString(@"shared_string_account") : OALocalizedString(@"shared_string_account_add");
+    self.titleView.text = _settings.osmUserName.get.length > 0 ? OALocalizedString(@"shared_string_account") : OALocalizedString(@"shared_string_account_add");
     [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
@@ -81,7 +81,7 @@
 
 - (NSString *) getTextForIndex:(NSInteger)index
 {
-    return index == 0 ? _settings.osmUserName : _settings.osmUserPassword;
+    return index == 0 ? _settings.osmUserName.get : _settings.osmUserPassword.get;
 }
 
 - (NSString *) getHintForIndex:(NSInteger)index
@@ -91,8 +91,8 @@
 
 - (void)doneButtonPressed
 {
-    [_settings setOsmUserName:_newUserName];
-    [_settings setOsmUserPassword:_newPassword];
+    [_settings.osmUserName set:_newUserName];
+    [_settings.osmUserPassword set:_newPassword];
     if (self.delegate)
         [self.delegate onAccountInformationUpdated];
 
@@ -123,11 +123,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAInputCellWithTitle";
-    OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:[OAInputCellWithTitle getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputCellWithTitle getCellIdentifier] owner:self options:nil];
         cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];

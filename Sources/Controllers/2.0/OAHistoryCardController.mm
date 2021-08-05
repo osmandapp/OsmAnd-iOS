@@ -14,7 +14,6 @@
 #import "OAAutoObserverProxy.h"
 #import "MGSwipeButton.h"
 #import "OAUtilities.h"
-#import "OADestinationCell.h"
 #import "OARootViewController.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
@@ -101,10 +100,10 @@
 - (UITableViewCell *)cellForRow:(NSInteger)row
 {
     OADirectionTableViewCell* cell;
-    cell = (OADirectionTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OADirectionTableViewCell"];
+    cell = (OADirectionTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OADirectionTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADirectionCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADirectionTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OADirectionTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -144,7 +143,6 @@
     if (cardItem.item.hType == OAHistoryTypeParking)
     {
         dirCell.leftIcon.image = [UIImage imageNamed:@"ic_parking_pin_small"];
-        [dirCell.titleLabel setText:cardItem.item.name];
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(cardItem.direction);
         
         NSMutableString *descText = [NSMutableString string];
@@ -153,14 +151,13 @@
             [descText appendString:cardItem.distanceStr];
         }
         
-        [dirCell.descLabel setText:descText];
+        [dirCell setTitle:cardItem.item.name andDescription:descText];
     }
     else
     {
         dirCell.leftIcon.image = [UIImage imageNamed:@"ic_map_pin_small"];
-        [dirCell.titleLabel setText:cardItem.item.name];
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(cardItem.direction);
-        [dirCell.descLabel setText:cardItem.distanceStr];
+        [dirCell setTitle:cardItem.item.name andDescription:cardItem.distanceStr];
     }
 }
 

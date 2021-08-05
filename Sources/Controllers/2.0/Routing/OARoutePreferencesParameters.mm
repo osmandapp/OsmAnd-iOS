@@ -24,7 +24,11 @@
 #import "OAAbstractCommandPlayer.h"
 #import "OAColors.h"
 #import "OAAvoidSpecificRoads.h"
+#import "OAGPXDocument.h"
 #import "OsmAndApp.h"
+#import "OAIconTitleValueCell.h"
+#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 
 #include <generalRouter.h>
 
@@ -39,7 +43,7 @@
     if (self)
     {
         [self commonInit];
-        _am = _settings.applicationMode;
+        _am = _settings.applicationMode.get;
     }
     return self;
 }
@@ -73,14 +77,14 @@
 
 - (BOOL) isSelected
 {
-    OAProfileBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
+    OACommonBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
     
     return [property get:_am];
 }
 
 - (void) setSelected:(BOOL)isChecked
 {
-    OAProfileBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
+    OACommonBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
     
     [property set:isChecked mode:_am];
     if (self.delegate)
@@ -122,7 +126,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASwitchCell";
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -134,22 +138,27 @@
 {
 }
 
+- (void)applyNewParameterValue:(BOOL)isChecked
+{
+    if (self.routingParameter.id == "short_way")
+        [self.settings.fastRouteMode set:!isChecked mode:[self.routingHelper getAppMode]];
+    
+    [self setSelected:isChecked];
+    
+    if ([self isKindOfClass:[OAOtherLocalRoutingParameter class]])
+        [self updateGpxRoutingParameter:((OAOtherLocalRoutingParameter *) self)];
+    
+    if ([self routeAware])
+        [self.routingHelper recalculateRouteDueToSettingsChange];
+}
+
 - (void) applyRoutingParameter:(id)sender
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
         BOOL isChecked = ((UISwitch *) sender).on;
         // if short way that it should set valut to fast mode opposite of current
-        if (self.routingParameter.id == "short_way")
-            [self.settings.fastRouteMode set:!isChecked mode:[self.routingHelper getAppMode]];
-        
-        [self setSelected:isChecked];
-        
-        if ([self isKindOfClass:[OAOtherLocalRoutingParameter class]])
-            [self updateGpxRoutingParameter:((OAOtherLocalRoutingParameter *) self)];
-        
-        if ([self routeAware])
-            [self.routingHelper recalculateRouteDueToSettingsChange];
+        [self applyNewParameterValue:isChecked];
     }
 }
 
@@ -166,30 +175,43 @@
             NSArray<CLLocation *> *ps = [rp getPoints];
             if (ps.count > 0)
             {
-                CLLocation *first = ps[0];
-                CLLocation *end = ps[ps.count - 1];
-                OARTargetPoint *pn = [tg getPointToNavigate];
-                BOOL update = false;
-                if (!pn || [pn.point distanceFromLocation:first] < 10)
+                if (rp.file.getNonEmptySegmentsCount > 0)
                 {
-                    [tg navigateToPoint:end updateRoute:false intermediate:-1];
-                    update = true;
+                    OARTargetPoint *endPoint = selected ? [tg getPointToStart] : nil;
+                    CLLocation *endLocation = endPoint != nil ? endPoint.point : ps.lastObject;
+                    CLLocation *startLoc = selected ? ps.firstObject : ([tg getPointToNavigate] != nil ? [tg getPointToNavigate].point : ps.firstObject);
+                    [tg navigateToPoint:endLocation updateRoute:NO intermediate:-1];
+                    if ([tg getPointToStart])
+                        [tg setStartPoint:startLoc updateRoute:false name:nil];
+                    [tg updateRouteAndRefresh:YES];
                 }
-                if (![tg getPointToStart] || [[tg getPointToStart].point distanceFromLocation:end] < 10)
+                else
                 {
-                    [tg setStartPoint:first updateRoute:false name:nil];
-                    update = true;
-                }
-                if (update)
-                {
-                    [tg updateRouteAndRefresh:true];
+                    CLLocation *first = ps[0];
+                    CLLocation *end = ps[ps.count - 1];
+                    OARTargetPoint *pn = [tg getPointToNavigate];
+                    BOOL update = false;
+                    if (!pn || [pn.point distanceFromLocation:first] < 10)
+                    {
+                        [tg navigateToPoint:end updateRoute:false intermediate:-1];
+                        update = true;
+                    }
+                    if (![tg getPointToStart] || [[tg getPointToStart].point distanceFromLocation:end] < 10)
+                    {
+                        [tg setStartPoint:first updateRoute:false name:nil];
+                        update = true;
+                    }
+                    if (update)
+                    {
+                        [tg updateRouteAndRefresh:true];
+                    }
                 }
             }
         }
         else if ([gpxParam getId] == gpx_option_calculate_first_last_segment_id)
         {
             [rp setCalculateOsmAndRouteParts:selected];
-            self.settings.gpxRouteCalcOsmandParts = selected;
+            [self.settings.gpxRouteCalcOsmandParts set:selected];
         }
         else if ([gpxParam getId] == gpx_option_from_start_point_id)
         {
@@ -197,19 +219,19 @@
         }
         else if ([gpxParam getId] == use_points_as_intermediates_id)
         {
-            self.settings.gpxCalculateRtept = selected;
+            [self.settings.gpxCalculateRtept set:selected];
             [rp setUseIntermediatePointsRTE:selected];
         }
         else if ([gpxParam getId] == calculate_osmand_route_gpx_id)
         {
-            self.settings.gpxRouteCalc = selected;
+            [self.settings.gpxRouteCalc set:selected];
             [rp setCalculateOsmAndRoute:selected];
             if (self.delegate)
                 [self.delegate updateParameters];
         }
     }
     if ([gpxParam getId] == calculate_osmand_route_without_internet_id)
-        self.settings.gpxRouteCalcOsmandParts = selected;
+        [self.settings.gpxRouteCalcOsmandParts set:selected];
     
     if ([gpxParam getId] == fast_route_mode_id)
         [self.settings.fastRouteMode set:selected];
@@ -234,7 +256,7 @@
 
 - (NSString *)getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (UIImage *)getIcon
@@ -297,6 +319,12 @@
 - (void) setSelected:(BOOL)isChecked
 {
     _selected = isChecked;
+}
+
+- (BOOL) routeAware
+{
+    // Prevent the route from refreshing twice when "reverse route" setting is changed
+    return self.getId != gpx_option_reverse_route_id;
 }
 
 @end
@@ -366,7 +394,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (OALocalRoutingParameter *) getSelected
@@ -445,7 +473,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -505,7 +533,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASwitchCell";
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -544,7 +572,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -562,9 +590,9 @@
 {
     OAApplicationMode *am = [self getApplicationMode];
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto rm = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
+    auto rm = [app getRoutingConfigForMode:am]->getRouter([am.getRoutingProfile UTF8String]);
     if (!rm && am.parent)
-        rm = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
+        rm = [app getRoutingConfigForMode:am.parent]->getRouter([am.parent.getRoutingProfile UTF8String]);
     
     auto& params = rm->getParametersList();
     for (auto& r : params)
@@ -599,7 +627,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -617,9 +645,9 @@
 {
     OAApplicationMode *am = [self getApplicationMode];
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto rm = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
+    auto rm = [app getRoutingConfigForMode:am]->getRouter([am.getRoutingProfile UTF8String]);
     if (!rm && am.parent)
-        rm = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
+        rm = [app getRoutingConfigForMode:am.parent]->getRouter([am.parent.getRoutingProfile UTF8String]);
     
     auto& params = rm->getParametersList();
     for (auto& r : params)
@@ -649,13 +677,13 @@
 
 - (NSString *) getValue
 {
-    NSString *path = self.settings.followTheGpxRoute;
+    NSString *path = self.settings.followTheGpxRoute.get;
     return !path ? @"" : [[[[path lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
 }
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -690,7 +718,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (BOOL) isSelected
@@ -741,7 +769,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingSwitchCell";
+    return [OASettingSwitchCell getCellIdentifier];
 }
 
 - (BOOL) isSelected
@@ -793,7 +821,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OAIconTitleValueCell";
+    return [OAIconTitleValueCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath

@@ -23,6 +23,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
 #import "OATransportRoutingHelper.h"
+#import "OAGpxRouteApproximation.h"
 
 #import <Reachability.h>
 #import <OsmAndCore/Utilities.h>
@@ -139,7 +140,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
         return;
     }
     BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable;
-    if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts)
+    if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts.get)
     {
         if (_params.previousToRecalculate && [_params.previousToRecalculate isCalculated])
         {
@@ -252,7 +253,7 @@ static BOOL _isDeviatedFromRoute = false;
         _voiceRouter = [[OAVoiceRouter alloc] initWithHelper:self];
         [_voiceRouter setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:_voiceRouter voiceProvider:[_settings.voiceProvider get]]];
         _provider = [[OARouteProvider alloc] init];
-        [self setAppMode:_settings.applicationMode];
+        [self setAppMode:_settings.applicationMode.get];
         _progressRoutes = [NSMutableArray new];
         _transportRoutingHelper = OATransportRoutingHelper.sharedInstance;
     }
@@ -512,7 +513,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (double) getArrivalDistance
 {
-    OAApplicationMode *m = _mode == nil ? _settings.applicationMode : _mode;
+    OAApplicationMode *m = _mode == nil ? _settings.applicationMode.get : _mode;
     float defaultSpeed = MAX(0.3f, [m getDefaultSpeed]);
 
     /// Used to be: car - 90 m, bicycle - 50 m, pedestrian - 20 m
@@ -920,7 +921,7 @@ static BOOL _isDeviatedFromRoute = false;
         // proceed to the next point with min acceptable bearing
         double ANGLE_TO_DECLINE = _route.routeVisibleAngle;
         int nextPoint = _route.currentRoute;
-        for (; nextPoint < routeNodes.count - 1; nextPoint++)
+        for (; nextPoint < (NSInteger) routeNodes.count - 1; nextPoint++)
         {
             float bearingTo = [currentLocation bearingTo:routeNodes[nextPoint]];
             float bearingTo2 = [routeNodes[nextPoint] bearingTo:routeNodes[nextPoint + 1]];
@@ -1146,8 +1147,8 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (NSString *) getRouteSegmentStreetName:(std::shared_ptr<RouteSegmentResult>)rs
 {
-    string locale = _settings.settingPrefMapLanguage ? [_settings.settingPrefMapLanguage UTF8String] : "";
-    BOOL transliterate = _settings.settingMapLanguageTranslit;
+    string locale = _settings.settingPrefMapLanguage.get ? [_settings.settingPrefMapLanguage.get UTF8String] : "";
+    BOOL transliterate = _settings.settingMapLanguageTranslit.get;
     NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
     NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
     NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
@@ -1185,12 +1186,12 @@ static BOOL _isDeviatedFromRoute = false;
     return [_route getDistanceToNextIntermediate:_lastFixedLocation];
 }
 
-- (int) getLeftTime
+- (long) getLeftTime
 {
     return [_route getLeftTime:_lastFixedLocation];
 }
 
-- (int) getLeftTimeNextIntermediate
+- (long) getLeftTimeNextIntermediate
 {
     return [_route getLeftTimeToNextIntermediate:_lastFixedLocation];
 }
@@ -1241,8 +1242,9 @@ static BOOL _isDeviatedFromRoute = false;
         
         if (!newFinalLocation)
         {
-            _settings.followTheRoute = false;
-            _settings.followTheGpxRoute = nil;
+            [_settings.followTheRoute set:NO];
+            [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
+            [_settings.followTheGpxRoute set:nil];
             // clear last fixed location
             _lastProjection = nil;
             [self setFollowingMode:NO];
@@ -1275,6 +1277,24 @@ static BOOL _isDeviatedFromRoute = false;
 - (float) getCurrentMaxSpeed
 {
     return [_route getCurrentMaxSpeed];
+}
+
+- (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end
+{
+	return [_provider getRoutingEnvironment:mode start:start end:end];
+}
+
+- (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
+{
+	return [_provider generateGpxPoints:env gctx:gctx locationsHolder:locationsHolder];
+}
+
+- (SHARED_PTR<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
+														   gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
+														 points:(std::vector<SHARED_PTR<GpxPoint>> &)points
+												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+	return [_provider calculateGpxApproximation:env gctx:gctx points:points resultMatcher:resultMatcher];
 }
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards

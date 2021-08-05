@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
     EOAAddPointModeAfter
 };
 
-@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxRtePt, OAGpxTrkSeg, OARoadSegmentData, OAGPXMutableDocument;
+@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxRtePt, OAGpxTrkSeg, OARoadSegmentData, OAGPXMutableDocument, OAGpxRouteApproximation;
 
 @protocol OASnapToRoadProgressDelegate
 
@@ -51,15 +51,18 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 @property (nonatomic) BOOL inApproximationMode;
 
 @property (nonatomic) OAGpxData *gpxData;
+@property (nonatomic) NSInteger selectedSegment;
 
 @property (nonatomic) EOACalculationMode lastCalculationMode;
 
 @property (nonatomic) EOAAddPointMode addPointMode;
+@property (nonatomic, assign) BOOL approximationMode;
 
 @property (nonatomic) NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *roadSegmentData;
 
 - (NSArray<OAGpxTrkPt *> *) getAllPoints;
 - (NSArray<OAGpxTrkPt *> *) getPoints;
+- (NSArray<NSArray<OAGpxTrkPt *> *> *) getPointsSegments:(BOOL)plain route:(BOOL)route;
 - (NSArray<OAGpxTrkPt *> *) getBeforePoints;
 - (NSArray<OAGpxTrkPt *> *) getAfterPoints;
 - (NSInteger) getPointsCount;
@@ -70,6 +73,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
 - (void) addPoints:(NSArray<OAGpxTrkPt *> *)points;
 - (void) addPoints;
+- (void) setPoints:(NSArray<OAGpxTrkPt *> *)points;
 
 - (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine;
 - (NSArray<OAGpxTrkSeg *> *) getAfterTrkSegmentLine;
@@ -84,6 +88,8 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) addPoint:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode;
 - (void) addPoint:(NSInteger)position point:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode;
 
+- (NSArray<OAGpxTrkPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAGpxTrkPt *> *)originalPoints mode:(OAApplicationMode *)mode;
+
 - (double) getRouteDistance;
 - (BOOL) isNewData;
 - (BOOL) isApproximationNeeded;
@@ -92,10 +98,17 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 - (BOOL) isInAddPointMode;
 
+- (void) splitPoints:(NSInteger) selectedPointPosition after:(BOOL)after;
+- (void) joinPoints:(NSInteger) selectedPointPosition;
 - (void) clearSegments;
 - (void) trimBefore:(NSInteger)selectedPointPosition;
 - (void) trimAfter:(NSInteger)selectedPointPosition;
 - (void) splitSegments:(NSInteger)position;
+
+- (BOOL) isFirstPointSelected:(BOOL)outer;
+- (BOOL) isFirstPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer;
+- (BOOL) isLastPointSelected:(BOOL) outer;
+- (BOOL) isLastPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer;
 
 - (void) updateSegmentsForSnap;
 
@@ -110,5 +123,9 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 - (void) setChangesSaved;
 - (BOOL) hasChanges;
+
+- (BOOL) canSplit:(BOOL)after;
+
+- (void) resetAppMode;
 
 @end

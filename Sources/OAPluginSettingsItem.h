@@ -8,6 +8,12 @@
 
 #import "OASettingsItem.h"
 
+@class OACustomPlugin;
+
 @interface OAPluginSettingsItem : OASettingsItem
+
+@property (nonatomic, readonly) OACustomPlugin *plugin;
+
+@property (nonatomic) NSArray<OASettingsItem *> *pluginDependentItems;
 
 @end

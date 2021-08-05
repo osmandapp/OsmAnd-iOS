@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 {
     RoutingParameter _param;
     OALocalRoutingParameterGroup *_group;
-    OAProfileString *_setting;
+    OACommonString *_setting;
 
     OAAppSettings *_settings;
     
@@ -90,13 +90,12 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 {
     NSString *text = _type == EOARouteParamTypeGroup ? [_group.getRoutingParameters[indexPath.row] getText] : [NSString stringWithUTF8String:_param.possibleValueDescriptions[indexPath.row].c_str()];
     
-    static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
     OASettingsTitleTableViewCell* cell = nil;
     
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
     }
     

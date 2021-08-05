@@ -22,10 +22,6 @@
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
 
-#define kCellTypeInput @"OATextInputCell"
-#define kCellTypeColorCollection @"colorCollectionCell"
-#define kCellTypeIconCollection @"iconCollectionCell"
-#define kCellTypePositionIconCollection @"positionIconCollection"
 #define kIconsAtRestRow 0
 #define kIconsWhileMovingRow 1
 
@@ -227,9 +223,7 @@
 
 - (void) setupNavBar
 {
-    NSString *imgName = _changedProfile.iconName;
-    UIImage *img = [UIImage imageNamed:imgName];
-    _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
     _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
 }
@@ -271,26 +265,26 @@
     NSMutableArray *profileMapAppearanceArr = [NSMutableArray array];
     NSString* profileColor = OALocalizedString(_colorNames[@(_changedProfile.color)]);
     [profileNameArr addObject:@{
-        @"type" : kCellTypeInput,
+        @"type" : [OATextInputCell getCellIdentifier],
         @"title" : _changedProfile.name,
     }];
     [profileAppearanceArr addObject:@{
-        @"type" : kCellTypeColorCollection,
+        @"type" : [OAColorsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"select_color"),
         @"value" : profileColor,
     }];
     [profileAppearanceArr addObject:@{
-        @"type" : kCellTypeIconCollection,
+        @"type" : [OAIconsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"select_icon"),
         @"value" : @"",
     }];
     [profileMapAppearanceArr addObject:@{
-        @"type" : kCellTypePositionIconCollection,
+        @"type" : [OALocationIconsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"position_icon_at_rest"),
         @"description" : @"",
     }];
     [profileMapAppearanceArr addObject:@{
-        @"type" : kCellTypePositionIconCollection,
+        @"type" : [OALocationIconsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"position_icon_while_moving"),
         @"description" : OALocalizedString(@"will_be_show_while_moving"),
     }];
@@ -508,13 +502,12 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath { 
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = [[NSString alloc] initWithString:item[@"type"]];
-    if ([cellType isEqualToString:kCellTypeInput])
+    if ([cellType isEqualToString:[OATextInputCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATextInputCell";
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
@@ -523,14 +516,13 @@
         cell.inputField.delegate = self;
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeColorCollection])
+    else if ([cellType isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAColorsTableViewCell";
         OAColorsTableViewCell *cell = nil;
-        cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorsTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAColorsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _colors;
             cell.delegate = self;
@@ -548,14 +540,13 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeIconCollection])
+    else if ([cellType isEqualToString:[OAIconsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAIconsTableViewCell";
         OAIconsTableViewCell *cell = nil;
-        cell = (OAIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OAIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAIconsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconsTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _icons;
             cell.delegate = self;
@@ -572,14 +563,14 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypePositionIconCollection])
+    else if ([cellType isEqualToString:[OALocationIconsTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OALocationIconsTableViewCell";
+        static NSString* const identifierCell = [OALocationIconsTableViewCell getCellIdentifier];
         OALocationIconsTableViewCell *cell = nil;
         cell = (OALocationIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALocationIconsTableViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALocationIconsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OALocationIconsTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
@@ -634,10 +625,7 @@
     _hasChangesBeenMade = YES;
     _changedProfile.iconName = _icons[tag];
     
-    UIImage *img = nil;
-    NSString *imgName = _changedProfile.iconName;
-    img = [UIImage imageNamed:imgName];
-    _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 

@@ -14,6 +14,7 @@
 #define CREATE_CATEGORY 0
 #define CONFIGURE_MAP 1
 #define NAVIGATION 2
+#define CONFIGURE_SCREEN 3
 
 @class OAQuickAction;
 

@@ -125,10 +125,6 @@
     auto debugSettings = [self getMapDebugSettings];
     //debugSettings->disableSymbolsFastCheckByFrustum = true;
     [self setMapDebugSettings:debugSettings];
-
-#if defined(OSMAND_IOS_DEV)
-    _forceRenderingOnEachFrame = NO;
-#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (void)deinit
@@ -193,14 +189,14 @@
     _renderer->addSymbolsProvider(provider);
 }
 
-- (void)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
+- (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
 {
-    _renderer->removeSymbolsProvider(provider);
+    return _renderer->removeSymbolsProvider(provider);
 }
 
-- (void)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
+- (bool)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
 {
-    _renderer->removeSymbolsProvider(provider);
+    return _renderer->removeSymbolsProvider(provider);
 }
 
 - (void)removeAllSymbolsProviders
@@ -535,6 +531,11 @@
 
 - (void)releaseContext
 {
+    [self releaseContext:NO];
+}
+
+- (void)releaseContext:(BOOL)gpuContextLost
+{
     if (_glShareGroup == nil)
         return;
 
@@ -544,7 +545,7 @@
     [self suspendRendering];
     
     // Release map renderer
-    if (!_renderer->releaseRendering())
+    if (!_renderer->releaseRendering(gpuContextLost))
     {
         [NSException raise:NSGenericException
                     format:@"Failed to release OpenGLES2 map renderer 0x%08x", glGetError()];
@@ -752,9 +753,6 @@
     // Perform rendering only if frame is marked as invalidated
     bool shouldRenderFrame = false;
     shouldRenderFrame = shouldRenderFrame || _renderer->isFrameInvalidated();
-#if defined(OSMAND_IOS_DEV)
-    shouldRenderFrame = shouldRenderFrame || _forceRenderingOnEachFrame;
-#endif // defined(OSMAND_IOS_DEV)
     if (shouldRenderFrame && _renderer->prepareFrame())
     {
         // Activate framebuffer
@@ -801,9 +799,18 @@
     return (_displayLink == nil);
 }
 
+- (void) didMoveToWindow
+{
+    // Resume rendering only if in foreground
+    if ([self isRenderingSuspended] && [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && self.window)
+    {
+        [self resumeRendering];
+    }
+}
+
 - (BOOL)resumeRendering
 {
-    if (_displayLink != nil)
+    if (_displayLink != nil || self.window == nil)
         return FALSE;
     
     if (![EAGLContext setCurrentContext:_glRenderContext])
@@ -814,7 +821,7 @@
     }
     
     // Setup display link
-    _displayLink = [CADisplayLink displayLinkWithTarget:self
+    _displayLink = [self.window.screen displayLinkWithTarget:self
                                                selector:@selector(render:)];
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
                        forMode:NSRunLoopCommonModes];
@@ -927,16 +934,5 @@
 {
     return _renderer->resumeGpuWorker();
 }
-
-
-#if defined(OSMAND_IOS_DEV)
-@synthesize forceRenderingOnEachFrame = _forceRenderingOnEachFrame;
-- (void)setForceRenderingOnEachFrame:(BOOL)forceRenderingOnEachFrame
-{
-    _forceRenderingOnEachFrame = forceRenderingOnEachFrame;
-
-    [_settingsObservable notifyEvent];
-}
-#endif // defined(OSMAND_IOS_DEV)
 
 @end

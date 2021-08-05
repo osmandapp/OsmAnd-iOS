@@ -11,6 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "Localization.h"
+#import "OADayNightHelper.h"
 
 @implementation OAMapSettingsSettingScreen
 {
@@ -64,7 +65,7 @@
 {
     if ([settingKeyName isEqualToString:settingAppModeKey])
     {
-        title = OALocalizedString(@"map_settings_mode");
+        title = OALocalizedString(@"map_mode");
         int mode = [_settings.appearanceMode get];
         data = @[
                  @{
@@ -84,7 +85,7 @@
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {
         title = OALocalizedString(@"map_settings_map_magnifier");
-        double value = [_settings.mapDensity get:_settings.applicationMode];
+        double value = [_settings.mapDensity get:_settings.applicationMode.get];
         
         data = @[
                  @{
@@ -132,7 +133,7 @@
     else if ([settingKeyName isEqualToString:textSizeKey])
     {
         title = OALocalizedString(@"map_settings_text_size");
-        double value = [_settings.textSize get:_settings.applicationMode];
+        double value = [_settings.textSize get:_settings.applicationMode.get];
         
         data = @[
                  @{
@@ -178,13 +179,11 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OASettingsTableViewCell";
     OASettingsTableViewCell* cell = nil;
-    
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -215,22 +214,23 @@
     {
         int index = (int)indexPath.row;
         if (index == 1)
-            [_settings setAppearanceMode:APPEARANCE_MODE_DAY];
+            [_settings.appearanceMode set:APPEARANCE_MODE_DAY];
         else if (index == 2)
-            [_settings setAppearanceMode:APPEARANCE_MODE_NIGHT];
+            [_settings.appearanceMode set:APPEARANCE_MODE_NIGHT];
         else
-            [_settings setAppearanceMode:APPEARANCE_MODE_AUTO];
+            [_settings.appearanceMode set:APPEARANCE_MODE_AUTO];
+        [[OADayNightHelper instance] forceUpdate];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {
         NSDictionary *item = data[indexPath.row];
-        [_settings.mapDensity set:[item[@"val"] doubleValue] mode:_settings.applicationMode];
+        [_settings.mapDensity set:[item[@"val"] doubleValue] mode:_settings.applicationMode.get];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
     else if ([settingKeyName isEqualToString:textSizeKey])
     {
         NSDictionary *item = data[indexPath.row];
-        [_settings.textSize set:[item[@"val"] doubleValue] mode:_settings.applicationMode];
+        [_settings.textSize set:[item[@"val"] doubleValue] mode:_settings.applicationMode.get];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
     

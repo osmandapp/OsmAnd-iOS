@@ -14,10 +14,6 @@
 
 @interface OAResourcesBaseViewController : OACompoundViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPlugins;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
 @property (nonatomic, assign) BOOL dataInvalidated;
 
 @property OADownloadProgressView* downloadView;
@@ -49,6 +45,7 @@
 - (void) offerClearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
 
 - (void) showDetailsOf:(OALocalResourceItem *)item;
+- (void) showDetailsOfCustomItem:(OACustomResourceItem *)item;
 
 - (UITableView *) getTableView;
 

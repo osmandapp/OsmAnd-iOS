@@ -21,6 +21,9 @@
 #import "OrderedDictionary.h"
 #import "Localization.h"
 #import "OAQuickActionType.h"
+#import "OAIconTitleValueCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATextInputIconCell.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -80,7 +83,6 @@ static OAQuickActionType *TYPE;
 - (void) addFavoriteSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
     NSString *groupName = self.getParams[KEY_CATEGORY_NAME];
     UIColor* color;
     if (self.getParams[KEY_CATEGORY_COLOR])
@@ -103,10 +105,18 @@ static OAQuickActionType *TYPE;
     if ([self isItemExists:title])
         title = [self getNewItemName:title];
     
+    QString elevation = QString::null;
+    QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
+    
     QString titleStr = QString::fromNSString(title);
     QString group = QString::fromNSString(groupName ? groupName : @"");
     QString description = QString::null;
-    fav.favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), titleStr, description, group, OsmAnd::FColorRGB(r,g,b));
+    QString address = QString::null;
+    QString icon = QString::null;
+    QString background = QString::null;
+    
+    auto favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
+    OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
     
     [app saveFavoritesToPermamentStorage];
 }
@@ -137,7 +147,7 @@ static OAQuickActionType *TYPE;
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
+                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
                           @"title" : OALocalizedString(@"quick_actions_show_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
@@ -146,7 +156,7 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"shared_string_options")];
     [data setObject:@[@{
-                          @"type" : @"OATextInputIconCell",
+                          @"type" : [OATextInputIconCell getCellIdentifier],
                           @"key" : KEY_NAME,
                           @"title" : self.getParams[KEY_NAME] ? self.getParams[KEY_NAME] : @"",
                           @"hint" : OALocalizedString(@"quick_action_template_name"),
@@ -161,7 +171,7 @@ static OAQuickActionType *TYPE;
     OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
     
     [data setObject:@[@{
-                          @"type" : @"OAIconTitleValueCell",
+                          @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_NAME,
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites"),
@@ -169,7 +179,7 @@ static OAQuickActionType *TYPE;
                           @"img" : @"ic_custom_folder"
                           },
                       @{
-                          @"type" : @"OAIconTitleValueCell",
+                          @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_COLOR,
                           @"title" : OALocalizedString(@"fav_color"),
                           @"value" : color ? color.name : @"",

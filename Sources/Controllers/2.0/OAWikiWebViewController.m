@@ -11,6 +11,8 @@
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
 #import "OASizes.h"
+#import "OAPlugin.h"
+#import "OAPOI.h"
 
 NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script.text = \"var coll = document.getElementsByTagName(\'H2\'); var i; for (i = 0; i < coll.length; i++){   coll[i].addEventListener(\'click\', function() { this.classList.toggle(\'active\'); var content = this.nextElementSibling; if (content.style.display === \'block\') { content.style.display = \'none\'; } else { content.style.display = \'block\';}}); } \"; document.head.appendChild(script);";
 
@@ -20,6 +22,8 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
 
 @implementation OAWikiWebViewController
 {
+    OAPOI *_poi;
+
     NSArray *_namesSorted;
     NSString *_contentLocale;
     NSURL *_baseUrl;
@@ -31,13 +35,12 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     NSLocale *_theLocal;
 }
 
-- (id)initWithLocalizedContent:(NSDictionary *)localizedContent localizedNames:(NSDictionary *)localizedNames
+- (id)initWithPoi:(OAPOI *)poi
 {
     self = [super init];
     if (self)
     {
-        _localizedNames = localizedNames;
-        _localizedContent = localizedContent;
+        _poi = poi;
     }
     return self;
 }
@@ -49,7 +52,7 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
 
 - (NSString *) getLocalizedTitle
 {
-    return [self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia";
+    return _poi.localizedNames[_contentLocale] ? _poi.localizedNames[_contentLocale] : @"Wikipedia";
 }
 
 - (void)viewDidLoad
@@ -65,22 +68,15 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.bottomView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.bottomView.layer addSublayer:_horizontalLine];
-    
-    _contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    if (!_contentLocale)
-        _contentLocale = [OAUtilities currentLang];
-    
-    NSString *content = [self.localizedContent objectForKey:_contentLocale];
-    if (!content)
-    {
+
+    NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
+    if (!preferredMapLanguage || preferredMapLanguage.length == 0)
+        preferredMapLanguage = NSLocale.currentLocale.languageCode;
+
+    _contentLocale = [OAPlugin onGetMapObjectsLocale:_poi preferredLocale:preferredMapLanguage];
+    if ([_contentLocale isEqualToString:@"en"])
         _contentLocale = @"";
-        content = [self.localizedContent objectForKey:_contentLocale];
-    }
-    if (!content && self.localizedContent.count > 0)
-    {
-        _contentLocale = self.localizedContent.allKeys[0];
-        content = [self.localizedContent objectForKey:_contentLocale];
-    }
+    NSString *content = _poi.localizedContent[_contentLocale];
 
     _titleView.text = [self getLocalizedTitle];
     
@@ -149,7 +145,7 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
 
 - (IBAction)localeButtonClicked:(id)sender
 {
-    if (_localizedContent.allKeys.count <= 1)
+    if (_poi.localizedContent.allKeys.count <= 1)
     {
         [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"no_other_translations") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         
@@ -160,7 +156,7 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     
     NSMutableArray *locales = [NSMutableArray array];
     NSString *nativeStr;
-    for (NSString *loc in _localizedContent.allKeys)
+    for (NSString *loc in _poi.localizedContent.allKeys)
     {
         if (loc.length == 0)
             nativeStr = loc;
@@ -204,12 +200,12 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     {
         _contentLocale = _namesSorted[buttonIndex - 1];
         
-        NSString *content = [self appendHeadToContent:[self.localizedContent objectForKey:_contentLocale]];
+        NSString *content = [self appendHeadToContent:_poi.localizedContent[_contentLocale]];
         
         NSString *locBtnStr = (_contentLocale.length == 0 ? @"EN" : [_contentLocale uppercaseString]);
         [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
         
-        _titleView.text = ([self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia");
+        _titleView.text = (_poi.localizedNames[_contentLocale] ? _poi.localizedNames[_contentLocale] : @"Wikipedia");
 
         [self buildBaseUrl];
         if (content)

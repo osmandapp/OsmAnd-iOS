@@ -176,9 +176,9 @@
     document->locationMarks.clear();
 }
 
-- (void) addRoutePoints:(NSArray<OAGpxRtePt *> *)points
+- (void) addRoutePoints:(NSArray<OAGpxRtePt *> *)points addRoute:(BOOL)addRoute
 {
-    if (self.routes.count == 0)
+    if (self.routes.count == 0 || addRoute)
     {
         OAGpxRte *route = [[OAGpxRte alloc] init];
         [self addRoute:route];

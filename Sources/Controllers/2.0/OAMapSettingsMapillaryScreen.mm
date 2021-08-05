@@ -14,7 +14,6 @@
 #import "Localization.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
-#import "OAIconTextDescCell.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
@@ -34,8 +33,6 @@
 
 #define resetButtonTag 500
 #define applyButtonTag 600
-
-#define kFooterId @"TableViewSectionFooter"
 
 static const NSInteger visibilitySection = 0;
 static const NSInteger nameFilterSection = 1;
@@ -77,20 +74,20 @@ static const NSInteger panoImageFilterSection = 3;
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        settingsScreen = EMapSettingsScreenPOI;
+        settingsScreen = EMapSettingsScreenMapillaryFilter;
         vwController = viewController;
         tblView = tableView;
         
         _mapillaryEnabled = _app.data.mapillary;
-        _panoOnly = _settings.mapillaryFilterPano;
+        _panoOnly = _settings.mapillaryFilterPano.get;
         
-        NSString *usernames = _settings.mapillaryFilterUserName;
-        NSString *userKeys = _settings.mapillaryFilterUserKey;
+        NSString *usernames = _settings.mapillaryFilterUserName.get;
+        NSString *userKeys = _settings.mapillaryFilterUserKey.get;
         _userNames = usernames ? usernames : @"";
         _userKeys = userKeys ? userKeys : @"";
         
-        _startDate = _settings.mapillaryFilterStartDate;
-        _endDate = _settings.mapillaryFilterEndDate;
+        _startDate = _settings.mapillaryFilterStartDate.get;
+        _endDate = _settings.mapillaryFilterEndDate.get;
         
         [self commonInit];
         [self initData];
@@ -107,7 +104,7 @@ static const NSInteger panoImageFilterSection = 3;
 {
     [self.tblView.tableFooterView removeFromSuperview];
     self.tblView.tableFooterView = nil;
-    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self buildFooterView];
     tblView.estimatedRowHeight = kEstimatedRowHeight;
 }
@@ -129,63 +126,63 @@ static const NSInteger panoImageFilterSection = 3;
     // Visibility/cache section
     
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell"},
+                         @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : @"OASettingSwitchCell",
+                             @"type" : [OASettingSwitchCell getCellIdentifier],
                              @"title" : @"",
                              @"description" : @"",
                              @"img" : @"",
                              @"key" : @"mapillary_enabled"
                              },
                          @{
-                             @"type" : @"OAIconTitleButtonCell",
+                             @"type" : [OAIconTitleButtonCell getCellIdentifier],
                              @"title" : OALocalizedString(@"tile_cache"),
                              @"btnTitle" : OALocalizedString(@"shared_string_reload"),
                              @"description" : @"",
                              @"img" : @"ic_custom_overlay_map.png"
                              },
-                         @{ @"type" : @"OADividerCell"}
+                         @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
     
     // Users filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell"},
+                         @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : @"OAIconTitleValueCell",
+                             @"type" : [OAIconTitleValueCell getCellIdentifier],
                              @"img" : @"ic_custom_user.png",
                              @"key" : @"users_filter",
                              @"title" : OALocalizedString(@"mapil_usernames")
                              },
-                         @{ @"type" : @"OADividerCell"}]];
+                         @{ @"type" : [OADividerCell getCellIdentifier]}]];
     // Date filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell"},
+                         @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : @"OATimeTableViewCell",
+                             @"type" : [OATimeTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_start_date"),
                              @"key" : @"start_date_filter",
                              @"img" : @"ic_custom_date.png"
                              },
                          @{
-                             @"type" : @"OATimeTableViewCell",
+                             @"type" : [OATimeTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_end_date"),
                              @"key" : @"end_date_filter",
                              @"img" : @"ic_custom_date.png"
                              },
-                         @{ @"type" : @"OADividerCell"}
+                         @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
     
     // Pano filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell"},
+                         @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : @"OASettingSwitchCell",
+                             @"type" : [OASettingSwitchCell getCellIdentifier],
                              @"title" : OALocalizedString(@"mapil_pano_only"),
                              @"description" : @"",
                              @"img" : @"ic_custom_coordinates.png",
                              @"key" : @"pano_only"
                              },
-                         @{ @"type" : @"OADividerCell"}
+                         @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
     
     _data = [NSArray arrayWithArray:dataArr];
@@ -261,7 +258,7 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void) setupView
 {
-    title = OALocalizedString(@"map_settings_mapillary");
+    title = OALocalizedString(@"street_level_imagery");
 }
 
 - (BOOL)datePickerIsShown
@@ -271,20 +268,20 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void) resetPressed
 {
-    [_settings setMapillaryFilterPano:NO];
-    [_settings setMapillaryFilterUserKey:nil];
-    [_settings setMapillaryFilterUserName:nil];
-    [_settings setMapillaryFilterStartDate:0];
-    [_settings setMapillaryFilterEndDate:0];
-    [_settings setUseMapillaryFilter:NO];
+    [_settings.mapillaryFilterPano set:NO];
+    [_settings.mapillaryFilterUserKey set:nil];
+    [_settings.mapillaryFilterUserName set:nil];
+    [_settings.mapillaryFilterStartDate set:0];
+    [_settings.mapillaryFilterEndDate set:0];
+    [_settings.useMapillaryFilter set:NO];
     
-    _panoOnly = _settings.mapillaryFilterPano;
+    _panoOnly = _settings.mapillaryFilterPano.get;
     
     _userNames = @"";
     _userKeys = @"";
     
-    _startDate = _settings.mapillaryFilterStartDate;
-    _endDate = _settings.mapillaryFilterEndDate;
+    _startDate = _settings.mapillaryFilterStartDate.get;
+    _endDate = _settings.mapillaryFilterEndDate.get;
     
     _atLeastOneFilterChanged = YES;
     
@@ -293,12 +290,12 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void) applyPressed
 {
-    [_settings setMapillaryFilterPano:_panoOnly];
-    [_settings setMapillaryFilterUserKey:_userKeys];
-    [_settings setMapillaryFilterUserName:_userNames];
-    [_settings setMapillaryFilterStartDate:_startDate];
-    [_settings setMapillaryFilterEndDate:_endDate];
-    [_settings setUseMapillaryFilter:(_userNames && _userNames.length > 0) || _startDate != 0 || _endDate != 0 || _panoOnly];
+    [_settings.mapillaryFilterPano set:_panoOnly];
+    [_settings.mapillaryFilterUserKey set:_userKeys];
+    [_settings.mapillaryFilterUserName set:_userNames];
+    [_settings.mapillaryFilterStartDate set:_startDate];
+    [_settings.mapillaryFilterEndDate set:_endDate];
+    [_settings.useMapillaryFilter set:(_userNames && _userNames.length > 0) || _startDate != 0 || _endDate != 0 || _panoOnly];
     
     if (_atLeastOneFilterChanged)
         [self reloadRasterCache];
@@ -341,13 +338,12 @@ static const NSInteger panoImageFilterSection = 3;
     UITableViewCell *outCell;
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         
@@ -363,56 +359,56 @@ static const NSInteger panoImageFilterSection = 3;
             {
                 cell.textView.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
                 NSString *imgName = _mapillaryEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-                cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [UIImage templateImageNamed:imgName];
                 cell.imgView.tintColor = _mapillaryEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_mapillaryEnabled];
             }
             else if ([key isEqualToString:@"pano_only"])
             {
-                cell.imgView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.imgView.tintColor = _panoOnly ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_panoOnly];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleButtonCell"])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAIconTitleButtonCell";
-        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleButtonCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
         {
             cell.titleView.text = item[@"title"];
-            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             [cell setButtonText:item[@"btnTitle"]];
+            [cell.buttonView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.buttonView addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OAIconTitleValueCell";
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleValueCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.leftImageView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.leftImageView.tintColor = UIColorFromRGB(color_tint_gray);
             if ([item[@"key"] isEqualToString:@"users_filter"])
             {
@@ -422,13 +418,12 @@ static const NSInteger panoImageFilterSection = 3;
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OADividerCell";
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);
@@ -437,13 +432,12 @@ static const NSInteger panoImageFilterSection = 3;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OATimeTableViewCell"])
+    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OATimeCell";
-        OATimeTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATimeTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
             [cell showLeftImageView:YES];
         }
@@ -452,7 +446,7 @@ static const NSInteger panoImageFilterSection = 3;
             double dateVal = [item[@"key"] isEqualToString:@"start_date_filter"] ? _startDate : _endDate;
             BOOL isNotSet = dateVal == 0;
             cell.lbTitle.text = item[@"title"];
-            UIImage *img = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *img = [UIImage templateImageNamed:item[@"img"]];
             if (img)
             {
                 [cell showLeftImageView:YES];
@@ -473,12 +467,11 @@ static const NSInteger panoImageFilterSection = 3;
     }
     else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
     {
-        static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
         OADateTimePickerTableViewCell* cell;
-        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
+        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADateTimePickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dateTimePicker.datePickerMode = UIDatePickerModeDate;
@@ -580,7 +573,7 @@ static const NSInteger panoImageFilterSection = 3;
     }
     else
     {
-        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
         NSString * text = [self getText:section];
         vw.label.text = text;
         return vw;
@@ -622,11 +615,11 @@ static const NSInteger panoImageFilterSection = 3;
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"] || [item[@"type"] isEqualToString:@"OAIconTitleButtonCell"] || [item[@"type"] isEqualToString:@"OAIconTitleValueCell"] || [indexPath isEqual:_datePickerIndexPath])
+    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
     }
@@ -637,7 +630,7 @@ static const NSInteger panoImageFilterSection = 3;
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:@"OAIconTitleButtonCell"] || [type isEqualToString:@"OASettingSwitchCell"])
+    if ([type isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
         return nil;
     return indexPath;
 }
@@ -666,7 +659,7 @@ static const NSInteger panoImageFilterSection = 3;
         [self.tblView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         [self.tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         OAUsernameFilterViewController *controller = [[OAUsernameFilterViewController alloc] initWithData:@[_userNames, _userKeys]];
         controller.delegate = self;

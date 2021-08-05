@@ -26,6 +26,7 @@
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OATargetMenuViewController.h"
+#import "OACustomSourceDetailsViewController.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -152,13 +153,6 @@ static BOOL dataInvalidated = NO;
 
 - (void) applyLocalization
 {
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void) viewDidLoad
@@ -215,7 +209,7 @@ static BOOL dataInvalidated = NO;
         [self.view insertSubview:self.downloadView aboveSubview:tableView];
         
         // Constraints
-        NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.toolbarView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.f];
+        NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.f];
         [self.view addConstraint:constraint];
         
         constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
@@ -224,7 +218,9 @@ static BOOL dataInvalidated = NO;
         constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
         [self.view addConstraint:constraint];
         
-        constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOADownloadProgressViewHeight];
+        [OAUtilities getBottomMargin];
+        
+        constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOADownloadProgressViewHeight + [OAUtilities getBottomMargin]];
         [self.view addConstraint:constraint];
     }
 }
@@ -240,17 +236,6 @@ static BOOL dataInvalidated = NO;
         [self.downloadView setButtonStatePause];
 }
 
-
-- (UIView *) getBottomView
-{
-    return self.toolbarView;
-}
-
-- (CGFloat) getToolBarHeight
-{
-    return defaultToolBarHeight;
-}
-
 - (void)updateContent
 {
 }
@@ -261,6 +246,15 @@ static BOOL dataInvalidated = NO;
 
 - (void) refreshDownloadingContent:(NSString *)downloadTaskKey
 {
+}
+
+- (void) downloadCustomItem:(OACustomResourceItem *)item
+{
+    [OAResourcesUIHelper startDownloadOfCustomItem:item onTaskCreated:^(id<OADownloadTask> task) {
+        [self updateContent];
+    } onTaskResumed:^(id<OADownloadTask> task) {
+        [self showDownloadViewForTask:task];
+    }];
 }
 
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
@@ -362,7 +356,21 @@ static BOOL dataInvalidated = NO;
             else
                 [self offerDownloadAndInstallOf:item];
         }
+        else if ([item_ isKindOfClass:OACustomResourceItem.class])
+        {
+            OACustomResourceItem *customItem = (OACustomResourceItem *) item_;
+            if (!customItem.isInstalled)
+                [self downloadCustomItem:customItem];
+            else
+                [self showDetailsOfCustomItem:customItem];
+        }
     }
+}
+    
+- (void) showDetailsOfCustomItem:(OACustomResourceItem *)item
+{
+    OACustomSourceDetailsViewController *customSourceDetails = [[OACustomSourceDetailsViewController alloc] initWithCustomItem:item region:(OACustomRegion *)self.region];
+    [self.navigationController pushViewController:customSourceDetails animated:YES];
 }
 
 - (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId

@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *) getCellNibId;
 
 - (void) build:(UICollectionViewCell *) cell;
+- (void) update;
 - (void) onCardPressed:(OAMapPanelViewController *) mapPanel;
 
 @end

@@ -13,6 +13,7 @@
 #import "OALog.h"
 #import "OADefaultFavorite.h"
 #import "OANativeUtilities.h"
+#import "OAFavoritesHelper.h"
 #import "OAUtilities.h"
 #import "OACollapsableView.h"
 #import "OACollapsableWaypointsView.h"
@@ -44,9 +45,13 @@
             [super setupCollapableViewsWithData:favorite lat:favorite.getLatitude lon:favorite.getLongitude];
         }
         
-        NSString *groupName = self.favorite.favorite->getGroup().toNSString();
-        self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorite") : groupName;
-        self.groupColor = [self.favorite getColor];
+        self.groupTitle = [self.favorite getCategoryDisplayName];
+        
+        if (!OAFavoritesHelper.isFavoritesLoaded)
+            [OAFavoritesHelper loadFavorites];
+        
+        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
+        self.groupColor = favoriteGroup.color;
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
@@ -64,6 +69,9 @@
         OsmAnd::PointI locationPoint;
         locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
         locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
+        
+        QString elevation = QString::null;
+        QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
         
         QString title = QString::fromNSString(formattedLocation);
         
@@ -89,13 +97,23 @@
             group = QString::null;
         
         QString description = QString::null;
+        QString address = QString::null;
+        QString icon = QString::null;
+        QString background = QString::null;
 
-        OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
-        fav.favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
+        auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
+                                                                        elevation,
+                                                                        time,
                                                                         title,
                                                                         description,
+                                                                        address,
                                                                         group,
+                                                                        icon,
+                                                                        background,
                                                                         OsmAnd::FColorRGB(r,g,b));
+        
+        OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+        
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
         
@@ -104,9 +122,13 @@
             [super setupCollapableViewsWithData:fav lat:location.latitude lon:location.longitude];
         }
         
-        NSString *groupStr = self.favorite.favorite->getGroup().toNSString();
-        self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorite") : groupStr;
-        self.groupColor = [self.favorite getColor];
+        self.groupTitle = [self.favorite getCategoryDisplayName];
+        
+        if (!OAFavoritesHelper.isFavoritesLoaded)
+            [OAFavoritesHelper loadFavorites];
+        
+        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
+        self.groupColor = favoriteGroup.color;
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
@@ -131,14 +153,14 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"favorite");
+    return OALocalizedString(@"favorites");
 }
 
 - (void) applyLocalization
 {
     [super applyLocalization];
     
-    self.titleView.text = OALocalizedString(@"favorite");
+    self.titleView.text = OALocalizedString(@"favorites");
 }
 
 - (void) viewDidLoad
@@ -148,6 +170,7 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     [settings setShowFavorites:YES];
     self.titleGradient.frame = self.navBar.frame;
+    self.deleteButton.hidden = YES;
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -213,7 +236,7 @@
 
 - (void) removeExistingItemFromCollection
 {
-    NSString *favoriteTitle = self.favorite.favorite->getTitle().toNSString();
+    NSString *favoriteTitle = [self.favorite getName];
     for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
     {
         if ((localFavorite != self.favorite.favorite) &&
@@ -231,76 +254,29 @@
     [_app saveFavoritesToPermamentStorage];
 }
 
+- (NSAttributedString *) getAttributedTypeStr:(NSString *)group
+{
+    return [self getAttributedTypeStr:group color:self.groupColor];
+}
+
 - (NSString *) getItemName
 {
-    if (!self.favorite.favorite->getTitle().isNull())
-    {
-        return self.favorite.favorite->getTitle().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemName:(NSString *)name
-{
-    self.favorite.favorite->setTitle(QString::fromNSString(name));
-}
-
-- (UIColor *) getItemColor
-{
-    return [UIColor colorWithRed:self.favorite.favorite->getColor().r/255.0 green:self.favorite.favorite->getColor().g/255.0 blue:self.favorite.favorite->getColor().b/255.0 alpha:1.0];
-}
-
-- (void) setItemColor:(UIColor *)color
-{
-    CGFloat r,g,b,a;
-    [color getRed:&r
-            green:&g
-             blue:&b
-            alpha:&a];
-    
-    self.favorite.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
+    return [self.favorite getDisplayName];
 }
 
 - (NSString *) getItemGroup
 {
-    if (!self.favorite.favorite->getGroup().isNull())
-    {
-        return self.favorite.favorite->getGroup().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setItemGroup:(NSString *)groupName
-{
-    self.favorite.favorite->setGroup(QString::fromNSString(groupName));
-}
-
-- (NSArray *) getItemGroups
-{
-    return [[OANativeUtilities QListOfStringsToNSMutableArray:_app.favoritesCollection->getGroups().toList()] copy];
+    return [self.favorite getCategoryDisplayName];
 }
 
 - (NSString *) getItemDesc
 {
-    if (!self.favorite.favorite->getDescription().isNull())
-    {
-        return self.favorite.favorite->getDescription().toNSString();
-    }
-    else
-    {
-        return @"";
-    }
+    return [self.favorite getDescription];
 }
 
-- (void) setItemDesc:(NSString *)desc
+- (UIImage *) getIcon
 {
-    self.favorite.favorite->setDescription(QString::fromNSString(desc));
+    return [self.favorite getCompositeIcon];
 }
 
 @end

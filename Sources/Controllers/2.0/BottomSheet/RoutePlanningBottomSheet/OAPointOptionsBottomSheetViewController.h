@@ -21,6 +21,12 @@
 
 - (void) onChangeRouteTypeBefore;
 - (void) onChangeRouteTypeAfter;
+- (void) onSplitPointsBefore;
+- (void) onSplitPointsAfter;
+- (void) onJoinPoints;
+
+- (void) onCloseMenu;
+- (void) onClearSelection;
 
 @end
 

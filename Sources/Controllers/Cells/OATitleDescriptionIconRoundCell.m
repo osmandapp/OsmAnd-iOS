@@ -110,4 +110,10 @@ static UIFont *_descrFont;
     _topCorners = topCorners;
 }
 
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    _contentContainer.layer.mask = nil;
+}
+
 @end

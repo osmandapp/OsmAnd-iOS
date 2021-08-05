@@ -35,16 +35,11 @@
 #import "OAMapWidgetRegistry.h"
 #import "OASettingsItem.h"
 #import "OAProfileSettingsItem.h"
+#import "OAExportItemsViewController.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
 #define OSMAND_SETTINGS_FILE_EXT @"osf"
-
-#define kHeaderId @"TableViewSectionHeader"
-#define kSwitchCell @"OASettingSwitchCell"
-#define kIconTitleDescrCell @"OAIconTextDescCell"
-#define kCellTypeAction @"OATitleRightIconCell"
-#define kTitleRightIconCell @"OATitleRightIconCell"
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -91,7 +86,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         [data addObject:@[
             @{
-                @"type" : kSwitchCell,
+                @"type" : [OASwitchTableViewCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_enabled")
             }
         ]];
@@ -101,7 +96,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
     NSMutableArray<NSDictionary *> *profileSettings = [NSMutableArray new];
     [profileSettings addObject:@{
-        @"type" : kIconTitleDescrCell,
+        @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"general_settings_2"),
         @"descr" : OALocalizedString(@"general_settings_descr"),
         @"img" : @"left_menu_icon_settings",
@@ -110,7 +105,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (_appMode != OAApplicationMode.DEFAULT)
     {
         [profileSettings addObject:@{
-            @"type" : kIconTitleDescrCell,
+            @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : OALocalizedString(@"routing_settings_2"),
             @"descr" : OALocalizedString(@"routing_settings_descr"),
             @"img" : @"left_menu_icon_navigation",
@@ -118,21 +113,21 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }];
     }
     [profileSettings addObject:@{
-        @"type" : kIconTitleDescrCell,
+        @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"configure_map"),
         @"descr" : OALocalizedString(@"configure_map_descr"),
         @"img" : @"left_menu_icon_map",
         @"key" : @"configure_map"
     }];
     [profileSettings addObject:@{
-        @"type" : kIconTitleDescrCell,
+        @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"layer_map_appearance"),
         @"descr" : OALocalizedString(@"configure_screen_descr"),
         @"img" : @"left_menu_configure_screen",
         @"key" : @"configure_screen"
     }];
     [profileSettings addObject:@{
-        @"type" : kIconTitleDescrCell,
+        @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"profile_appearance"),
         @"descr" : OALocalizedString(@"profile_appearance_descr"),
         @"img" : _appMode.getIconName,
@@ -141,7 +136,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
         // TODO: add ui customization
 //        @{
-//            @"type" : kIconTitleDescrCell,
+//            @"type" : [OAIconTextDescCell getCellIdentifier],
 //            @"title" : OALocalizedString(@"ui_customization"),
 //            @"descr" : OALocalizedString(@"ui_customization_descr"),
 //            @"img" : todo,
@@ -157,7 +152,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (tripRec)
     {
         [plugins addObject:@{
-            @"type" : kIconTitleDescrCell,
+            @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : tripRec.getName,
             @"img" : @"ic_custom_trip",
             @"key" : @"trip_rec"
@@ -168,7 +163,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (osmEdit)
     {
         [plugins addObject:@{
-            @"type" : kIconTitleDescrCell,
+            @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : osmEdit.getName,
             @"img" : @"ic_custom_osm_edits",
             @"key" : @"osm_edits"
@@ -185,13 +180,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     // Actions
     NSMutableArray<NSDictionary *> *settingsActions = [NSMutableArray new];
     [settingsActions addObject:@{
-        @"type" : kTitleRightIconCell,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"title" : OALocalizedString(@"export_profile"),
         @"img" : @"ic_custom_export",
         @"key" : @"export_profile"
     }];
     [settingsActions addObject:@{
-        @"type" : kTitleRightIconCell,
+        @"type" : [OATitleRightIconCell getCellIdentifier],
         @"title" : OALocalizedString(@"copy_from_other_profile"),
         @"img" : @"ic_custom_copy",
         @"key" : @"copy_profile"
@@ -200,7 +195,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (![_appMode isCustomProfile] || ([_appMode isCustomProfile] && [self getBackupFileForCustomMode:_appMode.stringKey]))
     {
         [settingsActions addObject:@{
-            @"type" : kTitleRightIconCell,
+            @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"reset_to_default"),
             @"img" : @"ic_custom_reset",
             @"key" : @"reset_to_default"
@@ -210,7 +205,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if ([_appMode isCustomProfile])
     {
         [settingsActions addObject:@{
-           @"type" : kTitleRightIconCell,
+           @"type" : [OATitleRightIconCell getCellIdentifier],
             @"title" : OALocalizedString(@"profile_alert_delete_title"),
             @"img" : @"ic_custom_remove_outlined",
             @"key" : @"delete_profile"
@@ -263,7 +258,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type
@@ -302,7 +297,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) setCurrentModeActive:(EOADashboardScreenType)type
 {
-    OAAppSettings.sharedManager.applicationMode = _appMode;
+    [OAAppSettings.sharedManager setApplicationModePref:_appMode];
     if (![OAApplicationMode.values containsObject:_appMode])
     {
         _screenToOpen = type;
@@ -353,7 +348,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = nil;
     vw.label.attributedText = nil;
     
@@ -386,7 +381,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kTitleRightIconCell])
+    if ([item[@"type"] isEqualToString:[OATitleRightIconCell getCellIdentifier]])
         return 45.;
     else
         return UITableViewAutomaticDimension;
@@ -415,35 +410,33 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kSwitchCell])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
         
         if (cell)
         {
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = [OAApplicationMode.values containsObject:_appMode];
             [cell.switchView addTarget:self action:@selector(onModeSwitchPressed:) forControlEvents:UIControlEventValueChanged];
             cell.textView.text = [OAApplicationMode.values containsObject:_appMode] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kIconTitleDescrCell])
+    else if ([item[@"type"] isEqualToString:[OAIconTextDescCell getCellIdentifier]])
     {
         OAIconTextDescCell* cell;
-        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
             cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
@@ -456,20 +449,19 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             [cell.textView setText:item[@"title"]];
             cell.descView.hidden = YES;
                 
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeAction])
+    else if ([item[@"type"] isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = kCellTypeAction;
-        OATitleRightIconCell *cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OATitleRightIconCell *cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
@@ -477,28 +469,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:kTitleRightIconCell])
-    {
-        OATitleRightIconCell* cell;
-        cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:@"OATitleRightIconCell"];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            [cell.iconView setTintColor:UIColorFromRGB(color_primary_purple)];
-            [cell.titleView setTextColor:UIColorFromRGB(color_primary_purple)];
-            [cell.titleView setFont:[UIFont systemFontOfSize:17.0f weight:UIFontWeightMedium]];
-        }
-        if (cell)
-        {
-            [cell.titleView setText:item[@"title"]];
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
-        }
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
     return nil;
@@ -539,8 +510,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //    }
     else if ([key isEqualToString:@"export_profile"])
     {
-        OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
-        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:_appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:_appMode] exportItemFiles:YES];
+        OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] initWithAppMode:_appMode];
+        [self.navigationController pushViewController:exportController animated:YES];
     }
     else if ([key isEqualToString:@"copy_profile"])
     {
@@ -600,7 +571,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) onPluginSettingsReset
 {
-    [self resetAppModePrefs: _appMode];
+    [self resetAppModePrefs:_appMode];
 }
 
 - (void) resetAppModePrefs:(OAApplicationMode *)appMode

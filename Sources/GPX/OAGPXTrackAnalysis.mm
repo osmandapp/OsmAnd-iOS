@@ -476,7 +476,7 @@
                 // Motion detection:
                 //   speed > 0  uses GPS chipset's motion detection
                 //   calculations[0] > minDisplacment * time  is heuristic needed because tracks may be filtered at recording time, so points at rest may not be present in file at all
-                if ((speed > 0) && (distance > 0.1 / 1000 * ((point.time - prev.time) * 1000)) && point.time != 0 && prev.time != 0)
+                if ((speed > 0) && (distance > 0.1 / (point.time - prev.time)) && point.time != 0 && prev.time != 0)
                 {
                     _timeMoving += (point.time - prev.time);
                     _totalDistanceMoving += distance;

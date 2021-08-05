@@ -23,8 +23,6 @@
 #define kMargin 16.0
 #define kButtonSpacing 13.0
 
-#define kActionCellIdentifier @"OAQuickActionCell"
-
 @interface OAQuickActionsSheetView () <UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topSliderView;
@@ -115,8 +113,8 @@
     _closeBtn.layer.cornerRadius = 9.;
     _controlBtnPrev.layer.cornerRadius = 9.;
     _controlBtnNext.layer.cornerRadius = 9.;
-    [_controlBtnPrev setImage:[[UIImage imageNamed:@"ic_custom_arrow_back"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [_controlBtnNext setImage:[[UIImage imageNamed:@"ic_custom_arrow_forward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_controlBtnPrev setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
+    [_controlBtnNext setImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"] forState:UIControlStateNormal];
     
     [self setupPageControls];
     
@@ -265,8 +263,8 @@
 
 - (void) registerSupportedNibs
 {
-    [_collectionView registerNib:[UINib nibWithNibName:kActionCellIdentifier bundle:nil]
-      forCellWithReuseIdentifier:kActionCellIdentifier];
+    [_collectionView registerNib:[UINib nibWithNibName:[OAQuickActionCell getCellIdentifier] bundle:nil]
+      forCellWithReuseIdentifier:[OAQuickActionCell getCellIdentifier]];
 }
 
 - (void) setupButton:(UIButton *)button active:(BOOL)active title:(NSString *)title
@@ -526,10 +524,10 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kActionCellIdentifier forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAQuickActionCell getCellIdentifier] forIndexPath:indexPath];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kActionCellIdentifier owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAQuickActionCell getCellIdentifier] owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
     if (cell && [cell isKindOfClass:OAQuickActionCell.class])
@@ -553,7 +551,7 @@
         resultCell.actionTitleView.text = action.getActionStateName;
         [resultCell.actionTitleView setEnabled:isEnabled];
         resultCell.actionTitleView.textColor = isDayMode ? UIColorFromRGB(color_quick_action_text) : UIColorFromRGB(color_text_secondary_night);
-        resultCell.imageView.image = [[UIImage imageNamed:action.getIconResName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        resultCell.imageView.image = [UIImage templateImageNamed:action.getIconResName];
         resultCell.imageView.tintColor = [(isDayMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_primary_night)) colorWithAlphaComponent:isEnabled ? 1.0 : 0.3];
         if (resultCell.imageView.subviews.count > 0)
             [[resultCell.imageView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -562,11 +560,11 @@
         if (action.hasSecondaryIcon)
         {
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
-            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             [background setTintColor:isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
             [resultCell.imageView addSubview:background];
-            UIImage *img = [[UIImage imageNamed:action.getSecondaryIconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *img = [UIImage templateImageNamed:action.getSecondaryIconName];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];
             view.frame = frame;
             [resultCell.imageView addSubview:view];
@@ -574,12 +572,12 @@
         if ([action isActionWithSlash])
         {
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
-            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_hide_bottom"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_hide_bottom"];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             background.frame = frame;
             [background setTintColor:isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
             [resultCell.imageView addSubview:background];
-            UIImage *img = [[UIImage imageNamed:@"ic_custom_compound_action_hide_top"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *img = [UIImage templateImageNamed:@"ic_custom_compound_action_hide_top"];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];
             view.frame = frame;
             [resultCell.imageView addSubview:view];

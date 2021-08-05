@@ -51,14 +51,14 @@
     return self;
 }
 
-+ (NSString *) getId
+- (NSString *) getId
 {
     return PLUGIN_ID;
 }
 
 - (NSString *) getName
 {
-    return OALocalizedString(@"map_settings_mapillary");
+    return OALocalizedString(@"mapillary");
 }
 
 - (void) registerLayers

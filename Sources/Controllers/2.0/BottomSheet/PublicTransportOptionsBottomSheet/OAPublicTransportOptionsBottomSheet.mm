@@ -13,6 +13,7 @@
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OASwitchTableViewCell.h"
 
 #define kButtonsDividerTag 150
 
@@ -55,8 +56,8 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-        @"type" : @"OABottomSheetHeaderIconCell",
-        @"title" : OALocalizedString(@"public_transport_menu"),
+        @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
+        @"title" : OALocalizedString(@"transport"),
         @"description" : @""
         }];
     
@@ -71,7 +72,7 @@
         NSString* imageName = [self getIconNameForStyleName:param.name];
         
         [arr addObject:@{
-            @"type" : @"OASettingSwitchCell",
+            @"type" : [OASettingSwitchCell getCellIdentifier],
             @"name" : param.name,
             @"title" : param.title,
             @"value" : param.value,
@@ -130,13 +131,12 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderIconCell";
-        OABottomSheetHeaderIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OABottomSheetHeaderIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderIconCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderIconCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderIconCell getCellIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderIconCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -149,13 +149,12 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         
@@ -163,9 +162,10 @@
         {
             [self updateSettingSwitchCell:cell data:item];
             
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             cell.switchView.on = [item[@"value"] isEqualToString:@"true"];
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
@@ -182,7 +182,7 @@
     NSString *imgName = data[@"img"];
     NSString *secondaryImgName = data[@"secondaryImg"];
     if (imgName)
-        img = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        img = [UIImage templateImageNamed:imgName];
     
     cell.textView.text = data[@"title"];
     NSString *desc = data[@"description"];
@@ -234,7 +234,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:@"OASwitchCell"])
+    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

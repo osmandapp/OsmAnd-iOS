@@ -119,8 +119,8 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> IOAMapTiledCollectionProvider::b
             }
             
             // TODO: Would be better to get just bitmap size here
-            auto img = getImageBitmap(i);
-            const auto iconSize31 = img->dimensions().width() / from31toPixelsScale;
+            double estimatedIconSize = 48. * UIScreen.mainScreen.scale;
+            const double iconSize31 = estimatedIconSize / from31toPixelsScale;
             bool intr = intersects(boundIntersections, pos31.x, pos31.y, iconSize31, iconSize31);
             
             if (!tileBBox31.contains(pos31))
@@ -134,16 +134,23 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> IOAMapTiledCollectionProvider::b
             .setPinIconVerticalAlignment(getPinIconVerticalAlignment())
             .setPinIconHorisontalAlignment(getPinIconHorisontalAlignment());
 
+            std::shared_ptr<SkBitmap> img;
+            
             if (intr)
             {
-                img = OsmAnd::SkiaUtilities::scaleBitmap(img, 0.5f, 0.5f);
+                img = getImageBitmap(i, false);
                 builder.setBaseOrder(builder.getBaseOrder() + 1);
             }
             else if (showCaptions && !getCaption(i).isEmpty())
             {
+                img = getImageBitmap(i);
                 builder.setCaption(getCaption(i));
                 builder.setCaptionStyle(captionStyle);
                 builder.setCaptionTopSpace(captionTopSpace);
+            }
+            else
+            {
+                img = getImageBitmap(i);
             }
             builder.setPinIcon(img);
             builder.buildAndAddToCollection(collection);

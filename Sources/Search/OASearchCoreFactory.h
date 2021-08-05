@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchCoreFactory.java
-//  git revision 5e103acc507b583bfcbd0327372b0b08deddc4de
+//  git revision 69c9d12f443ac7227605a09c41b58fdd5dfd2dd2
 
 #import <Foundation/Foundation.h>
 #import "OASearchCoreAPI.h"

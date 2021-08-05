@@ -28,6 +28,12 @@ class OAFavoritesMapLayerProvider
 public:
 private:
     QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> _favorites;
+    QHash<QString, std::shared_ptr<SkBitmap>> _iconsCache;
+    
+    std::shared_ptr<SkBitmap> getBitmapByFavorite(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav, bool isFullSize);
+    std::shared_ptr<SkBitmap> createCompositeBitmap(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav, bool isFullSize) const;
+    QString backgroundImageNameByType(const QString& type) const;
+    UIImage* getIcon(NSString* iconName, NSString* defaultIconName) const;
 protected:
 public:
     OAFavoritesMapLayerProvider(const QList<std::shared_ptr<OsmAnd::IFavoriteLocation>>& favorites,
@@ -41,7 +47,7 @@ public:
 
     virtual OsmAnd::PointI getPoint31(const int index) const override;
     virtual int getPointsCount() const override;
-    virtual std::shared_ptr<SkBitmap> getImageBitmap(const int index) const override;
+    virtual std::shared_ptr<SkBitmap> getImageBitmap(const int index, bool isFullSize) override;
     virtual QString getCaption(const int index) const override;
     
     virtual OsmAnd::ZoomLevel getMinZoom() const override;

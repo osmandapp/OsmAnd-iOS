@@ -48,7 +48,7 @@
         _isAnimating = NO;
         
         _cardHeaderView = [[OADestinationCardHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 50.0)];
-        _cardHeaderView.title.text = [OALocalizedString(@"directions") uppercaseStringWithLocale:[NSLocale currentLocale]];
+        _cardHeaderView.title.text = [OALocalizedString(@"map_markers") uppercaseStringWithLocale:[NSLocale currentLocale]];
         [_cardHeaderView.rightButton removeFromSuperview];
         
         _items = [NSMutableArray array];
@@ -97,10 +97,10 @@
 - (UITableViewCell *)cellForRow:(NSInteger)row
 {
     OADirectionTableViewCell* cell;
-    cell = (OADirectionTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OADirectionTableViewCell"];
+    cell = (OADirectionTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OADirectionTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADirectionCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADirectionTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OADirectionTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -141,35 +141,9 @@
     OADestinationItem *destItem = item;
     
     dirCell.separatorInset = UIEdgeInsetsMake(0.0, dirCell.titleLabel.frame.origin.x, 0.0, 0.0);
-    
-    if (destItem.destination.parking)
-    {
-        dirCell.leftIcon.image = [UIImage imageNamed:@"ic_parking_pin_small"];
-        [dirCell.titleLabel setText:destItem.destination.desc];
-        dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
-        
-        NSMutableString *descText = [NSMutableString string];
-        if (destItem.distanceStr)
-        {
-            [descText appendString:destItem.distanceStr];
-        }
-        NSString *parkingStr = [OADestinationCell parkingTimeStr:destItem.destination shortText:NO];
-        if (parkingStr)
-        {
-            if (descText.length > 0)
-                [descText appendString:@", "];
-            [descText appendString:parkingStr];
-        }
-        
-        [dirCell.descLabel setText:descText];
-    }
-    else
-    {
-        dirCell.leftIcon.image = [UIImage imageNamed:[destItem.destination.markerResourceName stringByAppendingString:@"_small"]];
-        [dirCell.titleLabel setText:destItem.destination.desc];
-        dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
-        [dirCell.descLabel setText:destItem.distanceStr];
-    }
+    dirCell.leftIcon.image = [UIImage imageNamed:[destItem.destination.markerResourceName stringByAppendingString:@"_small"]];
+    dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
+    [dirCell setTitle:destItem.destination.desc andDescription:destItem.distanceStr];
 }
 
 - (void)updateDistanceAndDirection

@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAApplicationMode.h"
 #import "OACommonTypes.h"
+#import "OAResultMatcher.h"
 
 #include <vector>
 
@@ -34,8 +35,10 @@
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation;
 
+struct GpxPoint;
+struct GpxRouteApproximation;
 struct TurnType;
 struct RouteSegmentResult;
 
@@ -73,8 +76,8 @@ struct RouteSegmentResult;
 - (OAGPXTrackAnalysis *) getTrackAnalysis;
 - (int) getLeftDistance;
 - (int) getLeftDistanceNextIntermediate;
-- (int) getLeftTime;
-- (int) getLeftTimeNextIntermediate;
+- (long) getLeftTime;
+- (long) getLeftTimeNextIntermediate;
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections;
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i;
 - (CLLocation *) getLastProjection;
@@ -96,6 +99,13 @@ struct RouteSegmentResult;
 - (BOOL) isPublicTransportMode;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
+
+- (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
+- (std::vector<std::shared_ptr<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder;
+- (std::shared_ptr<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
+														   gctx:(std::shared_ptr<GpxRouteApproximation>)gctx
+														 points:(std::vector<std::shared_ptr<GpxPoint>> &)points
+												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards;
 

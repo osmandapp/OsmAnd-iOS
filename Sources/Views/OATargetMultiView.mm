@@ -77,14 +77,12 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierText = @"OATargetPointViewCell";
-
     OATargetPoint *targetPoint = self.targetPoints[indexPath.row];
     OATargetPointViewCell* cell;
-    cell = (OATargetPointViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+    cell = (OATargetPointViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATargetPointViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetPointViewCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetPointViewCell getCellIdentifier] owner:self options:nil];
         cell = (OATargetPointViewCell *)[nib objectAtIndex:0];
     }
     cell.targetPoint = targetPoint;

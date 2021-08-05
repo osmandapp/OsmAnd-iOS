@@ -16,7 +16,7 @@
 #import "OAMapStyleSettings.h"
 #import "OASettingSwitchCell.h"
 #import "OATitleSliderTableViewCell.h"
-#import "OAIconTextDescButtonTableViewCell.h"
+#import "OAIconTextDescButtonCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
 #import "OALocalResourceInformationViewController.h"
@@ -115,10 +115,22 @@ static NSInteger kButtonsSection;
     _sqlitedbResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onSqlitedbResourcesChanged:) andObserve:[OAMapCreatorHelper sharedInstance].sqlitedbResourcesChangedObservable];
     
     _onlineMapSources = [NSMutableArray array];
+    
+    [self setupInitialState];
 }
 
 - (void)deinit
 {
+}
+
+- (void) setupInitialState
+{
+    if (_mapSettingType == EMapSettingOverlay)
+        _isEnabled = _app.data.overlayMapSource != nil;
+    else if (_mapSettingType == EMapSettingUnderlay)
+        _isEnabled = _app.data.underlayMapSource != nil;
+    else
+        _isEnabled = NO;
 }
 
 - (void)setupView
@@ -177,13 +189,6 @@ static NSInteger kButtonsSection;
     
     tblView.estimatedRowHeight = kEstimatedRowHeight;
     tblView.rowHeight = UITableViewAutomaticDimension;
-
-    if (_mapSettingType == EMapSettingOverlay)
-        _isEnabled = _app.data.overlayMapSource != nil;
-    else if (_mapSettingType == EMapSettingUnderlay)
-        _isEnabled = _app.data.underlayMapSource != nil;
-    else
-        _isEnabled = NO;
 
     kButtonsSection = _mapSettingType == EMapSettingOverlay ? 3 : 4;
 }
@@ -287,11 +292,10 @@ static NSInteger kButtonsSection;
 
     if ([item[@"type"] isEqualToString:kCellTypeIconSwitch])
     {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.descriptionView.hidden = YES;
@@ -300,7 +304,7 @@ static NSInteger kButtonsSection;
         {
             cell.textView.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = _isEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.image = [UIImage templateImageNamed:imgName];
             cell.imgView.tintColor = _isEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -311,11 +315,11 @@ static NSInteger kButtonsSection;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        static NSString* const identifierCell = @"OAIconTextDescButtonCell";
+        static NSString* const identifierCell = [OAIconTextDescButtonCell getCellIdentifier];
         OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-           NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescButtonTableViewCell" owner:self options:nil];
+           NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescButtonCell getCellIdentifier] owner:self options:nil];
            cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
         }
         
@@ -335,7 +339,7 @@ static NSInteger kButtonsSection;
                 itemMapSource = onlineSource.mapSource;
                 caption = onlineSource.mapSource.name;
                 description = OALocalizedString(@"online_map");
-                cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map_online"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map_online"];
                 cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
             }
         }
@@ -347,7 +351,7 @@ static NSInteger kButtonsSection;
             caption = sqlite.mapSource.name;
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];
-            cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map"];
             cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
         }
         
@@ -374,12 +378,11 @@ static NSInteger kButtonsSection;
     
     else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)
@@ -402,13 +405,13 @@ static NSInteger kButtonsSection;
     
     else if ([item[@"type"] isEqualToString:kCellTypeTitleSlider])
     {
-        static NSString* const identifierCell = @"OATitleSliderTableViewCell";
         OATitleSliderTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleSliderCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
+            [cell.sliderView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
         
@@ -426,13 +429,10 @@ static NSInteger kButtonsSection;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
-        static NSString* const identifierCell = @"OAButtonCell";
-        OAButtonCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
             [cell showImage:NO];
             [cell.button setTitleColor:[UIColor colorWithRed:87.0/255.0 green:20.0/255.0 blue:204.0/255.0 alpha:1] forState:UIControlStateNormal];
@@ -440,7 +440,7 @@ static NSInteger kButtonsSection;
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
-            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             if (indexPath.section == kAvailableLayersSection)
                 [cell.button addTarget:self action:@selector(installMorePressed) forControlEvents:UIControlEventTouchUpInside];
             else

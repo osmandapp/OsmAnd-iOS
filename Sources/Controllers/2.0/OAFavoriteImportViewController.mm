@@ -12,6 +12,7 @@
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OADefaultFavorite.h"
+#import "OATargetInfoViewController.h"
 #import "OAColors.h"
 
 #import "OsmAndApp.h"
@@ -220,7 +221,7 @@
             return;
         
         _app.favoritesCollection->mergeFrom(_favoritesCollection);
-        [_app saveFavoritesToPermamentStorage];
+        [OAFavoritesHelper loadFavorites];
         [self.ignoredNames removeAllObjects];
         self.conflictedName = @"";
         
@@ -271,13 +272,11 @@
 {
     OAFavoriteGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-    
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
     }
     
@@ -285,11 +284,6 @@
     {
         OAFavoriteItem* item = [groupData.points objectAtIndex:indexPath.row];
         [cell.titleView setText:item.favorite->getTitle().toNSString()];
-        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
-
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        cell.titleIcon.image = favCol.cellIcon;
-        cell.titleIcon.tintColor = favCol.color;
         
         cell.rightArrow.image = nil;
         cell.directionImageView.image = nil;
@@ -299,9 +293,10 @@
         cell.titleView.frame = titleFrame;
         
         [cell.distanceView setText:item.distance];
-        cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+        cell.titleIcon.image = [item getCompositeIcon];
     }
     return cell;
 }

@@ -88,7 +88,7 @@
     return self;
 }
 
-+ (NSString *) getId
+- (NSString *) getId
 {
     return PLUGIN_ID;
 }
@@ -112,7 +112,7 @@
 
 - (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationUtil
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && !_settings.offlineEditing)
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && !_settings.offlineEditing.get)
         return _remoteUtil;
     else
         return _localUtil;

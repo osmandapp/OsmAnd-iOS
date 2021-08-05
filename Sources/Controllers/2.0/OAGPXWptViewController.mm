@@ -24,6 +24,8 @@
 #include <OsmAndCore/GeoInfoDocument.h>
 #include <OsmAndCore/GpxDocument.h>
 #include "Localization.h"
+#include "OARootViewController.h"
+#include "OASelectedGPXHelper.h"
 
 
 @implementation OAGPXWptViewController
@@ -38,13 +40,17 @@
     if (self)
     {
         _app = [OsmAndApp instance];
+        if (!wpt.docPath)
+        {
+            wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
+        }
         self.wpt = wpt;
-        
+
         if (!headerOnly)
         {
             [super setupCollapableViewsWithData:wpt lat:wpt.point.position.latitude lon:wpt.point.position.longitude];
         }
-        
+
         self.groupTitle = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
         self.groupColor = self.wpt.color;
         
@@ -93,6 +99,30 @@
         [super setupCollapableViewsWithData:wpt lat:wpt.point.position.latitude lon:wpt.point.position.longitude];
     }
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.titleGradient.frame = self.navBar.frame;
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self applySafeAreaMargins];
+        self.titleGradient.frame = self.navBar.frame;
+    } completion:nil];
+}
+
+- (void) setupDeleteButtonIcon
+{
+    [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+}
+
+- (NSString *) getGpxFileName
+{
+    return [[_gpxFileName lastPathComponent] stringByDeletingPathExtension];
 }
 
 - (NSString *) getCommonTypeStr
@@ -153,6 +183,11 @@
     return YES;//![self.wpt.point isKindOfClass:[OAGpxRoutePoint class]];
 }
 
+-(void)activateEditing
+{
+    [[OARootViewController instance].mapPanel targetPointEditWaypoint:self.wpt];
+}
+
 -(void) deleteItem
 {
     [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"wpt_remove_q") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")] otherButtonItems:
@@ -203,7 +238,7 @@
 
 - (UIColor *) getItemColor
 {
-    return self.wpt.color;
+    return self.wpt.color ? self.wpt.color : ((OAFavoriteColor *) OADefaultFavorite.builtinColors.firstObject).color;
 }
 
 - (void) setItemColor:(UIColor *)color

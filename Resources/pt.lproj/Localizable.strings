@@ -516,7 +516,7 @@
 "sort_by_distance" = "Ordenar por distância";
 "sort_by_name" = "Ordenar por nome";
 "map_markers_other" = "Outros marcadores";
-"stop_routing_confirm" = "Quer parar a navegação?";
+"stop_routing_confirm" = "Parar a navegação?";
 "cancel_route" = "Cancelar a rota";
 "navigation_over_track" = "Iniciar a navegação ao longo do trilho\?";
 "shared_string_ellipsis" = "…";
@@ -1140,7 +1140,7 @@
 "osm_succsessful_uploads" = "Sucesso";
 "osm_upload_complete" = "Envio terminado";
 "osm_tag_too_long_message" = "O comprimento máximo do valor da etiqueta %@ é de 255 caracteres.\nUtilize menos caracteres para continuar.";
-"save_poi_without_poi_type_message" = "Quer mesmo guardar o POI sem especificar o tipo?";
+"save_poi_without_poi_type_message" = "Guardar POI sem especificar o tipo?";
 "osm_edit_uploading" = "A enviar...";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_OLC" = "Código de localização aberto (OLC)";
@@ -1653,7 +1653,7 @@
 "shared_string_import_complete" = "Importação terminada";
 "shared_string_importing" = "A importar";
 "shared_string_poi_types" = "Tipos de POI";
-"layer_amenity_label" = "Nomes dos POI";
+"layer_amenity_label" = "Nomes dos POI e favoritos";
 "osm_notes" = "Notas do OSM";
 "personal_category_name" = "Pessoal";
 "tones" = "toneladas";
@@ -1719,7 +1719,7 @@
 "map_settings_legend" = "Legenda";
 "position_icon_at_rest" = "Ícone de posição quando parado";
 "min_speed" = "Velocidade mínima";
-"import_complete_description" = "Todos os dados de %@ são importados. Pode usar os botões abaixo para abrir a parte necessária da aplicação para os gerir.";
+"import_complete_description" = "Todos os dados de %@ foram importados. Pode usar os botões abaixo para abrir a parte necessária da aplicação para os gerir.";
 "shared_string_add_profile" = "Adicionar perfil";
 "whole_track" = "Trilho inteiro";
 "save_new_track" = "Guardar como novo trilho";

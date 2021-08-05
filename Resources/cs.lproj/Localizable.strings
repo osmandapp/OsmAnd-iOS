@@ -679,7 +679,7 @@
 "plugins" = "Moduly";
 "open_map_settings" = "Otevřít nastavení mapy";
 "plugin_popup_ski_title" = "Zapnout lyžařský mapový styl";
-"plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
+"plugin_popup_ski_desc" = "Pro zapnutí <b>lyžařského</b> stylu mapy, přejděte prosím do <b>Nastavení mapy</b> > <b>Typ mapy</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
 "plugin_popup_wiki_desc" = "Chcete-li začít používat modul Wikipedie, stáhněte si prosím nejdříve data z Wikipedie pro daný region";
 "plugin_popup_wiki_ask" = "Abyste mohli stahovat data z Wikipedie, musíte aktivovat modul <b>Wikipedie</b>";
@@ -713,7 +713,7 @@
 "go_to_map" = "Přejít na mapu";
 "device_memory" = "Paměť zařízení";
 "free_memory" = "%@ volných";
-"first_usage_greeting" = "Get directions and discover new places without Internet connection";
+"first_usage_greeting" = "Nechte se navigovat a objevte nová místa bez nutnosti připojení k Internetu";
 "get_started" = "Začít";
 "first_usage_wizard_desc" = "Povolit OsmAndu určit vaši polohu a navrhnout mapy pro tuto oblast.";
 "location_not_found" = "Poloha nenalezena";
@@ -1561,7 +1561,7 @@
 "base_profile_descr_pedestrian" = "Chůze, turistika, běh";
 "map_settings_add_online_source" = "Přidat online zdroj";
 "profile_prefs_reset_successful" = "Všechna nastavení profilu obnovena do výchozího stavu";
-"layer_amenity_label" = "Překryvné popisky bodů";
+"layer_amenity_label" = "Popisky bodů (body zájmu, Oblíbené)";
 "osmand_routing" = "Navigace OsmAnd";
 "map_settings_legend" = "Legenda";
 "res_pseudo_mercator" = "Pseudo-Mercatorovo zobrazení";
@@ -2097,3 +2097,4 @@
 "carplay_profile" = "Profil CarPlay";
 "last_used" = "Naposledy použito";
 "map_widget_parking" = "Místo parkování";
+"search_more" = "Vyhledat další…";

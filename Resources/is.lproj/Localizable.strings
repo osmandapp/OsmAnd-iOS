@@ -1941,7 +1941,7 @@
 "selected_seg_recalc_descr" = "Aðeins valinn bútur verður endurreiknaður með völdu sniði";
 "next_seg_dist" = "Næsti bútur %@";
 "prev_segs_dist" = "Allir fyrri bútar %@";
-"layer_amenity_label" = "Merkingará þekju merkisstaða";
+"layer_amenity_label" = "Merkingar punkta (merkisstaðir, eftirlæti)";
 "prev_seg_dist" = "Fyrri bútur %@";
 "unsupported_action_descr" = "Þessi flýtiaðgerð er ekki studd í augnablikinu. Það gæti breyst í nýrri útgáfum forritsins.";
 "unsupported_action_title" = "Óstudd aðgerð (%@)";

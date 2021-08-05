@@ -162,7 +162,7 @@ typedef enum
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _mapillaryChangeObserver;
-    
+
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
     OsmAnd::PointI _mainMapTarget31;
@@ -228,7 +228,7 @@ typedef enum
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onMapillaryChanged)
                                                           andObserve:_app.data.mapillaryChangeObservable];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
     [_routingHelper addListener:self];
@@ -3518,8 +3518,12 @@ typedef enum
 
 - (void)openWiki:(OAWikiMenuViewController *)sender
 {
-    OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithLocalizedContent:self.targetMenuView.targetPoint.localizedContent localizedNames:self.targetMenuView.targetPoint.localizedNames];
-    [self.navigationController pushViewController:wikiWeb animated:YES];
+    id obj = self.targetMenuView.targetPoint.targetObj;
+    if ([obj isKindOfClass:OAPOI.class])
+    {
+        OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithPoi:(OAPOI *) obj];
+        [self.navigationController pushViewController:wikiWeb animated:YES];
+    }
 }
 
 #pragma mark - OADestinationViewControllerProtocol

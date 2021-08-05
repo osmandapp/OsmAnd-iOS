@@ -62,6 +62,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 + (UIImage *) getUserIcon;
 
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes;
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin;
 
 - (void) setFilterByName:(NSString *)filter;
 - (void) updateFilterResults;
@@ -98,5 +99,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (BOOL) isEmpty;
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius;
 - (void) removeUnsavedFilterByName;
-
+- (BOOL) isWikiFilter;
+- (BOOL) isTopWikiFilter;
+- (void) updateAcceptedTypeOrigins;
 @end

@@ -26,6 +26,7 @@
 #import "OAManageResourcesViewController.h"
 #import "OAWikiArticleHelper.h"
 #import "OAPOIFiltersHelper.h"
+#import "OAWikipediaPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -158,13 +159,20 @@
             }
         }
     }
-    
+
+    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class];
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestItems.count + 2];
     int i = 0;
     for (OAPOI *poi in self.nearestItems)
     {
         const auto distance = OsmAnd::Utilities::distance(poi.longitude, poi.latitude, _longitude, _latitude);
-        NSString *title = [NSString stringWithFormat:@"%@ (%@)", poi.nameLocalized, [[OsmAndApp instance] getFormattedDistance:distance]];
+
+        NSString *language = [poi.localizedNames.allKeys firstObjectCommonWithArray:[wikiPlugin getLanguagesToShow]];
+        NSString *nameLocalized = poi.localizedNames[language];
+        if (!nameLocalized)
+            nameLocalized = poi.nameLocalized;
+
+        NSString *title = [NSString stringWithFormat:@"%@ (%@)", nameLocalized, [[OsmAndApp instance] getFormattedDistance:distance]];
         UIButton *btn = [self createButton:title];
         btn.tag = i++;
         [self addSubview:btn];

@@ -106,6 +106,26 @@
     return val && [val isEqualToString:OSM_DELETE_VALUE];
 }
 
+- (NSSet<NSString *> *)getSupportedContentLocales
+{
+    NSMutableSet<NSString *> *supported = [NSMutableSet new];
+    [supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
+    return supported;
+}
+
+- (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag
+{
+    NSMutableArray<NSString *> *l = [NSMutableArray new];
+    for (NSString *nm in _values.allKeys)
+    {
+        if ([nm hasPrefix:[NSString stringWithFormat:@"%@:", tag]])
+            [l addObject:[nm substringFromIndex:tag.length + 1]];
+        else if ([nm isEqualToString:tag])
+            [l addObject:defTag];
+    }
+    return l;
+}
+
 - (NSString *) getTagContent:(NSString *)tag lang:(NSString *)lang
 {
     if (lang)

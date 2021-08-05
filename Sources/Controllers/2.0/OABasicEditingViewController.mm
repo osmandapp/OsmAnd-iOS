@@ -406,11 +406,16 @@ static const NSInteger _contactInfoSectionCount = 5;
     _isKeyboardShown = NO;
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+-(void)clearButtonPressed:(UIButton *)sender
 {
-    NSString *tagName = sender.tag == -1 ? [OAOSMSettings getOSMKey:NAME] : _tagNames[sender.tag];
+    BOOL isNameSection = sender.tag == -1;
+    NSString *tagName = isNameSection ? [OAOSMSettings getOSMKey:NAME] : _tagNames[sender.tag];
     [_poiData removeTag:tagName];
-}
 
+    [self.tableView beginUpdates];
+    OATextInputFloatingCell *cell = isNameSection ? _poiNameCell : (OATextInputFloatingCell *) _contactInfoItems[sender.tag];
+    cell.inputField.text = @"";
+    [self.tableView endUpdates];
+}
 
 @end

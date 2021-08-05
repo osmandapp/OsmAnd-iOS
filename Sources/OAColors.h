@@ -161,12 +161,10 @@
 #define color_gpx_up 0x4CB237
 #define color_gpx_down 0xDB5364
 
-<<<<<<< HEAD:OAColors.h
 #define color_region_uptodate_argb 0x5532C832
 #define color_region_backuped_argb 0x55FF8F00
 #define color_region_selected_argb 0x55FFFF00
 #define color_region_downloading_argb 0x44FF61FF
-=======
 
 #define color_checkbox_outline 0xC4C4C7
 
@@ -175,6 +173,5 @@
 #define markers_header_dark_blue 0x03416e
 #define nav_bar_night 0x222526
 #define text_primary_night 0xE6E6E6
->>>>>>> ad59fa714a1330de273b65c0ffb7e16da68c6b4c:Sources/OAColors.h
 
 #endif /* OAColors_h */

@@ -23,11 +23,8 @@
 #import "OAOsmEditsLayer.h"
 #import "OAOsmBugsLayer.h"
 #import "OAMapillaryLayer.h"
-<<<<<<< HEAD
 #import "OADownloadedRegionsLayer.h"
-=======
 #import "OARulerByTapControlLayer.h"
->>>>>>> ad59fa714a1330de273b65c0ffb7e16da68c6b4c
 
 #import "OATerrainMapLayer.h"
 #import "OAOverlayMapLayer.h"

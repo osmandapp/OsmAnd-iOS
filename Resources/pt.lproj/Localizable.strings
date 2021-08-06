@@ -2106,3 +2106,9 @@
 "threshold_distance" = "Limite de distância";
 "map_widget_parking" = "Local de estacionamento";
 "search_more" = "Pesquisar mais…";
+"preferred_languages" = "Idiomas preferidos";
+"available_languages" = "Idiomas disponíveis";
+"select_wikipedia_article_langs" = "Selecione os idiomas dos artigos da Wikipédia no mapa. Pode mudar para qualquer idioma disponível enquanto lê um artigo da Wikipédia.";
+"shared_string_all_languages" = "Todos os idiomas";
+"wiki_menu_download_descr" = "São necessários mapas adicionais para visualizar os POIs da Wikipédia no mapa.";
+"some_articles_may_not_available_in_lang" = "Alguns artigos da Wikipédia podem não estar disponíveis no seu idioma.";

@@ -1978,3 +1978,7 @@
 "default_profile_descr" = "Velg en profil å bruke for programstart.";
 "search_more" = "Søk mer …";
 "allow_3d_descr" = "Skru på dette for å vise kartet i 2,5D-perspektiv";
+"gpx_upload_private_visibility_descr" = "«Privat» betyr at sporet ikke vises i noen offentlige oppføringer, men sporingspunkter fra dem i ukronologisk rekkefølge er tilgjengelig gjennom det offentlige GPS-API-et uten tidsstempler.";
+"gpx_upload_identifiable_visibility_descr" = "«Identifiserbart» betyr at sporet vises offentlig i dine GPS-spor og i offentlige GPS-sporingsoppføringer. Altså vil andre kunne laste ned rå sporingsdata og tilknytte den til brukernavnet ditt. Sporingspunktsdata med offentlige tidsstempel fra GPS-API-et servert via sporingspunkts-API-et vil vise til din opprinnelige sporingsside.";
+"gpx_upload_public_visibility_descr" = "«Offentlig» betyr at sporet vises offentlig i dine GPS-spor og i offentlige GPS-sporingsoppføringer, og i den offentlige spor-listen med tidsstempler i rå form. Data servert via API-et viser ikke til sporsiden din. Tidsstempler fra sporingspunkter er ikke tilgjengelig gjennom det offentlige GPS-API-et, og sporingspunkter sorteres ikke kronologisk.";
+"app_restart_required" = "Programomstart kreves for å bruke noen innstillinger.";

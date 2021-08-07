@@ -1362,7 +1362,7 @@
 "shared_string_preparing" = "Előkészület";
 "shared_string_deselect_all" = "Összes kijelölés megszüntetése";
 "shared_string_continue" = "Folytatás";
-"layer_amenity_label" = "POI-rátétréteg feliratai";
+"layer_amenity_label" = "Pontfeliratok (érdekes pontok, kedvencek)";
 "osm_notes" = "OSM-jegyzetek";
 "personal_category_name" = "Személyes";
 "whole_track" = "Teljes nyomvonal";

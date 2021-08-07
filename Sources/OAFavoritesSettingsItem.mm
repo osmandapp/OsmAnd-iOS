@@ -100,7 +100,7 @@
                         OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
                         if (plugin)
                         {
-                            BOOL isTimeRestricted = item.getTimestamp != nil;
+                            BOOL isTimeRestricted = item.getTimestamp != nil && [item.getTimestamp timeIntervalSince1970] > 0;
                             [plugin setParkingType:isTimeRestricted];
                             [plugin setParkingTime:isTimeRestricted ? item.getTimestamp.timeIntervalSince1970 * 1000 : 0];
                             [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];

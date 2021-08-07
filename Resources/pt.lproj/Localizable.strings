@@ -1140,7 +1140,7 @@
 "osm_succsessful_uploads" = "Sucesso";
 "osm_upload_complete" = "Envio terminado";
 "osm_tag_too_long_message" = "O comprimento máximo do valor da etiqueta %@ é de 255 caracteres.\nUtilize menos caracteres para continuar.";
-"save_poi_without_poi_type_message" = "Quer mesmo guardar o POI sem especificar o tipo?";
+"save_poi_without_poi_type_message" = "Guardar POI sem especificar o tipo?";
 "osm_edit_uploading" = "A enviar...";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_OLC" = "Código de localização aberto (OLC)";
@@ -1653,7 +1653,7 @@
 "shared_string_import_complete" = "Importação terminada";
 "shared_string_importing" = "A importar";
 "shared_string_poi_types" = "Tipos de POI";
-"layer_amenity_label" = "Nomes dos POI";
+"layer_amenity_label" = "Nomes dos POI e favoritos";
 "osm_notes" = "Notas do OSM";
 "personal_category_name" = "Pessoal";
 "tones" = "toneladas";
@@ -2106,3 +2106,9 @@
 "threshold_distance" = "Limite de distância";
 "map_widget_parking" = "Local de estacionamento";
 "search_more" = "Pesquisar mais…";
+"preferred_languages" = "Idiomas preferidos";
+"available_languages" = "Idiomas disponíveis";
+"select_wikipedia_article_langs" = "Selecione os idiomas dos artigos da Wikipédia no mapa. Pode mudar para qualquer idioma disponível enquanto lê um artigo da Wikipédia.";
+"shared_string_all_languages" = "Todos os idiomas";
+"wiki_menu_download_descr" = "São necessários mapas adicionais para visualizar os POIs da Wikipédia no mapa.";
+"some_articles_may_not_available_in_lang" = "Alguns artigos da Wikipédia podem não estar disponíveis no seu idioma.";

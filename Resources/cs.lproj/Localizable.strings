@@ -1561,7 +1561,7 @@
 "base_profile_descr_pedestrian" = "Chůze, turistika, běh";
 "map_settings_add_online_source" = "Přidat online zdroj";
 "profile_prefs_reset_successful" = "Všechna nastavení profilu obnovena do výchozího stavu";
-"layer_amenity_label" = "Překryvné popisky bodů";
+"layer_amenity_label" = "Popisky bodů (body zájmu, Oblíbené)";
 "osmand_routing" = "Navigace OsmAnd";
 "map_settings_legend" = "Legenda";
 "res_pseudo_mercator" = "Pseudo-Mercatorovo zobrazení";

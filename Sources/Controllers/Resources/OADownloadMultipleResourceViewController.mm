@@ -211,6 +211,8 @@
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
             [cell setSelectedBackgroundView:bgColorView];
+            cell.descriptionView.hidden = NO;
+            cell.descriptionView.font = [UIFont systemFontOfSize:13.0];
         }
         if (cell)
         {
@@ -229,9 +231,7 @@
             else
                 size = [NSByteCountFormatter stringFromByteCount:[OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId)->packageSize countStyle:NSByteCountFormatterCountStyleFile];
 
-            cell.descriptionView.hidden = NO;
             cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", size, [item getDate]];
-            cell.descriptionView.font = [UIFont systemFontOfSize:13.0];
 
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];

@@ -488,7 +488,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 @implementation OAResourcesUIHelper
 
-+ (NSString *)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)resource inRegion:(OAWorldRegion *)region withRegionName:(BOOL)includeRegionName withResourceType:(BOOL)includeResourceType
++ (NSString *)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)resource
+                     inRegion:(OAWorldRegion *)region
+               withRegionName:(BOOL)includeRegionName
+             withResourceType:(BOOL)includeResourceType
 {
     if (region == [OsmAndApp instance].worldRegion)
     {
@@ -523,7 +526,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return [OAResourcesUIHelper titleOfResourceType:resource->type inRegion:region withRegionName:includeRegionName withResourceType:includeResourceType];
 }
 
-+ (NSString *)titleOfResourceType:(OsmAndResourceType)type inRegion:(OAWorldRegion *)region withRegionName:(BOOL)includeRegionName withResourceType:(BOOL)includeResourceType
++ (NSString *)titleOfResourceType:(OsmAndResourceType)type
+                         inRegion:(OAWorldRegion *)region
+                   withRegionName:(BOOL)includeRegionName
+                 withResourceType:(BOOL)includeResourceType
 {
     NSString *nameStr;
     switch (type)
@@ -737,7 +743,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return items;
 }
 
-+ (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(NSArray<OAWorldRegion *> *)subregions resourceTypes:(NSArray<NSNumber *> *)resourceTypes isGroup:(BOOL)isGroup
++ (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(NSArray<OAWorldRegion *> *)subregions
+                                        resourceTypes:(NSArray<NSNumber *> *)resourceTypes
+                                              isGroup:(BOOL)isGroup
 {
     NSMutableArray<OAResourceItem *> *resources = [NSMutableArray new];
     for (NSNumber *resourceType in resourceTypes)
@@ -749,7 +757,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return [NSArray arrayWithArray:resources];
 }
 
-+ (void)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAndResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
++ (void)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                  resourceType:(OsmAndResourceType)resourceType
+                    onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray<OAResourceItem *> * res = [OAResourcesUIHelper requestMapDownloadInfo:coordinate resourceType:resourceType subregions:nil];
@@ -760,7 +770,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     });
 }
 
-+ (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAndResourceType)resourceType subregions:(NSArray<OAWorldRegion *> *)subregions
++ (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                                         resourceType:(OsmAndResourceType)resourceType
+                                           subregions:(NSArray<OAWorldRegion *> *)subregions
 {
     NSMutableArray<OAResourceItem *>* res;
     res = [NSMutableArray new];
@@ -910,7 +922,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item
+                     onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     if (item.downloadUrl)
     {
@@ -1012,7 +1026,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return [NSString stringWithString:message];
 }
 
-+ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem selectedItems:(NSArray<OAResourceItem *> *)selectedItems onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
+                            selectedItems:(NSArray<OAResourceItem *> *)selectedItems
+                            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                            onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     NSMutableArray<OAResourceItem *> *items = [selectedItems mutableCopy];
     for (OAResourceItem *item in selectedItems)
@@ -1065,7 +1082,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
         return;
@@ -1086,7 +1105,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
+                   onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                   onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     if (![self.class checkIfUpdateEnabled:item.worldRegion])
         return;
@@ -1109,7 +1130,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void)startDownloadOfItem:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void)startDownloadOfItem:(OARepositoryResourceItem *)item
+              onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+              onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     // Create download tasks
     NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -1168,7 +1191,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+            resourceName:(NSString *)name
+           onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+           onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     // Create download tasks
     NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -1270,7 +1296,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [item.downloadTask stop];
 }
 
-+ (void) offerDeleteResourceOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
++ (void) offerDeleteResourceOf:(OALocalResourceItem *)item
+                viewController:(UIViewController *)viewController
+                   progressHUD:(MBProgressHUD *)progressHUD
+           executeAfterSuccess:(dispatch_block_t)block
 {
     NSString *title;
     if ([item isKindOfClass:[OASqliteDbResourceItem class]])
@@ -1296,7 +1325,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [viewController presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void) offerDeleteResourceOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD
++ (void) offerDeleteResourceOf:(OALocalResourceItem *)item
+                viewController:(UIViewController *)viewController
+                   progressHUD:(MBProgressHUD *)progressHUD
 {
     [self offerDeleteResourceOf:item viewController:viewController progressHUD:progressHUD executeAfterSuccess:nil];
 }

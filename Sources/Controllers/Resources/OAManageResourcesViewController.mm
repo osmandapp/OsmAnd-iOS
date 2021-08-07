@@ -777,7 +777,7 @@ static BOOL _lackOfResources;
                 regionResources.repositoryResources.insert(resource->id, resource);
             }
 
-            region.resourceTypes = [[typesArray sortedArrayUsingComparator:^NSComparisonResult(NSNumber *num1, NSNumber *num2) {
+            region.resourceTypes = [typesArray sortedArrayUsingComparator:^NSComparisonResult(NSNumber *num1, NSNumber *num2) {
                 NSInteger orderValue1 = [OAResourceType getOrderIndex:num1];
                 NSInteger orderValue2 = [OAResourceType getOrderIndex:num2];
                 if (orderValue1 < orderValue2)
@@ -786,7 +786,7 @@ static BOOL _lackOfResources;
                     return NSOrderedDescending;
                 else
                     return NSOrderedSame;
-            }] mutableCopy];
+            }];
         }
         else
         {
@@ -927,7 +927,9 @@ static BOOL _lackOfResources;
         [self collectSubregionItemsFromRegularRegion:region];
 }
 
-- (OAResourceItem *) collectSubregionItem:(OAWorldRegion *)region regionResources:(const RegionResources &)regionResources resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource
+- (OAResourceItem *) collectSubregionItem:(OAWorldRegion *)region
+                          regionResources:(const RegionResources &)regionResources
+                                 resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource
 {
     OAResourceItem *item_ = nil;
 
@@ -1043,8 +1045,7 @@ static BOOL _lackOfResources;
     
     [_allResourceItems addObjectsFromArray:_allSubregionItems];
     [_allResourceItems sortUsingComparator:self.resourceItemsComparator];
-
-    _regionMapItems = [[_regionMapItems sortedArrayUsingComparator:^NSComparisonResult(OAResourceItem *res1, OAResourceItem *res2) {
+    [_regionMapItems sortUsingComparator:^NSComparisonResult(OAResourceItem *res1, OAResourceItem *res2) {
         NSInteger orderValue1 = [OAResourceType getOrderIndex:[OAResourceType toValue:res1.resourceType]];
         NSInteger orderValue2 = [OAResourceType getOrderIndex:[OAResourceType toValue:res2.resourceType]];
         if (orderValue1 < orderValue2)
@@ -1053,7 +1054,7 @@ static BOOL _lackOfResources;
             return NSOrderedDescending;
         else
             return NSOrderedSame;
-    }] mutableCopy];
+    }];
 
     // Map Creator sqlitedb files
     [_localSqliteItems removeAllObjects];
@@ -2075,7 +2076,7 @@ static BOOL _lackOfResources;
                     if (item.resourceTypes.count > 0)
                     {
                         NSMutableOrderedSet<NSNumber *> *typesSet = [NSMutableOrderedSet orderedSetWithArray:item.resourceTypes];
-                        NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
+                        NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
                             NSInteger orderValue1 = [OAResourceType getOrderIndex:type1];
                             NSInteger orderValue2 = [OAResourceType getOrderIndex:type2];
                             if (orderValue1 < orderValue2)
@@ -2084,7 +2085,8 @@ static BOOL _lackOfResources;
                                 return NSOrderedDescending;
                             else
                                 return NSOrderedSame;
-                        }] mutableCopy];
+                        }];
+
                         NSMutableArray<NSString *> *typesLocalized = [NSMutableArray new];
                         [sortedTypesWithoutDuplicate enumerateObjectsUsingBlock:^(NSNumber *type, NSUInteger idx, BOOL *stop) {
                             [typesLocalized addObject:[OAResourceType resourceTypeLocalized:[OAResourceType toResourceType:type isGroup:NO]]];
@@ -2312,7 +2314,7 @@ static BOOL _lackOfResources;
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
+            [btnAcc setTintColor:UIColorFromRGB(color_primary_purple)];
             btnAcc.frame = CGRectMake(0.0, 0.0, 60.0, 50.0);
             [cell setAccessoryView:btnAcc];
         }

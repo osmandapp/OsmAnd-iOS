@@ -14,9 +14,6 @@
 
 @interface OAResourcesBaseViewController : OACompoundViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
 @property (nonatomic, assign) BOOL dataInvalidated;
 
 @property OADownloadProgressView* downloadView;

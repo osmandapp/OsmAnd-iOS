@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 @class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode;
+@class OAPOIUIFilter, OAPOI;
 
 @interface OAPlugin : NSObject
 
@@ -61,6 +62,12 @@
 + (void) addCustomPlugin:(OACustomPlugin *)plugin;
 + (void) removeCustomPlugin:(OACustomPlugin *)plugin;
 + (NSArray<OAWorldRegion *> *) getCustomDownloadRegions;
+- (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale;
++ (NSString *)onGetMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale;
+- (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters;
++ (void)registerCustomPoiFilters:(NSMutableArray<OAPOIUIFilter *> *)poiUIFilters;
+- (void)prepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
++ (void)onPrepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
 
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
 

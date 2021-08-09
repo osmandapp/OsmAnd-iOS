@@ -1471,7 +1471,7 @@
 "rendering_attr_appMode_description" = "Optimizar mapa para";
 "rendering_attr_smoothness_very_bad_name" = "Muy malo";
 "rendering_attr_transportStops_name" = "Paradas de transporte";
-"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5–9).";
+"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5 – 9).";
 "rendering_attr_surface_asphalt_name" = "Asfalto";
 "routeInfo_smoothness_name" = "Suavidad";
 "rendering_attr_pisteRoutes_name" = "Pistas de esquí";
@@ -1938,7 +1938,7 @@
 "osm_notes" = "Notas de OSM";
 "plugin_popup_osm_editing_ask" = "Activa el complemento de edición de OpenStreetMap para añadir y gestionar ediciones y notas de mapas";
 "plugin_popup_osm_editing_title" = "Activar la edición de OpenStreetMap";
-"layer_amenity_label" = "Nombres de PDI superpuestos";
+"layer_amenity_label" = "Nombres de puntos (PDI, favoritos)";
 "personal_category_name" = "Personal";
 "next_seg_dist" = "Siguiente segmento %@";
 "whole_track" = "Traza completa";
@@ -2131,6 +2131,12 @@
 "carplay_profile_descr" = "Perfil usado al conectar con CarPlay.";
 "carplay_profile" = "Perfil de CarPlay";
 "last_used" = "Último usado";
-"ios_release_4_0" = "- ¡Nuevo! Pantalla de «Añadir favorito» con opciones para elegir el icono, el color y la forma personalizada\n- Se ha añadido el nuevo «Widget de coordenadas» con las coordenadas de la ubicación actual\n- Se ha añadido la posibilidad de importar complementos personalizados definidos por el usuario\n- Se ha ampliado significativamente la funcionalidad de importar/exportar\n- La «distancia al pulsar» se ha movido de la regla radial a una opción separada\n- Se ha corregido el bloqueo de la aplicación CarPlay cuando se apaga la pantalla del iPhone\n- La pantalla de complementos se ha trasladado de Mapas y Recursos al menú principal\n- Se ha añadido el idioma finlandés.\n- Se ha corregido la interfaz de usuario en orientación horizontal para la pantalla «Planificar ruta».\n- Se ha añadido soporte para los archivos de navegación y visualización personalizados\n- Se ha corregido el rendimiento de la línea de dirección de los marcadores\n- Se ha corregido el problema con la importación de archivos GPX con extensiones en mayúsculas\n- Se ha corregido el problema con el menú «Seguir traza».\n- Se ha corregido la importación de archivos OBF\n";
+"ios_release_4_0" = "• ¡Nuevo! Pantalla de «Añadir favorito» con opciones para elegir el icono, el color y la forma personalizada\n• Se ha añadido el nuevo «Widget de coordenadas» con las coordenadas de la ubicación actual\n• Se ha añadido la posibilidad de importar complementos personalizados definidos por el usuario\n• Se ha ampliado significativamente la funcionalidad de importar/exportar\n• La «distancia al pulsar» se ha movido de la regla radial a una opción separada\n• Se ha corregido el bloqueo de la aplicación CarPlay cuando se apaga la pantalla del iPhone\n• La pantalla de complementos se ha trasladado de Mapas y Recursos al menú principal\n• Se ha añadido el idioma finlandés.\n• Se ha corregido la interfaz de usuario en orientación horizontal para la pantalla «Planificar ruta».\n• Se ha añadido soporte para los archivos de navegación y visualización personalizados\n• Se ha corregido el rendimiento de la línea de dirección de los marcadores\n• Se ha corregido el problema con la importación de archivos GPX con extensiones en mayúsculas\n• Se ha corregido el problema con el menú «Seguir traza».\n• Se ha corregido la importación de archivos OBF\n";
 "map_widget_parking" = "Lugar del estacionamiento";
 "search_more" = "Buscar más…";
+"preferred_languages" = "Idiomas preferidos";
+"available_languages" = "Idiomas disponibles";
+"some_articles_may_not_available_in_lang" = "Es posible que algunos artículos de Wikipedia no estén disponibles en tu idioma.";
+"wiki_menu_download_descr" = "Se necesitan mapas adicionales para ver los puntos de interés de Wikipedia en el mapa.";
+"select_wikipedia_article_langs" = "Marca los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
+"shared_string_all_languages" = "Todos los idiomas";

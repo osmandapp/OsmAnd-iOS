@@ -267,8 +267,6 @@ static BOOL _lackOfResources;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
 
     _numberFormatter = [[NSNumberFormatter alloc] init];
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
@@ -1291,7 +1289,7 @@ static BOOL _lackOfResources;
 - (void) updateTableLayout
 {
     CGRect frame = self.tableView.frame;
-    CGFloat h = self.view.bounds.size.height - self.toolbarView.bounds.size.height - frame.origin.y;
+    CGFloat h = self.view.bounds.size.height - frame.origin.y;
     if (self.downloadView.superview)
         h -= self.downloadView.bounds.size.height;
     
@@ -2759,19 +2757,6 @@ static BOOL _lackOfResources;
 }
 
 #pragma mark -
-
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    [OAAnalyticsHelper logEvent:@"purchases_open"];
-
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
-}
 
 - (void) doSubscribe:(NSString *)email
 {

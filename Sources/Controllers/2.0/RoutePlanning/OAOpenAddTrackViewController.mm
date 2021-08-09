@@ -56,6 +56,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     int _selectedFolderIndex;
     NSArray<NSString *> *_allFolders;
     OACollectionViewCellState *_scrollCellsState;
+    OAFoldersCell *_foldersCell;
 }
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
@@ -127,12 +128,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             [self.tableView reloadData];
         } completion:nil];
     }
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    if (self.delegate)
-        [self.delegate closeBottomSheet];
 }
 
 - (void) generateData
@@ -323,7 +318,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
     else if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
     {
-        OAFoldersCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFoldersCell getCellIdentifier]];
+        OAFoldersCell* cell = _foldersCell;
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCell getCellIdentifier] owner:self options:nil];
@@ -339,6 +334,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
+        _foldersCell = cell;
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
@@ -396,7 +392,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             if (self.delegate)
                 [self.delegate closeBottomSheet];
             [self dismissViewControllerAnimated:YES completion:nil];
-            [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFileName]];
+            [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
             break;
         }
         case EOAAddToATrack:
@@ -467,7 +463,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
     if (self.delegate)
+    {
         [self.delegate onSegmentSelected:position gpx:gpx];
+        [OARootViewController.instance dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - OAFoldersCellDelegate

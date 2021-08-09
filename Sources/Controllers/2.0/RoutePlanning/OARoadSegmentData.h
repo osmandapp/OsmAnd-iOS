@@ -19,7 +19,7 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic, readonly) OAGpxTrkPt *start;
 @property (nonatomic, readonly) OAGpxTrkPt *end;
-@property (nonatomic, readonly) NSArray<OAGpxTrkPt *> *points;
+@property (nonatomic, readonly) NSArray<OAGpxTrkPt *> *gpxPoints;
 @property (nonatomic, readonly) std::vector<std::shared_ptr<RouteSegmentResult>> segments;
 @property (nonatomic, readonly) double distance;
 

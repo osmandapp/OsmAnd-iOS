@@ -36,7 +36,7 @@
 
 @implementation OAApproximationTask
 {
-	OAGpxApproximator *_approximator;
+	__weak OAGpxApproximator *_approximator;
 	OARoutingEnvironment *_env;
 	SHARED_PTR<GpxRouteApproximation> _gctx;
 	std::vector<SHARED_PTR<GpxPoint>> _points;

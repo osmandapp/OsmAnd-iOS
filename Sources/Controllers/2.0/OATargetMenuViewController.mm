@@ -47,6 +47,10 @@
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
 #import "OADownloadMapViewController.h"
+#import "OAPlugin.h"
+#import "OAWikipediaPlugin.h"
+#import "OAPOI.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -160,22 +164,15 @@
         }
         case OATargetWiki:
         {
-            NSString *contentLocale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-            if (!contentLocale)
-                contentLocale = [OAUtilities currentLang];
-            
-            NSString *content = [targetPoint.localizedContent objectForKey:contentLocale];
-            if (!content)
-            {
-                contentLocale = @"";
-                content = [targetPoint.localizedContent objectForKey:contentLocale];
-            }
-            if (!content && targetPoint.localizedContent.count > 0)
-            {
-                contentLocale = targetPoint.localizedContent.allKeys[0];
-                content = [targetPoint.localizedContent objectForKey:contentLocale];
-            }
-            
+            NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
+            if (!preferredMapLanguage || preferredMapLanguage.length == 0)
+                preferredMapLanguage = NSLocale.currentLocale.languageCode;
+
+            NSString *language = [OAPlugin onGetMapObjectsLocale:targetPoint.targetObj preferredLocale:preferredMapLanguage];
+            if ([language isEqualToString:@"en"])
+                language = @"";
+
+            NSString *content = targetPoint.localizedContent[language];
             if (content)
                 controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
             break;

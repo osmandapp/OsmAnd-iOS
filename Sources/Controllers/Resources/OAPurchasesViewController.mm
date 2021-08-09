@@ -51,11 +51,6 @@
 {
     _titleView.text = OALocalizedString(@"purchases");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-    
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void) viewDidLoad
@@ -78,21 +73,10 @@
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
     [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 
-    _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
-
     if (self.openFromSplash)
     {
         self.backButton.hidden = YES;
         self.doneButton.hidden = NO;
-    }
-    
-    if (self.openFromCustomPlace)
-    {
-        [_toolbarView removeFromSuperview];
-        _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height + _toolbarView.frame.size.height);
     }
 }
 
@@ -110,16 +94,6 @@
 - (UIView *) getMiddleView
 {
     return _tableView;
-}
-
-- (UIView *) getBottomView
-{
-    return _toolbarView;
-}
-
-- (CGFloat) getToolBarHeight
-{
-    return defaultToolBarHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -338,22 +312,6 @@
     [[OARootViewController instance] restorePurchasesWithProgress:NO];
 }
 
-- (void) backButtonClicked:(id)sender
-{
-    if (self.openFromCustomPlace)
-        [self.navigationController popViewControllerAnimated:YES];
-    else
-        [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (IBAction) btnToolbarMapsClicked:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:NO];
-}
-
-- (IBAction) btnToolbarPurchasesClicked:(id)sender
-{
-}
 
 #pragma mark - UIAlertViewDelegate
 

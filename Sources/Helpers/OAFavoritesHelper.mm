@@ -394,9 +394,14 @@ static BOOL _favoritesLoaded = NO;
         {
             OAFavoriteGroup *group = _flatGroups[[item getCategory]];
             if (group)
-                [group.points removeObject:item];
-            
-            [_cachedFavoritePoints removeObject:item];
+            {
+                NSInteger indexItem = [group.points indexOfObject:item];
+                if (indexItem != NSNotFound)
+                    [group.points removeObjectAtIndex:indexItem];
+            }
+            NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:item];
+            if (cachedIndexItem != NSNotFound)
+                [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
             [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(item.favorite);
         }
     }
@@ -485,23 +490,26 @@ static BOOL _favoritesLoaded = NO;
 
 + (NSString *) checkEmoticons:(NSString *)text
 {
-    __block NSMutableString* tempString = [NSMutableString string];
-    
+    __block NSMutableString *tempString = [NSMutableString string];
+
     [text enumerateSubstringsInRange: NSMakeRange(0, text.length) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
-     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop){
-         
-         const unichar hs = [substring characterAtIndex: 0];
-         
-         // surrogate pair
-         if (0xd800 <= hs && hs <= 0xdbff) {
-             const unichar ls = [substring characterAtIndex: 1];
+     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+
+         const unichar hs = [substring characterAtIndex:0];
+
+        // surrogate pair
+         if (0xd800 <= hs && hs <= 0xdbff)
+         {
+             const unichar ls = [substring characterAtIndex:1];
              const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-             
-             [tempString appendString: (0x1d000 <= uc && uc <= 0x1f77f)? @"": substring]; // U+1D000-1F77F
-             
+
+             [tempString appendString:(0x1d000 <= uc && uc <= 0x1f77f) ? @"" : substring]; // U+1D000-1F77F
+
          // non surrogate
-         } else {
-             [tempString appendString: (0x2100 <= hs && hs <= 0x26ff)? @"": substring]; // U+2100-26FF
+         }
+         else
+         {
+             [tempString appendString:(0x2100 <= hs && hs <= 0x26ff && hs != 0x2116) ? @"" : substring]; // U+2100-26FF
          }
      }];
     

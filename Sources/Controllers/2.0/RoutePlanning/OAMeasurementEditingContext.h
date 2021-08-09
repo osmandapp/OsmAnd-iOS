@@ -73,6 +73,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
 - (void) addPoints:(NSArray<OAGpxTrkPt *> *)points;
 - (void) addPoints;
+- (void) setPoints:(NSArray<OAGpxTrkPt *> *)points;
 
 - (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine;
 - (NSArray<OAGpxTrkSeg *> *) getAfterTrkSegmentLine;

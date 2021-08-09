@@ -1004,7 +1004,7 @@
 "rendering_value_red_name" = "Rosso";
 "rendering_attr_surface_mud_name" = "Fango";
 "rendering_attr_highway_class_street_name" = "Strada";
-"routing_attr_avoid_unpaved_name" = "Evita strade non pavimentate";
+"routing_attr_avoid_unpaved_name" = "No strade non pavimentate";
 "rendering_value_pink_name" = "Rosa";
 "rendering_value_defaultTranslucentCyan_name" = "Predefinito (ciano traslucido)";
 "routing_attr_short_way_description" = "Utilizza la via migliore rispetto ai consumi (di solito la più breve).";
@@ -1015,7 +1015,7 @@
 "rendering_attr_highway_class_bridleway_name" = "Percorso equestre";
 "rendering_attr_surface_sett_name" = "Sampietrini";
 "routing_attr_avoid_ice_roads_fords_description" = "Evita strade di ghiaccio e guadi.";
-"routing_attr_driving_style_prefer_unpaved_description" = "Preferisci le strade pavimentate.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Preferisci le strade non pavimentate a quelle che lo sono per il calcolo del percorso.";
 "routeInfo_road_types_name" = "Tipi di strade";
 "rendering_attr_piste_difficulty_aerialway_name" = "Funivia";
 "rendering_attr_roadColors_description" = "Seleziona una combinazione di colori per le strade:";
@@ -1080,7 +1080,7 @@
 "routeInfo_tracktype_name" = "Rigidità della superficie";
 "routing_attr_width_description" = "Specifica il limite della larghezza del veicolo permessa nei percorsi.";
 "rendering_attr_piste_type_nordic_name" = "Sci nordico";
-"routing_attr_avoid_bus_name" = "Evita gli autobus";
+"routing_attr_avoid_bus_name" = "No autobus";
 "rendering_attr_hideNonVehicleHighways_name" = "Strade non carrabili";
 "rendering_attr_hideWaterPolygons_description" = "Acqua";
 "routing_attr_freeride_policy_description" = "Freeride e fuoripista sono percorsi e passaggi non ufficiali. Tipicamente non curati, non sguarniti dai funzionari e non controllati la sera. Entrare a proprio rischio e pericolo.";
@@ -1092,7 +1092,7 @@
 "routing_attr_piste_type_downhill_description" = "Pendii per sci alpino e discesa e accesso agli impianti di risalita.";
 "rendering_value_thick_name" = "Spesso";
 "routing_attr_prefer_motorway_description" = "Preferisci le autostrade";
-"routing_attr_avoid_subway_name" = "Evita le metro";
+"routing_attr_avoid_subway_name" = "No metro";
 "rendering_attr_showLez_name" = "Mostra le zone a Basse Emissioni";
 "routing_attr_piste_type_sled_description" = "Piste per slittino.";
 "rendering_attr_surface_dirt_name" = "Terra";
@@ -1103,7 +1103,7 @@
 "rendering_value_green_name" = "Verde";
 "routing_attr_freeride_policy_name" = "Fuori pista";
 "rendering_value_disabled_name" = "Disabilitato";
-"routing_attr_avoid_motorway_name" = "Evita le autostrade";
+"routing_attr_avoid_motorway_name" = "No autostrade";
 "rendering_attr_hideWoodScrubs_name" = "Foreste e boscaglie";
 "routing_attr_avoid_stairs_description" = "Evita le scale";
 "routing_attr_difficulty_preference_name" = "Difficoltà preferita";
@@ -1179,7 +1179,7 @@
 "routing_attr_height_obstacles_name" = "Utilizza dati altitudine";
 "rendering_attr_showCycleRoutes_name" = "Mostra i percorsi per bicicletta";
 "rendering_attr_surface_grass_paver_name" = "Misto erba pavimento";
-"routing_attr_avoid_tram_name" = "Evita i tram";
+"routing_attr_avoid_tram_name" = "No tram";
 "rendering_attr_surface_paved_name" = "Pavimentato";
 "rendering_attr_pisteRoutes_name" = "Piste da sci";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferisci le strade non pavimentate";
@@ -1197,7 +1197,7 @@
 "rendering_attr_surface_stone_name" = "Pietra";
 "rendering_attr_highway_class_footway_name" = "Percorso pedonale";
 "rendering_attr_highway_class_service_name" = "Strada di servizio";
-"routing_attr_avoid_ferries_name" = "Evita i traghetti";
+"routing_attr_avoid_ferries_name" = "No traghetti";
 "routing_attr_weight_name" = "Limite di peso";
 "rendering_attr_highway_class_state_road_name" = "Strada statale";
 "rendering_value_highContrastRoads_name" = "Strade ad alto contrasto";
@@ -1237,14 +1237,14 @@
 "rendering_value_translucent_yellow_name" = "Giallo traslucido";
 "rendering_attr_undefined_name" = "Indefinito";
 "rendering_attr_piste_type_sleigh_name" = "Slitta";
-"routing_attr_avoid_toll_name" = "Evita strade a pedaggio";
+"routing_attr_avoid_toll_name" = "No strade a pedaggio";
 "rendering_attr_tramRoutes_name" = "Percorsi in tram";
 "rendering_value_translucent_green_name" = "Verde traslucido";
 "rendering_value_translucent_lightblue_name" = "Azzurro traslucido";
 "routing_attr_avoid_shuttle_train_name" = "Evita i treni navetta";
 "rendering_value_thin_name" = "Sottile";
 "rendering_attr_tramTrainRoutes_name" = "Percorsi tram e treno";
-"routing_attr_avoid_stairs_name" = "Evita le scale";
+"routing_attr_avoid_stairs_name" = "No scale";
 "rendering_attr_surface_concrete_name" = "Cemento";
 "rendering_attr_showLez_description" = "Mostra sulla mappa le zone a Basse Emissioni. Non influisce sul calcolo del percorso.";
 "rendering_attr_hideIcons_name" = "Icone dei PDI";
@@ -1263,7 +1263,7 @@
 "routing_attr_driving_style_speed_name" = "Percorsi più brevi";
 "rendering_attr_showMtbRoutes_name" = "Mostra i percorsi per mountain bike";
 "rendering_attr_highway_class_track_grade1_name" = "Grado 1";
-"routing_attr_avoid_ferry_name" = "Evita i traghetti";
+"routing_attr_avoid_ferry_name" = "No traghetti";
 "routing_attr_prefer_motorway_name" = "Preferisci le autostrade";
 "routeInfo_piste_type_name" = "Tipo di pista";
 "rendering_attr_hidePOILabels_name" = "Etichette PDI";
@@ -1275,10 +1275,10 @@
 "routing_attr_piste_type_skitour_name" = "Scialpinismo";
 "rendering_attr_surface_fine_gravel_name" = "Pietrisco fine";
 "rendering_attr_surface_gravel_name" = "Pietrisco";
-"routing_attr_avoid_train_name" = "Evita i treni";
+"routing_attr_avoid_train_name" = "No treni";
 "rendering_value_translucent_pink_name" = "Rosa traslucido";
 "rendering_attr_depthContours_description" = "Mostra contorni e punti in profondità.";
-"routing_attr_avoid_share_taxi_name" = "Evita i taxi condivisi";
+"routing_attr_avoid_share_taxi_name" = "No taxi condivisi";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Colora per rete di appartenenza";
 "rendering_attr_pisteGrooming_name" = "Piste per sci da fondo";
 "routing_attr_width_name" = "Limite di larghezza";
@@ -1746,7 +1746,7 @@
 "save_new_track" = "Salva come nuova traccia";
 "help_mapillary" = "OsmAnd + Mapillary";
 "arrived_at_destination" = "Sei arrivato.";
-"base_profile_descr_public_transport" = "Tutti i tipi di trasporto pubblico";
+"base_profile_descr_public_transport" = "Tipi di trasporto pubblico";
 "listed_exist" = "Gli elencati %@, esistono già in OsmAnd.";
 "product_title_antarctica" = "Antartide";
 "vessel_width_limit_description" = "Imposta la larghezza della\"imbarcazione per evitare i ponti stretti";
@@ -1774,7 +1774,7 @@
 "save_changes" = "Salva le modifiche";
 "weight_limit_description" = "Indica il peso del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli pesanti.";
 "quick_action_remove_next_destination" = "Cancella il punto di destinazione più vicino";
-"layer_amenity_label" = "Sovrapposizione etichette PDI";
+"layer_amenity_label" = "Etichette dei punti (PDI, Preferiti)";
 "num_stops" = "fermate";
 "enter_profile_name" = "Inserisci il nome del profilo";
 "quick_action_mapillary_hide" = "Nascondi Mapillary";
@@ -1795,7 +1795,7 @@
 "open_saved_track" = "Apri una traccia salvata";
 "simplified_track_description" = "Solo la linea del percorso verrà salvata, i punti intermedi saranno cancellati.";
 "simplified_track" = "Traccia semplificata";
-"join_segments" = "Congiungi segmenti";
+"join_segments" = "Unisci segmenti";
 "hide_compass_ruler" = "Nascondi il righello della bussola";
 "show_compass_ruler" = "Mostra il righello della bussola";
 "profile_type_osmand_string" = "Profilo OsmAnd";

@@ -21,10 +21,6 @@
 #define kBottomPadding 32
 #define kIconWidth 48
 
-#define kSectionTypeDescription 0
-#define kSectionTypeSuggestedMaps 1
-#define kSectionTypeSuggestedProfiles 2
-
 #define kCellTypeMap @"MapCell"
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -36,6 +32,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
 
 @end
+
+typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
+    EOAPluginSectionTypeDescription = 0,
+    EOAPluginSectionTypeSuggestedMaps,
+    EOAPluginSectionTypeSuggestedProfiles
+};
 
 @implementation OAPluginInstalledViewController
 {
@@ -123,7 +125,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     NSMutableArray *descriptionSection = [NSMutableArray new];
     [descriptionSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
-        @"sectionType" : [NSNumber numberWithInt:kSectionTypeDescription],
+        @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeDescription],
         @"type" : [OATextViewSimpleCell getCellIdentifier],
         @"text" : _plugin.getDescription
     }]];
@@ -133,7 +135,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     for (OARepositoryResourceItem* item in _suggestedMaps)
     {
         [suggestedMapsSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
-            @"sectionType" : [NSNumber numberWithInt:kSectionTypeSuggestedMaps],
+            @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeSuggestedMaps],
             @"type" : kCellTypeMap
         }]];
     }
@@ -146,7 +148,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         [OAApplicationMode changeProfileAvailability:mode isSelected:YES];
         [addedAppModesSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
-            @"sectionType" : [NSNumber numberWithInt:kSectionTypeSuggestedProfiles],
+            @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeSuggestedProfiles],
             @"type" : [OAIconTextDescSwitchCell getCellIdentifier],
             @"mode" : mode
         }]];
@@ -371,9 +373,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         NSDictionary *item = _data[section].firstObject;
         if (item)
-        {
-            return [item[@"type"] integerValue];
-        }
+            return [item[@"sectionType"] integerValue];
     }
     return -1;
 }
@@ -382,9 +382,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSInteger type = [self getTypeForSection:section];
     
-    if (type == kSectionTypeSuggestedMaps)
+    if (type == EOAPluginSectionTypeSuggestedMaps)
         return OALocalizedString(@"suggested_maps");
-    else if (type == kSectionTypeSuggestedProfiles)
+    else if (type == EOAPluginSectionTypeSuggestedProfiles)
         return OALocalizedString(@"added_profiles");
         
     return @"";
@@ -394,9 +394,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSInteger type = [self getTypeForSection:section];
     
-    if (type == kSectionTypeSuggestedMaps)
+    if (type == EOAPluginSectionTypeSuggestedMaps)
         return OALocalizedString(@"suggested_maps_descr");
-    else if (type == kSectionTypeSuggestedProfiles)
+    else if (type == EOAPluginSectionTypeSuggestedProfiles)
         return OALocalizedString(@"added_profiles_descr");
     
     return @"";

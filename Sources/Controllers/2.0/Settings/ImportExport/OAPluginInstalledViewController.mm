@@ -250,7 +250,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
                 UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
@@ -278,7 +278,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.textLabel.textColor = [UIColor blackColor];
                 UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
@@ -406,14 +406,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSString *type = _data[indexPath.section][indexPath.row][@"type"];
     if ([type isEqualToString:kCellTypeMap])
-        [self onItemClicked:indexPath];
+        [self onItemPressed:indexPath];
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 #pragma mark - Selectors
 
-- (void) accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
+- (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event
 {
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:self.tableView]];
     if (!indexPath)
@@ -424,7 +424,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [self onItemClicked:indexPath];
+    [self onItemPressed:indexPath];
 }
 
 - (OARepositoryResourceItem *) getMapItem:(NSIndexPath *)indexPath
@@ -432,25 +432,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return (OARepositoryResourceItem *)_suggestedMaps[indexPath.row];
 }
 
-- (void) onItemClicked:(NSIndexPath *)indexPath
+- (void) onItemPressed:(NSIndexPath *)indexPath
 {
     OARepositoryResourceItem *mapItem = [self getMapItem:indexPath];
-        if (mapItem.downloadTask != nil)
-        {
-            [OAResourcesUIHelper offerCancelDownloadOf:mapItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
-                [self presentViewController:alert animated:YES completion:nil];
-            }];
-        }
-        else if ([mapItem isKindOfClass:[OARepositoryResourceItem class]])
-        {
-            OARepositoryResourceItem* item = (OARepositoryResourceItem*)mapItem;
-            
-            [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
-                [self updateAvailableMaps];
-            } onTaskResumed:nil completionHandler:^(UIAlertController *alert) {
-                [self presentViewController:alert animated:YES completion:nil];
-            }];
-        }
+    if (mapItem.downloadTask != nil)
+    {
+        [OAResourcesUIHelper offerCancelDownloadOf:mapItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
+            [self presentViewController:alert animated:YES completion:nil];
+        }];
+    }
+    else if ([mapItem isKindOfClass:[OARepositoryResourceItem class]])
+    {
+        OARepositoryResourceItem* item = (OARepositoryResourceItem*)mapItem;
+        
+        [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
+            [self updateAvailableMaps];
+        } onTaskResumed:nil completionHandler:^(UIAlertController *alert) {
+            [self presentViewController:alert animated:YES completion:nil];
+        }];
+    }
 }
 
 - (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
@@ -508,7 +508,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) refreshDownloadingContent:(NSString *)downloadTaskKey
 {
-    for (int i = 0; i < _suggestedMaps.count; i++)
+    for (NSInteger i = 0; i < _suggestedMaps.count; i++)
     {
         OAResourceItem *item = (OAResourceItem *)_suggestedMaps[i];
         if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])

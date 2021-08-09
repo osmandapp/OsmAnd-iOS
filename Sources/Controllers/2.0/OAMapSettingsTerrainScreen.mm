@@ -290,14 +290,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateAvailableMaps
 {
-    CLLocationCoordinate2D loca = [OAResourcesUIHelper getMapLocation];
+    CLLocationCoordinate2D loc = [OAResourcesUIHelper getMapLocation];
     OsmAnd::ResourcesManager::ResourceType resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
     if (_app.data.terrainType == EOATerrainTypeSlope)
         resType = OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
     else if (_app.data.terrainType == EOATerrainTypeHillshade)
         resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
     
-    [OAResourcesUIHelper getMapsForType:resType latLon:loca onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
+    [OAResourcesUIHelper getMapsForType:resType latLon:loc onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
         @synchronized(_dataLock)
         {
             _mapItems = res;
@@ -697,7 +697,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
                 UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
@@ -725,7 +725,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.textLabel.textColor = [UIColor blackColor];
                 UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
@@ -752,7 +752,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return nil;
 }
 
-- (void) accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
+- (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event
 {
     NSIndexPath *indexPath = [tblView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:tblView]];
     if (!indexPath)

@@ -28,7 +28,6 @@
 @property BOOL disabled;
 
 - (void) updateSize;
-- (BOOL) isInstalled;
 
 @end
 

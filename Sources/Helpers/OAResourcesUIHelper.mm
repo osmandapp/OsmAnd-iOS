@@ -57,12 +57,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     // override
 }
 
-- (BOOL) isInstalled
-{
-    NSString *path = [[OsmAndApp.instance.dataPath stringByAppendingPathComponent:RESOURCES_DIR] stringByAppendingPathComponent:self.resourceId.toNSString()];
-    return [NSFileManager.defaultManager fileExistsAtPath:path];
-}
-
 @end
 
 @implementation OARepositoryResourceItem
@@ -557,7 +551,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     
     for (OAResourceItem *indexItem in otherIndexItems)
     {
-        if (indexItem.resourceType == type && [indexItem isInstalled])
+        auto resource = OsmAndApp.instance.resourcesManager->getResource(indexItem.resourceId);
+        BOOL isInstalled = resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
+        
+        if (indexItem.resourceType == type && isInstalled)
         {
             return YES;
         }

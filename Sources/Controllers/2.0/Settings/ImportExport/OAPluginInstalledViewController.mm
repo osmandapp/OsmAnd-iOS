@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSString *_pluginId;
     OAPlugin *_plugin;
     
-    NSArray<NSArray<NSMutableDictionary *> *> *_data;
+    NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<OAResourceItem *> *_suggestedMaps;
     NSArray<OAApplicationMode *> *_addedAppModes;
     
@@ -124,20 +124,20 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSMutableArray *data = [NSMutableArray new];
     
     NSMutableArray *descriptionSection = [NSMutableArray new];
-    [descriptionSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
+    [descriptionSection addObject: @{
         @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeDescription],
         @"type" : [OATextViewSimpleCell getCellIdentifier],
         @"text" : _plugin.getDescription
-    }]];
+    }];
     [data addObject:descriptionSection];
     
     NSMutableArray *suggestedMapsSection = [NSMutableArray new];
     for (OARepositoryResourceItem* item in _suggestedMaps)
     {
-        [suggestedMapsSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
+        [suggestedMapsSection addObject: @{
             @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeSuggestedMaps],
             @"type" : kCellTypeMap
-        }]];
+        }];
     }
     if (suggestedMapsSection.count > 0)
         [data addObject:suggestedMapsSection];
@@ -147,11 +147,11 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     for (OAApplicationMode* mode in _addedAppModes)
     {
         [OAApplicationMode changeProfileAvailability:mode isSelected:YES];
-        [addedAppModesSection addObject: [NSMutableDictionary dictionaryWithDictionary:@{
+        [addedAppModesSection addObject: @{
             @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeSuggestedProfiles],
             @"type" : [OAIconTextDescSwitchCell getCellIdentifier],
             @"mode" : mode
-        }]];
+        }];
     }
     if (addedAppModesSection.count > 0)
         [data addObject:addedAppModesSection];

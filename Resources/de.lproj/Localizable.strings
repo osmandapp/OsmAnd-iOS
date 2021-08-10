@@ -2124,3 +2124,4 @@
 "wiki_menu_download_descr" = "Zusätzliche Karten werden benötigt um Wikipedia-POIs auf der Karte anzuzeigen.";
 "select_wikipedia_article_langs" = "Wählen Sie die Sprachen aus, in denen Wikipedia Artikel auf der Karte erscheinen sollen. Sie können zwischen allen verfügbaren Sprachen wechseln, während Sie den Artikel lesen.";
 "shared_string_all_languages" = "Alle Sprachen";
+"population_num" = "Einwohnerzahl: %@";

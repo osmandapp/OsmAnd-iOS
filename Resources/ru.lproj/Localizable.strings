@@ -2078,7 +2078,7 @@
 "preferred_languages" = "Предпочтительные языки";
 "available_languages" = "Доступные языки";
 "some_articles_may_not_available_in_lang" = "Некоторые статьи на Википедии могут быть недоступны на вашем языке.";
-"wiki_menu_download_descr" = "Нужны дополнительные карты для показа Wikipedia POI на карте.";
+"wiki_menu_download_descr" = "Для POI Википедии требуются дополнительные карты.";
 "select_wikipedia_article_langs" = "Выберите язык отображения статей Википедии на карте. Вы можете переключаться между всеми доступными языками во время чтения статьи.";
 "shared_string_all_languages" = "Все языки";
 "no_waypoints_found" = "Не найдено путевых точек";

@@ -140,6 +140,7 @@
         cell.inputField.text = text;
         cell.inputField.placeholder = [self getHintForIndex:indexPath.row];
         cell.inputField.textContentType = indexPath.row == 0 ? UITextContentTypeUsername : UITextContentTypePassword;
+        cell.inputField.secureTextEntry = indexPath.row != 0;
         cell.inputField.tag = indexPath.row;
         cell.inputField.returnKeyType = UIReturnKeyDone;
         

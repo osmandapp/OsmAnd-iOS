@@ -56,6 +56,7 @@
 @class OASearchWptAPI;
 @class OAMapRendererView;
 @class OAMapLayers;
+@class OAWorldRegion;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -137,6 +138,9 @@
 
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
+
+- (void) highlightRegion:(OAWorldRegion *)region;
+- (void) hideRegionHighlight;
 
 - (BOOL) simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
 

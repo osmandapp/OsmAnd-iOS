@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OADownloadedRegionsLayer : OASymbolMapLayer <OAContextMenuProvider>
 
+- (void) highlightRegion:(OAWorldRegion *)region;
+- (void) hideRegionHighlight;
+
 @end
 
 NS_ASSUME_NONNULL_END

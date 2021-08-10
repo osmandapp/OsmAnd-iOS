@@ -1388,6 +1388,17 @@
 - (void) hideContextPinMarker
 {
     [_mapLayers.contextMenuLayer hideContextPinMarker];
+    [_mapLayers.downloadedRegionsLayer hideRegionHighlight];
+}
+
+- (void) highlightRegion:(OAWorldRegion *)region
+{
+    [_mapLayers.downloadedRegionsLayer highlightRegion:region];
+}
+
+- (void) hideRegionHighlight
+{
+    [_mapLayers.downloadedRegionsLayer hideRegionHighlight];
 }
 
 - (float) currentZoomOutDelta

@@ -572,11 +572,11 @@
         if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
             NSMutableString *progressStr = [NSMutableString string];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:(_localMapIndexItem.size * [value floatValue]) countStyle:NSByteCountFormatterCountStyleFile]];
+            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:(_localMapIndexItem.sizePkg * [value floatValue]) countStyle:NSByteCountFormatterCountStyleFile]];
             [progressStr appendString:@" "];
             [progressStr appendString:OALocalizedString(@"shared_string_of")];
             [progressStr appendString:@" "];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_localMapIndexItem.size countStyle:NSByteCountFormatterCountStyleFile]];
+            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_localMapIndexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
             if (self.delegate && [self.delegate respondsToSelector:@selector(setDownloadProgress:text:)])
                 [self.delegate setDownloadProgress:[value floatValue] text:progressStr];
         }
@@ -593,13 +593,24 @@
                 [self.delegate hideProgressBar];
                 _localMapIndexItem = nil;
                 
-                [OAResourcesUIHelper requestMapDownloadInfo:self.location
-                                               resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
-                                                 onComplete:^(NSArray<OAResourceItem *>* res) {
-                    OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
-                    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
-                        self.localMapIndexItem = item;
-                }];
+                if ([self.getTargetObj isKindOfClass:OADownloadMapObject.class])
+                {
+                    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                    {
+                        OAResourceItem *item = ((OADownloadMapObject *) self.getTargetObj).indexItem;
+                        self.localMapIndexItem = [item isKindOfClass:OARepositoryResourceItem.class] ? (OARepositoryResourceItem *) item : nil;
+                    }
+                }
+                else
+                {
+                    [OAResourcesUIHelper requestMapDownloadInfo:self.location
+                                                   resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
+                                                     onComplete:^(NSArray<OAResourceItem *>* res) {
+                        OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
+                        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
+                            self.localMapIndexItem = item;
+                    }];
+                }
             }
         }];
     }
@@ -1057,6 +1068,21 @@
 - (CGFloat) mapHeightKoef
 {
     return 0; // override
+}
+
+- (BOOL)denyClose
+{
+    return NO;
+}
+
+- (BOOL)hideButtons
+{
+    return NO;
+}
+
+- (BOOL)hasDismissButton
+{
+    return NO;
 }
 
 @end

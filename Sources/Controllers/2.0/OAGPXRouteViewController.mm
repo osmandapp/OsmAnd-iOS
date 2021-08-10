@@ -216,6 +216,16 @@
     return YES;
 }
 
+- (BOOL)denyClose
+{
+    return YES;
+}
+
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 - (id)getTargetObj
 {
     return _gpxRouter.gpx;

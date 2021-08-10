@@ -312,7 +312,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) doLocationUpdate
 {
-    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetImpassableRoad)
+    if ([self.customController hasDismissButton])
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -349,7 +349,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) updateDirectionButton
 {
-    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetImpassableRoad)
+    if ([self.customController hasDismissButton])
     {
         self.buttonDirection.imageView.transform = CGAffineTransformIdentity;
     }
@@ -700,20 +700,12 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) closeDenied
 {
-    return (_hideButtons && _showFull)
-        || _targetPoint.type == OATargetGPXRoute
-        || _targetPoint.type == OATargetGPXEdit
-        || _targetPoint.type == OATargetRouteStartSelection
-        || _targetPoint.type == OATargetRouteFinishSelection
-        || _targetPoint.type == OATargetHomeSelection
-        || _targetPoint.type == OATargetWorkSelection
-        || _targetPoint.type == OATargetRouteIntermediateSelection
-        || _targetPoint.type == OATargetImpassableRoadSelection;
+    return (_hideButtons && _showFull) || [self.customController denyClose];
 }
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource || _targetPoint.type == OATargetMapDownload);
+    _hideButtons = [self.customController hideButtons];
     
     self.buttonsView.hidden = _hideButtons;
     
@@ -723,7 +715,7 @@ static const NSInteger _buttonsCount = 4;
     [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
     [self.buttonMore setTitle:OALocalizedString(@"actions") forState:UIControlStateNormal];
         
-    if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking || _targetPoint.type == OATargetImpassableRoad)
+    if (self.customController.hasDismissButton)
     {
         [_buttonDirection setTitle:OALocalizedString(@"shared_string_dismiss") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:[UIColor redColor] forState:UIControlStateNormal];

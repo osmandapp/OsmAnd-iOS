@@ -83,6 +83,11 @@
     return YES;
 }
 
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFloating;

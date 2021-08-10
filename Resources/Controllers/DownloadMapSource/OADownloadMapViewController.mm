@@ -128,6 +128,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return YES;
 }
 
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFixed;

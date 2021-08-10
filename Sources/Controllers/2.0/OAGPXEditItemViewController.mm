@@ -135,6 +135,16 @@
     return NO;
 }
 
+- (BOOL)denyClose
+{
+    return YES;
+}
+
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 - (NSAttributedString *) getAttributedTypeStr
 {
     return [OAGPXItemViewController getAttributedTypeStr:self.gpx];

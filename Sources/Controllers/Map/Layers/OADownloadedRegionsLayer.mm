@@ -54,6 +54,8 @@
     std::shared_ptr<OsmAnd::PolygonsCollection> _collection;
     OAAutoObserverProxy* _localResourcesChangedObserver;
     BOOL _initDone;
+    
+    std::shared_ptr<OsmAnd::Polygon> _selectionPolygon;
 }
 
 - (NSString *) layerId
@@ -168,6 +170,58 @@
     .setFillColor(regionColor);
     
     builder.buildAndAddToCollection(_collection);
+}
+
+- (void) highlightRegion:(OAWorldRegion *)region
+{
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView removeKeyedSymbolsProvider:_collection];
+        OAPointIContainer *pc = [[OAPointIContainer alloc] init];
+        [region getPoints31:pc];
+        const auto points = pc.qPoints;
+        BOOL hidden = NO;
+        if (!_selectionPolygon)
+        {
+            OsmAnd::ColorARGB regionColor = OsmAnd::ColorARGB(color_region_selected_argb);
+            if (!points.isEmpty())
+            {
+                OsmAnd::PolygonBuilder builder;
+                builder.setBaseOrder(self.baseOrder - _collection->getPolygons().size())
+                .setIsHidden(points.size() == 0)
+                .setPolygonId(100)
+                .setPoints(points)
+                .setFillColor(regionColor);
+                
+                _selectionPolygon = builder.buildAndAddToCollection(_collection);
+            }
+            else
+            {
+                hidden = YES;
+            }
+        }
+        else
+        {
+            if (!points.isEmpty())
+                _selectionPolygon->setPoints(points);
+            else
+                hidden = YES;
+        }
+        _selectionPolygon->setIsHidden(hidden);
+        [self.mapView addKeyedSymbolsProvider:_collection];
+    }];
+}
+
+- (void) hideRegionHighlight
+{
+    if (_selectionPolygon && !_selectionPolygon->isHidden())
+    {
+        [self.mapViewController runWithRenderSync:^{
+            [self.mapView removeKeyedSymbolsProvider:_collection];
+            if (_selectionPolygon)
+                _selectionPolygon->setIsHidden(true);
+            [self.mapView addKeyedSymbolsProvider:_collection];
+        }];
+    }
 }
 
 - (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region

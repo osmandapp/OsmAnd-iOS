@@ -14,6 +14,10 @@
 #import "OANativeUtilities.h"
 #import "OAColors.h"
 #import "OAPointIContainer.h"
+#import "OAAutoObserverProxy.h"
+#import "OAResourcesUIHelper.h"
+#import "OADownloadsManager.h"
+#import "OAManageResourcesViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -22,10 +26,33 @@
 #include <OsmAndCore/Map/PolygonsCollection.h>
 #include <OsmAndCore/WorldRegions.h>
 
+#define ZOOM_TO_SHOW_MAP_NAMES 6
+#define ZOOM_AFTER_BASEMAP 12
+#define ZOOM_TO_SHOW_BORDERS_ST 4
+#define ZOOM_TO_SHOW_BORDERS 7
+#define ZOOM_TO_SHOW_SELECTION_ST 3
+#define ZOOM_TO_SHOW_SELECTION 8
+#define ZOOM_MIN_TO_SHOW_DOWNLOAD_DIALOG 9
+#define ZOOM_MAX_TO_SHOW_DOWNLOAD_DIALOG 11
+
+@implementation OADownloadMapObject
+
+- (instancetype) initWithWorldRegion:(OAWorldRegion *)worldRegion indexItem:(OAResourceItem *)indexItem
+{
+    self = [super init];
+    if (self) {
+        _worldRegion = worldRegion;
+        _indexItem = indexItem;
+    }
+    return self;
+}
+
+@end
+
 @implementation OADownloadedRegionsLayer
 {
     std::shared_ptr<OsmAnd::PolygonsCollection> _collection;
-    
+    OAAutoObserverProxy* _localResourcesChangedObserver;
     BOOL _initDone;
 }
 
@@ -36,10 +63,20 @@
 
 - (void) initLayer
 {
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                andObserve:self.app.localResourcesChangedObservable];
     _collection = std::make_shared<OsmAnd::PolygonsCollection>();
     _initDone = YES;
     
     [self.mapView addKeyedSymbolsProvider:_collection];
+}
+
+- (void)deinitLayer
+{
+    [super deinitLayer];
+    [_localResourcesChangedObserver detach];
+    _localResourcesChangedObserver = nil;
 }
 
 - (void) resetLayer
@@ -52,13 +89,14 @@
 {
     [super updateLayer];
 
-    [self refreshRoute];
+    [self refreshLayer];
     return YES;
 }
 
-- (void) refreshRoute
+- (void) refreshLayer
 {
     NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray array];
+    NSMutableArray<OAWorldRegion *> *toRemove = [NSMutableArray array];
     const auto& localResources = self.app.resourcesManager->getLocalResources();
     if (!localResources.isEmpty())
     {
@@ -73,17 +111,19 @@
                         && [resource->id.toNSString() hasPrefix:region.downloadsIdPrefix])
                     {
                         [mapRegions addObject:region];
+                        [toRemove addObjectsFromArray:region.subregions];
                         break;
                     }
                 }
             }
         }
+        [mapRegions removeObjectsInArray:toRemove];
     }
     if (mapRegions.count > 0)
     {
         [self.mapViewController runWithRenderSync:^{
             [self.mapView removeKeyedSymbolsProvider:_collection];
-            _collection = std::make_shared<OsmAnd::PolygonsCollection>(OsmAnd::ZoomLevel3, OsmAnd::ZoomLevel7);
+            _collection = std::make_shared<OsmAnd::PolygonsCollection>();
             BOOL hasPoints = NO;
             for (OAWorldRegion *r in mapRegions)
             {
@@ -91,7 +131,7 @@
                 [r getPoints31:pc];
                 if (!pc.qPoints.isEmpty())
                 {
-                    [self drawRegion:pc.qPoints];
+                    [self drawRegion:pc.qPoints region:r];
                     hasPoints = YES;
                 }
             }
@@ -107,11 +147,18 @@
     }
 }
 
-- (void) drawRegion:(const QVector<OsmAnd::PointI> &)points
+- (void) drawRegion:(const QVector<OsmAnd::PointI> &)points region:(OAWorldRegion *)region
 {
     int baseOrder = self.baseOrder;
-    
-    OsmAnd::ColorARGB regionColor = OsmAnd::ColorARGB(color_region_uptodate_argb);
+    const auto& outdatedResources = self.app.resourcesManager->getOutdatedInstalledResources();
+    const auto& resource = self.app.resourcesManager->getLocalResource(QString::fromNSString([region.downloadsIdPrefix stringByAppendingString:@"map.obf"]));
+    BOOL outdated = NO;
+    if (resource)
+    {
+        const auto it = find(outdatedResources.begin(), outdatedResources.end(), resource);
+        outdated = it != outdatedResources.end();
+    }
+    OsmAnd::ColorARGB regionColor = OsmAnd::ColorARGB(outdated ? color_region_backuped_argb : color_region_uptodate_argb);
     
     OsmAnd::PolygonBuilder builder;
     builder.setBaseOrder(baseOrder--)
@@ -122,4 +169,128 @@
     
     builder.buildAndAddToCollection(_collection);
 }
+
+- (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region
+{
+    if (self.app.resourcesManager->isResourceInstalled(resource->id))
+    {
+        OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.resourceType = resource->type;
+        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                 inRegion:region
+                                           withRegionName:YES
+                                         withResourceType:NO];
+        item.resource = self.app.resourcesManager->getLocalResource(resource->id);
+        item.downloadTask = [[self.app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+        item.size = resource->size;
+        item.worldRegion = region;
+        return item;
+    }
+    else
+    {
+        OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.resourceType = resource->type;
+        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                 inRegion:region
+                                           withRegionName:YES
+                                         withResourceType:NO];
+        item.resource = resource;
+        item.downloadTask = [[self.app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+        item.size = resource->size;
+        item.sizePkg = resource->packageSize;
+        item.worldRegion = region;
+        return item;
+    }
+}
+
+- (void) getWorldRegionFromPoint:(CLLocationCoordinate2D)point dataObjects:(NSMutableArray<OADownloadMapObject *> *)dataObjects
+{
+    const auto zoom = self.mapView.zoomLevel;
+    if (zoom >= ZOOM_TO_SHOW_SELECTION_ST && zoom < ZOOM_TO_SHOW_SELECTION)
+    {
+        NSMutableArray<OAWorldRegion *> *regions = [[self.app.worldRegion queryAtLat:point.latitude lon:point.longitude] mutableCopy];
+        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:regions];
+        if (regions.count > 0)
+        {
+            [copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (![region contain:point.latitude lon:point.longitude])
+                    [regions removeObject:region];
+            }];
+        }
+        
+        [regions sortUsingComparator:^NSComparisonResult(id a, id b) {
+            NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
+            NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
+            return [second compare:first];
+        }];
+        
+        for (OAWorldRegion *region in regions)
+        {
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
+            OAResourceItem *mapItem = nil;
+            if (ids.count > 0)
+            {
+                for (NSString *resourceId in ids)
+                {
+                    const auto& resource = self.app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                    {
+                        OAResourceItem *item = [self resourceItemByResource:resource region:region];
+                        mapItem = item;
+                    }
+                }
+                if (mapItem)
+                    [dataObjects addObject:[[OADownloadMapObject alloc] initWithWorldRegion:region indexItem:mapItem]];
+            }
+        }
+    }
+}
+
+- (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateLayer];
+    });
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (OATargetPoint *) getTargetPoint:(id)obj
+{
+    if ([obj isKindOfClass:[OADownloadMapObject class]])
+    {
+        OADownloadMapObject *mapObject = (OADownloadMapObject *)obj;
+        
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.location = mapObject.worldRegion.regionCenter;
+        targetPoint.title = mapObject.worldRegion.localizedName ? mapObject.worldRegion.localizedName : mapObject.worldRegion.nativeName;
+   
+        targetPoint.icon = [UIImage imageNamed:@"ic_custom_show_on_map"];
+        targetPoint.type = OATargetMapDownload;
+        targetPoint.targetObj = mapObject;
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        return targetPoint;
+    }
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    return nil;
+}
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
+    NSMutableArray<OADownloadMapObject *> *downloadObjects = [NSMutableArray array];
+    [self getWorldRegionFromPoint:point dataObjects:downloadObjects];
+    for (OADownloadMapObject *obj in downloadObjects)
+    {
+        OATargetPoint *pnt = [self getTargetPoint:obj];
+        if (pnt)
+            [found addObject:pnt];
+    }
+}
+
 @end

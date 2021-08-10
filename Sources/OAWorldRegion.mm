@@ -69,6 +69,7 @@
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
         _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);
         _bboxBottomRight = CLLocationCoordinate2DMake(latLonBottomRight.latitude, latLonBottomRight.longitude);
+        _regionCenter = CLLocationCoordinate2DMake(region->regionCenter.latitude, region->regionCenter.longitude);
         
         [self setLocalizedNamesFrom:region->localizedNames];
         

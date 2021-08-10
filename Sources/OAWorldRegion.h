@@ -30,6 +30,7 @@
 
 @property (readonly) CLLocationCoordinate2D bboxTopLeft;
 @property (readonly) CLLocationCoordinate2D bboxBottomRight;
+@property (readonly) CLLocationCoordinate2D regionCenter;
 
 @property (nonatomic) NSArray *resourceTypes;
 

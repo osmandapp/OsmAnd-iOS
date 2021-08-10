@@ -7,10 +7,20 @@
 //
 
 #import "OASymbolMapLayer.h"
+#import "OAContextMenuProvider.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OADownloadedRegionsLayer : OASymbolMapLayer
+@class OAWorldRegion, OAResourceItem;
+
+@interface OADownloadMapObject : NSObject
+
+@property (nonatomic, readonly) OAWorldRegion *worldRegion;
+@property (nonatomic, readonly) OAResourceItem *indexItem;
+
+@end
+
+@interface OADownloadedRegionsLayer : OASymbolMapLayer <OAContextMenuProvider>
 
 @end
 

@@ -808,7 +808,7 @@
 "years_2_4" = "سنوات";
 "years_5" = "سنوات";
 "price_free" = "مجاناً";
-"get_discount_title" = "احصل على خصم بمقدار %d %@ عند %d%% .";
+"get_discount_title" = "احصل على %d %@ عند %d%% خصم.";
 "get_free_trial_title" = "إبدأ التجربة %d %@ .";
 "get_discount_short_descr" = "%@ إلى %d %@, ثم %@";
 "months_3" = "ثلاثة أشهر";

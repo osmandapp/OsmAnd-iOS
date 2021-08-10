@@ -1429,7 +1429,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@:‪%@‬";
 "nav_type_straight_line" = "خط مستقیم";
 "osm_note_close" = "بستن یادداشت OSM";
-"shared_string_password" = "گذرواژه";
+"shared_string_password" = "کلمه عبور";
 "help_purchases" = "خریدهای OsmAnd";
 "help_mapillary" = "OsmAnd + Mapillary";
 "num_stops" = "ایستگاه";

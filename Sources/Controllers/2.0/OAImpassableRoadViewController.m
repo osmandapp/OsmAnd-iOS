@@ -48,9 +48,19 @@
     return YES;
 }
 
+- (BOOL)denyClose
+{
+    return YES;
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFloating;
+}
+
+- (BOOL)hasDismissButton
+{
+    return YES;
 }
 
 @end

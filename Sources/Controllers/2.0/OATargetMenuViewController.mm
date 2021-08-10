@@ -1070,4 +1070,19 @@
     return 0; // override
 }
 
+- (BOOL)denyClose
+{
+    return NO;
+}
+
+- (BOOL)hideButtons
+{
+    return NO;
+}
+
+- (BOOL)hasDismissButton
+{
+    return NO;
+}
+
 @end

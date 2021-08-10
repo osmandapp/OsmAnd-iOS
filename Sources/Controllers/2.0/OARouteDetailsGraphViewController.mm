@@ -116,6 +116,11 @@
     return NO;
 }
 
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 - (NSAttributedString *)getAttributedTypeStr
 {
     return nil;

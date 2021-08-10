@@ -713,7 +713,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource || _targetPoint.type == OATargetMapDownload);
     
     self.buttonsView.hidden = _hideButtons;
     
@@ -1301,7 +1301,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (!hasDescription && !hasTransport)
     {
-        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin ? OAUtilities.getBottomMargin : 0);
+        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin && controlButtonsHeight == 0. ? OAUtilities.getBottomMargin : 0);
     }
     else
     {
@@ -1577,6 +1577,9 @@ static const NSInteger _buttonsCount = 4;
             controlButtonsHeight += kButtonsViewHeight;
         if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
             controlButtonsHeight += kButtonsViewHeight;
+        
+        if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin)
+            controlButtonsHeight += OAUtilities.getBottomMargin;
     }
     
     return controlButtonsHeight;

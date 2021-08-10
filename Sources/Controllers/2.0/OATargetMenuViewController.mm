@@ -38,6 +38,8 @@
 #import "OARouteDetailsGraphViewController.h"
 #import "OAChangePositionViewController.h"
 #import "OATrsansportRouteDetailsViewController.h"
+#import "OAMapDownloadController.h"
+#import "OADownloadedRegionsLayer.h"
 #import "OASizes.h"
 #import "OAPointDescription.h"
 #import "OAWorldRegion.h"
@@ -137,6 +139,12 @@
         case OATargetPOI:
         {
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetMapDownload:
+        {
+            controller = [[OAMapDownloadController alloc] initWithMapObject:targetPoint.targetObj];
             break;
         }
 
@@ -343,7 +351,8 @@
         targetPoint.type != OATargetImpassableRoadSelection &&
         targetPoint.type != OATargetChangePosition &&
         targetPoint.type != OATargetTransportRouteDetails &&
-        targetPoint.type != OATargetDownloadMapSource)
+        targetPoint.type != OATargetDownloadMapSource &&
+        targetPoint.type != OATargetMapDownload)
     {
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
                                        resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
@@ -373,6 +382,23 @@
             }
             [controller createMapDownloadControls];
         }];
+    }
+    else if (controller && targetPoint.type == OATargetMapDownload)
+    {
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        {
+            OAResourceItem *item = ((OADownloadMapObject *)targetPoint.targetObj).indexItem;
+            OARepositoryResourceItem *repoItem = [item isKindOfClass:OARepositoryResourceItem.class] ? (OARepositoryResourceItem *) item : nil;
+            controller.localMapIndexItem = repoItem;
+            BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (controller.delegate && [controller.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
+                    [controller.delegate showProgressBar];
+                else if (controller.delegate && [controller.delegate respondsToSelector:@selector(hideProgressBar)])
+                    [controller.delegate hideProgressBar];
+                [controller createMapDownloadControls];
+            });
+        }
     }
     return controller;
 }

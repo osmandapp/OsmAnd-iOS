@@ -2043,6 +2043,7 @@ typedef enum
         case OATargetAddress:
         case OATargetHistoryItem:
         case OATargetPOI:
+        case OATargetMapDownload:
         case OATargetOsmEdit:
         case OATargetOsmNote:
         case OATargetOsmOnlineNote:

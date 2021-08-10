@@ -1518,7 +1518,7 @@
 "routing_attr_allow_skating_only_description" = "Маршруты, подготовленные для фристайла или катания только на коньках без классических треков.";
 "routing_attr_piste_type_downhill_description" = "Склоны для катания и спуска на горных лыжах и доступ к подъёмникам.";
 "rendering_value_bicycle_name" = "Велосипед";
-"rendering_attr_surface_ice_name" = "Лед";
+"rendering_attr_surface_ice_name" = "Лёд";
 "routeInfo_piste_difficulty_name" = "Сложность горнолыжной трассы";
 "rendering_attr_hidePOILabels_name" = "Названия POI";
 "rendering_value_low_name" = "Низкая";

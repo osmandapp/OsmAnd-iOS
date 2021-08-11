@@ -10,6 +10,11 @@
 #import "OADownloadedRegionsLayer.h"
 #import "OAWorldRegion.h"
 #import "OAResourcesUIHelper.h"
+#import "OAManageResourcesViewController.h"
+#import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapLayers.h"
+#import "OADownloadedRegionsLayer.h"
 #import "Localization.h"
 
 @interface OAMapDownloadController ()
@@ -19,6 +24,8 @@
 @implementation OAMapDownloadController
 {
     OADownloadMapObject *_mapObject;
+    
+    NSArray<OAResourceItem *> *_otherResources;
 }
 
 - (instancetype)initWithMapObject:(OADownloadMapObject *)downloadMapObject
@@ -35,6 +42,8 @@
 {
     [super viewDidLoad];
     [self applyTopToolbarTargetTitle];
+    [self populateOtherResources];
+    [self setupOtherMapsButton];
 }
 
 - (void) applyTopToolbarTargetTitle
@@ -43,9 +52,56 @@
         self.titleView.text = [self.delegate getTargetTitle];
 }
 
+- (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region
+{
+    OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
+    item.resourceId = resource->id;
+    item.resourceType = resource->type;
+    item.title = [OAResourcesUIHelper titleOfResource:resource
+                                             inRegion:region
+                                       withRegionName:YES
+                                     withResourceType:NO];
+    item.resource = resource;
+    item.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+    item.size = resource->size;
+    item.sizePkg = resource->packageSize;
+    item.worldRegion = region;
+    return item;
+}
+
+- (void) populateOtherResources
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    NSMutableArray<OAResourceItem *> *res = [NSMutableArray array];
+    NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:_mapObject.worldRegion];
+    if (ids.count > 0)
+    {
+        for (NSString *resourceId in ids)
+        {
+            const auto resId = QString::fromNSString(resourceId);
+            const auto& resource = app.resourcesManager->getResourceInRepository(resId);
+            if (!app.resourcesManager->isResourceInstalled(resId) && resource->type != _mapObject.indexItem.resourceType)
+            {
+                OAResourceItem *item = [self resourceItemByResource:resource region:_mapObject.worldRegion];
+                [res addObject:item];
+            }
+        }
+    }
+    _otherResources = res;
+}
+
+- (void) setupOtherMapsButton
+{
+    if (_otherResources.count > 0)
+    {
+        self.rightControlButton = [[OATargetMenuControlButton alloc] init];
+        self.rightControlButton.title = OALocalizedString(@"region_others");
+    }
+}
+
 - (NSString *) getTypeStr
 {
-    return nil;
+    return [OAResourcesUIHelper resourceTypeLocalized:_mapObject.indexItem.resourceType];
 }
 
 - (UIColor *) getAdditionalInfoColor
@@ -123,6 +179,17 @@
     {
         [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:[NSString stringWithFormat:OALocalizedString(@"population_num"), region.population] textColor:nil isText:YES needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:YES]];
     }
+}
+
+- (void)rightControlButtonPressed
+{
+    OADownloadedRegionsLayer *layer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.downloadedRegionsLayer;
+    NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray array];
+    for (OAResourceItem *item in _otherResources)
+    {
+        [targetPoints addObject:[layer getTargetPoint:[[OADownloadMapObject alloc] initWithWorldRegion:_mapObject.worldRegion indexItem:item]]];
+    }
+    [OARootViewController.instance.mapPanel showContextMenuWithPoints:targetPoints];
 }
 
 @end

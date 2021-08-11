@@ -1327,7 +1327,6 @@ static const NSInteger _buttonsCount = 4;
         if (!_controlButtonRight.hidden)
         {
             _controlButtonRight.frame = [_controlButtonRight isDirectionRTL] ? leftControlButtonFrame : rightControlButtonFrame;
-            downloadY = CGRectGetMaxY(_controlButtonRight.frame) + 6.0;
         }
         if (!_controlButtonDownload.hidden)
         {
@@ -1567,7 +1566,7 @@ static const NSInteger _buttonsCount = 4;
     {
         if ([self.customController hasControlButtons])
             controlButtonsHeight += kButtonsViewHeight;
-        if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
+        if ((self.customController.downloadControlButton || !self.downloadProgressBar.hidden) && self.customController.leftControlButton)
             controlButtonsHeight += kButtonsViewHeight;
         
         if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin)

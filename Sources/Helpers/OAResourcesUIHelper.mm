@@ -188,6 +188,23 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
++ (NSString *) iconNameByresourceType:(OsmAnd::ResourcesManager::ResourceType)type
+{
+    switch (type)
+    {
+        case OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion:
+            return @"ic_custom_contour_lines";
+        case OsmAnd::ResourcesManager::ResourceType::WikiMapRegion:
+            return @"ic_custom_wikipedia";
+        case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
+            return @"ic_custom_hillshade";
+        case OsmAnd::ResourcesManager::ResourceType::SlopeRegion:
+            return @"ic_action_slope";
+        default:
+            return @"ic_custom_show_on_map";
+    }
+}
+
 + (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)resource
                       inRegion:(OAWorldRegion *)region
                 withRegionName:(BOOL)includeRegionName

@@ -388,7 +388,24 @@
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
         {
             OAResourceItem *item = ((OADownloadMapObject *)targetPoint.targetObj).indexItem;
-            OARepositoryResourceItem *repoItem = [item isKindOfClass:OARepositoryResourceItem.class] ? (OARepositoryResourceItem *) item : nil;
+            OARepositoryResourceItem *repoItem = nil;
+            const auto& resourceManager = OsmAndApp.instance.resourcesManager;
+            if (resourceManager->isInstalledResourceOutdated(item.resourceId))
+            {
+                repoItem = [[OARepositoryResourceItem alloc] init];
+                repoItem.resourceId = item.resourceId;
+                repoItem.resourceType = item.resourceType;
+                repoItem.title = item.title;
+                repoItem.resource = resourceManager->getResourceInRepository(item.resourceId);
+                repoItem.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]] firstObject];
+                repoItem.size = repoItem.resource->size;
+                repoItem.sizePkg = repoItem.resource->packageSize;
+                repoItem.worldRegion = item.worldRegion;
+            }
+            else if ([item isKindOfClass:OARepositoryResourceItem.class])
+            {
+                repoItem = (OARepositoryResourceItem *) item;
+            }
             controller.localMapIndexItem = repoItem;
             BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
             dispatch_async(dispatch_get_main_queue(), ^{

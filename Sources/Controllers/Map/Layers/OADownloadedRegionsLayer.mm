@@ -321,7 +321,7 @@
         targetPoint.location = mapObject.worldRegion.regionCenter;
         targetPoint.title = mapObject.worldRegion.localizedName ? mapObject.worldRegion.localizedName : mapObject.worldRegion.nativeName;
    
-        targetPoint.icon = [UIImage imageNamed:@"ic_custom_show_on_map"];
+        targetPoint.icon = [UIImage imageNamed:[OAResourcesUIHelper iconNameByresourceType:mapObject.indexItem.resourceType]];
         targetPoint.type = OATargetMapDownload;
         targetPoint.targetObj = mapObject;
         targetPoint.sortIndex = (NSInteger)targetPoint.type;

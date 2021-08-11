@@ -37,6 +37,8 @@
 #import "OARouteDetailsGraphViewController.h"
 #import "OAChangePositionViewController.h"
 #import "OATrsansportRouteDetailsViewController.h"
+#import "OAMapDownloadController.h"
+#import "OADownloadedRegionsLayer.h"
 #import "OASizes.h"
 #import "OAPointDescription.h"
 #import "OAWorldRegion.h"
@@ -45,6 +47,7 @@
 #import "Reachability.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
+#import "OAMapHudViewController.h"
 #import "OADownloadMapViewController.h"
 #import "OAPlugin.h"
 #import "OAWikipediaPlugin.h"
@@ -136,6 +139,12 @@
         case OATargetPOI:
         {
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetMapDownload:
+        {
+            controller = [[OAMapDownloadController alloc] initWithMapObject:targetPoint.targetObj];
             break;
         }
 
@@ -313,7 +322,8 @@
         targetPoint.type != OATargetImpassableRoadSelection &&
         targetPoint.type != OATargetChangePosition &&
         targetPoint.type != OATargetTransportRouteDetails &&
-        targetPoint.type != OATargetDownloadMapSource)
+        targetPoint.type != OATargetDownloadMapSource &&
+        targetPoint.type != OATargetMapDownload)
     {
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
                                        resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
@@ -343,6 +353,40 @@
             }
             [controller createMapDownloadControls];
         }];
+    }
+    else if (controller && targetPoint.type == OATargetMapDownload)
+    {
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        {
+            OAResourceItem *item = ((OADownloadMapObject *)targetPoint.targetObj).indexItem;
+            OARepositoryResourceItem *repoItem = nil;
+            const auto& resourceManager = OsmAndApp.instance.resourcesManager;
+            if (resourceManager->isInstalledResourceOutdated(item.resourceId))
+            {
+                repoItem = [[OARepositoryResourceItem alloc] init];
+                repoItem.resourceId = item.resourceId;
+                repoItem.resourceType = item.resourceType;
+                repoItem.title = item.title;
+                repoItem.resource = resourceManager->getResourceInRepository(item.resourceId);
+                repoItem.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]] firstObject];
+                repoItem.size = repoItem.resource->size;
+                repoItem.sizePkg = repoItem.resource->packageSize;
+                repoItem.worldRegion = item.worldRegion;
+            }
+            else if ([item isKindOfClass:OARepositoryResourceItem.class])
+            {
+                repoItem = (OARepositoryResourceItem *) item;
+            }
+            controller.localMapIndexItem = repoItem;
+            BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (controller.delegate && [controller.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
+                    [controller.delegate showProgressBar];
+                else if (controller.delegate && [controller.delegate respondsToSelector:@selector(hideProgressBar)])
+                    [controller.delegate hideProgressBar];
+                [controller createMapDownloadControls];
+            });
+        }
     }
     return controller;
 }
@@ -492,7 +536,7 @@
 {
     CGRect buttonFrame = self.buttonBack.frame;
     buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
-    buttonFrame.origin.y = [OAUtilities getStatusBarHeight] + 7.;
+    buttonFrame.origin.y = [[OARootViewController instance].mapPanel.hudViewController getHudMinTopOffset];
     self.buttonBack.frame = buttonFrame;
 }
 
@@ -516,11 +560,11 @@
         if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
             NSMutableString *progressStr = [NSMutableString string];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:(_localMapIndexItem.size * [value floatValue]) countStyle:NSByteCountFormatterCountStyleFile]];
+            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:(_localMapIndexItem.sizePkg * [value floatValue]) countStyle:NSByteCountFormatterCountStyleFile]];
             [progressStr appendString:@" "];
             [progressStr appendString:OALocalizedString(@"shared_string_of")];
             [progressStr appendString:@" "];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_localMapIndexItem.size countStyle:NSByteCountFormatterCountStyleFile]];
+            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_localMapIndexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
             if (self.delegate && [self.delegate respondsToSelector:@selector(setDownloadProgress:text:)])
                 [self.delegate setDownloadProgress:[value floatValue] text:progressStr];
         }
@@ -537,13 +581,24 @@
                 [self.delegate hideProgressBar];
                 _localMapIndexItem = nil;
                 
-                [OAResourcesUIHelper requestMapDownloadInfo:self.location
-                                               resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
-                                                 onComplete:^(NSArray<OAResourceItem *>* res) {
-                    OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
-                    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
-                        self.localMapIndexItem = item;
-                }];
+                if ([self.getTargetObj isKindOfClass:OADownloadMapObject.class])
+                {
+                    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                    {
+                        OAResourceItem *item = ((OADownloadMapObject *) self.getTargetObj).indexItem;
+                        self.localMapIndexItem = [item isKindOfClass:OARepositoryResourceItem.class] ? (OARepositoryResourceItem *) item : nil;
+                    }
+                }
+                else
+                {
+                    [OAResourcesUIHelper requestMapDownloadInfo:self.location
+                                                   resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
+                                                     onComplete:^(NSArray<OAResourceItem *>* res) {
+                        OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
+                        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
+                            self.localMapIndexItem = item;
+                    }];
+                }
             }
         }];
     }
@@ -803,14 +858,20 @@
 {
     if ([self hasTopToolbar])
     {
-        CGFloat backButtonAlpha = alpha;
+        CGFloat backButtonAlpha = alpha * 2;
+        backButtonAlpha = backButtonAlpha > 1 ? 1 : backButtonAlpha;
+        
         if (self.topToolbarType != ETopToolbarTypeFloating)
             backButtonAlpha = 0;
         if (self.topToolbarType == ETopToolbarTypeFloatingFixedButton)
             backButtonAlpha = 1;
         
         if (self.buttonBack.alpha != backButtonAlpha)
+        {
             self.buttonBack.alpha = backButtonAlpha;
+            if (!OAUtilities.isLandscape)
+                [OARootViewController.instance.mapPanel.hudViewController setTopControlsAlpha:1 - backButtonAlpha];
+        }
         
         if (self.topToolbarType == ETopToolbarTypeMiddleFixed)
         {
@@ -826,6 +887,9 @@
             }
         }
     }
+    
+    if (self.navBar.alpha > 0)
+        self.buttonBack.alpha = 1 - self.navBar.alpha;
 }
 
 - (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha
@@ -1001,6 +1065,21 @@
 - (CGFloat) mapHeightKoef
 {
     return 0; // override
+}
+
+- (BOOL)denyClose
+{
+    return NO;
+}
+
+- (BOOL)hideButtons
+{
+    return NO;
+}
+
+- (BOOL)hasDismissButton
+{
+    return NO;
 }
 
 @end

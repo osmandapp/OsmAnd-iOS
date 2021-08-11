@@ -2118,3 +2118,9 @@
 "carplay_profile" = "CarPlay Profil";
 "last_used" = "Zuletzt verwendet";
 "search_more" = "Mehr suchen…";
+"preferred_languages" = "Bevorzugte Sprachen";
+"available_languages" = "Verfügbare Sprachen";
+"some_articles_may_not_available_in_lang" = "Einige Wikipedia-Artikel sind möglicherweise nicht in Ihrer Sprache verfügbar.";
+"wiki_menu_download_descr" = "Zusätzliche Karten werden benötigt um Wikipedia-POIs auf der Karte anzuzeigen.";
+"select_wikipedia_article_langs" = "Wählen Sie die Sprachen aus, in denen Wikipedia Artikel auf der Karte erscheinen sollen. Sie können zwischen allen verfügbaren Sprachen wechseln, während Sie den Artikel lesen.";
+"shared_string_all_languages" = "Alle Sprachen";

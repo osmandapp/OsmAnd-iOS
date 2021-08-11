@@ -1124,6 +1124,7 @@
 "osm_building_num" = "Building number";
 "osm_phone" = "Phone";
 "osm_website" = "Website";
+"population_num" = "Population: %@";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "Delete POI";

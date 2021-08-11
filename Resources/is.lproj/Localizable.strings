@@ -2110,3 +2110,9 @@
 "carplay_profile" = "CarPlay-snið";
 "last_used" = "Síðast notað";
 "search_more" = "Leita áfram…";
+"preferred_languages" = "Valin tungumál";
+"available_languages" = "Tiltæk tungumál";
+"some_articles_may_not_available_in_lang" = "Sumar Wikipedia-greinar gætu verið ekki tiltækar á þínu tungumáli.";
+"wiki_menu_download_descr" = "Viðbótarkort þarf til að skoða Wikipedia-merkisstaði á kortinu.";
+"select_wikipedia_article_langs" = "Veldu þau tungumál sem Wikipedia-greinarnar ættu að birtast á á kortinu. Þú munt geta skipt á milli allra tiltækra tungumála á meðan þú lest greinar.";
+"shared_string_all_languages" = "Öll tungumál";

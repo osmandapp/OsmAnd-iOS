@@ -55,13 +55,12 @@
 #import "QuadRect.h"
 #import "OASnapTrackWarningViewController.h"
 #import "OAGpxApproximationViewController.h"
+#import "OAHudButton.h"
+#import "OAMapHudViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
-#define kDefaultMapRulerMarginBottom -17.0
-#define kDefaultMapRulerMarginLeft 120.0
-#define kPlanRouteMapRulerMarginLeft 70.0
 #define kToolbarHeight 60.0
 #define kHeaderSectionHeigh 60.0
 
@@ -101,7 +100,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIView *actionButtonsContainer;
-@property (weak, nonatomic) IBOutlet UIButton *modeButton;
+@property (weak, nonatomic) IBOutlet OAHudButton *modeButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
@@ -111,6 +110,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderTitleView;
 @property (weak, nonatomic) IBOutlet UILabel *landscapeHeaderDescriptionView;
 @property (weak, nonatomic) IBOutlet UIButton *landscapeExpandButton;
+@property (weak, nonatomic) IBOutlet UIButton *landscapeOptionsButton;
+@property (weak, nonatomic) IBOutlet UIButton *landscapeAddPointButton;
+@property (weak, nonatomic) IBOutlet UIProgressView *landscapeProgressView;
 
 @end
 
@@ -220,6 +222,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
+    _optionButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    _addButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"add_point") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    [_landscapeOptionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
+    [_landscapeAddPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
+    _optionButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    _addButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"add_point") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    
     _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
     [_expandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
     _landscapeExpandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
@@ -408,17 +417,22 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-kToolbarHeight - 25.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = (_actionButtonsContainer.isHidden && ![self isLeftSidePresentation] ? 0 : _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width) + 16;
+    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-kToolbarHeight - 16.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 16.);
+    CGFloat leftMargin = _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
 - (void) changeCenterOffset:(CGFloat)contentHeight
 {
-    if ([self isLeftSidePresentation])
+    if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
+    {
+        _centerImageView.center = CGPointMake(self.view.frame.size.width * 0.5,
+                                        (self.view.frame.size.height - _landscapeHeaderContainerView.frame.size.height) * 0.5);
+    }
+    else if ([self isLeftSidePresentation])
     {
         _centerImageView.center = CGPointMake(DeviceScreenWidth * 0.75,
-                                        self.view.frame.size.height * 0.5);
+                                        (self.view.frame.size.height - _landscapeHeaderContainerView.frame.size.height) * 0.5);
     }
     else
     {
@@ -430,10 +444,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)adjustMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if ([self isLeftSidePresentation])
+    if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
+    {
+        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportYScale = _landscapeHeaderContainerView.frame.size.height / DeviceScreenHeight;
+    }
+    else if ([self isLeftSidePresentation])
     {
         mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
-        mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportYScale = _landscapeHeaderContainerView.frame.size.height / DeviceScreenHeight;
     }
     else
     {
@@ -474,15 +493,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_editingContext.appMode != OAApplicationMode.DEFAULT)
     {
         img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        tint = UIColorFromRGB(_editingContext.appMode.getIconColor);
+        _modeButton.tintColorDay = UIColorFromRGB(_editingContext.appMode.getIconColor);
+        _modeButton.tintColorNight = UIColorFromRGB(_editingContext.appMode.getIconColor);
     }
     else
     {
         img = [UIImage templateImageNamed:@"ic_custom_straight_line"];
-        tint = UIColorFromRGB(color_chart_orange);
+        _modeButton.tintColorDay = UIColorFromRGB(color_chart_orange);
+        _modeButton.tintColorNight = UIColorFromRGB(color_chart_orange);
     }
     [_modeButton setImage:img forState:UIControlStateNormal];
-    [_modeButton setTintColor:tint];
+    [_modeButton updateColorsForPressedState:NO];
 }
 
 - (void) cancelModes
@@ -622,9 +643,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)dismiss
 {
     [self hide:YES duration:.2 onComplete:^{
-        [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+        [_mapPanel.hudViewController resetToDefaultRulerLayout];
         [self restoreMapViewPort];
-        [OARootViewController.instance.mapPanel hideScrollableHudViewController];
+        [_mapPanel hideScrollableHudViewController];
         _layer.editingCtx = nil;
         [_layer resetLayer];
     }];
@@ -786,6 +807,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             [self goMinimized];
             [button setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
         }
+        [self adjustMapViewPort];
     }
 }
 - (IBAction)onOptionsButtonPressed:(id)sender
@@ -1058,7 +1080,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             {
                 [_editingContext setChangesSaved];
                 [self hide:NO duration:.2 onComplete:^{
-                    [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+                    [_mapPanel.hudViewController resetToDefaultRulerLayout];
                     [self restoreMapViewPort];
                     [OARootViewController.instance.mapPanel hideScrollableHudViewController];
                     _layer.editingCtx = nil;
@@ -1557,6 +1579,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)hideProgressBar
 {
     _progressView.hidden = YES;
+    _landscapeProgressView.hidden = YES;
 }
 
 - (void)refresh
@@ -1568,11 +1591,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)showProgressBar
 {
     _progressView.hidden = NO;
+    _landscapeProgressView.hidden = NO;
 }
 
 - (void)updateProgress:(int)progress
 {
     [_progressView setProgress:progress / 100.];
+    [_landscapeProgressView setProgress:progress / 100.];
 }
 
 #pragma mark - OAPlanningOptionsDelegate

@@ -808,7 +808,7 @@
 "years_2_4" = "سنوات";
 "years_5" = "سنوات";
 "price_free" = "مجاناً";
-"get_discount_title" = "احصل على خصم بمقدار %d %@ عند %d%% .";
+"get_discount_title" = "احصل على %d %@ عند %d%% خصم.";
 "get_free_trial_title" = "إبدأ التجربة %d %@ .";
 "get_discount_short_descr" = "%@ إلى %d %@, ثم %@";
 "months_3" = "ثلاثة أشهر";
@@ -2110,3 +2110,9 @@
 "carplay_profile" = "ملف تعريف CarPlay";
 "last_used" = "آخر أستخدام";
 "search_more" = "بحث عن المزيد…";
+"preferred_languages" = "اللغة المفضلة";
+"available_languages" = "اللغات المتوفرة";
+"some_articles_may_not_available_in_lang" = "قد لا تتوفر بعض مقالات ويكيبيديا بلغتك.";
+"wiki_menu_download_descr" = "هناك حاجة إلى خرائط إضافية لعرض النقاط المهمة من ويكيبيديا على الخريطة.";
+"select_wikipedia_article_langs" = "حدد اللغات التي ستظهر بها مقالات ويكيبيديا على الخريطة. يمكنك التبديل بين جميع اللغات المتاحة أثناء قراءة المقالة.";
+"shared_string_all_languages" = "كل اللغات";

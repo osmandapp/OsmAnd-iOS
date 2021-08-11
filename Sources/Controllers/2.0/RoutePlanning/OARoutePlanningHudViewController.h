@@ -14,6 +14,11 @@
 
 @interface OARoutePlanningHudViewController : OABaseScrollableHudViewController
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *optionButtonWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *addButtonWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *optionButtonLandscapeWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *addButtonLandscapeWidthConstraint;
+
 - (instancetype) initWithFileName:(NSString *)fileName;
 - (instancetype) initWithInitialPoint:(CLLocation *)latLon;
 - (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning;

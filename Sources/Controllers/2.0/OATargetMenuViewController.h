@@ -9,6 +9,7 @@
 #import "OACompoundViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OATargetPoint.h"
+#import "OAHudButton.h"
 
 typedef NS_ENUM(NSInteger, ETopToolbarType)
 {
@@ -72,7 +73,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @interface OATargetMenuViewController : OACompoundViewController
 
-@property (weak, nonatomic) IBOutlet UIButton *buttonBack;
+@property (weak, nonatomic) IBOutlet OAHudButton *buttonBack;
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UIView *navBarBackground;
@@ -161,6 +162,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) activateEditing;
 - (BOOL) commitChangesAndExit;
 - (BOOL) preHide;
+
+- (BOOL) denyClose;
+- (BOOL) hideButtons;
+- (BOOL) hasDismissButton;
 
 - (void) backPressed;
 - (void) okPressed;

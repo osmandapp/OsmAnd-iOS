@@ -23,6 +23,7 @@
 #import "OAOsmEditsLayer.h"
 #import "OAOsmBugsLayer.h"
 #import "OAMapillaryLayer.h"
+#import "OADownloadedRegionsLayer.h"
 #import "OARulerByTapControlLayer.h"
 
 #import "OATerrainMapLayer.h"
@@ -55,6 +56,7 @@
 @property (nonatomic, readonly) OAGPXRecLayer *gpxRecMapLayer;
 @property (nonatomic, readonly) OARouteLayer *routeMapLayer;
 @property (nonatomic, readonly) OAMeasurementToolLayer *routePlanningLayer;
+@property (nonatomic, readonly) OADownloadedRegionsLayer *downloadedRegionsLayer;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
 

@@ -2114,3 +2114,9 @@
 "last_used" = "Востаннє використовувалось";
 "map_widget_parking" = "Місце для стоянки";
 "search_more" = "Шукати ще…";
+"preferred_languages" = "Бажані мови";
+"available_languages" = "Доступні мови";
+"some_articles_may_not_available_in_lang" = "Деякі статті Вікіпедії можуть бути недоступні вашою мовою.";
+"wiki_menu_download_descr" = "Для перегляду POI Вікіпедії на мапі потрібні додаткові мапи.";
+"select_wikipedia_article_langs" = "Виберіть мови статей Вікіпедії на мапі. Перемикайтеся між усіма доступними мовами під час читання статті.";
+"shared_string_all_languages" = "Усі мови";

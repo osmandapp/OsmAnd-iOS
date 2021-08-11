@@ -257,7 +257,7 @@
         }
         else if ([key isEqualToString:@"route_betw_points"])
         {
-            [self dismissViewControllerAnimated:NO completion:nil];
+            [self hide:YES];
             [self.delegate snapToRoadOptionSelected];
             return;
         }
@@ -267,12 +267,12 @@
         }
         else if ([key isEqualToString:@"save_new_track"])
         {
-            [self dismissViewControllerAnimated:NO completion:nil];
+            [self hide:YES];
             [self.delegate saveAsNewTrackSelected];
         }
         else if ([key isEqualToString:@"add_to_track"])
         {
-            [self dismissViewControllerAnimated:NO completion:nil];
+            [self hide:YES];
             [self.delegate addToTrackSelected];
         }
         else if ([key isEqualToString:@"get_directions"])
@@ -289,7 +289,7 @@
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self hide:YES];
 }
 
 @end

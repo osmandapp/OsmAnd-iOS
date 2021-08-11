@@ -348,6 +348,11 @@
     return YES;
 }
 
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 - (id) getTargetObj
 {
     return self.gpx;

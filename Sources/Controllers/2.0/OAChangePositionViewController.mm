@@ -199,6 +199,11 @@
     return NO;
 }
 
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 - (void)onMenuDismissed
 {
     [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:NO];

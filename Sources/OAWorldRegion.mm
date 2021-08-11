@@ -21,6 +21,7 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
+#import "OAPointIContainer.h"
 
 #import "OAWorldRegion+Protected.h"
 
@@ -68,6 +69,7 @@
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
         _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);
         _bboxBottomRight = CLLocationCoordinate2DMake(latLonBottomRight.latitude, latLonBottomRight.longitude);
+        _regionCenter = CLLocationCoordinate2DMake(region->regionCenter.latitude, region->regionCenter.longitude);
         
         [self setLocalizedNamesFrom:region->localizedNames];
         
@@ -167,6 +169,12 @@
         return t % 2 == 1;
     }
     return res;
+}
+
+- (void) getPoints31:(OAPointIContainer *)container;
+{
+    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
+        container.qPoints = _worldRegion->mapObject->points31;
 }
 
 + (int) ray_intersect_x:(int) x y:(int) y middleY:(int) middleY prevX:(int) prevX prevY:(int) prevY

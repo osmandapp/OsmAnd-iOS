@@ -21,7 +21,7 @@
 "years_5" = "Aastat";
 "months_3" = "Kolm kuud";
 "price_free" = "Tasuta";
-"get_discount_title" = "Hangi %d %@ %d%% allahindlusega.";
+"get_discount_title" = "Hangi %d %@ %d%% soodustusega.";
 "get_free_trial_title" = "Alusta %d %@ tasuta prooviperioodi.";
 "get_discount_short_descr" = "%@ %d %@ eest, seejärel %@";
 "get_discount_first_part" = "%@ esimese %@ eest";
@@ -45,7 +45,7 @@
 "switch_start_finish" = "Vaheta omavahel lähte- ja sihkoht";
 "clear_all_intermediates" = "Eemalda kõik vahepunktid";
 "shared_string_options" = "Valikud";
-"new_destination_point_dialog" = "Sihtkoht on juba määratud";
+"new_destination_point_dialog" = "Oled juba määranud sihtkoha";
 "replace_destination_point" = "Asenda sihtkoht";
 "shared_string_current" = "Praegune";
 "make_as_start_point" = "Tee sellest lähtepunkt";
@@ -1910,7 +1910,7 @@
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 
 "latest_version" = "Sul on kasutusel viimane versioon: %@";
-"layer_amenity_label" = "Huvipunktideülekatte sildid";
+"layer_amenity_label" = "Punktide sildid (huvipunktid, lemmikud)";
 "osm_notes" = "OSM märked";
 "plugin_popup_osm_editing_title" = "Võta kasutusele OpenStreetMap'i muutmine";
 "plugin_popup_osm_editing_ask" = "Kaardimuudatuste ning märkuste lisamiseks ja haldamiseks palun võta kasutusele OpenStreetMap'i muutmise plugin";
@@ -2098,3 +2098,9 @@
 "carplay_profile" = "CarPlay profiil";
 "last_used" = "Viimati kasutatud";
 "search_more" = "Otsi veel …";
+"preferred_languages" = "Eelistatud keeled";
+"available_languages" = "Saadaolevad keeled";
+"some_articles_may_not_available_in_lang" = "Kõik Vikipeedia artiklid ei pruugi olla saadaval sinu valitud keeles.";
+"wiki_menu_download_descr" = "Vikipedia huvipunktide kuvamiseks on vaja täiendavaid kaarte.";
+"select_wikipedia_article_langs" = "Vali keeled, milles kuvatakse kaardil Vikipeedia artikleid. Artikli lugemise ajal võib lülituda ükskõik millisele saadaolevale keelele.";
+"shared_string_all_languages" = "Kõik keeled";

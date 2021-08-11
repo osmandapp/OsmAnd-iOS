@@ -107,6 +107,16 @@
     return self.contentView;
 }
 
+- (BOOL)denyClose
+{
+    return YES;
+}
+
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {

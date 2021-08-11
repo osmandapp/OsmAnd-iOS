@@ -161,6 +161,10 @@
 #define color_gpx_up 0x4CB237
 #define color_gpx_down 0xDB5364
 
+#define color_region_uptodate_argb 0x5532C832
+#define color_region_backuped_argb 0x55FF8F00
+#define color_region_selected_argb 0x55FFFF00
+#define color_region_downloading_argb 0x44FF61FF
 
 #define color_checkbox_outline 0xC4C4C7
 

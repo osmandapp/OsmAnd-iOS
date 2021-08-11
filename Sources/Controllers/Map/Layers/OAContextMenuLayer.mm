@@ -53,6 +53,8 @@
     NSArray<NSString *> *_publicTransportTypes;
     
     id<OAMoveObjectProvider> _selectedObjectContextMenuProvider;
+    
+    NSArray<OAMapLayer *> *_pointLayers;
 }
 
 - (NSString *) layerId
@@ -357,8 +359,19 @@
     const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
     NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
 
-    [mapViewController.mapLayers.myPositionLayer collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
-    [mapViewController.mapLayers.mapillaryLayer collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
+    if (!_pointLayers)
+    {
+        _pointLayers = @[self.mapViewController.mapLayers.myPositionLayer,
+                         self.mapViewController.mapLayers.mapillaryLayer,
+                         self.mapViewController.mapLayers.downloadedRegionsLayer];
+    }
+    for (OAMapLayer *layer in _pointLayers)
+    {
+        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
+           [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
+    }
+    NSMutableArray<OAMapLayer *> *layers = [[mapViewController.mapLayers getLayers] mutableCopy];
+    [layers removeObjectsInArray:_pointLayers];
 
     for (const auto symbolInfo : symbolInfos)
     {
@@ -391,7 +404,7 @@
         }
         
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lon);
-        for (OAMapLayer *layer in [mapViewController.mapLayers getLayers])
+        for (OAMapLayer *layer in layers)
         {
             if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
                [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:found unknownLocation:showUnknownLocation];

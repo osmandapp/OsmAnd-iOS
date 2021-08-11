@@ -68,4 +68,9 @@
     return YES;
 }
 
+- (BOOL)hasDismissButton
+{
+    return YES;
+}
+
 @end

@@ -153,6 +153,11 @@
     return YES;
 }
 
+- (BOOL)hasDismissButton
+{
+    return YES;
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return self.isNew ? ETopToolbarTypeFixed : ETopToolbarTypeMiddleFixed;

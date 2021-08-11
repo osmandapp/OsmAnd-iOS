@@ -91,6 +91,9 @@
     _rulerByTapControlLayer = [[OARulerByTapControlLayer alloc] initWithMapViewController:_mapViewController baseOrder:-170000];
     [self addLayer:_rulerByTapControlLayer];
 
+    _downloadedRegionsLayer = [[OADownloadedRegionsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-10000];
+    [self addLayer:_downloadedRegionsLayer];
+
     [OAPlugin createLayers];
 }
 

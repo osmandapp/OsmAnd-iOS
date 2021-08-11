@@ -1205,6 +1205,14 @@ typedef enum
         [self setNeedsStatusBarAppearanceUpdate];
         return;
     }
+    else if (targetPoint.type == OATargetMapDownload)
+    {
+        [_mapViewController highlightRegion:((OADownloadMapObject *)targetPoint.targetObj).worldRegion];
+    }
+    else
+    {
+        [_mapViewController hideRegionHighlight];
+    }
     // show context marker on map
     [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
@@ -2043,6 +2051,7 @@ typedef enum
         case OATargetAddress:
         case OATargetHistoryItem:
         case OATargetPOI:
+        case OATargetMapDownload:
         case OATargetOsmEdit:
         case OATargetOsmNote:
         case OATargetOsmOnlineNote:

@@ -256,6 +256,11 @@
     return YES;
 }
 
+- (BOOL)hideButtons
+{
+    return YES;
+}
+
 - (NSAttributedString *)getAttributedTypeStr
 {
     return [self getFormattedDistTimeString];

@@ -162,6 +162,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) commitChangesAndExit;
 - (BOOL) preHide;
 
+- (BOOL) denyClose;
+- (BOOL) hideButtons;
+- (BOOL) hasDismissButton;
+
 - (void) backPressed;
 - (void) okPressed;
 - (void) cancelPressed;

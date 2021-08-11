@@ -91,6 +91,7 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 @interface OAResourcesUIHelper : NSObject
 
 + (NSString *) resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type;
++ (NSString *) iconNameByresourceType:(OsmAnd::ResourcesManager::ResourceType)type;
 
 + (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                       inRegion:(OAWorldRegion*)region

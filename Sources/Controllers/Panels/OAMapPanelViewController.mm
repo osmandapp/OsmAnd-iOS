@@ -1209,6 +1209,10 @@ typedef enum
     {
         [_mapViewController highlightRegion:((OADownloadMapObject *)targetPoint.targetObj).worldRegion];
     }
+    else
+    {
+        [_mapViewController hideRegionHighlight];
+    }
     // show context marker on map
     [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     

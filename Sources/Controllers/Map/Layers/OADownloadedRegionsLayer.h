@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) OAWorldRegion *worldRegion;
 @property (nonatomic, readonly) OAResourceItem *indexItem;
 
+- (instancetype) initWithWorldRegion:(OAWorldRegion *)worldRegion indexItem:(OAResourceItem *)indexItem;
+
 @end
 
 @interface OADownloadedRegionsLayer : OASymbolMapLayer <OAContextMenuProvider>

@@ -143,14 +143,6 @@
         cell.inputField.secureTextEntry = indexPath.row != 0;
         cell.inputField.tag = indexPath.row;
         cell.inputField.returnKeyType = UIReturnKeyDone;
-        
-        if (indexPath.row != 0)
-        {
-            if (@available(iOS 13.0, *))
-                cell.inputField.font = [UIFont monospacedSystemFontOfSize:17 weight:UIFontWeightRegular];
-            else
-                cell.inputField.font = [UIFont monospacedDigitSystemFontOfSize:16 weight:UIFontWeightRegular];
-        }
     }
     return cell;
 }

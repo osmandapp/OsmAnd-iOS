@@ -2112,3 +2112,4 @@
 "shared_string_all_languages" = "Todos os idiomas";
 "wiki_menu_download_descr" = "São necessários mapas adicionais para visualizar os POIs da Wikipédia no mapa.";
 "some_articles_may_not_available_in_lang" = "Alguns artigos da Wikipédia podem não estar disponíveis no seu idioma.";
+"population_num" = "População: %@";

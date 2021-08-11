@@ -94,7 +94,7 @@
 
 - (IBAction)openSavedTrackPressed:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self hide:YES];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_fileName];
     OAGPX *gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
     if (gpx)
@@ -103,7 +103,7 @@
 
 - (IBAction)createNewTrackButtonPressed:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self hide:YES];
     const auto point = OsmAnd::Utilities::convert31ToLatLon(OARootViewController.instance.mapPanel.mapViewController.mapView.target31);
     CLLocation *coord = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
     [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:coord]];
@@ -131,7 +131,7 @@
 
 - (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self hide:YES];
 }
 
 @end

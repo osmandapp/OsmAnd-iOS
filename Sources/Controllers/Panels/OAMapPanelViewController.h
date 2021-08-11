@@ -117,8 +117,6 @@
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 - (void) openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
 
-- (void) openTargetViewWithGPXEdit:(OAGPX *)item pushed:(BOOL)pushed;
-
 - (void) openTargetViewWithGPXRoute:(BOOL)pushed;
 - (void) openTargetViewWithGPXRoute:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
 - (void) openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed;

@@ -654,8 +654,6 @@
 		81AE516126298A3600BDF947 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */; };
 		840021471E28D4D70035F944 /* OASearchResultMatcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840021461E28D4D70035F944 /* OASearchResultMatcher.mm */; };
 		8404B3242040760100018DB3 /* OAScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8404B3232040760100018DB3 /* OAScrollView.m */; };
-		84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DD81B83175B00033C47 /* OAGPXEditItemViewController.mm */; };
-		84064DDF1B83175B00033C47 /* OAGPXEditItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84064DD91B83175B00033C47 /* OAGPXEditItemViewController.xib */; };
 		84064DEE1B83237F00033C47 /* OAGPXEditWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DEA1B83237F00033C47 /* OAGPXEditWptListViewController.mm */; };
 		84064DF11B83237F00033C47 /* OAGPXEditWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84064DEB1B83237F00033C47 /* OAGPXEditWptListViewController.xib */; };
 		84064DF71B83907600033C47 /* OAGPXEditWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DF31B83907600033C47 /* OAGPXEditWptViewController.mm */; };
@@ -4593,9 +4591,6 @@
 		8401FCF91EE46DB800238915 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8404B3222040760100018DB3 /* OAScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAScrollView.h; path = Views/OAScrollView.h; sourceTree = "<group>"; };
 		8404B3232040760100018DB3 /* OAScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAScrollView.m; path = Views/OAScrollView.m; sourceTree = "<group>"; };
-		84064DD71B83175B00033C47 /* OAGPXEditItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXEditItemViewController.h; path = Sources/Controllers/2.0/OAGPXEditItemViewController.h; sourceTree = "<group>"; };
-		84064DD81B83175B00033C47 /* OAGPXEditItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXEditItemViewController.mm; path = Sources/Controllers/2.0/OAGPXEditItemViewController.mm; sourceTree = "<group>"; };
-		84064DD91B83175B00033C47 /* OAGPXEditItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXEditItemViewController.xib; path = Sources/Controllers/2.0/OAGPXEditItemViewController.xib; sourceTree = "<group>"; };
 		84064DE91B83237F00033C47 /* OAGPXEditWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXEditWptListViewController.h; path = Sources/Controllers/2.0/OAGPXEditWptListViewController.h; sourceTree = "<group>"; };
 		84064DEA1B83237F00033C47 /* OAGPXEditWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXEditWptListViewController.mm; path = Sources/Controllers/2.0/OAGPXEditWptListViewController.mm; sourceTree = "<group>"; };
 		84064DEB1B83237F00033C47 /* OAGPXEditWptListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXEditWptListViewController.xib; path = Sources/Controllers/2.0/OAGPXEditWptListViewController.xib; sourceTree = "<group>"; };
@@ -11901,9 +11896,6 @@
 				8417A66C1B2596D600EA1D17 /* OAGPXWptViewController.h */,
 				8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */,
 				8417A66E1B2596D600EA1D17 /* OAGPXWptViewController.xib */,
-				84064DD71B83175B00033C47 /* OAGPXEditItemViewController.h */,
-				84064DD81B83175B00033C47 /* OAGPXEditItemViewController.mm */,
-				84064DD91B83175B00033C47 /* OAGPXEditItemViewController.xib */,
 				84064DF21B83907600033C47 /* OAGPXEditWptViewController.h */,
 				84064DF31B83907600033C47 /* OAGPXEditWptViewController.mm */,
 				84064DF41B83907600033C47 /* OAGPXEditWptViewController.xib */,
@@ -15646,7 +15638,6 @@
 				15BDDE7424D954EC00079C83 /* ic_custom_display_position_center@3x.png in Resources */,
 				847C0F9F1FC5D6F4003891F3 /* zoom_in_button_night.png in Resources */,
 				8444999C1AAA1FFA00ACA20D /* img_app_purchase_1@2x.png in Resources */,
-				84064DDF1B83175B00033C47 /* OAGPXEditItemViewController.xib in Resources */,
 				8476E1E61F6AA01000EC274F /* ic_list_startpoint.png in Resources */,
 				8A7672162281A4EF0098DE84 /* list_warnings_tunnel@2x.png in Resources */,
 				DA13418E243DC5A80039D214 /* map_action_subway.png in Resources */,
@@ -17863,7 +17854,6 @@
 				3202DBFF2671140700E69910 /* OAImagesTableViewCell.m in Sources */,
 				1580F69E2590B9E1002608E9 /* OASplitPointsCommand.mm in Sources */,
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
-				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				15DF4052242B3437004AF26B /* OASettingsHelper.mm in Sources */,
 				15CD7D2125B0430400BCB36A /* OASaveTrackViewController.mm in Sources */,
 				DAE7C567252C6BD400114A77 /* OAExitInfo.m in Sources */,

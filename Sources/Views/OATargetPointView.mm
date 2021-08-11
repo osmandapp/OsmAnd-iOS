@@ -388,7 +388,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) updateToolbarGradientWithAlpha:(CGFloat)alpha
 {
-    BOOL useGradient = (_activeTargetType != OATargetGPX) && (_activeTargetType != OATargetGPXEdit) && ![self isLandscape];
+    BOOL useGradient = (_activeTargetType != OATargetGPX) && ![self isLandscape];
     [self.customController applyGradient:useGradient alpha:alpha];
 }
 
@@ -702,7 +702,6 @@ static const NSInteger _buttonsCount = 4;
 {
     return (_hideButtons && _showFull)
         || _targetPoint.type == OATargetGPXRoute
-        || _targetPoint.type == OATargetGPXEdit
         || _targetPoint.type == OATargetRouteStartSelection
         || _targetPoint.type == OATargetRouteFinishSelection
         || _targetPoint.type == OATargetHomeSelection
@@ -713,7 +712,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource);
     
     self.buttonsView.hidden = _hideButtons;
     
@@ -740,7 +739,7 @@ static const NSInteger _buttonsCount = 4;
         _buttonDirection.imageView.transform = CGAffineTransformIdentity;
     }
     
-    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
+    if (self.activeTargetType == OATargetGPX)
     {
         if (_targetPoint.type == OATargetWpt && ![self newItem])
         {
@@ -1693,7 +1692,7 @@ static const NSInteger _buttonsCount = 4;
         [self updateDescriptionLabel];
     }
     
-    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
+    if (self.activeTargetType == OATargetGPX)
         _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt && ![self newItem]);
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
@@ -2034,7 +2033,7 @@ static const NSInteger _buttonsCount = 4;
         return;
     }
 
-    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
+    if (self.activeTargetType == OATargetGPX)
     {
         [self.menuViewDelegate targetPointAddWaypoint];
     }
@@ -2118,7 +2117,7 @@ static const NSInteger _buttonsCount = 4;
     if (_showFullScreen)
         return;
     
-    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute)
+    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
     {
         [self.menuViewDelegate targetGoToGPX];
     }
@@ -2374,7 +2373,7 @@ static const NSInteger _buttonsCount = 4;
     if (!_buttonLeft.hidden)
         [self updateLeftButton];
     
-    if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute) && self.customController)
+    if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute) && self.customController)
     {
         _targetPoint.targetObj = [self.customController getTargetObj];
         [self updateAddressLabel];

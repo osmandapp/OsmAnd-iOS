@@ -20,7 +20,6 @@
 #import "OAPOIViewController.h"
 #import "OAWikiMenuViewController.h"
 #import "OAGPXItemViewController.h"
-#import "OAGPXEditItemViewController.h"
 #import "OAGPXEditWptViewController.h"
 #import "OAGPXWptViewController.h"
 #import "OARouteTargetViewController.h"
@@ -180,10 +179,7 @@
             
         case OATargetWpt:
         {
-            if (activeTargetType == OATargetGPXEdit)
-                controller = [[OAGPXEditWptViewController alloc] initWithItem:targetPoint.targetObj headerOnly:headerOnly];
-            else
-                controller = [[OAGPXWptViewController alloc] initWithItem:targetPoint.targetObj headerOnly:headerOnly];
+            controller = [[OAGPXWptViewController alloc] initWithItem:targetPoint.targetObj headerOnly:headerOnly];
             break;
         }
             
@@ -208,31 +204,6 @@
             else
             {
                 controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
-                targetPoint.targetObj = ((OAGPXItemViewController *)controller).gpx;
-            }
-            break;
-        }
-            
-        case OATargetGPXEdit:
-        {
-            OAGPXEditItemViewControllerState *state = activeViewControllerState ? (OAGPXEditItemViewControllerState *)activeViewControllerState : nil;
-            if (targetPoint.targetObj)
-            {
-                if (state)
-                {
-                    if (state.showCurrentTrack)
-                        controller = [[OAGPXEditItemViewController alloc] initWithCurrentGPXItem:state];
-                    else
-                        controller = [[OAGPXEditItemViewController alloc] initWithGPXItem:targetPoint.targetObj ctrlState:state];
-                }
-                else
-                {
-                    controller = [[OAGPXEditItemViewController alloc] initWithGPXItem:targetPoint.targetObj];
-                }
-            }
-            else
-            {
-                controller = [[OAGPXEditItemViewController alloc] initWithCurrentGPXItem];
                 targetPoint.targetObj = ((OAGPXItemViewController *)controller).gpx;
             }
             break;
@@ -336,7 +307,6 @@
         targetPoint.type != OATargetRouteIntermediateSelection &&
         targetPoint.type != OATargetWorkSelection &&
         targetPoint.type != OATargetHomeSelection &&
-        targetPoint.type != OATargetGPXEdit &&
         targetPoint.type != OATargetGPXRoute &&
         targetPoint.type != OATargetRouteDetails &&
         targetPoint.type != OATargetRouteDetailsGraph &&

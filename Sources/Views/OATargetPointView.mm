@@ -1564,7 +1564,9 @@ static const NSInteger _buttonsCount = 4;
     {
         if ([self.customController hasControlButtons])
             controlButtonsHeight += kButtonsViewHeight;
-        if ((self.customController.downloadControlButton || !self.downloadProgressBar.hidden) && self.customController.leftControlButton)
+        BOOL hasDownloadControls = self.customController.downloadControlButton != nil || !self.downloadProgressBar.hidden;
+        BOOL needsSecondRow = controlButtonsHeight == 0 || self.customController.leftControlButton;
+        if (hasDownloadControls && needsSecondRow)
             controlButtonsHeight += kButtonsViewHeight;
         
         if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin)

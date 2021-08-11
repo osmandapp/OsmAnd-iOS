@@ -40,6 +40,9 @@
 
 #include <OsmAndCore/Utilities.h>
 
+#define kButtonWidth 50.0
+#define kButtonOffset 16.0
+
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -67,6 +70,7 @@
     UIPanGestureRecognizer* _grMove;
     
     OAAutoObserverProxy* _dayNightModeObserver;
+    OAAutoObserverProxy* _locationServicesStatusObserver;
 
     BOOL _driveModeActive;
     
@@ -80,6 +84,8 @@
     
     NSLayoutConstraint *_bottomRulerConstraint;
     NSLayoutConstraint *_leftRulerConstraint;
+    
+    BOOL _cachedLocationAvailableState;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -141,8 +147,14 @@
     _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onApplicationModeChanged:)
                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+    
+    _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                        withHandler:@selector(onLocationServicesStatusChanged)
+                                                                         andObserve:_app.locationServices.statusObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+    
+    _cachedLocationAvailableState = NO;
 }
 
 - (void) deinit
@@ -184,7 +196,7 @@
     _bottomRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-17.0f];
     [self.view addConstraint:_bottomRulerConstraint];
     
-    _leftRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:120.0f];
+    _leftRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:148.0f];
     [self.view addConstraint:_leftRulerConstraint];
     
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
@@ -195,6 +207,11 @@
     [self updateColors];
 
     _mapInfoController.delegate = self;
+}
+
+- (CGFloat) getExtraScreenOffset
+{
+    return (OAUtilities.isLandscape && OAUtilities.getLeftMargin > 0) ? 0.0 : kButtonOffset;
 }
 
 - (void)applyCorrectViewSize
@@ -244,7 +261,16 @@
 {
     [super viewDidAppear:animated];
     
-    [self.zoomButtonsView setHidden: ![[OAAppSettings sharedManager] settingShowZoomButton]];
+    if ([[OAAppSettings sharedManager] settingShowZoomButton])
+    {
+        [self.zoomButtonsView setHidden: NO];
+        [self showBottomControls:0 animated:NO];
+    }
+    else
+    {
+        [self.zoomButtonsView setHidden: YES];
+        [self hideBottomControls:0 animated:NO];
+    }
     
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -296,6 +322,8 @@
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applyCorrectViewSize];
+        [self setupBottomContolMarginsForHeight:0];
+        [self updateControlsLayout:[self getHudTopOffset]];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     }  ];
@@ -306,6 +334,12 @@
     _bottomRulerConstraint.constant = bottom;
     _leftRulerConstraint.constant = left;
     [self.rulerLabel layoutIfNeeded];
+}
+
+- (void) resetToDefaultRulerLayout
+{
+    CGFloat bottomMargin = OAUtilities.getBottomMargin > 0 ? 0 : kButtonOffset;
+    [self updateRulerPosition:-bottomMargin left:_driveModeButton.frame.origin.x + _driveModeButton.frame.size.width + kButtonOffset];
 }
 
 - (BOOL) shouldShowCompass
@@ -356,6 +390,8 @@
 
 - (IBAction) onMapModeButtonClicked:(id)sender
 {
+    [self updateMapModeButton];
+    
     switch (self.mapModeButtonType)
     {
         case EOAMapModeButtonTypeShowMap:
@@ -388,6 +424,13 @@
     });
 }
 
+- (void) onLocationServicesStatusChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateMapModeButtonIfNeeded];
+    });
+}
+
 - (void) updateColors
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
@@ -395,22 +438,21 @@
     [_quickActionController updateColors:isNight];
 
     [self updateMapSettingsButton];
-    [_mapSettingsButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
-
     [self updateCompassButton];
-    [_compassButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
 
-    _searchButton.tintColor = isNight ? UIColor.whiteColor : UIColorFromRGB(color_on_map_icon_color);
-    [_searchButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
+    [_searchButton setImage:[UIImage imageNamed:@"ic_custom_search"] forState:UIControlStateNormal];
+    [_searchButton updateColorsForPressedState:NO];
     
-    [_zoomInButton setImage:[UIImage imageNamed:isNight ? @"zoom_in_button_night" : @"zoom_in_button"] forState:UIControlStateNormal];
-    [_zoomInButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
-    [_zoomOutButton setImage:[UIImage imageNamed:isNight ? @"zoom_out_button_night" : @"zoom_out_button"] forState:UIControlStateNormal];
-    [_zoomOutButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
+    [_zoomInButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_in"] forState:UIControlStateNormal];
+    [_zoomOutButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_out"] forState:UIControlStateNormal];
+    [_zoomInButton updateColorsForPressedState:NO];
+    [_zoomOutButton updateColorsForPressedState:NO];
 
     [self updateMapModeButton];
     
-    [_optionsMenuButton setImage:[UIImage imageNamed:isNight ? @"menu_button_night" : @"menu_button"] forState:UIControlStateNormal];
+    [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
+    [_optionsMenuButton updateColorsForPressedState:NO];
+    _optionsMenuButton.layer.cornerRadius = 6;
     
     [self.rulerLabel updateColors];
     
@@ -427,6 +469,17 @@
     });
 }
 
+- (BOOL) isLocationAvailable
+{
+    return _app.locationServices.lastKnownLocation && _app.locationServices.status == OALocationServicesStatusActive && _app.locationServices.available && !_app.locationServices.denied;
+}
+
+- (void) updateMapModeButtonIfNeeded
+{
+    if (_cachedLocationAvailableState != [self isLocationAvailable])
+        [self updateMapModeButton];
+}
+
 - (void) updateMapModeButton
 {
     if (self.contextMenuMode)
@@ -434,12 +487,10 @@
         switch (self.mapModeButtonType)
         {
             case EOAMapModeButtonTypeShowMap:
-                [_mapModeButton setBackgroundImage:[UIImage imageNamed:@"bt_round_big"] forState:UIControlStateNormal];
                 [_mapModeButton setImage:[UIImage imageNamed:@"ic_dialog_map"] forState:UIControlStateNormal];
                 break;
 
             case EOAMapModeButtonTypeNavigate:
-                [_mapModeButton setBackgroundImage:nil forState:UIControlStateNormal];
                 [_mapModeButton setImage:[UIImage imageNamed:@"bt_trip_start.png"] forState:UIControlStateNormal];
                 break;
                 
@@ -469,28 +520,56 @@
             break;
     }
     
-    UIImage *backgroundImage;
-    
-    if (_app.locationServices.lastKnownLocation)
+    if ([self isLocationAvailable])
     {
-        if (_app.mapMode == OAMapModeFree)
+        switch (_app.mapMode)
         {
-            backgroundImage = [UIImage imageNamed:isNight ? @"bt_round_big_blue_night" : @"bt_round_big_blue"];
-            modeImage = [OAUtilities tintImageWithColor:modeImage color:[UIColor whiteColor]];
+            case OAMapModeFree: // Free mode
+            {
+                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_position"] forState:UIControlStateNormal];
+                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_active);
+                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_active);
+                _mapModeButton.tintColorDay = UIColor.whiteColor;
+                _mapModeButton.tintColorNight = UIColor.whiteColor;
+                break;
+            }
+                
+            case OAMapModePositionTrack: // Trace point
+            {
+                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_position"] forState:UIControlStateNormal];
+                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
+                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
+                _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
+                _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                break;
+            }
+                
+            case OAMapModeFollow: // Compass - 3D mode
+            {
+                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_follow"] forState:UIControlStateNormal];
+                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
+                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
+                _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
+                _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                break;
+            }
+
+            default:
+                break;
         }
-        else
-        {
-            backgroundImage = [UIImage imageNamed:isNight ? @"bt_round_big_night" : @"bt_round_big"];
-            modeImage = [OAUtilities tintImageWithColor:modeImage color:UIColorFromRGB(0x5B7EF8)];
-        }
+        _cachedLocationAvailableState = YES;
     }
     else
     {
-        backgroundImage = [UIImage imageNamed:isNight ? @"bt_round_big_night" : @"bt_round_big"];
+        [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_free"] forState:UIControlStateNormal];
+        _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
+        _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
+        _mapModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
+        _mapModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+        _cachedLocationAvailableState = NO;
     }
-
-    [_mapModeButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
-    [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
+    
+    [_mapModeButton updateColorsForPressedState:NO];
 
     if (_overlayUnderlayView && _overlayUnderlayView.superview)
     {
@@ -533,6 +612,7 @@
         
         BOOL showCompass = [self shouldShowCompass:[value floatValue]];
         [self updateCompassVisibility:showCompass];
+        [self updateMapModeButtonIfNeeded];
     });
 }
 
@@ -575,6 +655,7 @@
             [self.toolbarViewController onMapChanged:observable withKey:key];
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+        [self updateMapModeButtonIfNeeded];
     });
 }
 
@@ -662,19 +743,20 @@
     BOOL showCompass = [self shouldShowCompass];
     if ([rotateMap get] == ROTATE_MAP_NONE)
     {
-        _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_niu_white" : @"map_compass_niu"];
+        _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_north_night" : @"ic_custom_direction_north_day"];
         [self updateCompassVisibility:showCompass];
     }
     else if ([rotateMap get] == ROTATE_MAP_BEARING)
     {
-        _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_bearing_white" : @"map_compass_bearing"];
+        _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_bearing_night" : @"ic_custom_direction_bearing_day"];
         [self updateCompassVisibility:YES];
     }
     else
     {
-        _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_white" : @"map_compass"];
+        _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_compass_night" : @"ic_custom_direction_compass_day"];
         [self updateCompassVisibility:YES];
     }
+    [_compassButton updateColorsForPressedState:NO];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -751,7 +833,10 @@
     [self updateButtonsLayoutY:y];
     
     if (_widgetsView)
-        _widgetsView.frame = CGRectMake(0.0, y + 2.0 + [self getCoordinateWigetTopOffset:y], DeviceScreenWidth - OAUtilities.getLeftMargin * 2, 10.0);
+    {
+        CGFloat widgetsOffset = 2.0;
+        _widgetsView.frame = CGRectMake(widgetsOffset, y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2 - widgetsOffset * 2, 10.0);
+    }
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)
@@ -767,60 +852,55 @@
 
 - (void) updateButtonsLayoutY:(CGFloat)y
 {
-    CGFloat x = _compassBox.frame.origin.x;
+    CGFloat x = [self getExtraScreenOffset];
     CGSize size = _compassBox.frame.size;
-    CGFloat msX = _mapSettingsButton.frame.origin.x;
+    CGFloat msX = [self getExtraScreenOffset];
     CGSize msSize = _mapSettingsButton.frame.size;
-    CGFloat sX = _searchButton.frame.origin.x;
+    CGFloat sX = [self getExtraScreenOffset] + kButtonWidth + kButtonOffset;
     CGSize sSize = _searchButton.frame.size;
     
-    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY] + [self getCoordinateWigetTopOffset:y];
+    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY] + kButtonOffset;
     
     if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, buttonsY, size.width, size.height)))
     {
-        _compassBox.frame = CGRectMake(x, buttonsY + 7.0 + 45.0, size.width, size.height);
-        _mapSettingsButton.frame = CGRectMake(msX, buttonsY + 7.0, msSize.width, msSize.height);
-        _searchButton.frame = CGRectMake(sX, buttonsY + 7.0, sSize.width, sSize.height);
+        _compassBox.frame = CGRectMake(x, buttonsY + kButtonOffset + kButtonWidth, size.width, size.height);
+        _mapSettingsButton.frame = CGRectMake(msX, buttonsY, msSize.width, msSize.height);
+        _searchButton.frame = CGRectMake(sX, buttonsY, sSize.width, sSize.height);
     }
 }
 
-- (CGFloat) getCoordinateWigetTopOffset:(CGFloat)yOffset
+- (CGFloat) getHudMinTopOffset
 {
-    BOOL isCoordinatesVisible = [_topCoordinatesWidget isVisible];
+    return [OAUtilities getStatusBarHeight];
+}
+
+- (CGFloat) getHudTopOffset
+{
+    CGFloat offset = [self getHudMinTopOffset];
+    
     BOOL isMarkersWidgetVisible = _toolbarViewController.view.alpha != 0;
     CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
+    BOOL isCoordinatesVisible = [_topCoordinatesWidget isVisible] && _topCoordinatesWidget.alpha != 0;
     CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height;
+    
     if ([OAUtilities isLandscape])
     {
         if (isCoordinatesVisible && isMarkersWidgetVisible)
-            return 0;
-        else if (isMarkersWidgetVisible)
-            return -markersWidgetHeaderHeight;
-        else
-            return 0;
+            offset += coordinateWidgetHeight;
     }
     else
     {
-        return isCoordinatesVisible ? coordinateWidgetHeight : 0;
+        if (isMarkersWidgetVisible)
+            offset += markersWidgetHeaderHeight;
+        if (isCoordinatesVisible)
+            offset += coordinateWidgetHeight;
     }
-}
-    
-
-- (CGFloat) getControlsTopPosition
-{
-    if (_toolbarViewController && _toolbarViewController.view.alpha > 0.0)
-        return _toolbarViewController.view.frame.origin.y + _toolbarViewController.view.frame.size.height + 1.0;
-    else
-    {
-        _toolbarTopPosition = [OAUtilities getStatusBarHeight];
-         return _toolbarTopPosition;
-    }
-    
+    return offset;
 }
 
 - (void) updateToolbarLayout:(BOOL)animated;
 {
-    CGFloat y = [self getControlsTopPosition];
+    CGFloat y = [self getHudTopOffset];
     if (animated)
     {
         [UIView animateWithDuration:.2 animations:^{
@@ -835,7 +915,7 @@
 
 - (void) updateButtonsLayout:(BOOL)animated
 {
-    CGFloat y = [self getControlsTopPosition];
+    CGFloat y = [self getHudTopOffset];
     if (animated)
     {
         [UIView animateWithDuration:.2 animations:^{
@@ -884,8 +964,10 @@
 
 - (CGRect) getDownloadViewFrame
 {
-    CGFloat y = [self getControlsTopPosition];
-    return CGRectMake(106.0, y + 12.0, self.view.bounds.size.width - 116.0 - (_rightWidgetsView ? _rightWidgetsView.bounds.size.width - 4.0 : 0), 28.0);
+    CGFloat y = [self getHudTopOffset];
+    CGFloat leftMargin = self.searchButton.frame.origin.x + kButtonWidth + kButtonOffset;
+    CGFloat rightMargin = _rightWidgetsView ? _rightWidgetsView.bounds.size.width + 2 * kButtonOffset : kButtonOffset;
+    return CGRectMake(leftMargin, y + 12.0, self.view.bounds.size.width - leftMargin - rightMargin, 28.0);
 }
 
 - (CGRect) getRoutingProgressViewFrame
@@ -894,7 +976,7 @@
     if (_downloadView)
         y = _downloadView.frame.origin.y + _downloadView.frame.size.height;
     else
-        y = [self getControlsTopPosition];
+        y = [self getHudTopOffset];
     
     return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
 }
@@ -973,6 +1055,23 @@
     return _statusBarView.alpha > 0;
 }
 
+- (void) setTopControlsAlpha:(CGFloat)alpha
+{
+    CGFloat alphaEx = self.contextMenuMode ? 0.0 : alpha;
+
+    _statusBarView.alpha = alpha;
+    _mapSettingsButton.alpha = alpha;
+    _compassBox.alpha = [_mapPanelViewController.mapWidgetRegistry isVisible:@"compass"] ? alpha : 0.0;
+    _searchButton.alpha = alpha;
+    
+    _downloadView.alpha = alphaEx;
+    _widgetsView.alpha = alphaEx;
+    if (self.toolbarViewController)
+        self.toolbarViewController.view.alpha = alphaEx;
+    if (self.topCoordinatesWidget)
+        self.topCoordinatesWidget.alpha = alphaEx;
+}
+
 - (void) showTopControls
 {
     CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
@@ -990,7 +1089,9 @@
             self.toolbarViewController.view.alpha = alphaEx;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.alpha = alphaEx;
-        
+
+        [self updateControlsLayout:[self getHudTopOffset]];
+
     } completion:^(BOOL finished) {
         
         _statusBarView.userInteractionEnabled = YES;
@@ -1038,6 +1139,24 @@
     }];
 }
 
+- (void) addOffsetToView:(UIView *)view x:(CGFloat)x y:(CGFloat)y
+{
+    view.frame = CGRectMake(view.frame.origin.x + x, view.frame.origin.y + y, view.frame.size.width, view.frame.size.height);
+}
+
+- (void) setupBottomContolMarginsForHeight:(CGFloat)menuHeight
+{
+    CGFloat bottomMargin = [OAUtilities getBottomMargin] > 0 ? [OAUtilities getBottomMargin] : kButtonOffset;
+    CGFloat topSpace = DeviceScreenHeight - bottomMargin;
+    
+    _optionsMenuButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _optionsMenuButton.bounds.size.height, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
+    _driveModeButton.frame = CGRectMake([self getExtraScreenOffset] + kButtonWidth + kButtonOffset, topSpace - _driveModeButton.bounds.size.height, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
+    _mapModeButton.frame = CGRectMake(self.view.bounds.size.width - 2 * kButtonWidth - kButtonOffset - [self getExtraScreenOffset], topSpace - _mapModeButton.bounds.size.height, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+    _zoomButtonsView.frame = CGRectMake(self.view.bounds.size.width - kButtonWidth - [self getExtraScreenOffset], topSpace - _zoomButtonsView.bounds.size.height, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+    
+    [self resetToDefaultRulerLayout];
+}
+
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
@@ -1048,11 +1167,7 @@
             _zoomButtonsView.alpha = 1.0;
             _mapModeButton.alpha = 1.0;
             _driveModeButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
-            
-            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
-            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-            _mapModeButton.frame = CGRectMake(self.view.bounds.size.width - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-            _zoomButtonsView.frame = CGRectMake(self.view.bounds.size.width - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+             [self setupBottomContolMarginsForHeight:menuHeight];
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){
@@ -1085,10 +1200,13 @@
             _mapModeButton.alpha = 0.0;
             _driveModeButton.alpha = 0.0;
             
-            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
-            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+            [self setupBottomContolMarginsForHeight:menuHeight];
+            
+            CGFloat offsetValue = DeviceScreenWidth;
+            [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0];
+            [self addOffsetToView:_driveModeButton x:-offsetValue y:0];
+            [self addOffsetToView:_mapModeButton x:offsetValue y:0];
+            [self addOffsetToView:_zoomButtonsView x:offsetValue y:0];
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){
@@ -1124,10 +1242,11 @@
 
 - (void) updateMapSettingsButton
 {
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
     [_mapSettingsButton setImage:mode.getIcon forState:UIControlStateNormal];
-    _mapSettingsButton.tintColor = isNight ? UIColor.whiteColor : UIColorFromRGB(color_on_map_icon_color);
+    _mapSettingsButton.tintColorDay = UIColorFromRGB(mode.getIconColor);
+    _mapSettingsButton.tintColorNight = UIColorFromRGB(mode.getIconColor);
+    [_mapSettingsButton updateColorsForPressedState:NO];
 }
 
 - (void) enterContextMenuMode
@@ -1201,16 +1320,26 @@
 
 - (void) updateRouteButton:(BOOL)routePlanningMode followingMode:(BOOL)followingMode
 {
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
-    NSString *imageName;
     if (followingMode)
-        imageName = isNight ? @"icon_start_navigation_night" : @"icon_start_navigation";
+    {
+        [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] forState:UIControlStateNormal];
+        _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
+        _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+    }
     else if (routePlanningMode)
-        imageName = isNight ? @"icon_drive_mode_night" : @"icon_drive_mode";
+    {
+        [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation"] forState:UIControlStateNormal];
+        _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
+        _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+    }
     else
-        imageName = isNight ? @"icon_drive_mode_off_night" : @"icon_drive_mode_off";
+    {
+        [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation"] forState:UIControlStateNormal];
+        _driveModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
+        _driveModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+    }
 
-    [_driveModeButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [_driveModeButton updateColorsForPressedState:NO];
 }
 
 - (void) recreateControls

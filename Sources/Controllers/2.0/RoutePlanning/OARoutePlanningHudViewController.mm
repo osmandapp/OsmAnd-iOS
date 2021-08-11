@@ -55,13 +55,12 @@
 #import "QuadRect.h"
 #import "OASnapTrackWarningViewController.h"
 #import "OAGpxApproximationViewController.h"
+#import "OAHudButton.h"
+#import "OAMapHudViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
-#define kDefaultMapRulerMarginBottom -17.0
-#define kDefaultMapRulerMarginLeft 120.0
-#define kPlanRouteMapRulerMarginLeft 70.0
 #define kToolbarHeight 60.0
 #define kHeaderSectionHeigh 60.0
 
@@ -101,7 +100,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIView *actionButtonsContainer;
-@property (weak, nonatomic) IBOutlet UIButton *modeButton;
+@property (weak, nonatomic) IBOutlet OAHudButton *modeButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
@@ -418,8 +417,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-kToolbarHeight - 25.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = (_actionButtonsContainer.isHidden && ![self isLeftSidePresentation] ? 0 : _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width) + 16;
+    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-kToolbarHeight - 16.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 16.);
+    CGFloat leftMargin = _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
@@ -494,15 +493,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_editingContext.appMode != OAApplicationMode.DEFAULT)
     {
         img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        tint = UIColorFromRGB(_editingContext.appMode.getIconColor);
+        _modeButton.tintColorDay = UIColorFromRGB(_editingContext.appMode.getIconColor);
+        _modeButton.tintColorNight = UIColorFromRGB(_editingContext.appMode.getIconColor);
     }
     else
     {
         img = [UIImage templateImageNamed:@"ic_custom_straight_line"];
-        tint = UIColorFromRGB(color_chart_orange);
+        _modeButton.tintColorDay = UIColorFromRGB(color_chart_orange);
+        _modeButton.tintColorNight = UIColorFromRGB(color_chart_orange);
     }
     [_modeButton setImage:img forState:UIControlStateNormal];
-    [_modeButton setTintColor:tint];
+    [_modeButton updateColorsForPressedState:NO];
 }
 
 - (void) cancelModes
@@ -642,9 +643,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)dismiss
 {
     [self hide:YES duration:.2 onComplete:^{
-        [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+        [_mapPanel.hudViewController resetToDefaultRulerLayout];
         [self restoreMapViewPort];
-        [OARootViewController.instance.mapPanel hideScrollableHudViewController];
+        [_mapPanel hideScrollableHudViewController];
         _layer.editingCtx = nil;
         [_layer resetLayer];
     }];
@@ -1079,7 +1080,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             {
                 [_editingContext setChangesSaved];
                 [self hide:NO duration:.2 onComplete:^{
-                    [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+                    [_mapPanel.hudViewController resetToDefaultRulerLayout];
                     [self restoreMapViewPort];
                     [OARootViewController.instance.mapPanel hideScrollableHudViewController];
                     _layer.editingCtx = nil;

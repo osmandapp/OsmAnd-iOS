@@ -10,6 +10,8 @@
 #import <JASidePanelController.h>
 #import "OAMapPanelViewController.h"
 
+#define kLeftPannelGestureRecognizer @"kLeftPannelGestureRecognizer"
+
 @class OAProduct;
 
 @interface OARootViewController : JASidePanelController

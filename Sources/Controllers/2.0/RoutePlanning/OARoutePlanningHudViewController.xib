@@ -77,16 +77,17 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="8b4-dc-g4J" userLabel="action button">
-                    <rect key="frame" x="0.0" y="344" width="71" height="55"/>
+                    <rect key="frame" x="0.0" y="344" width="82" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTM-Ht-rdV">
-                            <rect key="frame" x="10.5" y="2.5" width="50" height="50"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTM-Ht-rdV" customClass="OAHudButton">
+                            <rect key="frame" x="16" y="0.0" width="50" height="50"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="50" id="oBJ-eC-M4w"/>
                                 <constraint firstAttribute="height" constant="50" id="und-VO-fgZ"/>
                             </constraints>
-                            <state key="normal" image="ic_custom_straight_line.png" backgroundImage="ic_control_knob"/>
+                            <state key="normal" image="ic_custom_straight_line.png"/>
                             <connections>
                                 <action selector="modeButtonPressed:" destination="-1" eventType="touchUpInside" id="2rF-Dj-IpU"/>
                             </connections>
@@ -542,7 +543,6 @@
     </objects>
     <resources>
         <image name="bg_title.png" width="320" height="64"/>
-        <image name="ic_control_knob" width="128" height="128"/>
         <image name="ic_custom_arrow_up.png" width="30" height="30"/>
         <image name="ic_custom_redo.png" width="30" height="30"/>
         <image name="ic_custom_routes.png" width="30" height="30"/>

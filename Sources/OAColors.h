@@ -41,6 +41,17 @@
 #define color_dialog_buttons_dark 0xff8800
 #define color_on_map_icon_color 0x505050
 
+#define color_on_map_icon_background_color_light 0xFFFFFF
+#define color_on_map_icon_background_color_dark 0x3F3F3F
+#define color_on_map_icon_background_color_tap_light 0xE6E6E6
+#define color_on_map_icon_background_color_tap_dark 0x595959
+#define color_on_map_icon_background_color_active 0x682AD5
+
+#define color_on_map_icon_border_color 0x4D4D4D
+
+#define color_on_map_icon_tint_color_light 0x545454
+#define color_on_map_icon_tint_color_dark 0xcccccc
+
 #define color_sky_day 0x8cbed6
 #define color_sky_night 0x05142e
 
@@ -90,6 +101,8 @@
 #define color_primary_purple_50 0x805714CC
 #define color_bottom_sheet_secondary 0xD8D5DD
 #define color_bottom_sheet_secondary_night 0x3F3D43
+
+#define color_primary_light_blue 0x7499F1
 
 #define color_osm_editing_text_field 0xE7E6EB
 #define color_coordinates_background 0x420F99

@@ -10,6 +10,7 @@
 #import "OACustomPlugin.h"
 #import "OADownloadsItem.h"
 #import "OAFileSettingsItem.h"
+#import "OASuggestedDownloadsItem.h"
 
 @implementation OAPluginSettingsItem
 {
@@ -66,10 +67,10 @@
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeOther)
                     _plugin.resourceDirName = item.fileName;
             }
-//            else if ([item isKindOfClass:OASuggestedDownloadsItem.class])
-//            {
-//                [plugin updateSuggestedDownloads:((OASuggestedDownloadsItem *) item).items];
-//            }
+            else if ([item isKindOfClass:OASuggestedDownloadsItem.class])
+            {
+                [_plugin updateSuggestedDownloads:((OASuggestedDownloadsItem *) item).items];
+            }
             else if ([item isKindOfClass:OADownloadsItem.class])
             {
                 [_plugin updateDownloadItems:((OADownloadsItem *) item).items];

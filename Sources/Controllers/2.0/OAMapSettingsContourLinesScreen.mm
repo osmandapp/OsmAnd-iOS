@@ -365,25 +365,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateAvailableMaps
 {
-    CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-    CLLocationCoordinate2D loca = loc.coordinate;
-    [OAResourcesUIHelper requestMapDownloadInfo:loca resourceType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion onComplete:^(NSArray<OAResourceItem *>* res) {
+    CLLocationCoordinate2D loc = [OAResourcesUIHelper getMapLocation];
+    [OAResourcesUIHelper getMapsForType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion latLon:loc onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
         @synchronized(_dataLock)
         {
-            NSMutableArray<OARepositoryResourceItem *> *availableItems = [NSMutableArray array];
-            if (res.count > 0)
-            {
-                for (OAResourceItem * item in res)
-                {
-                    if ([item isKindOfClass:OARepositoryResourceItem.class])
-                    {
-                        OARepositoryResourceItem *resource = (OARepositoryResourceItem*)item;
-                        [availableItems addObject:resource];
-                    }
-                }
-                _mapItems = availableItems;
-            }
-            
+            _mapItems = res;
             [self generateData];
             [tblView reloadData];
         }
@@ -571,7 +557,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
                 UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
@@ -599,7 +585,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.textLabel.textColor = [UIColor blackColor];
                 UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
@@ -611,7 +597,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [UIImage templateImageNamed:@"ic_custom_contour_lines"];
+        cell.imageView.image = [UIImage templateImageNamed: [OAResourcesUIHelper iconNameByResourseType:mapItem.resourceType]];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)
@@ -656,7 +642,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void) accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
+- (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event
 {
     NSIndexPath *indexPath = [tblView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:tblView]];
     if (!indexPath)

@@ -2121,7 +2121,7 @@ static BOOL _lackOfResources;
             
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
             btnAcc.frame = CGRectMake(0.0, 0.0, 60.0, 50.0);
             [cell setAccessoryView:btnAcc];
@@ -2149,7 +2149,7 @@ static BOOL _lackOfResources;
 
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
             [cell setAccessoryView:btnAcc];
@@ -2189,7 +2189,7 @@ static BOOL _lackOfResources;
             cell.textLabel.textColor = [UIColor blackColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
             [cell setAccessoryView:btnAcc];
@@ -2329,7 +2329,7 @@ static BOOL _lackOfResources;
     return cell;
 }
 
-- (void) accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
+- (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event
 {
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:self.tableView]];
     if (!indexPath)

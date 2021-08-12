@@ -509,6 +509,7 @@
 "shared_string_min" = "Min.";
 "shared_string_max" = "Max.";
 "shared_string_wifi_only" = "Only on Wi-Fi";
+"shared_string_turn_off" = "Turn off";
 
 "restart" = "Restart";
 
@@ -1746,6 +1747,11 @@
 "get_started" = "Get started";
 
 "first_usage_wizard_desc" = "Let OsmAnd determine your location and suggest maps to download for that region.";
+
+"suggested_maps" = "Suggested maps";
+"suggested_maps_descr" = "These maps are required for the plugin";
+"added_profiles" = "Added profiles";
+"added_profiles_descr" = "Profiles added by plugin";
 
 "location_not_found" = "Location not found";
 "search_my_location" = "Search my location";

@@ -1293,7 +1293,7 @@
 "map_settings_add_online_source" = "添加在线资源";
 "nav_type_geocoding" = "地理编码";
 "public_transport_warning_title" = "公共交通导航目前处于测试阶段，可能出现错误和信息不准确。";
-"exit_at" = "退出于";
+"exit_at" = "在该站下车";
 "shared_string_deselect_all" = "全部取消";
 "avoid_road" = "避开道路";
 "menu" = "菜单";
@@ -1451,7 +1451,6 @@
 "profile_type_custom_string" = "自定义配置文件";
 "shared_string_import_complete" = "导入完成";
 "quick_action_switch_profile_descr" = "操作按钮在选定的配置文件之间切换。";
-
 "osm_note_close" = "关闭 OSM 注记";
 "emergency" = "紧急救助";
 "shared_string_others" = "其它";
@@ -1517,3 +1516,5 @@
 "symbols" = "符号";
 "copied_to_clipboard" = "复制到剪贴板";
 "replace_favorite_confirmation" = "你确定你想要替换收藏的 %@？";
+"profile_appearance" = "配置外观";
+"configure_profile" = "更改配置";

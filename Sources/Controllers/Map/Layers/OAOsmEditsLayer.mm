@@ -40,6 +40,10 @@
     OAOsmEditingPlugin *_plugin;
     
     OAAutoObserverProxy *_editsChangedObserver;
+    
+    BOOL _showCaptionsCache;
+    double _textSize;
+    double _captionTopSpace;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
@@ -60,6 +64,11 @@
 {
     [super initLayer];
     
+    _textSize = OAAppSettings.sharedManager.textSize.get;
+    _showCaptionsCache = self.showCaptions;
+    // TODO: migrate to compound icons and probably remove this (for now, it's used to compensate for the edits' icon transparent space)
+    _captionTopSpace = -4 * self.displayDensityFactor;
+    
     _editsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onEditsCollectionChanged)
                                                        andObserve:self.app.osmEditsChangeObservable];
@@ -76,9 +85,21 @@
     return [_plugin isActive] && [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
 }
 
-- (void) deinitLayer
+- (BOOL) updateLayer
 {
-    [super deinitLayer];
+    [super updateLayer];
+    
+    if (self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get)
+    {
+        _showCaptionsCache = self.showCaptions;
+        _textSize = OAAppSettings.sharedManager.textSize.get;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hide];
+            [self refreshOsmEditsCollection];
+            [self show];
+        });
+    }
+    return YES;
 }
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getOsmEditsCollection
@@ -92,16 +113,34 @@
     NSArray * data = [self getAllPoints];
     for (OAOsmPoint *point in data)
     {
-        OsmAnd::MapMarkerBuilder()
-        .setIsAccuracyCircleSupported(false)
+        NSString *description = [self getPointDescription:point];
+        OsmAnd::MapMarkerBuilder builder;
+        builder.setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_osm_edit"])
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon([point getLatitude], [point getLongitude])))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-        .buildAndAddToCollection(_osmEditsCollection);
+        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+        
+        if (self.showCaptions && description.length > 0)
+        {
+            builder.setCaption(QString::fromNSString(description));
+            builder.setCaptionStyle(self.captionStyle);
+            builder.setCaptionTopSpace(_captionTopSpace);
+        }
+        builder.buildAndAddToCollection(_osmEditsCollection);
     }
+}
+
+- (NSString *) getPointDescription:(OAOsmPoint *)point
+{
+    NSString *res = @"";
+    if ([point isKindOfClass:OAOpenStreetMapPoint.class])
+    {
+        res = ((OAOpenStreetMapPoint *)point).getName;
+    }
+    return res == nil ? @"" : res;
 }
 
 - (void) show

@@ -19,7 +19,6 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAGPXItemViewController.h"
-#import "OAGPXEditItemViewController.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 #import "OADestinationCardsViewController.h"
@@ -464,7 +463,7 @@ typedef enum
 
 - (BOOL) hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails || _activeTargetType == OATargetRouteDetailsGraph;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails || _activeTargetType == OATargetRouteDetailsGraph;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -1245,9 +1244,6 @@ typedef enum
         if (targetPoint.centerMap)
             [self goToTargetPointDefault];
         
-        if (_activeTargetType == OATargetGPXEdit && targetPoint.type != OATargetWpt)
-            [self targetPointAddWaypoint];
-        
         if (_targetMenuView.needsManualContextMode)
             [self enterContextMenuMode];
     }];
@@ -1287,19 +1283,6 @@ typedef enum
             {
                 [_mapViewController hideContextPinMarker];
                 return NO;
-            }
-            break;
-        }
-        case OATargetGPXEdit:
-        {
-            if (isWaypoint)
-            {
-                NSString *path = ((OAGPX *)_activeTargetObj).gpxFilePath;
-                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:[path lastPathComponent]])
-                {
-                    [_mapViewController hideContextPinMarker];
-                    return NO;
-                }
             }
             break;
         }
@@ -1578,16 +1561,6 @@ typedef enum
             _activeViewControllerState = gpxItemViewControllerState;
             break;
         }
-
-        case OATargetGPXEdit:
-        {
-            OAGPXEditItemViewControllerState *gpxItemViewControllerState = (OAGPXEditItemViewControllerState *)([((OAGPXEditItemViewController *)self.targetMenuView.customController) getCurrentState]);
-            gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFilePath.length == 0);
-            
-            _activeViewControllerState = gpxItemViewControllerState;
-            break;
-        }
             
         case OATargetGPXRoute:
         {
@@ -1611,11 +1584,6 @@ typedef enum
         case OATargetGPX:
             [_mapViewController hideContextPinMarker];
             [self openTargetViewWithGPX:_activeTargetObj pushed:YES];
-            break;
-
-        case OATargetGPXEdit:
-            [_mapViewController hideContextPinMarker];
-            [self openTargetViewWithGPXEdit:_activeTargetObj pushed:YES];
             break;
             
         case OATargetGPXRoute:
@@ -1675,7 +1643,7 @@ typedef enum
 -(BOOL) gpxModeActive
 {
     return (_activeTargetActive &&
-        (_activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute));
+        (_activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXRoute));
 }
 
 - (void) onHandleIncomingURL:(NSString *)ext
@@ -2017,7 +1985,7 @@ typedef enum
 
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    if (self.targetMenuView.targetPoint.type == OATargetGPX || self.targetMenuView.targetPoint.type == OATargetGPXEdit || (![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
+    if (self.targetMenuView.targetPoint.type == OATargetGPX || (![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
@@ -2123,14 +2091,6 @@ typedef enum
             BOOL showFullScreen = (state && state.showFullScreen);
             [self.targetMenuView doInit:showFull showFullScreen:showFullScreen];
 
-            break;
-        }
-        case OATargetGPXEdit:
-        {
-            OAGPXEditItemViewControllerState *state = _activeViewControllerState ? (OAGPXEditItemViewControllerState *)_activeViewControllerState : nil;
-            BOOL showFull = (state && state.showFullScreen) || (!state && showFullMenu);
-            [self.targetMenuView doInit:showFull showFullScreen:showFull];
-            
             break;
         }
         case OATargetRouteStart:
@@ -2394,7 +2354,6 @@ typedef enum
         switch (self.targetMenuView.targetPoint.type)
         {
             case OATargetGPX:
-            case OATargetGPXEdit:
                 if ([self hasGpxActiveTargetType] && _activeTargetObj)
                     ((OAGPX *)_activeTargetObj).newGpx = NO;
                 popped = [OAGPXListViewController popToParent];
@@ -2687,63 +2646,6 @@ typedef enum
     
     [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
         [self enterContextMenuMode];
-        _activeTargetActive = YES;
-    }];
-}
-
-- (void) openTargetViewWithGPXEdit:(OAGPX *)item pushed:(BOOL)pushed
-{
-    BOOL showCurrentTrack = NO;
-    if (item == nil)
-    {
-        item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-        item.gpxTitle = OALocalizedString(@"track_recording_name");
-        showCurrentTrack = YES;
-    }
-    
-    [_mapViewController hideContextPinMarker];
-    
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    
-    NSString *caption = [item getNiceTitle];
-    
-    UIImage *icon = [UIImage imageNamed:@"icon_info"];
-    
-    targetPoint.type = OATargetGPXEdit;
-    
-    _targetMenuView.isAddressFound = YES;
-    _formattedTargetName = caption;
-    
-    if (_activeTargetType != OATargetGPXEdit)
-        [self displayGpxOnMap:item];
-    
-    if (item.bounds.center.latitude == DBL_MAX)
-    {
-        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
-        targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-        _targetLatitude = latLon.latitude;
-        _targetLongitude = latLon.longitude;
-    }
-    else
-    {
-        targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
-    }
-    
-    targetPoint.title = _formattedTargetName;
-    targetPoint.icon = icon;
-    targetPoint.toolbarNeeded = NO;
-    if (!showCurrentTrack)
-        targetPoint.targetObj = item;
-    
-    _activeTargetType = targetPoint.type;
-    _activeTargetObj = targetPoint.targetObj;
-    
-    _targetMenuView.activeTargetType = _activeTargetType;
-    [_targetMenuView setTargetPoint:targetPoint];
-    
-    [self enterContextMenuMode];
-    [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
         _activeTargetActive = YES;
     }];
 }
@@ -3065,12 +2967,6 @@ typedef enum
 
 - (void) openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
 {
-    if (![[OAIAPHelper sharedInstance].tripPlanning isActive])
-    {
-        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_TripPlanning];
-        return;
-    }
-
     [_mapViewController hideContextPinMarker];
  
     BOOL useCurrentRoute = (item == nil);

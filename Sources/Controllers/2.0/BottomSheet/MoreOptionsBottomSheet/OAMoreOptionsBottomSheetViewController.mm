@@ -136,7 +136,7 @@
                                   @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
             }
             else if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
-                && (_targetPoint.type != OATargetWpt && _targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXEdit)
+                && (_targetPoint.type != OATargetWpt && _targetPoint.type != OATargetGPX)
                 && _iapHelper.trackRecording.isActive) {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_add_waypoint",

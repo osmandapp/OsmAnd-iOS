@@ -1529,13 +1529,17 @@
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 
-"product_title_trip_planning" = "Trip planning";
-"product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
-"product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-
 "product_title_osm_editing" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+
+"product_title_mapillary" = "Mapillary";
+"product_desc_mapillary" = "Online street-level photos for everyone";
+"product_desc_ext_mapillary" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
+
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
+"product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
@@ -1696,8 +1700,6 @@
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
-
-"plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";

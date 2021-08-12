@@ -126,6 +126,16 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     return _products.osmEditing;
 }
 
+- (OAProduct *) mapillary
+{
+    return _products.mapillary;
+}
+
+- (OAProduct *) openPlaceReviews
+{
+    return _products.openPlaceReviews;
+}
+
 - (OAProduct *) parking
 {
     return _products.parking;
@@ -139,11 +149,6 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 - (OAProduct *) srtm
 {
     return _products.srtm;
-}
-
-- (OAProduct *) tripPlanning
-{
-    return _products.tripPlanning;
 }
 
 - (OAProduct *) allWorld

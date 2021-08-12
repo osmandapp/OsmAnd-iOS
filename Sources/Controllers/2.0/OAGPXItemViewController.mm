@@ -27,6 +27,7 @@
 #import "OAColors.h"
 #import "OASelectTrackFolderViewController.h"
 #import "OASaveTrackViewController.h"
+#import "OARoutePlanningHudViewController.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -675,10 +676,9 @@
                                     otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")),
                                                   OALocalizedString(@"shared_string_export"),
                                                   OALocalizedString(@"gpx_edit_mode"),
-                                                  OALocalizedString(@"product_title_trip_planning"),
                                                   OALocalizedString(@"plan_route_change_folder")]
                                       otherDesc:nil
-                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png", @"ic_action_route_distance.png", @"ic_dialog_move.png"]
+                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png",  @"ic_dialog_move.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
                                          {
@@ -693,14 +693,11 @@
                                                  case 2:
                                                      [self exportClicked:nil];
                                                      break;
-                                                 case 3:
-                                                     // enter edit mode
-                                                     [[OARootViewController instance].mapPanel openTargetViewWithGPXEdit:self.gpx pushed:NO];
+                                                 case 3:  
+                                                     [OARootViewController.instance.mapPanel hideTargetPointMenu];
+                                                     [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFileName]];
                                                      break;
                                                  case 4:
-                                                     [[OARootViewController instance].mapPanel targetGoToGPXRoute];
-                                                     break;
-                                                 case 5:
                                                      [self selectTrackClicked];
                                                      break;
 

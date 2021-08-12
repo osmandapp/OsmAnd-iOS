@@ -42,6 +42,7 @@
 #import "OAPluginsViewController.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
+#import "OARoutePlanningHudViewController.h"
 #import "OAImportGPXBottomSheetViewController.h"
 #import <MBProgressHUD.h>
 
@@ -855,40 +856,8 @@ static UIViewController *parentController;
 
 - (void) onCreateTrackClicked
 {
-    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-    
-    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-    [fmt setDateFormat:@"yyyy-MM-dd"];
-    
-    NSString *fileName = [NSString stringWithFormat:@"Track_%@.gpx", [fmt stringFromDate:[NSDate date]]];
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
-    
-    NSFileManager *fileMan = [NSFileManager defaultManager];
-    if ([fileMan fileExistsAtPath:path])
-    {
-        NSString *ext = [fileName pathExtension];
-        NSString *newName;
-        for (int i = 2; i < 100000; i++) {
-            newName = [[NSString stringWithFormat:@"%@_(%d)", [fileName stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
-            path = [_app.gpxPath stringByAppendingPathComponent:newName];
-            if (![fileMan fileExistsAtPath:path])
-                break;
-        }
-    }
-    
-    [doc saveTo:path];
-    
-    NSString *gpxFilePath = [OAUtilities getGpxShortPath:path];
-    OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-    OAGPX* item = [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
-    [[OAGPXDatabase sharedDb] save];
-    
-    item.newGpx = YES;
-    
-    [_settings showGpx:@[gpxFilePath]];
-
-    [self doPush];
-    [[OARootViewController instance].mapPanel openTargetViewWithGPXEdit:item pushed:YES];
+    [self dismissViewController];
+    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
 }
 
 - (void) cancelRoutePressed

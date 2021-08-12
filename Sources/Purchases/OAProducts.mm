@@ -1373,36 +1373,6 @@
 
 @end
 
-@implementation OATripPlanningProduct
-
-- (instancetype) init
-{
-    self = [super initWithIdentifier:kInAppId_Addon_TripPlanning];
-    if (self)
-    {
-        self.free = YES;
-        [self commonInit];
-    }
-    return self;
-}
-
-- (NSDecimalNumber *) getDefaultPrice
-{
-    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_TripPlanning_Default_Price];
-}
-
-- (NSString *) productIconName
-{
-    return @"ic_plugin_trip_planning";
-}
-
-- (NSString *) productScreenshotName
-{
-    return @"img_plugin_trip_planning.jpg";
-}
-
-@end
-
 @implementation OAOsmEditingProduct
 
 - (instancetype) init
@@ -1429,6 +1399,66 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_osm_edits.jpg";
+}
+
+@end
+
+@implementation OAMapillaryProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Mapillary];
+    if (self)
+    {
+        self.free = YES;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_Mapillary_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_mapillary_symbol";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_mapillary.jpg";
+}
+
+@end
+
+@implementation OAOpenPlaceReviewsProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_OpenPlaceReview];
+    if (self)
+    {
+        self.free = YES;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_OpenPlaceReviews_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_openplacereview_logo";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_openplacereviews.jpg";
 }
 
 @end
@@ -1591,8 +1621,9 @@
 @property (nonatomic) OAProduct *parking;
 @property (nonatomic) OAProduct *wiki;
 @property (nonatomic) OAProduct *srtm;
-@property (nonatomic) OAProduct *tripPlanning;
 @property (nonatomic) OAProduct *osmEditing;
+@property (nonatomic) OAProduct *mapillary;
+@property (nonatomic) OAProduct *openPlaceReviews;
 
 @property (nonatomic) OAProduct *allWorld;
 @property (nonatomic) OAProduct *russia;
@@ -1633,8 +1664,9 @@
         self.parking = [[OAParkingProduct alloc] init];
         self.wiki = [[OAWikiProduct alloc] init];
         self.srtm = [[OASrtmProduct alloc] init];
-        self.tripPlanning = [[OATripPlanningProduct alloc] init];
         self.osmEditing = [[OAOsmEditingProduct alloc] init];
+        self.mapillary = [[OAMapillaryProduct alloc] init];
+        self.openPlaceReviews = [[OAOpenPlaceReviewsProduct alloc] init];
         
         self.allWorld = [[OAAllWorldProduct alloc] init];
         self.russia = [[OARussiaProduct alloc] init];
@@ -1653,8 +1685,9 @@
                              self.parking,
                              self.wiki,
                              self.srtm,
-                             self.tripPlanning,
-                             self.osmEditing];
+                             self.osmEditing,
+                             self.mapillary,
+                             self.openPlaceReviews];
         
         self.inAppMaps = @[self.allWorld,
                            self.russia,
@@ -1678,8 +1711,9 @@
         self.inAppsFree = @[self.skiMap,
                             self.trackRecording,
                             self.parking,
-                            self.tripPlanning,
-                            self.osmEditing];
+                            self.osmEditing,
+                            self.mapillary,
+                            self.openPlaceReviews];
         
         NSMutableArray<OAProduct *> *paid = self.inApps.mutableCopy;
         [paid removeObjectsInArray:self.inAppsFree];
@@ -1850,6 +1884,20 @@
     {
         OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"modify_poi_short") titleWide:OALocalizedString(@"modify_poi") imageName:@"ic_plugin_osm_edit"];
         addon.sortIndex = 2;
+        [arr addObject:addon];
+    }
+    
+    if ([self.mapillary isPurchased])
+    {
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"product_title_mapillary") titleWide:OALocalizedString(@"product_title_mapillary") imageName:@"ic_custom_mapillary_symbol"];
+        addon.sortIndex = 3;
+        [arr addObject:addon];
+    }
+    
+    if ([self.openPlaceReviews isPurchased])
+    {
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"product_title_openplacereviews") titleWide:OALocalizedString(@"product_title_openplacereviews") imageName:@"ic_custom_mapillary_symbol"];
+        addon.sortIndex = 3;
         [arr addObject:addon];
     }
     

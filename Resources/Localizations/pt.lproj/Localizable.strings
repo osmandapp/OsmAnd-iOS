@@ -2113,3 +2113,14 @@
 "wiki_menu_download_descr" = "São necessários mapas adicionais para visualizar os POIs da Wikipédia no mapa.";
 "some_articles_may_not_available_in_lang" = "Alguns artigos da Wikipédia podem não estar disponíveis no seu idioma.";
 "population_num" = "População: %@";
+"added_profiles_descr" = "Perfis adicionados pela extensão";
+"added_profiles" = "Perfis adicionados";
+"suggested_maps_descr" = "Estes mapas são necessários para a extensão";
+"suggested_maps" = "Mapas sugeridos";
+"product_desc_ext_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre lugares públicos como restaurantes, hotéis, museus e pontos de rotas em dados abertos https://openplacereviews.org/data/.\n\nLeia mais em https://openplacereviews.org";
+"product_desc_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre locais públicos";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"product_desc_ext_mapillary" = "Fotos online ao nível da rua. Descubra locais, colabore, capture o mundo.";
+"product_desc_mapillary" = "Fotos online ao nível da rua";
+"product_title_mapillary" = "Mapillary";
+"shared_string_turn_off" = "Desativar";

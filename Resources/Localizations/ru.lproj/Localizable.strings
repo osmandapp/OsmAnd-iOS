@@ -446,7 +446,7 @@
 "map_creator" = "Создать карту";
 "local_names" = "Местные названия";
 "history" = "История";
-"today" = "Сегодня";
+"today" = "сегодня";
 "yesterday" = "Вчера";
 "hist_select_remove" = "Пожалуйста, выберите ячейки для удаления";
 "hist_remove_q" = "Удалить выбранные?";
@@ -1460,7 +1460,7 @@
 "routing_attr_avoid_subway_description" = "Исключить метро и рельсовый транспорт";
 "routeInfo_road_types_name" = "Типы дорог";
 "rendering_value_purple_name" = "Фиолетовый";
-"rendering_attr_hikingRoutesOSMC_description" = "Отрисовка дорог согласно трассам OSMC.";
+"rendering_attr_hikingRoutesOSMC_description" = "Отрисовка дорог в соответствии со следами OSMC.";
 "routing_attr_avoid_ferry_description" = "Исключить паромы";
 "rendering_attr_surface_fine_gravel_name" = "Мелкий гравий";
 "rendering_attr_surface_ground_name" = "Земля";

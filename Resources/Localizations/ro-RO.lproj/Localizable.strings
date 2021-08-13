@@ -2092,3 +2092,4 @@
 "add_osm_note" = "Adăugați o notă OSM";
 "toggle_voice" = "Voce pornit/oprit";
 "population_num" = "Populația: %@";
+"shared_string_turn_off" = "Opriți";

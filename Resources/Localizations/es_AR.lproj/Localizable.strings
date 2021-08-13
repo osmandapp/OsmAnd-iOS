@@ -2141,3 +2141,14 @@
 "select_wikipedia_article_langs" = "Marca los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
 "shared_string_all_languages" = "Todos los idiomas";
 "population_num" = "Población: %@";
+"suggested_maps_descr" = "Estos mapas deben usarse con el complemento.";
+"added_profiles_descr" = "Perfiles añadidos por el complemento";
+"added_profiles" = "Perfiles añadidos";
+"suggested_maps" = "Mapas sugeridos";
+"product_desc_ext_openplacereviews" = "Envía fotos, reseñas y enlaces sobre lugares públicos como restaurantes, hoteles, museos y puntos de referencia. Todos los datos son abiertos: https://openplacereviews.org/data/ .\n\nMás información en: https://openplacereviews.org";
+"product_desc_openplacereviews" = "Envía fotos, reseñas y enlaces sobre sitios públicos";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"product_desc_ext_mapillary" = "Fotos a nivel de calle en línea para todos. Descubre sitios, colabora, captura el mundo.";
+"product_desc_mapillary" = "Fotos en línea a nivel de calle para todos";
+"product_title_mapillary" = "Mapillary";
+"shared_string_turn_off" = "Apagar";

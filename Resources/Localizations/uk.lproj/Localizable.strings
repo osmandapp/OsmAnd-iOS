@@ -1215,7 +1215,7 @@
 "add_start" = "Додати відправну точку";
 "home_pt" = "Вдома";
 "work_pt" = "Робота";
-"mapillary_descr" = "Вуличні світлини в Інтернеті для всіх. Відкривайте місця, співпрацюйте, захоплюйте світ";
+"mapillary_descr" = "Світлини вулиць в мережі для всіх. Відкрийте для себе місця, діліться та оглядайте весь світ";
 // Rendering attributes
 "quick_action_no_overlay" = "Нема накладки мапи";
 "quick_action_add_overlay" = "Додати накладку мапи";
@@ -2121,3 +2121,14 @@
 "select_wikipedia_article_langs" = "Виберіть мови статей Вікіпедії на мапі. Перемикайтеся між усіма доступними мовами під час читання статті.";
 "shared_string_all_languages" = "Усі мови";
 "population_num" = "Населення: %@";
+"added_profiles_descr" = "Профілі, додані розширенням";
+"added_profiles" = "Додані профілі";
+"suggested_maps_descr" = "Ці мапи потрібно використовувати з плагіном";
+"suggested_maps" = "Пропоновані мапи";
+"product_desc_ext_openplacereviews" = "Надсилайте світлини, відгуки та посилання про громадські місця, як-от ресторани, готелі, музеї та точки шляху відкритими даними https://openplacereviews.org/data/.\n\nДізнайтеся більше на https://openplacereviews.org";
+"product_desc_openplacereviews" = "Надсилайте світлини, відгуки та посилання про громадські місця";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"product_desc_ext_mapillary" = "Світлини вулиць в мережі для всіх. Відкрийте для себе місця, діліться та оглядайте весь світ.";
+"product_desc_mapillary" = "Інтернет-світлини вулиць для всіх";
+"product_title_mapillary" = "Mapillary";
+"shared_string_turn_off" = "Вимкнути";

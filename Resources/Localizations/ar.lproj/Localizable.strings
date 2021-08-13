@@ -2098,8 +2098,8 @@
 "gpxup_public" = "عام";
 "restart" = "اعاده تشغيل";
 "shared_string_wifi_only" = "فقط على شبكة Wi-Fi";
-"no_waypoints_found" = "لم يتم العثور على إحداثيات";
-"context_menu_item_edit_waypoint" = "تحرير إحداثيات GPX";
+"no_waypoints_found" = "لم يتم العثور على احداثيات وجهة";
+"context_menu_item_edit_waypoint" = "تعدبل إحداثية GPX";
 "replace_waypoint_confirmation" = "هل تريد بالتأكيد استبدال إحداثية النقطة ٪@؟";
 "default" = "افتراضي";
 "map_widget_parking" = "مكان للوقوف";
@@ -2116,3 +2116,7 @@
 "wiki_menu_download_descr" = "هناك حاجة إلى خرائط إضافية لعرض النقاط المهمة من ويكيبيديا على الخريطة.";
 "select_wikipedia_article_langs" = "حدد اللغات التي ستظهر بها مقالات ويكيبيديا على الخريطة. يمكنك التبديل بين جميع اللغات المتاحة أثناء قراءة المقالة.";
 "shared_string_all_languages" = "كل اللغات";
+"shared_string_turn_off" = "إيقاف تشغيل";
+"added_profiles_descr" = "الأوضاع المضافة بواسطة الأداة الملحقة";
+"added_profiles" = "الأوضاع المضافة";
+"suggested_maps" = "خرائط مقترحة";

@@ -1349,7 +1349,7 @@
 "routing_attr_avoid_sett_name" = "Без булыжников или брусчатки";
 "rendering_attr_contourColorScheme_name" = "Цветовая гамма горизонталей";
 "rendering_attr_highway_class_footway_name" = "Пешеходная";
-"rendering_attr_surface_paving_stones_name" = "Брусчатка";
+"rendering_attr_surface_paving_stones_name" = "Тротуарная плитка";
 "rendering_attr_alpineHiking_description" = "Отрисовка дорог согласно шкале SAC.";
 "rendering_attr_showLez_description" = "Показывать на карте зоны с низким уровнем выбросов. Не влияет на навигацию.";
 "rendering_value_high_name" = "Высокая";
@@ -1419,7 +1419,7 @@
 "rendering_attr_smoothness_horrible_name" = "Ужасная";
 "rendering_attr_hideBuildings_name" = "Строения";
 "rendering_attr_showSurfaces_name" = "Тип дорожного покрытия";
-"rendering_attr_surface_paved_name" = "Твердая";
+"rendering_attr_surface_paved_name" = "Твёрдое";
 "rendering_attr_pisteRoutes_name" = "Горнолыжные маршруты";
 "rendering_attr_hmRendered_name" = "Больше деталей";
 "routing_attr_avoid_stairs_name" = "Без лестниц";
@@ -1439,7 +1439,7 @@
 "rendering_attr_piste_difficulty_easy_name" = "Легко";
 "routing_attr_avoid_bus_name" = "Без автобусов";
 "routing_attr_avoid_tram_description" = "Исключить трамваи";
-"rendering_attr_surface_grass_paver_name" = "Газонная решетка";
+"rendering_attr_surface_grass_paver_name" = "Газонная решётка";
 "routing_attr_avoid_shuttle_train_name" = "Без челночных поездов (шаттлов)";
 "routing_attr_prefer_motorway_description" = "Предпочитать магистрали";
 "rendering_attr_hideHouseNumbers_name" = "Номера домов";
@@ -1450,7 +1450,7 @@
 "rendering_attr_smoothness_excellent_name" = "Отличная";
 "routing_attr_avoid_share_taxi_description" = "Исключить маршрутные такси";
 "rendering_value_yellow_name" = "Жёлтый";
-"rendering_attr_surface_compacted_name" = "Утрамбованная";
+"rendering_attr_surface_compacted_name" = "Утрамбованное";
 "rendering_attr_smoothness_impassable_name" = "Непроходимая";
 "rendering_value_thin_name" = "Тонкая";
 "rendering_value_light_brown_name" = "Светло-коричневый";
@@ -1518,7 +1518,7 @@
 "routing_attr_allow_skating_only_description" = "Маршруты, подготовленные для фристайла или катания только на коньках без классических треков.";
 "routing_attr_piste_type_downhill_description" = "Склоны для катания и спуска на горных лыжах и доступ к подъёмникам.";
 "rendering_value_bicycle_name" = "Велосипед";
-"rendering_attr_surface_ice_name" = "Лед";
+"rendering_attr_surface_ice_name" = "Лёд";
 "routeInfo_piste_difficulty_name" = "Сложность горнолыжной трассы";
 "rendering_attr_hidePOILabels_name" = "Названия POI";
 "rendering_value_low_name" = "Низкая";
@@ -1605,7 +1605,7 @@
 "rendering_value_pedestrian_name" = "Пешком";
 "routing_attr_prefer_unpaved_description" = "Предпочитать грунтовые дороги.";
 "rendering_value_darkyellow_name" = "Тёмно-жёлтый";
-"rendering_attr_surface_unpaved_name" = "Грунтовая";
+"rendering_attr_surface_unpaved_name" = "Грунтовое";
 "rendering_attr_streetLightingNight_name" = "Показывать только ночью";
 "online_webpage_warning" = "Страница доступна только онлайн. Открыть ее в браузере?";
 "app_mode_osm" = "OSM";
@@ -2078,7 +2078,7 @@
 "preferred_languages" = "Предпочтительные языки";
 "available_languages" = "Доступные языки";
 "some_articles_may_not_available_in_lang" = "Некоторые статьи на Википедии могут быть недоступны на вашем языке.";
-"wiki_menu_download_descr" = "Нужны дополнительные карты для показа Wikipedia POI на карте.";
+"wiki_menu_download_descr" = "Для POI Википедии требуются дополнительные карты.";
 "select_wikipedia_article_langs" = "Выберите язык отображения статей Википедии на карте. Вы можете переключаться между всеми доступными языками во время чтения статьи.";
 "shared_string_all_languages" = "Все языки";
 "no_waypoints_found" = "Не найдено путевых точек";

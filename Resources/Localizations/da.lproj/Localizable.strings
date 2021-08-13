@@ -1900,7 +1900,6 @@
 "profile_type_osmand_string" = "OsmAnd-profil";
 "profile_type_user_string" = "Brugerprofil";
 "map_widget_distance_by_tap" = "Afstand ved tryk";
-
 "replace_favorite_confirmation" = "Erstat Favorit %@?";
 "select_another_track" = "Vælg et andet spor";
 "sport" = "Sport";
@@ -1966,3 +1965,7 @@
 "split_after" = "Opdel efter";
 "special" = "Særlig";
 "plan_route_create_new_route" = "Opret en ny rute";
+"weight_limit_description" = "Oplys din køretøjsvægt, da der kan gælde visse ruterestriktioner for tunge køretøjer.";
+"height_limit_description" = "Oplys din køretøjshøjde, da der kan gælde visse ruterestriktioner for høje køretøjer.";
+"width_limit_description" = "Angiv din køretøjsbredde. Nogle rutebegrænsninger kan gælde for brede køretøjer.";
+"search_more" = "Søg mere…";

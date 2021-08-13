@@ -291,7 +291,7 @@
 "change_color" = "Modifier la couleur";
 "gpx_trip_groups" = "Groupes de traces";
 "gpx_group_select" = "Sélection de groupe";
-"get_directions" = "Navigation";
+"get_directions" = "Guidages";
 "plugins" = "Gestionnaire de greffons";
 "open_map_settings" = "Ouvrez les paramètres de la carte";
 "plugin_popup_wiki_title" = "Télécharger Wikipédia";
@@ -1050,7 +1050,7 @@
 "years_5" = "Années";
 "months_3" = "Trois mois";
 "configure_map" = "Paramétrer la carte";
-"simulate_navigation" = "Simuler la navigation";
+"simulate_navigation" = "Simuler le guidage";
 "select_map_marker" = "Sélectionner une marque";
 "add_intermediate" = "Ajouter un point intermédiaire";
 "add_home" = "Ajouter domicile";

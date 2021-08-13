@@ -2139,3 +2139,4 @@
 "wiki_menu_download_descr" = "Mapas adicionais são necessários para visualizar os POIs da Wikipédia no mapa.";
 "select_wikipedia_article_langs" = "Selecione os idiomas nos quais os artigos da Wikipédia aparecerão no mapa. Você pode alternar entre todos os idiomas disponíveis enquanto lê o artigo.";
 "shared_string_all_languages" = "Todos os idiomas";
+"population_num" = "População: %@";

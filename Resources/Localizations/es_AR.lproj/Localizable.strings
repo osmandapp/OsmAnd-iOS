@@ -2140,3 +2140,4 @@
 "wiki_menu_download_descr" = "Se necesitan mapas adicionales para ver los puntos de interés de Wikipedia en el mapa.";
 "select_wikipedia_article_langs" = "Marca los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
 "shared_string_all_languages" = "Todos los idiomas";
+"population_num" = "Población: %@";

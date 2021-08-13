@@ -446,7 +446,7 @@
 "shared_string_show_more" = "Afișați mai multe";
 "map_widget_intermediate_time" = "Timp intermediar";
 "access_arrival_time" = "Timp sosire";
-"poi_opening_hours" = "Orar";
+"poi_opening_hours" = "Ore de deschidere";
 "interrupt_music" = "Întrerupeți muzica";
 "replace_destination_point" = "Înlocuiți destinația";
 "shared_string_apply" = "Aplicați";
@@ -2091,3 +2091,4 @@
 "toggle_online_notes" = "Comutați notele OSM";
 "add_osm_note" = "Adăugați o notă OSM";
 "toggle_voice" = "Voce pornit/oprit";
+"population_num" = "Populația: %@";

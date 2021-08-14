@@ -1969,3 +1969,7 @@
 "height_limit_description" = "Oplys din køretøjshøjde, da der kan gælde visse ruterestriktioner for høje køretøjer.";
 "width_limit_description" = "Angiv din køretøjsbredde. Nogle rutebegrænsninger kan gælde for brede køretøjer.";
 "search_more" = "Søg mere…";
+"gpx_upload_public_visibility_descr" = "\"Offentlig\" betyder, at sporingen vises offentligt i dine GPS-sporinger og i offentlige GPS-sporingslister og i den offentlige sporingsliste med tidsstempler i rå form. Data, der leveres via API'et, henviser ikke til din sporingsside. Sporpunktstidsstempler er ikke tilgængelige via den offentlige GPS-API, og sporpunkterne er ikke kronologisk ordnet.";
+"gpx_upload_private_visibility_descr" = "\"Privat\" betyder, at sporet ikke vises i nogen offentlige lister, men at sporpunkter fra det i ikke-kronologisk rækkefølge er tilgængelige via den offentlige GPS-API uden tidsstempler.";
+"gpx_upload_trackable_visibility_descr" = "\"Sporbar\" betyder, at sporingen ikke vises i offentlige lister, men at behandlede sporingspunkter med tidsstempler fra sporingen (som ikke kan knyttes direkte til dig) vises gennem downloads fra den offentlige GPS-API.";
+"gpx_upload_identifiable_visibility_descr" = "\"Identificerbar\" betyder, at sporet vil blive vist offentligt i dine GPS-sporinger og i offentlige GPS-sporingslister, dvs. at andre brugere vil kunne downloade det rå spor og knytte det til dit brugernavn. Offentlige sporpunktsdata med tidsstempel fra GPS-API'et, der leveres via trackpoints-API'et, vil henvise til din oprindelige sporingsside.";

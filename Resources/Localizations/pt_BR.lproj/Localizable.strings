@@ -2140,3 +2140,14 @@
 "select_wikipedia_article_langs" = "Selecione os idiomas nos quais os artigos da Wikipédia aparecerão no mapa. Você pode alternar entre todos os idiomas disponíveis enquanto lê o artigo.";
 "shared_string_all_languages" = "Todos os idiomas";
 "population_num" = "População: %@";
+"added_profiles_descr" = "Perfis adicionados pelo plugin";
+"added_profiles" = "Perfis adicionados";
+"suggested_maps_descr" = "Esses mapas são necessários para o plugin.";
+"suggested_maps" = "Mapas sugeridos";
+"product_desc_ext_openplacereviews" = "Envie fotos, comentários e links sobre locais públicos, como restaurantes, hotéis, museus e pontos de referência como dados abertos https://openplacereviews.org/data/.\n\nLeia mais em http://openplacereviews.org";
+"product_desc_openplacereviews" = "Envie fotos, comentários e links sobre lugares públicos";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"product_desc_ext_mapillary" = "Fotos ao nível da rua, online, para todos. Descobrir lugares, colaborar, capturar o mundo.";
+"product_desc_mapillary" = "Fotos online de rua para todos";
+"product_title_mapillary" = "Mapillary";
+"shared_string_turn_off" = "Desligar";

@@ -73,7 +73,7 @@
 {
     OsmAndAppInstance app = OsmAndApp.instance;
     NSMutableArray<OAResourceItem *> *res = [NSMutableArray array];
-    NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:_mapObject.worldRegion];
+    NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:_mapObject.worldRegion];
     if (ids.count > 0)
     {
         for (NSString *resourceId in ids)
@@ -142,6 +142,11 @@
 - (BOOL)hideButtons
 {
     return YES;
+}
+
+- (BOOL)offerMapDownload
+{
+    return NO;
 }
 
 - (ETopToolbarType) topToolbarType

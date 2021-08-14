@@ -599,16 +599,12 @@
                 [mapRegions removeObject:region];
         }];
         
-        double smallestArea = DBL_MAX;
-        for (OAWorldRegion *region : mapRegions)
-        {
-            double area = [region getArea];
-            if (area < smallestArea)
-            {
-                smallestArea = area;
-                selectedRegion = region;
-            }
-        }
+        [mapRegions sortUsingComparator:^NSComparisonResult(id a, id b) {
+            NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
+            NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
+            return [first compare:second];
+        }];
+        selectedRegion = mapRegions.firstObject;
     }
     return selectedRegion;
 }

@@ -39,7 +39,7 @@
     if (worldRegion)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
-        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:worldRegion];
+        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:worldRegion];
         if (ids.count > 0)
         {
             for (NSString *resourceId in ids)

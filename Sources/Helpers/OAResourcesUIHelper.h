@@ -160,5 +160,6 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 + (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles;
 
 + (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAnd::ResourcesManager::ResourceType>)resourceTypes;
++ (QVector<std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource>>) getExternalMapFilesAt:(OsmAnd::PointI)point routeData:(BOOL)routeData;
 
 @end

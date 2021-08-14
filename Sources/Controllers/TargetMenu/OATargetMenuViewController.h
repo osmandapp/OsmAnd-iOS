@@ -166,6 +166,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) denyClose;
 - (BOOL) hideButtons;
 - (BOOL) hasDismissButton;
+- (BOOL) offerMapDownload;
 
 - (void) backPressed;
 - (void) okPressed;

@@ -63,4 +63,9 @@
     return YES;
 }
 
+- (BOOL)offerMapDownload
+{
+    return NO;
+}
+
 @end

@@ -103,6 +103,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return YES;
 }
 
+- (BOOL)offerMapDownload
+{
+    return NO;
+}
+
 - (UIView *) getBottomView
 {
     return self.bottomToolBarView;

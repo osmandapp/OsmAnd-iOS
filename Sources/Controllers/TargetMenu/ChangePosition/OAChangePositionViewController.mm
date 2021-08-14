@@ -204,6 +204,11 @@
     return YES;
 }
 
+- (BOOL)offerMapDownload
+{
+    return NO;
+}
+
 - (void)onMenuDismissed
 {
     [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:NO];

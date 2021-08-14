@@ -151,6 +151,11 @@
     return NO;
 }
 
+- (BOOL)offerMapDownload
+{
+    return NO;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

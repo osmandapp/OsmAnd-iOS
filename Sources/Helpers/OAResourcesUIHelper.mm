@@ -38,6 +38,8 @@
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+#include <OsmAndCore/ObfsCollection.h>
+#include <OsmAndCore/Data/ObfMapSectionInfo.h>
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
@@ -186,6 +188,23 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             
         default:
             return OALocalizedString(@"res_unknown");
+    }
+}
+
++ (NSString *) iconNameByresourceType:(OsmAnd::ResourcesManager::ResourceType)type
+{
+    switch (type)
+    {
+        case OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion:
+            return @"ic_custom_contour_lines";
+        case OsmAnd::ResourcesManager::ResourceType::WikiMapRegion:
+            return @"ic_custom_wikipedia";
+        case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
+            return @"ic_custom_hillshade";
+        case OsmAnd::ResourcesManager::ResourceType::SlopeRegion:
+            return @"ic_action_slope";
+        default:
+            return @"ic_custom_show_on_map";
     }
 }
 
@@ -605,32 +624,13 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         
         for (OAWorldRegion *region in sortedSelectedRegions)
         {
-            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
             if (ids.count > 0)
             {
                 for (NSString *resourceId in ids)
                 {
-                    const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                    // Speacial case for Saudi Arabia Rahal map
-                    if (resource == nullptr)
-                    {
-                        const auto installedResource = app.resourcesManager->getResource(QString::fromNSString(resourceId));
-                        if (installedResource && installedResource->type == resourceType)
-                        {
-                            OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-                            item.resourceId = installedResource->id;
-                            item.resourceType = installedResource->type;
-                            item.title = [self.class titleOfResource:installedResource
-                                                            inRegion:region
-                                                      withRegionName:YES
-                                                    withResourceType:NO];
-                            item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
-                            item.worldRegion = region;
-                            [res addObject:item];
-                            continue;
-                        }
-                    }
-                    else if (resource->type == resourceType)
+                    const auto& resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                    if (resource && resource->type == resourceType)
                     {
                         if (app.resourcesManager->isResourceInstalled(resource->id))
                         {
@@ -1438,6 +1438,35 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return NSOrderedSame;
     }];
     return res;
+}
+
++ (QVector<std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource>>) getExternalMapFilesAt:(OsmAnd::PointI)point routeData:(BOOL)routeData
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& localResources = app.resourcesManager->getLocalResources();
+    QVector<std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource>> externalMaps;
+    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(1, point);
+    auto dataTypes = OsmAnd::ObfDataTypesMask();
+    dataTypes.set(OsmAnd::ObfDataType::Map);
+    if (routeData)
+        dataTypes.set(OsmAnd::ObfDataType::Routing);
+    for (const auto& res : localResources)
+    {
+        if (res->type == OsmAnd::ResourcesManager::ResourceType::MapRegion && !app.resourcesManager->getResourceInRepository(res->id))
+        {
+            const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(res->metadata);
+            BOOL accept = obfMetadata != nullptr;
+            if (accept)
+            {
+                accept = accept && !obfMetadata->obfFile->obfInfo->isBasemap;
+                accept = accept && !obfMetadata->obfFile->obfInfo->isBasemapWithCoastlines;
+                accept = accept && !obfMetadata->obfFile->filePath.toLower().contains(QStringLiteral("/world_"));
+            }
+            if (accept && obfMetadata->obfFile->obfInfo->containsDataFor(&bbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, dataTypes))
+                externalMaps.append(res);
+        }
+    }
+    return externalMaps;
 }
 
 @end

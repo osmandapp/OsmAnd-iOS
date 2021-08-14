@@ -117,6 +117,11 @@
     return YES;
 }
 
+- (BOOL)offerMapDownload
+{
+    return NO;
+}
+
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {

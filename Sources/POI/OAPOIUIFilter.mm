@@ -713,11 +713,33 @@
 
 - (void) combineWithPoiFilter:(OAPOIUIFilter *)f
 {
-    for (OAPOICategory *key in f.acceptedTypes.keyEnumerator)
-        [acceptedTypes setObject:[f.acceptedTypes objectForKey:key] forKey:key];
+    [self putAllAcceptedTypes:f.acceptedTypes];
 
     for (NSString *key in f.poiAdditionals.keyEnumerator)
         [poiAdditionals setObject:[f.poiAdditionals objectForKey:key] forKey:key];
+}
+
+- (void) putAllAcceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)types
+{
+    for (OAPOICategory *key in types.keyEnumerator)
+    {
+        NSMutableSet<NSString *> *typesSet = [types objectForKey:key];
+        NSMutableSet<NSString *> *existingTypes = [acceptedTypes objectForKey:key];
+        if (existingTypes)
+        {
+            if (typesSet != nil)
+                [existingTypes unionSet:typesSet];
+            else
+                [acceptedTypes setObject:nil forKey:key];
+        }
+        else
+        {
+            if (typesSet != nil)
+                [acceptedTypes setObject:[typesSet mutableCopy] forKey:key];
+            else
+                [acceptedTypes setObject:nil forKey:key];
+        }
+    }
 }
 
 - (void) combineWithPoiFilters:(NSSet<OAPOIUIFilter *> *)filters

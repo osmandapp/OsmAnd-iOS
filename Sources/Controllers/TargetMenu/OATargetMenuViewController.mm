@@ -309,22 +309,12 @@
         {
         }
     }
-    if (controller &&
-        targetPoint.type != OATargetImpassableRoad &&
-        targetPoint.type != OATargetRouteFinishSelection &&
-        targetPoint.type != OATargetRouteStartSelection &&
-        targetPoint.type != OATargetRouteIntermediateSelection &&
-        targetPoint.type != OATargetWorkSelection &&
-        targetPoint.type != OATargetHomeSelection &&
-        targetPoint.type != OATargetGPXRoute &&
-        targetPoint.type != OATargetRouteDetails &&
-        targetPoint.type != OATargetRouteDetailsGraph &&
-        targetPoint.type != OATargetImpassableRoadSelection &&
-        targetPoint.type != OATargetChangePosition &&
-        targetPoint.type != OATargetTransportRouteDetails &&
-        targetPoint.type != OATargetDownloadMapSource &&
-        targetPoint.type != OATargetMapDownload)
+    if (controller && [controller offerMapDownload])
     {
+        const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(targetPoint.location.latitude, targetPoint.location.longitude));
+        if (![OAResourcesUIHelper getExternalMapFilesAt:point31 routeData:NO].empty())
+            return controller;
+        
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
                                        resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
                                          onComplete:^(NSArray<OAResourceItem *>* res) {
@@ -1080,6 +1070,11 @@
 - (BOOL)hasDismissButton
 {
     return NO;
+}
+
+- (BOOL) offerMapDownload
+{
+    return YES;
 }
 
 @end

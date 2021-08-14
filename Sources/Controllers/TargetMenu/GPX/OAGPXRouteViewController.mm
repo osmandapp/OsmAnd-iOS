@@ -226,6 +226,11 @@
     return YES;
 }
 
+- (BOOL)offerMapDownload
+{
+    return NO;
+}
+
 - (id)getTargetObj
 {
     return _gpxRouter.gpx;

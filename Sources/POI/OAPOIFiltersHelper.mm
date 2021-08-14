@@ -869,7 +869,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     }
 }
 
-- (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters
+- (OAPOIUIFilter *) combineSelectedFilters:(NSSet<OAPOIUIFilter *> *)selectedFilters
 {
     if ([selectedFilters count] == 0) {
         return nil;

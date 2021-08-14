@@ -224,6 +224,22 @@
     }
 }
 
+- (OAResourceItem *)createLocalResourceItem:(OAWorldRegion *)region resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> &)resource
+{
+    OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+    item.resourceId = resource->id;
+    item.resourceType = resource->type;
+    item.title = [OAResourcesUIHelper titleOfResource:resource
+                                             inRegion:region
+                                       withRegionName:YES
+                                     withResourceType:NO];
+    item.resource = self.app.resourcesManager->getLocalResource(resource->id);
+    item.downloadTask = [[self.app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+    item.size = resource->size;
+    item.worldRegion = region;
+    return item;
+}
+
 - (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region
 {
     if (self.app.resourcesManager->isResourceInstalled(resource->id))
@@ -261,9 +277,11 @@
 
 - (void) getWorldRegionFromPoint:(CLLocationCoordinate2D)point dataObjects:(NSMutableArray<OADownloadMapObject *> *)dataObjects
 {
+    NSMutableArray<OADownloadMapObject *> *objectsToAdd = [NSMutableArray array];
     const auto zoom = self.mapView.zoomLevel;
     if (zoom >= ZOOM_TO_SHOW_SELECTION_ST && zoom < ZOOM_TO_SHOW_SELECTION)
     {
+        const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
         NSMutableArray<OAWorldRegion *> *regions = [[self.app.worldRegion queryAtLat:point.latitude lon:point.longitude] mutableCopy];
         NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:regions];
         if (regions.count > 0)
@@ -280,9 +298,11 @@
             return [second compare:first];
         }];
         
+        const auto externalMaps = [OAResourcesUIHelper getExternalMapFilesAt:point31 routeData:NO];
+        BOOL hasExternalMaps = !externalMaps.empty();
         for (OAWorldRegion *region in regions)
         {
-            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
             OAResourceItem *mapItem = nil;
             if (ids.count > 0)
             {
@@ -291,14 +311,25 @@
                     const auto& resource = self.app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
                     if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                     {
-                        OAResourceItem *item = [self resourceItemByResource:resource region:region];
-                        mapItem = item;
+                        BOOL installed = resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
+                        if (!hasExternalMaps || installed)
+                        {
+                            OAResourceItem *item = [self resourceItemByResource:resource region:region];
+                            mapItem = item;
+                        }
                     }
                 }
                 if (mapItem)
-                    [dataObjects addObject:[[OADownloadMapObject alloc] initWithWorldRegion:region indexItem:mapItem]];
+                    [objectsToAdd addObject:[[OADownloadMapObject alloc] initWithWorldRegion:region indexItem:mapItem]];
             }
         }
+        if (objectsToAdd.count == 0 && hasExternalMaps)
+        {
+            OAWorldRegion *largestRegion = regions.firstObject;
+            OAResourceItem *item = [self createLocalResourceItem:largestRegion resource:externalMaps.back()];
+            [objectsToAdd addObject:[[OADownloadMapObject alloc] initWithWorldRegion:largestRegion indexItem:item]];
+        }
+        [dataObjects addObjectsFromArray:objectsToAdd];
     }
 }
 

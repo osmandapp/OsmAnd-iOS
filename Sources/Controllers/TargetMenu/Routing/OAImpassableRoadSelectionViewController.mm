@@ -198,6 +198,11 @@
     return YES;
 }
 
+- (BOOL)offerMapDownload
+{
+    return NO;
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFixed;

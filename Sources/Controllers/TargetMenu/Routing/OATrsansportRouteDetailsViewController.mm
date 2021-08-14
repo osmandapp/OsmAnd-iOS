@@ -58,6 +58,11 @@
     return YES;
 }
 
+- (BOOL)offerMapDownload
+{
+    return NO;
+}
+
 - (NSAttributedString *)getAttributedTypeStr
 {
     return nil;

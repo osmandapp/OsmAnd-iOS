@@ -2125,3 +2125,8 @@
 "select_wikipedia_article_langs" = "Wählen Sie die Sprachen aus, in denen Wikipedia Artikel auf der Karte erscheinen sollen. Sie können zwischen allen verfügbaren Sprachen wechseln, während Sie den Artikel lesen.";
 "shared_string_all_languages" = "Alle Sprachen";
 "population_num" = "Einwohnerzahl: %@";
+"added_profiles_descr" = "Vom Plugin hinzugefügte Profile";
+"added_profiles" = "Profile hinzugefügt";
+"product_desc_mapillary" = "Onlinefotos auf Straßenebene für jedermann";
+"product_title_mapillary" = "Mapillary";
+"shared_string_turn_off" = "Ausschalten";

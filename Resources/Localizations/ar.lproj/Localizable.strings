@@ -2120,3 +2120,5 @@
 "added_profiles_descr" = "الأوضاع المضافة بواسطة الأداة الملحقة";
 "added_profiles" = "الأوضاع المضافة";
 "suggested_maps" = "خرائط مقترحة";
+"product_title_mapillary" = "مابيلاري";
+"population_num" = "السكان: %@";

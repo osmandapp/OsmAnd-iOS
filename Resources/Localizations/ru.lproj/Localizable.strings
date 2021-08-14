@@ -1905,7 +1905,7 @@
 "importing_from" = "Импорт данных из %@";
 "shared_string_importing" = "Импортирование";
 "avoid_road" = "Избегать дорог";
-"quick_action_map_source_title" = "Источники карты";
+"quick_action_map_source_title" = "Источники карт";
 "shared_string_poi_types" = "Типы POI";
 "shared_string_quick_actions" = "Быстрые действия";
 "shared_string_profiles" = "Профили";

@@ -64,7 +64,7 @@
 "rotate_map_to_bearing_descr" = "محاذاة الخريطة.";
 "rotate_map_compass_opt" = "حسب البوصلة";
 "rotate_map_bearing_opt" = "حسب اتجاه الحركة";
-"rotate_map_none_opt" = "الشمال في الأعلى";
+"rotate_map_none_opt" = "لا تقم بتدوير الشاشة (الشمال دائما للأعلى)";
 "driving_region_descr" = "حدد منطقة القيادة: الولايات المتحدة، أوروبا، المملكة المتحدة، آسيا، وأخرى.";
 "driving_region" = "منطقة القيادة";
 "driving_region_automatic" = "تلقائي";

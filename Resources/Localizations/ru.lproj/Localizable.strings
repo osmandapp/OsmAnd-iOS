@@ -932,7 +932,7 @@
 "arrival_distance_factor_at_last" = "На последних метрах";
 "show_warnings_title" = "Показывать сигналы…";
 "speak_title" = "Объявлять…";
-"keep_informing" = "Повторять навигационные инструкции";
+"keep_informing" = "Повторение подсказок";
 "arrival_distance" = "Объявление о прибытии";
 "default_speed_system_descr" = "Выберите единицы измерения скорости";
 "map_widget_intermediate_distance" = "Промежуточный пункт";

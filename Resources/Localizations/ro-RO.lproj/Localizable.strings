@@ -2093,3 +2093,9 @@
 "toggle_voice" = "Voce pornit/oprit";
 "population_num" = "Populația: %@";
 "shared_string_turn_off" = "Opriți";
+"product_desc_ext_openplacereviews" = "Trimiteți fotografii, recenzii și link-uri despre locuri publice, cum ar fi restaurante, hoteluri, muzee și puncte de reper ca date deschise https://openplacereviews.org/data/.\n\nCitiți mai multe la https://openplacereviews.org";
+"product_desc_openplacereviews" = "Trimiteți fotografii, recenzii și link-uri despre locuri publice";
+"product_title_openplacereviews" = "RecenziiOpenPlace";
+"product_desc_ext_mapillary" = "Fotografii online la nivel de stradă pentru toată lumea. Descoperiți locuri, colaborați, surprindeți lumea.";
+"product_desc_mapillary" = "Fotografii online la nivel de stradă pentru toată lumea";
+"product_title_mapillary" = "Mapillar";

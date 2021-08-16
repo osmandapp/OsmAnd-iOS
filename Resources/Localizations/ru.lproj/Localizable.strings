@@ -499,7 +499,7 @@
 "ending_point_too_far" = "Конец маршрута слишком далеко от ближайшей дороги.";
 "route_head" = "Двигайтесь прямо";
 "looking_up_address" = "Поиск адреса";
-"no_address_found" = "Адрес не определен";
+"no_address_found" = "Адрес не определён";
 "traffic_warning_speed_limit" = "Ограничение скорости";
 "traffic_warning_border_control" = "Пограничный контроль";
 "traffic_warning_stop" = "Знак остановки";
@@ -739,7 +739,7 @@
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
-"int_seconds" = "сек.";
+"int_seconds" = "с";
 "settings_preset" = "Профиль по умолчанию";
 "shared_string_info" = "Информация";
 "day_off_label" = "вых.";

@@ -27,6 +27,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 + (NSString *)resourceTypeLocalized:(OsmAndResourceType)type;
 + (UIImage *)getIcon:(OsmAndResourceType)type;
 + (NSInteger)getOrderIndex:(NSNumber *)type;
++ (OsmAndResourceType)resourceTypeByScopeId:(NSString *)scopeId;
 + (NSArray<NSNumber *> *)allResourceTypes;
 + (NSArray<NSNumber *> *)mapResourceTypes;
 + (BOOL)isMapResourceType:(OsmAndResourceType)type;
@@ -134,8 +135,6 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 @interface OAResourcesUIHelper : NSObject
 
-+ (NSString *) iconNameByresourceType:(OsmAnd::ResourcesManager::ResourceType)type;
-
 + (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                       inRegion:(OAWorldRegion*)region
                 withRegionName:(BOOL)includeRegionName
@@ -156,12 +155,11 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 + (void) startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate>&)resource;
 + (void) startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name;
 
-+ (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler;
-+ (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (NSString *)messageResourceStartDownload:(NSString *)resourceName stringifiedSize:(NSString *)stringifiedSize isOutdated:(BOOL)isOutdated;
++ (NSString *)messageResourceStartDownload:(NSString *)resourceName
+                           stringifiedSize:(NSString *)stringifiedSize
+                                isOutdated:(BOOL)isOutdated;
 
-+ (void) offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
                             selectedItems:(NSArray<OAResourceItem *> *)selectedItems
                             onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                             onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
@@ -169,6 +167,11 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
                     onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+                completionHandler:(void(^)(UIAlertController *))completionHandler;
 
 + (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
@@ -228,10 +231,7 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
                                           resourceType:(OsmAndResourceType)resourceType
                                             subregions:(NSArray<OAWorldRegion *> *)subregions;
 
-+ (OsmAnd::ResourcesManager::ResourceType) resourceTypeByScopeId:(NSString *)scopeId;
-+ (NSString *) iconNameByResourseType:(OsmAnd::ResourcesManager::ResourceType)type;
-
-+ (void) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon onComplete:(void (^)(NSArray<OARepositoryResourceItem *>*))onComplete;
++ (void) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon onComplete:(void (^)(NSArray<OARepositoryResourceItem *> *))onComplete;
 + (NSArray<OARepositoryResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon;
 + (NSArray<OAResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type names:(NSArray<NSString *> *)names limit:(NSInteger)limit;
 + (NSArray<OAResourceItem *> *) findIndexItemsAt:(NSArray<NSString *> *)names type:(OsmAnd::ResourcesManager::ResourceType)type includeDownloaded:(BOOL)includeDownloaded limit:(NSInteger)limit;

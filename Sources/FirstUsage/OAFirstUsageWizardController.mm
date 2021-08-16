@@ -652,6 +652,7 @@ typedef enum
                         item.size = resource->size;
                         item.sizePkg = resource->packageSize;
                         item.worldRegion = selectedRegion;
+                        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
                         _localMapIndexItem = item;
                         break;
                     }
@@ -672,7 +673,8 @@ typedef enum
         item.size = resource->size;
         item.sizePkg = resource->packageSize;
         item.worldRegion = _app.worldRegion;
-        
+        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+
         _baseMapIndexItem = item;
         
         if (_localMapIndexItem || _baseMapIndexItem)

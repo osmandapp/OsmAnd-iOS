@@ -597,7 +597,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [UIImage templateImageNamed: [OAResourcesUIHelper iconNameByResourseType:mapItem.resourceType]];
+        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)

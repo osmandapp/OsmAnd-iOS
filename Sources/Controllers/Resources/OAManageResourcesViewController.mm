@@ -1490,6 +1490,7 @@ static BOOL _lackOfResources;
                         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
                         item.size = resourceInRepository->size;
                         item.sizePkg = resourceInRepository->packageSize;
+                        item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
 
                         if (item.title == nil)
                             continue;
@@ -1508,6 +1509,10 @@ static BOOL _lackOfResources;
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                         item.worldRegion = region;
+
+                        const auto localResource = _app.resourcesManager->getLocalResource(resource->id);
+                        item.resource = localResource;
+                        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
                         item.size = resource->size;
 
@@ -1531,6 +1536,7 @@ static BOOL _lackOfResources;
                     item.worldRegion = region;
                     item.size = resource->size;
                     item.sizePkg = resource->packageSize;
+                    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
 
                     if (item.title == nil)
                         continue;

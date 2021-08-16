@@ -17,6 +17,7 @@
 #import "FFCircularProgressView+isSpinning.h"
 #include "Localization.h"
 #import "OASizes.h"
+#import "OAColors.h"
 
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
@@ -368,8 +369,9 @@
             cell.textLabel.font = [UIFont systemFontOfSize:17.0];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
-            UIImage* iconImage = [UIImage templateImageNamed:@"menu_item_update_icon.png"];
+            UIImage* iconImage = [UIImage templateImageNamed:@"menu_item_update_icon"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
+            [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {

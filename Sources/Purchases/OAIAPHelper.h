@@ -29,8 +29,9 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) OAProduct *parking;
 @property (nonatomic, readonly) OAProduct *wiki;
 @property (nonatomic, readonly) OAProduct *srtm;
-@property (nonatomic, readonly) OAProduct *tripPlanning;
 @property (nonatomic, readonly) OAProduct *osmEditing;
+@property (nonatomic, readonly) OAProduct *mapillary;
+@property (nonatomic, readonly) OAProduct *openPlaceReviews;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;

@@ -632,7 +632,7 @@ typedef enum
         
         if (selectedRegion)
         {
-            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:selectedRegion];
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:selectedRegion];
             if (ids.count > 0)
             {
                 for (NSString *resourceId in ids)

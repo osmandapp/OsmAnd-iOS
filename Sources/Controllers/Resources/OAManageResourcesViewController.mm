@@ -188,7 +188,7 @@ static NSMutableArray *_searchableWorldwideRegionItems;
 
 static BOOL _lackOfResources;
 
-+ (NSArray<NSString *> *)getResourcesInRepositoryIdsyRegion:(OAWorldRegion *)region
++ (NSArray<NSString *> *)getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region
 {
     const auto citRegionResources = _resourcesByRegions.constFind(region);
     if (citRegionResources == _resourcesByRegions.cend())
@@ -200,10 +200,6 @@ static BOOL _lackOfResources;
     {
         [res addObject:resource->id.toNSString()];
     }
-    // Check if special Saudi Arabia Rahal map is installed
-    if ([region.regionId isEqualToString:@"asia_saudi-arabia"])
-        [res addObject:@"saudi-arabia_rahal_asia.obf"];
-
     return [NSArray arrayWithArray:res];
 }
 
@@ -542,7 +538,7 @@ static BOOL _lackOfResources;
         {
             region = region.superregion;
         }
-            
+
         if (region)
             regionId = region.regionId;
         
@@ -901,7 +897,7 @@ static BOOL _lackOfResources;
             }
         }
     }
-    
+
     if (nauticalRegion)
     {
         [_allResourceItems addObjectsFromArray:allResourcesArray];
@@ -1193,7 +1189,7 @@ static BOOL _lackOfResources;
             break;
         }
     }
-    
+
     NSMutableSet *regionsSet = [NSMutableSet set];
     for (OAOutdatedResourceItem *item in _outdatedResourceItems)
     {
@@ -1910,7 +1906,7 @@ static BOOL _lackOfResources;
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
         OAResourceItem *item = (OAResourceItem *) item_;
-        FFCircularProgressView *progressView = (FFCircularProgressView* ) cell.accessoryView;
+        FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
 
         float progressCompleted = item.downloadTask.progressCompleted;
         if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
@@ -1955,7 +1951,7 @@ static BOOL _lackOfResources;
     BOOL disabled = NO;
 
     OAResourceItem *downloadingMultipleItem = nil;
-    
+
     id item_ = nil;
     if ([self isFiltering])
     {
@@ -2312,7 +2308,7 @@ static BOOL _lackOfResources;
 
             UIImage *iconImage = [UIImage templateImageNamed:@"menu_item_update_icon"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
             [btnAcc setTintColor:UIColorFromRGB(color_primary_purple)];
             btnAcc.frame = CGRectMake(0.0, 0.0, 60.0, 50.0);
@@ -2342,7 +2338,7 @@ static BOOL _lackOfResources;
             NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] ? @"ic_custom_multi_download" : @"ic_custom_download";
             UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
             btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
@@ -2385,7 +2381,7 @@ static BOOL _lackOfResources;
             NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] ? @"ic_custom_multi_download" : @"ic_custom_download";
             UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
             btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
@@ -2562,7 +2558,7 @@ static BOOL _lackOfResources;
     return cell;
 }
 
-- (void) accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
+- (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event
 {
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:self.tableView]];
     if (!indexPath)

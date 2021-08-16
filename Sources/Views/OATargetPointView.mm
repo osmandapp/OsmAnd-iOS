@@ -51,9 +51,7 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
 #define kButtonsViewHeight 44.0
-
-#define kDefaultMapRulerMarginBottom -17.0
-#define kDefaultMapRulerMarginLeft 120.0
+#define kDefaultMapRulerMarginBottom 0
 
 @interface OATargetPointZoomView ()
 
@@ -312,7 +310,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) doLocationUpdate
 {
-    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetImpassableRoad)
+    if ([self.customController hasDismissButton])
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -349,7 +347,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) updateDirectionButton
 {
-    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetImpassableRoad)
+    if ([self.customController hasDismissButton])
     {
         self.buttonDirection.imageView.transform = CGAffineTransformIdentity;
     }
@@ -388,7 +386,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) updateToolbarGradientWithAlpha:(CGFloat)alpha
 {
-    BOOL useGradient = (_activeTargetType != OATargetGPX) && (_activeTargetType != OATargetGPXEdit) && ![self isLandscape];
+    BOOL useGradient = (_activeTargetType != OATargetGPX) && ![self isLandscape];
     [self.customController applyGradient:useGradient alpha:alpha];
 }
 
@@ -700,21 +698,13 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) closeDenied
 {
-    return (_hideButtons && _showFull)
-        || _targetPoint.type == OATargetGPXRoute
-        || _targetPoint.type == OATargetGPXEdit
-        || _targetPoint.type == OATargetRouteStartSelection
-        || _targetPoint.type == OATargetRouteFinishSelection
-        || _targetPoint.type == OATargetHomeSelection
-        || _targetPoint.type == OATargetWorkSelection
-        || _targetPoint.type == OATargetRouteIntermediateSelection
-        || _targetPoint.type == OATargetImpassableRoadSelection;
+    return (_hideButtons && _showFull) || [self.customController denyClose];
 }
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource);
-    
+    _hideButtons = [self.customController hideButtons];
+  
     self.buttonsView.hidden = _hideButtons;
     
     if (self.customController.contentView)
@@ -723,7 +713,7 @@ static const NSInteger _buttonsCount = 4;
     [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
     [self.buttonMore setTitle:OALocalizedString(@"actions") forState:UIControlStateNormal];
         
-    if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking || _targetPoint.type == OATargetImpassableRoad)
+    if (self.customController.hasDismissButton)
     {
         [_buttonDirection setTitle:OALocalizedString(@"shared_string_dismiss") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
@@ -740,7 +730,7 @@ static const NSInteger _buttonsCount = 4;
         _buttonDirection.imageView.transform = CGAffineTransformIdentity;
     }
     
-    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
+    if (self.activeTargetType == OATargetGPX)
     {
         if (_targetPoint.type == OATargetWpt && ![self newItem])
         {
@@ -1057,7 +1047,7 @@ static const NSInteger _buttonsCount = 4;
                 [self removeFromSuperview];
                 
                 if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
-                    [self.menuViewDelegate targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+                    [self.menuViewDelegate targetResetMapRulerPosition];
             
                 [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
@@ -1080,7 +1070,7 @@ static const NSInteger _buttonsCount = 4;
             [self removeFromSuperview];
             
             if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
-                [self.menuViewDelegate targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+                [self.menuViewDelegate targetResetMapRulerPosition];
             
             [self clearCustomControllerIfNeeded];
             [self restoreTargetType];
@@ -1301,7 +1291,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (!hasDescription && !hasTransport)
     {
-        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin ? OAUtilities.getBottomMargin : 0);
+        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin && controlButtonsHeight == 0. ? OAUtilities.getBottomMargin : 0);
     }
     else
     {
@@ -1335,7 +1325,6 @@ static const NSInteger _buttonsCount = 4;
         if (!_controlButtonRight.hidden)
         {
             _controlButtonRight.frame = [_controlButtonRight isDirectionRTL] ? leftControlButtonFrame : rightControlButtonFrame;
-            downloadY = CGRectGetMaxY(_controlButtonRight.frame) + 6.0;
         }
         if (!_controlButtonDownload.hidden)
         {
@@ -1575,8 +1564,13 @@ static const NSInteger _buttonsCount = 4;
     {
         if ([self.customController hasControlButtons])
             controlButtonsHeight += kButtonsViewHeight;
-        if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
+        BOOL hasDownloadControls = self.customController.downloadControlButton != nil || !self.downloadProgressBar.hidden;
+        BOOL needsSecondRow = controlButtonsHeight == 0 || self.customController.leftControlButton;
+        if (hasDownloadControls && needsSecondRow)
             controlButtonsHeight += kButtonsViewHeight;
+        
+        if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin)
+            controlButtonsHeight += OAUtilities.getBottomMargin;
     }
     
     return controlButtonsHeight;
@@ -1693,7 +1687,7 @@ static const NSInteger _buttonsCount = 4;
         [self updateDescriptionLabel];
     }
     
-    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
+    if (self.activeTargetType == OATargetGPX)
         _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt && ![self newItem]);
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
@@ -2034,7 +2028,7 @@ static const NSInteger _buttonsCount = 4;
         return;
     }
 
-    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
+    if (self.activeTargetType == OATargetGPX)
     {
         [self.menuViewDelegate targetPointAddWaypoint];
     }
@@ -2118,7 +2112,7 @@ static const NSInteger _buttonsCount = 4;
     if (_showFullScreen)
         return;
     
-    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute)
+    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
     {
         [self.menuViewDelegate targetGoToGPX];
     }
@@ -2374,7 +2368,7 @@ static const NSInteger _buttonsCount = 4;
     if (!_buttonLeft.hidden)
         [self updateLeftButton];
     
-    if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute) && self.customController)
+    if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute) && self.customController)
     {
         _targetPoint.targetObj = [self.customController getTargetObj];
         [self updateAddressLabel];

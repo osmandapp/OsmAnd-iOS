@@ -25,6 +25,9 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAMapillaryPlugin.h"
+#import "OASkiMapsPlugin.h"
+#import "OANauticalMapsPlugin.h"
+#import "OASRTMPlugin.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOIUIFilter.h"
 
@@ -230,6 +233,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return @[];
 }
 
+- (NSArray<OAResourceItem *> *) getSuggestedMaps
+{
+    return @[];
+}
+
 /*
  * Return true in case if plugin should fill the map context menu with buildContextMenuRows method.
  */
@@ -279,6 +287,9 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
+    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
     [allPlugins addObject:[[OAWikipediaPlugin alloc] init]];
 
     [self loadCustomPlugins];
@@ -425,6 +436,10 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
     [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
     [plugin updateLayers];
+    
+    if (enable)
+        [plugin showInstalledScreen];
+    
     return true;
 }
 

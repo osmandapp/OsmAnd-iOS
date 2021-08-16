@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAProduct, OAResourceGroupItem;
+@class OAProduct, OAPointIContainer, OAResourceGroupItem;
 
 @interface OAWorldRegion : NSObject
 
@@ -30,6 +30,7 @@
 
 @property (readonly) CLLocationCoordinate2D bboxTopLeft;
 @property (readonly) CLLocationCoordinate2D bboxBottomRight;
+@property (readonly) CLLocationCoordinate2D regionCenter;
 
 @property (nonatomic) NSArray *resourceTypes;
 @property (nonatomic) OAResourceGroupItem *groupItem;
@@ -50,10 +51,13 @@
 - (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude;
 - (double) getArea;
 - (BOOL) contain:(double) lat lon:(double) lon;
+- (void) getPoints31:(OAPointIContainer *)container;
+
 - (NSInteger) getLevel;
 - (BOOL) containsSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getPrimarySuperregion;
+- (OAWorldRegion *) getRegionDataByDownloadName:(NSString *)downloadName;
 - (OAProduct *) getProduct;
 
 - (void) addSubregion:(OAWorldRegion *)subregion;

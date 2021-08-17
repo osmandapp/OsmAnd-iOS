@@ -225,20 +225,94 @@
         tripsRow = section0.count;
         [section0 addObject:section0tracks];
     }
-        
-    NSArray *arrTop = @[@{@"groupName": @"",
-                          @"cells": @[sectionAppMode]},
-                        @{@"groupName": OALocalizedString(@"map_settings_show"),
-                          @"cells": section0
-                          },
-                        @{@"groupName": OALocalizedString(@"map_settings_type"),
-                          @"cells": @[
-                                  @{@"name": OALocalizedString(@"map_settings_type"),
-                                    @"value": _app.data.lastMapSource.name,
-                                    @"type": [OASettingsTableViewCell getCellIdentifier]}
-                                  ],
-                          }
-                        ];
+
+    NSMutableArray *sectionRoutes = [NSMutableArray array];
+
+    NSMutableDictionary *sectionRoutesCycle = [NSMutableDictionary dictionary];
+    [sectionRoutesCycle setObject:OALocalizedString(@"rendering_attr_showCycleRoutes_name") forKey:@"name"];
+    [sectionRoutesCycle setObject:@"ic_action_bicycle_dark" forKey:@"primaryImg"];
+    [sectionRoutesCycle setObject:@"" forKey:@"value"];
+    [sectionRoutesCycle setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];
+
+    NSMutableDictionary *sectionRoutesMtb = [NSMutableDictionary dictionary];
+    [sectionRoutesMtb setObject:OALocalizedString(@"rendering_attr_showMtbRoutes_name") forKey:@"name"];
+    [sectionRoutesMtb setObject:@"ic_action_bicycle_dark" forKey:@"primaryImg"];
+    [sectionRoutesMtb setObject:@"" forKey:@"value"];
+    [sectionRoutesMtb setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
+    [sectionRoutesMtb setObject:@"rendering_attr_showMtbRoutes_name" forKey:@"key"];
+
+    NSMutableDictionary *sectionRoutesHiking = [NSMutableDictionary dictionary];
+    [sectionRoutesHiking setObject:OALocalizedString(@"rendering_attr_hikingRoutesOSMC_name") forKey:@"name"];
+    [sectionRoutesHiking setObject:@"ic_action_trekking_dark" forKey:@"primaryImg"];
+    [sectionRoutesHiking setObject:@"" forKey:@"value"];
+    [sectionRoutesHiking setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];
+
+    NSMutableDictionary *sectionRoutesAlpineHiking = [NSMutableDictionary dictionary];
+    [sectionRoutesAlpineHiking setObject:OALocalizedString(@"rendering_attr_alpineHiking_name") forKey:@"name"];
+    [sectionRoutesAlpineHiking setObject:@"ic_action_trekking_dark" forKey:@"primaryImg"];
+    [sectionRoutesAlpineHiking setObject:@"" forKey:@"value"];
+    [sectionRoutesAlpineHiking setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
+    [sectionRoutesAlpineHiking setObject:@"rendering_attr_alpineHiking_name" forKey:@"key"];
+
+    NSMutableDictionary *sectionRoutesSki = [NSMutableDictionary dictionary];
+    [sectionRoutesSki setObject:OALocalizedString(@"rendering_attr_pisteRoutes_name") forKey:@"name"];
+    [sectionRoutesSki setObject:@"ic_action_skiing" forKey:@"primaryImg"];
+    [sectionRoutesSki setObject:@"" forKey:@"value"];
+    [sectionRoutesSki setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
+    [sectionRoutesSki setObject:@"rendering_attr_pisteRoutes_name" forKey:@"key"];
+
+    NSMutableDictionary *sectionRoutesHorse = [NSMutableDictionary dictionary];
+    [sectionRoutesHorse setObject:OALocalizedString(@"rendering_attr_horseRoutes_name") forKey:@"name"];
+    [sectionRoutesHorse setObject:@"ic_action_horse" forKey:@"primaryImg"];
+    [sectionRoutesHorse setObject:@"" forKey:@"value"];
+    [sectionRoutesHorse setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
+    [sectionRoutesHorse setObject:@"rendering_attr_horseRoutes_name" forKey:@"key"];
+
+    NSMutableDictionary *sectionRoutesWhitewater = [NSMutableDictionary dictionary];
+    [sectionRoutesWhitewater setObject:OALocalizedString(@"rendering_attr_whiteWaterSports_name") forKey:@"name"];
+    [sectionRoutesWhitewater setObject:@"ic_action_horse" forKey:@"primaryImg"];
+    [sectionRoutesWhitewater setObject:@"" forKey:@"value"];
+    [sectionRoutesWhitewater setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
+    [sectionRoutesWhitewater setObject:@"rendering_attr_whiteWaterSports_name" forKey:@"key"];
+
+    NSMutableDictionary *sectionRoutesTravel = [NSMutableDictionary dictionary];
+    [sectionRoutesTravel setObject:OALocalizedString(@"travel_routes") forKey:@"name"];
+    [sectionRoutesTravel setObject:@"ic_custom_routes" forKey:@"primaryImg"];
+    [sectionRoutesTravel setObject:@"" forKey:@"value"];
+    [sectionRoutesTravel setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];
+
+    [sectionRoutes addObject:sectionRoutesCycle];
+    [sectionRoutes addObject:sectionRoutesMtb];
+    [sectionRoutes addObject:sectionRoutesHiking];
+    [sectionRoutes addObject:sectionRoutesAlpineHiking];
+    [sectionRoutes addObject:sectionRoutesSki];
+    [sectionRoutes addObject:sectionRoutesHorse];
+    [sectionRoutes addObject:sectionRoutesWhitewater];
+    [sectionRoutes addObject:sectionRoutesTravel];
+
+    NSArray *arrTop = @[
+            @{
+                @"groupName": @"",
+                @"cells": @[sectionAppMode]},
+            @{
+                @"groupName": OALocalizedString(@"map_settings_show"),
+                @"cells": section0
+            },
+            @{
+                @"groupName": OALocalizedString(@"rendering_category_routes"),
+                @"cells": sectionRoutes
+            },
+            @{
+                @"groupName": OALocalizedString(@"map_settings_type"),
+                @"cells": @[
+                        @{
+                            @"name": OALocalizedString(@"map_settings_type"),
+                            @"value": _app.data.lastMapSource.name,
+                            @"type": [OASettingsTableViewCell getCellIdentifier]
+                        }
+                ]
+            }
+    ];
     
     if (isOnlineMapSource)
     {
@@ -374,6 +448,16 @@
     tableData = [tableData arrayByAddingObjectsFromArray:arrayLanguage];
 
     [tblView reloadData];
+}
+
+- (NSString *)getRenderingStringPropertyDescription:(NSString *)propertyValue
+{
+    if (!propertyValue)
+        return @"";
+
+    NSString *propertyValueReplaced = [propertyValue stringByReplacingOccurrencesOfString:@"\\s+" withString:@"_"];
+    NSString *value = OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_description", propertyValueReplaced]);
+    return value ? value : propertyValue;
 }
 
 - (NSString *) getPercentString:(double)value
@@ -557,12 +641,15 @@
             }
             cell.textView.text = data[@"name"];
             NSString *desc = data[@"description"];
+            NSString *primaryImg = data[@"primaryImg"];
             NSString *secondaryImg = data[@"secondaryImg"];
             cell.descriptionView.text = desc;
             cell.descriptionView.hidden = desc.length == 0;
-            [cell setSecondaryImage:secondaryImg.length > 0 ? [UIImage imageNamed:data[@"secondaryImg"]] : nil];
+            [cell.imgView setImage:primaryImg.length > 0 ? [UIImage imageNamed:primaryImg] : nil];
+            [cell setSecondaryImage:secondaryImg.length > 0 ? [UIImage imageNamed:secondaryImg] : nil];
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
+            cell.imgView.hidden = primaryImg.length > 0;
         }
         outCell = cell;
     }
@@ -745,11 +832,11 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapSettingsViewController *mapSettingsViewController;
-    
+
     NSInteger section = indexPath.section;
     if ((isOnlineMapSource && section < 3) || !isOnlineMapSource)
         section--;
-    
+
     switch (section)
     {
         case 0:
@@ -765,15 +852,27 @@
                 
             break;
         }
-        
-        case 1: // Map Type
+
+        case 1: // Routes
+        {
+            if (indexPath.row == 0)
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCycleRoutes];
+            else if (indexPath.row == 2)
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenHikingRoutes];
+            else if (indexPath.row == 7)
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTravelRoutes];
+
+            break;
+        }
+
+        case 2: // Map Type
         {
             mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
 
             break;
         }
-            
-        case 2: // Map Style
+
+        case 3: // Map Style
         {
             if (!isOnlineMapSource)
             {
@@ -804,14 +903,14 @@
                     if (p.dataType != OABoolean)
                     {
                         OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
-                        
-                            [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+                        [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
                     }
                 }
                 break;
             }
         }
-        case 3:
+
+        case 4:
         {
             NSInteger index = 0;
             if ([_iapHelper.srtm isActive])
@@ -829,16 +928,17 @@
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
             break;
         }
-        case 4:
+
+        case 5:
         {
             mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenLanguage];
             break;
         }
-            
+
         default:
             break;
     }
-    
+
     if (mapSettingsViewController)
             [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     

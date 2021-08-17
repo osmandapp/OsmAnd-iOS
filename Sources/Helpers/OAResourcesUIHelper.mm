@@ -861,36 +861,48 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return;
 
     NSMutableString* message;
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_cell_q"),
-                                    resourceName,
-                                    stringifiedSize] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"incur_high_charges")];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-        
-    }
-    else
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_wifi_q"),
-                    resourceName,
-                    stringifiedSize] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
-    }]];
+    NetworkStatus status = [Reachability reachabilityForInternetConnection].currentReachabilityStatus;
     
-    if (completionHandler)
-        completionHandler(alert);
-    else
+    if (status == NotReachable)
+    {
+        message = [OALocalizedString(@"alert_inet_needed") mutableCopy];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        if (status == ReachableViaWWAN)
+        {
+            message = [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_cell_q"),
+                                        resourceName,
+                                        stringifiedSize] mutableCopy];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"incur_high_charges")];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"proceed_q")];
+            
+        }
+        else if (status == ReachableViaWiFi)
+        {
+            message = [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_wifi_q"),
+                        resourceName,
+                        stringifiedSize] mutableCopy];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"proceed_q")];
+        }
+
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        }]];
+        
+        if (completionHandler)
+            completionHandler(alert);
+        else
+            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 + (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed

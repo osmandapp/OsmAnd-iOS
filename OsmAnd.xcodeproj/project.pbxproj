@@ -1184,6 +1184,8 @@
 		DA32846726CBF76B0036BA73 /* img_plugin_wikipedia.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DA32845F26CBF76B0036BA73 /* img_plugin_wikipedia.jpg */; };
 		DA32846826CBF76B0036BA73 /* img_plugin_trip_recording.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DA32846026CBF76B0036BA73 /* img_plugin_trip_recording.jpg */; };
 		DA32846A26CBF7790036BA73 /* img_background_plans.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32846926CBF7780036BA73 /* img_background_plans.png */; };
+		DA32847D26CC01BA0036BA73 /* export_items@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32847B26CC01B90036BA73 /* export_items@3x.png */; };
+		DA32847E26CC01BA0036BA73 /* export_items@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32847C26CC01BA0036BA73 /* export_items@2x.png */; };
 		DA32BBF025C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */; };
 		DA32BBF225C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
@@ -3987,6 +3989,8 @@
 		DA32845F26CBF76B0036BA73 /* img_plugin_wikipedia.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_wikipedia.jpg; path = Resources/Icons/img_plugin_wikipedia.jpg; sourceTree = "<group>"; };
 		DA32846026CBF76B0036BA73 /* img_plugin_trip_recording.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_trip_recording.jpg; path = Resources/Icons/img_plugin_trip_recording.jpg; sourceTree = "<group>"; };
 		DA32846926CBF7780036BA73 /* img_background_plans.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_background_plans.png; path = Resources/Icons/img_background_plans.png; sourceTree = "<group>"; };
+		DA32847B26CC01B90036BA73 /* export_items@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "export_items@3x.png"; path = "Resources/Icons/export_items@3x.png"; sourceTree = "<group>"; };
+		DA32847C26CC01BA0036BA73 /* export_items@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "export_items@2x.png"; path = "Resources/Icons/export_items@2x.png"; sourceTree = "<group>"; };
 		DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_attach_track@3x.png"; path = "Resources/Icons/ic_custom_attach_track@3x.png"; sourceTree = "<group>"; };
 		DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_attach_track@2x.png"; path = "Resources/Icons/ic_custom_attach_track@2x.png"; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -6472,6 +6476,8 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DA32847C26CC01BA0036BA73 /* export_items@2x.png */,
+				DA32847B26CC01B90036BA73 /* export_items@3x.png */,
 				DA32846926CBF7780036BA73 /* img_background_plans.png */,
 				DA32845E26CBF76A0036BA73 /* img_plugin_contourlines.jpg */,
 				DA32845C26CBF76A0036BA73 /* img_plugin_nautical.jpg */,
@@ -12913,6 +12919,7 @@
 				84C102791FBDC10800D3E5EE /* warnings_railways_us@3x.png in Resources */,
 				157F3CD224A1F36D000A66F0 /* ic_custom_import@3x.png in Resources */,
 				84E297561E2FD80B006EA6B1 /* topo.render.xml in Resources */,
+				DA32847E26CC01BA0036BA73 /* export_items@2x.png in Resources */,
 				32309A732698D22F005751F5 /* ic_custom_direction_compass_night@2x.png in Resources */,
 				DA5A82D726C563A800F274C7 /* OAColorsTableViewCell.xib in Resources */,
 				BB2726FA19CB3878007C5613 /* routing.xml in Resources */,
@@ -13056,6 +13063,7 @@
 				847777431FAA260E00CA8C1F /* widget_monitoring_rec_inactive_day@2x.png in Resources */,
 				845E06051B5956E800DFC2A7 /* ic_arrow_open@2x.png in Resources */,
 				DA5A83E026C563A800F274C7 /* OAEditDescriptionViewController.xib in Resources */,
+				DA32847D26CC01BA0036BA73 /* export_items@3x.png in Resources */,
 				DAF345AB22F4482C009E2EB6 /* ic_custom_map_style@2x.png in Resources */,
 				DA5A848D26C563A900F274C7 /* OASaveTrackViewController.xib in Resources */,
 				DA5A84E126C563A900F274C7 /* OAMapSettingsWikipediaLanguagesScreen.xib in Resources */,

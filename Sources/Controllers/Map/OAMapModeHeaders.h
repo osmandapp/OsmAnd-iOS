@@ -12,8 +12,7 @@
 typedef enum
 {
     EOAMapModeButtonRegular = 0,
-    EOAMapModeButtonTypeShowMap,
-    EOAMapModeButtonTypeNavigate,
+    EOAMapModeButtonTypeShowMap
     
 } EOAMapModeButtonType;
 

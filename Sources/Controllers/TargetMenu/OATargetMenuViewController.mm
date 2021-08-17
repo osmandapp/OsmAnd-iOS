@@ -27,7 +27,6 @@
 #import "OAImpassableRoadViewController.h"
 #import "OAImpassableRoadSelectionViewController.h"
 #import "OARouteDetailsViewController.h"
-#import "OAGPXRouteViewController.h"
 #import "OAMyLocationViewController.h"
 #import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
@@ -275,18 +274,6 @@
         case OATargetRouteDetailsGraph:
         {
             controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj];
-            break;
-        }
-            
-        case OATargetGPXRoute:
-        {
-            OAGPXRouteViewControllerState *state = activeViewControllerState ? (OAGPXRouteViewControllerState *)activeViewControllerState : nil;
-            OAGpxRouteSegmentType segmentType = (OAGpxRouteSegmentType)targetPoint.segmentIndex;
-            if (state)
-                controller = [[OAGPXRouteViewController alloc] initWithCtrlState:state];
-            else
-                controller = [[OAGPXRouteViewController alloc] initWithSegmentType:segmentType];
-            
             break;
         }
         case OATargetChangePosition:

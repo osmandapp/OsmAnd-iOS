@@ -291,6 +291,14 @@
     }
 }
 
+- (UIImage *) getDefaultFavoriteImage
+{
+    OAFavoriteColor* color = OADefaultFavorite.builtinColors.firstObject;
+    return [self.class getImageWithColor:color.color
+                        background:@"circle"
+                              icon:[@"mx_" stringByAppendingString:@"special_star"]];
+}
+
 - (UIImage *) getPointIcon:(id)object
 {
     if (object && [self isObjectMovable:object])
@@ -300,7 +308,7 @@
         UIImage *img = [self getFavoriteImage:favLoc.get()];
         return [OAUtilities resizeImage:img newSize:CGSizeMake(60., 60.)];
     }
-    return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
+    return [self getDefaultFavoriteImage];
 }
 
 - (void) setPointVisibility:(id)object hidden:(BOOL)hidden

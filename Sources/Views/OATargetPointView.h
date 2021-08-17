@@ -22,19 +22,6 @@
 
 @protocol OATargetPointViewDelegate;
 
-@protocol OATargetPointZoomViewDelegate <NSObject>
-
-- (void) zoomInPressed;
-- (void) zoomOutPressed;
-
-@end
-
-@interface OATargetPointZoomView : UIView
-
-@property (weak, nonatomic) id<OATargetPointZoomViewDelegate> delegate;
-
-@end
-
 @interface OATargetPointView : OAScrollView<OATargetMenuViewControllerDelegate>
 
 @property (nonatomic) OATargetPoint *targetPoint;

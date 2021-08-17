@@ -651,12 +651,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAColorViewCell *)[nib objectAtIndex:0];
+            cell.colorIconView.layer.cornerRadius = cell.colorIconView.frame.size.width / 2;
         }
         OAFavoriteColor *favCol = item[@"color"];
         [cell.textView setText: item[@"label"]];
         [cell.descriptionView setText:favCol.name];
         cell.backgroundColor = UIColorFromRGB(0xffffff);
-        [cell.colorIconView setImage:favCol.icon];
+        cell.colorIconView.backgroundColor = favCol.color;
         
         return cell;
     }

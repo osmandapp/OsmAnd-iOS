@@ -10,7 +10,6 @@
 
 #import "OAMapViewController.h"
 #import "OATargetPointView.h"
-#import "OAGPXRouteViewController.h"
 
 @class OAFavoriteItem;
 @class OAGpxWptItem;

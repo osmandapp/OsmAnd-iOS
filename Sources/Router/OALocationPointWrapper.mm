@@ -12,6 +12,9 @@
 #import "OAWaypointHelper.h"
 #import "OAAmenityLocationPoint.h"
 #import "OAPOI.h"
+#import "OAFavoriteItem.h"
+#import "OAGpxWptItem.h"
+#import "OAGPXDocumentPrimitives.h"
 #import "OARTargetPoint.h"
 #import "OATargetPointsHelper.h"
 #import "OAAppSettings.h"
@@ -77,10 +80,17 @@
         }
         
     }
-    else if (_type == LPW_FAVORITES || _type == LPW_WAYPOINTS)
+    else if (_type == LPW_FAVORITES)
     {
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:[_point getColor]];
-        return favCol.icon;
+        OAFavoriteItem *favItem = (OAFavoriteItem *) _point;
+        return favItem.getCompositeIcon;
+    }
+    else if (_type == LPW_WAYPOINTS)
+    {
+        OAGpxWpt *wpt = (OAGpxWpt *) _point;
+        OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
+        [wptItem setPoint:wpt];
+        return wptItem.getCompositeIcon;
     }
     else if (_type == LPW_ALARMS)
     {

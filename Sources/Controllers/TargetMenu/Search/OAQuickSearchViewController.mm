@@ -18,7 +18,6 @@
 #import "OAPOIHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
-#import "OAPOIFavType.h"
 #import "OAFavoriteItem.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"

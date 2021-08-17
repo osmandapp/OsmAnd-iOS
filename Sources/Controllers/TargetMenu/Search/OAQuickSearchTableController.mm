@@ -581,13 +581,10 @@
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
                 {
-                    const auto& favorite = res.favorite;
-                    UIColor* color = [UIColor colorWithRed:favorite->getColor().r/255.0 green:favorite->getColor().g/255.0 blue:favorite->getColor().b/255.0 alpha:1.0];
-                    
-                    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-
+                    auto favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(res.favorite);
+                    OAFavoriteItem *favItem = [[OAFavoriteItem alloc] initWithFavorite:favorite];
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = favCol.icon;
+                    cell.titleIcon.image = favItem.getCompositeIcon;
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;

@@ -53,33 +53,7 @@
 #define kButtonsViewHeight 44.0
 #define kDefaultMapRulerMarginBottom 0
 
-@interface OATargetPointZoomView ()
-
-@property (weak, nonatomic) IBOutlet UIButton *buttonZoomIn;
-@property (weak, nonatomic) IBOutlet UIButton *buttonZoomOut;
-
-@end
-
-@implementation OATargetPointZoomView
-
-#pragma mark - Actions
-
-- (IBAction) buttonZoomInClicked:(id)sender
-{
-    if (self.delegate)
-        [self.delegate zoomInPressed];
-}
-
-- (IBAction) buttonZoomOutClicked:(id)sender
-{
-    if (self.delegate)
-        [self.delegate zoomOutPressed];
-}
-
-@end
-
-
-@interface OATargetPointView() <OATargetPointZoomViewDelegate, UIScrollViewDelegate, OAScrollViewDelegate>
+@interface OATargetPointView() <UIScrollViewDelegate, OAScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIView *topOverscrollView;
@@ -172,13 +146,7 @@ static const NSInteger _buttonsCount = 4;
     {
         if ([v isKindOfClass:[OATargetPointView class]])
             self = (OATargetPointView *)v;
-        else if ([v isKindOfClass:[OATargetPointZoomView class]])
-            self.zoomView = (OATargetPointZoomView *)v;
     }
-    
-    if (self && self.zoomView)
-        self.zoomView.delegate = self;
-    
     return self;
 }
 
@@ -190,19 +158,13 @@ static const NSInteger _buttonsCount = 4;
     {
         if ([v isKindOfClass:[OATargetPointView class]])
             self = (OATargetPointView *)v;
-        else if ([v isKindOfClass:[OATargetPointZoomView class]])
-            self.zoomView = (OATargetPointZoomView *)v;
     }
-    
-    if (self && self.zoomView)
-        self.zoomView.delegate = self;
     
     if (self)
     {
         self.frame = frame;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
-    
     return self;
 }
 
@@ -752,7 +714,6 @@ static const NSInteger _buttonsCount = 4;
         }
     }
     
-    _buttonLeft.hidden = YES;
     _imageView.hidden = NO;
     
     if (self.customController)
@@ -930,8 +891,6 @@ static const NSInteger _buttonsCount = 4;
         [UIView animateWithDuration:0.3 animations:^{
             
             self.frame = frame;
-            if (self.zoomView.superview)
-                _zoomView.alpha = 1.0;
             
         } completion:^(BOOL finished) {
             if (onComplete)
@@ -950,8 +909,6 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         
         self.frame = frame;
-        if (self.zoomView.superview)
-            _zoomView.alpha = 1.0;
         
         if (onComplete)
             onComplete();
@@ -998,16 +955,12 @@ static const NSInteger _buttonsCount = 4;
             [UIView animateWithDuration:duration animations:^{
                 
                 self.frame = frame;
-                
-                if (self.zoomView.superview)
-                    _zoomView.alpha = 0.0;
 
                 if (showingTopToolbar)
                     self.customController.navBar.frame = newTopToolbarFrame;
                 
             } completion:^(BOOL finished) {
                 
-                [self.zoomView removeFromSuperview];
                 [self removeFromSuperview];
                 
                 if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
@@ -1027,10 +980,6 @@ static const NSInteger _buttonsCount = 4;
         {
             self.frame = frame;
             
-            if (self.zoomView.superview)
-                _zoomView.alpha = 0.0;
-
-            [self.zoomView removeFromSuperview];
             [self removeFromSuperview];
             
             if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
@@ -1106,17 +1055,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) updateZoomViewFrameAnimated:(BOOL)animated
 {
-    if (_zoomView.superview)
-    {
-        if ([self isLandscape])
-            _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, DeviceScreenHeight / 2.0);
-        else
-            _zoomView.center = CGPointMake(self.frame.size.width - _zoomView.bounds.size.width / 2.0, _headerY - _zoomView.bounds.size.height / 2.0 - 5.0);
-        
-        BOOL showZoomView = (!_showFullScreen || [self isLandscape]) && ![self.customController supportMapInteraction];
-        _zoomView.alpha = (showZoomView ? 1.0 : 0.0);
-    }
-    else if (!_hiding && self.customController && [self.customController supportMapInteraction])
+    if (!_hiding && self.customController && [self.customController supportMapInteraction])
     {
         [self applyMapInteraction:[self getVisibleHeight] - OAUtilities.getBottomMargin animated:animated];
     }
@@ -1164,7 +1103,7 @@ static const NSInteger _buttonsCount = 4;
     sliderFrame.origin.x = _containerView.frame.size.width / 2 - _sliderView.frame.size.width / 2;
     _sliderView.frame = sliderFrame;
 
-    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
+    CGFloat textX = (_imageView.image ? 50.0 : itemsX) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
@@ -1378,10 +1317,7 @@ static const NSInteger _buttonsCount = 4;
             [self.customController addMapFrameLayer:[self getMapFrame:width] view:self];
     }
     
-    if (!_buttonLeft.hidden)
-        _buttonShadow.frame = CGRectMake(5.0, 0.0, width - 50.0 - (_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0), 73.0);
-    else
-        _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
+    _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
         
     _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + topViewHeight + controlButtonsHeight, width, infoViewHeight + heightWithMargin);
 
@@ -2270,9 +2206,6 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) contentChanged
 {
-    if (!_buttonLeft.hidden)
-        [self updateLeftButton];
-    
     if (_targetPoint.type == OATargetGPX && self.customController)
     {
         _targetPoint.targetObj = [self.customController getTargetObj];
@@ -2474,20 +2407,6 @@ static const NSInteger _buttonsCount = 4;
     [self.menuViewDelegate targetPointAddWaypoint];
 }
 
-#pragma mark - OATargetPointZoomViewDelegate
-
-- (void) zoomInPressed
-{
-    if (self.menuViewDelegate)
-        [self.menuViewDelegate targetZoomIn];
-}
-
-- (void) zoomOutPressed
-{
-    if (self.menuViewDelegate)
-        [self.menuViewDelegate targetZoomOut];
-}
-
 #pragma mark - UIScrollViewDelegate
 
 - (void) setTargetContentOffset:(CGPoint)newOffset withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
@@ -2610,9 +2529,6 @@ static const NSInteger _buttonsCount = 4;
             self.customController.additionalAccessoryView.frame = viewFrame;
         }
     }
-
-    if (!_zoomView.superview)
-        [self updateZoomViewFrameAnimated:YES];
 }
 
 - (BOOL) isScrollAllowed

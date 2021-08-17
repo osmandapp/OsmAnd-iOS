@@ -3594,7 +3594,6 @@ typedef enum
 
 - (void) updateColors
 {
-    [_targetMenuView updateColors];
     [self updateRouteButton];
 }
 

@@ -427,7 +427,7 @@
 "map_settings_night" = "Noaptea";
 "region_others" = "Alte hărți";
 "poi_filter_closest_poi" = "Cel mai apropiat POI";
-"nm" = "nmi";
+"nm" = "nmi ( nautic miles)";
 "traffic_warning_pedestrian" = "Trecere de pietoni";
 "shared_string_yes" = "Da";
 "configure_map" = "Configuraţi harta";
@@ -1478,7 +1478,7 @@
 "type_city_town" = "Scrieți orașul sau localitatea";
 "nothing_found_descr" = "Modificați interogarea de căutare sau măriți raza de căutare";
 "nothing_found" = "Nu s-a găsit nimic: %@";
-"nm_h" = "nmi/h";
+"nm_h" = "nmi/h ( nautic miles/oră)";
 "si_nm_h" = "Mile marine pe oră (nod)";
 "right_side_navigation" = "Traficul pe dreapta";
 "left_side_navigation" = "Traficul pe stânga";
@@ -2099,3 +2099,7 @@
 "product_desc_ext_mapillary" = "Fotografii online la nivel de stradă pentru toată lumea. Descoperiți locuri, colaborați, surprindeți lumea.";
 "product_desc_mapillary" = "Fotografii online la nivel de stradă pentru toată lumea";
 "product_title_mapillary" = "Mapillar";
+"added_profiles_descr" = "Profiluri adăugate de plugin";
+"added_profiles" = "Profiluri adăugate";
+"suggested_maps_descr" = "Aceste hărți sunt necesare pentru plugin";
+"suggested_maps" = "Hărți sugerate";

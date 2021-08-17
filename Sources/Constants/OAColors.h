@@ -189,7 +189,7 @@
 
 #define plugin_icon_green 0x67AC5B
 
-#define color_ok 0x2BBE31
-#define color_invalid 0xDA3A3A
+#define color_place_open 0x2BBE31
+#define color_place_closed 0xDA3A3A
 
 #endif /* OAColors_h */

@@ -14,9 +14,8 @@
 
 @interface OACollapsableNearestPoiTypeView : OACollapsableView
 
-@property (nonatomic, readonly) NSMutableArray<OAPOIType *> *poiTypes;
 @property (nonatomic, readonly) BOOL hasItems;
 
-- (void)setData:(NSMutableArray<OAPOIType *> *)poiTypes lat:(double)lat lon:(double)lon isPoiAdditional:(BOOL)isPoiAdditional;
+- (void)setData:(NSArray<OAPOIType *> *)poiTypes lat:(double)lat lon:(double)lon isPoiAdditional:(BOOL)isPoiAdditional;
 
 @end

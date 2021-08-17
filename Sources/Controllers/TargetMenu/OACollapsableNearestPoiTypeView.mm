@@ -21,23 +21,14 @@
 
 @implementation OACollapsableNearestPoiTypeView
 {
+    NSArray<OAPOIType *> *_poiTypes;
     NSArray<UIButton *> *_buttons;
     double _latitude;
     double _longitude;
     BOOL _isPoiAdditional;
 }
 
-- (instancetype) initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self)
-    {
-        // init
-    }
-    return self;
-}
-
-- (void)setData:(NSMutableArray<OAPOIType *> *)poiTypes lat:(double)lat lon:(double)lon isPoiAdditional:(BOOL)isPoiAdditional
+- (void)setData:(NSArray<OAPOIType *> *)poiTypes lat:(double)lat lon:(double)lon isPoiAdditional:(BOOL)isPoiAdditional
 {
     _poiTypes = poiTypes;
     _latitude = lat;
@@ -48,9 +39,9 @@
 
 - (void) buildViews
 {
-    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.poiTypes.count];
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:_poiTypes.count];
     int i = 0;
-    for (OAPOIType *poiType in self.poiTypes)
+    for (OAPOIType *poiType in _poiTypes)
     {
         NSString *title = poiType.nameLocalized;
         UIButton *btn = [self createButton:title];
@@ -105,9 +96,9 @@
 {
     UIButton *btn = sender;
     NSInteger index = btn.tag;
-    if (index >= 0 && index < self.poiTypes.count)
+    if (index >= 0 && index < _poiTypes.count)
     {
-        OAPOIType *pointType = self.poiTypes[index];
+        OAPOIType *pointType = _poiTypes[index];
         if (pointType)
         {
             OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[NSString stringWithFormat:@"%@%@", STD_PREFIX, pointType.name]];

@@ -290,7 +290,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             if (parser != nullptr)
             {
                 bool isOpened = parser->isOpened();
-                textColor = isOpened ? UIColorFromRGB(color_ok) : UIColorFromRGB(color_invalid);
+                textColor = isOpened ? UIColorFromRGB(color_place_open) : UIColorFromRGB(color_place_closed);
             }
             value = [value stringByReplacingOccurrencesOfString:@"; " withString:@"\n"];
             needLinks = NO;
@@ -465,7 +465,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             
             BOOL cuisineOrDish = [categoryName isEqualToString:@"cuisine"] || [categoryName isEqualToString:@"dish"] ;
             OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            [collapsableView setData:categoryTypes lat:self.poi.latitude lon:self.poi.longitude isPoiAdditional:YES];
+            [collapsableView setData:[NSArray arrayWithArray:categoryTypes] lat:self.poi.latitude lon:self.poi.longitude isPoiAdditional:YES];
             
             OARowInfo *row = [[OARowInfo alloc] initWithKey:poiAdditionalCategoryName icon:icon textPrefix:pType.poiAdditionalCategoryLocalized text:sb textColor:UIColor.blackColor isText:NO needLinks:NO order:pType.order typeName:pType.name isPhoneNumber:NO isUrl:NO];
             
@@ -484,7 +484,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
     if (collectedPoiTypes.count > 0)
     {
         OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-        [collapsableView setData:collectedPoiTypes lat:self.poi.latitude lon:self.poi.longitude isPoiAdditional:NO];
+        [collapsableView setData:[NSArray arrayWithArray:collectedPoiTypes] lat:self.poi.latitude lon:self.poi.longitude isPoiAdditional:NO];
         OAPOIType *poiCategory = self.poi.type;
         UIImage *icon = [UIImage imageNamed:poiCategory.iconName];
         

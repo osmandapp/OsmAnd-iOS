@@ -165,7 +165,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_settings"),
-            @"iconName": @"ic_action_settings",
+            @"iconName": @"left_menu_icon_settings",
             @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypeProfiles)
             }
@@ -215,7 +215,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_routing"),
-            @"iconName": @"ic_action_route_distance",
+            @"iconName": @"ic_custom_route",
             @"count": [NSString stringWithFormat:@"%ld",routingFilesCount],
             @"category" : @(EOAImportDataTypeRoutingSettings)
             }

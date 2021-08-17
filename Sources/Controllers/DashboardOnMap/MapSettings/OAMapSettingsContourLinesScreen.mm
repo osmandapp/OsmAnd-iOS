@@ -555,7 +555,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-                UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
+                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -583,7 +583,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (!mapItem.disabled)
             {
                 cell.textLabel.textColor = [UIColor blackColor];
-                UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
+                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];

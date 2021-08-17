@@ -61,7 +61,7 @@
                                         <rect key="frame" x="334" y="24" width="38" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" image="HUD_search_icon.png"/>
+                                        <state key="normal" image="ic_custom_search.png"/>
                                         <connections>
                                             <action selector="onSearchBtnClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="5sS-Bu-YR9"/>
                                         </connections>
@@ -510,7 +510,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="HUD_search_icon.png" width="25" height="25"/>
+        <image name="ic_custom_search.png" width="30" height="30"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
         <image name="ic_update.png" width="25" height="25"/>
         <image name="left_menu_icon_settings.png" width="30" height="30"/>

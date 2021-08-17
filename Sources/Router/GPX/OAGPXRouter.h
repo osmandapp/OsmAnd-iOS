@@ -53,9 +53,6 @@ typedef NS_ENUM(NSInteger, OAGPXRouteVariantType)
 - (void)refreshDestinations;
 - (void)refreshDestinations:(BOOL)rebuildPointsOrder;
 
-- (NSString *)getRouteVariantTypeIconName;
-- (NSString *)getRouteVariantTypeSmallIconName;
-
 - (CGFloat)getMovementSpeed;
 - (CGFloat)getMovementSpeed:(OAGPXRouteVariantType)routeVariantType;
 

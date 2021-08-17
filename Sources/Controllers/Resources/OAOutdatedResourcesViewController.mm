@@ -369,7 +369,7 @@
             cell.textLabel.font = [UIFont systemFontOfSize:17.0];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
-            UIImage* iconImage = [UIImage templateImageNamed:@"menu_item_update_icon"];
+            UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_import"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
             [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
         }

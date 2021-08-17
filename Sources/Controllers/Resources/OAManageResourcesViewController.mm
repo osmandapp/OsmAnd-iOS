@@ -2312,7 +2312,7 @@ static BOOL _lackOfResources;
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-            UIImage *iconImage = [UIImage templateImageNamed:@"menu_item_update_icon"];
+            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_import"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];

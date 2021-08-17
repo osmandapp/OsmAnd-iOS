@@ -66,7 +66,6 @@
 #define kRecordTrackRow 0
 #define kRecordTrackSection 0
 #define kGPXGroupHeaderRow 0
-#define kVisibleTracksWithRoutePlanningSection 2
 #define kVisibleTracksWithoutRoutePlanningSection 1
 #define kRoutePlanningSection 1
 
@@ -126,8 +125,6 @@
     
     BOOL _editActive;
     NSArray *_visible;
-    BOOL _isRouteActive;
-    OAGPX* _routeItem;
     
     NSString *_importGpxPath;
     
@@ -604,23 +601,6 @@ static UIViewController *parentController;
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
     
     NSString *routeFilePath = [[OAAppSettings sharedManager] mapSettingActiveRouteFilePath];
-    _isRouteActive = (routeFilePath != nil);
-    if (_isRouteActive)
-    {
-        _routeItem = [db getGPXItem:routeFilePath];
-        for (OAGPX *item in self.gpxList)
-        {
-            if ([item.gpxFilePath isEqualToString:routeFilePath])
-            {
-                [self.gpxList removeObject:item];
-                break;
-            }
-        }
-    }
-    else
-    {
-        _routeItem = nil;
-    }
     
     OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
     trackRecordingGroup.isMenu = YES;
@@ -649,24 +629,6 @@ static UIViewController *parentController;
             return [obj2.importDate compare:obj1.importDate];
         }];
         [self.gpxList setArray:sortedArrayGroups];
-    }
-    
-    if (_routeItem)
-    {
-        OAGpxTableGroup *routePlanningGroup = [[OAGpxTableGroup alloc] init];
-        routePlanningGroup.isMenu = YES;
-        routePlanningGroup.header = OALocalizedString(@"gpx_route");
-        
-        [routePlanningGroup.groupItems addObject:@{
-            @"title" : [_routeItem getNiceTitle],
-            @"track" : _routeItem,
-            @"distance" : [_app getFormattedDistance:_routeItem.totalDistance],
-            @"time" : [_app getFormattedTimeInterval:_routeItem.timeSpan shortFormat:YES],
-            @"wpt" : [NSString stringWithFormat:@"%d", _routeItem.wptPoints],
-            @"type" : [OAGPXTrackCell getCellIdentifier],
-            @"key" : @"route_item"}
-        ];
-        [tableData addObject:routePlanningGroup];
     }
     
     OAGpxTableGroup* visibleGroup = [[OAGpxTableGroup alloc] init];
@@ -794,8 +756,6 @@ static UIViewController *parentController;
     [self updateButtons];
     
     _editActive = YES;
-    if (_visible.count > 0)
-        [self selectAllGroup:_routeItem ? kVisibleTracksWithRoutePlanningSection : kVisibleTracksWithoutRoutePlanningSection];
     [self updateButtons];
     [self updateRecButtonsAnimated];
 }
@@ -1316,11 +1276,6 @@ static UIViewController *parentController;
                     [self.navigationController pushViewController:pluginsViewController animated:YES];
                 }
             }
-            else if ([menuCellType isEqualToString:@"route_item"])
-            {
-                [self doPush];
-                [[OARootViewController instance].mapPanel openTargetViewWithGPXRoute:_routeItem pushed:YES];
-            }
         }
         else if (indexPath.row == 0)
         {
@@ -1413,7 +1368,7 @@ static UIViewController *parentController;
     else
         [_selectedItems removeObject:selectedItem[@"track"]];
     
-    NSInteger section = _routeItem ? kVisibleTracksWithRoutePlanningSection : kVisibleTracksWithoutRoutePlanningSection;
+    NSInteger section = kVisibleTracksWithoutRoutePlanningSection;
     for (OAGpxTableGroup *item in _data)
     {
         if (item.isMenu)
@@ -1454,7 +1409,7 @@ static UIViewController *parentController;
 
 - (void) selectDeselectGroupHeader:(NSIndexPath *)indexPath select:(BOOL)select
 {
-    NSInteger section = _routeItem ? kVisibleTracksWithRoutePlanningSection : kVisibleTracksWithoutRoutePlanningSection;
+    NSInteger section = kVisibleTracksWithoutRoutePlanningSection;
     for (; section < [self.gpxTableView numberOfSections] - 1; section++)
     {
         OAGpxTableGroup* groupData = [_data objectAtIndex:section];

@@ -374,11 +374,11 @@ static UIViewController *parentController;
     // Generate menu items
     self.menuItems = @[@{@"type" : @"actionItem",
                          @"text": OALocalizedString(@"fav_import_title"),
-                         @"icon": @"favorite_import_icon",
+                         @"icon": @"ic_custom_import",
                          @"action": @"onImportClicked"},
                        @{@"type" : @"actionItem",
                          @"text": OALocalizedString(@"fav_export_title"),
-                         @"icon": @"favorite_export_icon.png",
+                         @"icon": @"ic_custom_export",
                          @"action": @"onExportClicked"}];
     [tableData addObject:self.menuItems];
 
@@ -718,7 +718,7 @@ static UIViewController *parentController;
     if (exportCollection->getFavoriteLocationsCount() == 0)
         return;
 
-    NSString* filename = [@"Exported favorites" stringByAppendingString:@".gpx"];
+    NSString* filename = [OsmAndApp instance].favoritesStorageFilename.lastPathComponent;
     NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingString:filename];
     if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
         return;

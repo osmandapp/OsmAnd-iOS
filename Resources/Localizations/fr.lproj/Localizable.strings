@@ -335,7 +335,7 @@
 "res_catalog_upd" = "Mise à jour du catalogue";
 "res_worldwide" = "Monde entier";
 "res_region_map" = "Carte de la région";
-"res_wsea_map" = "Carte du balisage maritime mondiale";
+"res_wsea_map" = "Carte du balisage maritime mondial";
 "res_wmap" = "Carte générale du monde";
 "res_dmap" = "Carte détaillée";
 "res_map_of_region" = "Carte de la région";
@@ -997,7 +997,7 @@
 "product_desc_ext_srtm" = "Ce plugin fournit des courbes de niveau et des ombres de collines, qui peuvent être affichées sur des cartes OsmAnd hors ligne. Les courbes de niveau fournissent des informations sur les hauteurs de la zone tandis que l'ombre des collines est leur visualisation. Voir les noms des sommets de montagne et les caractéristiques spécifiques du terrain à l'aide de ce plugin.\n\nLes données globales (entre 70 degrés nord et 70 degrés sud) sont basées sur des mesures effectuées par SRTM (Shuttle Radar Topography Mission) et ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), un instrument d'imagerie à bord de Terra, le satellite phare du système d'observation de la Terre de la NASA. ASTER est un effort de coopération entre la NASA, le ministère japonais de l'économie, du commerce et de l'industrie (METI) et Japan Space Systems (J-spacesystems).";
 "product_desc_ext_wikivoyage" = "Guides des lieux les plus intéressants au monde depuis OsmAnd et sans connexion Internet.";
 "product_title_sea_depth_contours" = "Lignes de sonde marines";
-"product_desc_sea_depth_contours" = "Isobathes et balisage maritime";
+"product_desc_sea_depth_contours" = "Bathymétrie et balisage maritime";
 "prch_wiki_info" = "L'addon Wikipedia permet d'activer les informations wikipedia pour les cartes que vous avez le droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
 "prch_srtm_info" = "L'extension courbes de niveau permet d'activer l'affichage des courbes de niveau pour les cartes auxquelles vous avez droit, achetées ou téléchargées dans les limites de l'offre gratuite.";
 "poi_category_and_type" = "Catégorie et type de POI";
@@ -1160,7 +1160,7 @@
 "rendering_value_translucent_blue_name" = "Bleu translucide";
 "rendering_attr_surface_pebblestone_name" = "Galets";
 "routing_attr_avoid_ice_roads_fords_description" = "Éviter les routes sur glace et les fjords.";
-"rendering_attr_depthContours_name" = "Lignes de sonde maritimes";
+"rendering_attr_depthContours_name" = "Lignes de sonde de profondeur";
 "routing_attr_avoid_train_description" = "Éviter le train";
 "rendering_value_translucent_purple_name" = "Violet translucide";
 "routing_attr_avoid_sett_description" = "Éviter les pavés";
@@ -2099,7 +2099,7 @@
 "carplay_profile_descr" = "Profil qui sera utilisé lorsque vous êtes connecté à CarPlay.";
 "carplay_profile" = "Profil CarPlay";
 "last_used" = "Dernier utilisé";
-"search_more" = "Chercher plus …";
+"search_more" = "Rechercher plus …";
 "preferred_languages" = "Langue préférée";
 "available_languages" = "Langues disponibles";
 "some_articles_may_not_available_in_lang" = "Certains articles Wikipédia peuvent ne pas être disponibles dans votre langue.";

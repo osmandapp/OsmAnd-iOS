@@ -53,13 +53,6 @@
         if (plugin && plugin.getParkingType)
             [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] label:self.descriptionView shortText:NO];
     }
-    else if (_targetPoint.type == OATargetGPXRoute)
-    {
-        _iconView.image = _targetPoint.icon;
-        double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
-        self.titleView.text = [[OsmAndApp instance] getFormattedDistance:distance];
-        [self updateDescriptionView];
-    }
     else
     {
         if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])

@@ -2122,3 +2122,9 @@
 "suggested_maps" = "خرائط مقترحة";
 "product_title_mapillary" = "مابيلاري";
 "population_num" = "السكان: %@";
+"product_title_openplacereviews" = "مراجعات الأماكان العامة";
+"suggested_maps_descr" = "هذه الخرائط مطلوبة للأداة الملحقة";
+"product_desc_ext_openplacereviews" = "أرسل الصور والمراجعات والروابط حول الأماكن العامة مثل المطاعم والفنادق والمتاحف والإحداثيات كبيانات مفتوحة\nhttps://openplacereviews.org/data/.\n\nاقرأ المزيد في https://openplacereviews.org";
+"product_desc_openplacereviews" = "أرسل الصور، المراجعات وروابط الأماكن العامة";
+"product_desc_ext_mapillary" = "صور على مستوى الشارع على الإنترنت متاحة للجميع. اكتشاف الأماكن، نسق مع غيرك وإلتقط صورا للعالم.";
+"product_desc_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع";

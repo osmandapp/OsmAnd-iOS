@@ -388,7 +388,7 @@
                 else if ([file hasSuffix:ROUTING_FILE_EXT])
                 {
                     item[@"label"] = fileName;
-                    item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
+                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_route"];
                 }
                 else if ([file.lowercaseString hasSuffix:GPX_FILE_EXT])
                 {

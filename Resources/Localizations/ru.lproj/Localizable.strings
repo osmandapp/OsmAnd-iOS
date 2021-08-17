@@ -499,7 +499,7 @@
 "ending_point_too_far" = "Конец маршрута слишком далеко от ближайшей дороги.";
 "route_head" = "Двигайтесь прямо";
 "looking_up_address" = "Поиск адреса";
-"no_address_found" = "Адрес не определен";
+"no_address_found" = "Адрес не определён";
 "traffic_warning_speed_limit" = "Ограничение скорости";
 "traffic_warning_border_control" = "Пограничный контроль";
 "traffic_warning_stop" = "Знак остановки";
@@ -739,7 +739,7 @@
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
-"int_seconds" = "сек.";
+"int_seconds" = "с";
 "settings_preset" = "Профиль по умолчанию";
 "shared_string_info" = "Информация";
 "day_off_label" = "вых.";
@@ -932,7 +932,7 @@
 "arrival_distance_factor_at_last" = "На последних метрах";
 "show_warnings_title" = "Показывать сигналы…";
 "speak_title" = "Объявлять…";
-"keep_informing" = "Повторять навигационные инструкции";
+"keep_informing" = "Повторение подсказок";
 "arrival_distance" = "Объявление о прибытии";
 "default_speed_system_descr" = "Выберите единицы измерения скорости";
 "map_widget_intermediate_distance" = "Промежуточный пункт";
@@ -1527,7 +1527,7 @@
 "routing_attr_allow_expert_description" = "Чрезвычайно сложные маршруты с опасными препятствиями и небезопасным окружением.";
 "rendering_attr_hideOverground_name" = "Надземные объекты";
 "rendering_value_disabled_name" = "Выключено";
-"rendering_attr_surface_mud_name" = "Ил";
+"rendering_attr_surface_mud_name" = "Месиво";
 "rendering_value_translucent_lightgreen_name" = "Полупрозрачный светло-зелёный";
 "rendering_attr_hideProposed_name" = "Планируемые объекты";
 "rendering_attr_surface_asphalt_name" = "Асфальт";

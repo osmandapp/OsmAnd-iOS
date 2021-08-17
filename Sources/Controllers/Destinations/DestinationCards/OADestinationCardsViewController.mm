@@ -14,7 +14,6 @@
 
 #import "OADestinationCardHeaderView.h"
 #import "OADestinationCardBaseController.h"
-#import "OAGPXRouteCardController.h"
 #import "OADirectionsCardController.h"
 #import "OARootViewController.h"
 #import "OADestinationsHelper.h"
@@ -291,25 +290,6 @@
     [self deactivateCards];
     
     // Add cards
-    
-    if ([OAGPXRouter sharedInstance].routeDoc && [OAGPXRouter sharedInstance].routeDoc.activePoints.count > 0)
-    {
-        OAGPXRouteCardController *gpxRouteCardController;
-        for (OADestinationCardBaseController *card in _sections)
-            if ([card isKindOfClass:[OAGPXRouteCardController class]])
-            {
-                gpxRouteCardController = (OAGPXRouteCardController *)card;
-                break;
-            }
-
-        if (!gpxRouteCardController)
-            gpxRouteCardController = [[OAGPXRouteCardController alloc] initWithSection:index++ tableView:self.tableView];
-        else
-            [gpxRouteCardController updateSectionNumber:index++];
-        
-        gpxRouteCardController.delegate = self;
-        [sections addObject:gpxRouteCardController];
-    }
 
     if ([[OADestinationsHelper instance] pureDestinationsCount] > 0)
     {

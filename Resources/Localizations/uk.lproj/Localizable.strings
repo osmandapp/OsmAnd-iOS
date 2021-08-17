@@ -2123,7 +2123,7 @@
 "population_num" = "Населення: %@";
 "added_profiles_descr" = "Профілі, додані розширенням";
 "added_profiles" = "Додані профілі";
-"suggested_maps_descr" = "Ці мапи потрібно використовувати з плагіном";
+"suggested_maps_descr" = "Ці мапи потрібно використовувати з розширенням";
 "suggested_maps" = "Пропоновані мапи";
 "product_desc_ext_openplacereviews" = "Надсилайте світлини, відгуки та посилання про громадські місця, як-от ресторани, готелі, музеї та точки шляху відкритими даними https://openplacereviews.org/data/.\n\nДізнайтеся більше на https://openplacereviews.org";
 "product_desc_openplacereviews" = "Надсилайте світлини, відгуки та посилання про громадські місця";

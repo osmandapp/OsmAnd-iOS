@@ -209,7 +209,7 @@ static NSMutableArray *activePopups;
     
     UIViewController *top = [OARootViewController instance].navigationController.topViewController;
     
-    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_tabbar_maps_normal"] color:UIColorFromRGB(0x4caf50)];
+    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_map"] color:UIColorFromRGB(0x4caf50)];
     popup.titleLabel.text = title;
     
     NSString *styledText = [self.class styledHTMLwithHTML:descText];
@@ -256,7 +256,7 @@ static NSMutableArray *activePopups;
 
     UIViewController *top = [OARootViewController instance].navigationController.topViewController;
     
-    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_tabbar_maps_normal"] color:UIColorFromRGB(0x4caf50)];
+    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_map"] color:UIColorFromRGB(0x4caf50)];
     popup.titleLabel.text = title;
     
     NSString *styledText = [self.class styledHTMLwithHTML:descText];

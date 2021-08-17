@@ -13,15 +13,12 @@
 
 @implementation OAFavoriteColor
 
--(instancetype)initWithName:(NSString *)name color:(UIColor *)color iconName:(NSString *)iconName
+-(instancetype)initWithName:(NSString *)name color:(UIColor *)color
 {
     self = [super init];
     if (self) {
         self.name = name;
         self.color = color;
-        self.iconName = iconName;
-        self.icon = [UIImage imageNamed:iconName];
-        self.cellIcon = [UIImage templateImageNamed:@"ic_custom_favorites"];
     }
     return self;
 }
@@ -44,21 +41,21 @@ static NSArray *colors;
 {
     if (!colors)
         colors = @[
-                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_purple") color:UIColorFromRGB(0x3F51B5) iconName:@"ic_favorite_1"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_purple") color:UIColorFromRGB(0x3F51B5)],
                    
-                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_green") color:UIColorFromRGB(0x43A047) iconName:@"ic_favorite_2"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_green") color:UIColorFromRGB(0x43A047)],
                    
-                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_yellow") color:UIColorFromRGB(0xffb300) iconName:@"ic_favorite_3"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_yellow") color:UIColorFromRGB(0xffb300)],
                    
-                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_orange") color:UIColorFromRGB(0xff5722) iconName:@"ic_favorite_4"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_orange") color:UIColorFromRGB(0xff5722)],
                    
-                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_gray") color:UIColorFromRGB(0x607d8b) iconName:@"ic_favorite_5"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_gray") color:UIColorFromRGB(0x607d8b)],
                    
-                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_red") color:UIColorFromRGB(0xe91e63) iconName:@"ic_favorite_6"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_red") color:UIColorFromRGB(0xe91e63)],
                    
-                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_blue") color:UIColorFromRGB(0x2196f3) iconName:@"ic_favorite_7"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_blue") color:UIColorFromRGB(0x2196f3)],
                    
-                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_magenta") color:UIColorFromRGB(0x9c27b0) iconName:@"ic_favorite_8"]
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_magenta") color:UIColorFromRGB(0x9c27b0)]
                    ];
     
     return colors;

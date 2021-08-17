@@ -2105,3 +2105,5 @@
 "select_wikipedia_article_langs" = "Zvolte jazyky, v nichž se články Wikipedie zobrazí na mapě. Při čtení článku můžete přepínat mezi všemi dostupnými jazyky.";
 "shared_string_all_languages" = "Všechny jazyky";
 "population_num" = "Populace: %@";
+"product_title_mapillary" = "Mapillary";
+"shared_string_turn_off" = "Vypnout";

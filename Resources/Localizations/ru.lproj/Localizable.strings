@@ -604,7 +604,7 @@
 "navigation_over_track" = "Начать навигацию по треку?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Выбрать на карте";
-"shared_string_my_location" = "Мое местоположение";
+"shared_string_my_location" = "Моё местоположение";
 "traffic_warning_payment" = "Платный проезд";
 "traffic_warning_speed_camera" = "Камера скорости";
 "traffic_warning" = "Дорожные предупреждения";
@@ -1460,7 +1460,7 @@
 "routing_attr_avoid_subway_description" = "Исключить метро и рельсовый транспорт";
 "routeInfo_road_types_name" = "Типы дорог";
 "rendering_value_purple_name" = "Фиолетовый";
-"rendering_attr_hikingRoutesOSMC_description" = "Отрисовка дорог в соответствии со следами OSMC.";
+"rendering_attr_hikingRoutesOSMC_description" = "Отрисовка дорог в соответствии с трассировкой OSMC.";
 "routing_attr_avoid_ferry_description" = "Исключить паромы";
 "rendering_attr_surface_fine_gravel_name" = "Мелкий гравий";
 "rendering_attr_surface_ground_name" = "Земля";
@@ -1527,7 +1527,7 @@
 "routing_attr_allow_expert_description" = "Чрезвычайно сложные маршруты с опасными препятствиями и небезопасным окружением.";
 "rendering_attr_hideOverground_name" = "Надземные объекты";
 "rendering_value_disabled_name" = "Выключено";
-"rendering_attr_surface_mud_name" = "Месиво";
+"rendering_attr_surface_mud_name" = "Топкая грязь";
 "rendering_value_translucent_lightgreen_name" = "Полупрозрачный светло-зелёный";
 "rendering_attr_hideProposed_name" = "Планируемые объекты";
 "rendering_attr_surface_asphalt_name" = "Асфальт";

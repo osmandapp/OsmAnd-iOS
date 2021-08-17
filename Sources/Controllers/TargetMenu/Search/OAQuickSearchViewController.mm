@@ -391,7 +391,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionShowOnMap:
         {
             _barActionLeftImageButton.hidden = YES;
-            UIImage *mapImage = [UIImage templateImageNamed:@"waypoint_map_disable.png"];
+            UIImage *mapImage = [UIImage templateImageNamed:@"ic_custom_map"];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
 

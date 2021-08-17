@@ -277,18 +277,6 @@
             controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj];
             break;
         }
-            
-        case OATargetGPXRoute:
-        {
-            OAGPXRouteViewControllerState *state = activeViewControllerState ? (OAGPXRouteViewControllerState *)activeViewControllerState : nil;
-            OAGpxRouteSegmentType segmentType = (OAGpxRouteSegmentType)targetPoint.segmentIndex;
-            if (state)
-                controller = [[OAGPXRouteViewController alloc] initWithCtrlState:state];
-            else
-                controller = [[OAGPXRouteViewController alloc] initWithSegmentType:segmentType];
-            
-            break;
-        }
         case OATargetChangePosition:
         {
             controller = [[OAChangePositionViewController alloc] initWithTargetPoint:targetPoint.targetObj];

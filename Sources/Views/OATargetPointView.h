@@ -113,7 +113,6 @@
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;
 - (void) targetGoToGPX;
-- (void) targetGoToGPXRoute;
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated;
 - (void) targetSetTopControlsVisible:(BOOL)visible;
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;

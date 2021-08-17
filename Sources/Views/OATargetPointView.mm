@@ -88,7 +88,6 @@
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UIButton *buttonLeft;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
@@ -121,8 +120,6 @@
 @property (weak, nonatomic) IBOutlet UIView *backViewRoute;
 @property (weak, nonatomic) IBOutlet UIButton *buttonShowInfo;
 @property (weak, nonatomic) IBOutlet UIButton *buttonRoute;
-
-@property (nonatomic) OATargetPointZoomView *zoomView;
 
 @property NSString* addressStr;
 @property OAMapRendererView* mapView;
@@ -263,8 +260,6 @@ static const NSInteger _buttonsCount = 4;
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
     _nearbyLabel.textColor = UIColorFromARGB(color_secondary_text_light_argb);
-    
-    [self updateColors];
     
     [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
                                                                 [self]
@@ -757,20 +752,8 @@ static const NSInteger _buttonsCount = 4;
         }
     }
     
-    if (_targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXRoute)
-        [self.zoomView removeFromSuperview];
-    
-    if (_targetPoint.type == OATargetGPXRoute)
-    {
-        [self updateLeftButton];
-        _buttonLeft.hidden = NO;
-        _imageView.hidden = YES;
-    }
-    else
-    {
-        _buttonLeft.hidden = YES;
-        _imageView.hidden = NO;
-    }
+    _buttonLeft.hidden = YES;
+    _imageView.hidden = NO;
     
     if (self.customController)
     {
@@ -812,14 +795,6 @@ static const NSInteger _buttonsCount = 4;
         default:
             return NO;
             break;
-    }
-}
-
-- (void) updateLeftButton
-{
-    if (_targetPoint.type == OATargetGPXRoute)
-    {
-        [_buttonLeft setImage:[UIImage imageNamed:[[OAGPXRouter sharedInstance] getRouteVariantTypeIconName]] forState:UIControlStateNormal];
     }
 }
 
@@ -921,18 +896,7 @@ static const NSInteger _buttonsCount = 4;
             [self.customController goFull];
     }
     
-    if (_targetPoint.type == OATargetGPXRoute)
-    {
-        self.zoomView.alpha = 0.0;
-        if ([self isLandscape])
-            [self.parentView addSubview:self.zoomView];
-        else
-            [self addSubview:self.zoomView];
-
-        //if ([self.gestureRecognizers containsObject:_panGesture])
-        //    [self removeGestureRecognizer:_panGesture];
-    }
-    else if (_targetPoint.type == OATargetImpassableRoadSelection)
+    if (_targetPoint.type == OATargetImpassableRoadSelection)
     {
         self.topView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
     }
@@ -1200,7 +1164,7 @@ static const NSInteger _buttonsCount = 4;
     sliderFrame.origin.x = _containerView.frame.size.width / 2 - _sliderView.frame.size.width / 2;
     _sliderView.frame = sliderFrame;
 
-    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
+    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
@@ -1650,12 +1614,6 @@ static const NSInteger _buttonsCount = 4;
         OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
         if (plugin && plugin.getParkingType)
             [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] label:self.coordinateLabel shortText:NO];
-    }
-    else if (_targetPoint.type == OATargetGPXRoute)
-    {
-        double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
-        self.addressLabel.text = [[OsmAndApp instance] getFormattedDistance:distance];
-        [self updateAddressLabel];
     }
     else
     {
@@ -2112,66 +2070,13 @@ static const NSInteger _buttonsCount = 4;
     if (_showFullScreen)
         return;
     
-    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
+    if (_targetPoint.type == OATargetGPX)
     {
         [self.menuViewDelegate targetGoToGPX];
     }
     else
     {
         [self.menuViewDelegate targetGoToPoint];
-    }
-}
-
-- (IBAction) buttonLeftClicked:(id)sender
-{
-    if (_targetPoint.type == OATargetGPXRoute)
-    {
-        OsmAndAppInstance app = [OsmAndApp instance];
-        OAGPXRouter *router = [OAGPXRouter sharedInstance];
-        
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"est_travel_time")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_cancel")
-                            otherTitles:@[OALocalizedString(@"pedestrian"), OALocalizedString(@"pedestrian"), OALocalizedString(@"m_style_bicycle"), OALocalizedString(@"m_style_car")]
-                              otherDesc:@[[app getFormattedSpeed:[router getMovementSpeed:OAGPXRouteVariantPedestrianSlow] drive:YES],
-                                          [app getFormattedSpeed:[router getMovementSpeed:OAGPXRouteVariantPedestrian] drive:YES],
-                                          [app getFormattedSpeed:[router getMovementSpeed:OAGPXRouteVariantBicycle] drive:YES],
-                                          [app getFormattedSpeed:[router getMovementSpeed:OAGPXRouteVariantCar] drive:YES]]
-                            otherImages:@[@"ic_mode_pedestrian.png", @"ic_mode_pedestrian.png", @"ic_mode_bike.png", @"ic_mode_car.png"]
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled)
-                                 {
-                                     switch (buttonIndex)
-                                     {
-                                         case 0:
-                                         {
-                                             [OAGPXRouter sharedInstance].routeVariantType = OAGPXRouteVariantPedestrianSlow;
-                                             break;
-                                         }
-                                         case 1:
-                                         {
-                                             [OAGPXRouter sharedInstance].routeVariantType = OAGPXRouteVariantPedestrian;
-                                             break;
-                                         }
-                                         case 2:
-                                         {
-                                             [OAGPXRouter sharedInstance].routeVariantType = OAGPXRouteVariantBicycle;
-                                             break;
-                                         }
-                                         case 3:
-                                         {
-                                             [OAGPXRouter sharedInstance].routeVariantType = OAGPXRouteVariantCar;
-                                             break;
-                                         }
-                                         default:
-                                             break;
-                                     }
-                                     
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                         [self contentChanged];
-                                     });
-                                 }
-                             }];
     }
 }
 
@@ -2368,7 +2273,7 @@ static const NSInteger _buttonsCount = 4;
     if (!_buttonLeft.hidden)
         [self updateLeftButton];
     
-    if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute) && self.customController)
+    if (_targetPoint.type == OATargetGPX && self.customController)
     {
         _targetPoint.targetObj = [self.customController getTargetObj];
         [self updateAddressLabel];
@@ -2377,11 +2282,6 @@ static const NSInteger _buttonsCount = 4;
         if (!item.newGpx)
             self.addressLabel.text = [item getNiceTitle];
         
-        if (_targetPoint.type == OATargetGPXRoute)
-        {
-            double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
-            self.addressLabel.text = [[OsmAndApp instance] getFormattedDistance:distance];
-        }
     }
     
     if (![_controlButtonDownload.titleLabel.text isEqualToString:self.customController.downloadControlButton.title])
@@ -2572,13 +2472,6 @@ static const NSInteger _buttonsCount = 4;
 - (void) addWaypoint
 {
     [self.menuViewDelegate targetPointAddWaypoint];
-}
-
-- (void) updateColors
-{
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
-    [_zoomView.buttonZoomIn setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
-    [_zoomView.buttonZoomOut setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
 }
 
 #pragma mark - OATargetPointZoomViewDelegate

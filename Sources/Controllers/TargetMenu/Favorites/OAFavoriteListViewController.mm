@@ -718,7 +718,7 @@ static UIViewController *parentController;
     if (exportCollection->getFavoriteLocationsCount() == 0)
         return;
 
-    NSString* filename = [@"Exported favorites" stringByAppendingString:@".gpx"];
+    NSString* filename = [OsmAndApp instance].favoritesStorageFilename.lastPathComponent;
     NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingString:filename];
     if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
         return;

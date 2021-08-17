@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -40,15 +40,6 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <color key="tintColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </imageView>
-                                <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Vs-Qf-khd" userLabel="Left">
-                                    <rect key="frame" x="268" y="12" width="44" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <color key="tintColor" red="0.24191196262836456" green="0.45687457919120789" blue="0.86722934246063232" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <state key="normal" image="ic_mode_pedestrian.png" backgroundImage="ic_route_modebg.png"/>
-                                    <connections>
-                                        <action selector="buttonLeftClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="Cg8-xB-kC7"/>
-                                    </connections>
-                                </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ул. Академика Крымского  " lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEN-oc-cuE">
                                     <rect key="frame" x="16" y="0.0" width="250" height="36"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -306,7 +297,6 @@
                 <outlet property="bottomOverscrollView" destination="HzX-Jk-g5N" id="Jc0-zb-gcC"/>
                 <outlet property="buttonDirection" destination="C1L-y5-El0" id="Y68-bQ-1ee"/>
                 <outlet property="buttonFavorite" destination="gGt-3L-A3v" id="CEI-vr-BLp"/>
-                <outlet property="buttonLeft" destination="3Vs-Qf-khd" id="hKD-Ky-Haf"/>
                 <outlet property="buttonMore" destination="WaX-6E-FvP" id="Rc7-ak-9Ap"/>
                 <outlet property="buttonRoute" destination="8Ad-9D-dpu" id="lu7-1h-p4u"/>
                 <outlet property="buttonShadow" destination="hve-we-D1N" id="Fqv-5i-jJ4"/>
@@ -332,52 +322,13 @@
             </connections>
             <point key="canvasLocation" x="376" y="191.6041979010495"/>
         </view>
-        <view contentMode="scaleToFill" id="8pl-hk-8t0" customClass="OATargetPointZoomView">
-            <rect key="frame" x="0.0" y="0.0" width="78" height="122"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8E-3N-Ha3" userLabel="Zoom IN">
-                    <rect key="frame" x="18" y="16" width="41" height="41"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="zoom_in_button.png" backgroundImage="HUD_compass_bg.png">
-                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="buttonZoomInClicked:" destination="8pl-hk-8t0" eventType="touchUpInside" id="om0-vp-sBc"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Smd-lZ-hl5" userLabel="Zoom OUT">
-                    <rect key="frame" x="18" y="65" width="41" height="41"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="zoom_out_button.png" backgroundImage="HUD_compass_bg.png">
-                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="buttonZoomOutClicked:" destination="8pl-hk-8t0" eventType="touchUpInside" id="5YY-Li-7WW"/>
-                    </connections>
-                </button>
-            </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-            <nil key="simulatedStatusBarMetrics"/>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <connections>
-                <outlet property="buttonZoomIn" destination="k8E-3N-Ha3" id="bUf-6H-aBU"/>
-                <outlet property="buttonZoomOut" destination="Smd-lZ-hl5" id="OAQ-QX-02z"/>
-            </connections>
-            <point key="canvasLocation" x="552" y="22.488755622188908"/>
-        </view>
     </objects>
     <resources>
-        <image name="HUD_compass_bg.png" width="41" height="41"/>
         <image name="ic_close.png" width="10" height="10"/>
-        <image name="ic_mode_pedestrian.png" width="18" height="18"/>
-        <image name="ic_route_modebg.png" width="44" height="44"/>
         <image name="left_menu_icon_navigation.png" width="30" height="30"/>
         <image name="menu_direction_icon.png" width="22" height="22"/>
         <image name="menu_share_icon.png" width="22" height="22"/>
         <image name="menu_star_icon.png" width="22" height="22"/>
         <image name="three_dots.png" width="22" height="22"/>
-        <image name="zoom_in_button.png" width="22" height="22"/>
-        <image name="zoom_out_button.png" width="22" height="22"/>
     </resources>
 </document>

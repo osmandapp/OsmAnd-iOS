@@ -402,14 +402,6 @@
             [[OARootViewController instance].mapPanel hideContextMenu];
             return;
         }
-        case EOAMapModeButtonTypeNavigate:
-        {
-            [[OARootViewController instance].mapPanel targetHide];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [[OAGPXRouter sharedInstance] saveRoute];
-            });
-            return;
-        }
         default:
             break;
     }
@@ -487,37 +479,13 @@
         switch (self.mapModeButtonType)
         {
             case EOAMapModeButtonTypeShowMap:
-                [_mapModeButton setImage:[UIImage imageNamed:@"ic_dialog_map"] forState:UIControlStateNormal];
-                break;
-
-            case EOAMapModeButtonTypeNavigate:
-                [_mapModeButton setImage:[UIImage imageNamed:@"bt_trip_start.png"] forState:UIControlStateNormal];
+                [_mapModeButton setImage:[UIImage imageNamed:@"ic_custom_show_on_map"] forState:UIControlStateNormal];
                 break;
                 
             default:
                 break;
         }
         return;
-    }
-    
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
-    UIImage* modeImage = nil;
-    switch (_app.mapMode)
-    {
-        case OAMapModeFree: // Free mode
-            modeImage = [UIImage imageNamed:isNight ? @"free_map_mode_button_night" : @"free_map_mode_button"];
-            break;
-            
-        case OAMapModePositionTrack: // Trace point
-            modeImage = [UIImage imageNamed:isNight ? @"position_track_map_mode_button_night" : @"position_track_map_mode_button"];
-            break;
-            
-        case OAMapModeFollow: // Compass - 3D mode
-            modeImage = [UIImage imageNamed:isNight ? @"follow_map_mode_button_night" : @"follow_map_mode_button"];
-            break;
-
-        default:
-            break;
     }
     
     if ([self isLocationAvailable])

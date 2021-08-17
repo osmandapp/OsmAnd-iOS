@@ -270,44 +270,6 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     [self.routeDoc buildRouteTrack];
 }
 
-- (NSString *)getRouteVariantTypeIconName
-{
-    switch (self.routeVariantType)
-    {
-        case OAGPXRouteVariantPedestrian:
-        case OAGPXRouteVariantPedestrianSlow:
-            return @"ic_mode_pedestrian";
-
-        case OAGPXRouteVariantBicycle:
-            return @"ic_mode_bike";
-
-        case OAGPXRouteVariantCar:
-            return @"ic_mode_car";
-            
-        default:
-            return @"ic_mode_pedestrian";
-    }
-}
-
-- (NSString *)getRouteVariantTypeSmallIconName
-{
-    switch (self.routeVariantType)
-    {
-        case OAGPXRouteVariantPedestrian:
-        case OAGPXRouteVariantPedestrianSlow:
-            return @"ic_trip_pedestrian";
-
-        case OAGPXRouteVariantBicycle:
-            return @"ic_trip_bike";
-
-        case OAGPXRouteVariantCar:
-            return @"ic_trip_car";
-            
-        default:
-            return @"ic_trip_pedestrian";
-    }
-}
-
 - (CGFloat)getMovementSpeed
 {
     return [self getMovementSpeed:self.routeVariantType];

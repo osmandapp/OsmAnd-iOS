@@ -38,8 +38,6 @@
                 return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:_title];
             case OATargetGPX:
                 return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX_ITEM name:_title];
-            case OATargetGPXRoute:
-                return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX_ITEM name:_title];
             case OATargetAddress:
                 return [[OAPointDescription alloc] initWithType:POINT_TYPE_ADDRESS name:_title];
             case OATargetTurn:

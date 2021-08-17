@@ -13,6 +13,10 @@
 		0A82ABAA2694D68000ED1F01 /* ic_custom_logo_openplacereviews@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A82ABA82694D67F00ED1F01 /* ic_custom_logo_openplacereviews@3x.png */; };
 		0A8F544D263949FC0020F5CF /* ic_custom_search_categories@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */; };
 		0A8F544E263949FC0020F5CF /* ic_custom_search_categories@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */; };
+		0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */; };
+		0AD1F3A726CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */; };
+		0AD1F3AA26CC034900EE4DFD /* ic_custom_multi_download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A826CC034800EE4DFD /* ic_custom_multi_download@3x.png */; };
+		0AD1F3AB26CC034900EE4DFD /* ic_custom_multi_download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A926CC034900EE4DFD /* ic_custom_multi_download@2x.png */; };
 		0CBDD091245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD07A245038CB00C94BC2 /* map_marker_direction_arrow_p2_color_pin_1@2x.png */; };
 		0CBDD093245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD07B245038CE00C94BC2 /* map_marker_direction_arrow_p2_color_pin_2@3x.png */; };
 		0CBDD095245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD07C245038CF00C94BC2 /* map_marker_direction_arrow_p2_color_pin_3@2x.png */; };
@@ -2764,6 +2768,11 @@
 		0A82ABA82694D67F00ED1F01 /* ic_custom_logo_openplacereviews@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_openplacereviews@3x.png"; path = "Resources/Icons/ic_custom_logo_openplacereviews@3x.png"; sourceTree = "<group>"; };
 		0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@2x.png"; path = "Resources/Icons/ic_custom_search_categories@2x.png"; sourceTree = "<group>"; };
 		0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@3x.png"; path = "Resources/Icons/ic_custom_search_categories@3x.png"; sourceTree = "<group>"; };
+		0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMultipleResourceViewController.h; sourceTree = "<group>"; };
+		0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMultipleResourceViewController.mm; sourceTree = "<group>"; };
+		0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMultipleResourceViewController.xib; sourceTree = "<group>"; };
+		0AD1F3A826CC034800EE4DFD /* ic_custom_multi_download@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_multi_download@3x.png"; path = "Resources/Icons/ic_custom_multi_download@3x.png"; sourceTree = "<group>"; };
+		0AD1F3A926CC034900EE4DFD /* ic_custom_multi_download@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_multi_download@2x.png"; path = "Resources/Icons/ic_custom_multi_download@2x.png"; sourceTree = "<group>"; };
 		0CBDD07A245038CB00C94BC2 /* map_marker_direction_arrow_p2_color_pin_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_marker_direction_arrow_p2_color_pin_1@2x.png"; path = "Resources/Icons/map_marker_direction_arrow_p2_color_pin_1@2x.png"; sourceTree = "<group>"; };
 		0CBDD07B245038CE00C94BC2 /* map_marker_direction_arrow_p2_color_pin_2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_marker_direction_arrow_p2_color_pin_2@3x.png"; path = "Resources/Icons/map_marker_direction_arrow_p2_color_pin_2@3x.png"; sourceTree = "<group>"; };
 		0CBDD07C245038CF00C94BC2 /* map_marker_direction_arrow_p2_color_pin_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_marker_direction_arrow_p2_color_pin_3@2x.png"; path = "Resources/Icons/map_marker_direction_arrow_p2_color_pin_3@2x.png"; sourceTree = "<group>"; };
@@ -6511,6 +6520,8 @@
 				32309A422698917F005751F5 /* ic_custom_map_zoom_in@3x.png */,
 				32309A3D26989113005751F5 /* ic_custom_map_zoom_out@2x.png */,
 				32309A3E26989113005751F5 /* ic_custom_map_zoom_out@3x.png */,
+				0AD1F3A926CC034900EE4DFD /* ic_custom_multi_download@2x.png */,
+				0AD1F3A826CC034800EE4DFD /* ic_custom_multi_download@3x.png */,
 				DA4C50EA25DD604E0096B60A /* CarPlay */,
 				0A82ABA72694D67F00ED1F01 /* ic_custom_logo_openplacereviews@2x.png */,
 				0A82ABA82694D67F00ED1F01 /* ic_custom_logo_openplacereviews@3x.png */,
@@ -9743,6 +9754,9 @@
 				DA5A7D9226C563A300F274C7 /* OALocalResourceInformationViewController.mm */,
 				DA5A7D9B26C563A300F274C7 /* OAManageResourcesViewController.h */,
 				DA5A7D7D26C563A300F274C7 /* OAManageResourcesViewController.mm */,
+				0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */,
+				0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */,
+				0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */,
 				DA5A7D9A26C563A300F274C7 /* OAOnlineTilesEditingViewController.h */,
 				DA5A7D8A26C563A300F274C7 /* OAOnlineTilesEditingViewController.mm */,
 				DA5A7D8926C563A300F274C7 /* OAOnlineTilesEditingViewController.xib */,
@@ -11576,12 +11590,14 @@
 				DA6471A922CF5433008F937F /* ic_custom_contour_lines@2x.png in Resources */,
 				DA5A82C426C563A800F274C7 /* OASegmentedControllCell.xib in Resources */,
 				DA5A83D126C563A800F274C7 /* OATransportRouteToolbarViewController.xib in Resources */,
+				0AD1F3AB26CC034900EE4DFD /* ic_custom_multi_download@2x.png in Resources */,
 				DA1341C6243DC5A90039D214 /* ic_action_sail_boat_dark@3x.png in Resources */,
 				DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */,
 				8433947F1FF4FA38006205A5 /* inclination_left.aiff in Resources */,
 				DA23424E23477F33003911B8 /* ic_custom_route@2x.png in Resources */,
 				15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */,
 				0CF5858B2440745F0081238D /* ic_custom_direction_widget_one@2x.png in Resources */,
+				0AD1F3AA26CC034900EE4DFD /* ic_custom_multi_download@3x.png in Resources */,
 				8441CB371B1370580033AC95 /* change_item_color@2x.png in Resources */,
 				8454DA211B2F16D700E5A5C5 /* ic_coordinates@3x.png in Resources */,
 				DA6471A322CF5433008F937F /* ic_custom_timer@3x.png in Resources */,
@@ -11933,6 +11949,7 @@
 				DA5A844126C563A900F274C7 /* OAMapillaryImageViewController.xib in Resources */,
 				DA5A840526C563A800F274C7 /* OAPOIViewController.xib in Resources */,
 				84F464211B664D3B00C1D96F /* ic_popup_no_internet@3x.png in Resources */,
+				0AD1F3A726CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib in Resources */,
 				DABF818D228BDE9300651A91 /* map_mapillary_location@2x.png in Resources */,
 				0CBDD09F245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_5@3x.png in Resources */,
 				DA1341F4243DC5A90039D214 /* ic_action_horse@3x.png in Resources */,
@@ -13571,6 +13588,7 @@
 				DA5A84E626C563A900F274C7 /* OAWaypointsRadiusScreen.mm in Sources */,
 				DA5A813326C563A700F274C7 /* OATerrainMapLayerProvider.mm in Sources */,
 				DA5A843B26C563A800F274C7 /* OAParkingViewController.mm in Sources */,
+				0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */,
 				DA5A842226C563A800F274C7 /* OAEditGPXColorViewController.m in Sources */,
 				DA5A844726C563A900F274C7 /* OAMapHudViewController.mm in Sources */,
 				DA5A816126C563A700F274C7 /* OAMapillaryPlugin.mm in Sources */,

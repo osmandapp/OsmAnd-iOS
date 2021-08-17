@@ -1148,6 +1148,8 @@
 {
     CGFloat bottomMargin = [OAUtilities getBottomMargin] > 0 ? [OAUtilities getBottomMargin] : kButtonOffset;
     CGFloat topSpace = DeviceScreenHeight - bottomMargin;
+    if (menuHeight > 0)
+        topSpace -= menuHeight + kButtonOffset;
     
     _optionsMenuButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _optionsMenuButton.bounds.size.height, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
     _driveModeButton.frame = CGRectMake([self getExtraScreenOffset] + kButtonWidth + kButtonOffset, topSpace - _driveModeButton.bounds.size.height, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);

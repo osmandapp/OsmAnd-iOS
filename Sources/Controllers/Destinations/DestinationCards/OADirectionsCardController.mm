@@ -65,12 +65,9 @@
     
     for (OADestination *destination in destinations)
     {
-        if (!destination.routePoint)
-        {
-            OADestinationItem *item = [[OADestinationItem alloc] init];
-            item.destination = destination;
-            [_items addObject:item];
-        }
+        OADestinationItem *item = [[OADestinationItem alloc] init];
+        item.destination = destination;
+        [_items addObject:item];
     }
     
     CLLocation* newLocation = _app.locationServices.lastKnownLocation;

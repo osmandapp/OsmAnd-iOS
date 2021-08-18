@@ -84,96 +84,6 @@
     }
 }
 
-- (void) updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder
-{
-    @synchronized(_syncObj)
-    {
-        NSMutableArray *routeDestinations = [NSMutableArray array];
-        
-        if (routePoints)
-        {
-            [routePoints enumerateObjectsUsingBlock:^(OAGpxRouteWptItem *item, NSUInteger idx, BOOL *stop)
-            {                
-                OADestination *destination = [[OADestination alloc] initWithDesc:item.point.name latitude:item.point.position.latitude longitude:item.point.position.longitude];
-                
-                destination.routePoint = YES;
-                
-                NSUInteger objIndex = [_app.data.destinations indexOfObject:destination];
-                if (objIndex != NSNotFound && !rebuildPointsOrder)
-                    destination = _app.data.destinations[objIndex];
-                
-                destination.routePointIndex = idx;
-                destination.routeTargetPoint = (item == [routePoints firstObject]);
-
-                if (item.point.color)
-                    destination.color = [OAUtilities colorFromString:item.point.color];
-                else
-                    destination.color = [UIColor whiteColor];
-                
-                [routeDestinations addObject:destination];
-            }];
-        }
-        
-        BOOL isSecondDestinationRoute = (_sortedDestinations.count > 1 && ((OADestination *)_sortedDestinations[1]).routePoint);
-
-        NSMutableArray *destinationsToRemove = [NSMutableArray array];
-        for (OADestination *destination in _app.data.destinations)
-            if (destination.routePoint && (![routeDestinations containsObject:destination] || rebuildPointsOrder))
-                [destinationsToRemove addObject:destination];
-        
-        for (OADestination *destination in destinationsToRemove)
-        {
-            [_app.data.destinations removeObject:destination];
-            [_sortedDestinations removeObject:destination];
-        }
-        
-        if (rebuildPointsOrder)
-        {
-            [routeDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop) {
-                
-                [_app.data.destinations addObject:destination];
-
-                if (idx == 0)
-                    [_sortedDestinations insertObject:destination atIndex:0];
-                else if (idx == 1 && isSecondDestinationRoute)
-                    [_sortedDestinations insertObject:destination atIndex:1];
-                else
-                    [_sortedDestinations addObject:destination];
-            }];
-        }
-        else
-        {
-            for (OADestination *destination in routeDestinations)
-            {
-                if (![_app.data.destinations containsObject:destination])
-                {
-                    [_app.data.destinations addObject:destination];
-                    [_sortedDestinations addObject:destination];
-                }
-            }
-            
-            [_sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
-             {
-                 if (destination.routePoint && destination.routeTargetPoint && idx > 0)
-                 {
-                     OADestination *firstDestination = [_sortedDestinations firstObject];
-                     if (firstDestination.routePoint)
-                     {
-                         [_sortedDestinations removeObject:firstDestination];
-                         [_sortedDestinations addObject:firstDestination];
-                     }
-                     [_sortedDestinations removeObject:destination];
-                     [_sortedDestinations insertObject:destination atIndex:0];
-                     
-                     *stop = YES;
-                 }
-             }];
-        }
-        
-        [self refreshDestinationIndexes];
-    }
-}
-
 - (void) refreshDestinationIndexes
 {
     @synchronized(_syncObj)
@@ -214,22 +124,10 @@
 {
     NSInteger res = 0;
     for (OADestination *destination in _app.data.destinations)
-        if (!destination.routePoint && !destination.hidden)
+        if (!destination.hidden)
             res++;
 
     return res;
-}
-
-- (void) moveRoutePointOnTop:(NSInteger)pointIndex
-{
-    for (OADestination *destination in self.sortedDestinations)
-    {
-        if (destination.routePoint && destination.routePointIndex == pointIndex)
-        {
-            [self moveDestinationOnTop:destination wasSelected:YES];
-            break;
-        }
-    }
 }
 
 - (void) moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected
@@ -238,8 +136,6 @@
     {
         NSUInteger newIndex = 0;
         OADestination *firstDestination = [_sortedDestinations firstObject];
-        if (firstDestination.routePoint && firstDestination.routeTargetPoint)
-            newIndex = 1;
         
         [_sortedDestinations removeObject:destination];
         [_sortedDestinations insertObject:destination atIndex:newIndex];
@@ -282,16 +178,13 @@
                 break;
             }
         
-        BOOL isRoute = ((OADestination *)self.sortedDestinations[0]).routePoint;
-        
         CGFloat distance = kMinDistanceFor2ndRowAutoSelection;
         OADestination *closestDestination;
         
         for (OADestination *destination in self.sortedDestinations)
         {
             double destDist = [destination distance:lat longitude:lon];
-            if (((isRoute && !isManualSelected && destination.routePoint && !destination.routeTargetPoint) ||
-                 (!isRoute && !destination.routePoint)) && destDist < distance)
+            if (destDist < distance)
             {
                 closestDestination = destination;
                 distance = destDist;
@@ -406,10 +299,7 @@
     h.longitude = destination.longitude;
     h.date = [NSDate date];
     
-    if (!destination.routePoint)
-        h.hType = OAHistoryTypeDirection;
-    else
-        h.hType = OAHistoryTypeRouteWpt;
+    h.hType = OAHistoryTypeDirection;
     
     [[OAHistoryHelper sharedInstance] addPoint:h];
 }

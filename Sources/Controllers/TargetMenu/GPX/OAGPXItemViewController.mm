@@ -22,7 +22,6 @@
 #import "OAGPXTrackColorCollection.h"
 #import "OADefaultFavorite.h"
 #import "OASelectedGPXHelper.h"
-#import "OAGPXRouter.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OASelectTrackFolderViewController.h"
@@ -276,10 +275,6 @@
 
 - (void)loadDoc
 {
-    OAGPXRouter *gpxRouter = [OAGPXRouter sharedInstance];
-    if (gpxRouter.gpx && [gpxRouter.gpx.gpxFilePath isEqualToString:self.gpx.gpxFilePath])
-        [gpxRouter cancelRoute];
-
     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
     self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
 }

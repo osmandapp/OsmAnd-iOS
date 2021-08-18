@@ -49,12 +49,12 @@
         return NO;
     
     OADestination *obj = (OADestination *)object;
-    return [obj.desc isEqualToString:self.desc] && [OAUtilities doublesEqualUpToDigits:5 source:obj.latitude destination:self.latitude] && [OAUtilities doublesEqualUpToDigits:5 source:obj.longitude destination:self.longitude] && obj.routePoint == self.routePoint;
+    return [obj.desc isEqualToString:self.desc] && [OAUtilities doublesEqualUpToDigits:5 source:obj.latitude destination:self.latitude] && [OAUtilities doublesEqualUpToDigits:5 source:obj.longitude destination:self.longitude];
 }
 
 -(NSUInteger)hash
 {
-    return [self.desc hash] + self.longitude * 10000 + self.latitude * 10000 + (self.routePoint ? 1 : 0);
+    return [self.desc hash] + self.longitude * 10000 + self.latitude * 10000;
 }
 
 #pragma mark - NSCoding
@@ -65,10 +65,6 @@
 #define kDestinationLongitude @"destination_longitude"
 #define kDestinationMarkerName @"destination_marker_name"
 #define kDestinationIndexName @"destination_index"
-
-#define kDestinationRoutePointName @"destination_route_point"
-#define kDestinationRouteTargetPointName @"destination_route_target_point"
-#define kDestinationRoutePointIndexName @"destination_route_point_index"
 
 #define kDestinationHidden @"destination_hidden"
 #define kDestinationManual @"destination_manual"
@@ -83,9 +79,6 @@
     [aCoder encodeObject:[NSNumber numberWithDouble:_longitude] forKey:kDestinationLongitude];
     [aCoder encodeObject:_markerResourceName forKey:kDestinationMarkerName];
     [aCoder encodeObject:[NSNumber numberWithInteger:_index] forKey:kDestinationIndexName];
-    [aCoder encodeObject:[NSNumber numberWithBool:_routePoint] forKey:kDestinationRoutePointName];
-    [aCoder encodeObject:[NSNumber numberWithBool:_routeTargetPoint] forKey:kDestinationRouteTargetPointName];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_routePointIndex] forKey:kDestinationRoutePointIndexName];
     [aCoder encodeObject:[NSNumber numberWithBool:_hidden] forKey:kDestinationHidden];
     [aCoder encodeObject:[NSNumber numberWithBool:_manual] forKey:kDestinationManual];
     [aCoder encodeObject:_creationDate forKey:kDestinationCreationDate];
@@ -101,10 +94,6 @@
         _longitude = [[aDecoder decodeObjectForKey:kDestinationLongitude] doubleValue];
         _markerResourceName = [aDecoder decodeObjectForKey:kDestinationMarkerName];
         _index = [[aDecoder decodeObjectForKey:kDestinationIndexName] integerValue];
-        _routePoint = [[aDecoder decodeObjectForKey:kDestinationRoutePointName] boolValue];
-        _routeTargetPoint = [[aDecoder decodeObjectForKey:kDestinationRouteTargetPointName] boolValue];
-        _routePointIndex = [[aDecoder decodeObjectForKey:kDestinationRoutePointIndexName] integerValue];
-        _hidden = [[aDecoder decodeObjectForKey:kDestinationHidden] boolValue];
         _manual = [[aDecoder decodeObjectForKey:kDestinationManual] boolValue];
         _creationDate = [aDecoder decodeObjectForKey:kDestinationCreationDate];
     }
@@ -119,9 +108,6 @@
     clone.color = _color;
     clone.markerResourceName = _markerResourceName;
     clone.index = _index;
-    clone.routePoint = _routePoint;
-    clone.routeTargetPoint = _routeTargetPoint;
-    clone.routePointIndex = _routePointIndex;
     clone.hidden = _hidden;
     clone.manual = _manual;
     clone.creationDate = _creationDate;

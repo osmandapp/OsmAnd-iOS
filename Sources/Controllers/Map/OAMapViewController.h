@@ -51,7 +51,6 @@
 
 @class OAGpxWpt;
 @class OAGpxMetadata;
-@class OAGPXRouteDocument;
 @class OAPOIUIFilter;
 @class OASearchWptAPI;
 @class OAMapRendererView;
@@ -97,9 +96,6 @@
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
 - (void) refreshMap;
-
-- (void) setDocFileRoute:(NSString *)fileName;
-- (void) setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc;
 
 - (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;

@@ -66,6 +66,7 @@
     item.size = resource->size;
     item.sizePkg = resource->packageSize;
     item.worldRegion = region;
+    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
     return item;
 }
 
@@ -101,7 +102,7 @@
 
 - (NSString *) getTypeStr
 {
-    return [OAResourcesUIHelper resourceTypeLocalized:_mapObject.indexItem.resourceType];
+    return [OAResourceType resourceTypeLocalized:_mapObject.indexItem.resourceType];
 }
 
 - (UIColor *) getAdditionalInfoColor
@@ -163,7 +164,7 @@
 {
     OAWorldRegion *region = _mapObject.worldRegion;
     OAResourceItem *item = _mapObject.indexItem;
-    NSString *resTypeLocalized = [OAResourcesUIHelper resourceTypeLocalized:item.resourceType];
+    NSString *resTypeLocalized = [OAResourceType resourceTypeLocalized:item.resourceType];
     NSString *iconInfo = @"ic_description.png";
     if (resTypeLocalized && resTypeLocalized.length > 0)
     {

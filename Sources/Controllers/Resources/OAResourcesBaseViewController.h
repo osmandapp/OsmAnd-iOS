@@ -34,8 +34,11 @@
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item;
 - (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item;
 
+- (void) showDownloadViewForTask:(id<OADownloadTask>)task;
+
 - (void) startDownloadOfItem:(OARepositoryResourceItem*)item;
-- (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name;
+- (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+            resourceName:(NSString *)name;
 
 - (void) offerCancelDownloadOf:(OAResourceItem *)item;
 

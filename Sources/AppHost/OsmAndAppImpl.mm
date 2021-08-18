@@ -437,6 +437,7 @@
     // Load world regions
     [self loadWorldRegions];
     [OAManageResourcesViewController prepareData];
+    [_worldRegion buildResourceGroupItem];
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];

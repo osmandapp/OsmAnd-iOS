@@ -59,6 +59,7 @@
                     item.size = resource->size;
                     item.sizePkg = resource->packageSize;
                     item.worldRegion = worldRegion;
+                    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
                     return item;
                 }
             }

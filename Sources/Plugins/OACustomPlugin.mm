@@ -163,7 +163,7 @@
         
     for (OASuggestedDownloadsItem *item in _suggestedDownloadItems)
     {
-        OsmAnd::ResourcesManager::ResourceType type = [OAResourcesUIHelper resourceTypeByScopeId:item.scopeId];
+        OsmAnd::ResourcesManager::ResourceType type = [OAResourceType resourceTypeByScopeId:item.scopeId];
 
         if (type != OsmAnd::ResourcesManager::ResourceType::Unknown)
         {

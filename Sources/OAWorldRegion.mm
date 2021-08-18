@@ -24,6 +24,7 @@
 #import "OAPointIContainer.h"
 
 #import "OAWorldRegion+Protected.h"
+#import "OAResourcesUIHelper.h"
 
 @implementation OAWorldRegion
 {
@@ -70,7 +71,7 @@
         _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);
         _bboxBottomRight = CLLocationCoordinate2DMake(latLonBottomRight.latitude, latLonBottomRight.longitude);
         _regionCenter = CLLocationCoordinate2DMake(region->regionCenter.latitude, region->regionCenter.longitude);
-        
+
         [self setLocalizedNamesFrom:region->localizedNames];
         
         if (!_localizedName && _nativeName.length == 0)
@@ -653,12 +654,73 @@
             NSString *regionDownloadId = region.downloadsIdPrefix;
             if ([regionDownloadId hasSuffix:@"."])
                 regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
-            
+
             if ([regionDownloadId isEqualToString:downloadName.lowercaseString])
                 return region;
         }
         return nil;
     }
+}
+
+- (void)buildResourceGroupItem
+{
+    NSArray<OAWorldRegion *> *subregions = self.subregions;
+    if (!subregions || subregions.count == 0)
+        return;
+
+    NSMutableArray<NSNumber *> *resourceGroupTypes = [[OAResourceType mapResourceTypes] mutableCopy];
+    [resourceGroupTypes removeObjectsInArray:self.resourceTypes];
+
+    if (![self hasGroupItems] && resourceGroupTypes.count > 0)
+    {
+        OAResourceGroupItem *group = [OAResourceGroupItem withParent:self];
+        NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:subregions resourceTypes:resourceGroupTypes isGroup:YES];
+        for (OAResourceItem *item in items)
+        {
+            if ([item isKindOfClass:OARepositoryResourceItem.class])
+                item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:((OARepositoryResourceItem *) item).resource->id.toNSString()]] firstObject];
+
+            [group addItem:item key:item.resourceType];
+        }
+        [group sort];
+        self.groupItem = group;
+    }
+
+    for (OAWorldRegion *subregion in subregions)
+    {
+        [subregion buildResourceGroupItem];
+        if ([subregion hasGroupItems] && [self.flattenedSubregions containsObject:subregion])
+        {
+            NSInteger indexOfSubregion = [self.flattenedSubregions indexOfObject:subregion];
+            if (indexOfSubregion != NSNotFound)
+            {
+                if (![self.flattenedSubregions[indexOfSubregion] hasGroupItems])
+                    self.flattenedSubregions[indexOfSubregion].groupItem = subregion.groupItem;
+            }
+        }
+    }
+}
+
+- (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type
+{
+    if ([self hasGroupItems])
+    {
+        OsmAndResourceType key = [OAResourceType toResourceType:type isGroup:YES];
+        [self.groupItem removeItem:key subregion:subregion];
+
+        NSArray<OAResourceItem *> *newItems = [OAResourcesUIHelper requestMapDownloadInfo:@[subregion] resourceTypes:@[type] isGroup:YES];
+        [self.groupItem addItems:newItems key:key];
+        [self.groupItem sort];
+    }
+    else
+    {
+        [self buildResourceGroupItem];
+    }
+}
+
+-(BOOL)hasGroupItems
+{
+    return self.groupItem && ![self.groupItem isEmpty];
 }
 
 @end

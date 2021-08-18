@@ -65,8 +65,8 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         return;
     
     // Skip other states except Finished (and completed)
-    if (task.state != OADownloadTaskStateFinished || task.error) {
-        
+    if (task.state != OADownloadTaskStateFinished || task.error)
+    {
         if (task.state == OADownloadTaskStateFinished)
             [_app updateScreenTurnOffSetting];
 
@@ -272,9 +272,9 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                         }
                         else
                         {
+                            OAWorldRegion *foundRegion;
                             if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
                             {
-                                OAWorldRegion *foundRegion;
                                 for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
                                 {
                                     if (resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
@@ -298,6 +298,8 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                     });
                                 }
                             }
+                            if (foundRegion)
+                                [foundRegion.superregion updateGroupItems:foundRegion type:[OAResourceType toValue:resource->type]];
                         }
                     }
                     else

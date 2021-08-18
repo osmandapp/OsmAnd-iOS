@@ -192,4 +192,6 @@
 #define color_place_open 0x2BBE31
 #define color_place_closed 0xDA3A3A
 
+#define resource_installed_icon_color 0x1FB38D
+
 #endif /* OAColors_h */

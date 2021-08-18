@@ -7,9 +7,7 @@
 //
 
 #import "OALocalResourceInformationViewController.h"
-
 #import "OsmAndApp.h"
-#include "Localization.h"
 #import "OALocalResourceInfoCell.h"
 #import "OAButtonCell.h"
 #import "OAPurchasesViewController.h"
@@ -20,11 +18,12 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAOnlineTilesEditingViewController.h"
+#import "OAResourcesUIHelper.h"
 
-typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
+#include "Localization.h"
 
-@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OATilesEditingViewControllerDelegate> {
-    
+@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OATilesEditingViewControllerDelegate>
+{
     NSArray *tableKeys;
     NSArray *tableValues;
     NSArray *tableButtons;
@@ -156,7 +155,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     {
         [tKeys addObject:OALocalizedString(@"res_created_on")];
         
-        if (!formatter) {
+        if (!formatter)
+        {
             formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -197,7 +197,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     {
         [tKeys addObject:OALocalizedString(@"res_created_on")];
         
-        if (!formatter) {
+        if (!formatter)
+        {
             formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -293,7 +294,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
     // Type
     [tKeys addObject:OALocalizedString(@"res_type")];
-    [tValues addObject:[OAResourcesUIHelper resourceTypeLocalized:localResource->type]];
+    [tValues addObject:[OAResourceType resourceTypeLocalized:localResource->type]];
 
     // Size
     [tKeys addObject:OALocalizedString(@"res_size")];
@@ -304,7 +305,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         // Timestamp
         NSDate *d = [NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000];
         
-        if (!formatter) {
+        if (!formatter)
+        {
             formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -383,8 +385,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     if (indexPath.section == 0)
     {
-        NSString* title = [tableKeys objectAtIndex:indexPath.row];
-        NSString* subtitle = [tableValues objectAtIndex:indexPath.row];
+        NSString *title = [tableKeys objectAtIndex:indexPath.row];
+        NSString *subtitle = [tableValues objectAtIndex:indexPath.row];
         
         // Obtain reusable cell or create one
         OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:[OALocalResourceInfoCell getCellIdentifier]];

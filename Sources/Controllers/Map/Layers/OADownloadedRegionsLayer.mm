@@ -237,6 +237,11 @@
     item.downloadTask = [[self.app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
     item.size = resource->size;
     item.worldRegion = region;
+
+    const auto localResource = self.app.resourcesManager->getLocalResource(resource->id);
+    item.resource = localResource;
+    item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
+
     return item;
 }
 
@@ -255,6 +260,11 @@
         item.downloadTask = [[self.app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
         item.size = resource->size;
         item.worldRegion = region;
+
+        const auto localResource = self.app.resourcesManager->getLocalResource(resource->id);
+        item.resource = localResource;
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
+
         return item;
     }
     else
@@ -271,6 +281,8 @@
         item.size = resource->size;
         item.sizePkg = resource->packageSize;
         item.worldRegion = region;
+        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+
         return item;
     }
 }
@@ -352,7 +364,7 @@
         targetPoint.location = mapObject.worldRegion.regionCenter;
         targetPoint.title = mapObject.worldRegion.localizedName ? mapObject.worldRegion.localizedName : mapObject.worldRegion.nativeName;
    
-        targetPoint.icon = [UIImage imageNamed:[OAResourcesUIHelper iconNameByresourceType:mapObject.indexItem.resourceType]];
+        targetPoint.icon = [OAResourceType getIcon:mapObject.indexItem.resourceType];
         targetPoint.type = OATargetMapDownload;
         targetPoint.targetObj = mapObject;
         targetPoint.sortIndex = (NSInteger)targetPoint.type;

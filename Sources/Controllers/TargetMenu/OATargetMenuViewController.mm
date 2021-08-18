@@ -349,6 +349,7 @@
                 repoItem.size = repoItem.resource->size;
                 repoItem.sizePkg = repoItem.resource->packageSize;
                 repoItem.worldRegion = item.worldRegion;
+                repoItem.date = item.date;
             }
             else if ([item isKindOfClass:OARepositoryResourceItem.class])
             {

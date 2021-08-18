@@ -308,7 +308,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         uint64_t _sizePkg = mapItem.sizePkg;
         if ((mapItem.resourceType == OsmAndResourceType::WikiMapRegion) && ![_iapHelper.wiki isActive])
             mapItem.disabled = YES;
-        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
 
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
         if (cell == nil)

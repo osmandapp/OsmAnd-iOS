@@ -17,6 +17,7 @@
 #import "FFCircularProgressView+isSpinning.h"
 #include "Localization.h"
 #import "OASizes.h"
+#import "OAColors.h"
 
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
@@ -170,6 +171,7 @@
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
         item.size = resourceInRepository->size;
         item.sizePkg = resourceInRepository->packageSize;
+        item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
 
         if (item.title == nil)
             continue;
@@ -369,6 +371,7 @@
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_import"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
+            [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
@@ -394,12 +397,12 @@
     if (cell.detailTextLabel != nil)
     {
         if (item.sizePkg > 0)
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
         else
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourceType resourceTypeLocalized:item.resourceType]];
     }
     
-    //[NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType]
+    //[NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType]
     
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {

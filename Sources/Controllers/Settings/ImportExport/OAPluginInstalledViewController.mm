@@ -236,7 +236,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
             mapItem.disabled = YES;
         }
         NSString *title = mapItem.title;
-        NSString *subtitle = [NSString stringWithFormat:@"%@ • %@", [OAResourcesUIHelper resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        NSString *subtitle = [NSString stringWithFormat:@"%@ • %@", [OAResourceType resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
 
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
         if (cell == nil)
@@ -292,7 +292,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
             }
         }
         
-        cell.imageView.image = [UIImage templateImageNamed: [OAResourcesUIHelper iconNameByResourseType:mapItem.resourceType]];
+        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)

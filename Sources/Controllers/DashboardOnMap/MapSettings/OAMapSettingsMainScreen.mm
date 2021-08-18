@@ -49,15 +49,19 @@
     
     OAMapStyleSettings *_styleSettings;
     NSArray *_filteredTopLevelParams;
-    
+    NSArray<OAMapStyleParameter *> *_routeParameters;
+
     OAAppModeCell *_appModeCell;
-    
+
     NSInteger favSection;
     NSInteger favRow;
     NSInteger tripsRow;
     NSInteger mapillaryRow;
     NSInteger contourLinesRow;
     NSInteger wikipediaRow;
+    NSInteger hikingRoutesRow;
+    NSInteger cycleRoutesRow;
+    NSInteger travelRoutesRow;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -70,11 +74,12 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
+        _routeParameters = [[OAMapStyleSettings sharedInstance] getParameters:@"routes"];
 
         title = OALocalizedString(@"configure_map");
 
         settingsScreen = EMapSettingsScreenMain;
-        
+
         vwController = viewController;
         tblView = tableView;
         [self initData];
@@ -227,68 +232,46 @@
     }
 
     NSMutableArray *sectionRoutes = [NSMutableArray array];
+    cycleRoutesRow = -1;
+    hikingRoutesRow = -1;
+    travelRoutesRow = -1;
 
-    NSMutableDictionary *sectionRoutesCycle = [NSMutableDictionary dictionary];
-    [sectionRoutesCycle setObject:OALocalizedString(@"rendering_attr_showCycleRoutes_name") forKey:@"name"];
-    [sectionRoutesCycle setObject:@"ic_action_bicycle_dark" forKey:@"primaryImg"];
-    [sectionRoutesCycle setObject:@"" forKey:@"value"];
-    [sectionRoutesCycle setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];
+    for (OAMapStyleParameter *routeParameter in _routeParameters)
+    {
+        NSMutableDictionary *cellRoutes = [NSMutableDictionary dictionary];
+        cellRoutes[@"name"] = routeParameter.title;
+        cellRoutes[@"value"] = @"";
 
-    NSMutableDictionary *sectionRoutesMtb = [NSMutableDictionary dictionary];
-    [sectionRoutesMtb setObject:OALocalizedString(@"rendering_attr_showMtbRoutes_name") forKey:@"name"];
-    [sectionRoutesMtb setObject:@"ic_action_bicycle_dark" forKey:@"primaryImg"];
-    [sectionRoutesMtb setObject:@"" forKey:@"value"];
-    [sectionRoutesMtb setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
-    [sectionRoutesMtb setObject:@"rendering_attr_showMtbRoutes_name" forKey:@"key"];
+        if ([routeParameter.title isEqualToString:OALocalizedString(@"rendering_attr_showCycleRoutes_name")])
+        {
+            cycleRoutesRow = [_routeParameters indexOfObject:routeParameter];
+            cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
+        }
+        else if ([routeParameter.title isEqualToString:OALocalizedString(@"rendering_attr_hikingRoutesOSMC_name")])
+        {
+            hikingRoutesRow = [_routeParameters indexOfObject:routeParameter];
+            cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
+        }
+        else if ([routeParameter.title isEqualToString:OALocalizedString(@"travel_routes")])
+        {
+            travelRoutesRow = [_routeParameters indexOfObject:routeParameter];
+            cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
+        }
+        else
+        {
+            cellRoutes[@"type"] = [OASwitchTableViewCell getCellIdentifier];
+            cellRoutes[@"key"] = [NSString stringWithFormat:@"routes_%@", routeParameter.title];
+            cellRoutes[@"switch"] = routeParameter.storedValue;
+            cellRoutes[@"tag"] = @([_routeParameters indexOfObject:routeParameter]);
+        }
 
-    NSMutableDictionary *sectionRoutesHiking = [NSMutableDictionary dictionary];
-    [sectionRoutesHiking setObject:OALocalizedString(@"rendering_attr_hikingRoutesOSMC_name") forKey:@"name"];
-    [sectionRoutesHiking setObject:@"ic_action_trekking_dark" forKey:@"primaryImg"];
-    [sectionRoutesHiking setObject:@"" forKey:@"value"];
-    [sectionRoutesHiking setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];
+        [sectionRoutes addObject:cellRoutes];
+    }
 
-    NSMutableDictionary *sectionRoutesAlpineHiking = [NSMutableDictionary dictionary];
-    [sectionRoutesAlpineHiking setObject:OALocalizedString(@"rendering_attr_alpineHiking_name") forKey:@"name"];
-    [sectionRoutesAlpineHiking setObject:@"ic_action_trekking_dark" forKey:@"primaryImg"];
-    [sectionRoutesAlpineHiking setObject:@"" forKey:@"value"];
-    [sectionRoutesAlpineHiking setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
-    [sectionRoutesAlpineHiking setObject:@"rendering_attr_alpineHiking_name" forKey:@"key"];
-
-    NSMutableDictionary *sectionRoutesSki = [NSMutableDictionary dictionary];
-    [sectionRoutesSki setObject:OALocalizedString(@"rendering_attr_pisteRoutes_name") forKey:@"name"];
-    [sectionRoutesSki setObject:@"ic_action_skiing" forKey:@"primaryImg"];
-    [sectionRoutesSki setObject:@"" forKey:@"value"];
-    [sectionRoutesSki setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
-    [sectionRoutesSki setObject:@"rendering_attr_pisteRoutes_name" forKey:@"key"];
-
-    NSMutableDictionary *sectionRoutesHorse = [NSMutableDictionary dictionary];
-    [sectionRoutesHorse setObject:OALocalizedString(@"rendering_attr_horseRoutes_name") forKey:@"name"];
-    [sectionRoutesHorse setObject:@"ic_action_horse" forKey:@"primaryImg"];
-    [sectionRoutesHorse setObject:@"" forKey:@"value"];
-    [sectionRoutesHorse setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
-    [sectionRoutesHorse setObject:@"rendering_attr_horseRoutes_name" forKey:@"key"];
-
-    NSMutableDictionary *sectionRoutesWhitewater = [NSMutableDictionary dictionary];
-    [sectionRoutesWhitewater setObject:OALocalizedString(@"rendering_attr_whiteWaterSports_name") forKey:@"name"];
-    [sectionRoutesWhitewater setObject:@"ic_action_horse" forKey:@"primaryImg"];
-    [sectionRoutesWhitewater setObject:@"" forKey:@"value"];
-    [sectionRoutesWhitewater setObject:[OASwitchTableViewCell getCellIdentifier] forKey:@"type"];
-    [sectionRoutesWhitewater setObject:@"rendering_attr_whiteWaterSports_name" forKey:@"key"];
-
-    NSMutableDictionary *sectionRoutesTravel = [NSMutableDictionary dictionary];
+    /*NSMutableDictionary *sectionRoutesTravel = [NSMutableDictionary dictionary];
     [sectionRoutesTravel setObject:OALocalizedString(@"travel_routes") forKey:@"name"];
-    [sectionRoutesTravel setObject:@"ic_custom_routes" forKey:@"primaryImg"];
     [sectionRoutesTravel setObject:@"" forKey:@"value"];
-    [sectionRoutesTravel setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];
-
-    [sectionRoutes addObject:sectionRoutesCycle];
-    [sectionRoutes addObject:sectionRoutesMtb];
-    [sectionRoutes addObject:sectionRoutesHiking];
-    [sectionRoutes addObject:sectionRoutesAlpineHiking];
-    [sectionRoutes addObject:sectionRoutesSki];
-    [sectionRoutes addObject:sectionRoutesHorse];
-    [sectionRoutes addObject:sectionRoutesWhitewater];
-    [sectionRoutes addObject:sectionRoutesTravel];
+    [sectionRoutesTravel setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];*/
 
     NSArray *arrTop = @[
             @{
@@ -585,6 +568,12 @@
                 [cell.switchView setOn:[_settings.mapSettingShowOnlineNotes get]];
                 [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            else if ([data[@"key"] hasPrefix:@"routes_"])
+            {
+                [cell.switchView setOn:[data[@"switch"] isEqualToString:@"true"]];
+                [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+                cell.switchView.tag = ((NSNumber *) data[@"tag"]).integerValue;
+            }
         }
         outCell = cell;
     }
@@ -641,15 +630,12 @@
             }
             cell.textView.text = data[@"name"];
             NSString *desc = data[@"description"];
-            NSString *primaryImg = data[@"primaryImg"];
             NSString *secondaryImg = data[@"secondaryImg"];
             cell.descriptionView.text = desc;
             cell.descriptionView.hidden = desc.length == 0;
-            [cell.imgView setImage:primaryImg.length > 0 ? [UIImage imageNamed:primaryImg] : nil];
             [cell setSecondaryImage:secondaryImg.length > 0 ? [UIImage imageNamed:secondaryImg] : nil];
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
-            cell.imgView.hidden = primaryImg.length > 0;
         }
         outCell = cell;
     }
@@ -713,6 +699,22 @@
         }
         else
             _app.data.overlayMapSource = nil;
+    }
+}
+
+- (void)mapSettingSwitchChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch *)sender;
+    if (switchView)
+    {
+        OAMapStyleParameter *p = _routeParameters[switchView.tag];
+        if (p)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                p.value = switchView.isOn ? @"true" : @"false";
+                [_styleSettings save:p];
+            });
+        }
     }
 }
 
@@ -855,11 +857,11 @@
 
         case 1: // Routes
         {
-            if (indexPath.row == 0)
+            if (indexPath.row == cycleRoutesRow)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCycleRoutes];
-            else if (indexPath.row == 2)
+            else if (indexPath.row == hikingRoutesRow)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenHikingRoutes];
-            else if (indexPath.row == 7)
+            else if (indexPath.row == travelRoutesRow)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTravelRoutes];
 
             break;

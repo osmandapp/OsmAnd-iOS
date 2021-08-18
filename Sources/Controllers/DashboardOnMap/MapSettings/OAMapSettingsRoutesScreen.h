@@ -1,5 +1,5 @@
 //
-//  OAMapSettingsCycleRoutesScreen.h
+//  OAMapSettingsRoutesScreen.h
 //  OsmAnd
 //
 //  Created by Skalii on 16.08.2021.
@@ -8,6 +8,6 @@
 
 #import "OAMapSettingsScreen.h"
 
-@interface OAMapSettingsCycleRoutesScreen : NSObject<OAMapSettingsScreen>
+@interface OAMapSettingsRoutesScreen : NSObject<OAMapSettingsScreen>
 
 @end

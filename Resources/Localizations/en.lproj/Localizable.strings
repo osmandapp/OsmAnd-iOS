@@ -2257,8 +2257,7 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation";
 "rendering_value_walkingRoutesOSMC_description" = "Assign color for routes basedon their individually locally assigned color (if present on OpenStreetMap) and hiking shield symbol";
 "shared_string_relation" = "Relation";
-"routes_color_by_type" = "Routes color by";
-
+"routes_color_by_type" = "Color routes by…";
 
 // Release Notes
 // instruction:

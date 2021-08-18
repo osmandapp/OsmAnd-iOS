@@ -10,8 +10,6 @@
 #import "OATargetPoint.h"
 #import "OADestination.h"
 #import "OADestinationCell.h"
-#import "OAGPXRouter.h"
-#import "OAGPXRouteDocument.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "Localization.h"

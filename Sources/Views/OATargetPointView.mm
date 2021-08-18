@@ -19,8 +19,6 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXRouter.h"
-#import "OAGPXRouteDocument.h"
 #import "OAEditTargetViewController.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"

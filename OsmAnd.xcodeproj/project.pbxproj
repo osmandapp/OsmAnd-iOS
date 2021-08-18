@@ -1190,6 +1190,7 @@
 		DA32846A26CBF7790036BA73 /* img_background_plans.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32846926CBF7780036BA73 /* img_background_plans.png */; };
 		DA32847D26CC01BA0036BA73 /* export_items@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32847B26CC01B90036BA73 /* export_items@3x.png */; };
 		DA32847E26CC01BA0036BA73 /* export_items@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32847C26CC01BA0036BA73 /* export_items@2x.png */; };
+		DA32848326CD38170036BA73 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA32848126CD38170036BA73 /* Settings.bundle */; };
 		DA32BBF025C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */; };
 		DA32BBF225C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
@@ -1442,7 +1443,6 @@
 		DA5A81E526C563A700F274C7 /* OAGPXDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ABB26C563A100F274C7 /* OAGPXDatabase.mm */; };
 		DA5A81E626C563A700F274C7 /* OAGpxRoutePoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ABE26C563A100F274C7 /* OAGpxRoutePoint.mm */; };
 		DA5A81E726C563A700F274C7 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC126C563A100F274C7 /* OAGPXTrackAnalysis.mm */; };
-		DA5A81E826C563A700F274C7 /* OAGPXRouteDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC426C563A100F274C7 /* OAGPXRouteDocument.mm */; };
 		DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC826C563A100F274C7 /* OAHistoryHelper.m */; };
 		DA5A81EA26C563A700F274C7 /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC926C563A100F274C7 /* OAHistoryItem.m */; };
 		DA5A81EB26C563A700F274C7 /* OAHistoryDB.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACA26C563A100F274C7 /* OAHistoryDB.m */; };
@@ -2327,7 +2327,6 @@
 		DA5A856726C563A900F274C7 /* OAAmenityLocationPoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810726C563A600F274C7 /* OAAmenityLocationPoint.mm */; };
 		DA5A856826C563A900F274C7 /* OATransportRoutingHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810E26C563A600F274C7 /* OATransportRoutingHelper.mm */; };
 		DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810F26C563A600F274C7 /* OARouteProvider.mm */; };
-		DA5A856A26C563A900F274C7 /* OAGPXRouter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811226C563A600F274C7 /* OAGPXRouter.mm */; };
 		DA5A856B26C563A900F274C7 /* OATspAnt.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811326C563A600F274C7 /* OATspAnt.m */; };
 		DA5A856C26C563A900F274C7 /* OARouteImporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811526C563A600F274C7 /* OARouteImporter.mm */; };
 		DA5A856D26C563A900F274C7 /* OATargetPointsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811B26C563A600F274C7 /* OATargetPointsHelper.mm */; };
@@ -4000,6 +3999,8 @@
 		DA32846926CBF7780036BA73 /* img_background_plans.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_background_plans.png; path = Resources/Icons/img_background_plans.png; sourceTree = "<group>"; };
 		DA32847B26CC01B90036BA73 /* export_items@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "export_items@3x.png"; path = "Resources/Icons/export_items@3x.png"; sourceTree = "<group>"; };
 		DA32847C26CC01BA0036BA73 /* export_items@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "export_items@2x.png"; path = "Resources/Icons/export_items@2x.png"; sourceTree = "<group>"; };
+		DA32848126CD38170036BA73 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		DA32848226CD38170036BA73 /* OA-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OA-Prefix.pch"; sourceTree = "<group>"; };
 		DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_attach_track@3x.png"; path = "Resources/Icons/ic_custom_attach_track@3x.png"; sourceTree = "<group>"; };
 		DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_attach_track@2x.png"; path = "Resources/Icons/ic_custom_attach_track@2x.png"; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -4464,8 +4465,6 @@
 		DA5A7AC026C563A100F274C7 /* OAGPXDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDatabase.h; sourceTree = "<group>"; };
 		DA5A7AC126C563A100F274C7 /* OAGPXTrackAnalysis.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXTrackAnalysis.mm; sourceTree = "<group>"; };
 		DA5A7AC226C563A100F274C7 /* OAGPXMutableDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXMutableDocument.h; sourceTree = "<group>"; };
-		DA5A7AC326C563A100F274C7 /* OAGPXRouteDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXRouteDocument.h; sourceTree = "<group>"; };
-		DA5A7AC426C563A100F274C7 /* OAGPXRouteDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXRouteDocument.mm; sourceTree = "<group>"; };
 		DA5A7AC626C563A100F274C7 /* OAHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryItem.h; sourceTree = "<group>"; };
 		DA5A7AC726C563A100F274C7 /* OAHistoryDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryDB.h; sourceTree = "<group>"; };
 		DA5A7AC826C563A100F274C7 /* OAHistoryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHistoryHelper.m; sourceTree = "<group>"; };
@@ -5974,9 +5973,7 @@
 		DA5A810E26C563A600F274C7 /* OATransportRoutingHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportRoutingHelper.mm; sourceTree = "<group>"; };
 		DA5A810F26C563A600F274C7 /* OARouteProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteProvider.mm; sourceTree = "<group>"; };
 		DA5A811126C563A600F274C7 /* OATspAnt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATspAnt.h; sourceTree = "<group>"; };
-		DA5A811226C563A600F274C7 /* OAGPXRouter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXRouter.mm; sourceTree = "<group>"; };
 		DA5A811326C563A600F274C7 /* OATspAnt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATspAnt.m; sourceTree = "<group>"; };
-		DA5A811426C563A600F274C7 /* OAGPXRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXRouter.h; sourceTree = "<group>"; };
 		DA5A811526C563A600F274C7 /* OARouteImporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteImporter.mm; sourceTree = "<group>"; };
 		DA5A811626C563A600F274C7 /* OAAlarmInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAlarmInfo.h; sourceTree = "<group>"; };
 		DA5A811726C563A600F274C7 /* OARouteDirectionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteDirectionInfo.h; sourceTree = "<group>"; };
@@ -7869,6 +7866,7 @@
 				BBA858EB17C222C500AADCC7 /* README.md */,
 				BBE57D4F17C2208600C349CC /* Resources */,
 				DA5A78FF26C5639F00F274C7 /* Sources */,
+				DA32848026CD38170036BA73 /* Support Files */,
 				DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
@@ -8154,6 +8152,15 @@
 			);
 			name = Profile;
 			path = Resources/Icons/Profile;
+			sourceTree = "<group>";
+		};
+		DA32848026CD38170036BA73 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA32848126CD38170036BA73 /* Settings.bundle */,
+				DA32848226CD38170036BA73 /* OA-Prefix.pch */,
+			);
+			path = "Support Files";
 			sourceTree = "<group>";
 		};
 		DA4C50EA25DD604E0096B60A /* CarPlay */ = {
@@ -8894,8 +8901,6 @@
 				DA5A7AB526C563A100F274C7 /* OAGpxInfo.m */,
 				DA5A7AC226C563A100F274C7 /* OAGPXMutableDocument.h */,
 				DA5A7AB426C563A100F274C7 /* OAGPXMutableDocument.mm */,
-				DA5A7AC326C563A100F274C7 /* OAGPXRouteDocument.h */,
-				DA5A7AC426C563A100F274C7 /* OAGPXRouteDocument.mm */,
 				DA5A7AB926C563A100F274C7 /* OAGpxRoutePoint.h */,
 				DA5A7ABE26C563A100F274C7 /* OAGpxRoutePoint.mm */,
 				DA5A7AB326C563A100F274C7 /* OAGPXTrackAnalysis.h */,
@@ -11092,9 +11097,7 @@
 			isa = PBXGroup;
 			children = (
 				DA5A811126C563A600F274C7 /* OATspAnt.h */,
-				DA5A811226C563A600F274C7 /* OAGPXRouter.mm */,
 				DA5A811326C563A600F274C7 /* OATspAnt.m */,
-				DA5A811426C563A600F274C7 /* OAGPXRouter.h */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -11734,6 +11737,7 @@
 				DA1BC13A233F9B01004DAF78 /* ic_custom_marker@2x.png in Resources */,
 				3A2D89221A28D69800511A5C /* icon_edit_active@2x.png in Resources */,
 				0A8F544D263949FC0020F5CF /* ic_custom_search_categories@2x.png in Resources */,
+				DA32848326CD38170036BA73 /* Settings.bundle in Resources */,
 				DAB985B4212423990081F8F8 /* el_tts.js in Resources */,
 				8466964C207CD7E000BA971B /* ic_action_clear_all@2x.png in Resources */,
 				DAF3454922F4482B009E2EB6 /* ic_custom_compound_action_hide_bottom@2x.png in Resources */,
@@ -13612,12 +13616,10 @@
 				DA5A819526C563A700F274C7 /* OANavStartStopAction.mm in Sources */,
 				DA5A81E626C563A700F274C7 /* OAGpxRoutePoint.mm in Sources */,
 				DA5A84B626C563A900F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,
-				DA5A81E826C563A700F274C7 /* OAGPXRouteDocument.mm in Sources */,
 				DA5A814D26C563A700F274C7 /* OASearchCategoriesListController.mm in Sources */,
 				DA5A81F726C563A700F274C7 /* OAChoosePlanViewController.mm in Sources */,
 				DA5A84F126C563A900F274C7 /* OAMapSource.m in Sources */,
 				DA5A825526C563A700F274C7 /* OAArrivalAnnouncementViewController.m in Sources */,
-				DA5A856A26C563A900F274C7 /* OAGPXRouter.mm in Sources */,
 				DA5A816B26C563A700F274C7 /* OANoImagesCard.m in Sources */,
 				DA5A852B26C563A900F274C7 /* OAWaypointUIHelper.mm in Sources */,
 				DA5A849F26C563A900F274C7 /* OAChangeRouteModeCommand.mm in Sources */,
@@ -14386,7 +14388,7 @@
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "OA-Prefix.pch";
+				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -14442,7 +14444,7 @@
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "OA-Prefix.pch";
+				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

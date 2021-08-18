@@ -652,9 +652,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *mapSettingShowRecordingTrack;
 @property (nonatomic) OACommonBoolean *mapSettingShowTripRecordingStartDialog;
 
-@property (nonatomic) NSString* mapSettingActiveRouteFilePath;
-@property (nonatomic) int mapSettingActiveRouteVariantType;
-
 @property (nonatomic) OACommonString *selectedPoiFilters;
 
 @property (nonatomic) OACommonInteger *discountId;

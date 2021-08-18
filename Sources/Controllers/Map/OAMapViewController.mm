@@ -29,12 +29,10 @@
 #import "OAPOIFiltersHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
-#import "OAGPXRouteDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
 #import "OAGpxWptItem.h"
-#import "OAGPXRouter.h"
 #import "OAGpxRoutePoint.h"
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
@@ -124,10 +122,6 @@
 {
     // -------------------------------------------------------------------------------------------
 
-    OAAutoObserverProxy* _gpxRouteDefinedObserver;
-    OAAutoObserverProxy* _gpxRouteCanceledObserver;
-    OAAutoObserverProxy* _gpxRouteChangedObserver;
-
     OAAutoObserverProxy* _updateGpxTracksObserver;
     OAAutoObserverProxy* _updateRecTrackObserver;
     OAAutoObserverProxy* _updateRouteTrackObserver;
@@ -135,16 +129,12 @@
     OAAutoObserverProxy* _trackRecordingObserver;
     
     NSString *_gpxDocFileTemp;
-    NSString *_gpxDocFileRoute;
 
-    // Route gpx
-    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsRoute;
     // Temp gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsTemp;
     // Currently recording gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsRec;
 
-    OAGPXRouter *_gpxRouter;
     OASelectedGPXHelper *_selectedGpxHelper;
     
     BOOL _tempTrackShowing;
@@ -194,6 +184,7 @@
     
     UITapGestureRecognizer* _grZoomIn;
     UITapGestureRecognizer* _grZoomOut;
+    UITapGestureRecognizer* _grZoomDoubleTap;
     UIPanGestureRecognizer* _grElevation;
     UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
@@ -224,7 +215,6 @@
     self.mapViewLoaded = NO;
     
     _app = [OsmAndApp instance];
-    _gpxRouter = [OAGPXRouter sharedInstance];
     _selectedGpxHelper = [OASelectedGPXHelper instance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
     
@@ -239,16 +229,6 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
-
-    _gpxRouteDefinedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onGpxRouteDefined)
-                                                              andObserve:_gpxRouter.routeDefinedObservable];
-    _gpxRouteCanceledObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onGpxRouteCanceled)
-                                                              andObserve:_gpxRouter.routeCanceledObservable];
-    _gpxRouteChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                          withHandler:@selector(onGpxRouteChanged)
-                                                           andObserve:_gpxRouter.routeChangedObservable];
 
     /*
     _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
@@ -361,6 +341,13 @@
     _grZoomOut.delegate = self;
     _grZoomOut.numberOfTapsRequired = 2;
     _grZoomOut.numberOfTouchesRequired = 2;
+    
+    // - double tap zoom gesture
+    _grZoomDoubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                         action:@selector(zoomOutGestureDetected:)];
+    _grZoomOut.delegate = self;
+    _grZoomOut.numberOfTapsRequired = 2;
+    _grZoomOut.numberOfTouchesRequired = 1;
     
     // - Elevation gesture
     _grElevation = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -683,17 +670,6 @@
         _mapView.viewportYScale = 1.5f;
     else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != 1.f)
         _mapView.viewportYScale = 1.f;
-}
-
-- (void) setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc
-{
-    _gpxDocsRoute.clear();
-    _gpxDocsRoute.append([doc getDocument]);
-}
-
-- (void) setDocFileRoute:(NSString *)fileName
-{
-    _gpxDocFileRoute = fileName;
 }
 
 - (void) setupMapArrowsLocation
@@ -1627,42 +1603,6 @@
     });
 }
 
-- (void) onGpxRouteDefined
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            [_gpxRouter.routeDoc buildRouteTrack];
-            [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self refreshGpxTracks];
-            });
-        });
-    });
-}
-
-- (void) onGpxRouteCanceled
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self hideRouteGpxTrack];
-    });
-}
-
-- (void) onGpxRouteChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self showRouteGpxTrack];
-    });
-}
-
 - (void) refreshMap
 {
     if (_app.locationServices.status == OALocationServicesStatusActive)
@@ -1714,8 +1654,6 @@
 
         if (!_gpxDocFileTemp)
             _gpxDocsTemp.clear();
-        if (!_gpxDocFileRoute)
-            _gpxDocsRoute.clear();
 
         _gpxDocsRec.clear();
         
@@ -1944,15 +1882,8 @@
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
             [self showRecGpxTrack:YES];
         
-        if (_gpxRouter.gpx && !_gpxDocFileRoute)
-        {
-            [_gpxRouter.routeDoc buildRouteTrack];
-            [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
-        }
-        
         [_selectedGpxHelper buildGpxList];
-        if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
+        if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];
         
         [self hideProgressHUD];
@@ -2161,24 +2092,6 @@
     }
 }
 
-- (void) showRouteGpxTrack
-{
-    @synchronized(_rendererSync)
-    {
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
-}
-
-- (void) hideRouteGpxTrack
-{
-    @synchronized(_rendererSync)
-    {
-        _gpxDocsRoute.clear();
-        _gpxDocFileRoute = nil;
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
-}
-
 - (void) showTempGpxTrack:(NSString *)filePath
 {
     [self showTempGpxTrack:filePath update:YES];
@@ -2379,20 +2292,6 @@
             return YES;
     }
     
-    if (!_gpxDocsRoute.isEmpty())
-    {
-        for (OAGpxRoutePoint *point in _gpxRouter.routeDoc.locationMarks)
-        {
-            if ([OAUtilities isCoordEqual:point.position.latitude srcLon:point.position.longitude destLat:location.latitude destLon:location.longitude])
-            {
-                found = YES;
-            }
-        }
-        
-        if (found)
-            return YES;
-    }
-    
     return NO;
 }
 
@@ -2517,29 +2416,6 @@
             groups.clear();
         }
     }
-
-    if (!_gpxDocsRoute.isEmpty())
-    {
-        for (OAGpxRoutePoint *point in _gpxRouter.routeDoc.locationMarks)
-        {
-            if (point.type.length > 0)
-                [groupSet addObject:point.type];
-
-            if ([OAUtilities isCoordEqual:point.position.latitude srcLon:point.position.longitude destLat:location.latitude destLon:location.longitude])
-            {
-                self.foundWpt = point;
-                self.foundWptDocPath = _gpxDocFileRoute;
-                
-                found = YES;
-            }
-        }
-        
-        if (found)
-        {
-            self.foundWptGroups = [groupSet allObjects];
-            return YES;
-        }
-    }
     
     return NO;
 }
@@ -2560,23 +2436,6 @@
         
         [self hideContextPinMarker];
         
-        return YES;
-    }
-    else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
-    {
-        auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsRoute.first());
-        auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-        
-        gpx->locationMarks.removeOne(_foundWpt.wpt);
-
-        [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
-        [[OAGPXDatabase sharedDb] save];
-        
-        [[OAGPXRouter sharedInstance].routeDoc removeRoutePoint:self.foundWpt];
-        [[OAGPXRouter sharedInstance] saveRouteIfModified];
-        
-        [self hideContextPinMarker];
-
         return YES;
     }
     else
@@ -2636,11 +2495,6 @@
         [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
 
         return YES;
-    }
-    else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
-    {
-        [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
-        [[OAGPXRouter sharedInstance] saveRouteIfModified];
     }
     else
     {
@@ -2775,37 +2629,6 @@
             
             return YES;
         }
-        
-        if ([_gpxDocFileRoute isEqualToString:[gpxFileName lastPathComponent]])
-        {
-            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsRoute.first());
-            auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-            
-            std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
-            p.reset(new OsmAnd::GpxDocument::GpxWpt());
-            wpt.wpt = p;
-
-            OAGpxRoutePoint *rp = [[OAGPXRouter sharedInstance].routeDoc addRoutePoint:wpt];
-            
-            gpx->locationMarks.append(p);
-            
-            self.foundWpt = rp;
-            self.foundWptDocPath = gpxFileName;
-            
-            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
-            [[OAGPXDatabase sharedDb] save];
-            
-            NSMutableSet *groups = [NSMutableSet set];
-            for (auto& loc : gpx->locationMarks)
-            {
-                if (!loc->type.isEmpty())
-                    [groups addObject:loc->type.toNSString()];
-            }
-            
-            self.foundWptGroups = [groups allObjects];
-                        
-            return YES;
-        }
     }
     
     return YES;
@@ -2835,13 +2658,6 @@
         if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
             auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
-            auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-            OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
-            return gpxDoc.locationMarks;
-        }
-        if ([_gpxDocFileRoute isEqualToString:[gpxFileName lastPathComponent]])
-        {
-            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsRoute.first());
             auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
             OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
             return gpxDoc.locationMarks;
@@ -3080,7 +2896,7 @@
 
 - (void) initRendererWithGpxTracks
 {
-    if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
+    if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
     {
         QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
         auto activeGpx = _selectedGpxHelper.activeGpx;
@@ -3089,8 +2905,6 @@
             if (it.value())
                 docs[it.key()] = it.value();
         }
-        if (_gpxDocFileRoute && !_gpxDocsRoute.isEmpty())
-            docs[QString::fromNSString(_gpxDocFileRoute)] = _gpxDocsRoute.first();
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
         

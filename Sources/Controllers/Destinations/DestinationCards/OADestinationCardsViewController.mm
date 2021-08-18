@@ -23,8 +23,6 @@
 #import "OADirectionAppearanceViewController.h"
 
 #import "OsmAndApp.h"
-#import "OAGPXRouter.h"
-#import "OAGPXRouteDocument.h"
 #import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore.h>

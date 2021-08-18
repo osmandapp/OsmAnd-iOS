@@ -82,9 +82,6 @@
 #define settingMapLanguageShowLocalKey @"settingMapLanguageShowLocalKey"
 #define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
 
-#define mapSettingActiveRouteFilePathKey @"mapSettingActiveRouteFilePathKey"
-#define mapSettingActiveRouteVariantTypeKey @"mapSettingActiveRouteVariantTypeKey"
-
 #define selectedPoiFiltersKey @"selectedPoiFiltersKey"
 #define pluginsKey @"pluginsKey"
 #define impassableRoadsKey @"impassableRoadsKey"
@@ -3047,9 +3044,6 @@
         [_globalPreferences setObject:_mapSettingShowRecordingTrack forKey:@"show_saved_track_remember"];
         [_globalPreferences setObject:_mapSettingShowTripRecordingStartDialog forKey:@"show_trip_recording_start_dialog"];
 
-        _mapSettingActiveRouteFilePath = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFilePathKey];
-        _mapSettingActiveRouteVariantType = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteVariantTypeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingActiveRouteVariantTypeKey] : 0;
-
         _selectedPoiFilters = [OACommonString withKey:selectedPoiFiltersKey defValue:@""];
         [_profilePreferences setObject:_selectedPoiFilters forKey:@"selected_poi_filter_for_map"];
 
@@ -3992,18 +3986,6 @@
     NSArray *array = [set allObjects];
     if (![array isEqualToArray:_plugins.get])
         [_plugins set:array];
-}
-
-- (void) setMapSettingActiveRouteFilePath:(NSString *)mapSettingActiveRouteFilePath
-{
-    _mapSettingActiveRouteFilePath = mapSettingActiveRouteFilePath;
-    [[NSUserDefaults standardUserDefaults] setObject:_mapSettingActiveRouteFilePath forKey:mapSettingActiveRouteFilePathKey];
-}
-
-- (void) setMapSettingActiveRouteVariantType:(int)mapSettingActiveRouteVariantType
-{
-    _mapSettingActiveRouteVariantType = mapSettingActiveRouteVariantType;
-    [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingActiveRouteVariantType forKey:mapSettingActiveRouteVariantTypeKey];
 }
 
 - (void) setLastSearchedCity:(unsigned long long)lastSearchedCity

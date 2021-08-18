@@ -40,8 +40,6 @@
 #import "OAUtilities.h"
 #import "PXAlertView.h"
 #import "OAPluginsViewController.h"
-#import "OAGPXRouter.h"
-#import "OAGPXRouteDocument.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAImportGPXBottomSheetViewController.h"
 #import <MBProgressHUD.h>
@@ -129,8 +127,6 @@
     NSString *_importGpxPath;
     
     MBProgressHUD *_progressHUD;
-    
-    OAAutoObserverProxy* _gpxRouteCanceledObserver;
 }
 
 static UIViewController *parentController;
@@ -530,9 +526,6 @@ static UIViewController *parentController;
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged)
                                                          andObserve:_app.trackRecordingObservable];
-    _gpxRouteCanceledObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                          withHandler:@selector(onGpxRouteCanceled)
-                                                           andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
     [self applySafeAreaMargins];
 }
 
@@ -542,9 +535,6 @@ static UIViewController *parentController;
     
     [_trackRecordingObserver detach];
     _trackRecordingObserver = nil;
-
-    [_gpxRouteCanceledObserver detach];
-    _gpxRouteCanceledObserver = nil;
 }
 
 - (void) updateButtons
@@ -599,8 +589,6 @@ static UIViewController *parentController;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     _visible = _settings.mapSettingVisibleGpx.get;
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
-    
-    NSString *routeFilePath = [[OAAppSettings sharedManager] mapSettingActiveRouteFilePath];
     
     OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
     trackRecordingGroup.isMenu = YES;
@@ -818,22 +806,6 @@ static UIViewController *parentController;
 {
     [self dismissViewController];
     [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
-}
-
-- (void) cancelRoutePressed
-{
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_cancel_route_q")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_no")
-                         otherTitle:OALocalizedString(@"shared_string_yes")
-                          otherDesc:nil
-                         otherImage:nil
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                             if (!cancelled)
-                             {
-                                 [[OAGPXRouter sharedInstance] cancelRoute];
-                             }
-                         }];
 }
 
 - (void) startStopRecPressed
@@ -1086,31 +1058,6 @@ static UIViewController *parentController;
                 cell.textView.text = menuItem[@"title"];
                 cell.iconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
                 cell.arrowIconView.hidden = YES;
-            }
-            return cell;
-        }
-        else if ([menuCellType isEqualToString:[OAGPXTrackCell getCellIdentifier]])
-        {
-            OAGPXTrackCell* cell = nil;
-            cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
-                cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
-            }
-            if (cell)
-            {
-                cell.titleLabel.text = menuItem[@"title"];
-                cell.distanceLabel.text = menuItem[@"distance"];
-                cell.timeLabel.text = menuItem[@"time"];
-                cell.wptLabel.text = menuItem[@"wpt"];
-                cell.leftIconImageView.image = [UIImage templateImageNamed:@"ic_custom_route"];
-                cell.leftIconImageView.tintColor = UIColorFromRGB(color_chart_orange);
-                [cell setRightButtonVisibility:YES];
-                [cell.editButton setImage:[UIImage templateImageNamed:@"ic_close"] forState:UIControlStateNormal];
-                cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
-                [cell.editButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.editButton addTarget:self action:@selector(cancelRoutePressed) forControlEvents:UIControlEventTouchUpInside];
             }
             return cell;
         }

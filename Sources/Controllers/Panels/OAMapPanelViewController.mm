@@ -79,7 +79,6 @@
 #import "OAUtilities.h"
 #import "OAGPXListViewController.h"
 #import "OAFavoriteListViewController.h"
-#import "OAGPXRouter.h"
 #import "OADestinationsHelper.h"
 #import "OAHistoryItem.h"
 #import "OAGPXEditWptViewController.h"
@@ -3427,15 +3426,6 @@ typedef enum
 
 - (void) destinationViewMoveTo:(OADestination *)destination
 {
-    if (destination.routePoint &&
-        [_mapViewController findWpt:CLLocationCoordinate2DMake(destination.latitude, destination.longitude)])
-    {
-        OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-        item.point = _mapViewController.foundWpt;
-        [self openTargetViewWithWpt:item pushed:NO showFullMenu:NO];
-        return;
-    }
-
     [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude animated:YES];
 
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];

@@ -208,7 +208,7 @@
 
     for (OADestination *destination in self.app.data.destinations)
     {
-        if (!destination.routePoint && !destination.hidden)
+        if (!destination.hidden)
         {
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
             [_destinationLayerWidget drawLineArrowWidget:destination];
@@ -527,7 +527,7 @@
                 
                 for (OADestination *destination in self.app.data.destinations)
                 {
-                    if ([OAUtilities isCoordEqual:destination.latitude srcLon:destination.longitude destLat:lat destLon:lon] && !destination.routePoint)
+                    if ([OAUtilities isCoordEqual:destination.latitude srcLon:destination.longitude destLat:lat destLon:lon])
                     {
                         OATargetPoint *targetPoint = [self getTargetPoint:destination];                        
                         if (![found containsObject:targetPoint])

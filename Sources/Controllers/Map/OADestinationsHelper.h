@@ -21,14 +21,12 @@
 
 + (OADestinationsHelper *) instance;
 
-- (void) updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder;
 - (void) reorderDestinations:(NSArray<OADestinationItem *> *)reorderedDestinations;
 - (void) replaceDestination:(OADestination *)destination withDestination:(OADestination *)newDestination;
 
 - (void) addDestination:(OADestination *)destination;
 - (void) removeDestination:(OADestination *)destination;
 - (void) moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected;
-- (void) moveRoutePointOnTop:(NSInteger)pointIndex;
 - (void) apply2ndRowAutoSelection;
 
 - (NSArray *) sortedDestinationsWithoutParking;

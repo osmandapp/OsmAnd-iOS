@@ -14,8 +14,6 @@
 #import "OAGPXRouteRoundCell.h"
 #import "OAHeaderRoundCell.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXRouter.h"
-#import "OAGPXRouteDocument.h"
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "Localization.h"

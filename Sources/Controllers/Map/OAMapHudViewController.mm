@@ -34,8 +34,6 @@
 #import "OADownloadTask.h"
 #import "OARoutingProgressView.h"
 
-#import "OAGPXRouter.h"
-
 #import "OAMapWidgetRegistry.h"
 
 #include <OsmAndCore/Utilities.h>

@@ -675,8 +675,8 @@
 "rotate_map_to_bearing" = "Арыентацыя мапы";
 "rotate_map_to_bearing_descr" = "Абраць спосаб выраўноўвання мапы.";
 "unit_of_length" = "Адзінкі вымярэння адлегласці";
-"coords_format" = "Фармат каардынатаў";
-"coords_format_descr" = "Фармат для геаграфічных каардынатаў.";
+"coords_format" = "Фармат каардынат";
+"coords_format_descr" = "Фармат для геаграфічных каардынат.";
 "save_global_track_interval" = "Агульны інтэрвал запісу";
 "save_global_track_interval_descr" = "Абярыце інтэрвал запісу следу (уключаецца віджэтам запісу GPX на мапе).";
 "unit_of_length_descr" = "Змяніць адзінкі вымярэння адлегласці.";
@@ -830,7 +830,7 @@
 "shared_string_off" = "Выкл";
 "by_name" = "Па імёнах";
 "online_map" = "Сеціўная мапа";
-"download_depth_countours" = "Контуры марскіх глыбіняў";
+"download_depth_countours" = "Контуры марскіх глыбінь";
 // Route info
 "osm_live_cancel_subscription" = "Скасаваць падпіску";
 "change_map_style" = "Змяніць стыль мапы";

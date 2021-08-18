@@ -2529,6 +2529,7 @@ static const NSInteger _buttonsCount = 4;
             self.customController.additionalAccessoryView.frame = viewFrame;
         }
     }
+    [self updateZoomViewFrameAnimated:YES];
 }
 
 - (BOOL) isScrollAllowed

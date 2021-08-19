@@ -900,7 +900,7 @@
 "reverse_track_dir" = "Käännä GPX:n suunta";
 "point_to_navigate" = "Navigate to";
 "start_of_track" = "Start of the track";
-"nearest_point" = "Nearest point";
+"nearest_point" = "Lähin piste";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Muuta kansiota";
 "plan_route_select_folder" = "Valitse kansio";
@@ -1534,7 +1534,7 @@
 "total" = "Yhteensä";
 "walk" = "Walk";
 "board_at" = "Board at";
-"exit_at" = "Exit at";
+"exit_at" = "Poistu kohdalla";
 "by_type" = "By %@";
 "num_stops" = "pysähdykset";
 "total_time" = "Kokonaisaika";
@@ -1795,7 +1795,7 @@
 "rendering_attr_showMtbRoutes_name" = "Näytä maastopyöräilyreitit";
 "rendering_attr_tracktype_grade5_name" = "Pehmeä";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
-"routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
+"routing_attr_width_description" = "Määrittele ajoneuvon sallittu leveys reiteille.";
 "rendering_attr_showSurfaceGrade_name" = "Näytä tien laatu";
 "rendering_attr_currentTrackColor_name" = "GPX-reitin väri";
 "rendering_attr_contourLines_description" = "Näytä alkaen zoomaustasosta (tarvitsee korkeuskäyrätietoja):";
@@ -1840,7 +1840,7 @@
 "rendering_attr_coloredBuildings_name" = "Värikoodaa rakennukset tyypeittäin";
 "rendering_attr_piste_difficulty_advanced_name" = "Edistynyt";
 "routeInfo_road_types_name" = "Tietyypit";
-"rendering_attr_showRoadMaps_description" = "Valitse koska näyttää \"ainoastaan tiet\" kartta:";
+"rendering_attr_showRoadMaps_description" = "Valitse koska näytetään \"ainoastaan tiet\" kartta:";
 "rendering_value_translucent_blue_name" = "Läpikuultava sininen";
 "routing_attr_avoid_bus_description" = "Avoids buses and trolleybuses";
 "rendering_attr_hideOverground_name" = "Maanpäälliset objektit";
@@ -1900,7 +1900,7 @@
 "rendering_attr_hideWaterPolygons_name" = "Piilota vesi";
 "routing_attr_avoid_stairs_name" = "Vältä portaita";
 "rendering_value_walkingRoutesOSMC_name" = "Väri OSMC-vaellussymbolin perusteella";
-"rendering_attr_piste_type_skitour_name" = "Hiihtoretki";
+"rendering_attr_piste_type_skitour_name" = "Hiihtomatkailu";
 "routing_attr_avoid_unpaved_description" = "Välttää päällystämättömiä teitä";
 "routing_attr_prefer_unpaved_description" = "Suosi päällystämättömiä teitä.";
 "rendering_attr_roadStyle_description" = "Tien tyyli";
@@ -2015,7 +2015,7 @@
 "rendering_attr_tracktype_grade2_name" = "Kiinteä (päällystämätön)";
 "rendering_attr_piste_type_hike_name" = "Vaellus";
 "rendering_value_medium_name" = "Keskipaksu";
-"rendering_attr_piste_type_snow_park_name" = "Terrain park";
+"rendering_attr_piste_type_snow_park_name" = "Maastopuisto";
 "rendering_attr_highway_class_footway_name" = "Jalkakäytävä";
 "routing_attr_avoid_tram_description" = "Avoids trams";
 "rendering_value_default13_name" = "Oletus (13)";

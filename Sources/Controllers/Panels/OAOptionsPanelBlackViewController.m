@@ -59,26 +59,11 @@
 {
     [super viewWillLayoutSubviews];
     
-    [self updateLayout:self.interfaceOrientation];
+    [self updateLayout];
 }
 
-- (void) updateLayout:(UIInterfaceOrientation)interfaceOrientation
+- (void) updateLayout
 {
-    CGFloat big;
-    CGFloat small;
-    
-    CGRect rect = self.view.bounds;
-    if (rect.size.width > rect.size.height)
-    {
-        big = rect.size.width;
-        small = rect.size.height;
-    }
-    else
-    {
-        big = rect.size.height;
-        small = rect.size.width;
-    }
-    
     CGFloat topY = [OAUtilities getStatusBarHeight];
     CGFloat buttonHeight = 50.0;
     CGFloat width = kDrawerWidth;
@@ -104,11 +89,7 @@
     NSInteger buttonsCount = topButtons.count + bottomButtons.count;
     CGFloat buttonsHeight = buttonHeight * buttonsCount;
 
-    CGFloat scrollHeight;
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation))
-        scrollHeight = big - topY;
-    else
-        scrollHeight = small - topY;
+    CGFloat scrollHeight = DeviceScreenHeight - topY;
 
     self.scrollView.frame = CGRectMake(0.0, topY, width, scrollHeight);
     self.scrollView.contentSize = CGSizeMake(width, buttonsHeight < scrollHeight ? scrollHeight : buttonsHeight);

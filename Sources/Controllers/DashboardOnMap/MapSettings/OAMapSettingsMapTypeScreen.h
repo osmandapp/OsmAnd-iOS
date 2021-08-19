@@ -8,6 +8,17 @@
 
 #import "OAMapSettingsScreen.h"
 
+@protocol OAMapTypeDelegate <NSObject>
+
+@required
+
+- (void)updateSkimapRoutesParameter:(OAMapSource *)source;
+- (void)refreshMenuRoutesParameters;
+
+@end
+
 @interface OAMapSettingsMapTypeScreen : NSObject<OAMapSettingsScreen>
+
+@property (nonatomic) id<OAMapTypeDelegate> delegate;
 
 @end

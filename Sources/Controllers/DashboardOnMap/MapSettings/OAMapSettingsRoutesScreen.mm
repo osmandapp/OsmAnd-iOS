@@ -53,13 +53,13 @@ typedef enum
         _styleSettings = [OAMapStyleSettings sharedInstance];
         _routesParameter = [_styleSettings getParameter:param];
 
-        if ([param isEqualToString:@"showCycleRoutes"])
+        if ([param isEqualToString:SHOW_CYCLE_ROUTES_ATTR])
         {
             _routesSettingType = ERoutesSettingCycle;
             settingsScreen = EMapSettingsScreenCycleRoutes;
             _routesEnabled = _routesParameter.storedValue.length > 0 && [_routesParameter.storedValue isEqualToString:@"true"];
         }
-        else if ([param isEqualToString:@"hikingRoutesOSMC"])
+        else if ([param isEqualToString:HIKING_ROUTES_OSMC_ATTR])
         {
             _routesSettingType = ERoutesSettingHiking;
             settingsScreen = EMapSettingsScreenHikingRoutes;
@@ -111,7 +111,7 @@ typedef enum
     }
     else
     {
-        for (OAMapStyleParameterValue *value in _routesParameter.possibleValues)
+        for (OAMapStyleParameterValue *value in _routesParameter.possibleValuesUnsorted)
         {
             if (value.name.length != 0)
             {
@@ -162,7 +162,7 @@ typedef enum
 
     if (_routesSettingType == ERoutesSettingCycle)
     {
-        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:@"showCycleNodeNetworkRoutes"];
+        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
         return [cycleNode.value isEqualToString:@"true"] ? [self getRenderingStringPropertyDescription:@"walkingRoutesOSMCNodes"] : OALocalizedString(@"walking_route_osmc_description");
     }
 
@@ -245,7 +245,7 @@ typedef enum
             BOOL selected;
             if (_routesSettingType == ERoutesSettingCycle)
             {
-                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:@"showCycleNodeNetworkRoutes"];
+                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
                 selected = [cycleNode.value isEqualToString:item[@"value"]];
             }
             else
@@ -281,8 +281,8 @@ typedef enum
 {
     if (indexPath.section != visibilitySection)
         [self onItemClicked:indexPath];
-    else
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
@@ -348,7 +348,7 @@ typedef enum
             if (_routesSettingType == ERoutesSettingCycle)
             {
                 _routesParameter.value = @"false";
-                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:@"showCycleNodeNetworkRoutes"];
+                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
                 cycleNode.value = @"false";
                 [_styleSettings save:cycleNode];
             }
@@ -362,28 +362,39 @@ typedef enum
         }
         [_styleSettings save:_routesParameter];
 
-        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationFade];
-        [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationFade];
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tblView endUpdates];
     }
 }
 
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {
+    NSString *value = [self getItem:indexPath][@"value"];
     if (_routesSettingType == ERoutesSettingCycle)
     {
-        _routesParameter.value = @"true";
-        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:@"showCycleNodeNetworkRoutes"];
-        cycleNode.value = [self getItem:indexPath][@"value"];
-        [_styleSettings save:cycleNode];
+        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
+        if (![cycleNode.value isEqualToString:value])
+        {
+            cycleNode.value = value;
+            [_styleSettings save:cycleNode];
+            [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        if (![_routesParameter.value isEqualToString:@"true"])
+        {
+            _routesParameter.value = @"true";
+            [_styleSettings save:_routesParameter];
+        }
     }
     else
     {
-        _routesParameter.value = [self getItem:indexPath][@"value"];
+        if (![_routesParameter.value isEqualToString:value])
+        {
+            _routesParameter.value = value;
+            [_styleSettings save:_routesParameter];
+            [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
-    [_styleSettings save:_routesParameter];
-
-    [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 @end

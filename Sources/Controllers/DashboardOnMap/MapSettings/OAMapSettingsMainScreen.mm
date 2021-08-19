@@ -27,6 +27,7 @@
 #import "Reachability.h"
 #import "OAPlugin.h"
 #import "OAWikipediaPlugin.h"
+#import "OAMapSettingsMapTypeScreen.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -37,7 +38,7 @@
 #define kContourLinesWidth @"contourWidth"
 #define kContourLinesColorScheme @"contourColorScheme"
 
-@interface OAMapSettingsMainScreen () <OAAppModeCellDelegate>
+@interface OAMapSettingsMainScreen () <OAAppModeCellDelegate, OAMapTypeDelegate>
 
 @end
 
@@ -49,7 +50,7 @@
     
     OAMapStyleSettings *_styleSettings;
     NSArray *_filteredTopLevelParams;
-    NSArray<OAMapStyleParameter *> *_routeParameters;
+    NSArray<OAMapStyleParameter *> *_routesParameters;
 
     OAAppModeCell *_appModeCell;
 
@@ -59,6 +60,7 @@
     NSInteger mapillaryRow;
     NSInteger contourLinesRow;
     NSInteger wikipediaRow;
+    NSInteger routesSection;
     NSInteger hikingRoutesRow;
     NSInteger cycleRoutesRow;
     NSInteger travelRoutesRow;
@@ -74,7 +76,8 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
-        _routeParameters = [[OAMapStyleSettings sharedInstance] getParameters:@"routes"];
+        _styleSettings = [OAMapStyleSettings sharedInstance];
+        _routesParameters = [[OAMapStyleSettings sharedInstance] getParameters:@"routes"];
 
         title = OALocalizedString(@"configure_map");
 
@@ -142,8 +145,6 @@
 
 - (void) setupView
 {
-    _styleSettings = [OAMapStyleSettings sharedInstance];
-
     NSMutableDictionary *sectionAppMode = [NSMutableDictionary dictionary];
     [sectionAppMode setObject:[OAAppModeCell getCellIdentifier] forKey:@"type"];
 
@@ -232,32 +233,33 @@
     }
 
     NSMutableArray *sectionRoutes = [NSMutableArray array];
+    routesSection = 2;
     cycleRoutesRow = -1;
     hikingRoutesRow = -1;
     travelRoutesRow = -1;
 
-    for (OAMapStyleParameter *routeParameter in _routeParameters)
+    for (OAMapStyleParameter *routeParameter in _routesParameters)
     {
-        if ([routeParameter.name isEqualToString:@"showCycleNodeNetworkRoutes"])
+        if ([routeParameter.name isEqualToString:CYCLE_NODE_NETWORK_ROUTES_ATTR])
             continue;
 
         NSMutableDictionary *cellRoutes = [NSMutableDictionary dictionary];
         cellRoutes[@"name"] = routeParameter.title;
         cellRoutes[@"value"] = @"";
 
-        if ([routeParameter.name isEqualToString:@"showCycleRoutes"])
+        if ([routeParameter.name isEqualToString:SHOW_CYCLE_ROUTES_ATTR])
         {
-            cycleRoutesRow = [_routeParameters indexOfObject:routeParameter];
+            cycleRoutesRow = [_routesParameters indexOfObject:routeParameter];
             cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
         }
-        else if ([routeParameter.name isEqualToString:@"hikingRoutesOSMC"])
+        else if ([routeParameter.name isEqualToString:HIKING_ROUTES_OSMC_ATTR])
         {
-            hikingRoutesRow = [_routeParameters indexOfObject:routeParameter];
+            hikingRoutesRow = [_routesParameters indexOfObject:routeParameter];
             cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
         }
         else if ([routeParameter.title isEqualToString:OALocalizedString(@"travel_routes")])
         {
-            travelRoutesRow = [_routeParameters indexOfObject:routeParameter];
+            travelRoutesRow = [_routesParameters indexOfObject:routeParameter];
             cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
         }
         else
@@ -265,7 +267,7 @@
             cellRoutes[@"type"] = [OASwitchTableViewCell getCellIdentifier];
             cellRoutes[@"key"] = [NSString stringWithFormat:@"routes_%@", routeParameter.title];
             cellRoutes[@"switch"] = routeParameter.storedValue;
-            cellRoutes[@"tag"] = @([_routeParameters indexOfObject:routeParameter]);
+            cellRoutes[@"tag"] = @([_routesParameters indexOfObject:routeParameter]);
         }
 
         [sectionRoutes addObject:cellRoutes];
@@ -698,7 +700,7 @@
     UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
-        OAMapStyleParameter *p = _routeParameters[switchView.tag];
+        OAMapStyleParameter *p = _routesParameters[switchView.tag];
         if (p)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -861,6 +863,7 @@
         case 2: // Map Type
         {
             mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
+            ((OAMapSettingsMapTypeScreen *) mapSettingsViewController.screenObj).delegate = self;
 
             break;
         }
@@ -936,6 +939,24 @@
             [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+#pragma mark - OAMapTypeDelegate
+
+- (void)updateSkimapRoutesParameter:(OAMapSource *)source
+{
+    if (![source.resourceId hasPrefix:@"skimap"])
+    {
+        OAMapStyleParameter *ski = [_styleSettings getParameter:PISTE_ROUTES_ATTR];
+        ski.value = @"false";
+        [_styleSettings save:ski];
+    }
+}
+
+- (void)refreshMenuRoutesParameters
+{
+    _routesParameters = [[OAMapStyleSettings sharedInstance] getParameters:@"routes"];
+    [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:routesSection] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 @end

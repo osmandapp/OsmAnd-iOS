@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+static NSString *HORSE_ROUTES_ATTR = @"horseRoutes";
+static NSString *PISTE_ROUTES_ATTR = @"pisteRoutes";
+static NSString *ALPINE_HIKING_ATTR = @"alpineHiking";
+static NSString *SHOW_MTB_ROUTES_ATTR = @"showMtbRoutes";
+static NSString *SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
+static NSString *WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
+static NSString *HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
+static NSString *CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
 
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
@@ -64,6 +72,6 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 - (void) save:(OAMapStyleParameter *)parameter;
 - (void) save:(OAMapStyleParameter *)parameter refreshMap:(BOOL)refreshMap;
 
--(void) resetMapStyleForAppMode:(NSString *)mapPresetName;
+- (void) resetMapStyleForAppMode:(NSString *)mapPresetName;
 
 @end

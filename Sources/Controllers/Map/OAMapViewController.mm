@@ -124,7 +124,6 @@
 
     OAAutoObserverProxy* _updateGpxTracksObserver;
     OAAutoObserverProxy* _updateRecTrackObserver;
-    OAAutoObserverProxy* _updateRouteTrackObserver;
 
     OAAutoObserverProxy* _trackRecordingObserver;
     
@@ -176,15 +175,16 @@
 
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
+    CGFloat _initialZoomTapPointY;
 
     UIPanGestureRecognizer* _grMove;
+    UIPanGestureRecognizer* _grZoomDoubleTap;
     
     UIRotationGestureRecognizer* _grRotate;
     CGFloat _accumulatedRotationAngle;
     
     UITapGestureRecognizer* _grZoomIn;
     UITapGestureRecognizer* _grZoomOut;
-    UITapGestureRecognizer* _grZoomDoubleTap;
     UIPanGestureRecognizer* _grElevation;
     UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
@@ -260,10 +260,6 @@
                                                          withHandler:@selector(onUpdateRecTrack)
                                                           andObserve:_app.updateRecTrackOnMapObservable];
 
-    _updateRouteTrackObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onUpdateRouteTrack)
-                                                         andObserve:_app.updateRouteTrackOnMapObservable];
-
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged:withKey:)
                                                          andObserve:_app.trackRecordingObservable];
@@ -323,6 +319,13 @@
     _grMove.minimumNumberOfTouches = 1;
     _grMove.maximumNumberOfTouches = 1;
     
+    // - Zoom double tap gesture
+    _grZoomDoubleTap = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                      action:@selector(zoomGestureDetected:)];
+    _grZoomDoubleTap.delegate = self;
+    _grZoomDoubleTap.minimumNumberOfTouches = 1;
+    _grZoomDoubleTap.maximumNumberOfTouches = 1;
+    
     // - Rotation gesture
     _grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self
                                                              action:@selector(rotateGestureDetected:)];
@@ -341,13 +344,6 @@
     _grZoomOut.delegate = self;
     _grZoomOut.numberOfTapsRequired = 2;
     _grZoomOut.numberOfTouchesRequired = 2;
-    
-    // - double tap zoom gesture
-    _grZoomDoubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                         action:@selector(zoomOutGestureDetected:)];
-    _grZoomOut.delegate = self;
-    _grZoomOut.numberOfTapsRequired = 2;
-    _grZoomOut.numberOfTouchesRequired = 1;
     
     // - Elevation gesture
     _grElevation = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -370,6 +366,7 @@
 
     // prevents single tap to fire together with double tap
     [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomIn];
+    [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomDoubleTap];
     
     _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
@@ -551,6 +548,7 @@
     [_mapView addGestureRecognizer:_grRotate];
     [_mapView addGestureRecognizer:_grZoomIn];
     [_mapView addGestureRecognizer:_grZoomOut];
+    [_mapView addGestureRecognizer:_grZoomDoubleTap];
     [_mapView addGestureRecognizer:_grElevation];
     [_mapView addGestureRecognizer:_grSymbolContextMenu];
     [_mapView addGestureRecognizer:_grPointContextMenu];
@@ -731,17 +729,26 @@
     return YES;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if (gestureRecognizer == _grZoomDoubleTap)
+        return touch.tapCount == 2;
+    return YES;
+}
+
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     // Elevation gesture recognizer should not be mixed with others
     if (gestureRecognizer == _grElevation &&
-        (otherGestureRecognizer == _grMove || otherGestureRecognizer == _grRotate || otherGestureRecognizer == _grZoom))
+        (otherGestureRecognizer == _grMove || otherGestureRecognizer == _grRotate || otherGestureRecognizer == _grZoom || otherGestureRecognizer == _grZoomDoubleTap))
         return NO;
     if (gestureRecognizer == _grMove && otherGestureRecognizer == _grElevation)
         return NO;
     if (gestureRecognizer == _grRotate && otherGestureRecognizer == _grElevation)
         return NO;
     if (gestureRecognizer == _grZoom && otherGestureRecognizer == _grElevation)
+        return NO;
+    if (gestureRecognizer == _grZoomDoubleTap && otherGestureRecognizer == _grElevation)
         return NO;
     
     if (gestureRecognizer == _grPointContextMenu && otherGestureRecognizer == _grSymbolContextMenu)
@@ -753,14 +760,26 @@
     if (gestureRecognizer == _grZoomIn && otherGestureRecognizer == _grSymbolContextMenu)
         return NO;
     
+    if (gestureRecognizer == _grPointContextMenu && otherGestureRecognizer == _grZoomDoubleTap)
+        return NO;
+    if (gestureRecognizer == _grSymbolContextMenu && otherGestureRecognizer == _grZoomDoubleTap)
+        return NO;
+    if (gestureRecognizer == _grMove && otherGestureRecognizer == _grZoomDoubleTap)
+        return NO;
+    if (gestureRecognizer == _grZoomDoubleTap && otherGestureRecognizer == _grMove)
+        return NO;
+    
     return YES;
 }
 
-- (void) zoomGestureDetected:(UIPinchGestureRecognizer *)recognizer
+- (void) zoomGestureDetected:(UIGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
     if (!self.mapViewLoaded)
         return;
+    
+    UIPinchGestureRecognizer *pinchRecognizer = [recognizer isKindOfClass:UIPinchGestureRecognizer.class] ? (UIPinchGestureRecognizer *) recognizer : nil;
+    UIPanGestureRecognizer *panGestutreRecognizer = [recognizer isKindOfClass:UIPanGestureRecognizer.class] ? (UIPanGestureRecognizer *) recognizer : nil;
     
     // If gesture has just began, just capture current zoom
     if (recognizer.state == UIGestureRecognizerStateBegan)
@@ -768,6 +787,8 @@
         // Suspend symbols update
         while (![_mapView suspendSymbolsUpdate]);
         _initialZoomLevelDuringGesture = _mapView.zoom;
+        if (panGestutreRecognizer)
+            _initialZoomTapPointY = [panGestutreRecognizer locationInView:recognizer.view].y;
         return;
     }
     
@@ -784,24 +805,42 @@
     }
     
     // Capture current touch center point
-    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
-    for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
-    {
-        CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
-        
-        centerPoint.x += touchPoint.x;
-        centerPoint.y += touchPoint.y;
-    }
-    centerPoint.x /= recognizer.numberOfTouches;
-    centerPoint.y /= recognizer.numberOfTouches;
-    centerPoint.x *= _mapView.contentScaleFactor;
-    centerPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI centerLocationBefore;
+    CGPoint centerPoint;
+    if (pinchRecognizer)
+    {
+        centerPoint = [recognizer locationOfTouch:0 inView:recognizer.view];
+        for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+        {
+            CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
+            
+            centerPoint.x += touchPoint.x;
+            centerPoint.y += touchPoint.y;
+        }
+        centerPoint.x /= recognizer.numberOfTouches;
+        centerPoint.y /= recognizer.numberOfTouches;
+        centerPoint.x *= _mapView.contentScaleFactor;
+        centerPoint.y *= _mapView.contentScaleFactor;
+    }
+    else
+    {
+        centerPoint = CGPointMake(DeviceScreenWidth / 2 * _mapView.contentScaleFactor, DeviceScreenHeight / 2 * _mapView.contentScaleFactor);
+    }
     [_mapView convert:centerPoint toLocation:&centerLocationBefore];
     
     // Change zoom
-    CGFloat scale = 1.0f - recognizer.scale;
-    scale = recognizer.scale < 1.0f ? scale * (10.0f / _mapView.contentScaleFactor) : scale;
+    CGFloat scale, gestureScale;
+    if (pinchRecognizer)
+    {
+        scale = 1.0f - pinchRecognizer.scale;
+    }
+    else
+    {
+        gestureScale = ([panGestutreRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
+        scale = -(1.0f - gestureScale);
+    }
+    gestureScale = pinchRecognizer ? pinchRecognizer.scale : gestureScale;
+    scale = gestureScale < 1.0f ? scale * (10.0f / _mapView.contentScaleFactor) : scale;
     _mapView.zoom = _initialZoomLevelDuringGesture - scale;
     if (_mapView.zoom > _mapView.maxZoom)
         _mapView.zoom = _mapView.maxZoom;
@@ -829,7 +868,8 @@
     // If this is the end of gesture, get velocity for animation
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
-        float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizer.velocity, kZoomVelocityAbsLimit);
+        CGFloat recognizerVelocity = pinchRecognizer ? pinchRecognizer.velocity : 0;
+        float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizerVelocity, kZoomVelocityAbsLimit);
         _mapView.animator->animateZoomWith(velocity,
                                           kZoomDeceleration,
                                           kUserInteractionAnimationKey);
@@ -1505,20 +1545,6 @@
             if (_recTrackShowing)
                 [self hideRecGpxTrack];
         }
-    });
-}
-
-- (void) onUpdateRouteTrack
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-        
-        [self showRouteGpxTrack];
     });
 }
 

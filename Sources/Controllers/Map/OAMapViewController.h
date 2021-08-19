@@ -140,9 +140,6 @@
 
 - (BOOL) simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
 
-- (void) showRouteGpxTrack;
-- (void) hideRouteGpxTrack;
-
 - (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update;
 - (void) showTempGpxTrack:(NSString *)filePath;
 - (void) hideTempGpxTrack:(BOOL)update;

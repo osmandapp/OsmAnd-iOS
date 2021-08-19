@@ -2252,13 +2252,11 @@
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
 
-"setting_supported_by_style" = "This setting is supported by map style \'%1$s\'";
 "travel_routes" = "Travel routes";
-"walking_route_osmc_description" = "Assign color for routes based on their individually locally assigned color (if present on OpenStreetMap)  and type (international, regional, local)";
-"rendering_value_walkingRoutesOSMCNodes_description" = "Assign color for routes based on node network type (international, regional, local) they belong to";
-"rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation";
-"rendering_value_walkingRoutesOSMC_description" = "Assign color for routes basedon their individually locally assigned color (if present on OpenStreetMap) and hiking shield symbol";
-"shared_string_relation" = "Relation";
+"walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Color routes according to their node network type (international, regional, local).";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation.";
+"rendering_value_walkingRoutesOSMC_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and hiking shield symbol.";
 "routes_color_by_type" = "Color routes by…";
 
 // Release Notes

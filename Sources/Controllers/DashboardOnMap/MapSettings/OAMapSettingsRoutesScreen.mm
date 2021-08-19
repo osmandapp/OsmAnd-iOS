@@ -13,8 +13,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OADividerCell.h"
 #import "OASettingSwitchCell.h"
-#import "OASwitchTableViewCell.h"
-#import "OASettingsTableViewCell.h"
+#import "OASettingsTitleTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAMapStyleSettings.h"
@@ -35,9 +34,9 @@ typedef enum
     OsmAndAppInstance _app;
     OAMapViewController *_mapViewController;
 
-//    OAMapStyleSettings *_styleSettings;
-//    NSArray<OAMapStyleParameter *> *_parameters;
-//    ERoutesSettingType _routesSettingType;
+    OAMapStyleSettings *_styleSettings;
+    OAMapStyleParameter *_routesParameter;
+    ERoutesSettingType _routesSettingType;
 
     NSArray<NSArray <NSDictionary *> *> *_data;
     BOOL _routesEnabled;
@@ -51,26 +50,27 @@ typedef enum
     if (self)
     {
         _app = [OsmAndApp instance];
-        /*_styleSettings = [OAMapStyleSettings sharedInstance];
+        _styleSettings = [OAMapStyleSettings sharedInstance];
+        _routesParameter = [_styleSettings getParameter:param];
 
-        if ([param isEqualToString:@"cycle"])
+        if ([param isEqualToString:@"showCycleRoutes"])
         {
             _routesSettingType = ERoutesSettingCycle;
-            title = OALocalizedString(@"rendering_attr_showCycleRoutes_name");
             settingsScreen = EMapSettingsScreenCycleRoutes;
+            _routesEnabled = _routesParameter.storedValue.length > 0 && [_routesParameter.storedValue isEqualToString:@"true"];
         }
-        else if ([param isEqualToString:@"hiking"])
+        else if ([param isEqualToString:@"hikingRoutesOSMC"])
         {
             _routesSettingType = ERoutesSettingHiking;
-            title = OALocalizedString(@"rendering_attr_hikingRoutesOSMC_name");
             settingsScreen = EMapSettingsScreenHikingRoutes;
+            _routesEnabled = _routesParameter.storedValue.length > 0 && ![_routesParameter.storedValue isEqualToString:@"disabled"];
         }
         else
         {
             _routesSettingType = ERoutesSettingTravel;
-            title = OALocalizedString(@"travel_routes");
             settingsScreen = EMapSettingsScreenTravelRoutes;
-        }*/
+            _routesEnabled = _routesParameter.storedValue.length > 0;
+        }
 
         vwController = viewController;
         tblView = tableView;
@@ -83,7 +83,6 @@ typedef enum
 
 - (void)commonInit
 {
-
 }
 
 - (void)initData
@@ -96,13 +95,48 @@ typedef enum
             ]
     ] mutableCopy];
 
+    NSMutableArray *colorsArr = [@[@{@"type": [OADividerCell getCellIdentifier]}] mutableCopy];
+    if (_routesSettingType == ERoutesSettingCycle)
+    {
+        [colorsArr addObject:@{
+                @"type": [OASettingsTitleTableViewCell getCellIdentifier],
+                @"value": @"false",
+                @"title": OALocalizedString(@"gpx_route")
+        }];
+        [colorsArr addObject:@{
+                @"type": [OASettingsTitleTableViewCell getCellIdentifier],
+                @"value": @"true",
+                @"title": OALocalizedString(@"rendering_value_walkingRoutesOSMCNodes_name")
+        }];
+    }
+    else
+    {
+        for (OAMapStyleParameterValue *value in _routesParameter.possibleValues)
+        {
+            if (value.name.length != 0)
+            {
+                [colorsArr addObject:@{
+                        @"type": [OASettingsTitleTableViewCell getCellIdentifier],
+                        @"value": value.name,
+                        @"title": value.title
+                }];
+            }
+        }
+    }
+    [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
+    [dataArr addObject:colorsArr];
+
     _data = [NSArray arrayWithArray:dataArr];
 }
+
 - (void)setupView
 {
-    [self.tblView.tableFooterView removeFromSuperview];
-    self.tblView.tableFooterView = nil;
-    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    title = _routesParameter.title;
+
+    [tblView.tableFooterView removeFromSuperview];
+    tblView.tableFooterView = nil;
+    [tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    tblView.rowHeight = UITableViewAutomaticDimension;
     tblView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
@@ -111,22 +145,28 @@ typedef enum
     return _data[indexPath.section][indexPath.row];
 }
 
-- (NSString *)getTextForFooter:(NSInteger)section
+- (NSString *)getRenderingStringPropertyDescription:(NSString *)propertyValue
 {
-    if (!_routesEnabled)
+    if (!propertyValue)
         return @"";
 
-    /*switch (section)
-    {
-        case languagesSection:
-            return OALocalizedString(@"select_wikipedia_article_langs");
-        case availableMapsSection:
-            return _mapItems.count > 0 ?  OALocalizedString(@"wiki_menu_download_descr") : @"";
-        default:
-            return @"";
-    }*/
+    NSString *propertyValueReplaced = [propertyValue stringByReplacingOccurrencesOfString:@"\\s+" withString:@"_"];
+    NSString *value = OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_description", propertyValueReplaced]);
+    return value ? value : propertyValue;
+}
 
-    return @"";
+- (NSString *)getTextForFooter:(NSInteger)section
+{
+    if (!_routesEnabled || section == visibilitySection)
+        return @"";
+
+    if (_routesSettingType == ERoutesSettingCycle)
+    {
+        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:@"showCycleNodeNetworkRoutes"];
+        return [cycleNode.value isEqualToString:@"true"] ? [self getRenderingStringPropertyDescription:@"walkingRoutesOSMCNodes"] : OALocalizedString(@"walking_route_osmc_description");
+    }
+
+    return [self getRenderingStringPropertyDescription:_routesParameter.value];
 }
 
 - (CGFloat)getFooterHeightForSection:(NSInteger)section
@@ -138,7 +178,7 @@ typedef enum
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return _data.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -146,45 +186,80 @@ typedef enum
     if (section != visibilitySection && !_routesEnabled)
         return 0;
 
-    return section == visibilitySection ? 1 : 0/*_parameters.count*/;
+    return _data[section].count;
 }
 
-- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*OAMapStyleParameter *p = _parameters[indexPath.row];
-    if (p.dataType != OABoolean)
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OASettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *) nib[0];
-        }
-        if (cell)
-        {
-            [cell.textView setText:p.title];
-            [cell.descriptionView setText:[p getValueTitle]];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
+            cell = (OADividerCell *) nib[0];
+            cell.backgroundColor = UIColor.whiteColor;
+            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.dividerInsets = UIEdgeInsetsZero;
+            cell.dividerHight = 0.5;
         }
         return cell;
     }
-    else
+    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
+            cell = (OASettingSwitchCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.descriptionView.hidden = YES;
         }
         if (cell)
         {
-            [cell.textView setText:p.title];
-            [cell.switchView setOn:[p.storedValue isEqualToString:@"true"]];
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tag = indexPath.row;
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            cell.textView.text = _routesEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            NSString *imgName = _routesEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
+            cell.imgView.image = [UIImage templateImageNamed:imgName];
+            cell.imgView.tintColor = _routesEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+
+            [cell.switchView setOn:_routesEnabled];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
-    }*/
+    }
+    else if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    {
+        OASettingsTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASettingsTitleTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
+        }
+        if (cell)
+        {
+            BOOL selected;
+            if (_routesSettingType == ERoutesSettingCycle)
+            {
+                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:@"showCycleNodeNetworkRoutes"];
+                selected = [cycleNode.value isEqualToString:item[@"value"]];
+            }
+            else
+            {
+                selected = [_routesParameter.value isEqualToString:item[@"value"]];
+            }
+
+            cell.textView.text = item[@"title"];
+            [cell.iconView setImage:selected ? [UIImage imageNamed:@"menu_cell_selected"] : nil];
+        }
+        return cell;
+    }
+
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate
@@ -210,14 +285,9 @@ typedef enum
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    [self onItemClicked:indexPath];
-}
-
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    if (section == colorsSection/* && .count > 0*/ && _routesEnabled)
+    if (section == colorsSection && _routesEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
         header.textLabel.textColor = UIColorFromRGB(color_text_footer);
@@ -258,9 +328,62 @@ typedef enum
 
 #pragma mark - Selectors
 
+- (void)applyParameter:(id)sender
+{
+    if ([sender isKindOfClass:[UISwitch class]])
+    {
+        [tblView beginUpdates];
+        UISwitch *sw = (UISwitch *) sender;
+        _routesEnabled = sw.on;
+
+        if (_routesEnabled)
+        {
+            if (_routesSettingType == ERoutesSettingCycle)
+                _routesParameter.value = @"true";
+            else if (_routesSettingType == ERoutesSettingHiking)
+                _routesParameter.value = @"walkingRoutesOSMC";
+        }
+        else
+        {
+            if (_routesSettingType == ERoutesSettingCycle)
+            {
+                _routesParameter.value = @"false";
+                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:@"showCycleNodeNetworkRoutes"];
+                cycleNode.value = @"false";
+                [_styleSettings save:cycleNode];
+            }
+            else if (_routesSettingType == ERoutesSettingHiking)
+            {
+                _routesParameter.value = @"disabled";
+            }
+            else if (_routesSettingType == ERoutesSettingTravel)
+            {
+            }
+        }
+        [_styleSettings save:_routesParameter];
+
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationFade];
+        [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationFade];
+        [tblView endUpdates];
+    }
+}
+
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
+    if (_routesSettingType == ERoutesSettingCycle)
+    {
+        _routesParameter.value = @"true";
+        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:@"showCycleNodeNetworkRoutes"];
+        cycleNode.value = [self getItem:indexPath][@"value"];
+        [_styleSettings save:cycleNode];
+    }
+    else
+    {
+        _routesParameter.value = [self getItem:indexPath][@"value"];
+    }
+    [_styleSettings save:_routesParameter];
+
+    [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 @end

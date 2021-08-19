@@ -238,16 +238,19 @@
 
     for (OAMapStyleParameter *routeParameter in _routeParameters)
     {
+        if ([routeParameter.name isEqualToString:@"showCycleNodeNetworkRoutes"])
+            continue;
+
         NSMutableDictionary *cellRoutes = [NSMutableDictionary dictionary];
         cellRoutes[@"name"] = routeParameter.title;
         cellRoutes[@"value"] = @"";
 
-        if ([routeParameter.title isEqualToString:OALocalizedString(@"rendering_attr_showCycleRoutes_name")])
+        if ([routeParameter.name isEqualToString:@"showCycleRoutes"])
         {
             cycleRoutesRow = [_routeParameters indexOfObject:routeParameter];
             cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
         }
-        else if ([routeParameter.title isEqualToString:OALocalizedString(@"rendering_attr_hikingRoutesOSMC_name")])
+        else if ([routeParameter.name isEqualToString:@"hikingRoutesOSMC"])
         {
             hikingRoutesRow = [_routeParameters indexOfObject:routeParameter];
             cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
@@ -267,11 +270,6 @@
 
         [sectionRoutes addObject:cellRoutes];
     }
-
-    /*NSMutableDictionary *sectionRoutesTravel = [NSMutableDictionary dictionary];
-    [sectionRoutesTravel setObject:OALocalizedString(@"travel_routes") forKey:@"name"];
-    [sectionRoutesTravel setObject:@"" forKey:@"value"];
-    [sectionRoutesTravel setObject:[OASettingsTableViewCell getCellIdentifier] forKey:@"type"];*/
 
     NSArray *arrTop = @[
             @{
@@ -337,6 +335,9 @@
         
         for (NSString *cName in categories)
         {
+            if ([cName isEqualToString:@"routes"])
+                continue;
+
             NSString *t = [_styleSettings getCategoryTitle:cName];
             if (![[t lowercaseString] isEqualToString:@"ui_hidden"])
             {
@@ -431,16 +432,6 @@
     tableData = [tableData arrayByAddingObjectsFromArray:arrayLanguage];
 
     [tblView reloadData];
-}
-
-- (NSString *)getRenderingStringPropertyDescription:(NSString *)propertyValue
-{
-    if (!propertyValue)
-        return @"";
-
-    NSString *propertyValueReplaced = [propertyValue stringByReplacingOccurrencesOfString:@"\\s+" withString:@"_"];
-    NSString *value = OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_description", propertyValueReplaced]);
-    return value ? value : propertyValue;
 }
 
 - (NSString *) getPercentString:(double)value

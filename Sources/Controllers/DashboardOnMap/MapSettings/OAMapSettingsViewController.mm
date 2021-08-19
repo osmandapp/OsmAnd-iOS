@@ -166,15 +166,18 @@
         case EMapSettingsScreenWikipedia:
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsWikipediaScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
         case EMapSettingsScreenCycleRoutes:
             if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:@"cycle"];
+                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:@"showCycleRoutes"];
+            break;
         case EMapSettingsScreenHikingRoutes:
             if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:@"hiking"];
+                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:@"hikingRoutesOSMC"];
+            break;
         case EMapSettingsScreenTravelRoutes:
             if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:@"travel"];
+                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:@"travelRoutes"];
             break;
         default:
             break;

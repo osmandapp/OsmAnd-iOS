@@ -19,6 +19,6 @@
 
 @interface OAMapSettingsMapTypeScreen : NSObject<OAMapSettingsScreen>
 
-@property (nonatomic) id<OAMapTypeDelegate> delegate;
+@property (weak, nonatomic) id<OAMapTypeDelegate> delegate;
 
 @end

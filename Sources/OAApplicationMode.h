@@ -37,8 +37,6 @@
 @property (nonatomic, readonly) NSString *variantKey;
 
 @property (nonatomic) NSString *descr;
-@property (nonatomic) CGFloat baseMinSpeed;
-@property (nonatomic) CGFloat baseMaxSpeed;
 
 @property (nonatomic, readonly) OAApplicationMode *parent;
 

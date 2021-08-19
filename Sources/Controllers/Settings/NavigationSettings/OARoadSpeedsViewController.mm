@@ -35,8 +35,8 @@
     CGFloat _ratio;
     NSInteger _maxValue;
     NSInteger _minValue;
-    NSInteger _baseMinSpeed;
-    NSInteger _baseMaxSpeed;
+    NSInteger _min;
+    NSInteger _max;
     NSString *_units;
     NSAttributedString *_footerAttrString;
 }
@@ -141,8 +141,8 @@
     _minValue = round(minSpeedValue * _ratio);
     _maxValue = round(maxSpeedValue * _ratio);
     
-    _baseMinSpeed = round(MIN(_minValue, router->getMinSpeed() * _ratio / 2.));
-    _baseMaxSpeed = round(MAX(_maxValue, router->getMaxSpeed() * _ratio * 1.5));
+    _min = round(MIN(_minValue, router->getMinSpeed() * _ratio / 2.));
+    _max = round(MAX(_maxValue, router->getMaxSpeed() * _ratio * 1.5));
 }
 
 - (void) setupView
@@ -160,8 +160,8 @@
     }];
     [tableData addObject:@{
         @"type" : [OASliderWithValuesCell getCellIdentifier],
-        @"minValue" : [NSString stringWithFormat:@"%ld %@", _baseMinSpeed, _units],
-        @"maxValue" : [NSString stringWithFormat:@"%ld %@", _baseMaxSpeed, _units],
+        @"minValue" : [NSString stringWithFormat:@"%ld %@", _min, _units],
+        @"maxValue" : [NSString stringWithFormat:@"%ld %@", _max, _units],
     }];
     _data = [NSArray arrayWithArray:tableData];
 }
@@ -212,8 +212,8 @@
         if (cell)
         {
             cell.rangeSlider.delegate = self;
-            cell.rangeSlider.minValue = _baseMinSpeed;
-            cell.rangeSlider.maxValue = _baseMaxSpeed;
+            cell.rangeSlider.minValue = _min;
+            cell.rangeSlider.maxValue = _max;
             cell.rangeSlider.selectedMinimum = _minValue;
             cell.rangeSlider.selectedMaximum = _maxValue;
             cell.minValueLabel.text = item[@"minValue"];

@@ -962,7 +962,7 @@ static const NSInteger _buttonsCount = 4;
                 [self removeFromSuperview];
                 
                 if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
-                    [self.menuViewDelegate targetResetMapRulerPosition];
+                    [self.menuViewDelegate targetResetRulerPosition];
             
                 [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
@@ -981,7 +981,7 @@ static const NSInteger _buttonsCount = 4;
             [self removeFromSuperview];
             
             if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
-                [self.menuViewDelegate targetResetMapRulerPosition];
+                [self.menuViewDelegate targetResetRulerPosition];
             
             [self clearCustomControllerIfNeeded];
             [self restoreTargetType];

@@ -12,6 +12,7 @@
 #import "OACustomSelectionButtonCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OASegmentedControllCell.h"
+#import "OADividerCell.h"
 #import "OATableViewCustomHeaderView.h"
 
 @interface OADownloadMultipleResourceViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -106,7 +107,7 @@
     for (OAResourceItem *item in _selectedItems)
     {
         if ([item isKindOfClass:OARepositoryResourceItem.class])
-            sizePkgSum += ((OARepositoryResourceItem *) item).resource->packageSize;
+            sizePkgSum += ((OARepositoryResourceItem *) item).sizePkg;
         else
             sizePkgSum += [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId)->packageSize;
     }
@@ -116,7 +117,6 @@
 
 - (NSString *)getTitleForSection:(NSInteger)section
 {
-
     if (section == 0 && _isSRTM)
         return _isSingleSRTM ? OALocalizedString(@"srtm_download_single_help_message") : OALocalizedString(@"srtm_download_list_help_message");
     else if ((section == 0 && !_isSRTM) || (section == 1 && !_isSingleSRTM))
@@ -125,20 +125,47 @@
     return nil;
 }
 
+- (BOOL)isDividerCell:(NSIndexPath *)indexPath
+{
+    BOOL isDividerCell = ((_isSRTM && indexPath.section == 1) || !_isSRTM) && indexPath.row % 2 == 0;
+    return isDividerCell;
+}
+
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath
+{
+    if ([self isDividerCell:indexPath])
+    {
+        return [OADividerCell cellHeight:0.5 dividerInsets:((OADividerCell *) [self tableView:self.tableView cellForRowAtIndexPath:indexPath]).dividerInsets];
+    }
+    else if (_isSRTM)
+    {
+        if (indexPath.section == 0)
+            return 36.;
+        else if (indexPath.section == 1)
+            return indexPath.row == 1 ? 48. : 66.;
+    }
+    return indexPath.row == 1 ? 48. : 66.;
+}
+
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
     if (!_isSingleSRTM)
     {
-        if (indexPath.row > 0)
+        if (![self isDividerCell:indexPath] && indexPath.row > 2)
         {
-            [self.tableView beginUpdates];
-            OAResourceItem *item = _items[indexPath.row - 1];
-            if ([_selectedItems containsObject:item])
-                [_selectedItems removeObject:item];
-            else
-                [_selectedItems addObject:item];
-            [self.tableView endUpdates];
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+            [UIView performWithoutAnimation:^{
+                [self.tableView beginUpdates];
+                OAResourceItem *item = _items[(indexPath.row - 1) / 2 - 1];
+                if ([_selectedItems containsObject:item])
+                    [_selectedItems removeObject:item];
+                else
+                    [_selectedItems addObject:item];
+
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                ((OATableViewCustomHeaderView *) [self.tableView headerViewForSection:indexPath.section]).label.text = [self getTitleForSection:indexPath.section];
+
+                [self.tableView endUpdates];
+            }];
         }
         [self updateDownloadButtonView];
     }
@@ -148,23 +175,31 @@
 {
     if (!_isSingleSRTM)
     {
-        [self.tableView beginUpdates];
-        BOOL shouldSelect = _selectedItems.count == 0;
-        NSInteger section = _isSRTM ? 1 : 0;
-        if (!shouldSelect)
-            [_selectedItems removeAllObjects];
-        else
-            [_selectedItems addObjectsFromArray:_items];
-
-        for (NSInteger i = 0; i < _items.count; i++)
-        {
-            if (shouldSelect)
-                [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [UIView performWithoutAnimation:^{
+            [self.tableView beginUpdates];
+            BOOL shouldSelect = _selectedItems.count == 0;
+            NSInteger section = _isSRTM ? 1 : 0;
+            if (!shouldSelect)
+                [_selectedItems removeAllObjects];
             else
-                [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:NO];
-        }
-        [self.tableView endUpdates];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationNone];
+                [_selectedItems addObjectsFromArray:_items];
+
+            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
+            for (NSInteger i = 1; i < _items.count + 1; i++) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
+                [indexPaths addObject:indexPath];
+                if (shouldSelect)
+                    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+                else
+                    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+            }
+            [indexPaths addObject:[NSIndexPath indexPathForRow:1 inSection:section]];
+
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+            ((OATableViewCustomHeaderView *) [self.tableView headerViewForSection:section]).label.text = [self getTitleForSection:section];
+
+            [self.tableView endUpdates];
+        }];
         [self updateDownloadButtonView];
     }
 }
@@ -245,20 +280,49 @@
         if (section == 0)
             return 1;
         else if (section == 1)
-            return _isSingleSRTM ? 1 : _items.count + 1;
+        {
+            NSInteger count = _isSingleSRTM ? 3 : (_items.count + 1) * 2 + 1;
+            return count;
+        }
     }
 
-    return _items.count + 1;
+    NSInteger count = (_items.count + 1) * 2 + 1;
+    return count;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _isSingleSRTM ? NO : indexPath.row != 0;
+    return _isSingleSRTM ? NO : ![self isDividerCell:indexPath] && indexPath.row > 2;
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControllCell getCellIdentifier] : indexPath.row == 0 && !_isSingleSRTM ? [OACustomSelectionButtonCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
+    if ([self isDividerCell:indexPath])
+    {
+        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
+            cell = (OADividerCell *) nib[0];
+            cell.backgroundColor = UIColor.whiteColor;
+            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.dividerHight = 0.5;
+        }
+        if (cell)
+        {
+            if (indexPath.row == 0 || indexPath.row == (_items.count + 1) * 2 || _isSingleSRTM)
+                cell.dividerInsets = UIEdgeInsetsZero;
+            else
+                cell.dividerInsets = UIEdgeInsetsMake(0., indexPath.row == 2 ? 20. : 112., 0., 0.);
+        }
+        return cell;
+    }
+
+    NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControllCell getCellIdentifier] :
+            indexPath.row == 1 && !_isSingleSRTM
+                    ? [OACustomSelectionButtonCell getCellIdentifier]
+                    : [OAMenuSimpleCell getCellIdentifier];
+
     if ([cellType isEqualToString:[OASegmentedControllCell getCellIdentifier]])
     {
         OASegmentedControllCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
@@ -295,21 +359,21 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
             cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
         }
         if (cell)
         {
-            NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all");
+            NSUInteger selectedAmount = _selectedItems.count;
+
+            NSString *selectionText = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all");
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
             [cell.selectDeselectButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
             [cell.selectionButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
 
-            NSInteger selectedAmount = _selectedItems.count;
             if (selectedAmount > 0)
             {
-                UIImage *selectionImage = selectedAmount < _items.count - 1 ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
+                UIImage *selectionImage = selectedAmount < _items.count ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
                 [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
             }
             else
@@ -326,7 +390,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
             cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);
             cell.descriptionView.hidden = NO;
             cell.descriptionView.font = [UIFont systemFontOfSize:13.0];
@@ -339,7 +402,7 @@
         }
         if (cell)
         {
-            OAResourceItem *item = _items[!_isSingleSRTM ? indexPath.row - 1 : indexPath.row];
+            OAResourceItem *item = _items[!_isSingleSRTM ? (indexPath.row - 1) / 2 - 1 : 0];
             BOOL selected = !_isSingleSRTM && [_selectedItems containsObject:item];
 
             cell.imgView.image = [OAResourceType getIcon:_type.type];
@@ -350,7 +413,7 @@
 
             NSString *size;
             if ([item isKindOfClass:OARepositoryResourceItem.class])
-                size = [NSByteCountFormatter stringFromByteCount:((OARepositoryResourceItem *) item).resource->packageSize countStyle:NSByteCountFormatterCountStyleFile];
+                size = [NSByteCountFormatter stringFromByteCount:((OARepositoryResourceItem *) item).sizePkg countStyle:NSByteCountFormatterCountStyleFile];
             else
                 size = [NSByteCountFormatter stringFromByteCount:[OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId)->packageSize countStyle:NSByteCountFormatterCountStyleFile];
 
@@ -369,11 +432,16 @@
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath];
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_isSingleSRTM && indexPath.row > 0)
+    if (!_isSingleSRTM && ![self isDividerCell:indexPath] && indexPath.row > 2)
     {
-        OAResourceItem *item = _items[indexPath.row - 1];
+        OAResourceItem *item = _items[(indexPath.row - 1) / 2 - 1];
         BOOL selected = [_selectedItems containsObject:item];
         [cell setSelected:selected animated:NO];
         if (selected)
@@ -387,10 +455,14 @@
 {
     if (!_isSingleSRTM)
     {
-        if (indexPath.row > 0)
+        if (![self isDividerCell:indexPath] && indexPath.row > 2)
             [self selectDeselectItem:indexPath];
         else
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+    else
+    {
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 
@@ -398,7 +470,7 @@
 {
     if (!_isSingleSRTM)
     {
-        if (indexPath.row > 0)
+        if (![self isDividerCell:indexPath] && indexPath.row > 2)
             [self selectDeselectItem:indexPath];
     }
 }

@@ -77,7 +77,7 @@
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
         _styleSettings = [OAMapStyleSettings sharedInstance];
-        _routesParameters = [[OAMapStyleSettings sharedInstance] getParameters:@"routes"];
+        _routesParameters = [_styleSettings getParameters:@"routes"];
 
         title = OALocalizedString(@"configure_map");
 

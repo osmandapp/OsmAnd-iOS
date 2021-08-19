@@ -10,7 +10,6 @@
 
 #import "OAMapViewController.h"
 #import "OATargetPointView.h"
-#import "OAGPXRouteViewController.h"
 
 @class OAFavoriteItem;
 @class OAGpxWptItem;
@@ -103,6 +102,8 @@
 
 - (OATargetPoint *) getCurrentTargetPoint;
 
+- (void) hideTargetPointMenu;
+
 - (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
 - (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed saveState:(BOOL)saveState;
 - (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed;
@@ -115,12 +116,6 @@
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 - (void) openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
 
-- (void) openTargetViewWithGPXEdit:(OAGPX *)item pushed:(BOOL)pushed;
-
-- (void) openTargetViewWithGPXRoute:(BOOL)pushed;
-- (void) openTargetViewWithGPXRoute:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
-- (void) openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed;
-- (void) openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
 - (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed;

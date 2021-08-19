@@ -363,8 +363,8 @@ static const NSInteger sectionCount = 2;
         item.size = resource->size;
         item.worldRegion = match;
 
-        NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
-        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
+        const auto localResource = _app.resourcesManager->getLocalResource(resource->id);
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
         if (item.title != nil)
         {

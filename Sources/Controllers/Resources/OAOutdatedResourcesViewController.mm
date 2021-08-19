@@ -17,6 +17,7 @@
 #import "FFCircularProgressView+isSpinning.h"
 #include "Localization.h"
 #import "OASizes.h"
+#import "OAColors.h"
 
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
@@ -82,8 +83,6 @@
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -370,8 +369,9 @@
             cell.textLabel.font = [UIFont systemFontOfSize:17.0];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
-            UIImage* iconImage = [UIImage templateImageNamed:@"menu_item_update_icon.png"];
+            UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_import"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
+            [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
@@ -402,7 +402,7 @@
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourceType resourceTypeLocalized:item.resourceType]];
     }
     
-    //[NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType]
+    //[NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType]
     
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
@@ -474,17 +474,6 @@
             }
         }
     }
-}
-
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
 }
 
 @end

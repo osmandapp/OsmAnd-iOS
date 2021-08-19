@@ -553,8 +553,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 #define MAP_ARROWS_LOCATION 0
 #define MAP_ARROWS_MAP_CENTER 1
 
-#define SAVE_TRACK_INTERVAL_DEFAULT 5
+#define SAVE_TRACK_INTERVAL_DEFAULT 5 //5000 in Android
 #define REC_FILTER_DEFAULT 0.f
+#define REC_TRACK_PRECISION_DEFAULT 50.f
 
 #define MAP_GEO_FORMAT_DEGREES 0
 #define MAP_GEO_FORMAT_MINUTES 1
@@ -572,6 +573,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 #define MAGNIFIER_DEFAULT_VALUE 1.0
 #define MAGNIFIER_DEFAULT_CAR 1.5
+#define MAGNIFIER_DEFAULT_CAR_TEXT 1.25
 
 #define LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY 0
 #define LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY 1
@@ -649,9 +651,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *mapSettingSaveTrackIntervalApproved;
 @property (nonatomic) OACommonBoolean *mapSettingShowRecordingTrack;
 @property (nonatomic) OACommonBoolean *mapSettingShowTripRecordingStartDialog;
-
-@property (nonatomic) NSString* mapSettingActiveRouteFilePath;
-@property (nonatomic) int mapSettingActiveRouteVariantType;
 
 @property (nonatomic) OACommonString *selectedPoiFilters;
 
@@ -797,6 +796,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *osmUseDevUrl;
 
 // Mapillary
+@property (nonatomic) OACommonBoolean *showMapillary;
 @property (nonatomic) OACommonBoolean *onlinePhotosRowCollapsed;
 @property (nonatomic) OACommonBoolean *mapillaryFirstDialogShown;
 

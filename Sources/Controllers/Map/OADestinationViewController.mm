@@ -15,8 +15,6 @@
 #import "OALog.h"
 #import "OAUtilities.h"
 #import "OADestinationsHelper.h"
-#import "OAGPXRouter.h"
-#import "OAGPXRouteDocument.h"
 #import "OADestinationCardsViewController.h"
 #import "OAHistoryHelper.h"
 #import "OAHistoryItem.h"
@@ -49,10 +47,6 @@
 
     OAAutoObserverProxy* _locationServicesUpdateObserver;
 
-    OAAutoObserverProxy* _gpxRouteDefinedObserver;
-    OAAutoObserverProxy* _gpxRouteChangedObserver;
-    OAAutoObserverProxy* _gpxRouteCanceledObserver;
-
     OAAutoObserverProxy* _destinationsChangeObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     
@@ -80,16 +74,6 @@
                         UIColorFromRGB(marker_pin_color_blue)];
         
         self.markerNames = @[@"ic_destination_pin_1", @"ic_destination_pin_2", @"ic_destination_pin_3", @"ic_destination_pin_4", @"ic_destination_pin_5", @"ic_destination_pin_6", @"ic_destination_pin_7"];
-        
-        _gpxRouteDefinedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onRouteDefined)
-                                                              andObserve:[OAGPXRouter sharedInstance].routeDefinedObservable];
-        _gpxRouteChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onDestinationsChanged)
-                                                              andObserve:[OAGPXRouter sharedInstance].routeChangedObservable];
-        _gpxRouteCanceledObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onRouteCanceled)
-                                                              andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
 
         _destinationsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onDestinationsChanged)
@@ -130,29 +114,6 @@
 - (IBAction) backButtonPress:(id)sender
 {
     [self openHideDestinationCardsView:sender];
-}
-
-- (void) onRouteDefined
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [self refreshCells];
-
-        if (self.destinationDelegate)
-            [self.destinationDelegate destinationsAdded];
-    });
-}
-
-- (void) onRouteCanceled
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [self refreshCells];
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0 && self.destinationDelegate)
-            [self.destinationDelegate hideDestinations];
-        else
-            [self updateFrame:YES];
-    });
 }
 
 - (void) onDestinationsChanged
@@ -517,16 +478,7 @@
 -(void) markAsVisited:(OADestination *)destination
 {
     [[OADestinationsHelper instance] addHistoryItem:destination];
-    
-    if (!destination.routePoint)
-    {
-        [[OADestinationsHelper instance] removeDestination:destination];
-    }
-    else
-    {
-        [[OAGPXRouter sharedInstance].routeDoc moveToInactiveByIndex:destination.routePointIndex];
-        [[OAGPXRouter sharedInstance].routeDoc updatePointsArray];
-    }
+    [[OADestinationsHelper instance] removeDestination:destination];
 }
 
 - (void) doRemoveDestination:(OADestination *)destination
@@ -622,7 +574,7 @@
         UIColor *c = _colors[i];
         BOOL colorExists = NO;
         for (OADestination *destination in _app.data.destinations)
-            if (!destination.routePoint && [OAUtilities areColorsEqual:destination.color color2:c])
+            if ([OAUtilities areColorsEqual:destination.color color2:c])
             {
                 colorExists = YES;
                 break;
@@ -636,7 +588,7 @@
     for (long i = (long) _app.data.destinations.count - 1; i >= 0; i--)
     {
         OADestination *destination = _app.data.destinations[i];
-        if (destination.color && !destination.routePoint)
+        if (destination.color)
         {
             lastUsedColor = destination.color;
             break;

@@ -137,7 +137,7 @@
         case PROFILE_ICON_TAXI:
             return @"ic_action_taxi";
         case PROFILE_ICON_TRUCK:
-            return @"ic_action_truck_dark";
+            return @"ic_action_truck";
         case PROFILE_ICON_SHUTTLE_BUS:
             return @"ic_action_shuttle_bus";
         case PROFILE_ICON_BUS:

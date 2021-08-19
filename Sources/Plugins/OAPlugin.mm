@@ -25,6 +25,11 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAMapillaryPlugin.h"
+#import "OASkiMapsPlugin.h"
+#import "OANauticalMapsPlugin.h"
+#import "OASRTMPlugin.h"
+#import "OAWikipediaPlugin.h"
+#import "OAPOIUIFilter.h"
 
 @implementation OAPlugin
 {
@@ -228,6 +233,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return @[];
 }
 
+- (NSArray<OAResourceItem *> *) getSuggestedMaps
+{
+    return @[];
+}
+
 /*
  * Return true in case if plugin should fill the map context menu with buildContextMenuRows method.
  */
@@ -273,11 +283,15 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     allPlugins.add(new OsmEditingPlugin(app));
     allPlugins.add(new OsmandDevelopmentPlugin(app));
     */
-    
+
     [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
-    
+    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
+    [allPlugins addObject:[[OAWikipediaPlugin alloc] init]];
+
     [self loadCustomPlugins];
     [self activatePlugins:enabledPlugins];
 }
@@ -336,6 +350,47 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return list;
 }
 
+- (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale
+{
+    return nil;
+}
+
++ (NSString *)onGetMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale
+{
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        NSString *locale = [plugin getMapObjectsLocale:object preferredLocale:preferredLocale];
+        if (locale)
+            return locale;
+    }
+    return preferredLocale;
+}
+
+- (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters
+{
+    return [NSArray new];
+}
+
++ (void)registerCustomPoiFilters:(NSMutableArray<OAPOIUIFilter *> *)poiUIFilters
+{
+    for (OAPlugin *p in [self.class getAvailablePlugins])
+    {
+        [poiUIFilters addObjectsFromArray:[p getCustomPoiFilters]];
+    }
+}
+
+- (void)prepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters
+{
+}
+
++ (void)onPrepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters
+{
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        [plugin prepareExtraTopPoiFilters:poiUIFilters];
+    }
+}
+
 /*
 private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, boolean paid, NSString *id, NSString *id2) {
     boolean marketEnabled = Version.isMarketEnabled(app);
@@ -381,6 +436,10 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
     [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
     [plugin updateLayers];
+    
+    if (enable)
+        [plugin showInstalledScreen];
+    
     return true;
 }
 

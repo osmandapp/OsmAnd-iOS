@@ -7,9 +7,7 @@
 //
 
 #import "OALocalResourceInformationViewController.h"
-
 #import "OsmAndApp.h"
-#include "Localization.h"
 #import "OALocalResourceInfoCell.h"
 #import "OAButtonCell.h"
 #import "OAPurchasesViewController.h"
@@ -20,11 +18,12 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAOnlineTilesEditingViewController.h"
+#import "OAResourcesUIHelper.h"
 
-typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
+#include "Localization.h"
 
-@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OATilesEditingViewControllerDelegate> {
-    
+@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OATilesEditingViewControllerDelegate>
+{
     NSArray *tableKeys;
     NSArray *tableValues;
     NSArray *tableButtons;
@@ -44,11 +43,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"res_details");
-    
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 -(void)viewDidLoad
@@ -57,8 +51,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
 }
 
 -(void)viewWillLayoutSubviews
@@ -87,11 +79,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(UIView *) getMiddleView
 {
     return _tableView;
-}
-
--(UIView *) getBottomView
-{
-    return _toolbarView;
 }
 
 -(CGFloat) getToolBarHeight
@@ -168,7 +155,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     {
         [tKeys addObject:OALocalizedString(@"res_created_on")];
         
-        if (!formatter) {
+        if (!formatter)
+        {
             formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -209,7 +197,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     {
         [tKeys addObject:OALocalizedString(@"res_created_on")];
         
-        if (!formatter) {
+        if (!formatter)
+        {
             formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -319,7 +308,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         // Timestamp
         NSDate *d = [NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000];
         
-        if (!formatter) {
+        if (!formatter)
+        {
             formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -398,8 +388,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     if (indexPath.section == 0)
     {
-        NSString* title = [tableKeys objectAtIndex:indexPath.row];
-        NSString* subtitle = [tableValues objectAtIndex:indexPath.row];
+        NSString *title = [tableKeys objectAtIndex:indexPath.row];
+        NSString *subtitle = [tableValues objectAtIndex:indexPath.row];
         
         // Obtain reusable cell or create one
         OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:[OALocalResourceInfoCell getCellIdentifier]];
@@ -427,16 +417,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     return nil;
 }
 
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
-}
 
 #pragma mark - OATilesEditingViewControllerDelegate
 

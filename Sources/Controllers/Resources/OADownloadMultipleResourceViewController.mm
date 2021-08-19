@@ -328,6 +328,8 @@
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             cell.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.descriptionView.hidden = NO;
+            cell.descriptionView.font = [UIFont systemFontOfSize:13.0];
             if (!_isSingleSRTM)
             {
                 UIView *bgColorView = [[UIView alloc] init];
@@ -355,9 +357,7 @@
             if ([OAResourceType isSRTMResourceItem:item])
                 size = [NSString stringWithFormat:@"%@ (%@)", size, [OAResourceType getSRTMFormatItem:item longFormat:NO]];
 
-            cell.descriptionView.hidden = NO;
             cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", size, [item getDate]];
-            cell.descriptionView.font = [UIFont systemFontOfSize:13.0];
 
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];

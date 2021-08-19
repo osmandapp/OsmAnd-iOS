@@ -9,6 +9,7 @@
 #import "OAShowHideMapillaryAction.h"
 #import "OAQuickActionType.h"
 #import "OsmAndApp.h"
+#import "OAIAPHelper.h"
 
 static OAQuickActionType *TYPE;
 
@@ -21,6 +22,9 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
+    if (OAIAPHelper.sharedInstance.mapillary.disabled)
+        return;
+    
     OAAppData *data = [OsmAndApp instance].data;
     [data setMapillary: !data.mapillary];
 }

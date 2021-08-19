@@ -82,9 +82,6 @@
 #define settingMapLanguageShowLocalKey @"settingMapLanguageShowLocalKey"
 #define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
 
-#define mapSettingActiveRouteFilePathKey @"mapSettingActiveRouteFilePathKey"
-#define mapSettingActiveRouteVariantTypeKey @"mapSettingActiveRouteVariantTypeKey"
-
 #define selectedPoiFiltersKey @"selectedPoiFiltersKey"
 #define pluginsKey @"pluginsKey"
 #define impassableRoadsKey @"impassableRoadsKey"
@@ -214,6 +211,7 @@
 #define offlineEditingKey @"offline_editing"
 #define osmUseDevUrlKey @"use_dev_url"
 
+#define showMapillaryKey @"show_mapillary"
 #define onlinePhotosRowCollapsedKey @"onlinePhotosRowCollapsed"
 #define mapillaryFirstDialogShownKey @"mapillaryFirstDialogShown"
 #define useMapillaryFilterKey @"useMapillaryFilter"
@@ -3020,7 +3018,7 @@
         _mapSettingShowPoiLabel = [OACommonBoolean withKey:mapSettingShowPoiLabelKey defValue:NO];
         _mapSettingShowOfflineEdits = [OACommonBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
-        _layerTransparencySeekbarMode = [OACommonInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
+        _layerTransparencySeekbarMode = [OACommonInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED];
 
         [_profilePreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
         [_profilePreferences setObject:_mapSettingShowPoiLabel forKey:@"show_poi_label"];
@@ -3045,9 +3043,6 @@
         [_profilePreferences setObject:_mapSettingSaveTrackIntervalApproved forKey:@"save_global_track_remember"];
         [_globalPreferences setObject:_mapSettingShowRecordingTrack forKey:@"show_saved_track_remember"];
         [_globalPreferences setObject:_mapSettingShowTripRecordingStartDialog forKey:@"show_trip_recording_start_dialog"];
-
-        _mapSettingActiveRouteFilePath = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFilePathKey];
-        _mapSettingActiveRouteVariantType = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteVariantTypeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingActiveRouteVariantTypeKey] : 0;
 
         _selectedPoiFilters = [OACommonString withKey:selectedPoiFiltersKey defValue:@""];
         [_profilePreferences setObject:_selectedPoiFilters forKey:@"selected_poi_filter_for_map"];
@@ -3126,6 +3121,8 @@
         [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
+        //[_profileIconName setModeDefaultValue:@"ic_action_truck" mode:OAApplicationMode.TRUCK];
+        //[_profileIconName setModeDefaultValue:@"ic_action_motorcycle_dark" mode:OAApplicationMode.MOTORCYCLE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
@@ -3146,6 +3143,7 @@
         _locationIcon = [OACommonInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_DEFAULT) mode:OAApplicationMode.BOAT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
@@ -3158,7 +3156,7 @@
         [_defaultSpeed setModeDefaultValue:@2.77 mode:OAApplicationMode.BICYCLE];
         [_defaultSpeed setModeDefaultValue:@1.11 mode:OAApplicationMode.PEDESTRIAN];
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.BOAT];
-        [_defaultSpeed setModeDefaultValue:@40.0 mode:OAApplicationMode.AIRCRAFT];
+        [_defaultSpeed setModeDefaultValue:@200.0 mode:OAApplicationMode.AIRCRAFT];
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.SKI];
         [_profilePreferences setObject:_defaultSpeed forKey:@"default_speed"];
 
@@ -3214,7 +3212,7 @@
         [_profilePreferences setObject:_mapDensity forKey:@"map_density_n"];
 
         _textSize = [OACommonDouble withKey:textSizeKey defValue:MAGNIFIER_DEFAULT_VALUE];
-        [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode CAR]];
+        [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR_TEXT) mode:[OAApplicationMode CAR]];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_textSize forKey:@"text_scale"];
@@ -3235,9 +3233,9 @@
         [_profilePreferences setObject:_mapSettingSaveTrackInterval forKey:@"save_track_interval"];
 
         _saveTrackMinDistance = [OACommonDouble withKey:saveTrackMinDistanceKey defValue:REC_FILTER_DEFAULT];
-        _saveTrackPrecision = [OACommonDouble withKey:saveTrackPrecisionKey defValue:REC_FILTER_DEFAULT];
+        _saveTrackPrecision = [OACommonDouble withKey:saveTrackPrecisionKey defValue:REC_TRACK_PRECISION_DEFAULT];
         _saveTrackMinSpeed = [OACommonDouble withKey:saveTrackMinSpeedKey defValue:REC_FILTER_DEFAULT];
-        _autoSplitRecording = [OACommonBoolean withKey:autoSplitRecordingKey defValue:NO];
+        _autoSplitRecording = [OACommonBoolean withKey:autoSplitRecordingKey defValue:YES];
 
         [_profilePreferences setObject:_saveTrackMinDistance forKey:@"save_track_min_distance"];
         [_profilePreferences setObject:_saveTrackPrecision forKey:@"save_track_precision"];
@@ -3255,7 +3253,7 @@
         [_globalPreferences setObject:_followTheGpxRoute forKey:@"follow_gpx"];
         _arrivalDistanceFactor = [OACommonDouble withKey:arrivalDistanceFactorKey defValue:1.0];
         [_profilePreferences setObject:_arrivalDistanceFactor forKey:@"arrival_distance_factor"];
-        _enableTimeConditionalRouting = [OACommonBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
+        _enableTimeConditionalRouting = [OACommonBoolean withKey:enableTimeConditionalRoutingKey defValue:YES];
         [_profilePreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
         _useIntermediatePointsNavigation = [OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO];
         [_globalPreferences setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
@@ -3340,7 +3338,8 @@
 
         _speakStreetNames = [OACommonBoolean withKey:speakStreetNamesKey defValue:YES];
         _speakTrafficWarnings = [OACommonBoolean withKey:speakTrafficWarningsKey defValue:YES];
-        _speakPedestrian = [OACommonBoolean withKey:speakPedestrianKey defValue:YES];
+        _speakPedestrian = [OACommonBoolean withKey:speakPedestrianKey defValue:NO];
+        [_speakPedestrian setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         _speakSpeedLimit = [OACommonBoolean withKey:speakSpeedLimitKey defValue:YES];
         _speakTunnels = [OACommonBoolean withKey:speakTunnels defValue:NO];
         _speakCameras = [OACommonBoolean withKey:speakCamerasKey defValue:NO];
@@ -3358,7 +3357,7 @@
 
         _voiceProvider = [OACommonString withKey:voiceProviderKey defValue:@""];
         _announceWpt = [OACommonBoolean withKey:announceWptKey defValue:YES];
-        _showScreenAlerts = [OACommonBoolean withKey:showScreenAlertsKey defValue:NO];
+        _showScreenAlerts = [OACommonBoolean withKey:showScreenAlertsKey defValue:YES];
 
         [_profilePreferences setObject:_voiceProvider forKey:@"voice_provider"];
         [_profilePreferences setObject:_announceWpt forKey:@"announce_wpt"];
@@ -3433,6 +3432,7 @@
         [_globalPreferences setObject:_offlineEditing forKey:@"offline_osm_editing"];
         [_globalPreferences setObject:_osmUseDevUrl forKey:@"use_dev_url"];
 
+        _showMapillary = [[[OACommonBoolean withKey:showMapillaryKey defValue:YES] makeGlobal] makeShared];
         _mapillaryFirstDialogShown = [[OACommonBoolean withKey:mapillaryFirstDialogShownKey defValue:NO] makeGlobal];
         _onlinePhotosRowCollapsed = [[[OACommonBoolean withKey:onlinePhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
         _useMapillaryFilter = [[[OACommonBoolean withKey:useMapillaryFilterKey defValue:NO] makeGlobal] makeShared];
@@ -3442,6 +3442,7 @@
         _mapillaryFilterEndDate = [[[OACommonDouble withKey:mapillaryFilterEndDateKey defValue: 0] makeGlobal] makeShared];
         _mapillaryFilterPano = [[[OACommonBoolean withKey:mapillaryFilterPanoKey defValue:NO] makeGlobal] makeShared];
 
+        [_globalPreferences setObject:_showMapillary forKey:@"show_mapillary"];
         [_globalPreferences setObject:_mapillaryFirstDialogShown forKey:@"mapillary_first_dialog_shown"];
         [_globalPreferences setObject:_onlinePhotosRowCollapsed forKey:@"mapillary_menu_collapsed"];
         [_globalPreferences setObject:_useMapillaryFilter forKey:@"use_mapillary_filters"];
@@ -3481,9 +3482,9 @@
         [_profilePreferences setObject:_distanceIndicationVisibility forKey:@"markers_distance_indication_enabled"];
         _distanceIndication = [OACommonDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
         [_profilePreferences setObject:_distanceIndication forKey:@"map_markers_mode"];
-        _arrowsOnMap = [OACommonBoolean withKey:mapArrowsOnMapKey defValue:YES];
+        _arrowsOnMap = [OACommonBoolean withKey:mapArrowsOnMapKey defValue:NO];
         [_profilePreferences setObject:_arrowsOnMap forKey:@"show_arrows_to_first_markers"];
-        _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:YES];
+        _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:NO];
         [_profilePreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
 
         // global
@@ -3556,7 +3557,7 @@
         _webglSupported = [[OACommonBoolean withKey:webglSupportedKey defValue:YES] makeGlobal];
         [_globalPreferences setObject:_webglSupported forKey:@"webgl_supported"];
 
-        _inappsRead = [[OACommonBoolean withKey:inappsReadKey defValue:YES] makeGlobal];
+        _inappsRead = [[OACommonBoolean withKey:inappsReadKey defValue:NO] makeGlobal];
         [_globalPreferences setObject:_inappsRead forKey:@"inapps_read"];
 
         _backupUserEmail = [[OACommonString withKey:backupUserEmailKey defValue:@""] makeGlobal];
@@ -3985,18 +3986,6 @@
     NSArray *array = [set allObjects];
     if (![array isEqualToArray:_plugins.get])
         [_plugins set:array];
-}
-
-- (void) setMapSettingActiveRouteFilePath:(NSString *)mapSettingActiveRouteFilePath
-{
-    _mapSettingActiveRouteFilePath = mapSettingActiveRouteFilePath;
-    [[NSUserDefaults standardUserDefaults] setObject:_mapSettingActiveRouteFilePath forKey:mapSettingActiveRouteFilePathKey];
-}
-
-- (void) setMapSettingActiveRouteVariantType:(int)mapSettingActiveRouteVariantType
-{
-    _mapSettingActiveRouteVariantType = mapSettingActiveRouteVariantType;
-    [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingActiveRouteVariantType forKey:mapSettingActiveRouteVariantTypeKey];
 }
 
 - (void) setLastSearchedCity:(unsigned long long)lastSearchedCity

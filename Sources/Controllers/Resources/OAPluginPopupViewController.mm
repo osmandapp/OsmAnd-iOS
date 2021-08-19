@@ -15,6 +15,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAPluginsViewController.h"
 #import "OAWorldRegion.h"
+#import "OAColors.h"
 
 static NSMutableArray *activePopups;
 
@@ -75,6 +76,11 @@ static NSMutableArray *activePopups;
     } completion:nil];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    [self show];
+}
 - (void)doLayout
 {
     CGFloat w = self.view.frame.size.width;
@@ -129,7 +135,11 @@ static NSMutableArray *activePopups;
     
     [self doLayout];
     
-    _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    if (!_shadeView)
+        _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    else
+        _shadeView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
+    
     _shadeView.backgroundColor = UIColorFromRGBA(0x00000060);
     _shadeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _shadeView.alpha = 0.0;
@@ -199,7 +209,7 @@ static NSMutableArray *activePopups;
     
     UIViewController *top = [OARootViewController instance].navigationController.topViewController;
     
-    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_tabbar_maps_normal"] color:UIColorFromRGB(0x4caf50)];
+    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_map"] color:UIColorFromRGB(0x4caf50)];
     popup.titleLabel.text = title;
     
     NSString *styledText = [self.class styledHTMLwithHTML:descText];
@@ -246,7 +256,7 @@ static NSMutableArray *activePopups;
 
     UIViewController *top = [OARootViewController instance].navigationController.topViewController;
     
-    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_tabbar_maps_normal"] color:UIColorFromRGB(0x4caf50)];
+    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_map"] color:UIColorFromRGB(0x4caf50)];
     popup.titleLabel.text = title;
     
     NSString *styledText = [self.class styledHTMLwithHTML:descText];
@@ -337,18 +347,6 @@ static NSMutableArray *activePopups;
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
-    else if ([kInAppId_Addon_TripPlanning isEqualToString:productIdentifier])
-    {
-        needShow = YES;
-        product = helper.tripPlanning;
-        
-        title = OALocalizedString(@"turn_on_plugin");
-        descText = OALocalizedString(@"plugin_popup_trip_planning_ask");
-        okButtonName = OALocalizedString(@"plugins");
-        cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        
-        [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
-    }
     else if ([kInAppId_Addon_OsmEditing isEqualToString:productIdentifier])
     {
         needShow = YES;
@@ -368,7 +366,8 @@ static NSMutableArray *activePopups;
         
         UIViewController *top = [OARootViewController instance].navigationController.topViewController;
         
-        popup.icon.image = [UIImage imageNamed:iconName];
+        popup.icon.image = [UIImage templateImageNamed:iconName];
+        popup.icon.tintColor = UIColorFromRGB(plugin_icon_green);
         popup.titleLabel.text = title;
         
         NSString *styledText = [self.class styledHTMLwithHTML:descText];
@@ -479,7 +478,8 @@ static NSMutableArray *activePopups;
 
         UIViewController *top = [OARootViewController instance].navigationController.topViewController;
         
-        popup.icon.image = [UIImage imageNamed:iconName];
+        popup.icon.image = [UIImage templateImageNamed:iconName];
+        popup.icon.tintColor = UIColorFromRGB(plugin_icon_green);
         popup.titleLabel.text = title;
         
         NSString *styledText = [self.class styledHTMLwithHTML:descText];

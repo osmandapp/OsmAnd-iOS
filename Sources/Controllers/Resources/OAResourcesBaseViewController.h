@@ -14,9 +14,6 @@
 
 @interface OAResourcesBaseViewController : OACompoundViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
 @property (nonatomic, assign) BOOL dataInvalidated;
 
 @property OADownloadProgressView* downloadView;
@@ -40,7 +37,8 @@
 - (void) showDownloadViewForTask:(id<OADownloadTask>)task;
 
 - (void) startDownloadOfItem:(OARepositoryResourceItem*)item;
-- (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name;
+- (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+            resourceName:(NSString *)name;
 
 - (void) offerCancelDownloadOf:(OAResourceItem *)item;
 

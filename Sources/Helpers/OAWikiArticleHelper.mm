@@ -39,7 +39,7 @@
     if (worldRegion)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
-        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:worldRegion];
+        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:worldRegion];
         if (ids.count > 0)
         {
             for (NSString *resourceId in ids)
@@ -79,7 +79,7 @@
     if (item && app.resourcesManager->isResourceInstalled(item.resourceId))
     {
         OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
-        NSArray<OAPOI *> *wiki = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:250];
+        NSArray<OAPOI *> *wiki = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:250];
         OAPOI *foundPoint = nil;
         for (OAPOI *poi in wiki)
         {
@@ -91,7 +91,7 @@
         }
         if (foundPoint)
         {
-            OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithLocalizedContent:foundPoint.localizedContent localizedNames:foundPoint.localizedNames];
+            OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithPoi:foundPoint];
             [OARootViewController.instance.mapPanel.navigationController pushViewController:wikiController animated:YES];
         }
         else

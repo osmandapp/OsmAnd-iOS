@@ -316,7 +316,8 @@
         if (container == _rightWidgetsView)
         {
             hasRightWidgets = widgetsHeight > 0;
-            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, yPos, maxWidth, containerHeight);
+            CGFloat rightOffset = 2.0;
+            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth - 2 * rightOffset, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, rightContainerFrame))
             {
                 container.frame = rightContainerFrame;
@@ -498,7 +499,6 @@
         //ts.boxTop = R.drawable.btn_flat_transparent;
         ts.rightColor = [UIColor clearColor];
         ts.leftColor = [UIColor clearColor];
-        ts.expand = @"HUD_compass_bg";
         //ts.boxFree = R.drawable.btn_round_transparent;
     }
     else if (nightMode)
@@ -506,7 +506,6 @@
         //ts.boxTop = R.drawable.btn_flat_night;
         ts.rightColor = UIColorFromRGBA(0x000000a0);
         ts.leftColor = UIColorFromRGBA(0x000000a0);
-        ts.expand = @"HUD_compass_bg_night";
         //ts.boxFree = R.drawable.btn_round_night;
     }
     else
@@ -514,7 +513,6 @@
         //ts.boxTop = R.drawable.btn_flat;
         ts.rightColor = [UIColor whiteColor];
         ts.leftColor = [UIColor whiteColor];
-        ts.expand = @"HUD_compass_bg";
         //ts.boxFree = R.drawable.btn_round;
     }
     

@@ -24,7 +24,6 @@
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
 #import "OAMapStyleSettings.h"
-#import "OAGPXRouter.h"
 #import "OATerrainLayer.h"
 #import "OAMapCreatorHelper.h"
 #import "OAOcbfHelper.h"
@@ -487,9 +486,6 @@
     // Init track recorder
     [OASavingTrackHelper sharedInstance];
     
-    // Init gpx router
-    [OAGPXRouter sharedInstance];
-    
     [OAMapCreatorHelper sharedInstance];
     [OATerrainLayer sharedInstanceHillshade];
     [OATerrainLayer sharedInstanceSlope];
@@ -824,9 +820,6 @@
 
     // Favorites
     [self saveFavoritesToPermamentStorage];
-
-    // GPX Route
-    [[OAGPXRouter sharedInstance] saveRoute];
 }
 
 - (void)saveFavoritesToPermamentStorage

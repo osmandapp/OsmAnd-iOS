@@ -29,12 +29,10 @@
 #import "OAPOIFiltersHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
-#import "OAGPXRouteDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
 #import "OAGpxWptItem.h"
-#import "OAGPXRouter.h"
 #import "OAGpxRoutePoint.h"
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
@@ -124,27 +122,18 @@
 {
     // -------------------------------------------------------------------------------------------
 
-    OAAutoObserverProxy* _gpxRouteDefinedObserver;
-    OAAutoObserverProxy* _gpxRouteCanceledObserver;
-    OAAutoObserverProxy* _gpxRouteChangedObserver;
-
     OAAutoObserverProxy* _updateGpxTracksObserver;
     OAAutoObserverProxy* _updateRecTrackObserver;
-    OAAutoObserverProxy* _updateRouteTrackObserver;
 
     OAAutoObserverProxy* _trackRecordingObserver;
     
     NSString *_gpxDocFileTemp;
-    NSString *_gpxDocFileRoute;
 
-    // Route gpx
-    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsRoute;
     // Temp gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsTemp;
     // Currently recording gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsRec;
 
-    OAGPXRouter *_gpxRouter;
     OASelectedGPXHelper *_selectedGpxHelper;
     
     BOOL _tempTrackShowing;
@@ -186,8 +175,10 @@
 
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
+    CGFloat _initialZoomTapPointY;
 
     UIPanGestureRecognizer* _grMove;
+    UIPanGestureRecognizer* _grZoomDoubleTap;
     
     UIRotationGestureRecognizer* _grRotate;
     CGFloat _accumulatedRotationAngle;
@@ -224,7 +215,6 @@
     self.mapViewLoaded = NO;
     
     _app = [OsmAndApp instance];
-    _gpxRouter = [OAGPXRouter sharedInstance];
     _selectedGpxHelper = [OASelectedGPXHelper instance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
     
@@ -239,16 +229,6 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
-
-    _gpxRouteDefinedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onGpxRouteDefined)
-                                                              andObserve:_gpxRouter.routeDefinedObservable];
-    _gpxRouteCanceledObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onGpxRouteCanceled)
-                                                              andObserve:_gpxRouter.routeCanceledObservable];
-    _gpxRouteChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                          withHandler:@selector(onGpxRouteChanged)
-                                                           andObserve:_gpxRouter.routeChangedObservable];
 
     /*
     _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
@@ -279,10 +259,6 @@
     _updateRecTrackObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onUpdateRecTrack)
                                                           andObserve:_app.updateRecTrackOnMapObservable];
-
-    _updateRouteTrackObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onUpdateRouteTrack)
-                                                         andObserve:_app.updateRouteTrackOnMapObservable];
 
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged:withKey:)
@@ -343,6 +319,13 @@
     _grMove.minimumNumberOfTouches = 1;
     _grMove.maximumNumberOfTouches = 1;
     
+    // - Zoom double tap gesture
+    _grZoomDoubleTap = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                      action:@selector(zoomGestureDetected:)];
+    _grZoomDoubleTap.delegate = self;
+    _grZoomDoubleTap.minimumNumberOfTouches = 1;
+    _grZoomDoubleTap.maximumNumberOfTouches = 1;
+    
     // - Rotation gesture
     _grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self
                                                              action:@selector(rotateGestureDetected:)];
@@ -383,6 +366,7 @@
 
     // prevents single tap to fire together with double tap
     [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomIn];
+    [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomDoubleTap];
     
     _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
@@ -564,6 +548,7 @@
     [_mapView addGestureRecognizer:_grRotate];
     [_mapView addGestureRecognizer:_grZoomIn];
     [_mapView addGestureRecognizer:_grZoomOut];
+    [_mapView addGestureRecognizer:_grZoomDoubleTap];
     [_mapView addGestureRecognizer:_grElevation];
     [_mapView addGestureRecognizer:_grSymbolContextMenu];
     [_mapView addGestureRecognizer:_grPointContextMenu];
@@ -685,17 +670,6 @@
         _mapView.viewportYScale = 1.f;
 }
 
-- (void) setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc
-{
-    _gpxDocsRoute.clear();
-    _gpxDocsRoute.append([doc getDocument]);
-}
-
-- (void) setDocFileRoute:(NSString *)fileName
-{
-    _gpxDocFileRoute = fileName;
-}
-
 - (void) setupMapArrowsLocation
 {
     [self setupMapArrowsLocation:_centerLocationForMapArrows];
@@ -755,17 +729,26 @@
     return YES;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if (gestureRecognizer == _grZoomDoubleTap)
+        return touch.tapCount == 2;
+    return YES;
+}
+
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     // Elevation gesture recognizer should not be mixed with others
     if (gestureRecognizer == _grElevation &&
-        (otherGestureRecognizer == _grMove || otherGestureRecognizer == _grRotate || otherGestureRecognizer == _grZoom))
+        (otherGestureRecognizer == _grMove || otherGestureRecognizer == _grRotate || otherGestureRecognizer == _grZoom || otherGestureRecognizer == _grZoomDoubleTap))
         return NO;
     if (gestureRecognizer == _grMove && otherGestureRecognizer == _grElevation)
         return NO;
     if (gestureRecognizer == _grRotate && otherGestureRecognizer == _grElevation)
         return NO;
     if (gestureRecognizer == _grZoom && otherGestureRecognizer == _grElevation)
+        return NO;
+    if (gestureRecognizer == _grZoomDoubleTap && otherGestureRecognizer == _grElevation)
         return NO;
     
     if (gestureRecognizer == _grPointContextMenu && otherGestureRecognizer == _grSymbolContextMenu)
@@ -777,14 +760,26 @@
     if (gestureRecognizer == _grZoomIn && otherGestureRecognizer == _grSymbolContextMenu)
         return NO;
     
+    if (gestureRecognizer == _grPointContextMenu && otherGestureRecognizer == _grZoomDoubleTap)
+        return NO;
+    if (gestureRecognizer == _grSymbolContextMenu && otherGestureRecognizer == _grZoomDoubleTap)
+        return NO;
+    if (gestureRecognizer == _grMove && otherGestureRecognizer == _grZoomDoubleTap)
+        return NO;
+    if (gestureRecognizer == _grZoomDoubleTap && otherGestureRecognizer == _grMove)
+        return NO;
+    
     return YES;
 }
 
-- (void) zoomGestureDetected:(UIPinchGestureRecognizer *)recognizer
+- (void) zoomGestureDetected:(UIGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
     if (!self.mapViewLoaded)
         return;
+    
+    UIPinchGestureRecognizer *pinchRecognizer = [recognizer isKindOfClass:UIPinchGestureRecognizer.class] ? (UIPinchGestureRecognizer *) recognizer : nil;
+    UIPanGestureRecognizer *panGestutreRecognizer = [recognizer isKindOfClass:UIPanGestureRecognizer.class] ? (UIPanGestureRecognizer *) recognizer : nil;
     
     // If gesture has just began, just capture current zoom
     if (recognizer.state == UIGestureRecognizerStateBegan)
@@ -792,6 +787,8 @@
         // Suspend symbols update
         while (![_mapView suspendSymbolsUpdate]);
         _initialZoomLevelDuringGesture = _mapView.zoom;
+        if (panGestutreRecognizer)
+            _initialZoomTapPointY = [panGestutreRecognizer locationInView:recognizer.view].y;
         return;
     }
     
@@ -808,24 +805,42 @@
     }
     
     // Capture current touch center point
-    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
-    for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
-    {
-        CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
-        
-        centerPoint.x += touchPoint.x;
-        centerPoint.y += touchPoint.y;
-    }
-    centerPoint.x /= recognizer.numberOfTouches;
-    centerPoint.y /= recognizer.numberOfTouches;
-    centerPoint.x *= _mapView.contentScaleFactor;
-    centerPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI centerLocationBefore;
+    CGPoint centerPoint;
+    if (pinchRecognizer)
+    {
+        centerPoint = [recognizer locationOfTouch:0 inView:recognizer.view];
+        for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+        {
+            CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
+            
+            centerPoint.x += touchPoint.x;
+            centerPoint.y += touchPoint.y;
+        }
+        centerPoint.x /= recognizer.numberOfTouches;
+        centerPoint.y /= recognizer.numberOfTouches;
+        centerPoint.x *= _mapView.contentScaleFactor;
+        centerPoint.y *= _mapView.contentScaleFactor;
+    }
+    else
+    {
+        centerPoint = CGPointMake(DeviceScreenWidth / 2 * _mapView.contentScaleFactor, DeviceScreenHeight / 2 * _mapView.contentScaleFactor);
+    }
     [_mapView convert:centerPoint toLocation:&centerLocationBefore];
     
     // Change zoom
-    CGFloat scale = 1.0f - recognizer.scale;
-    scale = recognizer.scale < 1.0f ? scale * (10.0f / _mapView.contentScaleFactor) : scale;
+    CGFloat scale, gestureScale;
+    if (pinchRecognizer)
+    {
+        scale = 1.0f - pinchRecognizer.scale;
+    }
+    else
+    {
+        gestureScale = ([panGestutreRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
+        scale = -(1.0f - gestureScale);
+    }
+    gestureScale = pinchRecognizer ? pinchRecognizer.scale : gestureScale;
+    scale = gestureScale < 1.0f ? scale * (10.0f / _mapView.contentScaleFactor) : scale;
     _mapView.zoom = _initialZoomLevelDuringGesture - scale;
     if (_mapView.zoom > _mapView.maxZoom)
         _mapView.zoom = _mapView.maxZoom;
@@ -853,7 +868,8 @@
     // If this is the end of gesture, get velocity for animation
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
-        float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizer.velocity, kZoomVelocityAbsLimit);
+        CGFloat recognizerVelocity = pinchRecognizer ? pinchRecognizer.velocity : 0;
+        float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizerVelocity, kZoomVelocityAbsLimit);
         _mapView.animator->animateZoomWith(velocity,
                                           kZoomDeceleration,
                                           kUserInteractionAnimationKey);
@@ -1388,6 +1404,17 @@
 - (void) hideContextPinMarker
 {
     [_mapLayers.contextMenuLayer hideContextPinMarker];
+    [_mapLayers.downloadedRegionsLayer hideRegionHighlight];
+}
+
+- (void) highlightRegion:(OAWorldRegion *)region
+{
+    [_mapLayers.downloadedRegionsLayer highlightRegion:region];
+}
+
+- (void) hideRegionHighlight
+{
+    [_mapLayers.downloadedRegionsLayer hideRegionHighlight];
 }
 
 - (float) currentZoomOutDelta
@@ -1521,20 +1548,6 @@
     });
 }
 
-- (void) onUpdateRouteTrack
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-        
-        [self showRouteGpxTrack];
-    });
-}
-
 - (void) onTrackRecordingChanged:(id)observable withKey:(id)key
 {
     if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
@@ -1616,42 +1629,6 @@
     });
 }
 
-- (void) onGpxRouteDefined
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
-        {
-            _mapSourceInvalidated = YES;
-            return;
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            [_gpxRouter.routeDoc buildRouteTrack];
-            [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self refreshGpxTracks];
-            });
-        });
-    });
-}
-
-- (void) onGpxRouteCanceled
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self hideRouteGpxTrack];
-    });
-}
-
-- (void) onGpxRouteChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self showRouteGpxTrack];
-    });
-}
-
 - (void) refreshMap
 {
     if (_app.locationServices.status == OALocationServicesStatusActive)
@@ -1703,8 +1680,6 @@
 
         if (!_gpxDocFileTemp)
             _gpxDocsTemp.clear();
-        if (!_gpxDocFileRoute)
-            _gpxDocsRoute.clear();
 
         _gpxDocsRec.clear();
         
@@ -1933,15 +1908,8 @@
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
             [self showRecGpxTrack:YES];
         
-        if (_gpxRouter.gpx && !_gpxDocFileRoute)
-        {
-            [_gpxRouter.routeDoc buildRouteTrack];
-            [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
-        }
-        
         [_selectedGpxHelper buildGpxList];
-        if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
+        if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];
         
         [self hideProgressHUD];
@@ -2150,24 +2118,6 @@
     }
 }
 
-- (void) showRouteGpxTrack
-{
-    @synchronized(_rendererSync)
-    {
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
-}
-
-- (void) hideRouteGpxTrack
-{
-    @synchronized(_rendererSync)
-    {
-        _gpxDocsRoute.clear();
-        _gpxDocFileRoute = nil;
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
-}
-
 - (void) showTempGpxTrack:(NSString *)filePath
 {
     [self showTempGpxTrack:filePath update:YES];
@@ -2368,20 +2318,6 @@
             return YES;
     }
     
-    if (!_gpxDocsRoute.isEmpty())
-    {
-        for (OAGpxRoutePoint *point in _gpxRouter.routeDoc.locationMarks)
-        {
-            if ([OAUtilities isCoordEqual:point.position.latitude srcLon:point.position.longitude destLat:location.latitude destLon:location.longitude])
-            {
-                found = YES;
-            }
-        }
-        
-        if (found)
-            return YES;
-    }
-    
     return NO;
 }
 
@@ -2506,29 +2442,6 @@
             groups.clear();
         }
     }
-
-    if (!_gpxDocsRoute.isEmpty())
-    {
-        for (OAGpxRoutePoint *point in _gpxRouter.routeDoc.locationMarks)
-        {
-            if (point.type.length > 0)
-                [groupSet addObject:point.type];
-
-            if ([OAUtilities isCoordEqual:point.position.latitude srcLon:point.position.longitude destLat:location.latitude destLon:location.longitude])
-            {
-                self.foundWpt = point;
-                self.foundWptDocPath = _gpxDocFileRoute;
-                
-                found = YES;
-            }
-        }
-        
-        if (found)
-        {
-            self.foundWptGroups = [groupSet allObjects];
-            return YES;
-        }
-    }
     
     return NO;
 }
@@ -2549,23 +2462,6 @@
         
         [self hideContextPinMarker];
         
-        return YES;
-    }
-    else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
-    {
-        auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsRoute.first());
-        auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-        
-        gpx->locationMarks.removeOne(_foundWpt.wpt);
-
-        [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
-        [[OAGPXDatabase sharedDb] save];
-        
-        [[OAGPXRouter sharedInstance].routeDoc removeRoutePoint:self.foundWpt];
-        [[OAGPXRouter sharedInstance] saveRouteIfModified];
-        
-        [self hideContextPinMarker];
-
         return YES;
     }
     else
@@ -2625,11 +2521,6 @@
         [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
 
         return YES;
-    }
-    else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
-    {
-        [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
-        [[OAGPXRouter sharedInstance] saveRouteIfModified];
     }
     else
     {
@@ -2764,37 +2655,6 @@
             
             return YES;
         }
-        
-        if ([_gpxDocFileRoute isEqualToString:[gpxFileName lastPathComponent]])
-        {
-            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsRoute.first());
-            auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-            
-            std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
-            p.reset(new OsmAnd::GpxDocument::GpxWpt());
-            wpt.wpt = p;
-
-            OAGpxRoutePoint *rp = [[OAGPXRouter sharedInstance].routeDoc addRoutePoint:wpt];
-            
-            gpx->locationMarks.append(p);
-            
-            self.foundWpt = rp;
-            self.foundWptDocPath = gpxFileName;
-            
-            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
-            [[OAGPXDatabase sharedDb] save];
-            
-            NSMutableSet *groups = [NSMutableSet set];
-            for (auto& loc : gpx->locationMarks)
-            {
-                if (!loc->type.isEmpty())
-                    [groups addObject:loc->type.toNSString()];
-            }
-            
-            self.foundWptGroups = [groups allObjects];
-                        
-            return YES;
-        }
     }
     
     return YES;
@@ -2824,13 +2684,6 @@
         if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
             auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
-            auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-            OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
-            return gpxDoc.locationMarks;
-        }
-        if ([_gpxDocFileRoute isEqualToString:[gpxFileName lastPathComponent]])
-        {
-            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsRoute.first());
             auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
             OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
             return gpxDoc.locationMarks;
@@ -3069,7 +2922,7 @@
 
 - (void) initRendererWithGpxTracks
 {
-    if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
+    if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
     {
         QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
         auto activeGpx = _selectedGpxHelper.activeGpx;
@@ -3078,8 +2931,6 @@
             if (it.value())
                 docs[it.key()] = it.value();
         }
-        if (_gpxDocFileRoute && !_gpxDocsRoute.isEmpty())
-            docs[QString::fromNSString(_gpxDocFileRoute)] = _gpxDocsRoute.first();
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
         

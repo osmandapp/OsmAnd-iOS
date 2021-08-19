@@ -14,7 +14,7 @@
 @property (nonatomic, assign) BOOL openFromSplash;
 @property (nonatomic, assign) BOOL displayBannerPurchaseAllMaps;
 
-+ (NSArray<NSString *> *) getResourcesInRepositoryIdsyRegion:(OAWorldRegion *)region;
++ (NSArray<NSString *> *) getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region;
 + (void) prepareData;
 + (BOOL) lackOfResources;
 

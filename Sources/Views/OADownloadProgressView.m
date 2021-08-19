@@ -92,12 +92,12 @@ typedef enum {
 
 -(void)setButtonStatePause {
     self.buttonState = kDownloadProgressButtonStatePause;
-    [self.startStopButtonView setImage:[UIImage imageNamed:@"Btn-Pause.png"] forState:UIControlStateNormal];
+    [self.startStopButtonView setImage:[UIImage imageNamed:@"ic_custom_pause"] forState:UIControlStateNormal];
 }
 
 -(void)setButtonStateResume {
     self.buttonState = kDownloadProgressButtonStateResume;
-    [self.startStopButtonView setImage:[UIImage imageNamed:@"Btn-Play.png"] forState:UIControlStateNormal];
+    [self.startStopButtonView setImage:[UIImage imageNamed:@"ic_custom_play"] forState:UIControlStateNormal];
 }
 
 

@@ -49,6 +49,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 + (NSString *)resourceTypeLocalized:(OsmAndResourceType)type;
 + (UIImage *)getIcon:(OsmAndResourceType)type;
 + (NSInteger)getOrderIndex:(NSNumber *)type;
++ (OsmAndResourceType)resourceTypeByScopeId:(NSString *)scopeId;
 + (NSArray<NSNumber *> *)allResourceTypes;
 + (NSArray<NSNumber *> *)mapResourceTypes;
 + (BOOL)isMapResourceType:(OsmAndResourceType)type;
@@ -138,14 +139,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @end
 
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
-typedef void (^OASimpleCallback)(UIAlertController *alert);
 
 @class MBProgressHUD;
 
 @interface OAResourcesUIHelper : NSObject
 
-+ (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource inRegion:(OAWorldRegion*)region withRegionName:(BOOL)includeRegionName withResourceType:(BOOL)includeResourceType;
-+ (NSString *)titleOfResourceType:(OsmAndResourceType)type inRegion:(OAWorldRegion *)region withRegionName:(BOOL)includeRegionName withResourceType:(BOOL)includeResourceType;
++ (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
+                      inRegion:(OAWorldRegion*)region
+                withRegionName:(BOOL)includeRegionName
+              withResourceType:(BOOL)includeResourceType;
+
++ (NSString *) titleOfResourceType:(OsmAndResourceType)type
+                         inRegion:(OAWorldRegion *)region
+                   withRegionName:(BOOL)includeRegionName
+                 withResourceType:(BOOL)includeResourceType;
 
 + (BOOL) isSpaceEnoughToDownloadAndUnpackOf:(OAResourceItem*)item;
 + (BOOL) isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
@@ -153,28 +160,66 @@ typedef void (^OASimpleCallback)(UIAlertController *alert);
 + (BOOL) verifySpaceAvailableDownloadAndUnpackResource:(uint64_t)spaceNeeded withResourceName:(NSString*)resourceName asUpdate:(BOOL)isUpdate;
 + (void) showNotEnoughSpaceAlertFor:(NSString*)resourceName withSize:(unsigned long long)size asUpdate:(BOOL)isUpdate;
 
-+ (void) startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name;
++ (void) startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name;
 + (void) startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate>&)resource;
 + (void) startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name;
 
-+ (NSString *)messageResourceStartDownload:(NSString *)resourceName stringifiedSize:(NSString *)stringifiedSize isOutdated:(BOOL)isOutdated;
-+ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem selectedItems:(NSArray<OAResourceItem *> *)selectedItems onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (NSString *)messageResourceStartDownload:(NSString *)resourceName
+                           stringifiedSize:(NSString *)stringifiedSize
+                                isOutdated:(BOOL)isOutdated;
 
-+ (void) startDownloadOfItem:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (void)startDownloadOfItems:(NSArray<OAResourceItem *> *)items onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
+                            selectedItems:(NSArray<OAResourceItem *> *)selectedItems
+                            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                            onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
++ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+                completionHandler:(void(^)(UIAlertController *))completionHandler;
+
++ (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
+                   onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                   onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void) startDownloadOfItem:(OARepositoryResourceItem *)item
+               onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+               onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void) startDownloadOfItems:(NSArray<OAResourceItem *> *)items
+                onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+            resourceName:(NSString *)name
+           onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+           onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void) startDownloadOfCustomItem:(OACustomResourceItem *)item
+                     onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler;
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop;
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_;
 + (void) cancelDownloadOf:(OAResourceItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop;
 
-+ (void) offerDeleteResourceOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
-+ (void) offerDeleteResourceOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD;
-+ (void)deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
++ (void) offerDeleteResourceOf:(OALocalResourceItem *)item
+                viewController:(UIViewController *)viewController
+                   progressHUD:(MBProgressHUD *)progressHUD
+           executeAfterSuccess:(dispatch_block_t)block;
+
++ (void) offerDeleteResourceOf:(OALocalResourceItem *)item
+                viewController:(UIViewController *)viewController
+                   progressHUD:(MBProgressHUD *)progressHUD;
+
++ (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
 + (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD;
++ (void) deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
 
 + (void) offerClearCacheOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block;
 + (void) clearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
@@ -183,9 +228,26 @@ typedef void (^OASimpleCallback)(UIAlertController *alert);
 + (NSString *) getCountryName:(OAResourceItem *)item;
 + (BOOL) checkIfDownloadAvailable;
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region;
-+ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAndResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete;
-+ (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(NSArray<OAWorldRegion *> *)subregions resourceTypes:(NSArray<NSNumber *> *)resourceTypes isGroup:(BOOL)isGroup;
-+ (NSArray<OAResourceItem *> *) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAndResourceType)resourceType subregions:(NSArray<OAWorldRegion *> *)subregions;
+
++ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                   resourceType:(OsmAndResourceType)resourceType
+                     onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete;
+
++ (NSArray<OAResourceItem *> *) requestMapDownloadInfo:(NSArray<OAWorldRegion *> *)subregions
+                                         resourceTypes:(NSArray<NSNumber *> *)resourceTypes
+                                               isGroup:(BOOL)isGroup;
+
++ (NSArray<OAResourceItem *> *) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                                          resourceType:(OsmAndResourceType)resourceType
+                                            subregions:(NSArray<OAWorldRegion *> *)subregions;
+
++ (void) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon onComplete:(void (^)(NSArray<OARepositoryResourceItem *> *))onComplete;
++ (NSArray<OARepositoryResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon;
++ (NSArray<OAResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type names:(NSArray<NSString *> *)names limit:(NSInteger)limit;
++ (NSArray<OAResourceItem *> *) findIndexItemsAt:(NSArray<NSString *> *)names type:(OsmAnd::ResourcesManager::ResourceType)type includeDownloaded:(BOOL)includeDownloaded limit:(NSInteger)limit;
++ (CLLocationCoordinate2D) getMapLocation;
+
+
 + (void) clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(float)zoom onComplete:(void (^)(void))onComplete;
 
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
@@ -196,5 +258,6 @@ typedef void (^OASimpleCallback)(UIAlertController *alert);
 + (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles;
 
 + (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAndResourceType>)resourceTypes;
++ (QVector<std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource>>) getExternalMapFilesAt:(OsmAnd::PointI)point routeData:(BOOL)routeData;
 
 @end

@@ -10,16 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OACustomRegion, OAWorldRegion;
-
-@interface OASuggestedDownloadItem : NSObject
-
-@property (nonatomic, readonly) NSString *scopeId;
-@property (nonatomic, readonly) NSString *searchType;
-@property (nonatomic, readonly) NSArray<NSString *> *names;
-@property (nonatomic, readonly) NSInteger limit;
-
-@end
+@class OACustomRegion, OAWorldRegion, OASuggestedDownloadsItem;
 
 @interface OACustomPlugin : OAPlugin
 
@@ -31,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) loadResources;
 - (void) updateDownloadItems:(NSArray<OAWorldRegion *> *)items;
+- (void) updateSuggestedDownloads:(NSArray<OASuggestedDownloadsItem *> *)items;
 
 - (void) writeAdditionalDataToJson:(NSMutableDictionary *)json;
 - (void) writeDependentFilesJson:(NSMutableDictionary *)json;
@@ -38,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) addRouter:(NSString *)fileName;
 - (void) addRenderer:(NSString *)fileName;
 
-- (void) removePluginItems:(void(^)(void) __nullable)onComplete;
+- (void) removePluginItems:(void(^)(void))onComplete;
 - (NSString *) getPluginDir;
 
 + (NSArray<OACustomRegion *> *)collectRegionsFromJson:(NSArray *)jsonArray;

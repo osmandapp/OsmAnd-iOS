@@ -18,10 +18,6 @@
 
 @property (nonatomic) NSInteger index;
 
-@property (nonatomic) BOOL routePoint;
-@property (nonatomic) BOOL routeTargetPoint;
-@property (nonatomic) NSInteger routePointIndex;
-
 @property (nonatomic) BOOL hidden;
 @property (nonatomic) BOOL manual;
 

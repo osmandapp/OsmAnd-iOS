@@ -632,7 +632,7 @@ typedef enum
         
         if (selectedRegion)
         {
-            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:selectedRegion];
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:selectedRegion];
             if (ids.count > 0)
             {
                 for (NSString *resourceId in ids)
@@ -653,6 +653,7 @@ typedef enum
                         item.sizePkg = resource->packageSize;
                         item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
                         item.worldRegion = selectedRegion;
+                        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
                         _localMapIndexItem = item;
                         break;
                     }

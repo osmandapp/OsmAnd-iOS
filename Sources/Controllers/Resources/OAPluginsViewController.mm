@@ -27,6 +27,7 @@
 #import "OAQuickActionRegistry.h"
 #import "OAPlugin.h"
 #import "OACustomPlugin.h"
+#import "OAColors.h"
 
 #define kDefaultPluginsSection 0
 #define kCustomPluginsSection 1
@@ -197,8 +198,8 @@
                 purchased = [product isPurchased];
                 disabled = product.disabled;
                 
-                imgTitle = [UIImage imageNamed:[product productIconName]];
-                
+                imgTitle = [UIImage templateImageNamed:[product productIconName]];
+
                 title = product.localizedTitle;
                 desc = product.localizedDescription;
                 if (product.price)
@@ -231,6 +232,7 @@
                 cell.imgIcon.contentMode = UIViewContentModeScaleAspectFit;
             
             [cell.imgIcon setImage:imgTitle];
+            cell.imgIcon.tintColor = UIColorFromRGB(plugin_icon_green);
             [cell.lbTitle setText:title];
             [cell.lbDescription setText:desc];
             [cell.btnPrice setTitle:price forState:UIControlStateNormal];

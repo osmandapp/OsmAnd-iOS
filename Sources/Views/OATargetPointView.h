@@ -22,19 +22,6 @@
 
 @protocol OATargetPointViewDelegate;
 
-@protocol OATargetPointZoomViewDelegate <NSObject>
-
-- (void) zoomInPressed;
-- (void) zoomOutPressed;
-
-@end
-
-@interface OATargetPointZoomView : UIView
-
-@property (weak, nonatomic) id<OATargetPointZoomViewDelegate> delegate;
-
-@end
-
 @interface OATargetPointView : OAScrollView<OATargetMenuViewControllerDelegate>
 
 @property (nonatomic) OATargetPoint *targetPoint;
@@ -113,12 +100,12 @@
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;
 - (void) targetGoToGPX;
-- (void) targetGoToGPXRoute;
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated;
 - (void) targetSetTopControlsVisible:(BOOL)visible;
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) targetStatusBarChanged;
 - (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left;
+- (void) targetResetRulerPosition;
 - (void) targetOpenAvoidRoad;
 
 - (void) targetViewEnableMapInteraction;

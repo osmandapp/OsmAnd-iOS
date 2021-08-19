@@ -51,11 +51,11 @@
 
 @class OAGpxWpt;
 @class OAGpxMetadata;
-@class OAGPXRouteDocument;
 @class OAPOIUIFilter;
 @class OASearchWptAPI;
 @class OAMapRendererView;
 @class OAMapLayers;
+@class OAWorldRegion;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -97,9 +97,6 @@
 - (float) getMapZoom;
 - (void) refreshMap;
 
-- (void) setDocFileRoute:(NSString *)fileName;
-- (void) setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc;
-
 - (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;
 
@@ -138,10 +135,10 @@
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
 
-- (BOOL) simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
+- (void) highlightRegion:(OAWorldRegion *)region;
+- (void) hideRegionHighlight;
 
-- (void) showRouteGpxTrack;
-- (void) hideRouteGpxTrack;
+- (BOOL) simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
 
 - (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update;
 - (void) showTempGpxTrack:(NSString *)filePath;

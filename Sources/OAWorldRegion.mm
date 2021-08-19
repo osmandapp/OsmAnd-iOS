@@ -21,6 +21,7 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
+#import "OAPointIContainer.h"
 
 #import "OAWorldRegion+Protected.h"
 #import "OAResourcesUIHelper.h"
@@ -69,7 +70,8 @@
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
         _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);
         _bboxBottomRight = CLLocationCoordinate2DMake(latLonBottomRight.latitude, latLonBottomRight.longitude);
-        
+        _regionCenter = CLLocationCoordinate2DMake(region->regionCenter.latitude, region->regionCenter.longitude);
+
         [self setLocalizedNamesFrom:region->localizedNames];
         
         if (!_localizedName && _nativeName.length == 0)
@@ -168,6 +170,12 @@
         return t % 2 == 1;
     }
     return res;
+}
+
+- (void) getPoints31:(OAPointIContainer *)container;
+{
+    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
+        container.qPoints = _worldRegion->mapObject->points31;
 }
 
 + (int) ray_intersect_x:(int) x y:(int) y middleY:(int) middleY prevX:(int) prevX prevY:(int) prevY
@@ -592,16 +600,12 @@
                 [mapRegions removeObject:region];
         }];
         
-        double smallestArea = DBL_MAX;
-        for (OAWorldRegion *region : mapRegions)
-        {
-            double area = [region getArea];
-            if (area < smallestArea)
-            {
-                smallestArea = area;
-                selectedRegion = region;
-            }
-        }
+        [mapRegions sortUsingComparator:^NSComparisonResult(id a, id b) {
+            NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
+            NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
+            return [first compare:second];
+        }];
+        selectedRegion = mapRegions.firstObject;
     }
     return selectedRegion;
 }
@@ -635,6 +639,27 @@
             return region;
     }
     return nil;
+}
+
+- (OAWorldRegion *) getRegionDataByDownloadName:(NSString *)downloadName
+{
+    if (!downloadName)
+    {
+        return nil;
+    }
+    else
+    {
+        for (OAWorldRegion *region in _flattenedSubregions)
+        {
+            NSString *regionDownloadId = region.downloadsIdPrefix;
+            if ([regionDownloadId hasSuffix:@"."])
+                regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
+
+            if ([regionDownloadId isEqualToString:downloadName.lowercaseString])
+                return region;
+        }
+        return nil;
+    }
 }
 
 - (void)buildResourceGroupItem
@@ -682,6 +707,7 @@
     {
         OsmAndResourceType key = [OAResourceType toResourceType:type isGroup:YES];
         [self.groupItem removeItem:key subregion:subregion];
+
         NSArray<OAResourceItem *> *newItems = [OAResourcesUIHelper requestMapDownloadInfo:@[subregion] resourceTypes:@[type] isGroup:YES];
         [self.groupItem addItems:newItems key:key];
         [self.groupItem sort];

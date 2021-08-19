@@ -188,7 +188,7 @@ static NSMutableArray *_searchableWorldwideRegionItems;
 
 static BOOL _lackOfResources;
 
-+ (NSArray<NSString *> *)getResourcesInRepositoryIdsyRegion:(OAWorldRegion *)region
++ (NSArray<NSString *> *)getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region
 {
     const auto citRegionResources = _resourcesByRegions.constFind(region);
     if (citRegionResources == _resourcesByRegions.cend())
@@ -200,10 +200,6 @@ static BOOL _lackOfResources;
     {
         [res addObject:resource->id.toNSString()];
     }
-    // Check if special Saudi Arabia Rahal map is installed
-    if ([region.regionId isEqualToString:@"asia_saudi-arabia"])
-        [res addObject:@"saudi-arabia_rahal_asia.obf"];
-
     return [NSArray arrayWithArray:res];
 }
 
@@ -269,8 +265,6 @@ static BOOL _lackOfResources;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
 
     _numberFormatter = [[NSNumberFormatter alloc] init];
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
@@ -544,7 +538,7 @@ static BOOL _lackOfResources;
         {
             region = region.superregion;
         }
-            
+
         if (region)
             regionId = region.regionId;
         
@@ -779,7 +773,7 @@ static BOOL _lackOfResources;
                 regionResources.repositoryResources.insert(resource->id, resource);
             }
 
-            region.resourceTypes = [[typesArray sortedArrayUsingComparator:^NSComparisonResult(NSNumber *num1, NSNumber *num2) {
+            region.resourceTypes = [typesArray sortedArrayUsingComparator:^NSComparisonResult(NSNumber *num1, NSNumber *num2) {
                 NSInteger orderValue1 = [OAResourceType getOrderIndex:num1];
                 NSInteger orderValue2 = [OAResourceType getOrderIndex:num2];
                 if (orderValue1 < orderValue2)
@@ -788,7 +782,7 @@ static BOOL _lackOfResources;
                     return NSOrderedDescending;
                 else
                     return NSOrderedSame;
-            }] mutableCopy];
+            }];
         }
         else
         {
@@ -969,7 +963,9 @@ static BOOL _lackOfResources;
         [self collectSubregionItemsFromRegularRegion:region];
 }
 
-- (OAResourceItem *) collectSubregionItem:(OAWorldRegion *)region regionResources:(const RegionResources &)regionResources resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource
+- (OAResourceItem *) collectSubregionItem:(OAWorldRegion *)region
+                          regionResources:(const RegionResources &)regionResources
+                                 resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource
 {
     OAResourceItem *item_ = nil;
 
@@ -1085,8 +1081,7 @@ static BOOL _lackOfResources;
     
     [_allResourceItems addObjectsFromArray:_allSubregionItems];
     [_allResourceItems sortUsingComparator:self.resourceItemsComparator];
-
-    _regionMapItems = [[_regionMapItems sortedArrayUsingComparator:^NSComparisonResult(OAResourceItem *res1, OAResourceItem *res2) {
+    [_regionMapItems sortUsingComparator:^NSComparisonResult(OAResourceItem *res1, OAResourceItem *res2) {
         NSInteger orderValue1 = [OAResourceType getOrderIndex:[OAResourceType toValue:res1.resourceType]];
         NSInteger orderValue2 = [OAResourceType getOrderIndex:[OAResourceType toValue:res2.resourceType]];
         if (orderValue1 < orderValue2)
@@ -1095,7 +1090,7 @@ static BOOL _lackOfResources;
             return NSOrderedDescending;
         else
             return NSOrderedSame;
-    }] mutableCopy];
+    }];
 
     // Map Creator sqlitedb files
     [_localSqliteItems removeAllObjects];
@@ -1236,7 +1231,7 @@ static BOOL _lackOfResources;
             break;
         }
     }
-    
+
     NSMutableSet *regionsSet = [NSMutableSet set];
     for (OAOutdatedResourceItem *item in _outdatedResourceItems)
     {
@@ -1403,7 +1398,7 @@ static BOOL _lackOfResources;
 - (void) updateTableLayout
 {
     CGRect frame = self.tableView.frame;
-    CGFloat h = self.view.bounds.size.height - self.toolbarView.bounds.size.height - frame.origin.y;
+    CGFloat h = self.view.bounds.size.height - frame.origin.y;
     if (self.downloadView.superview)
         h -= self.downloadView.bounds.size.height;
     
@@ -1558,6 +1553,10 @@ static BOOL _lackOfResources;
                         item.worldRegion = region;
                         NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
                         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
+
+                        const auto localResource = _app.resourcesManager->getLocalResource(resource->id);
+                        item.resource = localResource;
+                        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
                         item.size = resource->size;
 
@@ -1957,7 +1956,7 @@ static BOOL _lackOfResources;
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
         OAResourceItem *item = (OAResourceItem *) item_;
-        FFCircularProgressView *progressView = (FFCircularProgressView* ) cell.accessoryView;
+        FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
 
         float progressCompleted = item.downloadTask.progressCompleted;
         if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
@@ -2002,7 +2001,7 @@ static BOOL _lackOfResources;
     BOOL disabled = NO;
 
     OAResourceItem *downloadingMultipleItem = nil;
-    
+
     id item_ = nil;
     if ([self isFiltering])
     {
@@ -2123,7 +2122,7 @@ static BOOL _lackOfResources;
                     if (item.resourceTypes.count > 0)
                     {
                         NSMutableOrderedSet<NSNumber *> *typesSet = [NSMutableOrderedSet orderedSetWithArray:item.resourceTypes];
-                        NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
+                        NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
                             NSInteger orderValue1 = [OAResourceType getOrderIndex:type1];
                             NSInteger orderValue2 = [OAResourceType getOrderIndex:type2];
                             if (orderValue1 < orderValue2)
@@ -2132,7 +2131,8 @@ static BOOL _lackOfResources;
                                 return NSOrderedDescending;
                             else
                                 return NSOrderedSame;
-                        }] mutableCopy];
+                        }];
+
                         NSMutableArray<NSString *> *typesLocalized = [NSMutableArray new];
                         [sortedTypesWithoutDuplicate enumerateObjectsUsingBlock:^(NSNumber *type, NSUInteger idx, BOOL *stop) {
                             [typesLocalized addObject:[OAResourceType resourceTypeLocalized:[OAResourceType toResourceType:type isGroup:NO]]];
@@ -2390,11 +2390,11 @@ static BOOL _lackOfResources;
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-            UIImage *iconImage = [UIImage templateImageNamed:@"menu_item_update_icon"];
+            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_import"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
+            [btnAcc setTintColor:UIColorFromRGB(color_primary_purple)];
             btnAcc.frame = CGRectMake(0.0, 0.0, 60.0, 50.0);
             [cell setAccessoryView:btnAcc];
         }
@@ -2421,7 +2421,7 @@ static BOOL _lackOfResources;
             NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
             UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
             btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
@@ -2464,7 +2464,7 @@ static BOOL _lackOfResources;
             NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
             UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
             btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
@@ -2642,7 +2642,7 @@ static BOOL _lackOfResources;
     return cell;
 }
 
-- (void) accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
+- (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event
 {
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:self.tableView]];
     if (!indexPath)
@@ -3068,19 +3068,6 @@ static BOOL _lackOfResources;
 }
 
 #pragma mark -
-
-- (IBAction)btnToolbarMapsClicked:(id)sender
-{
-}
-
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
-{
-    [OAAnalyticsHelper logEvent:@"purchases_open"];
-
-    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-    purchasesViewController.openFromSplash = _openFromSplash;
-    [self.navigationController pushViewController:purchasesViewController animated:NO];
-}
 
 - (void) doSubscribe:(NSString *)email
 {

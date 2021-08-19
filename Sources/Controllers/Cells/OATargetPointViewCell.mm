@@ -10,8 +10,6 @@
 #import "OATargetPoint.h"
 #import "OADestination.h"
 #import "OADestinationCell.h"
-#import "OAGPXRouter.h"
-#import "OAGPXRouteDocument.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
@@ -52,13 +50,6 @@
         OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
         if (plugin && plugin.getParkingType)
             [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] label:self.descriptionView shortText:NO];
-    }
-    else if (_targetPoint.type == OATargetGPXRoute)
-    {
-        _iconView.image = _targetPoint.icon;
-        double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
-        self.titleView.text = [[OsmAndApp instance] getFormattedDistance:distance];
-        [self updateDescriptionView];
     }
     else
     {

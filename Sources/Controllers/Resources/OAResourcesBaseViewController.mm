@@ -153,11 +153,6 @@ static BOOL dataInvalidated = NO;
 
 - (void) applyLocalization
 {
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void) viewDidLoad
@@ -214,7 +209,7 @@ static BOOL dataInvalidated = NO;
         [self.view insertSubview:self.downloadView aboveSubview:tableView];
         
         // Constraints
-        NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.toolbarView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.f];
+        NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.f];
         [self.view addConstraint:constraint];
         
         constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
@@ -223,7 +218,9 @@ static BOOL dataInvalidated = NO;
         constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
         [self.view addConstraint:constraint];
         
-        constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOADownloadProgressViewHeight];
+        [OAUtilities getBottomMargin];
+        
+        constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOADownloadProgressViewHeight + [OAUtilities getBottomMargin]];
         [self.view addConstraint:constraint];
     }
 }
@@ -237,17 +234,6 @@ static BOOL dataInvalidated = NO;
         [self.downloadView setButtonStateResume];
     else
         [self.downloadView setButtonStatePause];
-}
-
-
-- (UIView *) getBottomView
-{
-    return self.toolbarView;
-}
-
-- (CGFloat) getToolBarHeight
-{
-    return defaultToolBarHeight;
 }
 
 - (void)updateContent
@@ -298,7 +284,8 @@ static BOOL dataInvalidated = NO;
     }];
 }
 
-- (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
+- (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+            resourceName:(NSString *)name
 {
     [OAResourcesUIHelper startDownloadOf:resource resourceName:name onTaskCreated:^(id<OADownloadTask> _Nonnull task) {
         [self updateContent];

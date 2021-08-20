@@ -2130,3 +2130,6 @@
 "product_desc_mapillary" = "Onlinefotos auf Straßenebene für jedermann";
 "product_title_mapillary" = "Mapillary";
 "shared_string_turn_off" = "Ausschalten";
+"suggested_maps_descr" = "Diese Karten werden für dieses Modul benötigt";
+"product_desc_ext_openplacereviews" = "Senden Sie Fotos, Reviews und Links über öffentliche Orte wie Restaurants, Hotels, Museen und Wegpunkte als Open Data https://openplacereviews.org/data/.\n\nLesen Sie mehr auf https://openplacereviews.org";
+"product_desc_ext_mapillary" = "Online-Fotos der Straßen für alle. Erkunden Sie Orte, machen Sie mit, fangen Sie die Welt ein.";

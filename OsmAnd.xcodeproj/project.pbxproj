@@ -10112,12 +10112,12 @@
 		DA5A7E5F26C563A400F274C7 /* PointEditing */ = {
 			isa = PBXGroup;
 			children = (
+				DA5A7E6226C563A400F274C7 /* OABasePointEditingHandler.h */,
+				DA5A7E6526C563A400F274C7 /* OABasePointEditingHandler.m */,
 				DA5A7E6026C563A400F274C7 /* OAFavoriteEditingHandler.h */,
 				DA5A7E6126C563A400F274C7 /* OAFavoriteEditingHandler.mm */,
-				DA5A7E6226C563A400F274C7 /* OABasePointEditingHandler.h */,
 				DA5A7E6326C563A400F274C7 /* OAGpxWptEditingHandler.h */,
 				DA5A7E6426C563A400F274C7 /* OAGpxWptEditingHandler.mm */,
-				DA5A7E6526C563A400F274C7 /* OABasePointEditingHandler.m */,
 			);
 			path = PointEditing;
 			sourceTree = "<group>";

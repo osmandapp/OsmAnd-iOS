@@ -477,7 +477,7 @@
         switch (self.mapModeButtonType)
         {
             case EOAMapModeButtonTypeShowMap:
-                [_mapModeButton setImage:[UIImage imageNamed:@"ic_custom_show_on_map"] forState:UIControlStateNormal];
+                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_show_on_map"] forState:UIControlStateNormal];
                 break;
                 
             default:

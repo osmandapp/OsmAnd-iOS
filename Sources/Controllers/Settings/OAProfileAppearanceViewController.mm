@@ -168,8 +168,6 @@
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
     _profile.locationIcon = baseModeForNewProfile.getLocationIcon;
     _profile.navigationIcon = baseModeForNewProfile.getNavigationIcon;
-    _profile.minSpeed = baseModeForNewProfile.baseMinSpeed;
-    _profile.maxSpeed = baseModeForNewProfile.baseMaxSpeed;
 }
 
 - (void) commonInit

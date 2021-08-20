@@ -37,8 +37,6 @@
 @property (nonatomic, readonly) NSString *variantKey;
 
 @property (nonatomic) NSString *descr;
-@property (nonatomic) CGFloat baseMinSpeed;
-@property (nonatomic) CGFloat baseMaxSpeed;
 
 @property (nonatomic, readonly) OAApplicationMode *parent;
 
@@ -49,6 +47,8 @@
 + (OAApplicationMode *) BICYCLE;
 + (OAApplicationMode *) PEDESTRIAN;
 + (OAApplicationMode *) AIRCRAFT;
++ (OAApplicationMode *) TRUCK;
++ (OAApplicationMode *) MOTORCYCLE;
 + (OAApplicationMode *) BOAT;
 + (OAApplicationMode *) PUBLIC_TRANSPORT;
 + (OAApplicationMode *) SKI;

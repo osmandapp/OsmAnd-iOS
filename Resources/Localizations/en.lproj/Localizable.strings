@@ -2250,6 +2250,8 @@
 "app_mode_pickup_truck" = "Pickup truck";
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
+"app_mode_truck" = "Truck";
+"app_mode_motorcycle" = "Motorcycle";
 "desert" = "Desert";
 
 

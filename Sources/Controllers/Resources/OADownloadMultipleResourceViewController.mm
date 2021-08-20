@@ -82,6 +82,9 @@
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
+
     [self updateDownloadButtonView];
 }
 
@@ -142,9 +145,10 @@
         if (indexPath.section == 0)
             return 36.;
         else if (indexPath.section == 1)
-            return indexPath.row == 1 ? 48. : 66.;
+            return indexPath.row == 1 && !_isSingleSRTM ? 48. : UITableViewAutomaticDimension;
     }
-    return indexPath.row == 1 ? 48. : 66.;
+
+    return indexPath.row == 1 ? 48. : UITableViewAutomaticDimension;
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
@@ -175,31 +179,30 @@
 {
     if (!_isSingleSRTM)
     {
-        [UIView performWithoutAnimation:^{
-            [self.tableView beginUpdates];
-            BOOL shouldSelect = _selectedItems.count == 0;
-            NSInteger section = _isSRTM ? 1 : 0;
-            if (!shouldSelect)
-                [_selectedItems removeAllObjects];
+        [self.tableView beginUpdates];
+        BOOL shouldSelect = _selectedItems.count == 0;
+        NSInteger section = _isSRTM ? 1 : 0;
+        if (!shouldSelect)
+            [_selectedItems removeAllObjects];
+        else
+            [_selectedItems addObjectsFromArray:_items];
+
+        NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
+        for (NSInteger i = 1; i < _items.count + 1; i++)
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
+            [indexPaths addObject:indexPath];
+            if (shouldSelect)
+                [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
             else
-                [_selectedItems addObjectsFromArray:_items];
+                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+        }
+        [indexPaths addObject:[NSIndexPath indexPathForRow:1 inSection:section]];
 
-            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
-            for (NSInteger i = 1; i < _items.count + 1; i++) {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
-                [indexPaths addObject:indexPath];
-                if (shouldSelect)
-                    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-                else
-                    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-            }
-            [indexPaths addObject:[NSIndexPath indexPathForRow:1 inSection:section]];
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        ((OATableViewCustomHeaderView *) [self.tableView headerViewForSection:section]).label.text = [self getTitleForSection:section];
 
-            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-            ((OATableViewCustomHeaderView *) [self.tableView headerViewForSection:section]).label.text = [self getTitleForSection:section];
-
-            [self.tableView endUpdates];
-        }];
+        [self.tableView endUpdates];
         [self updateDownloadButtonView];
     }
 }
@@ -422,6 +425,7 @@
 
             cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", size, [item getDate]];
 
+            [cell changeHeight:YES];
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];
             return cell;
@@ -453,26 +457,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_isSingleSRTM)
-    {
-        if (![self isDividerCell:indexPath] && indexPath.row > 2)
-            [self selectDeselectItem:indexPath];
-        else
-            [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
+    if (!_isSingleSRTM && ![self isDividerCell:indexPath] && indexPath.row > 2)
+        [self selectDeselectItem:indexPath];
     else
-    {
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_isSingleSRTM)
-    {
-        if (![self isDividerCell:indexPath] && indexPath.row > 2)
-            [self selectDeselectItem:indexPath];
-    }
+    if (!_isSingleSRTM && ![self isDividerCell:indexPath] && indexPath.row > 2)
+        [self selectDeselectItem:indexPath];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

@@ -495,7 +495,7 @@
 "relief_smoothness_factor_descr" = "Prednostni izbor izrisa terena: ravninsko ali gričevnato.";
 "choose_auto_follow_route" = "Samodejno središčenje zemljevida";
 "choose_auto_follow_route_descr" = "Časovni zamik, preden se položaj samodejno postavi v središče zemljevida";
-"auto_zoom_map" = "Samodejna povečava zemljevida";
+"auto_zoom_map" = "Samodejno približevanje zemljevida";
 "auto_zoom_map_descr" = "Samodejno prilagajanje približanja zemljevida glede na hitrost vožnje (zemljevid se usklajuje s trenutnim mestom)";
 "snap_to_road" = "Pripni na cesto";
 "snap_to_road_descr" = "Med navigacijo pripni položaj na ceste";
@@ -1271,7 +1271,6 @@
 "rendering_attr_piste_difficulty_novice_name" = "Začetniška";
 "routing_attr_width_name" = "Omejitevširine";
 "units_and_formats" = "Enote in zapisi";
-
 "osm_notes" = "Sporočila OSM";
 "quick_action_mapillary_hide" = "Skrij Mapillary";
 "shared_string_nothing_selected" = "Ni izbranih predmetov";
@@ -1290,7 +1289,7 @@
 "shared_string_exit" = "Končaj";
 "configure_screen_descr" = "Izbor privzetih možnosti delovanja zaslona za profil";
 "quick_action_showhide_mapillary_title" = "Prikaži/skrij Mapillary";
-"base_profile_descr_car" = "Za osebne avtomobile, motorje, tovornjake ...";
+"base_profile_descr_car" = "Za avtomobile, motorje, tovornjake ...";
 "shared_string_copy" = "Kopiraj";
 "selected_profile" = "Izbrani profil";
 "appearance_on_map" = "Prikaz na zemljevidu";
@@ -1358,7 +1357,6 @@
 "public_transport_warning_title" = "Možnost navigacije z javnim prevozom je še preizkusna, zato je pričakovati netočnosti in napake.";
 "distance_indication" = "Kazalec smeri";
 "avoid_road" = "Izogni se cesti";
-
 "icon" = "Ikona";
 "new_plugin_added" = "Dodan je nov vstavek";
 "coordinates" = "Koordinate";

@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OADestination.h"
 
-@protocol OAWidgetListener;
-
 @interface OADestinationsLineWidget : UIView <UIGestureRecognizerDelegate>
-
-@property (nonatomic, weak) id<OAWidgetListener> delegate;
 
 - (void) drawDestinationLineLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
 - (void) drawLineArrowWidget:(OADestination *)destination;

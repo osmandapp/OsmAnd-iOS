@@ -110,6 +110,8 @@
 
 "settings_preset" = "Default profile";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
+"dialogs_and_notifications" = "Dialogs and notifications";
+"dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
@@ -516,8 +518,10 @@
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
+"download_map_dialog" = "Download map dialog";
 "update_map" = "Update map";
 "download_pending" = "Download pending";
+"download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Move map to select needed area.";
 "number_of_tiles" = "Number of tiles";
 "download_size" = "Download size";

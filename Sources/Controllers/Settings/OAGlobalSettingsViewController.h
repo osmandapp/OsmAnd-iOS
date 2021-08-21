@@ -13,6 +13,7 @@ typedef enum
     EOAGlobalSettingsMain = 0,
     EOADefaultProfile,
     EOACarplayProfile,
+    EOADialogsAndNotifications
 } EOAGlobalSettingsScreen;
 
 @interface OAGlobalSettingsViewController : OACompoundViewController

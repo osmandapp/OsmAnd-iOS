@@ -297,6 +297,11 @@
     return [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft;
 }
 
+- (void) setCornerRadius:(CGFloat)value
+{
+    self.layer.cornerRadius = value;
+}
+
 @end
 
 @implementation UITableViewCell (util)

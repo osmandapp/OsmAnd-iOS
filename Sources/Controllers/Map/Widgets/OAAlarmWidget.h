@@ -7,13 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OABaseWidgetView.h"
 
-@protocol OAWidgetListener;
-
-@interface OAAlarmWidget : UIView
-
-@property (nonatomic, weak) id<OAWidgetListener> delegate;
-
-- (BOOL) updateInfo;
+@interface OAAlarmWidget : OABaseWidgetView
 
 @end

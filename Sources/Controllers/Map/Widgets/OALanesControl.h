@@ -7,14 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OABaseWidgetView.h"
 
-@protocol OAWidgetListener;
-
-@interface OALanesControl : UIView
-
-@property (nonatomic, weak) id<OAWidgetListener> delegate;
+@interface OALanesControl : OABaseWidgetView
 
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius;
-- (BOOL) updateInfo;
 
 @end

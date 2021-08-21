@@ -313,7 +313,7 @@
                     {
                         controller.localMapIndexItem = nil;
                         [controller createMapDownloadControls];
-                        return ;
+                        return;
                     }
                 }
                 OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];

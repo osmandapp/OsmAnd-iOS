@@ -7,12 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OABaseWidgetView.h"
 
-@protocol OAWidgetListener;
+@interface OARulerWidget : OABaseWidgetView <UIGestureRecognizerDelegate>
 
-@interface OARulerWidget : UIView <UIGestureRecognizerDelegate>
-
-- (BOOL) updateInfo;
 - (void) onMapSourceUpdated;
 
 @end

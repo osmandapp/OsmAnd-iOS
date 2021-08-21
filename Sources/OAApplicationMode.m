@@ -39,17 +39,19 @@ static OAApplicationMode *_BICYCLE;
 static OAApplicationMode *_PUBLIC_TRANSPORT;
 static OAApplicationMode *_PEDESTRIAN;
 static OAApplicationMode *_AIRCRAFT;
+static OAApplicationMode *_TRUCK;
+static OAApplicationMode *_MOTORCYCLE;
 static OAApplicationMode *_BOAT;
 static OAApplicationMode *_SKI;
 
 + (void)initRegVisibility
 {
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI];
+    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE];
     
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
-    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI    ];
+    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _TRUCK, _MOTORCYCLE];
     NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
     
     // left
@@ -65,8 +67,8 @@ static OAApplicationMode *_SKI;
     [self regWidgetVisibility:@"distance" am:all];
     [self regWidgetVisibility:@"time" am:all];
     [self regWidgetVisibility:@"intermediate_time" am:all];
-    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT]];
-    [self regWidgetVisibility:@"max_speed" am:@[_CAR]];
+    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT, _TRUCK, _MOTORCYCLE]];
+    [self regWidgetVisibility:@"max_speed" am:@[_CAR, _TRUCK, _MOTORCYCLE]];
     [self regWidgetVisibility:@"altitude" am:@[_PEDESTRIAN, _BICYCLE]];
     [self regWidgetVisibility:@"gps_info" am:none];
     
@@ -81,7 +83,7 @@ static OAApplicationMode *_SKI;
     [self regWidgetVisibility:@"config" am:none];
     [self regWidgetVisibility:@"layers" am:none];
     [self regWidgetVisibility:@"compass" am:none];
-    [self regWidgetVisibility:@"street_name" am:@[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT]];
+    [self regWidgetVisibility:@"street_name" am:@[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _TRUCK, _MOTORCYCLE]];
     [self regWidgetVisibility:@"back_to_location" am:all];
     [self regWidgetVisibility:@"monitoring_services" am:none];
     [self regWidgetVisibility:@"bgService" am:none];
@@ -100,44 +102,38 @@ static OAApplicationMode *_SKI;
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
-    _CAR.baseMinSpeed = 2.78;
-    _CAR.baseMaxSpeed = 54.17;
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
-    _BICYCLE.baseMinSpeed = 0.7;
-    _BICYCLE.baseMaxSpeed = 13.76;
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
-    _PEDESTRIAN.baseMinSpeed = 0.28;
-    _PEDESTRIAN.baseMaxSpeed = 4.16;
     [_values addObject:_PEDESTRIAN];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
     _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
-    _PUBLIC_TRANSPORT.baseMinSpeed = 0.28;
-    _PUBLIC_TRANSPORT.baseMaxSpeed = 41.66;
     [_values addObject:_PUBLIC_TRANSPORT];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
     _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
-    _AIRCRAFT.baseMinSpeed = 1.;
-    _AIRCRAFT.baseMaxSpeed = 300.;
     [_values addObject:_AIRCRAFT];
+    
+    _TRUCK = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_truck") stringKey:@"truck"];
+    _TRUCK.descr = OALocalizedString(@"app_mode_truck");
+    [_values addObject:_TRUCK];
+    
+    _MOTORCYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_motorcycle") stringKey:@"motorcycle"];
+    _MOTORCYCLE.descr = OALocalizedString(@"app_mode_motorcycle");
+    [_values addObject:_MOTORCYCLE];
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
     _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
-    _BOAT.baseMinSpeed = 0.42;
-    _BOAT.baseMaxSpeed = 8.33;
     [_values addObject:_BOAT];
     
     _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
     _SKI.descr = OALocalizedString(@"app_mode_skiing");
-    _SKI.baseMinSpeed = 0.42;
-    _SKI.baseMaxSpeed = 62.5;
     [_values addObject:_SKI];
 }
 
@@ -164,6 +160,16 @@ static OAApplicationMode *_SKI;
 + (OAApplicationMode *) AIRCRAFT;
 {
     return _AIRCRAFT;
+}
+
++ (OAApplicationMode *) TRUCK;
+{
+    return _TRUCK;
+}
+
++ (OAApplicationMode *) MOTORCYCLE;
+{
+    return _MOTORCYCLE;
 }
 
 + (OAApplicationMode *) BOAT;
@@ -541,10 +547,32 @@ static OAApplicationMode *_SKI;
 
 + (void) onApplicationStart
 {
+    [self initModesParents];
     [self initCustomModes];
-//    [self initModesParams];
+    [self initModesParams];
     [self initRegVisibility];
     [self reorderAppModes];
+}
+
++ (void) initModesParents
+{
+    // We can't set parent profiles directly in initialize() method. Because it creates infinity loop on app initialisation:
+    // OAAppSetttings.init() -> OAApplicationMode.init() -> OAAppSetttings.init() -> OAApplicationMode...
+    [_TRUCK setParent:_CAR];
+    [_MOTORCYCLE setParent:_CAR];
+}
+
++ (void) initModesParams
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    int defaultValue = 0;
+    if ([settings.appModeOrder get:_PEDESTRIAN] != defaultValue)
+    {
+        if ([settings.appModeOrder get:_TRUCK] != defaultValue)
+            [_TRUCK setOrder:_PEDESTRIAN.getOrder + 1];
+        if ([settings.appModeOrder get:_MOTORCYCLE] != defaultValue)
+            [_MOTORCYCLE setOrder:_PEDESTRIAN.getOrder + 1];
+    }
 }
 
 + (void) initCustomModes

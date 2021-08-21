@@ -2128,3 +2128,5 @@
 "product_desc_openplacereviews" = "أرسل الصور، المراجعات وروابط الأماكن العامة";
 "product_desc_ext_mapillary" = "صور على مستوى الشارع على الإنترنت متاحة للجميع. اكتشاف الأماكن، نسق مع غيرك وإلتقط صورا للعالم.";
 "product_desc_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع";
+"shared_strings_all_regions" = "كل المناطق";
+"welmode_download_maps" = "تنزيل الخرائط";

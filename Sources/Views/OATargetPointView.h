@@ -105,7 +105,7 @@
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) targetStatusBarChanged;
 - (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left;
-- (void) targetResetMapRulerPosition;
+- (void) targetResetRulerPosition;
 - (void) targetOpenAvoidRoad;
 
 - (void) targetViewEnableMapInteraction;

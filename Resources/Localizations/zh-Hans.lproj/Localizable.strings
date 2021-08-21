@@ -628,7 +628,7 @@
 "shared_string_collapse" = "折叠";
 "shared_string_widgets" = "小工具";
 "monitoring_control_start" = "REC";
-"map_widget_intermediate_distance" = "途径目的地";
+"map_widget_intermediate_distance" = "中转点";
 "always_center_position_on_map" = "总是在中心显示位置";
 "map_widget_appearance_rem" = "剩余的元素";
 "map_widget_compass" = "指南针";
@@ -1235,7 +1235,7 @@
 "new_profile" = "新配置文件";
 "routing_attr_piste_type_skitour_name" = "滑雪旅游";
 "base_profile_descr_aircraft" = "飞机、滑翔";
-"map_widget_intermediate_time" = "中转时间";
+"map_widget_intermediate_time" = "中转点时间";
 "purchase_dialog_title" = "选择规划";
 "rendering_attr_whiteWaterSports_name" = "激流运动";
 "rendering_value_darkyellow_name" = "暗黄色";
@@ -1413,7 +1413,7 @@
 "select_avoid_descr" = "选择你要在导航过程中避开的道路。你可以在地图上选择一条道路或从下面的列表中选择一种类型。";
 "subsequent_dest_description" = "向上移动目的地，并创建目的地";
 "transport_nearby_routes_within" = "附近的路线";
-"access_intermediate_arrival_time" = "中间到达时间";
+"access_intermediate_arrival_time" = "中转点到达时间";
 "get_discount_second_part" = "然后 %@";
 "months_3" = "三个月";
 "plugin_popup_osm_editing_title" = "开启 OpenStreetMap 编辑";
@@ -1432,7 +1432,7 @@
 "nearest_point" = "最近的点";
 "attach_to_the_roads" = "依附于道路";
 "simplified_track" = "简化轨迹";
-"map_widget_distance_by_tap" = "点击距离";
+"map_widget_distance_by_tap" = "点击测距";
 "street_level_imagery" = "街道等级图像";
 "download_wiki_data" = "为 %@ 下载维基百科数据";
 "download_size" = "下载大小";
@@ -1518,3 +1518,5 @@
 "replace_favorite_confirmation" = "你确定你想要替换收藏的 %@？";
 "profile_appearance" = "配置外观";
 "configure_profile" = "更改配置";
+"app_restart_required" = "应用需要重新启动以应用某些设置。";
+"routing_attr_allow_intermediate_name" = "允许中转点线路";

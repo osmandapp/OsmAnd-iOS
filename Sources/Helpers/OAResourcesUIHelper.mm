@@ -1191,18 +1191,29 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     uint64_t spaceNeeded = item.resource->packageSize + item.resource->size;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:spaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
-
-    NSString *message = [self messageResourceStartDownload:resourceName stringifiedSize:stringifiedSize isOutdated:NO];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    {
+        [self showNoInternetAlert];
+    }
+    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    {
         [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
-    }]];
-
-    if (completionHandler)
-        completionHandler(alert);
+    }
     else
-        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    {
+        NSString *message = [self messageResourceStartDownload:resourceName stringifiedSize:stringifiedSize isOutdated:NO];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        }]];
+        
+        if (completionHandler)
+            completionHandler(alert);
+        else
+            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 + (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
@@ -1249,16 +1260,27 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:totalSpaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
-
-    NSString *stringifiedSize = [NSByteCountFormatter stringFromByteCount:downloadSpaceNeeded countStyle:NSByteCountFormatterCountStyleFile];
-    NSString *message = [self messageResourceStartDownload:resourceName stringifiedSize:stringifiedSize isOutdated:NO];
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    {
+        [self showNoInternetAlert];
+    }
+    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    {
         [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
-    }]];
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        NSString *stringifiedSize = [NSByteCountFormatter stringFromByteCount:downloadSpaceNeeded countStyle:NSByteCountFormatterCountStyleFile];
+        NSString *message = [self messageResourceStartDownload:resourceName stringifiedSize:stringifiedSize isOutdated:NO];
+
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        }]];
+        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 + (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
@@ -1276,14 +1298,33 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:spaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
 
-    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:resourceInRepository->packageSize countStyle:NSByteCountFormatterCountStyleFile];
-    NSString* message = [self.class messageResourceStartDownload:resourceName stringifiedSize:stringifiedSize isOutdated:YES];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_update") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    {
+        [self showNoInternetAlert];
+    }
+    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    {
         [self.class startDownloadOf:resourceInRepository resourceName:resourceName onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
-    }]];
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:resourceInRepository->packageSize countStyle:NSByteCountFormatterCountStyleFile];
+        NSString* message = [self.class messageResourceStartDownload:resourceName stringifiedSize:stringifiedSize isOutdated:YES];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_update") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.class startDownloadOf:resourceInRepository resourceName:resourceName onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        }]];
+        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    }
+}
+
++ (void)showNoInternetAlert
+{
+    NSString *message = OALocalizedString(@"alert_inet_needed");
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
 }
 
 + (void)startDownloadOfItem:(OARepositoryResourceItem *)item

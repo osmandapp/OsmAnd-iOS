@@ -215,7 +215,7 @@
     [_menuButtonConfigureScreen setTitle:OALocalizedString(@"layer_map_appearance") forState:UIControlStateNormal];
     [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_help") forState:UIControlStateNormal];
-    [_menuButtonNavigation setTitle:OALocalizedString(@"get_directions") forState:UIControlStateNormal];
+    [_menuButtonNavigation setTitle:OALocalizedString(@"shared_string_navigation") forState:UIControlStateNormal];
     [_menuButtonPlanRoute setTitle:OALocalizedString(@"plan_route") forState:UIControlStateNormal];
     [_menuButtonPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
     

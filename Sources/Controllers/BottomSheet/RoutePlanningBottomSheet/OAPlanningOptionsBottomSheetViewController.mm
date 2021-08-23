@@ -136,10 +136,10 @@
     [data addObject:@[
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"get_directions"),
+            @"title" : OALocalizedString(@"shared_string_navigation"),
             @"img" : @"left_menu_icon_navigation",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
-            @"key" : @"get_directions"
+            @"key" : @"shared_string_navigation"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
@@ -275,7 +275,7 @@
             [self hide:YES];
             [self.delegate addToTrackSelected];
         }
-        else if ([key isEqualToString:@"get_directions"])
+        else if ([key isEqualToString:@"shared_string_navigation"])
         {
             [self.delegate directionsSelected];
         }

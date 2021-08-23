@@ -240,7 +240,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     else if (type == EOACarPlayButtonTypeDismiss)
         barButton.title = OALocalizedString(@"shared_string_done");
     else if (type == EOACarPlayButtonTypeDirections)
-        barButton.title = OALocalizedString(@"get_directions");
+        barButton.title = OALocalizedString(@"shared_string_navigation");
     else if (type == EOACarPlayButtonTypeRouteCalculation)
         barButton.title = [NSString stringWithFormat:OALocalizedString(@"route_calc_progress"), 0];
     else if (type == EOACarPlayButtonTypeCancelRoute)

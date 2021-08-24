@@ -248,8 +248,8 @@
     if (visible == self.hidden)
     {
         self.hidden = !visible;
-        if (_delegate)
-            [_delegate widgetVisibilityChanged:nil visible:visible];
+        if (self.delegate)
+            [self.delegate widgetVisibilityChanged:nil visible:visible];
         
         return YES;
     }

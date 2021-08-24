@@ -14,7 +14,7 @@
 @class OAToolbarViewController;
 @class OAMapRulerView;
 @class OAMapInfoController;
-@class OATopCoordinatesWidget;
+@class OATopCoordinatesWidget, OADownloadMapWidget;
 
 @interface OAMapHudViewController : UIViewController
 
@@ -48,6 +48,7 @@
 @property (nonatomic) OAToolbarViewController *toolbarViewController;
 @property (nonatomic) OAMapInfoController *mapInfoController;
 @property (nonatomic) OATopCoordinatesWidget *topCoordinatesWidget;
+@property (nonatomic) OADownloadMapWidget *downloadMapWidget;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
@@ -64,6 +65,7 @@
 - (void) removeToolbar;
 
 - (void) setCoordinatesWidget:(OATopCoordinatesWidget *)widget;
+- (void) setDownloadMapWidget:(OADownloadMapWidget *)widget;
 
 - (void) updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
 

@@ -1,15 +1,17 @@
 //
-//  OATopCoordinatesWidget.h
+//  OADownloadMapWidget.h
 //  OsmAnd Maps
 //
-//  Created by nnngrach on 26.03.2021.
+//  Created by Paul on 20.08.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
 
-@interface OATopCoordinatesWidget :OABaseWidgetView
+@interface OADownloadMapWidget : OABaseWidgetView
+
+@property (nonatomic, readonly) CGFloat shadowOffset;
 
 - (BOOL) isVisible;
 

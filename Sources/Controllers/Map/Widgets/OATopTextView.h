@@ -7,23 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OABaseWidgetView.h"
 
-@class OATopTextView;
-
-@protocol OATopTextViewListener <NSObject>
-
-@required
-- (void) topTextViewChanged:(OATopTextView *)topTextView;
-- (void) topTextViewVisibilityChanged:(OATopTextView *)topTextView visible:(BOOL)visible;
-- (void) topTextViewClicked:(OATopTextView *)topTextView;
-
-@end
-
-@interface OATopTextView : UIView
-
-@property (nonatomic, weak) id<OATopTextViewListener> delegate;
+@interface OATopTextView : OABaseWidgetView
 
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius nightMode:(BOOL)nightMode;
-- (BOOL) updateInfo;
 
 @end

@@ -191,6 +191,11 @@
     _waypointTextShadow.frame = _waypointText.frame;
 }
 
+- (BOOL)isTopText
+{
+    return YES;
+}
+
 - (BOOL) updateVisibility:(BOOL)visible
 {
     BOOL updated = [self updateVisibility:self visible:visible];
@@ -206,8 +211,8 @@
     if (needUpdate)
     {
         view.hidden = !visible;
-        if (_delegate)
-            [_delegate topTextViewVisibilityChanged:self visible:visible];
+        if (self.delegate)
+            [self.delegate widgetVisibilityChanged:self visible:visible];
     }
 
     return needUpdate;
@@ -244,8 +249,8 @@
     
     [self updateFrame];
     [self setNeedsLayout];
-    if (_delegate)
-        [_delegate topTextViewChanged:self];
+    if (self.delegate)
+        [self.delegate widgetChanged:self];
 }
 
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius nightMode:(BOOL)nightMode
@@ -402,8 +407,8 @@
     {
         [self updateFrame];
         [self setNeedsLayout];
-        if (_delegate)
-            [_delegate topTextViewChanged:self];
+        if (self.delegate)
+            [self.delegate widgetChanged:self];
     }
     
     return res;
@@ -549,16 +554,16 @@
 
 - (void) onTopTextViewClicked:(id)sender
 {
-    if (_delegate)
-        [_delegate topTextViewClicked:self];
+    if (self.delegate)
+        [self.delegate widgetClicked:self];
 }
 
 - (void) onWaypointViewClicked:(id)sender
 {
     [OAWaypointUIHelper showOnMap:_lastPoint];
 
-    if (_delegate)
-        [_delegate topTextViewClicked:self];
+    if (self.delegate)
+        [self.delegate widgetClicked:self];
 }
 
 - (IBAction) onMoreButtonClicked:(id)sender

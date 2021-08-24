@@ -135,8 +135,8 @@
     if (self.onClickFunction)
         self.onClickFunction(self);
     
-    if (_delegate)
-        [_delegate widgetClicked:self];
+    if (self.delegate)
+        [self.delegate widgetClicked:self];
 }
 
 - (void) setImage:(UIImage *)image
@@ -264,8 +264,8 @@
     
     _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
     _textView.attributedText = string;
-    if (_delegate)
-        [_delegate widgetChanged:self];
+    if (self.delegate)
+        [self.delegate widgetChanged:self];
 }
 
 - (CGFloat) getWidgetHeight
@@ -294,8 +294,8 @@
     if (visible == self.hidden)
     {
         self.hidden = !visible;
-        if (_delegate)
-            [_delegate widgetVisibilityChanged:self visible:visible];
+        if (self.delegate)
+            [self.delegate widgetVisibilityChanged:self visible:visible];
         
         return YES;
     }

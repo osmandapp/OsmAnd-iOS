@@ -34,6 +34,7 @@
 #import "OACompassRulerWidgetState.h"
 #import "OAUserInteractionPassThroughView.h"
 #import "OAToolbarViewController.h"
+#import "OADownloadMapWidget.h"
 
 @interface OATextState : NSObject
 
@@ -53,7 +54,7 @@
 @implementation OATextState
 @end
 
-@interface OAMapInfoController () <OAWidgetListener, OATopTextViewListener>
+@interface OAMapInfoController () <OAWidgetListener>
 
 @end
 
@@ -68,6 +69,7 @@
     BOOL _expanded;
     OATopTextView *_streetNameView;
     OATopCoordinatesWidget *_topCoordinatesView;
+    OADownloadMapWidget *_downloadMapWidget;
     OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
@@ -83,6 +85,8 @@
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
+    
+    NSArray<OABaseWidgetView *> *_widgetsToUpdate;
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -184,10 +188,8 @@
 {
     [self updateColorShadowsOfText];
     [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
-    [_streetNameView updateInfo];
-    [_lanesControl updateInfo];
-    [_alarmControl updateInfo];
-    [_topCoordinatesView updateInfo];
+    for (OABaseWidgetView *widget in _widgetsToUpdate)
+         [widget updateInfo];
 }
 
 - (void) updateInfo
@@ -223,7 +225,7 @@
     }
 }
 
-- (void) layoutWidgets:(OATextInfoWidget *)widget
+- (void) layoutWidgets:(OABaseWidgetView *)widget
 {
     NSMutableArray<UIView *> *containers = [NSMutableArray array];
     if (widget)
@@ -251,7 +253,7 @@
         [containers addObject:_rightWidgetsView];
     }
     
-    BOOL portrait = !OAUtilities.isLandscape;
+    BOOL portrait = !OAUtilities.isLandscapeIpadAware;
     CGFloat maxContainerHeight = 0;
     CGFloat yPos = 0;
     BOOL hasStreetName = NO;
@@ -412,6 +414,23 @@
             _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
         }
     }
+    
+    if (_downloadMapWidget && _downloadMapWidget.superview && !_downloadMapWidget.hidden)
+    {
+        if (_lastUpdateTime == 0)
+            [[OARootViewController instance].mapPanel updateToolbar];
+        
+        if (portrait)
+        {
+            _downloadMapWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 155.);
+        }
+        else
+        {
+            CGFloat widgetWidth = DeviceScreenWidth / 2;
+            CGFloat leftOffset = widgetWidth / 2 - [OAUtilities getLeftMargin];
+            _downloadMapWidget.frame = CGRectMake(leftOffset, 0., widgetWidth, 155.);
+        }
+    }
 }
 
 - (CGFloat) getLeftBottomY
@@ -429,6 +448,9 @@
 - (void) recreateControls
 {
     OAApplicationMode *appMode = _settings.applicationMode.get;
+    
+    [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];
+    [_mapHudViewController setDownloadMapWidget:_downloadMapWidget];
 
     [_streetNameView removeFromSuperview];
     [_widgetsView addSubview:_streetNameView];
@@ -442,8 +464,6 @@
 
     [_alarmControl removeFromSuperview];
     [_mapHudViewController.view addSubview:_alarmControl];
-    
-    [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];
 
     for (UIView *widget in _leftWidgetsView.subviews)
         [widget removeFromSuperview];
@@ -552,18 +572,30 @@
     MapMarkersWidgetsFactory mwf = map.getMapLayers().getMapMarkersLayer().getWidgetsFactory();
     OsmandApplication app = view.getApplication();
      */
+    NSMutableArray<OABaseWidgetView *> *widgetsToUpdate = [NSMutableArray array];
+    
     _lanesControl = [ric createLanesControl];
     _lanesControl.delegate = self;
+    [widgetsToUpdate addObject:_lanesControl];
 
     _streetNameView = [[OATopTextView alloc] init];
     _streetNameView.delegate = self;
+    [widgetsToUpdate addObject:_streetNameView];
     [self updateStreetName:NO ts:[self calculateTextState]];
     
     _alarmControl = [ric createAlarmInfoControl];
     _alarmControl.delegate = self;
+    [widgetsToUpdate addObject:_alarmControl];
     
     _topCoordinatesView = [[OATopCoordinatesWidget alloc] init];
     _topCoordinatesView.delegate = self;
+    [widgetsToUpdate addObject:_topCoordinatesView];
+    
+    _downloadMapWidget = [[OADownloadMapWidget alloc] init];
+    _downloadMapWidget.delegate = self;
+    [widgetsToUpdate addObject:_downloadMapWidget];
+    
+    _widgetsToUpdate = widgetsToUpdate;
     
     _rulerControl = [ric createRulerControl];
   
@@ -631,36 +663,25 @@
 
 #pragma mark - OAWidgetListener
 
-- (void) widgetChanged:(OATextInfoWidget *)widget
+- (void) widgetChanged:(OABaseWidgetView *)widget
 {
-    [self layoutWidgets:widget];
+    if (!widget.isTopText)
+        [self layoutWidgets:widget];
 }
 
-- (void) widgetVisibilityChanged:(OATextInfoWidget *)widget visible:(BOOL)visible
+- (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible
 {
-    [self layoutWidgets:widget];
+    [self layoutWidgets:widget.isTopText ? nil : widget];
 }
 
-- (void) widgetClicked:(OATextInfoWidget *)widget
+- (void) widgetClicked:(OABaseWidgetView *)widget
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
-    });
-}
-
-#pragma mark - OATopTextViewListener
-
-- (void) topTextViewChanged:(OATopTextView *)topTextView
-{
-}
-
-- (void) topTextViewVisibilityChanged:(OATopTextView *)topTextView visible:(BOOL)visible
-{
-    [self layoutWidgets:nil];
-}
-
-- (void) topTextViewClicked:(OATopTextView *)topTextView
-{
+    if (!widget.isTopText)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
+        });
+    }
 }
 
 @end

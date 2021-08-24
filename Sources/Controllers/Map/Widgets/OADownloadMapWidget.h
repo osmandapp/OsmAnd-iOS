@@ -11,6 +11,8 @@
 
 @interface OADownloadMapWidget : OABaseWidgetView
 
+@property (nonatomic, readonly) CGFloat shadowOffset;
+
 - (BOOL) isVisible;
 
 @end

@@ -109,7 +109,7 @@
     if (self.delegate)
         [self.delegate widgetChanged:nil];
     
-    self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.4].CGColor;
+    self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.2].CGColor;
     self.layer.shadowOpacity = 1.0;
     self.layer.shadowRadius = 12.0;
     self.layer.shadowOffset = CGSizeMake(0.0, 12.0);

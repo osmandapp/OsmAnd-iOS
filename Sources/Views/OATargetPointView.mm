@@ -195,7 +195,7 @@ static const NSInteger _buttonsCount = 4;
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
     [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
     [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_info") upperCase] forState:UIControlStateNormal];
-    [_buttonRoute setTitle:[OALocalizedString(@"get_directions") upperCase] forState:UIControlStateNormal];
+    [_buttonRoute setTitle:[OALocalizedString(@"shared_string_navigation") upperCase] forState:UIControlStateNormal];
 
     _backView4.hidden = YES;
     _buttonMore.hidden = YES;

@@ -314,6 +314,7 @@
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigation";
+"shared_string_navigation" = "Navigation";
 "get_directions" = "Directions";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";

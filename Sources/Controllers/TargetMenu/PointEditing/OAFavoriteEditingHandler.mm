@@ -134,7 +134,10 @@
 
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group
 {
-    return [OAFavoritesHelper checkDuplicates:_favorite newName:name newCategory:group];
+    OAFavoriteItem *comparingPoint = [[OAFavoriteItem alloc] initWithLat:_favorite.getLatitude lon:_favorite.getLatitude name:_favorite.getName category:_favorite.getCategory];
+    NSDictionary *result = [OAFavoritesHelper checkDuplicates:comparingPoint newName:name newCategory:group];
+    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[comparingPoint]];
+    return result;
 }
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
@@ -154,6 +157,7 @@
     {
         [OAFavoritesHelper editFavoriteName:_favorite newName:data.name group:data.category descr:[_favorite getDescription] address:[_favorite getAddress]];
     }
+    [OAFavoritesHelper loadFavorites];
 }
 
 @end

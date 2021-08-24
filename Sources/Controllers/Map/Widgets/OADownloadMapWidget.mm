@@ -196,7 +196,11 @@
 - (BOOL) shouldUpdate
 {
     if (![_settings.showDownloadMapDialog get])
+    {
+        if (!self.isHidden)
+            [self updateVisibility];
         return NO;
+    }
     
     BOOL isFirstLaunch = _cachedLocation == nil;
     const auto target31 = _mapView.target31;

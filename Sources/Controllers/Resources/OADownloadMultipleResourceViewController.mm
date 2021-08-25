@@ -133,18 +133,14 @@
 
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
 {
-    id cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-
-    if ([cell isKindOfClass:OADividerCell.class])
+    if ([self isDividerCell:indexPath])
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
-    else if ([cell isKindOfClass:OASegmentedControllCell.class])
+    else if (_isSRTM && indexPath.section == 0)
         return 36.;
-    else if ([cell isKindOfClass:OACustomSelectionButtonCell.class])
+    else if (indexPath.row == 1 && ((_isSRTM && indexPath.section == 1) || (!_isSRTM && indexPath.section == 0)))
         return 48.;
-    else if ([cell isKindOfClass:OAMenuSimpleCell.class])
+    else
         return estimated ? 66. : UITableViewAutomaticDimension;
-
-    return estimated ? 66. : UITableViewAutomaticDimension;
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
@@ -155,8 +151,14 @@
     else
         [_selectedItems addObject:item];
 
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    ((OATableViewCustomHeaderView *) [self.tableView headerViewForSection:indexPath.section]).label.text = [self getTitleForSection:indexPath.section];
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
+                    animations:^(void)
+                    {
+                            [self.tableView reloadData];
+                    }
+                    completion:nil];
     [self updateDownloadButtonView];
 }
 
@@ -175,11 +177,18 @@
         {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
             if (shouldSelect)
-                [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
             else
-                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         }
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationNone];
+        [UIView transitionWithView:self.tableView
+                          duration:0.35f
+                           options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
+                        animations:^(void)
+                        {
+                            [self.tableView reloadData];
+                        }
+                        completion:nil];
         [self updateDownloadButtonView];
     }
 }
@@ -191,9 +200,7 @@
         UISegmentedControl *segment = (UISegmentedControl *) sender;
         if (segment)
         {
-            [self.tableView beginUpdates];
             _srtmfOn = segment.selectedSegmentIndex == 1;
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
             [_items removeAllObjects];
             for (OAResourceItem *item in _multipleItem.items)
             {
@@ -208,8 +215,15 @@
                 if (![OsmAndApp instance].resourcesManager->isResourceInstalled(item.resourceId))
                     [_selectedItems addObject:item];
             }
+            [UIView transitionWithView:self.tableView
+                              duration:0.35f
+                               options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
+                            animations:^(void)
+                            {
+                                [self.tableView reloadData];
+                            }
+                            completion:nil];
             [self updateDownloadButtonView];
-            [self.tableView endUpdates];
         }
     }
 }
@@ -425,32 +439,32 @@
     {
         OAResourceItem *item = _items[(indexPath.row - 1) / 2 - 1];
         BOOL selected = [_selectedItems containsObject:item];
-        [cell setSelected:selected animated:NO];
+        [cell setSelected:selected animated:YES];
         if (selected)
-            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         else
-            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[self tableView:self.tableView cellForRowAtIndexPath:indexPath] isKindOfClass:OAMenuSimpleCell.class])
+    if (![self isDividerCell:indexPath] && indexPath.row > 2)
     {
         if (!_isSingleSRTM)
             [self selectDeselectItem:indexPath];
         else
-            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else
     {
-        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[self tableView:self.tableView cellForRowAtIndexPath:indexPath] isKindOfClass:OAMenuSimpleCell.class])
+    if (![self isDividerCell:indexPath] && indexPath.row > 2)
     {
         if (!_isSingleSRTM)
             [self selectDeselectItem:indexPath];

@@ -1695,7 +1695,7 @@
 "shared_string_max" = "Massimo";
 "shared_string_min" = "Min";
 "nothing_found_empty" = "Nessun risultato";
-"meters" = "metri";
+"shared_string_meters" = "metri";
 "tones" = "toni";
 "announce" = "Annunci";
 "transfers" = "Trasferimenti:";

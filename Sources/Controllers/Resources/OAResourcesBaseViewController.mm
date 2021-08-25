@@ -317,6 +317,22 @@ static BOOL dataInvalidated = NO;
     [self offerDeleteResourceOf:item executeAfterSuccess:nil];
 }
 
+- (void)offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items
+{
+    dispatch_block_t block = ^{
+        NSMutableSet *typesSet = [NSMutableSet new];
+        for (OALocalResourceItem *item in items)
+        {
+            [typesSet addObject:[OAResourceType toValue:item.resourceType]];
+        }
+        for (NSNumber *type in typesSet.allObjects)
+        {
+            [self.region.superregion updateGroupItems:self.region type:type];
+        }
+    };
+    [OAResourcesUIHelper deleteResourcesOf:items progressHUD:nil executeAfterSuccess:block];
+}
+
 - (void) offerClearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
 {
     [OAResourcesUIHelper offerClearCacheOf:item viewController:self executeAfterSuccess:block];

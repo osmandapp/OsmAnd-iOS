@@ -1434,7 +1434,7 @@
 "appearance_on_map" = "Weergeven op de kaart";
 "importing_from" = "Gegevens importeren uit %@";
 "import_complete_description" = "Alle gegevens uit de %@ zijn geïmporteerd, open met de onderstaande knoppen het benodigde deel van de app om deze te beheren.";
-"meters" = "meter";
+"shared_string_meters" = "meter";
 "shared_string_min" = "Min";
 "add_point" = "Punt toevoegen";
 "app_profiles" = "Toepassingsprofielen";

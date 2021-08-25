@@ -1693,7 +1693,7 @@
 "move_map_to_select_area" = "Déplacez la carte pour sélectionner la zone requise.";
 "update_map" = "Mettreà jour la carte";
 "shared_string_not_set" = "Non défini";
-"meters" = "mètres";
+"shared_string_meters" = "mètres";
 "tones" = "sonneries";
 "announce" = "Annonce";
 "transfers" = "Transferts :";

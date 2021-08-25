@@ -1643,7 +1643,7 @@
 "move_map_to_select_area" = "Flytt kartet for å velge området du trenger.";
 "update_map" = "Oppdater kart";
 "shared_string_exit" = "Avslutt";
-"meters" = "meter";
+"shared_string_meters" = "meter";
 "nav_type_geocoding" = "Geokoding";
 "nav_type_ski" = "Ski";
 "nav_type_brouter" = "BRouter";

@@ -251,6 +251,59 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return @((int) type);
 }
 
++ (BOOL)isSRTMResourceType:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
+{
+    return resource->type == OsmAndResourceType::SrtmMapRegion;
+}
+
++ (BOOL)isSRTMResourceItem:(OAResourceItem *)item
+{
+    return item.resourceType == OsmAndResourceType::SrtmMapRegion;
+}
+
++ (BOOL)isSingleSRTMResourceItem:(OAMultipleResourceItem *)item
+{
+    return [self.class isSRTMResourceItem:item] && item.items.count == 2 && [item.items[0].title isEqualToString:item.items[1].title];
+}
+
++ (BOOL)isSRTMF:(OAResourceItem *)item
+{
+    return [self.class isSRTMResourceItem:item] && item.resourceId.endsWith(".srtmf.obf");
+}
+
++ (BOOL)isSRTMFSettingOn
+{
+    return [OAAppSettings sharedManager].metricSystem.get == EOAMetricsConstant::MILES_AND_FEET;
+}
+
++ (NSString *)getSRTMFormatShort:(BOOL)isSRTMF
+{
+    return isSRTMF ? OALocalizedString(@"foot") : OALocalizedString(@"m");
+}
+
++ (NSString *)getSRTMFormatLong:(BOOL)isSRTMF
+{
+    return isSRTMF ? OALocalizedString(@"shared_string_feet") : OALocalizedString(@"shared_string_meters");
+}
+
++ (NSString *)getSRTMFormatItem:(OAResourceItem *)item longFormat:(BOOL)longFormat
+{
+    if (![self.class isSRTMResourceItem:item])
+        return nil;
+
+    BOOL isSRTMF = [self.class isSRTMF:item];
+    return longFormat ? [self.class getSRTMFormatLong:isSRTMF] : [self.class getSRTMFormatShort:isSRTMF];
+}
+
++ (NSString *)getSRTMFormatResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource longFormat:(BOOL)longFormat
+{
+    if (![self.class isSRTMResourceType:resource])
+        return nil;
+
+    BOOL isSRTMF = resource->id.endsWith(".srtmf.obf");
+    return longFormat ? [self.class getSRTMFormatLong:isSRTMF] : [self.class getSRTMFormatShort:isSRTMF];
+}
+
 @end
 
 @interface OAResourceGroupItem ()
@@ -319,18 +372,15 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 - (void)removeItem:(OsmAndResourceType)key subregion:(OAWorldRegion *)subregion
 {
     NSMutableArray<OAResourceItem *> *items = [[self getItems:key] mutableCopy];
-    OAResourceItem *itemToRemove;
+    NSMutableArray<OAResourceItem *> *itemsToRemove = [NSMutableArray new];
     for (OAResourceItem *item in items)
     {
         if (item.worldRegion == subregion)
-        {
-            itemToRemove = item;
-            break;
-        }
+            [itemsToRemove addObject:item];
     }
-    if (itemToRemove)
+    if (itemsToRemove.count > 0)
     {
-        [items removeObject:itemToRemove];
+        [items removeObjectsInArray:itemsToRemove];
         _individualDownloadItems[[OAResourceType toValue:key]] = [NSArray arrayWithArray:items];
     }
 }
@@ -1523,7 +1573,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.class deleteResourceOf:item progressHUD:progressHUD executeAfterSuccess:block];
+        [self.class deleteResourcesOf:@[item] progressHUD:progressHUD executeAfterSuccess:block];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:cancelAction];
@@ -1539,56 +1589,54 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [self offerDeleteResourceOf:item viewController:viewController progressHUD:progressHUD executeAfterSuccess:nil];
 }
 
-+ (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
++ (void)deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
 {
     dispatch_block_t proc = ^{
         OsmAndAppInstance app = [OsmAndApp instance];
-        if ([item isKindOfClass:[OASqliteDbResourceItem class]])
+        for (OALocalResourceItem *item in items)
         {
-            OASqliteDbResourceItem *sqliteItem = (OASqliteDbResourceItem *)item;
-            [[OAMapCreatorHelper sharedInstance] removeFile:sqliteItem.fileName];
-            if (block)
-                block();
-        }
-        else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
-        {
-            OAOnlineTilesResourceItem *tilesItem = (OAOnlineTilesResourceItem *)item;
-            [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];
-            app.resourcesManager->uninstallTilesResource(QString::fromNSString(item.title));
-            if ([tilesItem.title isEqualToString:@"OsmAnd (online tiles)"])
-                app.resourcesManager->installOsmAndOnlineTileSource();
-
-            [app.localResourcesChangedObservable notifyEvent];
-            if (block)
-                block();
-        }
-        else
-        {
-            if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+            if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {
-                NSString *filename = [app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
-                if (app.data.terrainType == EOATerrainTypeHillshade)
-                    [[OATerrainLayer sharedInstanceHillshade] removeFromDB:filename];
-                else if (app.data.terrainType == EOATerrainTypeSlope)
-                    [[OATerrainLayer sharedInstanceSlope] removeFromDB:filename];
+                OASqliteDbResourceItem *sqliteItem = (OASqliteDbResourceItem *) item;
+                [[OAMapCreatorHelper sharedInstance] removeFile:sqliteItem.fileName];
             }
-
-            const auto success = item.resourceId.isEmpty() || app.resourcesManager->uninstallResource(item.resourceId);
-            if (!success)
+            else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
             {
-                OALog(@"Failed to uninstall resource %@ from %@",
-                      item.resourceId.toNSString(),
-                      item.resource != nullptr ? item.resource->localPath.toNSString() : @"?");
+                OAOnlineTilesResourceItem *tilesItem = (OAOnlineTilesResourceItem *) item;
+                [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];
+                app.resourcesManager->uninstallTilesResource(QString::fromNSString(item.title));
+                if ([tilesItem.title isEqualToString:@"OsmAnd (online tiles)"])
+                    app.resourcesManager->installOsmAndOnlineTileSource();
+
+                [app.localResourcesChangedObservable notifyEvent];
             }
             else
             {
                 if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
-                    [app.data.terrainResourcesChangeObservable notifyEvent];
+                {
+                    NSString *filename = [app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
+                    if (app.data.terrainType == EOATerrainTypeHillshade)
+                        [[OATerrainLayer sharedInstanceHillshade] removeFromDB:filename];
+                    else if (app.data.terrainType == EOATerrainTypeSlope)
+                        [[OATerrainLayer sharedInstanceSlope] removeFromDB:filename];
+                }
 
-                if (block)
-                    block();
+                const auto success = item.resourceId.isEmpty() || app.resourcesManager->uninstallResource(item.resourceId);
+                if (!success)
+                {
+                    OALog(@"Failed to uninstall resource %@ from %@",
+                            item.resourceId.toNSString(),
+                            item.resource != nullptr ? item.resource->localPath.toNSString() : @"?");
+                }
+                else
+                {
+                    if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+                        [app.data.terrainResourcesChangeObservable notifyEvent];
+                }
             }
         }
+        if (block)
+            block();
     };
 
     if (progressHUD)
@@ -1606,7 +1654,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD
 {
-    [self.class deleteResourceOf:item progressHUD:progressHUD executeAfterSuccess:nil];
+    [self.class deleteResourcesOf:@[item] progressHUD:progressHUD executeAfterSuccess:nil];
 }
 
 + (void) offerClearCacheOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block
@@ -1845,6 +1893,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         item.resourceType = OsmAndResourceType::MapStyle;
         item.resource = resource;
         item.mapStyle = mapStyle;
+
+        NSString *localResourcePath = app.resourcesManager->getLocalResource(resource->id)->localPath.toNSString();
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
 
         [res addObject:item];
     }

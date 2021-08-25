@@ -405,7 +405,7 @@
 "min_km" = "min/km";
 "m_s" = "m/s";
 "tones" = "tones";
-"meters" = "meters";
+"shared_string_meters" = "meters";
 "nothing_found" = "Mitään ei löytynyt: %@";
 "nothing_found_empty" = "Mitään ei löytynyt";
 "nothing_found_descr" = "Modify the search query or increase the search radius";

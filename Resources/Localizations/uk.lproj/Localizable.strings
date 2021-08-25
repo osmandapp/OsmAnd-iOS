@@ -1798,7 +1798,7 @@
 "do_not_rotate" = "Не обертати";
 "app_theme_light" = "Світла";
 "settings_app_theme" = "Тема застосунку";
-"meters" = "метри";
+"shared_string_meters" = "метри";
 "tones" = "тонни";
 "announce" = "Оголошення";
 "only_manually" = "Лише вручну";

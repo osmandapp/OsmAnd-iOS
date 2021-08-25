@@ -1782,7 +1782,7 @@
 "do_not_rotate" = "Non rodes";
 "app_theme_light" = "Craru";
 "settings_app_theme" = "Tema de s'aplicatzione";
-"meters" = "metros";
+"shared_string_meters" = "metros";
 "tones" = "sonerias";
 "announce" = "Annùntzia";
 "only_manually" = "Manualmente ebbia";

@@ -1489,7 +1489,7 @@
 "shared_string_not_set" = "Не вызначана";
 "shared_string_end_date" = "Дата закрыцця";
 "shared_string_start_date" = "Дата пачатку будаўніцтва";
-"meters" = "метры";
+"shared_string_meters" = "метры";
 "tones" = "тоны";
 "announce" = "Абвестка";
 "swap_points" = "Памяняць месцамі пункт адпраўлення і пункт прызначэння";

@@ -1779,7 +1779,7 @@
 "do_not_rotate" = "Não girar";
 "app_theme_light" = "Claro";
 "settings_app_theme" = "Tema do aplicativo";
-"meters" = "metros";
+"shared_string_meters" = "metros";
 "tones" = "tons";
 "announce" = "Anunciar";
 "instructions_repeat" = "Toque no widget \"próxima curva\" para repetir as instruções";

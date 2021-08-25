@@ -1753,7 +1753,7 @@
 "shared_string_required" = "Nauðsynlegt";
 "special_routing" = "Sérstakt leiðaval";
 "profile_type_base_string" = "Grunnsnið";
-"meters" = "metrar";
+"shared_string_meters" = "metrar";
 "profile_appearance" = "Útlit sniðs";
 "nav_type_ski" = "Skíði";
 "shared_string_account_add" = "Bæta við notandaaðgangi";

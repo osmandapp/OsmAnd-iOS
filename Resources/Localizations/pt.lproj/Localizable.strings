@@ -1675,7 +1675,7 @@
 "menu" = "Menu";
 "res_source_sqlite" = "Ficheiro SQLiteDB";
 "shared_string_min" = "Mínimo";
-"meters" = "metros";
+"shared_string_meters" = "metros";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "configure_screen_descr" = "Selecionar opções de ecrã para o perfil";
 "quick_action_showhide_mapillary_title" = "Mostrar/ocultar Mapillary";

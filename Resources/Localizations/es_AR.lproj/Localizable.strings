@@ -1785,7 +1785,7 @@
 "do_not_rotate" = "No rotar";
 "app_theme_light" = "Claro";
 "settings_app_theme" = "Aspecto de la aplicación";
-"meters" = "metros";
+"shared_string_meters" = "metros";
 "tones" = "toneladas";
 "announce" = "Anunciar";
 "instructions_repeat" = "Pulsa el widget «Próximo giro» para repetir las indicaciones";

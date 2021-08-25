@@ -1777,7 +1777,7 @@
 "allow_3D_view" = "2.5D-Ansicht";
 "do_not_rotate" = "Nicht drehen";
 "app_theme_light" = "Hell";
-"meters" = "Meter";
+"shared_string_meters" = "Meter";
 "announce" = "Ankündigung";
 "only_manually" = "Nur manuell";
 "speed_limit_tolerance_descr" = "Wählen Sie den Toleranzbereich der Geschwindigkeitsbegrenzung, oberhalb dessen Sie eine Sprachwarnung erhalten.";

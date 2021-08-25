@@ -1114,7 +1114,7 @@
 "reset_to_default" = "Επαναφορά προεπιλογών";
 "select_icon" = "Επιλογή εικονιδίου";
 "copy_from_other_profile" = "Αντιγραφή από άλλο προφίλ";
-"meters" = "Μέτρα";
+"shared_string_meters" = "Μέτρα";
 "shared_string_deselect_all" = "Αποεπιλογή όλων";
 "walk" = "Περπάτημα";
 "profile_type_base_string" = "Κατατομή (προφίλ) βάσης";

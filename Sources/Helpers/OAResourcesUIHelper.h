@@ -19,6 +19,28 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @class OADownloadDescriptionInfo;
 
+@interface OAResourceItem : NSObject
+
+@property NSString *title;
+@property QString resourceId;
+@property OsmAndResourceType resourceType;
+@property uint64_t size;
+@property uint64_t sizePkg;
+@property NSDate *date;
+@property id<OADownloadTask> __weak downloadTask;
+@property OAWorldRegion *worldRegion;
+@property BOOL disabled;
+
+- (void)updateSize;
+- (NSString *)getDate;
+
+@end
+
+@interface OAMultipleResourceItem : OAResourceItem
+@property (nonatomic, readonly) NSArray<OAResourceItem *> *items;
+- (instancetype)initWithType:(OsmAndResourceType)resourceType items:(NSArray<OAResourceItem *> *)items;
+@end
+
 @interface OAResourceType : NSObject
 
 @property (nonatomic, readonly) OsmAndResourceType type;
@@ -34,29 +56,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 + (OsmAndResourceType)unknownType;
 + (OsmAndResourceType)toResourceType:(NSNumber *)value isGroup:(BOOL)isGroup;
 + (NSNumber *)toValue:(OsmAndResourceType)type;
++ (BOOL)isSRTMResourceType:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource;
++ (BOOL)isSRTMResourceItem:(OAResourceItem *)item;
++ (BOOL)isSingleSRTMResourceItem:(OAMultipleResourceItem *)item;
++ (BOOL)isSRTMF:(OAResourceItem *)item;
++ (BOOL)isSRTMFSettingOn;
++ (NSString *)getSRTMFormatShort:(BOOL)isSRTMF;
++ (NSString *)getSRTMFormatLong:(BOOL)isSRTMF;
++ (NSString *)getSRTMFormatItem:(OAResourceItem *)item longFormat:(BOOL)longFormat;
++ (NSString *)getSRTMFormatResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource longFormat:(BOOL)longFormat;
 
-@end
-
-@interface OAResourceItem : NSObject
-
-@property NSString* title;
-@property QString resourceId;
-@property OsmAndResourceType resourceType;
-@property uint64_t size;
-@property uint64_t sizePkg;
-@property NSDate *date;
-@property id<OADownloadTask> __weak downloadTask;
-@property OAWorldRegion* worldRegion;
-@property BOOL disabled;
-
-- (void)updateSize;
-- (NSString *)getDate;
-
-@end
-
-@interface OAMultipleResourceItem : OAResourceItem
-@property (nonatomic, readonly) NSArray<OAResourceItem *> *items;
-- (instancetype)initWithType:(OsmAndResourceType)resourceType items:(NSArray<OAResourceItem *> *)items;
 @end
 
 @interface OARepositoryResourceItem : OAResourceItem
@@ -210,6 +219,7 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 + (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
 + (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD;
++ (void) deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
 
 + (void) offerClearCacheOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block;
 + (void) clearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;

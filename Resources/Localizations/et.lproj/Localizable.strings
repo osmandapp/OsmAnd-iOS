@@ -1765,7 +1765,7 @@
 "number_of_tiles" = "Paanide arv";
 "update_map" = "Uuenda kaart";
 "shared_string_maximum" = "Maksimum";
-"meters" = "meetrit";
+"shared_string_meters" = "meetrit";
 "tones" = "toonid";
 "announce" = "Teata";
 "transfers" = "Ümberistumised:";

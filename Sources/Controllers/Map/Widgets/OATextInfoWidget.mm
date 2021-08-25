@@ -206,6 +206,8 @@
     if (text.length == 0 && subtext.length == 0)
     {
         _textView.text = @"";
+        _text = @"";
+        _subtext = @"";
     }
     else
     {

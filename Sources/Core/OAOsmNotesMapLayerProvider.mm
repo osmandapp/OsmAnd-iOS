@@ -104,8 +104,9 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer,
             {
                 currentNote = std::make_shared<OAOnlineOsmNote>();
                 double lat = -1, lon = -1;
-                foreach(const QXmlStreamAttribute &attr, xmlReader.attributes())
+                for(auto it = xmlReader.attributes().begin(); it != xmlReader.attributes().end(); ++it)
                 {
+                    const auto& attr = *it;
                     if (attr.name().toString() == QStringLiteral("lat"))
                         lat = attr.value().toDouble();
                     else if (attr.name().toString() == QStringLiteral("lon"))

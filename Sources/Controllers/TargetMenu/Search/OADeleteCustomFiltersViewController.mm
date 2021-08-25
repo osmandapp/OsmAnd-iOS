@@ -141,6 +141,8 @@
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
             [cell.selectDeselectButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.selectDeselectButtonTouchableArea removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.selectDeselectButtonTouchableArea addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
             [cell.selectionButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
 

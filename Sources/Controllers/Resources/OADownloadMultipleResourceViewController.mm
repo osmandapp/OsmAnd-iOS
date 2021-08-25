@@ -307,7 +307,7 @@
             if (indexPath.row == 0 || indexPath.row == (_items.count + 1) * 2 || _isSingleSRTM)
                 cell.dividerInsets = UIEdgeInsetsZero;
             else
-                cell.dividerInsets = UIEdgeInsetsMake(0., indexPath.row == 2 ? 20. : 100., 0., 0.);
+                cell.dividerInsets = UIEdgeInsetsMake(0., indexPath.row == 2 ? 20. : 110., 0., 0.);
         }
         return cell;
     }
@@ -362,6 +362,8 @@
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
             [cell.selectDeselectButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.selectDeselectButtonTouchableArea removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.selectDeselectButtonTouchableArea addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
             [cell.selectionButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
 

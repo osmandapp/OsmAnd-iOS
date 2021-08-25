@@ -29,6 +29,7 @@
 #import "OATextMultiViewCell.h"
 #import "OAGPXWptViewController.h"
 #import "OAFavoriteViewController.h"
+#import "OATargetInfoViewCell.h"
 
 #include "Localization.h"
 
@@ -410,6 +411,17 @@
             @"iconName" : @"ic_custom_folder",
             @"iconColor" : self.groupColor ? self.groupColor : ((OAFavoriteColor *)OADefaultFavorite.builtinColors.firstObject).color
         }];
+        
+        NSDate *date = [((OAFavoriteViewController *)self) getTimestamp];
+        NSString *dateText = [self dateToString:date];
+        if (dateText)
+        {
+            [_data addObject:@{
+                @"type" : [OATargetInfoViewCell getCellIdentifier],
+                @"label" : dateText,
+                @"iconName" : @"ic_custom_date",
+            }];
+        }
     }
     else if ([self isKindOfClass:OAGPXWptViewController.class])
     {
@@ -424,6 +436,17 @@
             @"iconName" : @"ic_custom_folder",
             @"iconColor" : [self getItemColor]
         }];
+        
+        NSDate *date = [((OAGPXWptViewController *)self) getTimestamp];
+        NSString *dateText = [self dateToString:date];
+        if (dateText)
+        {
+            [_data addObject:@{
+                @"type" : [OATargetInfoViewCell getCellIdentifier],
+                @"label" : dateText,
+                @"iconName" : @"ic_custom_date",
+            }];
+        }
     }
     
     [_data addObject:@{
@@ -431,6 +454,18 @@
         @"lat" : [NSNumber numberWithFloat:self.location.latitude],
         @"lon" : [NSNumber numberWithFloat:self.location.longitude]
     }];
+}
+
+- (NSString *)dateToString:(NSDate *)date
+{
+    if (date)
+    {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+        dateFormatter.timeStyle = NSDateFormatterShortStyle;
+        return [dateFormatter stringFromDate:date];
+    }
+    return nil;
 }
 
 - (void) setupCollapableViewsWithData:(id)data lat:(double)lat lon:(double)lon
@@ -659,6 +694,20 @@
         cell.backgroundColor = UIColorFromRGB(0xffffff);
         cell.colorIconView.backgroundColor = favCol.color;
         
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATargetInfoViewCell getCellIdentifier]])
+    {
+        OATargetInfoViewCell* cell;
+        cell = (OATargetInfoViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATargetInfoViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATargetInfoViewCell *)[nib objectAtIndex:0];
+        }
+        cell.backgroundColor = UIColorFromRGB(0xffffff);
+        cell.iconView.image = [UIImage templateImageNamed:item[@"iconName"]];
+        cell.textView.text = item[@"label"];
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])

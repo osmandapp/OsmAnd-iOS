@@ -279,4 +279,9 @@
     return [self.favorite getCompositeIcon];
 }
 
+- (NSDate *) getTimestamp
+{
+    return [self.favorite getTimestamp];
+}
+
 @end

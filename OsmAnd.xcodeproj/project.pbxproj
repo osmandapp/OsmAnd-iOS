@@ -9994,20 +9994,20 @@
 		DA5A7DFE26C563A300F274C7 /* Favorites */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7DFF26C563A300F274C7 /* OAFavoriteViewController.h */,
-				DA5A7E0026C563A300F274C7 /* OAReplaceFavoriteViewController.mm */,
-				DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */,
-				DA5A7E0226C563A300F274C7 /* OAFavoriteImportViewController.xib */,
-				DA5A7E0326C563A300F274C7 /* OAFavoriteViewController.mm */,
-				DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */,
 				DA5A7E0526C563A300F274C7 /* OAAddFavoriteGroupViewController.h */,
 				DA5A7E0626C563A300F274C7 /* OAAddFavoriteGroupViewController.mm */,
-				DA5A7E0726C563A300F274C7 /* OASelectFavoriteGroupViewController.mm */,
-				DA5A7E0826C563A300F274C7 /* OASelectFavoriteGroupViewController.h */,
 				DA5A7E0926C563A300F274C7 /* OAFavoriteImportViewController.h */,
-				DA5A7E0A26C563A300F274C7 /* OAReplaceFavoriteViewController.h */,
-				DA5A7E0B26C563A300F274C7 /* OAFavoriteViewController.xib */,
+				DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */,
+				DA5A7E0226C563A300F274C7 /* OAFavoriteImportViewController.xib */,
+				DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */,
 				DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */,
+				DA5A7DFF26C563A300F274C7 /* OAFavoriteViewController.h */,
+				DA5A7E0326C563A300F274C7 /* OAFavoriteViewController.mm */,
+				DA5A7E0B26C563A300F274C7 /* OAFavoriteViewController.xib */,
+				DA5A7E0A26C563A300F274C7 /* OAReplaceFavoriteViewController.h */,
+				DA5A7E0026C563A300F274C7 /* OAReplaceFavoriteViewController.mm */,
+				DA5A7E0826C563A300F274C7 /* OASelectFavoriteGroupViewController.h */,
+				DA5A7E0726C563A300F274C7 /* OASelectFavoriteGroupViewController.mm */,
 			);
 			path = Favorites;
 			sourceTree = "<group>";

@@ -32,4 +32,6 @@
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation gpxFileName:(NSString *)gpxFileName;
 - (NSString *) getGpxFileName;
 
+- (NSDate *) getTimestamp;
+
 @end

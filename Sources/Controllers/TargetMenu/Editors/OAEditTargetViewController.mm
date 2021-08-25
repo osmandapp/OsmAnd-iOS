@@ -413,11 +413,15 @@
         }];
         
         NSDate *date = [((OAFavoriteViewController *)self) getTimestamp];
-        [_data addObject:@{
-            @"type" : [OATargetInfoViewCell getCellIdentifier],
-            @"label" : [self dateToString:date],
-            @"iconName" : @"ic_custom_date",
-        }];
+        NSString *dateText = [self dateToString:date];
+        if (dateText)
+        {
+            [_data addObject:@{
+                @"type" : [OATargetInfoViewCell getCellIdentifier],
+                @"label" : dateText,
+                @"iconName" : @"ic_custom_date",
+            }];
+        }
     }
     else if ([self isKindOfClass:OAGPXWptViewController.class])
     {
@@ -434,11 +438,15 @@
         }];
         
         NSDate *date = [((OAGPXWptViewController *)self) getTimestamp];
-        [_data addObject:@{
-            @"type" : [OATargetInfoViewCell getCellIdentifier],
-            @"label" : [self dateToString:date],
-            @"iconName" : @"ic_custom_date",
-        }];
+        NSString *dateText = [self dateToString:date];
+        if (dateText)
+        {
+            [_data addObject:@{
+                @"type" : [OATargetInfoViewCell getCellIdentifier],
+                @"label" : dateText,
+                @"iconName" : @"ic_custom_date",
+            }];
+        }
     }
     
     [_data addObject:@{
@@ -450,10 +458,14 @@
 
 - (NSString *)dateToString:(NSDate *)date
 {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-    dateFormatter.timeStyle = NSDateFormatterShortStyle;
-    return [dateFormatter stringFromDate:date];
+    if (date)
+    {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+        dateFormatter.timeStyle = NSDateFormatterShortStyle;
+        return [dateFormatter stringFromDate:date];
+    }
+    return nil;
 }
 
 - (void) setupCollapableViewsWithData:(id)data lat:(double)lat lon:(double)lon

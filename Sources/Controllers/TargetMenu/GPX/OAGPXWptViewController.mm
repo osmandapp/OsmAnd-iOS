@@ -279,7 +279,10 @@
 - (NSDate *) getTimestamp
 {
     long timestamp = self.wpt.point.time;
-    return [NSDate dateWithTimeIntervalSince1970:timestamp];
+    if (timestamp > 0)
+        return [NSDate dateWithTimeIntervalSince1970:timestamp];
+    else
+        return nil;
 }
 
 @end

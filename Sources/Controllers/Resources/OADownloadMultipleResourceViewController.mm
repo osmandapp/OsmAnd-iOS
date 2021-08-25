@@ -79,6 +79,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.editing = !_isSingleSRTM;
+    self.tableView.allowsSelection = !_isSingleSRTM;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
@@ -137,7 +138,7 @@
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
     else if (_isSRTM && indexPath.section == 0)
         return 36.;
-    else if (indexPath.row == 1 && ((_isSRTM && indexPath.section == 1) || (!_isSRTM && indexPath.section == 0)))
+    else if (indexPath.row == 1 && ((_isSRTM && indexPath.section == 1 && !_isSingleSRTM) || (!_isSRTM && indexPath.section == 0)))
         return 48.;
     else
         return estimated ? 66. : UITableViewAutomaticDimension;
@@ -324,6 +325,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControllCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
 
@@ -479,14 +481,16 @@
         customHeader.label.text = [self getTitleForSection:section];
         customHeader.label.font = [UIFont systemFontOfSize:15];
         [customHeader setYOffset:12];
+        return customHeader;
     }
     else if ((section == 0 && !_isSRTM) || (section == 1 && !_isSingleSRTM))
     {
         customHeader.label.text = [self getTitleForSection:section];
         customHeader.label.font = [UIFont systemFontOfSize:13];
         [customHeader setYOffset:_isSRTM ? 12 : 32];
+        return customHeader;
     }
-    return customHeader;
+    return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -496,7 +500,7 @@
     else if ((section == 0 && !_isSRTM) || (section == 1 && !_isSingleSRTM))
         return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:_isSRTM ? 12 : 32 font:[UIFont systemFontOfSize:13]];
 
-    return UITableViewAutomaticDimension;
+    return 0.001;
 }
 
 @end

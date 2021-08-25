@@ -18,16 +18,19 @@
 #import "OAColors.h"
 #import "OAMapStyleSettings.h"
 
-static const NSInteger visibilitySection = 0;
-static const NSInteger colorsSection = 1;
+typedef NS_ENUM(NSInteger, EOAMapSettingsRoutesSection)
+{
+    EOAMapSettingsRoutesSectionVisibility = 0,
+    EOAMapSettingsRoutesSectionColors
+};
 
-typedef enum
+typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
     ERoutesSettingCycle = 0,
     ERoutesSettingHiking,
     ERoutesSettingTravel
 
-} ERoutesSettingType;
+};
 
 @implementation OAMapSettingsRoutesScreen
 {
@@ -75,27 +78,23 @@ typedef enum
         vwController = viewController;
         tblView = tableView;
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        [self commonInit];
         [self initData];
     }
     return self;
 }
 
-- (void)commonInit
-{
-}
-
 - (void)initData
 {
-    NSMutableArray *dataArr = [@[
-            @[
+    NSMutableArray *dataArr = [NSMutableArray new];
+
+    [dataArr addObject:@[
                     @{@"type": [OADividerCell getCellIdentifier]},
                     @{@"type": [OASettingSwitchCell getCellIdentifier]},
                     @{@"type": [OADividerCell getCellIdentifier]}
-            ]
-    ] mutableCopy];
+    ]];
 
-    NSMutableArray *colorsArr = [@[@{@"type": [OADividerCell getCellIdentifier]}] mutableCopy];
+    NSMutableArray *colorsArr = [NSMutableArray new];
+    [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     if (_routesSettingType == ERoutesSettingCycle)
     {
         [colorsArr addObject:@{
@@ -126,7 +125,7 @@ typedef enum
     [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     [dataArr addObject:colorsArr];
 
-    _data = [NSArray arrayWithArray:dataArr];
+    _data = dataArr;
 }
 
 - (void)setupView
@@ -157,7 +156,7 @@ typedef enum
 
 - (NSString *)getTextForFooter:(NSInteger)section
 {
-    if (!_routesEnabled || section == visibilitySection)
+    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
         return @"";
 
     if (_routesSettingType == ERoutesSettingCycle)
@@ -183,7 +182,7 @@ typedef enum
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section != visibilitySection && !_routesEnabled)
+    if (section != EOAMapSettingsRoutesSectionVisibility && !_routesEnabled)
         return 0;
 
     return _data[section].count;
@@ -194,7 +193,7 @@ typedef enum
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
@@ -274,12 +273,12 @@ typedef enum
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return indexPath.section != visibilitySection ? indexPath : nil;
+    return indexPath.section != EOAMapSettingsRoutesSectionVisibility ? indexPath : nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != visibilitySection)
+    if (indexPath.section != EOAMapSettingsRoutesSectionVisibility)
         [self onItemClicked:indexPath];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -287,7 +286,7 @@ typedef enum
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    if (section == colorsSection && _routesEnabled)
+    if (section == EOAMapSettingsRoutesSectionColors && _routesEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
         header.textLabel.textColor = UIColorFromRGB(color_text_footer);
@@ -296,7 +295,7 @@ typedef enum
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (!_routesEnabled || section == visibilitySection)
+    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
         return 0.01;
 
     return 56.0;
@@ -304,7 +303,7 @@ typedef enum
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (!_routesEnabled || section == visibilitySection)
+    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
         return @"";
 
     return OALocalizedString(@"routes_color_by_type");
@@ -317,7 +316,7 @@ typedef enum
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (!_routesEnabled || section == visibilitySection)
+    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
         return nil;
 
     OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
@@ -363,7 +362,7 @@ typedef enum
         [_styleSettings save:_routesParameter];
 
         [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionColors] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tblView endUpdates];
     }
 }
@@ -378,7 +377,7 @@ typedef enum
         {
             cycleNode.value = value;
             [_styleSettings save:cycleNode];
-            [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionColors] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         if (![_routesParameter.value isEqualToString:@"true"])
         {
@@ -392,7 +391,7 @@ typedef enum
         {
             _routesParameter.value = value;
             [_styleSettings save:_routesParameter];
-            [tblView reloadSections:[NSIndexSet indexSetWithIndex:colorsSection] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionColors] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
 }

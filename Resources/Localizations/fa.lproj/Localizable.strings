@@ -73,7 +73,7 @@
 "speak_traffic_warnings" = "هشدارهای ترافیکی";
 "announce_gpx_waypoints" = "راه‌نشان‌های رد";
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
-"speak_poi" = "نقاط توجه نزدیک";
+"speak_poi" = "نقاط توجه نزدیک از نوع";
 "speak_pedestrian" = "گذرگاه‌های پیاده";
 "int_seconds" = "ثانیه";
 "shared_string_never" = "هرگز";

@@ -2519,14 +2519,14 @@ static BOOL _lackOfResources;
                 break;
             }
         }
-        cell.imageView.image = [OAResourceType getIcon:item.resourceType];
+        cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         cell.imageView.tintColor = color;
     }
     else if ([item_ isKindOfClass:OAResourceItem.class])
     {
         OAResourceItem *item = (OAResourceItem *) item_;
         UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? UIColorFromRGB(resource_installed_icon_color) : UIColorFromRGB(color_tint_gray);
-        cell.imageView.image = [OAResourceType getIcon:item.resourceType];
+        cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         cell.imageView.tintColor = color;
     }
 

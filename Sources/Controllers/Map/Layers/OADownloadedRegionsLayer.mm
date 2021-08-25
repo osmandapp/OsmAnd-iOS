@@ -362,7 +362,7 @@
         targetPoint.location = mapObject.worldRegion.regionCenter;
         targetPoint.title = mapObject.worldRegion.localizedName ? mapObject.worldRegion.localizedName : mapObject.worldRegion.nativeName;
    
-        targetPoint.icon = [OAResourceType getIcon:mapObject.indexItem.resourceType];
+        targetPoint.icon = [OAResourceType getIcon:mapObject.indexItem.resourceType templated:NO];
         targetPoint.type = OATargetMapDownload;
         targetPoint.targetObj = mapObject;
         targetPoint.sortIndex = (NSInteger)targetPoint.type;

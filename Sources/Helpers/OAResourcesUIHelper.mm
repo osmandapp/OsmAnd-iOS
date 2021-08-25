@@ -86,36 +86,50 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (UIImage *)getIcon:(OsmAndResourceType)type
++ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
 {
+    NSString *imageNamed;
     switch (type)
     {
         case OsmAndResourceType::VoicePack:
-            return [UIImage templateImageNamed:@"ic_custom_sound"];
+            imageNamed = @"ic_custom_sound";
+            break;
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::DepthContourRegion:
-            return [UIImage templateImageNamed:@"ic_custom_contour_lines"];
+            imageNamed = @"ic_custom_contour_lines";
+            break;
         case OsmAndResourceType::HillshadeRegion:
-            return [UIImage templateImageNamed:@"ic_custom_hillshade"];
+            imageNamed = @"ic_custom_hillshade";
+            break;
         case OsmAndResourceType::SlopeRegion:
-            return [UIImage templateImageNamed:@"ic_action_slope"];
+            imageNamed = @"ic_action_slope";
+            break;
         case OsmAndResourceType::WikiMapRegion:
-            return [UIImage templateImageNamed:@"ic_custom_wikipedia"];
+            imageNamed = @"ic_custom_wikipedia";
+            break;
         case OsmAndResourceType::LiveUpdateRegion:
-            return [UIImage templateImageNamed:@"ic_custom_upload"]; //ic_custom_online
+            imageNamed = @"ic_custom_upload"; //ic_custom_online
+            break;
         case OsmAndResourceType::GpxFile:
-            return [UIImage templateImageNamed:@"ic_custom_route"];
+            imageNamed = @"ic_custom_route";
+            break;
         case OsmAndResourceType::SqliteFile:
-            return [UIImage templateImageNamed:@"ic_custom_overlay_map"];
+            imageNamed = @"ic_custom_overlay_map";
+            break;
         case OsmAndResourceType::MapStyle:
-            return [UIImage templateImageNamed:@"ic_custom_map_style"];
+            imageNamed = @"ic_custom_map_style";
+            break;
         case OsmAndResourceType::MapStylesPresets:
-            return [UIImage templateImageNamed:@"ic_custom_options"];
+            imageNamed = @"ic_custom_options";
+            break;
         case OsmAndResourceType::OnlineTileSources:
-            return [UIImage templateImageNamed:@"ic_custom_map_online"];
+            imageNamed = @"ic_custom_map_online";
+            break;
         default:
-            return [UIImage templateImageNamed:@"ic_custom_map"];
+            imageNamed = @"ic_custom_map";
+            break;
     }
+    return templated ? [UIImage templateImageNamed:imageNamed] : [UIImage imageNamed:imageNamed];
 }
 
 + (NSInteger)getOrderIndex:(NSNumber *)type

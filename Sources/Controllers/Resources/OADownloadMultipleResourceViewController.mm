@@ -395,7 +395,7 @@
             OAResourceItem *item = _items[!_isSingleSRTM ? (indexPath.row - 1) / 2 - 1 : 0];
             BOOL selected = !_isSingleSRTM && [_selectedItems containsObject:item];
 
-            cell.imgView.image = [OAResourceType getIcon:_type.type];
+            cell.imgView.image = [OAResourceType getIcon:_type.type templated:YES];
             cell.imgView.tintColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             cell.imgView.contentMode = UIViewContentModeCenter;
 

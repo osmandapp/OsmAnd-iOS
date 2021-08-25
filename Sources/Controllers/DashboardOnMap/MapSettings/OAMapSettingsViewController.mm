@@ -31,6 +31,8 @@
 #import "OAMapSettingsContourLinesScreen.h"
 #import "OAMapSettingsTerrainScreen.h"
 #import "OAMapSettingsWikipediaScreen.h"
+#import "OAMapSettingsRoutesScreen.h"
+#import "OAMapStyleSettings.h"
 #import <CoreLocation/CoreLocation.h>
 
 #include <QtMath>
@@ -165,6 +167,18 @@
         case EMapSettingsScreenWikipedia:
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsWikipediaScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+        case EMapSettingsScreenCycleRoutes:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:SHOW_CYCLE_ROUTES_ATTR];
+            break;
+        case EMapSettingsScreenHikingRoutes:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:HIKING_ROUTES_OSMC_ATTR];
+            break;
+        case EMapSettingsScreenTravelRoutes:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:@"travelRoutes"];
             break;
         default:
             break;

@@ -1932,7 +1932,7 @@
 "rendering_attr_appMode_description" = "Optimize map for";
 "routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
 "rendering_value_germanRoadAtlas_name" = "German road atlas";
-"rendering_attr_hikingRoutesOSMC_name" = "Hiking symbol overlay";
+"rendering_attr_hikingRoutesOSMC_name" = "Hiking routes";
 "rendering_attr_showRoadMaps_name" = "Roads-only maps";
 "routing_attr_avoid_ferries_description" = "Avoids ferries";
 "rendering_attr_contourWidth_description" = "Contour line width";
@@ -1954,7 +1954,7 @@
 "rendering_attr_smoothness_bad_name" = "Bad";
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
-"rendering_attr_showMtbRoutes_name" = "Show mountain bike trails";
+"rendering_attr_showMtbRoutes_name" = "Mountain bike routes";
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
 "routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
@@ -2013,7 +2013,7 @@
 "rendering_value_translucent_yellow_name" = "Translucent yellow";
 "rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
 "routing_attr_avoid_borders_name" = "No border crossings";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Color by network affiliation";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Network affiliation";
 "rendering_attr_smoothness_excellent_name" = "Excellent";
 "rendering_value_pink_name" = "Pink";
 "routing_attr_allow_expert_name" = "Allow expert routes";
@@ -2061,7 +2061,7 @@
 "routing_attr_piste_type_downhill_description" = "Slopes for alpine or downhill skiing and access to ski lifts.";
 "rendering_attr_hideWaterPolygons_name" = "Hide water";
 "routing_attr_avoid_stairs_name" = "No stairs";
-"rendering_value_walkingRoutesOSMC_name" = "Color by OSMC hiking symbol";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
 "routing_attr_avoid_unpaved_description" = "Avoids unpaved roads";
 "routing_attr_prefer_unpaved_description" = "Prefer unpaved roads.";
@@ -2169,7 +2169,7 @@
 "routing_attr_avoid_bus_name" = "No buses";
 "rendering_value_highContrastRoads_name" = "High contrast roads";
 "rendering_attr_highway_class_service_name" = "Service";
-"rendering_attr_showCycleRoutes_name" = "Show cycle routes";
+"rendering_attr_showCycleRoutes_name" = "Cycle routes";
 "rendering_attr_surface_metal_name" = "Metal";
 "rendering_value_translucent_purple_name" = "Translucent purple";
 "rendering_attr_hmRendered_description" = "Increase amount of map detail shown.";
@@ -2257,6 +2257,12 @@
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
 
+"travel_routes" = "Travel routes";
+"walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Color routes according to their node network type (international, regional, local).";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation.";
+"rendering_value_walkingRoutesOSMC_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and hiking shield symbol.";
+"routes_color_by_type" = "Color routes by…";
 
 // Release Notes
 // instruction:

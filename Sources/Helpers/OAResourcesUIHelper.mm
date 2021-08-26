@@ -1908,9 +1908,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         item.resource = resource;
         item.mapStyle = mapStyle;
 
-        NSString *localResourcePath = app.resourcesManager->getLocalResource(resource->id)->localPath.toNSString();
-        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
-
         [res addObject:item];
     }
 

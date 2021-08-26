@@ -49,8 +49,10 @@
 
 - (BOOL)contains:(double)left top:(double)top right:(double)right bottom:(double)bottom
 {
-    return _left < _right && _top < _bottom && _left <= left && _top <= top && _right >= right
-				&& _bottom >= bottom;
+    return MIN(_left, _right) <= MIN(left, right)
+            && MAX(_left, _right) >= MAX(left, right)
+            && MIN(_top, _bottom) <= MIN(top, bottom)
+            && MAX(_top, _bottom) >= MAX(top, bottom);
 }
 
 - (BOOL)contains:(QuadRect *)box

@@ -551,7 +551,7 @@
 "routing_attr_height_description" = "Specificați înălțimea vehiculului care va fi permisă pe rute.";
 "rendering_attr_highway_class_motorway_name" = "Autostradă";
 "rendering_attr_highway_class_state_road_name" = "Drumul de stat";
-"rendering_attr_showMtbRoutes_name" = "Arată rutele de MTB";
+"rendering_attr_showMtbRoutes_name" = "Traseele pentru biciclete de munte";
 "rendering_attr_surface_grass_name" = "Iarbă";
 "rendering_attr_undefined_name" = "Nedefinit";
 "rendering_attr_appMode_description" = "Optimizează harta pentru";
@@ -561,12 +561,12 @@
 "rendering_attr_lessDetailed_name" = "Mai puține detalii";
 "rendering_attr_hideWaterPolygons_description" = "Apă";
 "routing_attr_avoid_ferry_description" = "Evită feriboturile";
-"rendering_value_bicycle_name" = "Bicicleta";
+"rendering_value_bicycle_name" = "Ciclism";
 "rendering_value_translucent_blue_name" = "Albastru translucid";
 "rendering_attr_hideWaterPolygons_name" = "Ascunde apa";
 "rendering_attr_highway_class_steps_name" = "Pași";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Arată rutele pentru biciclete";
-"rendering_attr_showCycleRoutes_name" = "Arată rutele pentru biciclete";
+"rendering_attr_showCycleRoutes_name" = "Traseele pentru biciclete";
 "rendering_attr_currentTrackColor_description" = "Culoare GPX";
 "rendering_attr_smoothness_good_name" = "Bună";
 "rendering_attr_tracktype_grade1_name" = "Solid";
@@ -620,7 +620,7 @@
 "rendering_attr_hideHouseNumbers_name" = "Numărul caselor";
 "rendering_attr_surface_concrete_name" = "Beton";
 "rendering_attr_smoothness_bad_name" = "Proastă";
-"rendering_value_walkingRoutesOSMC_name" = "Culoare după simbolul de drumeție OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_smoothness_very_horrible_name" = "Foarte oribilă";
 "rendering_attr_currentTrackColor_name" = "Culoare GPX";
 "routing_attr_allow_private_name" = "Permite accesul privat";
@@ -706,7 +706,7 @@
 "rendering_attr_ice_road_name" = "Drum cu gheață";
 "rendering_attr_piste_difficulty_novice_name" = "Incepator";
 "rendering_value_disabled_name" = "Dezactivată";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Culoare în funcție de afilierea la rețea";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Afilierea la rețea";
 "rendering_attr_OSMMapperAssistant_name" = "OSM maper asistent";
 "rendering_attr_tracktype_grade5_name" = "Moale";
 "rendering_attr_highway_class_road_name" = "Drum";
@@ -1009,7 +1009,7 @@
 "save_poi_too_many_uppercase" = "Numele conține prea multe majuscule. Continuați?";
 "keep_informing_never" = "Numai manual (atingeți săgeata)";
 "rendering_attr_hikingRoutesOSMC_description" = "Redă traseele în funcție de urmele OSMC.";
-"rendering_attr_hikingRoutesOSMC_name" = "Simbol de drumeție suprapus";
+"rendering_attr_hikingRoutesOSMC_name" = "Rute de drumeție";
 "rendering_attr_alpineHiking_description" = "Redă traseele în funcție de scara SAC.";
 "rendering_attr_alpineHiking_name" = "Scala de drumeție alpină (SAC)";
 "sett_wunderlinq_ext_input" = "MiracolLINQ";
@@ -1583,7 +1583,7 @@
 //Poi catagories
 "amenity" = "Facilități";
 "default" = "Implicit";
-"vessel_width_limit_description" = "Setați lățimea vasului pentru a evita podurile înguste.";
+"vessel_width_limit_description" = "Setați lățimea navei pentru a evita podurile înguste.";
 "vessel_height_limit_description" = "Setați înălțimea vasului pentru a evita podurile joase. Rețineți că, în cazul în care podul este mobil, calculul utilizează înălțimea acestuia în stare deschisă.";
 "lenght_limit_description" = "Precizați lungimea autovehiculului, unele restricții de traseu pot fi aplicate pentru vehiculele lungi.";
 "routing_attr_piste_type_downhill_name" = "Schi alpin/coborâre";
@@ -2105,3 +2105,21 @@
 "suggested_maps" = "Hărți sugerate";
 "welmode_download_maps" = "Descărcați hărțile";
 "shared_strings_all_regions" = "Toate regiunile";
+"routes_color_by_type" = "Culoare rute de…";
+"rendering_value_walkingRoutesOSMC_description" = "Colorați rutele în funcție de culoarea lor locală individuală (dacă este prezentă pe OpenStreetMap) și de simbolul scutului de drumeție.";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Culoare în funcție de afilierea la rețea.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Colorează rutele în funcție de tipul de rețea de noduri (internațională, regională, locală).";
+"walking_route_osmc_description" = "Colorați rutele în funcție de culoarea locală individuală (dacă este prezentă pe OpenStreetMap) și de tipul lor (internațional, regional, local).";
+"travel_routes" = "Rute de călătorie";
+"m" = "m";
+"foot" = "picior";
+"shared_string_feet" = "picioare";
+"shared_string_meters" = "metri";
+"srtm_download_list_help_message" = "OsmAnd oferă date despre curbele de nivel în metri și picioare. Va trebui să descărcați din nou fișierul pentru a schimba formatul.";
+"srtm_download_single_help_message" = "Vă rugăm să selectați formatul necesar. Va trebui să descărcați din nou fișierul pentru a schimba formatul.";
+"srtm_unit_format" = "Formatul unitar al liniilor de contur";
+"download_suggestion" = "Descărcați harta detaliată %@ pentru a vizualiza această zonă";
+"download_map_dialog" = "Descărcați harta de dialog";
+"shared_string_navigation" = "Navigație";
+"dialogs_and_notifications_descr" = "Controlați ferestrele pop-up, dialogurile și notificările";
+"dialogs_and_notifications" = "Dialoguri și notificări";

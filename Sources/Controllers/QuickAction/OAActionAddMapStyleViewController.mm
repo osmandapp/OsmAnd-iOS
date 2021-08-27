@@ -109,8 +109,6 @@
         
         item.resource = resource;
         item.mapStyle = mapStyle;
-        NSString *localResourcePath = [OsmAndApp instance].resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
-        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
         
         item.sortIndex = [OAMapStyleTitles getSortIndexForTitle:item.mapStyle->title.toNSString()];
         

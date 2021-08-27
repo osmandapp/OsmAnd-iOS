@@ -284,15 +284,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if ([item isKindOfClass:OAMapSourceResourceItem.class])
                 source = (OAMapSourceResourceItem *) item;
 
-            if (self.delegate)
-                [self.delegate updateSkimapRoutesParameter:source.mapSource];
-
             _app.data.lastMapSource = source.mapSource;
             if (indexPath.section == kOfflineSourcesSection)
                 [_app.data setPrevOfflineSource:source.mapSource];
 
             if (self.delegate)
-                [self.delegate refreshMenuRoutesParameters];
+                [self.delegate refreshMenuRoutesParameters:source.mapSource];
             
             [tableView reloadData];
         }

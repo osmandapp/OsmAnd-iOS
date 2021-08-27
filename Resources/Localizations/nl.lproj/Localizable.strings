@@ -778,7 +778,7 @@
 "osm_live_payment_header" = "Kies de gewenste betalingsperiode:";
 "osm_live_payment_contribute_descr" = "Een gedeelte van de inkomsten gaat naar  OS-medewerkers.";
 "purchase_dialog_travel_description" = "Kies een van onderstaande aankopen om de offline reisgids te kunnen gebruiken:";
-"osm_live_enter_email" = "Voer een geldig emailadres in";
+"osm_live_enter_email" = "Voer een geldig e-mailadres in";
 "osm_live_enter_user_name" = "Voer je Openbare Naam in";
 "osm_live_payment_desc" = "Het abonnementsgeld is maandelijks. Het abonnement kan elk moment via App Store worden gestopt.";
 "osm_live_ask_for_purchase" = "Neem alsjeblieft eerst een abonnement op OsmAnd Live";
@@ -1543,7 +1543,6 @@
 "open_saved_track" = "Open opgeslagen track";
 "hide_compass_ruler" = "Verberg kompasliniaal";
 "show_compass_ruler" = "Toon kompasliniaal";
-
 "sport" = "Sport";
 "symbols" = "Symbolen";
 "split_before" = "Hiervoor splitsen";

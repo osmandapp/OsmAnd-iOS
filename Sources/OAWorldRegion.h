@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAProduct, OAPointIContainer, OAResourceGroupItem;
+@class OAProduct, OAPointIContainer, OAResourceGroupItem, QuadRect;
 
 @interface OAWorldRegion : NSObject
 
@@ -31,6 +31,7 @@
 @property (readonly) CLLocationCoordinate2D bboxTopLeft;
 @property (readonly) CLLocationCoordinate2D bboxBottomRight;
 @property (readonly) CLLocationCoordinate2D regionCenter;
+@property (nonatomic) QuadRect *boundingBox;
 
 @property (nonatomic) NSArray *resourceTypes;
 @property (nonatomic) OAResourceGroupItem *groupItem;
@@ -67,5 +68,7 @@
 - (void)buildResourceGroupItem;
 - (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type;
 - (BOOL)hasGroupItems;
++ (NSArray<OAWorldRegion *> *)removeDuplicates:(NSArray<OAWorldRegion *> *)regions;
+- (BOOL)containsRegion:(OAWorldRegion *)another;
 
 @end

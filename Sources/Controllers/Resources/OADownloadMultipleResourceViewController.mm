@@ -308,7 +308,7 @@
             if (indexPath.row == 0 || indexPath.row == (_items.count + 1) * 2 || _isSingleSRTM)
                 cell.dividerInsets = UIEdgeInsetsZero;
             else
-                cell.dividerInsets = UIEdgeInsetsMake(0., indexPath.row == 2 ? 20. : 100., 0., 0.);
+                cell.dividerInsets = UIEdgeInsetsMake(0., indexPath.row == 2 ? 20. : 110., 0., 0.);
         }
         return cell;
     }
@@ -364,6 +364,8 @@
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
             [cell.selectDeselectButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.selectDeselectButtonTouchableArea removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.selectDeselectButtonTouchableArea addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
             [cell.selectionButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -397,7 +399,7 @@
             OAResourceItem *item = _items[!_isSingleSRTM ? (indexPath.row - 1) / 2 - 1 : 0];
             BOOL selected = !_isSingleSRTM && [_selectedItems containsObject:item];
 
-            cell.imgView.image = [OAResourceType getIcon:_type.type];
+            cell.imgView.image = [OAResourceType getIcon:_type.type templated:YES];
             cell.imgView.tintColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             cell.imgView.contentMode = UIViewContentModeCenter;
 

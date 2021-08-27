@@ -292,7 +292,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
             }
         }
         
-        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType];
+        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)

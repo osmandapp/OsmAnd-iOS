@@ -1314,7 +1314,7 @@
 "res_zoom_warning" = "En düşük yakınlaştırma değeri, en yüksek yakınlaştırma değerine eşit veya ondan daha büyük olamaz";
 "res_expire_warning" = "Geçerliliğin sona erme süresi 0 ile 10000000 arasında bir sayı olmalıdır";
 "rendering_attr_roadColors_description" = "Bir yol rengişeması seçin:";
-"rendering_attr_showMtbRoutes_name" = "Dağ bisikleti parkurlarını göster";
+"rendering_attr_showMtbRoutes_name" = "Dağ bisikleti parkurları";
 "rendering_attr_showRoadMaps_description" = "Yalnızca yol haritalarının ne zaman görüntüleneceğini seçin:";
 "routing_attr_driving_style_prefer_unpaved_name" = "Asfaltsız yolları tercih et";
 "rendering_attr_hikingRoutesOSMC_description" = "OSMC izlerine göre yolları görselleştir.";
@@ -1437,7 +1437,7 @@
 "routing_attr_avoid_bus_name" = "Otobüs yok";
 "rendering_attr_highway_class_track_grade3_name" = "3. sınıf";
 "routing_attr_height_obstacles_description" = "Arazi kotunda faktör (SRTM, ASTER ve EU-DEM verileri aracılığıyla).";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC yürüyüş sembolüne göre renk";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_roadStyle_description" = "Yol tarzı";
 "rendering_attr_horseRoutes_name" = "At yolları";
 "routing_attr_avoid_toll_description" = "Ücretli yollardan kaçınır";
@@ -1476,7 +1476,7 @@
 "rendering_attr_surface_snow_name" = "Kar";
 "routing_attr_height_name" = "Yükseklik sınırı";
 "rendering_attr_undefined_name" = "Tanımlanmamış";
-"rendering_attr_showCycleRoutes_name" = "Bisiklet güzergahlarını göster";
+"rendering_attr_showCycleRoutes_name" = "Bisiklet güzergahları";
 "rendering_attr_smoothness_horrible_name" = "Korkunç";
 "routing_attr_avoid_ferries_description" = "Feribotlardan kaçınır";
 "rendering_attr_highway_class_service_name" = "Servis yolu";
@@ -1494,7 +1494,7 @@
 "routing_attr_avoid_borders_description" = "Ulusal sınırları geçmekten kaçınır";
 "rendering_attr_moreDetailed_name" = "Daha fazla bilgi";
 "routing_attr_avoid_stairs_name" = "Merdiven yok";
-"rendering_attr_hikingRoutesOSMC_name" = "Yürüyüş sembolü üst katmanı";
+"rendering_attr_hikingRoutesOSMC_name" = "Yürüyüş güzergahları";
 "routeInfo_road_types_name" = "Yol türleri";
 "routing_attr_avoid_subway_description" = "Metro ve hafif demiryolu araçlarından kaçınır";
 "rendering_attr_piste_difficulty_advanced_name" = "İleri";
@@ -1581,7 +1581,7 @@
 "rendering_value_medium_w_name" = "Orta";
 "rendering_attr_hideBuildings_name" = "Binalar";
 "rendering_attr_currentTrackWidth_description" = "GPX genişliği";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Ağ bağlantısına göre renklendir";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Ağ bağlantısı";
 "rendering_value_translucent_green_name" = "Yarı saydam yeşil";
 "rendering_attr_highway_class_state_road_name" = "Devlet yolu";
 "rendering_attr_appMode_name" = "Görselleştirme modu";
@@ -2131,3 +2131,20 @@
 "carplay_profile" = "CarPlay profili";
 "last_used" = "Son kullanılan";
 "search_more" = "Daha fazla ara…";
+"rendering_value_walkingRoutesOSMC_description" = "Güzergahları kendi yerel renklerine (OpenStreetMap'te varsa) ve yürüyüş levhası sembolüne göre renklendir.";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Ağ bağlantısına göre renklendir.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Güzergahları düğüm ağ türlerine (uluslararası, bölgesel, yerel) göre renklendir.";
+"travel_routes" = "Seyahat güzergahları";
+"dialogs_and_notifications" = "İletişim kutuları ve bildirimler";
+"routes_color_by_type" = "Güzergah renklendirme ölçütü…";
+"walking_route_osmc_description" = "Güzergahları kendi yerel renklerine (OpenStreetMap'te varsa) ve türlerine (uluslararası, bölgesel, yerel) göre renklendir.";
+"m" = "m";
+"foot" = "ft";
+"shared_string_feet" = "fit";
+"srtm_download_list_help_message" = "OsmAnd, metre ve fit cinsinden eş yükselti eğrileri verileri sağlar. Biçimi değiştirmek için dosyayı yeniden indirmeniz gerekecek.";
+"srtm_download_single_help_message" = "Lütfen gerekli biçimi seçin. Biçimi değiştirmek için dosyayı yeniden indirmeniz gerekecek.";
+"srtm_unit_format" = "Eş yükselti eğrileri birimi biçimi";
+"download_suggestion" = "Bu alanı görüntülemek için ayrıntılı %@ haritasını indirin";
+"download_map_dialog" = "Harita indirme iletişim kutusu";
+"shared_string_navigation" = "Navigasyon";
+"dialogs_and_notifications_descr" = "Açılır pencereleri, iletişim kutularını ve bildirimleri denetleyin";

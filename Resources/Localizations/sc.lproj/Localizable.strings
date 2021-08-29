@@ -951,7 +951,7 @@
 "shared_string_password" = "Crae de intrada";
 "shared_string_category" = "Categoria";
 "poi_category_and_type" = "Categoria e casta de PDI";
-"poi_opening_hours" = "Oràrios pro abèrrere";
+"poi_opening_hours" = "Oràrios de abertura";
 "poi_select_category" = "Ischerta sa categoria";
 "poi_select_type" = "Ischerta sa casta";
 "shared_string_upload" = "Càrriga";
@@ -1351,7 +1351,7 @@
 "rendering_attr_highway_class_track_grade5_name" = "Gradu 5";
 "rendering_attr_highway_class_state_road_name" = "Caminu istatale";
 "rendering_attr_surface_ground_name" = "Terrinu (naturale)";
-"rendering_value_walkingRoutesOSMC_name" = "Coloratzione sighinde su sìmbulu pro s\'escursionismu de OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routeInfo_road_types_name" = "Castas deàndalas";
 "rendering_value_orange_name" = "Arantzu";
 "routing_attr_avoid_sett_description" = "Istransit sos impredados e su pavè";
@@ -1365,7 +1365,7 @@
 "routing_attr_weight_name" = "Lìmite de pesu";
 "rendering_attr_tracktype_grade5_name" = "Modde";
 "rendering_attr_roadStyle_name" = "Istile disinnu de sos caminos";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Coloratzione a segunda de sa casta (afiliatzione) deàndala";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Casta (afiliatzione) de retze";
 "rendering_attr_noAdminboundaries_name" = "Làcanas";
 "rendering_attr_pisteGrooming_name" = "Pista abbatigada";
 "rendering_attr_tracktype_grade2_name" = "Sòlidu (chene pamentu)";
@@ -1389,7 +1389,7 @@
 "rendering_value_low_name" = "Bassa";
 "routing_attr_allow_advanced_name" = "Permite sasàndalas avantzadas";
 "routing_attr_difficulty_preference_description" = "Preferiàndalas de custa dificultade, fintzas si colare in pistas prus difìtziles o prus fàtziles est galu possìbile si est prus curtzu.";
-"rendering_attr_hikingRoutesOSMC_name" = "Istratu sìmbulos escursionisticos";
+"rendering_attr_hikingRoutesOSMC_name" = "Àndalas pro s'escursionismu";
 "routing_attr_avoid_tram_name" = "Perunu tram";
 "rendering_attr_hideWaterPolygons_name" = "Cua s\'abba";
 "rendering_attr_hideBuildings_name" = "Edifìtzios";
@@ -1514,7 +1514,7 @@
 "routing_attr_weight_description" = "Dislinda su lìmite de pesu de sos veìculos.";
 "rendering_attr_smoothness_horrible_name" = "Orrorosa";
 "rendering_attr_horseRoutes_name" = "Àndalas a caddu";
-"rendering_attr_showMtbRoutes_name" = "Ammustra sasàndalas pro sas bitzicletas pro sos montes";
+"rendering_attr_showMtbRoutes_name" = "Àndalas pro sas bitzicletas pro sos montes";
 "rendering_attr_surface_stone_name" = "Perda";
 "rendering_value_black_name" = "Nieddu";
 "routing_attr_width_description" = "Dislinda su lìmite de largària permìtidu in sas àndalas.";
@@ -1574,7 +1574,7 @@
 "rendering_attr_busRoutes_name" = "Àndalas in postale";
 "rendering_value_disabled_name" = "Disabilitadu";
 "routing_attr_piste_type_sled_description" = "Pistas pro s\'impreu de islitas.";
-"rendering_attr_showCycleRoutes_name" = "Ammustra sasàndalas pro bitzicleta";
+"rendering_attr_showCycleRoutes_name" = "Àndalas pro bitzicletas";
 "routing_attr_piste_type_downhill_name" = "Iscì alpinu/de achirrada";
 "rendering_attr_hideAccess_name" = "Restritziones de atzessu";
 "routing_attr_driving_style_prefer_unpaved_description" = "Preferi caminos no apamentados a sos caminos pamentados pro s\'àndala.";
@@ -2153,3 +2153,20 @@
 "shared_string_turn_off" = "Istuda";
 "shared_strings_all_regions" = "Totu sas regiones";
 "welmode_download_maps" = "Iscàrriga mapas";
+"routes_color_by_type" = "Colora sas àndalas in base a…";
+"rendering_value_walkingRoutesOSMC_description" = "Colora sas àndalas in base a su colore locale individuale issoro (si bi sunt in OpenStreetMap) e a su sìmbulu de sos caminos de escursionismu.";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Colora in base a sa retza de apartenèntzia.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Colora sas àndalas in base a sa casta de nodu de retza issoro (internatzionale, regionale, locale).";
+"walking_route_osmc_description" = "Colora sas àndalas in base a sos colores locales individuales issoro (si bi sunt in OpenStreetMap) e a sa casta issoro (internatzionales, regionales, locales).";
+"travel_routes" = "Àndalas de biàgiu";
+"m" = "m";
+"foot" = "ft";
+"shared_string_feet" = "pees";
+"srtm_download_list_help_message" = "OsmAnd frunit datos de sas curvas de livellu in metros e in pees. As a dèpere torrare a iscarrigare su documentu pro mudare su formadu.";
+"srtm_download_single_help_message" = "Pro praghere ischerta sa variante. As a dèpere torrare a iscarrigare su documentu pro mudare su formadu.";
+"srtm_unit_format" = "Formadu de s'unidade de medida pro sas curvas de livellu";
+"download_suggestion" = "Iscàrriga sa mapa a sa minuda %@ pro bìdere custa àrea";
+"download_map_dialog" = "Diàlogu de iscarrigamentu de sa mapa";
+"shared_string_navigation" = "Navigatzione";
+"dialogs_and_notifications_descr" = "Controlla sas ventaneddas a cumparsa, sos diàlogos e sas notìficas";
+"dialogs_and_notifications" = "Diàlogos e notìficas";

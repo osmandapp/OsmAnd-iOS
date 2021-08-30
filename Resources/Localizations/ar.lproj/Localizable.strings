@@ -294,7 +294,7 @@
 "shared_string_and" = "و";
 "shared_string_edit" = "تعديل";
 "shared_string_modify" = "تعديل";
-"shared_string_later" = "لاحقاً";
+"shared_string_later" = "لاحقا";
 "shared_string_of" = "من";
 "shared_string_all" = "الكل";
 "shared_string_from" = "من";
@@ -2130,3 +2130,4 @@
 "product_desc_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع";
 "shared_strings_all_regions" = "كل المناطق";
 "welmode_download_maps" = "تنزيل الخرائط";
+"travel_routes" = "طرق السفر";

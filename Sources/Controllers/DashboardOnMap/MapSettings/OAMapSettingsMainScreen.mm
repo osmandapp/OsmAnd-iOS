@@ -172,11 +172,10 @@
             if ([routeParameter.name isEqualToString:CYCLE_NODE_NETWORK_ROUTES_ATTR])
                 continue;
 
-            NSMutableDictionary *cellRoutes = [@{
-                    @"name": routeParameter.title,
-                    @"value": @"",
-                    @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name]
-            } mutableCopy];
+            NSMutableDictionary *cellRoutes = [NSMutableDictionary new];
+            cellRoutes[@"name"] = routeParameter.title;
+            cellRoutes[@"value"]= @"";
+            cellRoutes[@"key"]= [NSString stringWithFormat:@"routes_%@", routeParameter.name];
 
             if ([hasParameters containsObject:routeParameter.name])
             {
@@ -220,25 +219,25 @@
         else
             modeStr = OALocalizedString(@"-");
 
-        NSMutableArray *mapStyleSectionData = [@[
-                @{
-                        @"name": OALocalizedString(@"map_mode"),
-                        @"value": modeStr,
-                        @"type": [OASettingsTableViewCell getCellIdentifier],
-                        @"key": @"map_mode"
-                },
-                @{
-                        @"name": OALocalizedString(@"map_settings_map_magnifier"),
-                        @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode.get]],
-                        @"type": [OASettingsTableViewCell getCellIdentifier],
-                        @"key": @"map_magnifier"
-                },
-                @{
-                        @"name": OALocalizedString(@"map_settings_text_size"),
-                        @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
-                        @"type": [OASettingsTableViewCell getCellIdentifier],
-                        @"key": @"text_size"
-                }] mutableCopy];
+        NSMutableArray *mapStyleSectionData = [NSMutableArray new];
+        [mapStyleSectionData addObject:@{
+                @"name": OALocalizedString(@"map_mode"),
+                @"value": modeStr,
+                @"type": [OASettingsTableViewCell getCellIdentifier],
+                @"key": @"map_mode"
+        }];
+        [mapStyleSectionData addObject:@{
+                @"name": OALocalizedString(@"map_settings_map_magnifier"),
+                @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode.get]],
+                @"type": [OASettingsTableViewCell getCellIdentifier],
+                @"key": @"map_magnifier"
+        }];
+        [mapStyleSectionData addObject:@{
+                @"name": OALocalizedString(@"map_settings_text_size"),
+                @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
+                @"type": [OASettingsTableViewCell getCellIdentifier],
+                @"key": @"text_size"
+        }];
 
         for (NSString *cName in [self getAllCategories])
         {
@@ -290,31 +289,31 @@
         }];
     }
 
-    NSMutableArray *overlayUnderlaySectionData = [@[
-            @{
-                    @"name": OALocalizedString(@"map_settings_over"),
-                    @"description": @"",
-                    @"secondaryImg": @"ic_action_additional_option",
-                    @"type": [OASettingSwitchCell getCellIdentifier],
-                    @"key": @"overlay_layer"
-            },
-            @{
-                    @"name": OALocalizedString(@"map_settings_under"),
-                    @"description": @"",
-                    @"secondaryImg": @"ic_action_additional_option",
-                    @"type": [OASettingSwitchCell getCellIdentifier],
-                    @"key": @"underlay_layer"
-            }
-    ] mutableCopy];
+    NSMutableArray *overlayUnderlaySectionData = [NSMutableArray new];
 
     if ([_iapHelper.srtm isActive])
-        [overlayUnderlaySectionData insertObject:@{
+        [overlayUnderlaySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_terrain"),
                 @"description": @"",
                 @"secondaryImg": @"ic_action_additional_option",
                 @"type": [OASettingSwitchCell getCellIdentifier],
                 @"key": @"terrain_layer"
-        } atIndex:0];
+        }];
+
+    [overlayUnderlaySectionData addObject:@{
+            @"name": OALocalizedString(@"map_settings_over"),
+            @"description": @"",
+            @"secondaryImg": @"ic_action_additional_option",
+            @"type": [OASettingSwitchCell getCellIdentifier],
+            @"key": @"overlay_layer"
+    }];
+    [overlayUnderlaySectionData addObject:@{
+            @"name": OALocalizedString(@"map_settings_under"),
+            @"description": @"",
+            @"secondaryImg": @"ic_action_additional_option",
+            @"type": [OASettingSwitchCell getCellIdentifier],
+            @"key": @"underlay_layer"
+    }];
 
     [data addObject:@{
             @"groupName": OALocalizedString(@"map_settings_overunder"),

@@ -881,16 +881,20 @@
 
 #pragma mark - OAMapTypeDelegate
 
-- (void)refreshMenuRoutesParameters:(OAMapSource *)source
+- (void)updateSkimapRoutesParameter:(OAMapSource *)source
 {
-    _styleSettings = [OAMapStyleSettings sharedInstance];
-    _routesParameters = [_styleSettings getParameters:@"routes"];
-    OAMapStyleParameter *ski = [_styleSettings getParameter:PISTE_ROUTES_ATTR];
-    if (![_routesParameters containsObject:ski])
+    if (![source.resourceId hasPrefix:@"skimap"])
     {
+        OAMapStyleParameter *ski = [_styleSettings getParameter:PISTE_ROUTES_ATTR];
         ski.value = @"false";
         [_styleSettings save:ski];
     }
+}
+
+- (void)refreshMenu
+{
+    _styleSettings = [OAMapStyleSettings sharedInstance];
+    _routesParameters = [_styleSettings getParameters:@"routes"];
     [self setupView];
 }
 

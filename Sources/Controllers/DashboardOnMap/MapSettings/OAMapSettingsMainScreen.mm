@@ -403,11 +403,18 @@
 
 - (CGFloat) heightForHeader:(NSInteger)section
 {
-    NSDictionary *data = (NSDictionary *) ((NSArray *) ((NSDictionary *) tableData[section])[@"cells"])[0];
-    if ([data[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
-        return 0.01;
-    else
-        return 34.0;
+    NSDictionary *sectionData = tableData[section];
+    NSArray *cells = sectionData[@"cells"];
+    if (cells.count > 0)
+    {
+        NSDictionary *cellData = cells[0];
+        if ([cellData[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
+            return 0.01;
+        else
+            return 34.0;
+        
+    }
+    return 0.01;
 }
 
 #pragma mark - OAAppModeCellDelegate

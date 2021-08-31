@@ -85,7 +85,7 @@
 
 - (void) setupView
 {
-    NSMutableArray *data = [NSMutableArray new];
+    NSMutableArray *data = [NSMutableArray array];
 
     [data addObject:@{
             @"groupName": @"",
@@ -94,7 +94,7 @@
             }]
     }];
 
-    NSMutableArray *showSectionData = [NSMutableArray new];
+    NSMutableArray *showSectionData = [NSMutableArray array];
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"favorites"),
             @"value": @"",
@@ -219,7 +219,7 @@
         else
             modeStr = OALocalizedString(@"-");
 
-        NSMutableArray *mapStyleSectionData = [NSMutableArray new];
+        NSMutableArray *mapStyleSectionData = [NSMutableArray array];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_mode"),
                 @"value": modeStr,
@@ -289,7 +289,7 @@
         }];
     }
 
-    NSMutableArray *overlayUnderlaySectionData = [NSMutableArray new];
+    NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
 
     if ([_iapHelper.srtm isActive])
         [overlayUnderlaySectionData addObject:@{
@@ -343,7 +343,7 @@
     else
         prefLang = OALocalizedString(@"local_names");
 
-    NSString* languageValue;
+    NSString *languageValue;
     switch (_settings.settingMapLanguage.get)
     {
         case 0: // NativeOnly
@@ -371,14 +371,14 @@
 
 - (NSArray *) getAllCategories
 {
-    NSMutableArray *res = [NSMutableArray new];
+    NSMutableArray *res = [NSMutableArray array];
     NSMutableArray *categories = [NSMutableArray arrayWithArray:[_styleSettings getAllCategories]];
     for (NSString *cName in categories)
     {
         if (![[cName lowercaseString] isEqualToString:@"ui_hidden"] && ![[cName lowercaseString] isEqualToString:@"routes"])
             [res addObject:cName];
     }
-    return [NSArray arrayWithArray:res];
+    return res;
 }
 
 - (NSString *) getPercentString:(double)value
@@ -403,10 +403,8 @@
 
 - (CGFloat) heightForHeader:(NSInteger)section
 {
-    NSDictionary *sectionData = (NSDictionary *) tableData[section];
-    NSArray *cells = (NSArray *) sectionData[@"cells"];
-    NSDictionary *cellData = (NSDictionary *) cells[0];
-    if ([cellData[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
+    NSDictionary *data = (NSDictionary *) ((NSArray *) ((NSDictionary *) tableData[section])[@"cells"])[0];
+    if ([data[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
         return 0.01;
     else
         return 34.0;

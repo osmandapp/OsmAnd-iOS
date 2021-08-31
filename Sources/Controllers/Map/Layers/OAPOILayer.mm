@@ -261,7 +261,7 @@
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         if (poi.type)
         {
-            if ([poi.type.name isEqualToString:@"wiki_place"])
+            if ([poi.type.name isEqualToString:WIKI_PLACE])
                 targetPoint.type = OATargetWiki;
             else
                 targetPoint.type = OATargetPOI;

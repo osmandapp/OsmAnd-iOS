@@ -219,7 +219,7 @@
         }
     }];
 
-    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled)
+    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
 
     if ([self showNearestPoi])

@@ -15,6 +15,7 @@
 
 #define OSM_WIKI_CATEGORY @"osmwiki"
 #define WIKI_LANG @"wiki:lang:"
+#define WIKI_PLACE @"wiki_place"
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};

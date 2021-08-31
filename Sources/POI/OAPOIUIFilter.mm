@@ -230,7 +230,7 @@
 
 - (BOOL)isWikiFilter
 {
-    return [self.filterId hasPrefix:[NSString stringWithFormat:@"%@%@", STD_PREFIX, @"wiki_place"]] || [self isTopWikiFilter];
+    return [self.filterId hasPrefix:[NSString stringWithFormat:@"%@%@", STD_PREFIX, WIKI_PLACE]] || [self isTopWikiFilter];
 }
 
 - (BOOL)isTopWikiFilter

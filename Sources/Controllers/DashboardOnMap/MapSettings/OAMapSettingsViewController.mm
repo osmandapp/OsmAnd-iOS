@@ -184,23 +184,15 @@
             break;
     }
 
-    BOOL isOnlineMapSourcePrev = isOnlineMapSource;
+    OAMapSource* mapSource = _app.data.lastMapSource;
+    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
 
-    OAMapSettingsOnlineMapSourceOnUpdate updateOnlineMapSource = ^(void) {
-        OAMapSource *mapSource = _app.data.lastMapSource;
-        const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
+    BOOL _isOnlineMapSourcePrev = isOnlineMapSource;
+    isOnlineMapSource = ([mapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources));
 
-        isOnlineMapSource = ([mapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources));
-        if (self.screenObj)
-            self.screenObj.isOnlineMapSource = isOnlineMapSource;
-    };
+    self.screenObj.isOnlineMapSource = isOnlineMapSource;
 
-    updateOnlineMapSource();
-
-    if (self.screenObj)
-        self.screenObj.updateOnlineMapSource = updateOnlineMapSource;
-
-    if (isOnlineMapSourcePrev != isOnlineMapSource)
+    if (_isOnlineMapSourcePrev != isOnlineMapSource)
         [self.view setNeedsLayout];
 
     [super setupView];

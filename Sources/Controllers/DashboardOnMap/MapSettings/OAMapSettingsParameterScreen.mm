@@ -21,7 +21,7 @@
     OAMapStyleParameter *parameter;
 }
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource, parameterName;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, parameterName;
 
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param

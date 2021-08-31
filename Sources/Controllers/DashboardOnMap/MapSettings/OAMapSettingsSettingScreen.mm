@@ -21,7 +21,7 @@
     NSArray* data;
 }
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource, settingKeyName;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, settingKeyName;
 
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param

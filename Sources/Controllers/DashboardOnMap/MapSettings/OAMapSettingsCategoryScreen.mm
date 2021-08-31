@@ -22,7 +22,7 @@
 }
 
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource, categoryName;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, categoryName;
 
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param

@@ -87,7 +87,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString *_defaultColorScheme;
 }
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {

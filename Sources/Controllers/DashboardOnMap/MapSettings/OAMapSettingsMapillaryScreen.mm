@@ -65,7 +65,7 @@ static const NSInteger panoImageFilterSection = 3;
     UIView *_footerView;
 }
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {

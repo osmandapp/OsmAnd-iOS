@@ -55,7 +55,7 @@
     OAAppModeCell *_appModeCell;
 }
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
@@ -162,7 +162,8 @@
             @"cells": showSectionData
     }];
 
-    _routesParameters = !isOnlineMapSource ? [_styleSettings getParameters:@"routes"] : [NSArray array];
+    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
+    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:@"routes"] : [NSArray array];
     NSMutableArray *routesSectionData = [NSMutableArray array];
     if (_routesParameters.count > 0)
     {
@@ -897,11 +898,7 @@
 
 - (void)refreshMenu
 {
-    if (self.updateOnlineMapSource)
-        self.updateOnlineMapSource();
-
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    _routesParameters = !isOnlineMapSource ? [_styleSettings getParameters:@"routes"] : [NSArray array];
     [self setupView];
 }
 

@@ -34,13 +34,10 @@ typedef NS_ENUM(NSInteger, EMapSettingsScreen)
     EMapSettingsScreenTravelRoutes
 };
 
-typedef void (^OAMapSettingsOnlineMapSourceOnUpdate)(void);
-
 @protocol OAMapSettingsScreen <NSObject, OADashboardScreen, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, readonly) EMapSettingsScreen settingsScreen;
 @property (nonatomic, assign) BOOL isOnlineMapSource;
-@property (nonatomic) OAMapSettingsOnlineMapSourceOnUpdate updateOnlineMapSource;
 
 @optional
 

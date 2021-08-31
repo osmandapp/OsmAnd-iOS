@@ -292,8 +292,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [_app.data setPrevOfflineSource:source.mapSource];
 
             if (self.delegate)
-                [self.delegate refreshMenuRoutesParameters];
-            
+                [self.delegate refreshMenu];
+
             [tableView reloadData];
         }
         else

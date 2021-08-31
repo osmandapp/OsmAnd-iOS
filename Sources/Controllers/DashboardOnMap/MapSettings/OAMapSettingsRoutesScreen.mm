@@ -102,11 +102,13 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                 @"value": @"false",
                 @"title": OALocalizedString(@"gpx_route")
         }];
+        [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
         [colorsArr addObject:@{
                 @"type": [OASettingsTitleTableViewCell getCellIdentifier],
                 @"value": @"true",
                 @"title": OALocalizedString(@"rendering_value_walkingRoutesOSMCNodes_name")
         }];
+        [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     }
     else
     {
@@ -119,10 +121,10 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                         @"value": value.name,
                         @"title": value.title
                 }];
+                [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
             }
         }
     }
-    [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     [dataArr addObject:colorsArr];
 
     _data = dataArr;
@@ -132,11 +134,10 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
     title = _routesParameter.title;
 
+    tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [tblView.tableFooterView removeFromSuperview];
     tblView.tableFooterView = nil;
     [tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    tblView.rowHeight = UITableViewAutomaticDimension;
-    tblView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
@@ -152,6 +153,15 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     NSString *propertyValueReplaced = [propertyValue stringByReplacingOccurrencesOfString:@"\\s+" withString:@"_"];
     NSString *value = OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_description", propertyValueReplaced]);
     return value ? value : propertyValue;
+}
+
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+    else
+        return estimated ? 48. : UITableViewAutomaticDimension;
 }
 
 - (NSString *)getTextForFooter:(NSInteger)section
@@ -200,8 +210,12 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             cell = (OADividerCell *) nib[0];
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);
-            cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
+        }
+        if (cell)
+        {
+            CGFloat leftInset = indexPath.row == 0 || indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1 ? 0. : 20.;
+            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
         }
         return cell;
     }
@@ -217,7 +231,6 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             cell.textView.text = _routesEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = _routesEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.imgView.image = [UIImage templateImageNamed:imgName];
@@ -237,7 +250,6 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
         }
         if (cell)
         {
@@ -265,20 +277,24 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[self getItem:indexPath][@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
-    else
-        return UITableViewAutomaticDimension;
+    return [self heightForRow:indexPath estimated:NO];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath estimated:YES];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return indexPath.section != EOAMapSettingsRoutesSectionVisibility ? indexPath : nil;
+    NSDictionary *item = [self getItem:indexPath];
+    return [item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]] ? indexPath : nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != EOAMapSettingsRoutesSectionVisibility)
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
         [self onItemClicked:indexPath];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -377,7 +393,6 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         {
             cycleNode.value = value;
             [_styleSettings save:cycleNode];
-            [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionColors] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         if (![_routesParameter.value isEqualToString:@"true"])
         {
@@ -391,9 +406,11 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         {
             _routesParameter.value = value;
             [_styleSettings save:_routesParameter];
-            [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionColors] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
+    [UIView setAnimationsEnabled:NO];
+    [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionColors] withRowAnimation:UITableViewRowAnimationNone];
+    [UIView setAnimationsEnabled:YES];
 }
 
 @end

@@ -13,7 +13,7 @@
 @required
 
 - (void)updateSkimapRoutesParameter:(OAMapSource *)source;
-- (void)refreshMenuRoutesParameters;
+- (void)refreshMenu;
 
 @end
 

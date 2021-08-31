@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     NSArray<NSArray <NSDictionary *> *> *_data;
 }
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource;
 
 - (id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {

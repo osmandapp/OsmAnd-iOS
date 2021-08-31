@@ -69,7 +69,7 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
     NSMutableArray<OAPOIFilterTableRow *> *rows;
 }
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {

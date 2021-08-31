@@ -55,7 +55,7 @@
     OAAppModeCell *_appModeCell;
 }
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
@@ -66,7 +66,6 @@
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
         _styleSettings = [OAMapStyleSettings sharedInstance];
-        _routesParameters = [_styleSettings getParameters:@"routes"];
 
         title = OALocalizedString(@"configure_map");
 
@@ -163,6 +162,7 @@
             @"cells": showSectionData
     }];
 
+    _routesParameters = !isOnlineMapSource ? [_styleSettings getParameters:@"routes"] : [NSArray array];
     NSMutableArray *routesSectionData = [NSMutableArray array];
     if (_routesParameters.count > 0)
     {
@@ -897,8 +897,11 @@
 
 - (void)refreshMenu
 {
+    if (self.updateOnlineMapSource)
+        self.updateOnlineMapSource();
+
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    _routesParameters = [_styleSettings getParameters:@"routes"];
+    _routesParameters = !isOnlineMapSource ? [_styleSettings getParameters:@"routes"] : [NSArray array];
     [self setupView];
 }
 

@@ -40,7 +40,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kOfflineSourcesSection 0
 #define kOnlineSourcesSection 1
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, updateOnlineMapSource;
 
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController

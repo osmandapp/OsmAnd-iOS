@@ -66,7 +66,6 @@
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
         _styleSettings = [OAMapStyleSettings sharedInstance];
-        _routesParameters = [_styleSettings getParameters:@"routes"];
 
         title = OALocalizedString(@"configure_map");
 
@@ -163,6 +162,8 @@
             @"cells": showSectionData
     }];
 
+    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
+    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:@"routes"] : [NSArray array];
     NSMutableArray *routesSectionData = [NSMutableArray array];
     if (_routesParameters.count > 0)
     {
@@ -898,7 +899,6 @@
 - (void)refreshMenu
 {
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    _routesParameters = [_styleSettings getParameters:@"routes"];
     [self setupView];
 }
 

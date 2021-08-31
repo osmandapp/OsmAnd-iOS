@@ -186,12 +186,12 @@
 
     OAMapSource* mapSource = _app.data.lastMapSource;
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
-    
+
     BOOL _isOnlineMapSourcePrev = isOnlineMapSource;
     isOnlineMapSource = ([mapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources));
-    
+
     self.screenObj.isOnlineMapSource = isOnlineMapSource;
-    
+
     if (_isOnlineMapSourcePrev != isOnlineMapSource)
         [self.view setNeedsLayout];
 

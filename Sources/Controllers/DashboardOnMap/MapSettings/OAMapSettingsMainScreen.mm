@@ -613,7 +613,7 @@
     if (switchView)
     {
         BOOL wikipediaOn = switchView.isOn;
-        [[OsmAndApp instance].data setWikipedia:wikipediaOn];
+        [_app.data setWikipedia:wikipediaOn];
     }
 }
 

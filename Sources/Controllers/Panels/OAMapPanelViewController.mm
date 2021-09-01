@@ -1176,7 +1176,7 @@ typedef enum
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
     for (OATargetPoint *targetPoint in targetPoints)
     {
-        if ([self processTargetPoint:targetPoint])
+        if ([self processTargetPoint:targetPoint] && ![validPoints containsObject:targetPoint])
             [validPoints addObject:targetPoint];
     }
     

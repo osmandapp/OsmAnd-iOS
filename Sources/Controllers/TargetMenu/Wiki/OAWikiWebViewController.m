@@ -69,14 +69,39 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     self.bottomView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.bottomView.layer addSublayer:_horizontalLine];
 
-    NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
-    if (!preferredMapLanguage || preferredMapLanguage.length == 0)
-        preferredMapLanguage = NSLocale.currentLocale.languageCode;
+    NSString *content;
+    if (_poi.localizedContent.count == 1)
+    {
+        _contentLocale = _poi.localizedContent.allKeys.firstObject;
+        content = _poi.localizedContent.allValues.firstObject;
+    }
+    else
+    {
+        NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
+        if (!preferredMapLanguage || preferredMapLanguage.length == 0)
+            preferredMapLanguage = NSLocale.currentLocale.languageCode;
 
-    _contentLocale = [OAPlugin onGetMapObjectsLocale:_poi preferredLocale:preferredMapLanguage];
-    if ([_contentLocale isEqualToString:@"en"])
-        _contentLocale = @"";
-    NSString *content = _poi.localizedContent[_contentLocale];
+        _contentLocale = [OAPlugin onGetMapObjectsLocale:_poi preferredLocale:preferredMapLanguage];
+        if ([_contentLocale isEqualToString:@"en"])
+            _contentLocale = @"";
+
+        content = _poi.localizedContent[_contentLocale];
+        if (!content)
+        {
+            NSArray *locales = _poi.localizedContent.allKeys;
+            for (NSString *langCode in [NSLocale preferredLanguages])
+            {
+                _contentLocale = [langCode substringToIndex:[langCode indexOf:@"-"]];
+                if ([locales containsObject:_contentLocale])
+                {
+                    content = _poi.localizedContent[_contentLocale];
+                    break;
+                }
+            }
+            if (!content)
+                content = _poi.localizedContent.allValues.firstObject;
+        }
+    }
 
     _titleView.text = [self getLocalizedTitle];
     

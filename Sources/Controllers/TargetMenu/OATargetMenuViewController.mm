@@ -171,17 +171,43 @@
         }
         case OATargetWiki:
         {
-            NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
-            if (!preferredMapLanguage || preferredMapLanguage.length == 0)
-                preferredMapLanguage = NSLocale.currentLocale.languageCode;
+            if (targetPoint.localizedContent.count == 1)
+            {
+                controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:targetPoint.localizedContent.allValues.firstObject];
+            }
+            else
+            {
+                NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
+                if (!preferredMapLanguage || preferredMapLanguage.length == 0)
+                    preferredMapLanguage = NSLocale.currentLocale.languageCode;
 
-            NSString *language = [OAPlugin onGetMapObjectsLocale:targetPoint.targetObj preferredLocale:preferredMapLanguage];
-            if ([language isEqualToString:@"en"])
-                language = @"";
+                NSString *locale = [OAPlugin onGetMapObjectsLocale:targetPoint.targetObj preferredLocale:preferredMapLanguage];
+                if ([locale isEqualToString:@"en"])
+                    locale = @"";
 
-            NSString *content = targetPoint.localizedContent[language];
-            if (content)
-                controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
+                NSString *content = targetPoint.localizedContent[locale];
+                if (content)
+                {
+                    controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
+                }
+                else
+                {
+                    NSArray *locales = targetPoint.localizedContent.allKeys;
+                    for (NSString *langCode in [NSLocale preferredLanguages])
+                    {
+                        locale = [langCode substringToIndex:[langCode indexOf:@"-"]];
+                        if ([locales containsObject:locale])
+                        {
+                            content = targetPoint.localizedContent[locale];
+                            break;
+                        }
+                    }
+                    if (!content)
+                        content = targetPoint.localizedContent.allValues.firstObject;
+
+                    controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
+                }
+            }
             break;
         }
             

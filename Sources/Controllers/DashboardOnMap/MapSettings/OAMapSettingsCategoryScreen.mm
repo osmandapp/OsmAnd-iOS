@@ -11,6 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "Localization.h"
 
 @implementation OAMapSettingsCategoryScreen
 {
@@ -19,6 +20,8 @@
 
     OAMapStyleSettings *_styleSettings;
     NSArray<OAMapStyleParameter *> *_parameters;
+
+    BOOL _isDetailsCategory;
 }
 
 
@@ -35,6 +38,7 @@
         _styleSettings = [OAMapStyleSettings sharedInstance];
 
         categoryName = param;
+        _isDetailsCategory = [categoryName isEqual:@"details"];
 
         settingsScreen = EMapSettingsScreenCategory;
         
@@ -66,8 +70,7 @@
 
 - (void) setupView
 {
-    
-    if ([categoryName isEqual:@"details"])
+    if (_isDetailsCategory)
     {
         NSMutableArray<OAMapStyleParameter *> *withoutContoursLines;
         withoutContoursLines = [[_styleSettings getParameters:categoryName] mutableCopy];
@@ -97,42 +100,43 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _parameters.count;
+    return _isDetailsCategory ? _parameters.count + 1 : _parameters.count;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMapStyleParameter *p = _parameters[indexPath.row];
-    if (p.dataType != OABoolean)
-    {
-        OASettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
-            [cell.textView setText:p.title];
-            [cell.descriptionView setText:[p getValueTitle]];
-        }
-        return cell;
-    }
-    else
+    BOOL isPointLabelsRow = _isDetailsCategory && indexPath.row == 0;
+    OAMapStyleParameter *p = !isPointLabelsRow ? _parameters[_isDetailsCategory ? indexPath.row - 1 : indexPath.row] : nil;
+    if (isPointLabelsRow || p.dataType == OABoolean)
     {
         OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell = (OASwitchTableViewCell *) nib[0];
+        }
+        if (cell)
+        {
+            [cell.textView setText:isPointLabelsRow ? OALocalizedString(@"layer_amenity_label") : p.title];
+            [cell.switchView setOn:isPointLabelsRow ? [_settings.mapSettingShowPoiLabel get] : [p.storedValue isEqualToString:@"true"]];
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.switchView.tag = indexPath.row;
+        }
+        return cell;
+    }
+    else
+    {
+        OASettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASettingsTableViewCell *) nib[0];
         }
         if (cell)
         {
             [cell.textView setText:p.title];
-            [cell.switchView setOn:[p.storedValue isEqualToString:@"true"]];
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tag = indexPath.row;
+            [cell.descriptionView setText:[p getValueTitle]];
         }
         return cell;
     }
@@ -162,18 +166,27 @@
     }
 }
 
+#pragma mark - Switch
+
 - (void) mapSettingSwitchChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
-        OAMapStyleParameter *p = _parameters[switchView.tag];
-        if (p)
+        if (_isDetailsCategory && switchView.tag == 0)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                p.value = switchView.isOn ? @"true" : @"false";
-                [_styleSettings save:p];
-            });
+            [_settings setShowPoiLabel:switchView.isOn];
+        }
+        else
+        {
+            OAMapStyleParameter *p = _parameters[_isDetailsCategory ? switchView.tag - 1 : switchView.tag];
+            if (p)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    p.value = switchView.isOn ? @"true" : @"false";
+                    [_styleSettings save:p];
+                });
+            }
         }
     }
 }

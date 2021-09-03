@@ -16,6 +16,7 @@ static NSString *SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
 static NSString *WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
 static NSString *HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
 static NSString *CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
+static NSString *TRAVEL_ROUTES = @"travel_routes";
 
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
@@ -64,6 +65,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 - (NSArray<NSString *> *) getAllCategories;
 - (NSString *) getCategoryTitle:(NSString *)categoryName;
 - (NSArray<OAMapStyleParameter *> *) getParameters:(NSString *)category;
+- (NSArray<OAMapStyleParameter *> *) getParameters:(NSString *)category sorted:(BOOL)sorted;
 
 - (BOOL) isCategoryEnabled:(NSString *)categoryName;
 - (void) setCategoryEnabled:(BOOL)isVisible categoryName:(NSString *)categoryName;

@@ -9,31 +9,21 @@
 #import "OAMapSettingsMainScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAFirstMapillaryBottomSheetViewController.h"
-#import "OASettingsTableViewCell.h"
-#import "OASwitchTableViewCell.h"
-#import "OASettingSwitchCell.h"
+#import "OABaseSettingsListViewController.h"
+#import "OAIconTitleValueCell.h"
+#import "OAIconTextDividerSwitchCell.h"
+#import "OACustomSelectionCollapsableCell.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXDatabase.h"
-#import "OAMapSource.h"
 #import "OAAppModeCell.h"
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
-#import "OAAppSettings.h"
 #import "OAIAPHelper.h"
-#import "OAUtilities.h"
 #import "OAPOIFiltersHelper.h"
-#import "OAPOIUIFilter.h"
-#import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "Reachability.h"
-#import "OAPlugin.h"
-#import "OAWikipediaPlugin.h"
 #import "OAMapSettingsMapTypeScreen.h"
+#import "OAColors.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/IMapStylesCollection.h>
-
-#define kMapStyleTopSettingsCount 3
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
 #define kContourLinesColorScheme @"contourColorScheme"
@@ -49,7 +39,7 @@
     OAIAPHelper *_iapHelper;
 
     OAMapStyleSettings *_styleSettings;
-    NSArray *_filteredTopLevelParams;
+    NSArray<OAMapStyleParameter *> *_filteredTopLevelParams;
     NSArray<OAMapStyleParameter *> *_routesParameters;
 
     OAAppModeCell *_appModeCell;
@@ -57,7 +47,7 @@
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
+- (id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
     self = [super init];
     if (self)
@@ -78,16 +68,16 @@
     return self;
 }
 
-- (void) initData
+- (void)initData
 {
 }
 
-- (void) setupView
+- (void)setupView
 {
     NSMutableArray *data = [NSMutableArray array];
 
     [data addObject:@{
-            @"groupName": @"",
+            @"group_name": @"",
             @"cells": @[@{
                     @"type": [OAAppModeCell getCellIdentifier],
             }]
@@ -96,31 +86,31 @@
     NSMutableArray *showSectionData = [NSMutableArray array];
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"favorites"),
-            @"value": @"",
-            @"type": [OASwitchTableViewCell getCellIdentifier],
+            @"image": @"ic_custom_favorites",
+            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
             @"key": @"favorites"
     }];
 
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"poi_overlay"),
             @"value": [self getPOIDescription],
-            @"type": [OASettingsTableViewCell getCellIdentifier],
+            @"image": @"ic_custom_info",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
             @"key": @"poi_layer"
     }];
 
-    [showSectionData addObject:@{
+    /*[showSectionData addObject:@{
             @"name": OALocalizedString(@"layer_amenity_label"),
-            @"value": @"",
-            @"type": [OASwitchTableViewCell getCellIdentifier],
+            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
             @"key": @"layer_amenity_label"
-    }];
+    }];*/
 
     if ([_iapHelper.wiki isActive])
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"product_title_wiki"),
-                @"value": @"",
-                @"secondaryImg": @"ic_action_additional_option",
-                @"type": [OASettingSwitchCell getCellIdentifier],
+                @"image": @"ic_custom_wikipedia",
+                @"options": @YES,
+                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                 @"key": @"wikipedia_layer"
         }];
 
@@ -128,14 +118,14 @@
     {
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"osm_edits_offline_layer"),
-                @"value": @"",
-                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"image": @"ic_action_openstreetmap_logo",
+                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                 @"key": @"osm_edits_offline_layer"
         }];
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"osm_notes_online_layer"),
-                @"value": @"",
-                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"image": @"ic_action_osm_note",
+                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                 @"key": @"osm_notes_online_layer"
         }];
     }
@@ -143,9 +133,9 @@
     if ([_iapHelper.mapillary isActive])
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"street_level_imagery"),
-                @"description": @"",
-                @"secondaryImg": @"ic_action_additional_option",
-                @"type": [OASettingSwitchCell getCellIdentifier],
+                @"image": @"ic_custom_mapillary_symbol",
+                @"options": @YES,
+                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                 @"key": @"mapillary_layer"
         }];
 
@@ -153,57 +143,69 @@
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"tracks"),
                 @"value": @"",
-                @"type": [OASettingsTableViewCell getCellIdentifier],
+                @"image": @"ic_custom_trip",
+                @"type": [OAIconTitleValueCell getCellIdentifier],
                 @"key": @"tracks"
         }];
 
     [data addObject:@{
-            @"groupName": OALocalizedString(@"map_settings_show"),
+            @"group_name": OALocalizedString(@"map_settings_show"),
             @"cells": showSectionData
     }];
 
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
-    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:@"routes"] : [NSArray array];
-    NSMutableArray *routesSectionData = [NSMutableArray array];
+    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:@"routes" sorted:NO] : [NSArray array];
     if (_routesParameters.count > 0)
     {
-        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR];
+        NSArray<NSString *> *orderedNames = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, ALPINE_HIKING_ATTR, PISTE_ROUTES_ATTR, HORSE_ROUTES_ATTR, WHITE_WATER_SPORTS_ATTR, TRAVEL_ROUTES];
+        _routesParameters = [_routesParameters sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
+            NSInteger orderValue1 = [orderedNames indexOfObject:obj1.name];
+            NSInteger orderValue2 = [orderedNames indexOfObject:obj2.name];
+            if (orderValue1 < orderValue2)
+                return NSOrderedAscending;
+            else if (orderValue1 > orderValue2)
+                return NSOrderedDescending;
+            else
+                return NSOrderedSame;
+        }];
+
+        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
+        group.groupName = OALocalizedString(@"shared_string_collapse");
+        group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
+        group.isOpen = NO;
+
+        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
         for (OAMapStyleParameter *routeParameter in _routesParameters)
         {
             if ([routeParameter.name isEqualToString:CYCLE_NODE_NETWORK_ROUTES_ATTR])
                 continue;
 
-            NSMutableDictionary *cellRoutes = [NSMutableDictionary new];
-            cellRoutes[@"name"] = routeParameter.title;
-            cellRoutes[@"value"]= @"";
-            cellRoutes[@"key"]= [NSString stringWithFormat:@"routes_%@", routeParameter.name];
-
-            if ([hasParameters containsObject:routeParameter.name])
-            {
-                cellRoutes[@"type"] = [OASettingsTableViewCell getCellIdentifier];
-            }
-            else
-            {
-                cellRoutes[@"type"] = [OASwitchTableViewCell getCellIdentifier];
-                cellRoutes[@"switch"] = routeParameter.storedValue;
-                cellRoutes[@"tag"] = @([_routesParameters indexOfObject:routeParameter]);
-            }
-
-            [routesSectionData addObject:cellRoutes];
+            [group.groupItems addObject:@{
+                    @"name": routeParameter.title,
+                    @"image": [self getImageForParameterOrCategory:routeParameter.name],
+                    @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
+                    @"last_index": @([_routesParameters indexOfObject:routeParameter] == _routesParameters.count - 2),
+                    @"type": [hasParameters containsObject:routeParameter.name] ? [OAIconTitleValueCell getCellIdentifier] : [OAIconTextDividerSwitchCell getCellIdentifier]
+            }];
         }
 
         [data addObject:@{
-                @"groupName": OALocalizedString(@"rendering_category_routes"),
-                @"cells": routesSectionData
+                @"group_name": OALocalizedString(@"rendering_category_routes"),
+                @"cells": @[@{
+                        @"group": group,
+                        @"type": NSStringFromClass([group class]),
+                        @"key": @"collapsed_routes"
+                }]
         }];
     }
 
     [data addObject:@{
-            @"groupName": OALocalizedString(@"map_settings_type"),
+            @"group_name": OALocalizedString(@"map_settings_type"),
             @"cells": @[@{
                     @"name": OALocalizedString(@"map_settings_type"),
                     @"value": _app.data.lastMapSource.name,
-                    @"type": [OASettingsTableViewCell getCellIdentifier],
+                    @"image": @"ic_custom_map_style",
+                    @"type": [OAIconTitleValueCell getCellIdentifier],
                     @"key": @"map_type"
             }]
     }];
@@ -224,44 +226,35 @@
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_mode"),
                 @"value": modeStr,
-                @"type": [OASettingsTableViewCell getCellIdentifier],
+                @"image": @"ic_custom_sun",
+                @"type": [OAIconTitleValueCell getCellIdentifier],
                 @"key": @"map_mode"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_settings_map_magnifier"),
                 @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode.get]],
-                @"type": [OASettingsTableViewCell getCellIdentifier],
+                @"image": @"ic_custom_magnifier",
+                @"type": [OAIconTitleValueCell getCellIdentifier],
                 @"key": @"map_magnifier"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_settings_text_size"),
                 @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
-                @"type": [OASettingsTableViewCell getCellIdentifier],
+                @"image": @"ic_custom_text_size",
+                @"type": [OAIconTitleValueCell getCellIdentifier],
                 @"key": @"text_size"
         }];
 
         for (NSString *cName in [self getAllCategories])
         {
-            NSString *cTitle = [_styleSettings getCategoryTitle:cName];
-            if ([[cName lowercaseString] isEqualToString:@"transport"])
-            {
-                [mapStyleSectionData addObject:@{
-                        @"name": cTitle,
-                        @"value": @"",
-                        @"type": [OASettingSwitchCell getCellIdentifier],
-                        @"secondaryImg": @"ic_action_additional_option",
-                        @"key": [NSString stringWithFormat:@"transport_layer"]
-                }];
-            }
-            else
-            {
-                [mapStyleSectionData addObject:@{
-                        @"name": cTitle,
-                        @"value": @"",
-                        @"type": [OASettingsTableViewCell getCellIdentifier],
-                        @"key": [NSString stringWithFormat:@"category_%@", cName]
-                }];
-            }
+            BOOL isTransport = [[cName lowercaseString] isEqualToString:@"transport"];
+            [mapStyleSectionData addObject:@{
+                    @"name": [_styleSettings getCategoryTitle:cName],
+                    @"image": [self getImageForParameterOrCategory:cName],
+                    @"key": [NSString stringWithFormat:@"category_%@", cName],
+                    @"type": isTransport ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAIconTitleValueCell getCellIdentifier],
+                    isTransport ? @"options" : @"value": isTransport ? @YES : @""
+            }];
         }
 
         _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
@@ -269,8 +262,9 @@
         {
             [mapStyleSectionData addObject:@{
                     @"name": parameter.title,
+                    @"image": [self getImageForParameterOrCategory:parameter.name],
                     @"value": [parameter getValueTitle],
-                    @"type": [OASettingsTableViewCell getCellIdentifier],
+                    @"type": [OAIconTitleValueCell getCellIdentifier],
                     @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
             }];
         }
@@ -278,14 +272,14 @@
         if ([_iapHelper.srtm isActive])
             [mapStyleSectionData addObject:@{
                     @"name": OALocalizedString(@"product_title_srtm"),
-                    @"description": @"",
-                    @"secondaryImg": @"ic_action_additional_option",
-                    @"type": [OASettingSwitchCell getCellIdentifier],
+                    @"image": @"ic_custom_contour_lines",
+                    @"options": @YES,
+                    @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                     @"key": @"contour_lines_layer"
             }];
 
         [data addObject:@{
-                @"groupName": OALocalizedString(@"map_settings_style"),
+                @"group_name": OALocalizedString(@"map_settings_style"),
                 @"cells": mapStyleSectionData
         }];
     }
@@ -295,38 +289,39 @@
     if ([_iapHelper.srtm isActive])
         [overlayUnderlaySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_terrain"),
-                @"description": @"",
-                @"secondaryImg": @"ic_action_additional_option",
-                @"type": [OASettingSwitchCell getCellIdentifier],
+                @"image": @"ic_custom_hillshade",
+                @"options": @YES,
+                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                 @"key": @"terrain_layer"
         }];
 
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_over"),
-            @"description": @"",
-            @"secondaryImg": @"ic_action_additional_option",
-            @"type": [OASettingSwitchCell getCellIdentifier],
+            @"image": @"ic_custom_overlay_map",
+            @"options": @YES,
+            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
             @"key": @"overlay_layer"
     }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_under"),
-            @"description": @"",
-            @"secondaryImg": @"ic_action_additional_option",
-            @"type": [OASettingSwitchCell getCellIdentifier],
+            @"image": @"ic_custom_underlay_map",
+            @"options": @YES,
+            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
             @"key": @"underlay_layer"
     }];
 
     [data addObject:@{
-            @"groupName": OALocalizedString(@"map_settings_overunder"),
+            @"group_name": OALocalizedString(@"map_settings_overunder"),
             @"cells": overlayUnderlaySectionData
     }];
 
     [data addObject:@{
-            @"groupName": OALocalizedString(@"language"),
+            @"group_name": OALocalizedString(@"language"),
             @"cells": @[@{
                     @"name": OALocalizedString(@"sett_lang"),
                     @"value": [self getMapLangValueStr],
-                    @"type": [OASettingsTableViewCell getCellIdentifier],
+                    @"image": @"ic_custom_map_languge",
+                    @"type": [OAIconTitleValueCell getCellIdentifier],
                     @"key": @"map_language"
             }]
     }];
@@ -337,40 +332,26 @@
 
 - (NSString *)getMapLangValueStr
 {
-    NSString *prefLang;
     NSString *prefLangId = _settings.settingPrefMapLanguage.get;
-    if (prefLangId)
-        prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
-    else
-        prefLang = OALocalizedString(@"local_names");
-
-    NSString *languageValue;
+    NSString *prefLang = prefLangId.length > 0 ? [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_names");
     switch (_settings.settingMapLanguage.get)
     {
         case 0: // NativeOnly
-            languageValue = OALocalizedString(@"sett_lang_local");
-            break;
+            return OALocalizedString(@"sett_lang_local");
         case 4: // LocalizedAndNative
-            languageValue = [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
-            break;
+            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 1: // LocalizedOrNative
-            languageValue = [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
-            break;
+            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 5: // LocalizedOrTransliteratedAndNative
-            languageValue = [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]], OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
-            break;
+            return [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]], OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 6: // LocalizedOrTransliterated
-            languageValue = [NSString stringWithFormat:@"%@ (%@)", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]]];
-            break;
-
+            return [NSString stringWithFormat:@"%@ (%@)", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         default:
-            break;
+            return @"";
     }
-
-    return languageValue;
 }
 
-- (NSArray *) getAllCategories
+- (NSArray *)getAllCategories
 {
     NSMutableArray *res = [NSMutableArray array];
     NSMutableArray *categories = [NSMutableArray arrayWithArray:[_styleSettings getAllCategories]];
@@ -382,12 +363,12 @@
     return res;
 }
 
-- (NSString *) getPercentString:(double)value
+- (NSString *)getPercentString:(double)value
 {
     return [NSString stringWithFormat:@"%d %%", (int) (value * 100.0)];
 }
 
-- (NSString *) getPOIDescription
+- (NSString *)getPOIDescription
 {
     NSMutableString *descr = [[NSMutableString alloc] init];
     NSMutableArray<OAPOIUIFilter *> *selectedFilters = [[[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects] mutableCopy];
@@ -402,57 +383,151 @@
     return descr;
 }
 
-- (CGFloat) heightForHeader:(NSInteger)section
+- (NSString *)getImageForParameterOrCategory:(NSString *)paramName
 {
-    NSDictionary *sectionData = tableData[section];
-    NSArray *cells = sectionData[@"cells"];
-    if (cells.count > 0)
-    {
-        NSDictionary *cellData = cells[0];
-        if ([cellData[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
-            return 0.01;
-        else
-            return 34.0;
-        
-    }
-    return 0.01;
+    if ([paramName isEqualToString:SHOW_CYCLE_ROUTES_ATTR] || [paramName isEqualToString:SHOW_MTB_ROUTES_ATTR])
+        return @"ic_action_bicycle_dark"; //ic_action_mountain_bike
+    else if([paramName isEqualToString:WHITE_WATER_SPORTS_ATTR])
+        return @"ic_action_kayak";
+    else if([paramName isEqualToString:HORSE_ROUTES_ATTR])
+        return @"ic_action_horse";
+    else if([paramName isEqualToString:HIKING_ROUTES_OSMC_ATTR] || [paramName isEqualToString:ALPINE_HIKING_ATTR])
+        return @"ic_action_trekking_dark";
+    else if([paramName isEqualToString:PISTE_ROUTES_ATTR])
+        return @"ic_action_skiing";
+    else if([paramName isEqualToString:TRAVEL_ROUTES])
+        return @"mm_routes";
+    else if([paramName isEqualToString:@"roadStyle"])
+        return @"ic_custom_road_style";
+    else if([paramName isEqualToString:@"details"])
+        return @"ic_custom_overlay_map"; //ic_map_configure
+    else if([paramName isEqualToString:@"hide"])
+        return @"ic_custom_hide";
+    else if([paramName isEqualToString:@"transport"])
+        return @"ic_custom_transport_bus";
+
+    return @"";
 }
 
-#pragma mark - OAAppModeCellDelegate
-
-- (void) appModeChanged:(OAApplicationMode *)mode
+- (BOOL)isEnabled:(NSString *)key index:(NSInteger)index
 {
-    [_settings setApplicationModePref:mode];
-    
-    [self setupView];
+    if ([key isEqualToString:@"favorites"])
+        return [_settings.mapSettingShowFavorites get];
+    if ([key isEqualToString:@"poi_layer"])
+        return [_settings.selectedPoiFilters get].length > 0;
+//    else if ([key isEqualToString:@"layer_amenity_label"])
+//        return [_settings.mapSettingShowPoiLabel get];
+    else if ([key isEqualToString:@"wikipedia_layer"])
+        return _app.data.wikipedia;
+    else if ([key isEqualToString:@"osm_edits_offline_layer"])
+        return [_settings.mapSettingShowOfflineEdits get];
+    else if ([key isEqualToString:@"osm_notes_online_layer"])
+        return [_settings.mapSettingShowOnlineNotes get];
+    else if ([key isEqualToString:@"mapillary_layer"])
+        return _app.data.mapillary;
+    else if ([key isEqualToString:@"tracks"])
+        return _settings.mapSettingVisibleGpx.get.count > 0;
+    else if ([key isEqualToString:[NSString stringWithFormat:@"routes_%@", HIKING_ROUTES_OSMC_ATTR]])
+        return ![_routesParameters[index].value isEqualToString:@"disabled"];
+    else if ([key hasPrefix:@"routes_"])
+        return [_routesParameters[index].value isEqualToString:@"true"];
+    else if ([key isEqualToString:@"category_transport"])
+        return [_styleSettings isCategoryEnabled:@"transport"];
+    else if ([key isEqualToString:@"contour_lines_layer"])
+        return ![[_styleSettings getParameter:@"contourLines"].value isEqualToString:@"disabled"];
+    else if ([key isEqualToString:@"terrain_layer"])
+        return _app.data.terrainType != EOATerrainTypeDisabled;
+    else if ([key isEqualToString:@"overlay_layer"])
+        return _app.data.overlayMapSource != nil;
+    else if ([key isEqualToString:@"underlay_layer"])
+        return _app.data.underlayMapSource != nil;
+
+    return YES;
+}
+
+- (BOOL)isCollapsableGroup:(NSDictionary *)item
+{
+    return [item[@"type"] isEqualToString:NSStringFromClass([OATableCollapsableGroup class])];
 }
 
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    return (NSDictionary *) ((NSArray *) ((NSDictionary *) tableData[indexPath.section])[@"cells"])[indexPath.row];
+    NSArray *cells = tableData[indexPath.section][@"cells"];
+    if (cells.count > 0 && [self isCollapsableGroup:cells[0]])
+    {
+        OATableCollapsableGroup *group = cells[0][@"group"];
+        return !group.isOpen || indexPath.row == group.groupItems.count ? cells[0] : group.groupItems[indexPath.row];
+    }
+
+    return cells[indexPath.row];
+}
+
+- (CGFloat)heightForHeader:(NSInteger)section
+{
+    NSArray *cells = tableData[section][@"cells"];
+    if (cells.count > 0)
+        return [cells[0][@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]] ? 0.01 : 34.;
+
+    return 0.01;
+}
+
+- (void)openCloseGroup:(NSIndexPath *)indexPath
+{
+    OATableCollapsableGroup *group = [self getItem:indexPath][@"group"];
+    group.isOpen = !group.isOpen;
+
+    [tblView beginUpdates];
+    [tblView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+    [tblView endUpdates];
+    NSIndexPath *lastVisibleIndexPath = [tblView indexPathForCell:[tblView visibleCells].lastObject];
+    UITableViewScrollPosition scrollPosition = group.isOpen && lastVisibleIndexPath.section < indexPath.section ? UITableViewScrollPositionBottom : UITableViewScrollPositionNone;
+    [tblView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:group.isOpen ? group.groupItems.count : 0 inSection:indexPath.section] atScrollPosition:scrollPosition animated:YES];
+}
+
+- (void)openCloseGroupButtonAction:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+    [self openCloseGroup:indexPath];
+}
+
+#pragma mark - OAAppModeCellDelegate
+
+- (void)appModeChanged:(OAApplicationMode *)mode
+{
+    [_settings setApplicationModePref:mode];
+    [self setupView];
 }
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [tableData count];
+    return tableData.count;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return ((NSDictionary *) tableData[section])[@"groupName"];
+    return tableData[section][@"group_name"];
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [((NSArray*) ((NSDictionary *) tableData[section])[@"cells"]) count];
+    NSArray *cells = tableData[section][@"cells"];
+    if (cells.count > 0 && [self isCollapsableGroup:cells[0]])
+    {
+        OATableCollapsableGroup *group = cells[0][@"group"];
+        return group.isOpen ? group.groupItems.count + 1 : 1;
+    }
+
+    return cells.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    
+    BOOL isOn = [self isEnabled:item[@"key"] index:indexPath.row];
+
     UITableViewCell *outCell = nil;
     if ([item[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])
     {
@@ -464,327 +539,97 @@
             _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode.get;
             _appModeCell.delegate = self;
         }
-        
         outCell = _appModeCell;
-        
     }
-    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OASettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *) nib[0];
         }
-
         if (cell)
         {
-            [cell.textView setText:item[@"name"]];
-            [cell.descriptionView setText:item[@"value"]];
-        }
-        outCell = cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-        }
-
-        if (cell)
-        {
-            [cell.textView setText:item[@"name"]];
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-
-            if ([item[@"key"] isEqualToString:@"favorites"])
-            {
-                [cell.switchView setOn:[_settings.mapSettingShowFavorites get]];
-                [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            else if ([item[@"key"] isEqualToString:@"layer_amenity_label"])
-            {
-                [cell.switchView setOn:[_settings.mapSettingShowPoiLabel get]];
-                [cell.switchView addTarget:self action:@selector(showPoiLabelChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            else if ([item[@"key"] isEqualToString:@"osm_edits_offline_layer"])
-            {
-                [cell.switchView setOn:[_settings.mapSettingShowOfflineEdits get]];
-                [cell.switchView addTarget:self action:@selector(showOfflineEditsChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            else if ([item[@"key"] isEqualToString:@"osm_notes_online_layer"])
-            {
-                [cell.switchView setOn:[_settings.mapSettingShowOnlineNotes get]];
-                [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            else if ([item[@"key"] hasPrefix:@"routes_"])
-            {
-                [cell.switchView setOn:[item[@"switch"] isEqualToString:@"true"]];
-                [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-                cell.switchView.tag = ((NSNumber *) item[@"tag"]).integerValue;
-            }
-        }
-        outCell = cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
-    {
-        OASettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *) nib[0];
-        }
-
-        if (cell)
-        {
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            if ([item[@"key"] isEqualToString:@"mapillary_layer"])
-            {
-                [cell.switchView setOn:[OsmAndApp instance].data.mapillary];
-                [cell.switchView addTarget:self action:@selector(mapillaryChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            if ([item[@"key"] isEqualToString:@"contour_lines_layer"])
-            {
-                BOOL contourLinesOn = true;
-                OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
-                if ([parameter.value isEqual:@"disabled"])
-                    contourLinesOn = false;
-                [cell.switchView setOn:contourLinesOn];
-                [cell.switchView addTarget:self action:@selector(contourLinesChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            if ([item[@"key"] isEqualToString:@"overlay_layer"])
-            {
-                [cell.switchView setOn:_app.data.overlayMapSource != nil];
-                [cell.switchView addTarget:self action:@selector(overlayChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            if ([item[@"key"] isEqualToString:@"underlay_layer"])
-            {
-                [cell.switchView setOn:_app.data.underlayMapSource != nil];
-                [cell.switchView addTarget:self action:@selector(underlayChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            if ([item[@"key"] isEqualToString:@"terrain_layer"])
-            {
-                [cell.switchView setOn:_app.data.terrainType != EOATerrainTypeDisabled];
-                [cell.switchView addTarget:self action:@selector(terrainChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            if ([item[@"key"] isEqualToString:@"transport_layer"])
-            {
-                [cell.switchView setOn:[_styleSettings isCategoryEnabled:@"transport"]];
-                [cell.switchView addTarget:self action:@selector(transportChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            if ([item[@"key"] isEqualToString:@"wikipedia_layer"])
-            {
-                [cell.switchView setOn:_app.data.wikipedia];
-                [cell.switchView addTarget:self action:@selector(wikipediaChanged:) forControlEvents:UIControlEventValueChanged];
-            }
+            cell.separatorInset = UIEdgeInsetsMake(0., [item[@"last_index"] boolValue] ? 20.0 : 66.0, 0., 0.);
             cell.textView.text = item[@"name"];
-            NSString *desc = item[@"description"];
-            NSString *secondaryImg = item[@"secondaryImg"];
-            cell.descriptionView.text = desc;
-            cell.descriptionView.hidden = desc.length == 0;
-            [cell setSecondaryImage:secondaryImg.length > 0 ? [UIImage imageNamed:secondaryImg] : nil];
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
+            cell.descriptionView.text = item[@"value"];
+            cell.leftImageView.image = [UIImage templateImageNamed:item[@"image"]];
+            cell.leftImageView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+            [cell showImage:YES];
         }
         outCell = cell;
     }
+    else if ([item[@"type"] isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    {
+        OAIconTextDividerSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTextDividerSwitchCell *) nib[0];
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [item[@"last_index"] boolValue] ? 20.0 : 66.0, 0., 0.);
+            cell.switchView.on = isOn;
+            cell.dividerView.hidden = ![item[@"options"] boolValue];
+            cell.textView.text = item[@"name"];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"image"]];
+            cell.iconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
+        }
+        outCell = cell;
+    }
+    else if ([self isCollapsableGroup:item])
+    {
+        OATableCollapsableGroup *group = item[@"group"];
+        OACustomSelectionCollapsableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionCollapsableCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionCollapsableCell getCellIdentifier] owner:self options:nil];
+            cell = (OACustomSelectionCollapsableCell *) nib[0];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell makeSelectable:NO];
+        }
+        if (cell)
+        {
+            cell.descriptionView.hidden = YES;
+            cell.textView.text = group.groupName;
+            cell.textView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : @"ic_custom_arrow_down"];
+            if (!group.isOpen && [cell isDirectionRTL])
+                cell.iconView.image = cell.iconView.image.imageFlippedForRightToLeftLayoutDirection;
+
+            cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        outCell = cell;
+    }
+    if ([outCell needsUpdateConstraints])
+        [outCell updateConstraints];
     return outCell;
-}
-
-- (void) mapillaryChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        BOOL mapillaryOn = switchView.isOn;
-        [[OsmAndApp instance].data setMapillary:mapillaryOn];
-        if (mapillaryOn && !_settings.mapillaryFirstDialogShown.get)
-        {
-            [_settings.mapillaryFirstDialogShown set:YES];
-            OAFirstMapillaryBottomSheetViewController *screen = [[OAFirstMapillaryBottomSheetViewController alloc] init];
-            [screen show];
-        }
-    }
-}
-
-- (void)wikipediaChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        BOOL wikipediaOn = switchView.isOn;
-        [_app.data setWikipedia:wikipediaOn];
-    }
-}
-
-- (void) contourLinesChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
-        parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
-        [_styleSettings save:parameter];
-    }
-}
-
-- (void) overlayChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        if (switchView.isOn)
-        {
-            BOOL hasLastMapSource = _app.data.lastOverlayMapSource != nil;
-            if (!hasLastMapSource)
-                _app.data.lastOverlayMapSource = [OAMapSource getOsmAndOnlineTilesMapSource];
-            
-            _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
-            if (!hasLastMapSource)
-            {
-                OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
-                [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-            }
-        }
-        else
-            _app.data.overlayMapSource = nil;
-    }
-}
-
-- (void)mapSettingSwitchChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        OAMapStyleParameter *p = _routesParameters[switchView.tag];
-        if (p)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                p.value = switchView.isOn ? @"true" : @"false";
-                [_styleSettings save:p];
-            });
-        }
-    }
-}
-
-- (void) installMapLayerFor:(id)param
-{
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-    {
-        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources param:param];
-        [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-    }
-    else
-    {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-        [self.vwController presentViewController:alert animated:YES completion:nil];
-    }
-}
-
-- (void) underlayChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        OAMapStyleParameter *hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
-        if (switchView.isOn)
-        {
-            BOOL hasLastMapSource = _app.data.lastUnderlayMapSource != nil;
-            if (!hasLastMapSource)
-                _app.data.lastUnderlayMapSource = [OAMapSource getOsmAndOnlineTilesMapSource];
-
-            hidePolygonsParameter.value = @"true";
-            [_styleSettings save:hidePolygonsParameter];
-            _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
-            if (!hasLastMapSource)
-            {
-                OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
-                [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-            }
-        }
-        else
-        {
-            hidePolygonsParameter.value = @"false";
-            [_styleSettings save:hidePolygonsParameter];
-            _app.data.underlayMapSource = nil;
-        }
-    }
-}
-
-- (void) terrainChanged:(id)sender
-{
-    if ([sender isKindOfClass:UISwitch.class])
-    {
-        UISwitch *switchView = (UISwitch *) sender;
-        if (switchView.isOn)
-        {
-            EOATerrainType lastType = _app.data.lastTerrainType;
-            _app.data.terrainType = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
-        }
-        else
-        {
-            _app.data.lastTerrainType = _app.data.terrainType;
-            _app.data.terrainType = EOATerrainTypeDisabled;
-        }
-    }
-}
-
-- (void) showFavoriteChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-        [_settings setShowFavorites:switchView.isOn];
-}
-
-- (void) showPoiLabelChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-        [_settings setShowPoiLabel:switchView.isOn];
-}
-
-- (void) showOfflineEditsChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-        [_settings setShowOfflineEdits:switchView.isOn];
-}
-
-- (void) showOnlineNotesChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-        [_settings setShowOnlineNotes:switchView.isOn];
-}
-
-- (void) transportChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        [_styleSettings setCategoryEnabled:switchView.isOn categoryName:@"transport"];
-        if (switchView.isOn && ![_styleSettings isCategoryEnabled:@"transport"])
-        {
-            OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:@"transport"];
-            [transportSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-        }
-    }
 }
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return [self heightForHeader:section];
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     OAMapSettingsViewController *mapSettingsViewController;
 
+    if ([item[@"key"] isEqualToString:@"collapsed_routes"])
+    {
+        [self openCloseGroup:indexPath];
+    }
     if ([item[@"key"] isEqualToString:@"poi_layer"])
     {
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
@@ -809,10 +654,10 @@
     {
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenHikingRoutes];
     }
-    /*else if ([item[@"key"] isEqualToString:@"routes_travel"])
+    else if ([item[@"key"] isEqualToString:[NSString stringWithFormat:@"routes_%@", TRAVEL_ROUTES]])
     {
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTravelRoutes];
-    }*/
+    }
     else if ([item[@"key"] isEqualToString:@"map_type"])
     {
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
@@ -850,10 +695,6 @@
     {
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenLanguage];
     }
-    else if ([item[@"key"] isEqualToString:@"transport_layer"])
-    {
-        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:@"transport"];
-    }
     else if ([item[@"key"] hasPrefix:@"filtered_"])
     {
         for (OAMapStyleParameter *parameter in _filteredTopLevelParams)
@@ -877,11 +718,162 @@
         }
     }
 
-
     if (mapSettingsViewController)
             [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Switch
+
+- (void)onSwitchClick:(id)sender
+{
+    UISwitch *switchView = (UISwitch *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+    NSDictionary *item = [self getItem:indexPath];
+
+    if ([item[@"key"] isEqualToString:@"favorites"])
+        [_settings setShowFavorites:switchView.on];
+//    else if ([item[@"key"] isEqualToString:@"layer_amenity_label"])
+//        [_settings setShowPoiLabel:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"wikipedia_layer"])
+        [_app.data setWikipedia:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"osm_edits_offline_layer"])
+        [_settings setShowOfflineEdits:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"osm_notes_online_layer"])
+        [_settings setShowOnlineNotes:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"mapillary_layer"])
+        [self mapillaryChanged:switchView.isOn];
+    else if ([item[@"key"] hasPrefix:@"routes_"])
+        [self mapSettingSwitchChanged:switchView.isOn index:indexPath.row];
+    else if ([item[@"key"] isEqualToString:@"category_transport"])
+        [self transportChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"contour_lines_layer"])
+        [self contourLinesChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"terrain_layer"])
+        [self terrainChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"overlay_layer"])
+        [self overlayChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"underlay_layer"])
+        [self underlayChanged:switchView.isOn];
+
+    [tblView beginUpdates];
+    [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [tblView endUpdates];
+}
+
+- (void)mapillaryChanged:(BOOL)isOn
+{
+    [_app.data setMapillary:isOn];
+    if (isOn && !_settings.mapillaryFirstDialogShown.get)
+    {
+        [_settings.mapillaryFirstDialogShown set:YES];
+        OAFirstMapillaryBottomSheetViewController *screen = [[OAFirstMapillaryBottomSheetViewController alloc] init];
+        [screen show];
+    }
+}
+
+- (void)mapSettingSwitchChanged:(BOOL)isOn index:(NSInteger)index
+{
+    OAMapStyleParameter *parameter = _routesParameters[index];
+    if (parameter)
+    {
+        parameter.value = isOn ? @"true" : @"false";
+        [_styleSettings save:parameter];
+    }
+}
+
+- (void)transportChanged:(BOOL)isOn
+{
+    [_styleSettings setCategoryEnabled:isOn categoryName:@"transport"];
+    if (isOn && ![_styleSettings isCategoryEnabled:@"transport"])
+    {
+        OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:@"transport"];
+        [transportSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+    }
+}
+
+- (void)contourLinesChanged:(BOOL)isOn
+{
+    OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
+    parameter.value = isOn ? [_settings.contourLinesZoom get] : @"disabled";
+    [_styleSettings save:parameter];
+}
+
+- (void)terrainChanged:(BOOL)isOn
+{
+    if (isOn)
+    {
+        EOATerrainType lastType = _app.data.lastTerrainType;
+        _app.data.terrainType = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
+    }
+    else
+    {
+        _app.data.lastTerrainType = _app.data.terrainType;
+        _app.data.terrainType = EOATerrainTypeDisabled;
+    }
+}
+
+- (void)overlayChanged:(BOOL)isOn
+{
+    if (isOn)
+    {
+        BOOL hasLastMapSource = _app.data.lastOverlayMapSource != nil;
+        if (!hasLastMapSource)
+            _app.data.lastOverlayMapSource = [OAMapSource getOsmAndOnlineTilesMapSource];
+
+        _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
+        if (!hasLastMapSource)
+        {
+            OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
+            [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+        }
+    }
+    else
+    {
+        _app.data.overlayMapSource = nil;
+    }
+}
+
+- (void)underlayChanged:(BOOL)isOn
+{
+    OAMapStyleParameter *hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    if (isOn)
+    {
+        BOOL hasLastMapSource = _app.data.lastUnderlayMapSource != nil;
+        if (!hasLastMapSource)
+            _app.data.lastUnderlayMapSource = [OAMapSource getOsmAndOnlineTilesMapSource];
+
+        hidePolygonsParameter.value = @"true";
+        [_styleSettings save:hidePolygonsParameter];
+        _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
+        if (!hasLastMapSource)
+        {
+            OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
+            [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+        }
+    }
+    else
+    {
+        hidePolygonsParameter.value = @"false";
+        [_styleSettings save:hidePolygonsParameter];
+        _app.data.underlayMapSource = nil;
+    }
+}
+
+- (void)installMapLayerFor:(id)param
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources param:param];
+        [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+    }
+    else
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [self.vwController presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 #pragma mark - OAMapTypeDelegate

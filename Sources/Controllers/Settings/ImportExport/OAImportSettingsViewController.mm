@@ -87,7 +87,7 @@
     }
     else
     {
-        OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
+        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.type = [OAProgressTitleCell getCellIdentifier];
         group.groupName = OALocalizedString(@"reading_file");
         self.data = @[group];

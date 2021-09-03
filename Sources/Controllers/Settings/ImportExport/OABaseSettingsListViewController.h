@@ -12,9 +12,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAExportSettingsType, OAExportSettingsCategory, OASettingsCategoryItems, OATableGroupToImport;
+@class OAExportSettingsType, OAExportSettingsCategory, OASettingsCategoryItems, OATableCollapsableGroup;
 
-@interface OATableGroupToImport : NSObject
+@interface OATableCollapsableGroup : NSObject
 
     @property NSString* type;
     @property BOOL isOpen;
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSMutableDictionary<OAExportSettingsType *, NSArray *> *selectedItemsMap;
 @property (nonatomic) NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *itemsMap;
 @property (nonatomic) NSArray<OAExportSettingsCategory *> *itemTypes;
-@property (nonatomic) NSArray<OATableGroupToImport *> *data;
+@property (nonatomic) NSArray<OATableCollapsableGroup *> *data;
 
 - (NSArray *)getSelectedItems;
 - (void)showActivityIndicatorWithLabel:(NSString *)labelText;

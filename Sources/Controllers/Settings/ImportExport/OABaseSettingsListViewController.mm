@@ -21,7 +21,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@implementation OATableGroupToImport
+@implementation OATableCollapsableGroup
 
 -(instancetype) init
 {
@@ -86,7 +86,7 @@
     for (OAExportSettingsCategory *type in self.itemTypes)
     {
         OASettingsCategoryItems *categoryItems = self.itemsMap[type];
-        OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
+        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.groupName = type.title;
         group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
         group.isOpen = NO;
@@ -227,7 +227,7 @@
 
 - (void) openCloseGroup:(NSIndexPath *)indexPath
 {
-    OATableGroupToImport* groupData = [self.data objectAtIndex:indexPath.section];
+    OATableCollapsableGroup* groupData = [self.data objectAtIndex:indexPath.section];
     groupData.isOpen = !groupData.isOpen;
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
     UITableViewScrollPosition scrollPosition = !groupData.isOpen ? UITableViewScrollPositionNone : UITableViewScrollPositionTop;
@@ -236,7 +236,7 @@
 
 - (void) showActivityIndicatorWithLabel:(NSString *)labelText
 {
-    OATableGroupToImport *tableGroup = [[OATableGroupToImport alloc] init];
+    OATableCollapsableGroup *tableGroup = [[OATableCollapsableGroup alloc] init];
     tableGroup.type = [OAActivityViewWithTitleCell getCellIdentifier];
     tableGroup.groupName = labelText;
     self.data = @[tableGroup];
@@ -286,7 +286,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    OATableGroupToImport* groupData = [self.data objectAtIndex:section];
+    OATableCollapsableGroup* groupData = [self.data objectAtIndex:section];
     if (groupData.isOpen)
         return [groupData.groupItems count] + 1;
     return 1;
@@ -294,7 +294,7 @@
 
 - (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableGroupToImport* groupData = [self.data objectAtIndex:indexPath.section];
+    OATableCollapsableGroup* groupData = [self.data objectAtIndex:indexPath.section];
     if (indexPath.row == 0)
     {
         if ([groupData.type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
@@ -338,7 +338,7 @@
                 cell = (OACustomSelectionCollapsableCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
                 cell.openCloseGroupButton.hidden = NO;
-                cell.selectionGroupButton.hidden = NO;
+                [cell makeSelectable:YES];
                 cell.separatorInset = UIEdgeInsetsZero;
             }
             if (cell)

@@ -89,21 +89,16 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_mapillaryControl)
             [self createLayers];
-        
-        OAMapLayer *mapillaryLayer = [OARootViewController instance].mapPanel.mapViewController.mapLayers.mapillaryLayer;
-        OAAppData *data = [OsmAndApp instance].data;
 
         OAMapInfoController *mapInfoController = [self getMapInfoController];
         if (OAIAPHelper.sharedInstance.mapillary.disabled)
         {
             [mapInfoController removeSideWidget:_mapillaryControl];
             [mapInfoController recreateControls];
-            [data setMapillary:NO];
         }
         else
         {
             [self registerWidget];
-            [data setMapillary:YES];
         }
     });
 }

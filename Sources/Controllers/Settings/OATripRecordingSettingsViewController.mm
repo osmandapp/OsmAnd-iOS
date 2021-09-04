@@ -121,7 +121,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             NSString *minDistValue = [OAUtilities appendMeters:[settings.saveTrackMinDistance get:self.appMode]];
             NSString *minPrecision = [OAUtilities appendMeters:[settings.saveTrackPrecision get:self.appMode]];
-            NSString *minSpeed = [OAUtilities appendSpeed:[settings.saveTrackMinSpeed get:self.appMode]];
+            NSString *minSpeed = [OAUtilities appendSpeed:[settings.saveTrackMinSpeed get:self.appMode] * MPS_TO_KMH_MULTIPLIER];
             
             [dataArr addObject:
              @[@{
@@ -275,7 +275,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 [dataArr addObject: @{
                                       @"title" : minTrackSpeedNames[i],
                                       @"value" : @"",
-                                      @"img" : ([settings.saveTrackMinSpeed get:self.appMode] == minTrackSpeedValues[i].floatValue)
+                                      @"img" : ([settings.saveTrackMinSpeed get:self.appMode] == minTrackSpeedValues[i].floatValue / MPS_TO_KMH_MULTIPLIER)
                                       ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
@@ -659,7 +659,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
 - (void) selectMinSpeed:(NSInteger)index
 {
-    [_settings.saveTrackMinSpeed set:minTrackSpeedValues[index].doubleValue mode:self.appMode];
+    [_settings.saveTrackMinSpeed set:minTrackSpeedValues[index].doubleValue / MPS_TO_KMH_MULTIPLIER mode:self.appMode];
     [self backButtonClicked:nil];
 }
 

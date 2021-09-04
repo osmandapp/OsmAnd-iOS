@@ -15,6 +15,7 @@
 #import "OATargetPoint.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
+#import "OAGPXDatabase.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>

@@ -1093,7 +1093,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == _controlsSectionIndex)
-        return 2;
+        return 3;
     else if (section == _speedSectionIndex)
         return 2;
     else if (section == _timeSectionIndex)
@@ -1148,6 +1148,25 @@
                 cell.textView.text = OALocalizedString(@"fav_color");
                 cell.backgroundColor = UIColorFromRGB(0xffffff);
 
+                return cell;
+            }
+            case 2:
+            {
+                OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+                if (cell == nil)
+                {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+                    cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+                }
+
+                if (cell)
+                {
+                    cell.textView.text = OALocalizedString(@"gpx_dir_arrows");
+                    cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+                    [cell.switchView setOn:self.gpx.showArrows];
+                    [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+                    [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
+                }
                 return cell;
             }
             default:
@@ -1308,17 +1327,30 @@
 - (BOOL) onSwitchClick:(id)sender
 {
     UISwitch *sw = (UISwitch *)sender;
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (sw.isOn)
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+    if (indexPath.section == _controlsSectionIndex)
     {
-        [settings showGpx:@[self.gpx.gpxFilePath] update:NO];
-        [_mapViewController hideTempGpxTrack:NO];
-        [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    }
-    else if ([settings.mapSettingVisibleGpx.get containsObject:self.gpx.gpxFilePath])
-    {
-        [settings hideGpx:@[self.gpx.gpxFilePath] update:NO];
-        [_mapViewController showTempGpxTrack:self.gpx.gpxFilePath update:NO];
+        if (indexPath.row == 0)
+        {
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            if (sw.isOn)
+            {
+                [settings showGpx:@[self.gpx.gpxFilePath] update:NO];
+                [_mapViewController hideTempGpxTrack:NO];
+                [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+            }
+            else if ([settings.mapSettingVisibleGpx.get containsObject:self.gpx.gpxFilePath])
+            {
+                [settings hideGpx:@[self.gpx.gpxFilePath] update:NO];
+                [_mapViewController showTempGpxTrack:self.gpx.gpxFilePath update:NO];
+            }
+        }
+        else if (indexPath.row == 2)
+        {
+            self.gpx.showArrows = sw.isOn;
+            [[OAGPXDatabase sharedDb] save];
+            [[_app mapSettingsChangeObservable] notifyEvent];
+        }
     }
     return NO;
 }
@@ -1393,7 +1425,6 @@
 {
     NSArray *items = [_waypointsController getSelectedItems];
     OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
-
     for (OAGpxWptItem *item in items)
     {
         item.color = favCol.color;

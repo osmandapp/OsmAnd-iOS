@@ -18,6 +18,8 @@
 #import "QuadRect.h"
 #import "OAExitInfo.h"
 
+#include <routeSegmentResult.h>
+
 #define distanceClosestToIntermediate 400.0
 #define distanceThresholdToIntroduceFirstAndLastPoints 50
 

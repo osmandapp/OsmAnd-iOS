@@ -14,9 +14,11 @@
 #import "OALocationPoint.h"
 #import "OARouteProvider.h"
 
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
-#include <routeSegmentResult.h>
+#include "CommonCollections.h"
+#include "commonOsmAndCore.h"
+#include <turnType.h>
+
+struct RouteSegmentResult;
 
 @class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect;
 

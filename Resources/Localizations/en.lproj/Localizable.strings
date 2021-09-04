@@ -1633,6 +1633,7 @@
 "wpt_remove_q" = "Remove waypoint?";
 "gpx_select_track" = "Select track";
 "gpx_curr_new_track" = "Current track";
+"gpx_dir_arrows" = "Direction arrows";
 "enter_name" = "Enter name";
 "not_selected" = "Not selected";
 "language" = "Language";

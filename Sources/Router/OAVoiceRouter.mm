@@ -23,6 +23,8 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 
+#include <routeSegmentResult.h>
+
 
 @implementation OAVoiceRouter
 {

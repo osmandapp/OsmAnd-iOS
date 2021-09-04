@@ -1987,3 +1987,16 @@
 "travel_routes" = "Rejseruter";
 "quick_action_remove_next_destination_descr" = "Sletter den næste destination på din rute. Hvis det er den endelige destination, stopper navigationen.";
 "gpx_parse_error" = "OsmAnd GPX er ikke korrekt dannet, kontakt venligst supportteamet for at undersøge det nærmere.";
+"carplay_profile_descr" = "Profil, der skal bruges, når der er forbindelse til CarPlay.";
+"carplay_profile" = "CarPlay-profil";
+"carplay_active_message" = "Kort vises via CarPlay";
+"last_used" = "Sidst anvendt";
+"favorites_empty" = "Du har ikke gemt nogen favoritpunkter";
+"tracks_empty" = "Din sporliste er tom";
+"map_markers_empty" = "Du har ingen aktive kortmarkører";
+"trip_rec_actions_descr" = "Du kan finde alle dine optagede spor i %@";
+"road_max_speed_descr" = "Indstiller den maksimale rejsehastighed for alle veje på ruten. Sænker prioriteringen af veje med en mulig hastighed, der er højere end den maksimale hastighed.";
+"road_min_speed_descr" = "Indstiller den mindste rejsehastighed for alle veje på ruten. Øger prioriteringen af veje med anbefalede hastigheder, der er lavere end minimumshastigheden.";
+"dialogs_and_notifications_descr" = "Kontroller pop-ups, dialogbokse og notifikationer";
+"road_speeds_descr" = "Disse parametre kan påvirke ruteberegningen.";
+"send_anonymous_data_desc" = "Send til OsmAnd kort-downloadstatistik, vi indsamler ikke placeringsdata eller andre personlige oplysninger.";

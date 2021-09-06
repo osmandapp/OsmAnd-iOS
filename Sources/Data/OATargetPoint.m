@@ -71,17 +71,15 @@
 
     if (self.type != targetPoint.type)
         return NO;
-    BOOL isCoordEqual = [OAUtilities isCoordEqual:self.location.latitude srcLon:self.location.longitude destLat:targetPoint.location.latitude destLon:targetPoint.location.longitude upToDigits:4];
-    if (!isCoordEqual)
+    if (![OAUtilities isCoordEqual:self.location.latitude srcLon:self.location.longitude destLat:targetPoint.location.latitude destLon:targetPoint.location.longitude upToDigits:4])
         return NO;
     if (self.symbolId != targetPoint.symbolId)
         return NO;
-    BOOL isTitleEqual = self.title && targetPoint.title && [self.title isEqualToString:targetPoint.title];
-    if (self.obfId != targetPoint.obfId && !isCoordEqual && !isTitleEqual)
+    if (self.obfId != targetPoint.obfId)
         return NO;
-    if (!self.targetObj && targetPoint.targetObj && !isCoordEqual && !isTitleEqual)
+    if (!self.targetObj && targetPoint.targetObj)
         return NO;
-    if (self.targetObj && ![self.targetObj isEqual:targetPoint.targetObj] && !isCoordEqual && !isTitleEqual)
+    if (self.targetObj && ![self.targetObj isEqual:targetPoint.targetObj])
         return NO;
     if (!self.symbolGroupId && targetPoint.symbolGroupId)
         return NO;

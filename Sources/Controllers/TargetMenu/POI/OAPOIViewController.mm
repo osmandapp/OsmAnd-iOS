@@ -46,6 +46,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
 static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"whatsapp", @"viber"];
+static const NSArray<NSString *> *kIntFormattingTags = @[@"population"];
 
 - (instancetype) init
 {
@@ -218,7 +219,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         BOOL isText = NO;
         BOOL isDescription = NO;
         BOOL needLinks = ![@"population" isEqualToString:key];
-        BOOL needIntFormatting = [@"population" isEqualToString:key];
+        BOOL needIntFormatting = [kIntFormattingTags containsObject:key];
         BOOL isPhoneNumber = NO;
         BOOL isUrl = NO;
         BOOL isCuisine = NO;

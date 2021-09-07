@@ -218,6 +218,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         BOOL isText = NO;
         BOOL isDescription = NO;
         BOOL needLinks = ![@"population" isEqualToString:key];
+        BOOL needIntFormatting = [@"population" isEqualToString:key];
         BOOL isPhoneNumber = NO;
         BOOL isUrl = NO;
         BOOL isCuisine = NO;
@@ -252,6 +253,18 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                 }
                 [poiAdditionalCategoryTypes addObject:pType];
                 skip = YES;
+            }
+        }
+        else
+        {
+            if (needIntFormatting)
+            {
+                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+                [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+                NSInteger population = [value integerValue];
+                if (population > 0)
+                    value = [numberFormatter stringFromNumber:@(population)];
             }
         }
         

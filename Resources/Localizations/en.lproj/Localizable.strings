@@ -1333,6 +1333,7 @@
 "show_contour_lines" = "Show contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
+"contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "toggle_public_transport" = "Show/hide public transport";
@@ -1790,6 +1791,7 @@
 "wiki_sheet_title" = "How to open Wikipedia articles?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_wiki_online" = "Open article online";
+"explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 
 "custom_search" = "Custom search";

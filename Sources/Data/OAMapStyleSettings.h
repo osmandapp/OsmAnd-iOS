@@ -18,6 +18,12 @@ static NSString *HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
 static NSString *CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
 static NSString *TRAVEL_ROUTES = @"travel_routes";
 
+static NSString *ROAD_STYLE_CATEGORY = @"roadStyle";
+static NSString *DETAILS_CATEGORY = @"details";
+static NSString *HIDE_CATEGORY = @"hide";
+static NSString *TRANSPORT_CATEGORY = @"transport";
+static NSString *ROUTES_CATEGORY = @"routes";
+
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
     OABoolean,

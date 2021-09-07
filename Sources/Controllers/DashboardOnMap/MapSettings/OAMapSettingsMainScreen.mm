@@ -116,7 +116,7 @@ static BOOL _isRoutesGroupOpen = NO;
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"product_title_wiki"),
             @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
-            hasWiki ? @"options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
+            hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
             @"type": hasWiki ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
             @"key": @"wikipedia_layer"
     }];
@@ -141,7 +141,7 @@ static BOOL _isRoutesGroupOpen = NO;
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"street_level_imagery"),
                 @"image": @"ic_custom_mapillary_symbol",
-                @"options": @YES,
+                @"has_options": @YES,
                 @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                 @"key": @"mapillary_layer"
         }];
@@ -161,19 +161,21 @@ static BOOL _isRoutesGroupOpen = NO;
     }];
 
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
-    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:@"routes" sorted:NO] : [NSArray array];
+    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:ROUTES_CATEGORY sorted:NO] : [NSArray array];
     if (_routesParameters.count > 0)
     {
         NSArray<NSString *> *orderedNames = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, ALPINE_HIKING_ATTR, PISTE_ROUTES_ATTR, HORSE_ROUTES_ATTR, WHITE_WATER_SPORTS_ATTR, TRAVEL_ROUTES];
         _routesParameters = [_routesParameters sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
             NSInteger orderValue1 = [orderedNames indexOfObject:obj1.name];
             NSInteger orderValue2 = [orderedNames indexOfObject:obj2.name];
-            if (orderValue1 < orderValue2)
-                return NSOrderedAscending;
-            else if (orderValue1 > orderValue2)
-                return NSOrderedDescending;
-            else
-                return NSOrderedSame;
+            if (orderValue1 != NSNotFound && orderValue2 != NSNotFound)
+            {
+                if (orderValue1 < orderValue2)
+                    return NSOrderedAscending;
+                else if (orderValue1 > orderValue2)
+                    return NSOrderedDescending;
+            }
+            return NSOrderedSame;
         }];
 
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
@@ -254,13 +256,13 @@ static BOOL _isRoutesGroupOpen = NO;
 
         for (NSString *cName in [self getAllCategories])
         {
-            BOOL isTransport = [[cName lowercaseString] isEqualToString:@"transport"];
+            BOOL isTransport = [[cName lowercaseString] isEqualToString:TRANSPORT_CATEGORY];
             [mapStyleSectionData addObject:@{
                     @"name": [_styleSettings getCategoryTitle:cName],
                     @"image": [self getImageForParameterOrCategory:cName],
                     @"key": [NSString stringWithFormat:@"category_%@", cName],
                     @"type": isTransport ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAIconTitleValueCell getCellIdentifier],
-                    isTransport ? @"options" : @"value": isTransport ? @YES : @""
+                    isTransport ? @"has_options" : @"value": isTransport ? @YES : @""
             }];
         }
 
@@ -280,7 +282,7 @@ static BOOL _isRoutesGroupOpen = NO;
             [mapStyleSectionData addObject:@{
                     @"name": OALocalizedString(@"product_title_srtm"),
                     @"image": @"ic_custom_contour_lines",
-                    @"options": @YES,
+                    @"has_options": @YES,
                     @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                     @"key": @"contour_lines_layer"
             }];
@@ -295,21 +297,21 @@ static BOOL _isRoutesGroupOpen = NO;
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"shared_string_terrain"),
             @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",
-            hasSRTM ? @"options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
+            hasSRTM ? @"has_options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
             @"type": hasSRTM ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
             @"key": @"terrain_layer"
     }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_over"),
             @"image": @"ic_custom_overlay_map",
-            @"options": @YES,
+            @"has_options": @YES,
             @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
             @"key": @"overlay_layer"
     }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_under"),
             @"image": @"ic_custom_underlay_map",
-            @"options": @YES,
+            @"has_options": @YES,
             @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
             @"key": @"underlay_layer"
     }];
@@ -367,7 +369,7 @@ static BOOL _isRoutesGroupOpen = NO;
     NSMutableArray *res = [NSMutableArray array];
     for (NSString *cName in [_styleSettings getAllCategories])
     {
-        if (![[cName lowercaseString] isEqualToString:@"ui_hidden"] && ![[cName lowercaseString] isEqualToString:@"routes"])
+        if (![[cName lowercaseString] isEqualToString:@"ui_hidden"] && ![[cName lowercaseString] isEqualToString:ROUTES_CATEGORY])
             [res addObject:cName];
     }
     return res;
@@ -407,13 +409,13 @@ static BOOL _isRoutesGroupOpen = NO;
         return @"ic_action_skiing";
     else if([paramName isEqualToString:TRAVEL_ROUTES])
         return @"mm_routes";
-    else if([paramName isEqualToString:@"roadStyle"])
+    else if([paramName isEqualToString:ROAD_STYLE_CATEGORY])
         return @"ic_custom_road_style";
-    else if([paramName isEqualToString:@"details"])
+    else if([paramName isEqualToString:DETAILS_CATEGORY])
         return @"ic_custom_overlay_map";
-    else if([paramName isEqualToString:@"hide"])
+    else if([paramName isEqualToString:HIDE_CATEGORY])
         return @"ic_custom_hide";
-    else if([paramName isEqualToString:@"transport"])
+    else if([paramName isEqualToString:TRANSPORT_CATEGORY])
         return @"ic_custom_transport_bus";
 
     return @"";
@@ -438,7 +440,7 @@ static BOOL _isRoutesGroupOpen = NO;
     else if ([key isEqualToString:@"tracks"])
         return _settings.mapSettingVisibleGpx.get.count > 0;
     else if ([key isEqualToString:@"category_transport"])
-        return [_styleSettings isCategoryEnabled:@"transport"];
+        return [_styleSettings isCategoryEnabled:TRANSPORT_CATEGORY];
     else if ([key isEqualToString:@"contour_lines_layer"])
         return ![[_styleSettings getParameter:@"contourLines"].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
@@ -481,15 +483,6 @@ static BOOL _isRoutesGroupOpen = NO;
         return [cells[0][@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]] ? 0.01 : 34.;
 
     return 0.01;
-}
-
-- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
-{
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OAPromoButtonCell getCellIdentifier]])
-        return estimated ? 56. : UITableViewAutomaticDimension;
-
-    return estimated ? 48. : UITableViewAutomaticDimension;
 }
 
 - (void)openCloseGroup:(NSIndexPath *)indexPath
@@ -544,7 +537,7 @@ static BOOL _isRoutesGroupOpen = NO;
 {
     NSDictionary *item = [self getItem:indexPath];
     BOOL isOn = [self isEnabled:item[@"key"] index:indexPath.row];
-    BOOL hasOptions = [item[@"options"] boolValue];
+    BOOL hasOptions = [item[@"has_options"] boolValue];
     BOOL isLastIndex = [item[@"last_index"] boolValue];
 
     UITableViewCell *outCell = nil;
@@ -567,16 +560,16 @@ static BOOL _isRoutesGroupOpen = NO;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
+            [cell showImage:YES];
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         }
         if (cell)
         {
-            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
             cell.separatorInset = UIEdgeInsetsMake(0., isLastIndex ? 20.0 : 66.0, 0., 0.);
             cell.textView.text = item[@"name"];
             cell.descriptionView.text = item[@"value"];
             cell.leftImageView.image = [UIImage templateImageNamed:item[@"image"]];
             cell.leftImageView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-            [cell showImage:YES];
         }
         outCell = cell;
     }
@@ -600,7 +593,7 @@ static BOOL _isRoutesGroupOpen = NO;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
         outCell = cell;
     }
@@ -611,11 +604,11 @@ static BOOL _isRoutesGroupOpen = NO;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPromoButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAPromoButtonCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0., 66.0, 0., 0.);
         }
         if (cell)
         {
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 66.0, 0., 0.);
             cell.textView.text = item[@"name"];
             cell.descView.text = item[@"desc"];
             cell.actionButton.titleLabel.text = OALocalizedString(@"purchase_get");
@@ -624,7 +617,7 @@ static BOOL _isRoutesGroupOpen = NO;
 
             cell.actionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.actionButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.actionButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.actionButton addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         outCell = cell;
     }
@@ -637,11 +630,10 @@ static BOOL _isRoutesGroupOpen = NO;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionCollapsableCell getCellIdentifier] owner:self options:nil];
             cell = (OACustomSelectionCollapsableCell *) nib[0];
             [cell makeSelectable:NO];
+            cell.descriptionView.hidden = YES;
         }
         if (cell)
         {
-            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.descriptionView.hidden = YES;
             cell.textView.text = group.groupName;
             cell.textView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
@@ -665,16 +657,6 @@ static BOOL _isRoutesGroupOpen = NO;
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return [self heightForHeader:section];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath estimated:NO];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath estimated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -746,9 +728,9 @@ static BOOL _isRoutesGroupOpen = NO;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - Switch
+#pragma mark - UISwitch pressed
 
-- (void)onSwitchClick:(id)sender
+- (void)onSwitchPressed:(id)sender
 {
     UISwitch *switchView = (UISwitch *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
@@ -807,10 +789,10 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (void)transportChanged:(BOOL)isOn
 {
-    [_styleSettings setCategoryEnabled:isOn categoryName:@"transport"];
-    if (isOn && ![_styleSettings isCategoryEnabled:@"transport"])
+    [_styleSettings setCategoryEnabled:isOn categoryName:TRANSPORT_CATEGORY];
+    if (isOn && ![_styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
     {
-        OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:@"transport"];
+        OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:TRANSPORT_CATEGORY];
         [transportSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     }
 }
@@ -898,9 +880,9 @@ static BOOL _isRoutesGroupOpen = NO;
     }
 }
 
-#pragma mark - Button
+#pragma mark - UIButton pressed
 
-- (BOOL)onButtonClick:(id)sender
+- (BOOL)onButtonPressed:(id)sender
 {
     UIButton *button = (UIButton *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];

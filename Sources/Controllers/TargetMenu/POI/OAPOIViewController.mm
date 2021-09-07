@@ -452,9 +452,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             if (!icon)
                 icon = [UIImage imageNamed:pType.iconName];
             if (!icon)
-                [UIImage imageNamed:@"ic_action_note_dark"];
-            icon = pType.icon;
-            
+                icon = [UIImage imageNamed:@"ic_cuisine"];
+
             NSMutableString *sb = [NSMutableString new];
             for (OAPOIType *pt in categoryTypes)
             {
@@ -463,16 +462,12 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                 [sb appendString:pt.nameLocalized];
             }
             
-            BOOL cuisineOrDish = [categoryName isEqualToString:@"cuisine"] || [categoryName isEqualToString:@"dish"] ;
-            OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            [collapsableView setData:[NSArray arrayWithArray:categoryTypes] lat:self.poi.latitude lon:self.poi.longitude isPoiAdditional:YES];
-            
-            OARowInfo *row = [[OARowInfo alloc] initWithKey:poiAdditionalCategoryName icon:icon textPrefix:pType.poiAdditionalCategoryLocalized text:sb textColor:UIColor.blackColor isText:NO needLinks:NO order:pType.order typeName:pType.name isPhoneNumber:NO isUrl:NO];
-            
+            BOOL cuisineOrDish = [categoryName isEqualToString:@"cuisine"] || [categoryName isEqualToString:@"dish"];
             if (cuisineOrDish)
             {
-                if (cuisineRow)
-                    row = cuisineRow;
+                OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+                [collapsableView setData:[NSArray arrayWithArray:categoryTypes] lat:self.poi.latitude lon:self.poi.longitude isPoiAdditional:YES];
+                OARowInfo *row = [[OARowInfo alloc] initWithKey:poiAdditionalCategoryName icon:icon textPrefix:pType.poiAdditionalCategoryLocalized text:sb textColor:UIColor.blackColor isText:NO needLinks:NO order:pType.order typeName:pType.name isPhoneNumber:NO isUrl:NO];
                 row.collapsed = YES;
                 row.collapsable = YES;
                 row.collapsableView = collapsableView;
@@ -496,7 +491,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             [sb appendString:pt.nameLocalized];
         }
         OARowInfo *row = [[OARowInfo alloc] initWithKey:poiCategory.name icon:icon textPrefix:poiCategory.poiAdditionalCategoryLocalized text:sb textColor:UIColor.blackColor isText:NO needLinks:NO order:40 typeName:poiCategory.name isPhoneNumber:NO isUrl:NO];
-        row = cuisineRow;
         row.collapsed = YES;
         row.collapsable = YES;
         row.collapsableView = collapsableView;

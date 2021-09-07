@@ -68,7 +68,7 @@
         return NO;
     
     OATargetPoint *targetPoint = (OATargetPoint *) o;
-    
+
     if (self.type != targetPoint.type)
         return NO;
     if (![OAUtilities isCoordEqual:self.location.latitude srcLon:self.location.longitude destLat:targetPoint.location.latitude destLon:targetPoint.location.longitude upToDigits:4])

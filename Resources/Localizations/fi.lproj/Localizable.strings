@@ -405,7 +405,7 @@
 "min_km" = "min/km";
 "m_s" = "m/s";
 "tones" = "tones";
-"shared_string_meters" = "meters";
+"shared_string_meters" = "metriä";
 "nothing_found" = "Mitään ei löytynyt: %@";
 "nothing_found_empty" = "Mitään ei löytynyt";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
@@ -853,8 +853,8 @@
 "add_to_track" = "Lisää jälkeen";
 "move_point" = "Siirrä piste";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Add points before";
-"add_after" = "Add points after";
+"add_before" = "Lisää pisteitä ennen";
+"add_after" = "Lisää pisteitä jälkeen";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1164,7 +1164,7 @@
 "change_map_underlay" = "Change map underlay";
 "replace_destination" = "Korvaa määränpää";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"add_start" = "Lisää aloituspiste";
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Lisää koti";
 "add_work" = "Lisää työ";
@@ -1489,7 +1489,7 @@
 "latitude" = "Leveysaste";
 "longitude" = "Pituusaste";
 "track_save_short_q" = "Track is too short, do you want to save?";
-"add_as" = "Add as";
+"add_as" = "Lisää";
 "make_call" = "Soita";
 "all_group_points" = "Kaikki ryhmän pisteet";
 "enter_description" = "Enter description";
@@ -1823,7 +1823,7 @@
 "rendering_attr_contourDensity_description" = "Korkeuskäyräviivojen tiheys";
 "rendering_attr_currentTrackWidth_name" = "GPX:n leveys";
 "rendering_attr_horseRoutes_name" = "Ratsastusreitti";
-"routing_attr_avoid_ferry_description" = "Avoids ferries";
+"routing_attr_avoid_ferry_description" = "Välttää lauttoja";
 "rendering_attr_highway_class_track_grade2_name" = "Luokka 2";
 "rendering_attr_shareTaxiRoutes_name" = "Jaetut taksireitit";
 "routing_attr_relief_smoothness_factor_hills_name" = "Mäkinen";
@@ -2045,7 +2045,7 @@
 "rendering_value_translucent_orange_name" = "Läpikuultava oranssi";
 "rendering_attr_depthContours_description" = "Näytä korkeuskäyrät ja -pisteet.";
 "rendering_value_thick_name" = "Paksu";
-"routing_attr_avoid_ferry_name" = "Ei lauttoja";
+"routing_attr_avoid_ferry_name" = "Vältä lauttoja";
 "routing_attr_width_name" = "Leveysraja";
 "routing_attr_avoid_train_name" = "Ei junia";
 "routing_attr_allow_motorway_description" = "Sallii moottoritiet.";
@@ -2118,3 +2118,13 @@
 "restart" = "Käynnistä uudelleen";
 "shared_string_wifi_only" = "Vain Wi-Fi-verkossa";
 "ios_release_4_0" = "• Uusi! Lisää suosikki -näyttö, jossa voit myös valita mukautetun kuvakkeen, värin ja muodon\n• Lisätty uusi \"Koordinaatit-widgetti\", jossa on nykyisen sijainnin koordinaatit\n• Lisätty mahdollisuus tuoda käyttäjän määrittelemiä lisäosia\n• Tuonti- ja vientitoimintoa laajennettu huomattavasti\n• Etäisyys napauttamalla -siirrettiin sädeviivaimesta erilliseksi vaihtoehdoksi\n• Korjattu CarPlay-sovelluksen jäätyminen, kun iPhonen näyttö on sammutettu\n• Lisäosanäyttö siirrettiin Kartat & resurssit -valikosta päävalikkoon\n• Lisätty suomenkielinen lokalisointi\n• Korjattu käyttöliittymä suunnittele reitti -näytön vaakasuuntauksessa\n• Lisätty tuki mukautetuille reititys- ja piirtotiedostoille\n• Korjattu merkkien suuntalinjan suorituskykyä\n• Korjattu ongelma sellaisten GPX-tiedostojen tuonnissa, joissa on isoja kirjaimia sisältävä tiedostopääte\n• Korjattu ongelma seuraa rataa -valikossa\n• Korjattu OBF-tiedostojen tuonti\n";
+"shared_string_feet" = "jalkaa";
+"m" = "m";
+"srtm_download_list_help_message" = "OsmAnd tarjoaa korkeuskäyrätiedot metreinä ja jalkoina. Sinun on ladattava tiedosto uudelleen muodon muuttamiseksi.";
+"search_more" = "Etsi lisää…";
+"routes_color_by_type" = "Väritä reitit…";
+"rendering_value_walkingRoutesOSMC_description" = "Väritä reitit niiden yksilöllisen paikallisen värin (jos se on OpenStreetMapissa) ja vaellus symbolin mukaan.";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Väri verkkoyhteyden mukaan.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Väritä reitit niiden solmuvälin tyypin mukaan (kansainvälinen, alueellinen, paikallinen).";
+"walking_route_osmc_description" = "Värireitit niiden yksilöllisen paikallisen värin mukaan (jos ne ovat OpenStreetMapissa) ja tyypin (kansainvälinen, alueellinen, paikallinen).";
+"travel_routes" = "Matkareitit";

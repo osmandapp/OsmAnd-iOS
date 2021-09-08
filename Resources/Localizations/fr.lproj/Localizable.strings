@@ -257,7 +257,7 @@
 "menu_all_trips" = "Toutes les traces";
 "total_time" = "Temps total";
 "create_new_trip" = "Créer une nouvelle trace";
-"gpx_rename_q" = "Renommer la trace";
+"gpx_rename_q" = "Renommez la trace";
 "gpx_enter_new_name" = "Veuillez entrer le nouveau nom pour la trace";
 "gpx_cancel_route_q" = "Voulez vous annuler cet itinéraire ?";
 "parking" = "Parking";
@@ -295,7 +295,7 @@
 "plugins" = "Gestionnaire de greffons";
 "open_map_settings" = "Ouvrez les paramètres de la carte";
 "plugin_popup_wiki_title" = "Télécharger Wikipédia";
-"gpx_no_tracks" = "Il n'y a aucunes traces";
+"gpx_no_tracks" = "Il n'y a aucune trace";
 "gpx_elev_range" = "Gamme d'élévation";
 "device_memory" = "Mémoire de l\'appareil";
 "free_memory" = "%@ libre";
@@ -310,8 +310,8 @@
 "track_recording_name" = "Enregistrement d\'itinéraire en cours";
 "track_new_segment" = "Débuter un nouveau segment";
 "track_save" = "Enregistrer la trace en cours";
-"track_start_rec" = "Commencer l'enregistrement du parcours";
-"track_rec_addon_q" = "Veuillez activer le greffons d'enregistrement de parcours pour les enregistrer et les sauvegarder";
+"track_start_rec" = "Commencer l'enregistrement de la trace";
+"track_rec_addon_q" = "Veuillez activer le greffon d'enregistrement de traces pour les enregistrer et les sauvegarder";
 "track_clear" = "Effacer la trace actuelle";
 "track_clear_q" = "Voulez-vous effacer la trace actuelle ?";
 "m_style_walk" = "Marche";
@@ -781,7 +781,7 @@
 "osm_live_routing_descr" = "Utiliser les mises à jour d'OsmAnd Live pour la navigation";
 "traffic_warning_tunnel" = "En approche d\'un tunnel";
 "track_save_descr" = "Enregistrer la trace en cours comme fichier GPX.";
-"track_during_nav" = "Auto-enregistrement du parcours";
+"track_during_nav" = "Auto-enregistrement de la trace";
 "track_during_nav_descr" = "Activez pour enregistrer automatiquement une trace durant la navigation";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Misesà jour en temps réel";
@@ -1836,7 +1836,7 @@
 "ui_customization_descr" = "Éléments du panneau déroulant, menu contextuel";
 "lenght_limit_description" = "Indiquez la longueur de votre véhicule, certaines routes ayant des restrictions pouvant s'appliquer aux véhicules longs.";
 "shared_a_z" = "A - Z";
-"trip_name" = "Nom du trajet";
+"trip_name" = "Nom de la trace";
 "vk" = "VK";
 "select_application_profile" = "Sélectionner le profil d'application";
 "quick_action_template_name" = "Nom de modèle";
@@ -1877,7 +1877,7 @@
 "show_compass_ruler" = "Afficher la boussole";
 "gpx_export_failed" = "L'enregistrement de l'itinéraire a échoué";
 "attach_to_the_roads" = "Déplacer sur les routes";
-"join_segments" = "Joindre les segments";
+"join_segments" = "Relier les segments";
 "address_search" = "Recherche par adresse";
 "map_widget_distance_by_tap" = "Distance par appui";
 "tracks_on_map" = "Traces affichées";
@@ -1907,11 +1907,11 @@
 "favorites_empty" = "Vous n'avez pas encore enregistré de favoris";
 "map_markers_empty" = "Vous n'avez pas de marques actives sur la carte";
 "coordinates" = "Coordonnées";
-"move_point_descr" = "Déplacez la carte pour modifier la position de ce point.";
-"downloading" = "Téléchargement";
-"checking_for_duplicate_description" = "OsmAnd vérifie %@ pour détecter les doublons avec les éléments existants dans l'application. Cela peut prendre un certain temps.";
+"move_point_descr" = "Déplacer la carte pour changer la position de ce point.";
+"downloading" = "Téléchargement en cours";
+"checking_for_duplicate_description" = "OsmAnd vérifie que l'élément %@ n'existe pas déjà dans l'application. Cela peut prendre un certain temps.";
 "checking_for_duplicates" = "Recherche de doublons...";
-"reset_profile_action_descr" = "Réinitialiser tous les paramètres du profil aux valeurs par défaut de l'installation. Si vous appuyez sur Réinitialiser, toutes vos modifications seront annulées. Cette action ne peut pas être annulée.";
+"reset_profile_action_descr" = "Réinitialiser tous les paramètres du profil aux valeurs par défaut de l'installation. Appuyez sur Réinitialiser pour annuler toutes vos modifications, cette action ne peut pas être annulée.";
 "new_plugin_added" = "Nouveau greffon ajouté";
 "preparing_file" = "Préparation du fichier";
 "reading_file" = "Lecture du fichier";
@@ -1937,15 +1937,15 @@
 
 // Resources
 "shared_string_resources" = "Ressources";
-"public_transport_warning_descr_blog" = "Pour en savoir plus sur la navigation OsmAnd, consultez notre blog.";
-"calc_pedestrian_route" = "Calculer l'itinéraire à pied";
-"public_transport_ped_route_title" = "Le trajet à pied est d'environ %@, et peut être plus rapide que par les transports publics.";
+"public_transport_warning_descr_blog" = "Pour savoir comment OsmAnd calcule les itinéraires, visitez notre blog.";
+"calc_pedestrian_route" = "Calculer l'itinéraire piéton";
+"public_transport_ped_route_title" = "L'itinéraire piéton est approximativement de %@ et peut-être plus rapide qu'en transport public.";
 "res_standard" = "Cartes standards";
-"product_desc_antarctica" = "Téléchargement illimité de cartes pour Antarctique";
+"product_desc_antarctica" = "Téléchargement illimité de cartes pour l'Antarctique";
 "help_what_is_new" = "Nouveautés";
 "help_legend_descr" = "Le guide des symboles de la carte";
-"help_travel" = "Voyages (Wikipédia et Wikivoyage)";
-"unsupported_action_descr" = "Cette action rapide n'est pas prise en charge actuellement. Cela peut être corrigé dans les nouvelles versions de l'application.";
+"help_travel" = "Voyage (Wikipédia et Wikivoyage)";
+"unsupported_action_descr" = "Cette action rapide n'est pas prise en charge actuellement. Elle pourra être corrigée dans les nouvelles versions de l'application.";
 "unsupported_action" = "Action non prise en charge";
 "change_application_profile" = "Modifier le profil de l'application";
 "quick_action_showhide_mapillary_descr" = "Appuyez pour afficher/masquer la couche Mapillary sur la carte.";
@@ -1968,8 +1968,8 @@
 "quick_action_source_switch_descr" = "Appuyez pour faire défiler la liste ci-dessous.";
 "quick_action_dialog" = "Boîte de dialogue";
 "quick_action_fill_params_alert" = "Veuillez d'abord remplir les paramètres";
-"quick_action_dialog_descr" = "Appuyez pour afficher la boîte de dialogue avant d'effectuer l'action";
-"quick_action_add_actions_descr" = "Ajoutez des actions pour y accéder rapidement à partir de la carte.";
+"quick_action_dialog_descr" = "Activez pour afficher la boîte de dialogue avant d'appliquer l'action";
+"quick_action_add_actions_descr" = "Ajoutez des actions pour y accéder rapidement depuis la carte.";
 "quick_action_name_alert" = "Le nom de l'action rapide a été changé en %@ pour éviter les doublons.";
 "toggle_day_night" = "Changement de mode Jour/Nuit";
 "unsupported_items" = "Éléments non supportés";
@@ -1983,17 +1983,17 @@
 
 // Coordinate widget
 "coordinates_widget" = "Gadget de coordonnées";
-"mapil_select_user" = "Sélectionnez l'utilisateur";
+"mapil_select_user" = "Sélectionner l'utilisateur";
 "mapil_usernames" = "Noms d'utilisateur";
 "mapil_filter_date" = "Filtrer les images par date";
 "mapil_filter_user_descr" = "Filtrer les images par utilisateur";
-"mapil_reload_cache" = "Rechargez les vignettes pour voir les nouvelles données";
+"mapil_reload_cache" = "Recharger les tuiles pour voir les données les plus récentes";
 "mapillary_turn_on_widget_descr" = "Cela vous permet de contribuer rapidement à Mapillary";
-"mapillary_turn_on_widget" = "Activer le gadget Mapillary";
+"mapillary_turn_on_widget" = "Activer le greffon Mapillary";
 "mapillary_descr" = "Les photos des rues en ligne pour tous. Découvrez des lieux, collaborez, capturez le monde";
 "mapillary_get_descr" = "Téléchargez Mapillary pour ajouter des photos à cet endroit";
-"mapil_no_images" = "Nous n'avons pas de photos pour cet endroit.";
-"osm_editing_access_descr" = "Vous pouvez voir toutes vos modifications et notes locales dans %@. Les points déjà téléchargés ne sont pas répertoriés dans OsmAnd.";
+"mapil_no_images" = "Il n'y a pas de photos pour cet endroit.";
+"osm_editing_access_descr" = "Vous pouvez consulter toutes vos modifications et notes locales dans %@. Les points déjà téléchargés ne sont pas répertoriés dans OsmAnd.";
 "save_poi_without_poi_type_message" = "Voulez-vous enregistrer le POI sans type ?";
 "osm_tag_too_long_message" = "La longueur maximale du tag %@ est de 255 caractères.\nVeuillez la raccourcir pour continuer.";
 "osm_editing_settings_descr" = "Les paramètres de ce greffon sont globaux et s'appliquent à tous les profils.";
@@ -2015,13 +2015,13 @@
 "none_point_error" = "Merci d'ajouter au moins un point.";
 "gpx_saved_successfully" = "Fichier GPX enregistré dans %@";
 "simplified_track_description" = "Seul l'itinéraire sera enregistré, les étapes seront supprimées.";
-"whole_track_descr" = "L'itinéraire entier sera recalculé en utilisant le profil sélectionné.";
-"next_seg_descr" = "Le segment suivant sera recalculé en utilisant le profil sélectionné.";
-"route_betw_points_descr" = "Choisissez comment connecter ces points : avec une ligne droite ou en calculant un itinéraires à l'aide des profils répertoriés ci-dessous.";
+"whole_track_descr" = "Toute la trace sera recalculée en utilisant le profil sélectionné.";
+"next_seg_descr" = "Le segment suivant sera recalculé avec le profil sélectionné.";
+"route_betw_points_descr" = "Choisissez comment relier les points : avec une ligne droite ou en calculant un itinéraire à l'aide de l'un des profils énumérés ci-dessous.";
 "add_one_more_pnt" = "Ajouter un point supplémentaire";
 "delete_point" = "Supprimer ce point";
-"change_route_type_after" = "Changer le type de route après ce point";
-"change_route_type_before" = "Changer le type de route avant ce point";
+"change_route_type_after" = "Modifier le type d’itinéraire après ce point";
+"change_route_type_before" = "Modifier le type d’itinéraire avant ce point";
 "trim_after" = "Couper après ce point";
 "trim_before" = "Couper avant ce point";
 "add_after" = "Ajouter des points après";
@@ -2041,8 +2041,8 @@
 "obf_import_already_exists" = "Un fichier portant ce nom existe déjà. Veuillez sélectionner une action.";
 "plugin_popup_osm_editing_title" = "Activer l’édition OpenStreetMap";
 "map_coords" = "Carte : Lat %.5f Lon %.5f";
-"sett_ext_input_desc" = "Sélectionnez un dispositif tel qu'un clavier générique ou WunderLINQ pour les commandes externes.";
-"shared_string_required" = "Requis";
+"sett_ext_input_desc" = "Sélectionnez un périphérique externe comme un clavier générique ou un WunderLINQ pour utiliser l'application.";
+"shared_string_required" = "Obligatoire";
 "search_poi_types_descr" = "Vous pouvez combiner des types de POI de différentes catégories.";
 "reset_to_default_category_button_promo" = "La réinitialisation rétablira l'ordre de tri à son état initial.";
 "create_custom_categories_list_promo" = "Vous pouvez ajouter des catégories personnalisées, masquer les catégories que vous ne jugez pas nécessaires et modifier l'ordre de tri de la liste. Les catégories personnalisées peuvent être importées et exportées avec les profils.";
@@ -2053,7 +2053,7 @@
 "add_custom_category" = "Ajouter une catégorie personnalisée";
 "search_preogress" = "Recherche en cours…";
 "obf_import_title" = "Importer un fichier de carte hors ligne";
-"plugin_popup_osm_editing_ask" = "Veuillez activer le greffon d'édition OpenStreetMap pour ajouter et gérer les modifications et les notes de la carte";
+"plugin_popup_osm_editing_ask" = "Veuillez activer le greffon Édition OpenStreetMap pour ajouter et gérer les modifications de carte et les notes";
 "default_speed_descr" = "Estime l'heure d'arrivée pour les types de route inconnus et limite la vitesse sur toutes les routes (peut modifier le calcul d'itinéraire)";
 "shared_string_gpx_points" = "Points";
 
@@ -2074,7 +2074,7 @@
 "emergency" = "Urgences";
 "vessel_height_limit_description" = "Définissez la hauteur du navire pour éviter les ponts bas. N'oubliez pas que si le pont est mobile, le calcul utilise sa hauteur à l'état ouvert.";
 "route_between_points_add_track_desc" = "Sélectionnez une traces pour laquelle un nouveau segment sera ajouté.";
-"track_is_saved" = "%@\nest enregistré !";
+"track_is_saved" = "%@\nenregistré !";
 "ios_release_3_90" = "- Introduction d'une fonction \"Planifier un itinéraire\" pour planifier de futurs voyages avec la possibilité de créer des segments de parcours en utilisant différents types de navigation\n- Ajout d'une option permettant d'activer une boussole sur l'outil \"Règle de rayon\"\n- Ajout de l'option \"Superposition des étiquettes de PI\" qui permet d'afficher les noms des favoris, des points de repère et des marqueurs sur la carte\n- Ajout de nouvelles actions rapides pour la visibilité des courbes de niveau et du relief sur la carte, la modification d'un profil d'application, la suppression d'un point intermédiaire le plus proche\n- Correction des problèmes liés à la catégorie de recherche Wikipédia manquante\n- Importation de paramètres : correction de bugs, ajout du support pour tous les types de données disponibles dans OsmAnd\n- Edition d'OpenStreetMap : correction du sélecteur de temps et de l'impossibilité de modifier le commentaire de l'ensemble des modifications\n";
 "ios_release_3_80" = "- Introduction de \"profils d'application\" avec des paramètres indépendants\n- Nouvelle disposition des paramètres par profils et types : navigation, général, carte et écran\n- Possibilité d'importer ou d'exporter les paramètres des profils\n- Ajout de sources de données pour les photos en ligne\n- Ajout de la possibilité de télécharger des cartes en ligne dans la mémoire cache\n- Algorithmes de \"recherche\" améliorés\n";
 "units_nm" = "mn";
@@ -2106,7 +2106,7 @@
 "wiki_menu_download_descr" = "D’autres cartes sont nécessaires pour afficher les POI Wikipédia sur la carte.";
 "select_wikipedia_article_langs" = "Sélectionnez la langue dans laquelle les articles Wikipédia s'afficheront sur la carte. Vous pourrez changer pour toutes les langues disponibles en lisant l'article.";
 "shared_string_all_languages" = "Toutes les langues";
-"board_at" = "Conseil à";
+"board_at" = "Embarquez à";
 "m" = "m";
 "foot" = "pieds";
 "download_suggestion" = "Pour voir les détails de cette zone, téléchargez la carte %@";

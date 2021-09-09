@@ -2106,7 +2106,7 @@
 "wiki_menu_download_descr" = "D’autres cartes sont nécessaires pour afficher les POI Wikipédia sur la carte.";
 "select_wikipedia_article_langs" = "Sélectionnez la langue dans laquelle les articles Wikipédia s'afficheront sur la carte. Vous pourrez changer pour toutes les langues disponibles en lisant l'article.";
 "shared_string_all_languages" = "Toutes les langues";
-"board_at" = "Embarquez à";
+"board_at" = "Embarquement à";
 "m" = "m";
 "foot" = "pieds";
 "download_suggestion" = "Pour voir les détails de cette zone, téléchargez la carte %@";

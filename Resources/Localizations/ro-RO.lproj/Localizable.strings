@@ -132,7 +132,7 @@
 "osm_live_cancel_subscription" = "Anulare abonament";
 "gpx_option_reverse_route" = "Inversează direcția GPX";
 "shared_string_cancel" = "Anulează";
-"general_settings_2" = "Setările generale";
+"general_settings_2" = "Setări generale";
 "shared_string_never" = "Niciodată";
 "unit_of_length" = "Unități de lungime";
 "route_tsll" = "Virați ușor la stânga și continuați";
@@ -989,11 +989,11 @@
 "gpx_upload_public_visibility_descr" = "\"Public\" înseamnă că urma este afișată public în urmele GPS și în listele publice de urme GPS, precum și în lista publică de urme cu marcajele de timp în formă brută. Datele furnizate prin intermediul API nu fac trimitere la pagina dvs. de traseu. Nu sunt disponibile timestamps ale punctelor de urmărire prin intermediul API GPS publice, iar punctele de urmărire nu sunt ordonate cronologic.";
 "gpx_upload_private_visibility_descr" = "\"Privat\" înseamnă că urmărirea nu apare în nicio listă publică, dar punctele de urmărire din aceasta, în ordine necronologică, sunt disponibile prin intermediul API GPS public fără marcaje temporale.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identificabilă\" înseamnă că urma va fi afișată public în urmele GPS și în listele publice de urme GPS, adică alți utilizatori vor putea descărca urma brută și o vor putea asocia cu numele dvs. de utilizator. Datele publice cu marcaj orar ale punctelor de urmărire din API GPS, furnizate prin intermediul trackpoints API, vor face trimitere la pagina dvs. de urmărire originală.";
-"gpx_upload_trackable_visibility_descr" = "\"Trackable\" înseamnă că urmărirea nu apare în nicio listă publică, dar punctele de urmărire procesate cu marcaje de timp (care nu pot fi asociate direct cu dvs.) apar prin descărcări din API-ul GPS public.";
+"gpx_upload_trackable_visibility_descr" = "\"Urmăribilă\" înseamnă că urmărirea nu apare în nicio listă publică, dar punctele de urmărire procesate cu marcaje de timp (care nu pot fi asociate direct cu dvs.) apar prin descărcări din API-ul GPS public.";
 
 // Resources
 "shared_string_resources" = "Resurse";
-"profile_type_osmand_string" = "OsmAnd profil";
+"profile_type_osmand_string" = "Profil OsmAnd";
 "profile_type_user_string" = "Profilul utilizatorului";
 "shared_string_turn" = "Întoarceți";
 "quick_action_remove_next_destination_descr" = "Șterge următoarea destinație de pe traseu. Dacă aceasta este destinația finală, navigația se va opri.";
@@ -2105,9 +2105,9 @@
 "suggested_maps" = "Hărți sugerate";
 "welmode_download_maps" = "Descărcați hărțile";
 "shared_strings_all_regions" = "Toate regiunile";
-"routes_color_by_type" = "Culoare rute de…";
-"rendering_value_walkingRoutesOSMC_description" = "Colorați rutele în funcție de culoarea lor locală individuală (dacă este prezentă pe OpenStreetMap) și de simbolul scutului de drumeție.";
-"rendering_value_walkingRoutesScopeOSMC_description" = "Culoare în funcție de afilierea la rețea.";
+"routes_color_by_type" = "Colorează rutele după…";
+"rendering_value_walkingRoutesOSMC_description" = "Colorează rutele în funcție de culoarea lor locală individuală (dacă este prezentă pe OpenStreetMap) și de simbolul marcajului de drumeție.";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Colorează în funcție de afilierea la rețea.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Colorează rutele în funcție de tipul de rețea de noduri (internațională, regională, locală).";
 "walking_route_osmc_description" = "Colorați rutele în funcție de culoarea locală individuală (dacă este prezentă pe OpenStreetMap) și de tipul lor (internațional, regional, local).";
 "travel_routes" = "Rute de călătorie";

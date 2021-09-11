@@ -1520,3 +1520,9 @@
 "configure_profile" = "更改配置";
 "app_restart_required" = "应用需要重新启动以应用某些设置。";
 "routing_attr_allow_intermediate_name" = "允许中转点线路";
+"routes_color_by_type" = "根据 … 对路线着色";
+"rendering_value_walkingRoutesOSMC_description" = "根据他们各自的本地颜色（如果 OpenStreetMap 上存在）和远足盾牌符号为路线着色。";
+"rendering_value_walkingRoutesScopeOSMC_description" = "按网络从属着色。";
+"rendering_value_walkingRoutesOSMCNodes_description" = "根据其节点网络类型（国际、区域、本地）对路线进行着色。";
+"walking_route_osmc_description" = "根据各自的本地颜色（如果在OpenStreetMap上存在）和类型（国际、区域、本地）给路线着色。";
+"travel_routes" = "旅行路线";

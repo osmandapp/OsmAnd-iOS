@@ -1,6 +1,6 @@
 "OsmAnd Maps" = "خرائط أوسماند";
 "shared_string_previous" = "السابق";
-"route_stops_before" = "%d توقف قبل";
+"route_stops_before" = "%d محطة توقف قبل";
 "transport_routes" = "المسارات الرياضية";
 "transport_nearby_routes_within" = "الطرق الداخلية المجاورة";
 "transport_nearby_routes" = "في غضون";
@@ -30,7 +30,7 @@
 "open_from" = "افتح من";
 "open_till" = "مفتوح حتى";
 "will_close_at" = "يغلق أبوابه على";
-"will_open_at" = "سيفتح على";
+"will_open_at" = "يفتح على";
 "will_open_on" = "سيفتح في";
 "will_open_tomorrow_at" = "سيفتتح غدا في";
 "error_avoid_specific_road" = "لا يوجد منفذ للتجاوز";
@@ -812,7 +812,7 @@
 "get_free_trial_title" = "إبدأ التجربة %d %@ .";
 "get_discount_short_descr" = "%@ إلى %d %@, ثم %@";
 "months_3" = "ثلاثة أشهر";
-"get_discount_first_part" = "%@ إلى أول %@";
+"get_discount_first_part" = "%@ لأول %@";
 "get_discount_second_part" = "ثم %@";
 "get_discount_first_few_parts" = "%@ إلى أول %@";
 "poi_overlay" = "نقاط الاهتمام";
@@ -1354,7 +1354,7 @@
 "rendering_attr_noPolygons_description" = "اجعل جميع الميزات الأرض المساحية شفافة على خريطة.";
 "rendering_attr_appMode_description" = "تحسين الخريطة ل";
 "routing_attr_height_obstacles_description" = "استخدام بيانات ارتفاع التضاريس المقدمة بواسطة SRTM, ASTER, EU-DEM.";
-"rendering_value_walkingRoutesScopeOSMC_name" = "تلوين وفق الانتماء للشبكة";
+"rendering_value_walkingRoutesScopeOSMC_name" = "الانتماء لشبكة الاتصال";
 "rendering_attr_showRoadMaps_name" = "خرائط الطرقات فقط";
 "routeInfo_road_types_name" = "أنواع الطرق";
 "rendering_attr_highway_class_cycleway_name" = "طريق الدراجات";
@@ -1422,7 +1422,7 @@
 "rendering_value_bicycle_name" = "دراجة";
 "rendering_attr_piste_difficulty_freeride_name" = "الدراجات الجبلية";
 "rendering_attr_hideText_name" = "النص";
-"rendering_attr_showMtbRoutes_name" = "إظهار مسارات الدراجة الجبلية";
+"rendering_attr_showMtbRoutes_name" = "طرق الدراجات الجبلية";
 "routing_attr_avoid_ferries_name" = "تجنب العبارات";
 "routing_attr_avoid_train_name" = "بدون قطارات";
 "rendering_attr_hidePOILabels_name" = "تسميات POI";
@@ -1533,7 +1533,7 @@
 "rendering_attr_depthContours_description" = "إظهار نقاط ومعالم العمق.";
 "routeInfo_piste_difficulty_name" = "صعوبة الطريق";
 "rendering_value_medium_name" = "متوسط";
-"rendering_attr_hikingRoutesOSMC_name" = "كيفية اظهار رموز طبقة التسلق (الهايكنق)";
+"rendering_attr_hikingRoutesOSMC_name" = "طرق المشي الخلوي";
 "routing_attr_piste_type_nordic_name" = "التزلج عبر البلاد / الشمال";
 "rendering_value_darkyellow_name" = "أصفر غامق";
 "rendering_attr_smoothness_very_horrible_name" = "رهيب جداً";
@@ -1576,7 +1576,7 @@
 "rendering_value_translucent_red_name" = "أحمر فاتح";
 "rendering_attr_surface_asphalt_name" = "إسفلت";
 "rendering_value_purple_name" = "بنفسجي";
-"rendering_attr_showCycleRoutes_name" = "إظهار مسارات الدراجات";
+"rendering_attr_showCycleRoutes_name" = "طرق الدرجات الهوائية";
 "rendering_attr_surface_grass_paver_name" = "مرصف العشب";
 "routing_attr_allow_intermediate_description" = "طرق أكثر صعوبة مع أقسام أكثر حدة. بعض العقبات التي ينبغي تجنبها.";
 "rendering_attr_coloredBuildings_name" = "تلوين المباني حسب النوع";

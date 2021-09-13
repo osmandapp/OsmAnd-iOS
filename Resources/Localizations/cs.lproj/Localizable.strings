@@ -1097,7 +1097,7 @@
 "routing_attr_allow_advanced_description" = "Obtížné trasy s nebezpečnými překážkami a strmými úseky.";
 "routing_attr_short_way_description" = "Použít ekonomickou trasu (obvykle kratší).";
 "routeInfo_steepness_name" = "Strmost";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Zbarvení podle příslušnosti k síti";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Příslušnost k síti";
 "rendering_value_orange_name" = "Oranžová";
 "routing_attr_avoid_ferries_description" = "Vyhne se trajektům";
 "rendering_attr_noPolygons_name" = "Polygony";
@@ -1130,7 +1130,7 @@
 "rendering_attr_winter_road_name" = "Zimní cesta";
 "rendering_attr_smoothness_good_name" = "Dobrá";
 "rendering_attr_contourDensity_name" = "Hustota vrstevnic";
-"rendering_attr_hikingRoutesOSMC_name" = "Turistické trasy a značky";
+"rendering_attr_hikingRoutesOSMC_name" = "Turistické trasy";
 "rendering_value_car_name" = "Automobil";
 "rendering_attr_showRoadMaps_description" = "Zvolte, kdy zobrazovat silniční mapy:";
 "routing_attr_avoid_subway_description" = "Vyhnout se metru a lehké železniční dopravě";
@@ -1214,7 +1214,7 @@
 "routing_attr_avoid_shuttle_train_name" = "Žádný autovlak";
 "rendering_attr_highway_class_road_name" = "Cesta";
 "rendering_attr_surface_wood_name" = "Dřevo";
-"rendering_attr_showMtbRoutes_name" = "Zobrazit trasy pro horská kola";
+"rendering_attr_showMtbRoutes_name" = "Trasy pro horská kola";
 "rendering_attr_smoothness_very_bad_name" = "Velmi špatná";
 "rendering_attr_trolleybusRoutes_name" = "Trolejbusové linky";
 "routing_attr_allow_intermediate_name" = "Povolit trasy střední náročnosti";
@@ -1296,7 +1296,7 @@
 "routeInfo_tracktype_name" = "Pevnost povrchu";
 "routing_attr_driving_style_safety_name" = "Preferovat vedlejší silnice";
 "routing_attr_allow_private_name" = "Povolit soukromý přístup";
-"rendering_attr_showCycleRoutes_name" = "Zobrazit cyklostezky";
+"rendering_attr_showCycleRoutes_name" = "Cyklostezky";
 "rendering_attr_hideAccess_name" = "Omezení přístupu";
 "rendering_attr_streetLighting_name" = "Pouliční osvětlení";
 "routing_attr_avoid_unpaved_description" = "Vyhne se nezpevněným cestám";
@@ -1325,7 +1325,7 @@
 "rendering_value_default13_name" = "Výchozí (13)";
 "rendering_attr_contourDensity_description" = "Hustota vrstevnic";
 "rendering_value_translucent_yellow_name" = "Průsvitná žlutá";
-"rendering_value_walkingRoutesOSMC_name" = "Zbarvení podle turistické značky OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_value_americanRoadAtlas_name" = "Americký atlas cest";
 "rendering_attr_horseRoutes_name" = "Stezka pro koně";
 "rendering_attr_contourWidth_name" = "Šířka linie vrstevnic";
@@ -1537,7 +1537,7 @@
 "osm_note_comment_title" = "Komentovat OSM poznámku";
 "configure_screen_quick_action" = "Rychlá akce";
 "enter_profile_name" = "Zadejte název profilu";
-"import_complete_description" = "Všechna data z %@ jsou naimportovaná, můžete použít tlačítka níže k otevření části aplikace pro jejich správu.";
+"import_complete_description" = "Všechna data z %@ jsou naimportovaná, můžete použít tlačítka níže k otevření části aplikace pro jejich správu";
 "configure_screen_descr" = "Zvolte nastavení obrazovky pro profil";
 "profile_type_base_string" = "Základní profil";
 "help_mapillary" = "OsmAnd + Mapillary";
@@ -2107,3 +2107,15 @@
 "population_num" = "Populace: %@";
 "product_title_mapillary" = "Mapillary";
 "shared_string_turn_off" = "Vypnout";
+"product_desc_ext_openplacereviews" = "Vkládejte fotografie, recenze a odkazy související s veřejnými místy jako jsou restaurace, hotely, muzea a body zájmu, a to jako otevřená data na https://openplacereviews.org/data/.\n\nPřečtěte si více na http://openplacereviews.org";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"routes_color_by_type" = "Obarvit trasy podle…";
+"rendering_value_walkingRoutesOSMC_description" = "Obarví trasy podle jejich individuální lokální barvy (pokud je nastavena v OpenStreetMap) a turistického značení.";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Obarví trasy podle síťové příslušnosti.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Obarví trasy podle typu sítě (mezinárodní, regionální, lokální).";
+"walking_route_osmc_description" = "Obarví trasy podle jejich individuální lokální barvy (pokud je nastavena v OpenStreetMap) a typu (mezinárodní, regionální, lokální).";
+"travel_routes" = "Cestovní trasy";
+"added_profiles_descr" = "Profily přidané modulem";
+"added_profiles" = "Přidané profily";
+"suggested_maps_descr" = "Tyto mapy jsou potřebné pro modul";
+"suggested_maps" = "Navrhované mapy";

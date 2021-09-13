@@ -19,6 +19,7 @@
 #import "OAHistoryHelper.h"
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
+#import "OAOsmAndFormatter.h"
 
 #import "OsmAndApp.h"
 
@@ -147,7 +148,7 @@
                                                               newLocation.coordinate.latitude,
                                                               dataItem.item.longitude, dataItem.item.latitude);
             
-            dataItem.distance = [app getFormattedDistance:distance];
+            dataItem.distance = [OAOsmAndFormatter.instance getFormattedDistance:distance];
             dataItem.distanceMeters = distance;
             CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:dataItem.item.latitude longitude:dataItem.item.longitude]];
             dataItem.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);

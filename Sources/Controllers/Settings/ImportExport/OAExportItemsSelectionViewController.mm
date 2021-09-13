@@ -34,6 +34,7 @@
 #import "OADestination.h"
 #import "OAPOIHelper.h"
 #import "OATableViewCustomHeaderView.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -331,10 +332,9 @@
 //            return getTrackDescrForDataItem(dataItem);
 //        }
 //    } else
-    OsmAndAppInstance app = OsmAndApp.instance;
     if (appearanceInfo)
     {
-        NSString *dist = [app getFormattedDistance:appearanceInfo.totalDistance];
+        NSString *dist = [OAOsmAndFormatter.instance getFormattedDistance:appearanceInfo.totalDistance];
         NSString *points = [NSString stringWithFormat:@"%ld %@", appearanceInfo.wptPoints, OALocalizedString(@"shared_string_gpx_points").lowerCase];
         NSString *descr = [NSString stringWithFormat:@"%@ • %@", folder, dist];
         return [NSString stringWithFormat:@"%@, %@", descr, points];

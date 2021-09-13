@@ -12,6 +12,7 @@
 #import "OAMapViewController.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -84,7 +85,7 @@
         }
         else
         {
-            NSString *ds = [_app getFormattedDistance:_cachedMeters];
+            NSString *ds = [OAOsmAndFormatter.instance getFormattedDistance:_cachedMeters];
             int ls = [ds indexOf:@" "];
             if (ls == -1)
                 [self setText:ds subtext:nil];

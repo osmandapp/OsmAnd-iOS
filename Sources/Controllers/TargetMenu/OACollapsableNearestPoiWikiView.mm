@@ -27,6 +27,7 @@
 #import "OAWikiArticleHelper.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -172,7 +173,7 @@
         if (!nameLocalized)
             nameLocalized = poi.nameLocalized;
 
-        NSString *title = [NSString stringWithFormat:@"%@ (%@)", nameLocalized, [[OsmAndApp instance] getFormattedDistance:distance]];
+        NSString *title = [NSString stringWithFormat:@"%@ (%@)", nameLocalized, [[OAOsmAndFormatter instance] getFormattedDistance:distance]];
         UIButton *btn = [self createButton:title];
         btn.tag = i++;
         [self addSubview:btn];

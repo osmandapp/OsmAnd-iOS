@@ -13,10 +13,10 @@
 #import "OAWaypointHelper.h"
 #import "OALocationPointWrapper.h"
 #import "OASettingsTableViewCell.h"
+#import "OAOsmAndFormatter.h"
 
 @implementation OAWaypointsRadiusScreen
 {
-    OsmAndAppInstance _app;
     OAWaypointHelper *_waypointHelper;
     
     int _type;
@@ -30,7 +30,6 @@
     self = [super init];
     if (self)
     {
-        _app = [OsmAndApp instance];
         _waypointHelper = [OAWaypointHelper sharedInstance];
         
         _type = ((NSNumber *)param).intValue;
@@ -55,7 +54,7 @@
     {
         [arr addObject:
             @{
-              @"name" : [_app getFormattedDistance:i.intValue],
+              @"name" : [OAOsmAndFormatter.instance getFormattedDistance:i.intValue],
               @"value" : i,
               @"img" : i.intValue == selectedRadius ? @"menu_cell_selected.png" : @"" }];
     }

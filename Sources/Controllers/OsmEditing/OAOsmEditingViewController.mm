@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     id<OAOpenStreetMapUtilsProtocol> _editingUtil;
     
     BOOL _isAddingNewPOI;
+    BOOL _isKeyboardHidingAborted;
 }
 
 -(id) initWithLat:(double)latitude lon:(double)longitude
@@ -428,6 +429,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) keyboardWillShow:(NSNotification *)notification;
 {
+    _isKeyboardHidingAborted = YES;
     NSDictionary *userInfo = [notification userInfo];
     NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
@@ -444,15 +446,24 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) keyboardWillHide:(NSNotification *)notification;
 {
+    _isKeyboardHidingAborted = NO;
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        [self applySafeAreaMargins];
-        [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonApply];
-        [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonDelete];
-        [[self view] layoutIfNeeded];
-    } completion:nil];
+    
+    NSTimeInterval delayInSeconds = 0.1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if (!_isKeyboardHidingAborted)
+        {
+            [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+                [self applySafeAreaMargins];
+                [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonApply];
+                [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonDelete];
+                [[self view] layoutIfNeeded];
+            } completion:nil];
+        }
+    });
 }
 
 -(void) applyHeight:(CGFloat)height cornerRadius:(CGFloat)radius toView:(UIView *)button

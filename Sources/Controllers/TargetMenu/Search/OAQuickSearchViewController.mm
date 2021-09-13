@@ -36,6 +36,7 @@
 #import "OAQuickSearchEmptyResultListItem.h"
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
+#import "OAOsmAndFormatter.h"
 
 #import "OASearchUICore.h"
 #import "OASearchCoreFactory.h"
@@ -55,6 +56,7 @@
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
 #import "OANativeUtilities.h"
+#import "OAQuickSearchCoordinatesViewController.h"
 
 #import "Localization.h"
 
@@ -851,12 +853,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (_modalInput)
     {
         self.leftImageButton.hidden = NO;
-        self.textField.frame = CGRectMake(44, 5 + statusBarHeight, self.view.frame.size.width - 44 - 8, self.textField.frame.size.height);
+        self.textField.frame = CGRectMake(44 + OAUtilities.getLeftMargin, 5 + statusBarHeight, self.view.frame.size.width - 44 - 8 - 2*OAUtilities.getLeftMargin, self.textField.frame.size.height);
     }
     else
     {
         self.leftImageButton.hidden = YES;
-        self.textField.frame = CGRectMake(8, 5 + statusBarHeight, self.view.frame.size.width - 84 - 8, self.textField.frame.size.height);
+        self.textField.frame = CGRectMake(8 + OAUtilities.getLeftMargin, 5 + statusBarHeight, self.view.frame.size.width - 84 - 8 - 2*OAUtilities.getLeftMargin, self.textField.frame.size.height);
+        self.tabs.frame = CGRectMake(8 + OAUtilities.getLeftMargin, self.tabs.frame.origin.y, self.view.frame.size.width - 2*8 - 2*OAUtilities.getLeftMargin, self.tabs.frame.size.height);
+        self.btnCancel.frame = CGRectMake(self.view.frame.size.width - 84 - OAUtilities.getLeftMargin + 8, self.btnCancel.frame.origin.y, self.btnCancel.frame.size.width, self.btnCancel.frame.size.height);
     }
 
     _topView.frame = frame;
@@ -866,7 +870,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)updateSearchNearMapCenterLabel
 {
-    _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [[OsmAndApp instance] getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
+    _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [OAOsmAndFormatter.instance getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
 }
 
 - (void) adjustViewPosition:(UIView *)view byHeight:(CGFloat)height
@@ -1174,14 +1178,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [self updateTabsVisibility:NO];
             [self.textField becomeFirstResponder];
         }]];
-
-        /*
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_marker_dark"] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
+        
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_marker"] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
             CLLocation *latLon = [[self.searchUICore getSearchSettings] getOriginalLocation];
-            QuickSearchCoordinatesFragment.showDialog(QuickSearchDialogFragment.this,
-                                                      latLon.getLatitude(), latLon.getLongitude());
+            OAQuickSearchCoordinatesViewController *vc = [[OAQuickSearchCoordinatesViewController alloc] initWithLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
+            [self presentViewController:vc animated:YES completion:nil];
+
         }]];
-         */
 
         [data addObject:rows];
 
@@ -1703,8 +1706,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     int minimalSearchRadius = [self.searchUICore getMinimalSearchRadius:self.searchUICore.getPhrase];
     if ([self.searchUICore isSearchMoreAvailable:self.searchUICore.getPhrase] && minimalSearchRadius != INT_MAX)
     {
-        double rd = [OsmAndApp.instance calculateRoundedDist:minimalSearchRadius];
-        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"), [OsmAndApp.instance getFormattedDistance:rd]];
+        double rd = [OAOsmAndFormatter.instance calculateRoundedDist:minimalSearchRadius];
+        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"), [OAOsmAndFormatter.instance getFormattedDistance:rd]];
     }
 
     if (!_paused && !_cancelPrev)

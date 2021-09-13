@@ -27,6 +27,7 @@
 #import "OASelectTrackFolderViewController.h"
 #import "OASaveTrackViewController.h"
 #import "OARoutePlanningHudViewController.h"
+#import "OAOsmAndFormatter.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -186,12 +187,12 @@
     }
     else
     {
-        NSMutableString *distanceStr = [[[OsmAndApp instance] getFormattedDistance:item.totalDistance] mutableCopy];
+        NSMutableString *distanceStr = [[OAOsmAndFormatter.instance getFormattedDistance:item.totalDistance] mutableCopy];
         if (item.points > 0)
             [distanceStr appendFormat:@"\u00a0(%d)", item.points];
         NSString *waypointsStr = [NSString stringWithFormat:@"%d", item.wptPoints];
-        NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:item.timeMoving shortFormat:NO];
-        NSString *avgSpeedStr = [[OsmAndApp instance] getFormattedSpeed:item.avgSpeed];
+        NSString *timeMovingStr = [OAOsmAndFormatter.instance getFormattedTimeInterval:item.timeMoving shortFormat:NO];
+        NSString *avgSpeedStr = [OAOsmAndFormatter.instance getFormattedSpeed:item.avgSpeed];
 
         NSMutableAttributedString *stringDistance = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\u00a0\u00a0%@", [distanceStr stringByReplacingOccurrencesOfString:@" " withString:@"\u00a0"]]];
         NSMutableAttributedString *stringWaypoints = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  \u00a0\u00a0%@", [waypointsStr stringByReplacingOccurrencesOfString:@" " withString:@"\u00a0"]]];
@@ -1171,13 +1172,13 @@
             case 0: // Average speed
             {
                 [cell.lbTitle setText:OALocalizedString(@"gpx_average_speed")];
-                [cell.lbTime setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
+                [cell.lbTime setText:[OAOsmAndFormatter.instance getFormattedSpeed:self.gpx.avgSpeed]];
                 break;
             }
             case 1: // Max speed
             {
                 [cell.lbTitle setText:OALocalizedString(@"gpx_max_speed")];
-                [cell.lbTime setText:[_app getFormattedSpeed:self.gpx.maxSpeed]];
+                [cell.lbTime setText:[OAOsmAndFormatter.instance getFormattedSpeed:self.gpx.maxSpeed]];
                 break;
             }
 
@@ -1216,13 +1217,13 @@
             case 2: // Total Time
             {
                 [cell.lbTitle setText:OALocalizedString(@"total_time")];
-                [cell.lbTime setText:[_app getFormattedTimeInterval:self.gpx.timeSpan shortFormat:NO]];
+                [cell.lbTime setText:[OAOsmAndFormatter.instance getFormattedTimeInterval:self.gpx.timeSpan shortFormat:NO]];
                 break;
             }
             case 3: // Moving Time
             {
                 [cell.lbTitle setText:OALocalizedString(@"moving_time")];
-                [cell.lbTime setText:[_app getFormattedTimeInterval:self.gpx.timeMoving shortFormat:NO]];
+                [cell.lbTime setText:[OAOsmAndFormatter.instance getFormattedTimeInterval:self.gpx.timeMoving shortFormat:NO]];
                 break;
             }
 
@@ -1248,7 +1249,7 @@
             case 0: // Avg Elevation
             {
                 [cell.lbTitle setText:OALocalizedString(@"gpx_avg_elev")];
-                NSString *ele = [_app getFormattedAlt:self.gpx.avgElevation];
+                NSString *ele = [OAOsmAndFormatter.instance getFormattedAlt:self.gpx.avgElevation];
                 cell.lbTime.attributedText = [[NSAttributedString alloc] initWithString:ele attributes:attributesUp];
                 break;
             }
@@ -1256,8 +1257,8 @@
             {
                 [cell.lbTitle setText:OALocalizedString(@"gpx_elev_range")];
 
-                NSMutableAttributedString *rangeUp = [[NSMutableAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.minElevation] attributes:attributesUp];
-                NSMutableAttributedString *rangeDown = [[NSMutableAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.maxElevation] attributes:attributesDown];
+                NSMutableAttributedString *rangeUp = [[NSMutableAttributedString alloc] initWithString:[OAOsmAndFormatter.instance getFormattedAlt:self.gpx.minElevation] attributes:attributesUp];
+                NSMutableAttributedString *rangeDown = [[NSMutableAttributedString alloc] initWithString:[OAOsmAndFormatter.instance getFormattedAlt:self.gpx.maxElevation] attributes:attributesDown];
                 [rangeUp appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
                 [rangeUp appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
                 [rangeUp appendAttributedString:rangeDown];
@@ -1272,8 +1273,8 @@
                 NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
                 NSAttributedString *arrowUpStr = [NSAttributedString attributedStringWithAttachment:_arrowUp];
                 NSAttributedString *arrowDownStr = [NSAttributedString attributedStringWithAttachment:_arrowDown];
-                NSAttributedString *eleUp = [[NSAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.diffElevationUp] attributes:attributesUp];
-                NSAttributedString *eleDown = [[NSAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.diffElevationDown] attributes:attributesDown];
+                NSAttributedString *eleUp = [[NSAttributedString alloc] initWithString:[OAOsmAndFormatter.instance getFormattedAlt:self.gpx.diffElevationUp] attributes:attributesUp];
+                NSAttributedString *eleDown = [[NSAttributedString alloc] initWithString:[OAOsmAndFormatter.instance getFormattedAlt:self.gpx.diffElevationDown] attributes:attributesDown];
 
                 NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithAttributedString:arrowUpStr];
                 [res appendAttributedString:space];
@@ -1291,7 +1292,7 @@
             case 3: // Uphills Total
             {
                 [cell.lbTitle setText:OALocalizedString(@"gpx_uphills_total")];
-                cell.lbTime.attributedText = [[NSAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.maxElevation - self.gpx.minElevation] attributes:attributesUp];
+                cell.lbTime.attributedText = [[NSAttributedString alloc] initWithString:[OAOsmAndFormatter.instance getFormattedAlt:self.gpx.maxElevation - self.gpx.minElevation] attributes:attributesUp];
                 break;
             }
 

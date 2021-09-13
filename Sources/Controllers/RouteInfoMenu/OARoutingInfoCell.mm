@@ -13,6 +13,7 @@
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -94,16 +95,16 @@
     }
     else
     {
-        _distanceLabel.text = [[OsmAndApp instance] getFormattedDistance:[_routingHelper getLeftDistance]];
-        _timeLabel.text = [[OsmAndApp instance] getFormattedTimeInterval:[_routingHelper getLeftTime] shortFormat:NO];
+        _distanceLabel.text = [[OAOsmAndFormatter instance] getFormattedDistance:[_routingHelper getLeftDistance]];
+        _timeLabel.text = [[OAOsmAndFormatter instance] getFormattedTimeInterval:[_routingHelper getLeftTime] shortFormat:NO];
     }
 }
 
 - (NSString *) getTurnDescription:(OARouteDirectionInfo *)ri
 {
-    if (![[ri getDescriptionRoutePart] hasSuffix:[[OsmAndApp instance] getFormattedDistance:ri.distance]])
+    if (![[ri getDescriptionRoutePart] hasSuffix:[[OAOsmAndFormatter instance] getFormattedDistance:ri.distance]])
     {
-        return [NSString stringWithFormat:@"%d. %@ %@", (_directionInfo + 1), [ri getDescriptionRoutePart],[[OsmAndApp instance] getFormattedDistance:ri.distance]];
+        return [NSString stringWithFormat:@"%d. %@ %@", (_directionInfo + 1), [ri getDescriptionRoutePart],[[OAOsmAndFormatter instance] getFormattedDistance:ri.distance]];
     }
     else
     {

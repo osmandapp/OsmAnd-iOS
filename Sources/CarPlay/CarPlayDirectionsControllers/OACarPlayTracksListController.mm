@@ -19,6 +19,7 @@
 #import "OATargetPointsHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OAAppSettings.h"
+#import "OAOsmAndFormatter.h"
 
 #import <CarPlay/CarPlay.h>
 
@@ -74,18 +75,17 @@
 - (NSString *) getTrackDescription:(OAGPX *)gpx
 {
     NSMutableString *res = [NSMutableString new];
-    OsmAndAppInstance app = OsmAndApp.instance;
     BOOL needsSeparator = NO;
     if (!isnan(gpx.totalDistance) && gpx.totalDistance > 0)
     {
-        [res appendString:[app getFormattedDistance:gpx.totalDistance]];
+        [res appendString:[OAOsmAndFormatter.instance getFormattedDistance:gpx.totalDistance]];
         needsSeparator = YES;
     }
     if (!isnan(gpx.timeSpan) && gpx.timeSpan > 0)
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendString:[app getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
+        [res appendString:[OAOsmAndFormatter.instance getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
         needsSeparator = YES;
     }
     if (gpx.wptPoints > 0)

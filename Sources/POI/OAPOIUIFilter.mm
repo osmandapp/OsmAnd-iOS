@@ -18,6 +18,7 @@
 #import "OAMapUtils.h"
 #import "OAUtilities.h"
 #import "OANameStringMatcher.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -288,9 +289,9 @@
     }
     double val = distanceToSearchValues[distInd].doubleValue;
     if (val >= 1) {
-        return [@" < " stringByAppendingString:[app getFormattedDistance:(int)val * 1000]];
+        return [@" < " stringByAppendingString:[OAOsmAndFormatter.instance getFormattedDistance:(int)val * 1000]];
     } else {
-        return [@" < " stringByAppendingString:[app getFormattedDistance:500]];
+        return [@" < " stringByAppendingString:[OAOsmAndFormatter.instance getFormattedDistance:500]];
     }
 }
 

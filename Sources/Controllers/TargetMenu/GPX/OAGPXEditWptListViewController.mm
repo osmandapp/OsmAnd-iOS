@@ -16,6 +16,7 @@
 #import "OAIconTextTableViewCell.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAColors.h"
+#import "OAOsmAndFormatter.h"
 
 #import "OsmAndApp.h"
 
@@ -131,7 +132,7 @@
                                                           newLocation.coordinate.latitude,
                                                           wptLon, wptLat);
         
-        itemData.distance = [_app getFormattedDistance:distance];
+        itemData.distance = [OAOsmAndFormatter.instance getFormattedDistance:distance];
         itemData.distanceMeters = distance;
         CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
         itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);

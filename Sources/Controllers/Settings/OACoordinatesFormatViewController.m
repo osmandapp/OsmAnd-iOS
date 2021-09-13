@@ -14,6 +14,7 @@
 #import "OsmAndApp.h"
 #import "OALocationConvert.h"
 #import "OATableViewCustomFooterView.h"
+#import "OAOsmAndFormatter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -66,28 +67,28 @@
         @"name" : @"navigate_point_format_D",
         @"title" : OALocalizedString(@"navigate_point_format_D"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_DEGREES),
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_DEGREES]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES]],
         @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
     @{
         @"name" : @"navigate_point_format_DM",
         @"title" : OALocalizedString(@"navigate_point_format_DM"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_MINUTES),
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_MINUTES]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES]],
         @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
     @{
        @"name" : @"navigate_point_format_DMS",
        @"title" : OALocalizedString(@"navigate_point_format_DMS"),
        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_SECONDS),
-       @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_SECONDS]],
+       @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS]],
        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
     @{
         @"name" : @"utm_format",
         @"title" : OALocalizedString(@"UTM"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_UTM_FORMAT),
-        @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"coordinates_example"), [OALocationConvert getUTMCoordinateString:lat lon:lon], OALocalizedString(@"utm_description"), OALocalizedString(@"shared_string_read_more")],
+        @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM], OALocalizedString(@"utm_description"), OALocalizedString(@"shared_string_read_more")],
         @"url" : @"https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system",
         @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
@@ -95,7 +96,7 @@
        @"name" : @"olc_format",
        @"title" : OALocalizedString(@"navigate_point_format_OLC"),
        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_OLC_FORMAT),
-       @"description" : [NSString stringWithFormat:@"%@: %@. %@\n", OALocalizedString(@"coordinates_example"), [OALocationConvert getLocationOlcName:lat lon:lon], OALocalizedString(@"shared_string_read_more")],
+       @"description" : [NSString stringWithFormat:@"%@: %@. %@\n", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC], OALocalizedString(@"shared_string_read_more")],
        @"url" : @"https://en.wikipedia.org/wiki/Open_Location_Code",
        @"icon" : @"ic_custom_direction_compass",
        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],

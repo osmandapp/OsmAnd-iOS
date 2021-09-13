@@ -23,6 +23,7 @@
 #import "OATargetInfoViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
+#import "OAOsmAndFormatter.h"
 
 #import "OsmAndApp.h"
 
@@ -193,7 +194,7 @@ static UIViewController *parentController;
 
 
 
-            itemData.distance = [app getFormattedDistance:distance];
+            itemData.distance = [OAOsmAndFormatter.instance getFormattedDistance:distance];
             itemData.distanceMeters = distance;
             CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
             itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);

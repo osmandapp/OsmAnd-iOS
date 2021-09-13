@@ -14,6 +14,7 @@
 #import "OAGPXDatabase.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OAOsmAndFormatter.h"
 
 @implementation OAGpxFileInfo
 
@@ -72,7 +73,7 @@
 
 + (NSString *) getDescription:(OAGPX *)gpx
 {
-    NSString *dist = [[OsmAndApp instance] getFormattedDistance:gpx.totalDistance];
+    NSString *dist = [[OAOsmAndFormatter instance] getFormattedDistance:gpx.totalDistance];
     NSString *wpts = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
     return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }

@@ -18,6 +18,7 @@
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAOsmAndFormatter.h"
 
 #define kVerticalMargin 18.
 #define kHorizontalMargin 20.
@@ -118,15 +119,14 @@
             @"key" : @"header"
         }];
 
-        OsmAndAppInstance app = OsmAndApp.instance;
         for (OAGPX *gpx in gpxTopList)
         {
             [existingTracksSection addObject:@{
                     @"type" : [OAGPXRouteRoundCell getCellIdentifier],
                     @"track" : gpx,
                     @"title" : [gpx getNiceTitle],
-                    @"distance" : [app getFormattedDistance:gpx.totalDistance],
-                    @"time" : [app getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+                    @"distance" : [OAOsmAndFormatter.instance getFormattedDistance:gpx.totalDistance],
+                    @"time" : [OAOsmAndFormatter.instance getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
                     @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
                     @"key" : @"gpx_route"
                 }];

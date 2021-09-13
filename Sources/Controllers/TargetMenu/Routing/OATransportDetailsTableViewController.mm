@@ -26,6 +26,7 @@
 #import "OAReverseGeocoder.h"
 #import "OAPublicTransportRouteShieldCell.h"
 #import "OADividerCell.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OATransportDetailsTableViewController () <UITableViewDelegate, UITableViewDataSource, OATransportShieldDelegate>
 
@@ -38,6 +39,7 @@
     NSDictionary *_data;
     
     OsmAndAppInstance _app;
+    OAOsmAndFormatter *_formatter;
 }
 
 - (instancetype)initWithRouteIndex:(NSInteger) routeIndex
@@ -47,6 +49,7 @@
         _transportHelper = OATransportRoutingHelper.sharedInstance;
         _routeIndex = routeIndex;
         _app = [OsmAndApp instance];
+        _formatter = [OAOsmAndFormatter instance];
         [self generateData];
     }
     return self;
@@ -73,7 +76,7 @@
         @"title" : title,
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
-        @"time" : [_app getFormattedTimeHM:startTime.firstObject.doubleValue],
+        @"time" : [_formatter getFormattedTimeHM:startTime.firstObject.doubleValue],
         @"coords" : startLocation ? @[startLocation] : @[]
     }];
     
@@ -86,7 +89,7 @@
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_profile_pedestrian",
-        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
+        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_formatter getFormattedTimeInterval:time shortFormat:NO], [_formatter getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
@@ -109,7 +112,7 @@
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_profile_pedestrian",
-        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
+        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_formatter getFormattedTimeInterval:time shortFormat:NO], [_formatter getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[],
@@ -135,7 +138,7 @@
         @"descr" : OALocalizedString(@"map_widget_distance"),
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
-        @"time" : [_app getFormattedTimeHM:startTime.firstObject.doubleValue],
+        @"time" : [_formatter getFormattedTimeHM:startTime.firstObject.doubleValue],
         @"coords" : @[end.point]
     }];
     
@@ -153,7 +156,7 @@
     NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
     [collapsableCell setObject:[OAPublicTransportCollapsableCell getCellIdentifier] forKey:@"cell"];
     [collapsableCell setObject:[NSString stringWithFormat:OALocalizedString(@"by_type"), [r getTypeStr]] forKey:@"descr"];
-    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size(), OALocalizedString(@"num_stops"), [_app getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
+    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size(), OALocalizedString(@"num_stops"), [_formatter getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
     [collapsableCell setObject:@(YES) forKey:@"collapsed"];
     [collapsableCell setObject:color forKey:@"line_color"];
     NSInteger row = arr.count;
@@ -199,7 +202,7 @@
     const auto& startStop = segment->getStart();
     OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:route->type.c_str()]];
     [startTime setObject:@(startTime.firstObject.integerValue + routeRes->getBoardingTime()) atIndexedSubscript:0];
-    NSString *timeText = [_app getFormattedTimeHM:startTime.firstObject.doubleValue];
+    NSString *timeText = [_formatter getFormattedTimeHM:startTime.firstObject.doubleValue];
     NSString *str = [NSString stringWithUTF8String:route->color.c_str()];
     str = str.length == 0 ? stopType.renderAttr : str;
     UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
@@ -218,7 +221,7 @@
     }];
     // TODO: fix later for schedule
     [startTime setObject:@(startTime.firstObject.integerValue + segment->travelTime) atIndexedSubscript:0];
-    timeText = [_app getFormattedTimeHM:startTime.firstObject.doubleValue];
+    timeText = [_formatter getFormattedTimeHM:startTime.firstObject.doubleValue];
     
     NSMutableArray<CLLocation *> * locations = [self generateLocationsFor:segment];
     
@@ -304,7 +307,7 @@
                     [arr addObject:@{
                         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
                         @"img" : @"ic_profile_pedestrian",
-                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
+                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_formatter getFormattedTimeInterval:time shortFormat:NO], [_formatter getFormattedDistance:walkDist]],
                         @"top_route_line" : @(NO),
                         @"bottom_route_line" : @(NO),
                         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
@@ -407,15 +410,15 @@
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
     NSInteger walkTime = walkTimeReal > 0 ? walkTimeReal : walkTimePT;
-    NSString *walkTimeStr = [OsmAndApp.instance getFormattedTimeInterval:walkTime shortFormat:NO];
+    NSString *walkTimeStr = [_formatter getFormattedTimeInterval:walkTime shortFormat:NO];
     NSInteger walkDistanceReal = [_transportHelper getWalkingDistance:segments];
     NSInteger walkDistancePT = (NSInteger) res->getWalkDist();
     NSInteger walkDistance = walkDistanceReal > 0 ? walkDistanceReal : walkDistancePT;
-    NSString *walkDistanceStr = [OsmAndApp.instance getFormattedDistance:walkDistance];
+    NSString *walkDistanceStr = [_formatter getFormattedDistance:walkDistance];
     NSInteger travelTime = (NSInteger) res->getTravelTime() + walkTime;
-    NSString *travelTimeStr = [OsmAndApp.instance getFormattedTimeInterval:travelTime shortFormat:NO];
+    NSString *travelTimeStr = [_formatter getFormattedTimeInterval:travelTime shortFormat:NO];
     NSInteger travelDist = (NSInteger) res->getTravelDist() + walkDistance;
-    NSString *travelDistStr = [OsmAndApp.instance getFormattedDistance:travelDist];
+    NSString *travelDistStr = [_formatter getFormattedDistance:travelDist];
 
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     

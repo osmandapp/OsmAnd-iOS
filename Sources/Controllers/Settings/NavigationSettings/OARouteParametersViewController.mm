@@ -23,6 +23,7 @@
 #import "OARoutePreferencesParameters.h"
 #import "OARouteSettingsParameterController.h"
 #import "OARoadSpeedsViewController.h"
+#import "OAOsmAndFormatter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -105,7 +106,7 @@
     
     double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
     recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
-    NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OsmAndApp.instance getFormattedDistance:recalcDist];
+    NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OAOsmAndFormatter.instance getFormattedDistance:recalcDist];
     [parametersArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"recalculate_route"),

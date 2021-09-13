@@ -17,6 +17,7 @@
 #import "OAMapLayers.h"
 #import "OAMyPositionLayer.h"
 #import "OANativeUtilities.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -324,7 +325,7 @@
                     CGPoint a = linePoints[0].CGPointValue;
                     CGPoint b = linePoints[1].CGPointValue;
                     double angle = [OAMapUtils getAngleBetween:a end:b];
-                    NSString *distance = [_app getFormattedDistance:dist];
+                    NSString *distance = [OAOsmAndFormatter.instance getFormattedDistance:dist];
                     _rulerDistance = distance;
                     if (self.lineDrawingDelegate)
                         [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue)];
@@ -345,7 +346,7 @@
                 CGPoint b = linePoints[1].CGPointValue;
                 double angle = [OAMapUtils getAngleBetween:a end:b];
                 const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude, _tapPointTwo.longitude, _tapPointTwo.latitude);
-                NSString *distance = [_app getFormattedDistance:dist];
+                NSString *distance = [OAOsmAndFormatter.instance getFormattedDistance:dist];
                 _rulerDistance = distance;
                 if (self.lineDrawingDelegate)
                     [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue)];

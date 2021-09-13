@@ -328,6 +328,12 @@
     [self textChanged:textView userInput:YES];
 }
 
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView;
+{
+    [self textChanged:textView userInput:YES];
+    return YES;
+}
+
 #pragma mark - MDCMultilineTextInputLayoutDelegate
 - (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
       didChangeContentSize:(CGSize)size

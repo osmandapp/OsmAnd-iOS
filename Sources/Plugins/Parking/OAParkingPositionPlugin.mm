@@ -26,6 +26,7 @@
 #import "OAParkingAction.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -257,7 +258,7 @@
                     }
                     else
                     {
-                        NSString *ds = [pluginWeak.app getFormattedDistance:cachedMeters];
+                        NSString *ds = [OAOsmAndFormatter.instance getFormattedDistance:cachedMeters];
                         int ls = [ds indexOf:@" "];
                         if (ls == -1)
                             [parkingPlaceControlWeak setText:ds subtext:nil];

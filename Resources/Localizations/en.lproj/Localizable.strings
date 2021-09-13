@@ -115,7 +115,8 @@
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
-"coords_format" = "Coordinate format";
+"coords_format" = "Coordinates format";
+"coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings > ";
 "coordinates" = "Coordinates";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
@@ -784,6 +785,13 @@
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
+"navigate_point_format_UTM" = "UTM";
+"navigate_point_format_unknown" = "Unknown format";
+"navigate_point_northing" = "Northing";
+"navigate_point_easting" = "Easting";
+"navigate_point_zone" = "Zone";
+"navigate_point_olc" = "Open Location Code";
+"navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Approximate file size: %@";
 
 "coordinates_example" = "Example";
@@ -968,6 +976,7 @@
 "none_point_error" = "Please add at least one point.";
 "empty_filename" = "Filename cannot be empty";
 "incorrect_symbols" = "Invalid characters entered";
+"invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "split_before" = "Split before";

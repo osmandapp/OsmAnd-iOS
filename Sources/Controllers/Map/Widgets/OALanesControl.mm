@@ -19,6 +19,7 @@
 #import "OARouteDirectionInfo.h"
 #import "OAUtilities.h"
 #import "OATextInfoWidget.h"
+#import "OAOsmAndFormatter.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -258,7 +259,7 @@
             if (dist == 0)
                 [self refreshLabel:@""];
             else
-                [self refreshLabel:[_app getFormattedDistance:dist]];
+                [self refreshLabel:[OAOsmAndFormatter.instance getFormattedDistance:dist]];
             
             _textView.hidden = _textView.text.length == 0;
             needFrameUpdate = YES;

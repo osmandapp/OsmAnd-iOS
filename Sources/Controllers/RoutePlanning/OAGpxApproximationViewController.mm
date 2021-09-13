@@ -18,6 +18,7 @@
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OAOsmAndFormatter.h"
 
 #define kThresholdSection @"thresholdSection"
 #define kProfilesSection @"profilesSection"
@@ -285,7 +286,7 @@
     _distanceThreshold = slider.value;
 	[self calculateGpxApproximation:YES];
 	OATitleSliderRoundCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-	cell.valueLabel.text = [_app getFormattedDistance:_distanceThreshold];
+	cell.valueLabel.text = [OAOsmAndFormatter.instance getFormattedDistance:_distanceThreshold];
 }
 
 // MARK: UITableViewDataSource
@@ -322,7 +323,7 @@
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
             cell.titleLabel.text = item[@"title"];
             cell.sliderView.value = _distanceThreshold;
-			cell.valueLabel.text = [_app getFormattedDistance:_distanceThreshold];
+			cell.valueLabel.text = [OAOsmAndFormatter.instance getFormattedDistance:_distanceThreshold];
             cell.contentContainer.layer.cornerRadius = 12.;
 
             return cell;

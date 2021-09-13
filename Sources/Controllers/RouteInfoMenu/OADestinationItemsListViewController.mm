@@ -15,6 +15,7 @@
 #import "OAColors.h"
 #import "OADestinationItem.h"
 #import "OADestinationsHelper.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -257,7 +258,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                                                           itemData.destination.longitude, itemData.destination.latitude);
         
         itemData.distance = distance;
-        itemData.distanceStr = [app getFormattedDistance:distance];
+        itemData.distanceStr = [OAOsmAndFormatter.instance getFormattedDistance:distance];
         CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:itemData.destination.latitude longitude:itemData.destination.longitude]];
         itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
         
@@ -299,7 +300,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         
         
         
-        itemData.distance = [app getFormattedDistance:distance];
+        itemData.distance = [OAOsmAndFormatter.instance getFormattedDistance:distance];
         itemData.distanceMeters = distance;
         CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
         itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);

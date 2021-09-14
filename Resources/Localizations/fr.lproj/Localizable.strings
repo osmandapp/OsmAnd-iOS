@@ -413,7 +413,7 @@
 "new_filter_desc" = "Merci de saisir un nom pour ce filtre, il sera ajouté à l'onglet Catégories.";
 "skip_map_downloading" = "Ignorer le téléchargement des cartes";
 "search_another_country" = "Sélectionner une autre région";
-"first_usage_wizard_desc" = "Autoriser OsmAnd à vous localiser et à vous suggérer le téléchargement de la cartes de la région.";
+"first_usage_wizard_desc" = "Autoriser OsmAnd à vous localiser et à vous suggérer le téléchargement de la carte de la région.";
 "location_not_found" = "Position non trouvée";
 "no_inet_connection" = "Aucune connexion Internet";
 "no_inet_connection_desc_map" = "Indispensable pour télécharger des cartes.";

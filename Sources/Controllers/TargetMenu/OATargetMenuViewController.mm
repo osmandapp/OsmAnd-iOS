@@ -52,6 +52,9 @@
 #import "OAWikipediaPlugin.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
+#import "OATrackMenuViewController.h"
+#import "OASavingTrackHelper.h"
+#import "OAGPXDatabase.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -219,27 +222,13 @@
             
         case OATargetGPX:
         {
-            OAGPXItemViewControllerState *state = activeViewControllerState ? (OAGPXItemViewControllerState *)activeViewControllerState : nil;
-            
-            if (targetPoint.targetObj)
+            if (!targetPoint.targetObj || ((OAGPX *) targetPoint.targetObj).gpxFilePath.length == 0)
             {
-                if (state)
-                {
-                    if (state.showCurrentTrack)
-                        controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem:state];
-                    else
-                        controller = [[OAGPXItemViewController alloc] initWithGPXItem:targetPoint.targetObj ctrlState:state];
-                }
-                else
-                {
-                    controller = [[OAGPXItemViewController alloc] initWithGPXItem:targetPoint.targetObj];
-                }
+                OAGPX *item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+                item.gpxTitle = OALocalizedString(@"track_recording_name");
+                targetPoint.targetObj = item;
             }
-            else
-            {
-                controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
-                targetPoint.targetObj = ((OAGPXItemViewController *)controller).gpx;
-            }
+            controller = [[OATrackMenuViewController alloc] initWithGpx:targetPoint.targetObj];
             break;
         }
             

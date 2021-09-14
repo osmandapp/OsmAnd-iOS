@@ -196,4 +196,6 @@
 
 #define resource_installed_icon_color 0x1FB38D
 
+#define background_tab_bar 0xe6FFFFFF
+
 #endif /* OAColors_h */

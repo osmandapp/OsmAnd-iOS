@@ -1490,9 +1490,10 @@ typedef enum
     EOAMapModeButtonType mapModeButtonType;
     switch (_activeTargetType)
     {
-        case OATargetGPX:
+        //todo gpx context menu
+        /*case OATargetGPX:
             mapModeButtonType = EOAMapModeButtonTypeShowMap;
-            break;
+            break;*/
             
         default:
             mapModeButtonType = EOAMapModeButtonRegular;
@@ -1532,12 +1533,13 @@ typedef enum
     {
         case OATargetGPX:
         {
-            OAGPXItemViewControllerState *gpxItemViewControllerState = (OAGPXItemViewControllerState *)([((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState]);
+            //todo gpx context menu
+            /*OAGPXItemViewControllerState *gpxItemViewControllerState = (OAGPXItemViewControllerState *)([((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState]);
             gpxItemViewControllerState.showFull = self.targetMenuView.showFull;
             gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
             gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFilePath.length == 0);
             
-            _activeViewControllerState = gpxItemViewControllerState;
+            _activeViewControllerState = gpxItemViewControllerState;*/
             break;
         }
             
@@ -1943,7 +1945,8 @@ typedef enum
 
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    if (self.targetMenuView.targetPoint.type == OATargetGPX || (![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
+    //todo gpx context menu
+    if (/*self.targetMenuView.targetPoint.type == OATargetGPX || */(![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
@@ -2007,6 +2010,7 @@ typedef enum
         case OATargetTransportRoute:
         case OATargetTurn:
         case OATargetMyLocation:
+        case OATargetGPX:
         {
             if (controller)
                 [self.targetMenuView doInit:showFullMenu];
@@ -2040,15 +2044,6 @@ typedef enum
             wptViewController.mapViewController = self.mapViewController;
             wptViewController.wptDelegate = self;
             
-            break;
-        }
-        case OATargetGPX:
-        {
-            OAGPXItemViewControllerState *state = _activeViewControllerState ? (OAGPXItemViewControllerState *)_activeViewControllerState : nil;
-            BOOL showFull = (state && state.showFull) || (!state && showFullMenu);
-            BOOL showFullScreen = (state && state.showFullScreen);
-            [self.targetMenuView doInit:showFull showFullScreen:showFullScreen];
-
             break;
         }
         case OATargetRouteStart:
@@ -2101,8 +2096,7 @@ typedef enum
     [self.targetMenuView.layer removeAllAnimations];
     if ([self.view.subviews containsObject:self.targetMenuView])
         [self.targetMenuView removeFromSuperview];
-    
-    
+
     if (_targetMenuView.targetPoint.minimized)
     {
         _targetMenuView.targetPoint.minimized = NO;
@@ -2302,10 +2296,11 @@ typedef enum
         BOOL popped;
         switch (self.targetMenuView.targetPoint.type)
         {
+            //todo gpx context menu
             case OATargetGPX:
-                if ([self hasGpxActiveTargetType] && _activeTargetObj)
-                    ((OAGPX *)_activeTargetObj).newGpx = NO;
-                popped = [OAGPXListViewController popToParent];
+//                if ([self hasGpxActiveTargetType] && _activeTargetObj)
+//                    ((OAGPX *)_activeTargetObj).newGpx = NO;
+//                popped = [OAGPXListViewController popToParent];
                 break;
                 
             case OATargetFavorite:

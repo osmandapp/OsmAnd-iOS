@@ -13,6 +13,17 @@
 		0A82ABAA2694D68000ED1F01 /* ic_custom_logo_openplacereviews@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A82ABA82694D67F00ED1F01 /* ic_custom_logo_openplacereviews@3x.png */; };
 		0A8F544D263949FC0020F5CF /* ic_custom_search_categories@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */; };
 		0A8F544E263949FC0020F5CF /* ic_custom_search_categories@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */; };
+		0AA3BB8E26EB540100A9885D /* ic_custom_waypoint@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8626EB53FF00A9885D /* ic_custom_waypoint@3x.png */; };
+		0AA3BB8F26EB540100A9885D /* ic_custom_overview@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8726EB540000A9885D /* ic_custom_overview@3x.png */; };
+		0AA3BB9026EB540100A9885D /* ic_small_map_point@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8826EB540000A9885D /* ic_small_map_point@2x.png */; };
+		0AA3BB9126EB540100A9885D /* ic_custom_appearance@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8926EB540000A9885D /* ic_custom_appearance@2x.png */; };
+		0AA3BB9226EB540100A9885D /* ic_custom_waypoint@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8A26EB540000A9885D /* ic_custom_waypoint@2x.png */; };
+		0AA3BB9326EB540100A9885D /* ic_custom_overview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8B26EB540000A9885D /* ic_custom_overview@2x.png */; };
+		0AA3BB9426EB540100A9885D /* ic_small_map_point@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8C26EB540100A9885D /* ic_small_map_point@3x.png */; };
+		0AA3BB9526EB540100A9885D /* ic_custom_appearance@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8D26EB540100A9885D /* ic_custom_appearance@3x.png */; };
+		0AA3BB9826EBC00200A9885D /* OATrackMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB9726EBC00200A9885D /* OATrackMenuViewController.xib */; };
+		0AA3BB9B26EBD51E00A9885D /* OASegmentsTrackMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB9A26EBD51E00A9885D /* OASegmentsTrackMenuViewController.xib */; };
+		0AC6ECB626EA72240011456D /* OAOverviewTrackMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC6ECB526EA72240011456D /* OAOverviewTrackMenuViewController.xib */; };
 		0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */; };
 		0AD1F3A726CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */; };
 		0AD1F3AA26CC034900EE4DFD /* ic_custom_multi_download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A826CC034800EE4DFD /* ic_custom_multi_download@3x.png */; };
@@ -962,6 +973,10 @@
 		8AFC2C2524334A4E0095BA9F /* map_location_car_bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2BBC24334A4E0095BA9F /* map_location_car_bottom@2x.png */; };
 		8AFC2C2724334A4E0095BA9F /* map_location_default_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2BBD24334A4E0095BA9F /* map_location_default_top@2x.png */; };
 		A166C762BD53085527F42840 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4812C702BBB164A7AE849D7E /* libPods-OsmAnd Maps.a */; };
+		B0D61B91977188ED34EB63FD /* OATabBar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61B0861142A49F45480E4 /* OATabBar.mm */; };
+		B0D61CD7B0385BEA7F1FA654 /* OAOverviewTrackMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61722E2511E480468587A /* OAOverviewTrackMenuViewController.mm */; };
+		B0D61E8FD46170A168C47967 /* OASegmentsTrackMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D6136193A0B8DF32B2B057 /* OASegmentsTrackMenuViewController.mm */; };
+		B0D61F02E8A3B7B2733E2C18 /* OATrackMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D617376B44864C22144EAE /* OATrackMenuViewController.mm */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB27270119CB38D7007C5613 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FC19CB38D7007C5613 /* fonts */; };
 		BB27270419CB38D7007C5613 /* stubs in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FD19CB38D7007C5613 /* stubs */; };
@@ -2773,6 +2788,17 @@
 		0A82ABA82694D67F00ED1F01 /* ic_custom_logo_openplacereviews@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_openplacereviews@3x.png"; path = "Resources/Icons/ic_custom_logo_openplacereviews@3x.png"; sourceTree = "<group>"; };
 		0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@2x.png"; path = "Resources/Icons/ic_custom_search_categories@2x.png"; sourceTree = "<group>"; };
 		0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@3x.png"; path = "Resources/Icons/ic_custom_search_categories@3x.png"; sourceTree = "<group>"; };
+		0AA3BB8626EB53FF00A9885D /* ic_custom_waypoint@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_waypoint@3x.png"; path = "Resources/Icons/ic_custom_waypoint@3x.png"; sourceTree = "<group>"; };
+		0AA3BB8726EB540000A9885D /* ic_custom_overview@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_overview@3x.png"; path = "Resources/Icons/ic_custom_overview@3x.png"; sourceTree = "<group>"; };
+		0AA3BB8826EB540000A9885D /* ic_small_map_point@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_map_point@2x.png"; path = "Resources/Icons/ic_small_map_point@2x.png"; sourceTree = "<group>"; };
+		0AA3BB8926EB540000A9885D /* ic_custom_appearance@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_appearance@2x.png"; path = "Resources/Icons/ic_custom_appearance@2x.png"; sourceTree = "<group>"; };
+		0AA3BB8A26EB540000A9885D /* ic_custom_waypoint@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_waypoint@2x.png"; path = "Resources/Icons/ic_custom_waypoint@2x.png"; sourceTree = "<group>"; };
+		0AA3BB8B26EB540000A9885D /* ic_custom_overview@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_overview@2x.png"; path = "Resources/Icons/ic_custom_overview@2x.png"; sourceTree = "<group>"; };
+		0AA3BB8C26EB540100A9885D /* ic_small_map_point@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_map_point@3x.png"; path = "Resources/Icons/ic_small_map_point@3x.png"; sourceTree = "<group>"; };
+		0AA3BB8D26EB540100A9885D /* ic_custom_appearance@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_appearance@3x.png"; path = "Resources/Icons/ic_custom_appearance@3x.png"; sourceTree = "<group>"; };
+		0AA3BB9726EBC00200A9885D /* OATrackMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATrackMenuViewController.xib; sourceTree = "<group>"; };
+		0AA3BB9A26EBD51E00A9885D /* OASegmentsTrackMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASegmentsTrackMenuViewController.xib; sourceTree = "<group>"; };
+		0AC6ECB526EA72240011456D /* OAOverviewTrackMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOverviewTrackMenuViewController.xib; sourceTree = "<group>"; };
 		0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMultipleResourceViewController.h; sourceTree = "<group>"; };
 		0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMultipleResourceViewController.mm; sourceTree = "<group>"; };
 		0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMultipleResourceViewController.xib; sourceTree = "<group>"; };
@@ -3764,6 +3790,14 @@
 		8AFC2BBA24334A4E0095BA9F /* map_location_default_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_default_center@3x.png"; sourceTree = "<group>"; };
 		8AFC2BBC24334A4E0095BA9F /* map_location_car_bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_car_bottom@2x.png"; sourceTree = "<group>"; };
 		8AFC2BBD24334A4E0095BA9F /* map_location_default_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_default_top@2x.png"; sourceTree = "<group>"; };
+		B0D611DA900E1AED89C73712 /* OASegmentsTrackMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASegmentsTrackMenuViewController.h; sourceTree = "<group>"; };
+		B0D6136193A0B8DF32B2B057 /* OASegmentsTrackMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASegmentsTrackMenuViewController.mm; sourceTree = "<group>"; };
+		B0D61722E2511E480468587A /* OAOverviewTrackMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOverviewTrackMenuViewController.mm; sourceTree = "<group>"; };
+		B0D617376B44864C22144EAE /* OATrackMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackMenuViewController.mm; sourceTree = "<group>"; };
+		B0D619894A15E2D75C4CBC96 /* OATrackMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATrackMenuViewController.h; sourceTree = "<group>"; };
+		B0D61A452B91B3527AEFB412 /* OAOverviewTrackMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOverviewTrackMenuViewController.h; sourceTree = "<group>"; };
+		B0D61B0861142A49F45480E4 /* OATabBar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATabBar.mm; sourceTree = "<group>"; };
+		B0D61B47A8DC2B61A93099E6 /* OATabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATabBar.h; sourceTree = "<group>"; };
 		BB098CF41793F7FD00423944 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BB098CF61793F7FD00423944 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BB098CF81793F7FD00423944 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -6455,6 +6489,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AC993FB26E903E50004181F /* TrackMenu */ = {
+			isa = PBXGroup;
+			children = (
+				B0D61722E2511E480468587A /* OAOverviewTrackMenuViewController.mm */,
+				B0D61A452B91B3527AEFB412 /* OAOverviewTrackMenuViewController.h */,
+				0AC6ECB526EA72240011456D /* OAOverviewTrackMenuViewController.xib */,
+				B0D617376B44864C22144EAE /* OATrackMenuViewController.mm */,
+				B0D619894A15E2D75C4CBC96 /* OATrackMenuViewController.h */,
+				0AA3BB9726EBC00200A9885D /* OATrackMenuViewController.xib */,
+				B0D6136193A0B8DF32B2B057 /* OASegmentsTrackMenuViewController.mm */,
+				B0D611DA900E1AED89C73712 /* OASegmentsTrackMenuViewController.h */,
+				0AA3BB9A26EBD51E00A9885D /* OASegmentsTrackMenuViewController.xib */,
+			);
+			path = TrackMenu;
+			sourceTree = "<group>";
+		};
 		0FBE528DFE22A018C3A5A9D9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -6495,6 +6545,14 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				0AA3BB8926EB540000A9885D /* ic_custom_appearance@2x.png */,
+				0AA3BB8D26EB540100A9885D /* ic_custom_appearance@3x.png */,
+				0AA3BB8B26EB540000A9885D /* ic_custom_overview@2x.png */,
+				0AA3BB8726EB540000A9885D /* ic_custom_overview@3x.png */,
+				0AA3BB8A26EB540000A9885D /* ic_custom_waypoint@2x.png */,
+				0AA3BB8626EB53FF00A9885D /* ic_custom_waypoint@3x.png */,
+				0AA3BB8826EB540000A9885D /* ic_small_map_point@2x.png */,
+				0AA3BB8C26EB540100A9885D /* ic_small_map_point@3x.png */,
 				DAC849B726CFAD9900018091 /* img_download_map_colored@2x.png */,
 				DAC849B826CFAD9900018091 /* img_download_map_colored@3x.png */,
 				DA32847C26CC01BA0036BA73 /* export_items@2x.png */,
@@ -10150,6 +10208,7 @@
 		DA5A7E6B26C563A400F274C7 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
+				0AC993FB26E903E50004181F /* TrackMenu */,
 				DA5A7E7726C563A400F274C7 /* OAEditGPXColorViewController.h */,
 				DA5A7E8526C563A400F274C7 /* OAEditGPXColorViewController.m */,
 				DA5A7E7426C563A400F274C7 /* OAEditGPXColorViewController.xib */,
@@ -10918,6 +10977,8 @@
 				DA5A804826C563A500F274C7 /* UITableViewCell+getTableView.h */,
 				DA5A806426C563A500F274C7 /* UITableViewCell+getTableView.m */,
 				DA5A807326C563A500F274C7 /* XibViews */,
+				B0D61B0861142A49F45480E4 /* OATabBar.mm */,
+				B0D61B47A8DC2B61A93099E6 /* OATabBar.h */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -11758,6 +11819,7 @@
 				DA5A83E326C563A800F274C7 /* OAEditColorViewController.xib in Resources */,
 				842432571AEFDD1900925821 /* widget_monitoring_rec_big_day@2x.png in Resources */,
 				DA1341D8243DC5A90039D214 /* ic_action_truck@2x.png in Resources */,
+				0AA3BB9426EB540100A9885D /* ic_small_map_point@3x.png in Resources */,
 				DA1BC13A233F9B01004DAF78 /* ic_custom_marker@2x.png in Resources */,
 				3A2D89221A28D69800511A5C /* icon_edit_active@2x.png in Resources */,
 				0A8F544D263949FC0020F5CF /* ic_custom_search_categories@2x.png in Resources */,
@@ -11901,6 +11963,7 @@
 				8477772F1FAA260E00CA8C1F /* widget_intermediate_night@3x.png in Resources */,
 				333168C22507804400266047 /* ic_custom_logo_wikidata@2x.png in Resources */,
 				0CBDD0AF245038ED00C94BC2 /* map_marker_direction_arrow_p3_shadow@2x.png in Resources */,
+				0AA3BB9226EB540100A9885D /* ic_custom_waypoint@2x.png in Resources */,
 				DA5A82D126C563A800F274C7 /* OAIconsTableViewCell.xib in Resources */,
 				1571CE2024ADEE0F00083F92 /* ic_custom_direction_compass@3x.png in Resources */,
 				847777561FAA260E00CA8C1F /* widget_max_speed_night@3x.png in Resources */,
@@ -12036,6 +12099,7 @@
 				DABA3DDD22686E72005BB777 /* ic_tabbar_osm_edits@2x.png in Resources */,
 				158A381E257E65CD0038056A /* img_text_openstreetmap@3x.png in Resources */,
 				DA5A82C926C563A800F274C7 /* OALabelCollectionViewCell.xib in Resources */,
+				0AA3BB8F26EB540100A9885D /* ic_custom_overview@3x.png in Resources */,
 				DAF3459122F4482C009E2EB6 /* ic_action_osm_note@3x.png in Resources */,
 				8458BB851B0F1E7A00738132 /* ic_phone_number@3x.png in Resources */,
 				0CF58548244072EC0081238D /* widget_marker_triangle_pin_2@3x.png in Resources */,
@@ -12051,6 +12115,7 @@
 				8444999F1AAA1FFA00ACA20D /* img_app_purchase_1@3x.png in Resources */,
 				15BDDEA024DAF3BE00079C83 /* ic_custom_reset@2x.png in Resources */,
 				84EE2DAF1AFBF840007C9A94 /* icon_info@3x.png in Resources */,
+				0AA3BB9326EB540100A9885D /* ic_custom_overview@2x.png in Resources */,
 				32A001732610B43700ABE0D2 /* widget_coordinates_longitude_east_night@3x.png in Resources */,
 				DAFE4D3322169B4D009731CA /* map_osm_note_unresolved@3x.png in Resources */,
 				DA0C641821245B4500B2A350 /* et_tts.js in Resources */,
@@ -12561,6 +12626,7 @@
 				8458BB821B0F1E7A00738132 /* ic_phone_number@2x.png in Resources */,
 				DAEC05EF2296C6C500045298 /* ic_custom_mapillary_color_logo@3x.png in Resources */,
 				841503071DEED6AE007FAC50 /* ic_location_off@2x.png in Resources */,
+				0AA3BB9B26EBD51E00A9885D /* OASegmentsTrackMenuViewController.xib in Resources */,
 				8441CB431B1370580033AC95 /* delete_items@3x.png in Resources */,
 				323BD9072628850400D255ED /* ic_bg_point_circle_center@3x.png in Resources */,
 				32A001822610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png in Resources */,
@@ -12577,6 +12643,7 @@
 				8A1CF1E5227ED4A70083A04E /* warnings_tunnel@3x.png in Resources */,
 				84C102731FBDC10800D3E5EE /* warnings_stop@3x.png in Resources */,
 				DA68B3CC233B821A00F5ACCC /* ic_profile_car@3x.png in Resources */,
+				0AA3BB8E26EB540100A9885D /* ic_custom_waypoint@3x.png in Resources */,
 				DAF7A50621786BED00FB94FD /* widget_ruler_circle_hide_night@2x.png in Resources */,
 				8412222D1B395D2C00F80F9E /* ic_travel_time@3x.png in Resources */,
 				DA5A837B26C563A800F274C7 /* OADestinationItemsListViewController.xib in Resources */,
@@ -12660,6 +12727,7 @@
 				843394BF1FF54A19006205A5 /* list_intermediate@3x.png in Resources */,
 				8476E2861F6C1EEC00EC274F /* map_car_location_night@2x.png in Resources */,
 				DA45DA68230EE05A0083DFA2 /* img_mapstyle_default@2x.png in Resources */,
+				0AA3BB9826EBC00200A9885D /* OATrackMenuViewController.xib in Resources */,
 				DAF3455322F4482B009E2EB6 /* ic_custom_compound_action_remove@2x.png in Resources */,
 				8476E2E21F6C1EEC00EC274F /* map_pedestrian_location@3x.png in Resources */,
 				DAA4EDF1240E85B800F16073 /* ic_custom_download@2x.png in Resources */,
@@ -12790,6 +12858,7 @@
 				DA5A846926C563A900F274C7 /* OADiscountToolbarViewController.xib in Resources */,
 				0CF58550244072EC0081238D /* widget_marker_triangle_pin_1@3x.png in Resources */,
 				32B50ABE26BBDA0D002E6C92 /* ic_custom_shop_bag@3x.png in Resources */,
+				0AA3BB9126EB540100A9885D /* ic_custom_appearance@2x.png in Resources */,
 				842432001AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
 				DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */,
 				DA5A837326C563A800F274C7 /* OARouteSettingsBaseViewController.xib in Resources */,
@@ -12944,6 +13013,7 @@
 				158A381D257E65CD0038056A /* img_logo_osmand_120pt@3x.png in Resources */,
 				84B6E0882073CF55002CA15B /* ic_action_route_subsequent_destination@2x.png in Resources */,
 				DA9C623F221C46590087E140 /* ic_custom_osm_edits@3x.png in Resources */,
+				0AA3BB9026EB540100A9885D /* ic_small_map_point@2x.png in Resources */,
 				8476E29A1F6C1EEC00EC274F /* map_car_location@3x.png in Resources */,
 				DAB985B1212423710081F8F8 /* en-gb_tts.js in Resources */,
 				158A3818257E65CD0038056A /* img_text_openstreetmap.png in Resources */,
@@ -12985,6 +13055,7 @@
 				8AE0196E24505C8B00DA5C33 /* ic_custom_parking@2x.png in Resources */,
 				DA8EE7F2246D446400069A6D /* ic_action_slope@3x.png in Resources */,
 				DA84E85621D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */,
+				0AA3BB9526EB540100A9885D /* ic_custom_appearance@3x.png in Resources */,
 				8476E2981F6C1EEC00EC274F /* map_car_location@2x.png in Resources */,
 				84E4420A1AF8A07500F87542 /* parking_position@3x.png in Resources */,
 				84C102741FBDC10800D3E5EE /* warnings_toll_bridge@2x.png in Resources */,
@@ -13224,6 +13295,7 @@
 				848A14D91B223A4C00A31AE7 /* bg_title@3x.png in Resources */,
 				8AFC2C1124334A4E0095BA9F /* map_location_car_bottom@3x.png in Resources */,
 				DA5A851B26C563A900F274C7 /* OATargetPointView.xib in Resources */,
+				0AC6ECB626EA72240011456D /* OAOverviewTrackMenuViewController.xib in Resources */,
 				0CEF2C2024B717CC00BAAC4B /* ic_action_inline_skates@2x.png in Resources */,
 				1571CE3124ADEE3B00083F92 /* ic_custom_angular_unit@3x.png in Resources */,
 				84C41E4F1AB8600D0089EABB /* position_track_map_mode_button@2x.png in Resources */,
@@ -14168,6 +14240,10 @@
 				DA5A837F26C563A800F274C7 /* OADirectionsCardController.mm in Sources */,
 				DA5A839D26C563A800F274C7 /* OAMapPanelViewController.mm in Sources */,
 				DA5A825B26C563A700F274C7 /* OAOsmEditingSettingsViewController.mm in Sources */,
+				B0D61CD7B0385BEA7F1FA654 /* OAOverviewTrackMenuViewController.mm in Sources */,
+				B0D61F02E8A3B7B2733E2C18 /* OATrackMenuViewController.mm in Sources */,
+				B0D61E8FD46170A168C47967 /* OASegmentsTrackMenuViewController.mm in Sources */,
+				B0D61B91977188ED34EB63FD /* OATabBar.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

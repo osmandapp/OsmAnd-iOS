@@ -256,17 +256,14 @@ static const NSString *kPopulationTag = @"population";
                 skip = YES;
             }
         }
-        else
+        else if (needIntFormatting)
         {
-            if (needIntFormatting)
-            {
-                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-                [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-                [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSInteger population = [value integerValue];
-                if (population > 0)
-                    value = [numberFormatter stringFromNumber:@(population)];
-            }
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+            [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            NSInteger population = [value integerValue];
+            if (population > 0)
+                value = [numberFormatter stringFromNumber:@(population)];
         }
         
         if ([key hasPrefix:@"wiki_lang"])

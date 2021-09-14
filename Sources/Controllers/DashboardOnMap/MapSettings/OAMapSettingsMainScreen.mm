@@ -674,8 +674,6 @@ static BOOL _isRoutesGroupOpen = NO;
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapillaryFilter];
     else if ([item[@"key"] isEqualToString:@"wikipedia_layer"] && !isPromoButton)
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWikipedia];
-    else if ([item[@"key"] hasPrefix:@"routes_"])
-        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenRoutes param:[item[@"key"] substringFromIndex:7]];
     else if ([item[@"key"] isEqualToString:@"map_mode"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
     else if ([item[@"key"] isEqualToString:@"map_magnifier"])
@@ -693,7 +691,14 @@ static BOOL _isRoutesGroupOpen = NO;
     else if ([item[@"key"] isEqualToString:@"map_language"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenLanguage];
 
-    if ([item[@"key"] isEqualToString:@"map_type"])
+    if ([item[@"key"] hasPrefix:@"routes_"])
+    {
+        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
+        NSString *parameterName = [item[@"key"] substringFromIndex:7];
+        if ([hasParameters containsObject:parameterName])
+            mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenRoutes param:parameterName];
+    }
+    else if ([item[@"key"] isEqualToString:@"map_type"])
     {
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
         ((OAMapSettingsMapTypeScreen *) mapSettingsViewController.screenObj).delegate = self;

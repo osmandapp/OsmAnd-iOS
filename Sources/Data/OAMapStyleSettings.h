@@ -8,15 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *HORSE_ROUTES_ATTR = @"horseRoutes";
-static NSString *PISTE_ROUTES_ATTR = @"pisteRoutes";
-static NSString *ALPINE_HIKING_ATTR = @"alpineHiking";
-static NSString *SHOW_MTB_ROUTES_ATTR = @"showMtbRoutes";
-static NSString *SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
-static NSString *WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
-static NSString *HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
-static NSString *CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
-static NSString *TRAVEL_ROUTES = @"travel_routes";
+static NSString * const HORSE_ROUTES_ATTR = @"horseRoutes";
+static NSString * const PISTE_ROUTES_ATTR = @"pisteRoutes";
+static NSString * const ALPINE_HIKING_ATTR = @"alpineHiking";
+static NSString * const SHOW_MTB_ROUTES_ATTR = @"showMtbRoutes";
+static NSString * const SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
+static NSString * const WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
+static NSString * const HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
+static NSString * const CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
+static NSString * const TRAVEL_ROUTES = @"travel_routes";
 
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {

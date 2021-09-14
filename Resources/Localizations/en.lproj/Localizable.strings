@@ -116,7 +116,7 @@
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinates format";
-"coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings > ";
+"coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings";
 "coordinates" = "Coordinates";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";

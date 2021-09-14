@@ -129,7 +129,7 @@
     UIFont *textFont = [UIFont systemFontOfSize:13];
     NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:url attributes:@{NSFontAttributeName : textFont}];
     [str addAttribute:NSLinkAttributeName value:url range: NSMakeRange(0, str.length)];
-    text = [text stringByAppendingString:@""];
+    text = [text stringByAppendingString:@" > "];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
                                                                                 attributes:@{NSFontAttributeName : textFont,
                                                                                             NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];

@@ -533,7 +533,7 @@
 "shared_string_from" = "от";
 "get_started" = "Начать";
 "location_not_found" = "Не удалось определить местоположение";
-"no_inet_connection_desc_map" = "Требуется загрузить карты";
+"no_inet_connection_desc_map" = "Требуется загрузить карты.";
 "try_again" = "Попробуйте снова";
 "search_location" = "Определение местоположения…";
 "poi_filter_closest_poi" = "Ближайшие POI";
@@ -593,7 +593,7 @@
 "speak_poi" = "Ближайшие POI";
 "speak_pedestrian" = "Пешеходные переходы";
 "shared_string_never" = "Никогда";
-"general_settings_2" = "Основные настройки";
+"general_settings_2" = "Общие настройки";
 "speed_limit_exceed" = "Допустимое превышение скорости";
 "speed_limit_exceed_message" = "Выберите допустимое значение превышения скорости выше которого вы получите голосовое предупреждение.";
 "wake_on_voice" = "Автовключение экрана перед поворотом";

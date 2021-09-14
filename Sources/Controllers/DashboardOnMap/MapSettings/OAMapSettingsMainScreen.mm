@@ -170,7 +170,7 @@ static BOOL _isRoutesGroupOpen = NO;
     _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:kRoutesCategory sorted:NO] : [NSArray array];
     if (_routesParameters.count > 0)
     {
-        NSArray<NSString *> *orderedNames = @[kShowCycleRoutesAttr, kShowMtbRoutesAttr, kHikingRoutesOsmcAttr, kAlpineHikingAttr, kPisteRoutesAttr, kHorseRoutesAttr, kWhiteWaterSportsAttr, kTravelRoutesAttr];
+        NSArray<NSString *> *orderedNames = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, ALPINE_HIKING_ATTR, PISTE_ROUTES_ATTR, HORSE_ROUTES_ATTR, WHITE_WATER_SPORTS_ATTR, TRAVEL_ROUTES];
         _routesParameters = [_routesParameters sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
             return [@([orderedNames indexOfObject:obj1.name]) compare:@([orderedNames indexOfObject:obj2.name])];
         }];
@@ -180,10 +180,10 @@ static BOOL _isRoutesGroupOpen = NO;
         group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
         group.isOpen = NO;
 
-        NSArray<NSString *> *hasParameters = @[kShowCycleRoutesAttr, kHikingRoutesOsmcAttr, kTravelRoutesAttr];
+        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
         for (OAMapStyleParameter *routeParameter in _routesParameters)
         {
-            if ([routeParameter.name isEqualToString:kCycleNodeNetworkRoutesAttr])
+            if ([routeParameter.name isEqualToString:CYCLE_NODE_NETWORK_ROUTES_ATTR])
                 continue;
 
             [group.groupItems addObject:@{
@@ -394,17 +394,17 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (NSString *)getImageForParameterOrCategory:(NSString *)paramName
 {
-    if ([paramName isEqualToString:kShowCycleRoutesAttr] || [paramName isEqualToString:kShowMtbRoutesAttr])
+    if ([paramName isEqualToString:SHOW_CYCLE_ROUTES_ATTR] || [paramName isEqualToString:SHOW_MTB_ROUTES_ATTR])
         return @"ic_action_bicycle_dark";
-    else if([paramName isEqualToString:kWhiteWaterSportsAttr])
+    else if([paramName isEqualToString:WHITE_WATER_SPORTS_ATTR])
         return @"ic_action_kayak";
-    else if([paramName isEqualToString:kHorseRoutesAttr])
+    else if([paramName isEqualToString:HORSE_ROUTES_ATTR])
         return @"ic_action_horse";
-    else if([paramName isEqualToString:kHikingRoutesOsmcAttr] || [paramName isEqualToString:kAlpineHikingAttr])
+    else if([paramName isEqualToString:HIKING_ROUTES_OSMC_ATTR] || [paramName isEqualToString:ALPINE_HIKING_ATTR])
         return @"ic_action_trekking_dark";
-    else if([paramName isEqualToString:kPisteRoutesAttr])
+    else if([paramName isEqualToString:PISTE_ROUTES_ATTR])
         return @"ic_action_skiing";
-    else if([paramName isEqualToString:kTravelRoutesAttr])
+    else if([paramName isEqualToString:TRAVEL_ROUTES])
         return @"mm_routes";
     else if([paramName isEqualToString:kRoadStyleCategory])
         return @"ic_custom_road_style";
@@ -450,7 +450,7 @@ static BOOL _isRoutesGroupOpen = NO;
     if ([key hasPrefix:@"routes_"])
     {
         NSString *routesValue = _routesParameters[index].value;
-        return routesValue.length > 0 ? [key hasSuffix:kHikingRoutesOsmcAttr] ? ![routesValue isEqualToString:@"disabled"] : [routesValue isEqualToString:@"true"] : NO;
+        return routesValue.length > 0 ? [key hasSuffix:HIKING_ROUTES_OSMC_ATTR] ? ![routesValue isEqualToString:@"disabled"] : [routesValue isEqualToString:@"true"] : NO;
     }
 
     return YES;
@@ -900,7 +900,7 @@ static BOOL _isRoutesGroupOpen = NO;
 {
     if (![source.resourceId hasPrefix:@"skimap"])
     {
-        OAMapStyleParameter *ski = [_styleSettings getParameter:kPisteRoutesAttr];
+        OAMapStyleParameter *ski = [_styleSettings getParameter:PISTE_ROUTES_ATTR];
         ski.value = @"false";
         [_styleSettings save:ski];
     }

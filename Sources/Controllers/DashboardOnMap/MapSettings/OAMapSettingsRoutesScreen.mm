@@ -57,12 +57,12 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         _routesParameter = [_styleSettings getParameter:param];
         settingsScreen = EMapSettingsScreenRoutes;
 
-        if ([param isEqualToString:kShowCycleRoutesAttr])
+        if ([param isEqualToString:SHOW_CYCLE_ROUTES_ATTR])
         {
             _routesSettingType = ERoutesSettingCycle;
             _routesEnabled = _routesParameter.storedValue.length > 0 && [_routesParameter.storedValue isEqualToString:@"true"];
         }
-        else if ([param isEqualToString:kHikingRoutesOsmcAttr])
+        else if ([param isEqualToString:HIKING_ROUTES_OSMC_ATTR])
         {
             _routesSettingType = ERoutesSettingHiking;
             _routesEnabled = _routesParameter.storedValue.length > 0 && ![_routesParameter.storedValue isEqualToString:@"disabled"];
@@ -169,7 +169,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
     if (_routesSettingType == ERoutesSettingCycle)
     {
-        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:kCycleNodeNetworkRoutesAttr];
+        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
         return [cycleNode.value isEqualToString:@"true"] ? [self getRenderingStringPropertyDescription:@"walkingRoutesOSMCNodes"] : OALocalizedString(@"walking_route_osmc_description");
     }
 
@@ -254,7 +254,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             BOOL selected;
             if (_routesSettingType == ERoutesSettingCycle)
             {
-                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:kCycleNodeNetworkRoutesAttr];
+                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
                 selected = [cycleNode.value isEqualToString:item[@"value"]];
             }
             else
@@ -361,7 +361,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             if (_routesSettingType == ERoutesSettingCycle)
             {
                 _routesParameter.value = @"false";
-                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:kCycleNodeNetworkRoutesAttr];
+                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
                 cycleNode.value = @"false";
                 [_styleSettings save:cycleNode];
             }
@@ -386,7 +386,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     NSString *value = [self getItem:indexPath][@"value"];
     if (_routesSettingType == ERoutesSettingCycle)
     {
-        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:kCycleNodeNetworkRoutesAttr];
+        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
         if (![cycleNode.value isEqualToString:value])
         {
             cycleNode.value = value;

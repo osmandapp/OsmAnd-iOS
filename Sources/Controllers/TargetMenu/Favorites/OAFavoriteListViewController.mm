@@ -194,7 +194,7 @@ static UIViewController *parentController;
 
 
 
-            itemData.distance = [OAOsmAndFormatter.instance getFormattedDistance:distance];
+            itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
             itemData.distanceMeters = distance;
             CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
             itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);

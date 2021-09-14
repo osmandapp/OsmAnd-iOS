@@ -224,7 +224,7 @@
         CGPoint b = linePoints[1].CGPointValue;
         const auto dist = OsmAnd::Utilities::distance(startCoord.longitude, startCoord.latitude, finishCoord.longitude, finishCoord.latitude);
         double angle = [OAMapUtils getAngleBetween:b end:a];
-        NSString *distance = [OAOsmAndFormatter.instance getFormattedDistance:dist];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
         
         [self drawDistance:ctx distance:distance angle:angle start:b end:a];
     }

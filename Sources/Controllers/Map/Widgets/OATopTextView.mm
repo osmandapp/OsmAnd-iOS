@@ -347,12 +347,12 @@
         
         NSString *distStr = nil;
         if (dist > 0)
-            distStr = [OAOsmAndFormatter.instance getFormattedDistance:dist];
+            distStr = [OAOsmAndFormatter getFormattedDistance:dist];
         
         NSString *deviationStr = nil;
         UIImage *deviationImg = nil;
         if (dist > 0 && pnt.deviationDistance > 0) {
-            deviationStr = [OAOsmAndFormatter.instance getFormattedDistance:pnt.deviationDistance];
+            deviationStr = [OAOsmAndFormatter getFormattedDistance:pnt.deviationDistance];
             UIColor *color = UIColorFromRGB(color_osmand_orange);
             if (pnt.deviationDirectionRight)
                 deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];

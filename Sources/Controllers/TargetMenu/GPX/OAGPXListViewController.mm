@@ -553,7 +553,7 @@ static UIViewController *parentController;
         if (_recCell)
         {
             _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
-            _recCell.descriptionDistanceView.text = [OAOsmAndFormatter.instance getFormattedDistance:_savingHelper.distance];
+            _recCell.descriptionDistanceView.text = [OAOsmAndFormatter getFormattedDistance:_savingHelper.distance];
             [_recCell setNeedsLayout];
             
             if (!_recCell.btnSaveGpx.enabled && ([_savingHelper hasData]))
@@ -660,8 +660,8 @@ static UIViewController *parentController;
                 @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"title" : [track getName],
                 @"track" : track.gpx,
-                @"distance" : [OAOsmAndFormatter.instance getFormattedDistance:track.gpx.totalDistance],
-                @"time" : [OAOsmAndFormatter.instance getFormattedTimeInterval:track.gpx.timeSpan shortFormat:YES],
+                @"distance" : [OAOsmAndFormatter getFormattedDistance:track.gpx.totalDistance],
+                @"time" : [OAOsmAndFormatter getFormattedTimeInterval:track.gpx.timeSpan shortFormat:YES],
                 @"wpt" : [NSString stringWithFormat:@"%d", track.gpx.wptPoints],
                 @"key" : @"track_group"
             }];
@@ -1018,7 +1018,7 @@ static UIViewController *parentController;
                 [_recCell.textView setText:OALocalizedString(@"track_recording_name")];
                 
                 _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
-                _recCell.descriptionDistanceView.text = [OAOsmAndFormatter.instance getFormattedDistance:_savingHelper.distance];
+                _recCell.descriptionDistanceView.text = [OAOsmAndFormatter getFormattedDistance:_savingHelper.distance];
                 
                 [_recCell.btnStartStopRec removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];

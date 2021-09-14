@@ -40,17 +40,15 @@
 #define WEST @"W"
 #define EAST @"E"
 
-+ (OAOsmAndFormatter *)instance;
-
-- (double) calculateRoundedDist:(double)baseMetersDist;
-- (NSString *) getFormattedDistance:(float) meters;
-- (NSString *) getFormattedAlarmInfoDistance:(float)meters;
-- (NSString *) getFormattedAzimuth:(float)bearing;
-- (NSString *) getFormattedTimeHM:(NSTimeInterval)timeInterval;
-- (NSString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
-- (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive;
-- (NSString *) getFormattedSpeed:(float) metersperseconds;
-- (NSString *) getFormattedAlt:(double) alt;
-- (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
++ (double) calculateRoundedDist:(double)baseMetersDist;
++ (NSString *) getFormattedDistance:(float) meters;
++ (NSString *) getFormattedAlarmInfoDistance:(float)meters;
++ (NSString *) getFormattedAzimuth:(float)bearing;
++ (NSString *) getFormattedTimeHM:(NSTimeInterval)timeInterval;
++ (NSString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
++ (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive;
++ (NSString *) getFormattedSpeed:(float) metersperseconds;
++ (NSString *) getFormattedAlt:(double) alt;
++ (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
 
 @end

@@ -125,8 +125,8 @@
                     @"type" : [OAGPXRouteRoundCell getCellIdentifier],
                     @"track" : gpx,
                     @"title" : [gpx getNiceTitle],
-                    @"distance" : [OAOsmAndFormatter.instance getFormattedDistance:gpx.totalDistance],
-                    @"time" : [OAOsmAndFormatter.instance getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+                    @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
+                    @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
                     @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
                     @"key" : @"gpx_route"
                 }];

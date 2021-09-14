@@ -870,7 +870,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)updateSearchNearMapCenterLabel
 {
-    _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [OAOsmAndFormatter.instance getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
+    _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [OAOsmAndFormatter getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
 }
 
 - (void) adjustViewPosition:(UIView *)view byHeight:(CGFloat)height
@@ -1706,8 +1706,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     int minimalSearchRadius = [self.searchUICore getMinimalSearchRadius:self.searchUICore.getPhrase];
     if ([self.searchUICore isSearchMoreAvailable:self.searchUICore.getPhrase] && minimalSearchRadius != INT_MAX)
     {
-        double rd = [OAOsmAndFormatter.instance calculateRoundedDist:minimalSearchRadius];
-        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"), [OAOsmAndFormatter.instance getFormattedDistance:rd]];
+        double rd = [OAOsmAndFormatter calculateRoundedDist:minimalSearchRadius];
+        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"), [OAOsmAndFormatter getFormattedDistance:rd]];
     }
 
     if (!_paused && !_cancelPrev)

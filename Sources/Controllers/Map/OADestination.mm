@@ -41,7 +41,7 @@
 
 - (NSString *) distanceStr:(double)latitude longitude:(double)longitude
 {
-    return [[OAOsmAndFormatter instance] getFormattedDistance:[self distance:latitude longitude:longitude]];
+    return [OAOsmAndFormatter getFormattedDistance:[self distance:latitude longitude:longitude]];
 }
 
 -(BOOL)isEqual:(id)object

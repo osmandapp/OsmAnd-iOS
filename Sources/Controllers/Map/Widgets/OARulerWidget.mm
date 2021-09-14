@@ -55,7 +55,6 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
-    OAOsmAndFormatter *_formatter;
     OAMapViewController *_mapViewController;
     EOATextSide _textSide;
     double _radius;
@@ -151,7 +150,6 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _settings = [OAAppSettings sharedManager];
     _app = [OsmAndApp instance];
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    _formatter = OAOsmAndFormatter.instance;
 
     _mapDensity = _settings.mapDensity;
     _cachedMapDensity = [_mapDensity get];
@@ -351,7 +349,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _cachedMapDensity = _mapViewController.mapView.currentPixelsToMetersScaleFactor;
     double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
     _mapScaleUnrounded = fullMapScale;
-    _roundedDist = [_formatter calculateRoundedDist:_mapScaleUnrounded];
+    _roundedDist = [OAOsmAndFormatter calculateRoundedDist:_mapScaleUnrounded];
     _radius = _mapScale / _cachedMapDensity / [[UIScreen mainScreen] scale];
     [self updateText];
 }
@@ -362,7 +360,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double maxCircleRadius = _maxRadius;
     int i = 1;
     while ((maxCircleRadius -= _radius) > 0)
-        [_cacheDistances addObject:[_formatter getFormattedDistance:(_roundedDist * i++)]];
+        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:(_roundedDist * i++)]];
 }
 
 - (void) drawCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
@@ -539,7 +537,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         }
         
         NSString *distance = _cacheDistances[circleNumber - 1];
-        NSString *heading = [NSString stringWithFormat:@"%@ %@", [OAOsmAndFormatter.instance getFormattedAzimuth:_cachedHeading], [self getCardinalDirectionForDegrees:_cachedHeading]];
+        NSString *heading = [NSString stringWithFormat:@"%@ %@", [OAOsmAndFormatter getFormattedAzimuth:_cachedHeading], [self getCardinalDirectionForDegrees:_cachedHeading]];
         
         double offset = _textSide == EOATextSideHorizontal ? 5 : 20;
         double drawingTextRadius = radiusLength + offset;
@@ -841,7 +839,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             _cachedViewportScale = viewportScale;
             _cachedHeading = _app.locationServices.lastKnownHeading;
             _mapScaleUnrounded = fullMapScale;
-            _mapScale = [_formatter calculateRoundedDist:_mapScaleUnrounded];
+            _mapScale = [OAOsmAndFormatter calculateRoundedDist:_mapScaleUnrounded];
             _radius = (_mapScale / _cachedMapDensity) / [[UIScreen mainScreen] scale];
             _maxRadius = [self calculateMaxRadiusInPx];
             

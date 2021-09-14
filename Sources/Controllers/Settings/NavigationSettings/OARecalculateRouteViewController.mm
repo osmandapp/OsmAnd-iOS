@@ -67,7 +67,7 @@
     NSMutableArray<NSString *> *arr = [NSMutableArray new];
     for (NSNumber *n in _possibleDistanceValues)
     {
-        [arr addObject:[OAOsmAndFormatter.instance getFormattedDistance:n.doubleValue]];
+        [arr addObject:[OAOsmAndFormatter getFormattedDistance:n.doubleValue]];
     }
     _valueSummaries = arr;
 }
@@ -76,7 +76,7 @@
 {
     double defValue = [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]];
     defValue = defValue == -1 ? _possibleDistanceValues.firstObject.doubleValue : defValue;
-    return [OAOsmAndFormatter.instance getFormattedDistance:defValue];
+    return [OAOsmAndFormatter getFormattedDistance:defValue];
 }
 
 -(void) applyLocalization

@@ -259,7 +259,7 @@
             if (dist == 0)
                 [self refreshLabel:@""];
             else
-                [self refreshLabel:[OAOsmAndFormatter.instance getFormattedDistance:dist]];
+                [self refreshLabel:[OAOsmAndFormatter getFormattedDistance:dist]];
             
             _textView.hidden = _textView.text.length == 0;
             needFrameUpdate = YES;

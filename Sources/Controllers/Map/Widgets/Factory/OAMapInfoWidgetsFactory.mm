@@ -51,7 +51,7 @@
             if (cachedAlt != (int) compAlt)
             {
                 cachedAlt = (int) compAlt;
-                NSString *ds = [OAOsmAndFormatter.instance getFormattedAlt:cachedAlt];
+                NSString *ds = [OAOsmAndFormatter getFormattedAlt:cachedAlt];
                 int ls = [ds indexOf:@" "];
                 if (ls == -1)
                     [altitudeControlWeak setText:ds subtext:nil];
@@ -87,10 +87,10 @@
         if (currentLocation && centerLocation) {
             OAMapViewTrackingUtilities *trackingUtilities = [OAMapViewTrackingUtilities instance];
             if ([trackingUtilities isMapLinkedToLocation]) {
-                [rulerControlWeak setText:[OAOsmAndFormatter.instance getFormattedDistance:0] subtext:nil];
+                [rulerControlWeak setText:[OAOsmAndFormatter getFormattedDistance:0] subtext:nil];
             }
             else {
-                NSString *distance = [OAOsmAndFormatter.instance getFormattedDistance:OsmAnd::Utilities::distance(currentLocation.coordinate.longitude, currentLocation.coordinate.latitude,
+                NSString *distance = [OAOsmAndFormatter getFormattedDistance:OsmAnd::Utilities::distance(currentLocation.coordinate.longitude, currentLocation.coordinate.latitude,
                                                                                                         centerLocation.coordinate.longitude, centerLocation.coordinate.latitude)];
                 NSUInteger ls = [distance rangeOfString:@" " options:NSBackwardsSearch].location;
                 [rulerControlWeak setText:[distance substringToIndex:ls] subtext:[distance substringFromIndex:ls + 1]];

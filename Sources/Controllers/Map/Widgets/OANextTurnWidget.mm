@@ -171,7 +171,7 @@
 - (void) updateDistance
 {
     int deviatePath = _turnDrawable.deviatedFromRoute ? _deviatedPath : _nextTurnDistance;
-    NSString *ds = [OAOsmAndFormatter.instance getFormattedDistance:deviatePath];
+    NSString *ds = [OAOsmAndFormatter getFormattedDistance:deviatePath];
     
     if (ds)
     {

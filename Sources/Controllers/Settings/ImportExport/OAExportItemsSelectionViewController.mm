@@ -334,7 +334,7 @@
 //    } else
     if (appearanceInfo)
     {
-        NSString *dist = [OAOsmAndFormatter.instance getFormattedDistance:appearanceInfo.totalDistance];
+        NSString *dist = [OAOsmAndFormatter getFormattedDistance:appearanceInfo.totalDistance];
         NSString *points = [NSString stringWithFormat:@"%ld %@", appearanceInfo.wptPoints, OALocalizedString(@"shared_string_gpx_points").lowerCase];
         NSString *descr = [NSString stringWithFormat:@"%@ • %@", folder, dist];
         return [NSString stringWithFormat:@"%@, %@", descr, points];

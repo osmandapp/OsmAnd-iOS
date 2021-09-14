@@ -130,7 +130,7 @@
 {
     CLLocation *mapLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
     float dist = [mapLocation distanceFromLocation:roadInfo.location];
-    return [OAOsmAndFormatter.instance getFormattedDistance:dist];
+    return [OAOsmAndFormatter getFormattedDistance:dist];
 }
 
 - (void) setupView

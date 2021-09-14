@@ -85,7 +85,7 @@
         }
         else
         {
-            NSString *ds = [OAOsmAndFormatter.instance getFormattedDistance:_cachedMeters];
+            NSString *ds = [OAOsmAndFormatter getFormattedDistance:_cachedMeters];
             int ls = [ds indexOf:@" "];
             if (ls == -1)
                 [self setText:ds subtext:nil];

@@ -112,8 +112,8 @@
             OAGPXTrackAnalysis *trackAnalysis = self.routingHelper.getTrackAnalysis;
             if (trackAnalysis)
             {
-                _elevationLabel.text = [OAOsmAndFormatter.instance getFormattedAlt:trackAnalysis.maxElevation];
-                _descentLabel.text = [OAOsmAndFormatter.instance getFormattedAlt:trackAnalysis.minElevation];
+                _elevationLabel.text = [OAOsmAndFormatter getFormattedAlt:trackAnalysis.maxElevation];
+                _descentLabel.text = [OAOsmAndFormatter getFormattedAlt:trackAnalysis.minElevation];
             }
         }
     });

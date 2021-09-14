@@ -161,8 +161,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         [existingTracksSection addObject:@{
                 @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"title" : OALocalizedString(@"track_recording_name"),
-                @"distance" : [OAOsmAndFormatter.instance getFormattedDistance:0],
-                @"time" : [OAOsmAndFormatter.instance getFormattedTimeInterval:0 shortFormat:YES],
+                @"distance" : [OAOsmAndFormatter getFormattedDistance:0],
+                @"time" : [OAOsmAndFormatter getFormattedTimeInterval:0 shortFormat:YES],
                 @"wpt" : [NSString stringWithFormat:@"%d", 0],
                 @"key" : @"gpx_route"
             }];
@@ -174,8 +174,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"track" : gpx,
                 @"title" : [gpx getNiceTitle],
-                @"distance" : [OAOsmAndFormatter.instance getFormattedDistance:gpx.totalDistance],
-                @"time" : [OAOsmAndFormatter.instance getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+                @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
+                @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
                 @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
                 @"key" : @"gpx_route"
             }];

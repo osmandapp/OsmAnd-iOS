@@ -54,7 +54,7 @@
     {
         [arr addObject:
             @{
-              @"name" : [OAOsmAndFormatter.instance getFormattedDistance:i.intValue],
+              @"name" : [OAOsmAndFormatter getFormattedDistance:i.intValue],
               @"value" : i,
               @"img" : i.intValue == selectedRadius ? @"menu_cell_selected.png" : @"" }];
     }

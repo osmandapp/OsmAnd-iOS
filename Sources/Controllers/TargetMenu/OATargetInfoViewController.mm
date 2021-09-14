@@ -175,7 +175,7 @@
         }
         if (nearbyTransportRoutes.count > 0)
         {
-            NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter.instance getFormattedDistance:kShowStopsRadiusMeters]];
+            NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
             OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;

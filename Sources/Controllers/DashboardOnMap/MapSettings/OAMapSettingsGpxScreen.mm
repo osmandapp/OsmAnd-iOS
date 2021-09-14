@@ -104,7 +104,7 @@
         if (cell)
         {
             [cell.textView setText:OALocalizedString(@"track_recording_name")];
-            [cell.descriptionDistanceView setText:[OAOsmAndFormatter.instance getFormattedDistance:helper.distance]];
+            [cell.descriptionDistanceView setText:[OAOsmAndFormatter getFormattedDistance:helper.distance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", helper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
             if (_settings.mapSettingShowRecordingTrack.get)
@@ -119,7 +119,7 @@
         {
             OAGPX* item = [gpxList objectAtIndex:indexPath.row - (hasCurrentTrack ? 1 : 0)];
             [cell.textView setText:[item getNiceTitle]];
-            [cell.descriptionDistanceView setText:[OAOsmAndFormatter.instance getFormattedDistance:item.totalDistance]];
+            [cell.descriptionDistanceView setText:[OAOsmAndFormatter getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
             NSArray *visible = _settings.mapSettingVisibleGpx.get;

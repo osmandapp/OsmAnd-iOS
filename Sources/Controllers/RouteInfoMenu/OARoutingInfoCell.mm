@@ -95,16 +95,16 @@
     }
     else
     {
-        _distanceLabel.text = [[OAOsmAndFormatter instance] getFormattedDistance:[_routingHelper getLeftDistance]];
-        _timeLabel.text = [[OAOsmAndFormatter instance] getFormattedTimeInterval:[_routingHelper getLeftTime] shortFormat:NO];
+        _distanceLabel.text = [OAOsmAndFormatter getFormattedDistance:[_routingHelper getLeftDistance]];
+        _timeLabel.text = [OAOsmAndFormatter getFormattedTimeInterval:[_routingHelper getLeftTime] shortFormat:NO];
     }
 }
 
 - (NSString *) getTurnDescription:(OARouteDirectionInfo *)ri
 {
-    if (![[ri getDescriptionRoutePart] hasSuffix:[[OAOsmAndFormatter instance] getFormattedDistance:ri.distance]])
+    if (![[ri getDescriptionRoutePart] hasSuffix:[OAOsmAndFormatter getFormattedDistance:ri.distance]])
     {
-        return [NSString stringWithFormat:@"%d. %@ %@", (_directionInfo + 1), [ri getDescriptionRoutePart],[[OAOsmAndFormatter instance] getFormattedDistance:ri.distance]];
+        return [NSString stringWithFormat:@"%d. %@ %@", (_directionInfo + 1), [ri getDescriptionRoutePart],[OAOsmAndFormatter getFormattedDistance:ri.distance]];
     }
     else
     {

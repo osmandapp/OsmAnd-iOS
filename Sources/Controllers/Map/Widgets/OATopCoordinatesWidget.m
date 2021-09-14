@@ -195,7 +195,7 @@
                     _lonImageView.hidden = NO;
                     _verticalSeparator.hidden = NO;
                     
-                    NSString *coordinatesString = [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:format];
+                    NSString *coordinatesString = [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:format];
                     NSArray<NSString *> *coordinates = [coordinatesString componentsSeparatedByString:@","];
                     latText = coordinates[0];
                     lonText = [coordinates[1] trim];

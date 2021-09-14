@@ -188,7 +188,7 @@
             dist += getDistance(first.getLatitude, first.getLongitude, second.getLatitude, second.getLongitude);
         }
     }
-    return [OAOsmAndFormatter.instance getFormattedDistance:dist];
+    return [OAOsmAndFormatter getFormattedDistance:dist];
 }
 
 - (NSString *) getFooterText:(EOARouteBetweenPointsDialogMode)dialogMode

@@ -71,7 +71,7 @@
     
     
     
-    return [OAOsmAndFormatter.instance getFormattedDistance:distance];
+    return [OAOsmAndFormatter getFormattedDistance:distance];
 }
 
 // MARK: - CPListTemplateDelegate

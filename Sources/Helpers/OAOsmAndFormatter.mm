@@ -14,45 +14,48 @@
 #include <GeographicLib/GeoCoords.hpp>
 
 @implementation OAOsmAndFormatter
+
++ (NSString *) unitsKm
 {
-    NSString *_unitsKm;
-    NSString *_unitsm;
-    NSString *_unitsMi;
-    NSString *_unitsYd;
-    NSString *_unitsFt;
-    NSString *_unitsNm;
-    NSString *_unitsKmh;
-    NSString *_unitsMph;
+    return OALocalizedString(@"units_km");
 }
 
-+ (OAOsmAndFormatter*) instance
++ (NSString *) unitsm
 {
-    static OAOsmAndFormatter *_instance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _instance = [[OAOsmAndFormatter alloc] init];
-    });
-    return _instance;
+    return OALocalizedString(@"units_m");
 }
 
-- (instancetype)init
++ (NSString *) unitsMi
 {
-    self = [super init];
-    if (self) {
-        // Init units localization
-        _unitsKm = OALocalizedString(@"units_km");
-        _unitsm = OALocalizedString(@"units_m");
-        _unitsMi = OALocalizedString(@"units_mi");
-        _unitsYd = OALocalizedString(@"units_yd");
-        _unitsFt = OALocalizedString(@"units_ft");
-        _unitsNm = OALocalizedString(@"units_nm");
-        _unitsKmh = OALocalizedString(@"units_kmh");
-        _unitsMph = OALocalizedString(@"units_mph");
-    }
-    return self;
+    return OALocalizedString(@"units_mi");
 }
 
-- (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
++ (NSString *) unitsYd
+{
+    return OALocalizedString(@"units_yd");
+}
+
++ (NSString *) unitsFt
+{
+    return OALocalizedString(@"units_ft");
+}
+
++ (NSString *) unitsNm
+{
+    return OALocalizedString(@"units_nm");
+}
+
++ (NSString *) unitsKmh
+{
+    return OALocalizedString(@"units_kmh");
+}
+
++ (NSString *) unitsMph
+{
+    return OALocalizedString(@"units_mph");
+}
+
++ (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
 {
     int hours, minutes, seconds;
     [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
@@ -64,7 +67,7 @@
     return time;
 }
 
-- (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat
++ (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat
 {
     int hours, minutes, seconds;
     [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
@@ -98,15 +101,15 @@
     return time;
 }
 
-- (NSString *) getFormattedAlarmInfoDistance:(float)meters
++ (NSString *) getFormattedAlarmInfoDistance:(float)meters
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     BOOL kmAndMeters = [settings.metricSystem get] == KILOMETERS_AND_METERS;
     float mainUnitInMeters = kmAndMeters ? METERS_IN_KILOMETER : METERS_IN_ONE_MILE;
-    return [NSString stringWithFormat:@"%.1f %@", meters / mainUnitInMeters, kmAndMeters ? _unitsKm : _unitsMi];
+    return [NSString stringWithFormat:@"%.1f %@", meters / mainUnitInMeters, kmAndMeters ? [self unitsKm] : [self unitsMi]];
 }
 
-- (NSString *) getFormattedAzimuth:(float)bearing
++ (NSString *) getFormattedAzimuth:(float)bearing
 {
     while (bearing < -180.0)
         bearing += 360;
@@ -135,7 +138,7 @@
     }
 }
 
-- (NSString *) getFormattedDistance:(float)meters
++ (NSString *) getFormattedDistance:(float)meters
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
@@ -144,17 +147,17 @@
     float mainUnitInMeters;
     if (mc == KILOMETERS_AND_METERS)
     {
-        mainUnitStr = _unitsKm;
+        mainUnitStr = [self unitsKm];
         mainUnitInMeters = METERS_IN_KILOMETER;
     }
     else if (mc == NAUTICAL_MILES)
     {
-        mainUnitStr = _unitsNm;
+        mainUnitStr = [self unitsNm];
         mainUnitInMeters = METERS_IN_ONE_NAUTICALMILE;
     }
     else
     {
-        mainUnitStr = _unitsMi;
+        mainUnitStr = [self unitsMi];
         mainUnitInMeters = METERS_IN_ONE_MILE;
     }
     
@@ -194,23 +197,23 @@
     {
         if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES)
         {
-            return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
+            return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), [self unitsm]];
         }
         else if (mc == MILES_AND_FEET)
         {
             int feet = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
-            return [NSString stringWithFormat:@"%d %@", feet, _unitsFt];
+            return [NSString stringWithFormat:@"%d %@", feet, [self unitsFt]];
         }
         else if (mc == MILES_AND_YARDS)
         {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
-            return [NSString stringWithFormat:@"%d %@", yards, _unitsYd];
+            return [NSString stringWithFormat:@"%d %@", yards, [self unitsYd]];
         }
-        return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
+        return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), [self unitsm]];
     }
 }
 
-- (NSString *) getMilesFormattedStringWithMeters:(float)meters mainUnitInMeters:(float)mainUnitInMeters mainUnitStr:(NSString *)mainUnitStr
++ (NSString *) getMilesFormattedStringWithMeters:(float)meters mainUnitInMeters:(float)mainUnitInMeters mainUnitStr:(NSString *)mainUnitStr
 {
     float num = meters / mainUnitInMeters;
     NSString *numStr = [NSString stringWithFormat:@"%.2f", num];
@@ -219,7 +222,7 @@
     return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
 }
 
-- (BOOL) isCleanValue:(float)meters inUnits:(float)unitsInOneMeter
++ (BOOL) isCleanValue:(float)meters inUnits:(float)unitsInOneMeter
 {
     if ( int(meters) % int(METERS_IN_ONE_NAUTICALMILE) == 0)
         return NO;
@@ -227,45 +230,45 @@
     return (int((meters * unitsInOneMeter) * 100) % 100) < 1;
 }
 
-- (NSString *) getFormattedAlt:(double) alt
++ (NSString *) getFormattedAlt:(double) alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     if ([settings.metricSystem get] == KILOMETERS_AND_METERS) {
-        return [NSString stringWithFormat:@"%d %@", ((int) (alt + 0.5)), _unitsm];
+        return [NSString stringWithFormat:@"%d %@", ((int) (alt + 0.5)), [self unitsm]];
     } else {
-        return [NSString stringWithFormat:@"%d %@", ((int) (alt * FOOTS_IN_ONE_METER + 0.5)), _unitsFt];
+        return [NSString stringWithFormat:@"%d %@", ((int) (alt * FOOTS_IN_ONE_METER + 0.5)), [self unitsFt]];
     }
 }
 
-- (NSString *) getFormattedSpeed:(float) metersperseconds
++ (NSString *) getFormattedSpeed:(float) metersperseconds
 {
     return [self getFormattedSpeed:metersperseconds drive:NO];
 }
 
-- (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive
++ (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
     if ([settings.metricSystem get] == KILOMETERS_AND_METERS) {
         if (kmh >= 10 || drive) {
             // case of car
-            return [NSString stringWithFormat:@"%d %@", ((int) round(kmh)), _unitsKmh];
+            return [NSString stringWithFormat:@"%d %@", ((int) round(kmh)), [self unitsKmh]];
         }
         int kmh10 = (int) (kmh * 10.0f);
         // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
-        return [NSString stringWithFormat:@"%g %@", (kmh10 / 10.0f), _unitsKmh];
+        return [NSString stringWithFormat:@"%g %@", (kmh10 / 10.0f), [self unitsKmh]];
     } else {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
         if (mph >= 10) {
-            return [NSString stringWithFormat:@"%d %@", ((int) round(mph)), _unitsMph];
+            return [NSString stringWithFormat:@"%d %@", ((int) round(mph)), [self unitsMph]];
         } else {
             int mph10 = (int) (mph * 10.0f);
-            return [NSString stringWithFormat:@"%g %@", (mph10 / 10.0f), _unitsMph];
+            return [NSString stringWithFormat:@"%g %@", (mph10 / 10.0f), [self unitsMph]];
         }
     }
 }
 
-- (double) calculateRoundedDist:(double)baseMetersDist
++ (double) calculateRoundedDist:(double)baseMetersDist
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
@@ -329,7 +332,7 @@
     return roundDist;
 }
 
-- (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat
++ (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat
 {
     NSMutableString *result = [NSMutableString new];
     
@@ -376,7 +379,7 @@
     return [NSString stringWithString:result];
 }
 
-- (NSString *) formatCoordinate:(double)coordinate outputType:(NSInteger)outputType
++ (NSString *) formatCoordinate:(double)coordinate outputType:(NSInteger)outputType
 {
     if (coordinate < -180.0 || coordinate > 180.0 || isnan(coordinate))
     {
@@ -433,7 +436,7 @@
     return [NSString stringWithString:result];
 }
 
-- (double) formatCoordinate:(double)coordinate text:(NSMutableString *)text delimiter:(NSString *)delimiter
++ (double) formatCoordinate:(double)coordinate text:(NSMutableString *)text delimiter:(NSString *)delimiter
 {
     int deg = (int) floor(coordinate);
     if (deg < 10)

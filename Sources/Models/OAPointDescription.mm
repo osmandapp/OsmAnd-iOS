@@ -155,14 +155,14 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSInteger f = [settings.settingGeoFormat get];
-    return [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:f];
+    return [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:f];
 }
 
 + (NSString *) getLocationNamePlain:(double)lat lon:(double)lon
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSInteger f = [settings.settingGeoFormat get];
-    return [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:f];
+    return [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:f];
 }
 
 + (NSDictionary <NSNumber *, NSString *> *) getLocationData:(double) lat lon:(double)lon
@@ -170,12 +170,12 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     MutableOrderedDictionary<NSNumber *, NSString *> *results = [[MutableOrderedDictionary alloc] init];
         
-    [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES_SHORT] forKey:@(FORMAT_DEGREES_SHORT)];
-    [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES] forKey:@(FORMAT_DEGREES)];
-    [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES] forKey:@(FORMAT_MINUTES)];
-    [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS] forKey:@(FORMAT_SECONDS)];
-    [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM] forKey:@(FORMAT_UTM)];
-    [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC] forKey:@(FORMAT_OLC)];
+    [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES_SHORT] forKey:@(FORMAT_DEGREES_SHORT)];
+    [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES] forKey:@(FORMAT_DEGREES)];
+    [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES] forKey:@(FORMAT_MINUTES)];
+    [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS] forKey:@(FORMAT_SECONDS)];
+    [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM] forKey:@(FORMAT_UTM)];
+    [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC] forKey:@(FORMAT_OLC)];
     
     float zoom = [OARootViewController instance].mapPanel.mapViewController.getMapZoom;
     NSString *url = [NSString stringWithFormat:@"https://osmand.net/go?lat=%f&lon=%f&z=%f", lat, lon, zoom];
@@ -184,15 +184,15 @@
     NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get]];
     
     if (f == MAP_GEO_UTM_FORMAT)
-        [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM] forKey:@(POINT_LOCATION_LIST_HEADER)];
+        [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM] forKey:@(POINT_LOCATION_LIST_HEADER)];
     else if (f == MAP_GEO_OLC_FORMAT)
-        [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC] forKey:@(POINT_LOCATION_LIST_HEADER)];
+        [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC] forKey:@(POINT_LOCATION_LIST_HEADER)];
     else if (f == FORMAT_DEGREES)
-        [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES] forKey:@(POINT_LOCATION_LIST_HEADER)];
+        [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES] forKey:@(POINT_LOCATION_LIST_HEADER)];
     else if (f == FORMAT_MINUTES)
-        [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES] forKey:@(POINT_LOCATION_LIST_HEADER)];
+        [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES] forKey:@(POINT_LOCATION_LIST_HEADER)];
     else if (f == FORMAT_SECONDS)
-        [results setObject:[OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS] forKey:@(POINT_LOCATION_LIST_HEADER)];
+        [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS] forKey:@(POINT_LOCATION_LIST_HEADER)];
     return results;
 }
 

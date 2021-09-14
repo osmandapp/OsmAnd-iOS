@@ -59,35 +59,35 @@
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_DEGREES],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_DEGREES]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_MINUTES],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_MINUTES]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_SECONDS],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_SECONDS]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_UTM_FORMAT],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_UTM_FORMAT]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_OLC_FORMAT],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter.instance getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_OLC_FORMAT]
     }];
 }

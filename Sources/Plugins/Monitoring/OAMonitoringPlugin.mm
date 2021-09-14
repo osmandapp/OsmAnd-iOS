@@ -143,7 +143,7 @@
         if (dist > 0)
         {
             last = pluginWeak.recHelper.lastTimeUpdated;
-            NSString *ds = [OAOsmAndFormatter.instance getFormattedDistance:dist];
+            NSString *ds = [OAOsmAndFormatter getFormattedDistance:dist];
             int ls = [ds indexOf:@" "];
             if (ls == -1)
             {

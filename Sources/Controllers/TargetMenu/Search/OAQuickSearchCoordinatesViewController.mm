@@ -64,8 +64,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 @interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, OAQuickSearchCoordinateFormatsDelegate>
 
-@property (strong, nonatomic) IBOutlet UIView *toolbarView;
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIView *toolbarView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (weak) UITextView *tagTextView;
 
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     CLLocation *_currentLatLon;
     CLLocation *_additionalUtmLatLon;
     NSInteger _currentFormat;
-    NSMutableArray *_controlsSectionData;
+    NSArray *_controlsSectionData;
     NSArray *_searchResultSectionData;
     NSString *_latStr;
     NSString *_lonStr;
@@ -173,9 +173,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) updateControllsSectionCells
 {
-    _controlsSectionData = [NSMutableArray array];
+    NSMutableArray *result = [NSMutableArray array];
     
-    [_controlsSectionData addObject:@{
+    [result addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : _formatStr,
@@ -183,52 +183,54 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     if (_currentFormat == MAP_GEO_OLC_FORMAT)
     {
-        [_controlsSectionData addObject:@{
+        [result addObject:@{
             @"type" : [OACoodinateSearchCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_olc_short"),
             @"value" : _olcStr,
-            @"tag" : [NSNumber numberWithInteger:EOAQuickSearchCoordinatesTextFieldOlc],
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldOlc),
         }];
     }
     else if (_currentFormat == MAP_GEO_UTM_FORMAT)
     {
-        [_controlsSectionData addObject:@{
+        [result addObject:@{
             @"type" : [OACoodinateSearchCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_northing"),
             @"value" : _northingStr,
-            @"tag" : [NSNumber numberWithInteger:EOAQuickSearchCoordinatesTextFieldNorthing],
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
         }];
         
-        [_controlsSectionData addObject:@{
+        [result addObject:@{
             @"type" : [OACoodinateSearchCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_easting"),
             @"value" : _eastingStr,
-            @"tag" : [NSNumber numberWithInteger:EOAQuickSearchCoordinatesTextFieldEasting],
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldEasting),
         }];
         
-        [_controlsSectionData addObject:@{
+        [result addObject:@{
             @"type" : [OACoodinateSearchCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_zone"),
             @"value" : _zoneStr,
-            @"tag" : [NSNumber numberWithInteger:EOAQuickSearchCoordinatesTextFieldZone],
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
         }];
     }
     else
     {
-        [_controlsSectionData addObject:@{
+        [result addObject:@{
             @"type" : [OACoodinateSearchCell getCellIdentifier],
             @"title" : OALocalizedString(@"longitude"),
             @"value" : _lonStr,
-            @"tag" : [NSNumber numberWithInteger:EOAQuickSearchCoordinatesTextFieldLon],
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldLon),
         }];
         
-        [_controlsSectionData addObject:@{
+        [result addObject:@{
             @"type" : [OACoodinateSearchCell getCellIdentifier],
             @"title" : OALocalizedString(@"latitude"),
             @"value" : _latStr,
-            @"tag" : [NSNumber numberWithInteger:EOAQuickSearchCoordinatesTextFieldLat],
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldLat),
         }];
     }
+    
+    _controlsSectionData = [NSArray arrayWithArray:result];
     
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionControls] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -709,7 +711,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                                                       newLocation.coordinate.latitude,
                                                       _searchLocation.coordinate.longitude, _searchLocation.coordinate.latitude);
         
-    _distanceString = [OAOsmAndFormatter.instance getFormattedDistance:distance];
+    _distanceString = [OAOsmAndFormatter getFormattedDistance:distance];
     CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude]];
     double direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
     _direction = [NSNumber numberWithDouble:direction];

@@ -380,7 +380,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             }
             else
             {
-                NSString *ds = [[OAOsmAndFormatter instance] getFormattedSpeed:cachedSpeed];
+                NSString *ds = [OAOsmAndFormatter getFormattedSpeed:cachedSpeed];
                 int ls = [ds indexOf:@" "];
                 if (ls == -1)
                     [speedControlWeak setText:ds subtext:nil];
@@ -418,7 +418,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             if ([speedControlWeak isUpdateNeeded] || ABS(loc.speed - cachedSpeed) > minDelta)
             {
                 cachedSpeed = loc.speed;
-                NSString *ds = [[OAOsmAndFormatter instance] getFormattedSpeed:cachedSpeed];
+                NSString *ds = [OAOsmAndFormatter getFormattedSpeed:cachedSpeed];
                 int ls = [ds indexOf:@" "];
                 if (ls == -1)
                     [speedControlWeak setText:ds subtext:nil];
@@ -538,7 +538,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         {
             cachedDegrees = b;
             if (b != -1000)
-                [bearingControlWeak setText:[NSString stringWithFormat:@"%@%@", [[OAOsmAndFormatter instance] getFormattedAzimuth:b], relative ? @"" : @" M"] subtext:nil];
+                [bearingControlWeak setText:[NSString stringWithFormat:@"%@%@", [OAOsmAndFormatter getFormattedAzimuth:b], relative ? @"" : @" M"] subtext:nil];
             else
                 [bearingControlWeak setText:nil subtext:nil];
             

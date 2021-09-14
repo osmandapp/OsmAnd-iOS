@@ -79,7 +79,7 @@
     
     NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSString *dist = [OAOsmAndFormatter.instance getFormattedDistance:[_routingHelper getLeftDistance]];
+    NSString *dist = [OAOsmAndFormatter getFormattedDistance:[_routingHelper getLeftDistance]];
     NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
     NSAttributedString *time = [self getFormattedTimeInterval:[_routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
 

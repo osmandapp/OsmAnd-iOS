@@ -189,7 +189,7 @@
                 else
                     locImgId = @"warnings_tunnel";
 
-                bottomText = [OAOsmAndFormatter.instance getFormattedAlarmInfoDistance:alarm.floatValue];
+                bottomText = [OAOsmAndFormatter getFormattedAlarmInfoDistance:alarm.floatValue];
             }
             else
             {

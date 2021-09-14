@@ -187,7 +187,7 @@
             {
                 if (searchResult.distRelatedObjectName > 0)
                 {
-                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [self.class getCityTypeStr:city.subType], [OAOsmAndFormatter.instance getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
+                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [self.class getCityTypeStr:city.subType], [OAOsmAndFormatter getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
                 }
                 else
                 {

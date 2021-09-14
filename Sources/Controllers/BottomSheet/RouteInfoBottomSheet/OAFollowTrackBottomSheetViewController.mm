@@ -144,7 +144,6 @@
     OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     OAGPX *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:fileName]];
-    OAOsmAndFormatter *formatter = OAOsmAndFormatter.instance;
     
     NSString *title = [fileName.lastPathComponent stringByDeletingPathExtension];
     BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;
@@ -153,15 +152,15 @@
         title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"some_of"), params.selectedSegment + 1, _gpx.getNonEmptySegmentsCount], title];
     }
     
-    NSString *distance = gpxData ? [formatter getFormattedDistance:gpxData.totalDistance] : @"";
-    NSString *time = gpxData ? [formatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
+    NSString *distance = gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"";
+    NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
     if (isSegment)
     {
         OAGpxTrkSeg *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegments:NO][params.selectedSegment] : nil;
         if (seg)
         {
-            distance = [formatter getFormattedDistance:[OAGPXUIHelper getSegmentDistance:seg]];
-            time = [formatter getFormattedTimeInterval:[OAGPXUIHelper getSegmentTime:seg] shortFormat:YES];
+            distance = [OAOsmAndFormatter getFormattedDistance:[OAGPXUIHelper getSegmentDistance:seg]];
+            time = [OAOsmAndFormatter getFormattedTimeInterval:[OAGPXUIHelper getSegmentTime:seg] shortFormat:YES];
         }
     }
 	

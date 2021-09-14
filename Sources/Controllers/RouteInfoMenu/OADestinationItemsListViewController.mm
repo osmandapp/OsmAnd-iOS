@@ -258,7 +258,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                                                           itemData.destination.longitude, itemData.destination.latitude);
         
         itemData.distance = distance;
-        itemData.distanceStr = [OAOsmAndFormatter.instance getFormattedDistance:distance];
+        itemData.distanceStr = [OAOsmAndFormatter getFormattedDistance:distance];
         CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:itemData.destination.latitude longitude:itemData.destination.longitude]];
         itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
         
@@ -300,7 +300,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         
         
         
-        itemData.distance = [OAOsmAndFormatter.instance getFormattedDistance:distance];
+        itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
         itemData.distanceMeters = distance;
         CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
         itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);

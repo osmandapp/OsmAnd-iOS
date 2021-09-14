@@ -114,7 +114,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) enterRoutePreviewMode
 {
-    [OAOsmAndFormatter.instance getFormattedTimeHM:_routingHelper.getLeftTime];
+    [OAOsmAndFormatter getFormattedTimeHM:_routingHelper.getLeftTime];
     CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
     
     OATargetPointsHelper *targetHelper = OATargetPointsHelper.sharedInstance;
@@ -389,7 +389,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSMeasurement<NSUnitLength *> *) getFormattedDistance:(int)meters
 {
-    NSString *distString = [OAOsmAndFormatter.instance getFormattedDistance:meters];
+    NSString *distString = [OAOsmAndFormatter getFormattedDistance:meters];
     NSArray<NSString *> *components = [distString componentsSeparatedByString:@" "];
     if (components.count == 2)
         return [[NSMeasurement alloc] initWithDoubleValue:components.firstObject.doubleValue unit:[self getUnitByString:components.lastObject]];

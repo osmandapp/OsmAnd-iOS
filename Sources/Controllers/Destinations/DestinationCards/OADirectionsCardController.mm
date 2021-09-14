@@ -176,7 +176,7 @@
                                                           newLocation.coordinate.latitude,
                                                           item.destination.longitude, item.destination.latitude);
         
-        item.distanceStr = [OAOsmAndFormatter.instance getFormattedDistance:distance];
+        item.distanceStr = [OAOsmAndFormatter getFormattedDistance:distance];
         item.distance = distance;
         CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:item.destination.latitude longitude:item.destination.longitude]];
         item.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);

@@ -790,7 +790,7 @@
 
 + (NSString *) appendMeters:(float)value
 {
-    NSString *formattedValue = [[OAOsmAndFormatter instance] getFormattedDistance:value];
+    NSString *formattedValue = [OAOsmAndFormatter getFormattedDistance:value];
     return value == 0.f ? OALocalizedString(@"not_selected") : formattedValue;
 }
 

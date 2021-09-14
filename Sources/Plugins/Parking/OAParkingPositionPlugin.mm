@@ -258,7 +258,7 @@
                     }
                     else
                     {
-                        NSString *ds = [OAOsmAndFormatter.instance getFormattedDistance:cachedMeters];
+                        NSString *ds = [OAOsmAndFormatter getFormattedDistance:cachedMeters];
                         int ls = [ds indexOf:@" "];
                         if (ls == -1)
                             [parkingPlaceControlWeak setText:ds subtext:nil];

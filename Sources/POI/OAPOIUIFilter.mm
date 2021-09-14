@@ -289,9 +289,9 @@
     }
     double val = distanceToSearchValues[distInd].doubleValue;
     if (val >= 1) {
-        return [@" < " stringByAppendingString:[OAOsmAndFormatter.instance getFormattedDistance:(int)val * 1000]];
+        return [@" < " stringByAppendingString:[OAOsmAndFormatter getFormattedDistance:(int)val * 1000]];
     } else {
-        return [@" < " stringByAppendingString:[OAOsmAndFormatter.instance getFormattedDistance:500]];
+        return [@" < " stringByAppendingString:[OAOsmAndFormatter getFormattedDistance:500]];
     }
 }
 

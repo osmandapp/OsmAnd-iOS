@@ -78,14 +78,14 @@
     BOOL needsSeparator = NO;
     if (!isnan(gpx.totalDistance) && gpx.totalDistance > 0)
     {
-        [res appendString:[OAOsmAndFormatter.instance getFormattedDistance:gpx.totalDistance]];
+        [res appendString:[OAOsmAndFormatter getFormattedDistance:gpx.totalDistance]];
         needsSeparator = YES;
     }
     if (!isnan(gpx.timeSpan) && gpx.timeSpan > 0)
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendString:[OAOsmAndFormatter.instance getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
+        [res appendString:[OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
         needsSeparator = YES;
     }
     if (gpx.wptPoints > 0)

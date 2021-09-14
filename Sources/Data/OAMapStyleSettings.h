@@ -8,21 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *HORSE_ROUTES_ATTR = @"horseRoutes";
-static NSString *PISTE_ROUTES_ATTR = @"pisteRoutes";
-static NSString *ALPINE_HIKING_ATTR = @"alpineHiking";
-static NSString *SHOW_MTB_ROUTES_ATTR = @"showMtbRoutes";
-static NSString *SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
-static NSString *WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
-static NSString *HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
-static NSString *CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
-static NSString *TRAVEL_ROUTES = @"travel_routes";
-
-static NSString *ROAD_STYLE_CATEGORY = @"roadStyle";
-static NSString *DETAILS_CATEGORY = @"details";
-static NSString *HIDE_CATEGORY = @"hide";
-static NSString *TRANSPORT_CATEGORY = @"transport";
-static NSString *ROUTES_CATEGORY = @"routes";
+#define kHorseRoutesAttr @"horseRoutes"
+#define kPisteRoutesAttr @"pisteRoutes"
+#define kAlpineHikingAttr @"alpineHiking"
+#define kShowMtbRoutesAttr @"showMtbRoutes"
+#define kShowCycleRoutesAttr @"showCycleRoutes"
+#define kWhiteWaterSportsAttr @"whiteWaterSports"
+#define kHikingRoutesOsmcAttr @"hikingRoutesOSMC"
+#define kCycleNodeNetworkRoutesAttr @"showCycleNodeNetworkRoutes"
+#define kTravelRoutesAttr @"travel_routes"
 
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {

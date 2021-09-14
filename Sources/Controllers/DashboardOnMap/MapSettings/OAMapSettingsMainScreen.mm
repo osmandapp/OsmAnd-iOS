@@ -31,6 +31,12 @@
 #define kContourLinesWidth @"contourWidth"
 #define kContourLinesColorScheme @"contourColorScheme"
 
+#define kRoadStyleCategory @"roadStyle"
+#define kDetailsCategory @"details"
+#define kHideCategory @"hide"
+#define kTransportCategory @"transport"
+#define kRoutesCategory @"routes"
+
 @interface OAMapSettingsMainScreen () <OAAppModeCellDelegate, OAMapTypeDelegate>
 
 @end
@@ -161,21 +167,12 @@ static BOOL _isRoutesGroupOpen = NO;
     }];
 
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
-    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:ROUTES_CATEGORY sorted:NO] : [NSArray array];
+    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:kRoutesCategory sorted:NO] : [NSArray array];
     if (_routesParameters.count > 0)
     {
-        NSArray<NSString *> *orderedNames = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, ALPINE_HIKING_ATTR, PISTE_ROUTES_ATTR, HORSE_ROUTES_ATTR, WHITE_WATER_SPORTS_ATTR, TRAVEL_ROUTES];
+        NSArray<NSString *> *orderedNames = @[kShowCycleRoutesAttr, kShowMtbRoutesAttr, kHikingRoutesOsmcAttr, kAlpineHikingAttr, kPisteRoutesAttr, kHorseRoutesAttr, kWhiteWaterSportsAttr, kTravelRoutesAttr];
         _routesParameters = [_routesParameters sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
-            NSInteger orderValue1 = [orderedNames indexOfObject:obj1.name];
-            NSInteger orderValue2 = [orderedNames indexOfObject:obj2.name];
-            if (orderValue1 != NSNotFound && orderValue2 != NSNotFound)
-            {
-                if (orderValue1 < orderValue2)
-                    return NSOrderedAscending;
-                else if (orderValue1 > orderValue2)
-                    return NSOrderedDescending;
-            }
-            return NSOrderedSame;
+            return [@([orderedNames indexOfObject:obj1.name]) compare:@([orderedNames indexOfObject:obj2.name])];
         }];
 
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
@@ -183,10 +180,10 @@ static BOOL _isRoutesGroupOpen = NO;
         group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
         group.isOpen = NO;
 
-        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
+        NSArray<NSString *> *hasParameters = @[kShowCycleRoutesAttr, kHikingRoutesOsmcAttr, kTravelRoutesAttr];
         for (OAMapStyleParameter *routeParameter in _routesParameters)
         {
-            if ([routeParameter.name isEqualToString:CYCLE_NODE_NETWORK_ROUTES_ATTR])
+            if ([routeParameter.name isEqualToString:kCycleNodeNetworkRoutesAttr])
                 continue;
 
             [group.groupItems addObject:@{
@@ -256,7 +253,7 @@ static BOOL _isRoutesGroupOpen = NO;
 
         for (NSString *cName in [self getAllCategories])
         {
-            BOOL isTransport = [[cName lowercaseString] isEqualToString:TRANSPORT_CATEGORY];
+            BOOL isTransport = [[cName lowercaseString] isEqualToString:kTransportCategory];
             [mapStyleSectionData addObject:@{
                     @"name": [_styleSettings getCategoryTitle:cName],
                     @"image": [self getImageForParameterOrCategory:cName],
@@ -369,7 +366,7 @@ static BOOL _isRoutesGroupOpen = NO;
     NSMutableArray *res = [NSMutableArray array];
     for (NSString *cName in [_styleSettings getAllCategories])
     {
-        if (![[cName lowercaseString] isEqualToString:@"ui_hidden"] && ![[cName lowercaseString] isEqualToString:ROUTES_CATEGORY])
+        if (![[cName lowercaseString] isEqualToString:@"ui_hidden"] && ![[cName lowercaseString] isEqualToString:kRoutesCategory])
             [res addObject:cName];
     }
     return res;
@@ -397,25 +394,25 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (NSString *)getImageForParameterOrCategory:(NSString *)paramName
 {
-    if ([paramName isEqualToString:SHOW_CYCLE_ROUTES_ATTR] || [paramName isEqualToString:SHOW_MTB_ROUTES_ATTR])
+    if ([paramName isEqualToString:kShowCycleRoutesAttr] || [paramName isEqualToString:kShowMtbRoutesAttr])
         return @"ic_action_bicycle_dark";
-    else if([paramName isEqualToString:WHITE_WATER_SPORTS_ATTR])
+    else if([paramName isEqualToString:kWhiteWaterSportsAttr])
         return @"ic_action_kayak";
-    else if([paramName isEqualToString:HORSE_ROUTES_ATTR])
+    else if([paramName isEqualToString:kHorseRoutesAttr])
         return @"ic_action_horse";
-    else if([paramName isEqualToString:HIKING_ROUTES_OSMC_ATTR] || [paramName isEqualToString:ALPINE_HIKING_ATTR])
+    else if([paramName isEqualToString:kHikingRoutesOsmcAttr] || [paramName isEqualToString:kAlpineHikingAttr])
         return @"ic_action_trekking_dark";
-    else if([paramName isEqualToString:PISTE_ROUTES_ATTR])
+    else if([paramName isEqualToString:kPisteRoutesAttr])
         return @"ic_action_skiing";
-    else if([paramName isEqualToString:TRAVEL_ROUTES])
+    else if([paramName isEqualToString:kTravelRoutesAttr])
         return @"mm_routes";
-    else if([paramName isEqualToString:ROAD_STYLE_CATEGORY])
+    else if([paramName isEqualToString:kRoadStyleCategory])
         return @"ic_custom_road_style";
-    else if([paramName isEqualToString:DETAILS_CATEGORY])
+    else if([paramName isEqualToString:kDetailsCategory])
         return @"ic_custom_overlay_map";
-    else if([paramName isEqualToString:HIDE_CATEGORY])
+    else if([paramName isEqualToString:kHideCategory])
         return @"ic_custom_hide";
-    else if([paramName isEqualToString:TRANSPORT_CATEGORY])
+    else if([paramName isEqualToString:kTransportCategory])
         return @"ic_custom_transport_bus";
 
     return @"";
@@ -440,7 +437,7 @@ static BOOL _isRoutesGroupOpen = NO;
     else if ([key isEqualToString:@"tracks"])
         return _settings.mapSettingVisibleGpx.get.count > 0;
     else if ([key isEqualToString:@"category_transport"])
-        return [_styleSettings isCategoryEnabled:TRANSPORT_CATEGORY];
+        return [_styleSettings isCategoryEnabled:kTransportCategory];
     else if ([key isEqualToString:@"contour_lines_layer"])
         return ![[_styleSettings getParameter:@"contourLines"].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
@@ -453,7 +450,7 @@ static BOOL _isRoutesGroupOpen = NO;
     if ([key hasPrefix:@"routes_"])
     {
         NSString *routesValue = _routesParameters[index].value;
-        return routesValue.length > 0 ? [key hasSuffix:HIKING_ROUTES_OSMC_ATTR] ? ![routesValue isEqualToString:@"disabled"] : [routesValue isEqualToString:@"true"] : NO;
+        return routesValue.length > 0 ? [key hasSuffix:kHikingRoutesOsmcAttr] ? ![routesValue isEqualToString:@"disabled"] : [routesValue isEqualToString:@"true"] : NO;
     }
 
     return YES;
@@ -606,12 +603,15 @@ static BOOL _isRoutesGroupOpen = NO;
             cell = (OAPromoButtonCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., 66.0, 0., 0.);
+            cell.actionButton.titleLabel.numberOfLines = 1;
+            cell.actionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+            cell.actionButton.titleLabel.lineBreakMode = NSLineBreakByClipping;
         }
         if (cell)
         {
             cell.textView.text = item[@"name"];
             cell.descView.text = item[@"desc"];
-            cell.actionButton.titleLabel.text = OALocalizedString(@"purchase_get");
+            [cell.actionButton setTitle:OALocalizedString(@"purchase_get") forState:UIControlStateNormal];
             [cell.actionButton setTitleColor:[UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];
             cell.iconView.image = [UIImage imageNamed:item[@"image"]];
 
@@ -674,12 +674,8 @@ static BOOL _isRoutesGroupOpen = NO;
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapillaryFilter];
     else if ([item[@"key"] isEqualToString:@"wikipedia_layer"] && !isPromoButton)
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWikipedia];
-    else if ([item[@"key"] isEqualToString:[NSString stringWithFormat:@"routes_%@", SHOW_CYCLE_ROUTES_ATTR]])
-        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCycleRoutes];
-    else if ([item[@"key"] isEqualToString:[NSString stringWithFormat:@"routes_%@", HIKING_ROUTES_OSMC_ATTR]])
-        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenHikingRoutes];
-    else if ([item[@"key"] isEqualToString:[NSString stringWithFormat:@"routes_%@", TRAVEL_ROUTES]])
-        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTravelRoutes];
+    else if ([item[@"key"] hasPrefix:@"routes_"])
+        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenRoutes param:[item[@"key"] substringFromIndex:7]];
     else if ([item[@"key"] isEqualToString:@"map_mode"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
     else if ([item[@"key"] isEqualToString:@"map_magnifier"])
@@ -789,10 +785,10 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (void)transportChanged:(BOOL)isOn
 {
-    [_styleSettings setCategoryEnabled:isOn categoryName:TRANSPORT_CATEGORY];
-    if (isOn && ![_styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
+    [_styleSettings setCategoryEnabled:isOn categoryName:kTransportCategory];
+    if (isOn && ![_styleSettings isCategoryEnabled:kTransportCategory])
     {
-        OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:TRANSPORT_CATEGORY];
+        OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:kTransportCategory];
         [transportSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     }
 }
@@ -904,7 +900,7 @@ static BOOL _isRoutesGroupOpen = NO;
 {
     if (![source.resourceId hasPrefix:@"skimap"])
     {
-        OAMapStyleParameter *ski = [_styleSettings getParameter:PISTE_ROUTES_ATTR];
+        OAMapStyleParameter *ski = [_styleSettings getParameter:kPisteRoutesAttr];
         ski.value = @"false";
         [_styleSettings save:ski];
     }

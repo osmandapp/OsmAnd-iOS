@@ -11,7 +11,6 @@
 #import "OAFirstMapillaryBottomSheetViewController.h"
 #import "OABaseSettingsListViewController.h"
 #import "OARootViewController.h"
-#import "OAPluginPopupViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAIconTitleValueCell.h"
 #import "OAIconTextDividerSwitchCell.h"
@@ -930,34 +929,12 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (void)productPurchased:(NSNotification *)notification
 {
-    NSString *identifier = notification.object;
-    OAProduct *product = nil;
-    if (identifier)
-        product = [_iapHelper product:identifier];
-
-    if (product)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_iapHelper enableProduct:product.productIdentifier];
-            [self setupView];
-        });
-    }
+    [self setupView];
 }
 
 - (void)productsRestored:(NSNotification *)notification
 {
-    NSString *identifier = notification.object;
-    OAProduct *product = nil;
-    if (identifier)
-        product = [_iapHelper product:identifier];
-
-    if (product)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_iapHelper enableProduct:product.productIdentifier];
-            [self setupView];
-        });
-    }
+    [self setupView];
 }
 
 @end

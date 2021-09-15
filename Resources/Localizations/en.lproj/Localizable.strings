@@ -2288,3 +2288,11 @@
 • Fixed issue with importing GPX files with uppercase extensions\n
 • Fixed issue with \"Follow track\" menu\n
 • Fixed import of OBF files\n";
+
+"ios_release_4_1" = "• New screen for searching by coordinates in different formats\n
+• Improved coordinate search in OLC format\n
+• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n
+• Added ability to easily load maps of all regions of the country with a couple of clicks\n
+• Added contour lines in feet (You need to re-download files)\n
+• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load the map if the region is viewed without a map\n
+• New appearance of buttons on the map and added ability to change map zoom by double-tapping and swiping\n";

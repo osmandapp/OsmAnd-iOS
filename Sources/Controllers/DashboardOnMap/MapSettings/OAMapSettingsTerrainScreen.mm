@@ -957,8 +957,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
-    [self updateDownloadingCell:cell indexPath:indexPath];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+        [self updateDownloadingCell:cell indexPath:indexPath];
+    });
 }
 
 - (void) updateDownloadingCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath

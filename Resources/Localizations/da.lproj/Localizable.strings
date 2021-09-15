@@ -51,7 +51,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Gennemse kort";
 "m_style_car" = "Kørsel";
-"m_style_bicycle" = "Cykling";
+"m_style_bicycle" = "Cykle";
 "map_settings_map" = "Kort";
 "map_settings_show" = "Vis på kort";
 "map_settings_day" = "Dag";
@@ -226,7 +226,7 @@
 "gpx_uphldownhl" = "Op-/nedstigning";
 "track_recording" = "Optagelse af spor";
 "track_continue_rec_q" = "Fortsæt optagelsen?";
-"m_style_walk" = "Gå";
+"m_style_walk" = "Fodgænger";
 "map_settings_type" = "Korttype";
 "map_mode" = "Korttilstand";
 "map_settings_over" = "Overlejret";
@@ -639,7 +639,7 @@
 "speak_pedestrian" = "Fodgængerovergange";
 "int_seconds" = "sekunder";
 "shared_string_never" = "Aldrig";
-"general_settings_2" = "Generelle indstillinger";
+"general_settings_2" = "Globale indstillinger";
 "general_settings_descr" = "Konfigurer visning og generelle indstillinger";
 "routing_settings_descr" = "Indstillinger for navigation";
 "auto_zoom_none" = "Ingen automatisk zoom";
@@ -767,7 +767,7 @@
 "cancel_navigation" = "Stop navigation";
 "transport_routes" = "Ruter";
 "transport_nearby_routes_within" = "Nærliggende ruter indenfor";
-"transport_stop" = "Stoppested";
+"transport_stop" = "Stop";
 "transport_nearby_routes" = "Indenfor";
 "route_stops_before" = "%d stop før";
 "shared_string_previous" = "Forrige";
@@ -1003,7 +1003,7 @@
 "osm_notes_online_layer" = "OSM-noter (online)";
 "my_places" = "Foretrukne";
 "osm_edits_basic" = "Grundlæggende";
-"osm_edits_advanced" = "Avanceret";
+"osm_edits_advanced" = "Udvidet";
 "osm_edits_all" = "Alle redigeringer";
 "osm_edits_poi" = "IP-redigeringer";
 "osm_edits_notes" = "Noter";
@@ -1019,7 +1019,7 @@
 "map_widget_intermediate_time" = "Mellemliggende tid";
 "shared_string_time" = "Tid";
 "shared_string_distance" = "Afstand";
-"amenity" = "Faciliteter";
+"amenity" = "Facilitet";
 "shared_string_milliradians" = "Milliradianer";
 "angular_units" = "Enhed for vinkelmåling";
 "angular_units_descr" = "Ændre hvad azimuth er måles i.";
@@ -1607,7 +1607,7 @@
 "res_expire_warning" = "Udløbstiden skal være et tal mellem 0 og 10.000.000";
 "res_source_format" = "Kildeformat";
 "res_source_sqlite" = "SQLiteDB fil";
-"res_source_one_per_tile" = "En billedfil pr. flise";
+"res_source_one_per_tile" = "En billedfil pr. brik";
 "res_zoom_invalid_value" = "Zoomværdier skal være inden for området 1 - 22";
 "online_raster_map" = "Online rasterkort";
 "offline_raster_map" = "Offline rasterkort";
@@ -1620,7 +1620,7 @@
 "online_raster_maps" = "Online rasterkort";
 "import_raster_map_success" = "Raster-kort er blevet importeret. Åbn Kort-Indstillinger, og aktiver via Over-/Underlejring";
 "import_raster_map_failed" = "Import af raster-kort mislykkedes";
-"res_online_source_cache_alert" = "Anvendelse af disse ændringer rydder cache-data for denne flisekilde";
+"res_online_source_cache_alert" = "Hvis du anvender disseændringer, ryddes de lagrede data for denne brikkilde";
 "map_settings_show_slider_map" = "Vis skyder på kortet";
 "map_settings_add_online_source" = "Tilføj onlinekilde";
 "map_settings_hide_polygons" = "Skjul polygoner";
@@ -1775,7 +1775,7 @@
 "err_profile_import" = "Fejl ved læsning af elementdata: %@";
 "empty_profile_name_warning" = "Profilnavnet må ikke være tomt.";
 "all_application_profiles" = "Alle programprofiler";
-"ui_customization_descr" = "Skuffeelementer, genvejsmenu";
+"ui_customization_descr" = "Skuffeelementer, kontekstmenu";
 "ui_customization" = "Tilpasning af brugergrænseflade";
 "profile_appearance_descr" = "Ikon, farve og navn";
 "profile_settings" = "Profilindstillinger";
@@ -1871,7 +1871,7 @@
 "shared_string_preparing" = "Forbereder";
 "shared_string_deselect_all" = "Fravælg alle";
 "shared_string_continue" = "Fortsæt";
-"nothing_found_empty" = "Fandt ikke noget";
+"nothing_found_empty" = "Fandt intet";
 "nav_type_direct_to" = "Direkte-til-punkt";
 "nav_type_osmand" = "OsmAnd (offlinerouting)";
 "nav_type_descr" = "Vælg, hvordan en rute skal beregnes for profilen";
@@ -1936,7 +1936,7 @@
 "shared_string_gpx_points" = "Punkter";
 "search_history" = "Søgehistorik";
 "search_preogress" = "Søger…";
-"reverse_track_dir" = "Omvend GPX-retning";
+"reverse_track_dir" = "Vend spor-retning";
 "shared_string_others" = "Andre";
 "start_of_track" = "Starten af sporet";
 "extra_maps" = "Ekstra kort";
@@ -1990,7 +1990,7 @@
 "carplay_profile_descr" = "Profil, der skal bruges, når der er forbindelse til CarPlay.";
 "carplay_profile" = "CarPlay-profil";
 "carplay_active_message" = "Kort vises via CarPlay";
-"last_used" = "Sidst anvendt";
+"last_used" = "Sidst brugt";
 "favorites_empty" = "Du har ikke gemt nogen favoritpunkter";
 "tracks_empty" = "Din sporliste er tom";
 "map_markers_empty" = "Du har ingen aktive kortmarkører";
@@ -2000,3 +2000,35 @@
 "dialogs_and_notifications_descr" = "Kontroller pop-ups, dialogbokse og notifikationer";
 "road_speeds_descr" = "Disse parametre kan påvirke ruteberegningen.";
 "send_anonymous_data_desc" = "Send til OsmAnd kort-downloadstatistik, vi indsamler ikke placeringsdata eller andre personlige oplysninger.";
+"product_desc_ext_mapillary" = "Online-fotos på gadeniveau for alle. Oplev steder, samarbejd, indfang verden.";
+"added_profiles" = "Tilføjede profiler";
+"shared_string_wifi_only" = "Kun med Wi-Fi";
+"gpxup_private" = "Privat";
+"gpxup_trackable" = "Sporbar";
+"suggested_maps" = "Foreslåede kort";
+"default" = "Standard";
+"download_map_dialog" = "Dialogboksen Hent kort";
+"shared_string_all_languages" = "Alle sprog";
+"navigate_point_zone" = "Zone";
+"threshold_distance" = "Tærskelafstand";
+"navigate_point_northing" = "Nordlig";
+"rendering_value_walkingRoutesOSMC_description" = "Farvelæg ruterne efter deres individuelle lokale farve (hvis de findes på OpenStreetMap) og symbolet for vandreskjoldet.";
+"gpxup_identifiable" = "Identificerbar";
+"suggested_maps_descr" = "Disse kort er nødvendige for udvidelser.";
+"welmode_download_maps" = "Administrer kort";
+"foot" = "fod";
+"product_title_mapillary" = "Mapillary";
+"m" = "m";
+"shared_string_navigation" = "Navigation";
+"app_restart_required" = "Programgenstart kræves for at anvende nogle indstillinger.";
+"navigate_point_easting" = "Østlig";
+"added_profiles_descr" = "Profiler tilføjet af udvidelse";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"wiki_menu_download_descr" = "Yderligere kort er nødvendige for at se Wikipedia Interessepunkter på kortet.";
+"navigate_point_olc" = "Open Location Code (OLC)";
+"contour_lines_hillshades_slope" = "Konturlinjer, bakkeskygger, hældning";
+"explore_wikipedia_offline" = "Udforsk Wikipedia offline.";
+"shared_string_turn_off" = "Sluk";
+"context_menu_item_edit_waypoint" = "Rediger GPX-rutepunkt";
+"no_waypoints_found" = "Ingen rutepunkter fundet";
+"gpxup_public" = "Offentligt";

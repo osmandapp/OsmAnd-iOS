@@ -14,6 +14,7 @@
 #import "OsmAndAppImpl.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
+#import "OAOsmAndFormatter.h"
 
 #import "OATimeTableViewCell.h"
 #import "OASliderWithValuesCell.h"

@@ -1365,7 +1365,7 @@
 "routing_attr_piste_type_skitour_name" = "Ferðaskíði";
 "routing_attr_allow_motorway_description" = "Leyfa hraðbrautir.";
 "rendering_attr_surface_paving_stones_name" = "Hellusteinar";
-"rendering_attr_showCycleRoutes_name" = "Sýna hjólaleiðir";
+"rendering_attr_showCycleRoutes_name" = "Hjólaleiðir";
 "rendering_value_pink_name" = "Bleikt";
 "rendering_attr_highway_class_track_grade4_name" = "Gráða 4";
 "rendering_attr_roadColors_name" = "Litastef fyrir vegi";
@@ -1400,7 +1400,7 @@
 "rendering_attr_surface_sett_name" = "Steinlagt";
 "routing_attr_relief_smoothness_factor_plains_name" = "Minna hæðótt";
 "rendering_attr_hideText_name" = "Texti";
-"rendering_attr_showMtbRoutes_name" = "Sýna fjallahjólaleiðir";
+"rendering_attr_showMtbRoutes_name" = "Fjallahjólaleiðir";
 "rendering_attr_noPolygons_name" = "Flákar";
 "routing_attr_no_new_routing_description" = "Ekki nota leiðareglur sem komu til sögunnar í útgáfu 1.9.";
 "rendering_value_germanRoadAtlas_name" = "Þýsk vegakort";
@@ -1421,7 +1421,7 @@
 "rendering_attr_hmRendered_name" = "Sýna fleiri smáatriði á korti";
 "rendering_attr_piste_difficulty_connection_name" = "Tenging";
 "rendering_attr_showLez_description" = "Birta svæði með takmörkunum á útblæstri á kortinu. Hefur ekki áhrif á leiðaval.";
-"rendering_attr_hikingRoutesOSMC_name" = "Þekja með göngutáknum";
+"rendering_attr_hikingRoutesOSMC_name" = "Gönguleiðir";
 "routing_attr_avoid_sett_description" = "Forðast götusteina og steinlögn";
 "routing_attr_allow_private_description" = "Leyfa aðgang að einkasvæðum.";
 "rendering_value_disabled_name" = "Óvirkt";
@@ -1496,7 +1496,7 @@
 "routing_attr_height_description" = "Tilgreindu hæð farartækis sem leyfð er á leiðum.";
 "rendering_value_white_name" = "Hvítt";
 "rendering_attr_trainLightrailRoutes_name" = "Leiðir lesta";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Litur fer eftir leiðakerfi";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Leiðakerfi";
 "routing_attr_short_way_name" = "Leið með hagkvæmri eldsneytisnýtingu";
 "rendering_attr_roadStyle_name" = "Stíll götu";
 "rendering_attr_surface_fine_gravel_name" = "Fín möl";
@@ -1511,7 +1511,7 @@
 "rendering_attr_smoothness_horrible_name" = "Hörmulegt";
 "routing_attr_allow_classic_only_name" = "Leyfa leiðir sem eingöngu eru fyrir klassísk skíðaspor";
 "rendering_attr_contourColorScheme_description" = "Litastef hæðarlína";
-"rendering_value_walkingRoutesOSMC_name" = "Litur fer eftir OSMC göngutáknum";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_depthContours_name" = "Dýptarlínur sjávar";
 "rendering_value_yellow_name" = "Gult";
 "rendering_attr_highway_class_track_grade3_name" = "Gráða 3";
@@ -2130,3 +2130,16 @@
 "shared_string_turn_off" = "Slökkva";
 "welmode_download_maps" = "Sækja kort";
 "shared_strings_all_regions" = "Öll landsvæði";
+"routes_color_by_type" = "Lita leiðir eftir…";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Litur fer eftir leiðakerfi.";
+"travel_routes" = "Ferðaleiðir";
+"m" = "m";
+"foot" = "ft";
+"shared_string_feet" = "fet";
+"srtm_download_list_help_message" = "OsmAnd býður upp á hæðalínugögn í metrum og fetum. Þú þarft að sækja skrána aftur til að breyta sniðinu.";
+"srtm_download_single_help_message" = "Veldu rétt snið eininga. Þú þarft að sækja skrána aftur til að breyta sniðinu.";
+"srtm_unit_format" = "Snið eininga hæðarlína";
+"download_map_dialog" = "Niðurhalsgluggi korta";
+"shared_string_navigation" = "Leiðsögn";
+"dialogs_and_notifications_descr" = "Stjórngluggar, samskiptagluggar og tilkynningar";
+"dialogs_and_notifications" = "Samskiptagluggar og tilkynningar";

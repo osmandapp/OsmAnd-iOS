@@ -688,7 +688,7 @@
 "access_arrival_time" = "Ankomsttid";
 "map_widget_time" = "Resterende tid";
 "map_widget_altitude" = "Højde";
-"monitoring_control_start" = "REC";
+"monitoring_control_start" = "Optag";
 "map_widget_intermediate_distance" = "Mellemliggende destination";
 "map_widget_distance" = "Destination";
 "always_center_position_on_map" = "Vis altid position centeret";
@@ -744,7 +744,7 @@
 "will_open_tomorrow_at" = "Åbner i morgen kl.";
 "targets" = "Destinationer";
 "search_radius_proximity" = "Indenfor";
-"poi" = "Interessepunkt";
+"poi" = "Interessepunkt (IP)";
 "shared_string_search" = "Søg";
 "search_radius" = "Søgeradius";
 // Shared Strings
@@ -1306,7 +1306,7 @@
 "rendering_attr_noPolygons_description" = "Gør alle overflader på kortet transparent.";
 "rendering_value_americanRoadAtlas_name" = "Amerikansk vejkort";
 "rendering_attr_piste_type_nordic_name" = "Nordisk";
-"rendering_attr_showMtbRoutes_name" = "Vis mountainbike-stier";
+"rendering_attr_showMtbRoutes_name" = "Mountainbike-ruter";
 "rendering_attr_surface_stone_name" = "Sten";
 "rendering_attr_appMode_name" = "Renderingsmåde";
 "routing_attr_allow_skating_only_description" = "Ruter forberedt til freestyle eller kun skøjteløb uden klassiske spor.";
@@ -1441,7 +1441,7 @@
 "routing_attr_avoid_sett_description" = "Undgår brosten og natursten";
 "rendering_attr_highway_class_footway_name" = "Fortov";
 "rendering_attr_hidePOILabels_name" = "IP-etiketter";
-"routing_attr_freeride_policy_description" = "Fri og off-piste stier er uofficielle ruter og passager. Typisk upræparerede, ikke vedligeholdt og ikke kontrolleret om natten. Adgang på egen risiko.";
+"routing_attr_freeride_policy_description" = "'Freeride' og 'Off-piste' er uofficielle ruter og passager. Typisk upræparerede, ikke vedligeholdt og ikke kontrolleret om aftenen. Adgang på egen risiko.";
 "rendering_attr_smoothness_excellent_name" = "Fremragende";
 "rendering_attr_hideHouseNumbers_name" = "Husnumre";
 "rendering_attr_depthContours_name" = "Havdybdekonturer";
@@ -1518,7 +1518,7 @@
 "routing_attr_avoid_stairs_description" = "Undgår trapper";
 "rendering_attr_showLez_description" = "Vis miljøzoner på kortet. Påvirker ikke routing.";
 "routing_attr_avoid_share_taxi_description" = "Undgår deletaxi";
-"routing_attr_allow_intermediate_description" = "Mere vanskelige ruter med stejlere sektioner. Generelt bør nogle hindringer undgås.";
+"routing_attr_allow_intermediate_description" = "Mere vanskelige ruter med stejlere sektioner. Generelt med nogle forhindringer som bør undgås.";
 "rendering_value_translucent_pink_name" = "Gennemsigtig lyserød";
 "rendering_attr_roadColors_name" = "Farveskema for veje";
 "rendering_attr_smoothness_bad_name" = "Dårlig";
@@ -1556,7 +1556,7 @@
 "routing_attr_piste_type_skitour_name" = "Langrend ski";
 "routing_attr_freeride_policy_name" = "Off-piste";
 "rendering_attr_piste_type_sleigh_name" = "Slæde";
-"rendering_attr_hikingRoutesOSMC_name" = "Vandresymbol overlejring";
+"rendering_attr_hikingRoutesOSMC_name" = "Vandreruter";
 "routing_attr_driving_style_prefer_unpaved_description" = "Foretræk ikke-asfalterede veje fremfor asfalterede veje.";
 "rendering_value_defaultTranslucentCyan_name" = "Standard (gennemsigtig cyan)";
 "rendering_attr_tracktype_grade2_name" = "Fast (ikke befæstet)";
@@ -1570,7 +1570,7 @@
 "rendering_value_translucent_blue_name" = "Gennemsigtig blå";
 "rendering_value_thick_name" = "Tyk";
 "routing_attr_avoid_shuttle_train_name" = "Ingen shuttle-tog";
-"rendering_value_walkingRoutesOSMC_name" = "Farvelægning ifølge OSMC-vandresymbol";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routeInfo_tracktype_name" = "Overfladefasthed";
 "rendering_value_translucent_yellow_name" = "Gennemsigtigt gul";
 "rendering_attr_roadStyle_name" = "Vejformat";
@@ -1584,7 +1584,7 @@
 "rendering_attr_surface_paved_name" = "Befæstet";
 "rendering_attr_streetLightingNight_name" = "Vis kun om natten";
 "rendering_value_lightblue_name" = "Lyseblå";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Farvelægning ifølge netværkstilhørsforhold";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Netværkstilhørsforhold";
 "routeInfo_road_types_name" = "Vejtyper";
 "rendering_attr_surfaceIntegrity_name" = "Vejoverfladens integritet";
 "rendering_attr_moreDetailed_name" = "Flere detaljer";
@@ -1783,7 +1783,7 @@
 "reset_to_default" = "Nulstil til standard";
 "copy_from_other_profile" = "Kopiér fra en anden profil";
 "global_settings_descr" = "Påvirke hele programmet.";
-"osmand_settings" = "Indstillinger";
+"osmand_settings" = "OsmAnd-indstillinger";
 "device_settings" = "Indstillinger for enhed";
 "angular_measurment_units" = "Enhed for vinkelmåling";
 "allow_3D_view" = "2.5D-visning";
@@ -1878,7 +1878,7 @@
 "routing_attr_length_name" = "Længdegrænse";
 "default_profile_descr" = "Vælg en profil, der skal bruges til programstart.";
 "shared_string_next" = "Næste";
-"quick_action_remove_next_destination" = "Slet næste destinationspunkt";
+"quick_action_remove_next_destination" = "Slet nærmeste destinationspunkt";
 "quick_action_mapillary_show" = "Vis Mapillary";
 "next_seg" = "Næste segment";
 "arrived_at_destination" = "Ankommet.";
@@ -1895,7 +1895,7 @@
 "shared_string_min" = "Min";
 "quick_action_showhide_mapillary_title" = "Vis/skjul Mapillary";
 "quick_action_mapillary_hide" = "Skjul Mapillary";
-"layer_amenity_label" = "Overlejring af IP-etiketter";
+"layer_amenity_label" = "Punktetiketter (IP, Favoritter)";
 "shared_string_add_profile" = "Tilføj profil";
 "profile_type_osmand_string" = "OsmAnd-profil";
 "profile_type_user_string" = "Brugerprofil";
@@ -1925,7 +1925,7 @@
 "plan_route_select_folder" = "Valg mappe";
 "rearrange_categories" = "Omarrangere kategorier";
 "shared_string_disable" = "Deaktiver";
-"fav_point_dublicate" = "Favoritnavn dublet";
+"fav_point_dublicate" = "Favoritnavn dublet specificeret";
 "square" = "Firkant";
 "shared_string_enable" = "Aktiver";
 "map_during_navigation" = "Kort under navigationen";
@@ -1972,4 +1972,31 @@
 "gpx_upload_public_visibility_descr" = "\"Offentlig\" betyder, at sporingen vises offentligt i dine GPS-sporinger og i offentlige GPS-sporingslister og i den offentlige sporingsliste med tidsstempler i rå form. Data, der leveres via API'et, henviser ikke til din sporingsside. Sporpunktstidsstempler er ikke tilgængelige via den offentlige GPS-API, og sporpunkterne er ikke kronologisk ordnet.";
 "gpx_upload_private_visibility_descr" = "\"Privat\" betyder, at sporet ikke vises i nogen offentlige lister, men at sporpunkter fra det i ikke-kronologisk rækkefølge er tilgængelige via den offentlige GPS-API uden tidsstempler.";
 "gpx_upload_trackable_visibility_descr" = "\"Sporbar\" betyder, at sporingen ikke vises i offentlige lister, men at behandlede sporingspunkter med tidsstempler fra sporingen (som ikke kan knyttes direkte til dig) vises gennem downloads fra den offentlige GPS-API.";
-"gpx_upload_identifiable_visibility_descr" = "\"Identificerbar\" betyder, at sporet vil blive vist offentligt i dine GPS-sporinger og i offentlige GPS-sporingslister, dvs. at andre brugere vil kunne downloade det rå spor og knytte det til dit brugernavn. Offentlige sporpunktsdata med tidsstempel fra GPS-API'et, der leveres via trackpoints-API'et, vil henvise til din oprindelige sporingsside.";
+"gpx_upload_identifiable_visibility_descr" = "\"Identificerbar\" betyder, at sporet vil blive vist offentligt i dine GPS-sporinger og i offentlige GPS-sporingslister, dvs. andre brugere vil kunne downloade det rå spor og knytte det til dit brugernavn. Offentlige sporpunktsdata med tidsstempel fra GPS-API'et, der leveres via trackpoints-API'et, vil henvise til din oprindelige sporingsside.";
+"restart" = "Genstart";
+"shared_strings_all_regions" = "Alle regioner";
+"shared_string_feet" = "fod";
+"srtm_download_list_help_message" = "OsmAnd leverer data om højdekurver i meter og fod. Du skal downloade filen igen for at ændre formatet.";
+"routes_color_by_type" = "Farv ruter efter…";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Farvelægning efter netværkstilhørsforhold.";
+"dialogs_and_notifications" = "Dialoger og meddelelser";
+"walking_route_osmc_description" = "Farvelæg ruter efter deres individuelle, lokale farve (hvis de findes på OpenStreetMap) og type (international, regional, lokal).";
+"some_articles_may_not_available_in_lang" = "Nogle Wikipedia-artikler er muligvis ikke tilgængelige på dit sprog.";
+"route_between_points_warning_desc" = "Fastgør derefter dit spor til den nærmeste tilladte vej med en af dine navigationsprofiler for at bruge denne mulighed.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Farvelæg ruter efter deres knudepunktsnetværkstype (international, regional, lokal).";
+"travel_routes" = "Rejseruter";
+"quick_action_remove_next_destination_descr" = "Sletter den næste destination på din rute. Hvis det er den endelige destination, stopper navigationen.";
+"gpx_parse_error" = "OsmAnd GPX er ikke korrekt dannet, kontakt venligst supportteamet for at undersøge det nærmere.";
+"carplay_profile_descr" = "Profil, der skal bruges, når der er forbindelse til CarPlay.";
+"carplay_profile" = "CarPlay-profil";
+"carplay_active_message" = "Kort vises via CarPlay";
+"last_used" = "Sidst anvendt";
+"favorites_empty" = "Du har ikke gemt nogen favoritpunkter";
+"tracks_empty" = "Din sporliste er tom";
+"map_markers_empty" = "Du har ingen aktive kortmarkører";
+"trip_rec_actions_descr" = "Du kan finde alle dine optagede spor i %@";
+"road_max_speed_descr" = "Indstiller den maksimale rejsehastighed for alle veje på ruten. Sænker prioriteringen af veje med en mulig hastighed, der er højere end den maksimale hastighed.";
+"road_min_speed_descr" = "Indstiller den mindste rejsehastighed for alle veje på ruten. Øger prioriteringen af veje med anbefalede hastigheder, der er lavere end minimumshastigheden.";
+"dialogs_and_notifications_descr" = "Kontroller pop-ups, dialogbokse og notifikationer";
+"road_speeds_descr" = "Disse parametre kan påvirke ruteberegningen.";
+"send_anonymous_data_desc" = "Send til OsmAnd kort-downloadstatistik, vi indsamler ikke placeringsdata eller andre personlige oplysninger.";

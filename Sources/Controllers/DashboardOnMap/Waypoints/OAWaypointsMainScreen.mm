@@ -34,6 +34,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
 #import "OAFavoriteItem.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OARadiusItem : NSObject
 
@@ -702,12 +703,12 @@
         
         NSString *distStr = nil;
         if (dist > 0)
-            distStr = [_app getFormattedDistance:dist];
+            distStr = [OAOsmAndFormatter getFormattedDistance:dist];
         
         NSString *deviationStr = nil;
         UIImage *deviationImg = nil;
         if (dist > 0 && p.deviationDistance > 0) {
-            deviationStr = [NSString stringWithFormat:@"+%@", [_app getFormattedDistance:p.deviationDistance]];
+            deviationStr = [NSString stringWithFormat:@"+%@", [OAOsmAndFormatter getFormattedDistance:p.deviationDistance]];
             UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
             if (p.deviationDirectionRight)
                 deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
@@ -822,7 +823,7 @@
         int type = radiusItem.type;
 
         cell.title.text = OALocalizedString(@"search_radius_proximity");
-        NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
+        NSString *desc = [OAOsmAndFormatter getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
         [cell.button setTitle:desc forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.button.tag = [self encodePos:indexPath];
@@ -841,7 +842,7 @@
         OARadiusItem *radiusItem = (OARadiusItem *)item;
         int type = radiusItem.type;
         
-        NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
+        NSString *desc = [OAOsmAndFormatter getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
         [cell setButtonLeftTitle:[OALocalizedString(@"search_radius_proximity") stringByAppendingString:@":"] description:desc];
         
         OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];

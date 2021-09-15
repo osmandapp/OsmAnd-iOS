@@ -19,6 +19,7 @@
 #import "OAMapHudViewController.h"
 #import "OAToolbarViewController.h"
 #import "OADownloadMapWidget.h"
+#import "OAOsmAndFormatter.h"
 
 #define kHorisontalOffset 8
 #define kIconWidth 30
@@ -194,7 +195,7 @@
                     _lonImageView.hidden = NO;
                     _verticalSeparator.hidden = NO;
                     
-                    NSString *coordinatesString = [OALocationConvert formatLocationCoordinates:lat lon:lon format:[self getConverterFormat:format]];
+                    NSString *coordinatesString = [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:format];
                     NSArray<NSString *> *coordinates = [coordinatesString componentsSeparatedByString:@","];
                     latText = coordinates[0];
                     lonText = [coordinates[1] trim];

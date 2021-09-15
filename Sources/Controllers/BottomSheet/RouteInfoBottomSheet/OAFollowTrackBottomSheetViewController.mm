@@ -33,6 +33,7 @@
 #import "OAGPXUIHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OAFollowTrackBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
@@ -143,7 +144,6 @@
     OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     OAGPX *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:fileName]];
-    OsmAndAppInstance app = OsmAndApp.instance;
     
     NSString *title = [fileName.lastPathComponent stringByDeletingPathExtension];
     BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;
@@ -152,15 +152,15 @@
         title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"some_of"), params.selectedSegment + 1, _gpx.getNonEmptySegmentsCount], title];
     }
     
-    NSString *distance = gpxData ? [app getFormattedDistance:gpxData.totalDistance] : @"";
-    NSString *time = gpxData ? [app getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
+    NSString *distance = gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"";
+    NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
     if (isSegment)
     {
         OAGpxTrkSeg *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegments:NO][params.selectedSegment] : nil;
         if (seg)
         {
-            distance = [app getFormattedDistance:[OAGPXUIHelper getSegmentDistance:seg]];
-            time = [app getFormattedTimeInterval:[OAGPXUIHelper getSegmentTime:seg] shortFormat:YES];
+            distance = [OAOsmAndFormatter getFormattedDistance:[OAGPXUIHelper getSegmentDistance:seg]];
+            time = [OAOsmAndFormatter getFormattedTimeInterval:[OAGPXUIHelper getSegmentTime:seg] shortFormat:YES];
         }
     }
 	

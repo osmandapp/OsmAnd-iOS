@@ -18,6 +18,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OATransportStopType.h"
+#import "OAOsmAndFormatter.h"
 
 #include <transportRouteResultSegment.h>
 #include <transportRoutingObjects.h>
@@ -89,7 +90,7 @@ static UIFont *_shieldFont;
             float walkTime = walkingSegment.routingTime;
             if (walkTime > MIN_WALK_TIME)
             {
-                NSString *title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                 OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
                 shield.delegate = self;
                 shield.tag  = segIndex++;
@@ -111,7 +112,7 @@ static UIFont *_shieldFont;
                 else
                     start = _transportHelper.startLocation;
 
-                NSString *title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                 OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
                 shield.delegate = self;
                 shield.tag  = segIndex++;
@@ -151,7 +152,7 @@ static UIFont *_shieldFont;
                 if (walkTime > MIN_WALK_TIME)
                 {
                     [self drawArrowView:arr];
-                    title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                    title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                     OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
                     shield.delegate = self;
                     shield.tag  = segIndex++;
@@ -169,7 +170,7 @@ static UIFont *_shieldFont;
                         CLLocation *start = [[CLLocation alloc] initWithLatitude:s->getEnd().lat longitude:s->getEnd().lon];
                         CLLocation *end = _transportHelper.endLocation;
                         [self drawArrowView:arr];
-                        title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                        title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                         OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
                         shield.tag  = segIndex++;
                         shield.delegate = self;
@@ -270,7 +271,7 @@ static UIFont *_shieldFont;
             float walkTime = walkingSegment.routingTime;
             if (walkTime > MIN_WALK_TIME)
             {
-                NSString *title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                 [titles addObject:title];
             }
         }
@@ -279,7 +280,7 @@ static UIFont *_shieldFont;
             float walkTime = s->walkDist / route->getWalkSpeed();
             if (walkTime > MIN_WALK_TIME)
             {
-                NSString *title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                 [titles addObject:title];
             }
         }
@@ -294,7 +295,7 @@ static UIFont *_shieldFont;
                 float walkTime = walkingSegment.routingTime;
                 if (walkTime > MIN_WALK_TIME)
                 {
-                    title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                    title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                     [titles addObject:title];
                 }
             } else {
@@ -304,7 +305,7 @@ static UIFont *_shieldFont;
                     float walkTime = finishWalkDist / route->getWalkSpeed();
                     if (walkTime > MIN_WALK_TIME)
                     {
-                        title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                        title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                         [titles addObject:title];
                     }
                 }

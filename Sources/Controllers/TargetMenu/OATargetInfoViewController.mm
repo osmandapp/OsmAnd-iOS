@@ -41,6 +41,7 @@
 #import "OAWikiImageCard.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPlugin.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -174,8 +175,7 @@
         }
         if (nearbyTransportRoutes.count > 0)
         {
-            OsmAndAppInstance app = [OsmAndApp instance];
-            NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [app getFormattedDistance:kShowStopsRadiusMeters]];
+            NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
             OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;
@@ -219,7 +219,7 @@
         }
     }];
 
-    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled)
+    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
 
     if ([self showNearestPoi])

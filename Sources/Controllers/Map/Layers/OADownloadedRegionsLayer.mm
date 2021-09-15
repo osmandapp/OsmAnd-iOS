@@ -32,8 +32,6 @@
 #define ZOOM_TO_SHOW_BORDERS 7
 #define ZOOM_TO_SHOW_SELECTION_ST 3
 #define ZOOM_TO_SHOW_SELECTION 8
-#define ZOOM_MIN_TO_SHOW_DOWNLOAD_DIALOG 9
-#define ZOOM_MAX_TO_SHOW_DOWNLOAD_DIALOG 11
 
 @implementation OADownloadMapObject
 
@@ -364,7 +362,7 @@
         targetPoint.location = mapObject.worldRegion.regionCenter;
         targetPoint.title = mapObject.worldRegion.localizedName ? mapObject.worldRegion.localizedName : mapObject.worldRegion.nativeName;
    
-        targetPoint.icon = [OAResourceType getIcon:mapObject.indexItem.resourceType];
+        targetPoint.icon = [OAResourceType getIcon:mapObject.indexItem.resourceType templated:NO];
         targetPoint.type = OATargetMapDownload;
         targetPoint.targetObj = mapObject;
         targetPoint.sortIndex = (NSInteger)targetPoint.type;

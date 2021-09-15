@@ -31,6 +31,8 @@
 #import "OAMapSettingsContourLinesScreen.h"
 #import "OAMapSettingsTerrainScreen.h"
 #import "OAMapSettingsWikipediaScreen.h"
+#import "OAMapSettingsRoutesScreen.h"
+#import "OAMapStyleSettings.h"
 #import <CoreLocation/CoreLocation.h>
 
 #include <QtMath>
@@ -166,18 +168,22 @@
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsWikipediaScreen alloc] initWithTable:self.tableView viewController:self];
             break;
+        case EMapSettingsScreenRoutes:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
+            break;
         default:
             break;
     }
 
     OAMapSource* mapSource = _app.data.lastMapSource;
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
-    
+
     BOOL _isOnlineMapSourcePrev = isOnlineMapSource;
     isOnlineMapSource = ([mapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources));
-    
+
     self.screenObj.isOnlineMapSource = isOnlineMapSource;
-    
+
     if (_isOnlineMapSourcePrev != isOnlineMapSource)
         [self.view setNeedsLayout];
 

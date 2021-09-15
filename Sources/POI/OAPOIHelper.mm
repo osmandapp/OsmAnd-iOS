@@ -552,7 +552,7 @@
 - (NSArray<NSString *> *)getAllAvailableWikiLocales
 {
     NSMutableArray<NSString *> *availableWikiLocales = [NSMutableArray new];
-    for (OAPOIType *type in [[self getOsmwiki] getPoiTypeByKeyName:@"wiki_place"].poiAdditionals)
+    for (OAPOIType *type in [[self getOsmwiki] getPoiTypeByKeyName:WIKI_PLACE].poiAdditionals)
     {
         NSString *name = type.name;
         NSString *wikiLang = [NSString stringWithFormat:@"wiki_lang%@", @":"];

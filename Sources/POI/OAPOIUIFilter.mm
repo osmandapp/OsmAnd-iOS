@@ -18,6 +18,7 @@
 #import "OAMapUtils.h"
 #import "OAUtilities.h"
 #import "OANameStringMatcher.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -230,7 +231,7 @@
 
 - (BOOL)isWikiFilter
 {
-    return [self.filterId hasPrefix:[NSString stringWithFormat:@"%@%@", STD_PREFIX, @"wiki_place"]] || [self isTopWikiFilter];
+    return [self.filterId hasPrefix:[NSString stringWithFormat:@"%@%@", STD_PREFIX, WIKI_PLACE]] || [self isTopWikiFilter];
 }
 
 - (BOOL)isTopWikiFilter
@@ -288,9 +289,9 @@
     }
     double val = distanceToSearchValues[distInd].doubleValue;
     if (val >= 1) {
-        return [@" < " stringByAppendingString:[app getFormattedDistance:(int)val * 1000]];
+        return [@" < " stringByAppendingString:[OAOsmAndFormatter getFormattedDistance:(int)val * 1000]];
     } else {
-        return [@" < " stringByAppendingString:[app getFormattedDistance:500]];
+        return [@" < " stringByAppendingString:[OAOsmAndFormatter getFormattedDistance:500]];
     }
 }
 

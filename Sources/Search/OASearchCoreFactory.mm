@@ -1215,8 +1215,14 @@
     
     NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypes = [poiTypeFilter getAcceptedTypes];
     NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypesOrigin = [poiTypeFilter getAcceptedTypesOrigin];
+
     for (OAPOICategory *category in acceptedTypesOrigin)
-         [acceptedTypes setObject:[acceptedTypesOrigin objectForKey:category] forKey:category];
+    {
+        NSMutableSet<NSString *> *typesOrigin = [acceptedTypesOrigin objectForKey:category];
+        if (![typesOrigin isEqualToSet:[acceptedTypes objectForKey:category]])
+            [acceptedTypes setObject:typesOrigin forKey:category];
+    }
+
     if (acceptedTypes.count > 0)
     {
         auto categoriesFilter = QHash<QString, QStringList>();

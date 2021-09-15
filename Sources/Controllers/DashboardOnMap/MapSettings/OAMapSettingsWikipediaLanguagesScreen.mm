@@ -18,9 +18,12 @@
 #import "OAMenuSimpleCellNoIcon.h"
 #import "OARootViewController.h"
 
-static const NSInteger allSection = 0;
-static const NSInteger preferredSection = 1;
-static const NSInteger availableSection = 2;
+typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
+{
+    EOAMapSettingsWikipediaLangSectionAll = 0,
+    EOAMapSettingsWikipediaLangSectionPreffered,
+    EOAMapSettingsWikipediaLangSectionAvailable
+};
 
 @interface OAWikiLanguageItem ()
 
@@ -94,8 +97,6 @@ static const NSInteger availableSection = 2;
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    self.tableView.rowHeight = kEstimatedRowHeight;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     [self initData];
@@ -112,17 +113,20 @@ static const NSInteger availableSection = 2;
 {
     [self initLanguagesData];
 
-    NSMutableArray *dataArr = [@[@[
+    NSMutableArray *dataArr = [NSMutableArray new];
+    [dataArr addObject:@[
             @{@"type": [OADividerCell getCellIdentifier]},
             @{
                     @"type": [OASettingSwitchCell getCellIdentifier],
                     @"title": OALocalizedString(@"shared_string_all_languages")
             },
             @{@"type": [OADividerCell getCellIdentifier]}
-    ]] mutableCopy];
+    ]];
 
-    NSMutableArray *preferredLanguages = [@[@{@"type": [OADividerCell getCellIdentifier]}] mutableCopy];
-    NSMutableArray *availableLanguages = [@[@{@"type": [OADividerCell getCellIdentifier]}] mutableCopy];
+    NSMutableArray *preferredLanguages = [NSMutableArray new];
+    [preferredLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
+    NSMutableArray *availableLanguages = [NSMutableArray new];
+    [availableLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
 
     for (OAWikiLanguageItem *language in _languages)
     {
@@ -132,17 +136,20 @@ static const NSInteger availableSection = 2;
         };
 
         if (language.preferred)
+        {
             [preferredLanguages addObject:lang];
+            [preferredLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
+        }
         else
+        {
             [availableLanguages addObject:lang];
+            [availableLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
+        }
     }
-
-    [preferredLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
-    [availableLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     [dataArr addObject:preferredLanguages];
     [dataArr addObject:availableLanguages];
 
-    _data = [NSArray arrayWithArray:dataArr];
+    _data = dataArr;
 }
 
 - (void)initLanguagesData
@@ -209,9 +216,9 @@ static const NSInteger availableSection = 2;
         [self.tableView beginUpdates];
         UISwitch *sw = (UISwitch *) sender;
         _isGlobalWikiPoiEnabled = sw.on;
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:preferredSection] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:availableSection] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaLangSectionPreffered] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaLangSectionAvailable] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
     }
 }
@@ -225,31 +232,40 @@ static const NSInteger availableSection = 2;
 {
     switch (section)
     {
-        case allSection:
+        case EOAMapSettingsWikipediaLangSectionAll:
             return [NSString stringWithFormat:@"%@\n\n%@", OALocalizedString(@"some_articles_may_not_available_in_lang"), OALocalizedString(@"select_wikipedia_article_langs")];
-        case preferredSection:
+        case EOAMapSettingsWikipediaLangSectionPreffered:
             return [OALocalizedString(@"preferred_languages") upperCase];
-        case availableSection:
+        case EOAMapSettingsWikipediaLangSectionAvailable:
             return [OALocalizedString(@"available_languages") upperCase];
         default:
             return @"";
     }
 }
 
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+    else
+        return estimated ? 48. : UITableViewAutomaticDimension;
+}
+
 - (CGFloat)getHeaderHeightForSection:(NSInteger)section
 {
-    return [OATableViewCustomHeaderView getHeight:[self getTextForHeader:section] width:self.tableView.frame.size.width yOffset:17. font:[UIFont systemFontOfSize:section == allSection ? 15.0 : 13.0]];
+    return [OATableViewCustomHeaderView getHeight:[self getTextForHeader:section] width:self.tableView.frame.size.width yOffset:17. font:[UIFont systemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0]];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != allSection)
+    if (indexPath.section != EOAMapSettingsWikipediaLangSectionAll)
     {
         [self.tableView beginUpdates];
         OAWikiLanguageItem *language = [self getItem:indexPath][@"item"];
         language.checked = !language.checked;
-        [self.tableView endUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
     }
 }
 
@@ -277,7 +293,7 @@ static const NSInteger availableSection = 2;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section != allSection && _isGlobalWikiPoiEnabled)
+    if (section != EOAMapSettingsWikipediaLangSectionAll && _isGlobalWikiPoiEnabled)
         return 0;
 
     return _data[section].count;
@@ -288,21 +304,25 @@ static const NSInteger availableSection = 2;
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);
-            cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
+        }
+        if (cell)
+        {
+            CGFloat leftInset = indexPath.row == 0 || indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1 ? 0. : 62.;
+            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
         }
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
@@ -311,7 +331,6 @@ static const NSInteger availableSection = 2;
 
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             cell.textView.text = item[@"title"];
             cell.descriptionView.hidden = YES;
             cell.imgView.hidden = YES;
@@ -333,7 +352,7 @@ static const NSInteger availableSection = 2;
             cell = (OAMenuSimpleCellNoIcon *) nib[0];
             cell.tintColor = UIColorFromRGB(color_primary_purple);
             UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
             [cell setSelectedBackgroundView:bgColorView];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
             cell.descriptionView.hidden = YES;
@@ -360,33 +379,36 @@ static const NSInteger availableSection = 2;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[self getItem:indexPath][@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
-    else
-        return UITableViewAutomaticDimension;
+    return [self heightForRow:indexPath estimated:NO];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath estimated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != allSection)
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
     {
-        OAWikiLanguageItem *language = [self getItem:indexPath][@"item"];
-        [cell setSelected:language.checked animated:NO];
+        OAWikiLanguageItem *language = item[@"item"];
+        [cell setSelected:language.checked animated:YES];
         if (language.checked)
-            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         else
-            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return indexPath.section != allSection ? indexPath : nil;
+    return [[self getItem:indexPath][@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]] ? indexPath : nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != allSection)
+    if ([[self getItem:indexPath][@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
         [self selectDeselectItem:indexPath];
     else
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -394,13 +416,13 @@ static const NSInteger availableSection = 2;
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != allSection)
+    if ([[self getItem:indexPath][@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
         [self selectDeselectItem:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    if (section == allSection || !_isGlobalWikiPoiEnabled)
+    if (section == EOAMapSettingsWikipediaLangSectionAll || !_isGlobalWikiPoiEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
         header.textLabel.textColor = UIColorFromRGB(color_text_footer);
@@ -409,13 +431,13 @@ static const NSInteger availableSection = 2;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section != allSection && _isGlobalWikiPoiEnabled)
+    if (section != EOAMapSettingsWikipediaLangSectionAll && _isGlobalWikiPoiEnabled)
         return nil;
 
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     NSString *text = [self getTextForHeader:section];
     vw.label.text = text;
-    vw.label.font = [UIFont systemFontOfSize:section == allSection ? 15.0 : 13.0];
+    vw.label.font = [UIFont systemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0];
     return vw;
 }
 

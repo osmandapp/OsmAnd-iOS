@@ -19,6 +19,7 @@
 #import "OAMapViewController.h"
 #import "OAMapLayers.h"
 #import "OAColors.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -223,7 +224,7 @@
         CGPoint b = linePoints[1].CGPointValue;
         const auto dist = OsmAnd::Utilities::distance(startCoord.longitude, startCoord.latitude, finishCoord.longitude, finishCoord.latitude);
         double angle = [OAMapUtils getAngleBetween:b end:a];
-        NSString *distance = [_app getFormattedDistance:dist];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
         
         [self drawDistance:ctx distance:distance angle:angle start:b end:a];
     }

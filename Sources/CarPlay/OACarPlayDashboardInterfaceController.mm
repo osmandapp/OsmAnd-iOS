@@ -22,6 +22,7 @@
 #import "OAMapActions.h"
 #import "OALocationSimulation.h"
 #import "OACommonTypes.h"
+#import "OAOsmAndFormatter.h"
 
 #define unitsKm OALocalizedString(@"units_km")
 #define unitsM OALocalizedString(@"units_m")
@@ -113,7 +114,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) enterRoutePreviewMode
 {
-    [OsmAndApp.instance getFormattedTimeHM:_routingHelper.getLeftTime];
+    [OAOsmAndFormatter getFormattedTimeHM:_routingHelper.getLeftTime];
     CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
     
     OATargetPointsHelper *targetHelper = OATargetPointsHelper.sharedInstance;
@@ -240,7 +241,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     else if (type == EOACarPlayButtonTypeDismiss)
         barButton.title = OALocalizedString(@"shared_string_done");
     else if (type == EOACarPlayButtonTypeDirections)
-        barButton.title = OALocalizedString(@"get_directions");
+        barButton.title = OALocalizedString(@"shared_string_navigation");
     else if (type == EOACarPlayButtonTypeRouteCalculation)
         barButton.title = [NSString stringWithFormat:OALocalizedString(@"route_calc_progress"), 0];
     else if (type == EOACarPlayButtonTypeCancelRoute)
@@ -388,7 +389,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSMeasurement<NSUnitLength *> *) getFormattedDistance:(int)meters
 {
-    NSString *distString = [OsmAndApp.instance getFormattedDistance:meters];
+    NSString *distString = [OAOsmAndFormatter getFormattedDistance:meters];
     NSArray<NSString *> *components = [distString componentsSeparatedByString:@" "];
     if (components.count == 2)
         return [[NSMeasurement alloc] initWithDoubleValue:components.firstObject.doubleValue unit:[self getUnitByString:components.lastObject]];

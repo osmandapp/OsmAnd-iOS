@@ -14,6 +14,7 @@
 #import "OASizes.h"
 #import "OrderedDictionary.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OAOsmAndFormatter.h"
 #import <UIKit/UIDevice.h>
 
 @implementation UIBezierPath (util)
@@ -295,6 +296,11 @@
 - (BOOL) isDirectionRTL
 {
     return [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft;
+}
+
+- (void) setCornerRadius:(CGFloat)value
+{
+    self.layer.cornerRadius = value;
 }
 
 @end
@@ -784,7 +790,7 @@
 
 + (NSString *) appendMeters:(float)value
 {
-    NSString *formattedValue = [[OsmAndApp instance] getFormattedDistance:value];
+    NSString *formattedValue = [OAOsmAndFormatter getFormattedDistance:value];
     return value == 0.f ? OALocalizedString(@"not_selected") : formattedValue;
 }
 

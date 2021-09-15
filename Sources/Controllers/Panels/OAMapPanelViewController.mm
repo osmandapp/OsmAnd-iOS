@@ -53,6 +53,7 @@
 #import "OATopCoordinatesWidget.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAFavoritesHelper.h"
+#import "OADownloadMapWidget.h"
 
 #import <EventKit/EventKit.h>
 
@@ -3088,7 +3089,8 @@ typedef enum
     BOOL followingMode = [_routingHelper isFollowingMode];
     for (OAToolbarViewController *toolbar in _toolbars)
     {
-        if (toolbar && (toolbar.showOnTop || (!followingMode || ![toolbar isKindOfClass:[OADestinationViewController class]])))
+        BOOL isDestinationToolBar = [toolbar isKindOfClass:[OADestinationViewController class]];
+        if (toolbar && (toolbar.showOnTop || ((!followingMode && !self.hudViewController.downloadMapWidget.isVisible) || !isDestinationToolBar)))
             return toolbar;
     }
     return nil;

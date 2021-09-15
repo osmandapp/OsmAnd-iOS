@@ -69,6 +69,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (BOOL) setConstant:(NSString *)identifier constant:(CGFloat)constant;
 - (CGFloat) getConstant:(NSString *)identifier;
 - (BOOL) isDirectionRTL;
+- (void) setCornerRadius:(CGFloat)value;
 
 @end
 

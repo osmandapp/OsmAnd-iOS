@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="iN0-l3-epB" customClass="OADownloadMapWidget">
+            <rect key="frame" x="0.0" y="0.0" width="382" height="155"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download detailed London map, to view this area." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63Z-z7-sCH">
+                    <rect key="frame" x="20" y="12" width="262" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="SRO-qX-56z"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 MB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xFa-pf-k7x">
+                    <rect key="frame" x="20" y="57" width="262" height="24"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3XS-G0-mBp">
+                    <rect key="frame" x="20" y="97" width="168" height="42"/>
+                    <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="42" id="Hyw-Eu-XVp"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                    <state key="normal" title="Close">
+                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="closeButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="Bhg-5X-m18"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LaG-IY-fkx">
+                    <rect key="frame" x="194" y="97" width="168" height="42"/>
+                    <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                    <state key="normal" title="Dwonload">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="downloadButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="sTe-ED-N40"/>
+                    </connections>
+                </button>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_download_map_colored.png" translatesAutoresizingMaskIntoConstraints="NO" id="94u-n4-Wkq">
+                    <rect key="frame" x="302" y="10" width="60" height="60"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="Lib-9q-olW"/>
+                        <constraint firstAttribute="width" constant="60" id="Sf7-XI-WBf"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="3XS-G0-mBp" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="0.44" id="0T3-cc-Upw"/>
+                <constraint firstItem="94u-n4-Wkq" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="2g7-7Y-gsf"/>
+                <constraint firstAttribute="bottom" secondItem="3XS-G0-mBp" secondAttribute="bottom" constant="16" id="9z7-nn-JiY"/>
+                <constraint firstItem="3XS-G0-mBp" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="Quj-LF-yYp"/>
+                <constraint firstItem="LaG-IY-fkx" firstAttribute="width" secondItem="3XS-G0-mBp" secondAttribute="width" id="SMH-1H-dYZ"/>
+                <constraint firstAttribute="trailing" secondItem="LaG-IY-fkx" secondAttribute="trailing" constant="20" id="WAo-nY-8Xd"/>
+                <constraint firstItem="xFa-pf-k7x" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="XlN-bx-Vig"/>
+                <constraint firstItem="63Z-z7-sCH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="au5-Us-Dc0"/>
+                <constraint firstItem="3XS-G0-mBp" firstAttribute="top" secondItem="xFa-pf-k7x" secondAttribute="bottom" constant="16" id="duq-5o-ntx"/>
+                <constraint firstItem="xFa-pf-k7x" firstAttribute="top" secondItem="63Z-z7-sCH" secondAttribute="bottom" constant="1" id="i9v-rc-190"/>
+                <constraint firstAttribute="trailing" secondItem="94u-n4-Wkq" secondAttribute="trailing" constant="20" id="jQZ-rf-gkg"/>
+                <constraint firstAttribute="bottom" secondItem="LaG-IY-fkx" secondAttribute="bottom" constant="16" id="jcf-zo-5ns"/>
+                <constraint firstItem="3XS-G0-mBp" firstAttribute="height" secondItem="LaG-IY-fkx" secondAttribute="height" id="lai-pA-6gT"/>
+                <constraint firstItem="xFa-pf-k7x" firstAttribute="width" secondItem="63Z-z7-sCH" secondAttribute="width" id="nz5-4H-3t8"/>
+                <constraint firstItem="63Z-z7-sCH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="12" id="odG-9A-sod"/>
+                <constraint firstItem="94u-n4-Wkq" firstAttribute="leading" secondItem="63Z-z7-sCH" secondAttribute="trailing" constant="20" id="wgM-1i-kdN"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="closeButton" destination="3XS-G0-mBp" id="xaZ-OI-2Cn"/>
+                <outlet property="descrView" destination="xFa-pf-k7x" id="8Dp-C0-hA6"/>
+                <outlet property="downloadButton" destination="LaG-IY-fkx" id="gHN-F7-Na1"/>
+                <outlet property="titleView" destination="63Z-z7-sCH" id="HlQ-wr-TEM"/>
+            </connections>
+            <point key="canvasLocation" x="144" y="-90.404797601199405"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="img_download_map_colored.png" width="60" height="60"/>
+    </resources>
+</document>

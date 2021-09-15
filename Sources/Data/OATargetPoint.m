@@ -68,18 +68,19 @@
         return NO;
     
     OATargetPoint *targetPoint = (OATargetPoint *) o;
-    
+
     if (self.type != targetPoint.type)
         return NO;
     if (![OAUtilities isCoordEqual:self.location.latitude srcLon:self.location.longitude destLat:targetPoint.location.latitude destLon:targetPoint.location.longitude upToDigits:4])
         return NO;
     if (self.symbolId != targetPoint.symbolId)
         return NO;
-    if (self.obfId != targetPoint.obfId)
+    BOOL isTitleEqual = self.title && targetPoint.title && [self.title isEqualToString:targetPoint.title];
+    if (self.obfId != targetPoint.obfId && !isTitleEqual)
         return NO;
     if (!self.targetObj && targetPoint.targetObj)
         return NO;
-    if (self.targetObj && ![self.targetObj isEqual:targetPoint.targetObj])
+    if (self.targetObj && ![self.targetObj isEqual:targetPoint.targetObj] && !isTitleEqual)
         return NO;
     if (!self.symbolGroupId && targetPoint.symbolGroupId)
         return NO;

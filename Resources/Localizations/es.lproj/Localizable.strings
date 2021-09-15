@@ -1677,7 +1677,7 @@
 "shared_string_max" = "Máx";
 "shared_string_min" = "Mín";
 "nothing_found_empty" = "Nada encontrado";
-"meters" = "metros";
+"shared_string_meters" = "metros";
 "tones" = "tonos";
 "announce" = "Anunciar";
 "transfers" = "Transbordos:";

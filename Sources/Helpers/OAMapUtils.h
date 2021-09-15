@@ -9,6 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define MIN_LATITUDE -85.0511
+#define MAX_LATITUDE 85.0511
+#define LATITUDE_TURN 180.0
+#define MIN_LONGITUDE -180.0
+#define MAX_LONGITUDE 180.0
+#define LONGITUDE_TURN 360.0
+
 @class OAPOI;
 @class QuadRect;
 
@@ -27,5 +34,8 @@
 + (NSArray<NSValue *> *) calculateLineInRect:(CGRect)rect start:(CGPoint)start end:(CGPoint)end;
 
 + (double) getAngleBetween:(CGPoint)start end:(CGPoint)end;
+
++ (double) checkLatitude:(double) latitude;
++ (double) checkLongitude:(double) longitude;
 
 @end

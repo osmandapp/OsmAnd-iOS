@@ -9,6 +9,8 @@
 #import "OARouteDirectionInfo.h"
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
+#import "OAOsmAndFormatter.h"
+
 
 @implementation OARouteDirectionInfo
 {
@@ -36,8 +38,8 @@
 
 - (NSString *) getDescriptionRoute
 {
-    if (![_descriptionRoute hasSuffix:[[OsmAndApp instance] getFormattedDistance:self.distance]]) {
-        [_descriptionRoute stringByAppendingFormat:@" %@", [[OsmAndApp instance] getFormattedDistance:self.distance]];
+    if (![_descriptionRoute hasSuffix:[OAOsmAndFormatter getFormattedDistance:self.distance]]) {
+        [_descriptionRoute stringByAppendingFormat:@" %@", [OAOsmAndFormatter getFormattedDistance:self.distance]];
     }
     return [_descriptionRoute trim];
 }
@@ -49,8 +51,8 @@
 
 - (NSString *) getDescriptionRoute:(int) collectedDistance
 {
-    if (![_descriptionRoute hasSuffix:[[OsmAndApp instance] getFormattedDistance:collectedDistance]]) {
-        [_descriptionRoute stringByAppendingFormat:@" %@", [[OsmAndApp instance] getFormattedDistance:collectedDistance]];
+    if (![_descriptionRoute hasSuffix:[OAOsmAndFormatter getFormattedDistance:collectedDistance]]) {
+        [_descriptionRoute stringByAppendingFormat:@" %@", [OAOsmAndFormatter getFormattedDistance:collectedDistance]];
     }
     return [_descriptionRoute trim];
 }

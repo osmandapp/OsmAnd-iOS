@@ -42,6 +42,18 @@ typedef NS_ENUM(NSInteger, EOAXmlFileType) {
     return self;
 }
 
+- (void) doImport:(NSString *)path destPath:(NSString *)destPath
+{
+    BOOL imported = [[OAFileImportHelper sharedInstance] importResourceFileFromPath:path toPath:destPath];
+    if (imported && _fileType == EOAXmlFileTypeRouting)
+        [OsmAndApp.instance loadRoutingFiles];
+    NSString *message = imported ? [NSString stringWithFormat:OALocalizedString(@"res_import_success"), destPath.lastPathComponent] : OALocalizedString(@"obf_import_failed");
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+}
+
 - (void) handleImport
 {
     NSFileManager *fileManager = NSFileManager.defaultManager;
@@ -60,20 +72,51 @@ typedef NS_ENUM(NSInteger, EOAXmlFileType) {
         case EOAXmlFileTypeRendering:
         case EOAXmlFileTypeRouting:
         {
-            BOOL imported = [[OAFileImportHelper sharedInstance] importResourceFileFromPath:path toPath:destPath];
-            if (imported && _fileType == EOAXmlFileTypeRouting)
-                [OsmAndApp.instance loadRoutingFiles];
-            NSString *message = imported ? [NSString stringWithFormat:OALocalizedString(@"res_import_success"), destPath.lastPathComponent] : OALocalizedString(@"obf_import_failed");
-            
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+            BOOL fileExists = [fileManager fileExistsAtPath:destPath];
+            if (fileExists)
+            {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"obf_import_already_exists") preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }]];
+                
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self doImport:path destPath:destPath];
+                }]];
+                
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"gpx_add_new") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self doImport:path destPath:[self getNewPath:destPath]];
+                }]];
+                
+                [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+            }
+            else
+            {
+                [self doImport:path destPath:destPath];
+            }
         }
         default:
         {
             NSLog(@"Could not import: %@", destPath);
         }
     }
+}
+
+- (NSString *) getNewPath:(NSString *)destPath
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSString *destFilePath = destPath;
+    NSString *destDir = [destPath stringByDeletingLastPathComponent];
+    NSString *destFileName = destPath.lastPathComponent;
+    BOOL isRenderingFile = _fileType == EOAXmlFileTypeRendering;
+    destFileName = isRenderingFile ? [destFileName stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""] : destFileName;
+    while ([fileManager fileExistsAtPath:destFilePath])
+    {
+        destFileName = [OAUtilities createNewFileName:destFileName];
+        if (isRenderingFile)
+            destFileName = [destFileName stringByAppendingString:RENDERER_INDEX_EXT];
+        destFilePath = [destDir stringByAppendingPathComponent:destFileName];
+    }
+    return destFilePath;
 }
 
 - (NSString *) getDestinationDir
@@ -101,13 +144,7 @@ typedef NS_ENUM(NSInteger, EOAXmlFileType) {
             NSString *fileName = destFileName.stringByDeletingPathExtension;
             destFileName = [fileName stringByAppendingString:RENDERER_INDEX_EXT];
         }
-        NSString *destFilePath = [destDir stringByAppendingPathComponent:destFileName];
-        while ([fileManager fileExistsAtPath:destFilePath])
-        {
-            destFileName = [OAUtilities createNewFileName:destFileName];
-            destFilePath = [destDir stringByAppendingPathComponent:destFileName];
-        }
-        return destFilePath;
+        return [destDir stringByAppendingPathComponent:destFileName];
     }
     return nil;
 }

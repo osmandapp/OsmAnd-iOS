@@ -25,10 +25,12 @@
 
 #import "OAWorldRegion+Protected.h"
 #import "OAResourcesUIHelper.h"
+#import "QuadRect.h"
 
 @implementation OAWorldRegion
 {
     std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
+    QVector<OsmAnd::PointI> _points31;
 }
 
 - (instancetype) initWorld
@@ -55,6 +57,7 @@
         [self commonInit];
         
         _worldRegion = region;
+        [self findBoundaries];
         _regionId = _worldRegion->fullRegionName.toNSString();
         _downloadsIdPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
         _nativeName = _worldRegion->nativeName.toNSString();
@@ -141,14 +144,14 @@
 - (double) getArea
 {
     double area = 0.0;
-    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
+    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _points31.count() > 1)
     {
-        for (int i = 1; i < _worldRegion->mapObject->points31.count(); i++)
+        for (int i = 1; i < _points31.count(); i++)
         {
-            double ax = _worldRegion->mapObject->points31.at(i - 1).x;
-            double bx = _worldRegion->mapObject->points31.at(i).x;
-            double ay = _worldRegion->mapObject->points31.at(i - 1).y;
-            double by = _worldRegion->mapObject->points31.at(i).y;
+            double ax = _points31.at(i - 1).x;
+            double bx = _points31.at(i).x;
+            double ay = _points31.at(i - 1).y;
+            double by = _points31.at(i).y;
             area += (bx + ax) * (by - ay) / 1.631E10;
         }
     }
@@ -158,12 +161,12 @@
 - (BOOL) contain:(double) lat lon:(double) lon
 {
     BOOL res = NO;
-    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
+    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _points31.count() > 1)
     {
         OsmAnd::PointI p31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
         int t = 0;
-        for (int i = 1; i < _worldRegion->mapObject->points31.count(); i++) {
-            int fx = [self.class ray_intersect_x:_worldRegion->mapObject->points31.at(i).x y:_worldRegion->mapObject->points31.at(i).y middleY:p31.y prevX:_worldRegion->mapObject->points31.at(i - 1).x prevY:_worldRegion->mapObject->points31.at(i - 1).y];
+        for (int i = 1; i < _points31.count(); i++) {
+            int fx = [self.class ray_intersect_x:_points31.at(i).x y:_points31.at(i).y middleY:p31.y prevX:_points31.at(i - 1).x prevY:_points31.at(i - 1).y];
             if (INT_MIN != fx && p31.x >= fx)
                 t++;
         }
@@ -172,10 +175,15 @@
     return res;
 }
 
-- (void) getPoints31:(OAPointIContainer *)container;
+- (void)getPoints31:(OAPointIContainer *)container
 {
     if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
         container.qPoints = _worldRegion->mapObject->points31;
+}
+
+- (QVector<OsmAnd::PointI>)getPoints31
+{
+    return _points31;
 }
 
 + (int) ray_intersect_x:(int) x y:(int) y middleY:(int) middleY prevX:(int) prevX prevY:(int) prevY
@@ -283,6 +291,7 @@
 - (void) setWorldRegion:(const std::shared_ptr<const OsmAnd::WorldRegion>&)worldRegion
 {
     _worldRegion = worldRegion;
+    [self findBoundaries];
 }
 
 - (void) setNativeName:(NSString *)nativeName
@@ -610,6 +619,21 @@
     return selectedRegion;
 }
 
+- (NSString *) getCountryNameAtLat:(double)latitude lon:(double)longitude
+{
+    NSArray<OAWorldRegion *> *list = [self queryAtLat:latitude lon:longitude];
+    for (OAWorldRegion *region in list)
+    {
+        if ([region contain:latitude lon:longitude])
+        {
+            NSString *name = region.name;
+            if (name && name.length > 0)
+                return name;
+        }
+    }
+    return nil;
+}
+
 - (NSInteger) getLevel
 {
     NSInteger res = 0;
@@ -662,9 +686,52 @@
     }
 }
 
+- (void)findBoundaries
+{
+    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr)
+    {
+        _points31 = _worldRegion->mapObject->points31;
+        if (!_points31.isEmpty())
+        {
+            int32_t x = _points31.at(0).x;
+            int32_t y = _points31.at(0).y;
+            QVector<OsmAnd::PointI> points31;
+            points31 << OsmAnd::PointI(x, y);
+            double minX = x;
+            double maxX = x;
+            double minY = y;
+            double maxY = y;
+
+            if (_points31.size() > 1)
+            {
+                for (int i = 1; i < _points31.size(); i++)
+                {
+                    x = _points31.at(i).x;
+                    y = _points31.at(i).y;
+
+                    if (x > maxX)
+                        maxX = x;
+                    else if (x < minX)
+                        minX = x;
+
+                    if (y < maxY)
+                        maxY = y;
+                    else if (y > minY)
+                        minY = y;
+
+                    points31 << OsmAnd::PointI(x, y);
+                }
+            }
+
+            _boundingBox = [[QuadRect alloc] initWithLeft:minX top:minY right:maxX bottom:maxY];
+            _points31 = points31;
+        }
+    }
+}
+
 - (void)buildResourceGroupItem
 {
-    NSArray<OAWorldRegion *> *subregions = self.subregions;
+    NSArray<OAWorldRegion *> *subregions = [self.class removeDuplicates:self.subregions];
     if (!subregions || subregions.count == 0)
         return;
 
@@ -718,9 +785,104 @@
     }
 }
 
--(BOOL)hasGroupItems
+- (BOOL)hasGroupItems
 {
     return self.groupItem && ![self.groupItem isEmpty];
+}
+
++ (NSArray<OAWorldRegion *> *)removeDuplicates:(NSArray<OAWorldRegion *> *)regions
+{
+    NSMutableArray<OAWorldRegion *> *copy = [regions mutableCopy];
+    if (copy.count > 0)
+    {
+        NSMutableSet<OAWorldRegion *> *duplicates = [NSMutableSet new];
+        for (int i = 0; i < copy.count - 1; i++)
+        {
+            OAWorldRegion *r1 = copy[i];
+            for (int j = i + 1; j < copy.count; j++)
+            {
+                OAWorldRegion *r2 = copy[j];
+                if ([r1 containsRegion:r2])
+                    [duplicates addObject:r2];
+                else if ([r2 containsRegion:r1])
+                    [duplicates addObject:r1];
+            }
+        }
+        [copy removeObjectsInArray:duplicates.allObjects];
+    }
+    return copy;
+}
+
+- (BOOL)containsRegion:(OAWorldRegion *)another
+{
+    // Firstly check rectangles for greater efficiency
+    if (![self containsBoundingBox:another.boundingBox])
+        return NO;
+
+    // Secondly check whole polygons
+    if (![self containsPolygon:[another getPoints31]])
+        return NO;
+
+    // Finally check inner point
+    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(another.regionCenter.latitude, another.regionCenter.longitude));
+    BOOL isInnerPoint = [self.class isPointInsidePolygon:point polygon:[another getPoints31]];
+    if (isInnerPoint)
+    {
+        return [self.class isPointInsidePolygon:point polygon:_points31];
+    }
+    else
+    {
+        // in this case we should find real inner point and check it
+    }
+
+    return YES;
+}
+
+- (BOOL)containsBoundingBox:(QuadRect *)rectangle
+{
+    return _boundingBox && rectangle && [_boundingBox contains:rectangle];
+}
+
+- (BOOL)containsPolygon:(QVector<OsmAnd::PointI>)another
+{
+    return (!_points31.isEmpty() && !another.isEmpty()) &&
+            [self.class isFirstPolygonInsideSecond:another secondPolygon:_points31];
+}
+
++ (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::PointI >)firstPolygon secondPolygon:(QVector<OsmAnd::PointI>)secondPolygon
+{
+    for (OsmAnd::PointI pointI : firstPolygon)
+    {
+        if (![self.class isPointInsidePolygon:pointI polygon:secondPolygon])
+        {
+            // if at least one point is not inside the boundary, return false
+            return NO;
+        }
+    }
+    return YES;
+}
+
++ (BOOL)isPointInsidePolygon:(OsmAnd::PointI)point polygon:(QVector<OsmAnd::PointI>)polygon
+{
+    double px = point.x;
+    double py = point.y;
+    BOOL oddNodes = NO;
+
+    for (int i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++)
+    {
+        double x1 = polygon.at(i).x;
+        double y1 = polygon.at(i).y;
+        double x2 = polygon.at(j).x;
+        double y2 = polygon.at(j).y;
+        if (((y1 < py && y2 >= py)
+                || (y2 < py && y1 >= py))
+                && (x1 <= px || x2 <= px))
+        {
+            if (x1 + (py - y1) / (y2 - y1) * (x2 - x1) < px)
+                oddNodes = !oddNodes;
+        }
+    }
+    return oddNodes;
 }
 
 @end

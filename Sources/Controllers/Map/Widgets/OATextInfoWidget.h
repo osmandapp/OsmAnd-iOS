@@ -8,22 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "OABaseWidgetView.h"
 
 #define kTextInfoWidgetWidth 94
 #define kTextInfoWidgetHeight 32
 
-@class OATextInfoWidget;
-
-@protocol OAWidgetListener <NSObject>
-
-@required
-- (void) widgetChanged:(OATextInfoWidget *)widget;
-- (void) widgetVisibilityChanged:(OATextInfoWidget *)widget visible:(BOOL)visible;
-- (void) widgetClicked:(OATextInfoWidget *)widget;
-
-@end
-
-@interface OATextInfoWidget : UIView
+@interface OATextInfoWidget : OABaseWidgetView
 
 @property (nonatomic, readonly) UIFont *primaryFont;
 @property (nonatomic, readonly) UIColor *primaryColor;
@@ -32,8 +22,6 @@
 @property (nonatomic, readonly) UIColor *unitsColor;
 @property (nonatomic, readonly) UIColor *unitsShadowColor;
 @property (nonatomic, readonly) float shadowRadius;
-
-@property (nonatomic, weak) id<OAWidgetListener> delegate;
 
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
@@ -51,7 +39,6 @@
 - (BOOL) updateVisibility:(BOOL)visible;
 - (BOOL) isVisible;
 
-- (BOOL) updateInfo;
 - (BOOL) isUpdateNeeded;
 - (BOOL) isMetricSystemDepended;
 - (BOOL) isAngularUnitsDepended;

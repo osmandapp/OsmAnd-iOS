@@ -16,6 +16,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
 #import "OATopCoordinatesWidget.h"
+#import "OADownloadMapWidget.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -477,7 +478,7 @@
         switch (self.mapModeButtonType)
         {
             case EOAMapModeButtonTypeShowMap:
-                [_mapModeButton setImage:[UIImage imageNamed:@"ic_custom_show_on_map"] forState:UIControlStateNormal];
+                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_show_on_map"] forState:UIControlStateNormal];
                 break;
                 
             default:
@@ -734,7 +735,9 @@
     else
     {
         BOOL isNight = [OAAppSettings sharedManager].nightMode;
-        return isNight || [_topCoordinatesWidget isVisible] ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+        if (_topCoordinatesWidget.isVisible && !_downloadMapWidget.isVisible)
+            return UIStatusBarStyleLightContent;
+        return isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     }
 }
 
@@ -789,6 +792,20 @@
     }
 }
 
+- (void) setDownloadMapWidget:(OADownloadMapWidget *)widget
+{
+    if (_downloadMapWidget.superview)
+        [_downloadMapWidget removeFromSuperview];
+
+    _downloadMapWidget = widget;
+
+    if (![self.view.subviews containsObject:_downloadMapWidget])
+    {
+        [self.view addSubview:_downloadMapWidget];
+        [self.view insertSubview:_downloadMapWidget aboveSubview:_toolbarViewController.view];
+    }
+}
+
 - (void) updateControlsLayout:(CGFloat)y
 {
     [self updateControlsLayout:y statusBarColor:[self getStatusBarBackgroundColor]];
@@ -800,7 +817,7 @@
     
     if (_widgetsView)
     {
-        CGFloat widgetsOffset = 2.0;
+        CGFloat widgetsOffset = _downloadMapWidget.isVisible ? _downloadMapWidget.shadowOffset : 2.0;
         _widgetsView.frame = CGRectMake(widgetsOffset, y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2 - widgetsOffset * 2, 10.0);
     }
     if (_downloadView)
@@ -843,23 +860,32 @@
 - (CGFloat) getHudTopOffset
 {
     CGFloat offset = [self getHudMinTopOffset];
-    
+    BOOL isLandscape = [OAUtilities isLandscapeIpadAware];
     BOOL isMarkersWidgetVisible = _toolbarViewController.view.alpha != 0;
     CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
     BOOL isCoordinatesVisible = [_topCoordinatesWidget isVisible] && _topCoordinatesWidget.alpha != 0;
     CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height;
+    BOOL isMapDownloadVisible = [_downloadMapWidget isVisible] && _downloadMapWidget.alpha != 0;
+    CGFloat downloadWidgetHeight = _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     
-    if ([OAUtilities isLandscape])
+    if (isLandscape)
     {
-        if (isCoordinatesVisible && isMarkersWidgetVisible)
+        if (isCoordinatesVisible && isMarkersWidgetVisible && !isMapDownloadVisible)
             offset += coordinateWidgetHeight;
     }
     else
     {
-        if (isMarkersWidgetVisible)
-            offset += markersWidgetHeaderHeight;
-        if (isCoordinatesVisible)
-            offset += coordinateWidgetHeight;
+        if (isMapDownloadVisible)
+        {
+            offset += downloadWidgetHeight;
+        }
+        else
+        {
+            if (isMarkersWidgetVisible)
+                offset += markersWidgetHeaderHeight;
+            if (isCoordinatesVisible)
+                offset += coordinateWidgetHeight;
+        }
     }
     return offset;
 }
@@ -918,6 +944,8 @@
     UIColor *statusBarColor;
     if (self.contextMenuMode && !_toolbarViewController)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
+    else if (_downloadMapWidget.isVisible)
+        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColorFromRGB(color_bottom_sheet_background);
     else if ([_topCoordinatesWidget isVisible])
         return UIColorFromRGB(nav_bar_night);
     else if (_toolbarViewController)

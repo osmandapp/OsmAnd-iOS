@@ -1351,7 +1351,7 @@
 "rendering_attr_piste_difficulty_freeride_name" = "Безкоштовний проїзд";
 "routing_attr_piste_type_sled_name" = "Сани";
 "rendering_attr_surface_sett_name" = "Бруківка";
-"rendering_attr_showMtbRoutes_name" = "Показувати гірськовелосипедні маршрути";
+"rendering_attr_showMtbRoutes_name" = "Маршрути для гірських велосипедів";
 "rendering_attr_roadStyle_name" = "Стиль доріг";
 "routing_attr_piste_type_downhill_description" = "Траси для високогірних і гірських лиж та доступ до лижних підіймачів.";
 "routing_attr_no_new_routing_description" = "Не використовувати для побудови маршруту алгоритм представлений у версії 1.9.";
@@ -1456,7 +1456,7 @@
 "rendering_attr_showLez_description" = "Показати на мапі зони низьких викидів. Не впливає на маршрутизацію.";
 "rendering_attr_surface_compacted_name" = "Ущільнена";
 "routing_attr_allow_expert_name" = "Дозволити експертні маршрути";
-"rendering_value_walkingRoutesOSMC_name" = "Забарвлення відповідно до пішої символіки OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_connection_name" = "З\'єднання";
 "rendering_value_translucent_orange_name" = "Напівпрозорий жовтогарячий";
 "rendering_value_light_brown_name" = "Світло-коричневий";
@@ -1493,7 +1493,7 @@
 "routing_attr_difficulty_preference_name" = "Бажана складність";
 "rendering_value__name" = "Типово";
 "rendering_attr_roadColors_description" = "Виберіть кольорову схему доріг:";
-"rendering_attr_hikingRoutesOSMC_name" = "Шар символів для пішого туризму";
+"rendering_attr_hikingRoutesOSMC_name" = "Пішохідні маршрути";
 "rendering_attr_OSMMapperAssistant_name" = "Помічник мапера OSM";
 "rendering_attr_publicTransportMode_name" = "Маршрути автобусів, тролейбусів та шатлів";
 "rendering_value_default13_name" = "Типово (13)";
@@ -1513,7 +1513,7 @@
 "routing_attr_allow_classic_only_name" = "Дозволити тільки класичні маршрути";
 "rendering_attr_contourWidth_name" = "Товщина горизонталей";
 "rendering_attr_surface_grass_name" = "Трава";
-"rendering_attr_showCycleRoutes_name" = "Показати веломаршрути";
+"rendering_attr_showCycleRoutes_name" = "Веломаршрути";
 "rendering_attr_streetLighting_name" = "Вуличне освітлення";
 "rendering_attr_undefined_name" = "Невизначена";
 "routing_attr_allow_expert_description" = "Надзвичайно складні маршрути з небезпечними перешкодами та оточенням.";
@@ -1538,7 +1538,7 @@
 "rendering_attr_highway_class_motorway_name" = "Автомагістраль";
 "rendering_attr_hideWaterPolygons_description" = "Воду";
 "routing_attr_avoid_tram_name" = "Уникати трамваїв";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Забарвлення згідно з належністю до мережі";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Належність до мережі";
 "rendering_attr_surface_dirt_name" = "Бруд";
 "rendering_attr_surface_snow_name" = "Сніг";
 "rendering_attr_contourColorScheme_name" = "Колірна схема горизонталей";
@@ -1798,7 +1798,7 @@
 "do_not_rotate" = "Не обертати";
 "app_theme_light" = "Світла";
 "settings_app_theme" = "Тема застосунку";
-"meters" = "метри";
+"shared_string_meters" = "метри";
 "tones" = "тонни";
 "announce" = "Оголошення";
 "only_manually" = "Лише вручну";
@@ -2134,3 +2134,20 @@
 "shared_string_turn_off" = "Вимкнути";
 "welmode_download_maps" = "Завантаження мап";
 "shared_strings_all_regions" = "Усі регіони";
+"srtm_download_single_help_message" = "Виберіть потрібний формат. Щоб змінити його, потрібно повторно завантажувати файл.";
+"m" = "м";
+"foot" = "фут";
+"routes_color_by_type" = "Забарвлення маршрутів від…";
+"rendering_value_walkingRoutesOSMC_description" = "Забарвлення маршрутів згідно з їхнім індивідуальним місцевим кольором (якщо він присутній в OpenStreetMap) і символу туристичного щита.";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Забарвлення згідно з належністю до мережі.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Забарвлення маршрутів згідно з типом мережі вузлів (міжнародної, регіональної, місцевої).";
+"walking_route_osmc_description" = "Забарвлення маршрутів згідно з їхнім місцевим індивідуальним кольором (якщо він наявний в OpenStreetMap) і типу (міжнародний, регіональний, місцевий).";
+"travel_routes" = "Туристичні маршрути";
+"shared_string_feet" = "фути";
+"srtm_download_list_help_message" = "OsmAnd надає дані горизонталей у метрах і футах. Щоб змінити формат, потрібно повторно завантажити файл.";
+"srtm_unit_format" = "Варіант одиниць вимірювання горизонталей";
+"download_suggestion" = "Завантажте детальну мапу %@, щоб переглянути цю ділянку";
+"download_map_dialog" = "Діалогове вікно завантаження мапи";
+"shared_string_navigation" = "Навігація";
+"dialogs_and_notifications_descr" = "Керуйте спливними вікнами, діалогами та сповіщеннями";
+"dialogs_and_notifications" = "Діалоги та сповіщення";

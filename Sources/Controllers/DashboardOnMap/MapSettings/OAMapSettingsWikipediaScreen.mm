@@ -26,11 +26,12 @@
 
 #define kCellTypeMap @"MapCell"
 
-static const NSInteger visibilitySection = 0;
-static const NSInteger languagesSection = 1;
-static const NSInteger availableMapsSection = 2;
-
-typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
+{
+    EOAMapSettingsWikipediaSectionVisibility = 0,
+    EOAMapSettingsWikipediaSectionLanguages,
+    EOAMapSettingsWikipediaSectionAvailable
+};
 
 @interface OAMapSettingsWikipediaScreen () <OAWikipediaScreenDelegate>
 
@@ -104,23 +105,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)initData
 {
-    NSMutableArray *dataArr = [@[
-            @[
-                    @{@"type": [OADividerCell getCellIdentifier]},
-                    @{@"type": [OASettingSwitchCell getCellIdentifier]},
-                    @{@"type": [OADividerCell getCellIdentifier]}
-            ],
-            @[
-                    @{@"type": [OADividerCell getCellIdentifier]},
-                    @{
-                            @"type": [OAIconTitleValueCell getCellIdentifier],
-                            @"img": @"ic_custom_map_languge.png",
-                            @"title": OALocalizedString(@"language")
-                    },
-                    @{@"type": [OADividerCell getCellIdentifier]}]
-    ] mutableCopy];
+    NSMutableArray *dataArr = [NSMutableArray new];
+    [dataArr addObject:@[
+            @{@"type": [OADividerCell getCellIdentifier]},
+            @{@"type": [OASettingSwitchCell getCellIdentifier]},
+            @{@"type": [OADividerCell getCellIdentifier]}
+    ]];
+    [dataArr addObject:@[
+            @{@"type": [OADividerCell getCellIdentifier]},
+            @{
+                    @"type": [OAIconTitleValueCell getCellIdentifier],
+                    @"img": @"ic_custom_map_languge.png",
+                    @"title": OALocalizedString(@"language")
+            },
+            @{@"type": [OADividerCell getCellIdentifier]}
+    ]];
 
-    NSMutableArray *availableMapsArr = [@[@{@"type": [OADividerCell getCellIdentifier]}] mutableCopy];
+    NSMutableArray *availableMapsArr = [NSMutableArray new];
+    [availableMapsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
+
     for (OARepositoryResourceItem* item in _mapItems)
     {
         [availableMapsArr addObject:@{
@@ -128,19 +131,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 @"img": @"ic_custom_wikipedia.png",
                 @"item": item,
         }];
+        [availableMapsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     }
-    [availableMapsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
 
     if (_mapItems.count > 0)
-        [dataArr addObject: availableMapsArr];
+        [dataArr addObject:availableMapsArr];
 
-    _data = [NSArray arrayWithArray:dataArr];
+    _data = dataArr;
 }
 
 - (void)setupView
 {
     title = OALocalizedString(@"product_title_wiki");
 
+    self.tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tblView.tableFooterView removeFromSuperview];
     self.tblView.tableFooterView = nil;
     [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
@@ -180,12 +184,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
-        [self.tblView beginUpdates];
         UISwitch *sw = (UISwitch *) sender;
         [_app.data setWikipedia:_wikipediaEnabled = sw.on];
-        [self.tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tblView reloadSections:[NSIndexSet indexSetWithIndex:languagesSection] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tblView reloadSections:[NSIndexSet indexSetWithIndex:availableMapsSection] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tblView beginUpdates];
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionLanguages] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionAvailable] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tblView endUpdates];
     }
 }
@@ -202,9 +206,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     switch (section)
     {
-        case languagesSection:
+        case EOAMapSettingsWikipediaSectionLanguages:
             return OALocalizedString(@"select_wikipedia_article_langs");
-        case availableMapsSection:
+        case EOAMapSettingsWikipediaSectionAvailable:
             return _mapItems.count > 0 ?  OALocalizedString(@"wiki_menu_download_descr") : @"";
         default:
             return @"";
@@ -232,7 +236,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ((section != visibilitySection && !_wikipediaEnabled) || (section == availableMapsSection && _mapItems.count == 0))
+    if ((section != EOAMapSettingsWikipediaSectionVisibility && !_wikipediaEnabled) || (section == EOAMapSettingsWikipediaSectionAvailable && _mapItems.count == 0))
         return 0;
 
     return _data[section].count;
@@ -243,14 +247,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);
-            cell.dividerInsets = UIEdgeInsetsZero;
+            CGFloat leftInset = indexPath.row == 0 || indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1 ? 0. : 65.;
+            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
             cell.dividerHight = 0.5;
         }
         return cell;
@@ -267,7 +272,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             cell.textView.text = _wikipediaEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = _wikipediaEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.imgView.image = [UIImage templateImageNamed:imgName];
@@ -290,7 +294,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             cell.textView.text = item[@"title"];
             cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.leftImageView.tintColor = UIColorFromRGB(color_dialog_buttons_dark);
@@ -321,11 +324,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
             }
@@ -348,11 +352,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (!mapItem.disabled)
             {
                 cell.textLabel.textColor = [UIColor blackColor];
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
             }
@@ -363,7 +368,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
 
-        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < _mapItems.count ? 65.0 : 0.0, 0.0, 0.0);
         cell.imageView.image = [UIImage templateImageNamed:@"ic_custom_wikipedia"];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = mapItem.title;;
@@ -391,15 +395,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return indexPath.section != visibilitySection ? indexPath : nil;
+    return indexPath.section != EOAMapSettingsWikipediaSectionVisibility && ![[self getItem:indexPath][@"type"] isEqualToString:[OADividerCell getCellIdentifier]] ? indexPath : nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != visibilitySection)
+    if (indexPath.section != EOAMapSettingsWikipediaSectionVisibility && ![[self getItem:indexPath][@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
         [self onItemClicked:indexPath];
-    else
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
@@ -409,7 +413,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    if (section == availableMapsSection && _mapItems.count > 0 && _wikipediaEnabled)
+    if (section == EOAMapSettingsWikipediaSectionAvailable && _mapItems.count > 0 && _wikipediaEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
         header.textLabel.textColor = UIColorFromRGB(color_text_footer);
@@ -423,9 +427,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     switch (section)
     {
-        case languagesSection:
+        case EOAMapSettingsWikipediaSectionLanguages:
             return 38.0;
-        case availableMapsSection:
+        case EOAMapSettingsWikipediaSectionAvailable:
             return _mapItems.count > 0 ? 56.0 : 0.01;
         default:
             return 0.01;
@@ -439,7 +443,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     switch (section)
     {
-        case availableMapsSection:
+        case EOAMapSettingsWikipediaSectionAvailable:
             return _mapItems.count > 0 ? OALocalizedString(@"osmand_live_available_maps") : @"";
         default:
             return @"";
@@ -467,13 +471,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if (indexPath.section == languagesSection && [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if (indexPath.section == EOAMapSettingsWikipediaSectionLanguages && [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         OAMapSettingsWikipediaLanguagesScreen *controller = [[OAMapSettingsWikipediaLanguagesScreen alloc] init];
         controller.delegate = self;
         [self.vwController presentViewController:controller animated:YES completion:nil];
     }
-    else if (indexPath.section == availableMapsSection && [item[@"type"] isEqualToString:kCellTypeMap])
+    else if (indexPath.section == EOAMapSettingsWikipediaSectionAvailable && [item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceItem *mapItem = item[@"item"];
         if (mapItem.downloadTask != nil)
@@ -510,7 +514,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAResourceItem *mapItem = [self getItem:indexPath][@"item"];
     if (mapItem.downloadTask)
     {
-        FFCircularProgressView* progressView = (FFCircularProgressView *) cell.accessoryView;
+        FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
 
         float progressCompleted = mapItem.downloadTask.progressCompleted;
         if (progressCompleted >= 0.001f && mapItem.downloadTask.state == OADownloadTaskStateRunning)
@@ -534,6 +538,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
         }
+        progressView.tintColor = UIColorFromRGB(color_primary_purple);
     }
 }
 
@@ -543,9 +548,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         for (int i = 0; i < _mapItems.count; i++)
         {
-            OAResourceItem *item = (OAResourceItem *) _mapItems[i];
+            OAResourceItem *item = _mapItems[i];
             if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:availableMapsSection]];
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:EOAMapSettingsWikipediaSectionAvailable]];
         }
     }
 }
@@ -612,7 +617,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)updateSelectedLanguage
 {
     [self.tblView beginUpdates];
-    [self.tblView reloadSections:[NSIndexSet indexSetWithIndex:languagesSection] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionLanguages] withRowAnimation:UITableViewRowAnimationFade];
     [self.tblView endUpdates];
 }
 

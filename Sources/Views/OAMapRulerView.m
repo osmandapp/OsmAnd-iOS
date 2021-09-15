@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OAMapRulerView()
 
@@ -102,12 +103,12 @@
     NSString * vl = @"";
     if (metersPerPixel > 0 && metersPerPixel < 10000000.0)
     {
-        double roundedDist = [[OsmAndApp instance] calculateRoundedDist:metersPerMaxSize];
+        double roundedDist = [OAOsmAndFormatter calculateRoundedDist:metersPerMaxSize];
         rulerWidth =  (roundedDist / metersPerPixel) / [[UIScreen mainScreen] scale];
         if (rulerWidth < 0)
             rulerWidth = 0;
         else
-            vl = [[OsmAndApp instance] getFormattedDistance: roundedDist];
+            vl = [OAOsmAndFormatter getFormattedDistance: roundedDist];
     }
     CGRect frame = self.frame;
     self.hidden = rulerWidth == 0 ? true : false;

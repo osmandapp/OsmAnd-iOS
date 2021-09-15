@@ -14,6 +14,7 @@
 #import "OAMapViewController.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -36,7 +37,7 @@ NSString *const OATransportStopRouteArrow = @" → ";
     OsmAndAppInstance app = [OsmAndApp instance];
     auto lang = QStringLiteral("");
     if (useDistance && self.distance > 0) {
-        NSString *nm = [app getFormattedDistance:self.distance];
+        NSString *nm = [OAOsmAndFormatter getFormattedDistance:self.distance];
         if (_refStop && _refStop->getName(lang, false) != _stop->getName(lang, false))
             nm = [NSString stringWithFormat:@"%@, %@", _refStop->getName(lang, false).toNSString(), nm];
         

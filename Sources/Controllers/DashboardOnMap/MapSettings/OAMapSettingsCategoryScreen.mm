@@ -37,10 +37,10 @@
         categoryName = param;
 
         settingsScreen = EMapSettingsScreenCategory;
-        
+
         vwController = viewController;
         tblView = tableView;
-        
+
         [self commonInit];
         [self initData];
     }
@@ -66,7 +66,7 @@
 
 - (void) setupView
 {
-    
+
     if ([categoryName isEqual:@"details"])
     {
         NSMutableArray<OAMapStyleParameter *> *withoutContoursLines;

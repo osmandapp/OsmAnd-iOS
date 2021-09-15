@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+static NSString * const HORSE_ROUTES_ATTR = @"horseRoutes";
+static NSString * const PISTE_ROUTES_ATTR = @"pisteRoutes";
+static NSString * const ALPINE_HIKING_ATTR = @"alpineHiking";
+static NSString * const SHOW_MTB_ROUTES_ATTR = @"showMtbRoutes";
+static NSString * const SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
+static NSString * const WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
+static NSString * const HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
+static NSString * const CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
+static NSString * const TRAVEL_ROUTES = @"travel_routes";
 
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
@@ -56,6 +65,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 - (NSArray<NSString *> *) getAllCategories;
 - (NSString *) getCategoryTitle:(NSString *)categoryName;
 - (NSArray<OAMapStyleParameter *> *) getParameters:(NSString *)category;
+- (NSArray<OAMapStyleParameter *> *) getParameters:(NSString *)category sorted:(BOOL)sorted;
 
 - (BOOL) isCategoryEnabled:(NSString *)categoryName;
 - (void) setCategoryEnabled:(BOOL)isVisible categoryName:(NSString *)categoryName;
@@ -64,6 +74,6 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 - (void) save:(OAMapStyleParameter *)parameter;
 - (void) save:(OAMapStyleParameter *)parameter refreshMap:(BOOL)refreshMap;
 
--(void) resetMapStyleForAppMode:(NSString *)mapPresetName;
+- (void) resetMapStyleForAppMode:(NSString *)mapPresetName;
 
 @end

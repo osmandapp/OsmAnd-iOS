@@ -18,6 +18,8 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAToolbarViewController.h"
+#import "OADownloadMapWidget.h"
+#import "OAOsmAndFormatter.h"
 
 #define kHorisontalOffset 8
 #define kIconWidth 30
@@ -82,10 +84,10 @@
 
 - (void) layoutSubviews
 {
-    if (_delegate)
-        [_delegate widgetChanged:nil];
+    if (self.delegate)
+        [self.delegate widgetChanged:nil];
     
-    BOOL isLandscape = [OAUtilities isLandscape];
+    BOOL isLandscape = [OAUtilities isLandscapeIpadAware];
     CGFloat middlePoint = self.frame.size.width / 2;
     _horisontalSeparator.frame = CGRectMake(0, 0, self.frame.size.width, 1);
     _verticalSeparator.frame = CGRectMake(middlePoint - 1, 14, 1, 24);
@@ -136,8 +138,9 @@
 
 - (BOOL) isVisible
 {
-    OAToolbarViewController *topToolbar = [[OARootViewController instance].mapPanel.hudViewController toolbarViewController];
-    return [_settings.showCoordinatesWidget get] && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh;
+    OAMapHudViewController *hudController = [OARootViewController instance].mapPanel.hudViewController;
+    OAToolbarViewController *topToolbar = [hudController toolbarViewController];
+    return [_settings.showCoordinatesWidget get] && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh && !hudController.downloadMapWidget.isVisible;
 }
 
 - (BOOL) updateInfo
@@ -192,7 +195,7 @@
                     _lonImageView.hidden = NO;
                     _verticalSeparator.hidden = NO;
                     
-                    NSString *coordinatesString = [OALocationConvert formatLocationCoordinates:lat lon:lon format:[self getConverterFormat:format]];
+                    NSString *coordinatesString = [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:format];
                     NSArray<NSString *> *coordinates = [coordinatesString componentsSeparatedByString:@","];
                     latText = coordinates[0];
                     lonText = [coordinates[1] trim];
@@ -270,8 +273,8 @@
     if (visible == self.hidden)
     {
         self.hidden = !visible;
-        if (_delegate)
-            [_delegate widgetVisibilityChanged:nil visible:visible];
+        if (self.delegate)
+            [self.delegate widgetVisibilityChanged:nil visible:visible];
         
         return YES;
     }

@@ -1551,7 +1551,7 @@
 "voice_announces" = "語音提示";
 "help_nav_profiles" = "導航設定檔";
 "listed_exist" = "列出的 %@ 已存在於 OsmAnd 中。";
-"meters" = "公尺";
+"shared_string_meters" = "公尺";
 "shared_string_add_profile" = "新增設定檔";
 "m_style_pulic_transport" = "大眾運輸";
 "one" = "一";

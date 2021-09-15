@@ -62,6 +62,8 @@
         self.titleLabel.text = OALocalizedString(@"osmand_settings");
     else if (_settingsType == EOADefaultProfile)
         self.titleLabel.text = OALocalizedString(@"settings_preset");
+    else if (_settingsType == EOADialogsAndNotifications)
+        self.titleLabel.text = OALocalizedString(@"dialogs_and_notifications");
     else
         self.titleLabel.text = OALocalizedString(@"carplay_profile");
 }
@@ -97,36 +99,37 @@
     {
         case EOAGlobalSettingsMain:
         {
-            NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
-                @"name" : @"settings_preset",
-                @"title" : OALocalizedString(@"settings_preset"),
-                @"value" : _settings.useLastApplicationModeByDefault.get ? OALocalizedString(@"last_used") : _settings.defaultApplicationMode.get.toHumanString,
-                @"description" : OALocalizedString(@"default_profile_descr"),
-                @"img" : @"menu_cell_pointer.png",
-                @"type" : [OASettingsTableViewCell getCellIdentifier] },
+            _data = @[
                 @{
-                @"name" : @"carplay_profile",
-                @"title" : OALocalizedString(@"carplay_profile"),
-                @"value" : _settings.isCarPlayModeDefault.get ? OALocalizedString(@"settings_preset") : _settings.carPlayMode.get.toHumanString,
-                @"description" : OALocalizedString(@"carplay_profile_descr"),
-                @"img" : @"menu_cell_pointer.png",
-                @"type" : [OASettingsTableViewCell getCellIdentifier] },
+                    @"name" : @"settings_preset",
+                    @"title" : OALocalizedString(@"settings_preset"),
+                    @"value" : _settings.useLastApplicationModeByDefault.get ? OALocalizedString(@"last_used") : _settings.defaultApplicationMode.get.toHumanString,
+                    @"description" : OALocalizedString(@"default_profile_descr"),
+                    @"img" : @"menu_cell_pointer.png",
+                    @"type" : [OASettingsTableViewCell getCellIdentifier] },
                 @{
-                @"name" : @"do_not_show_discount",
-                @"title" : OALocalizedString(@"do_not_show_discount"),
-                @"description" : OALocalizedString(@"do_not_show_discount_desc"),
-                @"value" : @(_settings.settingDoNotShowPromotions.get),
-                @"img" : @"menu_cell_pointer.png",
-                @"type" : [OASwitchTableViewCell getCellIdentifier] },
+                    @"name" : @"carplay_profile",
+                    @"title" : OALocalizedString(@"carplay_profile"),
+                    @"value" : _settings.isCarPlayModeDefault.get ? OALocalizedString(@"settings_preset") : _settings.carPlayMode.get.toHumanString,
+                    @"description" : OALocalizedString(@"carplay_profile_descr"),
+                    @"img" : @"menu_cell_pointer.png",
+                    @"type" : [OASettingsTableViewCell getCellIdentifier] },
                 @{
-                @"name" : @"do_not_send_anonymous_data",
-                @"title" : OALocalizedString(@"send_anonymous_data"),
-                @"description" : OALocalizedString(@"send_anonymous_data_desc"),
-                @"value" : @(_settings.settingUseAnalytics.get),
-                @"img" : @"menu_cell_pointer.png",
-                @"type" : [OASwitchTableViewCell getCellIdentifier], }, nil
+                    @"name" : @"dialogs_and_notif",
+                    @"title" : OALocalizedString(@"dialogs_and_notifications"),
+                    @"description" : OALocalizedString(@"dialogs_and_notifications_descr"),
+                    @"value" : [self getDialogsAndNotificationsValue],
+                    @"img" : @"menu_cell_pointer.png",
+                    @"type" : [OASettingsTableViewCell getCellIdentifier]
+                },
+                @{
+                    @"name" : @"do_not_send_anonymous_data",
+                    @"title" : OALocalizedString(@"send_anonymous_data"),
+                    @"description" : OALocalizedString(@"send_anonymous_data_desc"),
+                    @"value" : @(_settings.settingUseAnalytics.get),
+                    @"img" : @"menu_cell_pointer.png",
+                    @"type" : [OASwitchTableViewCell getCellIdentifier], }
             ];
-            _data = [NSArray arrayWithArray:arr];
             break;
         }
         case EOADefaultProfile:
@@ -184,9 +187,38 @@
             _data = [NSArray arrayWithArray:arr];
             break;
         }
+        case EOADialogsAndNotifications:
+        {
+            _data = @[
+                @{
+                    @"name" : @"do_not_show_discount",
+                    @"title" : OALocalizedString(@"do_not_show_discount"),
+                    @"description" : OALocalizedString(@"do_not_show_discount_desc"),
+                    @"value" : @(_settings.settingDoNotShowPromotions.get),
+                    @"type" : [OASwitchTableViewCell getCellIdentifier]
+                },
+                @{
+                    @"name" : @"download_map_dialog",
+                    @"title" : OALocalizedString(@"download_map_dialog"),
+                    @"value" : @(_settings.showDownloadMapDialog.get),
+                    @"type" : [OASwitchTableViewCell getCellIdentifier]
+                }
+            ];
+        }
         default:
             break;
     }
+}
+
+- (NSString *) getDialogsAndNotificationsValue
+{
+    BOOL showPromotions = _settings.settingDoNotShowPromotions.get;
+    BOOL showDownloadMap = _settings.showDownloadMapDialog.get;
+    if (showPromotions && showDownloadMap)
+        return OALocalizedString(@"shared_string_all");
+    else if (!showPromotions && !showDownloadMap)
+        return OALocalizedString(@"map_settings_none");
+    return @"1/2";
 }
 
 - (IBAction) backButtonPressed:(id)sender
@@ -196,7 +228,7 @@
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    if (_settingsType == EOAGlobalSettingsMain)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications)
         return _data[indexPath.section];
     else
         return _data[indexPath.row];
@@ -291,6 +323,8 @@
                     settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADefaultProfile];
                 else if ([name isEqualToString:@"carplay_profile"])
                     settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOACarplayProfile];
+                else if ([name isEqualToString:@"dialogs_and_notif"])
+                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADialogsAndNotifications];
                 [self.navigationController pushViewController:settingsViewController animated:YES];
                 [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
                 break;
@@ -320,7 +354,7 @@
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_settingsType == EOAGlobalSettingsMain)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications)
         return 1;
     else if (_settingsType == EOADefaultProfile)
         return _isUsingLastAppMode ? 1 : _data.count;
@@ -332,7 +366,7 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_settingsType == EOAGlobalSettingsMain)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications)
         return _data.count;
     else
         return 1;
@@ -348,7 +382,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (_settingsType == EOAGlobalSettingsMain)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications)
     {
         NSDictionary *item = _data[section];
         return item[@"description"];
@@ -442,6 +476,8 @@
                 [_settings.settingDoNotShowPromotions set:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
                 [_settings.settingUseAnalytics set:isChecked];
+            else if ([name isEqualToString:@"download_map_dialog"])
+                [_settings.showDownloadMapDialog set:isChecked];
             else if ([name isEqualToString:@"last_used"])
             {
                 [_settings.useLastApplicationModeByDefault set:isChecked];

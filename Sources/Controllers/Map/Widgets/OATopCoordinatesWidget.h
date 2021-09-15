@@ -7,14 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OABaseWidgetView.h"
 
-@protocol OAWidgetListener;
+@interface OATopCoordinatesWidget :OABaseWidgetView
 
-@interface OATopCoordinatesWidget : UIView
-
-@property (nonatomic, weak) id<OAWidgetListener> delegate;
-
-- (BOOL) updateInfo;
 - (BOOL) isVisible;
 
 @end

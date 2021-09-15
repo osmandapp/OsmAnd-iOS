@@ -294,7 +294,10 @@
 
     // Type
     [tKeys addObject:OALocalizedString(@"res_type")];
-    [tValues addObject:[OAResourceType resourceTypeLocalized:localResource->type]];
+    NSString *typeLocalized = [OAResourceType resourceTypeLocalized:localResource->type];
+    if ([OAResourceType isSRTMResourceType:resource])
+        typeLocalized = [NSString stringWithFormat:@"%@ (%@)", typeLocalized, [OAResourceType getSRTMFormatResource:resource longFormat:NO]];
+    [tValues addObject:typeLocalized];
 
     // Size
     [tKeys addObject:OALocalizedString(@"res_size")];

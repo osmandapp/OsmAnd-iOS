@@ -74,13 +74,19 @@ static BOOL _isRoutesGroupOpen = NO;
 
         vwController = viewController;
         tblView = tableView;
-        [self initData];
     }
     return self;
 }
 
-- (void)initData
+- (void)initView
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
+}
+
+- (void)deinitView
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)setupView
@@ -119,13 +125,14 @@ static BOOL _isRoutesGroupOpen = NO;
             @"key": @"layer_amenity_label"
     }];
 
-    [showSectionData addObject:@{
-            @"name": OALocalizedString(@"product_title_wiki"),
-            @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
-            hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
-            @"type": hasWiki ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
-            @"key": @"wikipedia_layer"
-    }];
+    if (![_iapHelper.wiki isPurchased] || (!_iapHelper.wiki.disabled))
+        [showSectionData addObject:@{
+                @"name": OALocalizedString(@"product_title_wiki"),
+                @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
+                hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
+                @"type": hasWiki ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
+                @"key": @"wikipedia_layer"
+        }];
 
     if ([_iapHelper.osmEditing isActive])
     {
@@ -291,13 +298,14 @@ static BOOL _isRoutesGroupOpen = NO;
     }
 
     NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
-    [overlayUnderlaySectionData addObject:@{
+    if (![_iapHelper.srtm isPurchased] || (!_iapHelper.srtm.disabled))
+        [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"shared_string_terrain"),
             @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",
             hasSRTM ? @"has_options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
             @"type": hasSRTM ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
             @"key": @"terrain_layer"
-    }];
+        }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_over"),
             @"image": @"ic_custom_overlay_map",
@@ -915,6 +923,22 @@ static BOOL _isRoutesGroupOpen = NO;
 {
     _styleSettings = [OAMapStyleSettings sharedInstance];
     [self setupView];
+}
+
+#pragma mark - OAIAPProductNotification
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+    });
+}
+
+- (void)productsRestored:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+    });
 }
 
 @end

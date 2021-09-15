@@ -890,6 +890,13 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.text.length >= kMaxTexFieldSymbolsCount && string.length > 0)
+        return NO;
+    return YES;
+}
+
 -(void)textViewDidChange:(UITextView *)textView
 {
     [self setText:textView.text forTextFieldByTag:textView.tag];

@@ -7,19 +7,10 @@
 //
 
 #import "OACompoundViewController.h"
+#import "OATrackMenuViewController.h"
 
 @class OAGPX;
 @class OAButton;
-
-@protocol OAOverviewTrackMenuViewControllerDelegate <NSObject>
-
-@required
-
-- (void)overviewContentChanged;
-- (void)onExport;
-- (BOOL)onShowHide;
-
-@end
 
 @interface OAOverviewTrackMenuViewController : OACompoundViewController
 
@@ -43,7 +34,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (weak, nonatomic) id<OAOverviewTrackMenuViewControllerDelegate> delegate;
+@property (weak, nonatomic) id<OATrackMenuViewControllerDelegate> delegate;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 

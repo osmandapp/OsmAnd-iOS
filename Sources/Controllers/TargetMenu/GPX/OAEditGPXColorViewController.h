@@ -11,8 +11,9 @@
 
 @protocol OAEditGPXColorViewControllerDelegate <NSObject>
 
-@optional
-- (void) trackColorChanged;
+@required
+
+- (void)trackColorChanged:(NSInteger)colorIndex;
 
 @end
 
@@ -24,11 +25,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (assign, nonatomic) NSInteger colorIndex;
-@property (nonatomic, readonly) BOOL saveChanges;
+@property (weak, nonatomic) id<OAEditGPXColorViewControllerDelegate> delegate;
 
-@property (weak, nonatomic) id delegate;
-
-- (id) initWithColorValue:(NSInteger)colorValue colorsCollection:(OAGPXTrackColorCollection *)collection;
+- (id)initWithColorValue:(NSInteger)colorValue colorsCollection:(OAGPXTrackColorCollection *)collection;
 
 @end

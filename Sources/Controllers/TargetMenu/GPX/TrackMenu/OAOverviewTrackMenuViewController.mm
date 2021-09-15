@@ -11,10 +11,8 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
-#import "OADistanceDirection.h"
 
 @interface OAOverviewTrackMenuViewController ()
 
@@ -28,7 +26,6 @@
     OASavingTrackHelper *_savingHelper;
     OAMapViewController *_mapViewController;
 
-    OAGPXDocument *_doc;
     BOOL _isCurrentTrack;
     BOOL _isShown;
 }
@@ -44,7 +41,6 @@
         _gpx = gpx;
         _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
         _isCurrentTrack = _gpx.gpxFilePath.length == 0;
-        _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack : [[OAGPXDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
     }
     return self;
 }
@@ -58,12 +54,7 @@
     self.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
     self.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
 
-    double targetLatitude = _gpx.bounds.bottomRight.latitude;
-    double targetLongitude = _gpx.bounds.topLeft.longitude;
-
-    OADistanceDirection *distanceDirection = [[OADistanceDirection alloc] initWithLatitude:targetLatitude longitude:targetLongitude mapCenterCoordinate:_gpx.bounds.center];
-    [distanceDirection evaluateDistanceDirection:NO];
-    [self.directionTextView setText:distanceDirection.distance];
+    [self.directionTextView setText:[_app getFormattedDistance:_gpx.totalDistance]];
 
     [self.showHideButton setImage:[UIImage templateImageNamed:_isShown ? @"ic_custom_show" : @"ic_custom_hide"] forState:UIControlStateNormal];
 }
@@ -108,9 +99,9 @@
 
 - (IBAction)onShowHidePressed
 {
-    if (self.delegate)
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onShowHidePressed)])
     {
-        _isShown = [self.delegate onShowHide];
+        _isShown = [self.delegate onShowHidePressed];
         [self.showHideButton setTitle:_isShown ? OALocalizedString(@"sett_show") : OALocalizedString(@"poi_hide") forState:UIControlStateNormal];
         [self.showHideButton setImage:[UIImage templateImageNamed:_isShown ? @"ic_custom_show" : @"ic_custom_hide"] forState:UIControlStateNormal];
     }
@@ -118,18 +109,20 @@
 
 - (IBAction)onAppearancePressed
 {
-    if (self.delegate)
-        [self.delegate onExport];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onColorPressed)])
+        [self.delegate onColorPressed];
 }
 
 - (IBAction)onExportPressed
 {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onExportPressed)])
+        [self.delegate onExportPressed];
 }
 
 - (IBAction)onNavigationPressed
 {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onNavigationPressed)])
+        [self.delegate onNavigationPressed];
 }
 
 @end

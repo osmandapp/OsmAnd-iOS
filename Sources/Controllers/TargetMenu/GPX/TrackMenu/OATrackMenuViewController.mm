@@ -11,23 +11,29 @@
 #import "OASegmentsTrackMenuViewController.h"
 #import "OARootViewController.h"
 #import "OASaveTrackViewController.h"
+#import "OAEditGPXColorViewController.h"
+#import "OATrackSegmentsViewController.h"
 #import "OAMapRendererView.h"
 #import "OATabBar.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OANativeUtilities.h"
 #import "OAGPXDocument.h"
-#import "OAGPXDatabase.h"
-#import "OAGPXLayer.h"
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
+#import "OARoutingHelper.h"
+#import "OATargetPointsHelper.h"
+#import "OAGPXDatabase.h"
+#import "OANativeUtilities.h"
+#import "OAGPXLayer.h"
+#import "OAMapActions.h"
+#import "OARouteProvider.h"
 
 #define kOverviewPosition 0
 #define kSegmentsPosition 1
 #define kPointsPosition 2
 #define kActionsPosition 3
 
-@interface OATrackMenuViewController() <UIPageViewControllerDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OAOverviewTrackMenuViewControllerDelegate, OASaveTrackViewControllerDelegate>
+@interface OATrackMenuViewController() <UIPageViewControllerDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OATrackMenuViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate>
 
 @end
 
@@ -45,11 +51,13 @@
     OAAppSettings *_settings;
     OASavingTrackHelper *_savingHelper;
     OAGPX *_gpx;
+    OAGPXDocument *_doc;
 
     BOOL _isCurrentTrack;
     BOOL _isShown;
     NSString *_exportFileName;
     NSString *_exportFilePath;
+    OAGPXTrackColorCollection *_gpxColorCollection;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
@@ -61,8 +69,10 @@
         _settings = [OAAppSettings sharedManager];
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _gpx = gpx;
-        _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
         _isCurrentTrack = _gpx.gpxFilePath.length == 0;
+        _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
+                : [[OAGPXDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
+        _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
     }
     return self;
 }
@@ -77,6 +87,7 @@
 
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    _gpxColorCollection = [[OAGPXTrackColorCollection alloc] initWithMapViewController:_mapViewController];
 
 //    [_mapPanelViewController displayAreaOnMap:_gpx.bounds.topLeft bottomRight:_gpx.bounds.bottomRight zoom:10. bottomInset:!self.isLandscape ? DeviceScreenHeight - _overviewViewController.headerView.frame.size.height : 0 leftInset:self.isLandscape ? DeviceScreenHeight - _overviewViewController.headerView.frame.size.width : 0];
 //    [_mapPanelViewController displayGpxOnMap:_gpx];
@@ -117,14 +128,20 @@
     _segmentsViewController = [[OASegmentsTrackMenuViewController alloc] initWithGpx:_gpx];
     _controllers = @[_overviewViewController, _segmentsViewController];
 
-    [_pageViewController setViewControllers:@[_controllers.firstObject] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    [_pageViewController setViewControllers:@[_controllers.firstObject]
+                                  direction:UIPageViewControllerNavigationDirectionForward
+                                   animated:NO
+                                 completion:nil];
 
     [self setupTabBar];
 }
 
 - (void)setupPageController
 {
-    _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    _pageViewController = [[UIPageViewController alloc]
+            initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
+              navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                            options:nil];
     _pageViewController.delegate = self;
     CGRect frame = CGRectMake(0., 0., self.contentView.frame.size.width, self.contentView.frame.size.height);
     _pageViewController.view.frame = frame;
@@ -138,24 +155,33 @@
 
 - (void)setupTabBar
 {
+    UIColor *unselectedColor = UIColorFromRGB(color_dialog_buttons_dark);
     [self.tabBarView setItems:@[
-                    [[UITabBarItem alloc] initWithTitle:OALocalizedString(@"rendering_value_browse_map_name")
-                                                  image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overview"] color:UIColorFromRGB(color_dialog_buttons_dark)]
-                                                    tag:kOverviewPosition],
-                    [[UITabBarItem alloc] initWithTitle:OALocalizedString(@"track")
-                                                  image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_trip"] color:UIColorFromRGB(color_dialog_buttons_dark)]
-                                                    tag:kSegmentsPosition],
-                    [[UITabBarItem alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_points")
-                                                  image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_waypoint"] color:UIColorFromRGB(color_dialog_buttons_dark)]
-                                                    tag:kPointsPosition],
-                    [[UITabBarItem alloc] initWithTitle:OALocalizedString(@"actions")
-                                                  image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overflow_menu"] color:UIColorFromRGB(color_dialog_buttons_dark)]
-                                                    tag:kActionsPosition]
+                    [[UITabBarItem alloc]
+                            initWithTitle:OALocalizedString(@"rendering_value_browse_map_name")
+                                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overview"]
+                                                                    color:unselectedColor]
+                                      tag:kOverviewPosition],
+                    [[UITabBarItem alloc]
+                            initWithTitle:OALocalizedString(@"track")
+                                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_trip"]
+                                                                    color:unselectedColor]
+                                      tag:kSegmentsPosition],
+                    [[UITabBarItem alloc]
+                            initWithTitle:OALocalizedString(@"shared_string_gpx_points")
+                                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_waypoint"]
+                                                                    color:unselectedColor]
+                                      tag:kPointsPosition],
+                    [[UITabBarItem alloc]
+                            initWithTitle:OALocalizedString(@"actions")
+                                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
+                                                                    color:unselectedColor]
+                                      tag:kActionsPosition]
             ]
                           animated:YES];
 
     self.tabBarView.selectedItem = self.tabBarView.items[0];
-    self.tabBarView.itemWidth = (!self.isLandscape ? DeviceScreenWidth : DeviceScreenWidth / 2) / self.tabBarView.items.count;
+    self.tabBarView.itemWidth = (!self.isLandscape ? DeviceScreenWidth : DeviceScreenHeight < DeviceScreenWidth / 2 ? DeviceScreenHeight : DeviceScreenWidth / 2) / self.tabBarView.items.count;
     self.tabBarView.delegate = self;
 }
 
@@ -249,7 +275,7 @@
 - (BOOL)preHide
 {
     [_mapViewController keepTempGpxTrackVisible];
-    [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
     return YES;
 }
 
@@ -260,8 +286,7 @@
     int i = 1;
     while ([[NSFileManager defaultManager] fileExistsAtPath:[[folderPath stringByAppendingPathComponent:newName] stringByAppendingPathExtension:@"gpx"]])
     {
-        newName = [NSString stringWithFormat:@"%@ %i", name, i];
-        i++;
+        newName = [NSString stringWithFormat:@"%@ %i", name, i++];
     }
     return [newName stringByAppendingPathExtension:@"gpx"];
 }
@@ -275,7 +300,7 @@
     NSString *sourcePath = [_app.gpxPath stringByAppendingPathComponent:oldPath];
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
-    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
+    NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
     NSString *newName = newFileName ? newFileName : oldName;
     newName = [self getUniqueFileName:newName inFolderPath:newFolderPath];
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
@@ -283,10 +308,11 @@
 
     [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
 
+    OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
-        [OAGPXDatabase.sharedDb updateGPXFolderName:newStoringPath oldFilePath:oldPath];
-        [OAGPXDatabase.sharedDb save];
+        [gpxDatabase updateGPXFolderName:newStoringPath oldFilePath:oldPath];
+        [gpxDatabase save];
         [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
 
         self.titleView.text = [newName stringByDeletingPathExtension];
@@ -296,11 +322,14 @@
     {
         OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:sourcePath];
         OAGPXTrackAnalysis *analysis = [gpxDoc getAnalysis:0];
-        [OAGPXDatabase.sharedDb addGpxItem:[newFolder stringByAppendingPathComponent:newName] title:newName desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds analysis:analysis];
+        [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
+                                     title:newName
+                                      desc:gpxDoc.metadata.desc
+                                    bounds:gpxDoc.bounds
+                                  analysis:analysis];
 
-        NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:OAAppSettings.sharedManager.mapSettingVisibleGpx.get];
-        if ([visibleGpx containsObject:oldPath])
-            [OAAppSettings.sharedManager showGpx:@[newStoringPath]];
+        if ([_settings.mapSettingVisibleGpx.get containsObject:oldPath])
+            [_settings showGpx:@[newStoringPath]];
     }
 
     if (self.delegate)
@@ -334,7 +363,10 @@
     if ([_controllers indexOfObject:_pageViewController.viewControllers[0]] == kOverviewPosition)
     {
         if (item.tag > kOverviewPosition)
-            [_pageViewController setViewControllers:@[_segmentsViewController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+            [_pageViewController setViewControllers:@[_segmentsViewController]
+                                          direction:UIPageViewControllerNavigationDirectionForward
+                                           animated:YES
+                                         completion:nil];
     }
     else if ([_controllers indexOfObject:_pageViewController.viewControllers[0]] == kSegmentsPosition)
     {
@@ -375,7 +407,12 @@
         _exportFilePath = nil;
         _exportController = nil;
 
-        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:_gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension filePath:_gpx.gpxFilePath showOnMap:YES simplifiedTrack:YES];
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
+                initWithFileName:_gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension
+                        filePath:_gpx.gpxFilePath
+                       showOnMap:YES
+                 simplifiedTrack:YES];
+
         saveTrackViewController.delegate = self;
         [OARootViewController.instance presentViewController:saveTrackViewController animated:YES completion:nil];
     }
@@ -389,7 +426,26 @@
         [self.delegate contentChanged];
 }
 
-- (void)onExport
+- (BOOL)onShowHidePressed
+{
+    if (_isShown)
+        [_settings hideGpx:@[_gpx.gpxFilePath] update:YES];
+    else
+        [_settings showGpx:@[_gpx.gpxFilePath] update:YES];
+
+    return _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+}
+
+- (void)onColorPressed
+{
+    OAEditGPXColorViewController *trackColorViewController =
+            [[OAEditGPXColorViewController alloc] initWithColorValue:_gpx.color
+                                                    colorsCollection:_gpxColorCollection];
+    trackColorViewController.delegate = self;
+    [self.navController pushViewController:trackColorViewController animated:YES];
+}
+
+- (void)onExportPressed
 {
     if (_isCurrentTrack)
     {
@@ -399,8 +455,12 @@
         NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
         [simpleFormat setDateFormat:@"HH-mm_EEE"];
 
-        _exportFileName = [NSString stringWithFormat:@"%@_%@", [fmt stringFromDate:[NSDate date]], [simpleFormat stringFromDate:[NSDate date]]];
-        _exportFilePath = [NSString stringWithFormat:@"%@/%@.gpx", NSTemporaryDirectory(), _exportFileName];
+        _exportFileName = [NSString stringWithFormat:@"%@_%@",
+                [fmt stringFromDate:[NSDate date]],
+                [simpleFormat stringFromDate:[NSDate date]]];
+        _exportFilePath = [NSString stringWithFormat:@"%@/%@.gpx",
+                NSTemporaryDirectory(),
+                _exportFileName];
 
         [_savingHelper saveCurrentTrack:_exportFilePath];
     }
@@ -410,9 +470,7 @@
         _exportFilePath = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
     }
 
-    NSURL* gpxUrl = [NSURL fileURLWithPath:_exportFilePath];
-
-    _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
+    _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];
     _exportController.UTI = @"com.topografix.gpx";
     _exportController.delegate = self;
     _exportController.name = _exportFileName;
@@ -421,23 +479,77 @@
                                          animated:YES];
 }
 
-- (BOOL)onShowHide
+- (void)onNavigationPressed
 {
-    if (_isShown)
-        [_settings hideGpx:@[_gpx.gpxFilePath] update:YES];
+    if ([_doc getNonEmptySegmentsCount] > 1)
+    {
+        OATrackSegmentsViewController *trackSegmentViewController = [[OATrackSegmentsViewController alloc] initWithFile:_doc];
+        trackSegmentViewController.delegate = self;
+        [OARootViewController.instance presentViewController:trackSegmentViewController animated:YES completion:nil];
+    }
     else
-        [_settings showGpx:@[_gpx.gpxFilePath] update:YES];
-    return _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+    {
+        if (![[OARoutingHelper sharedInstance] isFollowingMode])
+            [_mapPanelViewController.mapActions stopNavigationWithoutConfirm];
+
+        [_mapPanelViewController.mapActions enterRoutePlanningModeGivenGpx:_gpx
+                                                                      from:nil
+                                                                  fromName:nil
+                                            useIntermediatePointsByDefault:YES
+                                                                showDialog:YES];
+        [_mapPanelViewController hideTargetPointMenu];
+    }
+}
+
+#pragma mark - OAEditGPXColorViewControllerDelegate
+
+-(void)trackColorChanged:(NSInteger)colorIndex
+{
+    OAGPXTrackColor *gpxColor = [_gpxColorCollection getAvailableGPXColors][colorIndex];
+    _gpx.color = gpxColor.colorValue;
+    [[OAGPXDatabase sharedDb] save];
+    [[_app mapSettingsChangeObservable] notifyEvent];
 }
 
 #pragma mark - OASaveTrackViewControllerDelegate
 
-- (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
+- (void)onSaveAsNewTrack:(NSString *)fileName
+               showOnMap:(BOOL)showOnMap
+         simplifiedTrack:(BOOL)simplifiedTrack
 {
     [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
              renameToNewName:[fileName.lastPathComponent
                      stringByAppendingPathExtension:@"gpx"]
           deleteOriginalFile:NO];
+}
+
+#pragma mark - OASegmentSelectionDelegate
+
+- (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+{
+    [OAAppSettings.sharedManager.gpxRouteSegment set:position];
+
+    [[OARootViewController instance].mapPanel.mapActions setGPXRouteParamsWithDocument:_doc path:_doc.path];
+    [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+    [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+
+    OAGPXRouteParamsBuilder *paramsBuilder = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
+    if (paramsBuilder)
+    {
+        [paramsBuilder setSelectedSegment:position];
+        NSArray<CLLocation *> *ps = [paramsBuilder getPoints];
+        if (ps.count > 0)
+        {
+            OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
+            [tg clearStartPoint:NO];
+            CLLocation *loc = ps.lastObject;
+            [tg navigateToPoint:loc updateRoute:YES intermediate:-1];
+        }
+    }
+
+    [[OARootViewController instance].mapPanel.mapActions stopNavigationWithoutConfirm];
+    [[OARootViewController instance].mapPanel.mapActions enterRoutePlanningModeGivenGpx:_doc path:_gpx.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+    [[OARootViewController instance].mapPanel hideTargetPointMenu];
 }
 
 @end

@@ -44,7 +44,7 @@
 @end
 
 
-@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate, OASaveTrackViewControllerDelegate> {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate,/* OAEditGPXColorViewControllerDelegate,*/ OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate, OASaveTrackViewControllerDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -1328,7 +1328,7 @@
     if (indexPath.section == _controlsSectionIndex && indexPath.row == 1)
     {
         _trackColorController = [[OAEditGPXColorViewController alloc] initWithColorValue:_gpx.color colorsCollection:_gpxColorCollection];
-        _trackColorController.delegate = self;
+//        _trackColorController.delegate = self;
         [self.navController pushViewController:_trackColorController animated:YES];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
@@ -1375,7 +1375,7 @@
     [self editClicked:nil];
 }
 
-#pragma mark - OAEditGPXColorViewControllerDelegate
+/*#pragma mark - OAEditGPXColorViewControllerDelegate
 -(void) trackColorChanged
 {
     if (_trackColorController.colorIndex == NSNotFound)
@@ -1385,7 +1385,7 @@
     [[OAGPXDatabase sharedDb] save];
     [[_app mapSettingsChangeObservable] notifyEvent];
     [self.tableView reloadData];
-}
+}*/
 
 #pragma mark - OAEditColorViewControllerDelegate
 

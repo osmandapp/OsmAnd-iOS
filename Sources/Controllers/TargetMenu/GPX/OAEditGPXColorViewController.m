@@ -8,14 +8,12 @@
 
 #import "OAEditGPXColorViewController.h"
 #import "OAIconTextTableViewCell.h"
-#import "OAGPXTrackColorCollection.h"
-#import "OAUtilities.h"
-#import "OsmAndApp.h"
 #include "Localization.h"
 
 @implementation OAEditGPXColorViewController
 {
     OAGPXTrackColorCollection *_colorCollection;
+    NSInteger _colorIndex;
 }
 
 - (id) initWithColorValue:(NSInteger)colorValue colorsCollection:(OAGPXTrackColorCollection *)collection
@@ -25,7 +23,7 @@
     {
         _colorCollection = collection;
         OAGPXTrackColor *gpxColor = [collection getColorForValue:colorValue];
-        self.colorIndex = [[collection getAvailableGPXColors] indexOfObject:gpxColor];
+        _colorIndex = [[collection getAvailableGPXColors] indexOfObject:gpxColor];
     }
     return self;
 }
@@ -39,8 +37,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    _saveChanges = NO;
     
     [self setupView];
 }
@@ -70,6 +66,7 @@
 }
 
 #pragma mark - UITableViewDataSource
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -80,7 +77,6 @@
     return OALocalizedString(@"fav_colors");
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [[_colorCollection getAvailableGPXColors] count];
@@ -88,12 +84,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+    OAIconTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        cell = (OAIconTextTableViewCell *) nib[0];
         cell.iconViewWidthConstraint.constant = 20.;
         cell.iconViewHeightConstraint.constant = 20.;
     }
@@ -107,15 +102,15 @@
         cell.iconView.backgroundColor = gpxColor.color;
         cell.textLeftMarginNoImage.constant = 50.;
         [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
-        cell.arrowIconView.hidden = indexPath.row != self.colorIndex;
+        cell.arrowIconView.hidden = indexPath.row != _colorIndex;
     }
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    self.colorIndex = indexPath.row;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    _colorIndex = indexPath.row;
     [self.tableView reloadData];
 }
 
@@ -123,10 +118,8 @@
 
 - (IBAction)saveClicked:(id)sender
 {
-    _saveChanges = YES;
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(trackColorChanged)])
-        [self.delegate trackColorChanged];
+    if (self.delegate)
+        [self.delegate trackColorChanged:_colorIndex];
     
     [self backButtonClicked:self];
 }

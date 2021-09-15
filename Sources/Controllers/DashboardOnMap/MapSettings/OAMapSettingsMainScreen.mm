@@ -75,7 +75,6 @@ static BOOL _isRoutesGroupOpen = NO;
 
         vwController = viewController;
         tblView = tableView;
-        [self initData];
     }
     return self;
 }

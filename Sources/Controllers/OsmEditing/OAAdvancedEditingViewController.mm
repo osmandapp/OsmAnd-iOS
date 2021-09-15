@@ -22,7 +22,7 @@
 
 #define kVerticalMargin 8.
 
-@interface OAAdvancedEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
+@interface OAAdvancedEditingViewController () <UITextViewDelegate, UIGestureRecognizerDelegate, MDCMultilineTextInputLayoutDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -47,6 +47,7 @@
     if (self)
     {
         self.view.frame = frame;
+        self.isKeyboardHidingAllowed = NO;
     }
     return self;
 }
@@ -135,6 +136,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onOutsedeCellsTapped)];
+    tapGesture.cancelsTouchesInView = NO;
+    [self.tableView addGestureRecognizer:tapGesture];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -326,6 +330,12 @@
 -(void)textViewDidChange:(UITextView *)textView
 {
     [self textChanged:textView userInput:YES];
+}
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView;
+{
+    [self textChanged:textView userInput:YES];
+    return YES;
 }
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate
@@ -553,9 +563,27 @@
     [self textChanged:self.tagTextView userInput:NO];
 }
 
+- (void) performKeyboardHiding
+{
+    // There is the bug: reloadInputViews() generates some extra "HideKeyboard" notifications, whitch is cause of UI bugs.
+    // The "isKeyboardHidingAllowed" variable is using to ignore all unnecessery notifications.
+    if (_isKeyboardShown)
+    {
+        self.isKeyboardHidingAllowed = YES;
+        [self.view endEditing:YES];
+    }
+}
+
 - (IBAction)hintDonePressed:(id)sender
 {
-    [self.view endEditing:YES];
+    [self performKeyboardHiding];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (void) onOutsedeCellsTapped
+{
+    [self performKeyboardHiding];
 }
 
 @end

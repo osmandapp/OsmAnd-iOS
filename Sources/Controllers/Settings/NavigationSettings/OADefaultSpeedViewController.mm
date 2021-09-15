@@ -16,6 +16,7 @@
 #import "OsmAndAppImpl.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OADefaultSpeedViewController()
 

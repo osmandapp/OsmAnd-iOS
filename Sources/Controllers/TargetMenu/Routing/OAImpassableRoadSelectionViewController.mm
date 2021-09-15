@@ -18,6 +18,7 @@
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -111,8 +112,8 @@
             OAGPXTrackAnalysis *trackAnalysis = self.routingHelper.getTrackAnalysis;
             if (trackAnalysis)
             {
-                _elevationLabel.text = [app getFormattedAlt:trackAnalysis.maxElevation];
-                _descentLabel.text = [app getFormattedAlt:trackAnalysis.minElevation];
+                _elevationLabel.text = [OAOsmAndFormatter getFormattedAlt:trackAnalysis.maxElevation];
+                _descentLabel.text = [OAOsmAndFormatter getFormattedAlt:trackAnalysis.minElevation];
             }
         }
     });

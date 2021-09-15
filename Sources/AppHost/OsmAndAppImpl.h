@@ -14,14 +14,6 @@
 #import "OAAppSettings.h"
 #import "OsmAndCore/GpxDocument.h"
 
-#define METERS_IN_KILOMETER 1000
-#define METERS_IN_ONE_MILE 1609.344f // 1609.344
-#define METERS_IN_ONE_NAUTICALMILE 1852.f // 1852
-#define YARDS_IN_ONE_METER 1.0936f
-#define FEET_IN_ONE_METER  YARDS_IN_ONE_METER * 3;
-#define FOOTS_IN_ONE_METER  3.2808f
-#define METERS_IN_ONE_METER  1.0000f
-
 @interface OsmAndAppImpl : NSObject <OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>
 
 @property(readonly) OAAppData* data;

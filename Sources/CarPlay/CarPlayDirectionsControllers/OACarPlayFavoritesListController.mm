@@ -11,6 +11,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OsmAndApp.h"
+#import "OAOsmAndFormatter.h"
 
 #import <CarPlay/CarPlay.h>
 
@@ -70,7 +71,7 @@
     
     
     
-    return [app getFormattedDistance:distance];
+    return [OAOsmAndFormatter getFormattedDistance:distance];
 }
 
 // MARK: - CPListTemplateDelegate

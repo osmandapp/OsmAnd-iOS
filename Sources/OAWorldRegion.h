@@ -50,6 +50,7 @@
 
 - (NSArray<OAWorldRegion *> *) queryAtLat:(double)lat lon:(double)lon;
 - (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude;
+- (NSString *) getCountryNameAtLat:(double)latitude lon:(double)longitude;
 - (double) getArea;
 - (BOOL) contain:(double) lat lon:(double) lon;
 - (void) getPoints31:(OAPointIContainer *)container;

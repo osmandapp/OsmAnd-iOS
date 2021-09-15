@@ -28,6 +28,7 @@
 #import "OAGpxInfo.h"
 #import "OATargetPointsHelper.h"
 #import "OAGPXUIHelper.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OATrackSegmentsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -92,14 +93,13 @@
     
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     OAGPX *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
-    OsmAndAppInstance app = OsmAndApp.instance;
     
     [data addObject:
      @{
          @"type" : [OAGPXTrackCell getCellIdentifier],
          @"title" : gpxData ? [gpxData getNiceTitle] : fileName,
-         @"distance" : gpxData ? [app getFormattedDistance:gpxData.totalDistance] : @"",
-         @"time" : gpxData ? [app getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"",
+         @"distance" : gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"",
+         @"time" : gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"",
          @"wpt" : gpxData ? [NSString stringWithFormat:@"%d", gpxData.wptPoints] : @"",
          @"img" : @"ic_custom_trip"
      }
@@ -115,10 +115,10 @@
         item[@"title"] = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), (int) idx];
         item[@"type"] = [OAGPXTrackCell getCellIdentifier];
         item[@"img"] = @"ic_custom_join_segments";
-        item[@"distance"] = [app getFormattedDistance:segmentDist];
+        item[@"distance"] = [OAOsmAndFormatter getFormattedDistance:segmentDist];
         
         if (segmentTime != 1)
-            item[@"time"] = [app getFormattedTimeInterval:segmentTime shortFormat:YES];
+            item[@"time"] = [OAOsmAndFormatter getFormattedTimeInterval:segmentTime shortFormat:YES];
         
         [data addObject:item];
         idx++;

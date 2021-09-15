@@ -17,6 +17,7 @@
 #import "OAMapLayers.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OASegmentOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -187,7 +188,7 @@
             dist += getDistance(first.getLatitude, first.getLongitude, second.getLatitude, second.getLongitude);
         }
     }
-    return [OsmAndApp.instance getFormattedDistance:dist];
+    return [OAOsmAndFormatter getFormattedDistance:dist];
 }
 
 - (NSString *) getFooterText:(EOARouteBetweenPointsDialogMode)dialogMode

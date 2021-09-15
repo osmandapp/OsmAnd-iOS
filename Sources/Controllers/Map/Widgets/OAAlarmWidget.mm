@@ -17,6 +17,7 @@
 #import "OAWaypointHelper.h"
 #import "OAAlarmInfo.h"
 #import "OACurrentPositionHelper.h"
+#import "OAOsmAndFormatter.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -188,7 +189,7 @@
                 else
                     locImgId = @"warnings_tunnel";
 
-                bottomText = [_app getFormattedAlarmInfoDistance:alarm.floatValue];
+                bottomText = [OAOsmAndFormatter getFormattedAlarmInfoDistance:alarm.floatValue];
             }
             else
             {

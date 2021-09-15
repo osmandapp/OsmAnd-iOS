@@ -46,6 +46,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
 static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"whatsapp", @"viber"];
+static const NSString *kPopulationTag = @"population";
 
 - (instancetype) init
 {
@@ -217,7 +218,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         NSString *textPrefix = nil;
         BOOL isText = NO;
         BOOL isDescription = NO;
-        BOOL needLinks = ![@"population" isEqualToString:key];
+        BOOL needLinks = ![kPopulationTag isEqualToString:key];
+        BOOL needIntFormatting = [kPopulationTag isEqualToString:key];
         BOOL isPhoneNumber = NO;
         BOOL isUrl = NO;
         BOOL isCuisine = NO;
@@ -253,6 +255,15 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                 [poiAdditionalCategoryTypes addObject:pType];
                 skip = YES;
             }
+        }
+        else if (needIntFormatting)
+        {
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+            [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            NSInteger population = [value integerValue];
+            if (population > 0)
+                value = [numberFormatter stringFromNumber:@(population)];
         }
         
         if ([key hasPrefix:@"wiki_lang"])
@@ -452,9 +463,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             if (!icon)
                 icon = [UIImage imageNamed:pType.iconName];
             if (!icon)
-                [UIImage imageNamed:@"ic_action_note_dark"];
-            icon = pType.icon;
-            
+                icon = [UIImage imageNamed:@"ic_cuisine"];
+
             NSMutableString *sb = [NSMutableString new];
             for (OAPOIType *pt in categoryTypes)
             {
@@ -463,16 +473,12 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                 [sb appendString:pt.nameLocalized];
             }
             
-            BOOL cuisineOrDish = [categoryName isEqualToString:@"cuisine"] || [categoryName isEqualToString:@"dish"] ;
-            OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            [collapsableView setData:[NSArray arrayWithArray:categoryTypes] lat:self.poi.latitude lon:self.poi.longitude isPoiAdditional:YES];
-            
-            OARowInfo *row = [[OARowInfo alloc] initWithKey:poiAdditionalCategoryName icon:icon textPrefix:pType.poiAdditionalCategoryLocalized text:sb textColor:UIColor.blackColor isText:NO needLinks:NO order:pType.order typeName:pType.name isPhoneNumber:NO isUrl:NO];
-            
+            BOOL cuisineOrDish = [categoryName isEqualToString:@"cuisine"] || [categoryName isEqualToString:@"dish"];
             if (cuisineOrDish)
             {
-                if (cuisineRow)
-                    row = cuisineRow;
+                OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+                [collapsableView setData:[NSArray arrayWithArray:categoryTypes] lat:self.poi.latitude lon:self.poi.longitude isPoiAdditional:YES];
+                OARowInfo *row = [[OARowInfo alloc] initWithKey:poiAdditionalCategoryName icon:icon textPrefix:pType.poiAdditionalCategoryLocalized text:sb textColor:UIColor.blackColor isText:NO needLinks:NO order:pType.order typeName:pType.name isPhoneNumber:NO isUrl:NO];
                 row.collapsed = YES;
                 row.collapsable = YES;
                 row.collapsableView = collapsableView;
@@ -496,7 +502,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             [sb appendString:pt.nameLocalized];
         }
         OARowInfo *row = [[OARowInfo alloc] initWithKey:poiCategory.name icon:icon textPrefix:poiCategory.poiAdditionalCategoryLocalized text:sb textColor:UIColor.blackColor isText:NO needLinks:NO order:40 typeName:poiCategory.name isPhoneNumber:NO isUrl:NO];
-        row = cuisineRow;
         row.collapsed = YES;
         row.collapsable = YES;
         row.collapsableView = collapsableView;

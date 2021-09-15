@@ -42,6 +42,7 @@
 #import "OAFavoriteItem.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -329,7 +330,7 @@ static const NSInteger _buttonsCount = 4;
                                                       coordinate.latitude,
                                                       _targetPoint.location.longitude, _targetPoint.location.latitude);
     
-    NSString *distanceStr = [[OsmAndApp instance] getFormattedDistance:distance];
+    NSString *distanceStr = [OAOsmAndFormatter getFormattedDistance:distance];
     
     CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude]];
     CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
@@ -1715,7 +1716,7 @@ static const NSInteger _buttonsCount = 4;
         }
         if (nearbyTransportStopRoutes.count > 0)
         {
-            NSString *nearInDistance = [NSString stringWithFormat:@"%@ %@:", OALocalizedString(@"transport_nearby_routes"), [[OsmAndApp instance] getFormattedDistance:kShowStopsRadiusMeters]];
+            NSString *nearInDistance = [NSString stringWithFormat:@"%@ %@:", OALocalizedString(@"transport_nearby_routes"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
             _nearbyLabel.text = nearInDistance;
             _nearbyLabel.hidden = NO;
 

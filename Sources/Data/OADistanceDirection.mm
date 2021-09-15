@@ -8,6 +8,7 @@
 
 #import "OADistanceDirection.h"
 #import "OsmAndApp.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -67,7 +68,7 @@
                                                               self.mapCenterCoordinate.latitude,
                                                               self.coordinate.longitude, self.coordinate.latitude);
             
-            _distance = [app getFormattedDistance:distance];
+            _distance = [OAOsmAndFormatter getFormattedDistance:distance];
             _distanceMeters = distance;
             _direction = 0;
         }
@@ -84,7 +85,7 @@
                                                                   location.coordinate.latitude,
                                                                   self.coordinate.longitude, self.coordinate.latitude);
                 
-                _distance = [app getFormattedDistance:distance];
+                _distance = [OAOsmAndFormatter getFormattedDistance:distance];
                 _distanceMeters = distance;
                 CGFloat itemDirection = [app.locationServices radiusFromBearingToLatitude:self.coordinate.latitude longitude:self.coordinate.longitude];
                 _direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - direction) * (M_PI / 180);

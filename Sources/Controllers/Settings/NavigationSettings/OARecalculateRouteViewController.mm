@@ -14,6 +14,7 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
+#import "OAOsmAndFormatter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -66,7 +67,7 @@
     NSMutableArray<NSString *> *arr = [NSMutableArray new];
     for (NSNumber *n in _possibleDistanceValues)
     {
-        [arr addObject:[_app getFormattedDistance:n.doubleValue]];
+        [arr addObject:[OAOsmAndFormatter getFormattedDistance:n.doubleValue]];
     }
     _valueSummaries = arr;
 }
@@ -75,7 +76,7 @@
 {
     double defValue = [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]];
     defValue = defValue == -1 ? _possibleDistanceValues.firstObject.doubleValue : defValue;
-    return [OsmAndApp.instance getFormattedDistance:defValue];
+    return [OAOsmAndFormatter getFormattedDistance:defValue];
 }
 
 -(void) applyLocalization

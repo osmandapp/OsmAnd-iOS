@@ -32,6 +32,7 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OAMenuSimpleCell.h"
 #import "OAButtonCell.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
@@ -129,7 +130,7 @@
 {
     CLLocation *mapLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
     float dist = [mapLocation distanceFromLocation:roadInfo.location];
-    return [[OsmAndApp instance] getFormattedDistance:dist];
+    return [OAOsmAndFormatter getFormattedDistance:dist];
 }
 
 - (void) setupView

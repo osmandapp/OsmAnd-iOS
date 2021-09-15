@@ -36,6 +36,7 @@
 #import "OAFilledButtonCell.h"
 #import "OASaveGpxToTripsActivity.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
+#import "OAOsmAndFormatter.h"
 
 #import <Charts/Charts-Swift.h>
 
@@ -135,11 +136,10 @@
     altCell.ascentTitle.text = OALocalizedString(@"gpx_ascent");
     altCell.descentTitle.text = OALocalizedString(@"gpx_descent");
     
-    OsmAndAppInstance app = [OsmAndApp instance];
-    altCell.avgAltitudeValue.text = [app getFormattedAlt:self.analysis.avgElevation];
-    altCell.altRangeValue.text = [NSString stringWithFormat:@"%@ - %@", [app getFormattedAlt:self.analysis.minElevation], [app getFormattedAlt:self.analysis.maxElevation]];
-    altCell.ascentValue.text = [app getFormattedAlt:self.analysis.diffElevationUp];
-    altCell.descentValue.text = [app getFormattedAlt:self.analysis.diffElevationDown];
+    altCell.avgAltitudeValue.text = [OAOsmAndFormatter getFormattedAlt:self.analysis.avgElevation];
+    altCell.altRangeValue.text = [NSString stringWithFormat:@"%@ - %@", [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation], [OAOsmAndFormatter getFormattedAlt:self.analysis.maxElevation]];
+    altCell.ascentValue.text = [OAOsmAndFormatter getFormattedAlt:self.analysis.diffElevationUp];
+    altCell.descentValue.text = [OAOsmAndFormatter getFormattedAlt:self.analysis.diffElevationDown];
     
     [dataArr setObject:@[altCell] forKey:@(section++)];
 }
@@ -180,7 +180,7 @@
             {
                 OARouteSegmentAttribute *segment = stat.partition[key];
                 NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"] && ![segment.getUserPropertyName isEqualToString:kUndefinedAttr] ? segment.getUserPropertyName : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", segment.getUserPropertyName]);
-                OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc] initWithTitle:title color:UIColorFromARGB(segment.color) distance:[[OsmAndApp instance] getFormattedDistance:segment.distance]];
+                OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc] initWithTitle:title color:UIColorFromARGB(segment.color) distance:[OAOsmAndFormatter getFormattedDistance:segment.distance]];
                 [legend.legendStackView addArrangedSubview:item];
             }
             [dataArr setObject:@[cell, legend] forKey:@(section++)];
@@ -284,11 +284,11 @@
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
         
         [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[app getFormattedAlt:self.analysis.maxElevation] attributes:attrs]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[OAOsmAndFormatter getFormattedAlt:self.analysis.maxElevation] attributes:attrs]];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
         
         [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[app getFormattedAlt:self.analysis.minElevation] attributes:attrs]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation] attributes:attrs]];
         
         [res addAttributes:attrs range:NSMakeRange(0, res.length)];
         

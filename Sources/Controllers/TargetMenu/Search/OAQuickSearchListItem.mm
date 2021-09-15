@@ -25,6 +25,7 @@
 #import "OAStreet.h"
 #import "OADefaultFavorite.h"
 #import "OAPointDescription.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -186,7 +187,7 @@
             {
                 if (searchResult.distRelatedObjectName > 0)
                 {
-                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [self.class getCityTypeStr:city.subType], [[OsmAndApp instance] getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
+                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [self.class getCityTypeStr:city.subType], [OAOsmAndFormatter getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
                 }
                 else
                 {

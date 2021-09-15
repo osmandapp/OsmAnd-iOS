@@ -75,7 +75,7 @@
 
     if (_exportStarted)
     {
-        OATableGroupToImport *group = [[OATableGroupToImport alloc] init];
+        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.type = [OAProgressTitleCell getCellIdentifier];
         group.groupName = OALocalizedString(@"preparing_file");
         self.data = @[group];

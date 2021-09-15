@@ -19,6 +19,7 @@
 #import "OAPointTableViewCell.h"
 #import "OASegmentTableViewCell.h"
 #import "OAGPXDocument.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -266,7 +267,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                         newLocation.coordinate.latitude,
                         favoriteLon, favoriteLat);
 
-                itemData.distance = [_app getFormattedDistance:distance];
+                itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
                 itemData.distanceMeters = distance;
                 CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
                 itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
@@ -296,7 +297,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             newLocation.coordinate.latitude,
             wptLon, wptLat);
 
-    itemData.distance = [_app getFormattedDistance:distance];
+    itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
     itemData.distanceMeters = distance;
     CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
     CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;

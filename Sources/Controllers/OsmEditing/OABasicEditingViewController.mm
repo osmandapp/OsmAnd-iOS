@@ -25,7 +25,7 @@
 
 #include <openingHoursParser.h>
 
-@interface OABasicEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
+@interface OABasicEditingViewController () <UITextViewDelegate, UIGestureRecognizerDelegate, MDCMultilineTextInputLayoutDelegate>
 
 @end
 
@@ -107,6 +107,9 @@ static const NSInteger _contactInfoSectionCount = 5;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onOutsedeCellsTapped)];
+    tapGesture.cancelsTouchesInView = NO;
+    [self.tableView addGestureRecognizer:tapGesture];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -416,6 +419,13 @@ static const NSInteger _contactInfoSectionCount = 5;
     OATextInputFloatingCell *cell = isNameSection ? _poiNameCell : (OATextInputFloatingCell *) _contactInfoItems[sender.tag];
     cell.inputField.text = @"";
     [self.tableView endUpdates];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (void) onOutsedeCellsTapped
+{
+    [self.view endEditing:YES];
 }
 
 @end

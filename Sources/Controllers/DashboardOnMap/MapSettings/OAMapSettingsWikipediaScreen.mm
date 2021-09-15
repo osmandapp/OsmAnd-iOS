@@ -184,12 +184,12 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
-        [self.tblView beginUpdates];
         UISwitch *sw = (UISwitch *) sender;
         [_app.data setWikipedia:_wikipediaEnabled = sw.on];
-        [self.tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionLanguages] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionAvailable] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tblView beginUpdates];
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionLanguages] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionAvailable] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tblView endUpdates];
     }
 }

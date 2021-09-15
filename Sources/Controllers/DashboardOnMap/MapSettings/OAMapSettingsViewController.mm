@@ -168,17 +168,9 @@
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsWikipediaScreen alloc] initWithTable:self.tableView viewController:self];
             break;
-        case EMapSettingsScreenCycleRoutes:
+        case EMapSettingsScreenRoutes:
             if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:SHOW_CYCLE_ROUTES_ATTR];
-            break;
-        case EMapSettingsScreenHikingRoutes:
-            if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:HIKING_ROUTES_OSMC_ATTR];
-            break;
-        case EMapSettingsScreenTravelRoutes:
-            if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:@"travelRoutes"];
+                self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
             break;
         default:
             break;
@@ -186,12 +178,12 @@
 
     OAMapSource* mapSource = _app.data.lastMapSource;
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
-    
+
     BOOL _isOnlineMapSourcePrev = isOnlineMapSource;
     isOnlineMapSource = ([mapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources));
-    
+
     self.screenObj.isOnlineMapSource = isOnlineMapSource;
-    
+
     if (_isOnlineMapSourcePrev != isOnlineMapSource)
         [self.view setNeedsLayout];
 

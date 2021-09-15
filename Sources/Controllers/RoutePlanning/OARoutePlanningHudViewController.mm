@@ -57,6 +57,7 @@
 #import "OAGpxApproximationViewController.h"
 #import "OAHudButton.h"
 #import "OAMapHudViewController.h"
+#import "OAOsmAndFormatter.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -479,7 +480,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (_layer != nil)
     {
-        NSString *distanceStr = [_app getFormattedDistance:_editingContext.getRouteDistance];
+        NSString *distanceStr = [OAOsmAndFormatter getFormattedDistance:_editingContext.getRouteDistance];
         NSString *titleStr = [NSString stringWithFormat:@"%@, %@ %ld", distanceStr, OALocalizedString(@"points_count"), _editingContext.getPointsCount];
         self.titleLabel.text = titleStr;
         self.landscapeHeaderTitleView.text = titleStr;
@@ -1210,7 +1211,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         if (currentLocation)
         {
             double azimuth = [location1 bearingTo:currentLocation];
-            cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"gpx_start"), [_app getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OsmAndApp.instance getFormattedAzimuth:azimuth]];
+            cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"gpx_start"), [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
         }
         else
         {
@@ -1222,7 +1223,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         OAGpxTrkPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
         CLLocation *location2 = [[CLLocation alloc] initWithLatitude:point2.getLatitude longitude:point2.getLongitude];
         double azimuth = [location1 bearingTo:location2];
-        cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:[location1 distanceFromLocation:location2]], [OsmAndApp.instance getFormattedAzimuth:azimuth]];
+        cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:location2]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
     }
     return cell;
 }
@@ -1291,7 +1292,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onMeasure:(double)distance bearing:(double)bearing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *description = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
+        NSString *description = [NSString stringWithFormat:@"%@ • %@", [OAOsmAndFormatter getFormattedDistance:distance], [OAOsmAndFormatter getFormattedAzimuth:bearing]];
         self.descriptionLabel.text = description;
         self.landscapeHeaderDescriptionView.text = description;
     });

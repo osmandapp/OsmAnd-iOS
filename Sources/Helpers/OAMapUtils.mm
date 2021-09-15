@@ -13,13 +13,6 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-#define MIN_LATITUDE -85.0511
-#define MAX_LATITUDE 85.0511
-#define LATITUDE_TURN 180.0
-#define MIN_LONGITUDE -180.0
-#define MAX_LONGITUDE 180.0
-#define LONGITUDE_TURN 360.0
-
 @implementation OAMapUtils
 
 + (NSArray<OAPOI *> *) sortPOI:(NSArray<OAPOI *> *)array lat:(double)lat lon:(double)lon

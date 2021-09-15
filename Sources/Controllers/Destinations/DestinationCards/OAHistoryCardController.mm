@@ -21,6 +21,7 @@
 #import "OANativeUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OAHistoryViewController.h"
+#import "OAOsmAndFormatter.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -199,7 +200,7 @@
                                                           newLocation.coordinate.latitude,
                                                           item.item.longitude, item.item.latitude);
         
-        item.distanceStr = [_app getFormattedDistance:distance];
+        item.distanceStr = [OAOsmAndFormatter getFormattedDistance:distance];
         item.distance = distance;
         CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:item.item.latitude longitude:item.item.longitude]];
         item.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);

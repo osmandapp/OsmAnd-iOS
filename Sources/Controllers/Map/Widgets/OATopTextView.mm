@@ -26,6 +26,7 @@
 #import "OAWaypointUIHelper.h"
 #import "OAPointDescription.h"
 #import "OALocationPointWrapper.h"
+#import "OAOsmAndFormatter.h"
 #include <binaryRead.h>
 @interface OATopTextView ()
 
@@ -346,12 +347,12 @@
         
         NSString *distStr = nil;
         if (dist > 0)
-            distStr = [_app getFormattedDistance:dist];
+            distStr = [OAOsmAndFormatter getFormattedDistance:dist];
         
         NSString *deviationStr = nil;
         UIImage *deviationImg = nil;
         if (dist > 0 && pnt.deviationDistance > 0) {
-            deviationStr = [_app getFormattedDistance:pnt.deviationDistance];
+            deviationStr = [OAOsmAndFormatter getFormattedDistance:pnt.deviationDistance];
             UIColor *color = UIColorFromRGB(color_osmand_orange);
             if (pnt.deviationDirectionRight)
                 deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];

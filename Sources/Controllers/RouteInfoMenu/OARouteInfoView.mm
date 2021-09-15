@@ -58,6 +58,7 @@
 #import "OAPublicTransportShieldCell.h"
 #import "OATableViewCustomFooterView.h"
 #import "OARouteAvoidTransportSettingsViewController.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -499,7 +500,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             @"custom_insets" : @(NO)
         }];
         
-        NSString *time = [_app getFormattedTimeInterval:approxPedestrianTime shortFormat:NO];
+        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:approxPedestrianTime shortFormat:NO];
         NSString *formattedStr = [NSString stringWithFormat:OALocalizedString(@"public_transport_ped_route_title"), time];
         NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:formattedStr attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
         
@@ -707,15 +708,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
     NSInteger walkTime = walkTimeReal > 0 ? walkTimeReal : walkTimePT;
-    NSString *walkTimeStr = [OsmAndApp.instance getFormattedTimeInterval:walkTime shortFormat:NO];
+    NSString *walkTimeStr = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
     NSInteger walkDistanceReal = [_transportHelper getWalkingDistance:segments];
     NSInteger walkDistancePT = (NSInteger) res->getWalkDist();
     NSInteger walkDistance = walkDistanceReal > 0 ? walkDistanceReal : walkDistancePT;
-    NSString *walkDistanceStr = [OsmAndApp.instance getFormattedDistance:walkDistance];
+    NSString *walkDistanceStr = [OAOsmAndFormatter getFormattedDistance:walkDistance];
     NSInteger travelTime = (NSInteger) res->getTravelTime() + walkTime;
-    NSString *travelTimeStr = [OsmAndApp.instance getFormattedTimeInterval:travelTime shortFormat:NO];
+    NSString *travelTimeStr = [OAOsmAndFormatter getFormattedTimeInterval:travelTime shortFormat:NO];
     NSInteger travelDist = (NSInteger) res->getTravelDist() + walkDistance;
-    NSString *travelDistStr = [OsmAndApp.instance getFormattedDistance:travelDist];
+    NSString *travelDistStr = [OAOsmAndFormatter getFormattedDistance:travelDist];
 
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     

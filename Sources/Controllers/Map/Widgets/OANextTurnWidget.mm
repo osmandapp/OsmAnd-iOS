@@ -15,6 +15,7 @@
 #import "OAUtilities.h"
 #import "OAVoiceRouter.h"
 #import "OAAppSettings.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OANextTurnWidget ()
 
@@ -170,7 +171,7 @@
 - (void) updateDistance
 {
     int deviatePath = _turnDrawable.deviatedFromRoute ? _deviatedPath : _nextTurnDistance;
-    NSString *ds = [_app getFormattedDistance:deviatePath];
+    NSString *ds = [OAOsmAndFormatter getFormattedDistance:deviatePath];
     
     if (ds)
     {

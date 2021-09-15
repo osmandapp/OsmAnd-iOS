@@ -8,17 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-#define FORMAT_DEGREES_SHORT 100
-#define FORMAT_DEGREES 101
-#define FORMAT_MINUTES 102
-#define FORMAT_SECONDS 103
-#define FORMAT_UTM 104
-#define FORMAT_OLC 105
+#define FORMAT_DEGREES_SHORT 6
+#define FORMAT_DEGREES 0
+#define FORMAT_MINUTES 1
+#define FORMAT_SECONDS 2
+#define FORMAT_UTM 3
+#define FORMAT_OLC 4
 
 @interface OALocationConvert : NSObject
 
 + (double) convert:(NSString *)coordinate;
-+ (NSString *) formatLocationCoordinates:(double) lat lon:(double)lon format:(NSInteger)outputFormat;
 + (NSString *) convert:(double) coordinate outputType:(NSInteger)outputType;
 + (NSString *) convertLatitude:(double) latitude outputType:(NSInteger)outType addCardinalDirection:(BOOL)addCardinalDirection;
 + (NSString *) convertLongitude:(double) longitude outputType:(NSInteger)outType addCardinalDirection:(BOOL)addCardinalDirection;

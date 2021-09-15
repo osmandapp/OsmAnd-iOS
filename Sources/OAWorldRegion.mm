@@ -619,6 +619,21 @@
     return selectedRegion;
 }
 
+- (NSString *) getCountryNameAtLat:(double)latitude lon:(double)longitude
+{
+    NSArray<OAWorldRegion *> *list = [self queryAtLat:latitude lon:longitude];
+    for (OAWorldRegion *region in list)
+    {
+        if ([region contain:latitude lon:longitude])
+        {
+            NSString *name = region.name;
+            if (name && name.length > 0)
+                return name;
+        }
+    }
+    return nil;
+}
+
 - (NSInteger) getLevel
 {
     NSInteger res = 0;

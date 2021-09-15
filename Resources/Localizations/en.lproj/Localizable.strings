@@ -115,7 +115,8 @@
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
-"coords_format" = "Coordinate format";
+"coords_format" = "Coordinates format";
+"coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings";
 "coordinates" = "Coordinates";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
@@ -783,6 +784,13 @@
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
+"navigate_point_format_UTM" = "UTM";
+"navigate_point_format_unknown" = "Unknown format";
+"navigate_point_northing" = "Northing";
+"navigate_point_easting" = "Easting";
+"navigate_point_zone" = "Zone";
+"navigate_point_olc" = "Open Location Code";
+"navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Approximate file size: %@";
 
 "coordinates_example" = "Example";
@@ -967,6 +975,7 @@
 "none_point_error" = "Please add at least one point.";
 "empty_filename" = "Filename cannot be empty";
 "incorrect_symbols" = "Invalid characters entered";
+"invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "split_before" = "Split before";
@@ -1333,6 +1342,7 @@
 "show_contour_lines" = "Show contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
+"contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "toggle_public_transport" = "Show/hide public transport";
@@ -1790,6 +1800,7 @@
 "wiki_sheet_title" = "How to open Wikipedia articles?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_wiki_online" = "Open article online";
+"explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 
 "custom_search" = "Custom search";
@@ -2305,3 +2316,11 @@
 • Fixed issue with importing GPX files with uppercase extensions\n
 • Fixed issue with \"Follow track\" menu\n
 • Fixed import of OBF files\n";
+
+"ios_release_4_1" = "• New screen for searching by coordinates in different formats\n
+• Improved coordinate search in OLC format\n
+• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n
+• Added ability to easily load maps of all regions of the country with a couple of clicks\n
+• Added contour lines in feet (You need to re-download files)\n
+• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load the map if the region is viewed without a map\n
+• New appearance of buttons on the map and added ability to change map zoom by double-tapping and swiping\n";

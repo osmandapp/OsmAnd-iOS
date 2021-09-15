@@ -55,23 +55,21 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         _app = [OsmAndApp instance];
         _styleSettings = [OAMapStyleSettings sharedInstance];
         _routesParameter = [_styleSettings getParameter:param];
+        settingsScreen = EMapSettingsScreenRoutes;
 
         if ([param isEqualToString:SHOW_CYCLE_ROUTES_ATTR])
         {
             _routesSettingType = ERoutesSettingCycle;
-            settingsScreen = EMapSettingsScreenCycleRoutes;
             _routesEnabled = _routesParameter.storedValue.length > 0 && [_routesParameter.storedValue isEqualToString:@"true"];
         }
         else if ([param isEqualToString:HIKING_ROUTES_OSMC_ATTR])
         {
             _routesSettingType = ERoutesSettingHiking;
-            settingsScreen = EMapSettingsScreenHikingRoutes;
             _routesEnabled = _routesParameter.storedValue.length > 0 && ![_routesParameter.storedValue isEqualToString:@"disabled"];
         }
         else
         {
             _routesSettingType = ERoutesSettingTravel;
-            settingsScreen = EMapSettingsScreenTravelRoutes;
             _routesEnabled = _routesParameter.storedValue.length > 0;
         }
 

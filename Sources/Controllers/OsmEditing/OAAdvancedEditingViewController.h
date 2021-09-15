@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAAdvancedEditingViewController : UITableViewController
 
+@property (nonatomic) BOOL isKeyboardHidingAllowed;
+
 - (instancetype)initWithFrame:(CGRect)frame;
 
 -(void)setDataProvider:(id<OAOsmEditingDataProtocol>)provider;

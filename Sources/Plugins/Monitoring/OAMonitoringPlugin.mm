@@ -23,6 +23,7 @@
 #import "PXAlertView.h"
 #import "OATrackIntervalDialogView.h"
 #import "OAMapViewController.h"
+#import "OAOsmAndFormatter.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 
@@ -142,7 +143,7 @@
         if (dist > 0)
         {
             last = pluginWeak.recHelper.lastTimeUpdated;
-            NSString *ds = [pluginWeak.app getFormattedDistance:dist];
+            NSString *ds = [OAOsmAndFormatter getFormattedDistance:dist];
             int ls = [ds indexOf:@" "];
             if (ls == -1)
             {

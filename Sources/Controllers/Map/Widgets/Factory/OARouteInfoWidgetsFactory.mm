@@ -26,6 +26,7 @@
 #import "OARulerWidget.h"
 #import "OADistanceToMapMarkerControl.h"
 #import "OADestinationsLineWidget.h"
+#import "OAOsmAndFormatter.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -379,7 +380,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             }
             else
             {
-                NSString *ds = [[OsmAndApp instance] getFormattedSpeed:cachedSpeed];
+                NSString *ds = [OAOsmAndFormatter getFormattedSpeed:cachedSpeed];
                 int ls = [ds indexOf:@" "];
                 if (ls == -1)
                     [speedControlWeak setText:ds subtext:nil];
@@ -417,7 +418,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             if ([speedControlWeak isUpdateNeeded] || ABS(loc.speed - cachedSpeed) > minDelta)
             {
                 cachedSpeed = loc.speed;
-                NSString *ds = [_app getFormattedSpeed:cachedSpeed];
+                NSString *ds = [OAOsmAndFormatter getFormattedSpeed:cachedSpeed];
                 int ls = [ds indexOf:@" "];
                 if (ls == -1)
                     [speedControlWeak setText:ds subtext:nil];
@@ -537,7 +538,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         {
             cachedDegrees = b;
             if (b != -1000)
-                [bearingControlWeak setText:[NSString stringWithFormat:@"%@%@", [_app getFormattedAzimuth:b], relative ? @"" : @" M"] subtext:nil];
+                [bearingControlWeak setText:[NSString stringWithFormat:@"%@%@", [OAOsmAndFormatter getFormattedAzimuth:b], relative ? @"" : @" M"] subtext:nil];
             else
                 [bearingControlWeak setText:nil subtext:nil];
             

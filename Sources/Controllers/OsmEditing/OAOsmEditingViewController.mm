@@ -89,7 +89,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
         changedTags:(NSSet *)changedTags
            callback:(void(^)(OAEntity *))callback
 {
-    if (!info && CREATE != action && [util isKindOfClass:OAOpenStreetMapRemoteUtil.class]) {
+    if (!info && CREATE != action && [util isKindOfClass:OAOpenStreetMapRemoteUtil.class])
+    {
         NSLog(@"Entity info was not loaded");
         return;
     }
@@ -100,7 +101,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     });
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
@@ -155,7 +157,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_advanced") forSegmentAtIndex:1];
 }
 
-- (void)setupPageController {
+- (void)setupPageController
+{
     _pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     _pageController.dataSource = self;
     _pageController.delegate = self;
@@ -204,7 +207,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     }
 }
 
-- (IBAction)deletePressed:(id)sender {
+- (IBAction)deletePressed:(id)sender
+{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_delete_confirmation_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -219,7 +223,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     
 }
 
-- (IBAction)applyPressed:(id)sender {
+- (IBAction)applyPressed:(id)sender
+{
     [self trySaving];
 }
 
@@ -324,11 +329,13 @@ typedef NS_ENUM(NSInteger, EditingTab)
     }];
     
     NSString *poiTypeTag = poiData.getTagValues[POI_TYPE_TAG];
-    if (poiTypeTag) {
+    if (poiTypeTag)
+    {
         NSString *formattedType = [[poiTypeTag stringByTrimmingCharactersInSet:
                                     [NSCharacterSet whitespaceAndNewlineCharacterSet]] lowerCase];
         OAPOIType *poiType = poiData.getAllTranslatedSubTypes[formattedType];
-        if (poiType) {
+        if (poiType)
+        {
             [entity putTagNoLC:poiType.getEditOsmTag value:poiType.getEditOsmValue];
             [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getEditOsmTag]];
             if (poiType.getOsmTag2)
@@ -399,9 +406,9 @@ typedef NS_ENUM(NSInteger, EditingTab)
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed
 {
     if (pageViewController.viewControllers[0] == _basicEditingController)
-        _segmentControl.selectedSegmentIndex = 0;
+        _segmentControl.selectedSegmentIndex = BASIC;
     else
-       _segmentControl.selectedSegmentIndex = 1;
+       _segmentControl.selectedSegmentIndex = ADVANCED;
 }
 
 - (IBAction)onBackPressed:(id)sender {
@@ -444,6 +451,12 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) keyboardWillHide:(NSNotification *)notification;
 {
+    if (_segmentControl.selectedSegmentIndex == ADVANCED && !_advancedEditingController.isKeyboardHidingAllowed)
+    {
+        // Filter wrong "HideKeyboard" notifications from OAAdvancedEditingViewController.
+        return;
+    }
+    
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
@@ -452,6 +465,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonApply];
         [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonDelete];
         [[self view] layoutIfNeeded];
+        _advancedEditingController.isKeyboardHidingAllowed = NO;
     } completion:nil];
 }
 

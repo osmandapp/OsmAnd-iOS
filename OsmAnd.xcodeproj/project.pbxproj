@@ -2369,7 +2369,6 @@
 		DA6676D52450660800EF476D /* ic_action_bus@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6676D42450660800EF476D /* ic_action_bus@3x.png */; };
 		DA6676D92450661700EF476D /* ic_action_bus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6676D72450661600EF476D /* ic_action_bus@2x.png */; };
 		DA66ACC026D91C5800D43299 /* OABaseVectorLinesLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */; };
-		DA66ACC426DA109A00D43299 /* OAVectorLinesSymbolsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA66ACC226DA109800D43299 /* OAVectorLinesSymbolsProvider.mm */; };
 		DA68B3A2233B81DB00F5ACCC /* ic_custom_intermediate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B393233B81D600F5ACCC /* ic_custom_intermediate@2x.png */; };
 		DA68B3A4233B81DB00F5ACCC /* ic_custom_work@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B394233B81D600F5ACCC /* ic_custom_work@3x.png */; };
 		DA68B3A6233B81DB00F5ACCC /* ic_custom_swap@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B395233B81D600F5ACCC /* ic_custom_swap@3x.png */; };
@@ -6032,8 +6031,6 @@
 		DA6676D72450661600EF476D /* ic_action_bus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_bus@2x.png"; path = "Resources/Icons/ic_action_bus@2x.png"; sourceTree = "<group>"; };
 		DA66ACBE26D91C5700D43299 /* OABaseVectorLinesLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseVectorLinesLayer.h; sourceTree = "<group>"; };
 		DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseVectorLinesLayer.mm; sourceTree = "<group>"; };
-		DA66ACC226DA109800D43299 /* OAVectorLinesSymbolsProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAVectorLinesSymbolsProvider.mm; sourceTree = "<group>"; };
-		DA66ACC326DA109900D43299 /* OAVectorLinesSymbolsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVectorLinesSymbolsProvider.h; sourceTree = "<group>"; };
 		DA68B393233B81D600F5ACCC /* ic_custom_intermediate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_intermediate@2x.png"; path = "Resources/Icons/ic_custom_intermediate@2x.png"; sourceTree = "<group>"; };
 		DA68B394233B81D600F5ACCC /* ic_custom_work@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_work@3x.png"; path = "Resources/Icons/ic_custom_work@3x.png"; sourceTree = "<group>"; };
 		DA68B395233B81D600F5ACCC /* ic_custom_swap@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_swap@3x.png"; path = "Resources/Icons/ic_custom_swap@3x.png"; sourceTree = "<group>"; };
@@ -8305,8 +8302,6 @@
 				DA5A791826C5639F00F274C7 /* OASQLiteTileSourceMapLayerProvider.mm */,
 				DA5A791726C5639F00F274C7 /* OATerrainMapLayerProvider.h */,
 				DA5A792926C5639F00F274C7 /* OATerrainMapLayerProvider.mm */,
-				DA66ACC326DA109900D43299 /* OAVectorLinesSymbolsProvider.h */,
-				DA66ACC226DA109800D43299 /* OAVectorLinesSymbolsProvider.mm */,
 				DA5A791626C5639F00F274C7 /* OAWaypointsMapLayerProvider.h */,
 				DA5A791F26C5639F00F274C7 /* OAWaypointsMapLayerProvider.mm */,
 				DA5A790F26C5639F00F274C7 /* OAWebClient.h */,
@@ -13957,7 +13952,6 @@
 				DA5A823A26C563A700F274C7 /* OABaseBigTitleSettingsViewController.m in Sources */,
 				DA5A83B326C563A800F274C7 /* OAFavoritesTabBarViewController.m in Sources */,
 				DA5A84A226C563A900F274C7 /* OAMovePointCommand.mm in Sources */,
-				DA66ACC426DA109A00D43299 /* OAVectorLinesSymbolsProvider.mm in Sources */,
 				DA5A854026C563A900F274C7 /* SunriseSunset.m in Sources */,
 				DA5A832326C563A800F274C7 /* OATitleSliderTableViewCell.m in Sources */,
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,

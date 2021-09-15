@@ -62,6 +62,8 @@
 
 - (void) initLayer
 {
+    [super initLayer];
+    
     _routingHelper = [OARoutingHelper sharedInstance];
     _transportHelper = [OATransportRoutingHelper sharedInstance];
     
@@ -94,11 +96,11 @@
 
 - (void) resetLayer
 {
+    [super resetLayer];
+    
     [self.mapView removeKeyedSymbolsProvider:_collection];
     [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
-    
-    [self resetSymbols];
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
@@ -256,7 +258,9 @@
         {
             lines[0]->setPoints(points);
         }
-        self.symbolsProvider->generateMapSymbolsByLine();
+//        [self resetSymbols];
+//        [self setVectorLineProvider:_collection];
+        [self refreshSymbolsProvider];
     }];
 }
 

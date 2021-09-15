@@ -22,8 +22,6 @@
 #include <OsmAndCore/Map/MapStylesCollection.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 
-#include "routeSegmentResult.h"
-
 
 #define H_STEP 5.0
 #define H_SLOPE_APPROX 100

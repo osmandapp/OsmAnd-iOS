@@ -750,6 +750,10 @@
         return NO;
     if (gestureRecognizer == _grZoomDoubleTap && otherGestureRecognizer == _grElevation)
         return NO;
+    if (gestureRecognizer == _grZoom && otherGestureRecognizer == _grZoomDoubleTap)
+        return NO;
+    if (gestureRecognizer == _grZoomDoubleTap && otherGestureRecognizer == _grZoom)
+        return NO;
     
     if (gestureRecognizer == _grPointContextMenu && otherGestureRecognizer == _grSymbolContextMenu)
         return NO;

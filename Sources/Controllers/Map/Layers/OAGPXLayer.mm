@@ -84,7 +84,7 @@
 {
     [self resetLayer];
 
-    self.symbolsProvider.reset();
+    [self resetSymbols];
     _gpxDocs = gpxDocs;
     
     [self refreshGpxTracks];

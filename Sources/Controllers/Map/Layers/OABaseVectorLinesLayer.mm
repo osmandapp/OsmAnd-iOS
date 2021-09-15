@@ -12,19 +12,32 @@
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
 #import "OAAutoObserverProxy.h"
-#import "OAVectorLinesSymbolsProvider.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/VectorLine.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
+#include <OsmAndCore/Map/MapMarker.h>
+#include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/Map/OnSurfaceRasterMapSymbol.h>
 
-#define kMaxZoom 11
+#define kZoomDelta 0.1
 
 
 @implementation OABaseVectorLinesLayer
 {
     OAAutoObserverProxy* _mapZoomObserver;
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _lineSymbolsCollection;
+    
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _vectorLinesCollection;
+    QHash<std::shared_ptr<OsmAnd::VectorLine>, QList<OsmAnd::VectorLine::OnPathSymbolData>> _fullSymbolsGroupByLine;
+    
+    QReadWriteLock _lock;
+    
+    float _lastZoom;
+    BOOL _isResetting;
+    
+    OsmAnd::AreaI _cachedMapArea;
 }
 
 - (NSString *) layerId
@@ -39,19 +52,52 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
-    _symbolsProvider.reset(new OAVectorLinesSymbolsProvider());
+}
+
+- (void) show
+{
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView addKeyedSymbolsProvider:_lineSymbolsCollection];
+    }];
+}
+
+- (void) hide
+{
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView removeKeyedSymbolsProvider:_lineSymbolsCollection];
+    }];
+}
+
+- (void) onMapFrameRendered
+{
+    bool changed = NO;
+    if (_vectorLinesCollection != nullptr && !_vectorLinesCollection->getLines().isEmpty() && _cachedMapArea != self.mapView.getVisibleBBox31)
+    {
+        auto bboxShiftPoint = _cachedMapArea.topLeft - self.mapView.getVisibleBBox31.topLeft;
+        changed = abs(bboxShiftPoint.x) > _cachedMapArea.width() || abs(bboxShiftPoint.y) > _cachedMapArea.height();
+    }
+    if (changed)
+    {
+        _cachedMapArea = self.mapView.getVisibleBBox31;
+        [self refreshSymbolsProvider];
+    }
 }
 
 - (void)resetLayer
 {
-    // override
+    QWriteLocker scopedLocker(&_lock);
+    [self hide];
+    _lineSymbolsCollection.reset(new OsmAnd::MapMarkersCollection());
+    _fullSymbolsGroupByLine.clear();
+    _vectorLinesCollection.reset();
+    _isResetting = YES;
+    [self show];
 }
 
 - (BOOL)updateLayer
 {
     return YES; //override
 }
-
 
 - (BOOL) isVisible
 {
@@ -60,30 +106,98 @@
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection
 {
-    _symbolsProvider->vectorLineCollection = collection;
-    [self refreshSymbolsProvider];
+    _vectorLinesCollection = collection;
+    [self buildMarkersSymbols];
+    [self resetSymbols];
+}
+
+- (void) buildMarkersSymbols
+{
+    QWriteLocker scopedLocker(&_lock);
+    _fullSymbolsGroupByLine.clear();
+    
+    if (_vectorLinesCollection)
+    {
+        for (const auto& line : _vectorLinesCollection->getLines())
+        {
+            QList<OsmAnd::VectorLine::OnPathSymbolData> symbolsInfo;
+            line->generateArrowsOnPath(symbolsInfo, _cachedMapArea, UIScreen.mainScreen.scale);
+            _fullSymbolsGroupByLine.insert(line, symbolsInfo);
+        }
+    }
 }
 
 - (void) resetSymbols
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView removeTiledSymbolsProvider:_symbolsProvider];
-        _symbolsProvider.reset(new OAVectorLinesSymbolsProvider());
+        
+        QWriteLocker scopedLocker(&_lock);
+        if (!_lineSymbolsCollection)
+        {
+            _lineSymbolsCollection.reset(new OsmAnd::MapMarkersCollection());
+            [self.mapView addKeyedSymbolsProvider:_lineSymbolsCollection];
+        }
+        int lineSymbolIdx = 0;
+        int initialSymbolsCount = _lineSymbolsCollection->getMarkers().size();
+        for (auto it = _fullSymbolsGroupByLine.begin(); it != _fullSymbolsGroupByLine.end(); ++it)
+        {
+            const auto& symbolsData = it.value();
+            const auto& line = it.key();
+            int baseOrder = line->baseOrder - 100;
+            for (const auto& symbolInfo : symbolsData)
+            {
+                if (lineSymbolIdx < initialSymbolsCount)
+                {
+                    auto marker = _lineSymbolsCollection->getMarkers()[lineSymbolIdx];
+                    marker->setPosition(symbolInfo.position31);
+                    marker->setOnMapSurfaceIconDirection(reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(marker->markerId), OsmAnd::Utilities::normalizedAngleDegrees(symbolInfo.direction));
+                    marker->setIsHidden(line->isHidden());
+                    lineSymbolIdx++;
+                }
+                else
+                {
+                    OsmAnd::MapMarkerBuilder builder;
+                    const auto markerKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(_lineSymbolsCollection->getMarkers().size());
+                    builder.addOnMapSurfaceIcon(markerKey, line->pathIcon);
+                    builder.setMarkerId(_lineSymbolsCollection->getMarkers().size());
+                    builder.setBaseOrder(--baseOrder);
+                    builder.setIsHidden(line->isHidden());
+                    const auto& marker = builder.buildAndAddToCollection(_lineSymbolsCollection);
+                    marker->setPosition(symbolInfo.position31);
+                    marker->setOnMapSurfaceIconDirection(markerKey, symbolInfo.direction);
+                    marker->setIsAccuracyCircleVisible(false);
+                }
+            }
+        }
+        QList< std::shared_ptr<OsmAnd::MapMarker> > toDelete;
+        while (lineSymbolIdx < initialSymbolsCount)
+        {
+            toDelete.append(_lineSymbolsCollection->getMarkers()[lineSymbolIdx]);
+            lineSymbolIdx++;
+        }
+        for (const auto& marker : toDelete)
+        {
+            _lineSymbolsCollection->removeMarker(marker);
+        }
     }];
 }
 
 - (void)refreshSymbolsProvider
 {
-    [self.mapViewController runWithRenderSync:^{
-        [self.mapView removeTiledSymbolsProvider:_symbolsProvider];
-        _symbolsProvider->generateMapSymbolsByLine();
-        [self.mapView addTiledSymbolsProvider:_symbolsProvider];
-    }];
+    [self buildMarkersSymbols];
+    [self resetSymbols];
 }
 
 - (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
 {
-    [self refreshSymbolsProvider];
+    // Introduced zoom filter to reduce number of refreses during zoom change
+    if (abs(_lastZoom - [value floatValue]) > kZoomDelta)
+    {
+        _cachedMapArea = self.mapView.getVisibleBBox31;
+        _lastZoom = self.mapView.zoom;
+        [self buildMarkersSymbols];
+        [self resetSymbols];
+    }
 }
 
 @end

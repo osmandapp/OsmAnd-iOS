@@ -53,7 +53,7 @@ void OAOsmNotesMapLayerProvider::setDataReadyCallback(const DataReadyCallback da
 
 OsmAnd::ZoomLevel OAOsmNotesMapLayerProvider::getMinZoom() const
 {
-    return OsmAnd::ZoomLevel11;
+    return OsmAnd::ZoomLevel13;
 }
 
 OsmAnd::ZoomLevel OAOsmNotesMapLayerProvider::getMaxZoom() const
@@ -107,6 +107,8 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer,
                 for(auto it = xmlReader.attributes().begin(); it != xmlReader.attributes().end(); ++it)
                 {
                     const auto& attr = *it;
+                    if (attr.name().isNull())
+                        continue;
                     if (attr.name().toString() == QStringLiteral("lat"))
                         lat = attr.value().toDouble();
                     else if (attr.name().toString() == QStringLiteral("lon"))
@@ -313,6 +315,6 @@ bool OAOsmNotesMapLayerProvider::NotesSymbolsGroup::obtainSortingKey(SortingKey&
 
 QString OAOsmNotesMapLayerProvider::NotesSymbolsGroup::toString() const
 {
-    return QString::null;
+    return QString();
 }
 

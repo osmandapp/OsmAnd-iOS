@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #include "binaryRead.h"
+#include "routeSegmentResult.h"
 
 #include <vector>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
@@ -16,9 +17,6 @@
 #import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
-struct RouteDataObject;
-struct RouteSegmentResult;
 
 @class OARouteStatistics;
 @class OAGPXDocument;

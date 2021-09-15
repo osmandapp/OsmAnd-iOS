@@ -20,6 +20,13 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *checkboxHeightContainer;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *checkboxWidthContainer;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textTopNoDescConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomNoDescConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textLeftNoSelectConstraint;
 
+- (void)makeSelectable:(BOOL)selectable;
 
 @end

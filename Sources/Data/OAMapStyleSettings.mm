@@ -266,14 +266,20 @@
 
 -(NSArray<OAMapStyleParameter *> *) getParameters:(NSString *)category
 {
+    return [self getParameters:category sorted:YES];
+}
+
+- (NSArray<OAMapStyleParameter *> *) getParameters:(NSString *)category sorted:(BOOL)sorted
+{
     NSMutableArray *res = [NSMutableArray array];
     for (OAMapStyleParameter *p in self.parameters)
+    {
         if ([p.category isEqualToString:category])
             [res addObject:p];
-
-    return [res sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
+    }
+    return sorted ? [res sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
         return [[obj1.title lowercaseString] compare:[obj2.title lowercaseString]];
-    }];
+    }] : [NSArray arrayWithArray:res];
 }
 
 -(void) loadParameters

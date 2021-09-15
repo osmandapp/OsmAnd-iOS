@@ -929,12 +929,16 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (void)productPurchased:(NSNotification *)notification
 {
-    [self setupView];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+    });
 }
 
 - (void)productsRestored:(NSNotification *)notification
 {
-    [self setupView];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+    });
 }
 
 @end

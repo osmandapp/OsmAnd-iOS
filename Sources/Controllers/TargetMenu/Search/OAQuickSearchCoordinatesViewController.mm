@@ -408,7 +408,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         NSString *value = field == EOAQuickSearchCoordinatesTextFieldLat ? _latStr : _lonStr;
         value = [value trim];
         
-        if (value.length == 0 || value.length >= kMaxTexFieldSymbolsCount)
+        if (value.length == 0)
             return NO;
         
         if ([value rangeOfCharacterFromSet: [[NSCharacterSet characterSetWithCharactersInString:@"0123456789:.-"] invertedSet] ].location != NSNotFound)

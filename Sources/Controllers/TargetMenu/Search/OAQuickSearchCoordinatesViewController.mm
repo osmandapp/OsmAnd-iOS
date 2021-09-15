@@ -43,6 +43,7 @@
 #define kMaxEastingValue 833360
 #define kMaxNorthingValue 9300000
 #define kUtmZoneMaxNumber 60
+#define kMaxTexFieldSymbolsCount 30
 
 
 typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesSection)
@@ -64,8 +65,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 @interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, OAQuickSearchCoordinateFormatsDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIView *toolbarView;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (weak) UITextView *tagTextView;
 
@@ -886,6 +887,13 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     _currentEditingTextField = textField;
     [self updateHintbar];
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.text.length >= kMaxTexFieldSymbolsCount && string.length > 0)
+        return NO;
     return YES;
 }
 

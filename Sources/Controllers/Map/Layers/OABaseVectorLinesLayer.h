@@ -10,11 +10,7 @@
 
 #include <OsmAndCore/Map/VectorLinesCollection.h>
 
-class OAVectorLinesSymbolsProvider;
-
 @interface OABaseVectorLinesLayer : OASymbolMapLayer
-
-@property (nonatomic) std::shared_ptr<OAVectorLinesSymbolsProvider> symbolsProvider;
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection;
 

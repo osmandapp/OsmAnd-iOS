@@ -4,7 +4,7 @@
 "transport_routes" = "المسارات الرياضية";
 "transport_nearby_routes_within" = "الطرق الداخلية المجاورة";
 "transport_nearby_routes" = "في غضون";
-"transport_stop" = "إيقاف";
+"transport_stop" = "موقف";
 "cancel_navigation" = "إيقاف التوجيه";
 "intermediate_items_sort_by_distance" = "فرز من الباب إلى الباب";
 "switch_start_finish" = "اعكس نقطة الانطلاق والوصول";
@@ -48,7 +48,7 @@
 "daynight_mode_auto" = "تلقائي";
 "route_simulation" = "محاكاة الطريق";
 "auto_follow_location_enabled" = "تم توسيط موقعك تلقائياً.";
-"unknown_location" = "الموقع لم يحدد";
+"unknown_location" = "الموقع غير معروف بعد.";
 "animate_routing_route_not_calculated" = "لا يوجد توجيه نشط حالياً";
 "settings_preset" = "الوضع الافتراضي";
 "settings_preset_descr" = "اختيار وضع افتراضي لعرض الخريطة: استعراض، سيارة، مشي .";
@@ -126,12 +126,12 @@
 "map_orientation_change_in_accordance_with_speed" = "عتبة توجيه الخريطة";
 "map_orientation_change_in_accordance_with_speed_descr" = "حدد أدناه السرعة التي ينتقل بها اتجاه الخريطة من \"اتجاه الحركة\" إلى \"البوصلة\"";
 "fast_route_mode" = "الطريق الأسرع";
-"fast_route_mode_descr" = "تفعيل لحساب الطريق الأسرع أو تعطيل لحساب مسار أقل استهلاكا للوقود";
+"fast_route_mode_descr" = "تفعيل لحساب الطريق الأسرع أو تعطيل لحساب مسار أقل استهلاكا للوقود.";
 "avoid_in_routing_title" = "التجنب…";
 "avoid_in_routing_descr" = "تجنب الطرق ، والعبارات غير المعبدة";
 "prefer_in_routing_title" = "فضّل…";
-"prefer_in_routing_descr" = "فضل الطرق السريعة";
-"relief_smoothness_factor_descr" = "التضاريس المفضلة : مسطحة أو تلال";
+"prefer_in_routing_descr" = "تفضيل الطرق السريعة.";
+"relief_smoothness_factor_descr" = "التضاريس المفضلة : مسطحة أو تلال.";
 "choose_auto_follow_route" = "التوسيط التلقائي";
 "choose_auto_follow_route_descr" = "إعادة توسيط الموقع الحالي بعد مدة معينه";
 "auto_zoom_map" = "التكبير التلقائي";
@@ -143,15 +143,15 @@
 "speak_title" = "الإعلامات…";
 "speak_descr" = "تكوين للإعلان عن أسماء الشوارع ، وتحذيرات المرور (توقف القسري ، المطبات السرعة) ، تحذيرات الكاميرا السرعة ، حدود السرعة";
 "keep_informing" = "إعادة تعليمات الملاحة";
-"keep_informing_descr" = "إعادة إعلان تعليمات الملاحة في فترات منتظمة";
+"keep_informing_descr" = "إعادة إعلان تعليمات الملاحة في فترات منتظمة.";
 "arrival_distance" = "تنبيه الوصول";
 "arrival_distance_descr" = "متى تريد إعلان الوصول؟";
 "default_speed_system" = "وحدات السرعة";
-"default_speed_system_descr" = "اختيار وحدة للسرعة";
+"default_speed_system_descr" = "اختيار وحدة للسرعة.";
 "speed_limit_exceed" = "حد السرعة";
 "speed_limit_exceed_message" = "حدد مجال السرعة المسموح به لتتلقى تنبيه صوتي ما إذا تجاوزته.";
 "wake_on_voice" = "تشغيل الشاشة";
-"wake_on_voice_descr" = "تشغيل شاشة الجهاز إذا كانت مغلقة عند الاقتراب من منعطف";
+"wake_on_voice_descr" = "تشغيل شاشة الجهاز (إذا كانت منطفئة) عند الاقتراب من منعطف.";
 "voice_pref_title" = "تفضيلات الصوت";
 "voice_provider" = "التوجيه الصوتي";
 "voice_provider_descr" = "تحديد التوجيه الصوتي للتنقل";
@@ -175,7 +175,7 @@
 "routing_settings_2" = "إعدادات الملاحة";
 "gpx_navigation" = "تتبع المسار";
 "impassable_road" = "تجنب طرقات";
-"impassable_road_desc" = "حدد الطرق التي تريد تجنبها أثناء التنقل";
+"impassable_road_desc" = "حدد طرق تريد تجنبها خلال التنقل.";
 "interrupt_music_descr" = "قم بإيقاف الموسيقى مؤقتًا أثناء المطالبات الصوتية (لايكفي خفض مستوى الصوت)";
 "interrupt_music" = "إيقاف الموسيقى";
 "shared_string_do_not_use" = "لا تستخدم";
@@ -205,7 +205,7 @@
 "internet_connection_required_for_online_route" = "يتم تحديد خدمة الملاحة عبر الإنترنت ولكن لا يتوفر اتصال بالإنترنت.";
 "empty_route_calculated" = "خطأ: الطريق المحسوب فارغ";
 "destination_point" = "الوجهة %@";
-"intermediate_point" = "الوجهة الوسطى %@";
+"intermediate_point" = "الوجهة الوسطية %@";
 "arrived_at_intermediate_point" = "لقد وصلت إلى وجهتك الوسيطة";
 "starting_point_too_far" = "نقطة الانطلاق بعيدة جدا عن أقرب طريق.";
 "ending_point_too_far" = "نقطة الوصول بعيدة جدا عن أقرب طريق.";
@@ -294,7 +294,7 @@
 "shared_string_and" = "و";
 "shared_string_edit" = "تعديل";
 "shared_string_modify" = "تعديل";
-"shared_string_later" = "لاحقا";
+"shared_string_later" = "لاحقاً";
 "shared_string_of" = "من";
 "shared_string_all" = "الكل";
 "shared_string_from" = "من";
@@ -400,7 +400,7 @@
 "map_settings_overunder" = "الخريطة العلوية/ السفلية";
 "map_settings_over" = "الخريطة العلوية";
 "map_settings_under" = "الخريطة السفلية";
-"map_settings_none" = "لا شيء";
+"map_settings_none" = "بدون";
 "map_settings_offline" = "أنماط للخرائط غير المتصلة";
 "map_settings_online" = "خرائط الإنترنت";
 "map_settings_transp" = "الشفافية";
@@ -420,7 +420,7 @@
 "sett_km" = "كيلومترات";
 "sett_ml" = "أميال";
 "sett_zoom" = "زر التكبير/التصغير";
-"sett_show" = "أظهر";
+"sett_show" = "عرض";
 "sett_notshow" = "عدم الإظهار";
 "sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
@@ -521,7 +521,7 @@
 "units_ft" = "قدم";
 "units_kmh" = "كم/س";
 "units_mph" = "ميل ساعة";
-"units_hour" = "h";
+"units_hour" = "س";
 "units_min" = "د";
 "units_sec" = "ثانية";
 // Map
@@ -645,7 +645,7 @@
 "you_searching" = "هل تبحث عن";
 "from_location" = "بعيدا";
 "show_alt_in_drive" = "إظهار الارتفاع في وضع القيادة";
-"purchase_get" = "تحميل";
+"purchase_get" = "الحصول على";
 "srtm_disabled" = "الخطوط الكنتورية معطلة";
 "prch_wiki_info" = "يتيح ملحق ويكبيديا معلومات ويكيبيديا للخرائط التي يحق لك الحصول عليها أو شراؤها أو تنزيلها ضمن حدود مجانية.";
 "prch_srtm_info" = "يتيح ملحق ويكبيديا معلومات ويكيبيديا للخرائط التي يحق لك الحصول عليها أو شراؤها أو تنزيلها ضمن حدود مجانية.";
@@ -856,7 +856,7 @@
 "help_follow_us" = "تابعنا";
 "actions" = "إجراءات";
 "directions_more_options" = "الاتجاهات من";
-"nearby_search" = "بحث بالجوار";
+"nearby_search" = "بحث بالقرب";
 "map_widget_ruler_control" = "دوائر القياس";
 "import_from_docs" = "الاستيراد من المستندات";
 "osm_live_routing" = "الملاحة عبر أوسماند لايف";
@@ -898,7 +898,7 @@
 "monthly_map_updates" = "تحديثات الخريطة: كل شهر";
 "daily_map_updates" = "تحديثات الخريطة: كل ساعة";
 "donation_to_osm" = "التبرع لمجتمع خريطة الشارع المفتوح";
-"purchase_unlim_title" = "شراء - %@";
+"purchase_unlim_title" = "اشتري - %@";
 "product_title_wikivoyage" = "أدلة السفر";
 "product_desc_wikivoyage" = "دليل السفر إلى جميع أنحاء العالم مجاناً.";
 "product_desc_ext_wikivoyage" = "أدلةالسفر إلى الأماكن الأكثر إثارة على هذا الكوكب, داخل أوسماند دون اتصال بالإنترنت.";
@@ -992,8 +992,8 @@
 "modify_edit_short" = "تعديل OSM";
 "open_osm_note" = "فتح ملاحظة OSM";
 "edit_osm_note" = "تحرير ملاحظة OSM";
-"osm_alert_title" = "ارتكب";
-"osm_alert_message" = "الرسالة";
+"osm_alert_title" = "تقديم";
+"osm_alert_message" = "رسالة";
 "osm_alert_button_ok" = "إنشاء الملاحظة";
 "modify_poi" = "تعديل معلومات POI";
 "product_title_osm_editing" = "تعديلات خريطة الشارع المفتوح";
@@ -1123,7 +1123,7 @@
 "download_pending" = "تحميل معلق";
 "reddit" = "موقع Reddit";
 // Quick action
-"quick_action_name" = "إجراء سريع";
+"quick_action_name" = "إجراءات سريعة";
 "quick_action_no_overlay" = "بدون طبقة";
 "quick_action_add_overlay" = "إضافة طبقة علوية";
 "quick_action_no_underlay" = "بدون طبقة";
@@ -1803,7 +1803,7 @@
 "profile_import_success" = "تم استيراد ملف تعريف التطبيق بنجاح";
 "err_profile_import" = "خطأ في قراءة بيانات العنصر:٪ @";
 "default_speed_dialog_msg" = "يستخدم لتقدير وقت الوصول لنوع غير معروف من الطرق ولتقليل السرعة لجميع الطرق (قد يغير المسار)";
-"vessel_width_limit_description" = "تحديد عرض السفينة لتجنب الجسور الضيقة.";
+"vessel_width_limit_description" = "تحديد عرض السفينة لتجنب الجسور الضيقة";
 "vessel_height_limit_description" = "ضبط الارتفاع لتجنب الجسور المنخفضة. ضع في اعتبارك أنه إذا كان الجسر متحركاً ، فسوف نستخدم ارتفاعه في الحالة المفتوحة.";
 "width_limit_description" = "أدل بعرض مركبتك، قد يتم تطبيق بعض القيود على المركبات العريضة.";
 "lenght_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
@@ -1848,9 +1848,9 @@
 "help_nav_profiles" = "أوضاع الملاحة";
 "reset_profile_action_descr" = "إعادة تعيين كافة إعدادات ملف التعريف إلى إعدادات التثبيت الافتراضية. سيؤدي النقر فوق إعادة التعيين إلى تجاهل جميع التغييرات ، ولا يمكن التراجع عن هذا الإجراء.";
 "import_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد \"نسخ إلى أوسماند\"";
-"profile_prefs_reset_successful" = "تمت استعادة جميع إعدادات الوضع إلى الحالة الافتراضية";
+"profile_prefs_reset_successful" = "تمت استعادة جميع إعدادات الوضع إلى الحالة الافتراضية.";
 "gpx_parse_error" = "لم يتم تكوين OsmAnd GPX بشكل جيد ، يرجى الاتصال بفريق الدعم لمزيد من التحقيقات.";
-"nothing_found_empty" = "لا يوجد نتائج";
+"nothing_found_empty" = "لم يتم العثور على شيء";
 "shared_string_next" = "التالي";
 "ltr_or_rtl_combine_via_colon" = "%@ :%@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
@@ -1867,7 +1867,7 @@
 "move_point" = "نقل نقطة";
 "add_to_track" = "إضافة إلى مسار";
 "save_new_track" = "حفظ كمسار جديد";
-"save_changes" = "حفظ التغييرات";
+"save_changes" = "حفظ التعديلات";
 "route_betw_points" = "المسار بين النقاط";
 "points_count" = "النقاط:";
 "point_num" = "النقطة %d";
@@ -1950,7 +1950,7 @@
 "quick_action_showhide_mapillary_title" = "إظهار/إخفاء مابيلاري";
 "profile_type_user_string" = "ملف تعريف المستخدم";
 "quick_action_switch_profile_descr" = "سيتم تبديل زر الإجراء التسجيل بين التشكيلات الجانبية المحددة.";
-"arrived_at_destination" = "تم الوصول";
+"arrived_at_destination" = "لقد وصلت.";
 "quick_action_remove_next_destination" = "حذف نقطة الوجهة التالية";
 "quick_action_mapillary_show" = "إظهار مابيلاري";
 "reverse_route" = "عكس الطريق";
@@ -2108,7 +2108,7 @@
 "route_between_points_warning_desc" = "بعد ذلك، قم بمحاذاة المسار إلى أقرب طريق مسموح به باستخدام أحد ملفات تعريف التنقل لاستخدام هذا الخيار.";
 "carplay_profile_descr" = "الملف الشخصي الذي سيتم استخدامه أثناء الاتصال ب CarPlay.";
 "carplay_profile" = "ملف تعريف CarPlay";
-"last_used" = "آخر أستخدام";
+"last_used" = "آخر استخدام";
 "search_more" = "بحث عن المزيد…";
 "preferred_languages" = "اللغة المفضلة";
 "available_languages" = "اللغات المتوفرة";
@@ -2122,11 +2122,11 @@
 "suggested_maps" = "خرائط مقترحة";
 "product_title_mapillary" = "مابيلاري";
 "population_num" = "السكان: %@";
-"product_title_openplacereviews" = "مراجعات الأماكان العامة";
-"suggested_maps_descr" = "هذه الخرائط مطلوبة للأداة الملحقة";
+"product_title_openplacereviews" = "موقع OpenPlaceReviews";
+"suggested_maps_descr" = "هذه الخرائط مطلوبة لاستخدامها مع الأداة الملحقة.";
 "product_desc_ext_openplacereviews" = "أرسل الصور والمراجعات والروابط حول الأماكن العامة مثل المطاعم والفنادق والمتاحف والإحداثيات كبيانات مفتوحة\nhttps://openplacereviews.org/data/.\n\nاقرأ المزيد في https://openplacereviews.org";
 "product_desc_openplacereviews" = "أرسل الصور، المراجعات وروابط الأماكن العامة";
-"product_desc_ext_mapillary" = "صور على مستوى الشارع على الإنترنت متاحة للجميع. اكتشاف الأماكن، نسق مع غيرك وإلتقط صورا للعالم.";
+"product_desc_ext_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع. اكتشف الأماكن، تعاون، والتقط صورا للعالم.";
 "product_desc_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع";
 "shared_strings_all_regions" = "كل المناطق";
 "welmode_download_maps" = "تنزيل الخرائط";
@@ -2139,7 +2139,7 @@
 "m" = "م";
 "foot" = "قدم";
 "shared_string_feet" = "قدم";
-"srtm_download_list_help_message" = "OsmAnd يوفر بيانات الخطوط الكنتورية بالأمتار والقدم. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";
+"srtm_download_list_help_message" = "OsmAndيوفر بيانات الخطوط الكنتورية بالأمتار والقدم. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";
 "srtm_download_single_help_message" = "الرجاء تحديد التنسيق المطلوب. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";
 "srtm_unit_format" = "تنسيق وحدة خطوط الكنتور";
 "download_suggestion" = "قم بتنزيل خريطة %@ المفصلة لعرض هذه المنطقة";
@@ -2147,3 +2147,9 @@
 "shared_string_navigation" = "الملاحة";
 "dialogs_and_notifications_descr" = "التحكم في النوافذ المنبثقة ، ومربعات الحوار والإشعارات";
 "dialogs_and_notifications" = "النوافذ والإشعارات";
+"navigate_point_zone" = "منطقة";
+"explore_wikipedia_offline" = "استكشف ويكيبيديا دون اتصال بالإنترنت.";
+"navigate_point_northing" = "نحو الشمال";
+"contour_lines_hillshades_slope" = "خطوط الكنتور ، التلال ، المنحدر";
+"navigate_point_olc" = "رمز التَّمَوْضُع المفتوح";
+"navigate_point_easting" = "تشريق";

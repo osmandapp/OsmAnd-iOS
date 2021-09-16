@@ -148,7 +148,7 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
     }
     
     if existingLinesDict.count > 0 || newLinesDict.count > 0 {
-        let fileURL = URL(fileURLWithPath: "Resources/" + language + ".lproj/Localizable.strings")
+        let fileURL = URL(fileURLWithPath: "../Resources/Localizations/" + language + ".lproj/Localizable.strings")
         do {
             let fileContent = try String(contentsOf: fileURL)
             var strings = fileContent.components(separatedBy: ";")
@@ -242,7 +242,7 @@ func parseIos (language: String, initial: Bool) -> [String : String] {
     if !initial {
         myLang = language
     }
-    let url = URL(fileURLWithPath: "Resources/" + myLang + ".lproj/Localizable.strings")
+    let url = URL(fileURLWithPath: "../Resources/Localizations/" + myLang + ".lproj/Localizable.strings")
     guard let dict = NSDictionary(contentsOf: url) else {return iosDict }
     iosDict = dict as! [String : String]
     return iosDict
@@ -255,7 +255,7 @@ func parseAndroidAndCompare(language: String, iosDict: [String:String], initial:
             myLang = "-" + lang
         }
     }
-    let url = URL(fileURLWithPath: "../android/OsmAnd/res/values" + myLang + "/strings.xml")
+    let url = URL(fileURLWithPath: "../../android/OsmAnd/res/values" + myLang + "/strings.xml")
     let myparser = Parser()
     let androidDict = myparser.myparser(path: url)
     if initial {
@@ -315,7 +315,7 @@ func addRoutingParams (language: String) {
     var routeDict: [String:String] = [:]
     var outputArray: [String] = []
     
-    let url = URL(fileURLWithPath: "Resources/" + language + ".lproj/Localizable.strings")
+    let url = URL(fileURLWithPath: "../Resources/Localizations/" + language + ".lproj/Localizable.strings")
     let path = url.path
     
     var str: String = ""
@@ -333,7 +333,7 @@ func addRoutingParams (language: String) {
             myLang = "-" + lang
         }
     }
-    let androidURL = URL(fileURLWithPath: "../android/OsmAnd/res/values" + myLang + "/strings.xml")
+    let androidURL = URL(fileURLWithPath: "../../android/OsmAnd/res/values" + myLang + "/strings.xml")
     let myparser = Parser()
     let androidDict = myparser.myparser(path: androidURL)
     for elem in androidDict {
@@ -404,7 +404,7 @@ class Parser: NSObject, XMLParserDelegate {
 
 //change directory to OsmAnd-ios repo folder.
 //uncomment this line for debugging.
-//FileManager.default.changeCurrentDirectoryPath("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/")
+//FileManager.default.changeCurrentDirectoryPath("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/Scripts/")
 
 if (CommandLine.arguments.count == 2) && (CommandLine.arguments[1] == "-routing") {
     for lang in allLanguagesDict {

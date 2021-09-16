@@ -33,7 +33,7 @@
 "shared_string_and" = "与";
 "shared_string_edit" = "编辑";
 "shared_string_modify" = "修改";
-"shared_string_later" = "稍后";
+"shared_string_later" = "后来";
 "shared_string_of" = "";
 "shared_string_all" = "全部";
 "shared_string_from" = "从";
@@ -74,7 +74,7 @@
 "poi_search_near_center" = "";
 "poi_hide" = "隐藏";
 // My Places
-"favorites" = "收藏夹";
+"favorites" = "收藏";
 "tracks" = "轨迹";
 // GPX
 "gpx_point" = "点";
@@ -133,8 +133,8 @@
 "map_settings_show" = "在地图上显示";
 "map_settings_type" = "地图类型";
 "map_mode" = "地图模式";
-"map_settings_day" = "白天";
-"map_settings_night" = "晚上";
+"map_settings_day" = "日";
+"map_settings_night" = "夜晚";
 "map_settings_style" = "地图风格";
 "map_settings_overunder" = "叠加层 / 背景层";
 "map_settings_over" = "叠加层";
@@ -352,7 +352,7 @@
 "product_title_wiki" = "维基百科";
 "product_desc_wiki" = "";
 "product_desc_ext_wiki" = "";
-"product_title_srtm" = "等高线数据";
+"product_title_srtm" = "等高线";
 "product_desc_srtm" = "";
 "product_desc_ext_srtm" = "";
 "my_location" = "";
@@ -368,7 +368,7 @@
 "enter_fav_name" = "输入收藏点名称";
 "res_installing" = "正在安装…";
 "res_roads" = "道路";
-"res_srtm" = "等高线数据";
+"res_srtm" = "等高线";
 "res_wiki" = "维基百科";
 "res_hillshade" = "地形阴影";
 "select_language" = "选语言";
@@ -498,7 +498,7 @@
 "show_something_on_map" = "在地图上显示 %@";
 "search_POI_level_btn" = "扩大搜索半径";
 "shared_string_street" = "街道";
-"shared_string_building" = "大厦";
+"shared_string_building" = "建筑";
 "shared_string_street_intersection" = "街道交叉口";
 "shared_string_address" = "地址";
 "do_not_show_discount" = "不要显示推广信息";
@@ -566,7 +566,7 @@
 "m_s" = "米/秒";
 // Shared Strings
 "shared_string_apply" = "应用";
-"transport_routes" = "路线";
+"transport_routes" = "线路";
 "switch_start_finish" = "交换起始点和目的地";
 "replace_destination_point" = "替换目的地";
 "traffic_warning_stop" = "停止标志";
@@ -836,7 +836,7 @@
 "add_home" = "添加家";
 "add_work" = "添加工作地点";
 "add_map_marker" = "添加地图标记";
-"osm_str_name" = "街道名稱";
+"osm_str_name" = "街道名";
 "open_osm_note" = "打开 OSM 注记";
 "osm_working_days" = "工作日";
 "add_action" = "添加动作";
@@ -885,7 +885,7 @@
 "quick_action_no_overlay" = "无覆盖层";
 "select_map_marker" = "选择地图标记";
 "gpx_alt_range" = "海拔高度范围";
-"create_poi_short" = "创建兴趣点";
+"create_poi_short" = "创建POI";
 "osm_edits_advanced" = "高级";
 "quick_action_pause_nav_descr" = "点击该按钮以暂停或恢复导航。";
 "add_poi" = "添加 POI";
@@ -909,7 +909,7 @@
 "osm_note_reopen" = "重新打开";
 "add_parking_place" = "添加停车场";
 "map_overlays" = "地图覆盖";
-"shared_string_filter" = "過濾器";
+"shared_string_filter" = "筛选器";
 "osm_editing_lost_changes_descr" = "任何未保存的更改将会丢失。要继续吗？";
 "osm_alert_button_ok" = "创建注记";
 "min_km" = "分/千米";
@@ -962,7 +962,7 @@
 "shared_string_category" = "类别";
 "osm_alert_message" = "消息";
 "key_hint_deselect" = "取消选中";
-"osm_poi_delete_title" = "删除 POI";
+"osm_poi_delete_title" = "删除兴趣点";
 "osm_edits_basic" = "基本";
 "quick_action_no_underlay" = "无衬底层";
 "osm_edit_without_name" = "没有名称";
@@ -1306,7 +1306,7 @@
 "shared_string_copy" = "复制";
 "next_seg" = "下一段";
 "reset_to_default" = "重置为默认值";
-"num_stops" = "停止";
+"num_stops" = "站点";
 "appearance_on_map" = "在地图上的外观";
 "units_t" = "吨";
 "position_icon_while_moving" = "移动时定位图标";
@@ -1367,7 +1367,7 @@
 "configure_screen_quick_action" = "快捷操作";
 "select_icon" = "选择图标";
 "one" = "一";
-"nothing_found_empty" = "什么都没找到";
+"nothing_found_empty" = "什么也没找到";
 "export_profile" = "导出配置文件";
 "osm_notes" = "OSM注记";
 "select_color" = "选择颜色";
@@ -1526,3 +1526,39 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "根据其节点网络类型（国际、区域、本地）对路线进行着色。";
 "walking_route_osmc_description" = "根据各自的本地颜色（如果在OpenStreetMap上存在）和类型（国际、区域、本地）给路线着色。";
 "travel_routes" = "旅行路线";
+"shared_string_all_languages" = "所有语言";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"gpxup_private" = "私人";
+"m" = "米";
+"wiki_menu_download_descr" = "需要其他地图才能在地图上查看维基百科兴趣点。";
+"gpxup_identifiable" = "可辨认";
+"restart" = "重新启动";
+"shared_string_turn_off" = "关闭";
+"shared_string_navigation" = "导航";
+"download_map_dialog" = "下载地图对话框";
+"product_desc_ext_mapillary" = "供所有人使用的在线街景照片。协作发现景点，捕捉世界之美。";
+"shared_strings_all_regions" = "所有区域";
+"navigate_point_olc" = "打开位置代码";
+"gpxup_trackable" = "可追踪";
+"shared_string_wifi_only" = "仅在 Wi-Fi 上";
+"explore_wikipedia_offline" = "离线浏览维基百科。";
+"navigate_point_zone" = "地区";
+"configure_map_descr" = "地图显示";
+"dialogs_and_notifications" = "对话框和通知";
+"contour_lines_hillshades_slope" = "等高线、丘陵阴影、坡度";
+"osmand_live_title" = "实时OsmAnd";
+"welmode_download_maps" = "下载地图";
+"context_menu_item_edit_waypoint" = "编辑 GPX 路径点";
+"suggested_maps" = "建议的地图";
+"default" = "默认";
+"product_title_mapillary" = "Mapillary";
+"configure_screen_descr" = "选择页面选项";
+"route_between_points_warning_desc" = "接下来，用你的一个导航配置文件将你的轨迹拍到最近的允许道路上，以使用这个选项。";
+"some_articles_may_not_available_in_lang" = "某些Wikipedia条目可能无法以您的语言提供。";
+"foot" = "脚";
+"threshold_distance" = "起始距离";
+"last_used" = "上次使用";
+"navigate_point_northing" = "北距";
+"gpxup_public" = "公共";
+"navigate_point_easting" = "东距";
+"no_waypoints_found" = "未发现路径点";

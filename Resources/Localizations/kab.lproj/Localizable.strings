@@ -39,7 +39,7 @@
 "years_5" = "Iseggasen";
 "units_mph" = "m/tasint";
 "product_title_africa" = "Tafriqt";
-"favorites" = "Inurifen";
+"favorites" = "Imenyafen";
 "rendering_category_transport" = "Amesni";
 "col_blue" = "Azegzaw";
 "shared_string_yes" = "Ih";
@@ -429,7 +429,7 @@
 "postcode" = "Tangalt n lpusṭa";
 "rendering_value_yellow_name" = "Awraɣ";
 "region_others" = "Wayeḍ";
-"home_pt" = "Tinefrent tagejdant";
+"home_pt" = "Agejdan";
 "osm_deleted" = "Ittwakkes";
 "shared_string_my_location" = "ideg";
 "get_started" = "Aha bdu tura";
@@ -453,7 +453,7 @@
 "week_short" = "mls";
 "day_short" = "S";
 "nm_h" = "nmi/h";
-"shared_string_password" = "Awal uffir";
+"shared_string_password" = "Awal-ik uffir n OSM";
 "by_name" = "S yisem";
 "si_mi_meters" = "Amayel / Amitr";
 "si_km_m" = "Ikilumitren/imitren";
@@ -540,7 +540,7 @@
 "profile_type_base_string" = "Amaɣnu";
 "reset_to_default" = "Err-d azalen s lexṣas";
 "search_activity" = "Rechercher";
-"save_changes" = "Sekles ibeddilen";
+"save_changes" = "Sekles asnifel";
 "shared_string_settings" = "Iɣewwaṛen";
 "selected_profiles" = "%dɣef %d";
 "profile_type_osmand_string" = "Amaɣnu OsmAnd";
@@ -615,3 +615,18 @@
 "default_color" = "Fren ini n lexṣas";
 "shared_string_enable" = "Rmed";
 "shared_string_account" = "Amiḍan";
+"some_articles_may_not_available_in_lang" = "Kra n yimagraden Wikipedia zemren ur ttilin ara s tutlayt-ik.";
+"navigate_point_zone" = "Tamnaḍt";
+"suggested_maps" = "Yettesumer";
+"wiki_menu_download_descr" = "Tikarḍiwin-nniḍen laqent i uskan n POI Wikipedia ɣef tkarḍa.";
+"default" = "Lexṣas";
+"m" = "m";
+"gpxup_private" = "Uslig";
+"shared_string_navigation" = "Assilel";
+"shared_string_turn_off" = "Sens";
+"shared_string_wifi_only" = "Alaɣef Wi-Fi";
+"shared_string_all_languages" = "Akk tutlayin";
+"navigate_point_olc" = "Ldi adeg…";
+"gpxup_public" = "Azayez";
+"welmode_download_maps" = "Sider";
+"foot" = "ft";

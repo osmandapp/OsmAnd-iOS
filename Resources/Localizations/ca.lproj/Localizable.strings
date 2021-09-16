@@ -48,7 +48,7 @@
 "poi_hide" = "Amaga";
 // My Places
 "favorites" = "Preferits";
-"tracks" = "Pistes";
+"tracks" = "Traces";
 // GPX
 "gpx_point" = "Punt";
 "gpx_waypoints" = "Fites";
@@ -319,14 +319,14 @@
 "help_quiz" = "Consulta";
 "product_title_wiki" = "Viquipèdia";
 "product_desc_wiki" = "Dades de la Viquipèdia";
-"product_title_srtm" = "Dades de corbes de nivell";
+"product_title_srtm" = "Línies de nivell";
 "product_desc_srtm" = "Mostra les corbes de nivell";
 "enter_description" = "Introduïu la descripció";
 "description" = "Descripció";
 "enter_fav_name" = "Introduïu el nom del preferit";
 "res_installing" = "S'està instal·lant…";
 "res_roads" = "Carreteres";
-"res_srtm" = "Dades de corbes de nivell";
+"res_srtm" = "Línies de nivell";
 "res_wiki" = "Viquipèdia";
 "select_language" = "Tria la llengua";
 "language_short" = "Llengua";
@@ -384,7 +384,7 @@
 "est_travel_time" = "Durada estimada del trajecte";
 "pedestrian" = "Vianant";
 "sorting" = "Classificant";
-"plugins" = "Gestor de connectors";
+"plugins" = "Connectors";
 "shared_string_later" = "Mes tard";
 "open_map_settings" = "Obre la configuració del mapa";
 "plugin_popup_wiki_title" = "Baixa dades de Viquipèdia";
@@ -767,7 +767,7 @@
 "shared_string_apply" = "Aplica";
 "transport_routes" = "Rutes";
 "transport_nearby_routes_within" = "Rutes properes a dins";
-"transport_stop" = "Parada";
+"transport_stop" = "Atura";
 "transport_nearby_routes" = "A dins";
 "route_stops_before" = "Queden %1$s parades";
 "shared_string_previous" = "Enrere";
@@ -803,7 +803,7 @@
 "help_search" = "Cerca de mapa";
 "help_trip_planning" = "Planificació d\'un viatge";
 "help_legend" = "Llegenda del mapa";
-"help_other_header" = "Una altra";
+"help_other_header" = "Altres";
 "help_install_and_troubleshoot" = "Instal·lació i solució de problemes";
 "help_tech_articles" = "Articles tècnics";
 "help_versions" = "Versions";
@@ -966,7 +966,7 @@
 "modify_edit_short" = "Modifica el canvi OSM";
 "open_osm_note" = "Obre una nota d\'OSM";
 "edit_osm_note" = "Edita la nota d'OSM";
-"osm_alert_title" = "Publica";
+"osm_alert_title" = "Valida";
 "osm_alert_message" = "Missatge";
 "osm_alert_button_ok" = "Crea nota";
 "modify_poi" = "Modifica la informació del PDI";
@@ -1246,7 +1246,7 @@
 "add_intermediate" = "Afegiu un punt intermedi";
 "add_home" = "Afegeix casa meva";
 "add_work" = "Afegeix lloc de la feina";
-"home_pt" = "Inici";
+"home_pt" = "Casa";
 "work_pt" = "Feina";
 "select_route_intermediate" = "Seleccioneu un punt intermedi";
 "sett_deg180" = "180 graus";
@@ -2020,3 +2020,34 @@
 "hide_compass_ruler" = "Amaga el regle de brúixola";
 "service" = "Servei";
 "follow_track" = "Segueix el trajecte";
+"navigate_point_easting" = "Abscissa";
+"product_title_mapillary" = "Mapillary";
+"shared_string_all_languages" = "Tots els idiomes";
+"shared_string_turn_off" = "Desactiva";
+"gpxup_trackable" = "Seguible";
+"gpxup_private" = "Privat";
+"route_between_points_warning_desc" = "Desprès, ajusteu la traçada a la carretera permesa més propera amb un dels vostres perfils de navegació per utilitzar aquesta opció.";
+"suggested_maps_descr" = "El connector necessita aquests mapes.";
+"no_waypoints_found" = "No s\'ha trobat cap fita";
+"added_profiles" = "Perfils afegits";
+"suggested_maps" = "Mapes suggerits";
+"context_menu_item_edit_waypoint" = "Edita la fita GPX";
+"dialogs_and_notifications" = "Diàlegs i notificacions";
+"product_desc_ext_mapillary" = "Fotografies a nivell de carrer a la xarxa per tothom. Descobriu llocs, col·laboreu, enregistreu el món.";
+"default" = "Per defecte";
+"shared_string_wifi_only" = "Només per wi-fi";
+"gpxup_identifiable" = "Identificable";
+"gpxup_public" = "Públic";
+"download_map_dialog" = "Diàleg de baixada de mapa";
+"welmode_download_maps" = "Baixa mapes";
+"navigate_point_olc" = "Codi de localització obert";
+"wiki_menu_download_descr" = "Es necessiten mapes addicionals per veure els PDIs de la Viquipèdia al mapa.";
+"some_articles_may_not_available_in_lang" = "Alguns articles de la Viquipèdia podrien no estar disponibles en el vostre idioma.";
+"shared_string_navigation" = "Navegació";
+"added_profiles_descr" = "El connector ha afegit els perfils";
+"m" = "m";
+"navigate_point_northing" = "Ordenada";
+"navigate_point_zone" = "Àrea";
+"last_used" = "Darrera utilització";
+"foot" = "ft";
+"threshold_distance" = "Llindar de distància";

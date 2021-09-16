@@ -33,25 +33,11 @@
     QHash<std::shared_ptr<OsmAnd::VectorLine>, QList<OsmAnd::VectorLine::OnPathSymbolData>> _fullSymbolsGroupByLine;
     
     QReadWriteLock _lock;
-    
-    float _lastZoom;
-    BOOL _isResetting;
-    
-    OsmAnd::AreaI _cachedMapArea;
 }
 
 - (NSString *) layerId
 {
     return nil; //override
-}
-
-- (void) initLayer
-{
-    [super initLayer];
-    
-    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
-                                                  andObserve:self.mapViewController.zoomObservable];
 }
 
 - (void) show
@@ -68,21 +54,6 @@
     }];
 }
 
-- (void) onMapFrameRendered
-{
-    bool changed = NO;
-    if (_vectorLinesCollection != nullptr && !_vectorLinesCollection->getLines().isEmpty() && _cachedMapArea != self.mapView.getVisibleBBox31)
-    {
-        auto bboxShiftPoint = _cachedMapArea.topLeft - self.mapView.getVisibleBBox31.topLeft;
-        changed = abs(bboxShiftPoint.x) > _cachedMapArea.width() || abs(bboxShiftPoint.y) > _cachedMapArea.height();
-    }
-    if (changed)
-    {
-        _cachedMapArea = self.mapView.getVisibleBBox31;
-        [self refreshSymbolsProvider];
-    }
-}
-
 - (void)resetLayer
 {
     QWriteLocker scopedLocker(&_lock);
@@ -90,7 +61,6 @@
     _lineSymbolsCollection.reset(new OsmAnd::MapMarkersCollection());
     _fullSymbolsGroupByLine.clear();
     _vectorLinesCollection.reset();
-    _isResetting = YES;
     [self show];
 }
 
@@ -106,9 +76,42 @@
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection
 {
+    QWriteLocker scopedLocker(&_lock);
     _vectorLinesCollection = collection;
-    [self buildMarkersSymbols];
+    _fullSymbolsGroupByLine.clear();
+    
+    if (_vectorLinesCollection)
+    {
+        for (const auto& line : _vectorLinesCollection->getLines())
+        {
+            line->lineUpdatedObservable.attach((__bridge const void*)self, [self]
+                                               (const OsmAnd::VectorLine* const vectorLine)
+                                               {
+                QWriteLocker scopedLocker(&_lock);
+                const auto& sharedLine = [self findSharedLine:vectorLine];
+                if (sharedLine)
+                {
+                    const auto symbolsInfo = vectorLine->getArrowsOnPath();
+                    _fullSymbolsGroupByLine.insert(sharedLine, symbolsInfo);
+                    [self resetSymbols];
+                }
+            });
+            const auto symbolsInfo = line->getArrowsOnPath();
+            _fullSymbolsGroupByLine.insert(line, symbolsInfo);
+        }
+    }
     [self resetSymbols];
+}
+
+- (std::shared_ptr<OsmAnd::VectorLine>) findSharedLine:(const OsmAnd::VectorLine* const)vectorLine
+{
+    const auto lines = _fullSymbolsGroupByLine.keys();
+    for (auto it = lines.begin(); it != lines.end(); ++it)
+    {
+        if (*it && (*it).get() == vectorLine)
+            return *it;
+    }
+    return nullptr;
 }
 
 - (void) buildMarkersSymbols
@@ -121,7 +124,7 @@
         for (const auto& line : _vectorLinesCollection->getLines())
         {
             QList<OsmAnd::VectorLine::OnPathSymbolData> symbolsInfo;
-            line->generateArrowsOnPath(symbolsInfo, _cachedMapArea, UIScreen.mainScreen.scale);
+            line->getArrowsOnPath();
             _fullSymbolsGroupByLine.insert(line, symbolsInfo);
         }
     }
@@ -130,8 +133,6 @@
 - (void) resetSymbols
 {
     [self.mapViewController runWithRenderSync:^{
-        
-        QWriteLocker scopedLocker(&_lock);
         if (!_lineSymbolsCollection)
         {
             _lineSymbolsCollection.reset(new OsmAnd::MapMarkersCollection());
@@ -180,24 +181,6 @@
             _lineSymbolsCollection->removeMarker(marker);
         }
     }];
-}
-
-- (void)refreshSymbolsProvider
-{
-    [self buildMarkersSymbols];
-    [self resetSymbols];
-}
-
-- (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
-{
-    // Introduced zoom filter to reduce number of refreses during zoom change
-    if (abs(_lastZoom - [value floatValue]) > kZoomDelta)
-    {
-        _cachedMapArea = self.mapView.getVisibleBBox31;
-        _lastZoom = self.mapView.zoom;
-        [self buildMarkersSymbols];
-        [self resetSymbols];
-    }
 }
 
 @end

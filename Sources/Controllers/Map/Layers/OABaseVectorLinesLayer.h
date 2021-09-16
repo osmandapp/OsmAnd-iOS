@@ -14,7 +14,4 @@
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection;
 
-- (void) resetSymbols;
-- (void) refreshSymbolsProvider;
-
 @end

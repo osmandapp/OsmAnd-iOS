@@ -59,7 +59,6 @@
     [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
-    [self resetSymbols];
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     
     _gpxDocs.clear();
@@ -84,7 +83,6 @@
 {
     [self resetLayer];
 
-    [self resetSymbols];
     _gpxDocs = gpxDocs;
     
     [self refreshGpxTracks];
@@ -206,7 +204,8 @@
         if (gpx.showArrows)
         {
             builder.setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
-            .setPathIconStep(100);
+            .setPathIconStep(100)
+            .setScreenScale(UIScreen.mainScreen.scale);
         }
         
         builder.buildAndAddToCollection(_linesCollection);

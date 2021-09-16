@@ -243,7 +243,8 @@
             
             builder.setFillColor(lineColor)
             .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
-            .setPathIconStep(40);
+            .setPathIconStep(40)
+            .setScreenScale(UIScreen.mainScreen.scale);
             
             builder.buildAndAddToCollection(_collection);
             
@@ -257,9 +258,6 @@
         {
             lines[0]->setPoints(points);
         }
-//        [self resetSymbols];
-//        [self setVectorLineProvider:_collection];
-        [self refreshSymbolsProvider];
     }];
 }
 

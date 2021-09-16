@@ -168,9 +168,9 @@
     NSString *iconInfo = @"ic_description.png";
     if (resTypeLocalized && resTypeLocalized.length > 0)
     {
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:resTypeLocalized textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        NSString *rowText = [NSString stringWithFormat:@"%@ - %@", resTypeLocalized, [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
-    [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:[NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     if (region.wikiLink && region.wikiLink.length > 0)
     {
         NSArray<NSString *> *items = [region.wikiLink componentsSeparatedByString:@":"];

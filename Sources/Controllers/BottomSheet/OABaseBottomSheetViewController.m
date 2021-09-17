@@ -262,7 +262,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     }
 }
 
-- (void) hide:(BOOL)animated
+- (void) hide:(BOOL)animated completion:(void (^ __nullable)(void))completion
 {
     _isHiding = YES;
     
@@ -275,14 +275,19 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             self.view.backgroundColor = UIColor.clearColor;
             _bottomSheetView.frame = frame;
         } completion:^(BOOL finished) {
-            [self dismissViewControllerAnimated:NO completion:nil];
+            [self dismissViewControllerAnimated:NO completion:completion];
         }];
     }
     else
     {
         _bottomSheetView.frame = frame;
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:YES completion:completion];
     }
+}
+
+- (void) hide:(BOOL)animated
+{
+    [self hide:animated completion:nil];
 }
 
 - (CGFloat) heightForLabel:(NSString *)text

@@ -10,6 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OACommonTypes.h"
 
+#define kDefaultTrackColor 0xFFFF0000
+
 @class OAGPXTrackAnalysis;
 @class OAGpxWpt;
 
@@ -25,6 +27,13 @@
 @property (nonatomic, assign) BOOL newGpx;
 
 @property (nonatomic) NSInteger color;
+
+@property (nonatomic, assign) BOOL showStartFinish;
+@property (nonatomic, assign) BOOL joinSegments;
+@property (nonatomic, assign) BOOL showArrows;
+@property (nonatomic) NSString *width;
+@property (nonatomic) NSString *coloringType;
+
 // Statistics
 @property (nonatomic) float totalDistance;
 @property (nonatomic) int   totalTracks;

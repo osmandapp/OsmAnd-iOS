@@ -1064,6 +1064,8 @@
         self.toolbarViewController.view.alpha = alphaEx;
     if (self.topCoordinatesWidget)
         self.topCoordinatesWidget.alpha = alphaEx;
+    if (self.downloadMapWidget)
+        self.downloadMapWidget.alpha = alphaEx;
 }
 
 - (void) showTopControls
@@ -1083,6 +1085,8 @@
             self.toolbarViewController.view.alpha = alphaEx;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.alpha = alphaEx;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.alpha = alphaEx;
 
         [self updateControlsLayout:[self getHudTopOffset]];
 
@@ -1098,6 +1102,8 @@
             self.toolbarViewController.view.userInteractionEnabled = alphaEx > 0.0;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.userInteractionEnabled = alphaEx > 0.0;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.userInteractionEnabled = alphaEx > 0.0;
         
     }];
 }
@@ -1116,6 +1122,8 @@
             self.toolbarViewController.view.alpha = 0.0;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.alpha = 0.0;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.alpha = 0.0;
         
     } completion:^(BOOL finished) {
         
@@ -1129,6 +1137,8 @@
             self.toolbarViewController.view.userInteractionEnabled = NO;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.userInteractionEnabled = NO;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.userInteractionEnabled = NO;
         
     }];
 }

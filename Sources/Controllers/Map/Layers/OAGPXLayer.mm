@@ -88,14 +88,20 @@
     [self refreshGpxTracks];
 }
 
-- (OsmAnd::ColorARGB) getTrackColor:(QString)filename
+- (OAGPX *)getGpxItem:(const QString &)filename
 {
     NSString *filenameNS = filename.toNSString();
     filenameNS = [OAUtilities getGpxShortPath:filenameNS];
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filenameNS];
+    return gpx;
+}
+
+- (OsmAnd::ColorARGB) getTrackColor:(QString)filename
+{
+    OAGPX * gpx = [self getGpxItem:filename];
     int colorValue = kDefaultTrackColor;
     if (gpx && gpx.color != 0)
-        colorValue = gpx.color;
+        colorValue = (int) gpx.color;
     
     OsmAnd::ColorARGB color(colorValue);
     
@@ -136,13 +142,16 @@
 {
     if (!_gpxDocs.empty())
     {
-        QList<QPair<OsmAnd::ColorARGB, QVector<OsmAnd::PointI>>> pointsList;
-        QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >::iterator it;
-        for (it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
+        int baseOrder = self.baseOrder;
+        int lineId = 1;
+        for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
         {
-            if (!it.value())
+            if (it.key().isNull() && !it.value())
                 continue;
+            
             BOOL routePoints = NO;
+            
+            OAGPX *gpx = [self getGpxItem:it.key()];
 
             if (it.value()->hasTrkPt())
             {
@@ -150,14 +159,13 @@
                 {
                     for (const auto& seg : track->segments)
                     {
-                        OsmAnd::ColorARGB color = [self getTrackColor:it.key()];
                         QVector<OsmAnd::PointI> points;
                         
                         for (const auto& pt : seg->points)
                         {
                             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                         }
-                        pointsList.push_back(qMakePair(color, points));
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++];
                     }
                 }
             }
@@ -171,39 +179,37 @@
                     {
                         points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                     }
-                    pointsList.push_back(qMakePair(OsmAnd::ColorARGB(kDefaultTrackColor), points));
+                    [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++];
                 }
             }
         }
-        
-        int baseOrder = self.baseOrder;
-        int lineId = 1;
-        
-        for (const auto& it : OsmAnd::rangeOf(OsmAnd::constOf(pointsList)))
-        {
-            const auto& color = it->first;
-            const auto& points = it->second;
-            
-            if (points.size() > 1)
-            {
-                OsmAnd::VectorLineBuilder builder;
-                builder.setBaseOrder(baseOrder--)
-                .setIsHidden(points.size() == 0)
-                .setLineId(lineId++)
-                .setLineWidth(30)
-                .setPoints(points)
-                .setFillColor(color)
-                .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
-                .setPathIconStep(40);
-                
-                builder.buildAndAddToCollection(_linesCollection);
-            }
-        }
-
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }
-    
+    [self setVectorLineProvider:_linesCollection];
     [self refreshGpxWaypoints];
+}
+
+- (void) drawLine:(QVector<OsmAnd::PointI> &)points gpx:(OAGPX *)gpx baseOrder:(int)baseOrder lineId:(int)lineId
+{
+    if (points.size() > 1)
+    {
+        OsmAnd::VectorLineBuilder builder;
+        builder.setBaseOrder(baseOrder)
+        .setIsHidden(points.size() == 0)
+        .setLineId(lineId)
+        .setLineWidth(30)
+        .setPoints(points)
+        .setFillColor(OsmAnd::ColorARGB((int) gpx.color));
+        
+        if (gpx.showArrows)
+        {
+            builder.setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
+            .setPathIconStep(100)
+            .setScreenScale(UIScreen.mainScreen.scale);
+        }
+        
+        builder.buildAndAddToCollection(_linesCollection);
+    }
 }
 
 - (void) refreshGpxWaypoints

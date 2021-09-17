@@ -28,6 +28,8 @@
 #import <Reachability.h>
 #import <OsmAndCore/Utilities.h>
 
+#include <routeSegmentResult.h>
+
 #define DEFAULT_GPS_TOLERANCE 12
 #define POSITION_TOLERANCE 60
 #define ALLOWED_DEVIATION 2

@@ -2396,6 +2396,7 @@
 		DA65834622BBB6FA0095B03D /* ic_custom_failure@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA65833B22BBB6F90095B03D /* ic_custom_failure@3x.png */; };
 		DA6676D52450660800EF476D /* ic_action_bus@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6676D42450660800EF476D /* ic_action_bus@3x.png */; };
 		DA6676D92450661700EF476D /* ic_action_bus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6676D72450661600EF476D /* ic_action_bus@2x.png */; };
+		DA66ACC026D91C5800D43299 /* OABaseVectorLinesLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */; };
 		DA68B3A2233B81DB00F5ACCC /* ic_custom_intermediate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B393233B81D600F5ACCC /* ic_custom_intermediate@2x.png */; };
 		DA68B3A4233B81DB00F5ACCC /* ic_custom_work@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B394233B81D600F5ACCC /* ic_custom_work@3x.png */; };
 		DA68B3A6233B81DB00F5ACCC /* ic_custom_swap@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B395233B81D600F5ACCC /* ic_custom_swap@3x.png */; };
@@ -6091,6 +6092,8 @@
 		DA65833B22BBB6F90095B03D /* ic_custom_failure@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_failure@3x.png"; path = "Resources/Icons/ic_custom_failure@3x.png"; sourceTree = "<group>"; };
 		DA6676D42450660800EF476D /* ic_action_bus@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_bus@3x.png"; path = "Resources/Icons/ic_action_bus@3x.png"; sourceTree = "<group>"; };
 		DA6676D72450661600EF476D /* ic_action_bus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_bus@2x.png"; path = "Resources/Icons/ic_action_bus@2x.png"; sourceTree = "<group>"; };
+		DA66ACBE26D91C5700D43299 /* OABaseVectorLinesLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseVectorLinesLayer.h; sourceTree = "<group>"; };
+		DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseVectorLinesLayer.mm; sourceTree = "<group>"; };
 		DA68B393233B81D600F5ACCC /* ic_custom_intermediate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_intermediate@2x.png"; path = "Resources/Icons/ic_custom_intermediate@2x.png"; sourceTree = "<group>"; };
 		DA68B394233B81D600F5ACCC /* ic_custom_work@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_work@3x.png"; path = "Resources/Icons/ic_custom_work@3x.png"; sourceTree = "<group>"; };
 		DA68B395233B81D600F5ACCC /* ic_custom_swap@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_swap@3x.png"; path = "Resources/Icons/ic_custom_swap@3x.png"; sourceTree = "<group>"; };
@@ -10403,55 +10406,57 @@
 		DA5A7ECE26C563A400F274C7 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7ECF26C563A400F274C7 /* OATransportStopsLayer.mm */,
-				DA5A7ED026C563A400F274C7 /* OARoutePointsLayer.h */,
-				DA5A7ED126C563A400F274C7 /* OAUnderlayMapLayer.mm */,
-				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
-				DA5A7ED326C563A400F274C7 /* OAMyPositionLayer.mm */,
-				DA5A7ED426C563A400F274C7 /* OAMapLayer.h */,
-				DA5A7ED526C563A400F274C7 /* OAOsmEditsLayer.h */,
-				DA5A7ED626C563A400F274C7 /* OAMapLayers.mm */,
-				DA5A7ED726C563A400F274C7 /* OASymbolMapLayer.mm */,
-				DA5A7ED826C563A400F274C7 /* OATransportStopsLayer.h */,
-				DA5A7ED926C563A400F274C7 /* OARouteLayer.mm */,
-				DA5A7EDA26C563A400F274C7 /* OAOsmEditsLayer.mm */,
-				DA5A7EDB26C563A400F274C7 /* OARulerByTapControlLayer.mm */,
-				DA5A7EDC26C563A400F274C7 /* OAMapLayers.h */,
-				DA5A7EDD26C563A400F274C7 /* OAGPXRecLayer.h */,
-				DA5A7EDE26C563A400F274C7 /* OAFavoritesLayer.h */,
-				DA5A7EDF26C563A400F274C7 /* OAMeasurementToolLayer.h */,
-				DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */,
-				DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */,
-				DA5A7EE226C563A400F274C7 /* OAMeasurementToolLayer.mm */,
 				DA5A7EE326C563A400F274C7 /* OAContextMenuLayer.h */,
-				DA5A7EE426C563A400F274C7 /* OAGPXRecLayer.mm */,
-				DA5A7EE526C563A400F274C7 /* OAOsmBugsLayer.h */,
-				DA5A7EE626C563A400F274C7 /* OADestinationsLayer.mm */,
-				DA5A7EE726C563A400F274C7 /* OAGPXLayer.mm */,
-				DA5A7EE826C563A400F274C7 /* OAPOILayer.h */,
-				DA5A7EE926C563A400F274C7 /* OAMapillaryLayer.mm */,
-				DA5A7EEA26C563A400F274C7 /* OADestinationsLayer.h */,
-				DA5A7EEB26C563A400F274C7 /* OARoutePointsLayer.mm */,
-				DA5A7EEC26C563A400F274C7 /* OAImpassableRoadsLayer.mm */,
-				DA5A7EED26C563A400F274C7 /* OARasterMapLayer.mm */,
-				DA5A7EEE26C563A400F274C7 /* OAGPXLayer.h */,
 				DA5A7EEF26C563A400F274C7 /* OAContextMenuLayer.mm */,
-				DA5A7EF026C563A400F274C7 /* OAOverlayMapLayer.h */,
-				DA5A7EF126C563A400F274C7 /* OAFavoritesLayer.mm */,
-				DA5A7EF226C563A400F274C7 /* OAImpassableRoadsLayer.h */,
-				DA5A7EF326C563A400F274C7 /* OAMyPositionLayer.h */,
 				DA5A7EF426C563A400F274C7 /* OAContextMenuProvider.h */,
-				DA5A7EF526C563A400F274C7 /* OARasterMapLayer.h */,
+				DA5A7EEA26C563A400F274C7 /* OADestinationsLayer.h */,
+				DA5A7EE626C563A400F274C7 /* OADestinationsLayer.mm */,
 				DA5A7EF626C563A400F274C7 /* OADownloadedRegionsLayer.h */,
-				DA5A7EF726C563A400F274C7 /* OASymbolMapLayer.h */,
+				DA5A7EFD26C563A400F274C7 /* OADownloadedRegionsLayer.mm */,
+				DA5A7EDE26C563A400F274C7 /* OAFavoritesLayer.h */,
+				DA5A7EF126C563A400F274C7 /* OAFavoritesLayer.mm */,
+				DA5A7EEE26C563A400F274C7 /* OAGPXLayer.h */,
+				DA5A7EE726C563A400F274C7 /* OAGPXLayer.mm */,
+				DA5A7EDD26C563A400F274C7 /* OAGPXRecLayer.h */,
+				DA5A7EE426C563A400F274C7 /* OAGPXRecLayer.mm */,
+				DA5A7EF226C563A400F274C7 /* OAImpassableRoadsLayer.h */,
+				DA5A7EEC26C563A400F274C7 /* OAImpassableRoadsLayer.mm */,
+				DA5A7EFB26C563A400F274C7 /* OAMapillaryLayer.h */,
+				DA5A7EE926C563A400F274C7 /* OAMapillaryLayer.mm */,
+				DA5A7ED426C563A400F274C7 /* OAMapLayer.h */,
 				DA5A7EF826C563A400F274C7 /* OAMapLayer.mm */,
+				DA5A7EDC26C563A400F274C7 /* OAMapLayers.h */,
+				DA5A7ED626C563A400F274C7 /* OAMapLayers.mm */,
+				DA5A7EDF26C563A400F274C7 /* OAMeasurementToolLayer.h */,
+				DA5A7EE226C563A400F274C7 /* OAMeasurementToolLayer.mm */,
+				DA5A7EF326C563A400F274C7 /* OAMyPositionLayer.h */,
+				DA5A7ED326C563A400F274C7 /* OAMyPositionLayer.mm */,
+				DA5A7EE526C563A400F274C7 /* OAOsmBugsLayer.h */,
+				DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */,
+				DA5A7ED526C563A400F274C7 /* OAOsmEditsLayer.h */,
+				DA5A7EDA26C563A400F274C7 /* OAOsmEditsLayer.mm */,
+				DA5A7EF026C563A400F274C7 /* OAOverlayMapLayer.h */,
+				DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */,
+				DA5A7EE826C563A400F274C7 /* OAPOILayer.h */,
+				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
+				DA5A7EF526C563A400F274C7 /* OARasterMapLayer.h */,
+				DA5A7EED26C563A400F274C7 /* OARasterMapLayer.mm */,
+				DA5A7EFC26C563A400F274C7 /* OARouteLayer.h */,
+				DA5A7ED926C563A400F274C7 /* OARouteLayer.mm */,
+				DA5A7ED026C563A400F274C7 /* OARoutePointsLayer.h */,
+				DA5A7EEB26C563A400F274C7 /* OARoutePointsLayer.mm */,
+				DA5A7EFF26C563A400F274C7 /* OARulerByTapControlLayer.h */,
+				DA5A7EDB26C563A400F274C7 /* OARulerByTapControlLayer.mm */,
+				DA5A7EF726C563A400F274C7 /* OASymbolMapLayer.h */,
+				DA5A7ED726C563A400F274C7 /* OASymbolMapLayer.mm */,
 				DA5A7EF926C563A400F274C7 /* OATerrainMapLayer.h */,
 				DA5A7EFA26C563A400F274C7 /* OATerrainMapLayer.mm */,
-				DA5A7EFB26C563A400F274C7 /* OAMapillaryLayer.h */,
-				DA5A7EFC26C563A400F274C7 /* OARouteLayer.h */,
-				DA5A7EFD26C563A400F274C7 /* OADownloadedRegionsLayer.mm */,
+				DA5A7ED826C563A400F274C7 /* OATransportStopsLayer.h */,
+				DA5A7ECF26C563A400F274C7 /* OATransportStopsLayer.mm */,
 				DA5A7EFE26C563A400F274C7 /* OAUnderlayMapLayer.h */,
-				DA5A7EFF26C563A400F274C7 /* OARulerByTapControlLayer.h */,
+				DA5A7ED126C563A400F274C7 /* OAUnderlayMapLayer.mm */,
+				DA66ACBE26D91C5700D43299 /* OABaseVectorLinesLayer.h */,
+				DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */,
 			);
 			path = Layers;
 			sourceTree = "<group>";
@@ -13491,6 +13496,7 @@
 				DA5A849A26C563A900F274C7 /* OASplitPointsCommand.mm in Sources */,
 				DA5A84DA26C563A900F274C7 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				DA5A847526C563A900F274C7 /* OAFingerRulerDelegate.mm in Sources */,
+				DA66ACC026D91C5800D43299 /* OABaseVectorLinesLayer.mm in Sources */,
 				DA5A821326C563A700F274C7 /* OAPluginInstalledViewController.mm in Sources */,
 				DA5A839226C563A800F274C7 /* OAOnlineTilesEditingViewController.mm in Sources */,
 				DA5A825C26C563A700F274C7 /* OAProfileAppearanceViewController.mm in Sources */,

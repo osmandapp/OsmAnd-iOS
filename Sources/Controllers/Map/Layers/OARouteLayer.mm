@@ -61,6 +61,8 @@
 
 - (void) initLayer
 {
+    [super initLayer];
+    
     _routingHelper = [OARoutingHelper sharedInstance];
     _transportHelper = [OATransportRoutingHelper sharedInstance];
     
@@ -93,6 +95,8 @@
 
 - (void) resetLayer
 {
+    [super resetLayer];
+    
     [self.mapView removeKeyedSymbolsProvider:_collection];
     [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
@@ -239,12 +243,16 @@
             
             builder.setFillColor(lineColor)
             .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
-            .setPathIconStep(40);
+            .setPathIconStep(40)
+            .setScreenScale(UIScreen.mainScreen.scale);
             
             builder.buildAndAddToCollection(_collection);
             
             if (isFirstLine)
+            {
                 [self.mapView addKeyedSymbolsProvider:_collection];
+                [self setVectorLineProvider:_collection];
+            }
         }
         else
         {

@@ -629,10 +629,11 @@
     if (maxSpeed > 0)
         paramsR[GeneralRouterConstants::MAX_SPEED] = [NSString stringWithFormat:@"%f", maxSpeed].UTF8String;
     float mb = (1 << 20);
+    natural_t freeMemory = [OAUtilities get_free_memory];
     // make visible
-    long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO
+    long memoryLimit = freeMemory > 0 ? (0.6 * (freeMemory / mb)) : (0.08 * ([NSProcessInfo processInfo].physicalMemory / mb));
     long memoryTotal = (long) ([NSProcessInfo processInfo].physicalMemory / mb);
-    NSLog(@"Use %ld MB of %ld", memoryLimit, memoryTotal);
+    NSLog(@"Use %ld MB of %ld MB, free memory: %ld MB", memoryLimit, memoryTotal, (long)(freeMemory / mb));
     
     auto cf = config->build(params.mode.getRoutingProfile.UTF8String, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
     if ([OAAppSettings.sharedManager.enableTimeConditionalRouting get:params.mode])

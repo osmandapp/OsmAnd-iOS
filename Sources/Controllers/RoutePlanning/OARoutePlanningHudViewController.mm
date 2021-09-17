@@ -1128,15 +1128,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) openSaveAsNewTrackMenu
 {
-    NSLog(@"openSaveAsNewTrackMenu 1");
-//    return;
-    
     if (_editingContext.getPointsCount > 0)
     {
         OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:[self getSuggestedFileName] filePath:[self getSuggestedFilePath] showOnMap:YES simplifiedTrack:YES];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
-//        [OARootViewController.instance presentViewController:saveTrackViewController animated:YES completion:nil];
     }
     else
     {

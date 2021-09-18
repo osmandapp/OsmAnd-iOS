@@ -619,7 +619,7 @@
 "relief_smoothness_factor_descr" = "Terreno preferido: llano o empinado.";
 "choose_auto_follow_route" = "Centrado automático del mapa";
 "choose_auto_follow_route_descr" = "Tiempo hasta que la vista del mapa vuelve a sincronizarse con la ubicación actual";
-"auto_zoom_map" = "Zoom automático del mapa";
+"auto_zoom_map" = "Zum automático del mapa";
 "auto_zoom_map_descr" = "Zoom automático del mapa, según la velocidad (mientras el mapa se sincroniza con la ubicación actual)";
 "guidance_preferences_descr" = "Preferencias de navegación";
 "routing_preferences_descr" = "Preferencias de navegación";
@@ -642,7 +642,7 @@
 "general_settings_2" = "Ajustes generales";
 "general_settings_descr" = "Aspecto de la aplicación, unidades, región";
 "routing_settings_descr" = "Configurar la navegación";
-"auto_zoom_none" = "Sin zoom automático";
+"auto_zoom_none" = "Sin zum automático";
 "auto_zoom_close" = "Para corto alcance";
 "auto_zoom_far" = "Para mediano alcance";
 "auto_zoom_farthest" = "Para largo alcance";
@@ -1370,7 +1370,7 @@
 "routing_attr_piste_type_sled_description" = "Pendientes para uso de trineos.";
 "rendering_value_red_name" = "Rojo";
 "routing_attr_relief_smoothness_factor_plains_name" = "Poco empinado";
-"rendering_attr_buildings15zoom_name" = "Edificios en zoom 15";
+"rendering_attr_buildings15zoom_name" = "Edificios en zum 15";
 "routing_attr_driving_style_safety_name" = "Preferir caminos secundarios";
 "rendering_value_dark_brown_name" = "Marrón oscuro";
 "rendering_value_lightgreen_name" = "Verde claro";
@@ -1577,7 +1577,7 @@
 "routing_attr_max_num_changes_description" = "Especifica el número máximo de transbordos";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Redes de nodos";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Plano (llanura)";
-"rendering_attr_contourLines_description" = "Mostrar desde el nivel de zoom (requiere datos de curvas de nivel):";
+"rendering_attr_contourLines_description" = "Mostrar desde el nivel de zum (requiere datos de curvas de nivel):";
 "rendering_attr_hidePOILabels_name" = "Etiquetas de PDI";
 "routing_attr_piste_type_downhill_description" = "Pistas de esquí alpino o de descenso y acceso a remontes mecánicos.";
 "routing_attr_freeride_policy_name" = "Fuera de pista";

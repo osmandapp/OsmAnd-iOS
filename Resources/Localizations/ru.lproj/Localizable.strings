@@ -533,7 +533,7 @@
 "shared_string_from" = "от";
 "get_started" = "Начать";
 "location_not_found" = "Не удалось определить местоположение";
-"no_inet_connection_desc_map" = "Требуется загрузить карты";
+"no_inet_connection_desc_map" = "Требуется загрузить карты.";
 "try_again" = "Попробуйте снова";
 "search_location" = "Определение местоположения…";
 "poi_filter_closest_poi" = "Ближайшие POI";

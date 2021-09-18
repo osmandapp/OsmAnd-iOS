@@ -511,7 +511,7 @@
 "route_tl" = "Fordulj balraés menj";
 "route_tshl" = "Forduljélesen balra és menj";
 "route_tsll" = "Fordulj enyhén balra és menj";
-"route_tu" = "Fordulj megés menj";
+"route_tu" = "Forduljon meg, és menjen tovább";
 "route_head" = "Előre";
 "looking_up_address" = "Cím keresése";
 "no_address_found" = "Ismeretlen cím";
@@ -1047,7 +1047,7 @@
 "rendering_attr_hideBuildings_name" = "Épületek";
 "rendering_attr_subwayMode_name" = "Metróvonalak";
 "rendering_attr_noPolygons_description" = "A térképen az összes területszerű objektum átlátszóvá tétele.";
-"routing_attr_width_description" = "Adja meg azútvonalakon a járművekre vonatkozó szélességkorlátozást.";
+"routing_attr_width_description" = "Adja meg az útvonalakon a járművekre vonatkozó szélességkorlátozást.";
 "routing_attr_avoid_sett_description" = "Elkerüli a macskaköves és kavicsburkolatút utakat";
 "rendering_attr_surface_gravel_name" = "Zúzott kő";
 "routing_attr_avoid_ferry_name" = "Komp nélkül";

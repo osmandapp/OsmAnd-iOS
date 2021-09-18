@@ -55,6 +55,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (BOOL) isValidEmail;
 - (NSString *) escapeUrl;
 - (NSString *) sanitizeFileName;
+- (NSString *) xmlStringToString;
 
 @end
 

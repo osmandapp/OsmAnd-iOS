@@ -357,24 +357,28 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         if (0 == strncmp((const char *)localname, kTagElementName, kTagElementNameLength))
         {
-            NSString *key = @"";
-            NSString *value = @"";
+            __block NSString *key = @"";
+            __block NSString *value = @"";
             for(int i = 0; i < attributeCount; i++) {
                 if(0 == strncmp((const char*)attributes[i].localname, kKeyAttributeName,
                                 kKeyAttributeNameLength)) {
                     
                     int length = (int) (attributes[i].end - attributes[i].value);
-                    key = [[NSString alloc] initWithBytes:attributes[i].value
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        key = [[NSString alloc] initWithBytes:attributes[i].value
                                                        length:length
-                                                     encoding:NSUTF8StringEncoding];
+                                                     encoding:NSUTF8StringEncoding].xmlStringToString;
+                    });
                 }
                 if(0 == strncmp((const char*)attributes[i].localname, kValueAttributeName,
                                 kValueAttributeNameLength)) {
                     
                     int length = (int) (attributes[i].end - attributes[i].value);
-                    value = [[NSString alloc] initWithBytes:attributes[i].value
-                                                   length:length
-                                                 encoding:NSUTF8StringEncoding];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                         length:length
+                                                       encoding:NSUTF8StringEncoding].xmlStringToString;
+                    });
                 }
             }
             if (key.length > 0 && value.length > 0)

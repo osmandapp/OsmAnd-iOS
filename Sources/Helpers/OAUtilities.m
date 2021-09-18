@@ -271,6 +271,13 @@
     return [[[self componentsSeparatedByCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]] componentsJoinedByString:@"_"];
 }
 
+- (NSString *) xmlStringToString
+{
+    NSDictionary *options = @{NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute : @(NSUTF8StringEncoding)};
+    NSAttributedString *res = [[NSAttributedString alloc] initWithData:[self dataUsingEncoding:NSUTF8StringEncoding] options:options documentAttributes:nil error:nil];
+    return res.string;
+}
+
 @end
 
 @implementation UIView (utils)

@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     id<OAOpenStreetMapUtilsProtocol> _editingUtil;
     
     BOOL _isAddingNewPOI;
+    BOOL _isOfflineEditing;
 }
 
 -(id) initWithLat:(double)latitude lon:(double)longitude
@@ -77,6 +78,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         _editPoiData = [[OAEditPOIData alloc] initWithEntity:entity];
         _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
         _editingUtil = _editingPlugin.getPoiModificationLocalUtil;
+        _isOfflineEditing = [OAAppSettings.sharedManager.offlineEditing get];
     }
     return self;
 }

@@ -640,7 +640,10 @@
     if (_localMapIndexItem)
     {
         self.downloadControlButton = [[OATargetMenuControlButton alloc] init];
-        self.downloadControlButton.title = OALocalizedString(@"download");
+        if ([self isKindOfClass:OAMapDownloadController.class])
+            self.downloadControlButton.title = OALocalizedString(@"download");
+        else
+            self.downloadControlButton.title = _localMapIndexItem.title;
         [self.delegate contentChanged];
     }
     else if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])

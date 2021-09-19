@@ -43,6 +43,7 @@
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmAndFormatter.h"
+#import "OAMapDownloadController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -1063,7 +1064,15 @@ static const NSInteger _buttonsCount = 4;
 - (void) layoutSubviews
 {
     if (![self isSliding] && !_hiding)
+    {
         [self doLayoutSubviews:NO];
+        
+        if ([_customController isKindOfClass:OAMapDownloadController.class])
+        {
+            NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+            [((OAMapDownloadController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+    }
 }
 
 - (void) doLayoutSubviews
@@ -1297,7 +1306,7 @@ static const NSInteger _buttonsCount = 4;
     else
         newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !landscape ? _customController.getToolBarHeight + topViewHeight / 2 : _headerOffset) + self.customController.additionalContentOffset};
     
-    if (adjustOffset)
+    if (adjustOffset || [_customController isKindOfClass:OAMapDownloadController.class])
         self.contentOffset = newOffset;
 
     if (_imageView.image)

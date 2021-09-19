@@ -17,6 +17,9 @@
 #import "OADownloadedRegionsLayer.h"
 #import "Localization.h"
 
+#define kCollapseDetailsRowType @"kCollapseDetailsRowType"
+#define kCollapseDetailsRowHeight 60.0
+
 @interface OAMapDownloadController ()
 
 @end
@@ -166,10 +169,15 @@
     OAResourceItem *item = _mapObject.indexItem;
     NSString *resTypeLocalized = [OAResourceType resourceTypeLocalized:item.resourceType];
     NSString *iconInfo = @"ic_description.png";
+    
+    OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
+    [collapseDetailsRowCell setHeight:kCollapseDetailsRowHeight];
+    [rows addObject:collapseDetailsRowCell];
+    
     if (resTypeLocalized && resTypeLocalized.length > 0)
     {
         NSString *rowText = [NSString stringWithFormat:@"%@ - %@", resTypeLocalized, [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:1 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     if (region.wikiLink && region.wikiLink.length > 0)
     {
@@ -179,11 +187,11 @@
             url = [NSString stringWithFormat:@"https://%@.wikipedia.org/wiki/%@", items[0], [items[1] stringByReplacingOccurrencesOfString:@" " withString:@"_"]];
         else
             url = [NSString stringWithFormat:@"https://wikipedia.org/wiki/%@", [items[0] stringByReplacingOccurrencesOfString:@" " withString:@"_"]];
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:url textColor:UIColorFromRGB(kHyperlinkColor) isText:NO needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:YES]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:url textColor:UIColorFromRGB(kHyperlinkColor) isText:NO needLinks:YES order:2 typeName:@"" isPhoneNumber:NO isUrl:YES]];
     }
     if (region.population && region.population.length > 0)
     {
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:[NSString stringWithFormat:OALocalizedString(@"population_num"), region.population] textColor:nil isText:YES needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:YES]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:[NSString stringWithFormat:OALocalizedString(@"population_num"), region.population] textColor:nil isText:YES needLinks:NO order:3 typeName:@"" isPhoneNumber:NO isUrl:YES]];
     }
 }
 
@@ -196,6 +204,11 @@
         [targetPoints addObject:[layer getTargetPoint:[[OADownloadMapObject alloc] initWithWorldRegion:_mapObject.worldRegion indexItem:item]]];
     }
     [OARootViewController.instance.mapPanel showContextMenuWithPoints:targetPoints];
+}
+
+- (CGFloat) additionalContentOffset
+{
+    return kCollapseDetailsRowHeight;
 }
 
 @end

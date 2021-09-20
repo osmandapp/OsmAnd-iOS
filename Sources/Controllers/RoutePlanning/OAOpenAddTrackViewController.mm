@@ -252,7 +252,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (void) dismissViewController
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (_screenType == EOAFollowTrack)
+            [self.delegate closeBottomSheet];
+    }];
 }
 
 #pragma mark - TableView

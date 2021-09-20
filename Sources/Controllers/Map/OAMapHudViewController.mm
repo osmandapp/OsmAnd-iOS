@@ -498,6 +498,7 @@
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_active);
                 _mapModeButton.tintColorDay = UIColor.whiteColor;
                 _mapModeButton.tintColorNight = UIColor.whiteColor;
+                _mapModeButton.borderWidthNight = 0;
                 break;
             }
                 
@@ -508,6 +509,7 @@
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
                 _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
                 _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                _mapModeButton.borderWidthNight = 2;
                 break;
             }
                 
@@ -518,6 +520,7 @@
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
                 _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
                 _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                _mapModeButton.borderWidthNight = 2;
                 break;
             }
 
@@ -533,6 +536,7 @@
         _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
         _mapModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
         _mapModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+        _mapModeButton.borderWidthNight = 2;
         _cachedLocationAvailableState = NO;
     }
     

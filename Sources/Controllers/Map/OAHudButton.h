@@ -20,6 +20,9 @@
 
 @property (nonatomic) UIColor *borderColor;
 
+@property (nonatomic) CGFloat borderWidthDay;
+@property (nonatomic) CGFloat borderWidthNight;
+
 - (void) updateColorsForPressedState:(BOOL)isPressed;
 
 @end

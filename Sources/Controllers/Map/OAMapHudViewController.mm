@@ -440,6 +440,7 @@
     [_zoomOutButton updateColorsForPressedState:NO];
 
     [self updateMapModeButton];
+    [self updateRouteButton:NO followingMode:NO];
     
     [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
     [_optionsMenuButton updateColorsForPressedState:NO];

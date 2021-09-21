@@ -62,7 +62,6 @@
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
-#define kToolbarHeight 60.0
 #define kHeaderSectionHeigh 60.0
 
 #define PLAN_ROUTE_MODE 0x1
@@ -304,7 +303,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         self.toolBarView.hidden = YES;
         self.landscapeHeaderContainerView.hidden = NO;
         
-        CGFloat buttonsViewHeight = kToolbarHeight + OAUtilities.getBottomMargin;
+        CGFloat buttonsViewHeight = [self getToolbarHeight] + OAUtilities.getBottomMargin;
         CGFloat buttonsViewY = DeviceScreenHeight - buttonsViewHeight;
         
         _landscapeHeaderContainerView.frame = CGRectMake(0, buttonsViewY, DeviceScreenWidth, buttonsViewHeight);
@@ -372,13 +371,21 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_currentPopupController)
         return _currentPopupController.initialHeight;
     
-    CGFloat fullToolbarHeight = kToolbarHeight +  [OAUtilities getBottomMargin];
+    CGFloat fullToolbarHeight = [self getToolbarHeight] +  [OAUtilities getBottomMargin];
     return _hudMode == EOAHudModeRoutePlanning ? kHeaderSectionHeigh + fullToolbarHeight : _infoView.getViewHeight;
 }
 
 - (CGFloat)expandedMenuHeight
 {
     return DeviceScreenHeight / 2;
+}
+
+- (CGFloat) getToolbarHeight
+{
+    if ([self isLeftSidePresentation])
+        return OAUtilities.getBottomMargin > 0 ? 48 : 60;
+    else
+        return OAUtilities.getBottomMargin > 0 ? 30 : 48;
 }
 
 - (BOOL)useGestureRecognizer
@@ -424,7 +431,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-kToolbarHeight - 16.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 16.);
+    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-[self getToolbarHeight] - 16.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 16.);
     CGFloat leftMargin = _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
@@ -1158,7 +1165,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? kToolbarHeight : ( height - ([OAUtilities isIPad] ? 0. : OAUtilities.getBottomMargin)) animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? [self getToolbarHeight] : ( height - ([OAUtilities isIPad] ? 0. : OAUtilities.getBottomMargin)) animated:YES];
     
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];

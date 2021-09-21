@@ -275,7 +275,7 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         if ([self.rulerLabel hasNoData])
         {
-            [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+            [self updateMapRulerData];
         }
     });
     
@@ -324,7 +324,7 @@
         [self setupBottomContolMarginsForHeight:0];
         [self updateControlsLayout:[self getHudTopOffset]];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+        [self updateMapRulerData];
     }  ];
 }
 
@@ -339,6 +339,11 @@
 {
     CGFloat bottomMargin = OAUtilities.getBottomMargin > 0 ? 0 : kButtonOffset;
     [self updateRulerPosition:-bottomMargin left:_driveModeButton.frame.origin.x + _driveModeButton.frame.size.width + kButtonOffset];
+}
+
+- (void)updateMapRulerData
+{
+    [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
 }
 
 - (BOOL) shouldShowCompass
@@ -605,7 +610,7 @@
         _zoomInButton.enabled = [_mapViewController canZoomIn];
         _zoomOutButton.enabled = [_mapViewController canZoomOut];
         
-        [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+        [self updateMapRulerData];
     });
 }
 
@@ -621,7 +626,7 @@
         if (self.toolbarViewController)
             [self.toolbarViewController onMapChanged:observable withKey:key];
         
-        [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+        [self updateMapRulerData];
         [self updateMapModeButtonIfNeeded];
     });
 }

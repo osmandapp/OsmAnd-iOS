@@ -1690,6 +1690,8 @@
 "gpx_enter_new_name" = "Please enter new name for the track";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Points";
+"shared_string_overview" = "Overview";
+"activity"= "Activity";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";

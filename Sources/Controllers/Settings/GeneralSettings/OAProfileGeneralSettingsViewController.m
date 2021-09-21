@@ -288,15 +288,15 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.leftImageView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftImageView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
         }
         return cell;
     }

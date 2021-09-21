@@ -147,16 +147,24 @@
                     <rect key="frame" x="0.0" y="493" width="414" height="396"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hwf-gF-YvT">
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hwf-gF-YvT" userLabel="Status Bar Background">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
-                        <view contentMode="scaleToFill" id="jw8-H4-X89">
+                        <view contentMode="scaleToFill" id="jw8-H4-X89" userLabel="Content Container">
                             <rect key="frame" x="0.0" y="0.0" width="417" height="338"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yao-ZD-271">
+                                <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="zFE-tM-QGM">
+                                    <rect key="frame" x="0.0" y="0.0" width="417" height="4"/>
+                                </progressView>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YKP-RZ-ZK0" userLabel="Slider">
+                                    <rect key="frame" x="197" y="6" width="32" height="3"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yao-ZD-271" userLabel="Top Header Container">
                                     <rect key="frame" x="0.0" y="12" width="417" height="49.5"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_routes.png" translatesAutoresizingMaskIntoConstraints="NO" id="Aod-ON-ikl">
@@ -166,19 +174,19 @@
                                                 <constraint firstAttribute="height" constant="30" id="taT-Lp-mMq"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxl-Cd-I6M">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxl-Cd-I6M" userLabel="Title">
                                             <rect key="frame" x="70" y="3" width="273" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2s5-50-fXV">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2s5-50-fXV" userLabel="Description">
                                             <rect key="frame" x="70" y="26.5" width="273" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1a9-hh-9hN">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1a9-hh-9hN" userLabel="Expand Button">
                                             <rect key="frame" x="363" y="10" width="30" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="30" id="PwD-iN-0X4"/>
@@ -208,19 +216,11 @@
                                         <constraint firstItem="vxl-Cd-I6M" firstAttribute="top" secondItem="yao-ZD-271" secondAttribute="top" constant="3" id="vGl-RL-RVf"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YKP-RZ-ZK0">
-                                    <rect key="frame" x="197" y="6" width="32" height="3"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
-                                </view>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kp4-4r-XHO">
                                     <rect key="frame" x="0.0" y="67" width="417" height="268"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </tableView>
-                                <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="zFE-tM-QGM">
-                                    <rect key="frame" x="0.0" y="0.0" width="417" height="4"/>
-                                </progressView>
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -236,6 +236,13 @@
                             <rect key="frame" x="0.0" y="336" width="414" height="60"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VkI-Al-pSd" userLabel="Separator">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
+                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="OgF-qy-IiU"/>
+                                    </constraints>
+                                </view>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vno-eG-MGA">
                                     <rect key="frame" x="24" y="16" width="366" height="44"/>
                                     <subviews>
@@ -311,13 +318,6 @@
                                         <constraint firstAttribute="height" constant="44" id="bKS-1S-7Wf"/>
                                     </constraints>
                                 </stackView>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VkI-Al-pSd">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
-                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="1" id="OgF-qy-IiU"/>
-                                    </constraints>
-                                </view>
                             </subviews>
                             <viewLayoutGuide key="safeArea" id="lUe-XT-GXT"/>
                             <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

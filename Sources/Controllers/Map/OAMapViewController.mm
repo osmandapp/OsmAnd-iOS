@@ -2326,6 +2326,40 @@
     return [self findWpt:location currentTrackOnly:NO];
 }
 
+//todo gpx track menu
+- (BOOL) findTrack:(CLLocationCoordinate2D)location
+{
+    NSArray *visibleTracks = [[OAAppSettings sharedManager].mapSettingVisibleGpx get];
+    for (NSString *visibleTrack in visibleTracks)
+    {
+        std::shared_ptr<OsmAnd::GpxDocument> gpxDoc = OsmAnd::GpxDocument::loadFrom(QString::fromNSString([_app.gpxPath stringByAppendingPathComponent:visibleTrack]));
+        for (auto &loc : gpxDoc->locationMarks)
+        {
+            if ([OAUtilities isCoordEqual:location.latitude srcLon:location.longitude destLat:loc->position.latitude destLon:loc->position.longitude upToDigits:3])
+            {
+                self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:visibleTrack];
+                return YES;
+            }
+        }
+        for (auto &track : gpxDoc->tracks)
+        {
+            for (auto &segment : track->segments)
+            {
+                for (auto &point : segment->points)
+                {
+                    if ([OAUtilities isCoordEqual:location.latitude srcLon:location.longitude destLat:point->position.latitude destLon:point->position.longitude upToDigits:3])
+                    {
+                        self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:visibleTrack];
+                        return YES;
+                    }
+                }
+            }
+        }
+    }
+
+    return NO;
+}
+
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];

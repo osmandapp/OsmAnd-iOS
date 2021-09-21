@@ -77,6 +77,11 @@
 {
     [super viewWillAppear:animated];
     [self layoutSubviews];
+    [self firstShowing];
+}
+
+- (void)firstShowing
+{
     [self show:YES state:EOADraggableMenuStateInitial onComplete:nil];
 }
 
@@ -225,7 +230,7 @@
 
 - (CGFloat)initialMenuHeight
 {
-    return 170.; // override
+    return _topHeaderContainerView.frame.origin.y + _topHeaderContainerView.frame.size.height + _toolBarView.frame.size.height; // override
 }
 
 - (CGFloat)expandedMenuHeight
@@ -459,12 +464,12 @@
             _isDragging = NO;
             BOOL shouldRefresh = NO;
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if ((newY - initialPoint.y > 180 || fastDownSlide) && _currentState == EOADraggableMenuStateInitial)
+            if ((newY - initialPoint.y > self.toolBarView.frame.size.height || fastDownSlide) && _currentState == EOADraggableMenuStateInitial)
             {
                 [self hide:YES duration:0.2 onComplete:nil];
                 break;
             }
-            else if (newY > DeviceScreenHeight - 170.0 + _toolBarView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide)
+            else if (newY > DeviceScreenHeight - [self initialMenuHeight] + _toolBarView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide)
             {
                 shouldRefresh = YES;
                 _currentState = EOADraggableMenuStateInitial;

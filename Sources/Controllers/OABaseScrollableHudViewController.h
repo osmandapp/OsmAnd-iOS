@@ -49,5 +49,7 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 - (void) updateShowingState:(EOADraggableMenuState)state;
 
 - (void) updateViewAnimated;
+- (BOOL) isLandscape;
+- (BOOL) isLeftSidePresentation;
 
 @end

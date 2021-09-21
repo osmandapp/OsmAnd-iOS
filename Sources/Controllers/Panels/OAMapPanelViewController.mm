@@ -122,6 +122,8 @@
 #import "OAGPXDocument.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
+#import "OATrackMenuViewController.h"
+#import "OAMapRulerView.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -410,7 +412,7 @@ typedef enum
         _scrollableHudViewController = nil;
     }
     [_hudViewController.quickActionController updateViewVisibility];
-    _activeTargetType = OATargetNone;
+    [self resetActiveTargetMenu];
     [self restoreFromContextMenuMode];
 }
 
@@ -1251,7 +1253,10 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
-    return [self showContextMenu:targetPoint saveState:YES];
+    if (targetPoint.type == OATargetGPX)
+        return [self openTargetViewWithGPX:targetPoint.targetObj pushed:(BOOL)NO];
+    else
+        return [self showContextMenu:targetPoint saveState:YES];
 }
 
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
@@ -1487,20 +1492,7 @@ typedef enum
 
 - (void) enterContextMenuMode
 {
-    EOAMapModeButtonType mapModeButtonType;
-    switch (_activeTargetType)
-    {
-        //todo gpx context menu
-        /*case OATargetGPX:
-            mapModeButtonType = EOAMapModeButtonTypeShowMap;
-            break;*/
-            
-        default:
-            mapModeButtonType = EOAMapModeButtonRegular;
-            break;
-    }
-    
-    self.hudViewController.mapModeButtonType = mapModeButtonType;
+    self.hudViewController.mapModeButtonType = EOAMapModeButtonRegular;
     [self.hudViewController enterContextMenuMode];
 }
 
@@ -1525,27 +1517,6 @@ typedef enum
         [self showBottomControls:menuHeight animated:animated];
     else
         [self hideBottomControls:menuHeight animated:animated];
-}
-
-- (void) storeActiveTargetViewControllerState
-{
-    switch (_activeTargetType)
-    {
-        case OATargetGPX:
-        {
-            //todo gpx context menu
-            /*OAGPXItemViewControllerState *gpxItemViewControllerState = (OAGPXItemViewControllerState *)([((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState]);
-            gpxItemViewControllerState.showFull = self.targetMenuView.showFull;
-            gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFilePath.length == 0);
-            
-            _activeViewControllerState = gpxItemViewControllerState;*/
-            break;
-        }
-            
-        default:
-            break;
-    }
 }
 
 - (void) restoreActiveTargetMenu
@@ -1945,8 +1916,7 @@ typedef enum
 
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    //todo gpx context menu
-    if (/*self.targetMenuView.targetPoint.type == OATargetGPX || */(![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
+    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
@@ -1971,7 +1941,6 @@ typedef enum
 
     if (_activeTargetActive)
     {
-        [self storeActiveTargetViewControllerState];
         _activeTargetActive = NO;
         BOOL activeTargetChildPushed = _activeTargetChildPushed;
         _activeTargetChildPushed = NO;
@@ -2010,7 +1979,6 @@ typedef enum
         case OATargetTransportRoute:
         case OATargetTurn:
         case OATargetMyLocation:
-        case OATargetGPX:
         {
             if (controller)
                 [self.targetMenuView doInit:showFullMenu];
@@ -2291,31 +2259,11 @@ typedef enum
     if (_targetMenuView.needsManualContextMode)
         [self restoreFromContextMenuMode];
     
-    if (_activeTargetType == OATargetNone || _activeTargetActive)
-    {
-        BOOL popped;
-        switch (self.targetMenuView.targetPoint.type)
-        {
-            //todo gpx context menu
-            case OATargetGPX:
-//                if ([self hasGpxActiveTargetType] && _activeTargetObj)
-//                    ((OAGPX *)_activeTargetObj).newGpx = NO;
-//                popped = [OAGPXListViewController popToParent];
-                break;
-                
-            case OATargetFavorite:
-                popped = [OAFavoriteListViewController popToParent];
-                break;
+    if ((_activeTargetType == OATargetNone || _activeTargetActive)
+            && self.targetMenuView.targetPoint.type == OATargetFavorite
+            && ![OAFavoriteListViewController popToParent])
+        [self.navigationController popViewControllerAnimated:YES];
 
-            default:
-                popped = NO;
-                break;
-        }
-
-        if (!popped)
-            [self.navigationController popViewControllerAnimated:YES];
-    }
-    
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         
         if (_activeTargetType != OATargetNone)
@@ -2542,7 +2490,12 @@ typedef enum
         item.gpxTitle = OALocalizedString(@"track_recording_name");
         showCurrentTrack = YES;
     }
-    
+
+    [self hideMultiMenuIfNeeded];
+
+    if (_dashboard)
+        [self closeDashboard];
+
     [_mapViewController hideContextPinMarker];
 
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
@@ -2556,9 +2509,6 @@ typedef enum
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
-    
-    if (_activeTargetType != OATargetGPX)
-        [self displayGpxOnMap:item];
     
     if (item.bounds.center.latitude == DBL_MAX)
     {
@@ -2583,11 +2533,10 @@ typedef enum
     
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
-    
-    [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
-        [self enterContextMenuMode];
-        _activeTargetActive = YES;
-    }];
+
+    [self showScrollableHudViewController:[[OATrackMenuViewController alloc] initWithGpx:targetPoint.targetObj]];
+    _activeTargetActive = YES;
+    [self enterContextMenuMode];
 }
 
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed
@@ -2925,13 +2874,13 @@ typedef enum
 {
     if (item.bounds.topLeft.latitude == DBL_MAX)
         return;
-    
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
 
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - ([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0), DeviceScreenHeight - ([self.targetMenuView isLandscape] ? 0.0 : 233.0));
+    OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
+
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - ([self.scrollableHudViewController isLandscape] ? DeviceScreenWidth * 0.45 : 0.0), DeviceScreenHeight - ([self.scrollableHudViewController isLandscape] ? 0.0 : [self.scrollableHudViewController getViewHeight]));
     _targetZoom = [self getZoomForBounds:item.bounds mapSize:screenBBox];
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
-    
+
     if (_targetMode == EOATargetBBOX)
     {
         _targetLatitude = item.bounds.bottomRight.latitude;
@@ -2942,24 +2891,18 @@ typedef enum
         _targetLatitude = item.bounds.center.latitude;
         _targetLongitude = item.bounds.center.longitude;
     }
-    
+
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(item.bounds.center.latitude, item.bounds.center.longitude))];
     [_mapViewController goToPosition:targetPoint31
                              andZoom:(_targetMode == EOATargetBBOX ? _targetZoom : kDefaultFavoriteZoomOnShow)
                             animated:NO];
-    
+
     renderView.azimuth = 0.0;
     renderView.elevationAngle = 90.0;
-    
+
     OsmAnd::LatLon latLon(item.bounds.center.latitude, item.bounds.center.longitude);
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
     _mainMapZoom = _targetZoom;
-    
-    if (self.targetMenuView.superview && !self.targetMenuView.showFullScreen)
-    {
-        Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : [self.targetMenuView getVisibleHeight]) centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
-    }
 }
 
 - (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight

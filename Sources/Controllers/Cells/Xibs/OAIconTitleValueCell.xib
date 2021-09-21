@@ -66,17 +66,20 @@
                     <constraint firstItem="TVY-ES-CU4" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="XGq-Lo-ipC"/>
                     <constraint firstItem="oCO-hD-EJk" firstAttribute="leading" secondItem="sBM-Kj-IT8" secondAttribute="trailing" constant="20" id="ae8-pj-6On"/>
                     <constraint firstItem="9jr-sR-1Hx" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="dfK-Wq-ibE"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="oCO-hD-EJk" secondAttribute="trailing" priority="999" id="iZI-nv-Gls"/>
                     <constraint firstItem="9jr-sR-1Hx" firstAttribute="leading" secondItem="oCO-hD-EJk" secondAttribute="trailing" constant="8" id="kCm-bw-Mwg"/>
                     <constraint firstItem="eW5-xD-Mrs" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" id="upu-bG-bLG"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="descriptionView" destination="oCO-hD-EJk" id="BaG-Vk-w4O"/>
-                <outlet property="iconView" destination="9jr-sR-1Hx" id="7Rr-Yf-ZEd"/>
-                <outlet property="imageTextLeadingMargin" destination="5f4-N5-a2N" id="MIV-3a-8vs"/>
-                <outlet property="leftImageView" destination="TVY-ES-CU4" id="1dU-Wm-XDv"/>
-                <outlet property="noImageTextLeadingMargin" destination="5eL-jr-RyH" id="p4c-v0-ab2"/>
+                <outlet property="leftIconTextLeadingMargin" destination="5f4-N5-a2N" id="MIV-3a-8vs"/>
+                <outlet property="leftIconView" destination="TVY-ES-CU4" id="1dU-Wm-XDv"/>
+                <outlet property="noLeftIconTextLeadingMargin" destination="5eL-jr-RyH" id="p4c-v0-ab2"/>
+                <outlet property="noRightIconDecsLeadingMargin" destination="iZI-nv-Gls" id="Avg-j5-rqJ"/>
                 <outlet property="openCloseGroupButton" destination="eW5-xD-Mrs" id="Yz2-bm-fUJ"/>
+                <outlet property="rightIconDescLeadingMargin" destination="kCm-bw-Mwg" id="rzu-gu-8gd"/>
+                <outlet property="rightIconView" destination="9jr-sR-1Hx" id="7Rr-Yf-ZEd"/>
                 <outlet property="textView" destination="sBM-Kj-IT8" id="5Vc-wx-NTW"/>
             </connections>
             <point key="canvasLocation" x="251.19999999999999" y="272.56371814092955"/>

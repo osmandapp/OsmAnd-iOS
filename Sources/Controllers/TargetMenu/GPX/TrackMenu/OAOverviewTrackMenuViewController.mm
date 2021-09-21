@@ -13,6 +13,7 @@
 #import "OAColors.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OAOverviewTrackMenuViewController ()
 
@@ -54,7 +55,7 @@
     self.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
     self.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
 
-    [self.directionTextView setText:[_app getFormattedDistance:_gpx.totalDistance]];
+    [self.directionTextView setText:[OAOsmAndFormatter getFormattedDistance:_gpx.totalDistance]];
 
     [self.showHideButton setImage:[UIImage templateImageNamed:_isShown ? @"ic_custom_show" : @"ic_custom_hide"] forState:UIControlStateNormal];
 }

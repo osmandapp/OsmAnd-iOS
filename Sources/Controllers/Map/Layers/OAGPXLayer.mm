@@ -242,7 +242,16 @@
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    if ([obj isKindOfClass:[OAGpxWptItem class]])
+    if ([obj isKindOfClass:[OAGPX class]])
+    {
+        OAGPX *item = (OAGPX *) obj;
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.type = OATargetGPX;
+        targetPoint.targetObj = item;
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        return targetPoint;
+    }
+    else if ([obj isKindOfClass:[OAGpxWptItem class]])
     {
         OAGpxWptItem *item = (OAGpxWptItem *)obj;
         
@@ -270,6 +279,13 @@
     OAMapViewController *mapViewController = self.mapViewController;
     if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
     {
+        if ([mapViewController findTrack:point])
+        {
+            OAGPX *item = mapViewController.foundGpx;
+            OATargetPoint *targetPoint = [self getTargetPoint:item];
+            if (![found containsObject:targetPoint])
+                [found addObject:targetPoint];
+        }
         if ([mapViewController findWpt:point])
         {
             OAGpxWpt *wpt = mapViewController.foundWpt;

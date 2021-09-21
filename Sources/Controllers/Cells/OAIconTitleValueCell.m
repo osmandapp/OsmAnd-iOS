@@ -7,12 +7,8 @@
 //
 
 #import "OAIconTitleValueCell.h"
-#import "OAUtilities.h"
 
 @implementation OAIconTitleValueCell
-{
-    BOOL _isImageShown;
-}
 
 - (void)awakeFromNib
 {
@@ -20,17 +16,22 @@
     if ([self.descriptionView isDirectionRTL])
     {
         self.descriptionView.textAlignment = NSTextAlignmentLeft;
-        [self.iconView setImage:self.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+        [self.rightIconView setImage:self.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
     }
-    
-    _isImageShown = YES;
 }
 
--(void)showImage:(BOOL)show
+-(void)showLeftIcon:(BOOL)show
 {
-    self.leftImageView.hidden = !show;
-    self.imageTextLeadingMargin.active = show;
-    self.noImageTextLeadingMargin.active = !show;
+    self.leftIconView.hidden = !show;
+    self.leftIconTextLeadingMargin.active = show;
+    self.noLeftIconTextLeadingMargin.active = !show;
+}
+
+-(void)showRightIcon:(BOOL)show
+{
+    self.rightIconView.hidden = !show;
+    self.rightIconDescLeadingMargin.active = show;
+    self.noRightIconDecsLeadingMargin.active = !show;
 }
 
 @end

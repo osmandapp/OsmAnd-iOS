@@ -6,14 +6,14 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OATargetMenuViewController.h"
+#import "OABaseScrollableHudViewController.h"
 
 @class OAGPX;
 @class OATabBar;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
-@required
+@optional
 
 - (void)overviewContentChanged;
 - (BOOL)onShowHidePressed;
@@ -23,13 +23,14 @@
 
 @end
 
-@interface OATrackMenuViewController : OATargetMenuViewController
+@interface OATrackMenuViewController : OABaseScrollableHudViewController
 
-@property (weak, nonatomic) IBOutlet UINavigationBar *navBarView;
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
+@property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
-
-- (CGFloat)getHeaderHeight;
 
 @end

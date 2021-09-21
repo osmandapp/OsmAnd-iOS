@@ -565,7 +565,7 @@ static BOOL _isRoutesGroupOpen = NO;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
-            [cell showImage:YES];
+            [cell showLeftIcon:YES];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         }
         if (cell)
@@ -573,8 +573,8 @@ static BOOL _isRoutesGroupOpen = NO;
             cell.separatorInset = UIEdgeInsetsMake(0., isLastIndex ? 20.0 : 66.0, 0., 0.);
             cell.textView.text = item[@"name"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftImageView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftImageView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
+            cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
         }
         outCell = cell;
     }

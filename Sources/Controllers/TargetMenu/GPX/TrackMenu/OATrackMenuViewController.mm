@@ -7,150 +7,166 @@
 //
 
 #import "OATrackMenuViewController.h"
-#import "OAOverviewTrackMenuViewController.h"
-#import "OASegmentsTrackMenuViewController.h"
 #import "OARootViewController.h"
 #import "OASaveTrackViewController.h"
 #import "OAEditGPXColorViewController.h"
 #import "OATrackSegmentsViewController.h"
+#import "OAMapHudViewController.h"
+#import "OARouteDetailsViewController.h"
 #import "OAMapRendererView.h"
+#import "OATrackMenuHeaderView.h"
 #import "OATabBar.h"
+#import "OAIconTitleValueCell.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OAGPXDocument.h"
-#import "OASelectedGPXHelper.h"
-#import "OASavingTrackHelper.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
+#import "OASelectedGPXHelper.h"
+#import "OASavingTrackHelper.h"
+#import "OAGPXUIHelper.h"
 #import "OAGPXDatabase.h"
-#import "OANativeUtilities.h"
 #import "OAGPXLayer.h"
+#import "OAGPXTrackAnalysis.h"
+#import "OAGPXDocument.h"
 #import "OAMapActions.h"
 #import "OARouteProvider.h"
+#import "OAOsmAndFormatter.h"
 
-#define kOverviewPosition 0
-#define kSegmentsPosition 1
-#define kPointsPosition 2
-#define kActionsPosition 3
+#define VIEWPORT_SHIFTED_SCALE 1.5f
+#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
-@interface OATrackMenuViewController() <UIPageViewControllerDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OATrackMenuViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate>
+#define kOverviewTabIndex 0
+#define kSegmentsTabIndex 1
+#define kPointsTabIndex 2
+#define kActionsTabIndex 3
+
+@interface OATrackMenuViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OAEditGPXColorViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuHeaderViewDelegate>
 
 @end
 
 @implementation OATrackMenuViewController
 {
-    UIPageViewController *_pageViewController;
     UIDocumentInteractionController *_exportController;
-    OAOverviewTrackMenuViewController *_overviewViewController;
-    OASegmentsTrackMenuViewController *_segmentsViewController;
     OAMapPanelViewController *_mapPanelViewController;
     OAMapViewController *_mapViewController;
-    NSArray *_controllers;
 
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OASavingTrackHelper *_savingHelper;
     OAGPX *_gpx;
     OAGPXDocument *_doc;
+    OAGPXTrackAnalysis *_analysis;
 
     BOOL _isCurrentTrack;
     BOOL _isShown;
     NSString *_exportFileName;
     NSString *_exportFilePath;
     OAGPXTrackColorCollection *_gpxColorCollection;
+
+    OATrackMenuHeaderView *_headerView;
+    CGFloat _cachedYViewPort;
+    NSArray<NSDictionary *> *_data;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
-    self = [super init];
+    self = [super initWithNibName:@"OATrackMenuViewController" bundle:nil];
     if (self)
     {
-        _app = [OsmAndApp instance];
-        _settings = [OAAppSettings sharedManager];
-        _savingHelper = [OASavingTrackHelper sharedInstance];
         _gpx = gpx;
-        _isCurrentTrack = _gpx.gpxFilePath.length == 0;
-        _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
-                : [[OAGPXDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
-        _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+        [self commonInit];
     }
     return self;
+}
+
+- (void)commonInit
+{
+    _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
+    _savingHelper = [OASavingTrackHelper sharedInstance];
+    _mapPanelViewController = [OARootViewController instance].mapPanel;
+    _mapViewController = _mapPanelViewController.mapViewController;
+    _gpxColorCollection = [[OAGPXTrackColorCollection alloc] initWithMapViewController:_mapViewController];
+
+    _isCurrentTrack = !_gpx || _gpx.gpxFilePath.length == 0 || _gpx.gpxFileName.length == 0;
+    if (_isCurrentTrack)
+    {
+        if (!_gpx)
+            _gpx = [_savingHelper getCurrentGPX];
+
+        _gpx.gpxTitle = OALocalizedString(@"track_recording_name");
+    }
+    _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
+            : [[OAGPXDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
+    _analysis = [_doc getAnalysis:_isCurrentTrack ? 0 : (long) [[OAUtilities getFileLastModificationDate:_gpx.gpxFilePath] timeIntervalSince1970]];
+
+    _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
 
     [self setupView];
+    if (![self isLandscape])
+        [self goExpanded];
+    else
+        [self goFullScreen];
 
-    _mapPanelViewController = [OARootViewController instance].mapPanel;
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    _gpxColorCollection = [[OAGPXTrackColorCollection alloc] initWithMapViewController:_mapViewController];
+    [_mapPanelViewController displayGpxOnMap:_gpx];
+    [_mapPanelViewController setTopControlsVisible:NO
+                              customStatusBarStyle:[OAAppSettings sharedManager].nightMode
+                                      ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+    _cachedYViewPort = _mapViewController.mapView.viewportYScale;
+    [self adjustMapViewPort];
 
-//    [_mapPanelViewController displayAreaOnMap:_gpx.bounds.topLeft bottomRight:_gpx.bounds.bottomRight zoom:10. bottomInset:!self.isLandscape ? DeviceScreenHeight - _overviewViewController.headerView.frame.size.height : 0 leftInset:self.isLandscape ? DeviceScreenHeight - _overviewViewController.headerView.frame.size.width : 0];
-//    [_mapPanelViewController displayGpxOnMap:_gpx];
-    OsmAnd::LatLon latLon(_gpx.bounds.topLeft.latitude, _gpx.bounds.bottomRight.longitude);
-    Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [_mapViewController goToPosition:point andZoom:_mapViewController.mapView.zoomLevel animated:NO];
+    if (!_isShown)
+        [self onShowHidePressed:nil];
 }
 
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    [self setupView];
-//}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)firstShowing
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
+    [self show:YES
+         state:[self isLandscape] ? EOADraggableMenuStateFullScreen : EOADraggableMenuStateExpanded
+    onComplete:^{
+        [_mapPanelViewController targetSetBottomControlsVisible:YES
+                                                     menuHeight:[self isLandscape] ? 0
+                                                             : [self getViewHeight] - [OAUtilities getBottomMargin]
+                                                       animated:YES];
+        [self changeMapRulerPosition];
+        [_mapPanelViewController.hudViewController updateMapRulerData];
+    }];
+}
 
-        if (self.delegate)
-        {
-            if (self.isLandscape)
-                [self.delegate requestFullScreenMode];
-            else
-                [self.delegate requestFullMode];
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
+{
+    [super hide:YES duration:duration onComplete:^{
+        if (onComplete)
+            onComplete();
 
-            [self.delegate contentChanged];
-        }
-    } completion:nil];
+        [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
+        [self restoreMapViewPort];
+        [_mapPanelViewController hideScrollableHudViewController];
+    }];
+}
+
+- (void)dismiss
+{
+    [self hide:YES duration:.2 onComplete:nil];
 }
 
 - (void)setupView
 {
-    [self setupPageController];
-
-    _overviewViewController = [[OAOverviewTrackMenuViewController alloc] initWithGpx:_gpx];
-    _overviewViewController.delegate = self;
-    _segmentsViewController = [[OASegmentsTrackMenuViewController alloc] initWithGpx:_gpx];
-    _controllers = @[_overviewViewController, _segmentsViewController];
-
-    [_pageViewController setViewControllers:@[_controllers.firstObject]
-                                  direction:UIPageViewControllerNavigationDirectionForward
-                                   animated:NO
-                                 completion:nil];
+    [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
+    self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
 
     [self setupTabBar];
-}
-
-- (void)setupPageController
-{
-    _pageViewController = [[UIPageViewController alloc]
-            initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
-              navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                            options:nil];
-    _pageViewController.delegate = self;
-    CGRect frame = CGRectMake(0., 0., self.contentView.frame.size.width, self.contentView.frame.size.height);
-    _pageViewController.view.frame = frame;
-    _pageViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
-    [self.parentViewController addChildViewController:_pageViewController];
-    [self.contentView addSubview:_pageViewController.view];
-    [_pageViewController didMoveToParentViewController:self.parentViewController];
-    [self.contentView sendSubviewToBack:_pageViewController.view];
+    [self generateData];
+    [self setupHeaderView];
+//    [self.view bringSubviewToFront:self.tableView];
 }
 
 - (void)setupTabBar
@@ -158,128 +174,332 @@
     UIColor *unselectedColor = UIColorFromRGB(color_dialog_buttons_dark);
     [self.tabBarView setItems:@[
                     [[UITabBarItem alloc]
-                            initWithTitle:OALocalizedString(@"rendering_value_browse_map_name")
+                            initWithTitle:OALocalizedString(@"shared_string_overview")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overview"]
                                                                     color:unselectedColor]
-                                      tag:kOverviewPosition],
+                                      tag:kOverviewTabIndex],
                     [[UITabBarItem alloc]
                             initWithTitle:OALocalizedString(@"track")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_trip"]
                                                                     color:unselectedColor]
-                                      tag:kSegmentsPosition],
+                                      tag:kSegmentsTabIndex],
                     [[UITabBarItem alloc]
                             initWithTitle:OALocalizedString(@"shared_string_gpx_points")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_waypoint"]
                                                                     color:unselectedColor]
-                                      tag:kPointsPosition],
+                                      tag:kPointsTabIndex],
                     [[UITabBarItem alloc]
                             initWithTitle:OALocalizedString(@"actions")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
                                                                     color:unselectedColor]
-                                      tag:kActionsPosition]
+                                      tag:kActionsTabIndex]
             ]
-                          animated:YES];
+                     animated:YES];
 
-    self.tabBarView.selectedItem = self.tabBarView.items[0];
-    self.tabBarView.itemWidth = (!self.isLandscape ? DeviceScreenWidth : DeviceScreenHeight < DeviceScreenWidth / 2 ? DeviceScreenHeight : DeviceScreenWidth / 2) / self.tabBarView.items.count;
+    self.tabBarView.selectedItem = self.tabBarView.items[kOverviewTabIndex];
+    self.tabBarView.itemWidth = self.scrollableView.frame.size.width / self.tabBarView.items.count;
     self.tabBarView.delegate = self;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+#pragma mark - OATrackMenuHeaderViewDelegate
+
+- (void)openAnalysis:(void(^)(void))onOpen
 {
-    return UIStatusBarStyleDefault;
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.type = OATargetRouteDetailsGraph;
+    targetPoint.targetObj = @{@"gpx": _doc, @"analysis": _analysis};
+    [self.navigationController pushViewController:[[OARouteDetailsViewController alloc] initWithGpxData:targetPoint.targetObj] animated:YES];
+
+    [self dismiss];
 }
 
-- (BOOL)hasBottomToolbar
+- (void)setupHeaderView
+{
+    if (_headerView)
+        [_headerView removeFromSuperview];
+
+//    if (!_headerView)
+    _headerView = [[OATrackMenuHeaderView alloc] init];
+    _headerView.delegate = self;
+    [_headerView.titleView setText:_isCurrentTrack ? OALocalizedString(@"track_recording_name") : [_gpx getNiceTitle]];
+    _headerView.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+    _headerView.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+
+    if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
+    {
+        //todo
+        NSString *docMetadataDesc = _doc.metadata.desc;
+        NSString *gpxDesc = _gpx.gpxDescription;
+        NSInteger docMetadataDescLength = docMetadataDesc.length;
+        NSInteger gpxDescLength = gpxDesc.length;
+        [_headerView setDescription:docMetadataDesc];
+
+        [self generateGpxBlockStatistics];
+
+        CLLocationCoordinate2D location = _app.locationServices.lastKnownLocation.coordinate;
+        CLLocationCoordinate2D gpxLocation = _doc.bounds.center;
+        _headerView.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+        _headerView.directionIconView.tintColor = UIColorFromRGB(color_primary_purple);
+        [_headerView.directionTextView setText:[OAOsmAndFormatter getFormattedDistance:getDistance(location.latitude, location.longitude, gpxLocation.latitude, gpxLocation.longitude)]];
+        _headerView.directionTextView.textColor = UIColorFromRGB(color_primary_purple);
+
+        OAWorldRegion *worldRegion = [_app.worldRegion findAtLat:_gpx.bounds.center.latitude lon:_gpx.bounds.center.longitude];
+        _headerView.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
+        _headerView.regionIconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
+        [_headerView.regionTextView setText:worldRegion.localizedName];
+        _headerView.regionTextView.textColor = UIColorFromRGB(color_text_footer);
+
+        [_headerView.showHideButton setTitle:_isShown ? OALocalizedString(@"sett_show") : OALocalizedString(@"poi_hide") forState:UIControlStateNormal];
+        [_headerView.showHideButton setImage:[UIImage templateImageNamed:_isShown ? @"ic_custom_show" : @"ic_custom_hide"] forState:UIControlStateNormal];
+        [_headerView.showHideButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [_headerView.showHideButton addTarget:self action:@selector(onShowHidePressed:) forControlEvents:UIControlEventTouchUpInside];
+
+        [_headerView.appearanceButton setTitle:OALocalizedString(@"map_settings_appearance") forState:UIControlStateNormal];
+        [_headerView.appearanceButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [_headerView.appearanceButton addTarget:self action:@selector(onAppearancePressed:) forControlEvents:UIControlEventTouchUpInside];
+
+        if (!_isCurrentTrack)
+        {
+            [_headerView.exportButton setTitle:OALocalizedString(@"shared_string_export") forState:UIControlStateNormal];
+            [_headerView.exportButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [_headerView.exportButton addTarget:self action:@selector(onExportPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+            [_headerView.navigationButton setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
+            [_headerView.navigationButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [_headerView.navigationButton addTarget:self action:@selector(onNavigationPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else
+        {
+            _headerView.exportButton.hidden = YES;
+            _headerView.navigationButton.hidden = YES;
+        }
+    }
+    else
+    {
+        [_headerView makeOnlyHeaderAndDescription];
+    }
+
+    if ([_headerView needsUpdateConstraints])
+        [_headerView updateConstraints];
+
+    if (_headerView.collectionView.hidden
+            && _headerView.locationContainerView.hidden
+            && _headerView.actionButtonsContainerView.hidden)
+    {
+        CGRect headerFrame = _headerView.frame;
+        headerFrame.size.height = _headerView.collectionView.frame.origin.y + 1;
+        _headerView.frame = headerFrame;
+    }
+    else
+    {
+        if (_headerView.descriptionView.hidden)
+        {
+            CGRect headerFrame = _headerView.frame;
+            headerFrame.size.height = _headerView.frame.size.height - _headerView.descriptionView.frame.size.height;
+            _headerView.frame = headerFrame;
+        }
+        if (_headerView.collectionView.hidden)
+        {
+            CGRect headerFrame = _headerView.frame;
+            headerFrame.size.height = _headerView.frame.size.height - _headerView.collectionView.frame.size.height;
+            _headerView.frame = headerFrame;
+        }
+    }
+
+    CGRect topHeaderContainerFrame = self.topHeaderContainerView.frame;
+    topHeaderContainerFrame.size.height = _headerView.frame.size.height;
+    self.topHeaderContainerView.frame = topHeaderContainerFrame;
+//    if (![self.topHeaderContainerView.subviews containsObject:_headerView])
+//    {
+    [self.topHeaderContainerView addSubview:_headerView];
+    [self.topHeaderContainerView sendSubviewToBack:_headerView];
+//    }
+}
+
+- (void)generateData
+{
+    NSMutableArray *data = [NSMutableArray array];
+
+    if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
+    {
+        NSMutableArray *infoSectionData = [NSMutableArray array];
+
+        NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:_isCurrentTrack ? _gpx.gpxFilePath : _doc.path error:nil];
+        NSString *formattedSize = [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize countStyle:NSByteCountFormatterCountStyleFile];
+
+        [infoSectionData addObject:@{
+                @"name": OALocalizedString(@"res_size"),
+                @"value": formattedSize,
+                @"has_options": @NO,
+                @"type": [OAIconTitleValueCell getCellIdentifier],
+                @"key": @"size"
+        }];
+
+        [infoSectionData addObject:@{
+                @"name": OALocalizedString(@"res_created_on"),
+                @"value": [NSDateFormatter localizedStringFromDate:_gpx.importDate
+                                                         dateStyle:NSDateFormatterMediumStyle
+                                                         timeStyle:NSDateFormatterNoStyle],
+                @"has_options": @NO,
+                @"type": [OAIconTitleValueCell getCellIdentifier],
+                @"key": @"created_on"
+        }];
+
+        if (!_isCurrentTrack)
+            [infoSectionData addObject:@{
+                    @"name": OALocalizedString(@"sett_arr_loc"),
+                    @"value": [[OAGPXDatabase sharedDb] getFileDir:_gpx.gpxFilePath].capitalizedString,
+                    @"has_options": @NO, //@YES
+                    @"type": [OAIconTitleValueCell getCellIdentifier],
+                    @"key": @"location"
+            }];
+
+        /*[infoSectionData addObject:@{
+                @"name": OALocalizedString(@"activity"),
+                @"value": @"",
+                @"has_options": @NO, //@YES
+                @"type": [OAIconTitleValueCell getCellIdentifier],
+                @"key": @"activity"
+        }];*/
+
+        [data addObject:@{
+                @"group_name": OALocalizedString(@"shared_string_info"),
+                @"cells": infoSectionData
+        }];
+    }
+
+    _data = data;
+}
+
+- (void)generateGpxBlockStatistics
+{
+    NSMutableArray *statistics = [NSMutableArray array];
+    if (_analysis)
+    {
+        BOOL withoutGaps = _isCurrentTrack ? _gpx.totalTracks == 0 || _doc.tracks.count == 0 || _doc.tracks.firstObject.generalTrack : NO;
+
+        if (_analysis.totalDistance != 0)
+        {
+            float totalDistance = withoutGaps ? _analysis.totalDistanceWithoutGaps : _analysis.totalDistance;
+            [statistics addObject:@{
+                    @"title": OALocalizedString(@"gpx_distance"),
+                    @"value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
+                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+            }];
+        }
+
+        if (_analysis.hasElevationData)
+        {
+            [statistics addObject:@{
+                    @"title": OALocalizedString(@"gpx_ascent"),
+                    @"value": [OAOsmAndFormatter getFormattedAlt:_analysis.diffElevationUp],
+                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+            }];
+            [statistics addObject:@{
+                    @"title": OALocalizedString(@"gpx_descent"),
+                    @"value": [OAOsmAndFormatter getFormattedAlt:_analysis.diffElevationDown],
+                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+            }];
+            [statistics addObject:@{
+                    @"title": OALocalizedString(@"gpx_alt_range"),
+                    @"value": [NSString stringWithFormat:@"%@ - %@",
+                                                         [OAOsmAndFormatter getFormattedAlt:_analysis.minElevation],
+                                                         [OAOsmAndFormatter getFormattedAlt:_analysis.maxElevation]],
+                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+            }];
+        }
+
+        if ([_analysis isSpeedSpecified])
+        {
+            [statistics addObject:@{
+                    @"title": OALocalizedString(@"gpx_average_speed"),
+                    @"value": [OAOsmAndFormatter getFormattedSpeed:_analysis.avgSpeed],
+                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+            }];
+            [statistics addObject:@{
+                    @"title": OALocalizedString(@"gpx_max_speed"),
+                    @"value": [OAOsmAndFormatter getFormattedSpeed:_analysis.maxSpeed],
+                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+            }];
+        }
+
+        if (_analysis.hasSpeedData)
+        {
+            long timeSpan = withoutGaps ? _analysis.timeSpanWithoutGaps : _analysis.timeSpan;
+            [statistics addObject:@{
+                    @"title": OALocalizedString(@"total_time"),
+                    @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
+                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+            }];
+        }
+
+        if (_analysis.isTimeMoving)
+        {
+            long timeMoving = withoutGaps ? _analysis.timeMovingWithoutGaps : _analysis.timeMoving;
+            [statistics addObject:@{
+                    @"title": OALocalizedString(@"moving_time"),
+                    @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
+                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+            }];
+        }
+    }
+    [_headerView setCollection:statistics];
+}
+
+- (CGFloat)initialMenuHeight
+{
+    CGFloat totalHeight = self.topHeaderContainerView.frame.origin.y + self.toolBarView.frame.size.height;
+    if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
+        totalHeight += !_headerView.collectionView.hidden
+                ? _headerView.collectionView.frame.origin.y
+                : _headerView.locationContainerView.frame.origin.y;
+    else
+        totalHeight += _headerView.bottomSeparatorView.frame.origin.y;
+
+    return totalHeight;
+}
+
+- (CGFloat)expandedMenuHeight
+{
+    return DeviceScreenHeight / 2;
+}
+
+- (BOOL)showStatusBarWhenFullScreen
 {
     return YES;
 }
 
-- (BOOL)hasTopToolbar
+- (void)doAdditionalLayout
 {
-    return YES;
+    self.backButtonLeadingConstraint.constant = [self isLandscape] ? self.scrollableView.frame.size.width + 20. : [OAUtilities getLeftMargin] + 10.;
+    self.backButtonContainerView.hidden = self.currentState == EOADraggableMenuStateFullScreen;
 }
 
-- (BOOL)hasControlButtons
+- (void)adjustMapViewPort
 {
-    return NO;
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    mapView.viewportXScale = [self isLandscape] ? VIEWPORT_SHIFTED_SCALE : VIEWPORT_NON_SHIFTED_SCALE;
+    mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
 }
 
-- (BOOL)needsLayoutOnModeChange
+- (void)restoreMapViewPort
 {
-    return NO;
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    if (mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
+        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (mapView.viewportYScale != _cachedYViewPort)
+        mapView.viewportYScale = _cachedYViewPort;
 }
 
-- (BOOL)supportMapInteraction
+- (void)changeMapRulerPosition
 {
-    return YES;
+    CGFloat bottomMargin = [self isLandscape] ? 0 : (-[self getViewHeight] + [OAUtilities getBottomMargin] - 20.);
+    [_mapPanelViewController targetSetMapRulerPosition:bottomMargin
+                                                  left:([self isLandscape] ? self.scrollableView.frame.size.width
+                                                          : [OAUtilities getLeftMargin] + 20.)];
 }
 
-- (BOOL)hideButtons
-{
-    return YES;
-}
-
-- (UIView *)bottomToolBarView
-{
-    return self.tabBarView;
-}
-
-- (UIView *)navBar
-{
-    return self.navBarView;
-}
-
-- (NSString *)getTypeStr
-{
-    return nil;
-}
-
-- (id)getTargetObj
-{
-    return _gpx;
-}
-
-- (BOOL)offerMapDownload
-{
-    return NO;
-}
-
--(CGFloat)getNavBarHeight
-{
-    return self.navBarView.frame.size.height;
-}
-
-- (CGFloat)getToolBarHeight
-{
-    CGFloat height = 0;
-    if (_pageViewController.viewControllers[0] == _overviewViewController)
-        height = [_overviewViewController getToolBarHeight];
-    else if (_pageViewController.viewControllers[0] == _segmentsViewController)
-        height = [_segmentsViewController getToolBarHeight];
-
-    return height + self.tabBarView.layer.frame.size.height;
-}
-
-- (CGFloat)getHeaderHeight
-{
-    CGFloat height = 0;
-    if (_pageViewController.viewControllers[0] == _overviewViewController)
-        height = [_overviewViewController getHeaderHeight];
-    else if (_pageViewController.viewControllers[0] == _segmentsViewController)
-        height = [_segmentsViewController getHeaderHeight];
-
-    return height + self.tabBarView.layer.frame.size.height;
-}
-
-- (BOOL)preHide
-{
-    [_mapViewController keepTempGpxTrackVisible];
-    [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    return YES;
-}
-
-- (NSString *) getUniqueFileName:(NSString *)fileName inFolderPath:(NSString *)folderPath
+- (NSString *)getUniqueFileName:(NSString *)fileName inFolderPath:(NSString *)folderPath
 {
     NSString *name = [fileName stringByDeletingPathExtension];
     NSString *newName = name;
@@ -315,7 +535,7 @@
         [gpxDatabase save];
         [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
 
-        self.titleView.text = [newName stringByDeletingPathExtension];
+//        self.titleView.text = [newName stringByDeletingPathExtension];
         [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
     }
     else
@@ -323,55 +543,76 @@
         OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:sourcePath];
         OAGPXTrackAnalysis *analysis = [gpxDoc getAnalysis:0];
         [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
-                                     title:newName
-                                      desc:gpxDoc.metadata.desc
-                                    bounds:gpxDoc.bounds
-                                  analysis:analysis];
+                          title:newName
+                           desc:gpxDoc.metadata.desc
+                         bounds:gpxDoc.bounds
+                       analysis:analysis];
 
         if ([_settings.mapSettingVisibleGpx.get containsObject:oldPath])
             [_settings showGpx:@[newStoringPath]];
     }
 
-    if (self.delegate)
-        [self.delegate contentChanged];
+//    if (self.delegate)
+//        [self.delegate contentChanged];
 }
 
-#pragma mark - UIPageViewControllerDelegate
-
-- (void)pageViewController:(UIPageViewController *)pageViewController
-        didFinishAnimating:(BOOL)finished
-   previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers
-       transitionCompleted:(BOOL)completed
+- (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    if (pageViewController.viewControllers[0] == _overviewViewController)
-        self.tabBarView.selectedItem = self.tabBarView.items[kOverviewPosition];
-    else if (pageViewController.viewControllers[0] == _segmentsViewController)
-        self.tabBarView.selectedItem = self.tabBarView.items[kSegmentsPosition];
-    /*else if (pageViewController.viewControllers[0] == _pointsController)
-        self.tabBarView.selectedItem = self.tabBarView.items[kPointsPosition];
-    else if (pageViewController.viewControllers[0] == _actionsController)
-        self.tabBarView.selectedItem = self.tabBarView.items[kActionsPosition];*/
+    return _data[indexPath.section][@"cells"][indexPath.row];
+}
+
+- (IBAction)onBackButtonPressed:(id)sender
+{
+    [self dismiss];
+}
+
+#pragma mark - OADraggableViewActions
+
+- (void)onViewHeightChanged:(CGFloat)height
+{
+    [_mapPanelViewController targetSetBottomControlsVisible:YES
+                                                 menuHeight:[self isLandscape] ? 0
+                                                         : height - [OAUtilities getBottomMargin]
+                                                   animated:YES];
+    [self changeMapRulerPosition];
+
+//    [self adjustActionButtonsPosition:height];
+//    [self changeMapRulerPosition];
+    [self adjustMapViewPort];
 }
 
 #pragma mark - UITabBarDelegate
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
-    NSInteger selectedTag = tabBar.selectedItem.tag;
-    NSLog(@"%ld",(long) selectedTag);
+    [self setupHeaderView];
+    [self generateData];
 
-    if ([_controllers indexOfObject:_pageViewController.viewControllers[0]] == kOverviewPosition)
+    switch (item.tag)
     {
-        if (item.tag > kOverviewPosition)
-            [_pageViewController setViewControllers:@[_segmentsViewController]
-                                          direction:UIPageViewControllerNavigationDirectionForward
-                                           animated:YES
-                                         completion:nil];
+        case kActionsTabIndex:
+        {
+            [self goFullScreen];
+            break;
+        }
+        default:
+        {
+            if (self.currentState == EOADraggableMenuStateInitial)
+                [self goExpanded];
+            else
+                [self updateViewAnimated];
+            break;
+        }
     }
-    else if ([_controllers indexOfObject:_pageViewController.viewControllers[0]] == kSegmentsPosition)
-    {
-        [_pageViewController setViewControllers:@[item.tag > kSegmentsPosition ? _segmentsViewController : _overviewViewController] direction:item.tag > kSegmentsPosition ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse animated:YES completion:nil];
-    }
+
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        [self.tableView reloadData];
+                    }
+                    completion: nil];
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate
@@ -418,34 +659,33 @@
     }
 }
 
-#pragma mark - OAOverviewTrackMenuViewControllerDelegate
+#pragma mark - Action buttons pressed
 
-- (void)overviewContentChanged
-{
-    if (self.delegate)
-        [self.delegate contentChanged];
-}
-
-- (BOOL)onShowHidePressed
+- (void)onShowHidePressed:(id)sender
 {
     if (_isShown)
         [_settings hideGpx:@[_gpx.gpxFilePath] update:YES];
     else
         [_settings showGpx:@[_gpx.gpxFilePath] update:YES];
 
-    return _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+    _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+
+    [_headerView.showHideButton setTitle:_isShown ? OALocalizedString(@"sett_show") : OALocalizedString(@"poi_hide")
+                                forState:UIControlStateNormal];
+    [_headerView.showHideButton setImage:[UIImage templateImageNamed:_isShown ? @"ic_custom_show" : @"ic_custom_hide"]
+                                forState:UIControlStateNormal];
 }
 
-- (void)onColorPressed
+- (void)onAppearancePressed:(id)sender
 {
     OAEditGPXColorViewController *trackColorViewController =
             [[OAEditGPXColorViewController alloc] initWithColorValue:_gpx.color
                                                     colorsCollection:_gpxColorCollection];
     trackColorViewController.delegate = self;
-    [self.navController pushViewController:trackColorViewController animated:YES];
+    [self presentViewController:trackColorViewController animated:YES completion:nil];
 }
 
-- (void)onExportPressed
+- (void)onExportPressed:(id)sender
 {
     if (_isCurrentTrack)
     {
@@ -474,12 +714,10 @@
     _exportController.UTI = @"com.topografix.gpx";
     _exportController.delegate = self;
     _exportController.name = _exportFileName;
-    [_exportController presentOptionsMenuFromRect:CGRectZero
-                                           inView:self.navController.view
-                                         animated:YES];
+    [_exportController presentOptionsMenuFromRect:CGRectZero inView:self.view animated:YES];
 }
 
-- (void)onNavigationPressed
+- (void)onNavigationPressed:(id)sender
 {
     if ([_doc getNonEmptySegmentsCount] > 1)
     {
@@ -497,7 +735,7 @@
                                                                   fromName:nil
                                             useIntermediatePointsByDefault:YES
                                                                 showDialog:YES];
-        [_mapPanelViewController hideTargetPointMenu];
+        [self dismiss];
     }
 }
 
@@ -518,8 +756,7 @@
          simplifiedTrack:(BOOL)simplifiedTrack
 {
     [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
-             renameToNewName:[fileName.lastPathComponent
-                     stringByAppendingPathExtension:@"gpx"]
+             renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
           deleteOriginalFile:NO];
 }
 
@@ -529,7 +766,7 @@
 {
     [OAAppSettings.sharedManager.gpxRouteSegment set:position];
 
-    [[OARootViewController instance].mapPanel.mapActions setGPXRouteParamsWithDocument:_doc path:_doc.path];
+    [_mapPanelViewController.mapActions setGPXRouteParamsWithDocument:_doc path:_doc.path];
     [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
     [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
 
@@ -547,9 +784,87 @@
         }
     }
 
-    [[OARootViewController instance].mapPanel.mapActions stopNavigationWithoutConfirm];
-    [[OARootViewController instance].mapPanel.mapActions enterRoutePlanningModeGivenGpx:_doc path:_gpx.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
-    [[OARootViewController instance].mapPanel hideTargetPointMenu];
+    [_mapPanelViewController.mapActions stopNavigationWithoutConfirm];
+    [_mapPanelViewController.mapActions enterRoutePlanningModeGivenGpx:_doc
+                                                                  path:_gpx.gpxFilePath
+                                                                  from:nil
+                                                              fromName:nil
+                                        useIntermediatePointsByDefault:YES
+                                                            showDialog:YES];
+    [self dismiss];
 }
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _data.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return ((NSArray *) _data[section][@"cells"]).count;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return _data[section][@"group_name"];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    BOOL hasOptions = [item[@"has_options"] boolValue];
+
+    UITableViewCell *outCell = nil;
+    if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    {
+        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *) nib[0];
+            [cell showLeftIcon:NO];
+            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+        }
+        if (cell)
+        {
+            NSString *value = item[@"value"];
+            cell.selectionStyle = hasOptions ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.textView.text = item[@"name"];
+            cell.descriptionView.text = value;
+            [cell showRightIcon:hasOptions];
+        }
+        outCell = cell;
+    }
+
+    return outCell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return section == [self numberOfSectionsInTableView:tableView] - 1 && _data.count > 0 ? 100. : 0.;
+}
+
+/*- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+
+    if (item[@"has_options"])
+    {
+        if ([item[@"key"] isEqualToString:@"location"])
+        {
+
+        }
+        else if ([item[@"key"] isEqualToString:@"activity"])
+        {
+
+        }
+    }
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}*/
 
 @end

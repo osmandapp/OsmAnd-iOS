@@ -374,8 +374,7 @@ static const NSInteger _buttonsCount = 4;
     if (landscape)
     {
         CGRect f = self.customController.bottomToolBarView.frame;
-        //todo gpx context menu
-        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, (_targetPoint.type == OATargetGPX ? DeviceScreenHeight < DeviceScreenWidth / 2 ? DeviceScreenHeight : DeviceScreenWidth / 2 : OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -1105,8 +1104,7 @@ static const NSInteger _buttonsCount = 4;
     _sliderView.frame = sliderFrame;
 
     CGFloat textX = (_imageView.image ? 50.0 : itemsX) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
-    //todo gpx context menu
-    CGFloat width = (landscape ? (OAUtilities.isIPad ? [self getViewWidthForPad] : _targetPoint.type == OATargetGPX ? DeviceScreenHeight < DeviceScreenWidth / 2 ? DeviceScreenHeight : DeviceScreenWidth / 2 : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
+    CGFloat width = (landscape ? (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
     
@@ -1128,7 +1126,7 @@ static const NSInteger _buttonsCount = 4;
         _coordinateLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat topViewHeight = 0.0;
-    CGFloat topY = (_targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetGPX || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource) ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
+    CGFloat topY = (_targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource) ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
     BOOL hasDescription = !_descriptionLabel.hidden;
     BOOL hasTransport = !_transportView.hidden;
     if (hasTransport)
@@ -1196,7 +1194,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (!hasDescription && !hasTransport)
     {
-        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetGPX || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin && controlButtonsHeight == 0. && _targetPoint.type != OATargetGPX ? OAUtilities.getBottomMargin : 0);
+        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin && controlButtonsHeight == 0. ? OAUtilities.getBottomMargin : 0);
     }
     else
     {
@@ -1420,8 +1418,6 @@ static const NSInteger _buttonsCount = 4;
 {
     if (_targetPoint.type == OATargetImpassableRoadSelection)
         return DeviceScreenHeight / 3;
-    else if (_targetPoint.type == OATargetGPX && [self.customController isKindOfClass:OATrackMenuViewController.class])
-        return [(OATrackMenuViewController *) self.customController getHeaderHeight];
     else if ([self.customController mapHeightKoef] > 0)
         return DeviceScreenHeight * [self.customController mapHeightKoef];
     else
@@ -2208,18 +2204,6 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) contentChanged
 {
-    if (_targetPoint.type == OATargetGPX && self.customController)
-    {
-        _targetPoint.targetObj = [self.customController getTargetObj];
-        //todo gpx context menu
-
-//        [self updateAddressLabel];
-
-//        OAGPX *item = _targetPoint.targetObj;
-//        if (!item.newGpx)
-//            self.addressLabel.text = [item getNiceTitle];
-    }
-    
     if (![_controlButtonDownload.titleLabel.text isEqualToString:self.customController.downloadControlButton.title])
         [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
 
@@ -2468,7 +2452,7 @@ static const NSInteger _buttonsCount = 4;
     }
 
     if (slidingDown && !goFull && !goFullScreen)
-        needCloseMenu = ![self isLandscape] && (_targetPoint.type == OATargetGPX || (!_showFull && [self preHide] && !(self.customController && [self.customController supportMapInteraction] && ![self.customController supportsForceClose])));
+        needCloseMenu = ![self isLandscape] && !_showFull && [self preHide] && !(self.customController && [self.customController supportMapInteraction] && ![self.customController supportsForceClose]);
     
     if (needCloseMenu)
     {

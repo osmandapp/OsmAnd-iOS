@@ -1076,8 +1076,8 @@ static UIViewController *parentController;
             {
                 cell.textView.text = item.groupName;
                 
-                cell.leftImageView.image = [UIImage templateImageNamed:item.groupIcon];
-                cell.leftImageView.tintColor = UIColorFromRGB(color_chart_orange);
+                cell.leftIconView.image = [UIImage templateImageNamed:item.groupIcon];
+                cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
                 cell.descriptionView.text = [NSString stringWithFormat:@"%ld", item.groupItems.count];
                 cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
                 
@@ -1091,15 +1091,15 @@ static UIViewController *parentController;
                 
                 if (item.isOpen)
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
                 }
                 else
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
                     if ([cell isDirectionRTL])
-                        [cell.iconView setImage:cell.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+                        [cell.rightIconView setImage:cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
                 }
-                cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+                cell.rightIconView.tintColor = UIColorFromRGB(color_icon_inactive);
             }
             return cell;
         }

@@ -315,6 +315,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         if (_approximationController)
             _approximationController.view.frame = self.tableView.frame;
         self.scrollableView.frame = CGRectMake(self.scrollableView.frame.origin.x, offset, self.scrollableView.frame.size.width, self.scrollableView.frame.size.height);
+        _buttonsStackLandscapeRightConstraint.constant = -8;
         [self adjustActionButtonsPosition:self.getViewHeight];
     }
     else
@@ -408,6 +409,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         CGFloat leftMargin = self.currentState == EOADraggableMenuStateInitial ? OAUtilities.getLeftMargin : self.scrollableView.frame.size.width;
         buttonsFrame.origin = CGPointMake(leftMargin, DeviceScreenHeight - buttonsFrame.size.height - 15. - self.toolBarView.frame.size.height);
+        
+        if (OAUtilities.getLeftMargin > 0)
+            _buttonsStackLandscapeRightConstraint.constant = OAUtilities.getLeftMargin - 8;
+        else
+            _buttonsStackLandscapeRightConstraint.constant = 8;
     }
     else
     {

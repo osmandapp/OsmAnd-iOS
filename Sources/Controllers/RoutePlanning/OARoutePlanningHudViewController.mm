@@ -382,6 +382,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CGFloat) getToolbarHeight
 {
+    if (OAUtilities.isIPad)
+        return 60;
     if ([self isLeftSidePresentation])
         return OAUtilities.getBottomMargin > 0 ? 48 : 60;
     else
@@ -1165,7 +1167,23 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? [self getToolbarHeight] : ( height - ([OAUtilities isIPad] ? 0. : OAUtilities.getBottomMargin)) animated:YES];
+    
+    CGFloat offset = 0;
+    if ([self isLeftSidePresentation])
+    {
+        if (OAUtilities.getBottomMargin > 0)
+            offset = [self getToolbarHeight];
+        else
+            offset = [self getToolbarHeight] - 16;
+    }
+    else
+    {
+        if (OAUtilities.getBottomMargin > 0)
+            offset = height - OAUtilities.getBottomMargin;
+        else
+            offset = height - 16;
+    }
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:offset animated:YES];
     
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];

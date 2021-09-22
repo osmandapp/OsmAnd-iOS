@@ -48,6 +48,8 @@
     self.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
     self.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
     self.borderColor = UIColorFromRGB(color_on_map_icon_border_color);
+    self.borderWidthDay = 0;
+    self.borderWidthNight = 2;
     
     [self updateColorsForPressedState:NO];
     
@@ -74,7 +76,7 @@
     self.tintColor = isNight ? self.tintColorNight : self.tintColorDay;
     
     self.layer.borderColor = self.borderColor.CGColor;
-    self.layer.borderWidth = isNight ? 2 : 0;
+    self.layer.borderWidth = isNight ? self.borderWidthNight : self.borderWidthDay;
 }
 
 - (IBAction) onButtonTouched:(id)sender

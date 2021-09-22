@@ -762,11 +762,17 @@ typedef enum
 
 - (void) closeRouteInfo:(void (^)(void))onComplete
 {
+    [self closeRouteInfoWithTopControlsVisibility:YES bottomsControlHeight:@0 onComplete:onComplete];
+}
+
+- (void) closeRouteInfoWithTopControlsVisibility:(BOOL)topControlsVisibility bottomsControlHeight:(NSNumber *)bottomsControlHeight onComplete:(void (^)(void))onComplete
+{
     if (self.routeInfoView.superview)
     {
         [self.routeInfoView hide:YES duration:.2 onComplete:^{
-            [self setTopControlsVisible:YES];
-            [self setBottomControlsVisible:YES menuHeight:0 animated:YES];
+            [self setTopControlsVisible:topControlsVisibility];
+            if (bottomsControlHeight)
+                [self setBottomControlsVisible:YES menuHeight:bottomsControlHeight.floatValue animated:YES];
             [_hudViewController.quickActionController updateViewVisibility];
             if (onComplete)
                 onComplete();
@@ -785,7 +791,7 @@ typedef enum
         [self setBottomControlsVisible:YES menuHeight:0 animated:YES];
         
         [self.routeInfoView hide:YES duration:.2 onComplete:^{
-            [self setTopControlsVisible:YES];
+            [self setTopControlsVisible:NO];
             [_hudViewController.quickActionController updateViewVisibility];
             if (onComplete)
                 onComplete();
@@ -2643,7 +2649,8 @@ typedef enum
 {
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
-    [self closeRouteInfo];
+    [self closeRouteInfoWithTopControlsVisibility:NO bottomsControlHeight:nil onComplete:nil];
+    
     [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;

@@ -640,14 +640,29 @@
     if (_localMapIndexItem)
     {
         self.downloadControlButton = [[OATargetMenuControlButton alloc] init];
-        if ([self isKindOfClass:OAMapDownloadController.class])
-            self.downloadControlButton.title = OALocalizedString(@"download");
-        else
+        if ([self showRegionNameOnDownloadButton])
             self.downloadControlButton.title = _localMapIndexItem.title;
+        else
+            self.downloadControlButton.title = OALocalizedString(@"download");
         [self.delegate contentChanged];
     }
     else if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])
         [self.delegate hideProgressBar];
+}
+
+- (BOOL) showRegionNameOnDownloadButton
+{
+    return YES; //override
+}
+
+- (BOOL) showDetailsButton
+{
+    return NO; //override
+}
+
+- (CGFloat) detailsButtonHeight
+{
+    return 50.; //override
 }
 
 - (IBAction) buttonBackPressed:(id)sender

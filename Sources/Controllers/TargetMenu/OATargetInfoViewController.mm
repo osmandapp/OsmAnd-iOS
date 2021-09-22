@@ -193,11 +193,28 @@
     // implement in subclasses
 }
 
+- (BOOL) showDetailsButton
+{
+    return NO; //override
+}
+
+- (void) appdendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
+{
+    if ([self showDetailsButton])
+    {
+        OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
+        [collapseDetailsRowCell setHeight:[self detailsButtonHeight]];
+        [rows addObject:collapseDetailsRowCell];
+    }
+}
+
 - (void) buildRowsInternal
 {    
     _rows = [NSMutableArray array];
 
     [self buildTopRows:_rows];
+    
+    [self appdendDetailsButtonRow:_rows];
     
     [self buildRows:_rows];
 

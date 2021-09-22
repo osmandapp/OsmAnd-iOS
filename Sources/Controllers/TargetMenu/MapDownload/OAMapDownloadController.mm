@@ -17,9 +17,6 @@
 #import "OADownloadedRegionsLayer.h"
 #import "Localization.h"
 
-#define kCollapseDetailsRowType @"kCollapseDetailsRowType"
-#define kCollapseDetailsRowHeight 60.0
-
 @interface OAMapDownloadController ()
 
 @end
@@ -153,6 +150,16 @@
     return NO;
 }
 
+- (BOOL) showRegionNameOnDownloadButton
+{
+    return NO;
+}
+
+- (BOOL) showDetailsButton
+{
+    return YES;
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFloating;
@@ -169,10 +176,6 @@
     OAResourceItem *item = _mapObject.indexItem;
     NSString *resTypeLocalized = [OAResourceType resourceTypeLocalized:item.resourceType];
     NSString *iconInfo = @"ic_description.png";
-    
-    OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
-    [collapseDetailsRowCell setHeight:kCollapseDetailsRowHeight];
-    [rows addObject:collapseDetailsRowCell];
     
     if (resTypeLocalized && resTypeLocalized.length > 0)
     {
@@ -204,11 +207,6 @@
         [targetPoints addObject:[layer getTargetPoint:[[OADownloadMapObject alloc] initWithWorldRegion:_mapObject.worldRegion indexItem:item]]];
     }
     [OARootViewController.instance.mapPanel showContextMenuWithPoints:targetPoints];
-}
-
-- (CGFloat) additionalContentOffset
-{
-    return kCollapseDetailsRowHeight;
 }
 
 @end

@@ -129,12 +129,12 @@
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _collectionData.count;
+    return self.collectionData.count;
 }
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _collectionData[indexPath.row];
+    NSDictionary *item = self.collectionData[indexPath.row];
     OAGpxStatBlockCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     if (cell == nil)
     {
@@ -178,11 +178,10 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *item = _collectionData[indexPath.row];
+    EOARouteStatisticsMode modeType = (EOARouteStatisticsMode) [item[@"type"] integerValue];
     if (self.delegate && [self.delegate respondsToSelector:@selector(openAnalysis:)])
-    {
-        [self.delegate openAnalysis:nil];
-//        [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:_doc analysis:_analysis];
-    }
+        [self.delegate openAnalysis:modeType];
 }
 
 @end

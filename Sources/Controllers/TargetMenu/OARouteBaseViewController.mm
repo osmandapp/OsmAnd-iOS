@@ -316,13 +316,26 @@
 - (void) changeChartMode:(EOARouteStatisticsMode)mode chart:(LineChartView *)chart modeCell:(OARouteStatisticsModeCell *)statsModeCell
 {
     switch (mode) {
-        case EOARouteStatisticsModeBoth:
+        case EOARouteStatisticsModeAltitudeSlope:
         {
             [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")] forState:UIControlStateNormal];
-            for (id<IChartDataSet> data in chart.lineData.dataSets)
-            {
-                data.visible = YES;
-            }
+            chart.lineData.dataSets[0].visible = YES;
+            chart.lineData.dataSets[1].visible = YES;
+            chart.lineData.dataSets[2].visible = NO;
+            chart.leftAxis.enabled = YES;
+            chart.leftAxis.drawLabelsEnabled = NO;
+            chart.leftAxis.drawGridLinesEnabled = NO;
+            chart.rightAxis.enabled = YES;
+            ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
+            renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
+            break;
+        }
+        case EOARouteStatisticsModeAltitudeSpeed:
+        {
+            [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_speed")] forState:UIControlStateNormal];
+            chart.lineData.dataSets[0].visible = YES;
+            chart.lineData.dataSets[1].visible = NO;
+            chart.lineData.dataSets[2].visible = YES;
             chart.leftAxis.enabled = YES;
             chart.leftAxis.drawLabelsEnabled = NO;
             chart.leftAxis.drawGridLinesEnabled = NO;
@@ -336,6 +349,7 @@
             [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_altitude") forState:UIControlStateNormal];
             chart.lineData.dataSets[0].visible = YES;
             chart.lineData.dataSets[1].visible = NO;
+            chart.lineData.dataSets[2].visible = NO;
             chart.leftAxis.enabled = YES;
             chart.leftAxis.drawLabelsEnabled = YES;
             chart.leftAxis.drawGridLinesEnabled = YES;
@@ -347,12 +361,28 @@
             [statsModeCell.modeButton setTitle:OALocalizedString(@"gpx_slope") forState:UIControlStateNormal];
             chart.lineData.dataSets[0].visible = NO;
             chart.lineData.dataSets[1].visible = YES;
+            chart.lineData.dataSets[2].visible = NO;
             chart.leftAxis.enabled = NO;
             chart.leftAxis.drawLabelsEnabled = NO;
             chart.leftAxis.drawGridLinesEnabled = NO;
             chart.rightAxis.enabled = YES;
             ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
             renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
+            break;
+        }
+        case EOARouteStatisticsModeSpeed:
+        {
+            [statsModeCell.modeButton setTitle:OALocalizedString(@"gpx_speed") forState:UIControlStateNormal];
+            chart.lineData.dataSets[0].visible = NO;
+            chart.lineData.dataSets[1].visible = NO;
+            chart.lineData.dataSets[2].visible = YES;
+            chart.leftAxis.enabled = NO;
+            chart.leftAxis.drawLabelsEnabled = NO;
+            chart.leftAxis.drawGridLinesEnabled = NO;
+            chart.rightAxis.enabled = YES;
+            ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
+            renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
+            [renderer computeAxisValuesWithMin:0 max:200];
             break;
         }
         default:

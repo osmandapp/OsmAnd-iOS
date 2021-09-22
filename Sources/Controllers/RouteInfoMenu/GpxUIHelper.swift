@@ -218,13 +218,15 @@ public enum GPXDataSetAxisType: String {
                 let dataSet = chartData?.dataSets[0] as! OrderedLineDataSet
                 res.append(NSAttributedString(string: "\(lround(entry.y)) " + dataSet.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet.color]))
             }
-            else if (chartData?.dataSetCount ?? 0 == 2) {
+            else if (chartData?.dataSetCount ?? 0 == 3) {
                 let dataSet1 = chartData?.dataSets[0] as! OrderedLineDataSet
                 let dataSet2 = chartData?.dataSets[1] as! OrderedLineDataSet
-                
+                let dataSet3 = chartData?.dataSets[2] as! OrderedLineDataSet
+
                 let useFirst = dataSet1.visible
                 let useSecond = dataSet2.visible
-                
+                let useThird = dataSet3.visible
+
                 if (useFirst) {
                     let entry1 = dataSet1.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
                     
@@ -237,6 +239,15 @@ public enum GPXDataSetAxisType: String {
                         res.append(NSAttributedString(string: ", \(lround(entry2?.y ?? 0)) " + dataSet2.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet2.color]))
                     } else {
                         res.append(NSAttributedString(string: "\(lround(entry2?.y ?? 0)) " + dataSet2.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet2.color]))
+                    }
+                }
+                if (useThird) {
+                    let entry3 = dataSet3.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
+
+                    if (useFirst) {
+                        res.append(NSAttributedString(string: ", \(lround(entry3?.y ?? 0)) " + dataSet3.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet3.color]))
+                    } else {
+                        res.append(NSAttributedString(string: "\(lround(entry3?.y ?? 0)) " + dataSet3.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet3.color]))
                     }
                 }
             }
@@ -308,17 +319,26 @@ public enum GPXDataSetAxisType: String {
         setupGPXChart(chartView: chartView, yLabelsCount: 4, topOffset: 20, bottomOffset: 4, useGesturesAndScale: useGesturesAndScale)
         var dataSets = [ILineChartDataSet]()
         var slopeDataSet: OrderedLineDataSet? = nil
+        var speedDataSet: OrderedLineDataSet? = nil
         let elevationDataSet = createGPXElevationDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
         dataSets.append(elevationDataSet);
         slopeDataSet = createGPXSlopeDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: elevationDataSet.entries, useRightAxis: true, drawFilled: true)
+        speedDataSet = createGPXSpeedDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: true, drawFilled: true)
 
         if (slopeDataSet != nil) {
             dataSets.append(slopeDataSet!)
-            chartView.leftAxis.drawLabelsEnabled = false
-            chartView.leftAxis.drawGridLinesEnabled = false
-        } else {
+        }
+
+        if (speedDataSet != nil) {
+            dataSets.append(speedDataSet!)
+        }
+
+        if (slopeDataSet == nil && speedDataSet == nil) {
             chartView.rightAxis.enabled = false
             chartView.leftAxis.enabled = true
+        } else {
+            chartView.leftAxis.drawLabelsEnabled = false
+            chartView.leftAxis.drawGridLinesEnabled = false
         }
         chartView.data = LineChartData(dataSets: dataSets)
     }
@@ -845,8 +865,10 @@ public enum GPXDataSetAxisType: String {
         return values;
     }
     
-    private static func createGPXSpeedDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType,
-                                       useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
+    private static func createGPXSpeedDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis,
+                                      axisType: GPXDataSetAxisType,
+                                      useRightAxis: Bool,
+                                      drawFilled: Bool) -> OrderedLineDataSet {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
         //    boolean light = settings.isLightContent();
         

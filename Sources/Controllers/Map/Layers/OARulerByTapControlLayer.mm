@@ -375,8 +375,8 @@
     paragraphStyle.alignment = NSTextAlignmentCenter;
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
 
-    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0];
-    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:strokeColor strokeWidth:strokeWidth];
+    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter];
+    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:strokeColor strokeWidth:strokeWidth alignment:NSTextAlignmentCenter];
 
     CGSize titleSize = [string size];
     CGRect rect = CGRectMake(middlePoint.x - (titleSize.width / 2), middlePoint.y - (titleSize.height / 2), titleSize.width, titleSize.height);

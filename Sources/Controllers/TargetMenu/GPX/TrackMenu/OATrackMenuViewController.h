@@ -7,6 +7,7 @@
 //
 
 #import "OABaseScrollableHudViewController.h"
+#import "OAStatisticsSelectionBottomSheetViewController.h"
 
 @class OAGPX;
 @class OATabBar;
@@ -15,21 +16,12 @@
 
 @optional
 
-- (void)overviewContentChanged;
-- (BOOL)onShowHidePressed;
-- (void)onColorPressed;
-- (void)onExportPressed;
-- (void)onNavigationPressed;
+- (void)openAnalysis:(EOARouteStatisticsMode)modeType;
+- (void)onExitAnalysis;
 
 @end
 
 @interface OATrackMenuViewController : OABaseScrollableHudViewController
-
-@property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
-@property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 

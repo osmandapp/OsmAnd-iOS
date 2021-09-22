@@ -614,6 +614,7 @@
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
+"gpx_selection_segment_title" = "Segments";
 
 "import_export" = "Import/Export";
 
@@ -1627,6 +1628,7 @@
 "all_group_points" = "All points of the group";
 "enter_description" = "Enter description";
 "description" = "Description";
+"read_full_description" = "Read full description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Roads";

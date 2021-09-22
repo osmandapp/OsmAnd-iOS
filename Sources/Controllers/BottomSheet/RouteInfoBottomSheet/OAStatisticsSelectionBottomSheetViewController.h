@@ -12,9 +12,11 @@
 
 typedef NS_ENUM(NSInteger, EOARouteStatisticsMode)
 {
-    EOARouteStatisticsModeBoth = 0,
+    EOARouteStatisticsModeAltitudeSlope = 0,
+    EOARouteStatisticsModeAltitudeSpeed,
     EOARouteStatisticsModeAltitude,
-    EOARouteStatisticsModeSlope
+    EOARouteStatisticsModeSlope,
+    EOARouteStatisticsModeSpeed
 };
 
 @class OAStatisticsSelectionBottomSheetViewController;

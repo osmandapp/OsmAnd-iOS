@@ -237,8 +237,8 @@
     UIColor *color = [UIColor blackColor];
     UIColor *shadowColor = [UIColor whiteColor];
 
-    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0];
-    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:shadowColor strokeWidth:kShadowRadius];
+    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter];
+    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:shadowColor strokeWidth:kShadowRadius alignment:NSTextAlignmentCenter];
 
     CGSize titleSize = [string size];
     CGRect rect = CGRectMake(middlePoint.x - (titleSize.width / 2), middlePoint.y - (titleSize.height / 2), titleSize.width, titleSize.height);

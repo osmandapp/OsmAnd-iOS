@@ -571,7 +571,11 @@
 
 - (BOOL) isAlreadyPurchased
 {
+#ifdef DEBUG
+    return YES;
+#else
     return [[NSUserDefaults standardUserDefaults] boolForKey:self.productIdentifier];
+#endif
 }
 
 - (BOOL) isLiveUpdatesPurchased

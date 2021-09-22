@@ -12,20 +12,20 @@
 #import "OAEditGPXColorViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OAMapHudViewController.h"
-#import "OARouteDetailsViewController.h"
+#import "OATrackMenuDescriptionViewController.h"
 #import "OAMapRendererView.h"
 #import "OATrackMenuHeaderView.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
+#import "OATextViewSimpleCell.h"
+#import "OATextLineViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXUIHelper.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXLayer.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
 #import "OAMapActions.h"
@@ -40,7 +40,13 @@
 #define kPointsTabIndex 2
 #define kActionsTabIndex 3
 
-@interface OATrackMenuViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OAEditGPXColorViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuHeaderViewDelegate>
+@interface OATrackMenuViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OAEditGPXColorViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate>
+
+@property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
+@property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 
 @end
 
@@ -49,21 +55,22 @@
     UIDocumentInteractionController *_exportController;
     OAMapPanelViewController *_mapPanelViewController;
     OAMapViewController *_mapViewController;
+    OATrackMenuHeaderView *_headerView;
 
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OASavingTrackHelper *_savingHelper;
+
     OAGPX *_gpx;
     OAGPXDocument *_doc;
     OAGPXTrackAnalysis *_analysis;
-
     BOOL _isCurrentTrack;
     BOOL _isShown;
+    NSString *_description;
     NSString *_exportFileName;
     NSString *_exportFilePath;
     OAGPXTrackColorCollection *_gpxColorCollection;
 
-    OATrackMenuHeaderView *_headerView;
     CGFloat _cachedYViewPort;
     NSArray<NSDictionary *> *_data;
 }
@@ -109,6 +116,7 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.sectionFooterHeight = 0.01;
 
     [self setupView];
     if (![self isLandscape])
@@ -144,18 +152,17 @@
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
-        if (onComplete)
-            onComplete();
-
         [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
         [self restoreMapViewPort];
         [_mapPanelViewController hideScrollableHudViewController];
+        if (onComplete)
+            onComplete();
     }];
 }
 
-- (void)dismiss
+- (void)dismiss:(void (^)(void))onComplete
 {
-    [self hide:YES duration:.2 onComplete:nil];
+    [self hide:YES duration:.2 onComplete:onComplete];
 }
 
 - (void)setupView
@@ -164,6 +171,7 @@
     self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
 
     [self setupTabBar];
+    [self setupDescription];
     [self generateData];
     [self setupHeaderView];
 //    [self.view bringSubviewToFront:self.tableView];
@@ -201,16 +209,28 @@
     self.tabBarView.delegate = self;
 }
 
-#pragma mark - OATrackMenuHeaderViewDelegate
-
-- (void)openAnalysis:(void(^)(void))onOpen
+- (void)setupDescription
 {
-    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    targetPoint.type = OATargetRouteDetailsGraph;
-    targetPoint.targetObj = @{@"gpx": _doc, @"analysis": _analysis};
-    [self.navigationController pushViewController:[[OARouteDetailsViewController alloc] initWithGpxData:targetPoint.targetObj] animated:YES];
-
-    [self dismiss];
+    if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
+    {
+        NSString *gpxDesc = _gpx.gpxDescription;
+        _description = _doc.metadata.desc;
+    }
+    else if (self.tabBarView.selectedItem.tag == kSegmentsTabIndex)
+    {
+        NSInteger segmentsCount = 0;
+        for (OAGpxTrk *track in _doc.tracks)
+        {
+            segmentsCount += track.segments.count;
+        }
+        _description = [NSString stringWithFormat: @"%@: %ld",
+                OALocalizedString(@"gpx_selection_segment_title"),
+                segmentsCount];
+    }
+    else
+    {
+        _description = @"";
+    }
 }
 
 - (void)setupHeaderView
@@ -227,13 +247,6 @@
 
     if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
     {
-        //todo
-        NSString *docMetadataDesc = _doc.metadata.desc;
-        NSString *gpxDesc = _gpx.gpxDescription;
-        NSInteger docMetadataDescLength = docMetadataDesc.length;
-        NSInteger gpxDescLength = gpxDesc.length;
-        [_headerView setDescription:docMetadataDesc];
-
         [self generateGpxBlockStatistics];
 
         CLLocationCoordinate2D location = _app.locationServices.lastKnownLocation.coordinate;
@@ -279,6 +292,8 @@
         [_headerView makeOnlyHeaderAndDescription];
     }
 
+    [_headerView setDescription:_description];
+
     if ([_headerView needsUpdateConstraints])
         [_headerView updateConstraints];
 
@@ -322,13 +337,44 @@
 
     if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
     {
+        if (_description && _description.length > 0)
+        {
+            NSMutableArray *descriptionSectionData = [NSMutableArray array];
+            NSAttributedString *description = [OAUtilities createAttributedString:
+                    [_description componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
+                                                                             font:[UIFont systemFontOfSize:17]
+                                                                            color:[UIColor blackColor]
+                                                                      strokeColor:nil
+                                                                      strokeWidth:0
+                                                                        alignment:NSTextAlignmentNatural];
+
+            [descriptionSectionData addObject:@{
+                    @"value": description,
+                    @"type": [OATextViewSimpleCell getCellIdentifier],
+                    @"key": @"description"
+            }];
+
+            if (_description.length > description.string.length)
+            {
+                [descriptionSectionData addObject:@{
+                        @"title": OALocalizedString(@"read_full_description"),
+                        @"type": [OATextLineViewCell getCellIdentifier],
+                        @"key": @"full_description"
+                }];
+            }
+
+            [data addObject:@{
+                    @"group_name": OALocalizedString(@"description"),
+                    @"cells": descriptionSectionData
+            }];
+        }
+
         NSMutableArray *infoSectionData = [NSMutableArray array];
 
         NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:_isCurrentTrack ? _gpx.gpxFilePath : _doc.path error:nil];
         NSString *formattedSize = [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize countStyle:NSByteCountFormatterCountStyleFile];
-
         [infoSectionData addObject:@{
-                @"name": OALocalizedString(@"res_size"),
+                @"title": OALocalizedString(@"res_size"),
                 @"value": formattedSize,
                 @"has_options": @NO,
                 @"type": [OAIconTitleValueCell getCellIdentifier],
@@ -336,7 +382,7 @@
         }];
 
         [infoSectionData addObject:@{
-                @"name": OALocalizedString(@"res_created_on"),
+                @"title": OALocalizedString(@"res_created_on"),
                 @"value": [NSDateFormatter localizedStringFromDate:_gpx.importDate
                                                          dateStyle:NSDateFormatterMediumStyle
                                                          timeStyle:NSDateFormatterNoStyle],
@@ -347,7 +393,7 @@
 
         if (!_isCurrentTrack)
             [infoSectionData addObject:@{
-                    @"name": OALocalizedString(@"sett_arr_loc"),
+                    @"title": OALocalizedString(@"sett_arr_loc"),
                     @"value": [[OAGPXDatabase sharedDb] getFileDir:_gpx.gpxFilePath].capitalizedString,
                     @"has_options": @NO, //@YES
                     @"type": [OAIconTitleValueCell getCellIdentifier],
@@ -355,7 +401,7 @@
             }];
 
         /*[infoSectionData addObject:@{
-                @"name": OALocalizedString(@"activity"),
+                @"title": OALocalizedString(@"activity"),
                 @"value": @"",
                 @"has_options": @NO, //@YES
                 @"type": [OAIconTitleValueCell getCellIdentifier],
@@ -384,7 +430,8 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_distance"),
                     @"value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
-                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+                    @"type": @(EOARouteStatisticsModeAltitude),
+                    @"icon": @"ic_small_distance@2x"
             }];
         }
 
@@ -393,19 +440,22 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_ascent"),
                     @"value": [OAOsmAndFormatter getFormattedAlt:_analysis.diffElevationUp],
-                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+                    @"type": @(EOARouteStatisticsModeSlope),
+                    @"icon": @"ic_small_ascent"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_descent"),
                     @"value": [OAOsmAndFormatter getFormattedAlt:_analysis.diffElevationDown],
-                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+                    @"type": @(EOARouteStatisticsModeAltitude),
+                    @"icon": @"ic_small_descent"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_alt_range"),
                     @"value": [NSString stringWithFormat:@"%@ - %@",
                                                          [OAOsmAndFormatter getFormattedAlt:_analysis.minElevation],
                                                          [OAOsmAndFormatter getFormattedAlt:_analysis.maxElevation]],
-                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+                    @"type": @(EOARouteStatisticsModeAltitude),
+                    @"icon": @"ic_small_altitude_range"
             }];
         }
 
@@ -414,12 +464,14 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_average_speed"),
                     @"value": [OAOsmAndFormatter getFormattedSpeed:_analysis.avgSpeed],
-                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+                    @"type": @(EOARouteStatisticsModeSpeed),
+                    @"icon": @"ic_small_speed"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_max_speed"),
                     @"value": [OAOsmAndFormatter getFormattedSpeed:_analysis.maxSpeed],
-                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+                    @"type": @(EOARouteStatisticsModeSpeed),
+                    @"icon": @"ic_small_max_speed"
             }];
         }
 
@@ -429,7 +481,8 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"total_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
-                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+                    @"type": @(EOARouteStatisticsModeSpeed),
+                    @"icon": @"ic_small_time"
             }];
         }
 
@@ -439,7 +492,8 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"moving_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
-                    @"icon": @"ic_custom_trip" //@"ic_small_track"
+                    @"type": @(EOARouteStatisticsModeSpeed),
+                    @"icon": @"ic_small_time"
             }];
         }
     }
@@ -563,7 +617,21 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self dismiss];
+    [self dismiss:nil];
+}
+
+#pragma mark - OATrackMenuViewControllerDelegate
+
+- (void)openAnalysis:(EOARouteStatisticsMode)modeType
+{
+    [self dismiss:^{
+        [_mapPanelViewController openTargetViewWithRouteDetailsGraph:_doc analysis:_analysis trackMenuDelegate:self modeType:modeType];
+    }];
+}
+
+- (void)onExitAnalysis
+{
+    [_mapPanelViewController openTargetViewWithGPX:_gpx pushed:NO];
 }
 
 #pragma mark - OADraggableViewActions
@@ -575,9 +643,6 @@
                                                          : height - [OAUtilities getBottomMargin]
                                                    animated:YES];
     [self changeMapRulerPosition];
-
-//    [self adjustActionButtonsPosition:height];
-//    [self changeMapRulerPosition];
     [self adjustMapViewPort];
 }
 
@@ -585,6 +650,7 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
+    [self setupDescription];
     [self setupHeaderView];
     [self generateData];
 
@@ -735,7 +801,7 @@
                                                                   fromName:nil
                                             useIntermediatePointsByDefault:YES
                                                                 showDialog:YES];
-        [self dismiss];
+        [self dismiss:nil];
     }
 }
 
@@ -791,7 +857,7 @@
                                                               fromName:nil
                                         useIntermediatePointsByDefault:YES
                                                             showDialog:YES];
-    [self dismiss];
+    [self dismiss:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -831,9 +897,45 @@
         {
             NSString *value = item[@"value"];
             cell.selectionStyle = hasOptions ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.textView.text = item[@"name"];
+            cell.textView.text = item[@"title"];
             cell.descriptionView.text = value;
             [cell showRightIcon:hasOptions];
+        }
+        outCell = cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    {
+        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextViewSimpleCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textView.textContainer.maximumNumberOfLines = 10;
+            cell.textView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
+        }
+        if (cell)
+        {
+            cell.textView.attributedText = item[@"value"];
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
+            [cell.textView sizeToFit];
+        }
+        outCell = cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATextLineViewCell getCellIdentifier]])
+    {
+        OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextLineViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsZero;
+        }
+        if (cell)
+        {
+            cell.textView.text = item[@"title"];
+            cell.textView.textColor = UIColorFromRGB(color_primary_purple);
         }
         outCell = cell;
     }
@@ -843,28 +945,26 @@
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return section == [self numberOfSectionsInTableView:tableView] - 1 && _data.count > 0 ? 100. : 0.;
-}
-
-/*- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
 
-    if (item[@"has_options"])
+    if ([item[@"key"] isEqualToString:@"full_description"])
     {
-        if ([item[@"key"] isEqualToString:@"location"])
-        {
-
-        }
-        else if ([item[@"key"] isEqualToString:@"activity"])
-        {
-
-        }
+        OATrackMenuDescriptionViewController *descriptionViewController =
+                [[OATrackMenuDescriptionViewController alloc] initWithGpxDoc:_doc gpx:_gpx];
+        [self.navigationController pushViewController:descriptionViewController animated:YES];
     }
+    /*else if ([item[@"key"] isEqualToString:@"location"])
+    {
+
+    }
+    else if ([item[@"key"] isEqualToString:@"activity"])
+    {
+
+    }*/
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}*/
+}
 
 @end

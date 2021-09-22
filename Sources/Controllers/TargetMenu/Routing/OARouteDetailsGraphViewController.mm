@@ -103,7 +103,7 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _currentMode = EOARouteStatisticsModeBoth;
+    _currentMode = EOARouteStatisticsModeAltitudeSlope;
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -170,6 +170,8 @@
     [_tableView setScrollEnabled:NO];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
+
+    [self refreshHighlightOnMap:NO];
 }
 
 - (BOOL)isLandscapeIPadAware
@@ -360,9 +362,18 @@
     [self cancelPressed];
 }
 
-- (void) cancelPressed
+- (void)cancelPressed
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:self.gpx analysis:self.analysis];
+    if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(onExitAnalysis)])
+    {
+        [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
+            [self.trackMenuDelegate onExitAnalysis];
+        }];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:self.gpx analysis:self.analysis];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -423,7 +434,7 @@
     [self updateRouteStatisticsGraph];
 }
 
-- (void) updateRouteStatisticsGraph
+- (void)updateRouteStatisticsGraph
 {
     if (_data.count > 1)
     {

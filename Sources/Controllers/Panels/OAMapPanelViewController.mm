@@ -176,7 +176,7 @@ typedef enum
     double _targetLongitude;
     double _targetZoom;
     EOATargetMode _targetMode;
-    
+
     OADestination *_targetDestination;
 
     OADashboardViewController *_dashboard;
@@ -2689,12 +2689,15 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis
+- (void)openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
+                                   analysis:(OAGPXTrackAnalysis *)analysis
+                          trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate
+                                   modeType:(EOARouteStatisticsMode)modeType
 {
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
-    
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     targetPoint.type = OATargetRouteDetailsGraph;
@@ -2719,6 +2722,13 @@ typedef enum
 
     [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        if (trackMenuDelegate)
+        {
+            OARouteDetailsGraphViewController *graphController = (OARouteDetailsGraphViewController *) self.targetMenuView.customController;
+            graphController.trackMenuDelegate = trackMenuDelegate;
+            [graphController onNewModeSelected:modeType];
+        }
+
         _activeTargetActive = YES;
     }];
 }

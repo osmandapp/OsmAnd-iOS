@@ -10,13 +10,7 @@
 
 @class OAGPXDocument, OAGPXTrackAnalysis, OAButton;
 
-@protocol OATrackMenuHeaderViewDelegate <NSObject>
-
-@optional
-
-- (void)openAnalysis:(void(^)(void))onOpen;
-
-@end
+@protocol OATrackMenuViewControllerDelegate;
 
 @interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -62,6 +56,6 @@
 - (void)setCollection:(NSArray *)data;
 - (void)makeOnlyHeaderAndDescription;
 
-@property (nonatomic) id<OATrackMenuHeaderViewDelegate> delegate;
+@property (nonatomic) id<OATrackMenuViewControllerDelegate> delegate;
 
 @end

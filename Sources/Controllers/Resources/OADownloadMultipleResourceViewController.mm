@@ -47,7 +47,14 @@
         _isSingleSRTM = [OAResourceType isSingleSRTMResourceItem:resource];
         if (_isSRTM)
         {
-            _srtmfOn = [OAResourceType isSRTMFSettingOn];
+            EOAMetricsConstant metricSystem = [OAAppSettings sharedManager].contourLinesLastSelectedMetricSystem.get;
+            if (metricSystem == -1) 
+            {
+                metricSystem = [OAAppSettings sharedManager].metricSystem.get;
+                [[OAAppSettings sharedManager].contourLinesLastSelectedMetricSystem set:metricSystem];
+            }
+            _srtmfOn = metricSystem == EOAMetricsConstant::MILES_AND_FEET;
+            
             _items = [NSMutableArray new];
             for (OAResourceItem *item in resource.items)
             {
@@ -202,6 +209,7 @@
         if (segment)
         {
             _srtmfOn = segment.selectedSegmentIndex == 1;
+            [[OAAppSettings sharedManager].contourLinesLastSelectedMetricSystem set:_srtmfOn ? EOAMetricsConstant::MILES_AND_FEET : EOAMetricsConstant::KILOMETERS_AND_METERS];
             [_items removeAllObjects];
             for (OAResourceItem *item in _multipleItem.items)
             {

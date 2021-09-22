@@ -591,6 +591,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (readonly, nonatomic) BOOL nightMode;
 @property (nonatomic) OACommonMetricSystem *metricSystem;
+@property (nonatomic) OACommonMetricSystem *contourLinesLastSelectedMetricSystem;
 @property (nonatomic) OACommonBoolean *drivingRegionAutomatic;
 @property (nonatomic) OACommonDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;

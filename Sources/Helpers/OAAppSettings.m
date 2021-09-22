@@ -20,6 +20,7 @@
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
+#define contourLinesLastSelectedMetricSystemKey @"contourLinesLastSelectedMetricSystemKey"
 #define drivingRegionAutomaticKey @"drivingRegionAutomatic"
 #define drivingRegionKey @"settingDrivingRegion"
 #define settingZoomButtonKey @"settingZoomButtonKey"
@@ -3294,6 +3295,7 @@
         _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
         _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
+        _contourLinesLastSelectedMetricSystem = [OACommonMetricSystem withKey:contourLinesLastSelectedMetricSystemKey defValue:-1];
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
 
@@ -3302,6 +3304,7 @@
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
+        [_profilePreferences setObject:_contourLinesLastSelectedMetricSystem forKey:@"contourLinesLastSelectedMetricSystemKey"];
         [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
 

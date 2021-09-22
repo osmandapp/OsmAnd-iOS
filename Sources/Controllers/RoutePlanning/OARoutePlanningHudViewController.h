@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *addButtonWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *optionButtonLandscapeWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *addButtonLandscapeWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsStackLandscapeRightConstraint;
 
 - (instancetype) initWithFileName:(NSString *)fileName;
 - (instancetype) initWithInitialPoint:(CLLocation *)latLon;

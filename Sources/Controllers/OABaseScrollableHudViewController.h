@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 
 - (CGFloat) getViewHeight:(EOADraggableMenuState)state;
 - (CGFloat) getViewHeight;
+- (CGFloat) getToolbarHeight;
 
 - (void) doAdditionalLayout;
 - (void) updateLayoutCurrentState;

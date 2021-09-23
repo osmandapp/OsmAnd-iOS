@@ -225,7 +225,7 @@
     paint.setColor(SkColorSetARGBInline(color.a, color.r, color.g, color.b));
     canvas.drawCircle(bitmapSize / 2, bitmapSize  / 2, (bitmapSize - strokeWidth) / 2, paint);
     
-    const auto arrowImage = [OANativeUtilities skBitmapFromMmPngResource:@"special_arrow_up"];
+    const auto arrowImage = [OANativeUtilities skBitmapFromPngResource:@"map_direction_arrow_small"];
     canvas.drawBitmap(*arrowImage,
                       (bitmapSize - arrowImage->width()) / 2.0f,
                       (bitmapSize - arrowImage->height()) / 2.0f,

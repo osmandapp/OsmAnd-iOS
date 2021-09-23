@@ -193,11 +193,6 @@
     // implement in subclasses
 }
 
-- (BOOL) showDetailsButton
-{
-    return NO; //override
-}
-
 - (void) appdendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
 {
     if ([self showDetailsButton])

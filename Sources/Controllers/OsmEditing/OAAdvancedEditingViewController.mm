@@ -43,7 +43,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [[OAAdvancedEditingViewController alloc] initWithNibName:@"OAAdvancedEditingViewController" bundle:nil];
+    self = [super initWithNibName:@"OAAdvancedEditingViewController" bundle:nil];
     if (self)
     {
         self.view.frame = frame;

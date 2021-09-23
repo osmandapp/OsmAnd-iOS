@@ -28,7 +28,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [[OACategoriesTableViewController alloc] initWithNibName:@"OACategoriesTableViewController" bundle:nil];
+    self = [super initWithNibName:@"OACategoriesTableViewController" bundle:nil];
     if (self)
     {
         self.view.frame = frame;

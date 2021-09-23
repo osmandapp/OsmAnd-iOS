@@ -86,7 +86,8 @@
                     .setPoints(points)
                     .setFillColor(OsmAnd::ColorARGB(kDefaultTrackColor))
                     .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
-                    .setPathIconStep(40)
+                    .setSpecialPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
+                    .setShouldShowArrows(true)
                     .setScreenScale(UIScreen.mainScreen.scale);
                     
                     builder.buildAndAddToCollection(self.linesCollection);

@@ -46,7 +46,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 
 - (instancetype) init
 {
-    self = [[OASubscriptionCancelViewController alloc] initWithNibName:@"OASubscriptionCancelViewController" bundle:nil];
+    self = [self initWithNibName:@"OASubscriptionCancelViewController" bundle:nil];
     if (self)
         self.view.frame = [UIScreen mainScreen].bounds;
     
@@ -55,7 +55,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 
 - (instancetype) initWithFrame:(CGRect)frame
 {
-    self = [[OASubscriptionCancelViewController alloc] initWithNibName:@"OASubscriptionCancelViewController" bundle:nil];
+    self = [self initWithNibName:@"OASubscriptionCancelViewController" bundle:nil];
     if (self)
         self.view.frame = [UIScreen mainScreen].bounds;
 

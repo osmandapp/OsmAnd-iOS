@@ -42,6 +42,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAPlugin.h"
 #import "OAOsmAndFormatter.h"
+#import "OAButtonRightIconCell.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -55,6 +56,7 @@
 #define kNearbyPoiMinRadius 250
 #define kNearbyPoiMaxRadius 1000
 #define kNearbyPoiSearchFactory 2
+#define kCollapseDetailsRowType @"kCollapseDetailsRowType"
 
 @implementation OARowInfo
 
@@ -191,11 +193,23 @@
     // implement in subclasses
 }
 
+- (void) appdendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
+{
+    if ([self showDetailsButton])
+    {
+        OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
+        [collapseDetailsRowCell setHeight:[self detailsButtonHeight]];
+        [rows addObject:collapseDetailsRowCell];
+    }
+}
+
 - (void) buildRowsInternal
 {    
     _rows = [NSMutableArray array];
 
     [self buildTopRows:_rows];
+    
+    [self appdendDetailsButtonRow:_rows];
     
     [self buildRows:_rows];
 
@@ -278,6 +292,8 @@
     {
         CGFloat textWidth = row.collapsable ? collapsableTitleWidth : regularTextWidth;
         CGFloat rowHeight;
+        if ([row.typeName isEqualToString:kCollapseDetailsRowType])
+            continue;
         if (row.isHtml)
         {
             rowHeight = 230.0;
@@ -704,6 +720,31 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     OARowInfo *info = _rows[indexPath.row];
     
+    if ([info.typeName isEqualToString:kCollapseDetailsRowType])
+    {
+        OAButtonRightIconCell *cell;
+        cell = (OAButtonRightIconCell *)[tableView dequeueReusableCellWithIdentifier:[OAButtonRightIconCell getCellIdentifier]];
+        
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonRightIconCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+            cell.backgroundColor = UIColorFromRGB(color_divider_light);
+        }
+        cell.iconView.hidden = YES;
+        cell.button.hidden = NO;
+        cell.button.userInteractionEnabled = NO;
+        [cell.button setTitleColor:UIColorFromRGB(color_dialog_buttons_light) forState:UIControlStateNormal];
+        [cell.button.titleLabel setFont:[UIFont systemFontOfSize:13 weight:UIFontWeightSemibold]];
+        if (self.delegate.isInFullMode)
+            [cell.button setTitle:OALocalizedString(@"shared_string_collapse").upperCase forState:UIControlStateNormal];
+        else
+            [cell.button setTitle:OALocalizedString(@"res_details").upperCase forState:UIControlStateNormal];
+       
+        return cell;
+    }
+    
     if (!info.isHtml)
     {
         if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
@@ -894,6 +935,15 @@
     {
         OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO readOnly:YES];
         [self.navController pushViewController:_editDescController animated:YES];
+    }
+    else if ([info.typeName isEqualToString:kCollapseDetailsRowType])
+    {
+        if (self.delegate.isInFullMode)
+            [self.delegate requestHeaderOnlyMode];
+        else
+            [self.delegate requestFullMode];
+        NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 

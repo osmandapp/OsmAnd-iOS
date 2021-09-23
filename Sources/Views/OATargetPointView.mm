@@ -43,6 +43,7 @@
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmAndFormatter.h"
+#import "OAMapDownloadController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -1063,7 +1064,15 @@ static const NSInteger _buttonsCount = 4;
 - (void) layoutSubviews
 {
     if (![self isSliding] && !_hiding)
+    {
         [self doLayoutSubviews:NO];
+        
+        if ([_customController showDetailsButton])
+        {
+            NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+            [((OAMapDownloadController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+    }
 }
 
 - (void) doLayoutSubviews
@@ -1295,9 +1304,9 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !landscape ? _customController.getToolBarHeight + topViewHeight / 2 : _headerOffset) + self.customController.additionalContentOffset};
+        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !landscape ? _customController.getToolBarHeight + topViewHeight / 2 : _headerOffset) + [self getAdditionalContentOffset]};
     
-    if (adjustOffset)
+    if (adjustOffset || [_customController showDetailsButton])
         self.contentOffset = newOffset;
 
     if (_imageView.image)
@@ -1440,6 +1449,14 @@ static const NSInteger _buttonsCount = 4;
     return mapFrame;
 }
 
+- (CGFloat) getAdditionalContentOffset
+{
+    if ([_customController showDetailsButton])
+        return self.customController.additionalContentOffset + [_customController detailsButtonHeight];
+    else
+        return self.customController.additionalContentOffset;
+}
+
 - (CGFloat) calculateTopY
 {
     CGFloat topY = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
@@ -1510,7 +1527,7 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !self.isLandscape ? _customController.getToolBarHeight + [self calculateTopViewHeight] / 2 : _headerOffset) + self.customController.additionalContentOffset};
+        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !self.isLandscape ? _customController.getToolBarHeight + [self calculateTopViewHeight] / 2 : _headerOffset) + [self getAdditionalContentOffset]};
     
     return newOffset;
 }
@@ -2492,7 +2509,7 @@ static const NSInteger _buttonsCount = 4;
         else
         {
             newOffset = [self requestHeaderOnlyMode:NO];
-            if (targetContentOffset->y + _customController.additionalContentOffset > 0 && !_customController.hasBottomToolbar)
+            if (targetContentOffset->y + [self getAdditionalContentOffset] > 0 && !_customController.hasBottomToolbar)
                 [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
             else if (_customController.hasBottomToolbar && ![self isLandscape])
                 [self setTargetContentOffset:newOffset withVelocity:CGPointZero targetContentOffset:targetContentOffset];

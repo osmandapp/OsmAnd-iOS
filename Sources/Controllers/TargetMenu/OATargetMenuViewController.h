@@ -149,6 +149,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) setTopToolbarAlpha:(CGFloat)alpha;
 - (void) setMiddleToolbarAlpha:(CGFloat)alpha;
 - (BOOL) needsAdditionalBottomMargin;
+- (BOOL) showRegionNameOnDownloadButton;
+- (BOOL) showDetailsButton;
+- (CGFloat) detailsButtonHeight;
 
 - (BOOL) needsMapRuler;
 

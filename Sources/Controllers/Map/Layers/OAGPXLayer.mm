@@ -248,6 +248,10 @@
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetGPX;
         targetPoint.targetObj = item;
+
+        targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
+        targetPoint.title = [item getNiceTitle];
+
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }

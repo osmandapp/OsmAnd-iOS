@@ -2347,7 +2347,7 @@
             {
                 for (auto &point : segment->points)
                 {
-                    if ([OAUtilities isCoordEqual:location.latitude srcLon:location.longitude destLat:point->position.latitude destLon:point->position.longitude upToDigits:3])
+                    if ([OAUtilities isCoordEqual:location.latitude srcLon:location.longitude destLat:point->position.latitude destLon:point->position.longitude upToDigits:2])
                     {
                         self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:visibleTrack];
                         return YES;

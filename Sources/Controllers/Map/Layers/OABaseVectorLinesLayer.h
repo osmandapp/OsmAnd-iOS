@@ -10,8 +10,13 @@
 
 #include <OsmAndCore/Map/VectorLinesCollection.h>
 
+#include <SkBitmap.h>
+
 @interface OABaseVectorLinesLayer : OASymbolMapLayer
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection;
+
+- (std::shared_ptr<SkBitmap>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
+- (std::shared_ptr<SkBitmap>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
 
 @end

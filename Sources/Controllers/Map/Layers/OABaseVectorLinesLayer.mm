@@ -21,6 +21,8 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/OnSurfaceRasterMapSymbol.h>
 
+#include <SkBitmapDevice.h>
+
 #define kZoomDelta 0.1
 
 
@@ -159,7 +161,7 @@
                 {
                     OsmAnd::MapMarkerBuilder builder;
                     const auto markerKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(_lineSymbolsCollection->getMarkers().size());
-                    builder.addOnMapSurfaceIcon(markerKey, line->pathIcon);
+                    builder.addOnMapSurfaceIcon(markerKey, line->getPointBitmap());
                     builder.setMarkerId(_lineSymbolsCollection->getMarkers().size());
                     builder.setBaseOrder(--baseOrder);
                     builder.setIsHidden(line->isHidden());
@@ -181,6 +183,56 @@
             _lineSymbolsCollection->removeMarker(marker);
         }
     }];
+}
+
+- (std::shared_ptr<SkBitmap>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName
+{
+    UIImage *image = [UIImage imageNamed:fileName];
+    if ([OAUtilities isColorBright:color])
+        image = [OAUtilities tintImageWithColor:image color:UIColor.blackColor];
+    return [OANativeUtilities skBitmapFromCGImage:image.CGImage];
+}
+
+- (std::shared_ptr<SkBitmap>) specialBitmapWithColor:(OsmAnd::ColorARGB)color
+{
+    const auto bitmap = std::make_shared<SkBitmap>();
+    CGFloat bitmapSize = 20. * UIScreen.mainScreen.scale;
+    CGFloat strokeWidth = 2.5 * UIScreen.mainScreen.scale;
+    if (bitmap->isNull())
+    {
+        if (!bitmap->tryAllocPixels(SkImageInfo::MakeN32Premul(bitmapSize, bitmapSize)))
+        {
+            LogPrintf(OsmAnd::LogSeverityLevel::Error,
+                      "Failed to allocate bitmap of size %dx%d",
+                      bitmapSize,
+                      bitmapSize);
+            return nullptr;
+        }
+        
+        bitmap->eraseColor(SK_ColorTRANSPARENT);
+    }
+
+    SkBitmapDevice target(*bitmap.get());
+    SkCanvas canvas(&target);
+    SkPaint paint;
+    paint.setStyle(SkPaint::Style::kStroke_Style);
+    paint.setColor(SkColorSetARGBInline(0x33, 0x00, 0x00, 0x00));
+    paint.setStrokeWidth(strokeWidth);
+    canvas.drawCircle(bitmapSize / 2, bitmapSize / 2, (bitmapSize - strokeWidth) / 2, paint);
+    
+    paint.reset();
+    paint.setStyle(SkPaint::Style::kFill_Style);
+    paint.setColor(SkColorSetARGBInline(color.a, color.r, color.g, color.b));
+    canvas.drawCircle(bitmapSize / 2, bitmapSize  / 2, (bitmapSize - strokeWidth) / 2, paint);
+    
+    const auto arrowImage = [OANativeUtilities skBitmapFromMmPngResource:@"special_arrow_up"];
+    canvas.drawBitmap(*arrowImage,
+                      (bitmapSize - arrowImage->width()) / 2.0f,
+                      (bitmapSize - arrowImage->height()) / 2.0f,
+                      nullptr);
+    
+    canvas.flush();
+    return bitmap;
 }
 
 @end

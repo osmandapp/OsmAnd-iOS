@@ -193,18 +193,21 @@
 {
     if (points.size() > 1)
     {
+        const auto colorARGB = OsmAnd::ColorARGB((int) gpx.color);
         OsmAnd::VectorLineBuilder builder;
         builder.setBaseOrder(baseOrder)
         .setIsHidden(points.size() == 0)
         .setLineId(lineId)
-        .setLineWidth(30)
+        .setLineWidth(20)
         .setPoints(points)
-        .setFillColor(OsmAnd::ColorARGB((int) gpx.color));
+        .setFillColor(colorARGB);
         
         if (gpx.showArrows)
         {
-            builder.setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
-            .setPathIconStep(100)
+            UIColor *color = UIColorFromARGB(gpx.color);
+            builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
+            .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
+            .setShouldShowArrows(true)
             .setScreenScale(UIScreen.mainScreen.scale);
         }
         

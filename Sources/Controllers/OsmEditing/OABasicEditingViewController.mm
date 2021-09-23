@@ -58,7 +58,7 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [[OABasicEditingViewController alloc] initWithNibName:@"OABasicEditingViewController" bundle:nil];
+    self = [super initWithNibName:@"OABasicEditingViewController" bundle:nil];
     if (self)
     {
         self.view.frame = frame;

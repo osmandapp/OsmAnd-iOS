@@ -16,7 +16,7 @@
 
 - (instancetype) init
 {
-    self = [[OALaunchScreenViewController alloc] initWithNibName:@"OALaunchScreenViewController" bundle:nil];
+    self = [super initWithNibName:@"OALaunchScreenViewController" bundle:nil];
     if (self)
     {
         self.view.frame = [UIScreen mainScreen].bounds;
@@ -26,7 +26,7 @@
 
 - (instancetype) initWithFrame:(CGRect)frame
 {
-    self = [[OALaunchScreenViewController alloc] initWithNibName:@"OALaunchScreenViewController" bundle:nil];
+    self = [super initWithNibName:@"OALaunchScreenViewController" bundle:nil];
     if (self)
     {
         self.view.frame = [UIScreen mainScreen].bounds;

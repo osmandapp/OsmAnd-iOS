@@ -116,6 +116,8 @@
 
 -(BOOL) isSpeedSpecified;
 
+- (BOOL) isColorizationTypeAvailable:(NSInteger)colorizationType;
+
 +(OAGPXTrackAnalysis *) segment:(long)filetimestamp seg:(OAGpxTrkSeg *)seg;
 -(void) prepareInformation:(long)fileStamp  splitSegments:(NSArray *)splitSegments;
 

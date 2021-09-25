@@ -15,8 +15,6 @@
 #include <routeDataBundle.h>
 #include <routeDataResources.h>
 
-#define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
-
 @implementation OARouteExporter
 {
     NSString *_name;

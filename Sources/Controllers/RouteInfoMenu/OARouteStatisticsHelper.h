@@ -16,6 +16,8 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+#define ROUTE_INFO_PREFIX @"routeInfo_"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class OARouteStatistics;
@@ -46,6 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OARouteStatisticsHelper : NSObject
 
 + (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(std::vector<SHARED_PTR<RouteSegmentResult> >)route;
+
++ (std::shared_ptr<OsmAnd::MapPresentationEnvironment>) getDefaultPresentationEnvironment;
 
 @end
 

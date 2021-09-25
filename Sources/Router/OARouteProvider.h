@@ -111,4 +111,9 @@ struct RouteSegmentResult;
 														 points:(std::vector<std::shared_ptr<GpxPoint>> &)points
 												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
++ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                                 gpxFile:(OAGPXDocument *)gpxFile
+                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                                         selectedSegment:(NSInteger)selectedSegment;
+
 @end

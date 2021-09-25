@@ -875,6 +875,18 @@
     }
 }
 
+- (EOAColorizationType) toColorizationType
+{
+    if (self.gst == EOAGradientScaleTypeSpeed)
+        return EOAColorizationTypeSpeed;
+    else if (self.gst == EOAGradientScaleTypeAltitude)
+        return EOAColorizationTypeElevation;
+    else if (self.gst == EOAGradientScaleTypeSlope)
+        return EOAGradientScaleTypeSlope;
+    else
+        return EOAColorizationTypeNone;
+}
+
 @end
 
 @interface OAUploadVisibility()

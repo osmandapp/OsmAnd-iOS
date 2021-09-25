@@ -15,11 +15,14 @@
 #import "OATargetPoint.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDatabase.h"
+#import "OAGPXDocument.h"
 #import "OAGpxWptItem.h"
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAWaypointsMapLayerProvider.h"
 #import "OAFavoritesLayer.h"
+#import "OARouteColorizationHelper.h"
+#import "OAColoringType.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -193,6 +196,35 @@
 {
     if (points.size() > 1)
     {
+        QList<OsmAnd::FColorARGB> colors;
+        if (gpx.coloringType.length > 0)
+        {
+            NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+            QString qPath = QString::fromNSString(path);
+            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
+            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+            doc.path = path;
+            OAColoringType *type = [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType];
+            OARouteColorizationHelper *routeColorization = [[OARouteColorizationHelper alloc] initWithGpxFile:doc analysis:[doc getAnalysis:0] type:type.toGradientScaleType.toColorizationType maxProfileSpeed:0];
+            
+            colors = routeColorization ? [routeColorization getResult] : QList<OsmAnd::FColorARGB>();
+            // Add outline for colorized lines
+            if (!colors.isEmpty())
+            {
+                const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
+                
+                OsmAnd::VectorLineBuilder outlineBuilder;
+                outlineBuilder.setBaseOrder(baseOrder--)
+                .setIsHidden(points.size() == 0)
+                .setLineId(lineId + 1000)
+                .setLineWidth(30)
+                .setPoints(points)
+                .setFillColor(outlineColor);
+                
+                outlineBuilder.buildAndAddToCollection(_linesCollection);
+            }
+        }
+        
         const auto colorARGB = OsmAnd::ColorARGB((int) gpx.color);
         OsmAnd::VectorLineBuilder builder;
         builder.setBaseOrder(baseOrder)
@@ -202,9 +234,13 @@
         .setPoints(points)
         .setFillColor(colorARGB);
         
+        if (!colors.empty())
+            builder.setColorizationMapping(colors);
+        
         if (gpx.showArrows)
         {
-            UIColor *color = UIColorFromARGB(gpx.color);
+            // Use black arrows for gradient colorization
+            UIColor *color = gpx.coloringType.length == 0 ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
             builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
             .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
             .setShouldShowArrows(true)

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OAApplicationMode.h"
+#import "OAColorizationType.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -186,6 +187,8 @@ typedef NS_ENUM(NSInteger, EOAGradientScaleType)
 + (NSString *) toHumanString:(EOAGradientScaleType)gst;
 + (NSString *) toTypeName:(EOAGradientScaleType)gst;
 + (NSString *) toColorTypeName:(EOAGradientScaleType)gst;
+
+- (EOAColorizationType) toColorizationType;
 
 @end
 

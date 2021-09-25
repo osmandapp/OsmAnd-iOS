@@ -12,6 +12,8 @@
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 
+#define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
+
 @class OAGpxTrkPt, OAGPXMutableDocument, OAGPXDocument, OAGpxTrkSeg;
 struct RouteSegmentResult;
 

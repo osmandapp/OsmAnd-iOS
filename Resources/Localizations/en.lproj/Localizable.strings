@@ -457,7 +457,11 @@
 "poi_categories" = "POI categories";
 "search_history" = "Search history";
 
+"track_coloring_solid" = "Solid";
+"attribute" = "Attribute";
+
 // Shared Strings
+"shared_string_custom" = "Custom";
 "shared_string_enable" = "Enable";
 "shared_string_disable" = "Disable";
 "shared_string_apply" = "Apply";

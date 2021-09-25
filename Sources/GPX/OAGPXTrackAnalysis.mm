@@ -10,6 +10,7 @@
 #import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OALocationServices.h"
+#import "OARouteColorizationHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -209,6 +210,16 @@
         
     }
     return self;
+}
+
+- (BOOL) isColorizationTypeAvailable:(NSInteger)colorizationType
+{
+    if (colorizationType == EOAColorizationTypeSpeed)
+        return [self isSpeedSpecified];
+    else if (colorizationType == EOAColorizationTypeElevation || colorizationType == EOAColorizationTypeSlope)
+        return [self isElevationSpecified];
+    else
+        return YES;
 }
  
 -(BOOL) isTimeSpecified

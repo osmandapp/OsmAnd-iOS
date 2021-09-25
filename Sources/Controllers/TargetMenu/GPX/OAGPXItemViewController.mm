@@ -28,6 +28,8 @@
 #import "OASaveTrackViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAOsmAndFormatter.h"
+#import "OAColoringType.h"
+#import "OAIconTextTableViewCell.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -77,6 +79,7 @@
     NSInteger _speedSectionIndex;
     NSInteger _timeSectionIndex;
     NSInteger _uphillsSectionIndex;
+    NSInteger _colorizationSectionIndex;
 
     NSString *_exportFileName;
     NSString *_exportFilePath;
@@ -97,6 +100,8 @@
     UIFont *_upDownFont;
     NSTextAttachment *_arrowUp;
     NSTextAttachment *_arrowDown;
+    
+    NSArray<OAColoringType *> *_coloringTypes;
 }
 
 @synthesize editing = _editing;
@@ -400,6 +405,23 @@
         _timeSectionIndex = -1;
         _uphillsSectionIndex = (uphillsDataExists ? nextSectionIndex++ : -1);
     }
+    
+    NSMutableArray<OAColoringType *> *colTypes = [NSMutableArray array];
+    for (OAColoringType *type : [OAColoringType getTrackColoringTypes])
+    {
+        if ([type isAvailableForDrawingTrack:self.doc attributeName:nil])
+            [colTypes addObject:type];
+    }
+    if (colTypes.count > 0)
+    {
+        _coloringTypes = colTypes;
+        _colorizationSectionIndex = nextSectionIndex++;
+    }
+    else
+    {
+        _colorizationSectionIndex = -1;
+    }
+    
     _sectionsCount = nextSectionIndex;
 
     if (_sectionsCount == (_showCurrentTrack ? 0 : 1))
@@ -1086,6 +1108,8 @@
         return OALocalizedString(@"gpx_route_time");
     else if (section == _uphillsSectionIndex)
         return OALocalizedString(@"gpx_uphldownhl");
+    else if (section == _colorizationSectionIndex)
+        return OALocalizedString(@"routes_color_by_type");
     else
         return @"";
 }
@@ -1101,6 +1125,8 @@
         return 4;
     else if (section == _uphillsSectionIndex)
         return 4;
+    else if (section == _colorizationSectionIndex)
+        return _coloringTypes.count + 1;
     else
         return 0;
 }
@@ -1252,6 +1278,34 @@
 
         return cell;
     }
+    else if (indexPath.section == _colorizationSectionIndex)
+    {
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell showImage:NO];
+            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
+        }
+        if (indexPath.row == 0)
+        {
+            cell.arrowIconView.hidden = self.gpx.coloringType.length != 0;
+            cell.textView.text = OALocalizedString(@"map_settings_none");
+        }
+        else
+        {
+            OAColoringType *colType = _coloringTypes[indexPath.row - 1];
+            cell.arrowIconView.hidden = ![self.gpx.coloringType isEqualToString:colType.name];
+            cell.textView.text = colType.title;
+        }
+        if ([cell needsUpdateConstraints])
+            [cell setNeedsUpdateConstraints];
+        
+        return cell;
+    }
     else if (indexPath.section == _uphillsSectionIndex)
     {
         OATimeTableViewCell* cell;
@@ -1363,6 +1417,20 @@
         _trackColorController = [[OAEditGPXColorViewController alloc] initWithColorValue:_gpx.color colorsCollection:_gpxColorCollection];
         _trackColorController.delegate = self;
         [self.navController pushViewController:_trackColorController animated:YES];
+    }
+    if (indexPath.section == _colorizationSectionIndex)
+    {
+        if (indexPath.row == 0)
+        {
+            [self.gpx setColoringType:@""];
+        }
+        else
+        {
+            [self.gpx setColoringType:_coloringTypes[indexPath.row - 1].name];
+        }
+        [[OAGPXDatabase sharedDb] save];
+        [[_app mapSettingsChangeObservable] notifyEvent];
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }

@@ -13,10 +13,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OADividerCell.h"
 #import "OASettingSwitchCell.h"
 #import "OAMenuSimpleCellNoIcon.h"
-#import "OARootViewController.h"
 
 typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 {
@@ -97,6 +95,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 52., 0., 0.);
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     [self initData];
@@ -114,19 +113,13 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     [self initLanguagesData];
 
     NSMutableArray *dataArr = [NSMutableArray new];
-    [dataArr addObject:@[
-            @{@"type": [OADividerCell getCellIdentifier]},
-            @{
+    [dataArr addObject:@[@{
                     @"type": [OASettingSwitchCell getCellIdentifier],
                     @"title": OALocalizedString(@"shared_string_all_languages")
-            },
-            @{@"type": [OADividerCell getCellIdentifier]}
-    ]];
+            }]];
 
     NSMutableArray *preferredLanguages = [NSMutableArray new];
-    [preferredLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     NSMutableArray *availableLanguages = [NSMutableArray new];
-    [availableLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
 
     for (OAWikiLanguageItem *language in _languages)
     {
@@ -136,15 +129,9 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
         };
 
         if (language.preferred)
-        {
             [preferredLanguages addObject:lang];
-            [preferredLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
-        }
         else
-        {
             [availableLanguages addObject:lang];
-            [availableLanguages addObject:@{@"type": [OADividerCell getCellIdentifier]}];
-        }
     }
     [dataArr addObject:preferredLanguages];
     [dataArr addObject:availableLanguages];
@@ -243,15 +230,6 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     }
 }
 
-- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
-{
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
-    else
-        return estimated ? 48. : UITableViewAutomaticDimension;
-}
-
 - (CGFloat)getHeaderHeightForSection:(NSInteger)section
 {
     return [OATableViewCustomHeaderView getHeight:[self getTextForHeader:section] width:self.tableView.frame.size.width yOffset:17. font:[UIFont systemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0]];
@@ -302,25 +280,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
-            cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
-            cell.dividerHight = 0.5;
-        }
-        if (cell)
-        {
-            CGFloat leftInset = indexPath.row == 0 || indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1 ? 0. : 62.;
-            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
         OASettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
@@ -328,7 +288,6 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *) nib[0];
         }
-
         if (cell)
         {
             cell.textView.text = item[@"title"];
@@ -354,7 +313,6 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
             [cell setSelectedBackgroundView:bgColorView];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
             cell.descriptionView.hidden = YES;
 
             if ([cell needsUpdateConstraints])
@@ -376,16 +334,6 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath estimated:NO];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath estimated:YES];
-}
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {

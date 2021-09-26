@@ -12,7 +12,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATableViewCustomFooterView.h"
-#import "OADividerCell.h"
 #import "OASettingSwitchCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAPOIFiltersHelper.h"
@@ -106,36 +105,32 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 - (void)initData
 {
     NSMutableArray *dataArr = [NSMutableArray new];
-    [dataArr addObject:@[
-            @{@"type": [OADividerCell getCellIdentifier]},
-            @{@"type": [OASettingSwitchCell getCellIdentifier]},
-            @{@"type": [OADividerCell getCellIdentifier]}
-    ]];
-    [dataArr addObject:@[
-            @{@"type": [OADividerCell getCellIdentifier]},
-            @{
-                    @"type": [OAIconTitleValueCell getCellIdentifier],
-                    @"img": @"ic_custom_map_languge.png",
-                    @"title": OALocalizedString(@"language")
-            },
-            @{@"type": [OADividerCell getCellIdentifier]}
-    ]];
+    [dataArr addObject:@[@{@"type": [OASettingSwitchCell getCellIdentifier]}]];
 
-    NSMutableArray *availableMapsArr = [NSMutableArray new];
-    [availableMapsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
-
-    for (OARepositoryResourceItem* item in _mapItems)
+    if (_wikipediaEnabled)
     {
-        [availableMapsArr addObject:@{
-                @"type": kCellTypeMap,
-                @"img": @"ic_custom_wikipedia.png",
-                @"item": item,
-        }];
-        [availableMapsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
+        [dataArr addObject:@[@{
+                        @"type": [OAIconTitleValueCell getCellIdentifier],
+                        @"img": @"ic_custom_map_languge",
+                        @"title": OALocalizedString(@"language")
+                }]];
     }
 
     if (_mapItems.count > 0)
+    {
+        NSMutableArray *availableMapsArr = [NSMutableArray new];
+
+        for (OARepositoryResourceItem *item in _mapItems)
+        {
+            [availableMapsArr addObject:@{
+                    @"type": kCellTypeMap,
+                    @"img": @"ic_custom_wikipedia",
+                    @"item": item,
+            }];
+        }
+
         [dataArr addObject:availableMapsArr];
+    }
 
     _data = dataArr;
 }
@@ -144,41 +139,35 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 {
     title = OALocalizedString(@"product_title_wiki");
 
-    self.tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tblView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16., 0., 0.);
     [self.tblView.tableFooterView removeFromSuperview];
     self.tblView.tableFooterView = nil;
     [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    tblView.estimatedRowHeight = kEstimatedRowHeight;
-    tblView.estimatedRowHeight = kEstimatedRowWithDescriptionHeight;
+    self.tblView.estimatedRowHeight = kEstimatedRowHeight;
 
     [self updateAvailableMaps];
 }
 
 - (void)updateAvailableMaps
 {
-    CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-    CLLocationCoordinate2D coord = loc.coordinate;
-    [OAResourcesUIHelper requestMapDownloadInfo:coord resourceType:OsmAnd::ResourcesManager::ResourceType::WikiMapRegion onComplete:^(NSArray<OAResourceItem *>* res) {
-        @synchronized(_dataLock)
-        {
-            NSMutableArray<OARepositoryResourceItem *> *availableItems = [NSMutableArray array];
-            if (res.count > 0)
-            {
-                for (OAResourceItem * item in res)
-                {
-                    if ([item isKindOfClass:OARepositoryResourceItem.class])
+    CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
+    _mapItems = [OAResourcesUIHelper findIndexItemsAt:coordinate
+                                                 type:OsmAndResourceType::WikiMapRegion
+                                    includeDownloaded:NO
+                                                limit:-1
+                                  skipIfOneDownloaded:YES];
+
+    [self initData];
+    [UIView transitionWithView:self.tblView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
                     {
-                        OARepositoryResourceItem *resource = (OARepositoryResourceItem *) item;
-                        [availableItems addObject:resource];
+        [self.tblView reloadData];
                     }
-                }
-                _mapItems = availableItems;
-            }
-            [self initData];
-            [tblView reloadData];
-        }
-    }];
+                    completion:nil];
 }
+
 
 - (void)applyParameter:(id)sender
 {
@@ -186,11 +175,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     {
         UISwitch *sw = (UISwitch *) sender;
         [_app.data setWikipedia:_wikipediaEnabled = sw.on];
-        [self.tblView beginUpdates];
-        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionLanguages] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionAvailable] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tblView endUpdates];
+        [self updateAvailableMaps];
     }
 }
 
@@ -245,22 +230,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
-            cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
-            CGFloat leftInset = indexPath.row == 0 || indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1 ? 0. : 65.;
-            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
-            cell.dividerHight = 0.5;
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
         OASettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
@@ -385,22 +355,14 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([[self getItem:indexPath][@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
-    else
-        return UITableViewAutomaticDimension;
-}
-
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return indexPath.section != EOAMapSettingsWikipediaSectionVisibility && ![[self getItem:indexPath][@"type"] isEqualToString:[OADividerCell getCellIdentifier]] ? indexPath : nil;
+    return indexPath.section != EOAMapSettingsWikipediaSectionVisibility ? indexPath : nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != EOAMapSettingsWikipediaSectionVisibility && ![[self getItem:indexPath][@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
+    if (indexPath.section != EOAMapSettingsWikipediaSectionVisibility)
         [self onItemClicked:indexPath];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

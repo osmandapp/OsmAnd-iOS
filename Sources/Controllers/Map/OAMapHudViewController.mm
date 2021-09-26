@@ -445,6 +445,7 @@
     [_zoomOutButton updateColorsForPressedState:NO];
 
     [self updateMapModeButton];
+    [self updateRouteButton:NO followingMode:NO];
     
     [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
     [_optionsMenuButton updateColorsForPressedState:NO];
@@ -503,6 +504,7 @@
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_active);
                 _mapModeButton.tintColorDay = UIColor.whiteColor;
                 _mapModeButton.tintColorNight = UIColor.whiteColor;
+                _mapModeButton.borderWidthNight = 0;
                 break;
             }
                 
@@ -513,6 +515,7 @@
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
                 _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
                 _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                _mapModeButton.borderWidthNight = 2;
                 break;
             }
                 
@@ -523,6 +526,7 @@
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
                 _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
                 _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                _mapModeButton.borderWidthNight = 2;
                 break;
             }
 
@@ -538,6 +542,7 @@
         _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
         _mapModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
         _mapModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+        _mapModeButton.borderWidthNight = 2;
         _cachedLocationAvailableState = NO;
     }
     
@@ -1069,6 +1074,8 @@
         self.toolbarViewController.view.alpha = alphaEx;
     if (self.topCoordinatesWidget)
         self.topCoordinatesWidget.alpha = alphaEx;
+    if (self.downloadMapWidget)
+        self.downloadMapWidget.alpha = alphaEx;
 }
 
 - (void) showTopControls
@@ -1088,6 +1095,8 @@
             self.toolbarViewController.view.alpha = alphaEx;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.alpha = alphaEx;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.alpha = alphaEx;
 
         [self updateControlsLayout:[self getHudTopOffset]];
 
@@ -1103,6 +1112,8 @@
             self.toolbarViewController.view.userInteractionEnabled = alphaEx > 0.0;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.userInteractionEnabled = alphaEx > 0.0;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.userInteractionEnabled = alphaEx > 0.0;
         
     }];
 }
@@ -1121,6 +1132,8 @@
             self.toolbarViewController.view.alpha = 0.0;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.alpha = 0.0;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.alpha = 0.0;
         
     } completion:^(BOOL finished) {
         
@@ -1134,6 +1147,8 @@
             self.toolbarViewController.view.userInteractionEnabled = NO;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.userInteractionEnabled = NO;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.userInteractionEnabled = NO;
         
     }];
 }

@@ -29,6 +29,21 @@
     return self.gpxTitle;
 }
 
+- (NSInteger)color
+{
+    return _color > 0 ? _color : kDefaultTrackColor;
+}
+
+- (NSString *)width
+{
+    return _width ? _width : @"thin";
+}
+
+- (NSString *)coloringType
+{
+    return _coloringType ? _coloringType : @"solid";
+}
+
 @end
 
 
@@ -342,6 +357,26 @@
                 wpt.speed = [value[@"speed"] doubleValue];
                 gpx.locationEnd = wpt;
             }
+            else if ([key isEqualToString:@"showStartFinish"])
+            {
+                gpx.showStartFinish = [value boolValue];
+            }
+            else if ([key isEqualToString:@"joinSegments"])
+            {
+                gpx.joinSegments = [value boolValue];
+            }
+            else if ([key isEqualToString:@"showArrows"])
+            {
+                gpx.showArrows = [value boolValue];
+            }
+            else if ([key isEqualToString:@"width"])
+            {
+                gpx.width = value;
+            }
+            else if ([key isEqualToString:@"coloringType"])
+            {
+                gpx.coloringType = value;
+            }
         }
         NSString *gpxFolderPath = OsmAndApp.instance.gpxPath;
         // Make compatible with old database data
@@ -395,6 +430,12 @@
 
         [d setObject:@(gpx.wptPoints) forKey:@"wptPoints"];
         [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
+        
+        [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
+        [d setObject:@(gpx.joinSegments) forKey:@"joinSegments"];
+        [d setObject:@(gpx.showArrows) forKey:@"showArrows"];
+        [d setObject:gpx.width forKey:@"width"];
+        [d setObject:gpx.coloringType forKey:@"coloringType"];
         
         if (gpx.locationStart)
         {

@@ -603,7 +603,7 @@
                     record = false;
                 }
                 float minSpeed = [settings.saveTrackMinSpeed get];
-                if(minSpeed > 0 && (!location.speed || (location.speed * 0.001 < minSpeed))) {
+                if(minSpeed > 0 && (!location.speed || (location.speed < minSpeed))) {
                     record = false;
                 }
             }

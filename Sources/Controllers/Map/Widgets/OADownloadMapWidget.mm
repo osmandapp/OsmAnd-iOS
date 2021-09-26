@@ -148,31 +148,35 @@
         else
         {
             [OAResourcesUIHelper requestMapDownloadInfo:_cachedLocation.coordinate resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion onComplete:^(NSArray<OAResourceItem *> *res) {
-                if (res.count > 0)
-                {
-                    for (OAResourceItem * item in res)
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    if (res.count > 0)
                     {
-                        if ([item isKindOfClass:OALocalResourceItem.class])
+                        for (OAResourceItem * item in res)
                         {
-                            _lastProcessedRegionName = item.resourceId.toNSString();
-                            [self updateVisibility];
-                            return;
+                            if ([item isKindOfClass:OALocalResourceItem.class])
+                            {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    _lastProcessedRegionName = item.resourceId.toNSString();
+                                    [self updateVisibility];
+                                });
+                                return;
+                            }
                         }
+                        OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
+                        NSString *resId = item.resourceId.toNSString();
+                        if ([_lastProcessedRegionName isEqualToString:resId])
+                            return;
+                        BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", resId]];
+                        _lastProcessedRegionName = isDownloading ? resId : nil;
+                        _resourceItem = isDownloading ? nil : item;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            BOOL visible = self.isVisible;
+                            if (visible)
+                                [self updateWidgetInformation];
+                            [self updateVisibility];
+                        });
                     }
-                    OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
-                    NSString *resId = item.resourceId.toNSString();
-                    if ([_lastProcessedRegionName isEqualToString:resId])
-                        return;
-                    BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", resId]];
-                    _lastProcessedRegionName = isDownloading ? resId : nil;
-                    _resourceItem = isDownloading ? nil : item;
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        BOOL visible = self.isVisible;
-                        if (visible)
-                            [self updateWidgetInformation];
-                        [self updateVisibility];
-                    });
-                }
+                });
             }];
         }
     }

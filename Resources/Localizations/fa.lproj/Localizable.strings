@@ -77,7 +77,7 @@
 "speak_pedestrian" = "گذرگاه‌های پیاده";
 "int_seconds" = "ثانیه";
 "shared_string_never" = "هرگز";
-"general_settings_2" = "تنظیمات کلی";
+"general_settings_2" = "تنظیمات سراسری";
 "general_settings_descr" = "Configure display and common settings for the application";
 "routing_settings_descr" = "جهت‌یابی را پیکربندی کنید";
 "auto_zoom_none" = "زوم خودکار غیرفعال";
@@ -301,7 +301,7 @@
 "poi_hide" = "نشان نده";
 // My Places
 "favorites" = "علاقه‌مندی‌ها";
-"tracks" = "ردها";
+"tracks" = "Tracks";
 // GPX
 "gpx_point" = "نقطه";
 "gpx_waypoint" = "راه‌نشان‌ها";
@@ -365,7 +365,7 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_none" = "هیچ";
+"map_settings_none" = "هیچ‌کدام";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "نقشه‌های آنلاین";
 "map_settings_transp" = "شفافیت";
@@ -409,7 +409,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "دانلود";
-"nothanks" = "خیر، سپاسگزارم";
+"nothanks" = "نه، متشکرم";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -496,7 +496,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "علاقه‌مندی‌ها";
+"import_favorite" = "علاقه‌مندی";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -506,7 +506,7 @@
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
 "ctx_mnu_share" = "هم‌رسانی";
-"ctx_mnu_direction" = "نشانگر نقشه";
+"ctx_mnu_direction" = "نشانهٔ نقشه";
 // Location Services
 "loc_access_denied" = "Access denied";
 "loc_access_denied_desc" = "Access to location service has been denied";
@@ -629,7 +629,7 @@
 "create_new_trip" = "Create new trip";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the trip";
-"gpx_rename_q" = "تغییرنام رد";
+"gpx_rename_q" = "تغییر نام رد";
 "gpx_enter_new_name" = "Please enter new name for the trip";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "غیرفعال";
@@ -764,7 +764,7 @@
 "transport_nearby_routes" = "تا";
 "route_stops_before" = "%d ایستگاه قبلی";
 "transport_routes" = "مسیرها";
-"transport_stop" = "توقف";
+"transport_stop" = "ایستگاه";
 "new_destination_point_dialog" = "قبلاً مقصدی را انتخاب کرده‌اید";
 "show_poi_over_map" = "نمایش نقاط کاربردی";
 "search_radius" = "شعاع جست‌وجو";
@@ -772,7 +772,7 @@
 "logging_interval_navigation_descr" = "بازهٔ زمانی ثبت داده‌های ضبط مسیر در هنگام راهبری";
 "logging_min_distance" = "کمترین جابجایی";
 "logging_min_distance_descr" = "فیلتر: کمترین مسافت تا ثبت یک نقطهٔ جدید";
-"logging_min_accuracy" = "کمترین دقت";
+"logging_min_accuracy" = "کمترین صحت";
 "logging_min_accuracy_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این دقت برسد";
 "logging_min_speed" = "کمترین سرعت";
 "logging_min_speed_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این سرعت برسد";
@@ -870,7 +870,7 @@
 "lightblue" = "آبی روشن";
 "quick_action_name_footer" = "خالی بگذارید تا از نشانی یا نام محل استفاده شود.";
 "brown" = "قهوه‌ای";
-"osm_alert_title" = "اجرا";
+"osm_alert_title" = "ارسال";
 "osm_poi_delete_title" = "حذف POI";
 "translucent_lightgreen" = "سبز روشن شفاف";
 "translucent_yellow" = "زرد شفاف";
@@ -964,7 +964,7 @@
 "mapil_pano_only" = "فقط نمایش عکس‌های ۳۶۰ درجه";
 "osm_phone" = "تلفن";
 "shared_string_distance" = "مسافت";
-"region_nautical" = "نقشهٔ دریایی";
+"region_nautical" = "نقشه‌های دریایی";
 "dark_yellow" = "زرد تیره";
 "osm_editing_offline" = "ویرایش آفلاین";
 "osm_live_routing" = "مسیریابی با OsmAnd Live";
@@ -972,10 +972,10 @@
 "shared_string_retry" = "تلاش مجدد";
 "translucent_orange" = "نارنجی شفاف";
 "download_depth_countours" = "منحنی‌های میزان عمق دریایی";
-"shared_string_filter" = "پالایه";
+"shared_string_filter" = "پالایش";
 "help_about" = "درباره";
 "traffic_warning_tunnel" = "تونل";
-"product_title_sea_depth_contours" = "منحنی‌های میزان عمق دریا";
+"product_title_sea_depth_contours" = "منحنی‌های میزان عمق دریایی";
 "help_features" = "قابلیت‌ها";
 "product_title_wikivoyage" = "راهنمای مسافرت";
 "edit_action" = "اصلاح کنش";
@@ -988,7 +988,7 @@
 "change_map_source" = "تغییر منبع نقشه";
 "translucent_blue" = "آبی شفاف";
 "get_discount_second_part" = "سپس %@";
-"osm_deleted" = "حذف‌شده(ها)";
+"osm_deleted" = "حذف شد";
 "poi_list" = "لیست POI";
 "osm_editing_lost_changes_descr" = "تغییراتی که ذخیره نکرده‌اید، از دست می‌رود. ادامه می‌دهید؟";
 "prev_route" = "مسیر قبلی";
@@ -1039,7 +1039,7 @@
 "routing_attr_width_description" = "محدودیت پهنای وسیله در مسیرها را مشخص کنید.";
 "routing_attr_avoid_shuttle_train_description" = "از قطار خطی پرهیز می‌کند";
 "routing_attr_avoid_train_name" = "قطار";
-"rendering_attr_hikingRoutesOSMC_name" = "لایهٔ نمادهای پیاده‌گردی";
+"rendering_attr_hikingRoutesOSMC_name" = "مسیرهای پیاده‌گردی";
 "routing_attr_avoid_ferries_description" = "از فرابَرها (ferries) پرهیز می‌کند";
 "rendering_value__name" = "پیش‌فرض";
 "routing_attr_avoid_toll_description" = "از جاده‌های عوارضی‌دار پرهیز می‌کند";
@@ -1053,7 +1053,7 @@
 "rendering_attr_highway_class_bridleway_name" = "راه اسب‌رو";
 "rendering_attr_surface_cobblestone_name" = "سنگفرش سنگی";
 "routing_attr_avoid_share_taxi_description" = "از تاکسی اشتراکی پرهیز می‌کند";
-"rendering_value_walkingRoutesOSMC_name" = "رنگ‌بندی بر اساس نماد پیاده‌گردی OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routeInfo_piste_difficulty_name" = "دشواری پیست";
 "routing_attr_avoid_toll_name" = "جادهٔ عوارضی‌دار";
 "rendering_value_dark_brown_name" = "قهوه‌ای تیره";
@@ -1145,7 +1145,7 @@
 "rendering_attr_highway_class_track_grade3_name" = "سطح ۳";
 "rendering_attr_surface_paved_name" = "روسازی‌شده";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "نمایش مسیرهای دوچرخهٔ شبکه‌های گره";
-"rendering_value_walkingRoutesScopeOSMC_name" = "رنگ‌بندی براساس وابستگی شبکه";
+"rendering_value_walkingRoutesScopeOSMC_name" = "وابستگی شبکه";
 "routing_attr_allow_classic_only_name" = "مسیرهای فقط-کلاسیک مجاز باشد";
 "rendering_attr_showAccess_name" = "محدودیت‌های دسترسی و عوارضی‌ها";
 "rendering_attr_tracktype_grade4_name" = "تقریباً نرم";
@@ -1429,7 +1429,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@:‪%@‬";
 "nav_type_straight_line" = "خط مستقیم";
 "osm_note_close" = "بستن یادداشت OSM";
-"shared_string_password" = "کلمه عبور";
+"shared_string_password" = "گذرواژه";
 "help_purchases" = "خریدهای OsmAnd";
 "help_mapillary" = "OsmAnd + Mapillary";
 "num_stops" = "ایستگاه";
@@ -1493,7 +1493,7 @@
 "walk" = "پیاده";
 "configure_map_descr" = "ظاهر نقشه";
 "res_pseudo_mercator" = "فراتابی شبه مرکاتور";
-"save_changes" = "ذخیرهٔ تغییرات";
+"save_changes" = "ذخیره‌کردن تغییرات";
 "import_complete_description" = "همهٔ داده از %@ درون‌برد شد. با استفاده از دکمه‌های زیر می‌توانید بخش موردنیاز برنامه را برای مدیریت آن باز کنید.";
 "map_settings_legend" = "کلید";
 "quick_action_switch_profile_descr" = "با لمس دکمهٔ عملیاتی بین پروفایل‌های انتخاب‌شده جابه‌جا شوید.";
@@ -1574,7 +1574,7 @@
 "circle" = "دایره";
 "amenity" = "تسهیلات";
 "fav_points_not_exist" = "هیچ نقطهٔ موردعلاقه‌ای وجود ندارد";
-"service" = "خدماتی";
+"service" = "خدمات";
 "favorite_friends_category" = "دوستان";
 "units_nm" = "nmi";
 "shared_string_import" = "درون‌برد";
@@ -1676,3 +1676,40 @@
 "allow_3d_descr" = "این گزینه را فعال کنید تا بتوانید نقشه را در دید 2.5D مشاهده کنید";
 "allow_3d" = "نمایش 2.5D را مجاز کنید";
 "angular_units" = "واحدهای اندازه گیری زاویه ای";
+"routes_color_by_type" = "رنگ‌بندی مسیرها بر اساس…";
+"navigate_point_northing" = "به‌طرف شمال";
+"rendering_value_walkingRoutesOSMC_description" = "مسیرها را بر اساس رنگ محلی و جداگانه‌ای که به آن‌ها داده شده (اگر در اوپن‌استریت‌مپ موجود است) و نماد پلاک پیاده‌گردی رنگ‌آمیزی کن.";
+"shared_string_wifi_only" = "فقط با وای‌فای";
+"product_desc_ext_mapillary" = "تصاویر آنلاین سطح خیابان برای همه. مکان‌ها را کشف کنید، همکاری کنید و جهان را به‌تصویر درآورید.";
+"dialogs_and_notifications" = "کادرها و اعلان‌ها";
+"no_waypoints_found" = "هیچ راه‌نشانی پیدا نشد";
+"suggested_maps_descr" = "این نقشه‌ها برای افزونه لازم هستند.";
+"added_profiles_descr" = "پروفایل‌هایی که افزونه افزوده";
+"shared_string_feet" = "پا";
+"contour_lines_hillshades_slope" = "خطوط میزان، سایه‌روشن‌ها، شیب";
+"m" = "m";
+"wiki_menu_download_descr" = "برای مشاهدهٔ نقاط ویکی‌پدیا روی نقشه باید نقشهٔ دیگری را نیز دانلود کنید.";
+"download_map_dialog" = "کادر دانلود نقشه";
+"navigate_point_olc" = "کدِ مکانی باز (OLC)";
+"last_used" = "آخرین استفاده‌شده";
+"shared_string_turn_off" = "خاموش";
+"gpxup_identifiable" = "قابل‌شناسایی";
+"foot" = "ft";
+"welmode_download_maps" = "دانلود نقشه‌ها";
+"rendering_value_walkingRoutesOSMCNodes_description" = "مسیرها را بر اساس نوع شبکهٔ گره آن‌ها (بین‌المللی، منطقه‌ای، محلی) رنگ‌آمیزی کن.";
+"some_articles_may_not_available_in_lang" = "ممکن است برخی مقاله‌های ویکی‌پدیا به زبان شما در دسترس نباشد.";
+"shared_string_navigation" = "ناوبری";
+"navigate_point_zone" = "ناحیه";
+"explore_wikipedia_offline" = "ویکی‌پدیا را آفلاین کاوش کنید.";
+"context_menu_item_edit_waypoint" = "ویرایش راه‌نشان GPX";
+"srtm_download_list_help_message" = "‏OsmAnd دادهٔ خطوط میزان را به متر و پا ارائه می‌دهد. برای تغییر قالب بایستی پرونده را دوباره دانلود کنید.";
+"shared_string_all_languages" = "همهٔ زبان‌ها";
+"product_title_mapillary" = "مپیلاری";
+"travel_routes" = "مسیرهای مسافرت";
+"walking_route_osmc_description" = "مسیرها را بر اساس رنگ محلی و جداگانه‌ای که به آن‌ها داده شده (اگر در اوپن‌استریت‌مپ موجود است) و نوع (بین‌المللی، منطقه‌ای، محلی) رنگ‌آمیزی کن.";
+"suggested_maps" = "نقشه‌های پیشنهادی";
+"added_profiles" = "پروفایل‌های افزوده";
+"rendering_value_walkingRoutesScopeOSMC_description" = "بر اساس وابستگی شبکه رنگ‌آمیزی کن.";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"navigate_point_easting" = "به‌طرف شرق";
+"shared_strings_all_regions" = "همهٔ مناطق";

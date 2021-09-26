@@ -61,6 +61,8 @@
 
 - (void) initLayer
 {
+    [super initLayer];
+    
     _routingHelper = [OARoutingHelper sharedInstance];
     _transportHelper = [OATransportRoutingHelper sharedInstance];
     
@@ -93,6 +95,8 @@
 
 - (void) resetLayer
 {
+    [super resetLayer];
+    
     [self.mapView removeKeyedSymbolsProvider:_collection];
     [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
@@ -226,7 +230,8 @@
             
             NSDictionary<NSString *, NSNumber *> *result = [self.mapViewController getLineRenderingAttributes:@"route"];
             NSNumber *val = [result valueForKey:@"color"];
-            OsmAnd::ColorARGB lineColor = (val && val.intValue != -1) ? OsmAnd::ColorARGB(val.intValue) : isNight ?
+            BOOL hasStyleColor = val && val.intValue != -1;
+            OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(val.intValue) : isNight ?
             OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d) : OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1);
             
             OsmAnd::VectorLineBuilder builder;
@@ -234,17 +239,23 @@
             .setIsHidden(points.size() == 0)
             .setApproximationEnabled(false)
             .setLineId(1)
-            .setLineWidth(30)
+            .setLineWidth(50)
             .setPoints(points);
             
+            UIColor *color = UIColorFromARGB(lineColor.argb);
             builder.setFillColor(lineColor)
-            .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
-            .setPathIconStep(40);
+            .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color fileName:@"map_direction_arrow"])
+            .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
+            .setShouldShowArrows(true)
+            .setScreenScale(UIScreen.mainScreen.scale);
             
             builder.buildAndAddToCollection(_collection);
             
             if (isFirstLine)
+            {
                 [self.mapView addKeyedSymbolsProvider:_collection];
+                [self setVectorLineProvider:_collection];
+            }
         }
         else
         {

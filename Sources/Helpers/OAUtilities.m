@@ -17,6 +17,9 @@
 #import "OAOsmAndFormatter.h"
 #import <UIKit/UIDevice.h>
 
+#import <mach/mach.h>
+#import <mach/mach_host.h>
+
 @implementation UIBezierPath (util)
 
 /**
@@ -266,6 +269,13 @@
 - (NSString *) sanitizeFileName
 {
     return [[[self componentsSeparatedByCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]] componentsJoinedByString:@"_"];
+}
+
+- (NSString *) xmlStringToString
+{
+    NSDictionary *options = @{NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute : @(NSUTF8StringEncoding)};
+    NSAttributedString *res = [[NSAttributedString alloc] initWithData:[self dataUsingEncoding:NSUTF8StringEncoding] options:options documentAttributes:nil error:nil];
+    return res.string;
 }
 
 @end
@@ -1727,6 +1737,25 @@ static const double d180PI = 180.0 / M_PI_2;
         newName = [[NSString stringWithFormat:@"%@ %ld", [nameWithoutExt substringToIndex:i], newNumberValue] stringByAppendingPathExtension:ext];
     
     return newName;
+}
+
++ (natural_t) get_free_memory
+{
+    mach_port_t host_port;
+    mach_msg_type_number_t host_size;
+    vm_size_t pagesize;
+    host_port = mach_host_self();
+    host_size = sizeof(vm_statistics_data_t) / sizeof(integer_t);
+    host_page_size(host_port, &pagesize);
+    vm_statistics_data_t vm_stat;
+    if (host_statistics(host_port, HOST_VM_INFO, (host_info_t)&vm_stat, &host_size) != KERN_SUCCESS)
+    {
+        NSLog(@"Failed to fetch vm statistics");
+        return 0;
+    }
+    /* Stats in bytes */
+    natural_t mem_free = vm_stat.free_count * pagesize;
+    return mem_free;
 }
 
 @end

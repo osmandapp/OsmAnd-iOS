@@ -196,8 +196,8 @@
         f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
         
         CGRect buttonsFrame = _toolBarView.frame;
-        buttonsFrame.origin.y = f.size.height - 60. - bottomMargin;
-        buttonsFrame.size.height = 60. + bottomMargin;
+        buttonsFrame.origin.y = f.size.height - [self getToolbarHeight] - bottomMargin;
+        buttonsFrame.size.height = [self getToolbarHeight] + bottomMargin;
         _toolBarView.frame = buttonsFrame;
         
         CGRect contentFrame = _contentContainer.frame;
@@ -207,7 +207,7 @@
     else
     {
         CGRect buttonsFrame = _toolBarView.frame;
-        buttonsFrame.size.height = 60. + bottomMargin;
+        buttonsFrame.size.height = [self getToolbarHeight] + bottomMargin;
         f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
@@ -221,6 +221,11 @@
         _contentContainer.frame = contentFrame;
     }
     _scrollableView.frame = f;
+}
+
+- (CGFloat) getToolbarHeight
+{
+    return 60.; // override
 }
 
 - (CGFloat) getLandscapeYOffset

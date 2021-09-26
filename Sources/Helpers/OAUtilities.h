@@ -55,6 +55,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (BOOL) isValidEmail;
 - (NSString *) escapeUrl;
 - (NSString *) sanitizeFileName;
+- (NSString *) xmlStringToString;
 
 @end
 
@@ -215,5 +216,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize;
 
 + (NSString *) createNewFileName:(NSString *)oldName;
+
++ (natural_t) get_free_memory;
 
 @end

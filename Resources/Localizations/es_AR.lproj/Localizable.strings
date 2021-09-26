@@ -488,7 +488,7 @@
 "postcode" = "Código postal";
 "show_something_on_map" = "Mostrar«%@» en el mapa";
 "search_POI_level_btn" = "Aumentar radio de búsqueda";
-"shared_string_street" = "Calle residencial";
+"shared_string_street" = "Calle";
 "shared_string_building" = "Edificio";
 "shared_string_street_intersection" = "Intersección de calles";
 "shared_string_address" = "Dirección";
@@ -619,7 +619,7 @@
 "relief_smoothness_factor_descr" = "Terreno preferido: llano o empinado.";
 "choose_auto_follow_route" = "Centrado automático del mapa";
 "choose_auto_follow_route_descr" = "Tiempo hasta que la vista del mapa vuelve a sincronizarse con la ubicación actual";
-"auto_zoom_map" = "Zoom automático del mapa";
+"auto_zoom_map" = "Zum automático del mapa";
 "auto_zoom_map_descr" = "Zoom automático del mapa, según la velocidad (mientras el mapa se sincroniza con la ubicación actual)";
 "guidance_preferences_descr" = "Preferencias de navegación";
 "routing_preferences_descr" = "Preferencias de navegación";
@@ -642,7 +642,7 @@
 "general_settings_2" = "Ajustes generales";
 "general_settings_descr" = "Aspecto de la aplicación, unidades, región";
 "routing_settings_descr" = "Configurar la navegación";
-"auto_zoom_none" = "Sin zoom automático";
+"auto_zoom_none" = "Sin zum automático";
 "auto_zoom_close" = "Para corto alcance";
 "auto_zoom_far" = "Para mediano alcance";
 "auto_zoom_farthest" = "Para largo alcance";
@@ -1256,7 +1256,6 @@
 "no_active_route" = "Sin ruta activa";
 "selected_roads" = "Caminos marcados";
 "shared_string_clear_all" = "Limpiar todo";
-"units_min_short" = "m";
 "units_sec_short" = "s";
 "select_route_intermediate" = "Marcar un punto intermedio";
 "select_home" = "Marcar punto de inicio";
@@ -1371,7 +1370,7 @@
 "routing_attr_piste_type_sled_description" = "Pendientes para uso de trineos.";
 "rendering_value_red_name" = "Rojo";
 "routing_attr_relief_smoothness_factor_plains_name" = "Poco empinado";
-"rendering_attr_buildings15zoom_name" = "Edificios en zoom 15";
+"rendering_attr_buildings15zoom_name" = "Edificios en zum 15";
 "routing_attr_driving_style_safety_name" = "Preferir caminos secundarios";
 "rendering_value_dark_brown_name" = "Marrón oscuro";
 "rendering_value_lightgreen_name" = "Verde claro";
@@ -1471,7 +1470,7 @@
 "rendering_attr_appMode_description" = "Optimizar mapa para";
 "rendering_attr_smoothness_very_bad_name" = "Muy malo";
 "rendering_attr_transportStops_name" = "Paradas de transporte";
-"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5 – 9).";
+"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5– 9).";
 "rendering_attr_surface_asphalt_name" = "Asfalto";
 "routeInfo_smoothness_name" = "Suavidad";
 "rendering_attr_pisteRoutes_name" = "Pistas de esquí";
@@ -1578,7 +1577,7 @@
 "routing_attr_max_num_changes_description" = "Especifica el número máximo de transbordos";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Redes de nodos";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Plano (llanura)";
-"rendering_attr_contourLines_description" = "Mostrar desde el nivel de zoom (requiere datos de curvas de nivel):";
+"rendering_attr_contourLines_description" = "Mostrar desde el nivel de zum (requiere datos de curvas de nivel):";
 "rendering_attr_hidePOILabels_name" = "Etiquetas de PDI";
 "routing_attr_piste_type_downhill_description" = "Pistas de esquí alpino o de descenso y acceso a remontes mecánicos.";
 "routing_attr_freeride_policy_name" = "Fuera de pista";
@@ -1821,7 +1820,7 @@
 "configure_map_descr" = "Apariencia del mapa";
 "export_profile_descr" = "Puedes exportar todos los ajustes del perfil, copiar todos los ajustes de otro perfil o restablecer todos los ajustes del perfil al estado predefinido.";
 "profile_sett_descr" = "Afecta al perfil de la aplicación elegido";
-"app_profiles" = "Perfiles de la aplicación";
+"app_profiles" = "Perfiles de aplicación";
 "selected_profile" = "Perfil marcado";
 "osmand_profile" = "Perfil de OsmAnd";
 "ui_customization_descr" = "Elementos del menú lateral y menú contextual";
@@ -2160,7 +2159,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Colorea las rutas según su tipo de red de nodos (internacional, regional, local).";
 "walking_route_osmc_description" = "Colorea las rutas según su color local individual (si está presente en OpenStreetMap) y el tipo (internacional, regional, local).";
 "travel_routes" = "Rutas turísticas";
-"m" = "m";
 "foot" = "ft";
 "shared_string_feet" = "pies";
 "srtm_download_list_help_message" = "OsmAnd proporciona datos de curvas de nivel en metros y pies. Deberás volver a descargar el archivo para cambiar el formato.";
@@ -2171,3 +2169,9 @@
 "shared_string_navigation" = "Navegación";
 "dialogs_and_notifications_descr" = "Controla las ventanas emergentes, diálogos y notificaciones";
 "dialogs_and_notifications" = "Diálogos y notificaciones";
+"explore_wikipedia_offline" = "Explorar Wikipedia sin conexión.";
+"navigate_point_zone" = "Zona";
+"contour_lines_hillshades_slope" = "Curvas de nivel, sombreados, pendientes";
+"navigate_point_easting" = "Al este";
+"navigate_point_olc" = "Código de Ubicación Abierto (OLC)";
+"navigate_point_northing" = "Al norte";

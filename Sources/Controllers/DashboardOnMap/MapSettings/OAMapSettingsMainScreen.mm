@@ -475,7 +475,7 @@ static BOOL _isRoutesGroupOpen = NO;
     if (cells.count > 0 && [self isCollapsableGroup:cells[0]])
     {
         OATableCollapsableGroup *group = cells[0][@"group"];
-        return !_isRoutesGroupOpen || indexPath.row == group.groupItems.count ? cells[0] : group.groupItems[indexPath.row];
+        return !_isRoutesGroupOpen || indexPath.row == 0 ? cells[0] : group.groupItems[indexPath.row - 1];
     }
 
     return cells[indexPath.row];

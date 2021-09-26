@@ -37,7 +37,7 @@
 "transport_routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Stop";
+"transport_stop" = "Zastanišćo";
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
@@ -426,7 +426,7 @@
 "poi_hide" = "Schować";
 // My Places
 "favorites" = "Fawority";
-"tracks" = "Čary";
+"tracks" = "Puće";
 // GPX
 "gpx_point" = "Dypk";
 "gpx_waypoint" = "Čarowy dypk";
@@ -653,7 +653,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_note" = "OSM-notica";
 "osm_created" = "Created";
-"osm_deleted" = "Wotstronjene";
+"osm_deleted" = "Zajimawostka je so wotstroniła";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -673,7 +673,7 @@
 "osm_website" = "Webstrona";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "POI wotstronić";
+"osm_poi_delete_title" = "POI wušmórnyć";
 "osm_target_modified" = "Změnjene OSM POI-dypki";
 "osm_target_deleted" = "Wotstronjene OSM POI-dypki";
 "osm_target_created" = "OSM POI-dypk wutworjeny";
@@ -1422,7 +1422,7 @@
 "avoid_routes_and_road" = "Wěste čary a pućne typy wobeńć";
 "avoid_road" = "Dróhu wobeńć";
 "num_stops" = "zastanišća";
-"m_style_pulic_transport" = "Zjawny transport";
+"m_style_pulic_transport" = "Zjawny wobchad";
 "arrival_announcement_frequency" = "Hdy chceće připowědź přijězda?";
 "profile_alert_delete_title" = "Profil wotstronić";
 "profile_type_base_string" = "zakładny profil";
@@ -1452,3 +1452,19 @@
 "coordinates" = "Koordinaty";
 "favorite_friends_category" = "Přećeljo";
 "default_color" = "Standardna barba";
+"shared_string_turn_off" = "Hasnyć";
+"foot" = "ft";
+"suggested_maps" = "Namjetowane karty";
+"added_profiles_descr" = "Plugin doda OsmAndej nowe profile";
+"default" = "Standard";
+"dialogs_and_notifications" = "Dialogy a zdźělenki";
+"context_menu_item_edit_waypoint" = "GPX-dypk wobdźěłać";
+"shared_string_navigation" = "Nawigacija";
+"gpxup_private" = "Priwatne";
+"m" = "m";
+"added_profiles" = "Přidate profile";
+"gpxup_public" = "Zjawne";
+"gpxup_identifiable" = "Spóznajomne";
+"welmode_download_maps" = "Karty sćahnyć";
+"rendering_value_pink_name" = "pink";
+"product_title_mapillary" = "Mapillary";

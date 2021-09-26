@@ -103,7 +103,7 @@
 "map_settings_type" = "Tipo de mapa";
 "map_settings_mode" = "Modo Dia/Noite";
 "map_settings_day" = "Dia";
-"map_settings_night" = "Noite";
+"map_settings_night" = "À noite";
 "map_settings_style" = "Estilo do mapa";
 "map_settings_overunder" = "Sobreposto / Subjacente";
 "map_settings_over" = "Sobreposto";
@@ -245,7 +245,7 @@
 // Context menu
 "ctx_mnu_edit_fav" = "Editar favorito";
 "ctx_mnu_add_fav" = "Adicionar favorito";
-"ctx_mnu_share" = "Compartilhe";
+"ctx_mnu_share" = "Compartilhar";
 "ctx_mnu_direction" = "Marcador de mapa";
 // Location Services
 "loc_access_denied" = "Acesso negado";
@@ -692,7 +692,7 @@
 "show_warnings_title" = "Mostrar alertas…";
 "shared_string_previous" = "Anterior";
 "transport_nearby_routes" = "Cerca de";
-"transport_stop" = "Parar";
+"transport_stop" = "Parada";
 "shared_string_close" = "Fechar";
 "save_global_track_interval_descr" = "Escolha o intervalo de registro para a gravação de trilha geral (habilitado por meio do widget de registro GPX no mapa).";
 "show_pedestrian_warnings" = "Faixas de pedestre";
@@ -815,7 +815,7 @@
 "help_search" = "Pesquisa de mapa";
 "help_trip_planning" = "Planejando uma viagem";
 "help_legend" = "Legenda do mapa";
-"help_other_header" = "Outro";
+"help_other_header" = "Outros";
 "help_install_and_troubleshoot" = "Instalação e solução de problemas";
 "help_tech_articles" = "Artigos técnicos";
 "help_versions" = "Versões";
@@ -900,14 +900,14 @@
 "already_has_inapp" = "Você já se inscreveu em %@.";
 "inapp_not_found" = "O %@ não é encontrado no OsmAnd. Provavelmente foi cancelado.";
 "lon" = "Lon";
-"osmand_live_update_now" = "Atualizar";
+"osmand_live_update_now" = "Atualizar agora";
 "osm_live_banner_descr" = "Inscreva-se no OsmAnd Live e ganhe ilimitado <b>1 hora</b>2 atualizações de mapas e <b>3 recursos</b>4 incluído a partir de %@";
 // GPX colors
 "red" = "Vermelho";
 "orange" = "Laranja";
 "lightblue" = "Azul claro";
 "blue" = "Azul";
-"pink" = "rosa";
+"pink" = "Rosa";
 "translucent_orange" = "Laranja translúcido";
 "translucent_lightblue" = "Azul claro translúcido";
 "translucent_blue" = "Azul translúcido";
@@ -1154,8 +1154,8 @@
 "add_poi" = "Adicionar POI";
 "change_map_style" = "Mudar estilo de mapa";
 "change_map_source" = "Mudar fonte de mapa";
-"change_map_overlay" = "Mudar sobreposição de mapa";
-"change_map_underlay" = "Mudar camada inferior de mapa";
+"change_map_overlay" = "Mudar mapa da camada superior";
+"change_map_underlay" = "Mudar mapa da camada inferior";
 "replace_destination" = "Substituir destino";
 "add_destination" = "Adicionar destino";
 "add_first_inermediate" = "Adicione o primeiro intermediário";
@@ -1255,7 +1255,6 @@
 "shared_string_clear_all" = "Limpar tudo";
 "no_active_route" = "Nenhuma rota ativa";
 "selected_roads" = "Estradas selecionadas";
-"units_min_short" = "m";
 "units_sec_short" = "s";
 "select_route_intermediate" = "Selecionar um ponto intermediário";
 "select_home" = "Selecionar ponto inicial";
@@ -1736,7 +1735,7 @@
 "base_profile_descr_bicycle" = "Mountain bike, ciclomotor, cavalo";
 "base_profile_descr_car" = "Carro, caminhão, motocicleta";
 "will_be_show_while_moving" = "Será mostrado enquanto se move";
-"position_icon_while_moving" = "Posicione oícone enquanto se move";
+"position_icon_while_moving" = "Ícone de posição enquanto se move";
 "position_icon_at_rest" = "Ícone de posição em repouso";
 "select_icon" = "Selecionar oícone";
 "select_color" = "Selecione a cor";
@@ -1974,7 +1973,7 @@
 "change_application_profile" = "Alterar perfil do aplicativo";
 "quick_action_showhide_mapillary_descr" = "Uma alternância para mostrar ou ocultar a camada Mapillary no mapa.";
 "nearest_point" = "Ponto próximo";
-"start_of_track" = "Início da pista";
+"start_of_track" = "Início da trilha";
 "point_to_navigate" = "Navegar para";
 "reverse_track_dir" = "Inverter direção da trilha";
 "attach_to_the_roads" = "Anexaràs estradas";
@@ -2123,13 +2122,13 @@
 "no_waypoints_found" = "Não há pontos de rota";
 "replace_waypoint_confirmation" = "Quer mesmo substituir o ponto %@?";
 "context_menu_item_edit_waypoint" = "Editar ponto GPX";
-"default" = "Padrão";
+"default" = "Predefinido";
 "select_profile" = "Selecionar perfil";
 "threshold_distance" = "Limite de distância";
 "route_between_points_warning_desc" = "Em seguida, ajuste seu caminho para a estrada permitida mais próxima com um de seus perfis de navegação para usar esta opção.";
 "carplay_profile_descr" = "Perfil que será utilizado ao conectar-se ao CarPlay.";
 "carplay_profile" = "Perfil no CarPlay";
-"last_used" = "Usado por último";
+"last_used" = "Usado porúltimo";
 "ios_release_4_0" = "• Nova! tela \"Adicionar favorito\" com opções para selecionar o ícone, cor e forma personalizados\n• Adicionado novo \"widget de Coordenadas\" com coordenadas da localização atual\n• Capacidade de importar plug-ins personalizados definidos pelo utilizador\n• Funcionalidade de importação / exportação melhorada significativamente\n• \"Distância por toque\" movida da régua de raio para uma opção separada\n• Corrigido o bloqueio da aplicação CarPlay quando a tela do iPhone é desligado\n• O ecrã de plug-ins foi movido de \"Mapas e recursos\" para o \"Menu principal\"\n• Adicionada localização finlandesa\n• Correção da interface no modo paisagem na tela \"Planear uma rota\"\n• Adicionado suporte para roteamento personalizado e ficheiros de renderização\n• Corrigido o desempenho da linha de direção dos marcadores\n• Corrigido problema com a importação de ficheiros GPX com extensões em maiúsculas\n• Corrigido problema com o menu \"Seguir trilho\"\n• Corrigida importação de ficheiros OBF\n";
 "map_widget_parking" = "Vaga de estacionamento";
 "search_more" = "Pesquisar mais…";
@@ -2159,7 +2158,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Rotas de cores de acordo com seu tipo de rede de nó (internacional, regional, local).";
 "walking_route_osmc_description" = "Rotas de cores de acordo com sua cor local individual (se presente no OpenStreetMap) e tipo (internacional, regional, local).";
 "travel_routes" = "Rotas de viagem";
-"m" = "m";
 "foot" = "ft";
 "shared_string_feet" = "pés";
 "srtm_download_list_help_message" = "OsmAnd fornece dados de linhas de contorno em metros e pés. Você precisará baixar novamente o arquivo para alterar o formato.";
@@ -2170,3 +2168,9 @@
 "shared_string_navigation" = "Navegação";
 "dialogs_and_notifications_descr" = "Popups de controle, caixas de diálogo e notificações.";
 "dialogs_and_notifications" = "Diálogos e notificações";
+"contour_lines_hillshades_slope" = "Curvas de nível, sombras de relevo, inclinação";
+"navigate_point_olc" = "Open Location Code";
+"navigate_point_northing" = "Norte (N)";
+"navigate_point_zone" = "Zona";
+"navigate_point_easting" = "Leste (E)";
+"explore_wikipedia_offline" = "Explore a Wikipedia offline.";

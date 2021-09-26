@@ -6,11 +6,11 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OASymbolMapLayer.h"
+#import "OABaseVectorLinesLayer.h"
 
 @class OATrackChartPoints;
 
-@interface OARouteLayer : OASymbolMapLayer
+@interface OARouteLayer : OABaseVectorLinesLayer
 
 - (void) refreshRoute;
 

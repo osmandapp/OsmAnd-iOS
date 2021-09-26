@@ -257,8 +257,9 @@
         }
         else if ([key isEqualToString:@"route_betw_points"])
         {
-            [self hide:YES];
-            [self.delegate snapToRoadOptionSelected];
+            [self hide:YES completion:^{
+                [self.delegate snapToRoadOptionSelected];
+            }];
             return;
         }
         else if ([key isEqualToString:@"save_changes"])
@@ -267,13 +268,15 @@
         }
         else if ([key isEqualToString:@"save_new_track"])
         {
-            [self hide:YES];
-            [self.delegate saveAsNewTrackSelected];
+            [self hide:YES completion:^{
+                [self.delegate saveAsNewTrackSelected];
+            }];
         }
         else if ([key isEqualToString:@"add_to_track"])
         {
-            [self hide:YES];
-            [self.delegate addToTrackSelected];
+            [self hide:YES completion:^{
+                [self.delegate addToTrackSelected];
+            }];
         }
         else if ([key isEqualToString:@"shared_string_navigation"])
         {

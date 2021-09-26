@@ -139,7 +139,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [[OAHistoryTableViewController alloc] initWithNibName:@"OAHistoryTableViewController" bundle:nil];
+    self = [super initWithNibName:@"OAHistoryTableViewController" bundle:nil];
     if (self)
     {
         self.view.frame = frame;

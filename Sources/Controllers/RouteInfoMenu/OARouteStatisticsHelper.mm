@@ -32,7 +32,6 @@
 #define STEP 4
 
 #define STEEPNESS_TAG @"steepness="
-#define ROUTE_INFO_PREFIX @"routeInfo_"
 
 static NSArray<NSNumber *> *_boundariesArray;
 static NSArray<NSString *> *_boundariesClass;

@@ -24,7 +24,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [[OAAddressTableViewController alloc] initWithNibName:@"OAAddressTableViewController" bundle:nil];
+    self = [super initWithNibName:@"OAAddressTableViewController" bundle:nil];
     if (self)
     {
         self.view.frame = frame;

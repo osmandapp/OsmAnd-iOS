@@ -38,6 +38,7 @@
 - (void) goFullScreen;
 - (void) goMinimized;
 - (void) hide:(BOOL)animated;
+- (void) hide:(BOOL)animated completion:(void (^ __nullable)(void))completion;
 
 - (void) setHeaderViewVisibility:(BOOL)hidden;
 

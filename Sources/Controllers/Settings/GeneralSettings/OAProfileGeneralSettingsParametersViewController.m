@@ -14,6 +14,9 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OATitleDescriptionCollapsableCell.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -413,6 +416,9 @@
         [_settings.rotateMap set:ROTATE_MAP_COMPASS mode:self.appMode];
     else
         [_settings.rotateMap set:ROTATE_MAP_NONE mode:self.appMode];
+    
+    [[OAMapViewTrackingUtilities instance] updateSettings];
+    [OARootViewController.instance.mapPanel.mapViewController refreshMap];
 }
 
 - (void) selectDrivingRegion:(NSString *)name

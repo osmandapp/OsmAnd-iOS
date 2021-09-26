@@ -67,7 +67,7 @@
 "gpx_route_time" = "Время маршрута";
 "gpx_uphldownhl" = "Подъемы/Спуски";
 "gpx_distance" = "Расстояние";
-"gpx_average_speed" = "Средняя скорость";
+"gpx_average_speed" = "Сред. скорость";
 "gpx_start" = "Старт";
 "gpx_finish" = "Финиш";
 "gpx_avg_elev" = "Средняя высота";
@@ -76,13 +76,13 @@
 "gpx_uphills_total" = "Всего подъем";
 // Map settings
 "rendering_value_browse_map_name" = "Обзор карты";
-"m_style_car" = "Вождение";
+"m_style_car" = "Автомобиль";
 "m_style_walk" = "Пешеход";
-"m_style_bicycle" = "Езда на велосипеде";
+"m_style_bicycle" = "Велосипед";
 "map_settings_map" = "Карта";
 "map_settings_fav" = "Избранное";
 "map_settings_tracks" = "Треки";
-"map_settings_show" = "Показывать на карте";
+"map_settings_show" = "Показать на карте";
 "map_settings_type" = "Тип карты";
 "map_mode" = "Режим карты";
 "map_settings_day" = "День";
@@ -111,7 +111,7 @@
 "sett_km" = "Километры";
 "sett_ml" = "Мили";
 "sett_zoom" = "Кнопки масштаба";
-"sett_show" = "Просмотр";
+"sett_show" = "Показать";
 "sett_notshow" = "Не показывать";
 "sett_loc_fmt" = "Формат координат";
 "sett_deg" = "Градусы";
@@ -261,8 +261,8 @@
 "track_continue_rec_q" = "Продолжить запись?";
 "rec_interval" = "Интервал записи";
 "rec_interval_minimum" = "Минимум";
-"units_minutes_short" = "мин.";
-"units_seconds_short" = "сек.";
+"units_minutes_short" = "мин";
+"units_seconds_short" = "с";
 "track_start_rec" = "Начать запись трека";
 "track_rec_addon_q" = "Активируйте дополнение \"Запись треков\" для записи ваших путешествий";
 "track_interval_remember" = "Запомнить мой выбор";
@@ -284,9 +284,9 @@
 "cannot_add_marker" = "Нельзя добавить парковку";
 "cannot_add_marker_desc" = "Уберите одно из направлений и повторите попытку";
 "cannot_add_destination" = "Нельзя добавить направление";
-"units_hour" = "час";
-"units_min" = "мин.";
-"units_sec" = "сек.";
+"units_hour" = "ч";
+"units_min" = "мин";
+"units_sec" = "с";
 "cannot_access_calendar" = "Ошибка доступа к календарю";
 "reminder_not_set_text" = "Нельзя установить напоминание, т.к. не разрешён доступ к календарю";
 "shared_string_buy" = "Купить";
@@ -391,7 +391,7 @@
 "gpx_speed" = "Скорость";
 "shared_string_dismiss" = "Отменить";
 "shared_string_modify" = "Изменить";
-"shared_string_later" = "Позже";
+"shared_string_later" = "Продолжить";
 "offline_maps" = "Офлайн-карты";
 "download_map" = "Скачать карту";
 "gpx_route" = "Маршрут";
@@ -413,7 +413,7 @@
 "gpx_group_select" = "Выбор групп";
 "show_all" = "Показать все";
 "get_directions" = "Маршрут";
-"parking" = "Парковка";
+"parking" = "Парковки";
 "est_travel_time" = "Время в пути";
 "pedestrian" = "Пешеход";
 "sorting" = "Сортировка";
@@ -433,7 +433,7 @@
 "go_to_downloads" = "Перейти в загрузки";
 "turn_on_plugin" = "Включите плагин";
 "all_world_popup_desc" = "Загрузите обзорную карту мира для отображения названий, границ стран и другой информации";
-"restore" = "Восстановить";
+"restore" = "Восстановление";
 "restore_all_purchases" = "Восстановить покупки";
 "no_statistics" = "Нет статистики";
 "no_internet_avail" = "Отсутствует интернет-соединение";
@@ -533,7 +533,7 @@
 "shared_string_from" = "от";
 "get_started" = "Начать";
 "location_not_found" = "Не удалось определить местоположение";
-"no_inet_connection_desc_map" = "Требуется загрузить карты";
+"no_inet_connection_desc_map" = "Требуется загрузить карты.";
 "try_again" = "Попробуйте снова";
 "search_location" = "Определение местоположения…";
 "poi_filter_closest_poi" = "Ближайшие POI";
@@ -566,7 +566,7 @@
 "map_markers_other" = "Другие маркеры";
 "si_mi_meters" = "Мили/метры";
 "first_usage_greeting" = "Прокладывайте маршруты и открывайте новые для себя места без подключения к Интернету";
-"first_usage_wizard_desc" = "OsmAnd определит ваше местоположение и предложит загрузить карты для этой области.";
+"first_usage_wizard_desc" = "OsmAndопределит ваше местоположение и предложит загрузить карты для этой области.";
 "city_type_neighbourhood" = "Пригород";
 "coords_format_descr" = "Формат для географических координат.";
 "no_inet_connection" = "Соединение с интернетом отсутствует";
@@ -593,7 +593,7 @@
 "speak_poi" = "Ближайшие POI";
 "speak_pedestrian" = "Пешеходные переходы";
 "shared_string_never" = "Никогда";
-"general_settings_2" = "Основные настройки";
+"general_settings_2" = "Общие настройки";
 "speed_limit_exceed" = "Допустимое превышение скорости";
 "speed_limit_exceed_message" = "Выберите допустимое значение превышения скорости выше которого вы получите голосовое предупреждение.";
 "wake_on_voice" = "Автовключение экрана перед поворотом";
@@ -631,10 +631,10 @@
 "subsequent_dest_description" = "Перемещает пункт назначения и создает промежуточную остановку";
 "first_intermediate_dest_description" = "Добавляет первую остановку на маршруте";
 "last_intermediate_dest_description" = "Добавляет последнюю остановку на маршруте";
-"in_app_purchase_desc" = "Разовый платеж";
+"in_app_purchase_desc" = "Разовый платёж";
 "transport_routes" = "Маршруты";
 "transport_nearby_routes" = "В пределах";
-"transport_stop" = "Стоп";
+"transport_stop" = "Остановка";
 "cancel_navigation" = "Остановить навигацию";
 "switch_start_finish" = "Поменять местами пункты отправления и назначения";
 "shared_string_options" = "Опции";
@@ -677,7 +677,7 @@
 "osmand_live_daily" = "Ежедневно";
 "osmand_live_weekly" = "Еженедельно";
 "osmand_live_donations" = "Пожертвования";
-"osmand_live_update_now" = "Обновить сейчас";
+"osmand_live_update_now" = "Обновить";
 "poi_type" = "Тип POI";
 "osm_editing_login_and_pass" = "Логин и пароль";
 "osm_working_days" = "Рабочие дни";
@@ -760,7 +760,7 @@
 "help_features" = "Возможности";
 "help_map_viewing" = "Обзор карты";
 "help_search" = "Поиск по карте";
-"help_trip_planning" = "Планирование поездки";
+"help_trip_planning" = "Планирование маршрута при навигации";
 "help_legend" = "Легенда";
 "help_other_header" = "Другие";
 "help_install_and_troubleshoot" = "Установка и решение проблем";
@@ -923,8 +923,8 @@
 "app_mode_hiking" = "Пеший туризм";
 "avoid_in_routing_title" = "Избегать…";
 "prefer_in_routing_title" = "Предпочитать…";
-"prefer_in_routing_descr" = "Предпочитать автомагистрали";
-"relief_smoothness_factor_descr" = "Предпочтительный рельеф: равнинный или холмистый";
+"prefer_in_routing_descr" = "Предпочитать автомагистрали.";
+"relief_smoothness_factor_descr" = "Выберите предпочтительный рельеф.";
 "routing_settings_descr" = "Настроить навигацию";
 "arrival_distance_factor_early" = "Раннее";
 "arrival_distance_factor_normally" = "По умолчанию";
@@ -934,7 +934,7 @@
 "speak_title" = "Объявлять…";
 "keep_informing" = "Повторение подсказок";
 "arrival_distance" = "Объявление о прибытии";
-"default_speed_system_descr" = "Выберите единицы измерения скорости";
+"default_speed_system_descr" = "Выберите единицы измерения скорости.";
 "map_widget_intermediate_distance" = "Промежуточный пункт";
 "always_center_position_on_map" = "Показывать положение в центре экрана";
 "map_widget_next_turn_small" = "Следующий поворот (небольшой)";
@@ -948,7 +948,7 @@
 "nearby_search" = "Поиск рядом";
 "map_widget_ruler_control" = "Радиус-линейка";
 "osm_live_routing" = "Навигация OsmAnd Live";
-"osmand_live_last_live_update" = "Последнее обновление: %@";
+"osmand_live_last_live_update" = "Дата обновления: %@";
 "osmand_live_not_updated" = "Ещё не обновлено";
 "osmand_live_hourly" = "Ежечасно";
 "osmand_live_upd_frequency" = "Частота обновления";
@@ -961,7 +961,7 @@
 "osm_name" = "Имя пользователя OpenStreetMap";
 "osm_pass" = "Пароль OpenStreetMap";
 "osm_confirm_delete" = "Удалить POI?";
-"create_poi_short" = "Добавить POI";
+"create_poi_short" = "Добавление POI";
 "amenity" = "Удобства";
 "osm_tag" = "Тег";
 "osm_edits_edits_label" = "Правки";
@@ -984,13 +984,13 @@
 "map_underlays" = "Подложки";
 "offline_vector_maps" = "Локальные векторные карты";
 "add_map_style" = "Добавить стиль карты";
-"map_sources" = "Источники карты";
+"map_sources" = "Источники карт";
 "map_styles" = "Стили карты";
 "add_action" = "Добавить действие";
 "toggle_poi" = "Показать/скрыть POI";
-"add_parking_place" = "Место парковки";
-"add_poi" = "POI";
-"change_map_style" = "Изменить стиль карты";
+"add_parking_place" = "Добавить место парковки";
+"add_poi" = "Добавить POI";
+"change_map_style" = "Сменить стиль карты";
 "change_map_source" = "Сменить источник карты";
 "change_map_underlay" = "Сменить подложку карты";
 "add_destination" = "Добавить пункт назначения";
@@ -1054,7 +1054,7 @@
 "auto_zoom_farthest" = "К дальнему плану";
 "keep_informing_never" = "При нажатии на стрелку (вручную)";
 "map_widget_next_next_turn" = "Второй след. поворот";
-"unknown_location" = "Местоположение еще не определено";
+"unknown_location" = "Местоположение ещё не определено.";
 "logging_interval_navigation_descr" = "Выберите интервал регистрации местоположения для записи трека во время навигации";
 "logging_min_distance" = "Минимальное смещение";
 "logging_min_distance_descr" = "Фильтр: минимальное расстояние, необходимое для регистрации новой точки";
@@ -1066,7 +1066,7 @@
 "auto_split_gap_descr" = "Начинает новый сегмент после 6-минутного перерыва, новый трек после 2-часового или новый файл после долгого перерыва";
 "directions_more_options" = "Маршрут от этой точки";
 "product_desc_wikivoyage" = "Бесплатный путеводитель по всему миру, который может редактировать каждый.";
-"product_desc_ext_wikivoyage" = "Просматривайте путеводители Викигида по самым интересным местам на планете внутри OsmAnd без подключения к Интернету.";
+"product_desc_ext_wikivoyage" = "Гид по самым интересным местам планеты в OsmAnd без подключения к интернету.";
 "product_desc_sea_depth_contours" = "Горизонтали морских глубин и плавучие знаки";
 "modify_poi_short" = "Редактировать POI";
 "product_desc_africa_short" = "Карты Африканского региона";
@@ -1081,7 +1081,7 @@
 "res_import_success" = "%@ успешно импортирован";
 "res_import_unsupported" = "Неверный формат файла. Поддерживаются только routing.xml и *.render.xml файлы.";
 "routing_import_please_restart" = "Для переключения на новый routing.xml, пожалуйста, перезапустите приложение.";
-"add_map_marker" = "Маркер";
+"add_map_marker" = "Добавить маркер";
 "add_gpx_waypoint" = "Добавить путевую точку GPX";
 "toggle_fav" = "Показать/скрыть избранные";
 "toggle_voice" = "Голосовая навигация";
@@ -1146,7 +1146,7 @@
 "osm_alert_title" = "Подтвердить";
 "modify_poi" = "Редактировать информацию о POI";
 "osm_upload_failed_descr" = "Пожалуйста, проверьте ваши данные для входа и подключение к Интернету и повторите попытку.";
-"osm_editing_lost_changes_descr" = "Все несохранённые изменения будут потеряны. Продолжить?";
+"osm_editing_lost_changes_descr" = "Все несохранённые изменения будут потеряны. Продолжить\?";
 "osm_upload_no_internet" = "Пожалуйста, проверьте подключение к Интернету и повторите попытку.";
 "osm_delete_confirmation_descr" = "Вы уверены, что хотите удалить этот POI?";
 "osm_note_created" = "Заметка OSM создана";
@@ -1251,13 +1251,13 @@
 "left_side_navigation" = "Левостороннее движение";
 "use_displayed_track_for_navigation" = "Вы хотите использовать показанный путь для навигации?";
 "calculate_osmand_route_without_internet" = "Рассчитать сегмент маршрута OsmAnd без Интернета";
-"impassable_road_desc" = "Укажите дороги, которых следует избегать при навигации";
+"impassable_road_desc" = "Укажите дороги, которых следует избегать при навигации.";
 "interrupt_music_descr" = "Полностью приостанавливать любую музыку во время голосовых подсказок (а не просто снизить ее громкость)";
-"fast_route_mode_descr" = "Расчет скоростного маршрута вместо кратчайшего";
+"fast_route_mode_descr" = "Расчёт скоростного маршрута вместо кратчайшего.";
 "auto_zoom_map_descr" = "Автоматическое масштабирование карты в соответствии с вашей скоростью (пока карта синхронизирована с текущим положением)";
 "snap_to_road_descr" = "Привязка к дорогам во время навигации";
-"keep_informing_descr" = "Повторять навигационные инструкции с регулярными интервалами";
-"wake_on_voice_descr" = "Включать экран перед поворотом (если выключен)";
+"keep_informing_descr" = "Повторять навигационные инструкции с заданным интервалом.";
+"wake_on_voice_descr" = "Включать экран перед поворотом (если выключен).";
 "voice_provider_descr" = "Выберите язык голосовых подсказок для навигации";
 "choose_audio_stream_descr" = "Выберите канал для голосовых подсказок";
 "recording_preferences_descr" = "Настройки записи трека";
@@ -1314,7 +1314,7 @@
 // Route info
 "gpx_avg_altitude" = "Средняя высота";
 "gpx_alt_range" = "Диапазон высот";
-"gpx_ascent" = "Подъем";
+"gpx_ascent" = "Подъём";
 "gpx_descent" = "Спуск";
 "stats_select_graph_data" = "Выбрать данные графика";
 "region_nautical" = "Морские карты";
@@ -1395,7 +1395,7 @@
 "rendering_attr_surface_sett_name" = "Брусчатка";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
 "routing_attr_relief_smoothness_factor_hills_name" = "Гористый";
-"rendering_attr_showMtbRoutes_name" = "Трассы для горных велосипедов";
+"rendering_attr_showMtbRoutes_name" = "Маршруты для горных велосипедов";
 "rendering_attr_piste_type_hike_name" = "Хайк";
 "rendering_attr_surface_snow_name" = "Снег";
 "rendering_attr_tramTrainRoutes_name" = "Маршруты трамваев и поездов";
@@ -1444,7 +1444,7 @@
 "routing_attr_prefer_motorway_description" = "Предпочитать магистрали";
 "rendering_attr_hideHouseNumbers_name" = "Номера домов";
 "rendering_attr_piste_difficulty_freeride_name" = "Фрирайд";
-"routing_attr_avoid_borders_name" = "Без перехода границы";
+"routing_attr_avoid_borders_name" = "Без пересечений границы";
 "routing_attr_allow_intermediate_name" = "Разрешить промежуточные маршруты";
 "routing_attr_allow_expert_name" = "Разрешить экспертные маршруты";
 "rendering_attr_smoothness_excellent_name" = "Отличная";
@@ -1465,8 +1465,8 @@
 "rendering_attr_surface_fine_gravel_name" = "Мелкий гравий";
 "rendering_attr_surface_ground_name" = "Земля";
 "rendering_attr_currentTrackColor_description" = "Цвет трека GPX";
-"rendering_attr_tracktype_grade1_name" = "Твердое";
-"rendering_value_walkingRoutesOSMC_name" = "Раскраска туристических меток по OSMC";
+"rendering_attr_tracktype_grade1_name" = "Твёрдое";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_value_translucent_yellow_name" = "Полупрозрачный жёлтый";
 "rendering_attr_highway_class_track_grade2_name" = "Класс 2";
 "rendering_attr_hideIcons_name" = "Значки POI";
@@ -1509,7 +1509,7 @@
 "rendering_attr_noAdminboundaries_name" = "Границы";
 "routing_attr_allow_skating_only_name" = "Разрешить только маршруты для катания на коньках";
 "routing_attr_avoid_ferries_name" = "Без паромов";
-"rendering_attr_hikingRoutesOSMC_name" = "Наложение туристических меток";
+"rendering_attr_hikingRoutesOSMC_name" = "Пешеходные маршруты";
 "rendering_value_translucent_lightblue_name" = "Полупрозрачный голубой";
 "rendering_attr_showCycleRoutes_name" = "Веломаршруты";
 "routing_attr_piste_type_skitour_description" = "Маршруты для горнолыжного туризма.";
@@ -1556,7 +1556,7 @@
 "rendering_value_blue_name" = "Синий";
 "rendering_attr_currentTrackWidth_name" = "Толщина трека GPX";
 "rendering_value_translucent_blue_name" = "Полупрозрачный синий";
-"routing_attr_difficulty_preference_description" = "Предпочитаемый уровень сложности маршрутов. Более сложные или легкие трассы могут использоваться, если они короче.";
+"routing_attr_difficulty_preference_description" = "Предпочитаемый уровень сложности маршрутов. Более сложные или лёгкие трассы могут использоваться, если они короче.";
 "rendering_attr_surface_pebblestone_name" = "Галька";
 "rendering_attr_noPolygons_description" = "Показывать только контуры, без заливки.";
 "routing_attr_avoid_tram_name" = "Без трамваев";
@@ -1570,7 +1570,7 @@
 "rendering_attr_smoothness_very_bad_name" = "Очень плохая";
 "rendering_attr_highway_class_bridleway_name" = "Конная";
 "rendering_attr_smoothness_intermediate_name" = "Средняя";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Раскраска по сетевой принадлежности";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Сетевая принадлежность";
 "rendering_attr_currentTrackColor_name" = "Цвет трека GPX";
 "rendering_attr_highway_class_state_road_name" = "Государственная дорога";
 "routing_attr_piste_type_skitour_name" = "Лыжные туры";
@@ -1599,7 +1599,7 @@
 "rendering_value_lightblue_name" = "Голубой";
 "rendering_attr_piste_difficulty_intermediate_name" = "Средне";
 "rendering_value_white_name" = "Белый";
-"rendering_value_black_name" = "Черный";
+"rendering_value_black_name" = "Чёрный";
 "routing_attr_piste_type_sled_description" = "Склоны для катания на санях.";
 "rendering_attr_alpineHiking_name" = "Пеший горный туризм по шкале (SAC)";
 "rendering_value_pedestrian_name" = "Пешком";
@@ -1607,7 +1607,7 @@
 "rendering_value_darkyellow_name" = "Тёмно-жёлтый";
 "rendering_attr_surface_unpaved_name" = "Грунтовое";
 "rendering_attr_streetLightingNight_name" = "Показывать только ночью";
-"online_webpage_warning" = "Страница доступна только онлайн. Открыть ее в браузере?";
+"online_webpage_warning" = "Страница доступна только онлайн. Открыть её в браузере\?";
 "app_mode_osm" = "OSM";
 "shared_string_clear_cache" = "Очистить кеш";
 "app_mode_pedestrian" = "Пешеход";
@@ -1622,7 +1622,7 @@
 "app_mode_taxi" = "Такси";
 "app_mode_scooter" = "Самокат";
 "app_mode_monowheel" = "Моноколесо";
-"app_mode_personal_transporter" = "Персональный транспортер";
+"app_mode_personal_transporter" = "Персональный транспортёр";
 "app_mode_ufo" = "НЛО";
 "app_mode_offroad" = "Внедорожник";
 "app_mode_campervan" = "Альковен (RV)";
@@ -1687,12 +1687,12 @@
 "help_travel" = "Путешествия (Википедия и Wikivoyage)";
 "enable_hillshade" = "Включить для просмотра данных о рельефе";
 "enable_contour_lines" = "Включить для просмотра горизонталей на карте";
-"res_online_source_cache_alert" = "Применение этих изменений приведет к очистке кешированных данных этого источника тайлов";
+"res_online_source_cache_alert" = "Применение этих изменений приведёт к очистке кешированных данных этого источника тайлов";
 "res_zoom_invalid_value" = "Значения масштабирования должны находиться в диапазоне 1 - 22";
 "download_wiki_data" = "Скачать данные Википедии для %@";
 "change_position_descr" = "Переместите карту, чтобы изменить положение объекта";
 "change_object_posiotion" = "Изменить положение объекта";
-"res_source_one_per_tile" = "Каждый тайл в своем файле";
+"res_source_one_per_tile" = "Каждый тайл в своём файле";
 "map_settings_hide_polygons_desc" = "Этот параметр влияет только на автономные векторные карты OsmAnd";
 "map_settings_show_slider_map" = "Показать ползунок на карте";
 "walk" = "Пешком";
@@ -1700,7 +1700,7 @@
 "public_transport_empty_warning_descr" = "Попробуйте изменить настройки.";
 "calc_pedestrian_route" = "Рассчитать пешеходный маршрут";
 "res_slope" = "Уклон";
-"help_mapillary" = "OsmAnd и Mapillary";
+"help_mapillary" = "OsmAndи Mapillary";
 "help_osmand_live" = "Подписка — OsmAnd Live";
 "help_purchases" = "Покупки OsmAnd";
 "hide_terrain" = "Скрыть рельеф";
@@ -1750,7 +1750,7 @@
 "empty_profile_name_warning" = "Название профиля не может быть пустым.";
 "all_application_profiles" = "Все профили приложений";
 "rearrange_profiles" = "Реорганизовать профили";
-"base_profile_descr_aircraft" = "Самолет, планеризм";
+"base_profile_descr_aircraft" = "Самолёт, планеризм";
 "base_profile_descr_boat" = "Корабль, гребля, парусный спорт";
 "base_profile_descr_public_transport" = "Виды общественного транспорта";
 "base_profile_descr_pedestrian" = "Прогулки, пеший туризм, бег";
@@ -1803,10 +1803,10 @@
 "routing_attr_length_name" = "Предельная длина";
 "do_not_rotate" = "Не вращать";
 "select_distance_for_recalculation" = "Отклонение, при котором маршрут будет пересчитан.";
-"avoid_routes_and_road" = "Исключить определенные маршруты и типы дорог";
+"avoid_routes_and_road" = "Исключить определённые маршруты и типы дорог";
 "special_routing" = "Специальная навигация";
 "default_profile_descr" = "Выберите профиль, который будет использоваться при запуске приложения.";
-"vessel_width_limit_description" = "Укажите ширину судна, чтобы избежать узких мостов.";
+"vessel_width_limit_description" = "Укажите ширину судна, чтобы избежать узких мостов";
 "lenght_limit_description" = "Укажите длину автомобиля, для длинных транспортных средств могут применяться ограничения на маршруте.";
 "send_anonymous_data" = "Отправить анонимные данные";
 "vessel_height_limit_description" = "Укажите высоту судна, чтобы избежать низких мостов. Имейте в виду, что если мост раздвижной, будет использована его высота в открытом состоянии.";
@@ -1841,7 +1841,7 @@
 "units_of_speed" = "Единицы скорости";
 "shared_string_meters" = "метры";
 "tones" = "тонны";
-"announce" = "Объявлять";
+"announce" = "Объявление";
 "instructions_repeat" = "Нажмите на виджет \"Следующий поворот\", чтобы повторить инструкции";
 "speed_limit_tolerance_descr" = "Выберите допустимое значение превышения скорости выше которого вы получите голосовое предупреждение.";
 "arrival_announcement_frequency" = "Как скоро следует сообщать о прибытии?";
@@ -1851,7 +1851,7 @@
 "configure_screen_descr" = "Настройка элементов экрана для профиля";
 "plugin_settings_reset" = "Сброс настроек плагина по умолчанию";
 "trip_rec_actions_descr" = "Вы можете найти все свои записанные треки в %@";
-"logging_accuracy" = "Точность ведения журнала";
+"logging_accuracy" = "Точность журналирования";
 "send_anonymous_data_desc" = "Отправьте в OsmAnd статистику загрузок карты, мы не собираем данные о местоположении или какую-либо личную информацию.";
 "device_settings" = "Настройки устройства";
 "allow_3D_view" = "2.5D-вид";
@@ -1875,9 +1875,9 @@
 "shared_string_copy" = "Копировать";
 "help_nav_profiles" = "Профили навигации";
 "import_profile_descr" = "Чтобы импортировать профиль, нажмите на нужный файл (*.osf) в любом приложении и выберите \"Копировать в OsmAnd Maps\"";
-"profile_prefs_reset_successful" = "Все настройки профиля восстановлены до состояния по умолчанию";
+"profile_prefs_reset_successful" = "Все настройки профиля восстановлены до состояния по умолчанию.";
 "reset_profile_action_descr" = "Сбросить все настройки профиля до значений по умолчанию. Нажатие на \"Сброс\" отменяет все ваши изменения, это действие нельзя отменить.";
-"gpx_parse_error" = "GPX сформирован неправильно, пожалуйста, свяжитесь со службой поддержки для выяснения причин.";
+"gpx_parse_error" = "GPXсформирован неправильно, пожалуйста, свяжитесь со службой поддержки для выяснения причин.";
 "nothing_found_empty" = "Ничего не найдено";
 "shared_string_next" = "Далее";
 "add_one_more_pnt" = "Добавить еще одну точку";
@@ -1924,7 +1924,7 @@
 "point_num" = "Точка %d";
 "shared_string_rendering_style" = "Стиль отрисовки";
 "shared_string_routing" = "Маршрутизация";
-"selected_profiles" = "%d из %d";
+"selected_profiles" = "%dиз %d";
 "shared_string_deselect_all" = "Отменить выбор";
 "move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
 
@@ -1953,7 +1953,7 @@
 "plugin_popup_osm_editing_title" = "Включить редактирование OpenStreetMap";
 "vk" = "ВК";
 "help_what_is_new" = "Что нового";
-"personal_category_name" = "Персональный";
+"personal_category_name" = "Персональные";
 "unsupported_action_title" = "Неподдерживаемое действие (%@)";
 "unsupported_action" = "Неподдерживаемое действие";
 "unsupported_items" = "Неподдерживаемые элементы";
@@ -1967,9 +1967,9 @@
 "layer_amenity_label" = "Названия точек";
 "quick_action_mapillary_hide" = "Скрыть Mapillary";
 "shared_string_add_profile" = "Добавить профиль";
-"arrived_at_destination" = "Вы прибыли";
+"arrived_at_destination" = "Вы прибыли.";
 "profile_type_user_string" = "Профиль пользователя";
-"quick_action_switch_profile_descr" = "Нажатие кнопки «Действия» переключает между выбранными профилями.";
+"quick_action_switch_profile_descr" = "Кнопка действия переключает между выбранными профилями.";
 "reverse_route" = "Обратный маршрут";
 "profile_type_osmand_string" = "Профиль OsmAnd";
 "quick_action_remove_next_destination_descr" = "Следующая точка маршрута будет удалена. Если это конечный пункт, навигация завершится.";
@@ -2009,7 +2009,7 @@
 "fav_points_not_exist" = "Избранные точки отсутствуют";
 "res_standard" = "Стандартная карта";
 "select_another_track" = "Выбрать другой трек";
-"travel" = "Путешествие";
+"travel" = "Путешествия";
 "plan_route_change_folder" = "Изменить папку";
 "favorite_places_category" = "Места";
 "street_level_imagery" = "Фото с улиц";
@@ -2017,7 +2017,7 @@
 "start_of_track" = "Начало трека";
 "split_after" = "Разделить после";
 "track" = "Трек";
-"some_of" = "%d из %d";
+"some_of" = "%dиз %d";
 "rearrange_categories" = "Упорядочить категории";
 "join_segments" = "Объединить сегменты";
 "none_point_error" = "Добавьте хотя бы одну точку.";
@@ -2025,10 +2025,10 @@
 "copied_to_clipboard" = "Скопировано в буфер обмена";
 "service" = "Сервис";
 "square" = "Квадрат";
-"emergency" = "Чрезвычайные обстоятельства";
+"emergency" = "Экстренные службы";
 "symbols" = "Символы";
 "fav_point_dublicate" = "Введено повторяющееся название избранной точки";
-"reverse_track_dir" = "Обратное направление трека";
+"reverse_track_dir" = "Реверсировать";
 "attach_to_the_roads" = "Привязка к дороге";
 "add_custom_category" = "Создать свою категорию";
 "shared_string_gpx_points" = "Точки";
@@ -2120,10 +2120,31 @@
 "threshold_distance" = "Предельная дистанция";
 "shared_strings_all_regions" = "Все регионы";
 "shared_string_feet" = "футы";
-"srtm_download_list_help_message" = "OsmAnd предоставляет данные изолиний в метрах и футах. Для изменения формата потребуется повторно загрузить файл.";
+"srtm_download_list_help_message" = "OsmAndпредоставляет данные изолиний в метрах и футах. Для изменения формата потребуется повторно загрузить файл.";
 "routes_color_by_type" = "Раскраска маршрутов…";
 "rendering_value_walkingRoutesOSMC_description" = "Окраска согласно индивидуальной маркировке на туристических информационных щитах (если задано на OpenStreetMap).";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Окраска согласно принадлежности к сети.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Окраска в соответствии с типом узловой сети (международная, региональная, местная).";
 "walking_route_osmc_description" = "Окраска на основе индивидуального цвета (если задано на OpenStreetMap) и типа (международный, региональный, местный).";
 "travel_routes" = "Туристические маршруты";
+"product_title_mapillary" = "Mapillary";
+"product_title_openplacereviews" = "OpenPlaceReviews";
+"contour_lines_hillshades_slope" = "Контурные линии, затенение рельефа (отмывка), уклоны";
+"last_used" = "Последний используемый";
+"m" = "м";
+"suggested_maps_descr" = "Эти карты необходимо использовать с плагином.";
+"added_profiles_descr" = "Профили, добавленные плагином";
+"navigate_point_olc" = "Открытый код местоположения (OLC)";
+"shared_string_navigation" = "Навигация";
+"navigate_point_easting" = "Восточной долготы";
+"navigate_point_northing" = "Северной широты";
+"welmode_download_maps" = "Загрузка карт";
+"foot" = "фут";
+"download_map_dialog" = "Диалог загрузки карты";
+"dialogs_and_notifications" = "Диалоги и уведомления";
+"explore_wikipedia_offline" = "Читайте Википедию офлайн.";
+"product_desc_ext_mapillary" = "Просмотр и создание панорам онлайн. Открывайте места, сотрудничайте, снимайте мир.";
+"shared_string_turn_off" = "Выключить";
+"navigate_point_zone" = "Зона";
+"suggested_maps" = "Предлагаемые карты";
+"added_profiles" = "Добавленные профили";

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OAApplicationMode.h"
+#import "OAColorizationType.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -186,6 +187,8 @@ typedef NS_ENUM(NSInteger, EOAGradientScaleType)
 + (NSString *) toHumanString:(EOAGradientScaleType)gst;
 + (NSString *) toTypeName:(EOAGradientScaleType)gst;
 + (NSString *) toColorTypeName:(EOAGradientScaleType)gst;
+
+- (EOAColorizationType) toColorizationType;
 
 @end
 
@@ -556,6 +559,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 #define SAVE_TRACK_INTERVAL_DEFAULT 5 //5000 in Android
 #define REC_FILTER_DEFAULT 0.f
 #define REC_TRACK_PRECISION_DEFAULT 50.f
+#define MPS_TO_KMH_MULTIPLIER 3.6
 
 #define MAP_GEO_FORMAT_DEGREES 0
 #define MAP_GEO_FORMAT_MINUTES 1

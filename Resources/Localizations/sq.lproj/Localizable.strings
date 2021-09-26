@@ -30,3 +30,5 @@
 "rendering_attr_alpineHiking_name" = "Shkalla malore e ecjes në këmbë/eskursion (SAC)";
 "rendering_attr_hideBuildings_name" = "Hiç ndërtesat";
 "app_theme_light" = "Ndriçimi";
+"navigate_point_northing" = "Vlera veriore";
+"navigate_point_easting" = "Vlera lindore";

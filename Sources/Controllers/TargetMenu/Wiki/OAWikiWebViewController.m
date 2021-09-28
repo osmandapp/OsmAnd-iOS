@@ -213,7 +213,7 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     {
         return nil;
     }
-    NSString *head = @"<head></head><div class=\"main\">%@</div>";
+    NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header><head></head><div class=\"main\">%@</div>";
     return [NSString stringWithFormat:head, content];
 }
 

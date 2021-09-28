@@ -15,6 +15,7 @@
 #import "OrderedDictionary.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OAColors.h"
 #import <UIKit/UIDevice.h>
 
 #import <mach/mach.h>
@@ -311,6 +312,89 @@
 - (void) setCornerRadius:(CGFloat)value
 {
     self.layer.cornerRadius = value;
+}
+
+- (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding
+{
+    self.backgroundColor = [UIColor clearColor];
+    UIBlurEffect *blurEffect;
+
+    if (@available(iOS 13.0, *))
+        blurEffect = [UIBlurEffect effectWithStyle:light
+                ? UIBlurEffectStyleSystemUltraThinMaterialLight : UIBlurEffectStyleSystemUltraThinMaterialDark];
+    else
+        blurEffect = [UIBlurEffect effectWithStyle:light
+                ? UIBlurEffectStyleLight : UIBlurEffectStyleDark];
+
+    UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    blurView.userInteractionEnabled = NO;
+    blurView.backgroundColor = [UIColor clearColor];
+    if (cornerRadius > 0)
+    {
+        blurView.layer.cornerRadius = cornerRadius;
+        blurView.layer.masksToBounds = YES;
+    }
+
+    [self insertSubview:blurView atIndex:0];
+
+    blurView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.leadingAnchor constraintEqualToAnchor:blurView.leadingAnchor constant:padding].active = YES;
+    [self.trailingAnchor constraintEqualToAnchor:blurView.trailingAnchor constant:-padding].active = YES;
+    [self.topAnchor constraintEqualToAnchor:blurView.topAnchor constant:padding].active = YES;
+    [self.bottomAnchor constraintEqualToAnchor:blurView.bottomAnchor constant:-padding].active = YES;
+
+    /*self.layer.cornerRadius = cornerRadius;
+    CIContext *context = [CIContext contextWithOptions:nil];
+
+    CIImage *inputImage = [CIImage imageWithColor:[CIColor colorWithRed:1 green:1 blue:1 alpha:0.8]];
+    inputImage = [inputImage imageByCroppingToRect:self.bounds];
+
+    CIFilter *clampFilter = [CIFilter filterWithName:@"CIAffineClamp"];
+    [clampFilter setDefaults];
+    [clampFilter setValue:inputImage forKey:kCIInputImageKey];
+
+    CIImage *clampedImage = [clampFilter valueForKey:kCIInputImageKey];
+
+//    CIFilter *explosureFilter = [CIFilter filterWithName:@"CIExposureAdjust"];
+//    [explosureFilter setValue:clampedImage forKey:kCIInputImageKey];
+//    [explosureFilter setValue:@-1.0f forKey:kCIInputEVKey];
+//
+//    CIImage *explosureImage = [explosureFilter valueForKey:kCIInputImageKey];
+
+    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [blurFilter setValue:clampedImage forKey:kCIInputImageKey];//explosureImage
+    [blurFilter setValue:@25 forKey:kCIInputRadiusKey];
+
+    CIImage *blurImage = [blurFilter valueForKey:kCIInputImageKey];
+
+    CIFilter *cropFilter = [CIFilter filterWithName:@"CICrop"];
+    [cropFilter setValue:blurImage forKey:kCIInputImageKey];
+    [cropFilter setValue:[CIVector vectorWithCGRect:[inputImage extent]] forKey: @"inputRectangle"];
+
+    CIImage *result = [cropFilter valueForKey:kCIOutputImageKey];
+
+    CGImageRef cgImage = [context createCGImage:result fromRect:[result extent]];
+    UIImage *returnVal = [UIImage imageWithCGImage:cgImage];
+
+    CGImageRelease(cgImage);
+
+    self.backgroundColor = [UIColor colorWithPatternImage:returnVal];*/
+}
+
+@end
+
+@implementation UIButton (utils)
+
+- (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding
+{
+    [super addBlurEffect:light cornerRadius:cornerRadius padding:padding];
+
+    UIImageView *imageView = self.imageView;
+    if (imageView)
+    {
+        imageView.backgroundColor = [UIColor clearColor];
+        [self bringSubviewToFront:imageView];
+    }
 }
 
 @end

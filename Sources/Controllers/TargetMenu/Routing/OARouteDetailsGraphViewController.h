@@ -7,7 +7,7 @@
 //
 
 #import "OARouteBaseViewController.h"
-#import "OATrackMenuViewController.h"
+#import "OATrackMenuHudViewController.h"
 
 @interface OARouteDetailsGraphViewController : OARouteBaseViewController <UITableViewDataSource, UITableViewDelegate>
 

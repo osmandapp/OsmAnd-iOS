@@ -29,7 +29,7 @@ static OAColoringType * SLOPE;
 static OAColoringType * ATTRIBUTE;
 
 static NSArray<OAColoringType *> * ROUTE_COLORING_TYPES = @[OAColoringType.DEFAULT, OAColoringType.CUSTOM_COLOR, OAColoringType.ALTITUDE, OAColoringType.SLOPE, OAColoringType.ATTRIBUTE];
-static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[/*OAColoringType.TRACK_SOLID,*/ OAColoringType.SPEED, OAColoringType.ALTITUDE, OAColoringType.SLOPE/*, OAColoringType.ATTRIBUTE*/];
+static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK_SOLID, OAColoringType.SPEED, OAColoringType.ALTITUDE, OAColoringType.SLOPE/*, OAColoringType.ATTRIBUTE*/];
 
 @implementation OAColoringType
 
@@ -158,6 +158,11 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[/*OAColoringType.TRA
 - (BOOL) isGradient
 {
     return self == self.class.SPEED || self == self.class.ALTITUDE || self == self.class.SLOPE;
+}
+
+- (BOOL) isSlope
+{
+    return self == self.class.SLOPE;
 }
 
 - (BOOL) isRouteInfoAttribute

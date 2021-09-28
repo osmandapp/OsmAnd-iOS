@@ -332,7 +332,7 @@ static UIViewController *parentController;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
                 [self doPush];
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
         });
     }
 }
@@ -1215,7 +1215,7 @@ static UIViewController *parentController;
                     if ([_savingHelper hasData])
                     {
                         [self doPush];
-                        [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil pushed:YES];
+                        [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil];
                     }
                 }
                 else
@@ -1234,7 +1234,7 @@ static UIViewController *parentController;
             NSDictionary *gpxInfo = item.groupItems[indexPath.row - 1];
             OAGPX* gpxItem = gpxInfo[@"track"];
             [self doPush];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxItem pushed:YES];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxItem];
         }
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }

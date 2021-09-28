@@ -13,7 +13,7 @@
 
 @required
 
-- (void) onItemSelected:(int)index type:(NSString *)type;
+- (void) onItemSelected:(NSInteger)index type:(NSString *)type;
 
 @end
 
@@ -25,7 +25,7 @@
 @property (weak, nonatomic) OACollectionViewCellState *state;
 @property (nonatomic) NSIndexPath *cellIndex;
 
-- (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(int)index;
+- (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index;
 - (void) updateContentOffset;
 
 @end

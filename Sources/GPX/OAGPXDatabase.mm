@@ -402,7 +402,7 @@
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];
         
-        [d setObject:@(gpx.color) forKey:@"color"];
+        [d setObject:@((int) gpx.color) forKey:@"color"];
         
         [d setObject:@(gpx.bounds.center.latitude) forKey:@"center_lat"];
         [d setObject:@(gpx.bounds.center.longitude) forKey:@"center_lon"];

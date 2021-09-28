@@ -122,7 +122,9 @@
 #import "OAGPXDocument.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
-#import "OATrackMenuViewController.h"
+#import "OABaseScrollableHudViewController.h"
+#import "OATrackMenuHudViewController.h"
+#import "OATrackMenuAppearanceHudViewController.h"
 #import "OAMapRulerView.h"
 
 #define _(name) OAMapPanelViewController__##name
@@ -1260,7 +1262,7 @@ typedef enum
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
     if (targetPoint.type == OATargetGPX)
-        return [self openTargetViewWithGPX:targetPoint.targetObj pushed:(BOOL)NO];
+        return [self openTargetViewWithGPX:targetPoint.targetObj];
     else
         return [self showContextMenu:targetPoint saveState:YES];
 }
@@ -1531,7 +1533,7 @@ typedef enum
     {
         case OATargetGPX:
             [_mapViewController hideContextPinMarker];
-            [self openTargetViewWithGPX:_activeTargetObj pushed:YES];
+            [self openTargetViewWithGPX:_activeTargetObj];
             break;
             
         default:
@@ -2487,7 +2489,12 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed
+- (void)openTargetViewWithGPX:(OAGPX *)item
+{
+    [self openTargetViewWithGPX:item trackHudMode:EOATrackMenuHudMode];
+}
+
+- (void)openTargetViewWithGPX:(OAGPX *)item trackHudMode:(EOATrackHudMode)trackHudMode;
 {
     BOOL showCurrentTrack = NO;
     if (item == nil)
@@ -2504,7 +2511,7 @@ typedef enum
 
     [_mapViewController hideContextPinMarker];
 
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    OAMapRendererView *renderView = (OAMapRendererView *) _mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = [item getNiceTitle];
@@ -2540,7 +2547,21 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
 
-    [self showScrollableHudViewController:[[OATrackMenuViewController alloc] initWithGpx:targetPoint.targetObj]];
+    OABaseTrackMenuHudViewController *trackMenuHudViewController;
+
+    switch (trackHudMode)
+    {
+        case EOATrackAppearanceHudMode:
+            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj];
+            break;
+
+        case EOATrackMenuHudMode:
+        default:
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj];
+            break;
+    }
+
+    [self showScrollableHudViewController:trackMenuHudViewController];
     _activeTargetActive = YES;
     [self enterContextMenuMode];
 }

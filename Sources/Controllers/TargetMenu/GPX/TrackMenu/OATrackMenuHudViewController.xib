@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OATrackMenuViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OATrackMenuHudViewController">
             <connections>
                 <outlet property="backButton" destination="URZ-Ef-ym2" id="bqw-1A-b1D"/>
                 <outlet property="backButtonContainerView" destination="qvQ-Gx-z0V" id="Ux5-Ps-3aN"/>
@@ -74,7 +74,7 @@
                                         <constraint firstAttribute="height" constant="1" id="q2g-17-0yI"/>
                                     </constraints>
                                 </view>
-                                <tabBar contentMode="scaleToFill" itemPositioning="centered" itemSpacing="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="j7s-w5-BDJ" customClass="OATabBar">
+                                <tabBar contentMode="scaleToFill" translucent="NO" itemPositioning="centered" itemSpacing="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="j7s-w5-BDJ" customClass="OATabBar">
                                     <rect key="frame" x="0.0" y="1" width="414" height="60"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
@@ -110,11 +110,6 @@
                             <state key="normal" image="ic_custom_arrow_back.png">
                                 <color key="titleColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                    <integer key="value" value="12"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="onBackButtonPressed:" destination="-1" eventType="touchUpInside" id="1hM-hv-RGL"/>
                             </connections>

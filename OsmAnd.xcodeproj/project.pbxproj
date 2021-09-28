@@ -46,6 +46,7 @@
 		0A8D1A2626FBA4460042444C /* OATrackMenuDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A8D1A2526FBA4460042444C /* OATrackMenuDescriptionViewController.xib */; };
 		0A8F544D263949FC0020F5CF /* ic_custom_search_categories@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */; };
 		0A8F544E263949FC0020F5CF /* ic_custom_search_categories@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */; };
+		0A9ED66C27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */; };
 		0AA3BB8E26EB540100A9885D /* ic_custom_waypoint@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8626EB53FF00A9885D /* ic_custom_waypoint@3x.png */; };
 		0AA3BB8F26EB540100A9885D /* ic_custom_overview@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8726EB540000A9885D /* ic_custom_overview@3x.png */; };
 		0AA3BB9026EB540100A9885D /* ic_small_map_point@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8826EB540000A9885D /* ic_small_map_point@2x.png */; };
@@ -54,7 +55,7 @@
 		0AA3BB9326EB540100A9885D /* ic_custom_overview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8B26EB540000A9885D /* ic_custom_overview@2x.png */; };
 		0AA3BB9426EB540100A9885D /* ic_small_map_point@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8C26EB540100A9885D /* ic_small_map_point@3x.png */; };
 		0AA3BB9526EB540100A9885D /* ic_custom_appearance@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB8D26EB540100A9885D /* ic_custom_appearance@3x.png */; };
-		0AA3BB9826EBC00200A9885D /* OATrackMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB9726EBC00200A9885D /* OATrackMenuViewController.xib */; };
+		0AA3BB9826EBC00200A9885D /* OATrackMenuHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3BB9726EBC00200A9885D /* OATrackMenuHudViewController.xib */; };
 		0AC29CF826E763E600A78C53 /* ic_custom_contour_lines_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC29CF426E763E500A78C53 /* ic_custom_contour_lines_colored@2x.png */; };
 		0AC29CF926E763E600A78C53 /* ic_custom_contour_lines_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC29CF526E763E500A78C53 /* ic_custom_contour_lines_colored@3x.png */; };
 		0AC29CFA26E763E600A78C53 /* ic_custom_wikipedia_download_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC29CF626E763E500A78C53 /* ic_custom_wikipedia_download_colored@2x.png */; };
@@ -1022,9 +1023,11 @@
 		B0D6111153524EEE21E870E0 /* OAGpxStatBlockCollectionViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D6165A09DCB273BE944F49 /* OAGpxStatBlockCollectionViewCell.mm */; };
 		B0D611B5F51911253E3690EE /* OAIconTextDividerSwitchCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618127C2BE2B1C9BFB000 /* OAIconTextDividerSwitchCell.mm */; };
 		B0D61212719CE756BE05F27F /* OAPromoButtonCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D617FE82CF036631057E2C /* OAPromoButtonCell.mm */; };
+		B0D61511780C648362077F37 /* OATrackMenuAppearanceHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61686FC06AEED2517A873 /* OATrackMenuAppearanceHudViewController.mm */; };
 		B0D6188748542F9E3A73D9C9 /* OATrackMenuDescriptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61F813CB80B52D99BAFD1 /* OATrackMenuDescriptionViewController.mm */; };
+		B0D6195E900EF69E053A5465 /* OABaseTrackMenuHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D610F332AD1BD4E707EE60 /* OABaseTrackMenuHudViewController.mm */; };
 		B0D61B91977188ED34EB63FD /* OATabBar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61B0861142A49F45480E4 /* OATabBar.mm */; };
-		B0D61F02E8A3B7B2733E2C18 /* OATrackMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D617376B44864C22144EAE /* OATrackMenuViewController.mm */; };
+		B0D61F02E8A3B7B2733E2C18 /* OATrackMenuHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB27270119CB38D7007C5613 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FC19CB38D7007C5613 /* fonts */; };
 		BB27270419CB38D7007C5613 /* stubs in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FD19CB38D7007C5613 /* stubs */; };
@@ -2876,6 +2879,7 @@
 		0A8D1A2526FBA4460042444C /* OATrackMenuDescriptionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATrackMenuDescriptionViewController.xib; sourceTree = "<group>"; };
 		0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@2x.png"; path = "Resources/Icons/ic_custom_search_categories@2x.png"; sourceTree = "<group>"; };
 		0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@3x.png"; path = "Resources/Icons/ic_custom_search_categories@3x.png"; sourceTree = "<group>"; };
+		0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATrackMenuAppearanceHudViewController.xib; sourceTree = "<group>"; };
 		0AA3BB8626EB53FF00A9885D /* ic_custom_waypoint@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_waypoint@3x.png"; path = "Resources/Icons/ic_custom_waypoint@3x.png"; sourceTree = "<group>"; };
 		0AA3BB8726EB540000A9885D /* ic_custom_overview@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_overview@3x.png"; path = "Resources/Icons/ic_custom_overview@3x.png"; sourceTree = "<group>"; };
 		0AA3BB8826EB540000A9885D /* ic_small_map_point@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_map_point@2x.png"; path = "Resources/Icons/ic_small_map_point@2x.png"; sourceTree = "<group>"; };
@@ -2884,7 +2888,7 @@
 		0AA3BB8B26EB540000A9885D /* ic_custom_overview@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_overview@2x.png"; path = "Resources/Icons/ic_custom_overview@2x.png"; sourceTree = "<group>"; };
 		0AA3BB8C26EB540100A9885D /* ic_small_map_point@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_map_point@3x.png"; path = "Resources/Icons/ic_small_map_point@3x.png"; sourceTree = "<group>"; };
 		0AA3BB8D26EB540100A9885D /* ic_custom_appearance@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_appearance@3x.png"; path = "Resources/Icons/ic_custom_appearance@3x.png"; sourceTree = "<group>"; };
-		0AA3BB9726EBC00200A9885D /* OATrackMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATrackMenuViewController.xib; sourceTree = "<group>"; };
+		0AA3BB9726EBC00200A9885D /* OATrackMenuHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATrackMenuHudViewController.xib; sourceTree = "<group>"; };
 		0AC29CF426E763E500A78C53 /* ic_custom_contour_lines_colored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_contour_lines_colored@2x.png"; path = "Resources/Icons/ic_custom_contour_lines_colored@2x.png"; sourceTree = "<group>"; };
 		0AC29CF526E763E500A78C53 /* ic_custom_contour_lines_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_contour_lines_colored@3x.png"; path = "Resources/Icons/ic_custom_contour_lines_colored@3x.png"; sourceTree = "<group>"; };
 		0AC29CF626E763E500A78C53 /* ic_custom_wikipedia_download_colored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wikipedia_download_colored@2x.png"; path = "Resources/Icons/ic_custom_wikipedia_download_colored@2x.png"; sourceTree = "<group>"; };
@@ -3895,16 +3899,20 @@
 		8AFC2BBA24334A4E0095BA9F /* map_location_default_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_default_center@3x.png"; sourceTree = "<group>"; };
 		8AFC2BBC24334A4E0095BA9F /* map_location_car_bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_car_bottom@2x.png"; sourceTree = "<group>"; };
 		8AFC2BBD24334A4E0095BA9F /* map_location_default_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_default_top@2x.png"; sourceTree = "<group>"; };
+		B0D610F332AD1BD4E707EE60 /* OABaseTrackMenuHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseTrackMenuHudViewController.mm; sourceTree = "<group>"; };
+		B0D614BCA21C85893C58B96D /* OABaseTrackMenuHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseTrackMenuHudViewController.h; sourceTree = "<group>"; };
 		B0D615B468D5B85362471A2D /* OATrackMenuDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATrackMenuDescriptionViewController.h; sourceTree = "<group>"; };
 		B0D615DB26BC93BDDC49DE77 /* OAIconTextDividerSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAIconTextDividerSwitchCell.h; sourceTree = "<group>"; };
 		B0D6160607F8AB0E74A75E0B /* OAPromoButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPromoButtonCell.h; sourceTree = "<group>"; };
 		B0D6165A09DCB273BE944F49 /* OAGpxStatBlockCollectionViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxStatBlockCollectionViewCell.mm; sourceTree = "<group>"; };
+		B0D61686FC06AEED2517A873 /* OATrackMenuAppearanceHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackMenuAppearanceHudViewController.mm; sourceTree = "<group>"; };
 		B0D616BD4B59FB4F1D8B9B4C /* OATrackMenuHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATrackMenuHeaderView.h; sourceTree = "<group>"; };
-		B0D617376B44864C22144EAE /* OATrackMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackMenuViewController.mm; sourceTree = "<group>"; };
+		B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackMenuHudViewController.mm; sourceTree = "<group>"; };
 		B0D617FE82CF036631057E2C /* OAPromoButtonCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPromoButtonCell.mm; sourceTree = "<group>"; };
 		B0D618127C2BE2B1C9BFB000 /* OAIconTextDividerSwitchCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAIconTextDividerSwitchCell.mm; sourceTree = "<group>"; };
 		B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackMenuHeaderView.mm; sourceTree = "<group>"; };
-		B0D619894A15E2D75C4CBC96 /* OATrackMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATrackMenuViewController.h; sourceTree = "<group>"; };
+		B0D619894A15E2D75C4CBC96 /* OATrackMenuHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATrackMenuHudViewController.h; sourceTree = "<group>"; };
+		B0D6198DDF14DCBC3FED03FA /* OATrackMenuAppearanceHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATrackMenuAppearanceHudViewController.h; sourceTree = "<group>"; };
 		B0D61B0861142A49F45480E4 /* OATabBar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATabBar.mm; sourceTree = "<group>"; };
 		B0D61B47A8DC2B61A93099E6 /* OATabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATabBar.h; sourceTree = "<group>"; };
 		B0D61F5A5B3B39B9CD1CF5CB /* OAGpxStatBlockCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxStatBlockCollectionViewCell.h; sourceTree = "<group>"; };
@@ -6614,15 +6622,20 @@
 		0AC993FB26E903E50004181F /* TrackMenu */ = {
 			isa = PBXGroup;
 			children = (
-				B0D617376B44864C22144EAE /* OATrackMenuViewController.mm */,
-				B0D619894A15E2D75C4CBC96 /* OATrackMenuViewController.h */,
-				0AA3BB9726EBC00200A9885D /* OATrackMenuViewController.xib */,
+				B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */,
+				B0D619894A15E2D75C4CBC96 /* OATrackMenuHudViewController.h */,
+				0AA3BB9726EBC00200A9885D /* OATrackMenuHudViewController.xib */,
 				B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */,
 				B0D616BD4B59FB4F1D8B9B4C /* OATrackMenuHeaderView.h */,
 				0A2571A126F253620079774F /* OATrackMenuHeaderView.xib */,
 				0A8D1A2526FBA4460042444C /* OATrackMenuDescriptionViewController.xib */,
 				B0D61F813CB80B52D99BAFD1 /* OATrackMenuDescriptionViewController.mm */,
 				B0D615B468D5B85362471A2D /* OATrackMenuDescriptionViewController.h */,
+				0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */,
+				B0D61686FC06AEED2517A873 /* OATrackMenuAppearanceHudViewController.mm */,
+				B0D6198DDF14DCBC3FED03FA /* OATrackMenuAppearanceHudViewController.h */,
+				B0D610F332AD1BD4E707EE60 /* OABaseTrackMenuHudViewController.mm */,
+				B0D614BCA21C85893C58B96D /* OABaseTrackMenuHudViewController.h */,
 			);
 			path = TrackMenu;
 			sourceTree = "<group>";
@@ -12951,7 +12964,7 @@
 				843394BF1FF54A19006205A5 /* list_intermediate@3x.png in Resources */,
 				8476E2861F6C1EEC00EC274F /* map_car_location_night@2x.png in Resources */,
 				DA45DA68230EE05A0083DFA2 /* img_mapstyle_default@2x.png in Resources */,
-				0AA3BB9826EBC00200A9885D /* OATrackMenuViewController.xib in Resources */,
+				0AA3BB9826EBC00200A9885D /* OATrackMenuHudViewController.xib in Resources */,
 				DAF3455322F4482B009E2EB6 /* ic_custom_compound_action_remove@2x.png in Resources */,
 				8476E2E21F6C1EEC00EC274F /* map_pedestrian_location@3x.png in Resources */,
 				DAA4EDF1240E85B800F16073 /* ic_custom_download@2x.png in Resources */,
@@ -13575,6 +13588,7 @@
 				DA1341B4243DC5A80039D214 /* ic_action_openstreetmap_logo@3x.png in Resources */,
 				8AE0195024505C8B00DA5C33 /* ic_small_pedestrian@2x.png in Resources */,
 				0A8D1A1326FBA1750042444C /* ic_small_altitude_average@3x.png in Resources */,
+				0A9ED66C27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib in Resources */,
 				8A1CF1E3227ED4A70083A04E /* warnings_tunnel@2x.png in Resources */,
 				3AFEEE481A0E34FD00900A47 /* menu_cell_pointer@2x.png in Resources */,
 				8AFC2BC924334A4E0095BA9F /* map_location_default_bottom@3x.png in Resources */,
@@ -14489,13 +14503,15 @@
 				DA5A837F26C563A800F274C7 /* OADirectionsCardController.mm in Sources */,
 				DA5A839D26C563A800F274C7 /* OAMapPanelViewController.mm in Sources */,
 				DA5A825B26C563A700F274C7 /* OAOsmEditingSettingsViewController.mm in Sources */,
-				B0D61F02E8A3B7B2733E2C18 /* OATrackMenuViewController.mm in Sources */,
+				B0D61F02E8A3B7B2733E2C18 /* OATrackMenuHudViewController.mm in Sources */,
 				B0D61B91977188ED34EB63FD /* OATabBar.mm in Sources */,
 				B0D611B5F51911253E3690EE /* OAIconTextDividerSwitchCell.mm in Sources */,
 				B0D61212719CE756BE05F27F /* OAPromoButtonCell.mm in Sources */,
 				B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */,
 				B0D6111153524EEE21E870E0 /* OAGpxStatBlockCollectionViewCell.mm in Sources */,
 				B0D6188748542F9E3A73D9C9 /* OATrackMenuDescriptionViewController.mm in Sources */,
+				B0D61511780C648362077F37 /* OATrackMenuAppearanceHudViewController.mm in Sources */,
+				B0D6195E900EF69E053A5465 /* OABaseTrackMenuHudViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

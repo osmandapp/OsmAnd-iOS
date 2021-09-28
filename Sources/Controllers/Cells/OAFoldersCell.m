@@ -26,8 +26,8 @@
 
 @implementation OAFoldersCell
 {
-    NSMutableArray *_data;
-    int _selectionIndex;
+    NSArray<NSDictionary *> *_data ;
+    NSInteger _selectionIndex;
     BOOL _isFirstLoad;
 }
 
@@ -42,12 +42,12 @@
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
-    _data = [NSMutableArray new];
+    _data = [NSMutableArray array];
     _selectionIndex = 0;
     _isFirstLoad = YES;
 }
 
-- (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(int)index
+- (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index
 {
     _data = values;
     _selectionIndex = index;
@@ -223,9 +223,11 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    _selectionIndex = indexPath.row;
+
     if (_delegate)
-        [_delegate onItemSelected:(int)indexPath.row type:_data[indexPath.row][@"type"]];
-    
+        [_delegate onItemSelected:_selectionIndex type:_data[_selectionIndex][@"type"]];
+
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 

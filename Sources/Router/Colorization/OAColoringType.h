@@ -33,5 +33,9 @@
 
 - (OAGradientScaleType *) toGradientScaleType;
 
+- (BOOL) isTrackSolid;
+- (BOOL) isGradient;
+- (BOOL) isSlope;
+
 @end
 

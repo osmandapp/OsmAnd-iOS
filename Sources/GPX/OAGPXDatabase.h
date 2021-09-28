@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OACommonTypes.h"
 
-#define kDefaultTrackColor 0xFFFF0000
+#define kDefaultTrackColor 0xFF0000
 
 @class OAGPXTrackAnalysis;
 @class OAGpxWpt;

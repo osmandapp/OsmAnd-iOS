@@ -31,7 +31,7 @@
 
 - (NSInteger)color
 {
-    return _color > 0 ? _color : kDefaultTrackColor;
+    return _color != 0 ? _color : kDefaultTrackColor;
 }
 
 - (NSString *)width

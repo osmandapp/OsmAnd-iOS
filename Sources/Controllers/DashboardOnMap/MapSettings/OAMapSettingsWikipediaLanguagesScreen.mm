@@ -101,6 +101,15 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     [self initData];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        self.tableView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 52., 0., 0.);
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
 - (void)applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"language");

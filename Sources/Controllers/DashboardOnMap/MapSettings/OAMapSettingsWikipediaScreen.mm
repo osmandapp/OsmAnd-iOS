@@ -148,6 +148,12 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     [self updateAvailableMaps];
 }
 
+- (void)onRotation
+{
+    self.tblView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16., 0., 0.);
+    [self.tblView reloadData];
+}
+
 - (void)updateAvailableMaps
 {
     CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];

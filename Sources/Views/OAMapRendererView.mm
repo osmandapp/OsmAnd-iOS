@@ -802,7 +802,7 @@
 - (void) didMoveToWindow
 {
     // Resume rendering only if in foreground
-    if ([self isRenderingSuspended] && [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && self.window)
+    if ([self isRenderingSuspended] && [[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground && self.window)
     {
         [self resumeRendering];
     }

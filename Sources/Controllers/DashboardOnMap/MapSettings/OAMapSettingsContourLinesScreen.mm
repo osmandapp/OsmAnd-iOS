@@ -374,7 +374,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [OAResourcesUIHelper getMapsForType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion latLon:loc onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
         @synchronized(_dataLock)
         {
-            if (!res && res.count == 0)
+            if (!res || res.count == 0)
                 return;
             
             NSArray *sortedMaps = [res sortedArrayUsingComparator:^NSComparisonResult(OARepositoryResourceItem* obj1, OARepositoryResourceItem* obj2) {

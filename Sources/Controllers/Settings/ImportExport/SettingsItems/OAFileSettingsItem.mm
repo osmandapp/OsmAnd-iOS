@@ -242,6 +242,7 @@
         self.name = [filePath stringByReplacingOccurrencesOfString:_docPath withString:@""];
         if ([self.name hasPrefix:_libPath])
             self.name = [@"/" stringByAppendingString:self.name.lastPathComponent];
+        self.name = [self.name stringByReplacingOccurrencesOfString:@"/GPX/" withString:@"/tracks/"];
         if (error)
         {
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
@@ -285,18 +286,8 @@
         }
         else if (self.subtype == EOASettingsItemFileSubtypeGpx)
         {
-            NSString *path = json[@"file"];
-            NSArray *pathComponents = [path pathComponents];
-            if (pathComponents.count > 2)
-            {
-                NSArray *filePathComponents = [pathComponents subarrayWithRange:NSMakeRange(2, pathComponents.count - 2)];
-                NSString *subfolderPath = [NSString pathWithComponents:filePathComponents];
-                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:subfolderPath];
-            }
-            else
-            {
-                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
-            }
+            NSString *path = [[json[@"file"] substringFromIndex:1] stringByReplacingOccurrencesOfString:@"tracks/" withString:@""];
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
         }
         else
         {

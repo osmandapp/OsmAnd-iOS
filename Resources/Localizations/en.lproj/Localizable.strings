@@ -652,6 +652,7 @@
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Average altitude";
 "gpx_alt_range" = "Altitude range";
+"gpx_distance" = "Distance";
 "gpx_ascent" = "Ascent";
 "gpx_descent" = "Descent";
 "gpx_updown" = "Up/Down";

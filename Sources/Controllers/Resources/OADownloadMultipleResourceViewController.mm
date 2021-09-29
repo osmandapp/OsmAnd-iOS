@@ -11,7 +11,7 @@
 #import "OAColors.h"
 #import "OACustomSelectionButtonCell.h"
 #import "OAMenuSimpleCell.h"
-#import "OASegmentedControllCell.h"
+#import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
 #import "OATableViewCustomHeaderView.h"
 
@@ -313,17 +313,17 @@
         return cell;
     }
 
-    NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControllCell getCellIdentifier] :
+    NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControlCell getCellIdentifier] :
             indexPath.row == 1 && !_isSingleSRTM
                     ? [OACustomSelectionButtonCell getCellIdentifier]
                     : [OAMenuSimpleCell getCellIdentifier];
 
-    if ([cellType isEqualToString:[OASegmentedControllCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASegmentedControlCell getCellIdentifier]])
     {
-        OASegmentedControllCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
+        OASegmentedControlCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControllCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControlCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;

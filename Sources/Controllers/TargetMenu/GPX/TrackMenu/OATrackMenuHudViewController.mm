@@ -417,7 +417,7 @@
                     @"title": OALocalizedString(@"total_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
                     @"type": @(EOARouteStatisticsModeSpeed),
-                    @"icon": @"ic_small_time"
+                    @"icon": @"ic_small_time_interval"
             }];
         }
 
@@ -428,7 +428,7 @@
                     @"title": OALocalizedString(@"moving_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
                     @"type": @(EOARouteStatisticsModeSpeed),
-                    @"icon": @"ic_small_time"
+                    @"icon": @"ic_small_time_moving"
             }];
         }
     }

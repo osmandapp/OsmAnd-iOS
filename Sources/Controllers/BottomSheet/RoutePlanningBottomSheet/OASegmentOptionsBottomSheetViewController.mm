@@ -8,7 +8,7 @@
 
 #import "OASegmentOptionsBottomSheetViewController.h"
 #import "OATitleIconRoundCell.h"
-#import "OASegmentedControllCell.h"
+#import "OASegmentedControlCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
@@ -75,7 +75,7 @@
     
     [data addObject:@[
         @{
-            @"type" : [OASegmentedControllCell getCellIdentifier],
+            @"type" : [OASegmentedControlCell getCellIdentifier],
             @"first_item_title" : [self getButtonText:EOARouteBetweenPointsDialogModeSingle],
             @"second_item_title" : [self getButtonText:EOARouteBetweenPointsDialogModeAll]
         }
@@ -249,14 +249,14 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:[OASegmentedControllCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASegmentedControlCell getCellIdentifier]])
     {
-        OASegmentedControllCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentedControllCell getCellIdentifier]];
+        OASegmentedControlCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentedControlCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControllCell getCellIdentifier] owner:self options:nil];
-            cell = (OASegmentedControllCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControlCell getCellIdentifier] owner:self options:nil];
+            cell = (OASegmentedControlCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
             

@@ -194,7 +194,15 @@
     }
     if (region.population && region.population.length > 0)
     {
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:[NSString stringWithFormat:OALocalizedString(@"population_num"), region.population] textColor:nil isText:YES needLinks:NO order:3 typeName:@"" isPhoneNumber:NO isUrl:YES]];
+        NSString *value = region.population;
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        NSInteger population = [value integerValue];
+        if (population > 0)
+            value = [numberFormatter stringFromNumber:@(population)];
+        
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:OALocalizedString(@"population_num") text:value textColor:nil isText:YES needLinks:NO order:3 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
 }
 

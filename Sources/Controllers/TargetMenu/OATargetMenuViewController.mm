@@ -195,7 +195,8 @@
                     NSArray *locales = targetPoint.localizedContent.allKeys;
                     for (NSString *langCode in [NSLocale preferredLanguages])
                     {
-                        locale = [langCode substringToIndex:[langCode indexOf:@"-"]];
+                        if ([langCode containsString:@"-"])
+                            locale = [langCode substringToIndex:[langCode indexOf:@"-"]];
                         if ([locales containsObject:locale])
                         {
                             content = targetPoint.localizedContent[locale];

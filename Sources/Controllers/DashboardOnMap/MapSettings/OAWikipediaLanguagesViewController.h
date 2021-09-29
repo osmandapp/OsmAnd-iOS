@@ -1,5 +1,5 @@
 //
-//  OAMapSettingsWikipediaLanguagesScreen.h
+//  OAWikipediaLanguagesViewController.h
 //  OsmAnd
 //
 //  Created by Skalii on 10.07.2021.
@@ -30,7 +30,7 @@
 
 @end
 
-@interface OAMapSettingsWikipediaLanguagesScreen : OACompoundViewController
+@interface OAWikipediaLanguagesViewController : OACompoundViewController
 
 @property (nonatomic) id<OAWikipediaScreenDelegate> delegate;
 

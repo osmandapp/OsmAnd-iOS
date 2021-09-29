@@ -850,7 +850,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return items;
 }
 
-+ (NSArray<OAResourceItem *> *) findIndexItemsAt:(NSArray<NSString *> *)names type:(OsmAnd::ResourcesManager::ResourceType)type includeDownloaded:(BOOL)includeDownloaded limit:(NSInteger)limit
++ (NSArray<OAResourceItem *> *) findIndexItemsAt:(NSArray<NSString *> *)names
+                                            type:(OsmAndResourceType)type
+                               includeDownloaded:(BOOL)includeDownloaded
+                                           limit:(NSInteger)limit
 {
     NSMutableArray<OAResourceItem *>* res = [NSMutableArray new];
     OAWorldRegion *worldRegion = OsmAndApp.instance.worldRegion;
@@ -860,9 +863,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         OAWorldRegion *downloadRegion = [worldRegion getRegionDataByDownloadName:name];
 
         if (downloadRegion && (includeDownloaded || ![OAResourcesUIHelper isIndexItemDownloaded:type downloadRegion:downloadRegion res:res]))
-        {
-            [self addIndexItem:type downloadRegion:downloadRegion res:res];
-        }
+            [self.class addIndexItem:type downloadRegion:downloadRegion res:res];
 
         if (limit != -1 && res.count == limit)
             break;
@@ -870,38 +871,60 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return res;
 }
 
-+ (BOOL) isIndexItemDownloaded:(OsmAnd::ResourcesManager::ResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion res:(NSMutableArray<OAResourceItem *>*)res
++ (NSArray<OAResourceItem *> *) findIndexItemsAt:(CLLocationCoordinate2D)coordinate
+                                            type:(OsmAndResourceType)type
+                               includeDownloaded:(BOOL)includeDownloaded
+                                           limit:(NSInteger)limit
+                             skipIfOneDownloaded:(BOOL)skipIfOneDownloaded
 {
-    CLLocationCoordinate2D regionCenter = CLLocationCoordinate2DMake((downloadRegion.bboxTopLeft.latitude + downloadRegion.bboxBottomRight.latitude) / 2, (downloadRegion.bboxTopLeft.longitude + downloadRegion.bboxBottomRight.longitude) / 2);
-    NSArray<OAResourceItem *> *otherIndexItems = [self requestMapDownloadInfo:regionCenter resourceType:type subregions:nil];
+    NSMutableArray<OAResourceItem *>* res = [NSMutableArray new];
+    OAWorldRegion *worldRegion = [[OsmAndApp instance].worldRegion findAtLat:coordinate.latitude lon:coordinate.longitude];
+    NSArray<OAWorldRegion *> *downloadRegions = [[OsmAndApp instance].worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude];
 
-    for (OAResourceItem *indexItem in otherIndexItems)
+    for (OAWorldRegion *downloadRegion in downloadRegions)
     {
-        auto resource = OsmAndApp.instance.resourcesManager->getResource(indexItem.resourceId);
-        BOOL isInstalled = resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
-
-        if (indexItem.resourceType == type && isInstalled)
+        if ([worldRegion.regionId hasPrefix:downloadRegion.regionId] || [downloadRegion.regionId hasPrefix:worldRegion.regionId])
         {
-            return YES;
+            BOOL itemDownloaded = [self.class isIndexItemDownloaded:type downloadRegion:downloadRegion res:res];
+
+            if (skipIfOneDownloaded && itemDownloaded)
+                return [NSArray array];
+
+            if (includeDownloaded || !itemDownloaded)
+                [self.class addIndexItem:type downloadRegion:downloadRegion res:res];
+
+            if (limit != -1 && res.count == limit)
+                break;
         }
     }
-    return downloadRegion.superregion != nil && [self addIndexItem:type downloadRegion:downloadRegion.superregion res:res];
+    return res;
 }
 
-+ (BOOL) addIndexItem:(OsmAnd::ResourcesManager::ResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion res:(NSMutableArray<OAResourceItem *>*)res
++ (BOOL) isIndexItemDownloaded:(OsmAndResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion res:(NSMutableArray<OAResourceItem *>*)res
 {
-    CLLocationCoordinate2D regionCenter = CLLocationCoordinate2DMake((downloadRegion.bboxTopLeft.latitude + downloadRegion.bboxBottomRight.latitude) / 2, (downloadRegion.bboxTopLeft.longitude + downloadRegion.bboxBottomRight.longitude) / 2);
-    NSArray<OAResourceItem *> *otherIndexItems = [self requestMapDownloadInfo:regionCenter resourceType:type subregions:nil];
+    NSArray<NSString *> *otherIndexItems = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:downloadRegion];
+    for (NSString *resourceId in otherIndexItems)
+    {
+        const auto resource = [OsmAndApp instance].resourcesManager->getResource(QString::fromNSString(resourceId));
+        if (resource && resource->type == type && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
+            return YES;
+    }
+    return downloadRegion.superregion != nil && [self.class isIndexItemDownloaded:type downloadRegion:downloadRegion.superregion res:res];
+}
+
++ (BOOL) addIndexItem:(OsmAndResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion res:(NSMutableArray<OAResourceItem *>*)res
+{
+    NSArray<OAResourceItem *> *otherIndexItems = [OAResourcesUIHelper requestMapDownloadInfo:@[downloadRegion] resourceTypes:@[[OAResourceType toValue:type]] isGroup:NO];
 
     for (OAResourceItem *indexItem in otherIndexItems)
     {
-        if (indexItem.resourceType == type && ![res containsObject:indexItem])
+        if (![res containsObject:indexItem])
         {
             [res addObject:indexItem];
             return YES;
         }
     }
-    return downloadRegion.superregion != nil && [self addIndexItem:type downloadRegion:downloadRegion.superregion res:res];
+    return downloadRegion.superregion != nil && [self.class addIndexItem:type downloadRegion:downloadRegion.superregion res:res];
 }
 
 + (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(NSArray<OAWorldRegion *> *)subregions

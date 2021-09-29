@@ -239,6 +239,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self generateData];
 }
 
+- (void)onRotation
+{
+    tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
+    [tblView reloadData];
+}
+
 - (void) generateData
 {
     NSMutableArray *result = [NSMutableArray array];

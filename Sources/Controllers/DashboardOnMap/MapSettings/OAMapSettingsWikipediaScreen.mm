@@ -15,7 +15,7 @@
 #import "OASettingSwitchCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAPOIFiltersHelper.h"
-#import "OAMapSettingsWikipediaLanguagesScreen.h"
+#import "OAWikipediaLanguagesViewController.h"
 #import "OAWikiArticleHelper.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
@@ -441,7 +441,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == EOAMapSettingsWikipediaSectionLanguages && [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAMapSettingsWikipediaLanguagesScreen *controller = [[OAMapSettingsWikipediaLanguagesScreen alloc] init];
+        OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] init];
         controller.delegate = self;
         [self.vwController presentViewController:controller animated:YES completion:nil];
     }

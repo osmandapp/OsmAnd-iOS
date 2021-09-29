@@ -1,12 +1,12 @@
 //
-//  OAMapSettingsWikipediaLanguagesScreen.mm
+//  OAWikipediaLanguagesViewController.mm
 //  OsmAnd
 //
 //  Created by Skalii on 10.07.2021.
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OAMapSettingsWikipediaLanguagesScreen.h"
+#import "OAWikipediaLanguagesViewController.h"
 #import "OsmAndApp.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOIHelper.h"
@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 @end
 
-@interface OAMapSettingsWikipediaLanguagesScreen () <UITableViewDelegate, UITableViewDataSource>
+@interface OAWikipediaLanguagesViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 @end
 
-@implementation OAMapSettingsWikipediaLanguagesScreen
+@implementation OAWikipediaLanguagesViewController
 {
     OsmAndAppInstance _app;
 

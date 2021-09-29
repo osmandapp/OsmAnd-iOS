@@ -2207,7 +2207,7 @@
 		DA5A84D426C563A900F274C7 /* OAMapSettingsOnlineSourcesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF126C563A500F274C7 /* OAMapSettingsOnlineSourcesScreen.mm */; };
 		DA5A84D526C563A900F274C7 /* OAMapSettingsSettingScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF226C563A500F274C7 /* OAMapSettingsSettingScreen.mm */; };
 		DA5A84D626C563A900F274C7 /* OAMapSettingsWikipediaScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF426C563A500F274C7 /* OAMapSettingsWikipediaScreen.mm */; };
-		DA5A84D726C563A900F274C7 /* OAMapSettingsWikipediaLanguagesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF526C563A500F274C7 /* OAMapSettingsWikipediaLanguagesScreen.mm */; };
+		DA5A84D726C563A900F274C7 /* OAWikipediaLanguagesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF526C563A500F274C7 /* OAWikipediaLanguagesViewController.mm */; };
 		DA5A84D826C563A900F274C7 /* OAMapSettingsContourLinesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF726C563A500F274C7 /* OAMapSettingsContourLinesScreen.mm */; };
 		DA5A84D926C563A900F274C7 /* OAMapSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF926C563A500F274C7 /* OAMapSettingsViewController.mm */; };
 		DA5A84DA26C563A900F274C7 /* OAMapSettingsMapTypeScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FFB26C563A500F274C7 /* OAMapSettingsMapTypeScreen.mm */; };
@@ -2217,7 +2217,7 @@
 		DA5A84DE26C563A900F274C7 /* OAMapSettingsLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A800126C563A500F274C7 /* OAMapSettingsLanguageScreen.mm */; };
 		DA5A84DF26C563A900F274C7 /* OAMapSettingsTerrainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A800226C563A500F274C7 /* OAMapSettingsTerrainScreen.mm */; };
 		DA5A84E026C563A900F274C7 /* OAMapSettingsMapillaryScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A800926C563A500F274C7 /* OAMapSettingsMapillaryScreen.mm */; };
-		DA5A84E126C563A900F274C7 /* OAMapSettingsWikipediaLanguagesScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A800C26C563A500F274C7 /* OAMapSettingsWikipediaLanguagesScreen.xib */; };
+		DA5A84E126C563A900F274C7 /* OAWikipediaLanguagesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A800C26C563A500F274C7 /* OAWikipediaLanguagesViewController.xib */; };
 		DA5A84E226C563A900F274C7 /* OAMapSettingsCategoryScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A800D26C563A500F274C7 /* OAMapSettingsCategoryScreen.mm */; };
 		DA5A84E326C563A900F274C7 /* OAMapSettingsPreferredLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A801026C563A500F274C7 /* OAMapSettingsPreferredLanguageScreen.mm */; };
 		DA5A84E426C563A900F274C7 /* OAMapSettingsParameterScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A801226C563A500F274C7 /* OAMapSettingsParameterScreen.mm */; };
@@ -5777,10 +5777,10 @@
 		DA5A7FF226C563A500F274C7 /* OAMapSettingsSettingScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsSettingScreen.mm; sourceTree = "<group>"; };
 		DA5A7FF326C563A500F274C7 /* OAMapSettingsGpxScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsGpxScreen.h; sourceTree = "<group>"; };
 		DA5A7FF426C563A500F274C7 /* OAMapSettingsWikipediaScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsWikipediaScreen.mm; sourceTree = "<group>"; };
-		DA5A7FF526C563A500F274C7 /* OAMapSettingsWikipediaLanguagesScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsWikipediaLanguagesScreen.mm; sourceTree = "<group>"; };
+		DA5A7FF526C563A500F274C7 /* OAWikipediaLanguagesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikipediaLanguagesViewController.mm; sourceTree = "<group>"; };
 		DA5A7FF626C563A500F274C7 /* OAMapSettingsParameterScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsParameterScreen.h; sourceTree = "<group>"; };
 		DA5A7FF726C563A500F274C7 /* OAMapSettingsContourLinesScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsContourLinesScreen.mm; sourceTree = "<group>"; };
-		DA5A7FF826C563A500F274C7 /* OAMapSettingsWikipediaLanguagesScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsWikipediaLanguagesScreen.h; sourceTree = "<group>"; };
+		DA5A7FF826C563A500F274C7 /* OAWikipediaLanguagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikipediaLanguagesViewController.h; sourceTree = "<group>"; };
 		DA5A7FF926C563A500F274C7 /* OAMapSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsViewController.mm; sourceTree = "<group>"; };
 		DA5A7FFA26C563A500F274C7 /* OAMapSettingsPreferredLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsPreferredLanguageScreen.h; sourceTree = "<group>"; };
 		DA5A7FFB26C563A500F274C7 /* OAMapSettingsMapTypeScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsMapTypeScreen.mm; sourceTree = "<group>"; };
@@ -5800,7 +5800,7 @@
 		DA5A800926C563A500F274C7 /* OAMapSettingsMapillaryScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsMapillaryScreen.mm; sourceTree = "<group>"; };
 		DA5A800A26C563A500F274C7 /* OAMapSettingsWikipediaScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsWikipediaScreen.h; sourceTree = "<group>"; };
 		DA5A800B26C563A500F274C7 /* OAMapSettingsScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsScreen.h; sourceTree = "<group>"; };
-		DA5A800C26C563A500F274C7 /* OAMapSettingsWikipediaLanguagesScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAMapSettingsWikipediaLanguagesScreen.xib; sourceTree = "<group>"; };
+		DA5A800C26C563A500F274C7 /* OAWikipediaLanguagesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAWikipediaLanguagesViewController.xib; sourceTree = "<group>"; };
 		DA5A800D26C563A500F274C7 /* OAMapSettingsCategoryScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsCategoryScreen.mm; sourceTree = "<group>"; };
 		DA5A800E26C563A500F274C7 /* OAMapSettingsMapTypeScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsMapTypeScreen.h; sourceTree = "<group>"; };
 		DA5A800F26C563A500F274C7 /* OAMapSettingsLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsLanguageScreen.h; sourceTree = "<group>"; };
@@ -10899,9 +10899,9 @@
 				DA5A800226C563A500F274C7 /* OAMapSettingsTerrainScreen.mm */,
 				DA5A801126C563A500F274C7 /* OAMapSettingsViewController.h */,
 				DA5A7FF926C563A500F274C7 /* OAMapSettingsViewController.mm */,
-				DA5A7FF826C563A500F274C7 /* OAMapSettingsWikipediaLanguagesScreen.h */,
-				DA5A7FF526C563A500F274C7 /* OAMapSettingsWikipediaLanguagesScreen.mm */,
-				DA5A800C26C563A500F274C7 /* OAMapSettingsWikipediaLanguagesScreen.xib */,
+				DA5A7FF826C563A500F274C7 /* OAWikipediaLanguagesViewController.h */,
+				DA5A7FF526C563A500F274C7 /* OAWikipediaLanguagesViewController.mm */,
+				DA5A800C26C563A500F274C7 /* OAWikipediaLanguagesViewController.xib */,
 				DA5A800A26C563A500F274C7 /* OAMapSettingsWikipediaScreen.h */,
 				DA5A7FF426C563A500F274C7 /* OAMapSettingsWikipediaScreen.mm */,
 			);
@@ -13270,7 +13270,7 @@
 				DA32847D26CC01BA0036BA73 /* export_items@3x.png in Resources */,
 				DAF345AB22F4482C009E2EB6 /* ic_custom_map_style@2x.png in Resources */,
 				DA5A848D26C563A900F274C7 /* OASaveTrackViewController.xib in Resources */,
-				DA5A84E126C563A900F274C7 /* OAMapSettingsWikipediaLanguagesScreen.xib in Resources */,
+				DA5A84E126C563A900F274C7 /* OAWikipediaLanguagesViewController.xib in Resources */,
 				843257A31A9DAE4100A7964E /* ic_arrow_up@3x.png in Resources */,
 				8476E25C1F6C1EEC00EC274F /* map_bicycle_location_night@2x.png in Resources */,
 				DA84E84B21D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png in Resources */,
@@ -14158,7 +14158,7 @@
 				DA5A822F26C563A700F274C7 /* OABaseSettingsListViewController.mm in Sources */,
 				DA5A820826C563A700F274C7 /* OAPurchaseDialogCardButton.m in Sources */,
 				DA5A81E726C563A700F274C7 /* OAGPXTrackAnalysis.mm in Sources */,
-				DA5A84D726C563A900F274C7 /* OAMapSettingsWikipediaLanguagesScreen.mm in Sources */,
+				DA5A84D726C563A900F274C7 /* OAWikipediaLanguagesViewController.mm in Sources */,
 				DA5A82FB26C563A800F274C7 /* OAImageDescTableViewCell.m in Sources */,
 				DA5A824F26C563A700F274C7 /* OAVoicePromptsViewController.mm in Sources */,
 				DA5A844826C563A900F274C7 /* OAMultiDestinationCell.mm in Sources */,

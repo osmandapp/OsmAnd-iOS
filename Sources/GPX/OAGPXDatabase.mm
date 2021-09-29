@@ -36,12 +36,12 @@
 
 - (NSString *)width
 {
-    return _width ? _width : @"thin";
+    return _width ? _width : @"";
 }
 
 - (NSString *)coloringType
 {
-    return _coloringType ? _coloringType : @"solid";
+    return _coloringType ? _coloringType : @"";
 }
 
 @end

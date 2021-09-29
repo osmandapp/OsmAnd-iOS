@@ -91,7 +91,8 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
             NSArray *locales = _poi.localizedContent.allKeys;
             for (NSString *langCode in [NSLocale preferredLanguages])
             {
-                _contentLocale = [langCode substringToIndex:[langCode indexOf:@"-"]];
+                if ([langCode containsString:@"-"])
+                    _contentLocale = [langCode substringToIndex:[langCode indexOf:@"-"]];
                 if ([locales containsObject:_contentLocale])
                 {
                     content = _poi.localizedContent[_contentLocale];

@@ -92,8 +92,8 @@ static BOOL _isRoutesGroupOpen = NO;
 - (void)setupView
 {
     NSMutableArray *data = [NSMutableArray array];
-    BOOL hasWiki = [_iapHelper.wiki isActive];
-    BOOL hasSRTM = [_iapHelper.srtm isActive];
+    BOOL hasWiki = [_iapHelper.wiki isPurchased];
+    BOOL hasSRTM = [_iapHelper.srtm isPurchased];
 
     [data addObject:@{
             @"group_name": @"",
@@ -125,7 +125,7 @@ static BOOL _isRoutesGroupOpen = NO;
             @"key": @"layer_amenity_label"
     }];
 
-    if (![_iapHelper.wiki isPurchased] || (!_iapHelper.wiki.disabled))
+    if (!hasWiki || (!_iapHelper.wiki.disabled))
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"product_title_wiki"),
                 @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
@@ -282,7 +282,7 @@ static BOOL _isRoutesGroupOpen = NO;
             }];
         }
 
-        if (hasSRTM)
+        if (hasSRTM && (!_iapHelper.srtm.disabled))
             [mapStyleSectionData addObject:@{
                     @"name": OALocalizedString(@"product_title_srtm"),
                     @"image": @"ic_custom_contour_lines",
@@ -298,7 +298,7 @@ static BOOL _isRoutesGroupOpen = NO;
     }
 
     NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
-    if (![_iapHelper.srtm isPurchased] || (!_iapHelper.srtm.disabled))
+    if (!hasSRTM || (!_iapHelper.srtm.disabled))
         [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"shared_string_terrain"),
             @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",

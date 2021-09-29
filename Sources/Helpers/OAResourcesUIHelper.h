@@ -241,12 +241,27 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
                                           resourceType:(OsmAndResourceType)resourceType
                                             subregions:(NSArray<OAWorldRegion *> *)subregions;
 
-+ (void) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon onComplete:(void (^)(NSArray<OARepositoryResourceItem *> *))onComplete;
-+ (NSArray<OARepositoryResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type latLon:(CLLocationCoordinate2D)latLon;
-+ (NSArray<OAResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type names:(NSArray<NSString *> *)names limit:(NSInteger)limit;
-+ (NSArray<OAResourceItem *> *) findIndexItemsAt:(NSArray<NSString *> *)names type:(OsmAnd::ResourcesManager::ResourceType)type includeDownloaded:(BOOL)includeDownloaded limit:(NSInteger)limit;
-+ (CLLocationCoordinate2D) getMapLocation;
++ (void) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type
+                 latLon:(CLLocationCoordinate2D)latLon
+             onComplete:(void (^)(NSArray<OARepositoryResourceItem *> *))onComplete;
++ (NSArray<OARepositoryResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type
+                                                  latLon:(CLLocationCoordinate2D)latLon;
++ (NSArray<OAResourceItem *> *) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type
+                                         names:(NSArray<NSString *> *)names
+                                         limit:(NSInteger)limit;
 
++ (NSArray<OAResourceItem *> *) findIndexItemsAt:(NSArray<NSString *> *)names
+                                            type:(OsmAndResourceType)type
+                               includeDownloaded:(BOOL)includeDownloaded
+                                           limit:(NSInteger)limit;
+
++ (NSArray<OAResourceItem *> *) findIndexItemsAt:(CLLocationCoordinate2D)coordinate
+                                            type:(OsmAndResourceType)type
+                               includeDownloaded:(BOOL)includeDownloaded
+                                           limit:(NSInteger)limit
+                             skipIfOneDownloaded:(BOOL)skipIfOneDownloaded;
+
++ (CLLocationCoordinate2D) getMapLocation;
 
 + (void) clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(float)zoom onComplete:(void (^)(void))onComplete;
 

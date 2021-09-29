@@ -2205,7 +2205,13 @@ static BOOL _lackOfResources;
                 }
                 
                 if (_sizePkg > 0)
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+                {
+                    NSString *srtmFormat = @"";
+                    if ([OAResourceType isSRTMResourceItem:item])
+                        srtmFormat = [NSString stringWithFormat:@" (%@)", [OAResourceType getSRTMFormatItem:item longFormat:NO]];
+
+                    subtitle = [NSString stringWithFormat:@"%@%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], srtmFormat, [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+                }
                 else
                     subtitle = [NSString stringWithFormat:@"%@", [OAResourceType resourceTypeLocalized:item.resourceType]];
             }

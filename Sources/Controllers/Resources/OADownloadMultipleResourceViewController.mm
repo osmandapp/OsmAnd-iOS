@@ -65,11 +65,26 @@
         _selectedItems = [NSMutableArray new];
         for (OAResourceItem *item in _items)
         {
-            if (![OsmAndApp instance].resourcesManager->isResourceInstalled(item.resourceId))
+            if (![self isResourceInstalled:item])
                 [_selectedItems addObject:item];
         }
     }
     return self;
+}
+
+- (BOOL) isResourceInstalled:(OAResourceItem *)resourceItem
+{
+    if (resourceItem.resourceType != OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+    {
+        return [OsmAndApp instance].resourcesManager->isResourceInstalled(resourceItem.resourceId);
+    }
+    else
+    {
+        QString srtmQPath = resourceItem.resourceId;
+        NSString *srtmfPath = [srtmQPath.toNSString() stringByReplacingOccurrencesOfString:@"srtm" withString:@"srtmf"];
+        QString srtmfQPath = QString(srtmfPath.UTF8String);
+        return [OsmAndApp instance].resourcesManager->isResourceInstalled(srtmQPath) || [OsmAndApp instance].resourcesManager->isResourceInstalled(srtmfQPath);
+    }
 }
 
 - (void)viewDidLoad
@@ -210,12 +225,24 @@
                 else if (!_srtmfOn && ![OAResourceType isSRTMF:item])
                     [_items addObject:item];
             }
-            [_selectedItems removeAllObjects];
+            
+            NSMutableArray *newSelectedItems = [NSMutableArray new];
             for (OAResourceItem *item in _items)
             {
-                if (![OsmAndApp instance].resourcesManager->isResourceInstalled(item.resourceId))
-                    [_selectedItems addObject:item];
+                if ([OsmAndApp instance].resourcesManager->isResourceInstalled(item.resourceId))
+                    continue;
+
+                for (OAResourceItem *selectedItem in _selectedItems)
+                {
+                    if ([item.title isEqualToString:selectedItem.title])
+                    {
+                        [newSelectedItems addObject:item];
+                        break;
+                    }
+                }
             }
+            _selectedItems = newSelectedItems;
+            
             [UIView transitionWithView:self.tableView
                               duration:0.35f
                                options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction

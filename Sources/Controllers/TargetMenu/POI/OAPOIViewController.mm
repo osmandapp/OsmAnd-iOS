@@ -22,6 +22,7 @@
 #import "OAOsmEditingPlugin.h"
 #import "Localization.h"
 #import "OACollapsableNearestPoiTypeView.h"
+#import "OAOsmAndFormatter.h"
 
 #include <openingHoursParser.h>
 #include <OsmAndCore.h>
@@ -46,9 +47,6 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
 static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"whatsapp", @"viber"];
-static const NSString *kPopulationTag = @"population";
-static const NSString *kElevationTag = @"ele";
-static const NSString *kCapacityTag = @"capacity";
 
 - (instancetype) init
 {
@@ -220,8 +218,7 @@ static const NSString *kCapacityTag = @"capacity";
         NSString *textPrefix = nil;
         BOOL isText = NO;
         BOOL isDescription = NO;
-        BOOL needLinks = ![kPopulationTag isEqualToString:key];
-        BOOL needIntFormatting = [kPopulationTag isEqualToString:key] || [kElevationTag isEqualToString:key] || [kCapacityTag isEqualToString:key];
+        BOOL needLinks = YES;
         BOOL isPhoneNumber = NO;
         BOOL isUrl = NO;
         BOOL isCuisine = NO;
@@ -258,16 +255,6 @@ static const NSString *kCapacityTag = @"capacity";
                 skip = YES;
             }
         }
-        else if (needIntFormatting)
-        {
-            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-            [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-            [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-            NSInteger population = [value integerValue];
-            if (population > 0)
-                value = [numberFormatter stringFromNumber:@(population)];
-        }
-        
         if ([key hasPrefix:@"wiki_lang"])
         {
             skip = YES;
@@ -404,6 +391,11 @@ static const NSString *kCapacityTag = @"capacity";
                 if (!icon && isText)
                 {
                     iconId = @"ic_description.png";
+                }
+                if (![self containTextInValue:value])
+                {
+                    value = [OAOsmAndFormatter getFormattedOsmTagValue:value];
+                    needLinks = NO;
                 }
             }
             else
@@ -565,6 +557,11 @@ static const NSString *kCapacityTag = @"capacity";
             [rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits.png"] textPrefix:nil text:[NSString stringWithFormat:@"%@%llu", link, entityId] textColor:UIColorFromRGB(kHyperlinkColor) isText:YES needLinks:NO order:10000 typeName:nil isPhoneNumber:NO isUrl:YES]];
         }
     }
+}
+
+- (BOOL) containTextInValue:(NSString *)value
+{
+    return [value rangeOfCharacterFromSet: [ [NSCharacterSet characterSetWithCharactersInString:@"0123456789.-"] invertedSet] ].location != NSNotFound;
 }
 
 - (BOOL) hasTopToolbar

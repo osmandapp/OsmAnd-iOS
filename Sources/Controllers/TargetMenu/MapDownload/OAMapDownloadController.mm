@@ -16,6 +16,7 @@
 #import "OAMapLayers.h"
 #import "OADownloadedRegionsLayer.h"
 #import "Localization.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OAMapDownloadController ()
 
@@ -179,7 +180,10 @@
     
     if (resTypeLocalized && resTypeLocalized.length > 0)
     {
-        NSString *rowText = [NSString stringWithFormat:@"%@ - %@", resTypeLocalized, [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        NSString *rowText = resTypeLocalized;
+        if (item.sizePkg && item.sizePkg > 0)
+            rowText = [NSString stringWithFormat:@"%@ - %@", rowText, [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        
         [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:1 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     if (region.wikiLink && region.wikiLink.length > 0)
@@ -194,15 +198,7 @@
     }
     if (region.population && region.population.length > 0)
     {
-        NSString *value = region.population;
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        NSInteger population = [value integerValue];
-        if (population > 0)
-            value = [numberFormatter stringFromNumber:@(population)];
-        
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:OALocalizedString(@"population_num") text:value textColor:nil isText:YES needLinks:NO order:3 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:OALocalizedString(@"population_num") text:[OAOsmAndFormatter getFormattedOsmTagValue:region.population] textColor:nil isText:YES needLinks:NO order:3 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
 }
 

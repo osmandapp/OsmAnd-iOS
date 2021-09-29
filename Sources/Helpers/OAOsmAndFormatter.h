@@ -51,4 +51,6 @@
 + (NSString *) getFormattedAlt:(double) alt;
 + (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
 
++ (NSString *) getFormattedOsmTagValue:(NSString *)tagValue;
+
 @end

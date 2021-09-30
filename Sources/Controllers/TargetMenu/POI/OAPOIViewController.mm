@@ -392,7 +392,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                 {
                     iconId = @"ic_description.png";
                 }
-                if ([self isNumbericValue:value])
+                if ([self isNumericValue:value])
                 {
                     value = [OAOsmAndFormatter getFormattedOsmTagValue:value];
                     needLinks = NO;
@@ -559,7 +559,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
     }
 }
 
-- (BOOL) isNumbericValue:(NSString *)value
+- (BOOL) isNumericValue:(NSString *)value
 {
     return [value rangeOfCharacterFromSet: [ [NSCharacterSet characterSetWithCharactersInString:@"0123456789.-"] invertedSet] ].location == NSNotFound;
 }

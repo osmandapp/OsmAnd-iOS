@@ -417,5 +417,20 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     return coordinate;
 }
 
++ (NSString *) getFormattedOsmTagValue:(NSString *)tagValue
+{
+    if ([tagValue rangeOfCharacterFromSet: [ [NSCharacterSet characterSetWithCharactersInString:@"0123456789.-"] invertedSet] ].location == NSNotFound)
+    {
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        [numberFormatter setGroupingSeparator:@"\u00a0"];
+        NSNumber *numberValue = [NSNumber numberWithDouble:[tagValue doubleValue]];
+        if (numberValue && numberValue.doubleValue != 0)
+            return [numberFormatter stringFromNumber:numberValue];
+    }
+    return tagValue;
+}
+
 
 @end

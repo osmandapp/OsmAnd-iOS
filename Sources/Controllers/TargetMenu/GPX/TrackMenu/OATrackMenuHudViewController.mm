@@ -138,6 +138,7 @@
     self.tabBarView.selectedItem = self.tabBarView.items[kOverviewTabIndex];
     self.tabBarView.itemWidth = self.scrollableView.frame.size.width / self.tabBarView.items.count;
     self.tabBarView.delegate = self;
+    [self.tabBarView makeTranslucent:YES];
 }
 
 - (void)setupDescription
@@ -194,8 +195,8 @@
         [_headerView.regionTextView setText:worldRegion.localizedName];
         _headerView.regionTextView.textColor = UIColorFromRGB(color_text_footer);
 
-        [_headerView.showHideButton setTitle:self.isShown ? OALocalizedString(@"sett_show") : OALocalizedString(@"poi_hide") forState:UIControlStateNormal];
-        [_headerView.showHideButton setImage:[UIImage templateImageNamed:self.isShown ? @"ic_custom_show" : @"ic_custom_hide"] forState:UIControlStateNormal];
+        [_headerView.showHideButton setTitle:self.isShown ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show") forState:UIControlStateNormal];
+        [_headerView.showHideButton setImage:[UIImage templateImageNamed:self.isShown ? @"ic_custom_hide" : @"ic_custom_show"] forState:UIControlStateNormal];
         [_headerView.showHideButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [_headerView.showHideButton addTarget:self action:@selector(onShowHidePressed:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -316,15 +317,17 @@
                 @"key": @"size"
         }];
 
-        [infoSectionData addObject:@{
-                @"title": OALocalizedString(@"res_created_on"),
-                @"value": [NSDateFormatter localizedStringFromDate:self.gpx.importDate
-                                                         dateStyle:NSDateFormatterMediumStyle
-                                                         timeStyle:NSDateFormatterNoStyle],
-                @"has_options": @NO,
-                @"type": [OAIconTitleValueCell getCellIdentifier],
-                @"key": @"created_on"
-        }];
+        NSDate *createdOnDate = [NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time];
+        if ([createdOnDate earlierDate:[NSDate date]] == createdOnDate)
+            [infoSectionData addObject:@{
+                    @"title": OALocalizedString(@"res_created_on"),
+                    @"value": [NSDateFormatter localizedStringFromDate:createdOnDate
+                                                             dateStyle:NSDateFormatterMediumStyle
+                                                             timeStyle:NSDateFormatterNoStyle],
+                    @"has_options": @NO,
+                    @"type": [OAIconTitleValueCell getCellIdentifier],
+                    @"key": @"created_on"
+            }];
 
         if (!self.isCurrentTrack)
             [infoSectionData addObject:@{
@@ -609,9 +612,9 @@
 
     self.isShown = !self.isShown;
 
-    [_headerView.showHideButton setTitle:self.isShown ? OALocalizedString(@"sett_show") : OALocalizedString(@"poi_hide")
+    [_headerView.showHideButton setTitle:self.isShown ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show")
                                 forState:UIControlStateNormal];
-    [_headerView.showHideButton setImage:[UIImage templateImageNamed:self.isShown ? @"ic_custom_show" : @"ic_custom_hide"]
+    [_headerView.showHideButton setImage:[UIImage templateImageNamed:self.isShown ? @"ic_custom_hide" : @"ic_custom_show"]
                                 forState:UIControlStateNormal];
 }
 

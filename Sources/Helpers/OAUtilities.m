@@ -399,6 +399,27 @@
 
 @end
 
+@implementation UITabBar (utils)
+
+- (void)makeTranslucent:(BOOL)light
+{
+    self.translucent = YES;
+    self.backgroundImage = [UIImage new];
+//    remove separator
+//    self.shadowImage = [UIImage new];
+    self.barTintColor = UIColor.clearColor;
+    self.backgroundColor = light ? UIColor.whiteColor : UIColor.blackColor;
+    self.layer.backgroundColor = UIColor.clearColor.CGColor;
+}
+
+- (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding
+{
+    [super addBlurEffect:light cornerRadius:cornerRadius padding:padding];
+    [self makeTranslucent:YES];
+}
+
+@end
+
 @implementation UITableViewCell (util)
 
 + (NSString *) getCellIdentifier

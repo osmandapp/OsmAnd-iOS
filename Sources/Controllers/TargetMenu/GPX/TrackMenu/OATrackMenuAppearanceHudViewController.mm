@@ -48,8 +48,18 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
     EOATrackAppearanceHudWidthTitleRow = 0,
     EOATrackAppearanceHudWidthValuesRow,
     EOATrackAppearanceHudWidthEmptySpaceRow,
-    EOATrackAppearanceHudWidthCustomIntervalRow
+    EOATrackAppearanceHudWidthCustomSliderRow
 };
+
+typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudSplitIntervalRow)
+{
+    EOATrackAppearanceHudSplitIntervalTitleRow = 0,
+    EOATrackAppearanceHudSplitIntervalValuesRow,
+    EOATrackAppearanceHudSplitIntervalNoneDescrOrCustomSliderRow
+};
+
+static const NSInteger kCustomTrackWidthMin = 1;
+static const NSInteger kCustomTrackWidthMax = 24;
 
 @interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate>
 
@@ -89,6 +99,11 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
     NSString *_selectedWidthType;
     NSArray<NSNumber *> *_widthValues;
     NSInteger _selectedWidthValue;
+
+    NSArray<NSString *> *_splitIntervalTypes;
+    NSString *_selectedSplitIntervalType;
+    NSArray<NSNumber *> *_splitIntervalValues;
+    NSInteger _selectedSplitIntervalValue;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
@@ -125,10 +140,31 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
     }
     _availableTrackColors = trackColors;
 
+    NSInteger widthValue = [self.gpx.width intValue];
     _widthTypes = @[@"Thin", @"Medium", @"Bold", @"Custom"];
-    _selectedWidthType = _widthTypes.firstObject;
-    _widthValues = @[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10];
-    _selectedWidthValue = [_widthValues.firstObject intValue];
+    _selectedWidthType = widthValue > 0 ? _widthTypes.lastObject : self.gpx.width.capitalizedString;
+
+    NSMutableArray *customWidthValues = [NSMutableArray array];
+    for (NSInteger i = kCustomTrackWidthMin; i <= kCustomTrackWidthMax; i++)
+    {
+        [customWidthValues addObject:@(i)];
+    }
+    _widthValues = customWidthValues;
+    _selectedWidthValue = widthValue > 0 ? widthValue : [_widthValues.firstObject intValue];
+
+    NSInteger splitIntervalValue = 0;
+    _splitIntervalTypes = @[@"None", @"Time", @"Distance"];
+    _selectedSplitIntervalType = /*splitIntervalValue == 0 ? */_splitIntervalTypes.firstObject/* : self.gpx.splitInterval*/;
+
+    NSMutableArray *customSplitIntervalValues = [NSMutableArray array];
+    for (NSInteger i = 1/*kCustomTrackSplitIntervalMin*/; i <= 10/*kCustomTrackSplitIntervalMax*/; i++)
+    {
+        [customSplitIntervalValues addObject:@(i)];
+    }
+    _splitIntervalValues = customSplitIntervalValues;
+    _selectedSplitIntervalValue = splitIntervalValue > 0 ? splitIntervalValue : [_splitIntervalValues.firstObject intValue];
+
+    NSLog(@"");
 }
 
 - (void)viewDidLoad
@@ -269,14 +305,15 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
             @"key": @"width_empty_space"
     }];
 
-
     if ([_selectedWidthType isEqualToString:@"Custom"])
     {
         [widthSectionData addObject:@{
-                @"selected_index": @(_selectedWidthValue),
+                @"selected_value": @(_selectedWidthValue),
                 @"values": _widthValues,
+                @"has_top_labels": @NO,
+                @"has_bottom_labels": @YES,
                 @"type": [OASegmentSliderTableViewCell getCellIdentifier],
-                @"key": @"width_custom_interval"
+                @"key": @"width_custom_slider"
         }];
     }
 
@@ -288,12 +325,43 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
 
     [splitSectionData addObject:@{
             @"title": OALocalizedString(@"gpx_split_interval"),
-            @"value": @"None",
+            @"value": _selectedSplitIntervalType,
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"key": @"split_title"
     }];
 
-    //    OASliderWithValuesCell
+//    for (NSString *splitIntervalType in _splitIntervalTypes)
+    [splitSectionData addObject:@{
+            @"selected_index": @([_splitIntervalTypes indexOfObject:_selectedSplitIntervalType]),
+            @"values": @[
+                    @{@"title": @"None"},
+                    @{@"title": @"Time"},
+                    @{@"title": @"Distance"}
+            ],
+            @"type": [OASegmentedControlCell getCellIdentifier],
+            @"key": @"split_interval_value"
+    }];
+
+    if ([_selectedSplitIntervalType isEqualToString:@"None"])
+    {
+        [splitSectionData addObject:@{
+                @"title": OALocalizedString(@"gpx_split_interval_none_descr"),
+                @"type": [OATextLineViewCell getCellIdentifier],
+                @"key": @"split_interval_none_descr"
+        }];
+    }
+    else
+    {
+        [splitSectionData addObject:@{
+                @"title": OALocalizedString(@"shared_string_interval"),
+                @"selected_value": @(_selectedSplitIntervalValue),
+                @"values": _splitIntervalValues,
+                @"has_top_labels": @YES,
+                @"has_bottom_labels": @YES,
+                @"type": [OASegmentSliderTableViewCell getCellIdentifier],
+                @"key": @"split_interval_custom_slider"
+        }];
+    }
 
     [data addObject:@{
             @"cells": splitSectionData,
@@ -340,8 +408,9 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
                     titleRow[@"value"] = _selectedColoringType.title;
                     cells[EOATrackAppearanceHudColorTitleRow] = titleRow;
 
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:EOATrackAppearanceHudColorTitleRow
-                                                                                inSection:section]]
+                    [self.tableView reloadRowsAtIndexPaths:@[
+                            [NSIndexPath indexPathForRow:EOATrackAppearanceHudColorTitleRow
+                                               inSection:section]]
                                           withRowAnimation:UITableViewRowAnimationNone];
                 }
 
@@ -367,8 +436,9 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
                     }
                     cells[EOATrackAppearanceHudColorGridOrElevationDescriptionRow] = gridOrElevationDescriptionRow;
 
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:EOATrackAppearanceHudColorGridOrElevationDescriptionRow
-                                                                                inSection:section]]
+                    [self.tableView reloadRowsAtIndexPaths:@[
+                            [NSIndexPath indexPathForRow:EOATrackAppearanceHudColorGridOrElevationDescriptionRow
+                                               inSection:section]]
                                           withRowAnimation:UITableViewRowAnimationNone];
                 }
             }
@@ -380,35 +450,78 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
                     titleRow[@"value"] = _selectedWidthType;
                     cells[EOATrackAppearanceHudWidthTitleRow] = titleRow;
 
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:EOATrackAppearanceHudWidthTitleRow
-                                                                                inSection:section]]
+                    [self.tableView reloadRowsAtIndexPaths:@[
+                            [NSIndexPath indexPathForRow:EOATrackAppearanceHudWidthTitleRow
+                                               inSection:section]]
                                           withRowAnimation:UITableViewRowAnimationNone];
                 }
 
-                if (cells.count == EOATrackAppearanceHudWidthCustomIntervalRow + 1 && ![_selectedWidthType isEqualToString:@"Custom"])
+                if (cells.count == EOATrackAppearanceHudWidthCustomSliderRow + 1 && ![_selectedWidthType isEqualToString:@"Custom"])
                 {
-                    [cells removeObjectAtIndex:EOATrackAppearanceHudWidthCustomIntervalRow];
+                    [cells removeObjectAtIndex:EOATrackAppearanceHudWidthCustomSliderRow];
 
                     [self.tableView beginUpdates];
-                    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:EOATrackAppearanceHudWidthCustomIntervalRow
-                                                                                inSection:section]]
+                    [self.tableView deleteRowsAtIndexPaths:@[
+                            [NSIndexPath indexPathForRow:EOATrackAppearanceHudWidthCustomSliderRow
+                                               inSection:section]]
                                           withRowAnimation:UITableViewRowAnimationAutomatic];
                     [self.tableView endUpdates];
                 }
                 else if (cells.count == EOATrackAppearanceHudWidthEmptySpaceRow + 1 && [_selectedWidthType isEqualToString:@"Custom"])
                 {
-                    [cells addObject:@{
-                            @"selected_index": @(_selectedWidthValue),
+                    [cells insertObject:@{
+                            @"selected_value": @(_selectedWidthValue),
                             @"values": _widthValues,
+                            @"has_top_labels": @NO,
+                            @"has_bottom_labels": @YES,
                             @"type": [OASegmentSliderTableViewCell getCellIdentifier],
-                            @"key": @"width_custom_interval"
-                    }];
+                            @"key": @"width_custom_slider"
+                    } atIndex:EOATrackAppearanceHudWidthCustomSliderRow];
 
                     [self.tableView beginUpdates];
-                    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:EOATrackAppearanceHudWidthCustomIntervalRow
-                                                                                inSection:section]]
+                    [self.tableView insertRowsAtIndexPaths:@[
+                            [NSIndexPath indexPathForRow:EOATrackAppearanceHudWidthCustomSliderRow
+                                               inSection:section]]
                                           withRowAnimation:UITableViewRowAnimationAutomatic];
                     [self.tableView endUpdates];
+                }
+            }
+            else if (section == EOATrackAppearanceHudSplitIntervalSection)
+            {
+                NSMutableDictionary *titleRow = [cells[EOATrackAppearanceHudSplitIntervalTitleRow] mutableCopy];
+                if (titleRow)
+                {
+                    titleRow[@"value"] = _selectedSplitIntervalType;
+                    cells[EOATrackAppearanceHudSplitIntervalTitleRow] = titleRow;
+
+                    [self.tableView reloadRowsAtIndexPaths:@[
+                            [NSIndexPath indexPathForRow:EOATrackAppearanceHudSplitIntervalTitleRow
+                                               inSection:section]]
+                                          withRowAnimation:UITableViewRowAnimationNone];
+                }
+
+                NSMutableDictionary *noneDescrOrCustomSliderRow = cells[EOATrackAppearanceHudSplitIntervalNoneDescrOrCustomSliderRow];
+                if (noneDescrOrCustomSliderRow)
+                {
+                    cells[EOATrackAppearanceHudSplitIntervalNoneDescrOrCustomSliderRow] =
+                            [_selectedSplitIntervalType isEqualToString:@"None"] ? @{
+                                    @"title": OALocalizedString(@"gpx_split_interval_none_descr"),
+                                    @"type": [OATextLineViewCell getCellIdentifier],
+                                    @"key": @"split_interval_none_descr"
+                            } : @{
+                                    @"title": OALocalizedString(@"shared_string_interval"),
+                                    @"selected_value": @(_selectedSplitIntervalValue),
+                                    @"values": _splitIntervalValues,
+                                    @"has_top_labels": @YES,
+                                    @"has_bottom_labels": @YES,
+                                    @"type": [OASegmentSliderTableViewCell getCellIdentifier],
+                                    @"key": @"split_interval_custom_slider"
+                            };
+
+                    [self.tableView reloadRowsAtIndexPaths:@[
+                            [NSIndexPath indexPathForRow:EOATrackAppearanceHudSplitIntervalNoneDescrOrCustomSliderRow
+                                               inSection:section]]
+                                          withRowAnimation:UITableViewRowAnimationNone];
                 }
             }
         }
@@ -601,6 +714,7 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextLineViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -625,8 +739,10 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
             cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
 
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor} forState:UIControlStateSelected];
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)} forState:UIControlStateNormal];
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor}
+                                                 forState:UIControlStateSelected];
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)}
+                                                 forState:UIControlStateNormal];
 
             if (@available(iOS 13.0, *))
                 cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
@@ -659,7 +775,8 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
 
             cell.segmentedControl.tag = indexPath.section << 10 | indexPath.row;
             [cell.segmentedControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.segmentedControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
+            [cell.segmentedControl addTarget:self action:@selector(segmentChanged:)
+                            forControlEvents:UIControlEventValueChanged];
         }
         outCell = cell;
     }
@@ -682,6 +799,8 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
     {
         OASegmentSliderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
         NSArray<NSNumber *> *values = item[@"values"];
+        BOOL hasTopLabels = [item[@"has_top_labels"] boolValue];
+        BOOL hasBottomLabels = [item[@"has_bottom_labels"] boolValue];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier] owner:self options:nil];
@@ -690,11 +809,14 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
         }
         if (cell)
         {
+            [cell showLabels:hasTopLabels topRight:hasTopLabels bottomLeft:hasBottomLabels bottomRight:hasBottomLabels];
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.titleLabel.text = [NSString stringWithFormat:@"%li", (long) [values.firstObject intValue]];
-            cell.valueLabel.text = [NSString stringWithFormat:@"%li", (long) [values.lastObject intValue]];
+            cell.topLeftLabel.text = item[@"title"];
+            cell.topRightLabel.text = [NSString stringWithFormat:@"%li", (long) [item[@"selected_value"] intValue]];
+            cell.bottomLeftLabel.text = [NSString stringWithFormat:@"%li", (long) [values.firstObject intValue]];
+            cell.bottomRightLabel.text = [NSString stringWithFormat:@"%li", (long) [values.lastObject intValue]];
             cell.numberOfMarks = values.count;
-            cell.selectedMark = [item[@"selected_index"] intValue];
+            cell.selectedMark = [item[@"selected_value"] intValue];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -738,10 +860,10 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
 
     OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     UIFont *textFont = [UIFont systemFontOfSize:13];
-    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc]
-            initWithString:sectionFooter
-            attributes:@{NSFontAttributeName: textFont,
-                    NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)}];
+    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:sectionFooter attributes:@{
+            NSFontAttributeName: textFont,
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+    }];
     vw.label.attributedText = textStr;
     return vw;
 }
@@ -792,8 +914,22 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
         if ([item[@"key"] isEqualToString:@"width_value"])
         {
             _selectedWidthType = _widthTypes[segment.selectedSegmentIndex];
-//        [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+            self.gpx.width = [_selectedWidthType isEqualToString:@"Custom"]
+                    ? [NSString stringWithFormat:@"%li", (long) _selectedWidthValue] : _selectedWidthType;
+            [[OAGPXDatabase sharedDb] save];
+
+            [[self.app updateGpxTracksOnMapObservable] notifyEvent];
             [self generateData:EOATrackAppearanceHudWidthSection];
+        }
+        else if ([item[@"key"] isEqualToString:@"split_interval_value"])
+        {
+            _selectedSplitIntervalType = _splitIntervalTypes[segment.selectedSegmentIndex];
+//            self.gpx.splitInterval = [_selectedSplitIntervalType isEqualToString:@"Custom"]
+//                    ? [NSString stringWithFormat:@"%li", (long) _selectedSplitIntervalValue] : _selectedSplitIntervalType;
+//            [[OAGPXDatabase sharedDb] save];
+
+//            [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+            [self generateData:EOATrackAppearanceHudSplitIntervalSection];
         }
     }
 }
@@ -809,16 +945,32 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
         OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         NSDictionary *item = [self getItem:indexPath];
 
-        if ([item[@"key"] isEqualToString:@"width_custom_interval"])
+        if ([item[@"key"] isEqualToString:@"width_custom_slider"])
         {
             NSInteger index = cell.selectedMark;
             NSInteger selectedValue = [_widthValues[index] intValue];
             if (_selectedWidthValue != selectedValue)
             {
                 _selectedWidthValue = selectedValue;
+                self.gpx.width = [NSString stringWithFormat:@"%li", (long) _selectedWidthValue];
+                [[OAGPXDatabase sharedDb] save];
 
-//            [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+                [[self.app updateGpxTracksOnMapObservable] notifyEvent];
                 [self generateData:EOATrackAppearanceHudWidthSection];
+            }
+        }
+        else if ([item[@"key"] isEqualToString:@"split_interval_custom_slider"])
+        {
+            NSInteger index = cell.selectedMark;
+            NSInteger selectedValue = [_splitIntervalValues[index] intValue];
+            if (_selectedSplitIntervalValue != selectedValue)
+            {
+                _selectedSplitIntervalValue = selectedValue;
+//                self.gpx.splitInterval = [NSString stringWithFormat:@"%li", (long) _selectedSplitIntervalValue];
+//                [[OAGPXDatabase sharedDb] save];
+
+//                [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+                [self generateData:EOATrackAppearanceHudSplitIntervalSection];
             }
         }
     }

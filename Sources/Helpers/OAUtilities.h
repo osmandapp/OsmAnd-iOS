@@ -75,9 +75,9 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
-@interface UIButton (util)
+@interface UITabBar (util)
 
-- (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding;
+- (void) makeTranslucent:(BOOL)light;
 
 @end
 

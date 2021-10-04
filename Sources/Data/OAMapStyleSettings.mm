@@ -152,8 +152,8 @@
 
         if ([name isEqualToString:@"appMode"] ||
             [name isEqualToString:@"baseAppMode"] ||
-            [name isEqualToString:@"currentTrackColor"] ||
-            [name isEqualToString:@"currentTrackWidth"] ||
+//            [name isEqualToString:@"currentTrackColor"] ||
+//            [name isEqualToString:@"currentTrackWidth"] ||
             [name isEqualToString:@"engine_v1"])
 
             continue;

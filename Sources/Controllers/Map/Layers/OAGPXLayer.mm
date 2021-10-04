@@ -23,6 +23,7 @@
 #import "OAFavoritesLayer.h"
 #import "OARouteColorizationHelper.h"
 #import "OAColoringType.h"
+#import "OAGPXAppearanceCollection.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -31,11 +32,18 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
+@interface OAGPXLayer ()
+
+@property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
+
+@end
+
 @implementation OAGPXLayer
 {
     std::shared_ptr<OAWaypointsMapLayerProvider> _waypointsMapProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
+    CGFloat _cacheLineWidth;
 }
 
 - (NSString *) layerId
@@ -78,7 +86,9 @@
             [self refreshGpxWaypoints];
         });
     }
-    
+
+    self.appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
+
     return YES;
 }
 
@@ -196,6 +206,13 @@
 {
     if (points.size() > 1)
     {
+        CGFloat lineWidth = _cacheLineWidth;
+        if (![self.appearanceCollection.gpxName isEqualToString:gpx.gpxFileName])
+        {
+            _cacheLineWidth = lineWidth = [self getLineWidth:gpx.width];
+            self.appearanceCollection.gpxName = gpx.gpxFileName;
+        }
+
         QList<OsmAnd::FColorARGB> colors;
         if (gpx.coloringType.length > 0)
         {
@@ -219,7 +236,7 @@
                     outlineBuilder.setBaseOrder(baseOrder--)
                             .setIsHidden(points.size() == 0)
                             .setLineId(lineId + 1000)
-                            .setLineWidth(30)
+                            .setLineWidth(lineWidth + 10)
                             .setPoints(points)
                             .setFillColor(outlineColor);
 
@@ -233,7 +250,7 @@
         builder.setBaseOrder(baseOrder)
         .setIsHidden(points.size() == 0)
         .setLineId(lineId)
-        .setLineWidth(20)
+        .setLineWidth(lineWidth)
         .setPoints(points)
         .setFillColor(colorARGB);
         
@@ -284,6 +301,38 @@
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }
+}
+
+- (CGFloat)getLineWidth:(NSString *)gpxWidth
+{
+    CGFloat lineWidth = kDefaultWidthMultiplier;
+    if (gpxWidth.length > 0 && self.appearanceCollection)
+    {
+        OAGPXTrackWidth *trackWidth = [self.appearanceCollection getWidthForValue:gpxWidth];
+        if (trackWidth)
+        {
+            if ([trackWidth isCustom])
+            {
+                lineWidth = [trackWidth.customValue floatValue];
+            }
+            else
+            {
+                NSInteger zoom = self.mapView.zoomLevel;
+                NSArray<NSArray<NSNumber *> *> *allValues = trackWidth.allValues;
+                for (NSArray<NSNumber *> *values in allValues)
+                {
+                    NSInteger minZoom = values[0].intValue;
+                    NSInteger maxZoom = values[1].intValue;
+                    if (zoom >= minZoom && ((zoom <= maxZoom && maxZoom != -1) || maxZoom == -1))
+                    {
+                        lineWidth = values[2].intValue;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return lineWidth * self.displayDensityFactor;
 }
 
 #pragma mark - OAContextMenuProvider

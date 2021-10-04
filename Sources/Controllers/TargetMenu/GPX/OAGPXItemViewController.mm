@@ -19,7 +19,7 @@
 #import "OAEditGroupViewController.h"
 #import "OAEditColorViewController.h"
 #import "OAEditGPXColorViewController.h"
-#import "OAGPXTrackColorCollection.h"
+#import "OAGPXAppearanceCollection.h"
 #import "OADefaultFavorite.h"
 #import "OASelectedGPXHelper.h"
 #import "OASizes.h"
@@ -90,7 +90,7 @@
     OAEditColorViewController *_colorController;
 
     OAEditGPXColorViewController *_trackColorController;
-    OAGPXTrackColorCollection *_gpxColorCollection;
+    OAGPXAppearanceCollection *_gpxColorCollection;
 
     UIView *_badge;
     CALayer *_horizontalLine;
@@ -379,7 +379,7 @@
 {
     [super viewDidLoad];
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    _gpxColorCollection = [[OAGPXTrackColorCollection alloc] initWithMapViewController:_mapViewController];
+    _gpxColorCollection = [[OAGPXAppearanceCollection alloc] init];
 
     dateTimeFormatter = [[NSDateFormatter alloc] init];
     dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;
@@ -1170,7 +1170,7 @@
                 OAGPXTrackColor *gpxColor = [_gpxColorCollection getColorForValue:_gpx.color];
                 cell.colorIconView.layer.cornerRadius = cell.colorIconView.frame.size.height / 2;
                 cell.colorIconView.backgroundColor = gpxColor.color;
-                [cell.descriptionView setText:gpxColor.name];
+                [cell.descriptionView setText:gpxColor.title];
 
                 cell.textView.text = OALocalizedString(@"fav_color");
                 cell.backgroundColor = UIColorFromRGB(0xffffff);
@@ -1481,7 +1481,7 @@
 {
     if (_trackColorController.colorIndex == NSNotFound)
         return;
-    OAGPXTrackColor *gpxColor = [[_gpxColorCollection getAvailableGPXColors] objectAtIndex:_trackColorController.colorIndex];
+    OAGPXTrackColor *gpxColor = [[_gpxColorCollection getAvailableColors] objectAtIndex:_trackColorController.colorIndex];
     _gpx.color = gpxColor.colorValue;
     [[OAGPXDatabase sharedDb] save];
     [[_app mapSettingsChangeObservable] notifyEvent];

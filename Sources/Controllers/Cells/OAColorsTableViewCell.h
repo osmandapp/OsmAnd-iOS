@@ -19,12 +19,17 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
+
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewLabelsTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewNoLabelsTopConstraint;
 
 @property (nonatomic) NSArray *dataArray;
 @property (nonatomic) NSInteger currentColor;
 
 @property (nonatomic, weak) id<OAColorsTableViewCellDelegate> delegate;
+
+- (void)showLabels:(BOOL)showLabels;
 
 @end
 

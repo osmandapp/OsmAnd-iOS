@@ -30,6 +30,7 @@
 
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) OAGPXDocument *doc;
+@property (nonatomic) OAGPXTrackAnalysis *analysis;
 @property (nonatomic) BOOL isCurrentTrack;
 @property (nonatomic) BOOL isShown;
 
@@ -72,6 +73,9 @@
     }
     self.doc = self.isCurrentTrack ? (OAGPXDocument *) self.savingHelper.currentTrack
             : [[OAGPXDocument alloc] initWithGpxFile:[self.app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
+
+    self.analysis = [self.doc getAnalysis:self.isCurrentTrack ? 0
+            : (long) [[OAUtilities getFileLastModificationDate:self.gpx.gpxFilePath] timeIntervalSince1970]];
 
     self.isShown = [self.settings.mapSettingVisibleGpx.get containsObject:self.gpx.gpxFilePath];
 }

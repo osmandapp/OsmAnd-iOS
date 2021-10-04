@@ -7,7 +7,7 @@
 //
 
 #import "OACompoundViewController.h"
-#import "OAGPXTrackColorCollection.h"
+#import "OAGPXAppearanceCollection.h"
 
 @protocol OAEditGPXColorViewControllerDelegate <NSObject>
 
@@ -27,6 +27,6 @@
 
 @property (weak, nonatomic) id<OAEditGPXColorViewControllerDelegate> delegate;
 
-- (id)initWithColorValue:(NSInteger)colorValue colorsCollection:(OAGPXTrackColorCollection *)collection;
+- (id)initWithColorValue:(NSInteger)colorValue colorsCollection:(OAGPXAppearanceCollection *)collection;
 
 @end

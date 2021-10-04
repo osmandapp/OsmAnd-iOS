@@ -520,6 +520,7 @@
 "shared_strings_all_regions" = "All regions";
 "shared_string_width" = "Width";
 "shared_string_interval" = "Interval";
+"shared_string_none" = "None";
 
 "restart" = "Restart";
 
@@ -1661,6 +1662,7 @@
 "reset_to_original" = "Reset to original";
 "route_line_color_elevation_description" = "Route line will be colorized depending on the elevation profile of the route.";
 "gpx_split_interval_none_descr" = "Select the desired splitting option: by time or by distance.";
+"slope_grey_color_descr" = "Grey color is used when slope is undefined.";
 "enter_name" = "Enter name";
 "not_selected" = "Not selected";
 "language" = "Language";

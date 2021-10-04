@@ -155,7 +155,7 @@
     points.push_back(from);
     points.push_back(to);
     
-    double strokeWidth = 20.;
+    double strokeWidth = 10.;
     std::vector<double> inlinePattern;
     inlinePattern.push_back(75);
     inlinePattern.push_back(45);

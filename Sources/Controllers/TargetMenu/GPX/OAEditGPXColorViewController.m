@@ -12,18 +12,18 @@
 
 @implementation OAEditGPXColorViewController
 {
-    OAGPXTrackColorCollection *_colorCollection;
+    OAGPXAppearanceCollection *_colorCollection;
     NSInteger _colorIndex;
 }
 
-- (id) initWithColorValue:(NSInteger)colorValue colorsCollection:(OAGPXTrackColorCollection *)collection
+- (id) initWithColorValue:(NSInteger)colorValue colorsCollection:(OAGPXAppearanceCollection *)collection
 {
     self = [super init];
     if (self)
     {
         _colorCollection = collection;
         OAGPXTrackColor *gpxColor = [collection getColorForValue:colorValue];
-        _colorIndex = [[collection getAvailableGPXColors] indexOfObject:gpxColor];
+        _colorIndex = [[collection getAvailableColors] indexOfObject:gpxColor];
     }
     return self;
 }
@@ -79,7 +79,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[_colorCollection getAvailableGPXColors] count];
+    return [[_colorCollection getAvailableColors] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -95,8 +95,8 @@
     
     if (cell) {
         
-        OAGPXTrackColor *gpxColor = [_colorCollection getAvailableGPXColors][indexPath.row];
-        [cell.textView setText:gpxColor.name];
+        OAGPXTrackColor *gpxColor = [_colorCollection getAvailableColors][indexPath.row];
+        [cell.textView setText:gpxColor.title];
         
         cell.iconView.layer.cornerRadius = cell.iconViewHeightConstraint.constant / 2;
         cell.iconView.backgroundColor = gpxColor.color;

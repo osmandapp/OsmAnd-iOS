@@ -20,18 +20,45 @@
     }
 }
 
+- (void)updateConstraints
+{
+    BOOL hasLeftIcon = !self.leftIconView.hidden;
+    BOOL hasRightIcon = !self.rightIconView.hidden;
+
+    self.leftIconTextLeadingMargin.active = hasLeftIcon;
+    self.noLeftIconTextLeadingMargin.active = !hasLeftIcon;
+
+    self.rightIconDescLeadingMargin.active = hasRightIcon;
+    self.noRightIconDecsLeadingMargin.active = !hasRightIcon;
+
+    [super updateConstraints];
+}
+
+- (BOOL)needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasLeftIcon = !self.leftIconView.hidden;
+        BOOL hasRightIcon = !self.rightIconView.hidden;
+
+        res = res || self.leftIconTextLeadingMargin.active != hasLeftIcon;
+        res = res || self.noLeftIconTextLeadingMargin.active != !hasLeftIcon;
+
+        res = res || self.rightIconDescLeadingMargin.active != hasRightIcon;
+        res = res || self.noRightIconDecsLeadingMargin.active != !hasRightIcon;
+    }
+    return res;
+}
+
 -(void)showLeftIcon:(BOOL)show
 {
     self.leftIconView.hidden = !show;
-    self.leftIconTextLeadingMargin.active = show;
-    self.noLeftIconTextLeadingMargin.active = !show;
 }
 
 -(void)showRightIcon:(BOOL)show
 {
     self.rightIconView.hidden = !show;
-    self.rightIconDescLeadingMargin.active = show;
-    self.noRightIconDecsLeadingMargin.active = !show;
 }
 
 @end

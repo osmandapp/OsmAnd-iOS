@@ -166,6 +166,7 @@
 - (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
+- (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth;
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings;
 
 - (void) showProgressHUDWithMessage:(NSString *)message;

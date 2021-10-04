@@ -84,4 +84,33 @@
         [self.delegate colorChanged:indexPath.row];
 }
 
+- (void)showLabels:(BOOL)showLabels;
+{
+    self.titleLabel.hidden = !showLabels;
+    self.valueLabel.hidden = !showLabels;
+}
+
+- (void)updateConstraints
+{
+    BOOL hasLabels = !self.titleLabel.hidden && !self.valueLabel.hidden;
+
+    self.collectionViewLabelsTopConstraint.active = hasLabels;
+    self.collectionViewNoLabelsTopConstraint.active = !hasLabels;
+
+    [super updateConstraints];
+}
+
+- (BOOL)needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasLabels = !self.titleLabel.hidden && !self.valueLabel.hidden;
+
+        res = res || self.collectionViewLabelsTopConstraint.active != hasLabels;
+        res = res || self.collectionViewNoLabelsTopConstraint.active != !hasLabels;
+    }
+    return res;
+}
+
 @end

@@ -3001,9 +3001,28 @@
     QHashIterator<QString, int> it(gpxColorsMap);
     while (it.hasNext()) {
         it.next();
-        NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
+        NSString *key = (0 == it.key().length()) ? (@"") : (it.key().toNSString());
         NSNumber *value = @(it.value());
         [result setObject:value forKey:key];
+    }
+    return result;
+}
+
+- (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth
+{
+    const auto &gpxWidthMap = _mapPresentationEnvironment->getGpxWidth();
+    NSMutableDictionary<NSString *, NSArray<NSNumber *> *> *result = [NSMutableDictionary new];
+    QHashIterator<QString, QList<int>> it(gpxWidthMap);
+    while (it.hasNext()) {
+        it.next();
+        NSString *key = (0 == it.key().length()) ? (@"") : (it.key().toNSString());
+        NSMutableArray<NSNumber *> *values = [NSMutableArray array];
+        QList<int> itValues = it.value();
+        for (int itValue : itValues)
+        {
+            [values addObject:@(itValue)];
+        }
+        result[key] = values;
     }
     return result;
 }

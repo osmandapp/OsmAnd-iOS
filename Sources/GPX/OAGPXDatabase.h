@@ -11,6 +11,7 @@
 #import "OACommonTypes.h"
 
 #define kDefaultTrackColor 0xFFFF0000
+#define kDefaultWidthMultiplier 7
 
 @class OAGPXTrackAnalysis;
 @class OAGpxWpt;
@@ -83,7 +84,9 @@
 
 -(NSString *)getFileDir:(NSString *)filePath;
 
--(void)load;
--(void)save;
+- (void)load;
+- (OAGPX *)reloadUnsaved:(OAGPX *)gpx;
+- (void)save;
+- (void)save:(OAGPX *)gpx;
 
 @end

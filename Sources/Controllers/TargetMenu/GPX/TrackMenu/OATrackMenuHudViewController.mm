@@ -37,7 +37,7 @@
 #define kPointsTabIndex 2
 #define kActionsTabIndex 3
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OAEditGPXColorViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
 
@@ -50,6 +50,7 @@
 
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) OAGPXDocument *doc;
+@property (nonatomic) OAGPXTrackAnalysis *analysis;
 @property (nonatomic) BOOL isCurrentTrack;
 @property (nonatomic) BOOL isShown;
 
@@ -62,11 +63,9 @@
     UIDocumentInteractionController *_exportController;
     OATrackMenuHeaderView *_headerView;
 
-    OAGPXTrackAnalysis *_analysis;
     NSString *_description;
     NSString *_exportFileName;
     NSString *_exportFilePath;
-    OAGPXTrackColorCollection *_gpxColorCollection;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
@@ -78,14 +77,6 @@
         [self commonInit];
     }
     return self;
-}
-
-- (void)commonInit
-{
-    [super commonInit];
-
-    _gpxColorCollection = [[OAGPXTrackColorCollection alloc] initWithMapViewController:self.mapViewController];
-    _analysis = [self.doc getAnalysis:self.isCurrentTrack ? 0 : (long) [[OAUtilities getFileLastModificationDate:self.gpx.gpxFilePath] timeIntervalSince1970]];
 }
 
 - (void)viewDidLoad
@@ -358,13 +349,13 @@
 - (void)generateGpxBlockStatistics
 {
     NSMutableArray *statistics = [NSMutableArray array];
-    if (_analysis)
+    if (self.analysis)
     {
         BOOL withoutGaps = !self.gpx.joinSegments && (self.isCurrentTrack ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack) : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack));
 
-        if (_analysis.totalDistance != 0)
+        if (self.analysis.totalDistance != 0)
         {
-            float totalDistance = withoutGaps ? _analysis.totalDistanceWithoutGaps : _analysis.totalDistance;
+            float totalDistance = withoutGaps ? self.analysis.totalDistanceWithoutGaps : self.analysis.totalDistance;
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_distance"),
                     @"value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
@@ -373,49 +364,49 @@
             }];
         }
 
-        if (_analysis.hasElevationData)
+        if (self.analysis.hasElevationData)
         {
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_ascent"),
-                    @"value": [OAOsmAndFormatter getFormattedAlt:_analysis.diffElevationUp],
+                    @"value": [OAOsmAndFormatter getFormattedAlt:self.analysis.diffElevationUp],
                     @"type": @(EOARouteStatisticsModeSlope),
                     @"icon": @"ic_small_ascent"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_descent"),
-                    @"value": [OAOsmAndFormatter getFormattedAlt:_analysis.diffElevationDown],
+                    @"value": [OAOsmAndFormatter getFormattedAlt:self.analysis.diffElevationDown],
                     @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_descent"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_alt_range"),
                     @"value": [NSString stringWithFormat:@"%@ - %@",
-                                                         [OAOsmAndFormatter getFormattedAlt:_analysis.minElevation],
-                                                         [OAOsmAndFormatter getFormattedAlt:_analysis.maxElevation]],
+                                                         [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation],
+                                                         [OAOsmAndFormatter getFormattedAlt:self.analysis.maxElevation]],
                     @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_altitude_range"
             }];
         }
 
-        if ([_analysis isSpeedSpecified])
+        if ([self.analysis isSpeedSpecified])
         {
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_average_speed"),
-                    @"value": [OAOsmAndFormatter getFormattedSpeed:_analysis.avgSpeed],
+                    @"value": [OAOsmAndFormatter getFormattedSpeed:self.analysis.avgSpeed],
                     @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_speed"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_max_speed"),
-                    @"value": [OAOsmAndFormatter getFormattedSpeed:_analysis.maxSpeed],
+                    @"value": [OAOsmAndFormatter getFormattedSpeed:self.analysis.maxSpeed],
                     @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_max_speed"
             }];
         }
 
-        if (_analysis.hasSpeedData)
+        if (self.analysis.hasSpeedData)
         {
-            long timeSpan = withoutGaps ? _analysis.timeSpanWithoutGaps : _analysis.timeSpan;
+            long timeSpan = withoutGaps ? self.analysis.timeSpanWithoutGaps : self.analysis.timeSpan;
             [statistics addObject:@{
                     @"title": OALocalizedString(@"total_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
@@ -424,9 +415,9 @@
             }];
         }
 
-        if (_analysis.isTimeMoving)
+        if (self.analysis.isTimeMoving)
         {
-            long timeMoving = withoutGaps ? _analysis.timeMovingWithoutGaps : _analysis.timeMoving;
+            long timeMoving = withoutGaps ? self.analysis.timeMovingWithoutGaps : self.analysis.timeMoving;
             [statistics addObject:@{
                     @"title": OALocalizedString(@"moving_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
@@ -513,7 +504,7 @@
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
 {
     [self dismiss:^{
-        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc analysis:_analysis trackMenuDelegate:self modeType:modeType];
+        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc analysis:self.analysis trackMenuDelegate:self modeType:modeType];
     }];
 }
 
@@ -685,14 +676,6 @@
 }
 
 #pragma mark - OAEditGPXColorViewControllerDelegate
-
--(void)trackColorChanged:(NSInteger)colorIndex
-{
-    OAGPXTrackColor *gpxColor = [_gpxColorCollection getAvailableGPXColors][colorIndex];
-    self.gpx.color = gpxColor.colorValue;
-    [[OAGPXDatabase sharedDb] save];
-    [[self.app mapSettingsChangeObservable] notifyEvent];
-}
 
 #pragma mark - OASaveTrackViewControllerDelegate
 

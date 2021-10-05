@@ -75,7 +75,7 @@
 -(OAGPX *)getGPXItem:(NSString *)filePath;
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;
--(BOOL)removeGpxItem:(NSString *)filePath;
+-(void)removeGpxItem:(NSString *)filePath;
 -(BOOL)containsGPXItem:(NSString *)filePath;
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;

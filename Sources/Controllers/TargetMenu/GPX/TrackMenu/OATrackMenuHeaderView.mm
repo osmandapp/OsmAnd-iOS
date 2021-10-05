@@ -49,23 +49,27 @@
 
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:[OAGpxStatBlockCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier]];
+    [self.collectionView registerNib:[UINib nibWithNibName:[OAGpxStatBlockCollectionViewCell getCellIdentifier] bundle:nil]
+          forCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier]];
     ((UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout).minimumInteritemSpacing = 12.;
 }
 
 - (void)commonInit
 {
-
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.clipsToBounds = YES;
 }
 
 - (void)updateConstraints
 {
-    BOOL hasDescription = !self.descriptionView.hidden;
+    BOOL hasDescription = !self.descriptionContainerView.hidden;
     BOOL hasCollection = !self.collectionView.hidden;
-    BOOL isOnlyTitleAndDescription = hasDescription && !hasCollection && self.collectionView.hidden
-            && self.locationContainerView.hidden && self.actionButtonsContainerView.hidden;
+    BOOL hasContent = hasCollection && !self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden;
+    BOOL isOnlyTitleAndDescription = hasDescription && !hasContent;
+    BOOL isOnlyTitle = !hasDescription && !hasContent;
 
     self.onlyTitleAndDescriptionConstraint.active = isOnlyTitleAndDescription;
+    self.onlyTitleNoDescriptionConstraint.active = isOnlyTitle;
 
     self.titleBottomDescriptionConstraint.active = hasDescription;
     self.titleBottomNoDescriptionConstraint.active = !hasDescription;
@@ -81,12 +85,14 @@
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasDescription = !self.descriptionView.hidden;
+        BOOL hasDescription = !self.descriptionContainerView.hidden;
         BOOL hasCollection = !self.collectionView.hidden;
-        BOOL isOnlyTitleAndDescription = hasDescription && !hasCollection && self.collectionView.hidden
-                && self.locationContainerView.hidden && self.actionButtonsContainerView.hidden;
+        BOOL hasContent = hasCollection && !self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden;
+        BOOL isOnlyTitleAndDescription = hasDescription && !hasContent;
+        BOOL isOnlyTitle = !hasDescription && !hasContent;
 
         res = res || self.onlyTitleAndDescriptionConstraint.active != isOnlyTitleAndDescription;
+        res = res || self.onlyTitleNoDescriptionConstraint.active != isOnlyTitle;
 
         res = res || self.titleBottomDescriptionConstraint.active != hasDescription;
         res = res || self.titleBottomNoDescriptionConstraint.active != !hasDescription;
@@ -100,8 +106,9 @@
 - (void)setDescription:(NSString *)description
 {
     BOOL hasDescription = description && description.length > 0;
+
     [self.descriptionView setText:description];
-    self.descriptionView.hidden = !hasDescription;
+    self.descriptionContainerView.hidden = !hasDescription;
 }
 
 - (void)setCollection:(NSArray *)data
@@ -113,8 +120,9 @@
     self.collectionView.hidden = !hasData;
 }
 
-- (void)makeOnlyHeaderAndDescription
+- (void)makeOnlyHeader:(BOOL)hasDescription
 {
+    self.descriptionContainerView.hidden = !hasDescription;
     self.collectionView.hidden = YES;
     self.locationContainerView.hidden = YES;
     self.actionButtonsContainerView.hidden = YES;
@@ -132,13 +140,18 @@
     return self.collectionData.count;
 }
 
-- (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView
+                   cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = self.collectionData[indexPath.row];
-    OAGpxStatBlockCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
+    OAGpxStatBlockCollectionViewCell *cell =
+            [collectionView dequeueReusableCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier]
+                    forIndexPath:indexPath];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGpxStatBlockCollectionViewCell getCellIdentifier] owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGpxStatBlockCollectionViewCell getCellIdentifier]
+                                                     owner:self
+                                                   options:nil];
         cell = nib[0];
     }
     if (cell)
@@ -148,7 +161,8 @@
         cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
         [cell.titleView setText:item[@"title"]];
 
-        cell.separatorView.hidden = indexPath.row == [self collectionView:collectionView numberOfItemsInSection:indexPath.section] - 1;
+        cell.separatorView.hidden =
+                indexPath.row == [self collectionView:collectionView numberOfItemsInSection:indexPath.section] - 1;
 
         if ([cell needsUpdateConstraints])
             [cell updateConstraints];
@@ -159,7 +173,9 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
-- (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+- (CGSize) collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout *)collectionViewLayout
+   sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _collectionData[indexPath.row];
     return [self getSizeForItem:item[@"title"] value:item[@"value"]];
@@ -167,8 +183,14 @@
 
 - (CGSize)getSizeForItem:(NSString *)title value:(NSString *)value
 {
-    CGSize sizeByTitle = [OAUtilities calculateTextBounds:title width:120. height:40. font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
-    CGSize sizeByValue = [OAUtilities calculateTextBounds:value width:100. height:40. font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
+    CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
+                                                    width:120.
+                                                   height:40.
+                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
+    CGSize sizeByValue = [OAUtilities calculateTextBounds:value
+                                                    width:100.
+                                                   height:40.
+                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
     CGFloat widthByTitle = (sizeByTitle.width < 60. ? 60. : sizeByTitle.width > 120. ? 120. : sizeByTitle.width) + 13.;
     CGFloat widthByValue = (sizeByValue.width < 40. ? 40. : sizeByValue.width > 100. ? 100. : sizeByValue.width) + 20. + 13.;
     return CGSizeMake(MAX(widthByTitle, widthByValue), 40.);

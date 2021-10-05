@@ -69,7 +69,8 @@
         [_scrollableView addGestureRecognizer:_panGesture];
     }
     _currentState = EOADraggableMenuStateInitial;
-    
+    _hudMode = EOAScrollableHudBaseMode;
+
     _sliderView.layer.cornerRadius = 3.;
 }
 
@@ -311,12 +312,21 @@
         CGRect frame = _scrollableView.frame;
         if ([self isLeftSidePresentation])
         {
-            frame.origin.x = -_scrollableView.bounds.size.width;
-            frame.origin.y = self.additionalLandscapeOffset;
-            frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
             frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
+
+            if (self.hudMode == EOAScrollableHudExtraHeaderInLandscapeMode)
+            {
+                frame.origin.x = -_scrollableView.bounds.size.width;
+                frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
+            }
+            else
+            {
+                frame.origin.x = 0.0;
+                frame.origin.y = 0.0;
+            }
+
             _scrollableView.frame = frame;
-            
+
             frame.origin.x = 0.0;
         }
         else

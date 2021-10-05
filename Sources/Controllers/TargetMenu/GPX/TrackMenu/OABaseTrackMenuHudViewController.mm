@@ -46,7 +46,7 @@
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
-    self = [super init]; //override initWithNibName
+    self = [super initWithNibName:@"OATrackMenuHudViewController" bundle:nil];
     if (self)
     {
         self.gpx = gpx;
@@ -148,6 +148,62 @@
 - (void)generateData
 {
     //override
+}
+
+- (void)generateData:(NSInteger)section
+{
+    NSArray *newCellsData = [self getCellsDataForSection:section];
+    if (newCellsData)
+    {
+        NSDictionary *sectionData = ((NSMutableArray *) self.data)[section];
+        if (sectionData)
+        {
+            NSMutableDictionary *newSectionData = [sectionData mutableCopy];
+            newSectionData[@"cells"] = newCellsData;
+            NSMutableArray *newData = [self.data mutableCopy];
+            newData[section] = newSectionData;
+            self.data = newData;
+
+            [UIView setAnimationsEnabled:NO];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section]
+                          withRowAnimation:UITableViewRowAnimationNone];
+            [UIView setAnimationsEnabled:YES];
+        }
+    }
+}
+
+- (void)generateData:(NSInteger)section row:(NSInteger)row
+{
+    NSDictionary *newCellData = [self getCellDataForSection:section row:row];
+    if (newCellData)
+    {
+        NSDictionary *sectionData = ((NSMutableArray *) self.data)[section];
+        if (sectionData)
+        {
+            NSMutableDictionary *newSectionData = [sectionData mutableCopy];
+            NSMutableArray *newRowsData = [newSectionData[@"cells"] mutableCopy];
+            newRowsData[row] = newCellData;
+            newSectionData[@"cells"] = newRowsData;
+            NSMutableArray *newData = [self.data mutableCopy];
+            newData[section] = newSectionData;
+            self.data = newData;
+
+            [UIView setAnimationsEnabled:NO];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:section]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+            [UIView setAnimationsEnabled:YES];
+        }
+    }
+}
+
+- (NSArray *)getCellsDataForSection:(NSInteger)section
+{
+    return nil; //override
+}
+
+- (NSDictionary *)getCellDataForSection:(NSInteger)section row:(NSInteger)row
+{
+    return nil; //override
 }
 
 - (CGFloat)expandedMenuHeight

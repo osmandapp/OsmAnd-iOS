@@ -7,24 +7,26 @@
 //
 
 #import "OATrackMenuHudViewController.h"
-#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASaveTrackViewController.h"
-#import "OAEditGPXColorViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OATrackMenuDescriptionViewController.h"
-#import "OAMapRendererView.h"
+#import "OASelectTrackFolderViewController.h"
+#import "PXAlertView.h"
 #import "OATrackMenuHeaderView.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
 #import "OATextViewSimpleCell.h"
 #import "OATextLineViewCell.h"
+#import "OATitleIconRoundCell.h"
+#import "OATitleDescriptionIconRoundCell.h"
+#import "OATitleSwitchRoundCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXDatabase.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
@@ -32,12 +34,31 @@
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
 
-#define kOverviewTabIndex 0
-#define kSegmentsTabIndex 1
-#define kPointsTabIndex 2
-#define kActionsTabIndex 3
+typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
+{
+    EOATrackMenuHudOverviewTab = 0,
+    EOATrackMenuHubSegmentsTab,
+    EOATrackMenuHudPointsTab,
+    EOATrackMenuHudActionsTab
+};
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate>
+typedef NS_ENUM(NSUInteger, EOATrackMenuHudActionsSection)
+{
+    EOATrackMenuHudActionsControlSection = 0,
+    EOATrackMenuHudActionsAnalyzeSection,
+    EOATrackMenuHudActionsShareSection,
+    EOATrackMenuHudActionsEditSection,
+    EOATrackMenuHudActionsChangeSection,
+    EOATrackMenuHudActionsDeleteSection,
+};
+
+typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
+{
+    EOATrackMenuHudActionsChangeRenameRow = 0,
+    EOATrackMenuHudActionsChangeMoveRow
+};
+
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
 
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
 
@@ -68,20 +89,10 @@
     NSString *_exportFilePath;
 }
 
-- (instancetype)initWithGpx:(OAGPX *)gpx
-{
-    self = [super initWithNibName:@"OATrackMenuHudViewController" bundle:nil];
-    if (self)
-    {
-        self.gpx = gpx;
-        [self commonInit];
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -94,9 +105,28 @@
 - (void)setupView
 {
     [self setupTabBar];
+    [self setupTableView];
     [self setupDescription];
 
     [super setupView];
+}
+
+- (void)setupTableView
+{
+    CGFloat headerHeight = 0.001;
+    UITableViewCellSeparatorStyle separatorStyle = UITableViewCellSeparatorStyleNone;
+    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
+    {
+        headerHeight = 56.;
+        separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    }
+    else if (self.tabBarView.selectedItem.tag == EOATrackMenuHudActionsTab)
+    {
+        headerHeight = 20.;
+    }
+    self.tableView.sectionHeaderHeight = headerHeight;
+    self.tableView.estimatedSectionHeaderHeight = headerHeight;
+    self.tableView.separatorStyle = separatorStyle;
 }
 
 - (void)setupTabBar
@@ -107,26 +137,26 @@
                             initWithTitle:OALocalizedString(@"shared_string_overview")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overview"]
                                                                     color:unselectedColor]
-                                      tag:kOverviewTabIndex],
+                                      tag:EOATrackMenuHudOverviewTab],
                     [[UITabBarItem alloc]
                             initWithTitle:OALocalizedString(@"track")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_trip"]
                                                                     color:unselectedColor]
-                                      tag:kSegmentsTabIndex],
+                                      tag:EOATrackMenuHubSegmentsTab],
                     [[UITabBarItem alloc]
                             initWithTitle:OALocalizedString(@"shared_string_gpx_points")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_waypoint"]
                                                                     color:unselectedColor]
-                                      tag:kPointsTabIndex],
+                                      tag:EOATrackMenuHudPointsTab],
                     [[UITabBarItem alloc]
                             initWithTitle:OALocalizedString(@"actions")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
                                                                     color:unselectedColor]
-                                      tag:kActionsTabIndex]
+                                      tag:EOATrackMenuHudActionsTab]
             ]
                      animated:YES];
 
-    self.tabBarView.selectedItem = self.tabBarView.items[kOverviewTabIndex];
+    self.tabBarView.selectedItem = self.tabBarView.items[EOATrackMenuHudOverviewTab];
     self.tabBarView.itemWidth = self.scrollableView.frame.size.width / self.tabBarView.items.count;
     self.tabBarView.delegate = self;
     [self.tabBarView makeTranslucent:YES];
@@ -134,11 +164,11 @@
 
 - (void)setupDescription
 {
-    if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
+    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
     {
         _description = self.doc.metadata.desc;
     }
-    else if (self.tabBarView.selectedItem.tag == kSegmentsTabIndex)
+    else if (self.tabBarView.selectedItem.tag == EOATrackMenuHubSegmentsTab)
     {
         NSInteger segmentsCount = 0;
         for (OAGpxTrk *track in self.doc.tracks)
@@ -162,14 +192,14 @@
     if (_headerView)
         [_headerView removeFromSuperview];
 
-//    if (!_headerView)
     _headerView = [[OATrackMenuHeaderView alloc] init];
     _headerView.delegate = self;
+
     [_headerView.titleView setText:self.isCurrentTrack ? OALocalizedString(@"track_recording_name") : [self.gpx getNiceTitle]];
     _headerView.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
     _headerView.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
 
-    if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
+    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
     {
         [self generateGpxBlockStatistics];
 
@@ -177,33 +207,42 @@
         CLLocationCoordinate2D gpxLocation = self.doc.bounds.center;
         _headerView.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
         _headerView.directionIconView.tintColor = UIColorFromRGB(color_primary_purple);
-        [_headerView.directionTextView setText:[OAOsmAndFormatter getFormattedDistance:getDistance(location.latitude, location.longitude, gpxLocation.latitude, gpxLocation.longitude)]];
+        [_headerView.directionTextView setText:[OAOsmAndFormatter getFormattedDistance:
+                getDistance(location.latitude, location.longitude, gpxLocation.latitude, gpxLocation.longitude)]];
         _headerView.directionTextView.textColor = UIColorFromRGB(color_primary_purple);
 
-        OAWorldRegion *worldRegion = [self.app.worldRegion findAtLat:self.gpx.bounds.center.latitude lon:self.gpx.bounds.center.longitude];
+        OAWorldRegion *worldRegion = [self.app.worldRegion findAtLat:self.gpx.bounds.center.latitude
+                                                                 lon:self.gpx.bounds.center.longitude];
         _headerView.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
         _headerView.regionIconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
         [_headerView.regionTextView setText:worldRegion.localizedName];
         _headerView.regionTextView.textColor = UIColorFromRGB(color_text_footer);
 
-        [_headerView.showHideButton setTitle:self.isShown ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show") forState:UIControlStateNormal];
-        [_headerView.showHideButton setImage:[UIImage templateImageNamed:self.isShown ? @"ic_custom_hide" : @"ic_custom_show"] forState:UIControlStateNormal];
+        [_headerView.showHideButton setTitle:self.isShown ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show")
+                                    forState:UIControlStateNormal];
+        [_headerView.showHideButton setImage:[UIImage templateImageNamed:self.isShown ? @"ic_custom_hide" : @"ic_custom_show"]
+                                    forState:UIControlStateNormal];
         [_headerView.showHideButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [_headerView.showHideButton addTarget:self action:@selector(onShowHidePressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_headerView.showHideButton addTarget:self action:@selector(onShowHidePressed:)
+                             forControlEvents:UIControlEventTouchUpInside];
 
-        [_headerView.appearanceButton setTitle:OALocalizedString(@"map_settings_appearance") forState:UIControlStateNormal];
+        [_headerView.appearanceButton setTitle:OALocalizedString(@"map_settings_appearance")
+                                      forState:UIControlStateNormal];
         [_headerView.appearanceButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [_headerView.appearanceButton addTarget:self action:@selector(onAppearancePressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_headerView.appearanceButton addTarget:self action:@selector(onAppearancePressed:)
+                               forControlEvents:UIControlEventTouchUpInside];
 
         if (!self.isCurrentTrack)
         {
             [_headerView.exportButton setTitle:OALocalizedString(@"shared_string_export") forState:UIControlStateNormal];
             [_headerView.exportButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [_headerView.exportButton addTarget:self action:@selector(onExportPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [_headerView.exportButton addTarget:self action:@selector(onExportPressed:)
+                               forControlEvents:UIControlEventTouchUpInside];
 
             [_headerView.navigationButton setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
             [_headerView.navigationButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [_headerView.navigationButton addTarget:self action:@selector(onNavigationPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [_headerView.navigationButton addTarget:self action:@selector(onNavigationPressed:)
+                                   forControlEvents:UIControlEventTouchUpInside];
         }
         else
         {
@@ -211,9 +250,13 @@
             _headerView.navigationButton.hidden = YES;
         }
     }
+    else if (self.tabBarView.selectedItem.tag == EOATrackMenuHudActionsTab)
+    {
+        [_headerView makeOnlyHeader:NO];
+    }
     else
     {
-        [_headerView makeOnlyHeaderAndDescription];
+        [_headerView makeOnlyHeader:YES];
     }
 
     [_headerView setDescription:_description];
@@ -232,28 +275,24 @@
     }
     else
     {
-        if (_headerView.descriptionView.hidden)
-        {
-            CGRect headerFrame = _headerView.frame;
-            headerFrame.size.height = _headerView.frame.size.height - _headerView.descriptionView.frame.size.height;
-            _headerView.frame = headerFrame;
-        }
+        CGRect headerFrame = _headerView.frame;
+
+        if (_headerView.descriptionContainerView.hidden)
+            headerFrame.size.height = _headerView.frame.size.height - _headerView.descriptionContainerView.frame.size.height;
+
         if (_headerView.collectionView.hidden)
-        {
-            CGRect headerFrame = _headerView.frame;
             headerFrame.size.height = _headerView.frame.size.height - _headerView.collectionView.frame.size.height;
-            _headerView.frame = headerFrame;
-        }
+
+        headerFrame.size.width = self.topHeaderContainerView.frame.size.width;
+        _headerView.frame = headerFrame;
     }
 
     CGRect topHeaderContainerFrame = self.topHeaderContainerView.frame;
     topHeaderContainerFrame.size.height = _headerView.frame.size.height;
     self.topHeaderContainerView.frame = topHeaderContainerFrame;
-//    if (![self.topHeaderContainerView.subviews containsObject:_headerView])
-//    {
+
     [self.topHeaderContainerView addSubview:_headerView];
     [self.topHeaderContainerView sendSubviewToBack:_headerView];
-//    }
 }
 
 - (void)generateData
@@ -262,7 +301,7 @@
 
     NSMutableArray *data = [NSMutableArray array];
 
-    if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
+    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
     {
         if (_description && _description.length > 0)
         {
@@ -298,8 +337,10 @@
 
         NSMutableArray *infoSectionData = [NSMutableArray array];
 
-        NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.isCurrentTrack ? self.gpx.gpxFilePath : self.doc.path error:nil];
-        NSString *formattedSize = [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize countStyle:NSByteCountFormatterCountStyleFile];
+        NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.isCurrentTrack
+                ? self.gpx.gpxFilePath : self.doc.path error:nil];
+        NSString *formattedSize = [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
+                                                                 countStyle:NSByteCountFormatterCountStyleFile];
         [infoSectionData addObject:@{
                 @"title": OALocalizedString(@"res_size"),
                 @"value": formattedSize,
@@ -342,8 +383,128 @@
                 @"cells": infoSectionData
         }];
     }
+    else if (self.tabBarView.selectedItem.tag == EOATrackMenuHudActionsTab)
+    {
+        NSMutableArray *controlSectionData = [NSMutableArray array];
+
+        [controlSectionData addObject:@{
+                @"title": OALocalizedString(@"map_settings_show"),
+                @"value": @(self.isShown),
+                @"type": [OATitleSwitchRoundCell getCellIdentifier],
+                @"key": @"control_show_on_map"
+        }];
+
+        [controlSectionData addObject:@{
+                @"title": OALocalizedString(@"map_settings_appearance"),
+                @"icon": @"ic_custom_appearance",
+                @"type": [OATitleIconRoundCell getCellIdentifier],
+                @"key": @"control_appearance"
+        }];
+
+        [controlSectionData addObject:@{
+                @"title": OALocalizedString(@"routing_settings"),
+                @"icon": @"ic_custom_navigation",
+                @"type": [OATitleIconRoundCell getCellIdentifier],
+                @"key": @"control_navigation"
+        }];
+
+        [data addObject:@{
+                @"cells": controlSectionData
+        }];
+
+        [data addObject:@{
+                @"cells": @[@{
+                        @"title": OALocalizedString(@"analyze_on_map"),
+                        @"icon": @"ic_custom_appearance",
+                        @"type": [OATitleIconRoundCell getCellIdentifier],
+                        @"key": @"analyze"
+                }]
+        }];
+
+        NSMutableArray *shareSectionData = [NSMutableArray array];
+
+        [shareSectionData addObject:@{
+                @"title": OALocalizedString(@"ctx_mnu_share"),
+                @"icon": @"ic_custom_export",
+                @"type": [OATitleIconRoundCell getCellIdentifier],
+                @"key": @"share"
+        }];
+
+        /*[shareSectionData addObject:@{
+                @"title": OALocalizedString(@"upload_to_openstreetmap"),
+                @"icon": @"ic_custom_upload_to_openstreetmap",
+                @"type": [OATitleIconRoundCell getCellIdentifier],
+                @"key": @"share_upload_osm"
+        }];*/
+
+        [data addObject:@{
+                @"cells": shareSectionData
+        }];
+
+        NSMutableArray *editSectionData = [NSMutableArray array];
+
+        [editSectionData addObject:@{
+                @"title": OALocalizedString(@"edit_track"),
+                @"icon": @"ic_custom_trip_edit",
+                @"type": [OATitleIconRoundCell getCellIdentifier],
+                @"key": @"edit"
+        }];
+
+        [editSectionData addObject:@{
+                @"title": OALocalizedString(@"duplicate_track"),
+                @"icon": @"ic_custom_copy",
+                @"type": [OATitleIconRoundCell getCellIdentifier],
+                @"key": @"edit_create_duplicate"
+        }];
+
+        [data addObject:@{
+                @"cells": editSectionData
+        }];
+
+        NSMutableArray *changeSectionData = [NSMutableArray array];
+
+        [changeSectionData addObject:@{
+                @"title": OALocalizedString(@"gpx_rename_q"),
+                @"icon": @"ic_custom_edit",
+                @"type": [OATitleIconRoundCell getCellIdentifier],
+                @"key": @"change_rename"
+        }];
+
+        [changeSectionData addObject:[self getCellDataForSection:EOATrackMenuHudActionsChangeSection
+                                                             row:EOATrackMenuHudActionsChangeMoveRow]];
+
+        [data addObject:@{
+                @"cells": changeSectionData
+        }];
+
+        [data addObject:@{
+                @"cells": @[@{
+                        @"title": OALocalizedString(@"shared_string_delete"),
+                        @"icon": @"ic_custom_remove_outlined",
+                        @"type": [OATitleIconRoundCell getCellIdentifier],
+                        @"key": @"delete"
+                }]
+        }];
+    }
 
     self.data = data;
+}
+
+- (NSDictionary *)getCellDataForSection:(NSInteger)section row:(NSInteger)row
+{
+    if (section == EOATrackMenuHudActionsChangeSection)
+    {
+        if (row == EOATrackMenuHudActionsChangeMoveRow)
+            return @{
+                    @"title": OALocalizedString(@"plan_route_change_folder"),
+                    @"icon": @"ic_custom_folder_move",
+                    @"desc": [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString,
+                    @"type": [OATitleDescriptionIconRoundCell getCellIdentifier],
+                    @"key": @"change_move"
+            };
+    }
+
+    return nil;
 }
 
 - (void)generateGpxBlockStatistics
@@ -351,7 +512,9 @@
     NSMutableArray *statistics = [NSMutableArray array];
     if (self.analysis)
     {
-        BOOL withoutGaps = !self.gpx.joinSegments && (self.isCurrentTrack ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack) : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack));
+        BOOL withoutGaps = !self.gpx.joinSegments && (self.isCurrentTrack
+                ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)
+                : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack));
 
         if (self.analysis.totalDistance != 0)
         {
@@ -432,7 +595,7 @@
 - (CGFloat)initialMenuHeight
 {
     CGFloat totalHeight = self.topHeaderContainerView.frame.origin.y + self.toolBarView.frame.size.height;
-    if (self.tabBarView.selectedItem.tag == kOverviewTabIndex)
+    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
         totalHeight += !_headerView.collectionView.hidden
                 ? _headerView.collectionView.frame.origin.y
                 : _headerView.locationContainerView.frame.origin.y;
@@ -459,12 +622,11 @@
         deleteOriginalFile:(BOOL)deleteOriginalFile
 {
     NSString *oldPath = self.gpx.gpxFilePath;
-    NSString *oldName = self.gpx.gpxFileName;
     NSString *sourcePath = [self.app.gpxPath stringByAppendingPathComponent:oldPath];
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [self.app.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = newFileName ? newFileName : oldName;
+    NSString *newName = newFileName ? newFileName : self.gpx.gpxFileName;
     newName = [self getUniqueFileName:newName inFolderPath:newFolderPath];
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
     NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
@@ -478,7 +640,6 @@
         [gpxDatabase save];
         [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
 
-//        self.titleView.text = [newName stringByDeletingPathExtension];
         [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
     }
     else
@@ -494,9 +655,61 @@
         if ([self.settings.mapSettingVisibleGpx.get containsObject:oldPath])
             [self.settings showGpx:@[newStoringPath]];
     }
+}
 
-//    if (self.delegate)
-//        [self.delegate contentChanged];
+- (void)renameTrack
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_rename_q")
+                                                    message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [self.gpx.gpxTitle lastPathComponent])
+                                                   delegate:self
+                                          cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
+                                          otherButtonTitles:OALocalizedString(@"shared_string_ok"), nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert textFieldAtIndex:0].text = [self.gpx.gpxTitle lastPathComponent];
+    [alert show];
+}
+
+- (void)deleteTrack
+{
+    [PXAlertView showAlertWithTitle:(self.isCurrentTrack ? OALocalizedString(@"track_clear_q") : OALocalizedString(@"gpx_remove"))
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_no")
+                         otherTitle:OALocalizedString(@"shared_string_yes")
+                          otherDesc:nil
+                         otherImage:nil
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     if (self.isCurrentTrack)
+                                     {
+                                         self.settings.mapSettingTrackRecording = NO;
+                                         [self.savingHelper clearData];
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             [self.mapViewController hideRecGpxTrack];
+                                         });
+                                     }
+                                     else
+                                     {
+                                         if (self.isShown)
+                                             [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+
+                                         OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+                                         [db removeGpxItem:self.gpx.gpxFilePath];
+                                         [db save]; //todo
+                                     }
+                                     [self dismiss:nil];
+                                 });
+                             }
+                         }];
+}
+
+- (BOOL)isEnabled:(NSString *)key
+{
+    if ([key isEqualToString:@"control_show_on_map"])
+        return self.isShown;
+
+    return NO;
 }
 
 #pragma mark - OATrackMenuViewControllerDelegate
@@ -504,7 +717,10 @@
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
 {
     [self dismiss:^{
-        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc analysis:self.analysis trackMenuDelegate:self modeType:modeType];
+        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
+                                                                analysis:self.analysis
+                                                       trackMenuDelegate:self
+                                                                modeType:modeType];
     }];
 }
 
@@ -517,13 +733,14 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
+    [self setupTableView];
     [self setupDescription];
-    [self setupHeaderView];
     [self generateData];
+    [self setupHeaderView];
 
     switch (item.tag)
     {
-        case kActionsTabIndex:
+        case EOATrackMenuHudActionsTab:
         {
             [self goFullScreen];
             break;
@@ -588,7 +805,7 @@
                  simplifiedTrack:YES];
 
         saveTrackViewController.delegate = self;
-        [OARootViewController.instance presentViewController:saveTrackViewController animated:YES completion:nil];
+        [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
 }
 
@@ -611,11 +828,6 @@
 
 - (void)onAppearancePressed:(id)sender
 {
-    /*OAEditGPXColorViewController *trackColorViewController =
-            [[OAEditGPXColorViewController alloc] initWithColorValue:self.gpx.color
-                                                    colorsCollection:_gpxColorCollection];
-    trackColorViewController.delegate = self;
-    [self presentViewController:trackColorViewController animated:YES completion:nil];*/
     [self dismiss:^{
         [self.mapPanelViewController openTargetViewWithGPX:self.gpx trackHudMode:EOATrackAppearanceHudMode];
     }];
@@ -659,7 +871,7 @@
     {
         OATrackSegmentsViewController *trackSegmentViewController = [[OATrackSegmentsViewController alloc] initWithFile:self.doc];
         trackSegmentViewController.delegate = self;
-        [OARootViewController.instance presentViewController:trackSegmentViewController animated:YES completion:nil];
+        [self presentViewController:trackSegmentViewController animated:YES completion:nil];
     }
     else
     {
@@ -667,15 +879,34 @@
             [self.mapPanelViewController.mapActions stopNavigationWithoutConfirm];
 
         [self.mapPanelViewController.mapActions enterRoutePlanningModeGivenGpx:self.gpx
-                                                                      from:nil
-                                                                  fromName:nil
-                                            useIntermediatePointsByDefault:YES
-                                                                showDialog:YES];
+                                                                          from:nil
+                                                                      fromName:nil
+                                                useIntermediatePointsByDefault:YES
+                                                                    showDialog:YES];
         [self dismiss:nil];
     }
 }
 
-#pragma mark - OAEditGPXColorViewControllerDelegate
+#pragma mark - OASelectTrackFolderDelegate
+
+- (void)onFolderSelected:(NSString *)selectedFolderName
+{
+    [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
+    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudActionsTab)
+        [self generateData:EOATrackMenuHudActionsChangeSection row:EOATrackMenuHudActionsChangeMoveRow];
+}
+
+- (void)onFolderAdded:(NSString *)addedFolderName
+{
+    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:addedFolderName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
+        [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath
+                                  withIntermediateDirectories:NO
+                                                   attributes:nil
+                                                        error:nil];
+
+    [self onFolderSelected:addedFolderName];
+}
 
 #pragma mark - OASaveTrackViewControllerDelegate
 
@@ -769,7 +1000,7 @@
         OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewSimpleCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -800,6 +1031,96 @@
         }
         outCell = cell;
     }
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    {
+        OATitleIconRoundCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier]
+                                                         owner:self options:nil];
+            cell = (OATitleIconRoundCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = UIColor.clearColor;
+            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+        }
+        if (cell)
+        {
+            cell.titleView.text = item[@"title"];
+            cell.textColorNormal = [item[@"key"] isEqualToString:@"delete"]
+                    ? UIColorFromRGB(color_primary_red) : UIColor.blackColor;
+
+            UIColor *tintColor = [item[@"key"] isEqualToString:@"delete"]
+                    ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_primary_purple);
+            cell.iconColorNormal = tintColor;
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
+
+            BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
+            cell.separatorView.hidden = isLast;
+        }
+        outCell = cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+    {
+        OATitleDescriptionIconRoundCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionIconRoundCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionIconRoundCell getCellIdentifier]
+                                                         owner:self options:nil];
+            cell = (OATitleDescriptionIconRoundCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = UIColor.clearColor;
+            cell.textColorNormal = UIColor.blackColor;
+            cell.iconColorNormal = UIColorFromRGB(color_primary_purple);
+        }
+        if (cell)
+        {
+            cell.titleView.text = item[@"title"];
+            cell.descrView.text = item[@"desc"];
+
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
+
+            BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
+            cell.separatorView.hidden = isLast;
+        }
+        outCell = cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
+    {
+        OATitleSwitchRoundCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATitleSwitchRoundCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSwitchRoundCell getCellIdentifier] owner:self options:nil];
+            cell = (OATitleSwitchRoundCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = UIColor.clearColor;
+            cell.textColorNormal = UIColor.blackColor;
+            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+        }
+        if (cell)
+        {
+            cell.titleView.text = item[@"title"];
+
+            BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
+            cell.separatorView.hidden = isLast;
+
+            cell.switchView.on = [self isEnabled:item[@"key"]];
+
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        outCell = cell;
+    }
+
+    if ([outCell needsUpdateConstraints])
+        [outCell updateConstraints];
 
     return outCell;
 }
@@ -816,16 +1137,69 @@
                 [[OATrackMenuDescriptionViewController alloc] initWithGpxDoc:self.doc gpx:self.gpx];
         [self.navigationController pushViewController:descriptionViewController animated:YES];
     }
-    /*else if ([item[@"key"] isEqualToString:@"location"])
+    else if ([item[@"key"] isEqualToString:@"control_appearance"])
     {
-
+        [self onAppearancePressed:nil];
     }
-    else if ([item[@"key"] isEqualToString:@"activity"])
+    else if ([item[@"key"] isEqualToString:@"control_navigation"])
     {
+        [self onNavigationPressed:nil];
+    }
+    else if ([item[@"key"] isEqualToString:@"analyze"])
+    {
+        [self openAnalysis:EOARouteStatisticsModeAltitudeSlope];
+    }
+    else if ([item[@"key"] isEqualToString:@"share"])
+    {
+        [self onExportPressed:nil];
+    }
+    else if ([item[@"key"] isEqualToString:@"edit"])
+    {
+        [self dismiss:^{
+            [self.mapPanelViewController targetOpenPlanRoute:self.gpx];
+        }];
+    }
+    else if ([item[@"key"] isEqualToString:@"edit_create_duplicate"])
+    {
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
+                initWithFileName:[_gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension stringByAppendingString:@"_copy"]
+                        filePath:_gpx.gpxFilePath
+                       showOnMap:YES
+                 simplifiedTrack:NO];
 
-    }*/
+        saveTrackViewController.delegate = self;
+        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+    }
+    else if ([item[@"key"] isEqualToString:@"change_rename"])
+    {
+        [self renameTrack];
+    }
+    else if ([item[@"key"] isEqualToString:@"change_move"])
+    {
+        OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithGPX:self.gpx];
+        selectFolderView.delegate = self;
+        [self presentViewController:selectFolderView animated:YES completion:nil];
+    }
+    else if ([item[@"key"] isEqualToString:@"delete"])
+    {
+        [self deleteTrack];
+    }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - UISwitch pressed
+
+- (void)onSwitchPressed:(id)sender
+{
+    UISwitch *switchView = (UISwitch *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+    NSDictionary *item = [self getItem:indexPath];
+
+    if ([item[@"key"] isEqualToString:@"control_show_on_map"])
+        [self onShowHidePressed:nil];
+
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 @end

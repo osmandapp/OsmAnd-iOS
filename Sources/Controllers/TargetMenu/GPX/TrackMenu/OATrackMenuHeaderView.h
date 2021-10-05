@@ -16,8 +16,6 @@
 
 @property (nonatomic) NSArray *collectionData;
 
-@property (weak, nonatomic) IBOutlet UIView *contentView;
-
 @property (weak, nonatomic) IBOutlet UIView *titleContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -36,7 +34,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *regionIconView;
 @property (weak, nonatomic) IBOutlet UILabel *regionTextView;
 
-@property (weak, nonatomic) IBOutlet UIView *actionButtonsContainerView;
+@property (weak, nonatomic) IBOutlet UIStackView *actionButtonsContainerView;
 @property (weak, nonatomic) IBOutlet OAButton *showHideButton;
 @property (weak, nonatomic) IBOutlet OAButton *appearanceButton;
 @property (weak, nonatomic) IBOutlet OAButton *exportButton;
@@ -51,10 +49,11 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoCollectionConstraint;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleAndDescriptionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleNoDescriptionConstraint;
 
 - (void)setDescription:(NSString *)description;
 - (void)setCollection:(NSArray *)data;
-- (void)makeOnlyHeaderAndDescription;
+- (void)makeOnlyHeader:(BOOL)hasDescription;
 
 @property (nonatomic) id<OATrackMenuViewControllerDelegate> delegate;
 

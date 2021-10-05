@@ -33,16 +33,22 @@ typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudSection)
     EOATrackAppearanceHudColorsSection,
     EOATrackAppearanceHudWidthSection,
     EOATrackAppearanceHudSplitIntervalSection,
-    EOATrackAppearanceHudJoinGapsSection,
-    EOATrackAppearanceHudResetSection
+    EOATrackAppearanceHudGapsSection,
+    EOATrackAppearanceHudActionsSection
+};
+
+typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudIconsRow)
+{
+    EOATrackAppearanceHudIconsArrowsRow = 0,
+    EOATrackAppearanceHudIconsStartFinishRow,
 };
 
 typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudColorRow)
 {
     EOATrackAppearanceHudColorTitleRow = 0,
     EOATrackAppearanceHudColorValuesRow,
-    EOATrackAppearanceHudColorGridOrElevationDescriptionRow,
-    EOATrackAppearanceHudColorElevationSliderAndDescriptionRow
+    EOATrackAppearanceHudColorGridOrElevationDescRow,
+    EOATrackAppearanceHudColorGradientAndDescRow
 };
 
 typedef NS_ENUM(NSUInteger, EOATrackAppearanceHudWidthRow)
@@ -81,7 +87,6 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
 
 @property (nonatomic) OsmAndAppInstance app;
 @property (nonatomic) OAAppSettings *settings;
-@property (nonatomic) OASavingTrackHelper *savingHelper;
 
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) OAGPXDocument *doc;
@@ -177,7 +182,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tableView registerClass:OATableViewCustomFooterView.class
+        forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 
     if (!self.isShown)
         [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
@@ -213,220 +219,318 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
 {
     [super generateData];
 
-    NSMutableArray *data = [NSMutableArray array];
-
-    [data addObject:@{
-            @"cells": @[@{
-                    @"title": OALocalizedString(@"gpx_dir_arrows"),
-                    @"value": @NO,
-                    @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
-                    @"key": @"direction_arrows"
-            }, @{
-                    @"title": OALocalizedString(@"track_show_start_finish_icons"),
-                    @"value": @NO,
-                    @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
-                    @"key": @"start_finish_icons"
-            }]
-    }];
-
-    [data addObject:@{
-            @"cells": [self getCellsDataForSection:EOATrackAppearanceHudColorsSection]
-    }];
-
-    [data addObject:@{
-            @"cells": [self getCellsDataForSection:EOATrackAppearanceHudWidthSection]
-    }];
-
-    [data addObject:@{
-            @"cells": [self getCellsDataForSection:EOATrackAppearanceHudSplitIntervalSection],
-            @"footer": OALocalizedString(@"gpx_split_interval_descr")
-    }];
-
-    [data addObject:@{
-            @"cells": @[@{
-                    @"title": OALocalizedString(@"gpx_join_gaps"),
-                    @"value": @NO,
-                    @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
-                    @"key": @"join_gaps"
-            }],
-            @"footer": OALocalizedString(@"gpx_join_gaps_descr")
-    }];
-
-    [data addObject:@{
-            @"header": OALocalizedString(@"actions"),
-            @"cells": @[@{
-                    @"title": OALocalizedString(@"reset_to_original"),
-                    @"right_icon": @"ic_custom_reset",
-                    @"has_options": @YES,
-                    @"type": [OAIconTitleValueCell getCellIdentifier],
-                    @"key": @"reset"
-            }]
-    }];
-
-    self.data = data;
+    self.data = @[
+            @{ @"cells": [self getCellsDataForSection:EOATrackAppearanceHudIconsSection] },
+            @{ @"cells": [self getCellsDataForSection:EOATrackAppearanceHudColorsSection] },
+            @{ @"cells": [self getCellsDataForSection:EOATrackAppearanceHudWidthSection] },
+            /*@{
+                    @"cells": [self getCellsDataForSection:EOATrackAppearanceHudSplitIntervalSection],
+                    @"footer": OALocalizedString(@"gpx_split_interval_descr")
+            },*/ /*@{
+                    @"cells": [self getCellsDataForSection:EOATrackAppearanceHudGapsSection],
+                    @"footer": OALocalizedString(@"gpx_join_gaps_descr")
+            },*/ @{
+                    @"header": OALocalizedString(@"actions"),
+                    @"cells": [self getCellsDataForSection:EOATrackAppearanceHudActionsSection]
+            }];
 }
 
-- (NSArray *)getCellsDataForSection:(EOATrackAppearanceHudSection)section
+- (NSArray *)getCellsDataForSection:(NSInteger)section
 {
-    NSMutableArray *sectionData = [NSMutableArray array];
-
-    if (section == EOATrackAppearanceHudColorsSection)
+    switch (section)
     {
-        [sectionData addObject:@{
-                @"title": OALocalizedString(@"fav_color"),
-                @"value": _selectedColoringType.title,
-                @"type": [OAIconTitleValueCell getCellIdentifier],
-                @"key": @"color_title"
-        }];
+        case EOATrackAppearanceHudIconsSection:
+            return @[
+                    [self getCellDataForSection:section row:EOATrackAppearanceHudIconsArrowsRow]/*,
+                    [self getCellDataForSection:section row:EOATrackAppearanceHudIconsStartFinishRow]*/
+            ];
 
-        NSMutableArray<NSDictionary *> *trackColoringTypes = [NSMutableArray array];
-        for (OAColoringType *type in _availableColoringTypes)
+        case EOATrackAppearanceHudColorsSection:
         {
-            [trackColoringTypes addObject:@{
-                    @"title": type.title,
-                    @"type": type.name
-            }];
+            NSMutableArray *sectionData = [NSMutableArray array];
+
+            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudColorTitleRow]];
+            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudColorValuesRow]];
+            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudColorGridOrElevationDescRow]];
+
+            if ([_selectedColoringType isGradient])
+                [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudColorGradientAndDescRow]];
+
+            return sectionData;
         }
 
-        [sectionData addObject:@{
-                @"values": trackColoringTypes,
-                @"type": [OAFoldersCell getCellIdentifier],
-                @"key": @"color_values"
-        }];
-
-        if ([_selectedColoringType isTrackSolid])
+        case EOATrackAppearanceHudWidthSection:
         {
-            [sectionData addObject:@{
-                    @"value": @(_selectedColor.colorValue),
-                    @"type": [OAColorsTableViewCell getCellIdentifier],
-                    @"values": _availableColors,
-                    @"key": @"color_grid"
-            }];
-        }
-        else if ([_selectedColoringType isGradient])
-        {
-            [sectionData addObject:@{
-                    @"title": OALocalizedString(@"route_line_color_elevation_description"),
-                    @"type": [OATextLineViewCell getCellIdentifier],
-                    @"key": @"color_elevation_description"
-            }];
+            NSMutableArray *sectionData = [NSMutableArray array];
 
-            NSString *description = @"";
-            NSString *extraDescription = @"";
-            if ([_selectedColoringType isSpeed])
-            {
-                description = [OAOsmAndFormatter getFormattedSpeed:0.0];
-                extraDescription = [OAOsmAndFormatter getFormattedSpeed:
-                        MAX(self.analysis.maxSpeed, [[OAAppSettings sharedManager].applicationMode.get getMaxSpeed])];
-            }
-            else if ([_selectedColoringType isAltitude])
-            {
-                description = [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation];
-                extraDescription = [OAOsmAndFormatter getFormattedAlt:
-                        MAX(self.analysis.maxElevation, self.analysis.minElevation + 50)];
-            }
-            else if ([_selectedColoringType isSlope])
-            {
-                description = OALocalizedString(@"slope_grey_color_descr");
-            }
+            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudWidthTitleRow]];
+            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudWidthValuesRow]];
+            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudWidthEmptySpaceRow]];
 
-            [sectionData addObject:@{
-                    @"icon": [_selectedColoringType isSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed",
-                    @"desc": description,
-                    @"extra_desc": extraDescription,
-                    @"desc_font_size": @([_selectedColoringType isSlope] ? 15 : 17),
-                    @"type": [OAImageTextViewCell getCellIdentifier],
-                    @"key": @"color_elevation_slider"
-            }];
+            if ([_selectedWidth isCustom])
+                [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudWidthCustomSliderRow]];
+
+            return sectionData;
         }
+
+        case EOATrackAppearanceHudSplitIntervalSection:
+            return @[
+                    [self getCellDataForSection:section row:EOATrackAppearanceHudSplitIntervalTitleRow],
+                    [self getCellDataForSection:section row:EOATrackAppearanceHudSplitIntervalValuesRow],
+                    [self getCellDataForSection:section row:EOATrackAppearanceHudSplitIntervalNoneDescrOrCustomSliderRow]
+            ];
+
+        case EOATrackAppearanceHudGapsSection:
+            return @[ [self getCellDataForSection:section row:0] ];
+
+        case EOATrackAppearanceHudActionsSection:
+            return @[ [self getCellDataForSection:section row:0] ];
+
+        default:
+            return nil;
     }
-    else if (section == EOATrackAppearanceHudWidthSection)
-    {
-        [sectionData addObject:@{
-                @"title": OALocalizedString(@"shared_string_width"),
-                @"value": _selectedWidth.title,
-                @"type": [OAIconTitleValueCell getCellIdentifier],
-                @"key": @"width_title"
-        }];
-
-        [sectionData addObject:@{
-                @"values": [_appearanceCollection getAvailableWidth],
-                @"with_images": @YES,
-                @"type": [OASegmentedControlCell getCellIdentifier],
-                @"key": @"width_value"
-        }];
-
-        [sectionData addObject:@{
-                @"value": @14,
-                @"type": [OADividerCell getCellIdentifier],
-                @"key": @"width_empty_space"
-        }];
-
-        if ([_selectedWidth isCustom])
-        {
-            [sectionData addObject:@{
-                    @"selected_value": _selectedWidth.customValue,
-                    @"values": _customWidthValues,
-                    @"has_top_labels": @NO,
-                    @"has_bottom_labels": @YES,
-                    @"type": [OASegmentSliderTableViewCell getCellIdentifier],
-                    @"key": @"width_custom_slider"
-            }];
-        }
-    }
-    else if (section == EOATrackAppearanceHudSplitIntervalSection)
-    {
-        [sectionData addObject:@{
-                @"title": OALocalizedString(@"gpx_split_interval"),
-                @"value": _selectedSplitInterval.title,
-                @"type": [OAIconTitleValueCell getCellIdentifier],
-                @"key": @"split_title"
-        }];
-
-        [sectionData addObject:@{
-                @"values": [_appearanceCollection getAvailableSplitIntervals],
-                @"type": [OASegmentedControlCell getCellIdentifier],
-                @"key": @"split_interval_value"
-        }];
-
-        if ([_selectedSplitInterval isCustom])
-        {
-            [sectionData addObject:@{
-                    @"selected_value": _selectedSplitInterval.customValue,
-                    @"values": _customSplitIntervalValues,
-                    @"has_top_labels": @YES,
-                    @"has_bottom_labels": @YES,
-                    @"type": [OASegmentSliderTableViewCell getCellIdentifier],
-                    @"key": @"split_interval_custom_slider"
-            }];
-        }
-        else
-        {
-            [sectionData addObject:@{
-                    @"title": OALocalizedString(@"gpx_split_interval_none_descr"),
-                    @"type": [OATextLineViewCell getCellIdentifier],
-                    @"key": @"split_interval_none_descr"
-            }];
-        }
-    }
-
-    return sectionData;
 }
 
-- (void)generateData:(EOATrackAppearanceHudSection)section
+- (NSDictionary *)getCellDataForSection:(NSInteger)section row:(NSInteger)row
 {
-    NSDictionary *sectionData = ((NSMutableArray *) self.data)[section];
-    if (sectionData)
+    switch (section)
     {
-        NSMutableDictionary *newSectionData = [sectionData mutableCopy];
-        newSectionData[@"cells"] = [self getCellsDataForSection:section];
-        NSMutableArray *newData = [self.data mutableCopy];
-        newData[section] = newSectionData;
-        self.data = newData;
+        case EOATrackAppearanceHudIconsSection:
+        {
+            switch (row)
+            {
+                case EOATrackAppearanceHudIconsArrowsRow:
+                    return @{
+                            @"title": OALocalizedString(@"gpx_dir_arrows"),
+                            @"value": @NO,
+                            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
+                            @"key": @"direction_arrows"
+                    };
 
-        [UIView setAnimationsEnabled:NO];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationNone];
-        [UIView setAnimationsEnabled:YES];
+                case EOATrackAppearanceHudIconsStartFinishRow:
+                    return @{
+                            @"title": OALocalizedString(@"track_show_start_finish_icons"),
+                            @"value": @NO,
+                            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
+                            @"key": @"start_finish_icons"
+                    };
+
+                default:
+                    return nil;
+            }
+        }
+
+        case EOATrackAppearanceHudColorsSection:
+        {
+            switch (row)
+            {
+                case EOATrackAppearanceHudColorTitleRow:
+                    return @{
+                            @"title": OALocalizedString(@"fav_color"),
+                            @"value": _selectedColoringType.title,
+                            @"type": [OAIconTitleValueCell getCellIdentifier],
+                            @"key": @"color_title"
+                    };
+
+                case EOATrackAppearanceHudColorValuesRow:
+                {
+                    NSMutableArray<NSDictionary *> *trackColoringTypes = [NSMutableArray array];
+                    for (OAColoringType *type in _availableColoringTypes)
+                    {
+                        [trackColoringTypes addObject:@{
+                                @"title": type.title,
+                                @"type": type.name
+                        }];
+                    }
+                    return @{
+                            @"values": trackColoringTypes,
+                            @"type": [OAFoldersCell getCellIdentifier],
+                            @"key": @"color_values"
+                    };
+                }
+
+                case EOATrackAppearanceHudColorGridOrElevationDescRow:
+                {
+                    if ([_selectedColoringType isTrackSolid])
+                        return @{
+                                @"value": @(_selectedColor.colorValue),
+                                @"type": [OAColorsTableViewCell getCellIdentifier],
+                                @"values": _availableColors,
+                                @"key": @"color_grid"
+                        };
+                    else if ([_selectedColoringType isGradient])
+                        return @{
+                                @"title": OALocalizedString(@"route_line_color_elevation_description"),
+                                @"type": [OATextLineViewCell getCellIdentifier],
+                                @"key": @"color_elevation_description"
+                        };
+                }
+
+                case EOATrackAppearanceHudColorGradientAndDescRow:
+                {
+                    NSString *description;
+                    NSString *extraDescription = @"";
+                    if ([_selectedColoringType isSpeed])
+                    {
+                        description = [OAOsmAndFormatter getFormattedSpeed:0.0];
+                        extraDescription = [OAOsmAndFormatter getFormattedSpeed:
+                                MAX(self.analysis.maxSpeed, [[OAAppSettings sharedManager].applicationMode.get getMaxSpeed])];
+                    }
+                    else if ([_selectedColoringType isAltitude])
+                    {
+                        description = [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation];
+                        extraDescription = [OAOsmAndFormatter getFormattedAlt:
+                                MAX(self.analysis.maxElevation, self.analysis.minElevation + 50)];
+                    }
+                    else if ([_selectedColoringType isSlope])
+                    {
+                        description = OALocalizedString(@"slope_grey_color_descr");
+                    }
+                    else
+                    {
+                        return nil;
+                    }
+
+                    return @{
+                            @"icon": [_selectedColoringType isSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed",
+                            @"desc": description,
+                            @"extra_desc": extraDescription,
+                            @"desc_font_size": @([_selectedColoringType isSlope] ? 15 : 17),
+                            @"type": [OAImageTextViewCell getCellIdentifier],
+                            @"key": @"color_elevation_slider"
+                    };
+                }
+
+                default:
+                    return nil;
+            }
+        }
+
+        case EOATrackAppearanceHudWidthSection:
+        {
+            switch (row)
+            {
+                case EOATrackAppearanceHudWidthTitleRow:
+                    return @{
+                            @"title": OALocalizedString(@"shared_string_width"),
+                            @"value": _selectedWidth.title,
+                            @"type": [OAIconTitleValueCell getCellIdentifier],
+                            @"key": @"width_title"
+                    };
+
+                case EOATrackAppearanceHudWidthValuesRow:
+                    return @{
+                            @"values": [_appearanceCollection getAvailableWidth],
+                            @"with_images": @YES,
+                            @"type": [OASegmentedControlCell getCellIdentifier],
+                            @"key": @"width_value"
+                    };
+
+                case EOATrackAppearanceHudWidthEmptySpaceRow:
+                    return @{
+                            @"value": @14,
+                            @"type": [OADividerCell getCellIdentifier],
+                            @"key": @"width_empty_space"
+                    };
+
+                case EOATrackAppearanceHudWidthCustomSliderRow:
+                {
+                    if ([_selectedWidth isCustom])
+                        return @{
+                                @"selected_value": _selectedWidth.customValue,
+                                @"values": _customWidthValues,
+                                @"has_top_labels": @NO,
+                                @"has_bottom_labels": @YES,
+                                @"type": [OASegmentSliderTableViewCell getCellIdentifier],
+                                @"key": @"width_custom_slider"
+                        };
+                }
+
+                default:
+                    return nil;
+            }
+        }
+
+        case EOATrackAppearanceHudSplitIntervalSection:
+        {
+            switch (row)
+            {
+                case EOATrackAppearanceHudSplitIntervalTitleRow:
+                    return @{
+                            @"title": OALocalizedString(@"gpx_split_interval"),
+                            @"value": _selectedSplitInterval.title,
+                            @"type": [OAIconTitleValueCell getCellIdentifier],
+                            @"key": @"split_title"
+                    };
+
+                case EOATrackAppearanceHudSplitIntervalValuesRow:
+                    return @{
+                            @"values": [_appearanceCollection getAvailableSplitIntervals],
+                            @"type": [OASegmentedControlCell getCellIdentifier],
+                            @"key": @"split_interval_value"
+                    };
+
+                case EOATrackAppearanceHudSplitIntervalNoneDescrOrCustomSliderRow:
+                {
+                    if ([_selectedSplitInterval isCustom])
+                        return @{
+                                @"selected_value": _selectedSplitInterval.customValue,
+                                @"values": _customSplitIntervalValues,
+                                @"has_top_labels": @YES,
+                                @"has_bottom_labels": @YES,
+                                @"type": [OASegmentSliderTableViewCell getCellIdentifier],
+                                @"key": @"split_interval_custom_slider"
+                        };
+                    else
+                        return @{
+                                @"title": OALocalizedString(@"gpx_split_interval_none_descr"),
+                                @"type": [OATextLineViewCell getCellIdentifier],
+                                @"key": @"split_interval_none_descr"
+                        };
+                }
+
+                default:
+                    return nil;
+            }
+        }
+
+        case EOATrackAppearanceHudGapsSection:
+        {
+            switch (row)
+            {
+                case 0:
+                    return @{
+                            @"title": OALocalizedString(@"gpx_join_gaps"),
+                            @"value": @NO,
+                            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
+                            @"key": @"join_gaps"
+                    };
+
+                default:
+                    return nil;
+            }
+        }
+
+        case EOATrackAppearanceHudActionsSection:
+        {
+            switch (row)
+            {
+                case 0:
+                    return @{
+                            @"title": OALocalizedString(@"reset_to_original"),
+                            @"right_icon": @"ic_custom_reset",
+                            @"has_options": @YES,
+                            @"type": [OAIconTitleValueCell getCellIdentifier],
+                            @"key": @"reset"
+                    };
+
+                default:
+                    return nil;
+            }
+        }
+
+        default:
+            return nil;
     }
 }
 
@@ -484,7 +588,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self dismiss:^{
-        [self.mapPanelViewController openTargetViewWithGPX:[[OAGPXDatabase sharedDb] reloadUnsaved:self.gpx] trackHudMode:EOATrackMenuHudMode];
+        [self.mapPanelViewController openTargetViewWithGPX:[[OAGPXDatabase sharedDb] reloadUnsaved:self.gpx]
+                                              trackHudMode:EOATrackMenuHudMode];
         [[self.app updateGpxTracksOnMapObservable] notifyEvent];
     }];}
 
@@ -525,7 +630,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
         OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier]
+                                                         owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
             [cell showLeftIcon:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
@@ -547,10 +653,12 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
     }
     else if ([item[@"type"] isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OAIconTextDividerSwitchCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier]
+                                                         owner:self options:nil];
             cell = (OAIconTextDividerSwitchCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
@@ -594,7 +702,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
         OAColorsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsTableViewCell getCellIdentifier]
+                                                         owner:self options:nil];
             cell = (OAColorsTableViewCell *) nib[0];
             cell.dataArray = values;
             cell.delegate = self;
@@ -616,7 +725,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
         OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier]
+                                                         owner:self options:nil];
             cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
@@ -641,7 +751,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
         BOOL withImages = [item[@"with_images"] boolValue];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControlCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControlCell getCellIdentifier]
+                                                         owner:self options:nil];
             cell = (OASegmentedControlCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
@@ -719,12 +830,14 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
     }
     else if ([item[@"type"] isEqualToString:[OASegmentSliderTableViewCell getCellIdentifier]])
     {
-        OASegmentSliderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
+        OASegmentSliderTableViewCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
         BOOL hasTopLabels = [item[@"has_top_labels"] boolValue];
         BOOL hasBottomLabels = [item[@"has_bottom_labels"] boolValue];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
+                                                         owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -752,7 +865,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
         OAImageTextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier]
+                                                         owner:self options:nil];
             cell = (OAImageTextViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
@@ -807,7 +921,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
     if (!sectionFooter || sectionFooter.length == 0)
         return nil;
 
-    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    OATableViewCustomFooterView *vw =
+            [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     UIFont *textFont = [UIFont systemFontOfSize:13];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:sectionFooter attributes:@{
             NSFontAttributeName: textFont,
@@ -864,7 +979,6 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
 
             [[self.app updateGpxTracksOnMapObservable] notifyEvent];
-            [self generateData:EOATrackAppearanceHudWidthSection];
         }
         else if ([item[@"key"] isEqualToString:@"split_interval_value"])
         {
@@ -872,8 +986,10 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
 //            self.gpx.splitInterval = [_selectedSplitInterval isCustom] ? _selectedSplitInterval.customValue : _selectedSplitInterval.key;
 
 //            [[self.app updateGpxTracksOnMapObservable] notifyEvent];
-            [self generateData:EOATrackAppearanceHudSplitIntervalSection];
+//            [self generateData:EOATrackAppearanceHudSplitIntervalSection];
         }
+
+        [self generateData:indexPath.section];
     }
 }
 
@@ -898,7 +1014,6 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
                 self.gpx.width = _selectedWidth.customValue;
 
                 [[self.app updateGpxTracksOnMapObservable] notifyEvent];
-                [self generateData:EOATrackAppearanceHudWidthSection];
             }
         }
         else if ([item[@"key"] isEqualToString:@"split_interval_custom_slider"])
@@ -911,9 +1026,10 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
 //                self.gpx.splitInterval = _selectedSplitInterval.customValue;
 
 //                [[self.app updateGpxTracksOnMapObservable] notifyEvent];
-                [self generateData:EOATrackAppearanceHudSplitIntervalSection];
             }
         }
+
+        [self generateData:indexPath.section row:indexPath.row];
     }
 }
 
@@ -936,7 +1052,8 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
     self.gpx.color = _selectedColor.colorValue;
 
     [[self.app updateGpxTracksOnMapObservable] notifyEvent];
-    [self generateData:EOATrackAppearanceHudColorsSection];
+    [self generateData:EOATrackAppearanceHudColorsSection
+                   row:EOATrackAppearanceHudColorGridOrElevationDescRow];
 }
 
 @end

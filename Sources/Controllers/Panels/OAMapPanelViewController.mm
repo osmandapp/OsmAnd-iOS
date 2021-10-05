@@ -1890,6 +1890,13 @@ typedef enum
     [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude]]];
 }
 
+- (void) targetOpenPlanRoute:(OAGPX *)gpx
+{
+    [self targetHideContextPinMarker];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:gpx.gpxFilePath]];
+}
+
 - (void) targetGoToPoint
 {
     OsmAnd::LatLon latLon(_targetLatitude, _targetLongitude);

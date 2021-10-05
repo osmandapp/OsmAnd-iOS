@@ -179,6 +179,26 @@
     return nil;
 }
 
+- (void)reloadGPXFile:(NSString *)filePath
+{
+    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+            stringByAppendingPathComponent:[NSString stringWithFormat:@"/GPX/%@", filePath]];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+
+    NSArray *dbContent = [NSArray arrayWithContentsOfFile:self.dbFilePath];
+
+    for (NSDictionary *gpxData in dbContent)
+    {
+        OAGPX *gpx = [self generateGpxItem:gpxData];
+
+        NSString *gpxFolderPath = [OsmAndApp instance].gpxPath;
+        // Make compatible with old database data
+        NSString *filePath = [gpx.gpxFilePath hasPrefix:gpxFolderPath] ? gpx.gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpx.gpxFilePath];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+            [res addObject:gpx];
+    }
+}
+
 -(void)removeGpxItem:(NSString *)filePath
 {
     NSMutableArray *arr = [NSMutableArray arrayWithArray:gpxList];

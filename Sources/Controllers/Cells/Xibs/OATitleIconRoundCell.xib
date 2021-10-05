@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,9 +17,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="48"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" id="lMm-Of-Cn0">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lMm-Of-Cn0">
                         <rect key="frame" x="16" y="0.0" width="288" height="48"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQ0-wT-faZ">
                                 <rect key="frame" x="16" y="13.5" width="206" height="21"/>
@@ -59,7 +58,9 @@
                     </view>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="lMm-Of-Cn0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="NVi-oj-vW1"/>
                     <constraint firstAttribute="bottom" secondItem="lMm-Of-Cn0" secondAttribute="bottom" id="k1G-l4-2KT"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="lMm-Of-Cn0" secondAttribute="trailing" id="ql1-M3-83l"/>
                     <constraint firstItem="lMm-Of-Cn0" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ylq-n3-6eK"/>
                 </constraints>
             </tableViewCellContentView>

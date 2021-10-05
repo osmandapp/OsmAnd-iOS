@@ -30,6 +30,10 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 - (void)setupView;
 - (void)setupHeaderView;
 - (void)generateData;
+- (void)generateData:(NSInteger)section;
+- (void)generateData:(NSInteger)section row:(NSInteger)row;
+- (NSArray *)getCellsDataForSection:(NSInteger)section;
+- (NSDictionary *)getCellDataForSection:(NSInteger)section row:(NSInteger)row;
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "OAGPXDatabase.h"
+#import "OARootViewController.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -179,41 +180,33 @@
     return nil;
 }
 
-- (void)reloadGPXFile:(NSString *)filePath
+-(void)removeGpxItem:(NSString *)filePath removeFile:(BOOL)removeFile
 {
-    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-            stringByAppendingPathComponent:[NSString stringWithFormat:@"/GPX/%@", filePath]];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-
-    NSArray *dbContent = [NSArray arrayWithContentsOfFile:self.dbFilePath];
-
-    for (NSDictionary *gpxData in dbContent)
+    NSMutableArray *newGpxList = [gpxList mutableCopy];
+    OAGPX *gpx;
+    for (OAGPX *item in newGpxList)
     {
-        OAGPX *gpx = [self generateGpxItem:gpxData];
-
-        NSString *gpxFolderPath = [OsmAndApp instance].gpxPath;
-        // Make compatible with old database data
-        NSString *filePath = [gpx.gpxFilePath hasPrefix:gpxFolderPath] ? gpx.gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpx.gpxFilePath];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-            [res addObject:gpx];
-    }
-}
-
--(void)removeGpxItem:(NSString *)filePath
-{
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:gpxList];
-    NSString *path;
-    for (OAGPX *item in arr) {
         if ([item.gpxFilePath isEqualToString:filePath])
         {
-            path = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:item.gpxFilePath];
-            [arr removeObject:item];
+            gpx = item;
             break;
         }
     }
-    gpxList = arr;
-    
-    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+    if (gpx)
+    {
+        [newGpxList removeObject:gpx];
+        gpxList = newGpxList;
+
+        NSMutableArray *dbContent = [NSMutableArray arrayWithContentsOfFile:self.dbFilePath];
+        [dbContent enumerateObjectsUsingBlock:^(NSDictionary *gpxData, NSUInteger idx, BOOL *stop) {
+            if ([gpxData[@"gpxFilePath"] isEqualToString:gpx.gpxFilePath])
+                [dbContent removeObject:gpxData];
+        }];
+        [dbContent writeToFile:self.dbFilePath atomically:YES];
+
+        if (removeFile)
+            [[NSFileManager defaultManager] removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath] error:nil];
+    }
 }
 
 - (NSString *) getFileDir:(NSString *)filePath
@@ -338,6 +331,14 @@
     return gpx;
 }
 
+- (void)reloadGPXFile:(NSString *)filePath onComplete:(void (^)(void))onComplete
+{
+    [[OARootViewController instance] importAsGPX:[NSURL fileURLWithPath:filePath]
+                                      showAlerts:NO
+                                     openGpxView:NO
+                                      onComplete:onComplete];
+}
+
 - (void)save
 {
     NSMutableArray *dbContent = [NSMutableArray array];
@@ -355,7 +356,7 @@
     if (!gpx)
         return;
 
-    NSMutableArray *dbContent = [[NSArray arrayWithContentsOfFile:self.dbFilePath] mutableCopy];
+    NSMutableArray *dbContent = [NSMutableArray arrayWithContentsOfFile:self.dbFilePath];
     NSDictionary *newGpxData = [self generateGpxData:gpx];
     NSInteger gpxIndex = [gpxList indexOfObject:gpx];
 

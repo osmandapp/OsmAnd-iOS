@@ -18,7 +18,6 @@
 #import "PXAlertView.h"
 #import "OAEditGroupViewController.h"
 #import "OAEditColorViewController.h"
-#import "OAEditGPXColorViewController.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OADefaultFavorite.h"
 #import "OASelectedGPXHelper.h"
@@ -89,7 +88,6 @@
     OAEditGroupViewController *_groupController;
     OAEditColorViewController *_colorController;
 
-    OAEditGPXColorViewController *_trackColorController;
     OAGPXAppearanceCollection *_gpxColorCollection;
 
     UIView *_badge;
@@ -1028,8 +1026,7 @@
                                              [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                                          }
 
-                                         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
-                                         [[OAGPXDatabase sharedDb] save];
+                                         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath removeFile:YES];
                                      }
                                      [self cancelPressed];
                                  });
@@ -1412,12 +1409,7 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == _controlsSectionIndex && indexPath.row == 1)
-    {
-        _trackColorController = [[OAEditGPXColorViewController alloc] initWithColorValue:_gpx.color colorsCollection:_gpxColorCollection];
-//        _trackColorController.delegate = self;
-        [self.navController pushViewController:_trackColorController animated:YES];
-    }
+
     if (indexPath.section == _colorizationSectionIndex)
     {
         if (indexPath.row == 0)

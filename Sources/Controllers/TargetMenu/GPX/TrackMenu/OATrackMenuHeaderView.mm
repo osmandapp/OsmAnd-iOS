@@ -177,7 +177,7 @@
                    layout:(UICollectionViewLayout *)collectionViewLayout
    sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _collectionData[indexPath.row];
+    NSDictionary *item = self.collectionData[indexPath.row];
     return [self getSizeForItem:item[@"title"] value:item[@"value"]];
 }
 
@@ -200,7 +200,7 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _collectionData[indexPath.row];
+    NSDictionary *item = self.collectionData[indexPath.row];
     EOARouteStatisticsMode modeType = (EOARouteStatisticsMode) [item[@"type"] integerValue];
     if (self.delegate && [self.delegate respondsToSelector:@selector(openAnalysis:)])
         [self.delegate openAnalysis:modeType];

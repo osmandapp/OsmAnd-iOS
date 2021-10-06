@@ -287,12 +287,50 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         _headerView.frame = headerFrame;
     }
 
+    CGRect bottomSeparatorFrame = _headerView.bottomSeparatorView.frame;
+    bottomSeparatorFrame.origin.x = self.view.frame.origin.x;
+    bottomSeparatorFrame.size.width = self.view.frame.size.width;
+    _headerView.bottomSeparatorView.frame = bottomSeparatorFrame;
+
     CGRect topHeaderContainerFrame = self.topHeaderContainerView.frame;
-    topHeaderContainerFrame.size.height = _headerView.frame.size.height;
+    topHeaderContainerFrame.size.height = _headerView.frame.size.height + 1;
     self.topHeaderContainerView.frame = topHeaderContainerFrame;
 
-    [self.topHeaderContainerView addSubview:_headerView];
+    [self.topHeaderContainerView insertSubview:_headerView atIndex:0];
     [self.topHeaderContainerView sendSubviewToBack:_headerView];
+
+    _headerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.topHeaderContainerView addConstraints:@[
+            [NSLayoutConstraint constraintWithItem:_headerView
+                                         attribute:NSLayoutAttributeLeading
+                                         relatedBy:NSLayoutRelationEqual
+                                            toItem:self.topHeaderContainerView
+                                         attribute:NSLayoutAttributeLeadingMargin
+                                        multiplier:1.0f
+                                          constant:0.f],
+            [NSLayoutConstraint constraintWithItem:_headerView
+                                         attribute:NSLayoutAttributeTop
+                                         relatedBy:NSLayoutRelationEqual
+                                            toItem:self.topHeaderContainerView
+                                         attribute:NSLayoutAttributeTop
+                                        multiplier:1.0f
+                                          constant:0.f],
+            [NSLayoutConstraint constraintWithItem:_headerView
+                                         attribute:NSLayoutAttributeTrailing
+                                         relatedBy:NSLayoutRelationEqual
+                                            toItem:self.topHeaderContainerView
+                                         attribute:NSLayoutAttributeTrailingMargin
+                                        multiplier:1.0f
+                                          constant:0.f],
+            [NSLayoutConstraint constraintWithItem:_headerView
+                                         attribute:NSLayoutAttributeBottom
+                                         relatedBy:NSLayoutRelationEqual
+                                            toItem:self.topHeaderContainerView
+                                         attribute:NSLayoutAttributeBottom
+                                        multiplier:1.0f
+                                          constant:0.f]
+            ]
+    ];
 }
 
 - (void)generateData
@@ -349,11 +387,10 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                 @"key": @"size"
         }];
 
-        NSDate *createdOnDate = [NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time];
-        if ([createdOnDate earlierDate:[NSDate date]] == createdOnDate)
+        if (self.doc.metadata.time > 0)
             [infoSectionData addObject:@{
                     @"title": OALocalizedString(@"res_created_on"),
-                    @"value": [NSDateFormatter localizedStringFromDate:createdOnDate
+                    @"value": [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
                                                              dateStyle:NSDateFormatterMediumStyle
                                                              timeStyle:NSDateFormatterNoStyle],
                     @"has_options": @NO,
@@ -470,8 +507,8 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                 @"key": @"change_rename"
         }];
 
-        [changeSectionData addObject:[self getCellDataForSection:EOATrackMenuHudActionsChangeSection
-                                                             row:EOATrackMenuHudActionsChangeMoveRow]];
+        [changeSectionData addObject:[self getCellDataForRow:EOATrackMenuHudActionsChangeMoveRow
+                                                     section:EOATrackMenuHudActionsChangeSection]];
 
         [data addObject:@{
                 @"cells": changeSectionData
@@ -490,7 +527,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     self.data = data;
 }
 
-- (NSDictionary *)getCellDataForSection:(NSInteger)section row:(NSInteger)row
+- (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section
 {
     if (section == EOATrackMenuHudActionsChangeSection)
     {
@@ -695,8 +732,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                                              [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
 
                                          OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-                                         [db removeGpxItem:self.gpx.gpxFilePath];
-                                         [db save]; //todo
+                                         [db removeGpxItem:self.gpx.gpxFilePath removeFile:YES];
                                      }
                                      [self dismiss:nil];
                                  });
@@ -984,7 +1020,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
             [cell showLeftIcon:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
         }
         if (cell)
         {
@@ -1002,7 +1038,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         {
             NSArray *nib = [[NSBundle mainBundle]loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewSimpleCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.textContainer.maximumNumberOfLines = 10;
             cell.textView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;

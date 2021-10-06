@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
+@property (nonatomic, readwrite) EOAScrollableMenuHudMode menuHudMode;
 
 @end
 
@@ -69,7 +70,7 @@
         [_scrollableView addGestureRecognizer:_panGesture];
     }
     _currentState = EOADraggableMenuStateInitial;
-    _hudMode = EOAScrollableHudBaseMode;
+    self.menuHudMode = EOAScrollableMenuHudBaseMode;
 
     _sliderView.layer.cornerRadius = 3.;
 }
@@ -314,7 +315,7 @@
         {
             frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
 
-            if (self.hudMode == EOAScrollableHudExtraHeaderInLandscapeMode)
+            if (self.menuHudMode == EOAScrollableMenuHudExtraHeaderInLandscapeMode)
             {
                 frame.origin.x = -_scrollableView.bounds.size.width;
                 frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;

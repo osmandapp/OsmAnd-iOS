@@ -174,7 +174,7 @@
 
 - (void)generateData:(NSInteger)section row:(NSInteger)row
 {
-    NSDictionary *newCellData = [self getCellDataForSection:section row:row];
+    NSDictionary *newCellData = [self getCellDataForRow:row section:section];
     if (newCellData)
     {
         NSDictionary *sectionData = ((NSMutableArray *) self.data)[section];
@@ -196,12 +196,12 @@
     }
 }
 
-- (NSArray *)getCellsDataForSection:(NSInteger)section
+- (NSArray<NSDictionary *> *)getCellsDataForSection:(NSInteger)section
 {
     return nil; //override
 }
 
-- (NSDictionary *)getCellDataForSection:(NSInteger)section row:(NSInteger)row
+- (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section
 {
     return nil; //override
 }

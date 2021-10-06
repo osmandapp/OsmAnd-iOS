@@ -7,6 +7,7 @@
 //
 
 #import "OABaseScrollableHudViewController.h"
+#import "OATrackMenuHeaderView.h"
 
 typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 {
@@ -32,8 +33,8 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 - (void)generateData;
 - (void)generateData:(NSInteger)section;
 - (void)generateData:(NSInteger)section row:(NSInteger)row;
-- (NSArray *)getCellsDataForSection:(NSInteger)section;
-- (NSDictionary *)getCellDataForSection:(NSInteger)section row:(NSInteger)row;
+- (NSArray<NSDictionary *> *)getCellsDataForSection:(NSInteger)section;
+- (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section;
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath;
 
 @end

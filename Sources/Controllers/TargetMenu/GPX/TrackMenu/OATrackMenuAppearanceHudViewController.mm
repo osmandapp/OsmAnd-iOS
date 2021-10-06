@@ -235,26 +235,26 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
             }];
 }
 
-- (NSArray *)getCellsDataForSection:(NSInteger)section
+- (NSArray<NSDictionary *> *)getCellsDataForSection:(NSInteger)section
 {
     switch (section)
     {
         case EOATrackAppearanceHudIconsSection:
             return @[
-                    [self getCellDataForSection:section row:EOATrackAppearanceHudIconsArrowsRow]/*,
-                    [self getCellDataForSection:section row:EOATrackAppearanceHudIconsStartFinishRow]*/
+                    [self getCellDataForRow:EOATrackAppearanceHudIconsArrowsRow section:section]/*,
+                    [self getCellDataForSection:EOATrackAppearanceHudIconsStartFinishRow row:section]*/
             ];
 
         case EOATrackAppearanceHudColorsSection:
         {
             NSMutableArray *sectionData = [NSMutableArray array];
 
-            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudColorTitleRow]];
-            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudColorValuesRow]];
-            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudColorGridOrElevationDescRow]];
+            [sectionData addObject:[self getCellDataForRow:EOATrackAppearanceHudColorTitleRow section:section]];
+            [sectionData addObject:[self getCellDataForRow:EOATrackAppearanceHudColorValuesRow section:section]];
+            [sectionData addObject:[self getCellDataForRow:EOATrackAppearanceHudColorGridOrElevationDescRow section:section]];
 
             if ([_selectedColoringType isGradient])
-                [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudColorGradientAndDescRow]];
+                [sectionData addObject:[self getCellDataForRow:EOATrackAppearanceHudColorGradientAndDescRow section:section]];
 
             return sectionData;
         }
@@ -263,35 +263,35 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
         {
             NSMutableArray *sectionData = [NSMutableArray array];
 
-            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudWidthTitleRow]];
-            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudWidthValuesRow]];
-            [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudWidthEmptySpaceRow]];
+            [sectionData addObject:[self getCellDataForRow:EOATrackAppearanceHudWidthTitleRow section:section]];
+            [sectionData addObject:[self getCellDataForRow:EOATrackAppearanceHudWidthValuesRow section:section]];
+            [sectionData addObject:[self getCellDataForRow:EOATrackAppearanceHudWidthEmptySpaceRow section:section]];
 
             if ([_selectedWidth isCustom])
-                [sectionData addObject:[self getCellDataForSection:section row:EOATrackAppearanceHudWidthCustomSliderRow]];
+                [sectionData addObject:[self getCellDataForRow:EOATrackAppearanceHudWidthCustomSliderRow section:section]];
 
             return sectionData;
         }
 
         case EOATrackAppearanceHudSplitIntervalSection:
             return @[
-                    [self getCellDataForSection:section row:EOATrackAppearanceHudSplitIntervalTitleRow],
-                    [self getCellDataForSection:section row:EOATrackAppearanceHudSplitIntervalValuesRow],
-                    [self getCellDataForSection:section row:EOATrackAppearanceHudSplitIntervalNoneDescrOrCustomSliderRow]
+                    [self getCellDataForRow:EOATrackAppearanceHudSplitIntervalTitleRow section:section],
+                    [self getCellDataForRow:EOATrackAppearanceHudSplitIntervalValuesRow section:section],
+                    [self getCellDataForRow:EOATrackAppearanceHudSplitIntervalNoneDescrOrCustomSliderRow section:section]
             ];
 
         case EOATrackAppearanceHudGapsSection:
-            return @[ [self getCellDataForSection:section row:0] ];
+            return @[[self getCellDataForRow:0 section:section] ];
 
         case EOATrackAppearanceHudActionsSection:
-            return @[ [self getCellDataForSection:section row:0] ];
+            return @[[self getCellDataForRow:0 section:section] ];
 
         default:
             return nil;
     }
 }
 
-- (NSDictionary *)getCellDataForSection:(NSInteger)section row:(NSInteger)row
+- (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section
 {
     switch (section)
     {
@@ -938,7 +938,23 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
 
     if ([item[@"key"] isEqualToString:@"reset"])
     {
-
+        [[OAGPXDatabase sharedDb] reloadGPXFile:[_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] onComplete:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.gpxFilePath];
+                [self commonInit];
+                [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
+                [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+                [self setupView];
+                [UIView transitionWithView:self.tableView
+                                  duration:0.35f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^(void)
+                                {
+                                    [self.tableView reloadData];
+                                }
+                                completion:nil];
+            });
+        }];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -1042,6 +1058,68 @@ static const NSInteger kCustomTrackSplitIntervalMax = 10;
 
     [[self.app updateGpxTracksOnMapObservable] notifyEvent];
     [self generateData:EOATrackAppearanceHudColorsSection];
+}
+
+- (void)generateData:(NSInteger)section
+{
+    if (section != EOATrackAppearanceHudColorsSection)
+    {
+        [super generateData:section];
+    }
+    else
+    {
+        NSInteger oldCellsCount = ((NSArray *) self.data[section][@"cells"]).count;
+        [self generateData:section row:EOATrackAppearanceHudColorValuesRow];
+        [self generateData:section row:EOATrackAppearanceHudColorGridOrElevationDescRow];
+
+        NSDictionary *newCellData = [self getCellDataForRow:EOATrackAppearanceHudColorGradientAndDescRow
+                section:section];
+        NSDictionary *sectionData = ((NSMutableArray *) self.data)[section];
+
+        if (sectionData)
+        {
+            NSMutableDictionary *newSectionData = [sectionData mutableCopy];
+            NSMutableArray *newRowsData = [newSectionData[@"cells"] mutableCopy];
+            if (!newCellData && oldCellsCount - 1 == EOATrackAppearanceHudColorGradientAndDescRow)
+                [newRowsData removeObjectAtIndex:EOATrackAppearanceHudColorGradientAndDescRow];
+            else
+                newRowsData[EOATrackAppearanceHudColorGradientAndDescRow] = newCellData;
+            newSectionData[@"cells"] = newRowsData;
+            NSMutableArray *newData = [self.data mutableCopy];
+            newData[section] = newSectionData;
+            self.data = newData;
+
+            if (newCellData)
+            {
+                [UIView setAnimationsEnabled:NO];
+                if (oldCellsCount - 1 == EOATrackAppearanceHudColorGradientAndDescRow)
+                {
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:EOATrackAppearanceHudColorGradientAndDescRow
+                                                                                inSection:section]]
+                                          withRowAnimation:UITableViewRowAnimationNone];
+                }
+                else if (oldCellsCount - 1 == EOATrackAppearanceHudColorGridOrElevationDescRow)
+                {
+                    [self.tableView beginUpdates];
+                    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:EOATrackAppearanceHudColorGradientAndDescRow
+                                                                                inSection:section]]
+                                          withRowAnimation:UITableViewRowAnimationBottom];
+                    [self.tableView endUpdates];
+                }
+                [UIView setAnimationsEnabled:YES];
+            }
+            else
+            {
+                [UIView setAnimationsEnabled:NO];
+                [self.tableView beginUpdates];
+                [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:EOATrackAppearanceHudColorGradientAndDescRow
+                                                                            inSection:section]]
+                                      withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView endUpdates];
+                [UIView setAnimationsEnabled:YES];
+            }
+        }
+    }
 }
 
 #pragma mark - OAColorsTableViewCellDelegate

@@ -32,39 +32,10 @@ static UIFont *_titleFont;
     // Configure the view for the selected state
 }
 
-- (void)highlight:(BOOL)highlighted
-{
-    if (highlighted)
-    {
-        _contentContainer.backgroundColor = UIColorFromRGB(color_primary_purple);
-        _titleView.textColor = UIColor.whiteColor;
-    }
-    else
-    {
-        _contentContainer.backgroundColor = UIColor.whiteColor;
-        _titleView.textColor = _textColorNormal ? _textColorNormal : UIColor.blackColor;
-    }
-}
-
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-{
-    if (animated)
-    {
-        [UIView animateWithDuration:.2 animations:^{
-            [self highlight:highlighted];
-        }];
-    }
-    else
-    {
-        [self highlight:highlighted];
-    }
-}
-
 - (CGFloat)getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth
 {
     CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth;
     return MAX(48., [self getTitleViewHeightWithWidth:textWidth text:text]);
-
 }
 
 - (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text

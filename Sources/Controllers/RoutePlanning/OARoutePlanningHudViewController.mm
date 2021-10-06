@@ -113,7 +113,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIButton *landscapeOptionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *landscapeAddPointButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *landscapeProgressView;
-@property (nonatomic, readwrite) EOAScrollableHudMode hudMode;
+@property (nonatomic, readwrite) EOAScrollableMenuHudMode menuHudMode;
 
 @end
 
@@ -143,6 +143,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 	
 	BOOL _showSnapWarning;
 }
+
+@synthesize menuHudMode;
 
 - (instancetype) init
 {
@@ -205,7 +207,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) commonInit:(OAMeasurementEditingContext *)context
 {
-    self.hudMode = EOAScrollableHudExtraHeaderInLandscapeMode;
+    self.menuHudMode = EOAScrollableMenuHudExtraHeaderInLandscapeMode;
     _app = OsmAndApp.instance;
     _settings = [OAAppSettings sharedManager];
     _mapPanel = OARootViewController.instance.mapPanel;

@@ -2080,11 +2080,9 @@
 		DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E7026C563A400F274C7 /* OAGPXWptViewController.mm */; };
 		DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E7226C563A400F274C7 /* OAGPXEditWptListViewController.mm */; };
 		DA5A841926C563A800F274C7 /* OAGPXEditWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E7326C563A400F274C7 /* OAGPXEditWptListViewController.xib */; };
-		DA5A841A26C563A800F274C7 /* OAEditGPXColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E7426C563A400F274C7 /* OAEditGPXColorViewController.xib */; };
 		DA5A841B26C563A800F274C7 /* OAGPXItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E7526C563A400F274C7 /* OAGPXItemViewController.mm */; };
 		DA5A841E26C563A800F274C7 /* OAGPXListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E7C26C563A400F274C7 /* OAGPXListViewController.mm */; };
 		DA5A841F26C563A800F274C7 /* OAGPXEditWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E7D26C563A400F274C7 /* OAGPXEditWptViewController.mm */; };
-		DA5A842226C563A800F274C7 /* OAEditGPXColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E8526C563A400F274C7 /* OAEditGPXColorViewController.m */; };
 		DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E8626C563A400F274C7 /* OAGPXWptListViewController.mm */; };
 		DA5A842426C563A800F274C7 /* OAGPXItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E8826C563A400F274C7 /* OAGPXItemViewController.xib */; };
 		DA5A842526C563A800F274C7 /* OATargetHistoryItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E8B26C563A400F274C7 /* OATargetHistoryItemViewController.m */; };
@@ -5556,10 +5554,8 @@
 		DA5A7E7026C563A400F274C7 /* OAGPXWptViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXWptViewController.mm; sourceTree = "<group>"; };
 		DA5A7E7226C563A400F274C7 /* OAGPXEditWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXEditWptListViewController.mm; sourceTree = "<group>"; };
 		DA5A7E7326C563A400F274C7 /* OAGPXEditWptListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAGPXEditWptListViewController.xib; sourceTree = "<group>"; };
-		DA5A7E7426C563A400F274C7 /* OAEditGPXColorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAEditGPXColorViewController.xib; sourceTree = "<group>"; };
 		DA5A7E7526C563A400F274C7 /* OAGPXItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXItemViewController.mm; sourceTree = "<group>"; };
 		DA5A7E7626C563A400F274C7 /* OAGPXWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXWptListViewController.h; sourceTree = "<group>"; };
-		DA5A7E7726C563A400F274C7 /* OAEditGPXColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditGPXColorViewController.h; sourceTree = "<group>"; };
 		DA5A7E7926C563A400F274C7 /* OAGPXWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXWptViewController.h; sourceTree = "<group>"; };
 		DA5A7E7B26C563A400F274C7 /* OAGPXEditWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXEditWptListViewController.h; sourceTree = "<group>"; };
 		DA5A7E7C26C563A400F274C7 /* OAGPXListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXListViewController.mm; sourceTree = "<group>"; };
@@ -5567,7 +5563,6 @@
 		DA5A7E7E26C563A400F274C7 /* OAGPXItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXItemViewController.h; sourceTree = "<group>"; };
 		DA5A7E8026C563A400F274C7 /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXListViewController.h; sourceTree = "<group>"; };
 		DA5A7E8426C563A400F274C7 /* OAGPXEditWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXEditWptViewController.h; sourceTree = "<group>"; };
-		DA5A7E8526C563A400F274C7 /* OAEditGPXColorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAEditGPXColorViewController.m; sourceTree = "<group>"; };
 		DA5A7E8626C563A400F274C7 /* OAGPXWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXWptListViewController.mm; sourceTree = "<group>"; };
 		DA5A7E8826C563A400F274C7 /* OAGPXItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAGPXItemViewController.xib; sourceTree = "<group>"; };
 		DA5A7E8A26C563A400F274C7 /* OATargetHistoryItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetHistoryItemViewController.h; sourceTree = "<group>"; };
@@ -10461,9 +10456,6 @@
 			isa = PBXGroup;
 			children = (
 				0AC993FB26E903E50004181F /* TrackMenu */,
-				DA5A7E7726C563A400F274C7 /* OAEditGPXColorViewController.h */,
-				DA5A7E8526C563A400F274C7 /* OAEditGPXColorViewController.m */,
-				DA5A7E7426C563A400F274C7 /* OAEditGPXColorViewController.xib */,
 				DA5A7E7B26C563A400F274C7 /* OAGPXEditWptListViewController.h */,
 				DA5A7E7226C563A400F274C7 /* OAGPXEditWptListViewController.mm */,
 				DA5A7E7326C563A400F274C7 /* OAGPXEditWptListViewController.xib */,
@@ -12470,7 +12462,6 @@
 				15BDDE7424D954EC00079C83 /* ic_custom_display_position_center@3x.png in Resources */,
 				8444999C1AAA1FFA00ACA20D /* img_app_purchase_1@2x.png in Resources */,
 				8A7672162281A4EF0098DE84 /* list_warnings_tunnel@2x.png in Resources */,
-				DA5A841A26C563A800F274C7 /* OAEditGPXColorViewController.xib in Resources */,
 				DA52CE0B24AE087F00CC309D /* ic_custom_direction_north@3x.png in Resources */,
 				1571CE1924ADEDF500083F92 /* ic_custom_direction_movement@2x.png in Resources */,
 				843E5CC31AB341E000BE14BE /* icon_direction_active@3x.png in Resources */,
@@ -14037,7 +14028,6 @@
 				DA5A813326C563A700F274C7 /* OATerrainMapLayerProvider.mm in Sources */,
 				DA5A843B26C563A800F274C7 /* OAParkingViewController.mm in Sources */,
 				0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */,
-				DA5A842226C563A800F274C7 /* OAEditGPXColorViewController.m in Sources */,
 				325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */,
 				DA5A844726C563A900F274C7 /* OAMapHudViewController.mm in Sources */,
 				DA5A816126C563A700F274C7 /* OAMapillaryPlugin.mm in Sources */,

@@ -53,6 +53,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
+
 @property (nonatomic) OAMapPanelViewController *mapPanelViewController;
 @property (nonatomic) OAMapViewController *mapViewController;
 
@@ -113,6 +116,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.sectionFooterHeight = 0.01;
+
+    self.bottomSeparatorHeight.constant = 0.5;
+    self.bottomSeparatorTopConstraint.constant = -0.5;
 
     if (!self.isShown)
         [self onShowHidePressed:nil];
@@ -267,7 +273,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     if (_headerView.collectionView.hidden)
     {
         if (_headerView.locationContainerView.hidden && _headerView.actionButtonsContainerView.hidden)
-            headerFrame.size.height = _headerView.collectionView.frame.origin.y + 1;
+            headerFrame.size.height = _headerView.collectionView.frame.origin.y;
         else
             headerFrame.size.height -= _headerView.collectionView.frame.size.height;
     }
@@ -278,7 +284,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     _headerView.frame = headerFrame;
 
     CGRect topHeaderContainerFrame = self.topHeaderContainerView.frame;
-    topHeaderContainerFrame.size.height = _headerView.frame.size.height + 1;
+    topHeaderContainerFrame.size.height = _headerView.frame.size.height;
     self.topHeaderContainerView.frame = topHeaderContainerFrame;
 
     [self.topHeaderContainerView insertSubview:_headerView atIndex:0];

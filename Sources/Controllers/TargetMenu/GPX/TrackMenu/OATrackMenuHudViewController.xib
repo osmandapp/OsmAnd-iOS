@@ -14,6 +14,8 @@
                 <outlet property="backButton" destination="URZ-Ef-ym2" id="bqw-1A-b1D"/>
                 <outlet property="backButtonContainerView" destination="qvQ-Gx-z0V" id="Ux5-Ps-3aN"/>
                 <outlet property="backButtonLeadingConstraint" destination="5gx-vm-gOg" id="RMi-NX-0SF"/>
+                <outlet property="bottomSeparatorHeight" destination="DUv-Ue-5oZ" id="G2d-yQ-k90"/>
+                <outlet property="bottomSeparatorTopConstraint" destination="Mz6-HQ-5Rd" id="hGZ-7Z-ccg"/>
                 <outlet property="contentContainer" destination="J4M-wt-sVQ" id="lWz-d9-8rW"/>
                 <outlet property="scrollableView" destination="9Ef-HN-sbO" id="Doq-y2-NC3"/>
                 <outlet property="sliderView" destination="Lnt-DR-w5c" id="b7J-u8-9Bk"/>

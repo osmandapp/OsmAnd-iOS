@@ -13,6 +13,8 @@
                 <outlet property="backButton" destination="bLs-VM-5BQ" id="0H0-2X-mWc"/>
                 <outlet property="backButtonContainerView" destination="ItH-eF-cbG" id="cBg-eN-AvQ"/>
                 <outlet property="backButtonLeadingConstraint" destination="6by-4y-2aM" id="yR7-Mo-cqD"/>
+                <outlet property="bottomSeparatorHeight" destination="HdQ-Yb-tT0" id="JPq-Wl-yE5"/>
+                <outlet property="bottomSeparatorTopConstraint" destination="uit-F6-dzg" id="oN6-d5-JBX"/>
                 <outlet property="contentContainer" destination="Z2i-nm-ocC" id="wN9-3b-8tj"/>
                 <outlet property="doneButton" destination="xxM-tZ-ruc" id="O47-5i-lib"/>
                 <outlet property="doneButtonContainerView" destination="ZCE-pt-ron" id="izl-MN-szy"/>

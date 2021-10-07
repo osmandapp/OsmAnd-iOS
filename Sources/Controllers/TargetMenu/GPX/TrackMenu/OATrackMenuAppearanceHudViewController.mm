@@ -67,6 +67,8 @@ static const NSInteger kCustomTrackWidthMax = 24;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *doneButtonTrailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
 @property (nonatomic) OAMapPanelViewController *mapPanelViewController;
 @property (nonatomic) OAMapViewController *mapViewController;
@@ -154,6 +156,9 @@ static const NSInteger kCustomTrackWidthMax = 24;
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+
+    self.bottomSeparatorHeight.constant = 0.5;
+    self.bottomSeparatorTopConstraint.constant = -0.5;
 
     if (!self.isShown)
         [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];

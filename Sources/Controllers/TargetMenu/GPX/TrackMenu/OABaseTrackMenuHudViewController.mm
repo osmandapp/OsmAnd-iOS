@@ -259,14 +259,28 @@
                                        secondItem:(UIView *)secondItem
                                   secondAttribute:(NSLayoutAttribute)secondAttribute
 {
+    return [self createBaseEqualConstraint:firstItem
+                            firstAttribute:firstAttribute
+                                secondItem:secondItem
+                           secondAttribute:secondAttribute
+                                  constant:0.f];
+}
+
+- (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
+                                   firstAttribute:(NSLayoutAttribute)firstAttribute
+                                       secondItem:(UIView *)secondItem
+                                  secondAttribute:(NSLayoutAttribute)secondAttribute
+                                         constant:(CGFloat)constant
+{
     return [NSLayoutConstraint constraintWithItem:firstItem
                                         attribute:firstAttribute
                                         relatedBy:NSLayoutRelationEqual
                                            toItem:secondItem
                                         attribute:secondAttribute
                                        multiplier:1.0f
-                                         constant:0.f];
+                                         constant:constant];
 }
+
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self dismiss:nil];

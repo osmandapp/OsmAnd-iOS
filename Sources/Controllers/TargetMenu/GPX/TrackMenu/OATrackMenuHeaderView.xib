@@ -74,7 +74,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="60" id="Rl3-WP-yVh"/>
                     </constraints>
-                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="12" id="LoU-9Z-Tan">
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="12" id="LoU-9Z-Tan">
                         <size key="itemSize" width="120" height="40"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>

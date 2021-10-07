@@ -118,6 +118,7 @@
         [self.mapPanelViewController.hudViewController resetToDefaultRulerLayout];
         [self restoreMapViewPort];
         [self.mapPanelViewController hideScrollableHudViewController];
+        [self.mapPanelViewController targetSetBottomControlsVisible:YES menuHeight:0 animated:YES];
         if (onComplete)
             onComplete();
     }];
@@ -206,6 +207,11 @@
     return nil; //override
 }
 
+- (void)setupModeViewShadowVisibility
+{
+    self.topHeaderContainerView.layer.shadowOpacity = 0.0;
+}
+
 - (CGFloat)expandedMenuHeight
 {
     return DeviceScreenHeight / 2;
@@ -250,6 +256,19 @@
     return self.data[indexPath.section][@"cells"][indexPath.row];
 }
 
+- (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
+                                   firstAttribute:(NSLayoutAttribute)firstAttribute
+                                       secondItem:(UIView *)secondItem
+                                  secondAttribute:(NSLayoutAttribute)secondAttribute
+{
+    return [NSLayoutConstraint constraintWithItem:firstItem
+                                        attribute:firstAttribute
+                                        relatedBy:NSLayoutRelationEqual
+                                           toItem:secondItem
+                                        attribute:secondAttribute
+                                       multiplier:1.0f
+                                         constant:0.f];
+}
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self dismiss:nil];

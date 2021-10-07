@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OABaseScrollableHudViewController.h"
+#import "OATrackMenuHudViewController.h"
 
 @class OAMeasurementEditingContext;
 
@@ -25,5 +26,7 @@
 - (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning;
 
 - (void) cancelModes;
+
+@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
 @end

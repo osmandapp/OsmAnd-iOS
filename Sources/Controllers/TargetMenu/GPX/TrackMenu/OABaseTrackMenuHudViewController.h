@@ -36,5 +36,9 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 - (NSArray<NSDictionary *> *)getCellsDataForSection:(NSInteger)section;
 - (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section;
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath;
+- (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
+                                   firstAttribute:(NSLayoutAttribute)firstAttribute
+                                       secondItem:(UIView *)secondItem
+                                  secondAttribute:(NSLayoutAttribute)secondAttribute;
 
 @end

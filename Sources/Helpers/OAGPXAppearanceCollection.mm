@@ -69,56 +69,12 @@
 
 @end
 
-@implementation OAGPXTrackSplitInterval
-
-- (instancetype)initWithType:(EOAGPXSplitType)type value:(NSString *)value
-{
-    self = [super init];
-    if (self)
-    {
-        NSString *key = [OAGPXTrackSplitInterval toTypeName:type];
-        self.key = key;
-        self.title = OALocalizedString([NSString stringWithFormat:@"shared_string_%@", key]);
-        self.type = type;
-        self.allValues = @[type == EOAGPXSplitTypeNone ? @(value.intValue) : @0];
-        self.customValue = value;
-    }
-    return self;
-}
-
-+ (instancetype)getDefault
-{
-    return [[OAGPXTrackSplitInterval alloc] initWithType:EOAGPXSplitTypeNone value:@"-1"];
-}
-
-- (BOOL)isCustom
-{
-    return self.type != EOAGPXSplitTypeNone;
-}
-
-+ (NSString *)toTypeName:(EOAGPXSplitType)splitType
-{
-    switch (splitType)
-    {
-        case EOAGPXSplitTypeDistance:
-            return @"distance";
-        case EOAGPXSplitTypeTime:
-            return @"time";
-
-        default:
-            return @"none";
-    }
-}
-
-@end
-
 @implementation OAGPXAppearanceCollection
 {
     OAMapViewController *_mapViewController;
 
     NSArray<OAGPXTrackColor *> *_availableColors;
     NSArray<OAGPXTrackWidth *> *_availableWidth;
-    NSArray<OAGPXTrackSplitInterval *> *_availableSplitInterval;
 }
 
 - (instancetype)init
@@ -142,21 +98,31 @@
         return _availableColors;
 
     NSMutableArray<NSString *> *possibleTrackColorKeys = [NSMutableArray new];
-    NSArray<OAMapStyleParameterValue *> *currentTrackColorParameters = [[OAMapStyleSettings sharedInstance] getParameter:CURRENT_TRACK_COLOR_ATTR].possibleValuesUnsorted;
-    [currentTrackColorParameters enumerateObjectsUsingBlock:^(OAMapStyleParameterValue *parameter, NSUInteger ids, BOOL * stop) {
-        if (ids != 0)
-            [possibleTrackColorKeys addObject:parameter.name];
-    }];
+    OAMapStyleParameter *currentTrackColor = [[OAMapStyleSettings sharedInstance] getParameter:CURRENT_TRACK_COLOR_ATTR];
 
-    NSMutableArray<OAGPXTrackColor *> *result = [NSMutableArray new];
-    NSDictionary<NSString *, NSNumber *> *possibleValues = [_mapViewController getGpxColors];
-    [possibleValues enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([possibleTrackColorKeys containsObject:key])
-            [result addObject:[[OAGPXTrackColor alloc] initWithKey:key value:obj.integerValue]];
-    }];
-    _availableColors = [result sortedArrayUsingComparator:^NSComparisonResult(OAGPXTrackColor *obj1, OAGPXTrackColor *obj2) {
-        return [@([possibleTrackColorKeys indexOfObject:obj1.key]) compare:@([possibleTrackColorKeys indexOfObject:obj2.key])];
-    }];
+    if (currentTrackColor)
+    {
+        NSArray<OAMapStyleParameterValue *> *currentTrackColorParameters = currentTrackColor.possibleValuesUnsorted;
+        [currentTrackColorParameters enumerateObjectsUsingBlock:^(OAMapStyleParameterValue *parameter, NSUInteger ids, BOOL *stop) {
+            if (ids != 0)
+                [possibleTrackColorKeys addObject:parameter.name];
+        }];
+
+        NSMutableArray<OAGPXTrackColor *> *result = [NSMutableArray new];
+        NSDictionary<NSString *, NSNumber *> *possibleValues = [_mapViewController getGpxColors];
+        [possibleValues enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, NSNumber *_Nonnull obj, BOOL *_Nonnull stop) {
+            if ([possibleTrackColorKeys containsObject:key])
+                [result addObject:[[OAGPXTrackColor alloc] initWithKey:key value:obj.integerValue]];
+        }];
+        _availableColors = [result sortedArrayUsingComparator:^NSComparisonResult(OAGPXTrackColor *obj1, OAGPXTrackColor *obj2) {
+            return [@([possibleTrackColorKeys indexOfObject:obj1.key]) compare:@([possibleTrackColorKeys indexOfObject:obj2.key])];
+        }];
+    }
+    else
+    {
+        _availableColors = [NSArray array];
+    }
+
     return _availableColors;
 }
 
@@ -181,38 +147,44 @@
         return _availableWidth;
 
     NSMutableArray<NSString *> *possibleTrackWidthKeys = [NSMutableArray new];
-    NSArray<OAMapStyleParameterValue *> *currentTrackWidthParameters = [[OAMapStyleSettings sharedInstance] getParameter:CURRENT_TRACK_WIDTH_ATTR].possibleValuesUnsorted;
-    [currentTrackWidthParameters enumerateObjectsUsingBlock:^(OAMapStyleParameterValue *parameter, NSUInteger ids, BOOL * stop) {
-        if (ids != 0)
-            [possibleTrackWidthKeys addObject:parameter.name];
-    }];
+    OAMapStyleParameter *currentTrackWidth = [[OAMapStyleSettings sharedInstance] getParameter:CURRENT_TRACK_WIDTH_ATTR];
 
-    NSMutableArray<OAGPXTrackWidth *> *result = [NSMutableArray new];
-    NSDictionary<NSString *, NSArray<NSNumber *> *> *possibleValues = [_mapViewController getGpxWidth];
-    [possibleValues enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray<NSNumber *> * _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *originalKey = [key substringToIndex:[key indexOf:@"_"]];
-        if ([possibleTrackWidthKeys containsObject:originalKey])
-        {
-            OAGPXTrackWidth *existWidth = _availableWidth ? [self getWidthForValue:originalKey] : nil;
-            if (existWidth)
-            {
-                NSMutableArray *existValues = [existWidth.allValues mutableCopy];
-                [existValues addObject:obj];
-                existWidth.allValues = existValues;
+    if (currentTrackWidth)
+    {
+        NSArray<OAMapStyleParameterValue *> *currentTrackWidthParameters = currentTrackWidth.possibleValuesUnsorted;
+        [currentTrackWidthParameters enumerateObjectsUsingBlock:^(OAMapStyleParameterValue *parameter, NSUInteger ids, BOOL *stop) {
+            if (ids != 0)
+                [possibleTrackWidthKeys addObject:parameter.name];
+        }];
+
+        NSMutableArray<OAGPXTrackWidth *> *result = [NSMutableArray new];
+        NSDictionary<NSString *, NSArray<NSNumber *> *> *possibleValues = [_mapViewController getGpxWidth];
+        [possibleValues enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, NSArray<NSNumber *> *_Nonnull obj, BOOL *_Nonnull stop) {
+            NSString *originalKey = [key substringToIndex:[key indexOf:@"_"]];
+            if ([possibleTrackWidthKeys containsObject:originalKey]) {
+                OAGPXTrackWidth *existWidth = _availableWidth ? [self getWidthForValue:originalKey] : nil;
+                if (existWidth) {
+                    NSMutableArray *existValues = [existWidth.allValues mutableCopy];
+                    [existValues addObject:obj];
+                    existWidth.allValues = existValues;
+                } else {
+                    [result addObject:[[OAGPXTrackWidth alloc] initWithKey:originalKey value:obj]];
+                    _availableWidth = result;
+                }
             }
-            else
-            {
-                [result addObject:[[OAGPXTrackWidth alloc] initWithKey:originalKey value:obj]];
-                _availableWidth = result;
-            }
-        }
-    }];
+        }];
 
-    [result addObject:[OAGPXTrackWidth getDefault]];
+        [result addObject:[OAGPXTrackWidth getDefault]];
 
-    _availableWidth = [result sortedArrayUsingComparator:^NSComparisonResult(OAGPXTrackWidth *obj1, OAGPXTrackWidth *obj2) {
-        return [@([possibleTrackWidthKeys indexOfObject:obj1.key]) compare:@([possibleTrackWidthKeys indexOfObject:obj2.key])];
-    }];
+        _availableWidth = [result sortedArrayUsingComparator:^NSComparisonResult(OAGPXTrackWidth *obj1, OAGPXTrackWidth *obj2) {
+            return [@([possibleTrackWidthKeys indexOfObject:obj1.key]) compare:@([possibleTrackWidthKeys indexOfObject:obj2.key])];
+        }];
+    }
+    else
+    {
+        _availableWidth = [NSArray array];
+    }
+
     return _availableWidth;
 }
 
@@ -235,34 +207,6 @@
     }
 
     return nil;
-}
-
-- (NSArray<OAGPXTrackSplitInterval *> *)getAvailableSplitIntervals
-{
-    if (_availableSplitInterval && [_availableSplitInterval count] > 0)
-        return _availableSplitInterval;
-
-    _availableSplitInterval = @[
-            [OAGPXTrackSplitInterval getDefault],
-            [[OAGPXTrackSplitInterval alloc] initWithType:EOAGPXSplitTypeDistance value:@"1"],
-            [[OAGPXTrackSplitInterval alloc] initWithType:EOAGPXSplitTypeTime value:@"1"]
-    ];
-
-    return _availableSplitInterval;
-}
-
-- (OAGPXTrackSplitInterval *)getSplitIntervalForType:(EOAGPXSplitType)type
-{
-    if (!_availableSplitInterval || [_availableSplitInterval count] == 0)
-        [self getAvailableSplitIntervals];
-
-    for (OAGPXTrackSplitInterval *splitInterval in _availableSplitInterval)
-    {
-        if (splitInterval.type == type)
-            return splitInterval;
-    }
-
-    return [OAGPXTrackSplitInterval getDefault];
 }
 
 @end

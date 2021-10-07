@@ -123,7 +123,6 @@
 #import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OABaseScrollableHudViewController.h"
-#import "OATrackMenuHudViewController.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAMapRulerView.h"
 
@@ -1890,11 +1889,14 @@ typedef enum
     [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude]]];
 }
 
-- (void) targetOpenPlanRoute:(OAGPX *)gpx
+- (void) targetOpenPlanRoute:(OAGPX *)gpx trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:gpx.gpxFilePath]];
+    OARoutePlanningHudViewController *routePlanningHudViewController =
+            [[OARoutePlanningHudViewController alloc] initWithFileName:gpx.gpxFilePath];
+    routePlanningHudViewController.trackMenuDelegate = trackMenuDelegate;
+    [self showScrollableHudViewController:routePlanningHudViewController];
 }
 
 - (void) targetGoToPoint
@@ -2496,12 +2498,36 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithGPX:(OAGPX *)item
+- (void)openTrackAppearance:(OAGPX *)item
+          trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate
 {
-    [self openTargetViewWithGPX:item trackHudMode:EOATrackMenuHudMode];
+    [self openTargetViewWithGPX:item
+                   trackHudMode:EOATrackAppearanceHudMode
+                            tab:EOATrackMenuHudOverviewTab
+              trackMenuDelegate:trackMenuDelegate];
 }
 
-- (void)openTargetViewWithGPX:(OAGPX *)item trackHudMode:(EOATrackHudMode)trackHudMode;
+- (void)openTargetViewWithGPX:(OAGPX *)item
+{
+    [self openTargetViewWithGPX:item
+                   trackHudMode:EOATrackMenuHudMode
+                            tab:EOATrackMenuHudOverviewTab];
+}
+
+- (void)openTargetViewWithGPX:(OAGPX *)item
+                 trackHudMode:(EOATrackHudMode)trackHudMode
+                          tab:(EOATrackMenuHudTab)tab;
+{
+    [self openTargetViewWithGPX:item
+                   trackHudMode:trackHudMode
+                            tab:tab
+              trackMenuDelegate:nil];
+}
+
+- (void)openTargetViewWithGPX:(OAGPX *)item
+                 trackHudMode:(EOATrackHudMode)trackHudMode
+                          tab:(EOATrackMenuHudTab)tab
+            trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate;
 {
     BOOL showCurrentTrack = NO;
     if (item == nil)
@@ -2560,11 +2586,12 @@ typedef enum
     {
         case EOATrackAppearanceHudMode:
             trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj];
+            ((OATrackMenuAppearanceHudViewController *) trackMenuHudViewController).trackMenuDelegate = trackMenuDelegate;
             break;
 
         case EOATrackMenuHudMode:
         default:
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj];
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj tab:tab];
             break;
     }
 

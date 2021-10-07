@@ -13,7 +13,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (weak, nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
+@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
 - (void)onNewModeSelected:(EOARouteStatisticsMode)mode;
 

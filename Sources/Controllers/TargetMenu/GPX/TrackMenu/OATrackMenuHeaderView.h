@@ -10,8 +10,6 @@
 
 @class OAGPXDocument, OAGPXTrackAnalysis, OAButton;
 
-@protocol OATrackMenuViewControllerDelegate;
-
 @interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic) NSArray *collectionData;
@@ -40,8 +38,6 @@
 @property (weak, nonatomic) IBOutlet OAButton *exportButton;
 @property (weak, nonatomic) IBOutlet OAButton *navigationButton;
 
-@property (weak, nonatomic) IBOutlet UIView *bottomSeparatorView;
-
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;
 
@@ -54,7 +50,5 @@
 - (void)setDescription:(NSString *)description;
 - (void)setCollection:(NSArray *)data;
 - (void)makeOnlyHeader:(BOOL)hasDescription;
-
-@property (nonatomic) id<OATrackMenuViewControllerDelegate> delegate;
 
 @end

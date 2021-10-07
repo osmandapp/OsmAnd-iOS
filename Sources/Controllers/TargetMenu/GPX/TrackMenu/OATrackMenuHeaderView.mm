@@ -7,8 +7,6 @@
 //
 
 #import "OATrackMenuHeaderView.h"
-#import "OARootViewController.h"
-#import "OARouteDetailsGraphViewController.h"
 #import "OAGpxStatBlockCollectionViewCell.h"
 #import "OAColors.h"
 
@@ -135,12 +133,12 @@
     return 1;
 }
 
-- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.collectionData.count;
 }
 
-- (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                    cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = self.collectionData[indexPath.row];
@@ -173,7 +171,7 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
-- (CGSize) collectionView:(UICollectionView *)collectionView
+- (CGSize)collectionView:(UICollectionView *)collectionView
                    layout:(UICollectionViewLayout *)collectionViewLayout
    sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -194,16 +192,6 @@
     CGFloat widthByTitle = (sizeByTitle.width < 60. ? 60. : sizeByTitle.width > 120. ? 120. : sizeByTitle.width) + 13.;
     CGFloat widthByValue = (sizeByValue.width < 40. ? 40. : sizeByValue.width > 100. ? 100. : sizeByValue.width) + 20. + 13.;
     return CGSizeMake(MAX(widthByTitle, widthByValue), 40.);
-}
-
-#pragma mark - UICollectionViewDelegate
-
-- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = self.collectionData[indexPath.row];
-    EOARouteStatisticsMode modeType = (EOARouteStatisticsMode) [item[@"type"] integerValue];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(openAnalysis:)])
-        [self.delegate openAnalysis:modeType];
 }
 
 @end

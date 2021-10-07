@@ -103,7 +103,7 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _currentMode = EOARouteStatisticsModeAltitudeSlope;
+    _currentMode = EOARouteStatisticsModeBoth;
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -364,12 +364,12 @@
 
 - (void)cancelPressed
 {
-    if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(onExitAnalysis)])
+    if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu)])
     {
         [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-            [self.trackMenuDelegate onExitAnalysis];
+            [self.trackMenuDelegate backToTrackMenu];
         }];
-    }
+    }	
     else
     {
         [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:self.gpx analysis:self.analysis];
@@ -434,7 +434,7 @@
     [self updateRouteStatisticsGraph];
 }
 
-- (void)updateRouteStatisticsGraph
+- (void) updateRouteStatisticsGraph
 {
     if (_data.count > 1)
     {

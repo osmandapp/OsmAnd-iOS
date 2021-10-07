@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OATargetPointView.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
+#import "OATrackMenuHudViewController.h"
 #import "OABaseTrackMenuHudViewController.h"
 
 @class OAFavoriteItem;
@@ -118,8 +119,12 @@
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
+
+- (void) openTrackAppearance:(OAGPX *)item
+          trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate;
+
 - (void) openTargetViewWithGPX:(OAGPX *)item;
-- (void) openTargetViewWithGPX:(OAGPX *)item trackHudMode:(EOATrackHudMode)trackHudMode;
+- (void) openTargetViewWithGPX:(OAGPX *)item trackHudMode:(EOATrackHudMode)trackHudMode tab:(EOATrackMenuHudTab)tab;
 
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 

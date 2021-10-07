@@ -9,15 +9,23 @@
 #import "OABaseTrackMenuHudViewController.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 
+typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
+{
+    EOATrackMenuHudOverviewTab = 0,
+    EOATrackMenuHudActionsTab
+};
+
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
 @optional
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType;
-- (void)onExitAnalysis;
+- (void)backToTrackMenu;
 
 @end
 
 @interface OATrackMenuHudViewController : OABaseTrackMenuHudViewController
+
+- (instancetype)initWithGpx:(OAGPX *)gpx tab:(EOATrackMenuHudTab)tab;
 
 @end

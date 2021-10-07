@@ -82,6 +82,13 @@
                                         <constraint firstAttribute="trailing" secondItem="pBw-Rg-Ge6" secondAttribute="trailing" constant="20" id="yl2-TL-37U"/>
                                     </constraints>
                                 </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZz-Dd-qQQ" userLabel="Separator">
+                                    <rect key="frame" x="0.0" y="62" width="414" height="1"/>
+                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="HdQ-Yb-tT0"/>
+                                    </constraints>
+                                </view>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="CTy-7m-ux9">
                                     <rect key="frame" x="0.0" y="63" width="414" height="336"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -89,6 +96,11 @@
                                 </tableView>
                             </subviews>
                             <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="WZz-Dd-qQQ" firstAttribute="leading" secondItem="Z2i-nm-ocC" secondAttribute="leading" id="AMI-a4-XBE"/>
+                                <constraint firstAttribute="trailing" secondItem="WZz-Dd-qQQ" secondAttribute="trailing" id="lws-If-zdO"/>
+                                <constraint firstItem="WZz-Dd-qQQ" firstAttribute="top" secondItem="yzx-9N-ib1" secondAttribute="bottom" constant="-1" id="uit-F6-dzg"/>
+                            </constraints>
                         </view>
                         <view hidden="YES" contentMode="scaleToFill" id="FVp-0e-c7g" userLabel="Toolbar">
                             <rect key="frame" x="0.0" y="399" width="414" height="0.0"/>

@@ -45,6 +45,8 @@
 @property (nonatomic) NSString *mapStyleName;
 @property (nonatomic) NSString *mapPresetName;
 @property (nonatomic) NSArray<OAMapStyleParameter *> *parameters;
+@property (nonatomic) OAMapStyleParameter *currentTrackColor;
+@property (nonatomic) OAMapStyleParameter *currentTrackWidth;
 @property (nonatomic) NSDictionary<NSString *, NSString *> *categories;
 
 @end
@@ -136,7 +138,7 @@
     }
 }
 
--(void) buildParameters:(NSString *)styleName
+- (void)buildParameters:(NSString *)styleName
 {
     const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(styleName));
     const auto& parameters = resolvedMapStyle->getParameters();
@@ -147,17 +149,14 @@
     for (const auto& p : OsmAnd::constOf(parameters))
     {
         NSString *name = resolvedMapStyle->getStringById(p->getNameId()).toNSString();
-        
+
         //NSLog(@"name = %@ title = %@ decs = %@ category = %@", name, p->getTitle().toNSString(), p->getDescription().toNSString(), p->getCategory().toNSString());
 
         if ([name isEqualToString:@"appMode"] ||
             [name isEqualToString:@"baseAppMode"] ||
-//            [name isEqualToString:@"currentTrackColor"] ||
-//            [name isEqualToString:@"currentTrackWidth"] ||
             [name isEqualToString:@"engine_v1"])
-
             continue;
-        
+
         NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
         NSString *attrLocText = OALocalizedString(attrLocKey);
         if ([attrLocKey isEqualToString:attrLocText])
@@ -176,8 +175,8 @@
             NSString *categoryLocText = OALocalizedString(categoryLocKey);
             if ([categoryLocKey isEqualToString:categoryLocText])
                 categoryLocText = [param.category capitalizedString];
-            
-            [categories setObject:categoryLocText forKey:param.category];
+
+            categories[param.category] = categoryLocText;
         }
         
         NSMutableArray<NSString *> *values = [NSMutableArray array];
@@ -230,8 +229,18 @@
                 break;
         }
 
-        [params addObject:param];
+        if ([name isEqualToString:CURRENT_TRACK_COLOR_ATTR])
+        {
+            self.currentTrackColor = param;
+            continue;
+        }
+        else if ([name isEqualToString:CURRENT_TRACK_WIDTH_ATTR])
+        {
+            self.currentTrackWidth = param;
+            continue;
+        }
 
+        [params addObject:param];
     }
 
     self.parameters = params;
@@ -243,11 +252,18 @@
     return self.parameters;
 }
 
--(OAMapStyleParameter *) getParameter:(NSString *)name
+- (OAMapStyleParameter *)getParameter:(NSString *)name
 {
+    if ([name isEqualToString:CURRENT_TRACK_COLOR_ATTR])
+        return self.currentTrackColor;
+    else if ([name isEqualToString:CURRENT_TRACK_WIDTH_ATTR])
+        return self.currentTrackWidth;
+
     for (OAMapStyleParameter *p in self.parameters)
+    {
         if ([p.name isEqualToString:name])
             return p;
+    }
     
     return nil;
 }

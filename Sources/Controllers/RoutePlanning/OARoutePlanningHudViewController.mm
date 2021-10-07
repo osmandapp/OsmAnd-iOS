@@ -113,7 +113,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIButton *landscapeOptionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *landscapeAddPointButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *landscapeProgressView;
-@property (nonatomic, readwrite) EOAScrollableMenuHudMode menuHudMode;
 
 @end
 
@@ -207,7 +206,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) commonInit:(OAMeasurementEditingContext *)context
 {
-    self.menuHudMode = EOAScrollableMenuHudExtraHeaderInLandscapeMode;
+    menuHudMode = EOAScrollableMenuHudExtraHeaderInLandscapeMode;
     _app = OsmAndApp.instance;
     _settings = [OAAppSettings sharedManager];
     _mapPanel = OARootViewController.instance.mapPanel;
@@ -260,7 +259,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [_closeButton setImage:[UIImage templateImageNamed:@"ic_navbar_close"] forState:UIControlStateNormal];
     _closeButton.imageView.tintColor = UIColor.whiteColor;
-    
+    [_closeButton addBlurEffect:NO cornerRadius:12. padding:0];
+
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     _titleView.text = OALocalizedString(@"plan_route");
     
@@ -668,6 +668,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_mapPanel hideScrollableHudViewController];
         _layer.editingCtx = nil;
         [_layer resetLayer];
+
+        if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu)])
+            [self.trackMenuDelegate backToTrackMenu];
     }];
 }
 
@@ -795,7 +798,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         OAExitRoutePlanningBottomSheetViewController *bottomSheet = [[OAExitRoutePlanningBottomSheetViewController alloc] init];
         bottomSheet.delegate = self;
-        [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
+        [bottomSheet presentInViewController:[OARootViewController instance].mapPanel.mapViewController];
     }
     else
     {

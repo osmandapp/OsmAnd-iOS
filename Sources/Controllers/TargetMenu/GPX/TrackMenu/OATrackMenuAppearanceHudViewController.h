@@ -7,7 +7,10 @@
 //
 
 #import "OABaseTrackMenuHudViewController.h"
+#import "OATrackMenuHudViewController.h"
 
 @interface OATrackMenuAppearanceHudViewController : OABaseTrackMenuHudViewController
+
+@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
 @end

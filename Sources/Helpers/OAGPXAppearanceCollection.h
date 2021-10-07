@@ -10,12 +10,6 @@
 
 @class OAMapViewController;
 
-typedef NS_ENUM(NSInteger, EOAGPXSplitType) {
-    EOAGPXSplitTypeNone = -1,
-    EOAGPXSplitTypeDistance = 1,
-    EOAGPXSplitTypeTime = 2
-};
-
 @interface OAGPXTrackAppearance : NSObject
 
 @property (nonatomic) NSString *key;
@@ -45,30 +39,14 @@ typedef NS_ENUM(NSInteger, EOAGPXSplitType) {
 
 @end
 
-@interface OAGPXTrackSplitInterval : OAGPXTrackAppearance
-
-@property (nonatomic) EOAGPXSplitType type;
-@property (nonatomic) NSArray<NSNumber *> *allValues;
-@property (nonatomic) NSString *customValue;
-
-- (instancetype)initWithType:(EOAGPXSplitType)type value:(NSString *)value;
-+ (instancetype)getDefault;
-
-- (BOOL)isCustom;
-+ (NSString *)toTypeName:(EOAGPXSplitType)splitType;
-
-@end
-
 @interface OAGPXAppearanceCollection : NSObject
 
 @property (nonatomic) NSString *gpxName;
 
 - (NSArray<OAGPXTrackColor *> *)getAvailableColors;
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
-- (NSArray<OAGPXTrackSplitInterval *> *)getAvailableSplitIntervals;
 
 - (OAGPXTrackColor *)getColorForValue:(NSInteger)value;
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;
-- (OAGPXTrackSplitInterval *)getSplitIntervalForType:(EOAGPXSplitType)type;
 
 @end

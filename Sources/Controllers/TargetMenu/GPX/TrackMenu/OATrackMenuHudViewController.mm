@@ -13,7 +13,6 @@
 #import "OATrackMenuDescriptionViewController.h"
 #import "OASelectTrackFolderViewController.h"
 #import "PXAlertView.h"
-#import "OATrackMenuHeaderView.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
 #import "OATextViewSimpleCell.h"
@@ -33,14 +32,6 @@
 #import "OAMapActions.h"
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
-
-typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
-{
-    EOATrackMenuHudOverviewTab = 0,
-    EOATrackMenuHubSegmentsTab,
-    EOATrackMenuHudPointsTab,
-    EOATrackMenuHudActionsTab
-};
 
 typedef NS_ENUM(NSUInteger, EOATrackMenuHudActionsSection)
 {
@@ -87,12 +78,37 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     NSString *_description;
     NSString *_exportFileName;
     NSString *_exportFilePath;
+
+    EOATrackMenuHudTab _selectedTab;
+}
+
+- (instancetype)initWithGpx:(OAGPX *)gpx
+{
+    self = [super initWithNibName:@"OATrackMenuHudViewController" bundle:nil];
+    if (self)
+    {
+        self.gpx = gpx;
+        _selectedTab = EOATrackMenuHudOverviewTab;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithGpx:(OAGPX *)gpx tab:(EOATrackMenuHudTab)tab
+{
+    self = [super initWithNibName:@"OATrackMenuHudViewController" bundle:nil];
+    if (self)
+    {
+        self.gpx = gpx;
+        _selectedTab = tab >= 0 ? tab : EOATrackMenuHudOverviewTab;
+        [self commonInit];
+    }
+    return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -115,17 +131,16 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 {
     CGFloat headerHeight = 0.001;
     UITableViewCellSeparatorStyle separatorStyle = UITableViewCellSeparatorStyleNone;
-    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         headerHeight = 56.;
         separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     }
-    else if (self.tabBarView.selectedItem.tag == EOATrackMenuHudActionsTab)
+    else if (_selectedTab == EOATrackMenuHudActionsTab)
     {
         headerHeight = 20.;
     }
     self.tableView.sectionHeaderHeight = headerHeight;
-    self.tableView.estimatedSectionHeaderHeight = headerHeight;
     self.tableView.separatorStyle = separatorStyle;
 }
 
@@ -139,16 +154,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                                                                     color:unselectedColor]
                                       tag:EOATrackMenuHudOverviewTab],
                     [[UITabBarItem alloc]
-                            initWithTitle:OALocalizedString(@"track")
-                                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_trip"]
-                                                                    color:unselectedColor]
-                                      tag:EOATrackMenuHubSegmentsTab],
-                    [[UITabBarItem alloc]
-                            initWithTitle:OALocalizedString(@"shared_string_gpx_points")
-                                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_waypoint"]
-                                                                    color:unselectedColor]
-                                      tag:EOATrackMenuHudPointsTab],
-                    [[UITabBarItem alloc]
                             initWithTitle:OALocalizedString(@"actions")
                                     image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
                                                                     color:unselectedColor]
@@ -156,7 +161,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             ]
                      animated:YES];
 
-    self.tabBarView.selectedItem = self.tabBarView.items[EOATrackMenuHudOverviewTab];
+    self.tabBarView.selectedItem = self.tabBarView.items[_selectedTab];
     self.tabBarView.itemWidth = self.scrollableView.frame.size.width / self.tabBarView.items.count;
     self.tabBarView.delegate = self;
     [self.tabBarView makeTranslucent:YES];
@@ -164,20 +169,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)setupDescription
 {
-    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         _description = self.doc.metadata.desc;
-    }
-    else if (self.tabBarView.selectedItem.tag == EOATrackMenuHubSegmentsTab)
-    {
-        NSInteger segmentsCount = 0;
-        for (OAGpxTrk *track in self.doc.tracks)
-        {
-            segmentsCount += track.segments.count;
-        }
-        _description = [NSString stringWithFormat: @"%@: %ld",
-                OALocalizedString(@"gpx_selection_segment_title"),
-                segmentsCount];
     }
     else
     {
@@ -193,13 +187,16 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         [_headerView removeFromSuperview];
 
     _headerView = [[OATrackMenuHeaderView alloc] init];
-    _headerView.delegate = self;
+    [_headerView setDescription:_description];
 
-    [_headerView.titleView setText:self.isCurrentTrack ? OALocalizedString(@"track_recording_name") : [self.gpx getNiceTitle]];
-    _headerView.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
-    _headerView.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+    if (_selectedTab != EOATrackMenuHudActionsTab)
+    {
+        [_headerView.titleView setText:self.isCurrentTrack ? OALocalizedString(@"track_recording_name") : [self.gpx getNiceTitle]];
+        _headerView.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+        _headerView.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+    }
 
-    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         [self generateGpxBlockStatistics];
 
@@ -250,8 +247,10 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             _headerView.navigationButton.hidden = YES;
         }
     }
-    else if (self.tabBarView.selectedItem.tag == EOATrackMenuHudActionsTab)
+    else if (_selectedTab == EOATrackMenuHudActionsTab)
     {
+        [_headerView.titleView setText:OALocalizedString(@"actions")];
+        _headerView.titleIconView.image = nil;
         [_headerView makeOnlyHeader:NO];
     }
     else
@@ -259,38 +258,23 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         [_headerView makeOnlyHeader:YES];
     }
 
-    [_headerView setDescription:_description];
-
     if ([_headerView needsUpdateConstraints])
         [_headerView updateConstraints];
 
-    if (_headerView.collectionView.hidden
-            && _headerView.locationContainerView.hidden
-            && _headerView.actionButtonsContainerView.hidden)
+    CGRect headerFrame = _headerView.frame;
+
+    if (_headerView.collectionView.hidden)
     {
-        CGRect headerFrame = _headerView.frame;
-        headerFrame.size.height = _headerView.collectionView.frame.origin.y + 1;
-        headerFrame.size.width = self.topHeaderContainerView.frame.size.width;
-        _headerView.frame = headerFrame;
-    }
-    else
-    {
-        CGRect headerFrame = _headerView.frame;
-
-        if (_headerView.descriptionContainerView.hidden)
-            headerFrame.size.height = _headerView.frame.size.height - _headerView.descriptionContainerView.frame.size.height;
-
-        if (_headerView.collectionView.hidden)
-            headerFrame.size.height = _headerView.frame.size.height - _headerView.collectionView.frame.size.height;
-
-        headerFrame.size.width = self.topHeaderContainerView.frame.size.width;
-        _headerView.frame = headerFrame;
+        if (_headerView.locationContainerView.hidden && _headerView.actionButtonsContainerView.hidden)
+            headerFrame.size.height = _headerView.collectionView.frame.origin.y + 1;
+        else
+            headerFrame.size.height -= _headerView.collectionView.frame.size.height;
     }
 
-    CGRect bottomSeparatorFrame = _headerView.bottomSeparatorView.frame;
-    bottomSeparatorFrame.origin.x = self.view.frame.origin.x;
-    bottomSeparatorFrame.size.width = self.view.frame.size.width;
-    _headerView.bottomSeparatorView.frame = bottomSeparatorFrame;
+    if (_headerView.descriptionContainerView.hidden)
+        headerFrame.size.height -= _headerView.descriptionContainerView.frame.size.height;
+
+    _headerView.frame = headerFrame;
 
     CGRect topHeaderContainerFrame = self.topHeaderContainerView.frame;
     topHeaderContainerFrame.size.height = _headerView.frame.size.height + 1;
@@ -301,34 +285,22 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
     _headerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.topHeaderContainerView addConstraints:@[
-            [NSLayoutConstraint constraintWithItem:_headerView
-                                         attribute:NSLayoutAttributeLeading
-                                         relatedBy:NSLayoutRelationEqual
-                                            toItem:self.topHeaderContainerView
-                                         attribute:NSLayoutAttributeLeadingMargin
-                                        multiplier:1.0f
-                                          constant:0.f],
-            [NSLayoutConstraint constraintWithItem:_headerView
-                                         attribute:NSLayoutAttributeTop
-                                         relatedBy:NSLayoutRelationEqual
-                                            toItem:self.topHeaderContainerView
-                                         attribute:NSLayoutAttributeTop
-                                        multiplier:1.0f
-                                          constant:0.f],
-            [NSLayoutConstraint constraintWithItem:_headerView
-                                         attribute:NSLayoutAttributeTrailing
-                                         relatedBy:NSLayoutRelationEqual
-                                            toItem:self.topHeaderContainerView
-                                         attribute:NSLayoutAttributeTrailingMargin
-                                        multiplier:1.0f
-                                          constant:0.f],
-            [NSLayoutConstraint constraintWithItem:_headerView
-                                         attribute:NSLayoutAttributeBottom
-                                         relatedBy:NSLayoutRelationEqual
-                                            toItem:self.topHeaderContainerView
-                                         attribute:NSLayoutAttributeBottom
-                                        multiplier:1.0f
-                                          constant:0.f]
+            [self createBaseEqualConstraint:_headerView
+                             firstAttribute:NSLayoutAttributeLeading
+                                 secondItem:self.topHeaderContainerView
+                            secondAttribute:NSLayoutAttributeLeadingMargin],
+            [self createBaseEqualConstraint:_headerView
+                             firstAttribute:NSLayoutAttributeTop
+                                 secondItem:self.topHeaderContainerView
+                            secondAttribute:NSLayoutAttributeTop],
+            [self createBaseEqualConstraint:_headerView
+                             firstAttribute:NSLayoutAttributeTrailing
+                                 secondItem:self.topHeaderContainerView
+                            secondAttribute:NSLayoutAttributeTrailingMargin],
+            [self createBaseEqualConstraint:_headerView
+                             firstAttribute:NSLayoutAttributeBottom
+                                 secondItem:self.topHeaderContainerView
+                            secondAttribute:NSLayoutAttributeBottom]
             ]
     ];
 }
@@ -339,7 +311,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
     NSMutableArray *data = [NSMutableArray array];
 
-    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         if (_description && _description.length > 0)
         {
@@ -407,20 +379,12 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                     @"key": @"location"
             }];
 
-        /*[infoSectionData addObject:@{
-                @"title": OALocalizedString(@"activity"),
-                @"value": @"",
-                @"has_options": @NO, //@YES
-                @"type": [OAIconTitleValueCell getCellIdentifier],
-                @"key": @"activity"
-        }];*/
-
         [data addObject:@{
                 @"group_name": OALocalizedString(@"shared_string_info"),
                 @"cells": infoSectionData
         }];
     }
-    else if (self.tabBarView.selectedItem.tag == EOATrackMenuHudActionsTab)
+    else if (_selectedTab == EOATrackMenuHudActionsTab)
     {
         NSMutableArray *controlSectionData = [NSMutableArray array];
 
@@ -466,13 +430,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                 @"type": [OATitleIconRoundCell getCellIdentifier],
                 @"key": @"share"
         }];
-
-        /*[shareSectionData addObject:@{
-                @"title": OALocalizedString(@"upload_to_openstreetmap"),
-                @"icon": @"ic_custom_upload_to_openstreetmap",
-                @"type": [OATitleIconRoundCell getCellIdentifier],
-                @"key": @"share_upload_osm"
-        }];*/
 
         [data addObject:@{
                 @"cells": shareSectionData
@@ -559,7 +516,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_distance"),
                     @"value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
-                    @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_distance@2x"
             }];
         }
@@ -569,13 +525,11 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_ascent"),
                     @"value": [OAOsmAndFormatter getFormattedAlt:self.analysis.diffElevationUp],
-                    @"type": @(EOARouteStatisticsModeSlope),
                     @"icon": @"ic_small_ascent"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_descent"),
                     @"value": [OAOsmAndFormatter getFormattedAlt:self.analysis.diffElevationDown],
-                    @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_descent"
             }];
             [statistics addObject:@{
@@ -583,7 +537,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                     @"value": [NSString stringWithFormat:@"%@ - %@",
                                                          [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation],
                                                          [OAOsmAndFormatter getFormattedAlt:self.analysis.maxElevation]],
-                    @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_altitude_range"
             }];
         }
@@ -593,13 +546,11 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_average_speed"),
                     @"value": [OAOsmAndFormatter getFormattedSpeed:self.analysis.avgSpeed],
-                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_speed"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_max_speed"),
                     @"value": [OAOsmAndFormatter getFormattedSpeed:self.analysis.maxSpeed],
-                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_max_speed"
             }];
         }
@@ -610,7 +561,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"total_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
-                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_time_interval"
             }];
         }
@@ -621,7 +571,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"moving_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
-                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_time_moving"
             }];
         }
@@ -631,13 +580,16 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (CGFloat)initialMenuHeight
 {
-    CGFloat totalHeight = self.topHeaderContainerView.frame.origin.y + self.toolBarView.frame.size.height;
-    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudOverviewTab)
-        totalHeight += !_headerView.collectionView.hidden
-                ? _headerView.collectionView.frame.origin.y
-                : _headerView.locationContainerView.frame.origin.y;
+    CGFloat totalHeight = self.topHeaderContainerView.frame.origin.y + self.toolBarView.frame.size.height + 10.;
+
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
+        totalHeight += _headerView.descriptionContainerView.hidden
+                ? _headerView.descriptionContainerView.frame.origin.y
+                : _headerView.collectionView.frame.origin.y;
+    else if (!_headerView.descriptionContainerView.hidden)
+        totalHeight += _headerView.collectionView.frame.origin.y;
     else
-        totalHeight += _headerView.bottomSeparatorView.frame.origin.y;
+        totalHeight += _headerView.titleContainerView.frame.size.height;
 
     return totalHeight;
 }
@@ -760,21 +712,25 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     }];
 }
 
-- (void)onExitAnalysis
+- (void)backToTrackMenu
 {
-    [self.mapPanelViewController openTargetViewWithGPX:self.gpx trackHudMode:EOATrackMenuHudMode];
+    [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                                          trackHudMode:EOATrackMenuHudMode
+                                                   tab:_selectedTab];
 }
 
 #pragma mark - UITabBarDelegate
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
+    _selectedTab = (EOATrackMenuHudTab) item.tag;
+
     [self setupTableView];
     [self setupDescription];
     [self generateData];
     [self setupHeaderView];
 
-    switch (item.tag)
+    switch (_selectedTab)
     {
         case EOATrackMenuHudActionsTab:
         {
@@ -865,7 +821,8 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 - (void)onAppearancePressed:(id)sender
 {
     [self dismiss:^{
-        [self.mapPanelViewController openTargetViewWithGPX:self.gpx trackHudMode:EOATrackAppearanceHudMode];
+        [self.mapPanelViewController openTrackAppearance:self.gpx
+                                       trackMenuDelegate:self];
     }];
 }
 
@@ -928,7 +885,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 - (void)onFolderSelected:(NSString *)selectedFolderName
 {
     [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
-    if (self.tabBarView.selectedItem.tag == EOATrackMenuHudActionsTab)
+    if (_selectedTab == EOATrackMenuHudActionsTab)
         [self generateData:EOATrackMenuHudActionsChangeSection row:EOATrackMenuHudActionsChangeMoveRow];
 }
 
@@ -981,11 +938,11 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
     [self.mapPanelViewController.mapActions stopNavigationWithoutConfirm];
     [self.mapPanelViewController.mapActions enterRoutePlanningModeGivenGpx:self.doc
-                                                                  path:self.gpx.gpxFilePath
-                                                                  from:nil
-                                                              fromName:nil
-                                        useIntermediatePointsByDefault:YES
-                                                            showDialog:YES];
+                                                                      path:self.gpx.gpxFilePath
+                                                                      from:nil
+                                                                  fromName:nil
+                                            useIntermediatePointsByDefault:YES
+                                                                showDialog:YES];
     [self dismiss:nil];
 }
 
@@ -1020,7 +977,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
             [cell showLeftIcon:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
         }
         if (cell)
         {
@@ -1038,7 +995,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         {
             NSArray *nib = [[NSBundle mainBundle]loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewSimpleCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.textContainer.maximumNumberOfLines = 10;
             cell.textView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -1183,7 +1140,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     }
     else if ([item[@"key"] isEqualToString:@"analyze"])
     {
-        [self openAnalysis:EOARouteStatisticsModeAltitudeSlope];
+        [self openAnalysis:EOARouteStatisticsModeBoth];
     }
     else if ([item[@"key"] isEqualToString:@"share"])
     {
@@ -1192,7 +1149,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     else if ([item[@"key"] isEqualToString:@"edit"])
     {
         [self dismiss:^{
-            [self.mapPanelViewController targetOpenPlanRoute:self.gpx];
+            [self.mapPanelViewController targetOpenPlanRoute:self.gpx trackMenuDelegate:self];
         }];
     }
     else if ([item[@"key"] isEqualToString:@"edit_create_duplicate"])

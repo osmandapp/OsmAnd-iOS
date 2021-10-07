@@ -135,8 +135,6 @@
     self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
 
-    [self.toolBarView addBlurEffect:YES cornerRadius:0. padding:0];
-
     [self generateData];
     [self setupHeaderView];
 }

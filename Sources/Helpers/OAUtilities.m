@@ -368,7 +368,7 @@
 {
     self.translucent = YES;
     self.backgroundImage = [UIImage new];
-    self.shadowImage = [UIImage new]; //remove separator
+    self.shadowImage = [UIImage new];
     self.barTintColor = UIColor.clearColor;
     self.backgroundColor = light ? UIColor.whiteColor : UIColor.blackColor;
     self.layer.backgroundColor = UIColor.clearColor.CGColor;

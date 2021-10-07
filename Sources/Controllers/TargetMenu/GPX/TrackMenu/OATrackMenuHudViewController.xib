@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -68,7 +69,7 @@
                                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </tableView>
                             </subviews>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="SFR-w4-dKd" firstAttribute="top" secondItem="Dhz-uG-Jnh" secondAttribute="bottom" constant="-1" id="Mz6-HQ-5Rd"/>
                                 <constraint firstAttribute="trailing" secondItem="SFR-w4-dKd" secondAttribute="trailing" id="yLf-JW-DQ1"/>
@@ -88,7 +89,7 @@
                                 </view>
                                 <tabBar clipsSubviews="YES" contentMode="scaleToFill" translucent="NO" itemPositioning="centered" itemSpacing="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="j7s-w5-BDJ" customClass="OATabBar">
                                     <rect key="frame" x="8" y="1" width="398" height="71"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" white="0.99616858237547889" alpha="0.89811320754716983" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="71" id="HFD-Wt-gxy"/>
                                     </constraints>
@@ -110,7 +111,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="Thk-pm-aPS"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
                 <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qvQ-Gx-z0V" userLabel="Back Button Container">
                     <rect key="frame" x="10" y="54" width="62" height="48"/>
@@ -149,5 +150,8 @@
     </objects>
     <resources>
         <image name="ic_custom_arrow_back.png" width="30" height="30"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

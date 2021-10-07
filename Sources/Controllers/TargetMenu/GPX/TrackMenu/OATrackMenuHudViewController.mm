@@ -164,7 +164,8 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     self.tabBarView.selectedItem = self.tabBarView.items[_selectedTab];
     self.tabBarView.itemWidth = self.scrollableView.frame.size.width / self.tabBarView.items.count;
     self.tabBarView.delegate = self;
-    [self.tabBarView addBlurEffect:YES cornerRadius:0. padding:0];
+    self.tabBarView.backgroundImage = [UIImage new];
+    self.tabBarView.shadowImage = [UIImage new];
 }
 
 - (void)setupDescription

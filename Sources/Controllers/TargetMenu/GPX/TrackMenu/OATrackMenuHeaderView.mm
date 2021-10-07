@@ -61,7 +61,6 @@
 - (void)commonInit
 {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    self.clipsToBounds = YES;
 }
 
 - (void)updateConstraints

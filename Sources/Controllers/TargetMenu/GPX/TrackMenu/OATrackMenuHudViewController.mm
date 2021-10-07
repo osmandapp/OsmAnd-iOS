@@ -135,18 +135,11 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)setupTableView
 {
-    CGFloat headerHeight = 0.001;
     UITableViewCellSeparatorStyle separatorStyle = UITableViewCellSeparatorStyleNone;
+
     if (_selectedTab == EOATrackMenuHudOverviewTab)
-    {
-        headerHeight = 56.;
         separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    }
-    else if (_selectedTab == EOATrackMenuHudActionsTab)
-    {
-        headerHeight = 20.;
-    }
-    self.tableView.sectionHeaderHeight = headerHeight;
+
     self.tableView.separatorStyle = separatorStyle;
 }
 
@@ -1126,6 +1119,36 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
+            || [item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+            || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]]
+            || [item[@"type"] isEqualToString:[OATextLineViewCell getCellIdentifier]])
+        return 48.;
+    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+        return 60.;
+    else
+        return estimated ? 48. : UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath estimated:NO];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
+        return 56.;
+    else if (_selectedTab == EOATrackMenuHudActionsTab)
+        return 20.;
+    else
+        return 0.01;
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

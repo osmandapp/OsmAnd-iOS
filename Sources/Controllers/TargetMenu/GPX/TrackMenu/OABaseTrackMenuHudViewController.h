@@ -25,6 +25,8 @@
 #define kSectionHeader @"header"
 #define kSectionFooter @"footer"
 
+#define kTableUpdateData @"update_data"
+
 typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 {
     EOATrackMenuHudMode = 0,
@@ -33,6 +35,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 
 typedef void(^OAGPXTableCellDataOnSwitch)(BOOL toggle);
 typedef BOOL(^OAGPXTableCellDataIsOn)();
+typedef void(^OAGPXTableDataUpdateData)();
 
 @class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController;
 
@@ -50,6 +53,7 @@ typedef BOOL(^OAGPXTableCellDataIsOn)();
 @property (nonatomic, readonly) BOOL toggle;
 @property (nonatomic, readonly) OAGPXTableCellDataOnSwitch onSwitch;
 @property (nonatomic, readonly) OAGPXTableCellDataIsOn isOn;
+@property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
 
 - (void)setData:(NSDictionary *)data;
 
@@ -62,6 +66,7 @@ typedef BOOL(^OAGPXTableCellDataIsOn)();
 @property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *cells;
 @property (nonatomic, readonly) NSString *header;
 @property (nonatomic, readonly) NSString *footer;
+@property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
 
 - (void)setData:(NSDictionary *)data;
 

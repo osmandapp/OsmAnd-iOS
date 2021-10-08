@@ -179,9 +179,59 @@ static const NSInteger kCustomTrackWidthMax = 24;
             OAGPXTableSectionData withData:@{ kSectionCells: [self generateDataForColorsSection]}
     ]];
 
-    [appearanceSections addObject:[
-            OAGPXTableSectionData withData:@{ kSectionCells: [self generateDataForWidthSection]}
-    ]];
+    NSMutableArray<OAGPXTableCellData *> *widthCells = [NSMutableArray array];
+    OAGPXTableCellData *widthTitle = [OAGPXTableCellData withData:@{
+            kCellKey: @"width_title",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellValues: @{ @"string_value": _selectedWidth.title },
+            kCellTitle: OALocalizedString(@"shared_string_width")
+    }];
+    [widthTitle setData:@{
+            kTableUpdateData: ^() {
+                [widthTitle setData:@{ kCellValues: @{ @"string_value": _selectedWidth.title } }];
+            }
+    }];
+    [widthCells addObject:widthTitle];
+
+    OAGPXTableCellData *widthValue = [OAGPXTableCellData withData:@{
+            kCellKey: @"width_value",
+            kCellType: [OASegmentedControlCell getCellIdentifier],
+            kCellValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] },
+            kCellToggle: @YES
+    }];
+    [widthValue setData:@{
+            kTableUpdateData: ^() {
+                [widthValue setData:@{ kCellValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] } }];
+            }
+    }];
+    [widthCells addObject:widthValue];
+
+    [widthCells addObject:[OAGPXTableCellData withData:@{
+            kCellKey: @"width_empty_space",
+            kCellType: [OADividerCell getCellIdentifier],
+            kCellValues: @{ @"float_value": @14.0 }
+    }]];
+
+    if ([_selectedWidth isCustom])
+        [widthCells addObject:[self generateDataForWidthCustomSliderCell]];
+
+    OAGPXTableSectionData *widthSection = [OAGPXTableSectionData withData:@{ kSectionCells: widthCells }];
+    [widthSection setData:@{
+            kTableUpdateData: ^() {
+                if ([_selectedWidth isCustom] && ![widthSection.cells.lastObject.key isEqualToString:@"width_custom_slider"])
+                    [widthSection.cells addObject:[self generateDataForWidthCustomSliderCell]];
+                else if (![_selectedWidth isCustom] && [widthSection.cells.lastObject.key isEqualToString:@"width_custom_slider"])
+                    [widthSection.cells removeObject:widthSection.cells.lastObject];
+        
+                for (OAGPXTableCellData *cell in widthSection.cells)
+                {
+                    if (cell.updateData)
+                        cell.updateData();
+                }
+        }
+    }];
+
+    [appearanceSections addObject:widthSection];
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[[OAGPXTableCellData withData:@{
@@ -276,42 +326,36 @@ static const NSInteger kCustomTrackWidthMax = 24;
     return colorsCells;
 }
 
+- (OAGPXTableCellData *)generateDataForWidthCustomSliderCell
+{
+    OAGPXTableCellData *customSliderCell = [OAGPXTableCellData withData:@{
+            kCellKey: @"width_custom_slider",
+            kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
+            kCellValues: @{
+                    @"int_value": _selectedWidth.customValue,
+                    @"array_value": _customWidthValues,
+                    @"has_top_labels": @NO,
+                    @"has_bottom_labels": @YES,
+            }
+    }];
+    [customSliderCell setData:@{
+            kTableUpdateData: ^() {
+                [customSliderCell setData:@{
+                        kCellValues: @{
+                                @"int_value": _selectedWidth.customValue,
+                                @"array_value": _customWidthValues,
+                                @"has_top_labels": @NO,
+                                @"has_bottom_labels": @YES,
+                        } }];
+            }
+    }];
+
+    return customSliderCell;
+}
+
 - (NSArray<OAGPXTableCellData *> *)generateDataForWidthSection
 {
-    NSMutableArray<OAGPXTableCellData *> *widthCells = [NSMutableArray array];
-    [widthCells addObject:[OAGPXTableCellData withData:@{
-            kCellKey: @"width_title",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellValues: @{ @"string_value": _selectedWidth.title },
-            kCellTitle: OALocalizedString(@"shared_string_width")
-    }]];
 
-    [widthCells addObject:[OAGPXTableCellData withData:@{
-            kCellKey: @"width_value",
-            kCellType: [OASegmentedControlCell getCellIdentifier],
-            kCellValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] },
-            kCellToggle: @YES
-    }]];
-
-    [widthCells addObject:[OAGPXTableCellData withData:@{
-            kCellKey: @"width_empty_space",
-            kCellType: [OADividerCell getCellIdentifier],
-            kCellValues: @{ @"float_value": @14.0 }
-    }]];
-
-    if ([_selectedWidth isCustom])
-        [widthCells addObject:[OAGPXTableCellData withData:@{
-                kCellKey: @"width_custom_slider",
-                kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
-                kCellValues: @{
-                        @"int_value": _selectedWidth.customValue,
-                        @"array_value": _customWidthValues,
-                        @"has_top_labels": @NO,
-                        @"has_bottom_labels": @YES,
-                }
-        }]];
-
-    return widthCells;
 }
 
 - (void)updateColorsSection
@@ -328,15 +372,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     completion:nil];
 }
 
-- (void)updateWidthSection
-{
-    [self.menuTableData[kWidthSection] setData:@{ kSectionCells: [self generateDataForWidthSection] }];
-
-    [UIView setAnimationsEnabled:NO];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kWidthSection]
-                  withRowAnimation:UITableViewRowAnimationNone];
-    [UIView setAnimationsEnabled:YES];
-}
 
 - (void)doAdditionalLayout
 {
@@ -743,7 +778,11 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
             [[self.app updateGpxTracksOnMapObservable] notifyEvent];
 
-            [self updateWidthSection];
+            self.menuTableData[indexPath.section].updateData();
+            [UIView setAnimationsEnabled:NO];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kWidthSection]
+                          withRowAnimation:UITableViewRowAnimationNone];
+            [UIView setAnimationsEnabled:YES];
         }
     }
 }

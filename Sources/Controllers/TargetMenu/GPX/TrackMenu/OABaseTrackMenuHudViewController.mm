@@ -52,6 +52,8 @@
         _onSwitch = data[kCellOnSwitch];
     if ([data.allKeys containsObject:kCellIsOn])
         _isOn = data[kCellIsOn];
+    if ([data.allKeys containsObject:kTableUpdateData])
+        _updateData = data[kTableUpdateData];
 }
 
 @end
@@ -76,6 +78,8 @@
         _header = data[kSectionHeader];
     if ([data.allKeys containsObject:kSectionFooter])
         _header = data[kSectionFooter];
+    if ([data.allKeys containsObject:kTableUpdateData])
+        _updateData = data[kTableUpdateData];
 }
 
 @end

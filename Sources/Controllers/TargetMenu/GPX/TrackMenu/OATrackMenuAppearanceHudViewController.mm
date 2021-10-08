@@ -71,9 +71,21 @@ static const NSInteger kCustomTrackWidthMax = 24;
     BOOL _oldShowArrows;
     NSString *_oldWidth;
     NSString *_oldColoringType;
+
+    OATrackMenuViewControllerState *_reopeningTrackMenuState;
 }
 
 @dynamic gpx, isShown, tableData;
+
+- (instancetype)initWithGpx:(OAGPX *)gpx state:(OATargetMenuViewControllerState *)state
+{
+    self = [super initWithGpx:gpx];
+    if (self)
+    {
+        _reopeningTrackMenuState = state;
+    }
+    return self;
+}
 
 - (NSString *)getNibName
 {
@@ -460,13 +472,15 @@ static const NSInteger kCustomTrackWidthMax = 24;
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
-        if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu:)])
+        if (_reopeningTrackMenuState)
         {
             self.gpx.color = _oldColor;
             self.gpx.showArrows = _oldShowArrows;
             self.gpx.width = _oldWidth;
             self.gpx.coloringType = _oldColoringType;
-            [self.trackMenuDelegate backToTrackMenu:self.gpx];
+            [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                                                  trackHudMode:EOATrackMenuHudMode
+                                                         state:_reopeningTrackMenuState];
         }
 
         [[self.app updateGpxTracksOnMapObservable] notifyEvent];
@@ -477,8 +491,10 @@ static const NSInteger kCustomTrackWidthMax = 24;
 {
     [self hide:YES duration:.2 onComplete:^{
         [[OAGPXDatabase sharedDb] save];
-        if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu:)])
-            [self.trackMenuDelegate backToTrackMenu:self.gpx];
+        if (_reopeningTrackMenuState)
+            [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                                                  trackHudMode:EOATrackMenuHudMode
+                                                         state:_reopeningTrackMenuState];
     }];
 }
 

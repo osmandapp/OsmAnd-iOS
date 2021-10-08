@@ -8,7 +8,6 @@
 
 #import "OATrackMenuHudViewController.h"
 #import "OATrackMenuHeaderView.h"
-#import "OAMapPanelViewController.h"
 #import "OASaveTrackViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OATrackMenuDescriptionViewController.h"
@@ -37,6 +36,10 @@
 #define kInfoCreatedOnCell 0
 #define kActionMoveCell 1
 
+@implementation OATrackMenuViewControllerState
+
+@end
+
 @interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
 
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
@@ -59,6 +62,7 @@
     NSString *_exportFilePath;
 
     EOATrackMenuHudTab _selectedTab;
+    OATrackMenuViewControllerState *_reopeningState;
 }
 
 @dynamic isShown, tableData;
@@ -79,6 +83,20 @@
     if (self)
     {
         _selectedTab = tab >= EOATrackMenuHudOverviewTab ? tab : EOATrackMenuHudOverviewTab;
+    }
+    return self;
+}
+
+- (instancetype)initWithGpx:(OAGPX *)gpx state:(OATargetMenuViewControllerState *)state
+{
+    self = [super initWithGpx:gpx];
+    if (self)
+    {
+        if ([state isKindOfClass:OATrackMenuViewControllerState.class])
+        {
+            _reopeningState = state;
+            _selectedTab = _reopeningState.lastSelectedTab;
+        }
     }
     return self;
 }
@@ -862,6 +880,22 @@
     }
 }
 
+- (OATrackMenuViewControllerState *)getCurrentState
+{
+    OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+    state.lastSelectedTab = _selectedTab;
+    state.gpxFilePath = self.gpx.gpxFilePath;
+
+    return state;
+}
+
+- (OATrackMenuViewControllerState *)getCurrentStateForAnalyze:(EOARouteStatisticsMode)routeStatistics
+{
+    OATrackMenuViewControllerState *state = [self getCurrentState];
+    state.routeStatistics = routeStatistics;
+    return state;
+}
+
 #pragma mark - OATrackMenuViewControllerDelegate
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
@@ -869,16 +903,8 @@
     [self hide:YES duration:.2 onComplete:^{
         [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
                                                                 analysis:self.analysis
-                                                       trackMenuDelegate:self
-                                                                modeType:modeType];
+                                                        menuControlState:[self getCurrentStateForAnalyze:modeType]];
     }];
-}
-
-- (void)backToTrackMenu:(OAGPX *)gpx
-{
-    [self.mapPanelViewController openTargetViewWithGPX:gpx ? gpx : self.gpx
-                                          trackHudMode:EOATrackMenuHudMode
-                                                   tab:_selectedTab];
 }
 
 #pragma mark - UITabBarDelegate
@@ -983,8 +1009,9 @@
 - (void)onAppearancePressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
-        [self.mapPanelViewController openTrackAppearance:self.gpx
-                                       trackMenuDelegate:self];
+        [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                                              trackHudMode:EOATrackAppearanceHudMode
+                                                     state:[self getCurrentState]];
     }];
 }
 
@@ -1345,7 +1372,7 @@
     else if ([cellData.key isEqualToString:@"edit"])
     {
         [self hide:YES duration:.2 onComplete:^{
-            [self.mapPanelViewController targetOpenPlanRoute:self.gpx trackMenuDelegate:self];
+            [self.mapPanelViewController targetOpenPlanRoute:self.gpx trackMenuState:[self getCurrentState]];
         }];
     }
     else if ([cellData.key isEqualToString:@"edit_create_duplicate"])

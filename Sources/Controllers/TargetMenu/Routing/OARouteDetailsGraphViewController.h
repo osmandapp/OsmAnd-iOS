@@ -13,7 +13,8 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
+- (instancetype)initWithGpxData:(NSDictionary *)data
+          trackMenuControlState:(OATargetMenuViewControllerState *)trackMenuControlState;
 
 - (void)onNewModeSelected:(EOARouteStatisticsMode)mode;
 

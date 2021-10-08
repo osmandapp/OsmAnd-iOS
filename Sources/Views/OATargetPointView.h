@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "OANavigationController.h"
 #import "OATargetMenuViewController.h"
-#import "OATrackMenuHudViewController.h"
 #import "OAButton.h"
 #import "OATargetPoint.h"
 #import "OAScrollView.h"
@@ -28,7 +27,6 @@
 @property (nonatomic) OATargetPoint *targetPoint;
 @property (nonatomic, assign) BOOL isAddressFound;
 @property (strong, nonatomic) id<OATargetPointViewDelegate> menuViewDelegate;
-@property (weak, nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 @property (nonatomic) OATargetMenuViewController* customController;
 
 @property (nonatomic, assign) OATargetPointType activeTargetType;
@@ -98,7 +96,7 @@
 - (void) targetHide;
 - (void) targetOpenRouteSettings;
 - (void) targetOpenPlanRoute;
-- (void) targetOpenPlanRoute:(OAGPX *)gpx trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate;
+- (void) targetOpenPlanRoute:(OAGPX *)gpx trackMenuState:(OATargetMenuViewControllerState *)trackMenuState;
 - (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked onComplete:(void (^)(void))onComplete;
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;

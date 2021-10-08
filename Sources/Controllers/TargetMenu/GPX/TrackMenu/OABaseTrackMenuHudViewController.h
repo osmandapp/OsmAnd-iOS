@@ -87,7 +87,6 @@ typedef void(^OAGPXTableDataUpdateData)();
 
 @property (nonatomic, readonly) OAMapPanelViewController *mapPanelViewController;
 @property (nonatomic, readonly) OAMapViewController *mapViewController;
-@property (nonatomic, readonly) NSArray<OAGPXTableSectionData *> *tableData;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 

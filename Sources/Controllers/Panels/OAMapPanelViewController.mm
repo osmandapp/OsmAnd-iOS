@@ -122,7 +122,6 @@
 #import "OAGPXDocument.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
-#import "OABaseScrollableHudViewController.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAMapRulerView.h"
 
@@ -1889,13 +1888,12 @@ typedef enum
     [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude]]];
 }
 
-- (void) targetOpenPlanRoute:(OAGPX *)gpx trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate
+- (void) targetOpenPlanRoute:(OAGPX *)gpx trackMenuState:(OATargetMenuViewControllerState *)trackMenuState;
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     OARoutePlanningHudViewController *routePlanningHudViewController =
-            [[OARoutePlanningHudViewController alloc] initWithFileName:gpx.gpxFilePath];
-    routePlanningHudViewController.trackMenuDelegate = trackMenuDelegate;
+            [[OARoutePlanningHudViewController alloc] initWithFileName:gpx.gpxFilePath trackMenuState:trackMenuState];
     [self showScrollableHudViewController:routePlanningHudViewController];
 }
 
@@ -2498,36 +2496,16 @@ typedef enum
     }];
 }
 
-- (void)openTrackAppearance:(OAGPX *)item
-          trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate
-{
-    [self openTargetViewWithGPX:item
-                   trackHudMode:EOATrackAppearanceHudMode
-                            tab:EOATrackMenuHudOverviewTab
-              trackMenuDelegate:trackMenuDelegate];
-}
-
 - (void)openTargetViewWithGPX:(OAGPX *)item
 {
     [self openTargetViewWithGPX:item
                    trackHudMode:EOATrackMenuHudMode
-                            tab:EOATrackMenuHudOverviewTab];
+                          state:nil];
 }
 
 - (void)openTargetViewWithGPX:(OAGPX *)item
                  trackHudMode:(EOATrackHudMode)trackHudMode
-                          tab:(EOATrackMenuHudTab)tab;
-{
-    [self openTargetViewWithGPX:item
-                   trackHudMode:trackHudMode
-                            tab:tab
-              trackMenuDelegate:nil];
-}
-
-- (void)openTargetViewWithGPX:(OAGPX *)item
-                 trackHudMode:(EOATrackHudMode)trackHudMode
-                          tab:(EOATrackMenuHudTab)tab
-            trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate;
+                        state:(OATargetMenuViewControllerState *)state;
 {
     BOOL showCurrentTrack = NO;
     if (item == nil)
@@ -2585,13 +2563,13 @@ typedef enum
     switch (trackHudMode)
     {
         case EOATrackAppearanceHudMode:
-            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj];
-            ((OATrackMenuAppearanceHudViewController *) trackMenuHudViewController).trackMenuDelegate = trackMenuDelegate;
+            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
+                                                                                               state:state];
             break;
 
         case EOATrackMenuHudMode:
         default:
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj tab:tab];
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj state:state];
             break;
     }
 
@@ -2751,10 +2729,9 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
-                                   analysis:(OAGPXTrackAnalysis *)analysis
-                          trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate
-                                   modeType:(EOARouteStatisticsMode)modeType
+- (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
+                                    analysis:(OAGPXTrackAnalysis *)analysis
+                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
 {
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
@@ -2777,17 +2754,14 @@ typedef enum
     
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
+    _activeViewControllerState = menuControlState;
     _targetMenuView.activeTargetType = _activeTargetType;
-    _targetMenuView.trackMenuDelegate = trackMenuDelegate;
 
     [_targetMenuView setTargetPoint:targetPoint];
     [self applyTargetPoint:targetPoint];
 
     [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
-        if ([self.targetMenuView.customController isKindOfClass:OARouteDetailsGraphViewController.class])
-            [((OARouteDetailsGraphViewController *) self.targetMenuView.customController) onNewModeSelected:modeType];
-
         _activeTargetActive = YES;
     }];
 }

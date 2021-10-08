@@ -504,7 +504,9 @@
 
 - (void) openRouteDetailsGraph
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx analysis:self.analysis trackMenuDelegate:nil modeType:EOARouteStatisticsModeBoth];
+    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
+                                                                         analysis:self.analysis
+                                                                 menuControlState:nil];
 }
 
 - (void) onBarChartTapped:(UITapGestureRecognizer *)recognizer

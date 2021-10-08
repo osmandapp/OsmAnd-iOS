@@ -1807,8 +1807,6 @@ static const NSInteger _buttonsCount = 4;
 
     _customController = customController;
     self.customController.delegate = self;
-    if ([self.customController isKindOfClass:OARouteDetailsGraphViewController.class])
-        ((OARouteDetailsGraphViewController *) self.customController).trackMenuDelegate = self.trackMenuDelegate;
     self.customController.navController = self.navController;
     [self.customController setContentBackgroundColor:UIColorFromRGB(0xffffff)];
     self.customController.location = self.targetPoint.location;

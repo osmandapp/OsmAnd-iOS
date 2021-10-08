@@ -141,6 +141,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     CLLocation *_initialPoint;
 	
 	BOOL _showSnapWarning;
+    OATrackMenuViewControllerState *_trackMenuState;
 }
 
 @synthesize menuHudMode;
@@ -195,6 +196,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 		_showSnapWarning = showSnapWarning;
         [self commonInit:editingCtx];
         [self setMode:FOLLOW_TRACK_MODE on:followTrackMode];
+    }
+    return self;
+}
+
+- (instancetype) initWithFileName:(NSString *)fileName trackMenuState:(OATargetMenuViewControllerState *)trackMenuState
+{
+    self = [self initWithFileName:fileName];
+    if (self)
+    {
+        _trackMenuState = trackMenuState;
     }
     return self;
 }
@@ -669,8 +680,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         _layer.editingCtx = nil;
         [_layer resetLayer];
 
-        if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu:)])
-            [self.trackMenuDelegate backToTrackMenu:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]];
+        if (_trackMenuState)
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
+                                                  trackHudMode:EOATrackMenuHudMode
+                                                         state:_trackMenuState];
     }];
 }
 

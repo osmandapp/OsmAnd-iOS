@@ -11,6 +11,6 @@
 
 @interface OATrackMenuAppearanceHudViewController : OABaseTrackMenuHudViewController
 
-@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
+- (instancetype)initWithGpx:(OAGPX *)gpx state:(OATargetMenuViewControllerState *)state;
 
 @end

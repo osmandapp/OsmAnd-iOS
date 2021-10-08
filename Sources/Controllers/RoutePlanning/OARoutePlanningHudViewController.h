@@ -22,11 +22,10 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsStackLandscapeRightConstraint;
 
 - (instancetype) initWithFileName:(NSString *)fileName;
+- (instancetype) initWithFileName:(NSString *)fileName trackMenuState:(OATargetMenuViewControllerState *)trackMenuState;
 - (instancetype) initWithInitialPoint:(CLLocation *)latLon;
 - (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning;
 
 - (void) cancelModes;
-
-@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
 @end

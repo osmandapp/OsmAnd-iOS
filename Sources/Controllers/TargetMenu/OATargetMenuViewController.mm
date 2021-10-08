@@ -274,7 +274,9 @@
             
         case OATargetRouteDetailsGraph:
         {
-            controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj];
+            controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj
+                                                              trackMenuControlState:activeViewControllerState];
+
             break;
         }
         case OATargetChangePosition:

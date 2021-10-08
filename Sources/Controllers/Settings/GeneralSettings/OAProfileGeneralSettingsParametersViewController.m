@@ -274,7 +274,7 @@
             
         case EOAProfileGeneralSettingsExternalInputDevices:
             [dataArr addObject:@{
-                @"name" : @"shared_string_none",
+                @"name" : @"sett_no_ext_input",
                 @"title" : OALocalizedString(@"shared_string_none"),
                 @"selected" : @(externamlInputDevices == NO_EXTERNAL_DEVICE),
                 @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
@@ -492,7 +492,7 @@
 
 - (void) selectSettingExternalInput:(NSString *)name
 {
-    if ([name isEqualToString:@"shared_string_none"])
+    if ([name isEqualToString:@"sett_no_ext_input"])
         [_settings.settingExternalInputDevice set:NO_EXTERNAL_DEVICE mode:self.appMode];
     else if ([name isEqualToString:@"sett_generic_ext_input"])
         [_settings.settingExternalInputDevice set:GENERIC_EXTERNAL_DEVICE mode:self.appMode];

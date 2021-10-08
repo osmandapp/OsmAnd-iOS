@@ -10,8 +10,6 @@
 
 #import "OAMapViewController.h"
 #import "OATargetPointView.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
-#import "OATrackMenuHudViewController.h"
 #import "OABaseTrackMenuHudViewController.h"
 
 @class OAFavoriteItem;
@@ -23,8 +21,6 @@
 @class OAMapActions, OAMapWidgetRegistry;
 @class OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode;
 @class OAGPXDocument, OAGPXTrackAnalysis;
-
-@protocol OATrackMenuViewControllerDelegate;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -120,11 +116,10 @@
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 
-- (void) openTrackAppearance:(OAGPX *)item
-          trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate;
-
 - (void) openTargetViewWithGPX:(OAGPX *)item;
-- (void) openTargetViewWithGPX:(OAGPX *)item trackHudMode:(EOATrackHudMode)trackHudMode tab:(EOATrackMenuHudTab)tab;
+- (void) openTargetViewWithGPX:(OAGPX *)item
+                  trackHudMode:(EOATrackHudMode)trackHudMode
+                         state:(OATargetMenuViewControllerState *)state;
 
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
@@ -133,7 +128,9 @@
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
 - (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
-- (void)openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis trackMenuDelegate:(id<OATrackMenuViewControllerDelegate>)trackMenuDelegate modeType:(EOARouteStatisticsMode)modeType;
+- (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
+                                    analysis:(OAGPXTrackAnalysis *)analysis
+                            menuControlState:(OATargetMenuViewControllerState *)menuControlState;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
 - (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;

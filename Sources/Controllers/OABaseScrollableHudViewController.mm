@@ -313,7 +313,7 @@
         if ([self isLeftSidePresentation])
         {
             frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
-            frame.origin.x = -_scrollableView.bounds.size.width;
+            frame.origin.x = 0.0;
 
             if (self.menuHudMode == EOAScrollableMenuHudExtraHeaderInLandscapeMode)
                 frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
@@ -321,8 +321,6 @@
                 frame.origin.y = 0.0;
 
             _scrollableView.frame = frame;
-
-            frame.origin.x = 0.0;
         }
         else
         {

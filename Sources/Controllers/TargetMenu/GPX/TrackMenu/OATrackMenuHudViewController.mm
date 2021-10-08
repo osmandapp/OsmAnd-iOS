@@ -58,7 +58,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 @property (nonatomic) NSArray<NSDictionary *> *tableData;
 @property (nonatomic) BOOL isShown;
-@property (nonatomic) OATableData *menuTableData;
+@property (nonatomic) NSArray<OAGPXTableSectionData *> *menuTableData;
 
 @end
 

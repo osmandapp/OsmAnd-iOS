@@ -9,7 +9,21 @@
 #import "OABaseScrollableHudViewController.h"
 #import "OsmAndApp.h"
 #import "OASavingTrackHelper.h"
-#import "OATableData.h"
+
+#define kCellKey @"key"
+#define kCellType @"type"
+#define kCellValues @"values"
+#define kCellTitle @"title"
+#define kCellDesc @"desc"
+#define kCellLeftIcon @"left_icon"
+#define kCellRightIcon @"right_icon"
+#define kCellToggle @"toggle"
+#define kCellOnSwitch @"on_switch"
+#define kCellIsOn @"isOn"
+
+#define kSectionCells @"cells"
+#define kSectionHeader @"header"
+#define kSectionFooter @"footer"
 
 typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 {
@@ -17,7 +31,41 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
     EOATrackAppearanceHudMode,
 };
 
+typedef void(^OAGPXTableCellDataOnSwitch)(BOOL toggle);
+typedef BOOL(^OAGPXTableCellDataIsOn)();
+
 @class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController;
+
+@interface OAGPXTableCellData : NSObject
+
++ (instancetype)withData:(NSDictionary *)data;
+
+@property (nonatomic, readonly) NSString *key;
+@property (nonatomic, readonly) NSString *type;
+@property (nonatomic, readonly) NSDictionary *values;
+@property (nonatomic, readonly) NSString *title;
+@property (nonatomic, readonly) NSString *desc;
+@property (nonatomic, readonly) NSString *leftIcon;
+@property (nonatomic, readonly) NSString *rightIcon;
+@property (nonatomic, readonly) BOOL toggle;
+@property (nonatomic, readonly) OAGPXTableCellDataOnSwitch onSwitch;
+@property (nonatomic, readonly) OAGPXTableCellDataIsOn isOn;
+
+- (void)setData:(NSDictionary *)data;
+
+@end
+
+@interface OAGPXTableSectionData : NSObject
+
++ (instancetype)withData:(NSDictionary *)data;
+
+@property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *cells;
+@property (nonatomic, readonly) NSString *header;
+@property (nonatomic, readonly) NSString *footer;
+
+- (void)setData:(NSDictionary *)data;
+
+@end
 
 @interface OABaseTrackMenuHudViewController : OABaseScrollableHudViewController
 
@@ -34,14 +82,14 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 @property (nonatomic, readonly) OAMapPanelViewController *mapPanelViewController;
 @property (nonatomic, readonly) OAMapViewController *mapViewController;
 @property (nonatomic, readonly) NSArray<NSDictionary *> *tableData;
-@property (nonatomic, readonly) OATableData *menuTableData;
+@property (nonatomic, readonly) NSArray<OAGPXTableSectionData *> *menuTableData;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 
 - (void)updateGpxData;
 - (void)generateData:(NSInteger)section;
 - (void)generateData:(NSInteger)section row:(NSInteger)row;
-- (OATableCellData *)getCellData:(NSIndexPath *)indexPath;
+- (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath;
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath;
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem

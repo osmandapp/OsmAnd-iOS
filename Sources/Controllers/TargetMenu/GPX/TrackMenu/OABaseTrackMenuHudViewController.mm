@@ -18,6 +18,68 @@
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
+@implementation OAGPXTableCellData
+
++ (instancetype)withData:(NSDictionary *)data
+{
+    OAGPXTableCellData *cellData = [OAGPXTableCellData new];
+    if (cellData)
+    {
+        [cellData setData:data];
+    }
+    return cellData;
+}
+
+- (void)setData:(NSDictionary *)data
+{
+    if ([data.allKeys containsObject:kCellKey])
+        _key = data[kCellKey];
+    if ([data.allKeys containsObject:kCellType])
+        _type = data[kCellType];
+    if ([data.allKeys containsObject:kCellValues])
+        _values = data[kCellValues];
+    if ([data.allKeys containsObject:kCellTitle])
+        _title = data[kCellTitle];
+    if ([data.allKeys containsObject:kCellDesc])
+        _desc = data[kCellDesc];
+    if ([data.allKeys containsObject:kCellLeftIcon])
+        _leftIcon = data[kCellLeftIcon];
+    if ([data.allKeys containsObject:kCellRightIcon])
+        _rightIcon = data[kCellRightIcon];
+    if ([data.allKeys containsObject:kCellToggle])
+        _toggle = [data[kCellToggle] boolValue];
+    if ([data.allKeys containsObject:kCellOnSwitch])
+        _onSwitch = data[kCellOnSwitch];
+    if ([data.allKeys containsObject:kCellIsOn])
+        _isOn = data[kCellIsOn];
+}
+
+@end
+
+@implementation OAGPXTableSectionData
+
++ (instancetype)withData:(NSDictionary *)data
+{
+    OAGPXTableSectionData *sectionData = [OAGPXTableSectionData new];
+    if (sectionData)
+    {
+        [sectionData setData:data];
+    }
+    return sectionData;
+}
+
+- (void)setData:(NSDictionary *)data
+{
+    if ([data.allKeys containsObject:kSectionCells])
+        _cells = data[kSectionCells];
+    if ([data.allKeys containsObject:kSectionHeader])
+        _header = data[kSectionHeader];
+    if ([data.allKeys containsObject:kSectionFooter])
+        _header = data[kSectionFooter];
+}
+
+@end
+
 @interface OABaseTrackMenuHudViewController()
 
 @property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
@@ -28,7 +90,7 @@
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) BOOL isShown;
 @property (nonatomic) NSArray<NSDictionary *> *tableData;
-@property (nonatomic) OATableData *menuTableData;
+@property (nonatomic) NSArray<OAGPXTableSectionData *> *menuTableData;
 
 @end
 
@@ -256,9 +318,9 @@
                                                           : [OAUtilities getLeftMargin] + 20.)];
 }
 
-- (OATableCellData *)getCellData:(NSIndexPath *)indexPath
+- (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _menuTableData.sections[indexPath.section].cells[indexPath.row];
+    return _menuTableData[indexPath.section].cells[indexPath.row];
 }
 
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath

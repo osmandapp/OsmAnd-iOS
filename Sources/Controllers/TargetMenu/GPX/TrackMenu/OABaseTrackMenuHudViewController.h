@@ -69,6 +69,7 @@ typedef void(^OAGPXTableDataUpdateData)();
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
 
 - (void)setData:(NSDictionary *)data;
+- (BOOL)containsCell:(NSString *)key;
 
 @end
 
@@ -86,16 +87,12 @@ typedef void(^OAGPXTableDataUpdateData)();
 
 @property (nonatomic, readonly) OAMapPanelViewController *mapPanelViewController;
 @property (nonatomic, readonly) OAMapViewController *mapViewController;
-@property (nonatomic, readonly) NSArray<NSDictionary *> *tableData;
-@property (nonatomic, readonly) NSArray<OAGPXTableSectionData *> *menuTableData;
+@property (nonatomic, readonly) NSArray<OAGPXTableSectionData *> *tableData;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 
 - (void)updateGpxData;
-- (void)generateData:(NSInteger)section;
-- (void)generateData:(NSInteger)section row:(NSInteger)row;
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath;
-- (NSDictionary *)getItem:(NSIndexPath *)indexPath;
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
                                    firstAttribute:(NSLayoutAttribute)firstAttribute

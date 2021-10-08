@@ -47,7 +47,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) BOOL isShown;
-@property (nonatomic) NSArray<OAGPXTableSectionData *> *menuTableData;
+@property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
 
 @end
 
@@ -73,7 +73,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     NSString *_oldColoringType;
 }
 
-@dynamic gpx, isShown, menuTableData;
+@dynamic gpx, isShown, tableData;
 
 - (NSString *)getNibName
 {
@@ -264,16 +264,15 @@ static const NSInteger kCustomTrackWidthMax = 24;
     if ([_selectedColoringType isGradient])
         [colorsCells addObject:[self generateDataForColorElevationGradientCell]];
 
-    OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{
-            kSectionCells: colorsCells
-    }];
+    OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{ kSectionCells: colorsCells }];
     [colorsSection setData:@{
             kTableUpdateData: ^() {
                 colorsSection.cells[kColorGridOrDescriptionCell] = generateGridOrDescriptionCell();
 
-                if ([_selectedColoringType isGradient] && ![colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"])
+                BOOL hasElevationGradient = [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"];
+                if ([_selectedColoringType isGradient] && !hasElevationGradient)
                     [colorsSection.cells addObject:[self generateDataForColorElevationGradientCell]];
-                else if (![_selectedColoringType isGradient] && [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"])
+                else if (![_selectedColoringType isGradient] && hasElevationGradient)
                     [colorsSection.cells removeObject:colorsSection.cells.lastObject];
 
                 for (OAGPXTableCellData *cell in colorsSection.cells)
@@ -325,9 +324,10 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTableSectionData *widthSection = [OAGPXTableSectionData withData:@{ kSectionCells: widthCells }];
     [widthSection setData:@{
             kTableUpdateData: ^() {
-                if ([_selectedWidth isCustom] && ![widthSection.cells.lastObject.key isEqualToString:@"width_custom_slider"])
+                BOOL hasCustomSlider = [widthSection.cells.lastObject.key isEqualToString:@"width_custom_slider"];
+                if ([_selectedWidth isCustom] && !hasCustomSlider)
                     [widthSection.cells addObject:[self generateDataForWidthCustomSliderCell]];
-                else if (![_selectedWidth isCustom] && [widthSection.cells.lastObject.key isEqualToString:@"width_custom_slider"])
+                else if (![_selectedWidth isCustom] && hasCustomSlider)
                     [widthSection.cells removeObject:widthSection.cells.lastObject];
         
                 for (OAGPXTableCellData *cell in widthSection.cells)
@@ -351,7 +351,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             kSectionHeader:OALocalizedString(@"actions")
     }]];
 
-    self.menuTableData = appearanceSections;
+    self.tableData = appearanceSections;
 }
 
 - (OAGPXTableCellData *)generateDataForColorElevationGradientCell
@@ -486,17 +486,17 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.menuTableData.count;
+    return self.tableData.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.menuTableData[section].cells.count;
+    return self.tableData[section].cells.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return self.menuTableData[section].header;
+    return self.tableData[section].header;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -545,7 +545,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
         }
         if (cell)
         {
-            cell.switchView.on = cellData.isOn();
+            cell.switchView.on = cellData.isOn ? cellData.isOn() : NO;
             cell.textView.text = cellData.title;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -812,7 +812,8 @@ static const NSInteger kCustomTrackWidthMax = 24;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-    cellData.onSwitch(switchView.isOn);
+    if (cellData.onSwitch)
+        cellData.onSwitch(switchView.isOn);
 
     [[self.app updateGpxTracksOnMapObservable] notifyEvent];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -835,7 +836,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
             [[self.app updateGpxTracksOnMapObservable] notifyEvent];
 
-            self.menuTableData[indexPath.section].updateData();
+            self.tableData[indexPath.section].updateData();
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kWidthSection]
                           withRowAnimation:UITableViewRowAnimationNone];
@@ -879,7 +880,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
     [[self.app updateGpxTracksOnMapObservable] notifyEvent];
 
-    self.menuTableData[kColorsSection].updateData();
+    self.tableData[kColorsSection].updateData();
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -899,7 +900,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
     [[self.app updateGpxTracksOnMapObservable] notifyEvent];
 
-    self.menuTableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
+    self.tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
     [UIView setAnimationsEnabled:NO];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection]]
                           withRowAnimation:UITableViewRowAnimationNone];

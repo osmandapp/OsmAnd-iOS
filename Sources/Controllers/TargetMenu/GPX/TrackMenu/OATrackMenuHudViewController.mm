@@ -13,7 +13,6 @@
 #import "OATrackSegmentsViewController.h"
 #import "OATrackMenuDescriptionViewController.h"
 #import "OASelectTrackFolderViewController.h"
-#import "PXAlertView.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
 #import "OATextViewSimpleCell.h"
@@ -33,21 +32,10 @@
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
 
-typedef NS_ENUM(NSUInteger, EOATrackMenuHudActionsSection)
-{
-    EOATrackMenuHudActionsControlSection = 0,
-    EOATrackMenuHudActionsAnalyzeSection,
-    EOATrackMenuHudActionsShareSection,
-    EOATrackMenuHudActionsEditSection,
-    EOATrackMenuHudActionsChangeSection,
-    EOATrackMenuHudActionsDeleteSection,
-};
+#define kActionsSection 4
 
-typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
-{
-    EOATrackMenuHudActionsChangeRenameRow = 0,
-    EOATrackMenuHudActionsChangeMoveRow
-};
+#define kInfoCreatedOnCell 0
+#define kActionMoveCell 1
 
 @interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
 
@@ -56,9 +44,8 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
-@property (nonatomic) NSArray<NSDictionary *> *tableData;
 @property (nonatomic) BOOL isShown;
-@property (nonatomic) NSArray<OAGPXTableSectionData *> *menuTableData;
+@property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
 
 @end
 
@@ -74,7 +61,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     EOATrackMenuHudTab _selectedTab;
 }
 
-@dynamic tableData, isShown, menuTableData;
+@dynamic isShown, tableData;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
@@ -314,196 +301,300 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)generateData
 {
-    NSMutableArray *newData = [NSMutableArray array];
+    NSMutableArray<OAGPXTableSectionData *> *overviewSections = [NSMutableArray array];
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         if (_description && _description.length > 0)
         {
-            NSMutableArray *descriptionSectionData = [NSMutableArray array];
-            NSAttributedString *description = [OAUtilities createAttributedString:
-                    [_description componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
-                                                                             font:[UIFont systemFontOfSize:17]
-                                                                            color:UIColor.blackColor
-                                                                      strokeColor:nil
-                                                                      strokeWidth:0
-                                                                        alignment:NSTextAlignmentNatural];
+            NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
 
-            [descriptionSectionData addObject:@{
-                    @"value": description,
-                    @"type": [OATextViewSimpleCell getCellIdentifier],
-                    @"key": @"description"
+            NSAttributedString * (^generateDescriptionAttrString) (void) = ^{
+                return [OAUtilities createAttributedString:
+                                [_description componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
+                                                      font:[UIFont systemFontOfSize:17]
+                                                     color:UIColor.blackColor
+                                               strokeColor:nil
+                                               strokeWidth:0
+                                                 alignment:NSTextAlignmentNatural];
+            };
+
+            NSAttributedString *descriptionAttr = generateDescriptionAttrString();
+            OAGPXTableCellData *description = [OAGPXTableCellData withData:@{
+                    kCellKey: @"description",
+                    kCellType: [OATextViewSimpleCell getCellIdentifier],
+                    kCellValues: @{ @"attr_string_value": descriptionAttr }
             }];
 
-            if (_description.length > description.string.length)
-            {
-                [descriptionSectionData addObject:@{
-                        @"title": OALocalizedString(@"read_full_description"),
-                        @"type": [OATextLineViewCell getCellIdentifier],
-                        @"key": @"full_description"
+            [description setData:@{
+                    kTableUpdateData: ^() {
+                        [description setData:@{ kCellValues: @{ @"attr_string_value": generateDescriptionAttrString() } }];
+                    }
+            }];
+            [descriptionCells addObject:description];
+
+            OAGPXTableCellData * (^generateDataForFullDescriptionCell) (void) = ^{
+                return [OAGPXTableCellData withData:@{
+                        kCellKey: @"full_description",
+                        kCellType: [OATextLineViewCell getCellIdentifier],
+                        kCellTitle: OALocalizedString(@"read_full_description")
                 }];
-            }
+            };
 
-            [newData addObject:@{
-                    @"group_name": OALocalizedString(@"description"),
-                    @"cells": descriptionSectionData
+            if (_description.length > descriptionAttr.length)
+                [descriptionCells addObject:generateDataForFullDescriptionCell()];
+
+            OAGPXTableSectionData *descriptionSection = [OAGPXTableSectionData withData:@{
+                    kSectionCells: descriptionCells,
+                    kSectionHeader: OALocalizedString(@"description")
             }];
+            [descriptionSection setData:@{
+                    kTableUpdateData: ^() {
+                        NSAttributedString *newDescriptionAttr = generateDescriptionAttrString();
+
+                        BOOL hasFullDescription = [descriptionSection.cells.lastObject.key isEqualToString:@"full_description"];
+                        if (_description.length > newDescriptionAttr.length && !hasFullDescription)
+                            [descriptionSection.cells addObject:generateDataForFullDescriptionCell()];
+                        else if (_description.length <= newDescriptionAttr.length && hasFullDescription)
+                            [descriptionSection.cells removeObject:descriptionSection.cells.lastObject];
+
+                        for (OAGPXTableCellData *cell in descriptionSection.cells)
+                        {
+                            if (cell.updateData)
+                                cell.updateData();
+                        }
+                    }
+            }];
+            [overviewSections addObject:descriptionSection];
         }
 
-        NSMutableArray *infoSectionData = [NSMutableArray array];
+        NSMutableArray<OAGPXTableCellData *> *infoCells = [NSMutableArray array];
 
-        NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.isCurrentTrack
-                ? self.gpx.gpxFilePath : self.doc.path error:nil];
-        NSString *formattedSize = [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
-                                                                 countStyle:NSByteCountFormatterCountStyleFile];
-        [infoSectionData addObject:@{
-                @"title": OALocalizedString(@"res_size"),
-                @"value": formattedSize,
-                @"has_options": @NO,
-                @"type": [OAIconTitleValueCell getCellIdentifier],
-                @"key": @"size"
+        NSString * (^generateSizeString) (void) = ^{
+            NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.isCurrentTrack
+                    ? self.gpx.gpxFilePath : self.doc.path error:nil];
+            return [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
+                                                  countStyle:NSByteCountFormatterCountStyleFile];
+        };
+
+        OAGPXTableCellData *size = [OAGPXTableCellData withData:@{
+                kCellKey: @"size",
+                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"res_size"),
+                kCellDesc: generateSizeString()
         }];
+
+        [size setData:@{
+                kTableUpdateData: ^() {
+                    [size setData:@{ kCellDesc: generateSizeString() }];
+                }
+        }];
+        [infoCells addObject:size];
+
+        OAGPXTableCellData * (^generateDataForCreatedOnCell) (void) = ^{
+
+            NSString * (^generateCreatedOnString) (void) = ^{
+                return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
+                                                      dateStyle:NSDateFormatterMediumStyle
+                                                      timeStyle:NSDateFormatterNoStyle];
+            };
+
+            OAGPXTableCellData *createdOn = [OAGPXTableCellData withData:@{
+                    kCellKey: @"created_on",
+                    kCellType: [OAIconTitleValueCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"res_created_on"),
+                    kCellDesc: generateCreatedOnString()
+            }];
+            [createdOn setData:@{
+                    kTableUpdateData: ^() {
+                        [createdOn setData:@{ kCellDesc: generateCreatedOnString() }];
+                    }
+            }];
+
+            return createdOn;
+        };
 
         if (self.doc.metadata.time > 0)
-            [infoSectionData addObject:@{
-                    @"title": OALocalizedString(@"res_created_on"),
-                    @"value": [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
-                                                             dateStyle:NSDateFormatterMediumStyle
-                                                             timeStyle:NSDateFormatterNoStyle],
-                    @"has_options": @NO,
-                    @"type": [OAIconTitleValueCell getCellIdentifier],
-                    @"key": @"created_on"
+            [infoCells addObject:generateDataForCreatedOnCell()];
+
+        OAGPXTableCellData * (^generateDataForLocationCell) (void) = ^{
+            OAGPXTableCellData *createdOn = [OAGPXTableCellData withData:@{
+                    kCellKey: @"location",
+                    kCellType: [OAIconTitleValueCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"sett_arr_loc"),
+                    kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString
             }];
+            [createdOn setData:@{
+                    kTableUpdateData: ^() {
+                        [createdOn setData:@{ kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString }];
+                    }
+            }];
+            return createdOn;
+        };
 
         if (!self.isCurrentTrack)
-            [infoSectionData addObject:@{
-                    @"title": OALocalizedString(@"sett_arr_loc"),
-                    @"value": [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString,
-                    @"has_options": @NO, //@YES
-                    @"type": [OAIconTitleValueCell getCellIdentifier],
-                    @"key": @"location"
-            }];
+            [infoCells addObject:generateDataForLocationCell()];
 
-        [newData addObject:@{
-                @"group_name": OALocalizedString(@"shared_string_info"),
-                @"cells": infoSectionData
+        OAGPXTableSectionData *infoSection = [OAGPXTableSectionData withData:@{
+                kSectionCells: infoCells,
+                kSectionHeader: OALocalizedString(@"shared_string_info")
         }];
+        [infoSection setData:@{
+                kTableUpdateData: ^() {
+                    BOOL hasCreatedOn = [infoSection containsCell:@"created_on"];
+                    if (self.doc.metadata.time > 0 && !hasCreatedOn)
+                        [infoSection.cells insertObject:generateDataForCreatedOnCell() atIndex:kInfoCreatedOnCell];
+                    else if (self.doc.metadata.time <= 0 && hasCreatedOn)
+                        [infoSection.cells removeObjectAtIndex:kInfoCreatedOnCell];
+
+                    BOOL hasLocation = [infoSection.cells.lastObject.key isEqualToString:@"location"];
+                    if (!self.isCurrentTrack && !hasLocation)
+                        [infoSection.cells addObject:generateDataForLocationCell()];
+                    else if (self.isCurrentTrack && hasLocation)
+                        [infoSection.cells removeObject:infoSection.cells.lastObject];
+
+                    for (OAGPXTableCellData *cell in infoSection.cells)
+                    {
+                        if (cell.updateData)
+                            cell.updateData();
+                    }
+                }
+        }];
+
+        [overviewSections addObject:infoSection];
     }
     else if (_selectedTab == EOATrackMenuHudActionsTab)
     {
-        NSMutableArray *controlSectionData = [NSMutableArray array];
+        NSMutableArray<OAGPXTableCellData *> *controlCells = [NSMutableArray array];
 
-        [controlSectionData addObject:@{
-                @"title": OALocalizedString(@"map_settings_show"),
-                @"value": @(self.isShown),
-                @"type": [OATitleSwitchRoundCell getCellIdentifier],
-                @"key": @"control_show_on_map"
+        OAGPXTableCellData *showOnMap = [OAGPXTableCellData withData:@{
+                kCellKey: @"control_show_on_map",
+                kCellType: [OATitleSwitchRoundCell getCellIdentifier],
+                kCellValues: @{ @"bool_value": @(self.isShown) },
+                kCellTitle: OALocalizedString(@"map_settings_show"),
+                kCellOnSwitch: ^(BOOL toggle) { [self onShowHidePressed:nil]; },
+                kCellIsOn: ^() { return self.isShown; }
         }];
 
-        [controlSectionData addObject:@{
-                @"title": OALocalizedString(@"map_settings_appearance"),
-                @"icon": @"ic_custom_appearance",
-                @"type": [OATitleIconRoundCell getCellIdentifier],
-                @"key": @"control_appearance"
+        [showOnMap setData:@{
+                kTableUpdateData: ^() {
+                    [showOnMap setData:@{ kCellValues: @{ @"bool_value": @(self.isShown) } }];
+                }
+        }];
+        [controlCells addObject:showOnMap];
+
+        [controlCells addObject:[OAGPXTableCellData withData:@{
+                kCellKey: @"control_appearance",
+                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                kCellRightIcon: @"ic_custom_appearance",
+                kCellTitle: OALocalizedString(@"map_settings_appearance")
+        }]];
+
+        [controlCells addObject:[OAGPXTableCellData withData:@{
+                kCellKey: @"control_navigation",
+                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                kCellRightIcon: @"ic_custom_navigation",
+                kCellTitle: OALocalizedString(@"routing_settings")
+        }]];
+
+        OAGPXTableSectionData *controlsSection = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells }];
+        [controlsSection setData:@{
+                kTableUpdateData: ^() {
+                    for (OAGPXTableCellData *cell in controlsSection.cells)
+                    {
+                        if (cell.updateData)
+                            cell.updateData();
+                    }
+                }
         }];
 
-        [controlSectionData addObject:@{
-                @"title": OALocalizedString(@"routing_settings"),
-                @"icon": @"ic_custom_navigation",
-                @"type": [OATitleIconRoundCell getCellIdentifier],
-                @"key": @"control_navigation"
+        [overviewSections addObject:controlsSection];
+        [overviewSections addObject:[OAGPXTableSectionData withData:@{
+                kSectionCells: @[
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"analyze",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellRightIcon: @"ic_custom_appearance",
+                                kCellTitle: OALocalizedString(@"analyze_on_map")
+                        }]
+                ]
+        }]];
+        [overviewSections addObject:[OAGPXTableSectionData withData:@{
+                kSectionCells: @[
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"share",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellRightIcon: @"ic_custom_export",
+                                kCellTitle: OALocalizedString(@"ctx_mnu_share")
+                        }]
+                ]
+        }]];
+        [overviewSections addObject:[OAGPXTableSectionData withData:@{
+                kSectionCells: @[
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"edit",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellRightIcon: @"ic_custom_trip_edit",
+                                kCellTitle: OALocalizedString(@"edit_track")
+                        }],
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"edit_create_duplicate",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellRightIcon: @"ic_custom_copy",
+                                kCellTitle: OALocalizedString(@"duplicate_track")
+                        }]
+                ]
+        }]];
+
+        NSMutableArray<OAGPXTableCellData *> *changeCells = [NSMutableArray array];
+
+        [changeCells addObject:[OAGPXTableCellData withData:@{
+                kCellKey: @"change_rename",
+                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                kCellRightIcon: @"ic_custom_edit",
+                kCellTitle: OALocalizedString(@"gpx_rename_q")
+        }]];
+
+        OAGPXTableCellData *move = [OAGPXTableCellData withData:@{
+                kCellKey: @"change_move",
+                kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
+                kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString,
+                kCellRightIcon: @"ic_custom_folder_move",
+                kCellTitle: OALocalizedString(@"plan_route_change_folder")
         }];
 
-        [newData addObject:@{
-                @"cells": controlSectionData
+        [move setData:@{
+                kTableUpdateData: ^() {
+                    [move setData:@{ kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString }];
+                }
         }];
+        [changeCells addObject:move];
 
-        [newData addObject:@{
-                @"cells": @[@{
-                        @"title": OALocalizedString(@"analyze_on_map"),
-                        @"icon": @"ic_custom_appearance",
-                        @"type": [OATitleIconRoundCell getCellIdentifier],
-                        @"key": @"analyze"
-                }]
+        OAGPXTableSectionData *changeSection = [OAGPXTableSectionData withData:@{ kSectionCells: changeCells }];
+        [changeSection setData:@{
+                kTableUpdateData: ^() {
+                    for (OAGPXTableCellData *cell in changeSection.cells)
+                    {
+                        if (cell.updateData)
+                            cell.updateData();
+                    }
+                }
         }];
+        [overviewSections addObject:changeSection];
 
-        NSMutableArray *shareSectionData = [NSMutableArray array];
-
-        [shareSectionData addObject:@{
-                @"title": OALocalizedString(@"ctx_mnu_share"),
-                @"icon": @"ic_custom_export",
-                @"type": [OATitleIconRoundCell getCellIdentifier],
-                @"key": @"share"
-        }];
-
-        [newData addObject:@{
-                @"cells": shareSectionData
-        }];
-
-        NSMutableArray *editSectionData = [NSMutableArray array];
-
-        [editSectionData addObject:@{
-                @"title": OALocalizedString(@"edit_track"),
-                @"icon": @"ic_custom_trip_edit",
-                @"type": [OATitleIconRoundCell getCellIdentifier],
-                @"key": @"edit"
-        }];
-
-        [editSectionData addObject:@{
-                @"title": OALocalizedString(@"duplicate_track"),
-                @"icon": @"ic_custom_copy",
-                @"type": [OATitleIconRoundCell getCellIdentifier],
-                @"key": @"edit_create_duplicate"
-        }];
-
-        [newData addObject:@{
-                @"cells": editSectionData
-        }];
-
-        NSMutableArray *changeSectionData = [NSMutableArray array];
-
-        [changeSectionData addObject:@{
-                @"title": OALocalizedString(@"gpx_rename_q"),
-                @"icon": @"ic_custom_edit",
-                @"type": [OATitleIconRoundCell getCellIdentifier],
-                @"key": @"change_rename"
-        }];
-
-        [changeSectionData addObject:[self getCellDataForRow:EOATrackMenuHudActionsChangeMoveRow
-                                                     section:EOATrackMenuHudActionsChangeSection]];
-
-        [newData addObject:@{
-                @"cells": changeSectionData
-        }];
-
-        [newData addObject:@{
-                @"cells": @[@{
-                        @"title": OALocalizedString(@"shared_string_delete"),
-                        @"icon": @"ic_custom_remove_outlined",
-                        @"type": [OATitleIconRoundCell getCellIdentifier],
-                        @"key": @"delete"
-                }]
-        }];
+        [overviewSections addObject:[OAGPXTableSectionData withData:@{
+                kSectionCells: @[
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"delete",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellRightIcon: @"ic_custom_remove_outlined",
+                                kCellTitle: OALocalizedString(@"shared_string_delete")
+                        }]
+                ]
+        }]];
     }
 
-    self.tableData = newData;
-}
-
-- (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section
-{
-    if (section == EOATrackMenuHudActionsChangeSection)
-    {
-        if (row == EOATrackMenuHudActionsChangeMoveRow)
-            return @{
-                    @"title": OALocalizedString(@"plan_route_change_folder"),
-                    @"icon": @"ic_custom_folder_move",
-                    @"desc": [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString,
-                    @"type": [OATitleDescriptionIconRoundCell getCellIdentifier],
-                    @"key": @"change_move"
-            };
-    }
-
-    return nil;
+    self.tableData = overviewSections;
 }
 
 - (void)generateGpxBlockStatistics
@@ -608,7 +699,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [self.app.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = [OAUtilities createNewFileName:newFileName];
+    NSString *newName = newFileName ? [OAUtilities createNewFileName:newFileName] : self.gpx.gpxFileName;
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
     NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
 
@@ -662,18 +753,25 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
 
         [self hide:YES duration:.2 onComplete:nil];
-        }]];
+        }]
+    ];
 
     [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)showAlertRenameTrack
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"gpx_rename_q") message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [self.gpx.gpxTitle lastPathComponent]) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"gpx_rename_q")
+            message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [self.gpx.gpxTitle lastPathComponent])
+                                                            preferredStyle:UIAlertControllerStyleAlert];
 
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                              style:UIAlertActionStyleCancel
+                                            handler:nil]];
 
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction *_Nonnull action) {
         [self renameTrack:alert.textFields[0].text];
     }]];
 
@@ -686,8 +784,12 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)showAlertWithText:(NSString *)text
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:text preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:text
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                              style:UIAlertActionStyleDefault
+                                            handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -758,14 +860,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     {
         [self showAlertWithText:OALocalizedString(@"empty_filename")];
     }
-}
-
-- (BOOL)isEnabled:(NSString *)key
-{
-    if ([key isEqualToString:@"control_show_on_map"])
-        return self.isShown;
-
-    return NO;
 }
 
 #pragma mark - OATrackMenuViewControllerDelegate
@@ -954,7 +1048,14 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 {
     [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
     if (_selectedTab == EOATrackMenuHudActionsTab)
-        [self generateData:EOATrackMenuHudActionsChangeSection row:EOATrackMenuHudActionsChangeMoveRow];
+    {
+        self.tableData[kActionsSection].cells[kActionMoveCell].updateData();
+        [UIView setAnimationsEnabled:NO];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kActionMoveCell
+                                                                    inSection:kActionsSection]]
+                              withRowAnimation:UITableViewRowAnimationNone];
+        [UIView setAnimationsEnabled:YES];
+    }
 }
 
 - (void)onFolderAdded:(NSString *)addedFolderName
@@ -1023,21 +1124,19 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ((NSArray *) self.tableData[section][@"cells"]).count;
+    return self.tableData[section].cells.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return self.tableData[section][@"group_name"];
+    return self.tableData[section].header;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    BOOL hasOptions = [item[@"has_options"] boolValue];
-
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
     UITableViewCell *outCell = nil;
-    if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
@@ -1049,14 +1148,14 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
         if (cell)
         {
-            cell.selectionStyle = hasOptions ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
-            [cell showRightIcon:hasOptions];
+            cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.textView.text = cellData.title;
+            cell.descriptionView.text = cellData.desc;
+            [cell showRightIcon:cellData.toggle];
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
     {
         OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
         if (cell == nil)
@@ -1070,13 +1169,13 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
         if (cell)
         {
-            cell.textView.attributedText = item[@"value"];
+            cell.textView.attributedText = cellData.values[@"attr_string_value"];
             cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATextLineViewCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {
         OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
         if (cell == nil)
@@ -1087,12 +1186,12 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.textView.text = cellData.title;
             cell.textView.textColor = UIColorFromRGB(color_primary_purple);
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
         OATitleIconRoundCell *cell =
                 [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
@@ -1108,14 +1207,14 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
         if (cell)
         {
-            cell.titleView.text = item[@"title"];
-            cell.textColorNormal = [item[@"key"] isEqualToString:@"delete"]
+            cell.titleView.text = cellData.title;
+            cell.textColorNormal = [cellData.key isEqualToString:@"delete"]
                     ? UIColorFromRGB(color_primary_red) : UIColor.blackColor;
 
-            UIColor *tintColor = [item[@"key"] isEqualToString:@"delete"]
+            UIColor *tintColor = [cellData.key isEqualToString:@"delete"]
                     ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_primary_purple);
             cell.iconColorNormal = tintColor;
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.iconView.image = [UIImage templateImageNamed:cellData.rightIcon];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
@@ -1123,7 +1222,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
     {
         OATitleDescriptionIconRoundCell *cell =
                 [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionIconRoundCell getCellIdentifier]];
@@ -1139,10 +1238,10 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
         if (cell)
         {
-            cell.titleView.text = item[@"title"];
-            cell.descrView.text = item[@"desc"];
+            cell.titleView.text = cellData.title;
+            cell.descrView.text = cellData.desc;
 
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.iconView.image = [UIImage templateImageNamed:cellData.rightIcon];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
@@ -1150,7 +1249,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
     {
         OATitleSwitchRoundCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATitleSwitchRoundCell getCellIdentifier]];
         if (cell == nil)
@@ -1165,13 +1264,13 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }
         if (cell)
         {
-            cell.titleView.text = item[@"title"];
+            cell.titleView.text = cellData.title;
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
             cell.separatorView.hidden = isLast;
 
-            cell.switchView.on = [self isEnabled:item[@"key"]];
+            cell.switchView.on = cellData.isOn ? cellData.isOn() : NO;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -1190,13 +1289,13 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
-            || [item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
-            || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]]
-            || [item[@"type"] isEqualToString:[OATextLineViewCell getCellIdentifier]])
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
         return 48.;
-    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
         return 60.;
     else
         return estimated ? 48. : UITableViewAutomaticDimension;
@@ -1219,37 +1318,37 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-    if ([item[@"key"] isEqualToString:@"full_description"])
+    if ([cellData.key isEqualToString:@"full_description"])
     {
         OATrackMenuDescriptionViewController *descriptionViewController =
                 [[OATrackMenuDescriptionViewController alloc] initWithGpxDoc:self.doc gpx:self.gpx];
         [self.navigationController pushViewController:descriptionViewController animated:YES];
     }
-    else if ([item[@"key"] isEqualToString:@"control_appearance"])
+    else if ([cellData.key isEqualToString:@"control_appearance"])
     {
         [self onAppearancePressed:nil];
     }
-    else if ([item[@"key"] isEqualToString:@"control_navigation"])
+    else if ([cellData.key isEqualToString:@"control_navigation"])
     {
         [self onNavigationPressed:nil];
     }
-    else if ([item[@"key"] isEqualToString:@"analyze"])
+    else if ([cellData.key isEqualToString:@"analyze"])
     {
         [self openAnalysis:EOARouteStatisticsModeBoth];
     }
-    else if ([item[@"key"] isEqualToString:@"share"])
+    else if ([cellData.key isEqualToString:@"share"])
     {
         [self onExportPressed:nil];
     }
-    else if ([item[@"key"] isEqualToString:@"edit"])
+    else if ([cellData.key isEqualToString:@"edit"])
     {
         [self hide:YES duration:.2 onComplete:^{
             [self.mapPanelViewController targetOpenPlanRoute:self.gpx trackMenuDelegate:self];
         }];
     }
-    else if ([item[@"key"] isEqualToString:@"edit_create_duplicate"])
+    else if ([cellData.key isEqualToString:@"edit_create_duplicate"])
     {
         OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
                 initWithFileName:[self.gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension stringByAppendingString:@"_copy"]
@@ -1260,17 +1359,17 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
-    else if ([item[@"key"] isEqualToString:@"change_rename"])
+    else if ([cellData.key isEqualToString:@"change_rename"])
     {
         [self showAlertRenameTrack];
     }
-    else if ([item[@"key"] isEqualToString:@"change_move"])
+    else if ([cellData.key isEqualToString:@"change_move"])
     {
         OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithGPX:self.gpx];
         selectFolderView.delegate = self;
         [self presentViewController:selectFolderView animated:YES completion:nil];
     }
-    else if ([item[@"key"] isEqualToString:@"delete"])
+    else if ([cellData.key isEqualToString:@"delete"])
     {
         [self showAlertDeleteTrack];
     }
@@ -1284,10 +1383,10 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 {
     UISwitch *switchView = (UISwitch *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
-    NSDictionary *item = [self getItem:indexPath];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-    if ([item[@"key"] isEqualToString:@"control_show_on_map"])
-        [self onShowHidePressed:nil];
+    if (cellData.onSwitch)
+        cellData.onSwitch(switchView.isOn);
 
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }

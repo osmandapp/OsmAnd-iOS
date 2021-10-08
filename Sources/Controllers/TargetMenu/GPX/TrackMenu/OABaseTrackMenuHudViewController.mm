@@ -82,6 +82,16 @@
         _updateData = data[kTableUpdateData];
 }
 
+- (BOOL)containsCell:(NSString *)key
+{
+    for (OAGPXTableCellData *cellData in self.cells)
+    {
+        if ([cellData.key isEqualToString:key])
+            return YES;
+    }
+    return NO;
+}
+
 @end
 
 @interface OABaseTrackMenuHudViewController()
@@ -93,8 +103,7 @@
 
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) BOOL isShown;
-@property (nonatomic) NSArray<NSDictionary *> *tableData;
-@property (nonatomic) NSArray<OAGPXTableSectionData *> *menuTableData;
+@property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
 
 @end
 
@@ -222,62 +231,6 @@
     //override
 }
 
-- (void)generateData:(NSInteger)section
-{
-    NSArray *newCellsData = [self getCellsDataForSection:section];
-    if (newCellsData)
-    {
-        NSDictionary *sectionData = ((NSMutableArray *) _tableData)[section];
-        if (sectionData)
-        {
-            NSMutableDictionary *newSectionData = [sectionData mutableCopy];
-            newSectionData[@"cells"] = newCellsData;
-            NSMutableArray *newData = [_tableData mutableCopy];
-            newData[section] = newSectionData;
-            _tableData = newData;
-
-            [UIView setAnimationsEnabled:NO];
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section]
-                          withRowAnimation:UITableViewRowAnimationNone];
-            [UIView setAnimationsEnabled:YES];
-        }
-    }
-}
-
-- (void)generateData:(NSInteger)section row:(NSInteger)row
-{
-    NSDictionary *newCellData = [self getCellDataForRow:row section:section];
-    if (newCellData)
-    {
-        NSDictionary *sectionData = ((NSMutableArray *) _tableData)[section];
-        if (sectionData)
-        {
-            NSMutableDictionary *newSectionData = [sectionData mutableCopy];
-            NSMutableArray *newRowsData = [newSectionData[@"cells"] mutableCopy];
-            newRowsData[row] = newCellData;
-            newSectionData[@"cells"] = newRowsData;
-            NSMutableArray *newData = [_tableData mutableCopy];
-            newData[section] = newSectionData;
-            _tableData = newData;
-
-            [UIView setAnimationsEnabled:NO];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:section]]
-                                  withRowAnimation:UITableViewRowAnimationNone];
-            [UIView setAnimationsEnabled:YES];
-        }
-    }
-}
-
-- (NSArray<NSDictionary *> *)getCellsDataForSection:(NSInteger)section
-{
-    return nil; //override
-}
-
-- (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section
-{
-    return nil; //override
-}
-
 - (void)setupModeViewShadowVisibility
 {
     self.topHeaderContainerView.layer.shadowOpacity = 0.0;
@@ -324,12 +277,7 @@
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _menuTableData[indexPath.section].cells[indexPath.row];
-}
-
-- (NSDictionary *)getItem:(NSIndexPath *)indexPath
-{
-    return _tableData[indexPath.section][@"cells"][indexPath.row];
+    return _tableData[indexPath.section].cells[indexPath.row];
 }
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem

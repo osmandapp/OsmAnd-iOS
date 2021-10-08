@@ -20,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
-@property (nonatomic, readwrite) EOAScrollableMenuHudMode menuHudMode;
 
 @end
 
@@ -70,7 +69,7 @@
         [_scrollableView addGestureRecognizer:_panGesture];
     }
     _currentState = EOADraggableMenuStateInitial;
-    self.menuHudMode = EOAScrollableMenuHudBaseMode;
+    _menuHudMode = EOAScrollableMenuHudBaseMode;
 
     _sliderView.layer.cornerRadius = 3.;
 }
@@ -79,10 +78,10 @@
 {
     [super viewWillAppear:animated];
     [self layoutSubviews];
-    [self firstShowing];
+    [self willAppearShowing];
 }
 
-- (void)firstShowing
+- (void)willAppearShowing
 {
     [self show:YES state:EOADraggableMenuStateInitial onComplete:nil];
 }
@@ -314,17 +313,12 @@
         if ([self isLeftSidePresentation])
         {
             frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
+            frame.origin.x = -_scrollableView.bounds.size.width;
 
             if (self.menuHudMode == EOAScrollableMenuHudExtraHeaderInLandscapeMode)
-            {
-                frame.origin.x = -_scrollableView.bounds.size.width;
                 frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
-            }
             else
-            {
-                frame.origin.x = 0.0;
                 frame.origin.y = 0.0;
-            }
 
             _scrollableView.frame = frame;
 
@@ -339,7 +333,7 @@
             
             frame.origin.y = DeviceScreenHeight - _scrollableView.bounds.size.height;
         }
-        
+
         [UIView animateWithDuration:0.3 animations:^{
             _scrollableView.frame = frame;
         } completion:^(BOOL finished) {

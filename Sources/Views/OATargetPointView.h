@@ -28,6 +28,7 @@
 @property (nonatomic) OATargetPoint *targetPoint;
 @property (nonatomic, assign) BOOL isAddressFound;
 @property (strong, nonatomic) id<OATargetPointViewDelegate> menuViewDelegate;
+@property (weak, nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 @property (nonatomic) OATargetMenuViewController* customController;
 
 @property (nonatomic, assign) OATargetPointType activeTargetType;

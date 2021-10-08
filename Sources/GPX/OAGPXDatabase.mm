@@ -180,6 +180,11 @@
     return nil;
 }
 
+-(void)removeGpxItem:(NSString *)filePath
+{
+    [self removeGpxItem:filePath removeFile:YES];
+}
+
 -(void)removeGpxItem:(NSString *)filePath removeFile:(BOOL)removeFile
 {
     NSMutableArray *newGpxList = [gpxList mutableCopy];
@@ -196,13 +201,6 @@
     {
         [newGpxList removeObject:gpx];
         gpxList = newGpxList;
-
-        NSMutableArray *dbContent = [NSMutableArray arrayWithContentsOfFile:self.dbFilePath];
-        [dbContent enumerateObjectsUsingBlock:^(NSDictionary *gpxData, NSUInteger idx, BOOL *stop) {
-            if ([gpxData[@"gpxFilePath"] isEqualToString:gpx.gpxFilePath])
-                [dbContent removeObject:gpxData];
-        }];
-        [dbContent writeToFile:self.dbFilePath atomically:YES];
 
         if (removeFile)
             [[NSFileManager defaultManager] removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath] error:nil];
@@ -301,36 +299,6 @@
     gpxList = res;
 }
 
-- (OAGPX *)reloadUnsaved:(OAGPX *)gpx
-{
-    if (gpx)
-    {
-        NSInteger gpxIndex = [gpxList indexOfObject:gpx];
-        if (gpxIndex != NSNotFound)
-        {
-            NSArray *dbContent = [NSArray arrayWithContentsOfFile:self.dbFilePath];
-            NSDictionary *newGpxData = dbContent.count > gpxIndex ? dbContent[gpxIndex] : nil;
-            if (!newGpxData || ![newGpxData[@"gpxFilePath"] isEqualToString:gpx.gpxFilePath])
-            {
-                for (NSDictionary *gpxData in dbContent)
-                {
-                    if ([gpxData[@"gpxFilePath"] isEqualToString:gpx.gpxFilePath])
-                    {
-                        newGpxData = gpxData;
-                        break;
-                    }
-                }
-            }
-            if (newGpxData)
-                gpx = [self generateGpxItem:newGpxData];
-            NSMutableArray *newGpxList = [gpxList mutableCopy];
-            newGpxList[gpxIndex] = gpx;
-            gpxList = newGpxList;
-        }
-    }
-    return gpx;
-}
-
 - (void)reloadGPXFile:(NSString *)filePath onComplete:(void (^)(void))onComplete
 {
     [[OARootViewController instance] importAsGPX:[NSURL fileURLWithPath:filePath]
@@ -344,59 +312,13 @@
     NSMutableArray *dbContent = [NSMutableArray array];
     for (OAGPX *gpx in gpxList)
     {
-        NSDictionary *gpxData = [self generateGpxData:gpx];
-        if (gpxData)
-            [dbContent addObject:gpxData];
+        [dbContent addObject:[self generateGpxData:gpx]];
     }
-    [dbContent writeToFile:self.dbFilePath atomically:YES];
-}
-
-- (void)save:(OAGPX *)gpx
-{
-    if (!gpx)
-        return;
-
-    NSMutableArray *dbContent = [NSMutableArray arrayWithContentsOfFile:self.dbFilePath];
-    NSDictionary *newGpxData = [self generateGpxData:gpx];
-    NSInteger gpxIndex = [gpxList indexOfObject:gpx];
-
-    if (gpxIndex != NSNotFound)
-    {
-        if (gpxIndex < dbContent.count)
-        {
-            dbContent[gpxIndex] = newGpxData;
-        }
-        else
-        {
-            [dbContent addObject:newGpxData];
-
-            NSMutableArray *newGpxList = [gpxList mutableCopy];
-            [newGpxList removeObject:gpx];
-            [newGpxList addObject:gpx];
-            gpxList = newGpxList;
-        }
-    }
-    else
-    {
-        [dbContent enumerateObjectsUsingBlock:^(NSDictionary *gpxData, NSUInteger idx, BOOL *stop) {
-            if ([gpxData[@"gpxFilePath"] isEqualToString:gpx.gpxFilePath])
-                [dbContent removeObject:gpxData];
-        }];
-        [dbContent addObject:newGpxData];
-
-        NSMutableArray *newGpxList = [gpxList mutableCopy];
-        [newGpxList addObject:gpx];
-        gpxList = newGpxList;
-    }
-
     [dbContent writeToFile:self.dbFilePath atomically:YES];
 }
 
 - (NSDictionary *)generateGpxData:(OAGPX *)gpx
 {
-    if (!gpx)
-        return nil;
-
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
 
     [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];

@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 @optional
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType;
-- (void)backToTrackMenu;
+- (void)backToTrackMenu:(OAGPX *)gpx;
 
 @end
 

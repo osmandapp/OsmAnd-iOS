@@ -78,7 +78,6 @@
 "gpx_stat" = "統計";
 "gpx_route_time" = "路線時間";
 "gpx_uphldownhl" = "上坡 / 下坡";
-"gpx_distance" = "距離";
 "gpx_average_speed" = "平均速率";
 "gpx_start" = "開始";
 "gpx_finish" = "完成";
@@ -116,7 +115,7 @@
 "map_settings_overunder" = "上層 / 下層";
 "map_settings_over" = "上層";
 "map_settings_under" = "下層";
-"map_settings_none" = "無";
+"shared_string_none" = "無";
 "map_settings_offline" = "離線地圖的樣式";
 "map_settings_online" = "線上地圖";
 "map_settings_transp" = "透明度";
@@ -683,7 +682,6 @@
 "map_widget_battery" = "電池位準";
 "map_widget_plain_time" = "目前時間";
 "map_widget_max_speed" = "速限";
-"max_speed_none" = "無";
 "access_arrival_time" = "抵達時間";
 "map_widget_time" = "剩餘時間";
 "map_widget_altitude" = "海拔高度";
@@ -984,7 +982,6 @@
 "shared_string_reset" = "重設";
 "shared_string_reload" = "重新載入";
 "save_poi_too_many_uppercase" = "名稱中包含太多的大寫字母。要繼續嗎？";
-"sett_no_ext_input" = "無";
 "sett_generic_ext_input" = "通用鍵盤";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "shared_string_read_more" = "讀取更多";

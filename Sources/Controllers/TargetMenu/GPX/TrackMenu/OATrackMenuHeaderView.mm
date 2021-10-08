@@ -70,6 +70,7 @@
     BOOL hasContent = hasCollection && !self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden;
     BOOL isOnlyTitleAndDescription = hasDescription && !hasContent;
     BOOL isOnlyTitle = !hasDescription && !hasContent;
+    BOOL hasDirection = !self.directionContainerView.hidden;
 
     self.onlyTitleAndDescriptionConstraint.active = isOnlyTitleAndDescription;
     self.onlyTitleNoDescriptionConstraint.active = isOnlyTitle;
@@ -79,6 +80,9 @@
 
     self.descriptionBottomCollectionConstraint.active = hasCollection;
     self.descriptionBottomNoCollectionConstraint.active = !hasCollection;
+
+    self.regionDirectionConstraint.active = hasDirection;
+    self.regionNoDirectionConstraint.active = !hasDirection;
 
     [super updateConstraints];
 }
@@ -93,6 +97,7 @@
         BOOL hasContent = hasCollection && !self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden;
         BOOL isOnlyTitleAndDescription = hasDescription && !hasContent;
         BOOL isOnlyTitle = !hasDescription && !hasContent;
+        BOOL hasDirection = !self.directionContainerView.hidden;
 
         res = res || self.onlyTitleAndDescriptionConstraint.active != isOnlyTitleAndDescription;
         res = res || self.onlyTitleNoDescriptionConstraint.active != isOnlyTitle;
@@ -102,8 +107,20 @@
 
         res = res || self.descriptionBottomCollectionConstraint.active != hasCollection;
         res = res || self.descriptionBottomNoCollectionConstraint.active != !hasCollection;
+
+        res = res || self.regionDirectionConstraint.active != hasDirection;
+        res = res || self.regionNoDirectionConstraint.active != !hasDirection;
     }
     return res;
+}
+
+- (void)setDirection:(NSString *)direction
+{
+    BOOL hasDirection = direction && direction.length > 0;
+
+    [self.directionTextView setText:direction];
+    self.directionContainerView.hidden = !hasDirection;
+    self.locationSeparatorView.hidden = !hasDirection;
 }
 
 - (void)setDescription:(NSString *)description
@@ -129,6 +146,11 @@
     self.collectionView.hidden = YES;
     self.locationContainerView.hidden = YES;
     self.actionButtonsContainerView.hidden = YES;
+}
+
+- (void)showLocation:(BOOL)show
+{
+    self.locationContainerView.hidden = !show;
 }
 
 #pragma mark - UICollectionViewDataSource

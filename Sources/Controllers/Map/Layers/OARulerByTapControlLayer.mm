@@ -155,7 +155,7 @@
     points.push_back(from);
     points.push_back(to);
     
-    double strokeWidth = 10.;
+    double strokeWidth = 5.;
     std::vector<double> inlinePattern;
     inlinePattern.push_back(75);
     inlinePattern.push_back(45);
@@ -164,7 +164,7 @@
     inlineBuilder.setBaseOrder(self.mapViewController.mapLayers.myPositionLayer.baseOrder + lineId)
     .setIsHidden(false)
     .setLineId(lineId + 1)
-    .setLineWidth(strokeWidth)
+    .setLineWidth(strokeWidth * self.displayDensityFactor)
     .setLineDash(inlinePattern)
     .setPoints(points)
     .setFillColor(color);

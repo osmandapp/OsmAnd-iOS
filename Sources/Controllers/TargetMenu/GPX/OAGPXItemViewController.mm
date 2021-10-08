@@ -46,7 +46,7 @@
 @end
 
 
-@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate,/* OAEditGPXColorViewControllerDelegate,*/ OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate, OASaveTrackViewControllerDelegate> {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate, OASaveTrackViewControllerDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -1026,7 +1026,7 @@
                                              [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                                          }
 
-                                         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath removeFile:YES];
+                                         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
                                      }
                                      [self cancelPressed];
                                  });
@@ -1290,7 +1290,7 @@
         if (indexPath.row == 0)
         {
             cell.arrowIconView.hidden = self.gpx.coloringType.length != 0;
-            cell.textView.text = OALocalizedString(@"map_settings_none");
+            cell.textView.text = OALocalizedString(@"shared_string_none");
         }
         else
         {
@@ -1467,18 +1467,6 @@
     [_waypointsController generateData];
     [self editClicked:nil];
 }
-
-/*#pragma mark - OAEditGPXColorViewControllerDelegate
--(void) trackColorChanged
-{
-    if (_trackColorController.colorIndex == NSNotFound)
-        return;
-    OAGPXTrackColor *gpxColor = [[_gpxColorCollection getAvailableColors] objectAtIndex:_trackColorController.colorIndex];
-    _gpx.color = gpxColor.colorValue;
-    [[OAGPXDatabase sharedDb] save];
-    [[_app mapSettingsChangeObservable] notifyEvent];
-    [self.tableView reloadData];
-}*/
 
 #pragma mark - OAEditColorViewControllerDelegate
 

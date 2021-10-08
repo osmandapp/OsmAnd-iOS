@@ -10,9 +10,9 @@
 
 @interface OAImageTextViewCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet UITextView *descView;
-@property (strong, nonatomic) IBOutlet UITextView *extraDescView;
-@property (strong, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UITextView *descView;
+@property (weak, nonatomic) IBOutlet UITextView *extraDescView;
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconViewHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descExtraTrailingConstraint;

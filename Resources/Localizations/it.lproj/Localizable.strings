@@ -72,7 +72,6 @@
 "gpx_stat" = "Statistiche";
 "gpx_route_time" = "Tempo del percorso";
 "gpx_uphldownhl" = "Salite/discese";
-"gpx_distance" = "Distanza";
 "gpx_average_speed" = "Velocità media";
 "gpx_start" = "Avvia";
 "gpx_finish" = "Fine";
@@ -95,7 +94,7 @@
 "map_settings_overunder" = "Sovrapposizione/sfondo";
 "map_settings_over" = "Sovrapposizione";
 "map_settings_under" = "Sfondo";
-"map_settings_none" = "Nessuno";
+"shared_string_none" = "Nessuno";
 "map_settings_offline" = "Stili per le mappe offline";
 "map_settings_online" = "Mappe online";
 "map_settings_transp" = "Trasparenza";
@@ -627,7 +626,6 @@
 "monitoring_control_start" = "REG";
 "map_widget_altitude" = "Altitudine";
 "map_widget_max_speed" = "Limite di velocità";
-"max_speed_none" = "nessuno";
 "access_arrival_time" = "Orario di arrivo";
 "map_widget_time" = "Tempo rimasto";
 "layer_map_appearance" = "Configura lo schermo";
@@ -761,7 +759,6 @@
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
-"sett_no_ext_input" = "Nessuno";
 "sett_generic_ext_input" = "Tastiera generica";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "transport_routes" = "Percorsi";

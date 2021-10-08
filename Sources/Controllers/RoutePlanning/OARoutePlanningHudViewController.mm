@@ -669,8 +669,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         _layer.editingCtx = nil;
         [_layer resetLayer];
 
-        if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu)])
-            [self.trackMenuDelegate backToTrackMenu];
+        if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu:)])
+            [self.trackMenuDelegate backToTrackMenu:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]];
     }];
 }
 
@@ -798,7 +798,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         OAExitRoutePlanningBottomSheetViewController *bottomSheet = [[OAExitRoutePlanningBottomSheetViewController alloc] init];
         bottomSheet.delegate = self;
-        [bottomSheet presentInViewController:[OARootViewController instance].mapPanel.mapViewController];
+        [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
     }
     else
     {

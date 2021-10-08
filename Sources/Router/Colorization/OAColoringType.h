@@ -35,9 +35,6 @@
 
 - (BOOL) isTrackSolid;
 - (BOOL) isGradient;
-- (BOOL) isSlope;
-- (BOOL) isSpeed;
-- (BOOL) isAltitude;
 
 @end
 

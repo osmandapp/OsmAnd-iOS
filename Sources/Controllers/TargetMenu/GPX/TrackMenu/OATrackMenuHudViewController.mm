@@ -7,6 +7,7 @@
 //
 
 #import "OATrackMenuHudViewController.h"
+#import "OATrackMenuHeaderView.h"
 #import "OAMapPanelViewController.h"
 #import "OASaveTrackViewController.h"
 #import "OATrackSegmentsViewController.h"
@@ -25,7 +26,6 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OASelectedGPXHelper.h"
-#import "OASavingTrackHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
@@ -56,20 +56,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
-@property (nonatomic) OAMapPanelViewController *mapPanelViewController;
-@property (nonatomic) OAMapViewController *mapViewController;
-
-@property (nonatomic) OsmAndAppInstance app;
-@property (nonatomic) OAAppSettings *settings;
-@property (nonatomic) OASavingTrackHelper *savingHelper;
-
-@property (nonatomic) OAGPX *gpx;
-@property (nonatomic) OAGPXDocument *doc;
-@property (nonatomic) OAGPXTrackAnalysis *analysis;
-@property (nonatomic) BOOL isCurrentTrack;
+@property (nonatomic) NSArray<NSDictionary *> *tableData;
 @property (nonatomic) BOOL isShown;
-
-@property (nonatomic) NSArray<NSDictionary *> *data;
+@property (nonatomic) OATableData *menuTableData;
 
 @end
 
@@ -85,28 +74,35 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     EOATrackMenuHudTab _selectedTab;
 }
 
+@dynamic tableData, isShown, menuTableData;
+
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
-    self = [super initWithNibName:@"OATrackMenuHudViewController" bundle:nil];
+    self = [super initWithGpx:gpx];
     if (self)
     {
-        self.gpx = gpx;
         _selectedTab = EOATrackMenuHudOverviewTab;
-        [self commonInit];
     }
     return self;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx tab:(EOATrackMenuHudTab)tab
 {
-    self = [super initWithNibName:@"OATrackMenuHudViewController" bundle:nil];
+    self = [super initWithGpx:gpx];
     if (self)
     {
-        self.gpx = gpx;
-        _selectedTab = tab >= 0 ? tab : EOATrackMenuHudOverviewTab;
-        [self commonInit];
+        _selectedTab = tab >= EOATrackMenuHudOverviewTab ? tab : EOATrackMenuHudOverviewTab;
     }
     return self;
+}
+
+- (NSString *)getNibName
+{
+    return @"OATrackMenuHudViewController";
+}
+
+- (void)commonInit
+{
 }
 
 - (void)viewDidLoad
@@ -115,7 +111,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.sectionFooterHeight = 0.01;
 
     self.bottomSeparatorHeight.constant = 0.5;
     self.bottomSeparatorTopConstraint.constant = -0.5;
@@ -129,8 +124,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     [self setupTabBar];
     [self setupTableView];
     [self setupDescription];
-
-    [super setupView];
 }
 
 - (void)setupTableView
@@ -181,8 +174,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)setupHeaderView
 {
-    [super setupHeaderView];
-
     if (_headerView)
         [_headerView removeFromSuperview];
 
@@ -200,20 +191,34 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     {
         [self generateGpxBlockStatistics];
 
-        CLLocationCoordinate2D location = self.app.locationServices.lastKnownLocation.coordinate;
         CLLocationCoordinate2D gpxLocation = self.doc.bounds.center;
-        _headerView.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
-        _headerView.directionIconView.tintColor = UIColorFromRGB(color_primary_purple);
-        [_headerView.directionTextView setText:[OAOsmAndFormatter getFormattedDistance:
-                getDistance(location.latitude, location.longitude, gpxLocation.latitude, gpxLocation.longitude)]];
-        _headerView.directionTextView.textColor = UIColorFromRGB(color_primary_purple);
+        CLLocation *lastKnownLocation = self.app.locationServices.lastKnownLocation;
+        NSString *direction = lastKnownLocation && gpxLocation.latitude != DBL_MAX ?
+                [OAOsmAndFormatter getFormattedDistance:getDistance(
+                        lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.longitude,
+                        gpxLocation.latitude, gpxLocation.longitude)] : @"";
 
-        OAWorldRegion *worldRegion = [self.app.worldRegion findAtLat:self.gpx.bounds.center.latitude
-                                                                 lon:self.gpx.bounds.center.longitude];
-        _headerView.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
-        _headerView.regionIconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
-        [_headerView.regionTextView setText:worldRegion.localizedName];
-        _headerView.regionTextView.textColor = UIColorFromRGB(color_text_footer);
+        [_headerView setDirection:direction];
+        if (!_headerView.directionContainerView.hidden)
+        {
+            _headerView.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            _headerView.directionIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            _headerView.directionTextView.textColor = UIColorFromRGB(color_primary_purple);
+        }
+
+        if (gpxLocation.latitude != DBL_MAX)
+        {
+            OAWorldRegion *worldRegion = [self.app.worldRegion findAtLat:gpxLocation.latitude
+                                                                     lon:gpxLocation.longitude];
+            _headerView.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
+            _headerView.regionIconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
+            [_headerView.regionTextView setText:worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName];
+            _headerView.regionTextView.textColor = UIColorFromRGB(color_text_footer);
+        }
+        else
+        {
+            [_headerView showLocation:NO];
+        }
 
         [_headerView.showHideButton setTitle:self.isShown ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show")
                                     forState:UIControlStateNormal];
@@ -263,6 +268,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
     CGRect headerFrame = _headerView.frame;
 
+    if (_headerView.locationContainerView.hidden)
+        headerFrame.size.height -= _headerView.locationContainerView.frame.size.height;
+
     if (_headerView.collectionView.hidden)
     {
         if (_headerView.locationContainerView.hidden && _headerView.actionButtonsContainerView.hidden)
@@ -283,7 +291,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     [self.topHeaderContainerView insertSubview:_headerView atIndex:0];
     [self.topHeaderContainerView sendSubviewToBack:_headerView];
 
-    _headerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.topHeaderContainerView addConstraints:@[
             [self createBaseEqualConstraint:_headerView
                              firstAttribute:NSLayoutAttributeLeading
@@ -307,9 +314,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)generateData
 {
-    [super generateData];
-
-    NSMutableArray *data = [NSMutableArray array];
+    NSMutableArray *newData = [NSMutableArray array];
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
@@ -339,7 +344,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                 }];
             }
 
-            [data addObject:@{
+            [newData addObject:@{
                     @"group_name": OALocalizedString(@"description"),
                     @"cells": descriptionSectionData
             }];
@@ -379,7 +384,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                     @"key": @"location"
             }];
 
-        [data addObject:@{
+        [newData addObject:@{
                 @"group_name": OALocalizedString(@"shared_string_info"),
                 @"cells": infoSectionData
         }];
@@ -409,11 +414,11 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                 @"key": @"control_navigation"
         }];
 
-        [data addObject:@{
+        [newData addObject:@{
                 @"cells": controlSectionData
         }];
 
-        [data addObject:@{
+        [newData addObject:@{
                 @"cells": @[@{
                         @"title": OALocalizedString(@"analyze_on_map"),
                         @"icon": @"ic_custom_appearance",
@@ -431,7 +436,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                 @"key": @"share"
         }];
 
-        [data addObject:@{
+        [newData addObject:@{
                 @"cells": shareSectionData
         }];
 
@@ -451,7 +456,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                 @"key": @"edit_create_duplicate"
         }];
 
-        [data addObject:@{
+        [newData addObject:@{
                 @"cells": editSectionData
         }];
 
@@ -467,11 +472,11 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         [changeSectionData addObject:[self getCellDataForRow:EOATrackMenuHudActionsChangeMoveRow
                                                      section:EOATrackMenuHudActionsChangeSection]];
 
-        [data addObject:@{
+        [newData addObject:@{
                 @"cells": changeSectionData
         }];
 
-        [data addObject:@{
+        [newData addObject:@{
                 @"cells": @[@{
                         @"title": OALocalizedString(@"shared_string_delete"),
                         @"icon": @"ic_custom_remove_outlined",
@@ -481,7 +486,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         }];
     }
 
-    self.data = data;
+    self.tableData = newData;
 }
 
 - (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section
@@ -514,7 +519,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         {
             float totalDistance = withoutGaps ? self.analysis.totalDistanceWithoutGaps : self.analysis.totalDistance;
             [statistics addObject:@{
-                    @"title": OALocalizedString(@"gpx_distance"),
+                    @"title": OALocalizedString(@"shared_string_distance"),
                     @"value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
                     @"icon": @"ic_small_distance@2x"
             }];
@@ -594,18 +599,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     return totalHeight;
 }
 
-- (NSString *)getUniqueFileName:(NSString *)fileName inFolderPath:(NSString *)folderPath
-{
-    NSString *name = [fileName stringByDeletingPathExtension];
-    NSString *newName = name;
-    int i = 1;
-    while ([[NSFileManager defaultManager] fileExistsAtPath:[[folderPath stringByAppendingPathComponent:newName] stringByAppendingPathExtension:@"gpx"]])
-    {
-        newName = [NSString stringWithFormat:@"%@ %i", name, i++];
-    }
-    return [newName stringByAppendingPathExtension:@"gpx"];
-}
-
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
@@ -615,8 +608,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [self.app.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = newFileName ? newFileName : self.gpx.gpxFileName;
-    newName = [self getUniqueFileName:newName inFolderPath:newFolderPath];
+    NSString *newName = [OAUtilities createNewFileName:newFileName];
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
     NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
 
@@ -646,50 +638,126 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     }
 }
 
-- (void)renameTrack
+- (void)showAlertDeleteTrack
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_rename_q")
-                                                    message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [self.gpx.gpxTitle lastPathComponent])
-                                                   delegate:self
-                                          cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
-                                          otherButtonTitles:OALocalizedString(@"shared_string_ok"), nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert textFieldAtIndex:0].text = [self.gpx.gpxTitle lastPathComponent];
-    [alert show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:self.isCurrentTrack ? OALocalizedString(@"track_clear_q") : OALocalizedString(@"gpx_remove") preferredStyle:UIAlertControllerStyleAlert];
+
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
+
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (self.isCurrentTrack)
+        {
+            self.settings.mapSettingTrackRecording = NO;
+            [self.savingHelper clearData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mapViewController hideRecGpxTrack];
+            });
+        }
+        else
+        {
+            if (self.isShown)
+                [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+
+            [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
+        }
+
+        [self hide:YES duration:.2 onComplete:nil];
+        }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)deleteTrack
+- (void)showAlertRenameTrack
 {
-    [PXAlertView showAlertWithTitle:(self.isCurrentTrack ? OALocalizedString(@"track_clear_q") : OALocalizedString(@"gpx_remove"))
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_no")
-                         otherTitle:OALocalizedString(@"shared_string_yes")
-                          otherDesc:nil
-                         otherImage:nil
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                             if (!cancelled)
-                             {
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     if (self.isCurrentTrack)
-                                     {
-                                         self.settings.mapSettingTrackRecording = NO;
-                                         [self.savingHelper clearData];
-                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                             [self.mapViewController hideRecGpxTrack];
-                                         });
-                                     }
-                                     else
-                                     {
-                                         if (self.isShown)
-                                             [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"gpx_rename_q") message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [self.gpx.gpxTitle lastPathComponent]) preferredStyle:UIAlertControllerStyleAlert];
 
-                                         OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-                                         [db removeGpxItem:self.gpx.gpxFilePath removeFile:YES];
-                                     }
-                                     [self dismiss:nil];
-                                 });
-                             }
-                         }];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+        [self renameTrack:alert.textFields[0].text];
+    }]];
+
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.text = [self.gpx.gpxTitle lastPathComponent];
+    }];
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showAlertWithText:(NSString *)text
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:text preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)renameTrack:(NSString *)newName
+{
+    if (newName.length > 0)
+    {
+        NSString *oldFilePath = self.gpx.gpxFilePath;
+        NSString *oldPath = [self.app.gpxPath stringByAppendingPathComponent:oldFilePath];
+        NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
+        NSString *newFilePath = [[self.gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
+        NSString *newPath = [self.app.gpxPath stringByAppendingPathComponent:newFilePath];
+        if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
+        {
+            self.gpx.gpxTitle = newName;
+            self.gpx.gpxFileName = newFileName;
+            self.gpx.gpxFilePath = newFilePath;
+            [[OAGPXDatabase sharedDb] save];
+
+            OAGpxMetadata *metadata;
+            if (self.doc.metadata)
+            {
+                metadata = (OAGpxMetadata *) self.doc.metadata;
+            }
+            else
+            {
+                metadata = [[OAGpxMetadata alloc] init];
+                long time = 0;
+                if (self.doc.locationMarks.count > 0)
+                    time = self.doc.locationMarks[0].time;
+                if (self.doc.tracks.count > 0)
+                {
+                    OAGpxTrk *track = self.doc.tracks[0];
+                    track.name = newName;
+                    if (track.segments.count > 0)
+                    {
+                        OAGpxTrkSeg *seg = track.segments[0];
+                        if (seg.points.count > 0)
+                         {
+                            OAGpxTrkPt *p = seg.points[0];
+                            if (time > p.time)
+                                time = p.time;
+                        }
+                    }
+                }
+                metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
+            }
+            metadata.name = newFileName;
+
+            if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
+                [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];
+
+            BOOL saveFailed = ![self.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
+            self.doc.path = newPath;
+            self.doc.metadata = metadata;
+
+            if (saveFailed)
+                [self.doc saveTo:newPath];
+
+            [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
+        }
+        else
+        {
+            [self showAlertWithText:OALocalizedString(@"gpx_already_exsists")];
+        }
+    }
+    else
+    {
+        [self showAlertWithText:OALocalizedString(@"empty_filename")];
+    }
 }
 
 - (BOOL)isEnabled:(NSString *)key
@@ -704,7 +772,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
 {
-    [self dismiss:^{
+    [self hide:YES duration:.2 onComplete:^{
         [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
                                                                 analysis:self.analysis
                                                        trackMenuDelegate:self
@@ -712,9 +780,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     }];
 }
 
-- (void)backToTrackMenu
+- (void)backToTrackMenu:(OAGPX *)gpx
 {
-    [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+    [self.mapPanelViewController openTargetViewWithGPX:gpx ? gpx : self.gpx
                                           trackHudMode:EOATrackMenuHudMode
                                                    tab:_selectedTab];
 }
@@ -820,7 +888,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
 
 - (void)onAppearancePressed:(id)sender
 {
-    [self dismiss:^{
+    [self hide:YES duration:.2 onComplete:^{
         [self.mapPanelViewController openTrackAppearance:self.gpx
                                        trackMenuDelegate:self];
     }];
@@ -876,7 +944,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                                                                       fromName:nil
                                                 useIntermediatePointsByDefault:YES
                                                                     showDialog:YES];
-        [self dismiss:nil];
+        [self hide:YES duration:.2 onComplete:nil];
     }
 }
 
@@ -943,24 +1011,24 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
                                                                   fromName:nil
                                             useIntermediatePointsByDefault:YES
                                                                 showDialog:YES];
-    [self dismiss:nil];
+    [self hide:YES duration:.2 onComplete:nil];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.data.count;
+    return self.tableData.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ((NSArray *) self.data[section][@"cells"]).count;
+    return ((NSArray *) self.tableData[section][@"cells"]).count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return self.data[section][@"group_name"];
+    return self.tableData[section][@"group_name"];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1149,7 +1217,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
         return 0.01;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
@@ -1178,15 +1245,15 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     }
     else if ([item[@"key"] isEqualToString:@"edit"])
     {
-        [self dismiss:^{
+        [self hide:YES duration:.2 onComplete:^{
             [self.mapPanelViewController targetOpenPlanRoute:self.gpx trackMenuDelegate:self];
         }];
     }
     else if ([item[@"key"] isEqualToString:@"edit_create_duplicate"])
     {
         OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
-                initWithFileName:[_gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension stringByAppendingString:@"_copy"]
-                        filePath:_gpx.gpxFilePath
+                initWithFileName:[self.gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension stringByAppendingString:@"_copy"]
+                        filePath:self.gpx.gpxFilePath
                        showOnMap:YES
                  simplifiedTrack:NO];
 
@@ -1195,7 +1262,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     }
     else if ([item[@"key"] isEqualToString:@"change_rename"])
     {
-        [self renameTrack];
+        [self showAlertRenameTrack];
     }
     else if ([item[@"key"] isEqualToString:@"change_move"])
     {
@@ -1205,7 +1272,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudChangeRow)
     }
     else if ([item[@"key"] isEqualToString:@"delete"])
     {
-        [self deleteTrack];
+        [self showAlertDeleteTrack];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

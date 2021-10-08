@@ -66,7 +66,6 @@
 "gpx_remove" = "Voleu suprimir el trajecte?";
 "gpx_stat" = "Estadístiques";
 "gpx_route_time" = "Temps de ruta";
-"gpx_distance" = "Distància";
 "gpx_average_speed" = "Velocitat mitjana";
 "gpx_start" = "Comença";
 "gpx_finish" = "Finalitza";
@@ -102,7 +101,7 @@
 "map_settings_overunder" = "Capa de fons / capa superposada";
 "map_settings_over" = "Capa superposada";
 "map_settings_under" = "Capa de fons";
-"map_settings_none" = "Cap";
+"shared_string_none" = "Cap";
 "map_settings_offline" = "Estils pels mapes fora de línia";
 "map_settings_online" = "Mapes en línia";
 "map_settings_transp" = "Transparència";
@@ -684,7 +683,6 @@
 "map_widget_battery" = "Nivell de la bateria";
 "map_widget_plain_time" = "Hora actual";
 "map_widget_max_speed" = "Límit de velocitat";
-"max_speed_none" = "cap";
 "access_arrival_time" = "Hora d\'arribada";
 "map_widget_time" = "Temps per arribar-hi";
 "monitoring_control_start" = "REC";
@@ -1074,7 +1072,6 @@
 "osm_edit_without_name" = "Sense nom";
 "osm_upload_complete" = "Pujada finalitzada";
 "osm_edit_uploading" = "S'està pujant…";
-"sett_no_ext_input" = "Cap";
 "sett_generic_ext_input" = "Teclat genèric";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "shared_string_read_more" = "Més informació";

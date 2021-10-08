@@ -83,7 +83,6 @@
 "gpx_route" = "Leið";
 "gpx_route_time" = "Tími á leiðinni";
 "gpx_uphldownhl" = "Brekkur upp/niður";
-"gpx_distance" = "Vegalengd";
 "gpx_average_speed" = "Meðalhraði";
 "gpx_start" = "Upphaf";
 "gpx_finish" = "Ljúka";
@@ -125,7 +124,7 @@
 "map_settings_overunder" = "Yfirlag / Undirlag";
 "map_settings_over" = "Yfirlag";
 "map_settings_under" = "Undirlag";
-"map_settings_none" = "Ekkert";
+"shared_string_none" = "Ekkert";
 "map_settings_offline" = "Stíll ónettengdra korta";
 "map_settings_online" = "Nettengd kort";
 "map_settings_transp" = "Gegnsæi";
@@ -571,7 +570,6 @@
 "map_widget_battery" = "Styrkur rafhlöðu";
 "map_widget_plain_time" = "Núverandi tími";
 "map_widget_max_speed" = "Hraðatakmörk";
-"max_speed_none" = "ekkert";
 "access_arrival_time" = "Komutími";
 "map_widget_time" = "Tími til stefnu";
 "shared_string_collapse" = "Fella saman";
@@ -1082,7 +1080,6 @@
 "osm_upload_complete" = "Innsendingu lokið";
 "sett_ext_input_desc" = "Veldu tæki á borð við venjulegt lyklaborð eða WunderLINQ fyrir ytri stýringar.";
 "sett_ext_input" = "Utanáliggjandi inntakstæki";
-"sett_no_ext_input" = "Ekkert";
 "sett_generic_ext_input" = "Venjulegt lyklaborð";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Renna að";

@@ -51,7 +51,6 @@
 "map_widget_battery" = "میزان شارژ باطری";
 "map_widget_plain_time" = "زمان جاری";
 "map_widget_max_speed" = "سرعت مجاز";
-"max_speed_none" = "هیچ‌کدام";
 "access_arrival_time" = "زمان رسیدن";
 "map_widget_time" = "مدت سفر";
 "shared_string_collapse" = "مخفی شود";
@@ -323,7 +322,6 @@
 "gpx_route" = "مسیر";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
-"gpx_distance" = "Distance";
 "gpx_average_speed" = "میانگین سرعت";
 "gpx_start" = "شروع";
 "gpx_finish" = "پایان";
@@ -365,7 +363,7 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_none" = "هیچ‌کدام";
+"shared_string_none" = "هیچ‌کدام";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "نقشه‌های آنلاین";
 "map_settings_transp" = "شفافیت";
@@ -821,7 +819,6 @@
 "shared_string_reset" = "تنظیم مجدد";
 "shared_string_reload" = "بارکردن مجدد";
 "save_poi_too_many_uppercase" = "حروف بزرگ زیادی در نام وجود دارد. ادامه می‌دهید؟";
-"sett_no_ext_input" = "هیچ";
 "shared_string_read_more" = "بیشتر بخوانید";
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";

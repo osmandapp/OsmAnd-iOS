@@ -122,7 +122,7 @@
                 }
 
                 if (index == 0)
-                    value = OALocalizedString(@"sett_no_ext_input");
+                    value = OALocalizedString(@"shared_string_none");
                 else if (index != -1)
                     value = [self addSpaceToValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]];
                 else

@@ -2330,16 +2330,20 @@
     return [self findWpt:location currentTrackOnly:NO];
 }
 
-//todo gpx track menu
 - (BOOL) findTrack:(CLLocationCoordinate2D)location
 {
     NSArray *visibleTracks = [[OAAppSettings sharedManager].mapSettingVisibleGpx get];
     for (NSString *visibleTrack in visibleTracks)
     {
-        std::shared_ptr<OsmAnd::GpxDocument> gpxDoc = OsmAnd::GpxDocument::loadFrom(QString::fromNSString([_app.gpxPath stringByAppendingPathComponent:visibleTrack]));
+        std::shared_ptr<OsmAnd::GpxDocument> gpxDoc =
+                OsmAnd::GpxDocument::loadFrom(QString::fromNSString([_app.gpxPath stringByAppendingPathComponent:visibleTrack]));
         for (auto &loc : gpxDoc->locationMarks)
         {
-            if ([OAUtilities isCoordEqual:location.latitude srcLon:location.longitude destLat:loc->position.latitude destLon:loc->position.longitude upToDigits:3])
+            if ([OAUtilities isCoordEqual:location.latitude
+                                   srcLon:location.longitude
+                                  destLat:loc->position.latitude
+                                  destLon:loc->position.longitude
+                               upToDigits:3])
             {
                 self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:visibleTrack];
                 return YES;
@@ -2351,7 +2355,11 @@
             {
                 for (auto &point : segment->points)
                 {
-                    if ([OAUtilities isCoordEqual:location.latitude srcLon:location.longitude destLat:point->position.latitude destLon:point->position.longitude upToDigits:2])
+                    if ([OAUtilities isCoordEqual:location.latitude
+                                           srcLon:location.longitude
+                                          destLat:point->position.latitude
+                                          destLon:point->position.longitude
+                                       upToDigits:2])
                     {
                         self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:visibleTrack];
                         return YES;

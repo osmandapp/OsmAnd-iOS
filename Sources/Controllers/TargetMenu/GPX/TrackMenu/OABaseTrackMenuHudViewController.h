@@ -7,7 +7,9 @@
 //
 
 #import "OABaseScrollableHudViewController.h"
-#import "OATrackMenuHeaderView.h"
+#import "OsmAndApp.h"
+#import "OASavingTrackHelper.h"
+#import "OATableData.h"
 
 typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 {
@@ -15,26 +17,31 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
     EOATrackAppearanceHudMode,
 };
 
-@class OAGPX;
+@class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController;
 
 @interface OABaseTrackMenuHudViewController : OABaseScrollableHudViewController
 
-@property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (nonatomic, readonly) OAGPX *gpx;
+@property (nonatomic, readonly) OAGPXDocument *doc;
+@property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
+@property (nonatomic, readonly) BOOL isCurrentTrack;
+@property (nonatomic, readonly) BOOL isShown;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
+@property (nonatomic, readonly) OsmAndAppInstance app;
+@property (nonatomic, readonly) OAAppSettings *settings;
+@property (nonatomic, readonly) OASavingTrackHelper *savingHelper;
+
+@property (nonatomic, readonly) OAMapPanelViewController *mapPanelViewController;
+@property (nonatomic, readonly) OAMapViewController *mapViewController;
+@property (nonatomic, readonly) NSArray<NSDictionary *> *tableData;
+@property (nonatomic, readonly) OATableData *menuTableData;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 
-- (void)commonInit;
-- (void)dismiss:(void (^)(void))onComplete;
-- (void)setupView;
-- (void)setupHeaderView;
-- (void)generateData;
+- (void)updateGpxData;
 - (void)generateData:(NSInteger)section;
 - (void)generateData:(NSInteger)section row:(NSInteger)row;
-- (NSArray<NSDictionary *> *)getCellsDataForSection:(NSInteger)section;
-- (NSDictionary *)getCellDataForRow:(NSInteger)row section:(NSInteger)section;
+- (OATableCellData *)getCellData:(NSIndexPath *)indexPath;
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath;
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem

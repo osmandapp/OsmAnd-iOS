@@ -12,7 +12,6 @@
 #import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OASavingTrackHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
 
@@ -21,122 +20,130 @@
 
 @interface OABaseTrackMenuHudViewController()
 
-@property (nonatomic) OAMapPanelViewController *mapPanelViewController;
-@property (nonatomic) OAMapViewController *mapViewController;
+@property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 
-@property (nonatomic) OsmAndAppInstance app;
-@property (nonatomic) OAAppSettings *settings;
-@property (nonatomic) OASavingTrackHelper *savingHelper;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 
 @property (nonatomic) OAGPX *gpx;
-@property (nonatomic) OAGPXDocument *doc;
-@property (nonatomic) OAGPXTrackAnalysis *analysis;
-@property (nonatomic) BOOL isCurrentTrack;
 @property (nonatomic) BOOL isShown;
-
-@property (nonatomic) CGFloat cachedYViewPort;
-@property (nonatomic) NSArray<NSDictionary *> *data;
+@property (nonatomic) NSArray<NSDictionary *> *tableData;
+@property (nonatomic) OATableData *menuTableData;
 
 @end
 
 @implementation OABaseTrackMenuHudViewController
 {
-
+    CGFloat _cachedYViewPort;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
-    self = [super initWithNibName:@"OATrackMenuHudViewController" bundle:nil];
+    self = [self initWithNibName:[self getNibName] bundle:nil];
     if (self)
     {
-        self.gpx = gpx;
+        _gpx = gpx;
+
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
+        _savingHelper = [OASavingTrackHelper sharedInstance];
+        _mapPanelViewController = [OARootViewController instance].mapPanel;
+        _mapViewController = _mapPanelViewController.mapViewController;
+        [self updateGpxData];
         [self commonInit];
     }
     return self;
 }
 
+- (NSString *)getNibName
+{
+    return nil; //override
+}
+
+- (void)updateGpxData
+{
+    _isCurrentTrack = !_gpx || _gpx.gpxFilePath.length == 0 || _gpx.gpxFileName.length == 0;
+    if (_isCurrentTrack)
+    {
+        if (!_gpx)
+        _gpx = [_savingHelper getCurrentGPX];
+
+        _gpx.gpxTitle = OALocalizedString(@"track_recording_name");
+    }
+    _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
+            : [[OAGPXDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
+
+    _analysis = [_doc getAnalysis:_isCurrentTrack ? 0
+            : (long) [[OAUtilities getFileLastModificationDate:_gpx.gpxFilePath] timeIntervalSince1970]];
+
+    _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+}
+
 - (void)commonInit
 {
-    self.app = [OsmAndApp instance];
-    self.settings = [OAAppSettings sharedManager];
-    self.savingHelper = [OASavingTrackHelper sharedInstance];
-    self.mapPanelViewController = [OARootViewController instance].mapPanel;
-    self.mapViewController = self.mapPanelViewController.mapViewController;
-
-    self.isCurrentTrack = !self.gpx || self.gpx.gpxFilePath.length == 0 || self.gpx.gpxFileName.length == 0;
-    if (self.isCurrentTrack)
-    {
-        if (!self.gpx)
-            self.gpx = [self.savingHelper getCurrentGPX];
-
-        self.gpx.gpxTitle = OALocalizedString(@"track_recording_name");
-    }
-    self.doc = self.isCurrentTrack ? (OAGPXDocument *) self.savingHelper.currentTrack
-            : [[OAGPXDocument alloc] initWithGpxFile:[self.app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
-
-    self.analysis = [self.doc getAnalysis:self.isCurrentTrack ? 0
-            : (long) [[OAUtilities getFileLastModificationDate:self.gpx.gpxFilePath] timeIntervalSince1970]];
-
-    self.isShown = [self.settings.mapSettingVisibleGpx.get containsObject:self.gpx.gpxFilePath];
+    //override
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self applyLocalization];
+
+    [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
+    self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
 
     [self setupView];
+
+    [self generateData];
+    [self setupHeaderView];
+
     if (![self isLandscape])
         [self goExpanded];
     else
         [self goFullScreen];
-
-    [self.mapPanelViewController displayGpxOnMap:self.gpx];
-    [self.mapPanelViewController setTopControlsVisible:NO
-                              customStatusBarStyle:[OAAppSettings sharedManager].nightMode
-                                      ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
-    self.cachedYViewPort = self.mapViewController.mapView.viewportYScale;
-    [self adjustMapViewPort];
 }
 
-- (void)firstShowing
+- (void)applyLocalization
+{
+    //override
+}
+
+- (void)willAppearShowing
 {
     [self show:YES
          state:[self isLandscape] ? EOADraggableMenuStateFullScreen : EOADraggableMenuStateExpanded
     onComplete:^{
-        [self.mapPanelViewController targetSetBottomControlsVisible:YES
+        [_mapPanelViewController displayGpxOnMap:_gpx];
+        [_mapPanelViewController setTopControlsVisible:NO
+                                  customStatusBarStyle:[OAAppSettings sharedManager].nightMode
+                                          ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+        _cachedYViewPort = _mapViewController.mapView.viewportYScale;
+        [self adjustMapViewPort];
+        [_mapPanelViewController targetSetBottomControlsVisible:YES
                                                      menuHeight:[self isLandscape] ? 0
                                                              : [self getViewHeight] - [OAUtilities getBottomMargin]
                                                        animated:YES];
         [self changeMapRulerPosition];
-        [self.mapPanelViewController.hudViewController updateMapRulerData];
+        [_mapPanelViewController.hudViewController updateMapRulerData];
     }];
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
-        [self.mapPanelViewController.hudViewController resetToDefaultRulerLayout];
+        [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
         [self restoreMapViewPort];
-        [self.mapPanelViewController hideScrollableHudViewController];
-        [self.mapPanelViewController targetSetBottomControlsVisible:YES menuHeight:0 animated:YES];
+        [_mapPanelViewController hideScrollableHudViewController];
+        [_mapPanelViewController targetSetBottomControlsVisible:YES menuHeight:0 animated:YES];
         if (onComplete)
             onComplete();
     }];
 }
 
-- (void)dismiss:(void (^)(void))onComplete
-{
-    [self hide:YES duration:.2 onComplete:onComplete];
-}
-
 - (void)setupView
 {
-    [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
-    self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
-    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
-
-    [self generateData];
-    [self setupHeaderView];
+    //override
 }
 
 - (void)setupHeaderView
@@ -154,14 +161,14 @@
     NSArray *newCellsData = [self getCellsDataForSection:section];
     if (newCellsData)
     {
-        NSDictionary *sectionData = ((NSMutableArray *) self.data)[section];
+        NSDictionary *sectionData = ((NSMutableArray *) _tableData)[section];
         if (sectionData)
         {
             NSMutableDictionary *newSectionData = [sectionData mutableCopy];
             newSectionData[@"cells"] = newCellsData;
-            NSMutableArray *newData = [self.data mutableCopy];
+            NSMutableArray *newData = [_tableData mutableCopy];
             newData[section] = newSectionData;
-            self.data = newData;
+            _tableData = newData;
 
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section]
@@ -176,16 +183,16 @@
     NSDictionary *newCellData = [self getCellDataForRow:row section:section];
     if (newCellData)
     {
-        NSDictionary *sectionData = ((NSMutableArray *) self.data)[section];
+        NSDictionary *sectionData = ((NSMutableArray *) _tableData)[section];
         if (sectionData)
         {
             NSMutableDictionary *newSectionData = [sectionData mutableCopy];
             NSMutableArray *newRowsData = [newSectionData[@"cells"] mutableCopy];
             newRowsData[row] = newCellData;
             newSectionData[@"cells"] = newRowsData;
-            NSMutableArray *newData = [self.data mutableCopy];
+            NSMutableArray *newData = [_tableData mutableCopy];
             newData[section] = newSectionData;
-            self.data = newData;
+            _tableData = newData;
 
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:section]]
@@ -228,30 +235,35 @@
 
 - (void)adjustMapViewPort
 {
-    self.mapViewController.mapView.viewportXScale = [self isLandscape] ? VIEWPORT_SHIFTED_SCALE : VIEWPORT_NON_SHIFTED_SCALE;
-    self.mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
+    _mapViewController.mapView.viewportXScale = [self isLandscape] ? VIEWPORT_SHIFTED_SCALE : VIEWPORT_NON_SHIFTED_SCALE;
+    _mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
 }
 
 - (void)restoreMapViewPort
 {
-    OAMapRendererView *mapView = self.mapViewController.mapView;
+    OAMapRendererView *mapView = _mapViewController.mapView;
     if (mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-    if (mapView.viewportYScale != self.cachedYViewPort)
-        mapView.viewportYScale = self.cachedYViewPort;
+    if (mapView.viewportYScale != _cachedYViewPort)
+        mapView.viewportYScale = _cachedYViewPort;
 }
 
 - (void)changeMapRulerPosition
 {
     CGFloat bottomMargin = [self isLandscape] ? 0 : (-[self getViewHeight] + [OAUtilities getBottomMargin] - 20.);
-    [self.mapPanelViewController targetSetMapRulerPosition:bottomMargin
+    [_mapPanelViewController targetSetMapRulerPosition:bottomMargin
                                                   left:([self isLandscape] ? self.tableView.frame.size.width
                                                           : [OAUtilities getLeftMargin] + 20.)];
 }
 
+- (OATableCellData *)getCellData:(NSIndexPath *)indexPath
+{
+    return _menuTableData.sections[indexPath.section].cells[indexPath.row];
+}
+
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    return self.data[indexPath.section][@"cells"][indexPath.row];
+    return _tableData[indexPath.section][@"cells"][indexPath.row];
 }
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
@@ -283,14 +295,14 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self dismiss:nil];
+    [self hide:YES duration:.2 onComplete:nil];
 }
 
 #pragma mark - OADraggableViewActions
 
 - (void)onViewHeightChanged:(CGFloat)height
 {
-    [self.mapPanelViewController targetSetBottomControlsVisible:YES
+    [_mapPanelViewController targetSetBottomControlsVisible:YES
                                                  menuHeight:[self isLandscape] ? 0
                                                          : height - [OAUtilities getBottomMargin]
                                                    animated:YES];

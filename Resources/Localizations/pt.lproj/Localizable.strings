@@ -75,7 +75,6 @@
 "gpx_stat" = "Estatísticas";
 "gpx_route_time" = "Tempo de percurso";
 "gpx_uphldownhl" = "Subidas/descidas";
-"gpx_distance" = "Distância";
 "gpx_average_speed" = "Velocidade média";
 "gpx_start" = "Iniciar";
 "gpx_finish" = "Terminar";
@@ -113,7 +112,7 @@
 "map_settings_overunder" = "Camada superior / inferior";
 "map_settings_over" = "Camada superior";
 "map_settings_under" = "Camada inferior";
-"map_settings_none" = "Nenhum";
+"shared_string_none" = "Nenhum";
 "map_settings_offline" = "Estilos de mapas offline";
 "map_settings_online" = "Mapas online";
 "map_settings_transp" = "Transparência";
@@ -455,7 +454,6 @@
 "map_widget_altitude" = "Altitude";
 "map_widget_plain_time" = "Hora atual";
 "map_widget_max_speed" = "Limite de velocidade";
-"max_speed_none" = "nenhuma";
 "access_arrival_time" = "Hora de chegada";
 "map_widget_time" = "Tempo para chegar";
 "map_widget_ruler_control" = "Régua radial";
@@ -1047,7 +1045,6 @@
 "navigate_point_format_D" = "GGG.GG";
 "navigate_point_format_DM" = "GGG MM.MM";
 "navigate_point_format_DMS" = "GGG MM SS.SS";
-"sett_no_ext_input" = "Nenhum";
 "sett_generic_ext_input" = "Teclado genérico";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "reddit" = "Reddit";

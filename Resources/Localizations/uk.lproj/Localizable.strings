@@ -63,7 +63,6 @@
 "gpx_overwrite" = "Перезаписати";
 "gpx_stat" = "Статистика";
 "gpx_route" = "Маршрут";
-"gpx_distance" = "Відстань";
 "gpx_average_speed" = "Середня швидкість";
 "gpx_start" = "Почати";
 "gpx_finish" = "Фініш";
@@ -195,7 +194,7 @@
 "map_settings_overunder" = "Накладка та підкладка";
 "map_settings_over" = "Накладка";
 "map_settings_under" = "Підкладка";
-"map_settings_none" = "Нема";
+"shared_string_none" = "Нема";
 "map_settings_offline" = "Стилі оффлайн мап";
 "map_settings_online" = "Мережеві мапи";
 "map_settings_avail_lay" = "Доступні шари";
@@ -682,7 +681,6 @@
 "map_widget_battery" = "Рівень заряду батареї";
 "map_widget_plain_time" = "Поточний час";
 "map_widget_max_speed" = "Обмеження швидкості";
-"max_speed_none" = "немає";
 "access_arrival_time" = "Час прибуття";
 "map_widget_time" = "Час в дорозі";
 "monitoring_control_start" = "REC";
@@ -961,7 +959,6 @@
 "navigate_point_format_DM" = "ГГГ ММ.ММ";
 "navigate_point_format_DMS" = "ГГГ ММ СС.СС";
 "poi_opening_hours" = "Робочі години";
-"sett_no_ext_input" = "Немає";
 "sett_generic_ext_input" = "Типова клавіатура";
 "sett_wunderlinq_ext_input" = "WundеrLINQ";
 "upload_to_osm" = "Надсилання змін до OSM";

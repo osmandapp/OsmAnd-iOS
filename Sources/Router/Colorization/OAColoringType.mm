@@ -160,21 +160,6 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return self == self.class.SPEED || self == self.class.ALTITUDE || self == self.class.SLOPE;
 }
 
-- (BOOL) isSlope
-{
-    return self == self.class.SLOPE;
-}
-
-- (BOOL) isSpeed
-{
-    return self == self.class.SPEED;
-}
-
-- (BOOL) isAltitude
-{
-    return self == self.class.ALTITUDE;
-}
-
 - (BOOL) isRouteInfoAttribute
 {
     return self == self.class.ATTRIBUTE;

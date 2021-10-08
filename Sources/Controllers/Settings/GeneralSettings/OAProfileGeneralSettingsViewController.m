@@ -185,7 +185,7 @@
     else if ([_settings.settingExternalInputDevice get:self.appMode] == WUNDERLINQ_EXTERNAL_DEVICE)
         externalInputDeviceValue = OALocalizedString(@"sett_wunderlinq_ext_input");
     else
-        externalInputDeviceValue = OALocalizedString(@"sett_no_ext_input");
+        externalInputDeviceValue = OALocalizedString(@"shared_string_none");
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *appearanceArr = [NSMutableArray array];

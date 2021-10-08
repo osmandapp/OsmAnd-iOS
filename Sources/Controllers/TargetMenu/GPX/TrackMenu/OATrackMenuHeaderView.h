@@ -47,8 +47,13 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleAndDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleNoDescriptionConstraint;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
+
+- (void)setDirection:(NSString *)direction;
 - (void)setDescription:(NSString *)description;
 - (void)setCollection:(NSArray *)data;
 - (void)makeOnlyHeader:(BOOL)hasDescription;
+- (void)showLocation:(BOOL)show;
 
 @end

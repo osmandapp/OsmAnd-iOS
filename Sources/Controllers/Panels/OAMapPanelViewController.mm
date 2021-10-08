@@ -2778,18 +2778,15 @@ typedef enum
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
     _targetMenuView.activeTargetType = _activeTargetType;
+    _targetMenuView.trackMenuDelegate = trackMenuDelegate;
 
     [_targetMenuView setTargetPoint:targetPoint];
     [self applyTargetPoint:targetPoint];
 
     [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
-        if (trackMenuDelegate)
-        {
-            OARouteDetailsGraphViewController *graphController = (OARouteDetailsGraphViewController *) self.targetMenuView.customController;
-            graphController.trackMenuDelegate = trackMenuDelegate;
-            [graphController onNewModeSelected:modeType];
-        }
+        if ([self.targetMenuView.customController isKindOfClass:OARouteDetailsGraphViewController.class])
+            [((OARouteDetailsGraphViewController *) self.targetMenuView.customController) onNewModeSelected:modeType];
 
         _activeTargetActive = YES;
     }];

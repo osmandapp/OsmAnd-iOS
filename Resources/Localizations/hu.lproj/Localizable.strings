@@ -67,7 +67,6 @@
 "gpx_stat" = "Statisztikák";
 "gpx_route_time" = "Menetidő";
 "gpx_uphldownhl" = "Hegynek fel / hegynek le";
-"gpx_distance" = "Távolság";
 "gpx_average_speed" = "Átlagsebesség";
 "gpx_start" = "Indítás";
 "gpx_finish" = "Befejezés";
@@ -105,7 +104,7 @@
 "map_settings_overunder" = "Rátét / alátét";
 "map_settings_over" = "Rátét";
 "map_settings_under" = "Alátét";
-"map_settings_none" = "Nincs";
+"shared_string_none" = "Nincs";
 "map_settings_offline" = "Kapcsolat nélküli térképek stílusai";
 "map_settings_online" = "Online térképek";
 "map_settings_transp" = "Áttetszőség";
@@ -682,7 +681,6 @@
 "shared_string_password" = "Jelszó";
 "shared_string_distance" = "Távolság";
 "shared_string_milliradians" = "Milliradián";
-"sett_no_ext_input" = "Nincs";
 "sett_generic_ext_input" = "Általános billentyűzet";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "reddit" = "Reddit";
@@ -719,7 +717,6 @@
 "voice_pref_title" = "Hang";
 "choose_audio_stream" = "Hangnavigáció kimenete";
 "layer_map_appearance" = "Képernyő beállítása";
-"max_speed_none" = "nincs";
 "access_arrival_time" = "Érkezési idő";
 "map_widget_time" = "Hátralévő idő";
 "map_widget_altitude" = "Magasság";

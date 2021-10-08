@@ -10,9 +10,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="iN0-l3-epB" customClass="OATrackMenuHeaderView">
+        <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iN0-l3-epB" customClass="OATrackMenuHeaderView">
             <rect key="frame" x="0.0" y="0.0" width="414" height="238"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0oj-SL-cMW" userLabel="Title Container">
                     <rect key="frame" x="20" y="0.0" width="374" height="44"/>
@@ -167,6 +166,7 @@
                         <constraint firstItem="Iio-8u-at5" firstAttribute="leading" secondItem="VTD-C4-FFB" secondAttribute="leading" id="DZ9-XE-uD7"/>
                         <constraint firstItem="jqG-9D-3Mp" firstAttribute="leading" secondItem="Iio-8u-at5" secondAttribute="trailing" id="JDr-CT-Yca"/>
                         <constraint firstAttribute="bottom" secondItem="jqG-9D-3Mp" secondAttribute="bottom" constant="2" id="QwM-Ry-WRD"/>
+                        <constraint firstItem="WEo-uC-2EY" firstAttribute="leading" secondItem="VTD-C4-FFB" secondAttribute="leading" priority="749" id="T8R-rV-fJU"/>
                         <constraint firstItem="WEo-uC-2EY" firstAttribute="leading" secondItem="jqG-9D-3Mp" secondAttribute="trailing" id="aLt-O4-RaB"/>
                         <constraint firstItem="Iio-8u-at5" firstAttribute="top" secondItem="VTD-C4-FFB" secondAttribute="top" constant="2" id="bQ2-nX-3xN"/>
                         <constraint firstItem="WEo-uC-2EY" firstAttribute="top" secondItem="VTD-C4-FFB" secondAttribute="top" constant="2" id="dVK-Nx-yDr"/>
@@ -308,7 +308,9 @@
                 <outlet property="onlyTitleAndDescriptionConstraint" destination="pao-Pt-7rc" id="b0a-as-BQ6"/>
                 <outlet property="onlyTitleNoDescriptionConstraint" destination="oac-Lt-1sc" id="ddX-lF-XK8"/>
                 <outlet property="regionContainerView" destination="WEo-uC-2EY" id="zrC-rh-ELX"/>
+                <outlet property="regionDirectionConstraint" destination="aLt-O4-RaB" id="bze-pL-bUl"/>
                 <outlet property="regionIconView" destination="XVR-ZX-2dk" id="ZiF-bq-zPy"/>
+                <outlet property="regionNoDirectionConstraint" destination="T8R-rV-fJU" id="HQu-iG-pqf"/>
                 <outlet property="regionTextView" destination="wVj-5r-123" id="R6P-Aa-cbU"/>
                 <outlet property="showHideButton" destination="3Ev-Ap-uIN" id="ncK-Wh-dip"/>
                 <outlet property="titleBottomDescriptionConstraint" destination="QmN-gL-7dO" id="MXe-qU-ymK"/>

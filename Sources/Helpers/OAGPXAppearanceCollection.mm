@@ -12,7 +12,7 @@
 #import "OAGPXDatabase.h"
 #import "OAMapStyleSettings.h"
 
-@implementation OAGPXTrackAppearance : NSObject
+@implementation OAGPXTrackAppearance
 
 @end
 

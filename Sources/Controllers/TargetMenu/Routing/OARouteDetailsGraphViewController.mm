@@ -364,10 +364,10 @@
 
 - (void)cancelPressed
 {
-    if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu)])
+    if (self.trackMenuDelegate && [self.trackMenuDelegate respondsToSelector:@selector(backToTrackMenu:)])
     {
         [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-            [self.trackMenuDelegate backToTrackMenu];
+            [self.trackMenuDelegate backToTrackMenu:nil];
         }];
     }	
     else

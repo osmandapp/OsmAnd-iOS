@@ -72,7 +72,7 @@
     _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
     if ([arr[0] isEqualToString:@"-"])
-        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
+        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(@"shared_string_none")];
     _measurementRangeStringArr = [NSArray arrayWithArray:arr];
     _selectedParameter = _vehicleParameter[@"selectedItem"];
     NSString *valueString = _vehicleParameter[@"value"];
@@ -167,7 +167,7 @@
     [parametersArr addObject:@{
         @"type" : [OAInputCellWithTitle getCellIdentifier],
         @"title" : [self getMeasurementUnit:parameter],
-        @"value" : [_measurementValue isEqualToString:OALocalizedString(@"sett_no_ext_input")] ? @"0" : _measurementValue,
+        @"value" : [_measurementValue isEqualToString:OALocalizedString(@"shared_string_none")] ? @"0" : _measurementValue,
     }];
     [parametersArr addObject:@{
         @"type" : [OAHorizontalCollectionViewCell getCellIdentifier],

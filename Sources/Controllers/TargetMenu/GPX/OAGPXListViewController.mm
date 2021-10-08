@@ -390,7 +390,7 @@ static UIViewController *parentController;
         NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:name];
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
-    [[OAGPXDatabase sharedDb] save:item];
+    [[OAGPXDatabase sharedDb] save];
     if (![_importUrl.path hasPrefix:_app.gpxPath])
         [fileManager removeItemAtPath:_importUrl.path error:nil];
     

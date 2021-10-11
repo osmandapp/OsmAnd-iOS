@@ -35,9 +35,8 @@
 #define applyButtonTag 600
 
 static const NSInteger visibilitySection = 0;
-static const NSInteger nameFilterSection = 1;
-static const NSInteger dateFilterSection = 2;
-static const NSInteger panoImageFilterSection = 3;
+static const NSInteger dateFilterSection = 1;
+static const NSInteger panoImageFilterSection = 2;
 
 @interface OAMapSettingsMapillaryScreen () <OAMapillaryScreenDelegate>
 
@@ -144,16 +143,6 @@ static const NSInteger panoImageFilterSection = 3;
                          @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
     
-    // Users filter
-    [dataArr addObject:@[
-                         @{ @"type" : [OADividerCell getCellIdentifier]},
-                         @{
-                             @"type" : [OAIconTitleValueCell getCellIdentifier],
-                             @"img" : @"ic_custom_user.png",
-                             @"key" : @"users_filter",
-                             @"title" : OALocalizedString(@"mapil_usernames")
-                             },
-                         @{ @"type" : [OADividerCell getCellIdentifier]}]];
     // Date filter
     [dataArr addObject:@[
                          @{ @"type" : [OADividerCell getCellIdentifier]},
@@ -541,7 +530,7 @@ static const NSInteger panoImageFilterSection = 3;
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case nameFilterSection:
+        case dateFilterSection:
             return 30.0;
         default:
             return 0.01;
@@ -557,8 +546,6 @@ static const NSInteger panoImageFilterSection = 3;
     NSString *text = @"";
     if (section == visibilitySection)
         text = OALocalizedString(@"mapil_reload_cache");
-    else if (section == nameFilterSection)
-        text = OALocalizedString(@"mapil_filter_user_descr");
     else
         text = OALocalizedString(@"mapil_filter_date");
     return text;
@@ -582,7 +569,7 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    if (section == nameFilterSection)
+    if (section == dateFilterSection)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
         header.textLabel.textColor = UIColorFromRGB(color_text_footer);
@@ -605,7 +592,7 @@ static const NSInteger panoImageFilterSection = 3;
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case nameFilterSection:
+        case dateFilterSection:
             return OALocalizedString(@"shared_string_filter");
         default:
             return nil;

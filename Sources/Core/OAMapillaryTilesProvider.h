@@ -126,6 +126,9 @@ public:
     virtual OsmAnd::ZoomLevel getMinZoom() const;
     virtual OsmAnd::ZoomLevel getMaxZoom() const;
     
+    virtual OsmAnd::ZoomLevel getMinVisibleZoom() const override;
+    virtual OsmAnd::ZoomLevel getMaxVisibleZoom() const override;
+    
     void setLocalCachePath(const QString& localCachePath);
     
     OsmAnd::ZoomLevel getRasterTileZoom() const;

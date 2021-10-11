@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAColors.h"
 #import "OAWebClient.h"
+#import "OAMapillaryImage.h"
 
 #include <OsmAndCore/Map/MapDataProviderHelpers.h>
 #include <OsmAndCore/Data/Amenity.h>
@@ -31,11 +32,12 @@
 
 #define EXTENT 4096.0
 #define LINE_WIDTH 3.0f
+#define MAPILLARY_ACCESS_TOKEN "MLY|4444816185556934|29475a355616c979409a5adc377a00fa"
 
 OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFactor /* = 1.0f*/, const unsigned long long physicalMemory /*= 0*/)
 : _vectorName(QStringLiteral("mapillary_vector"))
 , _vectorPathSuffix(QString(_vectorName).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
-, _vectorUrlPattern(QStringLiteral("https://d25uarhxywzl1j.cloudfront.net/v0.1/${osm_zoom}/${osm_x}/${osm_y}.mvt"))
+, _vectorUrlPattern(QStringLiteral("https://tiles.mapillary.com/maps/vtp/mly1_public/2/${osm_zoom}/${osm_x}/${osm_y}/?access_token=") + MAPILLARY_ACCESS_TOKEN)
 , _rasterZoomLevel(OsmAnd::ZoomLevel16)
 , _vectorZoomLevel(OsmAnd::ZoomLevel14)
 , _rasterName(QStringLiteral("mapillary_raster"))
@@ -129,15 +131,14 @@ bool OAMapillaryTilesProvider::filtered(const QHash<uint8_t, QVariant> &userData
     OAAppSettings *settings = [OAAppSettings sharedManager];
     QString keys = QString::fromNSString(settings.mapillaryFilterUserKey.get);
     QStringList userKeys = keys.split(QStringLiteral("$$$"));
-    
-    double capturedAt = userData[OsmAnd::MvtReader::getUserDataId("captured_at")].toDouble() / 1000;
+    double capturedAt = userData[OsmAnd::MvtReader::getUserDataId(kCapturedAtKey)].toDouble() / 1000;
     double from = settings.mapillaryFilterStartDate.get;
     double to = settings.mapillaryFilterEndDate.get;
     bool pano = settings.mapillaryFilterPano.get;
     
     if (userKeys.count() > 0 && (keys.compare(QStringLiteral("")) != 0))
     {
-        const auto keyId = userData[OsmAnd::MvtReader::getUserDataId("userkey")].toInt();
+        const auto keyId = userData[OsmAnd::MvtReader::getUserDataId(kOrganizationIdKey)].toInt();
         const auto& key = geometryTile->getUserKey(keyId);
         if (!userKeys.contains(key))
             return true;
@@ -150,7 +151,7 @@ bool OAMapillaryTilesProvider::filtered(const QHash<uint8_t, QVariant> &userData
     else if ((from != 0 && capturedAt < from) || (to != 0 && capturedAt > to))
         return true;
     if (pano)
-        return userData[OsmAnd::MvtReader::getUserDataId("pano")].toInt() == 0;
+        return userData[OsmAnd::MvtReader::getUserDataId(kIsPanoramiceKey)].toInt() == 0;
 
     return false;
 }
@@ -352,7 +353,7 @@ QByteArray OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProv
     if (req.zoom > getMaxZoom() || req.zoom < getMinZoom())
         return nullptr;
     
-    return req.zoom > _rasterZoomLevel ? getVectorTileImage(req) : getRasterTileImage(req);
+    return getVectorTileImage(req);
 }
 
 QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledDataProvider::Request& req)
@@ -750,6 +751,16 @@ OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMinZoom() const
 }
 
 OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMaxZoom() const
+{
+    return OsmAnd::ZoomLevel21;
+}
+
+OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMinVisibleZoom() const
+{
+    return OsmAnd::ZoomLevel13;
+}
+
+OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMaxVisibleZoom() const
 {
     return OsmAnd::ZoomLevel21;
 }

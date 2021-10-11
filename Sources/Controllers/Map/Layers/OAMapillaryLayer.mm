@@ -188,7 +188,7 @@
     if (_imageMarker && _imageHeadingIconKey)
     {
         _imageMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(image.latitude, image.longitude)));
-        _imageMarker->setOnMapSurfaceIconDirection(_imageHeadingIconKey, OsmAnd::Utilities::normalizedAngleDegrees(image.ca));
+        _imageMarker->setOnMapSurfaceIconDirection(_imageHeadingIconKey, OsmAnd::Utilities::normalizedAngleDegrees(image.compassAngle));
         _imageMarker->setIsHidden(false);
     }
 }

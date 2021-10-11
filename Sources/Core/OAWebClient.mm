@@ -61,8 +61,7 @@ QByteArray OAWebClient::downloadData(
     QByteArray res;
     if (url != nullptr && !url.isEmpty())
     {
-        NSURLRequest *request = [NSURLRequest requestWithURL:
-                                 [NSURL URLWithString:url.toNSString()] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[url.toNSString() stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
 
         unsigned int responseCode = 0;
         NSURLResponse __block *response = nil;

@@ -231,7 +231,7 @@
             OAWorldRegion *worldRegion = [self.app.worldRegion findAtLat:gpxLocation.latitude
                                                                      lon:gpxLocation.longitude];
             _headerView.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
-            _headerView.regionIconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
+            _headerView.regionIconView.tintColor = UIColorFromRGB(color_tint_gray);
             [_headerView.regionTextView setText:worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName];
             _headerView.regionTextView.textColor = UIColorFromRGB(color_text_footer);
         }

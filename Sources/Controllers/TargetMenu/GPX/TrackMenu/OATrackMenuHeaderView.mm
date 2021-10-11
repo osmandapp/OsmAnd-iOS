@@ -18,6 +18,9 @@
 #define kBlockStatistickDivider 13.
 
 @implementation OATrackMenuHeaderView
+{
+    NSArray *_collectionData;
+}
 
 - (instancetype)init
 {
@@ -76,10 +79,12 @@
     self.onlyTitleNoDescriptionConstraint.active = isOnlyTitle;
 
     self.titleBottomDescriptionConstraint.active = hasDescription;
-    self.titleBottomNoDescriptionConstraint.active = !hasDescription;
+    self.titleBottomNoDescriptionConstraint.active = !hasDescription && hasCollection;
 
     self.descriptionBottomCollectionConstraint.active = hasCollection;
     self.descriptionBottomNoCollectionConstraint.active = !hasCollection;
+
+    self.titleBottomNoDescriptionNoCollectionConstraint.active = !hasDescription && !hasCollection;
 
     self.regionDirectionConstraint.active = hasDirection;
     self.regionNoDirectionConstraint.active = !hasDirection;
@@ -103,10 +108,12 @@
         res = res || self.onlyTitleNoDescriptionConstraint.active != isOnlyTitle;
 
         res = res || self.titleBottomDescriptionConstraint.active != hasDescription;
-        res = res || self.titleBottomNoDescriptionConstraint.active != !hasDescription;
+        res = res || self.titleBottomNoDescriptionConstraint.active != !hasDescription && hasCollection;
 
         res = res || self.descriptionBottomCollectionConstraint.active != hasCollection;
         res = res || self.descriptionBottomNoCollectionConstraint.active != !hasCollection;
+
+        res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active != !hasDescription && !hasCollection;
 
         res = res || self.regionDirectionConstraint.active != hasDirection;
         res = res || self.regionNoDirectionConstraint.active != !hasDirection;
@@ -135,7 +142,7 @@
 {
     BOOL hasData = data && data.count > 0;
 
-    self.collectionData = data;
+    _collectionData = data;
     [self.collectionView reloadData];
     self.collectionView.hidden = !hasData;
 }
@@ -162,13 +169,13 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.collectionData.count;
+    return _collectionData.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                    cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = self.collectionData[indexPath.row];
+    NSDictionary *item = _collectionData[indexPath.row];
     OAGpxStatBlockCollectionViewCell *cell =
             [collectionView dequeueReusableCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier]
                     forIndexPath:indexPath];
@@ -202,7 +209,7 @@
                    layout:(UICollectionViewLayout *)collectionViewLayout
    sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = self.collectionData[indexPath.row];
+    NSDictionary *item = _collectionData[indexPath.row];
     BOOL isLast = indexPath.row == [self collectionView:collectionView numberOfItemsInSection:indexPath.section] - 1;
     return [self getSizeForItem:item[@"title"] value:item[@"value"] isLast:isLast];
 }

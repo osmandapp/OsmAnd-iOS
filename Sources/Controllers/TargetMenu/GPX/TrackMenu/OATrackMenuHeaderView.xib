@@ -274,6 +274,7 @@
                 <constraint firstItem="0oj-SL-cMW" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="UJl-JG-SjF"/>
                 <constraint firstItem="0oj-SL-cMW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="Ypd-uH-pLc"/>
                 <constraint firstAttribute="trailingMargin" secondItem="dzH-uG-dio" secondAttribute="trailing" id="bfj-3w-WBU"/>
+                <constraint firstItem="bg1-Wv-H5u" firstAttribute="top" secondItem="0oj-SL-cMW" secondAttribute="bottom" id="dkj-1H-O9y"/>
                 <constraint firstItem="VTD-C4-FFB" firstAttribute="top" secondItem="Uvg-4A-Ywj" secondAttribute="bottom" id="eGK-QY-S4g"/>
                 <constraint firstItem="dzH-uG-dio" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="ey6-l0-t8U"/>
                 <constraint firstItem="Uvg-4A-Ywj" firstAttribute="top" secondItem="0oj-SL-cMW" secondAttribute="bottom" priority="999" id="had-JX-7it"/>
@@ -281,6 +282,7 @@
                 <constraint firstItem="Uvg-4A-Ywj" firstAttribute="top" secondItem="bg1-Wv-H5u" secondAttribute="bottom" id="lmx-5w-UHo"/>
                 <constraint firstAttribute="bottom" secondItem="0oj-SL-cMW" secondAttribute="bottom" priority="999" id="oac-Lt-1sc"/>
                 <constraint firstAttribute="bottom" secondItem="bg1-Wv-H5u" secondAttribute="bottom" priority="999" id="pao-Pt-7rc"/>
+                <constraint firstItem="0oj-SL-cMW" firstAttribute="bottom" secondItem="VTD-C4-FFB" secondAttribute="top" priority="749" id="sks-0a-29l"/>
                 <constraint firstItem="bg1-Wv-H5u" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="vdh-Iy-Gu0"/>
                 <constraint firstAttribute="trailingMargin" secondItem="0oj-SL-cMW" secondAttribute="trailing" id="x7l-yi-5LV"/>
                 <constraint firstItem="VTD-C4-FFB" firstAttribute="top" secondItem="bg1-Wv-H5u" secondAttribute="bottom" priority="999" id="ydK-og-mpj"/>
@@ -315,6 +317,7 @@
                 <outlet property="showHideButton" destination="3Ev-Ap-uIN" id="ncK-Wh-dip"/>
                 <outlet property="titleBottomDescriptionConstraint" destination="QmN-gL-7dO" id="MXe-qU-ymK"/>
                 <outlet property="titleBottomNoDescriptionConstraint" destination="had-JX-7it" id="yq1-fp-Bnr"/>
+                <outlet property="titleBottomNoDescriptionNoCollectionConstraint" destination="sks-0a-29l" id="kuM-PL-kKm"/>
                 <outlet property="titleContainerView" destination="0oj-SL-cMW" id="So2-Ab-gUr"/>
                 <outlet property="titleIconView" destination="fzz-Q2-eTx" id="AvQ-dH-qSL"/>
                 <outlet property="titleView" destination="pVn-K9-1IG" id="7gv-xf-rBR"/>

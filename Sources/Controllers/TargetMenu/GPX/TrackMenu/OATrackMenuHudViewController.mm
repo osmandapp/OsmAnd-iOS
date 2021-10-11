@@ -288,19 +288,17 @@
 
     CGRect headerFrame = _headerView.frame;
 
+    if (_headerView.descriptionContainerView.hidden)
+        headerFrame.size.height -= _headerView.descriptionContainerView.frame.size.height;
+
     if (_headerView.locationContainerView.hidden)
         headerFrame.size.height -= _headerView.locationContainerView.frame.size.height;
 
     if (_headerView.collectionView.hidden)
-    {
-        if (_headerView.locationContainerView.hidden && _headerView.actionButtonsContainerView.hidden)
-            headerFrame.size.height = _headerView.collectionView.frame.origin.y;
-        else
-            headerFrame.size.height -= _headerView.collectionView.frame.size.height;
-    }
+        headerFrame.size.height -= _headerView.collectionView.frame.size.height;
 
-    if (_headerView.descriptionContainerView.hidden)
-        headerFrame.size.height -= _headerView.descriptionContainerView.frame.size.height;
+    if (_headerView.actionButtonsContainerView.hidden)
+        headerFrame.size.height -= _headerView.actionButtonsContainerView.frame.size.height;
 
     _headerView.frame = headerFrame;
 

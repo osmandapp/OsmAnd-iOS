@@ -143,21 +143,36 @@
 
 - (void)setupTabBar
 {
-    UIColor *unselectedColor = UIColorFromRGB(color_dialog_buttons_dark);
-    [self.tabBarView setItems:@[
-                    [[UITabBarItem alloc]
-                            initWithTitle:OALocalizedString(@"shared_string_overview")
-                                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overview"]
-                                                                    color:unselectedColor]
-                                      tag:EOATrackMenuHudOverviewTab],
-                    [[UITabBarItem alloc]
-                            initWithTitle:OALocalizedString(@"actions")
-                                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
-                                                                    color:unselectedColor]
-                                      tag:EOATrackMenuHudActionsTab]
-            ]
-                     animated:YES];
+    UIColor *unselectedColor = UIColorFromRGB(unselected_tab_icon);
+    UITabBarItem *overviewBarItem = [[UITabBarItem alloc]
+            initWithTitle:OALocalizedString(@"shared_string_overview")
+                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overview"]
+                                                    color:unselectedColor]
+                      tag:EOATrackMenuHudOverviewTab];
+    [overviewBarItem setTitleTextAttributes:@{
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer),
+            NSFontAttributeName : [UIFont systemFontOfSize:12]
+    } forState:UIControlStateNormal];
+    [overviewBarItem setTitleTextAttributes:@{
+            NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+            NSFontAttributeName : [UIFont systemFontOfSize:12]
+    } forState:UIControlStateSelected];
 
+    UITabBarItem *actionsBarItem = [[UITabBarItem alloc]
+            initWithTitle:OALocalizedString(@"actions")
+                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
+                                                    color:unselectedColor]
+                      tag:EOATrackMenuHudActionsTab];
+    [actionsBarItem setTitleTextAttributes:@{
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer),
+            NSFontAttributeName : [UIFont systemFontOfSize:12]
+    } forState:UIControlStateNormal];
+    [actionsBarItem setTitleTextAttributes:@{
+            NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+            NSFontAttributeName : [UIFont systemFontOfSize:12]
+    } forState:UIControlStateSelected];
+
+    [self.tabBarView setItems:@[overviewBarItem, actionsBarItem] animated:YES];
     self.tabBarView.selectedItem = self.tabBarView.items[_selectedTab];
     self.tabBarView.itemWidth = self.scrollableView.frame.size.width / self.tabBarView.items.count;
     self.tabBarView.delegate = self;

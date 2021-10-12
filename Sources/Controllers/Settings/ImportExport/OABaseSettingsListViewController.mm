@@ -423,7 +423,7 @@
                 OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
                 NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
                 NSInteger itemsTotal = [items getItemsForType:settingType].count;
-                NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"sett_no_ext_input") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"some_of"), selectedAmount, itemsTotal]);
+                NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"some_of"), selectedAmount, itemsTotal]);
                 
                 long size = [self calculateItemsSize:self.selectedItemsMap[settingType]];
                 if (size > 0)

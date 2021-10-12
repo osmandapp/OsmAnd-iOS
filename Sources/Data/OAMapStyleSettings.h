@@ -18,6 +18,9 @@ static NSString * const HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
 static NSString * const CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
 static NSString * const TRAVEL_ROUTES = @"travel_routes";
 
+static NSString * const CURRENT_TRACK_COLOR_ATTR = @"currentTrackColor";
+static NSString * const CURRENT_TRACK_WIDTH_ATTR = @"currentTrackWidth";
+
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
     OABoolean,

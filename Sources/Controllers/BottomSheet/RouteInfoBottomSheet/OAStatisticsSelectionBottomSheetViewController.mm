@@ -75,7 +75,7 @@
                      @"title" : OALocalizedString(@"stats_select_graph_data"),
                      @"description" : @""
                      }];
-    
+
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_widget_altitude"),
@@ -84,7 +84,7 @@
         @"round_bottom" : @(NO),
         @"round_top" : @(YES)
     }];
-    
+
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"gpx_slope"),
@@ -93,16 +93,16 @@
         @"round_bottom" : @(NO),
         @"round_top" : @(NO)
     }];
-    
+
     [arr addObject:@{
-        @"type" : [OATitleIconRoundCell getCellIdentifier],
-        @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")],
-        @"img" : @"ic_custom_altitude_and_slope",
-        @"mode" : @(EOARouteStatisticsModeBoth),
-        @"round_bottom" : @(YES),
-        @"round_top" : @(NO)
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
+            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")],
+            @"img" : @"ic_custom_altitude_and_slope",
+            @"mode" : @(EOARouteStatisticsModeBoth),
+            @"round_bottom" : @(YES),
+            @"round_top" : @(NO)
     }];
-    
+
     _data = [NSArray arrayWithArray:arr];
 }
 

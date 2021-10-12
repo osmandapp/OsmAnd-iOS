@@ -162,7 +162,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }
         
         if (gpx)
-            [mapPanel openTargetViewWithGPX:gpx pushed:NO];
+            [mapPanel openTargetViewWithGPX:gpx];
     }
     else if (_type == EOAWaypointFavorite)
     {

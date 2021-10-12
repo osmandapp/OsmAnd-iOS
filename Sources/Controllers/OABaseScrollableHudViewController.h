@@ -15,6 +15,12 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
     EOADraggableMenuStateFullScreen
 };
 
+typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
+{
+    EOAScrollableMenuHudBaseMode = 0,
+    EOAScrollableMenuHudExtraHeaderInLandscapeMode
+};
+
 @interface OABaseScrollableHudViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -25,6 +31,7 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 @property (nonatomic, readonly) CGFloat initialMenuHeight;
 @property (nonatomic, readonly) CGFloat expandedMenuHeight;
 
+@property (nonatomic, readonly) EOAScrollableMenuHudMode menuHudMode;
 @property (nonatomic, readonly) EOADraggableMenuState currentState;
 
 @property (nonatomic, readonly) BOOL supportsFullScreen;
@@ -50,5 +57,7 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 - (void) updateShowingState:(EOADraggableMenuState)state;
 
 - (void) updateViewAnimated;
+- (BOOL) isLandscape;
+- (BOOL) isLeftSidePresentation;
 
 @end

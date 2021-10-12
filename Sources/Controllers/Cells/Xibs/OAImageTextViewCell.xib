@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -25,7 +25,7 @@
                         </constraints>
                     </imageView>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="751" scrollEnabled="NO" editable="NO" text="Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="nJh-lZ-x1T">
-                        <rect key="frame" x="16" y="152" width="288" height="34"/>
+                        <rect key="frame" x="16" y="152" width="144" height="34"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="Bps-75-AWB"/>
@@ -35,20 +35,39 @@
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         <dataDetectorType key="dataDetectorTypes" link="YES"/>
                     </textView>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="751" scrollEnabled="NO" editable="NO" text="Text" textAlignment="right" translatesAutoresizingMaskIntoConstraints="NO" id="bG6-86-KD9">
+                        <rect key="frame" x="160" y="152" width="144" height="34"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="aE0-Ra-3ZT"/>
+                        </constraints>
+                        <color key="textColor" systemColor="labelColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                    </textView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="nJh-lZ-x1T" firstAttribute="top" secondItem="QZa-dq-tFg" secondAttribute="bottom" constant="16" id="2Pc-Yp-dZk"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="bG6-86-KD9" secondAttribute="trailing" id="3CM-MN-zEC"/>
+                    <constraint firstItem="bG6-86-KD9" firstAttribute="width" secondItem="nJh-lZ-x1T" secondAttribute="width" id="4SZ-rZ-SsL"/>
+                    <constraint firstItem="bG6-86-KD9" firstAttribute="leading" secondItem="nJh-lZ-x1T" secondAttribute="trailing" id="5TX-rZ-SsL"/>
                     <constraint firstAttribute="bottom" secondItem="nJh-lZ-x1T" secondAttribute="bottom" constant="16" id="AvV-Xk-6tN"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="nJh-lZ-x1T" secondAttribute="trailing" id="H2c-vi-GKE"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="nJh-lZ-x1T" secondAttribute="trailing" priority="999" id="H2c-vi-GKE"/>
                     <constraint firstItem="QZa-dq-tFg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="Vsl-4r-HUv"/>
+                    <constraint firstItem="bG6-86-KD9" firstAttribute="top" secondItem="QZa-dq-tFg" secondAttribute="bottom" constant="16" id="a4c-3A-vH7"/>
                     <constraint firstItem="nJh-lZ-x1T" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="erk-Y6-mQ3"/>
                     <constraint firstItem="QZa-dq-tFg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="gqU-z9-zHb"/>
+                    <constraint firstAttribute="bottom" secondItem="bG6-86-KD9" secondAttribute="bottom" constant="16" id="h3K-xt-8pa"/>
                     <constraint firstAttribute="trailing" secondItem="QZa-dq-tFg" secondAttribute="trailing" constant="16" id="pWi-SZ-eI5"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
+                <outlet property="descExtraTrailingConstraint" destination="5TX-rZ-SsL" id="RR3-Nf-f6D"/>
+                <outlet property="descNoExtraTrailingConstraint" destination="H2c-vi-GKE" id="SE9-BD-lhA"/>
                 <outlet property="descView" destination="nJh-lZ-x1T" id="vxS-5I-nsN"/>
+                <outlet property="extraDescView" destination="bG6-86-KD9" id="bOk-Nb-GzI"/>
                 <outlet property="iconView" destination="QZa-dq-tFg" id="v7N-C5-6I7"/>
                 <outlet property="iconViewHeight" destination="VOe-OX-Zmn" id="JLP-Wu-QmM"/>
             </connections>

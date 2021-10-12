@@ -221,10 +221,10 @@ public enum GPXDataSetAxisType: String {
             else if (chartData?.dataSetCount ?? 0 == 2) {
                 let dataSet1 = chartData?.dataSets[0] as! OrderedLineDataSet
                 let dataSet2 = chartData?.dataSets[1] as! OrderedLineDataSet
-                
+
                 let useFirst = dataSet1.visible
                 let useSecond = dataSet2.visible
-                
+
                 if (useFirst) {
                     let entry1 = dataSet1.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
                     
@@ -844,9 +844,9 @@ public enum GPXDataSetAxisType: String {
         }
         return values;
     }
-    
+
     private static func createGPXSpeedDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType,
-                                       useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
+                                              useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
         //    boolean light = settings.isLightContent();
         

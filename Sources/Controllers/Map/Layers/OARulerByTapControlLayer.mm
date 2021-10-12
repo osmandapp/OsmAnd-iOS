@@ -155,7 +155,7 @@
     points.push_back(from);
     points.push_back(to);
     
-    double strokeWidth = 20.;
+    double strokeWidth = 5.;
     std::vector<double> inlinePattern;
     inlinePattern.push_back(75);
     inlinePattern.push_back(45);
@@ -164,7 +164,7 @@
     inlineBuilder.setBaseOrder(self.mapViewController.mapLayers.myPositionLayer.baseOrder + lineId)
     .setIsHidden(false)
     .setLineId(lineId + 1)
-    .setLineWidth(strokeWidth)
+    .setLineWidth(strokeWidth * self.displayDensityFactor)
     .setLineDash(inlinePattern)
     .setPoints(points)
     .setFillColor(color);
@@ -375,8 +375,8 @@
     paragraphStyle.alignment = NSTextAlignmentCenter;
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
 
-    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0];
-    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:strokeColor strokeWidth:strokeWidth];
+    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter];
+    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:strokeColor strokeWidth:strokeWidth alignment:NSTextAlignmentCenter];
 
     CGSize titleSize = [string size];
     CGRect rect = CGRectMake(middlePoint.x - (titleSize.width / 2), middlePoint.y - (titleSize.height / 2), titleSize.width, titleSize.height);

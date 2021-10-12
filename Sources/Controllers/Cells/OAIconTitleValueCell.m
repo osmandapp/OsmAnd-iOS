@@ -7,12 +7,8 @@
 //
 
 #import "OAIconTitleValueCell.h"
-#import "OAUtilities.h"
 
 @implementation OAIconTitleValueCell
-{
-    BOOL _isImageShown;
-}
 
 - (void)awakeFromNib
 {
@@ -20,17 +16,49 @@
     if ([self.descriptionView isDirectionRTL])
     {
         self.descriptionView.textAlignment = NSTextAlignmentLeft;
-        [self.iconView setImage:self.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+        [self.rightIconView setImage:self.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
     }
-    
-    _isImageShown = YES;
 }
 
--(void)showImage:(BOOL)show
+- (void)updateConstraints
 {
-    self.leftImageView.hidden = !show;
-    self.imageTextLeadingMargin.active = show;
-    self.noImageTextLeadingMargin.active = !show;
+    BOOL hasLeftIcon = !self.leftIconView.hidden;
+    BOOL hasRightIcon = !self.rightIconView.hidden;
+
+    self.leftIconTextLeadingMargin.active = hasLeftIcon;
+    self.noLeftIconTextLeadingMargin.active = !hasLeftIcon;
+
+    self.rightIconDescLeadingMargin.active = hasRightIcon;
+    self.noRightIconDecsLeadingMargin.active = !hasRightIcon;
+
+    [super updateConstraints];
+}
+
+- (BOOL)needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasLeftIcon = !self.leftIconView.hidden;
+        BOOL hasRightIcon = !self.rightIconView.hidden;
+
+        res = res || self.leftIconTextLeadingMargin.active != hasLeftIcon;
+        res = res || self.noLeftIconTextLeadingMargin.active != !hasLeftIcon;
+
+        res = res || self.rightIconDescLeadingMargin.active != hasRightIcon;
+        res = res || self.noRightIconDecsLeadingMargin.active != !hasRightIcon;
+    }
+    return res;
+}
+
+-(void)showLeftIcon:(BOOL)show
+{
+    self.leftIconView.hidden = !show;
+}
+
+-(void)showRightIcon:(BOOL)show
+{
+    self.rightIconView.hidden = !show;
 }
 
 @end

@@ -78,7 +78,6 @@
 "gpx_route" = "Rota";
 "gpx_route_time" = "Rotası süresi";
 "gpx_uphldownhl" = "Yokuş / downhills";
-"gpx_distance" = "Mesafe";
 "gpx_average_speed" = "Ortalama hız";
 "gpx_start" = "Başlat";
 "gpx_finish" = "Bitir";
@@ -120,7 +119,7 @@
 "map_settings_overunder" = "Üst katman / Alt katman";
 "map_settings_over" = "Üst katman";
 "map_settings_under" = "Altına koymak";
-"map_settings_none" = "Yok";
+"shared_string_none" = "Yok";
 "map_settings_offline" = "Çevrim dışı haritalar için tarzlar";
 "map_settings_online" = "Çevrim içi haritalar";
 "map_settings_transp" = "Şeffaflık";
@@ -534,7 +533,6 @@
 "monitoring_control_start" = "REC";
 "map_widget_plain_time" = "Şimdiki zaman";
 "map_widget_max_speed" = "Hız sınırı";
-"max_speed_none" = "hiçbiri";
 "access_arrival_time" = "Varış zamanı";
 "shared_string_collapse" = "Daralt";
 "shared_string_topbar" = "Üst menü";
@@ -765,7 +763,6 @@
 "show_tunnels" = "Tüneller";
 "mapillary_image" = "Mapillary görüntüsü";
 "shared_string_reload" = "Tekrar yükle";
-"sett_no_ext_input" = "Yok";
 "sett_generic_ext_input" = "Genel Klavye";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "save_poi_too_many_uppercase" = "İsim çok fazla büyük harf içermektedir. Devam et\?";

@@ -275,7 +275,7 @@
         case EOAProfileGeneralSettingsExternalInputDevices:
             [dataArr addObject:@{
                 @"name" : @"sett_no_ext_input",
-                @"title" : OALocalizedString(@"sett_no_ext_input"),
+                @"title" : OALocalizedString(@"shared_string_none"),
                 @"selected" : @(externamlInputDevices == NO_EXTERNAL_DEVICE),
                 @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];

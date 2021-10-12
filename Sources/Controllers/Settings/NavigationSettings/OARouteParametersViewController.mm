@@ -345,16 +345,16 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.rightIconView.tintColor = UIColorFromRGB(color_icon_inactive);
         }
         if (cell)
         {
-            cell.leftImageView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftImageView.tintColor = UIColorFromRGB(_iconColor);
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = UIColorFromRGB(_iconColor);
             if ([item[@"key"] isEqualToString:@"recalculateRoute"])
             {
-                cell.leftImageView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(_iconColor);
+                cell.leftIconView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(_iconColor);
             }
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];

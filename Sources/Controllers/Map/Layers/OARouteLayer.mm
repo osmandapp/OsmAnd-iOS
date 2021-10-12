@@ -229,9 +229,9 @@
             BOOL isNight = [OAAppSettings sharedManager].nightMode;
             
             NSDictionary<NSString *, NSNumber *> *result = [self.mapViewController getLineRenderingAttributes:@"route"];
-            NSNumber *val = [result valueForKey:@"color"];
-            BOOL hasStyleColor = val && val.intValue != -1;
-            OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(val.intValue) : isNight ?
+            NSNumber *colorVal = [result valueForKey:@"color"];
+            BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
+            OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(colorVal.intValue) : isNight ?
             OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d) : OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1);
             
             OsmAnd::VectorLineBuilder builder;
@@ -239,7 +239,7 @@
             .setIsHidden(points.size() == 0)
             .setApproximationEnabled(false)
             .setLineId(1)
-            .setLineWidth(50)
+            .setLineWidth(16. * self.displayDensityFactor)
             .setPoints(points);
             
             UIColor *color = UIColorFromARGB(lineColor.argb);

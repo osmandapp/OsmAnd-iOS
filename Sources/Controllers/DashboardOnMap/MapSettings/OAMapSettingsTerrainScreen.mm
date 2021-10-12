@@ -644,13 +644,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAImageTextViewCell *)[nib objectAtIndex:0];
+            cell = (OAImageTextViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell showExtraDesc:NO];
         }
         if (cell)
         {
             cell.iconView.image = [UIImage imageNamed:item[@"img"]];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
+
             NSString *descr = item[@"descr"];
             if (descr && descr.length > 0)
             {

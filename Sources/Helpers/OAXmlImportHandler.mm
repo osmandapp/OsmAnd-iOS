@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, EOAXmlFileType) {
     {
         NSString *newPath = [path.stringByDeletingPathExtension stringByAppendingPathExtension:newExt];
         [fileManager moveItemAtPath:path toPath:newPath error:nil];
-        [OARootViewController.instance importAsGPX:[NSURL fileURLWithPath:newPath] openGpxView:YES];
+        [OARootViewController.instance importAsGPX:[NSURL fileURLWithPath:newPath] showAlerts:YES openGpxView:YES];
         return;
     }
     NSString *destPath = self.getDestinationFilePath;

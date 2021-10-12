@@ -16,9 +16,9 @@
 @interface OAGPXLayer : OABaseVectorLinesLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 @property (nonatomic) QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > gpxDocs;
-
 @property (nonatomic) std::shared_ptr<OsmAnd::VectorLinesCollection> linesCollection;
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs;
+- (CGFloat) getLineWidth:(NSString *)gpxWidth;
 
 @end

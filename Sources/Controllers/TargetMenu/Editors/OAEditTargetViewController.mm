@@ -719,8 +719,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
-        
-        [cell showImage:NO];
+
+        [cell showLeftIcon:NO];
         [cell.textView setText: item[@"label"]];
         [cell.descriptionView setText: item[@"description"]];
         cell.backgroundColor = UIColorFromRGB(0xffffff);

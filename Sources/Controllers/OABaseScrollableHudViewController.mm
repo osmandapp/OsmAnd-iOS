@@ -69,7 +69,8 @@
         [_scrollableView addGestureRecognizer:_panGesture];
     }
     _currentState = EOADraggableMenuStateInitial;
-    
+    _menuHudMode = EOAScrollableMenuHudBaseMode;
+
     _sliderView.layer.cornerRadius = 3.;
 }
 
@@ -230,7 +231,7 @@
 
 - (CGFloat)initialMenuHeight
 {
-    return 170.; // override
+    return _topHeaderContainerView.frame.origin.y + _topHeaderContainerView.frame.size.height + _toolBarView.frame.size.height; // override
 }
 
 - (CGFloat)expandedMenuHeight
@@ -306,13 +307,15 @@
         CGRect frame = _scrollableView.frame;
         if ([self isLeftSidePresentation])
         {
-            frame.origin.x = -_scrollableView.bounds.size.width;
-            frame.origin.y = self.additionalLandscapeOffset;
-            frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
             frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
-            _scrollableView.frame = frame;
-            
             frame.origin.x = 0.0;
+
+            if (self.menuHudMode == EOAScrollableMenuHudExtraHeaderInLandscapeMode)
+                frame.origin.y = DeviceScreenHeight - self.additionalLandscapeOffset;
+            else
+                frame.origin.y = 0.0;
+
+            _scrollableView.frame = frame;
         }
         else
         {
@@ -323,7 +326,7 @@
             
             frame.origin.y = DeviceScreenHeight - _scrollableView.bounds.size.height;
         }
-        
+
         [UIView animateWithDuration:0.3 animations:^{
             _scrollableView.frame = frame;
         } completion:^(BOOL finished) {
@@ -464,12 +467,12 @@
             _isDragging = NO;
             BOOL shouldRefresh = NO;
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if ((newY - initialPoint.y > 180 || fastDownSlide) && _currentState == EOADraggableMenuStateInitial)
+            if ((newY - initialPoint.y > self.toolBarView.frame.size.height || fastDownSlide) && _currentState == EOADraggableMenuStateInitial)
             {
                 [self hide:YES duration:0.2 onComplete:nil];
                 break;
             }
-            else if (newY > DeviceScreenHeight - 170.0 + _toolBarView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide)
+            else if (newY > DeviceScreenHeight - [self initialMenuHeight] + _toolBarView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide)
             {
                 shouldRefresh = YES;
                 _currentState = EOADraggableMenuStateInitial;

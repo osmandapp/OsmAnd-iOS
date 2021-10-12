@@ -2339,7 +2339,6 @@
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
         auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
-//        auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
         for (auto &loc : doc->locationMarks)
         {
             if ([OAUtilities isCoordEqual:location.latitude

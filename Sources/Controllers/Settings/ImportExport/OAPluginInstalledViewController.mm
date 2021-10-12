@@ -15,6 +15,9 @@
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAIconTextDescSwitchCell.h"
+#import "OADownloadMultipleResourceViewController.h"
+#import "OAPluginPopupViewController.h"
+#import "OARootViewController.h"
 
 #define kSidePadding 20.0
 #define kTopPadding 6
@@ -22,10 +25,11 @@
 #define kIconWidth 48
 
 #define kCellTypeMap @"MapCell"
+#define kCellTypeMultyMap @"MultyMapCell"
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAPluginInstalledViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAPluginInstalledViewController () <UITableViewDelegate, UITableViewDataSource, OADownloadMultipleResourceDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *disableButton;
 @property (weak, nonatomic) IBOutlet UIButton *enableButton;
@@ -47,6 +51,11 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<OAResourceItem *> *_suggestedMaps;
+    NSArray<OAMultipleResourceItem *> *_mapMultipleItems;
+    NSArray<OAResourceItem *> *_multipleDownloadingItems;
+    NSMutableArray<OAMultipleResourceItem *> *_collectedRegionMultipleMapItems;
+    NSMutableArray<OARepositoryResourceItem *> *_collectedRegionMaps;
+    NSString *_collectiongPreviousRegionId;
     NSArray<OAApplicationMode *> *_addedAppModes;
     
     OAIAPHelper *_iapHelper;
@@ -136,9 +145,18 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     {
         [suggestedMapsSection addObject: @{
             @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeSuggestedMaps],
-            @"type" : kCellTypeMap
+            @"type" : kCellTypeMap,
+            @"item" : item
         }];
     }
+    for (OAMultipleResourceItem* item in _mapMultipleItems)
+    {
+        [suggestedMapsSection addObject:@{
+            @"type" : kCellTypeMultyMap,
+            @"item" : item,
+        }];
+    }
+
     if (suggestedMapsSection.count > 0)
         [data addObject:suggestedMapsSection];
     
@@ -161,9 +179,85 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void) updateAvailableMaps
 {
-    _suggestedMaps = [_plugin getSuggestedMaps];
+    NSArray<OAResourceItem *> *allSuggestedMaps = [_plugin getSuggestedMaps];
+    NSMutableArray<OAResourceItem *> *regularMaps = [NSMutableArray new];
+    NSMutableArray<OAResourceItem *> *srtmMaps = [NSMutableArray new];
+    
+    for (OAResourceItem *map in allSuggestedMaps)
+    {
+        if (map.resourceType == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+            [srtmMaps addObject:map];
+        else
+            [regularMaps addObject:map];
+    }
+    
+    _suggestedMaps = [NSArray arrayWithArray:regularMaps];
+    
+    NSArray *sortedSrtmMaps = [srtmMaps sortedArrayUsingComparator:^NSComparisonResult(OARepositoryResourceItem* obj1, OARepositoryResourceItem* obj2) {
+        return [obj1.worldRegion.localizedName.lowercaseString compare:obj2.worldRegion.localizedName.lowercaseString];
+    }];
+    
+    _collectedRegionMultipleMapItems = [NSMutableArray new];
+    _collectedRegionMaps = [NSMutableArray new];
+    _collectiongPreviousRegionId = nil;
+    
+    for (OARepositoryResourceItem *map in sortedSrtmMaps)
+    {
+        if (!_collectiongPreviousRegionId)
+        {
+            [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
+        }
+        else if (!_collectiongPreviousRegionId || ![map.worldRegion.regionId isEqualToString:_collectiongPreviousRegionId])
+        {
+            [self saveCollectedItemIfNeeded];
+            [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
+        }
+        else
+        {
+            [self appendToCollectingItem:map];
+        }
+    }
+    [self saveCollectedItemIfNeeded];
+    
+    _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
+    [self refreshDownloadTasks];
     [self generateData];
     [self.tableView reloadData];
+}
+
+- (void) startCollectingNewItem:(NSMutableArray<OARepositoryResourceItem *> *)collectedRegionMaps map:(OARepositoryResourceItem *)map collectiongPreviousRegionId:(NSString *)collectiongPreviousRegionId
+{
+    _collectiongPreviousRegionId = map.worldRegion.regionId;
+    _collectedRegionMaps = [NSMutableArray arrayWithObject:map];
+}
+
+- (void) appendToCollectingItem:(OARepositoryResourceItem *)map
+{
+    [_collectedRegionMaps addObject:map];
+}
+
+- (void) saveCollectedItemIfNeeded
+{
+    if (_collectedRegionMaps.count > 1)
+    {
+        OAMultipleResourceItem *regionMultipleItem = [[OAMultipleResourceItem alloc] initWithType:OsmAndResourceType::SrtmMapRegion items:[NSArray arrayWithArray:_collectedRegionMaps]];
+        regionMultipleItem.worldRegion = _collectedRegionMaps[0].worldRegion;
+        [_collectedRegionMultipleMapItems addObject:regionMultipleItem];
+    }
+}
+
+- (void) refreshDownloadTasks
+{
+    for (OAMultipleResourceItem *multipleItem in _mapMultipleItems)
+    {
+        for (OARepositoryResourceItem *resourceItem in multipleItem.items)
+            resourceItem.downloadTask = [self getDownloadTaskFor:resourceItem.resource->id.toNSString()];
+    }
+}
+
+- (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId
+{
+    return [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -222,11 +316,11 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeMap])
+    else if ([item[@"type"] isEqualToString:kCellTypeMap] || [item[@"type"] isEqualToString:kCellTypeMultyMap])
     {
         static NSString* const repositoryResourceCell = @"repositoryResourceCell";
         static NSString* const downloadingResourceCell = @"downloadingResourceCell";
-        OAResourceItem *mapItem = _suggestedMaps[indexPath.row];
+        OAResourceItem *mapItem = [self getMapItem:indexPath];
         NSString* cellTypeId = mapItem.downloadTask ? downloadingResourceCell : repositoryResourceCell;
         
         uint64_t _sizePkg = mapItem.sizePkg;
@@ -405,7 +499,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *type = _data[indexPath.section][indexPath.row][@"type"];
-    if ([type isEqualToString:kCellTypeMap])
+    if ([type isEqualToString:kCellTypeMap] || [type isEqualToString:kCellTypeMultyMap])
         [self onItemPressed:indexPath];
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -427,29 +521,60 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     [self onItemPressed:indexPath];
 }
 
-- (OARepositoryResourceItem *) getMapItem:(NSIndexPath *)indexPath
+- (OAResourceItem *) getMapItem:(NSIndexPath *)indexPath
 {
-    return (OARepositoryResourceItem *)_suggestedMaps[indexPath.row];
+    NSDictionary *dataItem = _data[indexPath.section][indexPath.row];
+    
+    if ([dataItem[@"type"] isEqualToString:kCellTypeMap])
+    {
+        return (OARepositoryResourceItem *)dataItem[@"item"];
+    }
+    else
+    {
+        OAMultipleResourceItem *multyItem = dataItem[@"item"];
+        for (OARepositoryResourceItem *resourceItem in multyItem.items)
+        {
+            if (resourceItem.downloadTask != nil)
+                return resourceItem;
+        }
+        return multyItem.items[0];
+    }
 }
 
 - (void) onItemPressed:(NSIndexPath *)indexPath
 {
-    OARepositoryResourceItem *mapItem = [self getMapItem:indexPath];
-    if (mapItem.downloadTask != nil)
+    OAResourceItem *activeMapItem = [self getMapItem:indexPath];
+    OAResourceItem *dataItem = _data[indexPath.section][indexPath.row][@"item"];
+    if (activeMapItem.downloadTask != nil)
     {
-        [OAResourcesUIHelper offerCancelDownloadOf:mapItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
+        [OAResourcesUIHelper offerCancelDownloadOf:activeMapItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
             [self presentViewController:alert animated:YES completion:nil];
         }];
     }
-    else if ([mapItem isKindOfClass:[OARepositoryResourceItem class]])
+    else if ([dataItem isKindOfClass:[OARepositoryResourceItem class]])
     {
-        OARepositoryResourceItem* item = (OARepositoryResourceItem*)mapItem;
+        OARepositoryResourceItem* item = (OARepositoryResourceItem*)dataItem;
         
         [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
             [self updateAvailableMaps];
         } onTaskResumed:nil completionHandler:^(UIAlertController *alert) {
             [self presentViewController:alert animated:YES completion:nil];
         }];
+    }
+    else if ([dataItem isKindOfClass:[OAMultipleResourceItem class]])
+    {
+        OARepositoryResourceItem* item = (OARepositoryResourceItem*)dataItem;
+        if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion
+             || item.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
+        {
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
+        }
+        else
+        {
+            OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:(OAMultipleResourceItem *)dataItem];
+            controller.delegate = self;
+            [self presentViewController:controller animated:YES completion:nil];
+        }
     }
 }
 
@@ -508,11 +633,29 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void) refreshDownloadingContent:(NSString *)downloadTaskKey
 {
-    for (NSInteger i = 0; i < _suggestedMaps.count; i++)
+    for (NSInteger i = 0; i < _data.count; i ++)
     {
-        OAResourceItem *item = (OAResourceItem *)_suggestedMaps[i];
-        if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
-            [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
+        NSArray *section = _data[i];
+        for (NSInteger j = 0; j < section.count; j ++)
+        {
+            id dataItem = section[j];
+            if ([dataItem isKindOfClass:OARepositoryResourceItem.class])
+            {
+                OAResourceItem *item = (OAResourceItem *)dataItem;
+                if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
+                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
+            }
+            else if ([dataItem isKindOfClass:OAMultipleResourceItem.class])
+            {
+                OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *)dataItem;
+                
+                for (OAResourceItem *item in multipleItem.items)
+                {
+                    if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
+                        [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
+                }
+            }
+        }
     }
 }
 
@@ -546,6 +689,54 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [self updateAvailableMaps];
         [self.tableView reloadData];
     });
+}
+
+#pragma mark - OADownloadMultipleResourceDelegate
+
+- (void)downloadResources:(OAMultipleResourceItem *)item selectedItems:(NSArray<OAResourceItem *> *)selectedItems;
+{
+    _multipleDownloadingItems = selectedItems;
+    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:selectedItems onTaskCreated:^(id<OADownloadTask> task) {
+        [self refreshDownloadTasks];
+        [self.tableView reloadData];
+    } onTaskResumed:^(id<OADownloadTask> task) {
+    }];
+}
+
+- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceItem *> *)itemsToCheck
+{
+    NSMutableArray<OALocalResourceItem *> *itemsToRemove = [NSMutableArray new];
+    OAResourceItem *prevItem;
+    for (OAResourceItem *itemToCheck in itemsToCheck)
+    {
+        QString srtmMapName = itemToCheck.resourceId.remove(QLatin1String([OAResourceType isSRTMF:itemToCheck] ? ".srtmf.obf" : ".srtm.obf"));
+        if (prevItem && prevItem.resourceId.startsWith(srtmMapName))
+        {
+            BOOL prevItemInstalled = _app.resourcesManager->isResourceInstalled(prevItem.resourceId);
+            if (prevItemInstalled && prevItem.resourceId.compare(itemToCheck.resourceId) != 0)
+            {
+                [itemsToRemove addObject:(OALocalResourceItem *) prevItem];
+            }
+            else
+            {
+                BOOL itemToCheckInstalled = _app.resourcesManager->isResourceInstalled(itemToCheck.resourceId);
+                if (itemToCheckInstalled && itemToCheck.resourceId.compare(prevItem.resourceId) != 0)
+                    [itemsToRemove addObject:(OALocalResourceItem *) itemToCheck];
+            }
+        }
+        prevItem = itemToCheck;
+    }
+    [self offerSilentDeleteResourcesOf:itemsToRemove];
+}
+
+- (void)offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items
+{
+    [OAResourcesUIHelper deleteResourcesOf:items progressHUD:nil executeAfterSuccess:nil];
+}
+
+- (void)clearMultipleResources
+{
+    _multipleDownloadingItems = nil;
 }
 
 @end

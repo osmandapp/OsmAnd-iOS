@@ -96,11 +96,10 @@
         }
     }
     std::vector<std::shared_ptr<RouteDataBundle>> typeList;
-    auto& rules = resources->rules;
-    for (const auto& rule : rules)
+    for (const auto& rule : resources->insertOrder)
     {
         auto typeBundle = std::make_shared<RouteDataBundle>(resources);
-        rule.first.writeToBundle(typeBundle);
+        rule.writeToBundle(typeBundle);
         typeList.push_back(typeBundle);
     }
     

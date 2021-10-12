@@ -33,5 +33,7 @@
 
 - (OAGradientScaleType *) toGradientScaleType;
 
+- (BOOL) isGradient;
+
 @end
 

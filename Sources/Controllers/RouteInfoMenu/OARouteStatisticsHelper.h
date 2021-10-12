@@ -20,7 +20,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OARouteStatistics;
+@class OARouteStatistics, OARouteSegmentAttribute;
 @class OAGPXDocument;
 
 @interface OATrackChartPoints : NSObject
@@ -48,8 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OARouteStatisticsHelper : NSObject
 
 + (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(std::vector<SHARED_PTR<RouteSegmentResult> >)route;
-
-+ (std::shared_ptr<OsmAnd::MapPresentationEnvironment>) getDefaultPresentationEnvironment;
++ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames;
 
 @end
 
@@ -58,6 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithPresentationEnvironment:(std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultPresentationEnv;
 
 - (OARouteStatistics *) computeStatistic:(NSArray<OARouteSegmentWithIncline *> *) route attribute:(NSString *) attribute;
+
+- (OARouteSegmentAttribute *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment;
 
 @end
 

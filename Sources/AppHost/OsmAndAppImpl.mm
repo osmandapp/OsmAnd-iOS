@@ -57,6 +57,10 @@
 #include <binaryRoutePlanner.h>
 #include <routePlannerFrontEnd.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/IMapStylesCollection.h>
+#include <OsmAndCore/Map/UnresolvedMapStyle.h>
+#include <OsmAndCore/Map/ResolvedMapStyle.h>
+#include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <openingHoursParser.h>
 
 #define MILS_IN_DEGREE 17.777778f
@@ -103,6 +107,7 @@
 
 @synthesize initialURLMapState = _initialURLMapState;
 
+@synthesize defaultRenderer = _defaultRenderer;
 @synthesize resourcesManager = _resourcesManager;
 @synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
 @synthesize osmAndLiveUpdatedObservable = _osmAndLiveUpdatedObservable;
@@ -510,6 +515,19 @@
     [self askReview];
     
     return YES;
+}
+
+- (std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultRenderer
+{
+    if (!_defaultRenderer)
+    {
+        auto defSourceResource = _resourcesManager->getResource(QString::fromNSString([OAAppData defaultMapSource].resourceId));
+        const auto name = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(defSourceResource->metadata)->mapStyle->name;
+        
+        const auto& resolvedMapStyle = _resourcesManager->mapStylesCollection->getResolvedStyleByName(name);
+        _defaultRenderer = std::make_shared<OsmAnd::MapPresentationEnvironment>(resolvedMapStyle);
+    }
+    return _defaultRenderer;
 }
 
 - (void) askReview

@@ -12,11 +12,15 @@
 
 #include <SkBitmap.h>
 
+@class OAGPXDocument;
+
 @interface OABaseVectorLinesLayer : OASymbolMapLayer
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection;
 
 - (std::shared_ptr<SkBitmap>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
 - (std::shared_ptr<SkBitmap>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
+
+- (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors attrName:(NSString *)attrName gpx:(OAGPXDocument *)gpx;
 
 @end

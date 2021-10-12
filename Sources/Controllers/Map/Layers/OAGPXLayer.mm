@@ -31,6 +31,10 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
+#define COLORIZATION_NONE 0
+#define COLORIZATION_GRADIENT 1
+#define COLORIZATION_SOLID 2
+
 @implementation OAGPXLayer
 {
     std::shared_ptr<OAWaypointsMapLayerProvider> _waypointsMapProvider;
@@ -107,25 +111,6 @@
         colorValue = (int) gpx.color;
     
     OsmAnd::ColorARGB color(colorValue);
-    
-//    if (extraData)
-//    {
-//        const auto& values = extraData->getValues();
-//        const auto& it = values.find(QStringLiteral("color"));
-//        if (it != values.end())
-//        {
-//            //bool ok;
-//            //color = OsmAnd::Utilities::parseColor(it.value().toString(), OsmAnd::ColorARGB(kDefaultTrackColor), &ok);
-//            NSString *colorStr = it.value().toString().toNSString();
-//            UIColor *c = [OAUtilities colorFromString:colorStr];
-//            if (c)
-//            {
-//                CGFloat r, g, b, a;
-//                [c getRed:&r green:&g blue:&b alpha:&a];
-//                color = OsmAnd::ColorARGB(255 * a, 255 * r, 255 * g, 255 * b);
-//            }
-//        }
-//    }
     return color;
 }
 
@@ -149,15 +134,40 @@
         int lineId = 1;
         for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
         {
-            if (it.key().isNull() && !it.value())
+            if (it.key().isNull() || !it.value())
                 continue;
             
             BOOL routePoints = NO;
             
             OAGPX *gpx = [self getGpxItem:it.key()];
+            QList<OsmAnd::FColorARGB> colors;
+            int colorizationScheme = COLORIZATION_NONE;
+            if (gpx.coloringType.length > 0)
+            {
+                NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+                QString qPath = QString::fromNSString(path);
+                auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
+                OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+                doc.path = path;
+
+                OAColoringType *type = [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType];
+                if ([type isGradient])
+                {
+                    colorizationScheme = COLORIZATION_GRADIENT;
+                    OARouteColorizationHelper *routeColorization = [[OARouteColorizationHelper alloc] initWithGpxFile:doc analysis:[doc getAnalysis:0] type:type.toGradientScaleType.toColorizationType maxProfileSpeed:0];
+
+                    colors = routeColorization ? [routeColorization getResult] : QList<OsmAnd::FColorARGB>();
+                }
+                else if (type == OAColoringType.ATTRIBUTE)
+                {
+                    colorizationScheme = COLORIZATION_SOLID;
+                    [self calculateSegmentsColor:colors attrName:gpx.coloringType gpx:doc];
+                }
+            }
 
             if (it.value()->hasTrkPt())
             {
+                int segStartIndex = 0;
                 for (const auto& track : it.value()->tracks)
                 {
                     for (const auto& seg : track->segments)
@@ -168,7 +178,13 @@
                         {
                             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                         }
-                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++];
+                        QList<OsmAnd::FColorARGB> segmentColors;
+                        if (points.size() > 1 && !colors.isEmpty() && segStartIndex < colors.size() && segStartIndex + points.size() - 1 < colors.size())
+                        {
+                            segmentColors = colors.mid(segStartIndex, points.size());
+                        }
+                        segStartIndex += points.size() - 1;
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:colorizationScheme];
                     }
                 }
             }
@@ -182,7 +198,7 @@
                     {
                         points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                     }
-                    [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++];
+                    [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} colorizationScheme:COLORIZATION_NONE];
                 }
             }
         }
@@ -192,22 +208,13 @@
     [self refreshGpxWaypoints];
 }
 
-- (void) drawLine:(QVector<OsmAnd::PointI> &)points gpx:(OAGPX *)gpx baseOrder:(int)baseOrder lineId:(int)lineId
+- (void) drawLine:(QVector<OsmAnd::PointI> &)points gpx:(OAGPX *)gpx baseOrder:(int)baseOrder lineId:(int)lineId colors:(const QList<OsmAnd::FColorARGB> &)colors colorizationScheme:(int)colorizationScheme
 {
     if (points.size() > 1)
     {
-        QList<OsmAnd::FColorARGB> colors;
-        if (gpx.coloringType.length > 0)
+        
+        if (colors.size() > 0)
         {
-            NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
-            QString qPath = QString::fromNSString(path);
-            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
-            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-            doc.path = path;
-            OAColoringType *type = [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType];
-            OARouteColorizationHelper *routeColorization = [[OARouteColorizationHelper alloc] initWithGpxFile:doc analysis:[doc getAnalysis:0] type:type.toGradientScaleType.toColorizationType maxProfileSpeed:0];
-            
-            colors = routeColorization ? [routeColorization getResult] : QList<OsmAnd::FColorARGB>();
             // Add outline for colorized lines
             if (!colors.isEmpty())
             {
@@ -218,6 +225,7 @@
                 .setIsHidden(points.size() == 0)
                 .setLineId(lineId + 1000)
                 .setLineWidth(30)
+                .setOutlineWidth(10)
                 .setPoints(points)
                 .setFillColor(outlineColor);
                 
@@ -235,7 +243,10 @@
         .setFillColor(colorARGB);
         
         if (!colors.empty())
-            builder.setColorizationMapping(colors);
+        {
+            builder.setColorizationMapping(colors)
+            .setColorizationScheme(colorizationScheme);
+        }
         
         if (gpx.showArrows)
         {

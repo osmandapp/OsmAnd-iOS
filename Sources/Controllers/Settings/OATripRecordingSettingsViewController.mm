@@ -426,8 +426,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
         {
@@ -439,21 +439,21 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 for (UIView *vw in cell.subviews)
                     vw.alpha = 0.4;
                 cell.userInteractionEnabled = NO;
-                cell.leftImageView.tintColor = UIColorFromRGB(color_icon_inactive);
+                cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
             }
             else
             {
                 for (UIView *vw in cell.subviews)
                     vw.alpha = 1;
                 cell.userInteractionEnabled = YES;
-                cell.leftImageView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+                cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
             }
             
             NSString *img = item[@"img"];
             if (img)
-                cell.leftImageView.image = [UIImage templateImageNamed:img];
-            
-            [cell showImage:img != nil];
+                cell.leftIconView.image = [UIImage templateImageNamed:img];
+
+            [cell showLeftIcon:img != nil];
         }
         return cell;
     }

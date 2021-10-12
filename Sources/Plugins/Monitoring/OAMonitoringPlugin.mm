@@ -275,7 +275,7 @@
                                          }
                                          case 1:
                                          {
-                                             [[self getMapPanelViewController] openTargetViewWithGPX:nil pushed:NO];
+                                             [[self getMapPanelViewController] openTargetViewWithGPX:nil];
                                              break;
                                          }
                                          case 2:
@@ -337,7 +337,7 @@
                                              }
                                              case 1:
                                              {
-                                                 [[self getMapPanelViewController] openTargetViewWithGPX:nil pushed:NO];
+                                                 [[self getMapPanelViewController] openTargetViewWithGPX:nil];
                                                  break;
                                              }
                                              case 2:

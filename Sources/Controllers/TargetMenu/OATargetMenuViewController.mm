@@ -218,32 +218,6 @@
             break;
         }
             
-        case OATargetGPX:
-        {
-            OAGPXItemViewControllerState *state = activeViewControllerState ? (OAGPXItemViewControllerState *)activeViewControllerState : nil;
-            
-            if (targetPoint.targetObj)
-            {
-                if (state)
-                {
-                    if (state.showCurrentTrack)
-                        controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem:state];
-                    else
-                        controller = [[OAGPXItemViewController alloc] initWithGPXItem:targetPoint.targetObj ctrlState:state];
-                }
-                else
-                {
-                    controller = [[OAGPXItemViewController alloc] initWithGPXItem:targetPoint.targetObj];
-                }
-            }
-            else
-            {
-                controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
-                targetPoint.targetObj = ((OAGPXItemViewController *)controller).gpx;
-            }
-            break;
-        }
-            
         case OATargetRouteStart:
         case OATargetRouteFinish:
         case OATargetRouteIntermediate:
@@ -300,7 +274,9 @@
             
         case OATargetRouteDetailsGraph:
         {
-            controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj];
+            controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj
+                                                              trackMenuControlState:activeViewControllerState];
+
             break;
         }
         case OATargetChangePosition:

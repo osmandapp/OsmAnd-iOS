@@ -134,7 +134,6 @@
 "map_widget_battery" = "Aku laetuse tase";
 "map_widget_plain_time" = "Praegune aeg";
 "map_widget_max_speed" = "Kiiruspiirang";
-"max_speed_none" = "määramata";
 "access_arrival_time" = "Saabumisaeg";
 "map_widget_time" = "Aeg minna";
 "map_widget_ruler_control" = "Raadiuse joonlaud";
@@ -507,7 +506,7 @@
 "map_settings_under" = "Aluskiht";
 "map_settings_install_maps" = "Vali paigaldatavad või uuendatavad kaardid";
 "map_settings_install_more" = "Paigalda veel...";
-"map_settings_none" = "Mitteühtegi";
+"shared_string_none" = "Mitteühtegi";
 "map_settings_offline" = "Võrguühenduseta kaartide stiilid";
 "map_settings_online" = "Veebikaardid";
 "map_settings_transp" = "Läbipaistvus";
@@ -1216,7 +1215,6 @@
 "do_not_send_anonymous_data" = "Ära saada anonüümseid andmeid";
 "sett_ext_input_desc" = "Vali välise juhtimise seade, näiteks harilik klaviatuur või WunderLINQ.";
 "sett_ext_input" = "Välised sisendseadmed";
-"sett_no_ext_input" = "Mitteühtegi";
 "sett_generic_ext_input" = "Harilik klaviatuur";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Zoom In";

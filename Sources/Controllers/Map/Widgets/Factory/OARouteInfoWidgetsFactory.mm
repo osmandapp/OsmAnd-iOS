@@ -376,7 +376,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             }
             else if (cachedSpeed == 40.f /*RouteDataObject::NONE_MAX_SPEED*/)
             {
-                [speedControlWeak setText:OALocalizedString(@"max_speed_none") subtext:@""];
+                [speedControlWeak setText:OALocalizedString(@"shared_string_none").lowerCase subtext:@""];
             }
             else
             {

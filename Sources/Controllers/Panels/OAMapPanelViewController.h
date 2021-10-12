@@ -10,6 +10,7 @@
 
 #import "OAMapViewController.h"
 #import "OATargetPointView.h"
+#import "OABaseTrackMenuHudViewController.h"
 
 @class OAFavoriteItem;
 @class OAGpxWptItem;
@@ -114,7 +115,11 @@
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
-- (void) openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
+
+- (void) openTargetViewWithGPX:(OAGPX *)item;
+- (void) openTargetViewWithGPX:(OAGPX *)item
+                  trackHudMode:(EOATrackHudMode)trackHudMode
+                         state:(OATargetMenuViewControllerState *)state;
 
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
@@ -123,7 +128,9 @@
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
 - (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
-- (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
+- (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
+                                    analysis:(OAGPXTrackAnalysis *)analysis
+                            menuControlState:(OATargetMenuViewControllerState *)menuControlState;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
 - (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;

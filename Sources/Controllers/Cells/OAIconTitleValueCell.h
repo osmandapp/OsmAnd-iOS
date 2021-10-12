@@ -12,12 +12,15 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
-@property (weak, nonatomic) IBOutlet UIImageView *leftImageView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noImageTextLeadingMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageTextLeadingMargin;
+@property (weak, nonatomic) IBOutlet UIImageView *leftIconView;
+@property (weak, nonatomic) IBOutlet UIImageView *rightIconView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noLeftIconTextLeadingMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftIconTextLeadingMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noRightIconDecsLeadingMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightIconDescLeadingMargin;
 @property (weak, nonatomic) IBOutlet UIButton *openCloseGroupButton;
 
--(void)showImage:(BOOL)show;
+-(void)showLeftIcon:(BOOL)show;
+-(void)showRightIcon:(BOOL)show;
 
 @end

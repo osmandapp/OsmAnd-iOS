@@ -26,10 +26,9 @@
 - (instancetype)initWithActiveTrips;
 - (instancetype)initWithAllTrips;
 
--(void)processUrl:(NSURL*)url;
--(void)processUrl:(NSURL*)url openGpxView:(BOOL)openGpxView;
+- (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete;
 
-- (void) setShouldPopToParent:(BOOL)shouldPop;
+- (void)setShouldPopToParent:(BOOL)shouldPop;
 
 + (BOOL)popToParent;
 

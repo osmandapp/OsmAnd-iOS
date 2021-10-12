@@ -31,6 +31,7 @@
 #import "OARouteInfoLegendItemView.h"
 #import "OARouteStatisticsModeCell.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
+#import "OAGPXDatabase.h"
 
 #import <Charts/Charts-Swift.h>
 
@@ -45,7 +46,7 @@
 @implementation OARouteDetailsGraphViewController
 {
     NSArray *_data;
-    
+
     EOARouteStatisticsMode _currentMode;
     
     BOOL _hasTranslated;
@@ -55,6 +56,21 @@
     
     CGFloat _cachedYViewPort;
     OAMapRendererView *_mapView;
+    OATrackMenuViewControllerState *_trackMenuControlState;
+}
+
+- (instancetype)initWithGpxData:(NSDictionary *)data
+          trackMenuControlState:(OATargetMenuViewControllerState *)trackMenuControlState
+{
+    self = [super initWithGpxData:data];
+    if (self)
+    {
+        if (data)
+        {
+            _trackMenuControlState = trackMenuControlState;
+        }
+    }
+    return self;
 }
 
 - (NSArray *) getMainGraphSectionData
@@ -103,7 +119,7 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _currentMode = EOARouteStatisticsModeBoth;
+    _currentMode = _trackMenuControlState ? _trackMenuControlState.routeStatistics : EOARouteStatisticsModeBoth;
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -170,6 +186,8 @@
     [_tableView setScrollEnabled:NO];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
+
+    [self refreshHighlightOnMap:NO];
 }
 
 - (BOOL)isLandscapeIPadAware
@@ -360,9 +378,20 @@
     [self cancelPressed];
 }
 
-- (void) cancelPressed
+- (void)cancelPressed
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:self.gpx analysis:self.analysis];
+    if (_trackMenuControlState)
+    {
+        [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
+                                                               trackHudMode:EOATrackMenuHudMode
+                                                                      state:_trackMenuControlState];
+        }];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:self.gpx analysis:self.analysis];
+    }
 }
 
 #pragma mark - UITableViewDataSource

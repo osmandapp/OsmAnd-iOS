@@ -222,7 +222,7 @@
 
             [headersArr addObject: @{ @"header" : OALocalizedString(@"osmand_live_donation_header"),
                                       @"footer" : OALocalizedString(@"osmand_live_support_reg_descr") }];
-            NSString *countryName = [_selectedCountryItem.downloadName isEqualToString:kBillingUserDonationNone] ? OALocalizedString(@"map_settings_none") : _selectedCountryItem.localName;
+            NSString *countryName = [_selectedCountryItem.downloadName isEqualToString:kBillingUserDonationNone] ? OALocalizedString(@"shared_string_none") : _selectedCountryItem.localName;
             [dataArr addObject:
              @[@{
                    @"name" : @"support_region",

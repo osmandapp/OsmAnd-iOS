@@ -15,6 +15,7 @@
 #import "OrderedDictionary.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OAColors.h"
 #import <UIKit/UIDevice.h>
 
 #import <mach/mach.h>
@@ -311,6 +312,72 @@
 - (void) setCornerRadius:(CGFloat)value
 {
     self.layer.cornerRadius = value;
+}
+
+- (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding
+{
+    self.backgroundColor = [UIColor clearColor];
+    UIBlurEffect *blurEffect;
+
+    if (@available(iOS 13.0, *))
+        blurEffect = [UIBlurEffect effectWithStyle:light
+                ? UIBlurEffectStyleSystemUltraThinMaterialLight : UIBlurEffectStyleSystemUltraThinMaterialDark];
+    else
+        blurEffect = [UIBlurEffect effectWithStyle:light
+                ? UIBlurEffectStyleLight : UIBlurEffectStyleDark];
+
+    UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    blurView.userInteractionEnabled = NO;
+    blurView.backgroundColor = [UIColor clearColor];
+    if (cornerRadius > 0)
+    {
+        blurView.layer.cornerRadius = cornerRadius;
+        blurView.layer.masksToBounds = YES;
+    }
+
+    [self insertSubview:blurView atIndex:0];
+
+    blurView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.leadingAnchor constraintEqualToAnchor:blurView.leadingAnchor constant:padding].active = YES;
+    [self.trailingAnchor constraintEqualToAnchor:blurView.trailingAnchor constant:-padding].active = YES;
+    [self.topAnchor constraintEqualToAnchor:blurView.topAnchor constant:padding].active = YES;
+    [self.bottomAnchor constraintEqualToAnchor:blurView.bottomAnchor constant:-padding].active = YES;
+}
+
+@end
+
+@implementation UIButton (utils)
+
+- (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding
+{
+    [super addBlurEffect:light cornerRadius:cornerRadius padding:padding];
+
+    UIImageView *imageView = self.imageView;
+    if (imageView)
+    {
+        imageView.backgroundColor = [UIColor clearColor];
+        [self bringSubviewToFront:imageView];
+    }
+}
+
+@end
+
+@implementation UITabBar (utils)
+
+- (void)makeTranslucent:(BOOL)light
+{
+    self.translucent = YES;
+    self.backgroundImage = [UIImage new];
+    self.shadowImage = [UIImage new];
+    self.barTintColor = UIColor.clearColor;
+    self.backgroundColor = light ? UIColor.whiteColor : UIColor.blackColor;
+    self.layer.backgroundColor = UIColor.clearColor.CGColor;
+}
+
+- (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding
+{
+    [super addBlurEffect:light cornerRadius:cornerRadius padding:padding];
+    [self makeTranslucent:YES];
 }
 
 @end
@@ -1438,11 +1505,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return luminance >= .5f;
 }
 
-+ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth
++ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
 {
     NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
+    paragraphStyle.alignment = alignment;
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
 
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];

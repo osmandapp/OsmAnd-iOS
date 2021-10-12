@@ -589,17 +589,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell showLabels:YES topRight:YES bottomLeft:NO bottomRight:NO];
         }
         if (cell)
         {
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             OAMapStyleParameter *p = (OAMapStyleParameter *)item[@"parameter"];
-            cell.titleLabel.text = item[@"name"];
+            cell.topLeftLabel.text = item[@"name"];
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             if ([p.name isEqualToString:kContourLinesDensity])
             {
                 NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
-                cell.valueLabel.text = [self getLocalizedParamValue:v];
+                cell.topRightLabel.text = [self getLocalizedParamValue:v];
                 cell.numberOfMarks = _visibleDensityValues.count;
                 cell.selectedMark = [_visibleDensityValues indexOfObject:v];
                 [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -608,12 +609,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             else if ([p.name isEqualToString:kContourLinesWidth])
             {
                 NSString *v = p.value.length == 0 ? kDefaultWidth : p.value;
-                cell.valueLabel.text = [self getLocalizedParamValue:v];
+                cell.topRightLabel.text = [self getLocalizedParamValue:v];
                 cell.numberOfMarks = _visibleWidthValues.count;
                 cell.selectedMark = [_visibleWidthValues indexOfObject:v];
                 [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];
             }
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
         }
         return cell;
     }

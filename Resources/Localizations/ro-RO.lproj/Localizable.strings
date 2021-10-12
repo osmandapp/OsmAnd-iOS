@@ -435,7 +435,7 @@
 "osm_poi_delete_title" = "Șterge POI";
 "shared_string_options" = "Opțiuni";
 "shared_string_delete" = "Șterge";
-"map_settings_none" = "Niciunul";
+"shared_string_none" = "Niciunul";
 "fav_name" = "Nume";
 "shared_string_email_address" = "Adresa de email";
 "osmand_live_updates" = "Actualizări live";
@@ -505,7 +505,6 @@
 "shared_string_current" = "Actual";
 "transport_routes" = "Rute";
 "free_memory" = "Gratis %@";
-"max_speed_none" = "nici una";
 "menu_help" = "Ajutor";
 "res_wiki" = "Wikipedia (wiki)";
 "yellow" = "Galben";
@@ -779,7 +778,6 @@
 "day_short" = "Z";
 "week_short" = "S";
 "clear_all_intermediates" = "Eliminați toate punctele intermediare";
-"sett_no_ext_input" = "Niciunul";
 "wikivoyage_offline" = "Wikivoyage deconectat";
 "wikipedia_offline" = "Wikipedia offline";
 "rendering_attr_streetLightingNight_name" = "Afișați doar noaptea";

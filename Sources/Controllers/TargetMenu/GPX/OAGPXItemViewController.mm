@@ -18,8 +18,7 @@
 #import "PXAlertView.h"
 #import "OAEditGroupViewController.h"
 #import "OAEditColorViewController.h"
-#import "OAEditGPXColorViewController.h"
-#import "OAGPXTrackColorCollection.h"
+#import "OAGPXAppearanceCollection.h"
 #import "OADefaultFavorite.h"
 #import "OASelectedGPXHelper.h"
 #import "OASizes.h"
@@ -47,7 +46,7 @@
 @end
 
 
-@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate, OASaveTrackViewControllerDelegate> {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate, OASaveTrackViewControllerDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -89,8 +88,7 @@
     OAEditGroupViewController *_groupController;
     OAEditColorViewController *_colorController;
 
-    OAEditGPXColorViewController *_trackColorController;
-    OAGPXTrackColorCollection *_gpxColorCollection;
+    OAGPXAppearanceCollection *_gpxColorCollection;
 
     UIView *_badge;
     CALayer *_horizontalLine;
@@ -379,7 +377,7 @@
 {
     [super viewDidLoad];
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    _gpxColorCollection = [[OAGPXTrackColorCollection alloc] initWithMapViewController:_mapViewController];
+    _gpxColorCollection = [[OAGPXAppearanceCollection alloc] init];
 
     dateTimeFormatter = [[NSDateFormatter alloc] init];
     dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;
@@ -1029,7 +1027,6 @@
                                          }
 
                                          [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
-                                         [[OAGPXDatabase sharedDb] save];
                                      }
                                      [self cancelPressed];
                                  });
@@ -1170,7 +1167,7 @@
                 OAGPXTrackColor *gpxColor = [_gpxColorCollection getColorForValue:_gpx.color];
                 cell.colorIconView.layer.cornerRadius = cell.colorIconView.frame.size.height / 2;
                 cell.colorIconView.backgroundColor = gpxColor.color;
-                [cell.descriptionView setText:gpxColor.name];
+                [cell.descriptionView setText:gpxColor.title];
 
                 cell.textView.text = OALocalizedString(@"fav_color");
                 cell.backgroundColor = UIColorFromRGB(0xffffff);
@@ -1293,7 +1290,7 @@
         if (indexPath.row == 0)
         {
             cell.arrowIconView.hidden = self.gpx.coloringType.length != 0;
-            cell.textView.text = OALocalizedString(@"map_settings_none");
+            cell.textView.text = OALocalizedString(@"shared_string_none");
         }
         else
         {
@@ -1412,12 +1409,7 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == _controlsSectionIndex && indexPath.row == 1)
-    {
-        _trackColorController = [[OAEditGPXColorViewController alloc] initWithColorValue:_gpx.color colorsCollection:_gpxColorCollection];
-        _trackColorController.delegate = self;
-        [self.navController pushViewController:_trackColorController animated:YES];
-    }
+
     if (indexPath.section == _colorizationSectionIndex)
     {
         if (indexPath.row == 0)
@@ -1474,18 +1466,6 @@
     _waypointsController.allGroups = [self readGroups];
     [_waypointsController generateData];
     [self editClicked:nil];
-}
-
-#pragma mark - OAEditGPXColorViewControllerDelegate
--(void) trackColorChanged
-{
-    if (_trackColorController.colorIndex == NSNotFound)
-        return;
-    OAGPXTrackColor *gpxColor = [[_gpxColorCollection getAvailableGPXColors] objectAtIndex:_trackColorController.colorIndex];
-    _gpx.color = gpxColor.colorValue;
-    [[OAGPXDatabase sharedDb] save];
-    [[_app mapSettingsChangeObservable] notifyEvent];
-    [self.tableView reloadData];
 }
 
 #pragma mark - OAEditColorViewControllerDelegate

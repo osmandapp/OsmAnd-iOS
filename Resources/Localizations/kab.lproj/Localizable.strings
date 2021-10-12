@@ -127,7 +127,7 @@
 "shared_string_reset" = "Ales awennez";
 "region_south_america" = "Marikan n Unẓul";
 "shared_string_io_error" = "Tuccḍa I/O";
-"map_settings_none" = "Ula yiwen";
+"shared_string_none" = "Ula yiwen";
 "osm_phone" = "Tiliɣri";
 "shared_string_building" = "Azadaɣ";
 "rendering_attr_roadStyle_description" = "Aɣanib:";
@@ -251,7 +251,6 @@
 "add_work" = "Rnu";
 "nearby_search" = "Nadi di liqrib";
 "res_updates" = "Isedɣiten";
-"max_speed_none" = "ulac";
 "change_color" = "Snifel ini";
 "rendering_attr_piste_difficulty_advanced_name" = "Talqayt";
 "open_till" = "Yeldi almi";
@@ -297,7 +296,6 @@
 "shared_string_filters" = "Imzizdigen";
 "configure_map" = "Swel…";
 "rendering_attr_surface_stone_name" = "Ablaḍ";
-"sett_no_ext_input" = "Ula yiwen";
 "units_km" = "km";
 "save_filter" = "Imsizdeg";
 "route_tl" = "Brenɣer tama tazelmaṭ t edfraḍ";

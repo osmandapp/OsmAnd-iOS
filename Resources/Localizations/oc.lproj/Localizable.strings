@@ -133,7 +133,6 @@
 "map_widget_battery" = "Battery level";
 "map_widget_plain_time" = "Current time";
 "map_widget_max_speed" = "Speed limit";
-"max_speed_none" = "none";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";
@@ -498,7 +497,7 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_none" = "None";
+"shared_string_none" = "None";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
 "map_settings_transp" = "Transparency";
@@ -1192,7 +1191,6 @@
 "do_not_send_anonymous_data" = "Do not send anonymous data";
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
 "sett_ext_input" = "External input devices";
-"sett_no_ext_input" = "None";
 "sett_generic_ext_input" = "Generic Keyboard";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Zoom In";

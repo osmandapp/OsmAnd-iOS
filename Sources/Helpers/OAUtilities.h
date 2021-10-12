@@ -71,6 +71,13 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (CGFloat) getConstant:(NSString *)identifier;
 - (BOOL) isDirectionRTL;
 - (void) setCornerRadius:(CGFloat)value;
+- (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding;
+
+@end
+
+@interface UITabBar (util)
+
+- (void) makeTranslucent:(BOOL)light;
 
 @end
 
@@ -191,7 +198,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName;
 
 + (BOOL) isColorBright:(UIColor *)color;
-+ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth;
++ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize;

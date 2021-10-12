@@ -217,7 +217,7 @@
     if (showPromotions && showDownloadMap)
         return OALocalizedString(@"shared_string_all");
     else if (!showPromotions && !showDownloadMap)
-        return OALocalizedString(@"map_settings_none");
+        return OALocalizedString(@"shared_string_none");
     return @"1/2";
 }
 

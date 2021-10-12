@@ -61,7 +61,7 @@
 "traffic_warning" = "Προειδοποίηση κυκλοφοριακού";
 "osmand_live_donations" = "Δωρεές";
 "parking" = "Στάθμευση";
-"map_settings_none" = "Κανένα";
+"shared_string_none" = "Κανένα";
 "change_map_style" = "Αλλαγή μορφής χάρτη";
 "cancel_route" = "Απόρριψη διαδρομής";
 "poi_filter_closest_poi" = "Πλησιέστερα ΣΕ";
@@ -304,7 +304,6 @@
 "osm_edit_without_name" = "Χωρίς όνομα";
 "traffic_warning_speed_limit" = "Όριο ταχύτητας";
 "in_app_purchase_desc_ex" = "Μόλις αγοραστεί, θα είναι μονίμως διαθέσιμη για σας.";
-"max_speed_none" = "καμία";
 "arrival_distance_descr" = "Πόσο σύντομη θέλετε την αναγγελία άφιξης;";
 "app_mode_train" = "Τρένο";
 "menu_active_trips" = "Ενεργή";
@@ -448,7 +447,6 @@
 "shared_string_buy" = "Αγορά";
 "shared_string_on" = "Ενεργό";
 "loading_poi_obj" = "Φόρτωση ΣΕ…";
-"sett_no_ext_input" = "Κανένα";
 "save_poi_too_many_uppercase" = "Το όνομα περιέχει υπερβολικά πολλά κεφαλαία γράμματα. Συνέχεια;";
 "auto_zoom_none" = "Χωρίς αυτόματη εστίαση";
 "keep_informing_never" = "Μόνο χειροκίνητα (πατήστε το βέλος)";

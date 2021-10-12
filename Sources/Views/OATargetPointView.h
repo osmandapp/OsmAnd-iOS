@@ -18,7 +18,7 @@
 #define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.75
 
-@class OATargetPoint, OAFavoriteItem, OAGpxWptItem;
+@class OATargetPoint, OAFavoriteItem, OAGpxWptItem, OAGPX;
 
 @protocol OATargetPointViewDelegate;
 
@@ -96,6 +96,7 @@
 - (void) targetHide;
 - (void) targetOpenRouteSettings;
 - (void) targetOpenPlanRoute;
+- (void) targetOpenPlanRoute:(OAGPX *)gpx trackMenuState:(OATargetMenuViewControllerState *)trackMenuState;
 - (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked onComplete:(void (^)(void))onComplete;
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;

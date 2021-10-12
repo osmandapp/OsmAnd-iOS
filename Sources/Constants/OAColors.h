@@ -100,6 +100,7 @@
 #define color_primary_purple_10 0x105714CC
 #define color_primary_purple_50 0x805714CC
 #define color_bottom_sheet_secondary 0xD8D5DD
+#define color_bottom_sheet_secondary_10 0x10D8D5DD
 #define color_bottom_sheet_secondary_night 0x3F3D43
 
 #define color_primary_light_blue 0x7499F1
@@ -195,5 +196,7 @@
 #define color_place_closed 0xDA3A3A
 
 #define resource_installed_icon_color 0x1FB38D
+
+#define unselected_tab_icon 0x898198
 
 #endif /* OAColors_h */

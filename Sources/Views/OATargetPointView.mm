@@ -44,6 +44,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmAndFormatter.h"
 #import "OAMapDownloadController.h"
+#import "OARouteDetailsGraphViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -1066,7 +1067,7 @@ static const NSInteger _buttonsCount = 4;
     if (![self isSliding] && !_hiding)
     {
         [self doLayoutSubviews:NO];
-        
+
         if ([_customController showDetailsButton])
         {
             NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -1426,8 +1427,6 @@ static const NSInteger _buttonsCount = 4;
 {
     if (_targetPoint.type == OATargetImpassableRoadSelection)
         return DeviceScreenHeight / 3;
-    else if (_targetPoint.type == OATargetGPX)
-        return DeviceScreenHeight / 2 - _toolbarHeight;
     else if ([self.customController mapHeightKoef] > 0)
         return DeviceScreenHeight * [self.customController mapHeightKoef];
     else
@@ -2222,17 +2221,6 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) contentChanged
 {
-    if (_targetPoint.type == OATargetGPX && self.customController)
-    {
-        _targetPoint.targetObj = [self.customController getTargetObj];
-        [self updateAddressLabel];
-
-        OAGPX *item = _targetPoint.targetObj;
-        if (!item.newGpx)
-            self.addressLabel.text = [item getNiceTitle];
-        
-    }
-    
     if (![_controlButtonDownload.titleLabel.text isEqualToString:self.customController.downloadControlButton.title])
         [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
 

@@ -59,7 +59,7 @@
 "map_settings_style" = "Kortstilart";
 "map_settings_overunder" = "Over-/underlejring";
 "map_settings_under" = "Underlejret";
-"map_settings_none" = "Ingen";
+"shared_string_none" = "Ingen";
 "map_settings_online" = "Onlinekort";
 "map_settings_avail_lay" = "Tilgængelige lag";
 "intro_download" = "Hent\nkort";
@@ -161,7 +161,6 @@
 "gpx_export_select_track" = "Vælg en rute til eksport";
 "gpx_no_tracks" = "Der er ingen ruter";
 "gpx_remove" = "Fjern rute?";
-"gpx_distance" = "Afstand";
 "gpx_finish" = "Afslut";
 "gpx_avg_elev" = "Gennemsnitlig højde";
 "gpx_elev_range" = "Højdeinterval";
@@ -684,7 +683,6 @@
 "map_widget_battery" = "Batteriniveau";
 "map_widget_plain_time" = "Aktuel tid";
 "map_widget_max_speed" = "Hastighedsgrænse";
-"max_speed_none" = "Ingen";
 "access_arrival_time" = "Ankomsttid";
 "map_widget_time" = "Resterende tid";
 "map_widget_altitude" = "Højde";
@@ -1085,7 +1083,6 @@
 "osm_upload_complete" = "Overførelse afsluttet";
 "sett_ext_input_desc" = "Vælg en enhed, såsom et generisk tastatur eller WunderLINQ for ekstern kontrol.";
 "sett_ext_input" = "Eksterne inputenheder";
-"sett_no_ext_input" = "Ingen";
 "sett_generic_ext_input" = "Generisk tastatur";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Zoom ind";

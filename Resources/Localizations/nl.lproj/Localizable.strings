@@ -85,7 +85,6 @@
 "map_widget_battery" = "Batterijniveau";
 "map_widget_plain_time" = "Huidige tijd";
 "map_widget_max_speed" = "Snelheidslimiet";
-"max_speed_none" = "geen";
 "access_arrival_time" = "Aankomsttijd";
 "map_widget_time" = "Resterende tijd";
 "shared_string_collapse" = "Inklappen";
@@ -358,7 +357,6 @@
 "gpx_route" = "Route";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
-"gpx_distance" = "Distance";
 "gpx_average_speed" = "Gemiddelde snelheid";
 "gpx_start" = "Start";
 "gpx_finish" = "Einde";
@@ -400,7 +398,7 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_none" = "Geen";
+"shared_string_none" = "Geen";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online kaarten";
 "map_settings_transp" = "Transparantie";
@@ -804,7 +802,6 @@
 "years_5" = "Jaren";
 "price_free" = "Gratis";
 "months_3" = "Drie maanden";
-"sett_no_ext_input" = "Geen";
 "unlimited_downloads" = "Onbeperkte downloads";
 "wikivoyage_offline" = "Wikivoyage offline";
 "contour_lines_hillshade_maps" = "Hoogtelijnen & Reliëfschaduwkaarten";

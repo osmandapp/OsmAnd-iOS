@@ -26,8 +26,8 @@
 
 @implementation OAFoldersCell
 {
-    NSMutableArray *_data;
-    int _selectionIndex;
+    NSArray<NSDictionary *> *_data ;
+    NSInteger _selectionIndex;
     BOOL _isFirstLoad;
 }
 
@@ -42,12 +42,12 @@
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];
-    _data = [NSMutableArray new];
+    _data = [NSMutableArray array];
     _selectionIndex = 0;
     _isFirstLoad = YES;
 }
 
-- (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(int)index
+- (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index
 {
     _data = values;
     _selectionIndex = index;
@@ -155,6 +155,7 @@
         destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
         destCell.layer.cornerRadius = 9;
         NSString *iconName = item[@"img"];
+        BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
         if (iconName && iconName.length > 0)
         {
             [destCell.imageView setImage:[UIImage templateImageNamed:item[@"img"]]];
@@ -177,9 +178,12 @@
         }
         else
         {
-            destCell.layer.backgroundColor = UIColorFromARGB(color_primary_purple_10).CGColor;
-            destCell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
-            destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+            destCell.layer.backgroundColor = available
+                    ? UIColorFromARGB(color_primary_purple_10).CGColor : UIColorFromARGB(color_bottom_sheet_secondary_10).CGColor;
+            destCell.titleLabel.textColor = available
+                    ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
+            destCell.imageView.tintColor = available
+                    ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
         }
     }
     return cell;
@@ -187,26 +191,36 @@
 
 - (void)collectionView:(UICollectionView *)colView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell* cell = [colView cellForItemAtIndexPath:indexPath];
-    [UIView animateWithDuration:0.2
-                          delay:0
-                        options:(UIViewAnimationOptionAllowUserInteraction)
-                     animations:^{
-        [cell setBackgroundColor:UIColorFromRGB(color_tint_gray)];
+    NSDictionary *item = _data[indexPath.row];
+    BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
+    if (available)
+    {
+        UICollectionViewCell *cell = [colView cellForItemAtIndexPath:indexPath];
+        [UIView animateWithDuration:0.2
+                              delay:0
+                            options:(UIViewAnimationOptionAllowUserInteraction)
+                         animations:^{
+                             [cell setBackgroundColor:UIColorFromRGB(color_tint_gray)];
+                         }
+                         completion:nil];
     }
-                     completion:nil];
 }
 
 - (void)collectionView:(UICollectionView *)colView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell* cell = [colView cellForItemAtIndexPath:indexPath];
-    [UIView animateWithDuration:0.2
-                          delay:0
-                        options:(UIViewAnimationOptionAllowUserInteraction)
-                     animations:^{
-        [colView reloadData];
+    NSDictionary *item = _data[indexPath.row];
+    BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
+    if (available)
+    {
+        UICollectionViewCell *cell = [colView cellForItemAtIndexPath:indexPath];
+        [UIView animateWithDuration:0.2
+                              delay:0
+                            options:(UIViewAnimationOptionAllowUserInteraction)
+                         animations:^{
+                             [colView reloadData];
+                         }
+                         completion:nil];
     }
-                     completion:nil];
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -223,9 +237,16 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_delegate)
-        [_delegate onItemSelected:(int)indexPath.row type:_data[indexPath.row][@"type"]];
-    
+    NSDictionary *item = _data[indexPath.row];
+    BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
+    if (available)
+    {
+        _selectionIndex = indexPath.row;
+
+        if (_delegate)
+            [_delegate onItemSelected:_selectionIndex type:_data[_selectionIndex][@"type"]];
+    }
+
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 

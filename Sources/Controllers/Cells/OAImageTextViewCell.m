@@ -11,7 +11,8 @@
 
 @implementation OAImageTextViewCell
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     [super awakeFromNib];
     _descView.textContainerInset = UIEdgeInsetsZero;
     _descView.textContainer.lineFragmentPadding = 0;
@@ -20,7 +21,8 @@
     _descView.linkTextAttributes = linkAttributes;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
@@ -29,7 +31,13 @@
 - (void)updateConstraints
 {
     CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
-    self.iconViewHeight.constant = (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
+    CGFloat newIconHeight = (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
+    BOOL hasExtraDesc = !self.extraDescView.hidden;
+
+    self.iconViewHeight.constant = newIconHeight;
+    self.descExtraTrailingConstraint.active = hasExtraDesc;
+    self.descNoExtraTrailingConstraint.active = !hasExtraDesc;
+    self.extraDescEqualDescWidth.active = hasExtraDesc;
 
     [super updateConstraints];
 }
@@ -40,9 +48,20 @@
     if (!res)
     {
         CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
-        res |= self.iconViewHeight.constant != (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
+        CGFloat newIconHeight = (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
+        BOOL hasExtraDesc = !self.extraDescView.hidden;
+
+        res |= self.iconViewHeight.constant != newIconHeight;
+        res |= self.descExtraTrailingConstraint.active != hasExtraDesc;
+        res |= self.descNoExtraTrailingConstraint.active != !hasExtraDesc;
+        res |= self.extraDescEqualDescWidth.active != hasExtraDesc;
     }
     return res;
+}
+
+- (void)showExtraDesc:(BOOL)show
+{
+    self.extraDescView.hidden = !show;
 }
 
 @end

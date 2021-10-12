@@ -172,11 +172,10 @@ static UIViewController *parentController;
     return self;
 }
 
-- (void) removeFromDB
+- (void) removeFromDB:(BOOL)removeFile
 {
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_importUrl.path];
-    [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath];
-    [[OAGPXDatabase sharedDb] save];
+    [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath removeFile:removeFile];
 }
 
 - (void) setShouldPopToParent:(BOOL)shouldPop
@@ -207,7 +206,7 @@ static UIViewController *parentController;
         id overwriteHandler = ^(UIAlertAction * _Nonnull action) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 _newGpxName = nil;
-                [self removeFromDB];
+                [self removeFromDB:YES];
                 [self doImport:YES];
             });
         };
@@ -275,7 +274,7 @@ static UIViewController *parentController;
     }
 }
 
-- (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
+- (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete
 {
     _importUrl = [url copy];
     OAGPX *item;
@@ -292,7 +291,8 @@ static UIViewController *parentController;
     // Try to import gpx
     BOOL exists = [[OAGPXDatabase sharedDb] containsGPXItemByFileName:_importUrl.path.lastPathComponent];    
     _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
-    if (_doc) {
+    if (_doc)
+    {
         if (exists)
         {
             if (showAlerts)
@@ -304,8 +304,9 @@ static UIViewController *parentController;
             }
             else
             {
-                [[NSFileManager defaultManager] removeItemAtPath:[_importGpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
-                [self removeFromDB];
+                if (![_importUrl.path hasPrefix:_app.gpxPath])
+                    [[NSFileManager defaultManager] removeItemAtPath:[_importGpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
+                [self removeFromDB:![_importUrl.path hasPrefix:_app.gpxPath]];
                 item = [self doImport:NO];
             }
         }
@@ -331,27 +332,32 @@ static UIViewController *parentController;
     if (item && openGpxView)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-                [self doPush];
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+            [self doPush];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
         });
     }
+    if (onComplete)
+        onComplete();
 }
 
--(void)processUrl:(NSURL*)url openGpxView:(BOOL)openGpxView
+- (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete
 {
     if ([url isFileURL])
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self showProgressHUD];
-            [self processUrl:url showAlerts:YES openGpxView:openGpxView];
-            [self hideProgressAndRefresh];
-        });
+        [self prepareProcessUrl:^{
+            [self processUrl:url showAlerts:showAlerts openGpxView:openGpxView onComplete:onComplete];
+        }];
     }
 }
 
--(void)processUrl:(NSURL*)url
+- (void)prepareProcessUrl:(void (^)(void))processUrl
 {
-    [self processUrl:url openGpxView:YES];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self showProgressHUD];
+        if (processUrl)
+            processUrl();
+        [self hideProgressAndRefresh];
+    });
 }
 
 - (void)commonInit
@@ -385,7 +391,8 @@ static UIViewController *parentController;
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
-    [fileManager removeItemAtPath:_importUrl.path error:nil];
+    if (![_importUrl.path hasPrefix:_app.gpxPath])
+        [fileManager removeItemAtPath:_importUrl.path error:nil];
     
     _doc = nil;
     _importUrl = nil;
@@ -436,7 +443,9 @@ static UIViewController *parentController;
 }
 
 #pragma mark - OAGPXImportDelegate
-- (void)hideProgressAndRefresh {
+
+- (void)hideProgressAndRefresh
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hideProgressHUD];
         [self generateData];
@@ -444,42 +453,42 @@ static UIViewController *parentController;
     });
 }
 
-- (void) importAllGPXFromDocuments
+- (void)importAllGPXFromDocuments
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self showProgressHUD];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSArray *paths = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
-        NSURL *documentsURL = [paths lastObject];
-        NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
-        NSDirectoryEnumerator *enumerator = [fileManager
-                                             enumeratorAtURL:documentsURL
-                                             includingPropertiesForKeys:keys
-                                             options:0
-                                             errorHandler:^(NSURL *url, NSError *error) {
-                                                 // Return YES for the enumeration to continue after the error.
-                                                 return YES;
-                                             }];
-        for (NSURL *url in enumerator) {
-            NSNumber *isDirectory = nil;
-            if ([url isFileURL]) {
-                [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
-                if ([isDirectory boolValue])
+    [self prepareProcessUrl:^{
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            NSArray *paths = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+            NSURL *documentsURL = [paths lastObject];
+            NSArray *keys = @[NSURLIsDirectoryKey];
+            NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:documentsURL
+                                                  includingPropertiesForKeys:keys
+                                                                     options:0
+                                                                errorHandler:^(NSURL *url, NSError *error) {
+                // Return YES for the enumeration to continue after the error.
+                return YES;
+            }];
+
+            for (NSURL *url in enumerator)
+            {
+                NSNumber *isDirectory = nil;
+                if ([url isFileURL])
                 {
-                    [enumerator skipDescendants];
-                }
-                else if (![isDirectory boolValue] &&
-                         ([url.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
-                          [url.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
-                          [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
-                         ![url.lastPathComponent isEqualToString:@"favourites.gpx"])
-                {
-                    [self processUrl:url showAlerts:NO openGpxView:NO];
+                    [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+                    if ([isDirectory boolValue])
+                    {
+                        [enumerator skipDescendants];
+                    }
+                    else if (![isDirectory boolValue] &&
+                            ([url.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
+                                    [url.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
+                                    [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
+                            ![url.lastPathComponent isEqualToString:@"favourites.gpx"])
+                    {
+                        [self processUrl:url showAlerts:NO openGpxView:NO onComplete:nil];
+                    }
                 }
             }
-        }
-        [self hideProgressAndRefresh];
-    });
+    }];
 }
 
 - (void) applyLocalization
@@ -1076,8 +1085,8 @@ static UIViewController *parentController;
             {
                 cell.textView.text = item.groupName;
                 
-                cell.leftImageView.image = [UIImage templateImageNamed:item.groupIcon];
-                cell.leftImageView.tintColor = UIColorFromRGB(color_chart_orange);
+                cell.leftIconView.image = [UIImage templateImageNamed:item.groupIcon];
+                cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
                 cell.descriptionView.text = [NSString stringWithFormat:@"%ld", item.groupItems.count];
                 cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
                 
@@ -1091,15 +1100,15 @@ static UIViewController *parentController;
                 
                 if (item.isOpen)
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
                 }
                 else
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
                     if ([cell isDirectionRTL])
-                        [cell.iconView setImage:cell.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+                        [cell.rightIconView setImage:cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
                 }
-                cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+                cell.rightIconView.tintColor = UIColorFromRGB(color_icon_inactive);
             }
             return cell;
         }
@@ -1215,7 +1224,7 @@ static UIViewController *parentController;
                     if ([_savingHelper hasData])
                     {
                         [self doPush];
-                        [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil pushed:YES];
+                        [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil];
                     }
                 }
                 else
@@ -1234,7 +1243,7 @@ static UIViewController *parentController;
             NSDictionary *gpxInfo = item.groupItems[indexPath.row - 1];
             OAGPX* gpxItem = gpxInfo[@"track"];
             [self doPush];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxItem pushed:YES];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxItem];
         }
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }

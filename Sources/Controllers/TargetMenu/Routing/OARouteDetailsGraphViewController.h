@@ -7,9 +7,15 @@
 //
 
 #import "OARouteBaseViewController.h"
+#import "OATrackMenuHudViewController.h"
 
 @interface OARouteDetailsGraphViewController : OARouteBaseViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+- (instancetype)initWithGpxData:(NSDictionary *)data
+          trackMenuControlState:(OATargetMenuViewControllerState *)trackMenuControlState;
+
+- (void)onNewModeSelected:(EOARouteStatisticsMode)mode;
 
 @end

@@ -141,7 +141,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     CLLocation *_initialPoint;
 	
 	BOOL _showSnapWarning;
+    OATrackMenuViewControllerState *_trackMenuState;
 }
+
+@synthesize menuHudMode;
 
 - (instancetype) init
 {
@@ -197,6 +200,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
+- (instancetype) initWithFileName:(NSString *)fileName trackMenuState:(OATargetMenuViewControllerState *)trackMenuState
+{
+    self = [self initWithFileName:fileName];
+    if (self)
+    {
+        _trackMenuState = trackMenuState;
+    }
+    return self;
+}
+
 - (void) commonInit
 {
     [self commonInit:[[OAMeasurementEditingContext alloc] init]];
@@ -204,6 +217,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) commonInit:(OAMeasurementEditingContext *)context
 {
+    menuHudMode = EOAScrollableMenuHudExtraHeaderInLandscapeMode;
     _app = OsmAndApp.instance;
     _settings = [OAAppSettings sharedManager];
     _mapPanel = OARootViewController.instance.mapPanel;
@@ -256,7 +270,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [_closeButton setImage:[UIImage templateImageNamed:@"ic_navbar_close"] forState:UIControlStateNormal];
     _closeButton.imageView.tintColor = UIColor.whiteColor;
-    
+    [_closeButton addBlurEffect:NO cornerRadius:12. padding:0];
+
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     _titleView.text = OALocalizedString(@"plan_route");
     
@@ -664,6 +679,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_mapPanel hideScrollableHudViewController];
         _layer.editingCtx = nil;
         [_layer resetLayer];
+
+        if (_trackMenuState)
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
+                                                  trackHudMode:EOATrackMenuHudMode
+                                                         state:_trackMenuState];
     }];
 }
 

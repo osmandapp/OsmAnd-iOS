@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSArray<NSArray<NSDictionary *> *> *_data;
     EOASortingMode _sortingMode;
     EOAPlanningTrackScreenType _screenType;
-    int _selectedFolderIndex;
+    NSInteger _selectedFolderIndex;
     NSArray<NSString *> *_allFolders;
     OACollectionViewCellState *_scrollCellsState;
     OAFoldersCell *_foldersCell;
@@ -474,7 +474,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 #pragma mark - OAFoldersCellDelegate
 
-- (void) onItemSelected:(int)index type:(NSString *)type
+- (void) onItemSelected:(NSInteger)index type:(NSString *)type
 {
     _selectedFolderIndex = index;
     [self generateData];

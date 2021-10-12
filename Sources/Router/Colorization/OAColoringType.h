@@ -33,10 +33,7 @@
 
 - (OAGradientScaleType *) toGradientScaleType;
 
-<<<<<<< HEAD
-=======
 - (BOOL) isTrackSolid;
->>>>>>> 31d17e5d1ebb3d4d1d3eae3cf25bb9f7c40019c5
 - (BOOL) isGradient;
 
 @end

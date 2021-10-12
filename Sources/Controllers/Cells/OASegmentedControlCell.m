@@ -1,14 +1,14 @@
 //
-//  OASegmentedControllCell.m
+//  OASegmentedControlCell.m
 //  OsmAnd
 //
 //  Created by Paul on 24/11/2020.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OASegmentedControllCell.h"
+#import "OASegmentedControlCell.h"
 
-@implementation OASegmentedControllCell
+@implementation OASegmentedControlCell
 
 - (void) awakeFromNib
 {
@@ -20,6 +20,12 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)changeHeight:(BOOL)higher
+{
+    self.segmentedControlPrimaryHeight.active = !higher;
+    self.segmentedControlSecondaryHeight.active = higher;
 }
 
 @end

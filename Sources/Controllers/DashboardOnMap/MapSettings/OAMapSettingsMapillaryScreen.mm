@@ -408,8 +408,8 @@ static const NSInteger panoImageFilterSection = 3;
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
             if ([item[@"key"] isEqualToString:@"users_filter"])
             {
                 NSString *usernames = [_userNames stringByReplacingOccurrencesOfString:@"$$$" withString:@", "];

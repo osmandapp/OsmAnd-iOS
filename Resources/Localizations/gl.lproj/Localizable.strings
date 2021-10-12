@@ -96,7 +96,6 @@
 "map_widget_battery" = "Nivel da batería";
 "map_widget_plain_time" = "Tempo actual";
 "map_widget_max_speed" = "Límite da velocidade";
-"max_speed_none" = "none";
 "access_arrival_time" = "Hora da chegada";
 "map_widget_time" = "Tempo para chegar";
 "map_widget_ruler_control" = "Regra de raio";
@@ -376,7 +375,6 @@
 "gpx_route" = "Itinerario";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
-"gpx_distance" = "Distance";
 "gpx_average_speed" = "Velocidade media";
 "gpx_start" = "Comezar";
 "gpx_finish" = "Rematar";
@@ -422,7 +420,7 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_none" = "Ningún";
+"shared_string_none" = "Ningún";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Mapas con conexión";
 "map_settings_transp" = "Transparencia";
@@ -817,7 +815,6 @@
 "osm_live_enter_email" = "Insire un enderezo do correo válido";
 "osm_live_enter_user_name" = "Insire un nome público";
 "osm_live_ask_for_purchase" = "Merca primeiro unha subscrición ó OsmAnd ao Vivo";
-"sett_no_ext_input" = "Ningún";
 "sett_generic_ext_input" = "Teclado xenérico";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "day" = "Día";

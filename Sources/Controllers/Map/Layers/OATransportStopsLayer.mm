@@ -125,7 +125,7 @@
                     builder.setBaseOrder(baseOrder--)
                     .setIsHidden(points.size() == 0)
                     .setLineId(lineId++)
-                    .setLineWidth(30)
+                    .setLineWidth(6 * self.displayDensityFactor)
                     .setPoints(points)
                     .setFillColor(color);
                     

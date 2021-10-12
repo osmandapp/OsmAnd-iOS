@@ -122,7 +122,7 @@
                 }
 
                 if (index == 0)
-                    value = OALocalizedString(@"sett_no_ext_input");
+                    value = OALocalizedString(@"shared_string_none");
                 else if (index != -1)
                     value = [self addSpaceToValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]];
                 else
@@ -190,15 +190,15 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftImageView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftImageView.tintColor = [item[@"selectedItem"] intValue] == 0 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = [item[@"selectedItem"] intValue] == 0 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

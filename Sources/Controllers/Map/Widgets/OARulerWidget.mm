@@ -426,8 +426,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) drawTextCoords:(NSString *)text textCoords:(NSArray<NSValue *> *)textCoords font:(UIFont *)font
 {
-    NSAttributedString *distString = [OAUtilities createAttributedString:text font:font color:_textColor strokeColor:nil strokeWidth:0];
-    NSAttributedString *distShadowString = [OAUtilities createAttributedString:text font:font color:_textColor strokeColor:_textShadowColor strokeWidth:_strokeWidthText];
+    NSAttributedString *distString = [OAUtilities createAttributedString:text font:font color:_textColor strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter];
+    NSAttributedString *distShadowString = [OAUtilities createAttributedString:text font:font color:_textColor strokeColor:_textShadowColor strokeWidth:_strokeWidthText alignment:NSTextAlignmentCenter];
     
     if (textCoords.count > 0 && textCoords[0])
     {
@@ -446,11 +446,11 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     CGSize boundsDistance;
     CGSize boundsHeading;
     
-    boundsDistance = [[OAUtilities createAttributedString:topOrLeftText font:_font color:_textColor strokeColor:nil strokeWidth:0] size];
+    boundsDistance = [[OAUtilities createAttributedString:topOrLeftText font:_font color:_textColor strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter] size];
     if ([topOrLeftText isEqualToString:rightOrBottomText])
         boundsHeading = boundsDistance;
     else
-        boundsHeading = [[OAUtilities createAttributedString:rightOrBottomText font:_font color:_textColor strokeColor:nil strokeWidth:0] size];
+        boundsHeading = [[OAUtilities createAttributedString:rightOrBottomText font:_font color:_textColor strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter] size];
     
     CGPoint topOrLeftCoordinate = CGPointZero;
     CGPoint rightOrBottomCoordinate = CGPointZero;
@@ -466,11 +466,11 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     CGSize boundsDistance;
     CGSize boundsHeading;
     
-    boundsDistance = [[OAUtilities createAttributedString:rightOrBottomText font:_font color:_textColor strokeColor:nil strokeWidth:0] size];
+    boundsDistance = [[OAUtilities createAttributedString:rightOrBottomText font:_font color:_textColor strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter] size];
     if ([topOrLeftText isEqualToString:rightOrBottomText])
         boundsHeading = boundsDistance;
     else
-        boundsHeading = [[OAUtilities createAttributedString:topOrLeftText font:_boldFont color:_textColor strokeColor:nil strokeWidth:0] size];
+        boundsHeading = [[OAUtilities createAttributedString:topOrLeftText font:_boldFont color:_textColor strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter] size];
 
     CGPoint topOrLeftCoordinate = CGPointZero;
     CGPoint rightOrBottomCoordinate = CGPointZero;
@@ -615,8 +615,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         NSString *cardinalDirection = [self getCardinalDirection:i];
         if (cardinalDirection)
         {
-            NSAttributedString *cardinalString = [OAUtilities createAttributedString:cardinalDirection font:_boldFont color:_textColor strokeColor:nil strokeWidth:0];
-            NSAttributedString *cardinalShadowString = [OAUtilities createAttributedString:cardinalDirection font:_boldFont color:_textColor strokeColor:_textShadowColor strokeWidth:_strokeWidthText];
+            NSAttributedString *cardinalString = [OAUtilities createAttributedString:cardinalDirection font:_boldFont color:_textColor strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter];
+            NSAttributedString *cardinalShadowString = [OAUtilities createAttributedString:cardinalDirection font:_boldFont color:_textColor strokeColor:_textShadowColor strokeWidth:_strokeWidthText alignment:NSTextAlignmentCenter];
             CGFloat textWidth = cardinalString.size.width;
             CGFloat textHeight = cardinalString.size.height;
             

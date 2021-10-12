@@ -40,7 +40,7 @@
 "map_settings_night" = "Ноч";
 "map_settings_style" = "Стыль мапы";
 "map_settings_overunder" = "Ніжні/верхні пласты";
-"map_settings_none" = "Нічога";
+"shared_string_none" = "Нічога";
 "map_settings_online" = "Сеціўныя мапы";
 "intro_download" = "Спампаваць\nмапу";
 "intro_next" = "Далей";
@@ -111,7 +111,6 @@
 "gpx_remove" = "Выдаліць след?";
 "gpx_route_time" = "Час маршруту";
 "gpx_uphldownhl" = "Уздымы/Спускі";
-"gpx_distance" = "Адлегласьць";
 "gpx_average_speed" = "Сярэдняя хуткасць";
 "gpx_start" = "Пачаць";
 "gpx_finish" = "Фініш";
@@ -653,7 +652,6 @@
 "map_widget_battery" = "Узровень зараду батарэі";
 "map_widget_plain_time" = "Цяперашні час";
 "map_widget_max_speed" = "Абмежаванне хуткасці";
-"max_speed_none" = "няма";
 "access_arrival_time" = "Час прыбыцця";
 "map_widget_time" = "Час у дарозе";
 "map_widget_altitude" = "Вышыня";
@@ -812,7 +810,6 @@
 "get_discount_title" = "Атрымайце %d %@ са зніжкай %d%%.";
 "get_free_trial_title" = "Пачаць бясплатны перыяд %d %@.";
 "get_discount_short_descr" = "%@ за %d %@, пасля %@";
-"sett_no_ext_input" = "Няма";
 "sett_generic_ext_input" = "Тыповая клавіятура";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "months_3" = "Тры месяцы";

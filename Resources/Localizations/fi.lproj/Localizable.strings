@@ -152,7 +152,6 @@
 "map_widget_battery" = "Akun taso";
 "map_widget_plain_time" = "Aika nyt";
 "map_widget_max_speed" = "Nopeusrajoitus";
-"max_speed_none" = "ei mitään";
 "access_arrival_time" = "Saapumisaika";
 "map_widget_time" = "Aikaa jäljellä";
 "map_widget_ruler_control" = "Sädeviivain";
@@ -652,7 +651,7 @@
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
-"map_settings_none" = "Ei mitään";
+"shared_string_none" = "Ei mitään";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online kartat";
 "map_settings_transp" = "Läpinäkyvyys";
@@ -1695,7 +1694,6 @@
 "send_anonymous_data" = "Lähetä nimettömiä tietoja";
 "sett_ext_input_desc" = "Valitse laite, kuten yleinen näppäimistö tai WunderLINQ, ulkoista ohjausta varten.";
 "sett_ext_input" = "Ulkoiset syöttölaitteet";
-"sett_no_ext_input" = "Ei mitään";
 "sett_generic_ext_input" = "Tavallinen näppäimistö";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Lähennä";

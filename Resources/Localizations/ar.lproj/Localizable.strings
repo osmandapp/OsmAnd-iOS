@@ -85,7 +85,6 @@
 "map_widget_battery" = "مستوى البطارية";
 "map_widget_plain_time" = "الوقت الحالي";
 "map_widget_max_speed" = "حد السرعة";
-"max_speed_none" = "بدون";
 "access_arrival_time" = "وقت الوصول";
 "map_widget_time" = "وقت الذهاب";
 "shared_string_collapse" = "تدلي";
@@ -358,7 +357,6 @@
 "gpx_route" = "طريق";
 "gpx_route_time" = "وقت التوجيه";
 "gpx_uphldownhl" = "الصعود والهبوط";
-"gpx_distance" = "Distance";
 "gpx_average_speed" = "متوسط السرعة";
 "gpx_start" = "بدء";
 "gpx_finish" = "إنهاء";
@@ -400,7 +398,7 @@
 "map_settings_overunder" = "الخريطة العلوية/ السفلية";
 "map_settings_over" = "الخريطة العلوية";
 "map_settings_under" = "الخريطة السفلية";
-"map_settings_none" = "بدون";
+"shared_string_none" = "بدون";
 "map_settings_offline" = "أنماط للخرائط غير المتصلة";
 "map_settings_online" = "خرائط الإنترنت";
 "map_settings_transp" = "الشفافية";
@@ -1084,7 +1082,6 @@
 "osm_upload_complete" = "اكتمال الرفع";
 "sett_ext_input_desc" = "حدد جهاز تحكم خارجي ، مثل لوحة المفاتيح أو WunderLINQ.";
 "sett_ext_input" = "أجهزة الإدخال الخارجية";
-"sett_no_ext_input" = "لا شيء";
 "sett_generic_ext_input" = "لوحة المفاتيح العامة";
 "sett_wunderlinq_ext_input" = "وندرلينك";
 "key_hint_zoom_in" = "تكبير";

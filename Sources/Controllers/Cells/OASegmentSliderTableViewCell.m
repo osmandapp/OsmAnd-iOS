@@ -210,4 +210,59 @@ const CGFloat kMarkWidth = 2.0;
         return nextMark - 1;
 }
 
+- (void)showLabels:(BOOL)topLeft topRight:(BOOL)topRight bottomLeft:(BOOL)bottomLeft bottomRight:(BOOL)bottomRight;
+{
+    self.topLeftLabel.hidden = !topLeft;
+    self.topRightLabel.hidden = !topRight;
+    self.bottomLeftLabel.hidden = !bottomLeft;
+    self.bottomRightLabel.hidden = !bottomRight;
+
+    UIFont *bottomLabelsFont = [UIFont systemFontOfSize:topLeft || topRight ? 15. : 17.];
+    self.bottomLeftLabel.font = bottomLabelsFont;
+    self.bottomRightLabel.font = bottomLabelsFont;
+}
+
+- (void)updateConstraints
+{
+    BOOL hasLeftTopLabel = !self.topLeftLabel.hidden;
+    BOOL hasRightTopLabel = !self.topRightLabel.hidden;
+    BOOL hasTopLabels = hasLeftTopLabel || hasRightTopLabel;
+
+    BOOL hasLeftBottomLabel = !self.bottomLeftLabel.hidden;
+    BOOL hasRightBottomLabel = !self.bottomRightLabel.hidden;
+    BOOL hasBottomLabels = hasLeftBottomLabel || hasRightBottomLabel;
+
+    self.sliderLabelsTopConstraint.active = hasTopLabels;
+    self.sliderNoLabelsTopConstraint.active = !hasTopLabels;
+
+    self.sliderLabelsBottomConstraint.constant = hasTopLabels ? 7. : 13.;
+    self.sliderLabelsBottomConstraint.active = hasBottomLabels;
+    self.sliderNoLabelsBottomConstraint.active = !hasBottomLabels;
+
+    [super updateConstraints];
+}
+
+- (BOOL)needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasLeftTopLabel = !self.topLeftLabel.hidden;
+        BOOL hasRightTopLabel = !self.topRightLabel.hidden;
+        BOOL hasTopLabels = hasLeftTopLabel || hasRightTopLabel;
+
+        BOOL hasLeftBottomLabel = !self.bottomLeftLabel.hidden;
+        BOOL hasRightBottomLabel = !self.bottomRightLabel.hidden;
+        BOOL hasBottomLabels = hasLeftBottomLabel || hasRightBottomLabel;
+
+        res = res || self.sliderLabelsTopConstraint.active != hasTopLabels;
+        res = res || self.sliderNoLabelsTopConstraint.active != !hasTopLabels;
+
+        res = res || self.sliderLabelsBottomConstraint.constant != (hasTopLabels ? 7. : 13.);
+        res = res || self.sliderLabelsBottomConstraint.active != hasBottomLabels;
+        res = res || self.sliderNoLabelsBottomConstraint.active != !hasBottomLabels;
+    }
+    return res;
+}
+
 @end

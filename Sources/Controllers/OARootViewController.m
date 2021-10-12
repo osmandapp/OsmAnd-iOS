@@ -330,17 +330,22 @@ typedef enum : NSUInteger {
 
 - (void)importAsGPX:(NSURL *)url
 {
-    [self importAsGPX:url openGpxView:YES];
+    [self importAsGPX:url showAlerts:YES openGpxView:YES];
 }
 
-- (void)importAsGPX:(NSURL *)url openGpxView:(BOOL)openGpxView
+- (void)importAsGPX:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
+{
+    [self importAsGPX:url showAlerts:showAlerts openGpxView:openGpxView onComplete:nil];
+}
+
+- (void)importAsGPX:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete
 {
     UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
     [myPlacesViewController setSelectedIndex:1];
     OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
     if (gpxController == nil)
         return;
-    [gpxController processUrl:url openGpxView:openGpxView];
+    [gpxController prepareProcessUrl:url showAlerts:showAlerts openGpxView:openGpxView onComplete:onComplete];
     [self closeMenuAndPanelsAnimated:NO];
 }
 

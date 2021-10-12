@@ -97,7 +97,6 @@
 "gpx_route" = "路线";
 "gpx_route_time" = "";
 "gpx_uphldownhl" = "";
-"gpx_distance" = "Distance";
 "gpx_average_speed" = "平均速度";
 "gpx_start" = "开始";
 "gpx_finish" = "完成";
@@ -139,7 +138,7 @@
 "map_settings_overunder" = "叠加层 / 背景层";
 "map_settings_over" = "叠加层";
 "map_settings_under" = "背景层";
-"map_settings_none" = "无";
+"shared_string_none" = "无";
 "map_settings_offline" = "";
 "map_settings_online" = "在线地图";
 "map_settings_transp" = "透明度";
@@ -546,7 +545,6 @@
 "map_widget_battery" = "电池用量";
 "map_widget_plain_time" = "当前时间";
 "map_widget_max_speed" = "速度限制";
-"max_speed_none" = "无";
 "sort_by_distance" = "按距离排序";
 "will_open_tomorrow_at" = "明日开始营业时间";
 "open_from" = "开始营业于";
@@ -1269,7 +1267,6 @@
 "app_mode_wagon" = "旅行车";
 "app_mode_camper" = "露营车";
 "rendering_attr_tracktype_grade5_name" = "松软";
-"sett_no_ext_input" = "无";
 "app_mode_offroad" = "越野";
 "app_mode_scooter" = "踏板车";
 "app_mode_monowheel" = "单轮";

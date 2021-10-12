@@ -271,8 +271,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftImageView.tintColor = UIColorFromRGB(color_dialog_buttons_dark);
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_dialog_buttons_dark);
             cell.descriptionView.text = [_wikiPlugin getLanguagesSummary];
         }
         return cell;

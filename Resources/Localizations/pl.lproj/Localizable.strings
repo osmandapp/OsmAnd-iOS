@@ -84,7 +84,6 @@
 "gpx_stat" = "Statystyki";
 "gpx_route" = "Trasa";
 "gpx_route_time" = "Czas trasy";
-"gpx_distance" = "Odległość";
 "gpx_average_speed" = "Średnia prędkość";
 "gpx_avg_elev" = "Średnie wzniesienia";
 "gpx_elev_range" = "Zakres wzniesień";
@@ -97,7 +96,7 @@
 "map_settings_night" = "Noc";
 "map_settings_style" = "Styl mapy";
 "map_settings_over" = "Nakładka";
-"map_settings_none" = "Brak";
+"shared_string_none" = "Brak";
 "map_settings_offline" = "Style map offline";
 "map_settings_online" = "Mapy online";
 "map_settings_transp" = "Przejrzystość";
@@ -557,7 +556,6 @@
 "map_widget_battery" = "Stan akumulatora";
 "map_widget_plain_time" = "Aktualny czas";
 "map_widget_max_speed" = "Ograniczenie prędkości";
-"max_speed_none" = "brak";
 "access_arrival_time" = "Czas przybycia";
 "map_widget_time" = "Czas do osiągnięcia celu";
 "shared_string_collapse" = "Zwiń";
@@ -1078,7 +1076,6 @@
 "osm_upload_complete" = "Przesyłanie zakończone";
 "sett_ext_input_desc" = "Wybierz urządzenie takie jak zwykła klawiatura lub WundeRLINQ do sterowania zewnętrznego.";
 "sett_ext_input" = "Zewnętrzne urządzenia wejściowe";
-"sett_no_ext_input" = "Brak";
 "sett_generic_ext_input" = "Zwykła klawiatura";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Przybliż";

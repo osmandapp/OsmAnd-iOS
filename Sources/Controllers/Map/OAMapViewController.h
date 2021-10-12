@@ -49,6 +49,7 @@
 #define CENTER_CONSTANT 0
 #define BOTTOM_CONSTANT 1
 
+@class OAGPX;
 @class OAGpxWpt;
 @class OAGpxMetadata;
 @class OAPOIUIFilter;
@@ -72,6 +73,7 @@
 @property (readonly) OAObservable* mapObservable;
 @property (readonly) OAObservable* mapSourceUpdatedObservable;
 
+@property (nonatomic) OAGPX *foundGpx;
 @property (nonatomic) OAGpxWpt *foundWpt;
 @property (nonatomic) NSArray *foundWptGroups;
 @property (nonatomic) NSString *foundWptDocPath;
@@ -102,6 +104,7 @@
 
 - (BOOL) findWpt:(CLLocationCoordinate2D)location;
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
+- (BOOL) findTrack:(CLLocationCoordinate2D)location;
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;
@@ -163,6 +166,7 @@
 - (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
+- (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth;
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings;
 
 - (void) showProgressHUDWithMessage:(NSString *)message;

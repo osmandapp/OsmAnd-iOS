@@ -136,7 +136,7 @@
         builder.setBaseOrder(self.baseOrder)
         .setIsHidden(false)
         .setLineId(lineId)
-        .setLineWidth(16)
+        .setLineWidth(8)
         .setLineDash(linePattern)
         .setFillColor(lineColor);
         

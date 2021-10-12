@@ -23,6 +23,7 @@
 #import "OAFavoritesLayer.h"
 #import "OARouteColorizationHelper.h"
 #import "OAColoringType.h"
+#import "OAGPXAppearanceCollection.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -35,11 +36,18 @@
 #define COLORIZATION_GRADIENT 1
 #define COLORIZATION_SOLID 2
 
+@interface OAGPXLayer ()
+
+@property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
+
+@end
+
 @implementation OAGPXLayer
 {
     std::shared_ptr<OAWaypointsMapLayerProvider> _waypointsMapProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
+    CGFloat _cacheLineWidth;
 }
 
 - (NSString *) layerId
@@ -82,7 +90,9 @@
             [self refreshGpxWaypoints];
         });
     }
-    
+
+    self.appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
+
     return YES;
 }
 
@@ -212,19 +222,34 @@
 {
     if (points.size() > 1)
     {
-        
-        if (colors.size() > 0)
+        CGFloat lineWidth = _cacheLineWidth;
+        if (![self.appearanceCollection.gpxName isEqualToString:gpx.gpxFileName])
         {
+            _cacheLineWidth = lineWidth = [self getLineWidth:gpx.width];
+            self.appearanceCollection.gpxName = gpx.gpxFileName;
+        }
+
+        QList<OsmAnd::FColorARGB> colors;
+        if (gpx.coloringType.length > 0)
+        {
+            NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+            QString qPath = QString::fromNSString(path);
+            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
+            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+            doc.path = path;
+            OAColoringType *type = [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType];
+            OARouteColorizationHelper *routeColorization = [[OARouteColorizationHelper alloc] initWithGpxFile:doc analysis:[doc getAnalysis:0] type:type.toGradientScaleType.toColorizationType maxProfileSpeed:0];
+
+            colors = routeColorization ? [routeColorization getResult] : QList<OsmAnd::FColorARGB>();
             // Add outline for colorized lines
-            if (!colors.isEmpty())
-            {
+            if (!colors.isEmpty()) {
                 const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
-                
+
                 OsmAnd::VectorLineBuilder outlineBuilder;
                 outlineBuilder.setBaseOrder(baseOrder--)
                 .setIsHidden(points.size() == 0)
                 .setLineId(lineId + 1000)
-                .setLineWidth(30)
+                .setLineWidth(lineWidth + 10)
                 .setOutlineWidth(10)
                 .setPoints(points)
                 .setFillColor(outlineColor);
@@ -238,7 +263,7 @@
         builder.setBaseOrder(baseOrder)
         .setIsHidden(points.size() == 0)
         .setLineId(lineId)
-        .setLineWidth(20)
+        .setLineWidth(lineWidth)
         .setPoints(points)
         .setFillColor(colorARGB);
         
@@ -294,11 +319,56 @@
     }
 }
 
+- (CGFloat)getLineWidth:(NSString *)gpxWidth
+{
+    CGFloat lineWidth = kDefaultWidthMultiplier;
+    if (gpxWidth.length > 0 && self.appearanceCollection)
+    {
+        OAGPXTrackWidth *trackWidth = [self.appearanceCollection getWidthForValue:gpxWidth];
+        if (trackWidth)
+        {
+            if ([trackWidth isCustom])
+            {
+                lineWidth = [trackWidth.customValue floatValue];
+            }
+            else
+            {
+                NSInteger zoom = self.mapView.zoomLevel;
+                NSArray<NSArray<NSNumber *> *> *allValues = trackWidth.allValues;
+                for (NSArray<NSNumber *> *values in allValues)
+                {
+                    NSInteger minZoom = values[0].intValue;
+                    NSInteger maxZoom = values[1].intValue;
+                    if (zoom >= minZoom && ((zoom <= maxZoom && maxZoom != -1) || maxZoom == -1))
+                    {
+                        lineWidth = values[2].intValue;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return lineWidth * self.displayDensityFactor;
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    if ([obj isKindOfClass:[OAGpxWptItem class]])
+    if ([obj isKindOfClass:[OAGPX class]])
+    {
+        OAGPX *item = (OAGPX *) obj;
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.type = OATargetGPX;
+        targetPoint.targetObj = item;
+
+        targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
+        targetPoint.title = [item getNiceTitle];
+
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        return targetPoint;
+    }
+    else if ([obj isKindOfClass:[OAGpxWptItem class]])
     {
         OAGpxWptItem *item = (OAGpxWptItem *)obj;
         
@@ -326,6 +396,13 @@
     OAMapViewController *mapViewController = self.mapViewController;
     if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
     {
+        if ([mapViewController findTrack:point])
+        {
+            OAGPX *item = mapViewController.foundGpx;
+            OATargetPoint *targetPoint = [self getTargetPoint:item];
+            if (![found containsObject:targetPoint])
+                [found addObject:targetPoint];
+        }
         if ([mapViewController findWpt:point])
         {
             OAGpxWpt *wpt = mapViewController.foundWpt;

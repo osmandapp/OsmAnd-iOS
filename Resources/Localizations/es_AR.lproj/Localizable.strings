@@ -132,7 +132,6 @@
 "gpx_stat" = "Estadísticas";
 "gpx_route_time" = "Tiempo del recorrido";
 "gpx_uphldownhl" = "Ascensos/Descensos";
-"gpx_distance" = "Distancia";
 "gpx_average_speed" = "Velocidad media";
 "gpx_start" = "Iniciar";
 "gpx_finish" = "Finalizar";
@@ -170,7 +169,7 @@
 "map_settings_overunder" = "Superpuesta/Subyacente";
 "map_settings_over" = "Superposición";
 "map_settings_under" = "Subyacente";
-"map_settings_none" = "Ninguno";
+"shared_string_none" = "Ninguno";
 "map_settings_offline" = "Estilos de mapas sin conexión";
 "map_settings_online" = "Mapas en línea";
 "map_settings_transp" = "Transparencia";
@@ -684,7 +683,6 @@
 "map_widget_battery" = "Nivel de batería";
 "map_widget_plain_time" = "Hora actual";
 "map_widget_max_speed" = "Límite de velocidad";
-"max_speed_none" = "ninguna";
 "access_arrival_time" = "Hora de llegada";
 "map_widget_time" = "Tiempo de llegada";
 "map_widget_altitude" = "Altitud";
@@ -1085,7 +1083,6 @@
 "osm_upload_complete" = "Subida completa";
 "sett_ext_input_desc" = "Elige un dispositivo como un teclado genérico o WunderLINQ para los controles externos.";
 "sett_ext_input" = "Dispositivos de entrada externos";
-"sett_no_ext_input" = "Ninguno";
 "sett_generic_ext_input" = "Teclado genérico";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Acercar";

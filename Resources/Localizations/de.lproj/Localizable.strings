@@ -53,7 +53,6 @@
 "gpx_no_tracks" = "Keine Tracks vorhanden";
 "gpx_remove" = "Track entfernen?";
 "gpx_stat" = "Statistiken";
-"gpx_distance" = "Entfernung";
 "gpx_average_speed" = "Durchschnittsgeschwindigkeit";
 "gpx_finish" = "Beenden";
 "gpx_avg_elev" = "Durchschnittshöhe";
@@ -72,7 +71,7 @@
 "map_settings_day" = "Tag";
 "map_settings_night" = "Nacht";
 "map_settings_style" = "Kartendarstellung";
-"map_settings_none" = "Keine";
+"shared_string_none" = "Keine";
 "map_settings_offline" = "Stile für Offline Karten";
 "map_settings_online" = "Online-Karten";
 "map_settings_transp" = "Transparenz";
@@ -610,7 +609,6 @@
 "map_widget_battery" = "Akkustand";
 "map_widget_plain_time" = "Aktuelle Zeit";
 "map_widget_max_speed" = "Tempolimit";
-"max_speed_none" = "keine";
 "access_arrival_time" = "Ankunftszeit";
 "map_widget_time" = "Verbleibende Zeit";
 "shared_string_collapse" = "Einklappen";
@@ -1086,7 +1084,6 @@
 "osm_upload_complete" = "Hochladen abgeschlossen";
 "sett_ext_input_desc" = "Wählen Sie ein Gerät wie eine Tastatur oder WunderLINQ für externe Steuerelemente aus.";
 "sett_ext_input" = "Externe Eingabegeräte";
-"sett_no_ext_input" = "Keines";
 "sett_generic_ext_input" = "Tastatur";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Hineinzoomen";

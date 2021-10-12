@@ -61,7 +61,6 @@
 "gpx_stat" = "Štatistiky";
 "gpx_route" = "Cesta";
 "gpx_route_time" = "Čas trasy";
-"gpx_distance" = "Vzdialenosť";
 "gpx_average_speed" = "Priemerná rýchlosť";
 "gpx_start" = "Spustiť";
 "gpx_finish" = "Dokončiť";
@@ -84,7 +83,7 @@
 "map_settings_overunder" = "Prekrývacia/Podkladová";
 "map_settings_over" = "Prekrývacia";
 "map_settings_under" = "Podkladová";
-"map_settings_none" = "Žiadne";
+"shared_string_none" = "Žiadne";
 "map_settings_offline" = "Štýly pre offline mapy";
 "map_settings_online" = "Online mapy";
 "map_settings_transp" = "Priehľadnosť";
@@ -682,7 +681,6 @@
 "map_widget_battery" = "Úroveň batérie";
 "map_widget_plain_time" = "Aktuálny čas";
 "map_widget_max_speed" = "Obmedzenie rýchlosti";
-"max_speed_none" = "žiadna";
 "access_arrival_time" = "Čas príchodu";
 "map_widget_time" = "Zostávajúci čas";
 "map_widget_altitude" = "Nadm. výška";
@@ -1083,7 +1081,6 @@
 "osm_upload_complete" = "Odoslanie hotové";
 "sett_ext_input_desc" = "Zvoľte zariadenie, ako napr. univerzálnu klávesnicu alebo WunderLINQ, pre externé ovládanie.";
 "sett_ext_input" = "Externé vstupné zariadenia";
-"sett_no_ext_input" = "Žiadne";
 "sett_generic_ext_input" = "Všeobecná klávesnica";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Priblížiť";

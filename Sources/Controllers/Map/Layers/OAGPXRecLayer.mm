@@ -16,6 +16,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
+#import "OASavingTrackHelper.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -23,6 +24,13 @@
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
+
+@interface OAGPXRecLayer ()
+
+@property (nonatomic) CGFloat defaultTrackWidth;
+@property (nonatomic) NSDictionary<NSString *, NSArray<NSNumber *> *> *gpxWidthAttrs;
+
+@end
 
 @implementation OAGPXRecLayer
 
@@ -70,6 +78,7 @@
         int baseOrder = self.baseOrder;
         int lineId = 1;
         int lineIndex = 0;
+        CGFloat lineWidth = [self getLineWidth:[[OASavingTrackHelper sharedInstance] getCurrentGPX].width];
 
         const auto& lines = self.linesCollection->getLines();
         for (const auto& points : OsmAnd::constOf(pointsList))
@@ -82,7 +91,7 @@
                     builder.setBaseOrder(baseOrder--)
                     .setIsHidden(points.size() == 0)
                     .setLineId(lineId++)
-                    .setLineWidth(30)
+                    .setLineWidth(lineWidth)
                     .setPoints(points)
                     .setFillColor(OsmAnd::ColorARGB(kDefaultTrackColor))
                     .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])

@@ -11,6 +11,7 @@
 #import "OACommonTypes.h"
 
 #define kDefaultTrackColor 0xFFFF0000
+#define kDefaultWidthMultiplier 7
 
 @class OAGPXTrackAnalysis;
 @class OAGpxWpt;
@@ -74,7 +75,8 @@
 -(OAGPX *)getGPXItem:(NSString *)filePath;
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;
--(BOOL)removeGpxItem:(NSString *)filePath;
+-(void)removeGpxItem:(NSString *)filePath;
+-(void)removeGpxItem:(NSString *)filePath removeFile:(BOOL)removeFile;
 -(BOOL)containsGPXItem:(NSString *)filePath;
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
@@ -83,7 +85,8 @@
 
 -(NSString *)getFileDir:(NSString *)filePath;
 
--(void)load;
--(void)save;
+- (void)load;
+- (void)reloadGPXFile:(NSString *)filePath onComplete:(void (^)(void))onComplete;
+- (void)save;
 
 @end

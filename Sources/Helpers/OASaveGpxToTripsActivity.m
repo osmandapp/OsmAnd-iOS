@@ -81,7 +81,7 @@
                 finalPath = [[_pathToTmpGpx stringByDeletingLastPathComponent] stringByAppendingPathComponent:alert.textFields.firstObject.text];
                 [[NSFileManager defaultManager] moveItemAtPath:_pathToTmpGpx toPath:finalPath error:nil];
             }
-            [rootVC importAsGPX:[NSURL fileURLWithPath:finalPath] openGpxView:NO];
+            [rootVC importAsGPX:[NSURL fileURLWithPath:finalPath] showAlerts:YES openGpxView:NO];
         }]];
         
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];

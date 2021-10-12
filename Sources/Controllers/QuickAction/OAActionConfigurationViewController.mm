@@ -590,23 +590,23 @@
             OAFavoriteColor *color = [OADefaultFavorite builtinColors][[item[@"color"] integerValue]];
             if (item[@"img"])
             {
-                cell.leftImageView.layer.cornerRadius = 0.;
-                cell.leftImageView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.leftImageView.tintColor = color.color;
+                cell.leftIconView.layer.cornerRadius = 0.;
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.leftIconView.tintColor = color.color;
             }
             else if ([item[@"key"] isEqualToString:@"category_color"])
             {
-                cell.leftImageView.layer.cornerRadius = cell.leftImageView.frame.size.height / 2;
-                cell.leftImageView.backgroundColor = color.color;
+                cell.leftIconView.layer.cornerRadius = cell.leftIconView.frame.size.height / 2;
+                cell.leftIconView.backgroundColor = color.color;
             }
             else
             {
-                [cell showImage:NO];
+                [cell showLeftIcon:NO];
             }
             
             cell.descriptionView.text = item[@"value"];
             cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }

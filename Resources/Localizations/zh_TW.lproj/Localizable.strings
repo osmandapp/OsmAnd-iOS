@@ -101,7 +101,6 @@
 "gpx_stat" = "統計";
 "gpx_route_time" = "路線時間";
 "gpx_uphldownhl" = "上坡 / 下坡";
-"gpx_distance" = "距離";
 "gpx_average_speed" = "平均速度";
 "gpx_start" = "開始";
 "gpx_finish" = "結束";
@@ -139,7 +138,7 @@
 "map_settings_overunder" = "上層 / 下層";
 "map_settings_over" = "上層";
 "map_settings_under" = "下層";
-"map_settings_none" = "無";
+"shared_string_none" = "無";
 "map_settings_offline" = "離線地圖的樣式";
 "map_settings_online" = "線上地圖";
 "map_settings_transp" = "透明度";

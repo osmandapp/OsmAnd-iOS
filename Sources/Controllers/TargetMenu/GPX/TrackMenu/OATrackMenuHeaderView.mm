@@ -80,11 +80,10 @@
 
     self.titleBottomDescriptionConstraint.active = hasDescription;
     self.titleBottomNoDescriptionConstraint.active = !hasDescription && hasCollection;
+    self.titleBottomNoDescriptionNoCollectionConstraint.active = !hasDescription && !hasCollection;
 
     self.descriptionBottomCollectionConstraint.active = hasCollection;
     self.descriptionBottomNoCollectionConstraint.active = !hasCollection;
-
-    self.titleBottomNoDescriptionNoCollectionConstraint.active = !hasDescription && !hasCollection;
 
     self.regionDirectionConstraint.active = hasDirection;
     self.regionNoDirectionConstraint.active = !hasDirection;
@@ -109,11 +108,10 @@
 
         res = res || self.titleBottomDescriptionConstraint.active != hasDescription;
         res = res || self.titleBottomNoDescriptionConstraint.active != !hasDescription && hasCollection;
-
-        res = res || self.descriptionBottomCollectionConstraint.active != hasCollection;
-        res = res || self.descriptionBottomNoCollectionConstraint.active != !hasCollection;
-
         res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active != !hasDescription && !hasCollection;
+
+        res = res || self.descriptionBottomCollectionConstraint.active != hasDescription && hasCollection;
+        res = res || self.descriptionBottomNoCollectionConstraint.active != hasDescription && !hasCollection;
 
         res = res || self.regionDirectionConstraint.active != hasDirection;
         res = res || self.regionNoDirectionConstraint.active != !hasDirection;

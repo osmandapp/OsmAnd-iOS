@@ -19,6 +19,7 @@
 #import "OATitleIconRoundCell.h"
 #import "OATitleDescriptionIconRoundCell.h"
 #import "OATitleSwitchRoundCell.h"
+#import "OAPointTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
@@ -30,6 +31,10 @@
 #import "OAMapActions.h"
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
+#import "OAAutoObserverProxy.h"
+#import "OAGpxWptItem.h"
+
+#include <OsmAndCore/Utilities.h>
 
 #define kActionsSection 4
 
@@ -54,6 +59,8 @@
 
 @implementation OATrackMenuHudViewController
 {
+    OAAutoObserverProxy *_locationServicesUpdateObserver;
+
     UIDocumentInteractionController *_exportController;
     OATrackMenuHeaderView *_headerView;
 
@@ -63,6 +70,10 @@
 
     EOATrackMenuHudTab _selectedTab;
     OATrackMenuViewControllerState *_reopeningState;
+    NSTimeInterval _lastUpdate;
+
+    //    NSArray<OAGpxWptItem *> *_unsortedWaypoints;
+    NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
 }
 
 @dynamic isShown, tableData;
@@ -108,6 +119,31 @@
 
 - (void)commonInit
 {
+    NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups = [NSMutableDictionary dictionary];
+    for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
+    {
+        OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
+        if (gpxWpt.type.length == 0)
+        {
+            [withoutGroup addObject:gpxWptItem];
+        }
+        else
+        {
+            NSMutableArray<OAGpxWptItem *> *group = waypointGroups[gpxWpt.type];
+            if (!group)
+                group = [@[gpxWptItem] mutableCopy];
+            else
+                [group addObject:gpxWptItem];
+
+            waypointGroups[gpxWpt.type] = group;
+        }
+    }
+
+    if (withoutGroup.count > 0)
+        waypointGroups[OALocalizedString(@"gpx_waypoints")] = withoutGroup;
+
+    _waypointGroups = waypointGroups;
 }
 
 - (void)viewDidLoad
@@ -122,6 +158,23 @@
 
     if (!self.isShown)
         [self onShowHidePressed:nil];
+
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(updateDistanceAndDirection)
+                                                                 andObserve:self.app.locationServices.updateObserver];
+}
+
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
+{
+    [super hide:YES duration:duration onComplete:^{
+        if (_locationServicesUpdateObserver)
+        {
+            [_locationServicesUpdateObserver detach];
+            _locationServicesUpdateObserver = nil;
+        }
+        if (onComplete)
+            onComplete();
+    }];
 }
 
 - (void)setupView
@@ -133,46 +186,20 @@
 
 - (void)setupTableView
 {
-    UITableViewCellSeparatorStyle separatorStyle = UITableViewCellSeparatorStyleNone;
-
-    if (_selectedTab == EOATrackMenuHudOverviewTab)
-        separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-
-    self.tableView.separatorStyle = separatorStyle;
+    if (_selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudPointsTab)
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    else
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)setupTabBar
 {
-    UIColor *unselectedColor = UIColorFromRGB(unselected_tab_icon);
-    UITabBarItem *overviewBarItem = [[UITabBarItem alloc]
-            initWithTitle:OALocalizedString(@"shared_string_overview")
-                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overview"]
-                                                    color:unselectedColor]
-                      tag:EOATrackMenuHudOverviewTab];
-    [overviewBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer),
-            NSFontAttributeName : [UIFont systemFontOfSize:12]
-    } forState:UIControlStateNormal];
-    [overviewBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-            NSFontAttributeName : [UIFont systemFontOfSize:12]
-    } forState:UIControlStateSelected];
+    [self.tabBarView setItems:@[
+            [self createTabBarItem:EOATrackMenuHudOverviewTab],
+            [self createTabBarItem:EOATrackMenuHudPointsTab],
+            [self createTabBarItem:EOATrackMenuHudActionsTab]
+    ] animated:YES];
 
-    UITabBarItem *actionsBarItem = [[UITabBarItem alloc]
-            initWithTitle:OALocalizedString(@"actions")
-                    image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
-                                                    color:unselectedColor]
-                      tag:EOATrackMenuHudActionsTab];
-    [actionsBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer),
-            NSFontAttributeName : [UIFont systemFontOfSize:12]
-    } forState:UIControlStateNormal];
-    [actionsBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-            NSFontAttributeName : [UIFont systemFontOfSize:12]
-    } forState:UIControlStateSelected];
-
-    [self.tabBarView setItems:@[overviewBarItem, actionsBarItem] animated:YES];
     self.tabBarView.selectedItem = self.tabBarView.items[_selectedTab];
     self.tabBarView.itemWidth = self.scrollableView.frame.size.width / self.tabBarView.items.count;
     self.tabBarView.delegate = self;
@@ -180,15 +207,66 @@
     self.tabBarView.shadowImage = [UIImage new];
 }
 
+- (UITabBarItem *)createTabBarItem:(EOATrackMenuHudTab)tab
+{
+    UIColor *unselectedColor = UIColorFromRGB(unselected_tab_icon);
+    UIFont *titleFont = [UIFont systemFontOfSize:12];
+    NSString *title;
+    NSString *icon;
+
+    switch (tab)
+    {
+        case EOATrackMenuHudActionsTab:
+        {
+            title = @"actions";
+            icon = @"ic_custom_overflow_menu";
+            break;
+        }
+        case EOATrackMenuHudPointsTab:
+        {
+            title = @"shared_string_gpx_points";
+            icon = @"ic_custom_waypoint";
+            break;
+        }
+        case EOATrackMenuHudOverviewTab:
+        default:
+        {
+            title = @"shared_string_overview";
+            icon = @"ic_custom_overview";
+            break;
+        }
+    }
+
+    UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:OALocalizedString(title)
+            image:[OAUtilities tintImageWithColor:[UIImage templateImageNamed:icon] color:unselectedColor]
+                                                               tag:tab];
+
+    [tabBarItem setTitleTextAttributes:@{
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer),
+            NSFontAttributeName: titleFont
+    } forState:UIControlStateNormal];
+
+    [tabBarItem setTitleTextAttributes:@{
+            NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+            NSFontAttributeName: titleFont
+    } forState:UIControlStateSelected];
+
+    return tabBarItem;
+}
+
 - (void)setupDescription
 {
-    if (_selectedTab == EOATrackMenuHudOverviewTab)
+    switch (_selectedTab)
     {
-        _description = self.doc.metadata.desc;
-    }
-    else
-    {
-        _description = @"";
+        case EOATrackMenuHudOverviewTab:
+            _description = self.doc.metadata.desc;
+            break;
+        case EOATrackMenuHudPointsTab:
+            _description = [NSString stringWithFormat:@"%@: %li",OALocalizedString(@"groups"), _waypointGroups.allKeys.count];
+            break;
+        default:
+            _description = @"";
+            break;
     }
 }
 
@@ -200,6 +278,11 @@
     _headerView = [[OATrackMenuHeaderView alloc] init];
     [_headerView setDescription:_description];
 
+    BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
+    _headerView.backgroundColor = isOverview ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
+    self.topHeaderContainerView.superview.backgroundColor =
+            isOverview ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
+
     if (_selectedTab != EOATrackMenuHudActionsTab)
     {
         [_headerView.titleView setText:self.isCurrentTrack ? OALocalizedString(@"track_recording_name") : [self.gpx getNiceTitle]];
@@ -207,7 +290,7 @@
         _headerView.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
     }
 
-    if (_selectedTab == EOATrackMenuHudOverviewTab)
+    if (isOverview)
     {
         [self generateGpxBlockStatistics];
 
@@ -332,7 +415,7 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *overviewSections = [NSMutableArray array];
+    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
@@ -396,7 +479,7 @@
                         }
                     }
             }];
-            [overviewSections addObject:descriptionSection];
+            [tableSections addObject:descriptionSection];
         }
 
         NSMutableArray<OAGPXTableCellData *> *infoCells = [NSMutableArray array];
@@ -492,7 +575,7 @@
                 }
         }];
 
-        [overviewSections addObject:infoSection];
+        [tableSections addObject:infoSection];
     }
     else if (_selectedTab == EOATrackMenuHudActionsTab)
     {
@@ -539,8 +622,8 @@
                 }
         }];
 
-        [overviewSections addObject:controlsSection];
-        [overviewSections addObject:[OAGPXTableSectionData withData:@{
+        [tableSections addObject:controlsSection];
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
                 kSectionCells: @[
                         [OAGPXTableCellData withData:@{
                                 kCellKey: @"analyze",
@@ -550,7 +633,7 @@
                         }]
                 ]
         }]];
-        [overviewSections addObject:[OAGPXTableSectionData withData:@{
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
                 kSectionCells: @[
                         [OAGPXTableCellData withData:@{
                                 kCellKey: @"share",
@@ -560,7 +643,7 @@
                         }]
                 ]
         }]];
-        [overviewSections addObject:[OAGPXTableSectionData withData:@{
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
                 kSectionCells: @[
                         [OAGPXTableCellData withData:@{
                                 kCellKey: @"edit",
@@ -611,9 +694,9 @@
                     }
                 }
         }];
-        [overviewSections addObject:changeSection];
+        [tableSections addObject:changeSection];
 
-        [overviewSections addObject:[OAGPXTableSectionData withData:@{
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
                 kSectionCells: @[
                         [OAGPXTableCellData withData:@{
                                 kCellKey: @"delete",
@@ -624,8 +707,30 @@
                 ]
         }]];
     }
+    else if (_selectedTab == EOATrackMenuHudPointsTab)
+    {
+        for (NSString *groupName in _waypointGroups.keyEnumerator)
+        {
+            NSMutableArray<OAGPXTableCellData *> *waypointsCells = [NSMutableArray array];
+            NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
 
-    self.tableData = overviewSections;
+            for (OAGpxWptItem *waypoint in waypoints)
+            {
+                [waypointsCells addObject:[OAGPXTableCellData withData:@{
+                        kCellKey: [NSString stringWithFormat:@"waypoint_%@", waypoint.point.name],
+                        kCellType: [OAPointTableViewCell getCellIdentifier],
+                        kCellValues: @{ @"wpt_item_value": waypoint }
+                }]];
+            }
+
+            [tableSections addObject:[OAGPXTableSectionData withData:@{
+                    kSectionCells: waypointsCells,
+                    kSectionHeader: groupName,
+            }]];
+        }
+    }
+
+    self.tableData = tableSections;
 }
 
 - (void)generateGpxBlockStatistics
@@ -909,6 +1014,120 @@
     return state;
 }
 
+- (void)updateDistanceAndDirection
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDistanceAndDirection:NO];
+    });
+}
+
+- (void)updateDistanceAndDirection:(BOOL)forceUpdate
+{
+    if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
+        return;
+
+    _lastUpdate = [[NSDate date] timeIntervalSince1970];
+
+    // Obtain fresh location and heading
+    CLLocation *newLocation = self.app.locationServices.lastKnownLocation;
+    if (!newLocation)
+        return;
+
+    CLLocationDirection newHeading = self.app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+            ? newLocation.course : newHeading;
+
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
+    {
+        OsmAnd::LatLon latLon(self.gpx.bounds.center.latitude, self.gpx.bounds.center.longitude);
+        const auto &trackPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        const auto trackLon = OsmAnd::Utilities::get31LongitudeX(trackPosition31.x);
+        const auto trackLat = OsmAnd::Utilities::get31LatitudeY(trackPosition31.y);
+
+        const auto distance = OsmAnd::Utilities::distance(
+                newLocation.coordinate.longitude,
+                newLocation.coordinate.latitude,
+                trackLon,
+                trackLat
+        );
+        [_headerView setDirection:[OAOsmAndFormatter getFormattedDistance:distance]];
+        CGFloat itemDirection = [self.app.locationServices radiusFromBearingToLocation:[
+                [CLLocation alloc] initWithLatitude:trackLon longitude:trackLat]];
+        _headerView.directionIconView.transform = CGAffineTransformMakeRotation(
+                OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180));
+    }
+    else if (_selectedTab == EOATrackMenuHudPointsTab)
+    {
+        for (NSString *groupName in _waypointGroups)
+        {
+            NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
+            [waypoints enumerateObjectsUsingBlock:^(OAGpxWptItem *gpxWptItem, NSUInteger idx, BOOL *stop) {
+                OsmAnd::LatLon latLon(gpxWptItem.point.position.latitude, gpxWptItem.point.position.longitude);
+                const auto &wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+                const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
+                const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
+
+                const auto distance = OsmAnd::Utilities::distance(
+                        newLocation.coordinate.longitude,
+                        newLocation.coordinate.latitude,
+                        wptLon,
+                        wptLat
+                );
+
+                gpxWptItem.distance = [OAOsmAndFormatter getFormattedDistance:distance];
+                gpxWptItem.distanceMeters = distance;
+                CGFloat itemDirection = [self.app.locationServices radiusFromBearingToLocation:[
+                        [CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
+                gpxWptItem.direction =
+                        OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+            }];
+        }
+
+        [self refreshVisibleWaypointRows];
+    }
+}
+
+- (void)refreshVisibleWaypointRows
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView beginUpdates];
+        NSArray<NSIndexPath *> *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
+        for (NSIndexPath *indexPath in visibleIndexPaths)
+        {
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            if ([cell isKindOfClass:[OAPointTableViewCell class]])
+            {
+                OAGPXTableCellData *cellData = [self getCellData:indexPath];
+                OAGpxWptItem *item = cellData.values[@"wpt_item_value"];
+                if (item)
+                {
+                    OAPointTableViewCell *pointTableViewCell = (OAPointTableViewCell *) cell;
+                    [pointTableViewCell.titleView setText:item.point.name];
+                    [pointTableViewCell.distanceView setText:item.distance];
+                    pointTableViewCell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+                }
+            }
+        }
+        [self.tableView endUpdates];
+    });
+}
+
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+{
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
+        return 48.;
+    else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+        return 60.;
+    else if ([cellData.type isEqualToString:[OAPointTableViewCell getCellIdentifier]])
+        return 66.;
+    else
+        return estimated ? 48. : UITableViewAutomaticDimension;
+}
+
 #pragma mark - OATrackMenuViewControllerDelegate
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
@@ -930,6 +1149,7 @@
     [self setupDescription];
     [self generateData];
     [self setupHeaderView];
+    [self updateDistanceAndDirection:YES];
 
     switch (_selectedTab)
     {
@@ -1318,6 +1538,34 @@
         }
         outCell = cell;
     }
+    else if ([cellData.type isEqualToString:[OAPointTableViewCell getCellIdentifier]])
+    {
+        OAPointTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAPointTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
+            cell.distanceView.textColor = UIColorFromRGB(color_active_light);
+        }
+        if (cell)
+        {
+            OAGpxWptItem *item = cellData.values[@"wpt_item_value"];
+
+            [cell.titleView setText:item.point.name];
+            [cell.titleIcon setImage:item.getCompositeIcon];
+
+            [cell.distanceView setText:item.distance];
+            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+
+            if (![cell.directionImageView.tintColor isEqual:UIColorFromRGB(color_active_light)])
+            {
+                cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionImageView.tintColor = UIColorFromRGB(color_active_light);
+            }
+        }
+        outCell = cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -1326,20 +1574,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
-{
-    OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
-        return 48.;
-    else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
-        return 60.;
-    else
-        return estimated ? 48. : UITableViewAutomaticDimension;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1350,6 +1584,8 @@
 {
     if (_selectedTab == EOATrackMenuHudOverviewTab)
         return 56.;
+    else if (_selectedTab == EOATrackMenuHudPointsTab)
+        return 32.;
     else if (_selectedTab == EOATrackMenuHudActionsTab)
         return 20.;
     else
@@ -1365,6 +1601,12 @@
         OATrackMenuDescriptionViewController *descriptionViewController =
                 [[OATrackMenuDescriptionViewController alloc] initWithGpxDoc:self.doc gpx:self.gpx];
         [self.navigationController pushViewController:descriptionViewController animated:YES];
+    }
+    else if ([cellData.key hasPrefix:@"waypoint_"])
+    {
+        [self hide:YES duration:.2 onComplete:^{
+            [self.mapPanelViewController openTargetViewWithWpt:cellData.values[@"wpt_item_value"] pushed:NO];
+        }];
     }
     else if ([cellData.key isEqualToString:@"control_appearance"])
     {

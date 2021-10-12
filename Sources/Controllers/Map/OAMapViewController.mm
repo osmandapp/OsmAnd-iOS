@@ -2335,7 +2335,11 @@
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
-        const auto& doc = it.value();
+        NSString *gpxFilePath = [it.key().toNSString()
+                stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
+                                          withString:@""];
+        auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
+//        auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
         for (auto &loc : doc->locationMarks)
         {
             if ([OAUtilities isCoordEqual:location.latitude
@@ -2344,7 +2348,7 @@
                                   destLon:loc->position.longitude
                                upToDigits:3])
             {
-                self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:doc->metadata->name.toNSString()];
+                self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
                 return YES;
             }
         }
@@ -2360,7 +2364,7 @@
                                           destLon:point->position.longitude
                                        upToDigits:2])
                     {
-                        self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:doc->metadata->name.toNSString()];
+                        self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
                         return YES;
                     }
                 }

@@ -184,8 +184,9 @@
     //override
 }
 
-- (void)willAppearShowing
+- (void)viewWillAppear:(BOOL)animated
 {
+    [self updateViewAnimated];
     [self show:YES
          state:[self isLandscape] ? EOADraggableMenuStateFullScreen : EOADraggableMenuStateExpanded
     onComplete:^{

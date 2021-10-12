@@ -78,11 +78,6 @@
 {
     [super viewWillAppear:animated];
     [self layoutSubviews];
-    [self willAppearShowing];
-}
-
-- (void)willAppearShowing
-{
     [self show:YES state:EOADraggableMenuStateInitial onComplete:nil];
 }
 

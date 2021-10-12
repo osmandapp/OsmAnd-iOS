@@ -2332,12 +2332,11 @@
 
 - (BOOL) findTrack:(CLLocationCoordinate2D)location
 {
-    NSArray *visibleTracks = [[OAAppSettings sharedManager].mapSettingVisibleGpx get];
-    for (NSString *visibleTrack in visibleTracks)
+    auto activeGpx = _selectedGpxHelper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
-        std::shared_ptr<OsmAnd::GpxDocument> gpxDoc =
-                OsmAnd::GpxDocument::loadFrom(QString::fromNSString([_app.gpxPath stringByAppendingPathComponent:visibleTrack]));
-        for (auto &loc : gpxDoc->locationMarks)
+        const auto& doc = it.value();
+        for (auto &loc : doc->locationMarks)
         {
             if ([OAUtilities isCoordEqual:location.latitude
                                    srcLon:location.longitude
@@ -2345,11 +2344,11 @@
                                   destLon:loc->position.longitude
                                upToDigits:3])
             {
-                self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:visibleTrack];
+                self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:doc->metadata->name.toNSString()];
                 return YES;
             }
         }
-        for (auto &track : gpxDoc->tracks)
+        for (auto &track : doc->tracks)
         {
             for (auto &segment : track->segments)
             {
@@ -2361,7 +2360,7 @@
                                           destLon:point->position.longitude
                                        upToDigits:2])
                     {
-                        self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:visibleTrack];
+                        self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:doc->metadata->name.toNSString()];
                         return YES;
                     }
                 }

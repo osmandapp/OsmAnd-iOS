@@ -216,32 +216,28 @@
         QList<OsmAnd::FColorARGB> colors;
         if (gpx.coloringType.length > 0)
         {
+            NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+            QString qPath = QString::fromNSString(path);
+            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
+            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+            doc.path = path;
             OAColoringType *type = [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType];
-            if (type.isGradient)
-            {
-                NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
-                QString qPath = QString::fromNSString(path);
-                auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
-                OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-                doc.path = path;
-                OARouteColorizationHelper *routeColorization = [[OARouteColorizationHelper alloc] initWithGpxFile:doc analysis:[doc getAnalysis:0] type:type.toGradientScaleType.toColorizationType maxProfileSpeed:0];
+            OARouteColorizationHelper *routeColorization = [[OARouteColorizationHelper alloc] initWithGpxFile:doc analysis:[doc getAnalysis:0] type:type.toGradientScaleType.toColorizationType maxProfileSpeed:0];
 
-                colors = routeColorization ? [routeColorization getResult] : QList<OsmAnd::FColorARGB>();
-                // Add outline for colorized lines
-                if (!colors.isEmpty())
-                {
-                    const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
+            colors = routeColorization ? [routeColorization getResult] : QList<OsmAnd::FColorARGB>();
+            // Add outline for colorized lines
+            if (!colors.isEmpty()) {
+                const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
 
-                    OsmAnd::VectorLineBuilder outlineBuilder;
-                    outlineBuilder.setBaseOrder(baseOrder--)
-                            .setIsHidden(points.size() == 0)
-                            .setLineId(lineId + 1000)
-                            .setLineWidth(lineWidth + 10)
-                            .setPoints(points)
-                            .setFillColor(outlineColor);
+                OsmAnd::VectorLineBuilder outlineBuilder;
+                outlineBuilder.setBaseOrder(baseOrder--)
+                        .setIsHidden(points.size() == 0)
+                        .setLineId(lineId + 1000)
+                        .setLineWidth(lineWidth + 10)
+                        .setPoints(points)
+                        .setFillColor(outlineColor);
 
-                    outlineBuilder.buildAndAddToCollection(_linesCollection);
-                }
+                outlineBuilder.buildAndAddToCollection(_linesCollection);
             }
         }
         

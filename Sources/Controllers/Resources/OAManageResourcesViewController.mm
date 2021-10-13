@@ -891,11 +891,6 @@ static BOOL _lackOfResources;
         for (NSNumber *type in regionMapItemsTypesInGroup)
         {
             OsmAndResourceType resourceType = [OAResourceType toResourceType:type isGroup:YES];
-
-            BOOL hideCompositeMapRegionDownloadCell = (resourceType == OsmAndResourceType::MapRegion) && (self.region.subregions.count < self.region.flattenedSubregions.count) && ![self.region.superregion.regionId hasPrefix:northAmericaRegionId] && ![self.region.regionId hasPrefix:russiaRegionId];
-            if (hideCompositeMapRegionDownloadCell)
-                continue;
-            
             if (resourceType != [OAResourceType unknownType])
             {
                 OAMultipleResourceItem *multipleResourceItem = [[OAMultipleResourceItem alloc] initWithType:resourceType items:[self.region.groupItem getItems:resourceType]];

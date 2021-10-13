@@ -297,7 +297,7 @@
     
     if (_image)
     {
-        NSString *urlStr = [MAPILLARY_VIEWER_URL_TEMPLATE stringByAppendingString:_image.key];
+        NSString *urlStr = [MAPILLARY_VIEWER_URL_TEMPLATE stringByAppendingString:_image.imageId];
         NSURL *url = [NSURL URLWithString:urlStr];
         NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
         [_webView loadRequest:urlRequest];

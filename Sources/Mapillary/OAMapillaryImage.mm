@@ -38,10 +38,10 @@
                 else if (isLon)
                     _longitude = val;
                 else
-                    _ca = val;
+                    _compassAngle = val;
             }
             else if ([key isEqualToString:@"key"])
-                _key = values[key];
+                _imageId = values[key];
         }
     }
     return self;
@@ -51,18 +51,19 @@
 {
     BOOL res = YES;
     @try {
-        _ca = data[OsmAnd::MvtReader::getUserDataId("ca")].toDouble();
-        _capturedAt = data[OsmAnd::MvtReader::getUserDataId("captured_at")].toUInt();
-        _key = data[OsmAnd::MvtReader::getUserDataId("key")].toString().toNSString();
-        _pano = data[OsmAnd::MvtReader::getUserDataId("pano")].toInt() == 1;
-        _sKey = geometryTile->getSequenceKey(data[OsmAnd::MvtReader::getUserDataId("skey")].toInt()).toNSString();
-        _userKey = geometryTile->getUserKey(data[OsmAnd::MvtReader::getUserDataId("userkey")].toInt()).toNSString();
+        _capturedAt = data[OsmAnd::MvtReader::getUserDataId(kCapturedAtKey)].toUInt();
+        _compassAngle = data[OsmAnd::MvtReader::getUserDataId(kCompassAngleKey)].toDouble();
+        _imageId = data[OsmAnd::MvtReader::getUserDataId(kImageIdKey)].toString().toNSString();
+        _sequenceId = geometryTile->getSequenceKey(data[OsmAnd::MvtReader::getUserDataId(kSequenceIdKey)].toInt()).toNSString();
+        if (data.contains(OsmAnd::MvtReader::getUserDataId(kOrganizationIdKey)))
+            _organizationId = geometryTile->getUserKey(data[OsmAnd::MvtReader::getUserDataId(kOrganizationIdKey)].toInt()).toNSString();
+        _panoramicImage = data[OsmAnd::MvtReader::getUserDataId(kIsPanoramiceKey)].toBool();
     }
     @catch (NSException * e) {
         res = NO;
     }
 
-    return res && self.key;
+    return res && self.imageId;
 }
 
 @end

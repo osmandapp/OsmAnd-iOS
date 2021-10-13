@@ -24,6 +24,7 @@
 #import "OARouteColorizationHelper.h"
 #import "OAColoringType.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAGpxStartFinishIconProvider.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -45,6 +46,7 @@
 @implementation OAGPXLayer
 {
     std::shared_ptr<OAWaypointsMapLayerProvider> _waypointsMapProvider;
+    std::shared_ptr<OAGpxStartFinishIconProvider> _startFinishProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
     CGFloat _cacheLineWidth;
@@ -72,6 +74,7 @@
     [super resetLayer];
 
     [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
+    [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
@@ -216,6 +219,7 @@
     }
     [self setVectorLineProvider:_linesCollection];
     [self refreshGpxWaypoints];
+    [self refreshStartFinishPoints];
 }
 
 - (void) drawLine:(QVector<OsmAnd::PointI> &)points gpx:(OAGPX *)gpx baseOrder:(int)baseOrder lineId:(int)lineId colors:(const QList<OsmAnd::FColorARGB> &)colors colorizationScheme:(int)colorizationScheme
@@ -273,6 +277,15 @@
         
         builder.buildAndAddToCollection(_linesCollection);
     }
+}
+
+- (void) refreshStartFinishPoints
+{
+    if (_startFinishProvider)
+        [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
+    
+    _startFinishProvider.reset(new OAGpxStartFinishIconProvider());
+    [self.mapView addTiledSymbolsProvider:_startFinishProvider];
 }
 
 - (void) refreshGpxWaypoints

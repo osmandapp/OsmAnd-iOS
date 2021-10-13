@@ -30,6 +30,7 @@
 #import "OAMapActions.h"
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
+#import "OASavingTrackHelper.h"
 
 #define kActionsSection 4
 
@@ -63,6 +64,8 @@
 
     EOATrackMenuHudTab _selectedTab;
     OATrackMenuViewControllerState *_reopeningState;
+    
+    OsmAndAppInstance _app;
 }
 
 @dynamic isShown, tableData;
@@ -73,6 +76,7 @@
     if (self)
     {
         _selectedTab = EOATrackMenuHudOverviewTab;
+        [self commonInit];
     }
     return self;
 }
@@ -83,6 +87,7 @@
     if (self)
     {
         _selectedTab = tab >= EOATrackMenuHudOverviewTab ? tab : EOATrackMenuHudOverviewTab;
+        [self commonInit];
     }
     return self;
 }
@@ -96,6 +101,7 @@
         {
             _reopeningState = state;
             _selectedTab = _reopeningState.lastSelectedTab;
+            [self commonInit];
         }
     }
     return self;
@@ -108,6 +114,7 @@
 
 - (void)commonInit
 {
+    _app = [OsmAndApp instance];
 }
 
 - (void)viewDidLoad
@@ -212,7 +219,7 @@
         [self generateGpxBlockStatistics];
 
         CLLocationCoordinate2D gpxLocation = self.doc.bounds.center;
-        CLLocation *lastKnownLocation = self.app.locationServices.lastKnownLocation;
+        CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
         NSString *direction = lastKnownLocation && gpxLocation.latitude != DBL_MAX ?
                 [OAOsmAndFormatter getFormattedDistance:getDistance(
                         lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.longitude,
@@ -228,7 +235,7 @@
 
         if (gpxLocation.latitude != DBL_MAX)
         {
-            OAWorldRegion *worldRegion = [self.app.worldRegion findAtLat:gpxLocation.latitude
+            OAWorldRegion *worldRegion = [_app.worldRegion findAtLat:gpxLocation.latitude
                                                                      lon:gpxLocation.longitude];
             _headerView.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
             _headerView.regionIconView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -726,10 +733,10 @@
         deleteOriginalFile:(BOOL)deleteOriginalFile
 {
     NSString *oldPath = self.gpx.gpxFilePath;
-    NSString *sourcePath = [self.app.gpxPath stringByAppendingPathComponent:oldPath];
+    NSString *sourcePath = [_app.gpxPath stringByAppendingPathComponent:oldPath];
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
-    NSString *newFolderPath = [self.app.gpxPath stringByAppendingPathComponent:newFolder];
+    NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
     NSString *newName = newFileName ? [OAUtilities createNewFileName:newFileName] : self.gpx.gpxFileName;
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
     NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
@@ -829,10 +836,10 @@
     if (newName.length > 0)
     {
         NSString *oldFilePath = self.gpx.gpxFilePath;
-        NSString *oldPath = [self.app.gpxPath stringByAppendingPathComponent:oldFilePath];
+        NSString *oldPath = [_app.gpxPath stringByAppendingPathComponent:oldFilePath];
         NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
         NSString *newFilePath = [[self.gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
-        NSString *newPath = [self.app.gpxPath stringByAppendingPathComponent:newFilePath];
+        NSString *newPath = [_app.gpxPath stringByAppendingPathComponent:newFilePath];
         if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
         {
             self.gpx.gpxTitle = newName;
@@ -1050,7 +1057,7 @@
     else
     {
         _exportFileName = self.gpx.gpxFileName;
-        _exportFilePath = [self.app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+        _exportFilePath = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
     }
 
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];

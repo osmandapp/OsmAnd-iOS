@@ -2271,6 +2271,7 @@
 "symbols" = "Symbols";
 "transport" = "Transport";
 "travel" = "Travel";
+"nautical" = "Nautical";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";

@@ -205,6 +205,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 
 - (BOOL) isAvailableInSubscription:(NSString *)attributeName route:(BOOL)route
 {
+    // TODO: restrict access with subscription
 //    if ((isRouteInfoAttribute() && route) || this == ColoringType.SLOPE) {
 //        return InAppPurchaseHelper.isOsmAndProAvailable(app);
 //    }
@@ -236,31 +237,9 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     if (routeSegments.empty() || attributeName.length == 0)
         return NO;
     
-    // TODO: implement for surface colorization
+    NSArray<OARouteStatistics *> *stats = [OARouteStatisticsHelper calculateRouteStatistic:routeSegments attributeNames:@[attributeName]];
     
-//    const auto& defaultRenderer = [OARouteStatisticsHelper getDefaultPresentationEnvironment];
-    
-//    RenderingRulesStorage currentRenderer = app.getRendererRegistry().getCurrentSelectedRenderer();
-//    RenderingRulesStorage defaultRenderer = app.getRendererRegistry().defaultRender();
-//    List<String> rendererAttrs = RouteStatisticsHelper
-//        .getRouteStatisticAttrsNames(currentRenderer, defaultRenderer, true);
-//    if (Algorithms.isEmpty(rendererAttrs) || !rendererAttrs.contains(attributeName)) {
-//        return false;
-//    }
-//
-//    boolean night = app.getDaynightHelper().isNightModeForMapControls();
-//    MapRenderRepositories maps = app.getResourceManager().getRenderer();
-//    RenderingRuleSearchRequest currentSearchRequest =
-//    maps.getSearchRequestWithAppliedCustomRules(currentRenderer, night);
-//    RenderingRuleSearchRequest defaultSearchRequest =
-//    maps.getSearchRequestWithAppliedCustomRules(defaultRenderer, night);
-//
-//    List<RouteStatistics> routeStatisticsList =
-//    RouteStatisticsHelper.calculateRouteStatistic(routeSegments,
-//                                                  Collections.singletonList(attributeName), currentRenderer,
-//                                                  defaultRenderer, currentSearchRequest, defaultSearchRequest);
-//    return !Algorithms.isEmpty(routeStatisticsList);
-    return NO;
+    return stats.count > 0;
 }
 
 - (OAGradientScaleType *) toGradientScaleType

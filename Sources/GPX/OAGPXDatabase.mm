@@ -45,6 +45,11 @@
     return _coloringType ? _coloringType : @"";
 }
 
+- (EOAGpxSplitType)splitType
+{
+    return _splitType == 0 ? EOAGpxSplitTypeNone : _splitType;
+}
+
 @end
 
 
@@ -361,6 +366,9 @@
     [d setObject:@(gpx.showArrows) forKey:@"showArrows"];
     [d setObject:gpx.width forKey:@"width"];
     [d setObject:gpx.coloringType forKey:@"coloringType"];
+    
+    [d setObject:@(gpx.splitType) forKey:@"splitType"];
+    [d setObject:@(gpx.splitInterval) forKey:@"splitInterval"];
 
     if (gpx.locationStart)
     {
@@ -422,7 +430,7 @@
         } else if ([key isEqualToString:@"totalDistance"]) {
             gpx.totalDistance = [value floatValue];
         } else if ([key isEqualToString:@"totalTracks"]) {
-            gpx.totalTracks = [value integerValue];
+            gpx.totalTracks = [value intValue];
         } else if ([key isEqualToString:@"startTime"]) {
             gpx.startTime = [value longValue];
         } else if ([key isEqualToString:@"endTime"]) {
@@ -448,13 +456,17 @@
         } else if ([key isEqualToString:@"avgSpeed"]) {
             gpx.avgSpeed = [value floatValue];
         } else if ([key isEqualToString:@"points"]) {
-            gpx.points = [value integerValue];
+            gpx.points = [value intValue];
         } else if ([key isEqualToString:@"wptPoints"]) {
-            gpx.wptPoints = [value integerValue];
+            gpx.wptPoints = [value intValue];
         } else if ([key isEqualToString:@"metricEnd"]) {
             gpx.metricEnd = [value doubleValue];
         } else if ([key isEqualToString:@"color"]) {
             gpx.color = [value intValue];
+        } else if ([key isEqualToString:@"splitType"]) {
+            gpx.splitType = (EOAGpxSplitType) [value integerValue];
+        } else if ([key isEqualToString:@"splitInterval"]) {
+            gpx.splitInterval = [value doubleValue];
         } else if ([key isEqualToString:@"locationStart"]) {
             OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
             wpt.position = CLLocationCoordinate2DMake([value[@"position_lat"] doubleValue], [value[@"position_lon"] doubleValue]) ;

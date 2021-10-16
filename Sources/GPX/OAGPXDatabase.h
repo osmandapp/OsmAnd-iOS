@@ -13,6 +13,12 @@
 #define kDefaultTrackColor 0xFFFF0000
 #define kDefaultWidthMultiplier 7
 
+typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
+    EOAGpxSplitTypeNone = -1,
+    EOAGpxSplitTypeDistance = 1,
+    EOAGpxSplitTypeTime
+};
+
 @class OAGPXTrackAnalysis;
 @class OAGpxWpt;
 
@@ -34,6 +40,9 @@
 @property (nonatomic, assign) BOOL showArrows;
 @property (nonatomic) NSString *width;
 @property (nonatomic) NSString *coloringType;
+
+@property (nonatomic, assign) EOAGpxSplitType splitType;
+@property (nonatomic, assign) double splitInterval;
 
 // Statistics
 @property (nonatomic) float totalDistance;

@@ -14,6 +14,8 @@
 #import "OAColors.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
+#import "OsmAndApp.h"
+#import "OASavingTrackHelper.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -110,6 +112,7 @@
 @implementation OABaseTrackMenuHudViewController
 {
     CGFloat _cachedYViewPort;
+    OsmAndAppInstance _app;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx

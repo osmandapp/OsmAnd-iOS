@@ -17,6 +17,7 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/FavoriteLocationsGpxCollection.h>
 #include <OsmAndCore/GpxDocument.h>
+#include <OsmAndCore/Map/MapPresentationEnvironment.h>
 
 #include <routingConfiguration.h>
 
@@ -28,6 +29,8 @@
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
+
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::MapPresentationEnvironment> defaultRenderer;
 
 @property(nonatomic, readonly) std::shared_ptr<RoutingConfigurationBuilder> defaultRoutingConfig;
 

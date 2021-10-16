@@ -201,7 +201,6 @@
                 OsmAnd::VectorLineBuilder builder;
                 builder.setBaseOrder(baseOrder--)
                 .setIsHidden(way->nodes.size() == 0)
-                .setApproximationEnabled(false)
                 .setLineId(1)
                 .setLineWidth(30)
                 .setPoints(points)
@@ -237,7 +236,7 @@
             OsmAnd::VectorLineBuilder builder;
             builder.setBaseOrder(baseOrder--)
             .setIsHidden(points.size() == 0)
-            .setApproximationEnabled(false)
+//            .setApproximationEnabled(false)
             .setLineId(1)
             .setLineWidth(16. * self.displayDensityFactor)
             .setPoints(points);

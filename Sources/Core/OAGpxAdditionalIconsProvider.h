@@ -1,5 +1,5 @@
 //
-//  OAGpxStartFinishIconProvider.h
+//  OAGpxAdditionalIconsProvider.h
 //  OsmAnd
 //
 //  Created by Paul on 13/10/21.
@@ -29,8 +29,8 @@
 
 using namespace OsmAnd;
 
-class OAGpxStartFinishIconProvider
-    : public std::enable_shared_from_this<OAGpxStartFinishIconProvider>
+class OAGpxAdditionalIconsProvider
+    : public std::enable_shared_from_this<OAGpxAdditionalIconsProvider>
     , public OsmAnd::IMapTiledSymbolsProvider
 {
 public:
@@ -48,17 +48,28 @@ public:
 
 private:
     QReadWriteLock _lock;
-    std::shared_ptr<OsmAnd::MapSymbolsGroup> buildMapSymbolsGroup(const OsmAnd::AreaI &bbox31, const double metersPerPixel);
+    QList<std::shared_ptr<MapSymbolsGroup>> buildMapSymbolsGroups(const AreaI &bbox31, const double metersPerPixel);
     
-    QList<QPair<OsmAnd::PointI, OsmAnd::PointI>> _pointLocations;
+    const std::shared_ptr<const TextRasterizer> _textRasterizer;
+    TextRasterizer::Style _captionStyle;
+    
+    QList<QPair<PointI, PointI>> _startFinishLocations;
+    QList<QPair<PointI, QPair<QString, int>>> _labelsAndCoordinates;
     
     const std::shared_ptr<SkBitmap> _startIcon;
     const std::shared_ptr<SkBitmap> _finishIcon;
     const std::shared_ptr<SkBitmap> _startFinishIcon;
+    
+    void buildStartFinishSymbolsGroup(const OsmAnd::AreaI &bbox31, double metersPerPixel, QList<std::shared_ptr<MapSymbolsGroup>>& mapSymbolsGroups);
+    void buildSplitIntervalsSymbolsGroup(const OsmAnd::AreaI &bbox31, double metersPerPixel, QList<QPair<PointI, QPair<QString, int>>> visibleLabels, QList<std::shared_ptr<MapSymbolsGroup>>& mapSymbolsGroups);
+    
+    void buildVisibleSplits(const double metersPerPixel, QList<QPair<PointI, QPair<QString, int>>>& visibleSplits);
+    
+    std::shared_ptr<SkBitmap> getSplitIconForValue(const QPair<QString, int>& labelData);
 protected:
 public:
-    OAGpxStartFinishIconProvider();
-    virtual ~OAGpxStartFinishIconProvider();
+    OAGpxAdditionalIconsProvider();
+    virtual ~OAGpxAdditionalIconsProvider();
     
     virtual OsmAnd::ZoomLevel getMinZoom() const override;
     virtual OsmAnd::ZoomLevel getMaxZoom() const override;

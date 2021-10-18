@@ -44,6 +44,7 @@
 #define kMaxNorthingValue 9300000
 #define kUtmZoneMaxNumber 60
 #define kMaxTexFieldSymbolsCount 30
+#define kEstimatedCellHeight 48.0
 
 
 typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesSection)
@@ -877,13 +878,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     }
     else if ([cellType isEqualToString:[OAQuickSearchResultTableViewCell getCellIdentifier]] && ![item[@"isErrorCell"] boolValue])
     {
-        OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-        OAPOI *poi = [[OAPOI alloc] init];
-        poi.latitude = _searchLocation.coordinate.latitude;
-        poi.longitude = _searchLocation.coordinate.longitude;
-        poi.nameLocalized = @"";
-        OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
-        targetPoint.centerMap = YES;
+        OATargetPoint *targetPoint = [OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude];
         [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
         [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
@@ -962,16 +957,19 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) keyboardWillShow:(NSNotification *)notification;
 {
-    NSDictionary *userInfo = [notification userInfo];
-    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
-    
-    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        UIEdgeInsets insets = [[self tableView] contentInset];
-        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, kHintBarHeight + (DeviceScreenHeight - keyboardHeight), insets.right)];
-    } completion:nil];
+    if ([OAUtilities isLandscape])
+    {
+        NSDictionary *userInfo = [notification userInfo];
+        CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+        NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+        NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+        CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+
+        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+            UIEdgeInsets insets = [[self tableView] contentInset];
+            [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, kHintBarHeight + (DeviceScreenHeight - keyboardHeight), insets.right)];
+        } completion:nil];
+    }
 }
 
 - (void) keyboardWillHide:(NSNotification *)notification;

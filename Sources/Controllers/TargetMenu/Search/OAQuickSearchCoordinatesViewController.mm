@@ -218,22 +218,22 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         [result addObject:@{
             @"type" : [OACoodinateSearchCell getCellIdentifier],
-            @"title" : OALocalizedString(@"longitude"),
-            @"value" : _lonStr,
-            @"tag" : @(EOAQuickSearchCoordinatesTextFieldLon),
+            @"title" : OALocalizedString(@"latitude"),
+            @"value" : _latStr,
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldLat),
         }];
         
         [result addObject:@{
             @"type" : [OACoodinateSearchCell getCellIdentifier],
-            @"title" : OALocalizedString(@"latitude"),
-            @"value" : _latStr,
-            @"tag" : @(EOAQuickSearchCoordinatesTextFieldLat),
+            @"title" : OALocalizedString(@"longitude"),
+            @"value" : _lonStr,
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldLon),
         }];
     }
     
     _controlsSectionData = [NSArray arrayWithArray:result];
     
-    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionControls] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionControls] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) updateLocationCell:(CLLocation *)latLon
@@ -259,7 +259,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         _searchResultSectionData = [NSArray arrayWithArray:result];
     }
     
-    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionSearchResult] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionSearchResult] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (NSDictionary *) getLocarionData:(CLLocation *)location
@@ -281,6 +281,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 #pragma mark - Coordinates processing
 
+- (CLLocation *) getDisplayingCoordinate
+{
+    return _searchLocation ? _searchLocation : [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+}
+
 - (BOOL) applyFormat:(NSInteger)format forceApply:(BOOL)forceApply
 {
    if (_currentFormat != format || forceApply)
@@ -289,7 +294,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
        _currentFormat = format;
        _formatStr = [OAPointDescription formatToHumanString:_currentFormat];
        
-       CLLocation *latLon = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+       CLLocation *latLon = [self getDisplayingCoordinate];
        
        if (_currentFormat == MAP_GEO_UTM_FORMAT)
        {
@@ -861,7 +866,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         [self.view endEditing:YES];
         
-        OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat];
+        OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat location:[self getDisplayingCoordinate]];
         vc.delegate = self;
         [self presentViewController:vc animated:YES completion:nil];
     }

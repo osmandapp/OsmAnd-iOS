@@ -26,15 +26,17 @@
 @implementation OAQuickSearchCoordinateFormatsViewController
 {
     NSInteger _currentFormat;
+    CLLocation *_location;
     NSMutableArray *_data;
 }
 
-- (instancetype) initWithCurrentFormat:(NSInteger)currentFormat
+- (instancetype) initWithCurrentFormat:(NSInteger)currentFormat location:(CLLocation *)location
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
         _currentFormat = currentFormat;
+        _location = location;
         [self commonInit];
     }
     return self;
@@ -48,13 +50,8 @@
 - (void) generateData
 {
     _data = [NSMutableArray array];
-    
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
-    if (!location)
-        location = mapPanel.mapViewController.getMapLocation;
-    double lat = location.coordinate.latitude;
-    double lon = location.coordinate.longitude;
+    double lat = _location.coordinate.latitude;
+    double lon = _location.coordinate.longitude;
 
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],

@@ -621,6 +621,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
 "gpx_selection_segment_title" = "Segments";
+"waypoint_one" = "Waypoint 1";
 
 "import_export" = "Import/Export";
 
@@ -1375,6 +1376,7 @@
 "add_parking_short" = "Add Parking";
 "add_waypoint" = "Add waypoint to track";
 "add_waypoint_short" = "Add waypoint";
+"delete_waypoints" = "Delete waypoints";
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "No waypoints found";

@@ -16,8 +16,9 @@
 #define kCellTitle @"title"
 #define kCellDesc @"desc"
 #define kCellLeftIcon @"left_icon"
-#define kCellRightIcon @"right_icon"
+#define kCellRightIconName @"right_icon_name"
 #define kCellToggle @"toggle"
+#define kCellTintColor @"tint_color"
 #define kCellOnSwitch @"on_switch"
 #define kCellIsOn @"isOn"
 
@@ -48,9 +49,10 @@ typedef void(^OAGPXTableDataUpdateData)();
 @property (nonatomic, readonly) NSDictionary *values;
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) NSString *desc;
-@property (nonatomic, readonly) NSString *leftIcon;
-@property (nonatomic, readonly) NSString *rightIcon;
+@property (nonatomic, readonly) UIImage *leftIcon;
+@property (nonatomic, readonly) NSString *rightIconName;
 @property (nonatomic, readonly) BOOL toggle;
+@property (nonatomic, readonly) NSInteger tintColor;
 @property (nonatomic, readonly) OAGPXTableCellDataOnSwitch onSwitch;
 @property (nonatomic, readonly) OAGPXTableCellDataIsOn isOn;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;

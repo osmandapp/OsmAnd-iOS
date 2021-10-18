@@ -35,9 +35,12 @@
 #import "OAFavoriteEditingHandler.h"
 #import "OAGpxWptEditingHandler.h"
 #import "OAPointDescription.h"
+#import "OAGPXDatabase.h"
+#import "OATrackMenuHudViewController.h"
 
 #include "Localization.h"
 #import "OAGPXDocument.h"
+#import "OATargetMenuViewController.h"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -102,6 +105,7 @@
     
     OACollectionViewCellState *_scrollCellsState;
     NSString *_renamedPointAlertMessage;
+    OATargetMenuViewControllerState *_targetMenuState;
 }
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite
@@ -143,7 +147,11 @@
     return self;
 }
 
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString *)formattedTitle customParam:(NSString *)customParam pointType:(EOAEditPointType)pointType
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location
+                           title:(NSString *)formattedTitle
+                     customParam:(NSString *)customParam
+                       pointType:(EOAEditPointType)pointType
+                 targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
 {
     self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
@@ -152,6 +160,7 @@
         _isNewItemAdding = YES;
         _isUnsaved = YES;
         _app = [OsmAndApp instance];
+        _targetMenuState = targetMenuState;
 
         if (_editPointType == EOAEditPointTypeFavorite)
         {
@@ -549,6 +558,14 @@
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
             [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
         }
+        if (!_isNewItemAdding && _targetMenuState && [_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
+        {
+            OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[db getGPXItem:[
+                    [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]]
+                                                               trackHudMode:EOATrackMenuHudMode
+                                                                      state:_targetMenuState];
+        }
     }];
 }
 
@@ -602,6 +619,8 @@
             data.category = savingGroup;
             [_pointHandler savePoint:data newPoint:NO];
         }
+
+        [[OARootViewController instance].mapPanel reopenContextMenu];
     }
 }
 

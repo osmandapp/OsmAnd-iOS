@@ -9,9 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OABaseScrollableHudViewController.h"
-#import "OATrackMenuHudViewController.h"
 
-@class OAMeasurementEditingContext;
+@class OAMeasurementEditingContext, OATargetMenuViewControllerState;
 
 @interface OARoutePlanningHudViewController : OABaseScrollableHudViewController
 
@@ -22,7 +21,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsStackLandscapeRightConstraint;
 
 - (instancetype) initWithFileName:(NSString *)fileName;
-- (instancetype) initWithFileName:(NSString *)fileName trackMenuState:(OATargetMenuViewControllerState *)trackMenuState;
+- (instancetype) initWithFileName:(NSString *)fileName
+                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState;
 - (instancetype) initWithInitialPoint:(CLLocation *)latLon;
 - (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning;
 

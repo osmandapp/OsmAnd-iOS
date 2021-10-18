@@ -70,7 +70,7 @@
 {
     BOOL hasDescription = !self.descriptionContainerView.hidden;
     BOOL hasCollection = !self.collectionView.hidden;
-    BOOL hasContent = hasCollection && !self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden;
+    BOOL hasContent = hasCollection || !self.locationContainerView.hidden || !self.actionButtonsContainerView.hidden;
     BOOL isOnlyTitleAndDescription = hasDescription && !hasContent;
     BOOL isOnlyTitle = !hasDescription && !hasContent;
     BOOL hasDirection = !self.directionContainerView.hidden;
@@ -80,7 +80,8 @@
 
     self.titleBottomDescriptionConstraint.active = hasDescription;
     self.titleBottomNoDescriptionConstraint.active = !hasDescription && hasCollection;
-    self.titleBottomNoDescriptionNoCollectionConstraint.active = !hasDescription && !hasCollection;
+    self.titleBottomNoDescriptionNoCollectionConstraint.active =
+            !hasDescription && !hasCollection && !isOnlyTitleAndDescription && !isOnlyTitle;
 
     self.descriptionBottomCollectionConstraint.active = hasCollection;
     self.descriptionBottomNoCollectionConstraint.active = !hasCollection;
@@ -98,7 +99,7 @@
     {
         BOOL hasDescription = !self.descriptionContainerView.hidden;
         BOOL hasCollection = !self.collectionView.hidden;
-        BOOL hasContent = hasCollection && !self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden;
+        BOOL hasContent = hasCollection || !self.locationContainerView.hidden || !self.actionButtonsContainerView.hidden;
         BOOL isOnlyTitleAndDescription = hasDescription && !hasContent;
         BOOL isOnlyTitle = !hasDescription && !hasContent;
         BOOL hasDirection = !self.directionContainerView.hidden;
@@ -108,7 +109,8 @@
 
         res = res || self.titleBottomDescriptionConstraint.active != hasDescription;
         res = res || self.titleBottomNoDescriptionConstraint.active != !hasDescription && hasCollection;
-        res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active != !hasDescription && !hasCollection;
+        res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active !=
+                !hasDescription && !hasCollection && !isOnlyTitleAndDescription && !isOnlyTitle;
 
         res = res || self.descriptionBottomCollectionConstraint.active != hasDescription && hasCollection;
         res = res || self.descriptionBottomNoCollectionConstraint.active != hasDescription && !hasCollection;
@@ -117,6 +119,36 @@
         res = res || self.regionNoDirectionConstraint.active != !hasDirection;
     }
     return res;
+}
+
+- (void)updateFrame
+{
+    CGRect headerFrame = self.frame;
+
+    if (self.onlyTitleAndDescriptionConstraint.active)
+    {
+        headerFrame.size.height =
+                self.descriptionContainerView.frame.origin.y + self.descriptionContainerView.frame.size.height;
+    }
+    else if (self.onlyTitleNoDescriptionConstraint.active)
+    {
+        headerFrame.size.height = self.titleContainerView.frame.size.height;
+    }
+    else {
+        if (self.descriptionContainerView.hidden)
+            headerFrame.size.height -= self.descriptionContainerView.frame.size.height;
+
+        if (self.locationContainerView.hidden)
+            headerFrame.size.height -= self.locationContainerView.frame.size.height;
+
+        if (self.collectionView.hidden)
+            headerFrame.size.height -= self.collectionView.frame.size.height;
+
+        if (self.actionButtonsContainerView.hidden)
+            headerFrame.size.height -= self.actionButtonsContainerView.frame.size.height;
+    }
+
+    self.frame = headerFrame;
 }
 
 - (void)setDirection:(NSString *)direction

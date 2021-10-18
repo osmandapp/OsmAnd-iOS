@@ -52,6 +52,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
+#import "OAAddWaypointViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -292,6 +293,12 @@
         case OATargetDownloadMapSource:
         {
             controller = [[OADownloadMapViewController alloc] init];
+            break;
+        }
+        case OATargetNewMovableWpt:
+        {
+            controller = [[OAAddWaypointViewController alloc] initWithGpx:targetPoint.targetObj
+                                                          targetMenuState:activeViewControllerState];
             break;
         }
             

@@ -44,10 +44,12 @@
         _desc = data[kCellDesc];
     if ([data.allKeys containsObject:kCellLeftIcon])
         _leftIcon = data[kCellLeftIcon];
-    if ([data.allKeys containsObject:kCellRightIcon])
-        _rightIcon = data[kCellRightIcon];
+    if ([data.allKeys containsObject:kCellRightIconName])
+        _rightIconName = data[kCellRightIconName];
     if ([data.allKeys containsObject:kCellToggle])
         _toggle = [data[kCellToggle] boolValue];
+    if ([data.allKeys containsObject:kCellTintColor])
+        _tintColor = [data[kCellTintColor] integerValue];
     if ([data.allKeys containsObject:kCellOnSwitch])
         _onSwitch = data[kCellOnSwitch];
     if ([data.allKeys containsObject:kCellIsOn])
@@ -163,6 +165,8 @@
 {
     [super viewDidLoad];
     [self applyLocalization];
+    _cachedYViewPort = _mapViewController.mapView.viewportYScale;
+    [self adjustMapViewPort];
 
     [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
@@ -190,12 +194,10 @@
     [self show:YES
          state:[self isLandscape] ? EOADraggableMenuStateFullScreen : EOADraggableMenuStateExpanded
     onComplete:^{
-        [_mapPanelViewController displayGpxOnMap:_gpx];
+        [_mapPanelViewController targetGoToGPX];
         [_mapPanelViewController setTopControlsVisible:NO
                                   customStatusBarStyle:[OAAppSettings sharedManager].nightMode
                                           ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
-        _cachedYViewPort = _mapViewController.mapView.viewportYScale;
-        [self adjustMapViewPort];
         [_mapPanelViewController targetSetBottomControlsVisible:YES
                                                      menuHeight:[self isLandscape] ? 0
                                                              : [self getViewHeight] - [OAUtilities getBottomMargin]
@@ -205,13 +207,23 @@
     }];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        if (![self isLandscape])
+            [self goExpanded];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self adjustMapViewPort];
+    }];
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    [self restoreMapViewPort];
     [super hide:YES duration:duration onComplete:^{
         [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
-        [self restoreMapViewPort];
         [_mapPanelViewController hideScrollableHudViewController];
-        [_mapPanelViewController targetSetBottomControlsVisible:YES menuHeight:0 animated:YES];
         if (onComplete)
             onComplete();
     }];

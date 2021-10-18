@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 @optional
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType;
+- (void)refreshWaypoints:(BOOL)updateAllData;
 
 @end
 

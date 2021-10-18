@@ -357,7 +357,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     kCellKey: @"reset",
                     kCellType: [OAIconTitleValueCell getCellIdentifier],
                     kCellTitle: OALocalizedString(@"reset_to_original"),
-                    kCellRightIcon:@"ic_custom_reset",
+                    kCellRightIconName: @"ic_custom_reset",
                     kCellToggle: @YES
             }]],
             kSectionHeader:OALocalizedString(@"actions")
@@ -396,7 +396,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
             },
             kCellDesc: generateDescription(),
-            kCellLeftIcon: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
+            kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
     }];
     [colorGradient setData:@{
             kTableUpdateData: ^() {
@@ -406,7 +406,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                                 @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
                         },
                         kCellDesc: generateDescription(),
-                        kCellLeftIcon: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
+                        kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
                 }];
             }
     }];
@@ -538,7 +538,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             cell.textView.textColor = cellData.toggle ? UIColorFromRGB(color_primary_purple) : UIColor.blackColor;
             if (cellData.toggle)
             {
-                cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIcon];
+                cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
                 cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
             }
             [cell showRightIcon:cellData.toggle];
@@ -585,7 +585,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             NSString *extraDesc = cellData.values[@"extra_desc"];
             [cell showExtraDesc:extraDesc && extraDesc.length > 0];
 
-            cell.iconView.image = [UIImage imageNamed:cellData.leftIcon];
+            cell.iconView.image = [UIImage imageNamed:cellData.rightIconName];
 
             cell.descView.text = cellData.desc;
             cell.descView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];

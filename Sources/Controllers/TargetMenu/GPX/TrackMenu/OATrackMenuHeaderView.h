@@ -49,6 +49,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
 
+- (void)updateFrame;
+
 - (void)setDirection:(NSString *)direction;
 - (void)setDescription:(NSString *)description;
 - (void)setCollection:(NSArray *)data;

@@ -815,7 +815,7 @@ static UIViewController *parentController;
 - (void) onCreateTrackClicked
 {
     [self dismissViewController];
-    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
+    [[OARootViewController instance].mapPanel showPlanRouteViewController:[[OARoutePlanningHudViewController alloc] init]];
 }
 
 - (void) startStopRecPressed

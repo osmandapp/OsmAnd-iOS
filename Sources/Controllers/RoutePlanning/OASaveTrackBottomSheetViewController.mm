@@ -106,7 +106,8 @@
     [self hide:YES];
     const auto point = OsmAnd::Utilities::convert31ToLatLon(OARootViewController.instance.mapPanel.mapViewController.mapView.target31);
     CLLocation *coord = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
-    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:coord]];
+    [[OARootViewController instance].mapPanel showPlanRouteViewController:
+            [[OARoutePlanningHudViewController alloc] initWithInitialPoint:coord]];
 }
 
 - (IBAction)shareButtonPressed:(id)sender

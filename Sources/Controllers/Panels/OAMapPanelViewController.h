@@ -21,6 +21,7 @@
 @class OAMapActions, OAMapWidgetRegistry;
 @class OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode;
 @class OAGPXDocument, OAGPXTrackAnalysis;
+@class OARoutePlanningHudViewController;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -51,6 +52,8 @@
 
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller;
 - (void) hideScrollableHudViewController;
+
+- (void) showPlanRouteViewController:(OARoutePlanningHudViewController *)controller;
 
 - (BOOL) gpxModeActive;
 
@@ -132,6 +135,8 @@
                                     analysis:(OAGPXTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
+- (void) openTargetViewWithNewGpxWptMovableTarget:(OAGPX *)gpx
+                                 menuControlState:(OATargetMenuViewControllerState *)menuControlState;
 - (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;
 

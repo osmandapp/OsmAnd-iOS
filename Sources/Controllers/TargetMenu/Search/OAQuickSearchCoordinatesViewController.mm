@@ -803,9 +803,14 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             [cell.textField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.textField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.label.text = item[@"title"];
+            
             cell.clearButton.tag = tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            cell.clearBackgroundButton.tag = tag;
+            [cell.clearBackgroundButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearBackgroundButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            
             
             UITextInputAssistantItem* inputAssistantItem = cell.textField.inputAssistantItem;
             inputAssistantItem.leadingBarButtonGroups = @[];
@@ -881,6 +886,14 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         targetPoint.centerMap = YES;
         [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
         [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    else if ([cellType isEqualToString:[OACoodinateSearchCell getCellIdentifier]])
+    {
+        OACoodinateSearchCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if (cell)
+        {
+            [cell.textField becomeFirstResponder];
+        }
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

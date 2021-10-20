@@ -1004,14 +1004,15 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) keyboardWillShow:(NSNotification *)notification;
 {
-    if ([OAUtilities isLandscape])
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+    CGFloat aboveKeyboardScreenPart = self.view.frame.size.height - keyboardHeight;
+    CGFloat inputFieldsHeight = defaultNavBarHeight + 35 + _controlsSectionData.count * kEstimatedCellHeight;
+    if (aboveKeyboardScreenPart < inputFieldsHeight)
     {
-        NSDictionary *userInfo = [notification userInfo];
-        CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-        NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-        NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-        CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
-
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
             UIEdgeInsets insets = [[self tableView] contentInset];
             [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, kHintBarHeight + (DeviceScreenHeight - keyboardHeight), insets.right)];

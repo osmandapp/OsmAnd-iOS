@@ -85,7 +85,7 @@
                         <constraint firstAttribute="trailing" secondItem="nWK-Mj-437" secondAttribute="trailing" id="vky-g2-jDt"/>
                     </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="66" estimatedRowHeight="66" sectionHeaderHeight="56" estimatedSectionHeaderHeight="56" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="OGE-fG-Yjv">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="14" estimatedSectionHeaderHeight="14" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="OGE-fG-Yjv">
                     <rect key="frame" x="0.0" y="100" width="414" height="692"/>
                     <viewLayoutGuide key="safeArea" id="cFw-9L-jrd"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>

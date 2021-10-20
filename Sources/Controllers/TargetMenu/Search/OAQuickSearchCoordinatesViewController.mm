@@ -39,6 +39,7 @@
 #include <GeographicLib/GeoCoords.hpp>
 
 #define kSearchCityLimit 100
+#define defaultNavBarHeight 58
 #define kHintBarHeight 44
 #define kMaxEastingValue 833360
 #define kMaxNorthingValue 9300000
@@ -101,6 +102,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     UITextField *_currentEditingTextField;
     BOOL _shouldHideHintBar;
+    UIView *_navBarBackgroundView;
 }
 
 - (instancetype) initWithLat:(double)lat lon:(double)lon
@@ -145,6 +147,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     tapGesture.cancelsTouchesInView = NO;
@@ -157,6 +160,10 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     _toolbarView.frame = CGRectMake(0, DeviceScreenHeight, self.view.frame.size.width, kHintBarHeight);
     
+    _navBarBackgroundView = [self createNavBarBackgroundView];
+    _navBarBackgroundView.frame = self.navbarView.bounds;
+    [self.navbarView insertSubview:_navBarBackgroundView atIndex:0];
+    
     _currentFormat = [OAAppSettings.sharedManager.settingGeoFormat get];
     if (!isnan(_quickSearchCoordsLattitude) && !isnan(_quickSearchCoordsLongitude))
     {
@@ -165,6 +172,25 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     }
     
     [self generateData];
+}
+
+- (UIView *) createNavBarBackgroundView
+{
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        blurEffectView.alpha = 0;
+        return blurEffectView;
+    }
+    else
+    {
+        UIView *res = [[UIView alloc] init];
+        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.alpha = 0;
+        return res;
+    }
 }
 
 - (void) generateData
@@ -892,6 +918,27 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat alpha = (self.tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((self.tableView.contentOffset.y + defaultNavBarHeight) / (fabs(self.tableView.contentSize.height - self.tableView.frame.size.height)));
+    if (alpha > 0)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            self.navbarView.backgroundColor = UIColor.clearColor;
+            _navBarBackgroundView.alpha = 1;
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            self.navbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            _navBarBackgroundView.alpha = 0;
+        }];
+    }
 }
 
 #pragma mark - UITextViewDelegate

@@ -2,23 +2,20 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAQuickSearchCoordinatesViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OABaseTableViewController">
             <connections>
                 <outlet property="backButton" destination="G5Q-x1-dIo" id="SCL-to-Bh7"/>
                 <outlet property="cancelButton" destination="dj9-4i-jfO" id="3tL-vf-RvR"/>
                 <outlet property="doneButton" destination="SjJ-8f-vqm" id="xcN-37-6Tk"/>
                 <outlet property="navbarView" destination="Bs9-2L-ti4" id="ibU-c4-UdB"/>
-                <outlet property="scrollView" destination="zdJ-8f-Xym" id="tQZ-Ri-zo0"/>
                 <outlet property="tableView" destination="NrM-78-nBe" id="TGz-iw-9pj"/>
                 <outlet property="titleLabel" destination="krK-4A-igo" id="uhV-5C-3aD"/>
-                <outlet property="toolbarView" destination="Iuh-L6-uWd" id="DZv-84-0jq"/>
                 <outlet property="view" destination="Q3I-vz-wne" id="ypL-hP-jmO"/>
             </connections>
         </placeholder>
@@ -100,7 +97,7 @@
             <viewLayoutGuide key="safeArea" id="FS5-wo-05w"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="NrM-78-nBe" firstAttribute="top" secondItem="Q3I-vz-wne" secondAttribute="top" id="4xb-6N-uV7"/>
+                <constraint firstItem="NrM-78-nBe" firstAttribute="top" secondItem="Bs9-2L-ti4" secondAttribute="top" id="4xb-6N-uV7"/>
                 <constraint firstItem="G5Q-x1-dIo" firstAttribute="leading" secondItem="FS5-wo-05w" secondAttribute="leading" constant="16" id="6dF-C9-bQ8"/>
                 <constraint firstItem="Bs9-2L-ti4" firstAttribute="leading" secondItem="Q3I-vz-wne" secondAttribute="leading" id="8j3-B9-DYC"/>
                 <constraint firstItem="dj9-4i-jfO" firstAttribute="top" secondItem="Q3I-vz-wne" secondAttribute="top" constant="12" id="IF8-XV-VFw"/>
@@ -116,39 +113,6 @@
                 <constraint firstItem="Bs9-2L-ti4" firstAttribute="bottom" secondItem="G5Q-x1-dIo" secondAttribute="bottom" constant="13" id="lVq-ub-oms"/>
             </constraints>
             <point key="canvasLocation" x="213.04347826086959" y="6.6964285714285712"/>
-        </view>
-        <view contentMode="scaleToFill" id="Iuh-L6-uWd">
-            <rect key="frame" x="0.0" y="0.0" width="366" height="44"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zdJ-8f-Xym">
-                    <rect key="frame" x="0.0" y="0.0" width="366" height="44"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ehx-lv-Pfd">
-                            <rect key="frame" x="0.0" y="0.0" width="366" height="44"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </view>
-                    </subviews>
-                    <constraints>
-                        <constraint firstItem="Ehx-lv-Pfd" firstAttribute="top" secondItem="zdJ-8f-Xym" secondAttribute="top" id="JlP-cK-d7d"/>
-                        <constraint firstAttribute="trailing" secondItem="Ehx-lv-Pfd" secondAttribute="trailing" id="clw-7N-cxr"/>
-                        <constraint firstItem="Ehx-lv-Pfd" firstAttribute="height" secondItem="zdJ-8f-Xym" secondAttribute="height" id="sBn-hM-bvs"/>
-                        <constraint firstItem="Ehx-lv-Pfd" firstAttribute="width" secondItem="zdJ-8f-Xym" secondAttribute="width" id="wcb-9f-ftW"/>
-                        <constraint firstItem="Ehx-lv-Pfd" firstAttribute="leading" secondItem="zdJ-8f-Xym" secondAttribute="leading" id="ypz-ku-o6I"/>
-                        <constraint firstAttribute="bottom" secondItem="Ehx-lv-Pfd" secondAttribute="bottom" id="zpJ-gv-xya"/>
-                    </constraints>
-                </scrollView>
-            </subviews>
-            <viewLayoutGuide key="safeArea" id="Gax-nF-ZOE"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-            <constraints>
-                <constraint firstItem="zdJ-8f-Xym" firstAttribute="top" secondItem="Iuh-L6-uWd" secondAttribute="top" id="1fi-wO-Oj4"/>
-                <constraint firstAttribute="bottom" secondItem="zdJ-8f-Xym" secondAttribute="bottom" id="Ar9-LQ-bUx"/>
-                <constraint firstAttribute="trailing" secondItem="zdJ-8f-Xym" secondAttribute="trailing" id="PpX-7m-RP7"/>
-                <constraint firstItem="zdJ-8f-Xym" firstAttribute="leading" secondItem="Gax-nF-ZOE" secondAttribute="leading" id="TKD-Lg-gTb"/>
-            </constraints>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="213" y="-380"/>
         </view>
     </objects>
     <resources>

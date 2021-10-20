@@ -1785,7 +1785,7 @@
             cell = (OASelectionIconTitleCollapsableWithIconCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell showRightIcon:YES];
+            [cell showRightIcon:NO];
             [cell makeSelectable:NO];
         }
         if (cell)

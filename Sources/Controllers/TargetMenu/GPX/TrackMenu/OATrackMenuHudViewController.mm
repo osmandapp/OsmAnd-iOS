@@ -719,11 +719,11 @@
 
                     [waypointCellData setData:@{
                             kTableUpdateData: ^() {
-                                CLLocation *newLocation = self.app.locationServices.lastKnownLocation;
+                                CLLocation *newLocation = _app.locationServices.lastKnownLocation;
                                 if (!newLocation)
                                     return;
 
-                                CLLocationDirection newHeading = self.app.locationServices.lastKnownHeading;
+                                CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
                                 CLLocationDirection newDirection =
                                         (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
                                                 ? newLocation.course : newHeading;
@@ -742,7 +742,7 @@
 
                                 waypoint.distance = [OAOsmAndFormatter getFormattedDistance:distance];
                                 waypoint.distanceMeters = distance;
-                                CGFloat itemDirection = [self.app.locationServices radiusFromBearingToLocation:[
+                                CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[
                                         [CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
                                 waypoint.direction =
                                         OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
@@ -1123,7 +1123,7 @@
     [self updateDistanceAndDirection:YES];
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(updateDistanceAndDirection)
-                                                                 andObserve:self.app.locationServices.updateObserver];
+                                                                 andObserve:_app.locationServices.updateObserver];
 }
 
 - (void)stopLocationServices
@@ -1150,11 +1150,11 @@
     _lastUpdate = [[NSDate date] timeIntervalSince1970];
 
     // Obtain fresh location and heading
-    CLLocation *newLocation = self.app.locationServices.lastKnownLocation;
+    CLLocation *newLocation = _app.locationServices.lastKnownLocation;
     if (!newLocation)
         return;
 
-    CLLocationDirection newHeading = self.app.locationServices.lastKnownHeading;
+    CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
     CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
             ? newLocation.course : newHeading;
 
@@ -1172,7 +1172,7 @@
                 trackLat
         );
         [_headerView setDirection:[OAOsmAndFormatter getFormattedDistance:distance]];
-        CGFloat itemDirection = [self.app.locationServices radiusFromBearingToLocation:[
+        CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[
                 [CLLocation alloc] initWithLatitude:trackLat longitude:trackLon]];
         _headerView.directionIconView.transform = CGAffineTransformMakeRotation(
                 OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180));

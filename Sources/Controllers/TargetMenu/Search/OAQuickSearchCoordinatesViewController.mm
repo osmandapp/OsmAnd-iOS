@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 };
 
 
-@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, OAQuickSearchCoordinateFormatsDelegate>
+@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAQuickSearchCoordinateFormatsDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -103,6 +103,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     UITextField *_currentEditingTextField;
     BOOL _shouldHideHintBar;
     UIView *_navBarBackgroundView;
+    NSTimeInterval _lastTableViewTapTime;
 }
 
 - (instancetype) initWithLat:(double)lat lon:(double)lon
@@ -151,6 +152,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     tapGesture.cancelsTouchesInView = NO;
+    tapGesture.delegate = self;
     [self.tableView addGestureRecognizer:tapGesture];
     
     self.titleLabel.text = OALocalizedString(@"coords_search");
@@ -792,6 +794,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -810,6 +813,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             cell.textField.font = [UIFont systemFontOfSize:17.0];
             [cell.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
             cell.clearButton.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -861,6 +865,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             cell.directionIcon.tintColor = UIColorFromRGB(color_active_light);
             cell.distanceLabel.textColor = UIColorFromRGB(color_primary_purple);
             cell.coordinateLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -891,36 +896,55 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = indexPath.section == 0 ? _controlsSectionData[indexPath.row] : _searchResultSectionData[indexPath.row];
-    NSString *cellType = item[@"type"];
-    
-    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    if ([self canSelectCell])
     {
-        [self.view endEditing:YES];
+        NSDictionary *item = indexPath.section == 0 ? _controlsSectionData[indexPath.row] : _searchResultSectionData[indexPath.row];
+        NSString *cellType = item[@"type"];
         
-        OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat location:[self getDisplayingCoordinate]];
-        vc.delegate = self;
-        [self presentViewController:vc animated:YES completion:nil];
-    }
-    else if ([cellType isEqualToString:[OAQuickSearchResultTableViewCell getCellIdentifier]] && ![item[@"isErrorCell"] boolValue])
-    {
-        OATargetPoint *targetPoint = [OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude];
-        [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
-        [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-    }
-    else if ([cellType isEqualToString:[OACoodinateSearchCell getCellIdentifier]])
-    {
-        OACoodinateSearchCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        if (cell)
+        if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
         {
-            [cell.textField becomeFirstResponder];
+            [self.view endEditing:YES];
+            
+            OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat location:[self getDisplayingCoordinate]];
+            vc.delegate = self;
+            [self presentViewController:vc animated:YES completion:nil];
+        }
+        else if ([cellType isEqualToString:[OAQuickSearchResultTableViewCell getCellIdentifier]] && ![item[@"isErrorCell"] boolValue])
+        {
+            OATargetPoint *targetPoint = [OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude];
+            [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
+            [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+        else if ([cellType isEqualToString:[OACoodinateSearchCell getCellIdentifier]])
+        {
+            OACoodinateSearchCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            if (cell)
+            {
+                [cell.textField becomeFirstResponder];
+            }
         }
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - UIScrollViewDelegate
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    // handle only touches on tableView background
+    if([touch.view isKindOfClass:[UITableViewCell class]] || [touch.view.superview isKindOfClass:[UITableViewCell class]] || [touch.view.superview.superview isKindOfClass:[UITableViewCell class]])
+        return NO;
+    return YES;
+}
+
+- (BOOL) canSelectCell
+{
+    //Sometimes a TapGestureRecognizer that has been added to the tableView to hide the keyboard immediately calls the didSelectRow method  with random IndexPath value.
+    // This method filters that extra calls.
+    double filteringTimeIntervalInSeconds = 0.1;
+    NSTimeInterval timeNow = [[NSDate date] timeIntervalSince1970];
+    return timeNow - _lastTableViewTapTime > filteringTimeIntervalInSeconds;
+}
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -999,6 +1023,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return YES;
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+
 #pragma mark - Keyboard notifications
 
 
@@ -1031,7 +1057,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     } completion:nil];
 }
 
-- (void) dismissKeyboard {
+- (void) dismissKeyboard
+{
+    _lastTableViewTapTime = [[NSDate date] timeIntervalSince1970];
     [self.view endEditing:YES];
 }
 

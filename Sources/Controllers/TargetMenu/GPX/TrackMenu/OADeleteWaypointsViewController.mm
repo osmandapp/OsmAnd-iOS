@@ -16,6 +16,7 @@
 #import "OAColors.h"
 #import "OAAutoObserverProxy.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OASavingTrackHelper.h"
 
 @interface OADeleteWaypointsViewController () <UITableViewDelegate, UITableViewDataSource>
 

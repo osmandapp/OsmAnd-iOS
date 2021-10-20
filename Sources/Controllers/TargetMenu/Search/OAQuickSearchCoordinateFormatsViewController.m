@@ -50,6 +50,8 @@
 - (void) generateData
 {
     _data = [NSMutableArray array];
+    if (!_location)
+        _location = [OARootViewController instance].mapPanel.mapViewController.getMapLocation;
     double lat = _location.coordinate.latitude;
     double lon = _location.coordinate.longitude;
 

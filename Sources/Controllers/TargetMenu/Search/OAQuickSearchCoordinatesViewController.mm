@@ -253,9 +253,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else
     {
         NSMutableArray *result = [NSMutableArray new];
-        [result addObject:[self getLocarionData:latLon]];
+        [result addObject:[self getLocationData:latLon]];
         if (_additionalUtmLatLon)
-            [result addObject:[self getLocarionData:_additionalUtmLatLon]];
+            [result addObject:[self getLocationData:_additionalUtmLatLon]];
         
         _searchResultSectionData = [NSArray arrayWithArray:result];
     }
@@ -263,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionSearchResult] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (NSDictionary *) getLocarionData:(CLLocation *)location
+- (NSDictionary *) getLocationData:(CLLocation *)location
 {
     NSString *title = [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
     NSString *countryName = [_app.worldRegion getCountryNameAtLat:location.coordinate.latitude lon:location.coordinate.longitude];

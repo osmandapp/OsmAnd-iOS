@@ -1030,11 +1030,15 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             btn.frame = CGRectMake(xPosition + margin, 6, 0, 0);
             btn.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
             btn.layer.masksToBounds = YES;
-            btn.layer.cornerRadius = 4.0;
+            btn.layer.cornerRadius = 6.0;
             btn.titleLabel.numberOfLines = 1;
+            if (@available(iOS 13.0, *)) {
+                btn.titleLabel.font = [UIFont monospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
+            } else {
+                btn.titleLabel.font = [UIFont monospacedDigitSystemFontOfSize:17 weight:UIFontWeightSemibold];
+            }
             [btn setTitle:hint forState:UIControlStateNormal];
             [btn setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-            btn.titleLabel.font = [UIFont systemFontOfSize:15];
             [btn sizeToFit];
             [btn addTarget:self action:@selector(tagHintTapped:) forControlEvents:UIControlEventTouchUpInside];
             

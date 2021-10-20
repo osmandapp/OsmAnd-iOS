@@ -972,32 +972,35 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateDownloadingCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath
 {
-    OAResourceItem *mapItem = _mapItems[indexPath.row];
-    if (mapItem.downloadTask)
+    if (_mapItems && _mapItems.count > 0)
     {
-        FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-        
-        float progressCompleted = mapItem.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.001f && mapItem.downloadTask.state == OADownloadTaskStateRunning)
+        OAResourceItem *mapItem = _mapItems[indexPath.row];
+        if (mapItem.downloadTask)
         {
-            progressView.iconPath = nil;
-            if (progressView.isSpinning)
-                [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted - 0.001;
-        }
-        else if (mapItem.downloadTask.state == OADownloadTaskStateFinished)
-        {
-            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-            progressView.progress = 0.0f;
-        }
-        else
-        {
-            progressView.iconPath = [UIBezierPath bezierPath];
-            progressView.progress = 0.0;
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
+            FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+            
+            float progressCompleted = mapItem.downloadTask.progressCompleted;
+            if (progressCompleted >= 0.001f && mapItem.downloadTask.state == OADownloadTaskStateRunning)
+            {
+                progressView.iconPath = nil;
+                if (progressView.isSpinning)
+                    [progressView stopSpinProgressBackgroundLayer];
+                progressView.progress = progressCompleted - 0.001;
+            }
+            else if (mapItem.downloadTask.state == OADownloadTaskStateFinished)
+            {
+                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+                progressView.progress = 0.0f;
+            }
+            else
+            {
+                progressView.iconPath = [UIBezierPath bezierPath];
+                progressView.progress = 0.0;
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+            }
         }
     }
 }

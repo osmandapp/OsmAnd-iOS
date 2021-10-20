@@ -12,6 +12,11 @@
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
 #import "OAAutoObserverProxy.h"
+#import "OAGPXDocument.h"
+#import "OARouteStatisticsHelper.h"
+#import "OARouteImporter.h"
+#import "OARouteStatistics.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -20,6 +25,8 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/OnSurfaceRasterMapSymbol.h>
+#include <OsmAndCore/Map/MapStylesCollection.h>
+#include <OsmAndCore/Map/ResolvedMapStyle.h>
 
 #include <SkBitmapDevice.h>
 
@@ -233,6 +240,76 @@
     
     canvas.flush();
     return bitmap;
+}
+
+- (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors attrName:(NSString *)attrName gpx:(OAGPXDocument *)gpx
+{
+    OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpx];
+    const auto segs = [routeImporter importRoute];
+    const auto& env = [OsmAndApp instance].defaultRenderer;
+    
+    OARouteStatisticsComputer *statsComputer = [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:env];
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
+    for (OAGpxTrkSeg *seg in [gpx getNonEmptyTrkSegments:YES])
+    {
+        for (OAGpxTrkPt *trkPt in seg.points)
+        {
+            [locations addObject:[[CLLocation alloc] initWithLatitude:trkPt.position.latitude longitude:trkPt.position.longitude]];
+        }
+    }
+    int firstSegmentLocationIdx = [self getIdxOfFirstSegmentLocation:locations routeSegments:segs];
+    for (NSInteger i = 0; i < segs.size(); i++)
+    {
+        const auto& segment = segs[i];
+        OARouteSegmentWithIncline *routeSeg = [[OARouteSegmentWithIncline alloc] init];
+        routeSeg.obj = segment->object;
+        OARouteSegmentAttribute *attribute = [statsComputer classifySegment:attrName slopeClass:-1 segment:routeSeg];
+        OsmAnd::ColorARGB color((int)attribute.color);
+//        color = color == 0 ? RouteColorize.LIGHT_GREY : color;
+        
+        if (i == 0)
+        {
+            for (int j = 0; j < firstSegmentLocationIdx; j++)
+            {
+                colors.push_back(color);
+            }
+        }
+        
+        int pointsSize = abs(segment->getStartPointIndex() - segment->getEndPointIndex());
+        for (int j = 0; j < pointsSize; j++)
+        {
+            colors.push_back(color);
+        }
+        
+        if (i == segs.size() - 1)
+        {
+            int start = colors.size();
+            for (int j = start; j < locations.count; j++)
+            {
+                colors.push_back(color);
+            }
+        }
+    }
+}
+
+- (int) getIdxOfFirstSegmentLocation:(NSArray<CLLocation *> *)locations
+                       routeSegments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)routeSegments
+{
+    int locationsIdx = 0;
+    if (routeSegments.size() == 0)
+        return locationsIdx;
+    const auto& segmentStartPoint = routeSegments[0]->getStartPoint();
+    while (locationsIdx < locations.count)
+    {
+        CLLocation *location = locations[locationsIdx];
+        if (location.coordinate.latitude == segmentStartPoint.lat
+            && location.coordinate.longitude == segmentStartPoint.lon)
+        {
+            break;
+        }
+        locationsIdx++;
+    }
+    return locationsIdx == locations.count ? 0 : locationsIdx;
 }
 
 @end

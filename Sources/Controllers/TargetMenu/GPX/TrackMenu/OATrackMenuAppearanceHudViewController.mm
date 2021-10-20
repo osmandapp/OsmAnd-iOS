@@ -73,6 +73,8 @@ static const NSInteger kCustomTrackWidthMax = 24;
     NSString *_oldColoringType;
 
     OATrackMenuViewControllerState *_reopeningTrackMenuState;
+    
+    OsmAndAppInstance _app;
 }
 
 @dynamic gpx, isShown, tableData;
@@ -83,6 +85,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     if (self)
     {
         _reopeningTrackMenuState = state;
+        [self commonInit];
     }
     return self;
 }
@@ -94,6 +97,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
 - (void)commonInit
 {
+    _app = [OsmAndApp instance];
     _oldColor = self.gpx.color;
     _oldShowArrows = self.gpx.showArrows;
     _oldWidth = self.gpx.width;
@@ -483,7 +487,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                                                          state:_reopeningTrackMenuState];
         }
 
-        [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }];
 }
 
@@ -796,13 +800,13 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
     if ([cellData.key isEqualToString:@"reset"])
     {
-        [[OAGPXDatabase sharedDb] reloadGPXFile:[self.app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] onComplete:^{
+        [[OAGPXDatabase sharedDb] reloadGPXFile:[_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] onComplete:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.gpxFilePath];
                 [self updateGpxData];
                 [self commonInit];
                 [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
-                [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+                [[_app updateGpxTracksOnMapObservable] notifyEvent];
                 [self generateData];
                 [self setupHeaderView];
                 [UIView transitionWithView:self.tableView
@@ -831,7 +835,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     if (cellData.onSwitch)
         cellData.onSwitch(switchView.isOn);
 
-    [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
@@ -850,7 +854,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             _selectedWidth = [_appearanceCollection getAvailableWidth][segment.selectedSegmentIndex];
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
 
-            [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
             self.tableData[indexPath.section].updateData();
             [UIView setAnimationsEnabled:NO];
@@ -881,7 +885,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                 _selectedWidth.customValue = [NSString stringWithFormat:@"%li", selectedValue];
                 self.gpx.width = _selectedWidth.customValue;
 
-                [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+                [[_app updateGpxTracksOnMapObservable] notifyEvent];
             }
         }
     }
@@ -894,7 +898,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     _selectedColoringType = _availableColoringTypes[index];
     self.gpx.coloringType = _selectedColoringType.name;
 
-    [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
     self.tableData[kColorsSection].updateData();
     [UIView transitionWithView:self.tableView
@@ -914,7 +918,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     _selectedColor = [_appearanceCollection getColorForValue:_availableColors[tag].intValue];
     self.gpx.color = _selectedColor.colorValue;
 
-    [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
     self.tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
     [UIView setAnimationsEnabled:NO];

@@ -42,14 +42,8 @@ private:
     const QString _vectorName;
     const QString _vectorPathSuffix;
     const QString _vectorUrlPattern;
-    const OsmAnd::ZoomLevel _rasterZoomLevel;
     const OsmAnd::ZoomLevel _vectorZoomLevel;
     QString _vectorLocalCachePath;
-    
-    const QString _rasterName;
-    const QString _rasterPathSuffix;
-    const QString _rasterUrlPattern;
-    QString _rasterLocalCachePath;
 
     mutable QReadWriteLock _localCacheLock;
     mutable QMutex _localCachePathMutex;
@@ -98,8 +92,6 @@ private:
                    const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
                    SkCanvas& canvas);
     
-    QByteArray getRasterTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
-    
     QByteArray getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
     
     virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
@@ -128,7 +120,6 @@ public:
     
     void setLocalCachePath(const QString& localCachePath);
     
-    OsmAnd::ZoomLevel getRasterTileZoom() const;
     OsmAnd::ZoomLevel getVectorTileZoom() const;
 
     std::shared_ptr<const OsmAnd::MvtReader::Tile> readGeometry(const OsmAnd::TileId &tileId);

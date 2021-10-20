@@ -7,8 +7,6 @@
 //
 
 #import "OABaseScrollableHudViewController.h"
-#import "OsmAndApp.h"
-#import "OASavingTrackHelper.h"
 
 #define kCellKey @"key"
 #define kCellType @"type"
@@ -38,7 +36,7 @@ typedef void(^OAGPXTableCellDataOnSwitch)(BOOL toggle);
 typedef BOOL(^OAGPXTableCellDataIsOn)();
 typedef void(^OAGPXTableDataUpdateData)();
 
-@class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController;
+@class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
 
 @interface OAGPXTableCellData : NSObject
 
@@ -83,7 +81,6 @@ typedef void(^OAGPXTableDataUpdateData)();
 @property (nonatomic, readonly) BOOL isCurrentTrack;
 @property (nonatomic, readonly) BOOL isShown;
 
-@property (nonatomic, readonly) OsmAndAppInstance app;
 @property (nonatomic, readonly) OAAppSettings *settings;
 @property (nonatomic, readonly) OASavingTrackHelper *savingHelper;
 

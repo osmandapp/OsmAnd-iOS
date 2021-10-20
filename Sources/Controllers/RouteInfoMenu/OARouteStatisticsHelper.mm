@@ -85,26 +85,8 @@ static NSArray<NSString *> *_boundariesClass;
     }
 }
 
-+ (std::shared_ptr<OsmAnd::MapPresentationEnvironment>) getDefaultPresentationEnvironment
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    auto defSourceResource = app.resourcesManager->getResource(QString::fromNSString([OAAppData defaultMapSource].resourceId));
-    const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(defSourceResource->metadata)->mapStyle;
-    
-    const auto& resolvedMapStyle = app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
-    return std::shared_ptr<OsmAnd::MapPresentationEnvironment>(
-                                                               new OsmAnd::MapPresentationEnvironment(
-                                                                                                      resolvedMapStyle,
-                                                                                                      [OARootViewController instance].mapPanel.mapViewController.displayDensityFactor,
-                                                                                                      1.0,
-                                                                                                      1.0,
-                                                                                                      QString::fromNSString(OAUtilities.currentLang),
-                                                                                                      OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly));
-}
-
 + (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
 {
-    NSArray<OARouteSegmentWithIncline *> *routeSegmentWithInclines = [self.class calculateInclineRouteSegments:route];
     NSMutableArray<NSString *> *attributeNames = [NSMutableArray new];
     OsmAndAppInstance app = [OsmAndApp instance];
     
@@ -129,7 +111,14 @@ static NSArray<NSString *> *_boundariesClass;
         [self getAttributeNames:attributeNames mapSourceResource:mapSourceResource];
     }
     
-    const auto& defaultPresentationEnv = [self getDefaultPresentationEnvironment];
+    return [self calculateRouteStatistic:route attributeNames:attributeNames];
+}
+
++ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames
+{
+    NSArray<OARouteSegmentWithIncline *> *routeSegmentWithInclines = [self.class calculateInclineRouteSegments:route];
+    
+    const auto& defaultPresentationEnv = OsmAndApp.instance.defaultRenderer;
     
     // "steepnessColor", "surfaceColor", "roadClassColor", "smoothnessColor"
     // steepness=-19_-16

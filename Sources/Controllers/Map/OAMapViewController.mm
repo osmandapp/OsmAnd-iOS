@@ -2384,6 +2384,9 @@
     
     for (OAGpxWpt *wptItem in helper.currentTrack.locationMarks)
     {
+        if ([[[OASavingTrackHelper sharedInstance] getCurrentGPX].hiddenGroups containsObject:wptItem.type])
+            continue;
+
         if (wptItem.type.length > 0)
             [groupSet addObject:wptItem.type];
         
@@ -2414,9 +2417,16 @@
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         const auto& doc = it.value();
+        NSString *gpxFilePath = [it.key().toNSString()
+                stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
+                                          withString:@""];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
         for (auto locIt = doc->locationMarks.begin(); locIt != doc->locationMarks.end(); ++locIt)
         {
             auto loc = *locIt;
+            if ([gpx.hiddenGroups containsObject:loc->type.toNSString()])
+                continue;
+
             if (!loc->type.isEmpty())
                 groups.insert(loc->type);
 
@@ -2454,10 +2464,18 @@
     
     if (!_gpxDocsTemp.isEmpty())
     {
-        const auto& doc = _gpxDocsTemp.first();
-    
-        for (auto& loc : doc->locationMarks)
+        auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
+        auto gpxDoc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc);
+        OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:gpxDoc];
+        NSString *gpxFilePath = [document.path
+                stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
+                                          withString:@""];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+        for (auto& loc : geoDoc->locationMarks)
         {
+            if ([gpx.hiddenGroups containsObject:loc->type.toNSString()])
+                continue;
+
             if (!loc->type.isEmpty())
                 groups.insert(loc->type);
             

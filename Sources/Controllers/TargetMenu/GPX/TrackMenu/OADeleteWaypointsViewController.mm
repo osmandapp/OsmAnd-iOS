@@ -10,7 +10,8 @@
 #import "OABaseTrackMenuHudViewController.h"
 #import "OATrackMenuHudViewController.h"
 #import "OARootViewController.h"
-#import "OAPointTableViewCell.h"
+#import "OAPointWithRegionTableViewCell.h"
+#import "OASelectionIconTitleCollapsableWithIconCell.h"
 #import "OAGpxWptItem.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -36,6 +37,7 @@
     NSArray<OAGPXTableSectionData *> *_tableData;
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
     NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *_selectedWaypointGroups;
+    NSArray<NSNumber *> *_originalCloseOpenGroups;
     BOOL _isCurrentTrack;
     NSString *_gpxFilePath;
 }
@@ -61,12 +63,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self updateGroupData];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
 
-    [self setupDeleteButtonView];
+    [self updateDeleteButtonView];
     [self updateDistanceAndDirection];
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(updateDistanceAndDirection)
@@ -89,7 +92,31 @@
     self.titleLabel.text = OALocalizedString(@"delete_waypoints");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.selectAllButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
-    [self.deleteButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
+}
+
+- (void)updateGroupData
+{
+    NSMutableArray<NSNumber *> *closeOpenGroups = [NSMutableArray array];
+    for (OAGPXTableSectionData *sectionData in _tableData)
+    {
+        OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
+        [closeOpenGroups addObject:@(groupCellData.toggle)];
+        [groupCellData setData:@{
+                kTableUpdateData: ^() {
+                    NSString *groupName = groupCellData.values[@"string_value_title"];
+                    NSArray *selectedWaypoints = _selectedWaypointGroups[groupName];
+                    [groupCellData setData:@{
+                            kCellValues: @{
+                                    @"string_value_title": groupName,
+                                    @"bool_value_selected": @(selectedWaypoints != nil ? selectedWaypoints.count > 0 : NO)
+                            },
+                            kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right",
+                            kCellTintColor: @(groupCellData.tintColor)
+                    }];
+                }
+        }];
+    }
+    _originalCloseOpenGroups = closeOpenGroups;
 }
 
 - (void)updateDistanceAndDirection
@@ -104,44 +131,130 @@
     });
 }
 
-- (void)setupDeleteButtonView
+- (void)updateDeleteButtonView
 {
     BOOL hasSelection = _selectedWaypointGroups.allKeys.count != 0;
-    self.deleteButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_route_button_inactive);
+    self.deleteButton.backgroundColor =
+            hasSelection ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_route_button_inactive);
     [self.deleteButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
-    [self.deleteButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.deleteButton setUserInteractionEnabled:hasSelection];
+
+    NSString *textShow = OALocalizedString(@"shared_string_delete");
+    UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+    UIColor *colorShow = hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
+    NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
+
+    NSInteger selectedGroupsCount = 0;
+    NSInteger selectedWaypointsCount = 0;
+    for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
+    {
+        selectedWaypointsCount += _selectedWaypointGroups[groupName].count;
+        if (_selectedWaypointGroups[groupName].count == _waypointGroups[groupName].count)
+            selectedGroupsCount += 1;
+    }
+    NSString *textGroups = [NSString stringWithFormat:@"\n%@ %li, %@ %li",
+                    OALocalizedString(@"groups"),
+                    selectedGroupsCount,
+                    OALocalizedString(@"gpx_waypoints").lowerCase,
+                    selectedWaypointsCount];
+
+    UIFont *fontCategories = [UIFont systemFontOfSize:13];
+    UIColor *colorCategories = hasSelection != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
+    NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textGroups attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
+
+    [attrShow appendAttributedString:attrCategories];
+
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:2.0];
+    [style setAlignment:NSTextAlignmentCenter];
+    [attrShow addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attrShow.string.length)];
+
+    [self.deleteButton setAttributedTitle:attrShow forState:UIControlStateNormal];
+}
+
+- (void)restoreCloseOpenGroups
+{
+    for (NSInteger i = 0; i < _tableData.count; i++)
+    {
+        OAGPXTableCellData *groupCellData = _tableData[i].cells.firstObject;
+        [groupCellData setData:@{
+                kCellToggle: _originalCloseOpenGroups[i]
+        }];
+    }
+}
+
+- (void)selectDeselectGroup:(id)sender
+{
+    UIButton *sw = (UIButton *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+
+    NSArray<OAGpxWptItem *> *gpxWptItems = [self getGpxWptItems:indexPath.section];
+    NSString *groupName = [self checkGroupName:gpxWptItems.firstObject.point.type];
+    NSMutableArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
+
+    if (waypoints)
+    {
+        if (waypoints.count != 0)
+            [waypoints removeAllObjects];
+        else
+            [waypoints addObjectsFromArray:gpxWptItems];
+    }
+    else
+    {
+        waypoints = [gpxWptItems mutableCopy];
+    }
+    _selectedWaypointGroups[groupName] = waypoints.count > 0 ? waypoints : nil;
+    OAGPXTableCellData *groupCellData = [self getCellData:indexPath];
+    if (groupCellData.updateData)
+        groupCellData.updateData();
+
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                  withRowAnimation:UITableViewRowAnimationNone];
+
+    [self updateDeleteButtonView];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
-    OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath];
-    NSString *groupName = gpxWptItem.point.type;
-    if (!groupName || groupName.length == 0)
-        groupName = OALocalizedString(@"gpx_waypoints");
+    OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath.section row:indexPath.row - 1];
+    NSString *groupName = [self checkGroupName:gpxWptItem.point.type];
     NSMutableArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
 
-     if (waypoints)
-     {
-         if ([waypoints containsObject:gpxWptItem])
-             [waypoints removeObject:gpxWptItem];
-         else
+    if (waypoints)
+    {
+        if ([waypoints containsObject:gpxWptItem])
+            [waypoints removeObject:gpxWptItem];
+        else
             [waypoints addObject:gpxWptItem];
-     }
-     else
-     {
-         waypoints = [@[gpxWptItem] mutableCopy];
-     }
+    }
+    else
+    {
+        waypoints = [@[gpxWptItem] mutableCopy];
+    }
     _selectedWaypointGroups[groupName] = waypoints.count > 0 ? waypoints : nil;
+    OAGPXTableCellData *groupCellData = [self getCellData:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+    if (groupCellData.updateData)
+        groupCellData.updateData();
 
-     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-     [self setupDeleteButtonView];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath]
+                          withRowAnimation:UITableViewRowAnimationNone];
+
+    [self updateDeleteButtonView];
 }
 
-- (OAGpxWptItem *)getGpxWptItem:(NSIndexPath *)indexPath
+- (NSString *)checkGroupName:(NSString *)groupName
 {
-    NSString *groupName = _tableData[indexPath.section].header;
-    return _waypointGroups[groupName][indexPath.row];
+    return !groupName || groupName.length == 0 ? OALocalizedString(@"shared_string_gpx_points") : groupName;
+}
+
+- (OAGpxWptItem *)getGpxWptItem:(NSInteger)section row:(NSInteger)row
+{
+    return [self getGpxWptItems:section][row];
+}
+
+- (NSArray<OAGpxWptItem *> *)getGpxWptItems:(NSInteger)section
+{
+    return _waypointGroups[_waypointGroups.allKeys[section]];
 }
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
@@ -149,9 +262,25 @@
     return _tableData[indexPath.section].cells[indexPath.row];
 }
 
+- (void)openCloseGroupButtonAction:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    [cellData setData:@{
+            kCellToggle: @(!cellData.toggle)
+    }];
+    if (_tableData[indexPath.section].updateData)
+        _tableData[indexPath.section].updateData();
+
+    [self.tableView beginUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+}
+
 - (IBAction)onCancelButtonClicked:(id)sender
 {
-
+    [self restoreCloseOpenGroups];
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate refreshWaypoints:NO];
 
@@ -160,9 +289,13 @@
 
 - (IBAction)onSelectAllButtonClicked:(id)sender
 {
-    for (NSString *groupName in _waypointGroups.keyEnumerator)
+    for (NSInteger i = 0; i < _waypointGroups.allKeys.count; i++)
     {
+        NSString *groupName = _waypointGroups.allKeys[i];
         _selectedWaypointGroups[groupName] = [_waypointGroups[groupName] mutableCopy];
+        OAGPXTableCellData *groupCellData = _tableData[i].cells.firstObject;
+        if (groupCellData.updateData)
+            groupCellData.updateData();
     }
 
     [UIView transitionWithView:self.tableView
@@ -174,35 +307,18 @@
                     }
                     completion: nil];
 
-    [self setupDeleteButtonView];
+    [self updateDeleteButtonView];
 }
 
 - (IBAction)onDeleteButtonClicked:(id)sender
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    if (_isCurrentTrack)
+    for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
     {
-        OASavingTrackHelper *savingHelper = [OASavingTrackHelper sharedInstance];
-        for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
-        {
-            NSArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
-            for (OAGpxWptItem *waypoint in waypoints)
-            {
-                [savingHelper deleteWpt:waypoint.point];
-            }
-        }
-        [[app trackRecordingObservable] notifyEvent];
-    }
-    else
-    {
-        NSString *path = [app.gpxPath stringByAppendingPathComponent:_gpxFilePath];
-        for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
-        {
-            NSArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
-            [[OARootViewController instance].mapPanel.mapViewController deleteWpts:waypoints docPath:path];
-        }
+        if (self.trackMenuDelegate)
+            [self.trackMenuDelegate deleteWaypointsGroup:groupName];
     }
 
+    [self restoreCloseOpenGroups];
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate refreshWaypoints:YES];
 
@@ -221,24 +337,21 @@
     return _tableData[section].cells.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _tableData[section].header;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     UITableViewCell *outCell = nil;
-    if ([cellData.type isEqualToString:[OAPointTableViewCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OAPointWithRegionTableViewCell getCellIdentifier]])
     {
-        OAPointTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+        OAPointWithRegionTableViewCell *cell =
+                [self.tableView dequeueReusableCellWithIdentifier:[OAPointWithRegionTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAPointTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointWithRegionTableViewCell getCellIdentifier]
+                                                         owner:self
+                                                       options:nil];
+            cell = (OAPointWithRegionTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
-            cell.distanceView.textColor = UIColorFromRGB(color_active_light);
 
             cell.tintColor = UIColorFromRGB(color_primary_purple);
             UIView *bgColorView = [[UIView alloc] init];
@@ -248,16 +361,80 @@
         if (cell)
         {
             [cell.titleView setText:cellData.values[@"string_value_title"]];
-            [cell.titleIcon setImage:cellData.leftIcon];
+            [cell.iconView setImage:cellData.leftIcon];
+            [cell setRegion:cellData.desc];
+            [cell setDirection:cellData.values[@"string_value_distance"]];
 
-            [cell.distanceView setText:cellData.values[@"string_value_distance"]];
-            cell.directionImageView.transform =
+            cell.directionIconView.transform =
                     CGAffineTransformMakeRotation([cellData.values[@"float_value_direction"] floatValue]);
 
-            if (![cell.directionImageView.tintColor isEqual:UIColorFromRGB(color_active_light)])
+            if (![cell.directionIconView.tintColor isEqual:UIColorFromRGB(color_active_light)])
             {
-                cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
-                cell.directionImageView.tintColor = UIColorFromRGB(color_active_light);
+                cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
+            }
+        }
+        outCell = cell;
+    }
+    else if ([cellData.type isEqualToString:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]])
+    {
+        OASelectionIconTitleCollapsableWithIconCell *cell =
+                [self.tableView dequeueReusableCellWithIdentifier:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]
+                                                         owner:self
+                                                       options:nil];
+            cell = (OASelectionIconTitleCollapsableWithIconCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsZero;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell showOptionsButton:NO];
+            [cell makeSelectable:YES];
+        }
+        if (cell)
+        {
+            NSInteger tag = indexPath.section << 10 | indexPath.row;
+
+            [cell.titleView setText:cellData.values[@"string_value_title"]];
+
+            [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
+            cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
+
+            cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
+            if (!cellData.toggle && [cell isDirectionRTL])
+                cell.arrowIconView.image = cell.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;
+
+            cell.openCloseGroupButton.tag = tag;
+            [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.openCloseGroupButton addTarget:self
+                                          action:@selector(openCloseGroupButtonAction:)
+                                forControlEvents:UIControlEventTouchUpInside];
+
+            cell.selectionButton.tag = tag;
+            [cell.selectionButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.selectionButton addTarget:self
+                                     action:@selector(selectDeselectGroup:)
+                           forControlEvents:UIControlEventTouchUpInside];
+
+            cell.selectionGroupButton.tag = tag;
+            [cell.selectionGroupButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.selectionGroupButton addTarget:self
+                                          action:@selector(selectDeselectGroup:)
+                                forControlEvents:UIControlEventTouchUpInside];
+
+            if ([cellData.values[@"bool_value_selected"] boolValue])
+            {
+                NSString *groupName = [self checkGroupName:
+                        _waypointGroups[_waypointGroups.allKeys[indexPath.section]][indexPath.row].point.type];
+                UIImage *selectionImage =  _selectedWaypointGroups[groupName].count == _waypointGroups[groupName].count
+                        ? [UIImage imageNamed:@"ic_system_checkbox_selected"]
+                        : [UIImage imageNamed:@"ic_system_checkbox_indeterminate"];
+                [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
+            }
+            else
+            {
+                [cell.selectionButton setImage:nil forState:UIControlStateNormal];
             }
         }
         outCell = cell;
@@ -273,32 +450,37 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath];
-    NSString *groupName = gpxWptItem.point.type;
-    if (!groupName || groupName.length == 0)
-        groupName = OALocalizedString(@"gpx_waypoints");
-    NSMutableArray<OAGpxWptItem *> *selectedWaypoints = _selectedWaypointGroups[groupName];
-    BOOL selected = selectedWaypoints && [selectedWaypoints containsObject:gpxWptItem];
-    [cell setSelected:selected animated:YES];
-    if (selected)
-        [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-    else
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row > 0)
+    {
+        OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath.section row:indexPath.row - 1];
+        NSString *groupName = [self checkGroupName:gpxWptItem.point.type];
+        NSMutableArray<OAGpxWptItem *> *selectedWaypoints = _selectedWaypointGroups[groupName];
+        BOOL selected = selectedWaypoints && [selectedWaypoints containsObject:gpxWptItem];
+        [cell setSelected:selected animated:YES];
+        if (selected)
+            [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        else
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self selectDeselectItem:indexPath];
+    if (indexPath.row > 0)
+        [self selectDeselectItem:indexPath];
+    else
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self selectDeselectItem:indexPath];
+    if (indexPath.row > 0)
+        [self selectDeselectItem:indexPath];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    return indexPath.row != 0;
 }
 
 @end

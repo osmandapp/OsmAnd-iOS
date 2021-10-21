@@ -19,10 +19,17 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
-@optional
+@required
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType;
 - (void)refreshWaypoints:(BOOL)updateAllData;
+- (NSInteger)getWaypointsCount:(NSString *)groupName;
+- (NSInteger)getWaypointsGroupColor:(NSString *)groupName;
+- (BOOL)isWaypointsGroupVisible:(NSString *)groupName;
+- (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show;
+- (void)deleteWaypointsGroup:(NSString *)groupName;
+- (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName;
+- (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 
 @end
 

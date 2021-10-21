@@ -285,7 +285,17 @@
                 continue;
             
             if (!it.value()->locationMarks.empty())
-                locationMarks.append(it.value()->locationMarks);
+            {
+                NSString *gpxFilePath = [it.key().toNSString()
+                        stringByReplacingOccurrencesOfString:[self.app.gpxPath stringByAppendingString:@"/"]
+                                                  withString:@""];
+                OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+                for (const auto& waypoint : it.value()->locationMarks)
+                {
+                    if (![gpx.hiddenGroups containsObject:waypoint->type.toNSString()])
+                        locationMarks.append(waypoint);
+                }
+            }
         }
         
         const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;

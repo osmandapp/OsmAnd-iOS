@@ -25,14 +25,14 @@
 
 - (void)updateConstraints
 {
-    BOOL hasRightIcon = !self.rightIconView.hidden;
+    BOOL hasOptionButton = !self.optionsButton.hidden;
     BOOL isSelectable = !self.selectionButton.hidden;
 
-    self.arrowIconWithRightIconConstraint.active = hasRightIcon;
-    self.arrowIconNoRightIconConstraint.active = !hasRightIcon;
+    self.arrowIconWithOptionButtonConstraint.active = hasOptionButton;
+    self.arrowIconNoOptionButtonConstraint.active = !hasOptionButton;
 
-    self.openCloseGroupButtonWithRightIconConstraint.active = hasRightIcon;
-    self.openCloseGroupButtonNoRightIconConstraint.active = !hasRightIcon;
+    self.openCloseGroupButtonWithOptionsGroupButtonConstraint.active = hasOptionButton;
+    self.openCloseGroupButtonNoOptionsGroupButtonConstraint.active = !hasOptionButton;
 
     self.leftIconWithSelectionButtonConstraint.active = isSelectable;
     self.leftIconWithSelectionGroupButtonConstraint.active = isSelectable;
@@ -49,14 +49,14 @@
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasRightIcon = !self.rightIconView.hidden;
+        BOOL hasOptinButton = !self.optionsButton.hidden;
         BOOL isSelectable = !self.selectionButton.hidden;
 
-        res = res || self.arrowIconWithRightIconConstraint.active != hasRightIcon;
-        res = res || self.arrowIconNoRightIconConstraint.active != !hasRightIcon;
+        res = res || self.arrowIconWithOptionButtonConstraint.active != hasOptinButton;
+        res = res || self.arrowIconNoOptionButtonConstraint.active != !hasOptinButton;
 
-        res = res || self.openCloseGroupButtonWithRightIconConstraint.active != hasRightIcon;
-        res = res || self.openCloseGroupButtonNoRightIconConstraint.active != !hasRightIcon;
+        res = res || self.openCloseGroupButtonWithOptionsGroupButtonConstraint.active != hasOptinButton;
+        res = res || self.openCloseGroupButtonNoOptionsGroupButtonConstraint.active != !hasOptinButton;
 
         res = res || self.leftIconWithSelectionButtonConstraint.active != isSelectable;
         res = res || self.leftIconWithSelectionGroupButtonConstraint.active != !isSelectable;
@@ -68,9 +68,10 @@
     return res;
 }
 
-- (void)showRightIcon:(BOOL)show
+- (void)showOptionsButton:(BOOL)show
 {
-    self.rightIconView.hidden = !show;
+    self.optionsButton.hidden = !show;
+    self.optionsGroupButton.hidden = !show;
     self.dividerView.hidden = !show;
 }
 

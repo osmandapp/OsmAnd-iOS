@@ -56,6 +56,8 @@
         _isOn = data[kCellIsOn];
     if ([data.allKeys containsObject:kTableUpdateData])
         _updateData = data[kTableUpdateData];
+    if ([data.allKeys containsObject:kCellButtonPressed])
+        _onButtonPressed = data[kCellButtonPressed];
 }
 
 @end

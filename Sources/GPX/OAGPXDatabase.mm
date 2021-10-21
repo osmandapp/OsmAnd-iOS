@@ -30,6 +30,24 @@
     return self.gpxTitle;
 }
 
+- (void)removeHiddenGroups:(NSString *)groupName
+{
+    if (!self.hiddenGroups)
+    {
+        self.hiddenGroups = [NSSet set];
+        return;
+    }
+
+    NSMutableSet *newHiddenGroups = [self.hiddenGroups mutableCopy];
+    [newHiddenGroups removeObject:groupName];
+    self.hiddenGroups = newHiddenGroups;
+}
+
+- (void)addHiddenGroups:(NSString *)groupName
+{
+    self.hiddenGroups = self.hiddenGroups ? [self.hiddenGroups setByAddingObject:groupName] : [NSSet set];
+}
+
 - (NSInteger)color
 {
     return _color != 0 ? _color : kDefaultTrackColor;
@@ -354,6 +372,7 @@
     [d setObject:@(gpx.points) forKey:@"points"];
 
     [d setObject:@(gpx.wptPoints) forKey:@"wptPoints"];
+    [d setObject:gpx.hiddenGroups != nil ? gpx.hiddenGroups : [NSSet set] forKey:@"hiddenGroups"];
     [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
 
     [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
@@ -498,7 +517,13 @@
         {
             gpx.coloringType = value;
         }
+        else if ([key isEqualToString:@"hiddenGroups"])
+        {
+            gpx.hiddenGroups = value;
+        }
     }
+    if (!gpx.hiddenGroups)
+        gpx.hiddenGroups = [NSSet set];
 
     if (!gpx.gpxFilePath)
         gpx.gpxFilePath = gpx.gpxFileName;

@@ -55,12 +55,16 @@
 
 @property (nonatomic) int points;
 @property (nonatomic) int wptPoints;
+@property (nonatomic) NSSet<NSString *> *hiddenGroups;
 
 @property (nonatomic) double   metricEnd;
 @property (nonatomic) OAGpxWpt *locationStart;
 @property (nonatomic) OAGpxWpt *locationEnd;
 
 - (NSString *)getNiceTitle;
+
+- (void)removeHiddenGroups:(NSString *)groupName;
+- (void)addHiddenGroups:(NSString *)groupName;
 
 @end
 

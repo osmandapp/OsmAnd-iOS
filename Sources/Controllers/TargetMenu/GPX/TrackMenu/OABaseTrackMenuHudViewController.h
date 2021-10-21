@@ -21,6 +21,7 @@
 #define kCellTintColor @"tint_color"
 #define kCellOnSwitch @"on_switch"
 #define kCellIsOn @"isOn"
+#define kCellButtonPressed @"on_button_pressed"
 
 #define kSectionCells @"cells"
 #define kSectionHeader @"header"
@@ -56,6 +57,7 @@ typedef void(^OAGPXTableDataUpdateData)();
 @property (nonatomic, readonly) OAGPXTableCellDataOnSwitch onSwitch;
 @property (nonatomic, readonly) OAGPXTableCellDataIsOn isOn;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
+@property (nonatomic, readonly) OAGPXTableDataUpdateData onButtonPressed;
 
 - (void)setData:(NSDictionary *)data;
 

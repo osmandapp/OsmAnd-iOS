@@ -14,6 +14,8 @@
 #import "OASelectTrackFolderViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OADeleteWaypointsViewController.h"
+#import "OAEditWaypointsGroupBottomSheetViewController.h"
+#import "OADeleteWaypointsGroupBottomSheetViewController.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
 #import "OATextViewSimpleCell.h"
@@ -249,7 +251,7 @@
         case EOATrackMenuHudPointsTab:
         {
             NSInteger groupsCount = _waypointGroups.allKeys.count;
-            if ([_waypointGroups.allKeys containsObject:OALocalizedString(@"gpx_waypoints")])
+            if ([_waypointGroups.allKeys containsObject:OALocalizedString(@"shared_string_gpx_points")])
                 groupsCount--;
 
             _description = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"groups"), groupsCount];
@@ -681,7 +683,8 @@
                                 kCellKey: @"delete",
                                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                                 kCellRightIconName: @"ic_custom_remove_outlined",
-                                kCellTitle: OALocalizedString(@"shared_string_delete")
+                                kCellTitle: OALocalizedString(@"shared_string_delete"),
+                                kCellTintColor: @color_primary_red
                         }]
                 ]
         }]];
@@ -690,38 +693,22 @@
     {
         for (NSString *groupName in _waypointGroups.keyEnumerator)
         {
-            NSInteger (^waypointCellsCount) (void) = ^{
-                NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
-                return waypoints ? (long) waypoints.count : 0;
-            };
-
-            int (^groupCellColor) (void) = ^{
-                UIColor *groupColor;
-                if (waypointCellsCount() > 0)
-                {
-                    OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
-                    groupColor = waypoint.color ? waypoint.color
-                            : waypoint.point.color ? [OAUtilities colorFromString:waypoint.point.color] : nil;
-                }
-                if (!groupColor)
-                    groupColor = [OADefaultFavorite getDefaultColor];
-
-                return [OAUtilities colorToNumber:groupColor];
-            };
-
             OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
                     kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
                     kCellType: [OASelectionIconTitleCollapsableWithIconCell getCellIdentifier],
                     kCellValues: @{ @"string_value_title": groupName },
                     kCellRightIconName: @"ic_custom_arrow_up",
                     kCellToggle: @YES,
-                    kCellTintColor: @(groupCellColor())
+                    kCellTintColor: @([self getWaypointsGroupColor:groupName]),
+                    kCellButtonPressed: ^() {
+                        [self openWaypointsGroupOptionsScreen:groupName];
+                    }
             }];
             [groupCellData setData:@{
                     kTableUpdateData: ^() {
                         [groupCellData setData:@{
                                 kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right",
-                                kCellTintColor: @(groupCellColor())
+                                kCellTintColor: @([self getWaypointsGroupColor:groupName])
                         }];
                     }
             }];
@@ -815,7 +802,7 @@
                                 if (groupCellData.updateData)
                                     groupCellData.updateData();
 
-                                if (waypointsSection.cells.count != waypointCellsCount() + 1 || !groupCellData.toggle)
+                                if (waypointsSection.cells.count != [self getWaypointsCount:groupName] + 1 || !groupCellData.toggle)
                                 {
                                     [waypointsSection setData:@{
                                             kSectionCells: [@[groupCellData] arrayByAddingObjectsFromArray:generateDataForWaypointCells()]
@@ -832,7 +819,7 @@
                             }
                         }
 
-                        if ((waypointsSection.cells.count == 1 && waypointCellsCount() == 0) || sectionIndex == NSNotFound)
+                        if ((waypointsSection.cells.count == 1 && [self getWaypointsCount:groupName] == 0) || sectionIndex == NSNotFound)
                         {
                             NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData mutableCopy];
                             [newTableData removeObject:waypointsSection];
@@ -1252,7 +1239,7 @@
     }
 
     if (withoutGroup.count > 0)
-        waypointGroups[OALocalizedString(@"gpx_waypoints")] = withoutGroup;
+        waypointGroups[OALocalizedString(@"shared_string_gpx_points")] = withoutGroup;
 
     _waypointGroups = waypointGroups;
 }
@@ -1332,6 +1319,82 @@
         else
             [self stopLocationServices];
     }
+}
+
+- (NSInteger)getWaypointsCount:(NSString *)groupName
+{
+    NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
+    return waypoints ? (long) waypoints.count : 0;
+}
+
+- (NSInteger)getWaypointsGroupColor:(NSString *)groupName
+{
+    UIColor *groupColor;
+    if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
+    {
+        OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
+        groupColor = waypoint.color ? waypoint.color
+                : waypoint.point.color ? [OAUtilities colorFromString:waypoint.point.color] : nil;
+    }
+    if (!groupColor)
+        groupColor = [OADefaultFavorite getDefaultColor];
+
+    return [OAUtilities colorToNumber:groupColor];
+}
+
+- (BOOL)isWaypointsGroupVisible:(NSString *)groupName
+{
+    return ![self.gpx.hiddenGroups containsObject:groupName];
+}
+
+- (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show
+{
+    if (show)
+        [self.gpx removeHiddenGroups:groupName];
+    else
+        [self.gpx addHiddenGroups:groupName];
+    [[OAGPXDatabase sharedDb] save];
+
+    if (self.isCurrentTrack)
+        [[self.app trackRecordingObservable] notifyEvent];
+    else
+        [[self.app updateGpxTracksOnMapObservable] notifyEvent];
+}
+
+- (void)deleteWaypointsGroup:(NSString *)groupName
+{
+    OASavingTrackHelper *savingHelper = [OASavingTrackHelper sharedInstance];
+    if (self.isCurrentTrack)
+    {
+        NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
+        for (OAGpxWptItem *waypoint in waypoints)
+        {
+            [savingHelper deleteWpt:waypoint.point];
+        }
+        [[self.app trackRecordingObservable] notifyEvent];
+    }
+    else
+    {
+        NSString *path = [self.app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+        NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
+        [self.mapViewController deleteWpts:waypoints docPath:path];
+    }
+}
+
+- (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName
+{
+    OADeleteWaypointsGroupBottomSheetViewController *deleteWaypointsGroupBottomSheet =
+            [[OADeleteWaypointsGroupBottomSheetViewController alloc] initWithGroupName:groupName];
+    deleteWaypointsGroupBottomSheet.trackMenuDelegate = self;
+    [deleteWaypointsGroupBottomSheet presentInViewController:self];
+}
+
+- (void)openWaypointsGroupOptionsScreen:(NSString *)groupName
+{
+    OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
+            [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithGroupName:groupName];
+    editWaypointsBottomSheet.trackMenuDelegate = self;
+    [editWaypointsBottomSheet presentInViewController:self];
 }
 
 #pragma mark - UITabBarDelegate
@@ -1592,6 +1655,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    NSInteger tag = indexPath.section << 10 | indexPath.row;
     UITableViewCell *outCell = nil;
     if ([cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
@@ -1674,12 +1738,10 @@
         if (cell)
         {
             cell.titleView.text = cellData.title;
-            cell.textColorNormal = [cellData.key isEqualToString:@"delete"]
-                    ? UIColorFromRGB(color_primary_red) : UIColor.blackColor;
+            cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
-            UIColor *tintColor = [cellData.key isEqualToString:@"delete"]
-                    ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_primary_purple);
-            cell.iconColorNormal = tintColor;
+            cell.iconColorNormal = cellData.tintColor > 0
+                    ? UIColorFromRGB(cellData.tintColor) : UIColorFromRGB(color_primary_purple);
             cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
@@ -1738,7 +1800,7 @@
 
             cell.switchView.on = cellData.isOn ? cellData.isOn() : NO;
 
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            cell.switchView.tag = tag;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
@@ -1785,7 +1847,7 @@
             cell = (OASelectionIconTitleCollapsableWithIconCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell showRightIcon:NO];
+            [cell showOptionsButton:YES];
             [cell makeSelectable:NO];
         }
         if (cell)
@@ -1795,8 +1857,8 @@
             [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
             cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
 
-            [cell.rightIconView setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.optionsButton.imageView setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]];
+            cell.optionsButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
 
             cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
@@ -1804,9 +1866,19 @@
                 cell.arrowIconView.image = cell.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;
 
             [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
+            cell.openCloseGroupButton.tag = tag;
             [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 
+            cell.optionsButton.tag = tag;
+            [cell.optionsButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.optionsButton addTarget:self
+                                   action:@selector(cellButtonPressed:)
+                         forControlEvents:UIControlEventTouchUpInside];
+            cell.optionsGroupButton.tag = tag;
+            [cell.optionsGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.optionsGroupButton addTarget:self
+                                        action:@selector(cellButtonPressed:)
+                              forControlEvents:UIControlEventTouchUpInside];
         }
         outCell = cell;
     }
@@ -1934,7 +2006,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - UISwitch pressed
+#pragma mark - selectors
 
 - (void)onSwitchPressed:(id)sender
 {
@@ -1946,6 +2018,16 @@
         cellData.onSwitch(switchView.isOn);
 
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)cellButtonPressed:(id)sender
+{
+    UIButton *switchView = (UIButton *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+
+    if (cellData.onButtonPressed)
+        cellData.onButtonPressed();
 }
 
 @end

@@ -243,7 +243,7 @@
 
 - (NSString *)checkGroupName:(NSString *)groupName
 {
-    return !groupName || groupName.length == 0 ? OALocalizedString(@"gpx_waypoints") : groupName;
+    return !groupName || groupName.length == 0 ? OALocalizedString(@"shared_string_gpx_points") : groupName;
 }
 
 - (OAGpxWptItem *)getGpxWptItem:(NSInteger)section row:(NSInteger)row
@@ -311,28 +311,10 @@
 
 - (IBAction)onDeleteButtonClicked:(id)sender
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    if (_isCurrentTrack)
+    for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
     {
-        OASavingTrackHelper *savingHelper = [OASavingTrackHelper sharedInstance];
-        for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
-        {
-            NSArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
-            for (OAGpxWptItem *waypoint in waypoints)
-            {
-                [savingHelper deleteWpt:waypoint.point];
-            }
-        }
-        [[app trackRecordingObservable] notifyEvent];
-    }
-    else
-    {
-        NSString *path = [app.gpxPath stringByAppendingPathComponent:_gpxFilePath];
-        for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
-        {
-            NSArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
-            [[OARootViewController instance].mapPanel.mapViewController deleteWpts:waypoints docPath:path];
-        }
+        if (self.trackMenuDelegate)
+            [self.trackMenuDelegate deleteWaypointsGroup:groupName];
     }
 
     [self restoreCloseOpenGroups];
@@ -405,7 +387,7 @@
             cell = (OASelectionIconTitleCollapsableWithIconCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell showRightIcon:NO];
+            [cell showOptionsButton:NO];
             [cell makeSelectable:YES];
         }
         if (cell)
@@ -416,9 +398,6 @@
 
             [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
             cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
-
-            [cell.rightIconView setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
 
             cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];

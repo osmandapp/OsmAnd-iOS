@@ -18,13 +18,11 @@
 @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
 @property (weak, nonatomic) IBOutlet UIButton *openCloseGroupButton;
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
-@property (weak, nonatomic) IBOutlet UIImageView *rightIconView;
+@property (weak, nonatomic) IBOutlet UIButton *optionsButton;
+@property (weak, nonatomic) IBOutlet UIButton *optionsGroupButton;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *arrowIconWithRightIconConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *arrowIconNoRightIconConstraint;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *openCloseGroupButtonWithRightIconConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *openCloseGroupButtonNoRightIconConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *arrowIconWithOptionButtonConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *arrowIconNoOptionButtonConstraint;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftIconWithSelectionButtonConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftIconNoSelectionButtonConstraint;
@@ -34,10 +32,13 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *openCloseGroupButtonWithSelectionGroupButtonConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *openCloseGroupButtonNoSelectionGroupButtonConstraint;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *openCloseGroupButtonWithOptionsGroupButtonConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *openCloseGroupButtonNoOptionsGroupButtonConstraint;
+
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *checkboxHeightContainer;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *checkboxWidthContainer;
 
-- (void)showRightIcon:(BOOL)show;
+- (void)showOptionsButton:(BOOL)show;
 - (void)makeSelectable:(BOOL)selectable;
 
 @end

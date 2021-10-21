@@ -381,14 +381,13 @@ static UIViewController *parentController;
         [fileManager moveItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] error:nil];
     }
     
-    OAGPXTrackAnalysis *analysis = [_doc getAnalysis:0];
     if (_newGpxName) {
         NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:_newGpxName];
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
     } else {
         NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
         NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:name];
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
     }
     [[OAGPXDatabase sharedDb] save];
     if (![_importUrl.path hasPrefix:_app.gpxPath])

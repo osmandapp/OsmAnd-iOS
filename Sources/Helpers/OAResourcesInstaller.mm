@@ -87,8 +87,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     NSString *destFilePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName];
     [NSFileManager.defaultManager createDirectoryAtPath:destFilePath.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:nil];
     [doc saveTo:destFilePath];
-    OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-    [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+    [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
     [[OAGPXDatabase sharedDb] save];
 }
 

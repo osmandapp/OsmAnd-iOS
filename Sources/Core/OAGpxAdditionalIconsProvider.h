@@ -50,6 +50,9 @@ private:
     QReadWriteLock _lock;
     QList<std::shared_ptr<MapSymbolsGroup>> buildMapSymbolsGroups(const AreaI &bbox31, const double metersPerPixel);
     
+    ZoomLevel _cachedZoomLevel;
+    QList<QPair<PointI, QPair<QString, int>>> _visibleSplitLabels;
+    
     const std::shared_ptr<const TextRasterizer> _textRasterizer;
     TextRasterizer::Style _captionStyle;
     

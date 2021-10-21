@@ -755,12 +755,11 @@
     else
     {
         OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:sourcePath];
-        OAGPXTrackAnalysis *analysis = [gpxDoc getAnalysis:0];
         [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
                           title:newName
                            desc:gpxDoc.metadata.desc
                          bounds:gpxDoc.bounds
-                       analysis:analysis];
+                       document:gpxDoc];
 
         if ([self.settings.mapSettingVisibleGpx.get containsObject:oldPath])
             [self.settings showGpx:@[newStoringPath]];

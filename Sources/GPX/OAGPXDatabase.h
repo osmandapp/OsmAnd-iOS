@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 };
 
 @class OAGPXTrackAnalysis;
-@class OAGpxWpt;
+@class OAGpxWpt, OAGPXDocument;
 
 @interface OAGPX : NSObject
 
@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 + (OAGPXDatabase *)sharedDb;
 
 -(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
 -(OAGPX *)getGPXItem:(NSString *)filePath;
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;

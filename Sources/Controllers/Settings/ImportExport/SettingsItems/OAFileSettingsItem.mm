@@ -305,8 +305,7 @@
         {
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:destFilePath];
             [doc saveTo:destFilePath];
-            OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
             [[OAGPXDatabase sharedDb] save];
             break;
         }

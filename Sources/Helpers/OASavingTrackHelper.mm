@@ -371,9 +371,8 @@
 
             [doc saveTo:fout];
             
-            OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:fout];
-            [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
             [[OAGPXDatabase sharedDb] save];
         }
         

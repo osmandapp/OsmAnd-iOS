@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -36,20 +36,30 @@
                         </constraints>
                         <state key="normal" title="Button" image="ic_custom_clear_field.png"/>
                     </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pev-8n-ebZ">
+                        <rect key="frame" x="274" y="0.0" width="46" height="48"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" title=" "/>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="pev-8n-ebZ" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" id="0XE-kn-b6S"/>
                     <constraint firstItem="sBM-Kj-IT8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="NX6-3V-6tN" secondAttribute="top" constant="14.5" id="NYI-GM-fNs"/>
                     <constraint firstItem="sBM-Kj-IT8" firstAttribute="leading" secondItem="NX6-3V-6tN" secondAttribute="leadingMargin" id="WFU-RM-H1W"/>
                     <constraint firstAttribute="trailingMargin" secondItem="2gs-gc-n2d" secondAttribute="trailing" id="a44-RE-Nxj"/>
                     <constraint firstItem="2gs-gc-n2d" firstAttribute="leading" secondItem="VUE-5U-3ex" secondAttribute="trailing" constant="8" id="crJ-Kt-0Fi"/>
                     <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sBM-Kj-IT8" secondAttribute="bottom" constant="14" id="dY5-tN-Qg0"/>
                     <constraint firstItem="2gs-gc-n2d" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="eH3-7X-kZl"/>
+                    <constraint firstAttribute="trailing" secondItem="pev-8n-ebZ" secondAttribute="trailing" id="eaB-tm-3Pl"/>
                     <constraint firstItem="VUE-5U-3ex" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="f20-XF-h3w"/>
                     <constraint firstItem="sBM-Kj-IT8" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="gdR-VX-IVe"/>
                     <constraint firstItem="VUE-5U-3ex" firstAttribute="leading" secondItem="sBM-Kj-IT8" secondAttribute="trailing" constant="8" id="tg4-MX-45g"/>
+                    <constraint firstAttribute="bottom" secondItem="pev-8n-ebZ" secondAttribute="bottom" id="xH7-YC-xkn"/>
+                    <constraint firstItem="pev-8n-ebZ" firstAttribute="leading" secondItem="2gs-gc-n2d" secondAttribute="leading" id="yNI-pM-3YJ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="clearBackgroundButton" destination="pev-8n-ebZ" id="yht-eX-gHR"/>
                 <outlet property="clearButton" destination="2gs-gc-n2d" id="n7S-L0-yNa"/>
                 <outlet property="label" destination="sBM-Kj-IT8" id="nXk-KM-ZeW"/>
                 <outlet property="textField" destination="VUE-5U-3ex" id="vwW-71-3TX"/>

@@ -22,6 +22,6 @@
 
 @property (nonatomic, weak) id<OAQuickSearchCoordinateFormatsDelegate> delegate;
 
-- (instancetype) initWithCurrentFormat:(NSInteger)currentFormat;
+- (instancetype) initWithCurrentFormat:(NSInteger)currentFormat location:(CLLocation *)location;
 
 @end

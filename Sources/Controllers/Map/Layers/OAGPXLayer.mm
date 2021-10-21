@@ -49,7 +49,6 @@
     std::shared_ptr<OAGpxAdditionalIconsProvider> _startFinishProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
-    CGFloat _cacheLineWidth;
 }
 
 - (NSString *) layerId
@@ -65,7 +64,7 @@
     _showCaptionsCache = self.showCaptions;
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    
+
     [self.mapView addKeyedSymbolsProvider:_linesCollection];
 }
 
@@ -226,13 +225,8 @@
 {
     if (points.size() > 1)
     {
-        CGFloat lineWidth = _cacheLineWidth;
-        if (![self.appearanceCollection.gpxName isEqualToString:gpx.gpxFileName])
-        {
-            _cacheLineWidth = lineWidth = [self getLineWidth:gpx.width];
-            self.appearanceCollection.gpxName = gpx.gpxFileName;
-        }
-        
+        CGFloat lineWidth = [self getLineWidth:gpx.width];
+
         // Add outline for colorized lines
         if (!colors.isEmpty())
         {

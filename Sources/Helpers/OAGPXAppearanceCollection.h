@@ -41,8 +41,6 @@
 
 @interface OAGPXAppearanceCollection : NSObject
 
-@property (nonatomic) NSString *gpxName;
-
 - (NSArray<OAGPXTrackColor *> *)getAvailableColors;
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
 

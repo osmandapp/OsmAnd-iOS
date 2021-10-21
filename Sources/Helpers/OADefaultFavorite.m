@@ -63,6 +63,9 @@ static NSArray *colors;
 
 + (UIColor *) getDefaultColor
 {
+    if (!colors)
+        [self.class builtinColors];
+
     return ((OAFavoriteColor *)colors[0]).color;
 }
 

@@ -316,6 +316,8 @@
         NSString *gpxFolderPath = [OsmAndApp instance].gpxPath;
         // Make compatible with old database data
         NSString *filePath = [gpx.gpxFilePath hasPrefix:gpxFolderPath] ? gpx.gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpx.gpxFilePath];
+        if (!gpx.gpxFilePath)
+            gpx.gpxFilePath = gpx.gpxFileName;
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
              [res addObject:gpx];
     }
@@ -377,7 +379,7 @@
     [d setObject:@(gpx.points) forKey:@"points"];
 
     [d setObject:@(gpx.wptPoints) forKey:@"wptPoints"];
-    [d setObject:gpx.hiddenGroups != nil ? gpx.hiddenGroups : [NSSet set] forKey:@"hiddenGroups"];
+    [d setObject:gpx.hiddenGroups ? gpx.hiddenGroups.allObjects : [NSArray array] forKey:@"hiddenGroups"];
     [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
 
     [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
@@ -531,14 +533,11 @@
         }
         else if ([key isEqualToString:@"hiddenGroups"])
         {
-            gpx.hiddenGroups = value;
+            gpx.hiddenGroups = [NSSet setWithArray:value];
         }
     }
     if (!gpx.hiddenGroups)
         gpx.hiddenGroups = [NSSet set];
-
-    if (!gpx.gpxFilePath)
-        gpx.gpxFilePath = gpx.gpxFileName;
 
     return gpx;
 }

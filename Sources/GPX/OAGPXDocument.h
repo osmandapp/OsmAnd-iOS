@@ -84,8 +84,25 @@
 - (void)processBounds:(CLLocationCoordinate2D)coord;
 - (void)applyBounds;
 
-- (UIColor *) getColor:(NSArray<OAGpxExtension *> *)extensions;
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
+
+- (int) getColor:(int)defColor;
+- (void) setColor:(int)value;
+
+- (NSString *) getColoringType;
+- (NSString *) getGradientScaleType;
+- (void) setColoringType:(NSString *)coloringType;
+- (void) removeGradientScaleType;
+- (NSString *) getSplitType;
+- (void) setSplitType:(NSString *)gpxSplitType;
+- (double) getSplitInterval;
+- (void) setSplitInterval:(double)splitInterval;
+- (NSString *) getWidth:(NSString *)defWidth;
+- (void) setWidth:(NSString *)width;
+- (BOOL) isShowArrows;
+- (void) setShowArrows:(BOOL)showArrows;
+- (BOOL) isShowStartFinish;
+- (void) setShowStartFinish:(BOOL)showStartFinish;
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
 - (NSInteger) getNonEmptySegmentsCount;

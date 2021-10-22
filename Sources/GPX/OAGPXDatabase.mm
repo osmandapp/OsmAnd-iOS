@@ -108,7 +108,7 @@
     gpxList = res;
 }
 
--(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXDocument *)document
+-(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
     return [self buildGpxItem:fileName path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document];
 }
@@ -132,8 +132,6 @@
         gpx.gpxDescription = desc;
     else
         gpx.gpxDescription = @"";
-    
-    gpx.color = 0;
     
     gpx.importDate = [NSDate date];
     
@@ -159,9 +157,28 @@
     gpx.locationStart = analysis.locationStart;
     gpx.locationEnd = analysis.locationEnd;
     
+    gpx.splitType = [self splitTypeByName:document.getSplitType];
+    gpx.splitInterval = [document getSplitInterval];
+    gpx.color = [document getColor:kDefaultTrackColor];
+    gpx.coloringType = [document getColoringType];
+    gpx.width = [document getWidth:nil];
+    gpx.showArrows = [document isShowArrows];
+    gpx.showStartFinish = [document isShowStartFinish];
+    
     return gpx;
 }
 
+- (EOAGpxSplitType) splitTypeByName:(NSString *)splitName
+{
+    if (splitName.length == 0 || [splitName isEqualToString:@"no_split"])
+        return EOAGpxSplitTypeNone;
+    else if ([splitName isEqualToString:@"distance"])
+        return EOAGpxSplitTypeDistance;
+    else if ([splitName isEqualToString:@"time"])
+        return EOAGpxSplitTypeTime;
+    
+    return EOAGpxSplitTypeNone;
+}
 
 -(OAGPX *)getGPXItem:(NSString *)filePath
 {

@@ -2120,7 +2120,7 @@
 "wiki_menu_download_descr" = "Zusätzliche Karten werden benötigt um Wikipedia-POIs auf der Karte anzuzeigen.";
 "select_wikipedia_article_langs" = "Sprachauswahl für Wikipedia-Artikel auf der Karte. Während des Lesens eines Artikels ist ein Wechsel auf jede verfügbare Sprache möglich.";
 "shared_string_all_languages" = "Alle Sprachen";
-"population_num" = "Einwohnerzahl: %@";
+"population_num" = "Einwohnerzahl";
 "added_profiles_descr" = "Vom Plugin hinzugefügte Profile";
 "added_profiles" = "Profile hinzugefügt";
 "product_desc_mapillary" = "Onlinefotos auf Straßenebene für jedermann";
@@ -2156,3 +2156,38 @@
 "explore_wikipedia_offline" = "Wikipedia offline entdecken.";
 "navigate_point_zone" = "Zone";
 "navigate_point_northing" = "Nord-/Hochwert";
+"regions" = "Regionen";
+"m" = "m";
+"duplicate_track" = "Track duplizieren";
+"shared_string_width" = "Breite";
+"navigate_point_format_UTM" = "UTM";
+"navigate_point_format_unknown" = "Unbekanntes Format";
+"navigate_point_olc_short" = "OLC";
+"read_full_description" = "Vollständige Beschreibung lesen";
+"gpx_split_interval" = "Trennungsintervall";
+"coords_format_descr_quick_search" = "Sie können das Koordinatenformat für das Profil in den allgemeinen Einstellungen ändern";
+"track_coloring_solid" = "Ausgefüllt";
+"gpx_selection_segment_title" = "Abschnitte";
+"gpx_join_gaps_descr" = "Lücken zwischen den Segmenten werden verbunden.";
+"ios_release_4_1" = "• Neues Fenster für die Suche nach Koordinaten in verschiedenen Formaten\n• Verbesserte Koordinatensuche im OLC Format\n• Neues benutzerfreundliches Menü zur Auswahl der Sprachen für die Anzeige von Wikipedia-Artikeln auf der Karte\n• Es wurde die Möglichkeit hinzugefügt, Karten aller Regionen eines Landes mit ein paar Klicks zu laden.\n• Höhenlinien in Feet (ft) hinzugefügt (Sie müssen die Dateien erneut herunterladen)\n• Möglichkeit hinzugefügt, Karten herunterzuladen, indem die gewünschte Region oder das gewünschte Land auf der Karte ausgewählt wird, sowie ein Dialogfeld mit dem Vorschlag, die Karte zu laden, wenn die Region ohne Karte angesehen wird.\n• Neues Aussehen der Schaltflächen auf der Karte und zusätzliche Möglichkeit, den Kartenzoom durch Doppeltippen und Streichen zu ändern\n";
+"attribute" = "Attribut";
+
+// Shared Strings
+"shared_string_custom" = "Benutzerdefiniert";
+"shared_string_interval" = "Intervall";
+"invalid_format" = "Ungültiges Format";
+"gpx_dir_arrows" = "Richtungspfeile";
+"gpx_join_gaps" = "Lücken schließen";
+"gpx_split_interval_none_descr" = "Wählen Sie die gewünschte Aufteilungsoption: nach Zeit oder nach Entfernung.";
+"gpx_split_interval_descr" = "Wählen Sie das Intervall, in dem Markierungen mit Abstand oder Zeit auf dem Track angezeigt werden.";
+"upload_to_openstreetmap" = "Hochladen zu OpenStreetMap";
+"track_show_start_finish_icons" = "Start- und Ziel-Symbole anzeigen";
+"reset_to_original" = "Auf Original zurücksetzen";
+"route_line_color_elevation_description" = "Routenlinie wird je nach Höhenprofil der Route eingefärbt.";
+"slope_grey_color_descr" = "Graue Farbe wird verwendet, wenn die Steigung nicht definiert ist.";
+"analyze_on_map" = "Auf der Karte auswerten";
+"shared_string_overview" = "Übersicht";
+"edit_track" = "Track editieren";
+"activity" = "Aktivität";
+"nautical" = "Nautisch";
+"units_min_short" = "m";

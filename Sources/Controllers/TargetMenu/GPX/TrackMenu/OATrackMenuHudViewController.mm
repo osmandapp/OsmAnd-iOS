@@ -701,13 +701,19 @@
     {
         for (NSString *groupName in _waypointGroups.keyEnumerator)
         {
+            __block BOOL isHidden = [self.gpx.hiddenGroups containsObject:groupName];
+            __block UIImage *leftIcon = [UIImage templateImageNamed:
+                    isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
+            __block UIColor *tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
+                    : UIColorFromRGB([self getWaypointsGroupColor:groupName]);
             OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
                     kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
                     kCellType: [OASelectionIconTitleCollapsableWithIconCell getCellIdentifier],
                     kCellTitle: groupName,
+                    kCellLeftIcon: leftIcon,
                     kCellRightIconName: @"ic_custom_arrow_up",
                     kCellToggle: @YES,
-                    kCellTintColor: @([self getWaypointsGroupColor:groupName]),
+                    kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
                     kCellButtonPressed: ^() {
                         [self openWaypointsGroupOptionsScreen:groupName];
                     }
@@ -727,11 +733,17 @@
             [groupCellData setData:@{
                     kTableUpdateData: ^() {
                         newGroupName();
+                        isHidden = [self.gpx.hiddenGroups containsObject:currentGroupName];
+                        leftIcon = [UIImage templateImageNamed:
+                                isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
+                        tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
+                                : UIColorFromRGB([self getWaypointsGroupColor:currentGroupName]);
                         [groupCellData setData:@{
                                 kCellKey: [NSString stringWithFormat:@"group_%@", currentGroupName],
                                 kCellTitle: currentGroupName,
+                                kCellLeftIcon: leftIcon,
                                 kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right",
-                                kCellTintColor: @([self getWaypointsGroupColor:currentGroupName]),
+                                kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
                                 kCellButtonPressed: ^() {
                                     [self openWaypointsGroupOptionsScreen:currentGroupName];
                                 }
@@ -1393,6 +1405,13 @@
         [self.gpx addHiddenGroups:groupName];
     [[OAGPXDatabase sharedDb] save];
 
+    NSInteger groupIndex = [_waypointGroups.allKeys indexOfObject:groupName];
+    OAGPXTableSectionData *groupSection = self.tableData[groupIndex];
+    if (groupSection.updateData)
+        groupSection.updateData();
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:groupIndex]]
+                          withRowAnimation:UITableViewRowAnimationNone];
+
     if (self.isCurrentTrack)
         [[_app trackRecordingObservable] notifyEvent];
     else
@@ -1943,7 +1962,7 @@
         {
             [cell.titleView setText:cellData.title];
 
-            [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
+            [cell.leftIconView setImage:cellData.leftIcon];
             cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
 
             [cell.optionsButton.imageView setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]];

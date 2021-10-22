@@ -61,8 +61,7 @@
 
     self.titleView.text = _groupName;
 
-    [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
-    self.leftIconView.tintColor = _groupColor;
+    [self setLeftIcon];
     [self.sliderView removeFromSuperview];
     [self.rightButton removeFromSuperview];
     [self.closeButton removeFromSuperview];
@@ -145,6 +144,14 @@
     return [_groupName isEqualToString:OALocalizedString(@"shared_string_gpx_points")];
 }
 
+- (void)setLeftIcon
+{
+    UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? @"ic_custom_folder" : @"ic_custom_folder_hidden"];
+    UIColor *tintColor = _isShown ? _groupColor : UIColorFromRGB(color_footer_icon_gray);
+    self.leftIconView.image = leftIcon;
+    self.leftIconView.tintColor = tintColor;
+}
+
 - (CGFloat)initialHeight
 {
     NSInteger sectionsCount = _tableData.count;
@@ -179,6 +186,8 @@
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate setWaypointsGroupVisible:[self isDefaultGroup] ? @"" : _groupName
                                                     show:_isShown = !_isShown];
+
+    [self setLeftIcon];
 }
 
 #pragma mark - OAEditWaypointsGroupOptionsDelegate
@@ -199,7 +208,8 @@
     if (groupColor)
     {
         _groupColor = groupColor;
-        self.leftIconView.tintColor = _groupColor;
+        if (_isShown)
+            self.leftIconView.tintColor = _groupColor;
     }
 }
 

@@ -2131,7 +2131,7 @@
 "map_widget_parking" = "Parking";
 "context_menu_item_edit_waypoint" = "Modifier le waypoint GPX";
 "mapil_contribute" = "Apportez vos propres images des rues";
-"population_num" = "Population: %@";
+"population_num" = "Population";
 "shared_string_feet" = "Pieds";
 "srtm_download_list_help_message" = "OsmAnd fournit des données de lignes de contour en mètres et en pieds. Vous devrez télécharger à nouveau le fichier pour changer le format.";
 "srtm_download_single_help_message" = "Veuillez sélectionner le format nécessaire. Vous devrez télécharger à nouveau le fichier pour changer le format.";
@@ -2145,3 +2145,38 @@
 "explore_wikipedia_offline" = "Explorez Wikipédia hors ligne.";
 "navigate_point_zone" = "Zone";
 "navigate_point_olc" = "Ouvrir un code d\'emplacement";
+"regions" = "Régions";
+"navigate_point_format_UTM" = "UTM";
+"navigate_point_olc_short" = "OlC";
+"route_line_color_elevation_description" = "La ligne de l'itinéraire sera colorée en fonction du profil d'élévation de l'itinéraire.";
+"attribute" = "Propriétés";
+"slope_grey_color_descr" = "La couleur grise est utilisée lorsque la pente n’est pas connue.";
+"analyze_on_map" = "Analyser sur la carte";
+"upload_to_openstreetmap" = "Envoyer sur OpenStreetMap";
+"edit_track" = "Modifier la trace";
+"duplicate_track" = "Dupliquer la trace";
+
+// Shared Strings
+"shared_string_custom" = "Personnalisé";
+"coords_format_descr_quick_search" = "Vous pouvez modifier le format des coordonnées du profil dans les paramètres généraux";
+"track_coloring_solid" = "Opaque";
+"shared_string_width" = "Largeur";
+"invalid_format" = "Format non valide";
+"shared_string_interval" = "Intervalle";
+"gpx_selection_segment_title" = "Segment";
+"navigate_point_format_unknown" = "Format inconnu";
+"read_full_description" = "Lire la description complète";
+"gpx_split_interval" = "Intervalle de fractionnement";
+"gpx_dir_arrows" = "Flèches de direction";
+"shared_string_overview" = "Aperçu";
+"gpx_split_interval_descr" = "Sélectionnez l'intervalle auquel les marques de distance ou de temps sur la trace seront affichées.";
+"gpx_join_gaps" = "Fusionner pour éviter les interruptions";
+"gpx_join_gaps_descr" = "Les écarts entre les segments seront connectés.";
+"track_show_start_finish_icons" = "Afficher les icônes de départ et d'arrivée";
+"reset_to_original" = "Revenir à l'original";
+"gpx_split_interval_none_descr" = "Sélectionnez l'option de fractionnement souhaitée : par temps ou par distance.";
+"activity" = "Activité";
+"nautical" = "Nautique";
+"m" = "m";
+"ios_release_4_1" = "- Nouvel écran pour la recherche par coordonnées dans différents formats\n- Amélioration de la recherche de coordonnées dans le format OLC\n- Nouveau menu convivial permettant de choisir la langue d'affichage des articles de Wikipédia sur la carte\n- Ajout de la possibilité de charger facilement les cartes de toutes les régions du pays en quelques clics\n- Ajout de courbes de niveau en pieds (Vous devez retélécharger les fichiers)\n- Ajout de la possibilité de télécharger des cartes en sélectionnant la région ou le pays souhaité sur la carte, ainsi que l'ajout d'une boîte de dialogue avec la suggestion de télécharger la carte si la région n’a pas été préalablement téléchargée.\n- Nouvelle apparence des boutons sur l’écran et ajout de la possibilité de modifier le zoom de la carte par un double tapotement ou un glissement.\n";
+"units_min_short" = "m";

@@ -112,7 +112,7 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
                         if (splitByDistance)
                             stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedDistance:metricStartValue]);
                         else if (splitByTime)
-                            stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeHM:metricStartValue]);
+                            stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
                         _labelsAndCoordinates.push_back({pos31, {stringValue, (int) gpx.color}});
                     }
                 }

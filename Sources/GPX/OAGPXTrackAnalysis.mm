@@ -39,7 +39,7 @@
 -(double) metric:(OALocationMark *)p1 p2:(OALocationMark *)p2
 {
     if(p1.time != 0 && p2.time != 0) {
-        return abs((p2.time - p1.time) / 1000l);
+        return abs((p2.time - p1.time));
     }
     return 0;
 }

@@ -243,7 +243,7 @@
                 .setIsHidden(points.size() == 0)
                 .setLineId(lineId + 1000)
                 .setLineWidth(lineWidth + 5)
-                .setOutlineWidth(6)
+                .setOutlineWidth(5)
                 .setPoints(points)
                 .setFillColor(outlineColor);
             
@@ -353,7 +353,7 @@
             }
         }
     }
-    return lineWidth * self.displayDensityFactor;
+    return lineWidth;
 }
 
 #pragma mark - OAContextMenuProvider

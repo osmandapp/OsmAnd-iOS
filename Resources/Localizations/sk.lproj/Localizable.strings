@@ -1339,7 +1339,7 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Zobraziť sieť cyklotrás";
 "routing_attr_short_way_name" = "Ekonomická trasa";
 "rendering_attr_noPolygons_name" = "Polygóny";
-"routing_attr_width_description" = "Zadajtešírku vozidla, ktorá musí byť povolená na cestách.";
+"routing_attr_width_description" = "Zadajte šírku vozidla, ktorá musí byť povolená na cestách.";
 "rendering_attr_piste_difficulty_expert_name" = "Pre expertov";
 "routeInfo_piste_difficulty_name" = "Obtiažnosť zjazdovky";
 "routing_attr_allow_intermediate_name" = "Povoliť trasy strednej náročnosti";
@@ -1569,7 +1569,7 @@
 "routing_attr_length_name" = "Limit dĺžky";
 "weight_limit_description" = "Zadajte hmotnosť vášho vozidla, pretože na trase môžu byť obmedzenia pre ťažké vozidlá.";
 "default_speed_dialog_msg" = "Odhaduječas na cestách neznámeho typu a obmedzuje rýchlosť na všetkých cestách (môže ovplyvniť trasu)";
-"width_limit_description" = "Zadajtešírku vášho vozidla, pretože na trase môžu byť obmedzenia pre široké vozidlá.";
+"width_limit_description" = "Zadajte šírku vášho vozidla, pretože na trase môžu byť obmedzenia pre široké vozidlá.";
 "height_limit_description" = "Zadajte výšku vášho vozidla, pretože na trase môžu byť obmedzenia pre vysoké vozidlá.";
 "export_profile" = "Exportovať";
 "profile_appearance" = "Vzhľad profilu";

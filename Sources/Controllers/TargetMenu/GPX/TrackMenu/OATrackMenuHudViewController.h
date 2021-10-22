@@ -22,12 +22,17 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 @required
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType;
-- (void)refreshWaypoints:(BOOL)updateAllData;
+- (void)refreshWaypoints;
+- (void)refreshLocationServices;
 - (NSInteger)getWaypointsCount:(NSString *)groupName;
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName;
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName;
 - (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show;
-- (void)deleteWaypointsGroup:(NSString *)groupName;
+- (void)deleteWaypointsGroup:(NSString *)groupName
+           selectedWaypoints:(NSArray<OAGpxWptItem *> *)selectedWaypoints;
+- (void)changeWaypointsGroup:(NSString *)groupName
+                newGroupName:(NSString *)newGroupName
+               newGroupColor:(UIColor *)newGroupColor;
 - (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName;
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 

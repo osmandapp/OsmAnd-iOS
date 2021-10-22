@@ -38,8 +38,8 @@
         _key = data[kCellKey];
     if ([data.allKeys containsObject:kCellType])
         _type = data[kCellType];
-    if ([data.allKeys containsObject:kCellValues])
-        _values = data[kCellValues];
+    if ([data.allKeys containsObject:kTableValues])
+        _values = data[kTableValues];
     if ([data.allKeys containsObject:kCellTitle])
         _title = data[kCellTitle];
     if ([data.allKeys containsObject:kCellDesc])
@@ -83,7 +83,9 @@
     if ([data.allKeys containsObject:kSectionHeader])
         _header = data[kSectionHeader];
     if ([data.allKeys containsObject:kSectionFooter])
-        _header = data[kSectionFooter];
+        _footer = data[kSectionFooter];
+    if ([data.allKeys containsObject:kTableValues])
+        _values = data[kTableValues];
     if ([data.allKeys containsObject:kTableUpdateData])
         _updateData = data[kTableUpdateData];
 }

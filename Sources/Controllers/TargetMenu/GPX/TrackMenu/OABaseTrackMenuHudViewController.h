@@ -10,7 +10,6 @@
 
 #define kCellKey @"key"
 #define kCellType @"type"
-#define kCellValues @"values"
 #define kCellTitle @"title"
 #define kCellDesc @"desc"
 #define kCellLeftIcon @"left_icon"
@@ -25,6 +24,7 @@
 #define kSectionHeader @"header"
 #define kSectionFooter @"footer"
 
+#define kTableValues @"values"
 #define kTableUpdateData @"update_data"
 
 typedef NS_ENUM(NSUInteger, EOATrackHudMode)
@@ -68,6 +68,7 @@ typedef void(^OAGPXTableDataUpdateData)();
 @property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *cells;
 @property (nonatomic, readonly) NSString *header;
 @property (nonatomic, readonly) NSString *footer;
+@property (nonatomic, readonly) NSDictionary *values;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
 
 - (void)setData:(NSDictionary *)data;

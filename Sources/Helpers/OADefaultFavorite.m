@@ -63,10 +63,18 @@ static NSArray *colors;
 
 + (UIColor *) getDefaultColor
 {
-    if (!colors)
-        [self.class builtinColors];
+    return ((OAFavoriteColor *) [self.class builtinColors][0]).color;
+}
 
-    return ((OAFavoriteColor *)colors[0]).color;
++ (OAFavoriteColor *)getFavoriteColor:(UIColor *)color
+{
+    NSArray *favoriteColors = [OADefaultFavorite builtinColors];
+    for (OAFavoriteColor *favoriteColor in favoriteColors)
+    {
+        if ([favoriteColor.color isEqual:color])
+            return favoriteColor;
+    }
+    return favoriteColors[0];
 }
 
 + (OAFavoriteColor *)nearestFavColor:(UIColor *)sourceColor

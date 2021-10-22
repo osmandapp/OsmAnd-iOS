@@ -1059,6 +1059,7 @@
 		B0D6188748542F9E3A73D9C9 /* OATrackMenuDescriptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61F813CB80B52D99BAFD1 /* OATrackMenuDescriptionViewController.mm */; };
 		B0D6195E900EF69E053A5465 /* OABaseTrackMenuHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D610F332AD1BD4E707EE60 /* OABaseTrackMenuHudViewController.mm */; };
 		B0D61A10E033AC2150A5354F /* OADeleteWaypointsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D6164DBF4B387F62FB25A1 /* OADeleteWaypointsViewController.mm */; };
+		B0D61A9D5A74989254593C0B /* OAEditWaypointsGroupOptionsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61D6C029D14889610378F /* OAEditWaypointsGroupOptionsViewController.mm */; };
 		B0D61B91977188ED34EB63FD /* OATabBar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61B0861142A49F45480E4 /* OATabBar.mm */; };
 		B0D61DCAA5D5FFE23DCA2303 /* OAEditWaypointsGroupBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */; };
 		B0D61F02E8A3B7B2733E2C18 /* OATrackMenuHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */; };
@@ -3983,6 +3984,7 @@
 		B0D616BD4B59FB4F1D8B9B4C /* OATrackMenuHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATrackMenuHeaderView.h; sourceTree = "<group>"; };
 		B0D616ED5414E4F939C10BB6 /* OATitleSwitchRoundCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATitleSwitchRoundCell.mm; sourceTree = "<group>"; };
 		B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackMenuHudViewController.mm; sourceTree = "<group>"; };
+		B0D617A9D1879485C6A8AA8E /* OAEditWaypointsGroupOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditWaypointsGroupOptionsViewController.h; sourceTree = "<group>"; };
 		B0D617FE82CF036631057E2C /* OAPromoButtonCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPromoButtonCell.mm; sourceTree = "<group>"; };
 		B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddWaypointViewController.mm; sourceTree = "<group>"; };
 		B0D618127C2BE2B1C9BFB000 /* OAIconTextDividerSwitchCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAIconTextDividerSwitchCell.mm; sourceTree = "<group>"; };
@@ -3995,6 +3997,7 @@
 		B0D61B247F6E55B974404878 /* OATitleSwitchRoundCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATitleSwitchRoundCell.h; sourceTree = "<group>"; };
 		B0D61B47A8DC2B61A93099E6 /* OATabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATabBar.h; sourceTree = "<group>"; };
 		B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADeleteWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
+		B0D61D6C029D14889610378F /* OAEditWaypointsGroupOptionsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupOptionsViewController.mm; sourceTree = "<group>"; };
 		B0D61F5A5B3B39B9CD1CF5CB /* OAGpxStatBlockCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxStatBlockCollectionViewCell.h; sourceTree = "<group>"; };
 		B0D61F813CB80B52D99BAFD1 /* OATrackMenuDescriptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackMenuDescriptionViewController.mm; sourceTree = "<group>"; };
 		BB098CF41793F7FD00423944 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -6731,6 +6734,8 @@
 				B0D612B5CB6F0BCF4F0DBC08 /* OAEditWaypointsGroupBottomSheetViewController.h */,
 				B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */,
 				B0D61B1682B18F885993C32F /* OADeleteWaypointsGroupBottomSheetViewController.h */,
+				B0D61D6C029D14889610378F /* OAEditWaypointsGroupOptionsViewController.mm */,
+				B0D617A9D1879485C6A8AA8E /* OAEditWaypointsGroupOptionsViewController.h */,
 			);
 			path = TrackMenu;
 			sourceTree = "<group>";
@@ -14682,6 +14687,7 @@
 				B0D61831F16BA2B502597852 /* OASelectionIconTitleCollapsableWithIconCell.mm in Sources */,
 				B0D61DCAA5D5FFE23DCA2303 /* OAEditWaypointsGroupBottomSheetViewController.mm in Sources */,
 				B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */,
+				B0D61A9D5A74989254593C0B /* OAEditWaypointsGroupOptionsViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

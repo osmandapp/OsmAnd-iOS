@@ -89,15 +89,17 @@
                     kSectionCells: @[[OAGPXTableCellData withData:@{
                             kCellKey: @"delete",
                             kCellType: [OAFilledButtonCell getCellIdentifier],
-                            kCellValues: @{ @"title_color_value_integer": @color_icon_color_night },
+                            kTableValues: @{@"title_color_value_integer": @color_icon_color_night },
                             kCellTitle: OALocalizedString(@"shared_string_delete"),
                             kCellTintColor: @color_primary_red,
                             kCellButtonPressed: ^() {
                                 [self hide:YES completion:^{
                                     if (self.trackMenuDelegate)
                                     {
-                                        [self.trackMenuDelegate deleteWaypointsGroup:_groupName];
-                                        [self.trackMenuDelegate refreshWaypoints:YES];
+                                        [self.trackMenuDelegate deleteWaypointsGroup:_groupName
+                                                                   selectedWaypoints:nil];
+                                        [self.trackMenuDelegate refreshWaypoints];
+                                        [self.trackMenuDelegate refreshLocationServices];
                                     }
                                 }];
                             }

@@ -103,15 +103,15 @@
         [closeOpenGroups addObject:@(groupCellData.toggle)];
         [groupCellData setData:@{
                 kTableUpdateData: ^() {
-                    NSString *groupName = groupCellData.values[@"string_value_title"];
+                    NSString *groupName = groupCellData.title;
                     NSArray *selectedWaypoints = _selectedWaypointGroups[groupName];
                     [groupCellData setData:@{
-                            kCellValues: @{
-                                    @"string_value_title": groupName,
+                            kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
+                            kTableValues: @{
                                     @"bool_value_selected": @(selectedWaypoints != nil ? selectedWaypoints.count > 0 : NO)
                             },
-                            kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right",
-                            kCellTintColor: @(groupCellData.tintColor)
+                            kCellTitle: groupName,
+                            kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
                     }];
                 }
         }];
@@ -282,7 +282,7 @@
 {
     [self restoreCloseOpenGroups];
     if (self.trackMenuDelegate)
-        [self.trackMenuDelegate refreshWaypoints:NO];
+        [self.trackMenuDelegate refreshLocationServices];
 
     [self dismissViewController];
 }
@@ -315,12 +315,16 @@
     for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
     {
         if (self.trackMenuDelegate)
-            [self.trackMenuDelegate deleteWaypointsGroup:groupName];
+            [self.trackMenuDelegate deleteWaypointsGroup:groupName
+                                       selectedWaypoints:_selectedWaypointGroups[groupName]];
     }
 
     [self restoreCloseOpenGroups];
     if (self.trackMenuDelegate)
-        [self.trackMenuDelegate refreshWaypoints:YES];
+    {
+        [self.trackMenuDelegate refreshWaypoints];
+        [self.trackMenuDelegate refreshLocationServices];
+    }
 
     [self dismissViewController];
 }
@@ -360,7 +364,7 @@
         }
         if (cell)
         {
-            [cell.titleView setText:cellData.values[@"string_value_title"]];
+            [cell.titleView setText:cellData.title];
             [cell.iconView setImage:cellData.leftIcon];
             [cell setRegion:cellData.desc];
             [cell setDirection:cellData.values[@"string_value_distance"]];
@@ -395,7 +399,7 @@
         {
             NSInteger tag = indexPath.section << 10 | indexPath.row;
 
-            [cell.titleView setText:cellData.values[@"string_value_title"]];
+            [cell.titleView setText:cellData.title];
 
             [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
             cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);

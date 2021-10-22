@@ -197,13 +197,13 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTableCellData *colorTitle = [OAGPXTableCellData withData:@{
             kCellKey: @"color_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellValues: @{ @"string_value": _selectedColoringType.title },
+            kTableValues: @{ @"string_value": _selectedColoringType.title },
             kCellTitle: OALocalizedString(@"fav_color")
     }];
 
     [colorTitle setData:@{
             kTableUpdateData: ^() {
-                [colorTitle setData:@{ kCellValues: @{ @"string_value": _selectedColoringType.title } }];
+                [colorTitle setData:@{ kTableValues: @{@"string_value": _selectedColoringType.title } }];
             }
     }];
     [colorsCells addObject:colorTitle];
@@ -221,7 +221,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTableCellData *colorValues = [OAGPXTableCellData withData:@{
             kCellKey: @"color_values",
             kCellType: [OAFoldersCell getCellIdentifier],
-            kCellValues: @{ @"array_value": trackColoringTypes },
+            kTableValues: @{ @"array_value": trackColoringTypes },
             kCellTitle: OALocalizedString(@"fav_color")
     }];
 
@@ -236,7 +236,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                             @"available": @([type isAvailableForDrawingTrack:self.doc attributeName:nil])
                     }];
                 }
-                [colorValues setData:@{ kCellValues: @{ @"array_value": newTrackColoringTypes } }];
+                [colorValues setData:@{ kTableValues: @{@"array_value": newTrackColoringTypes } }];
             }
     }];
     [colorsCells addObject:colorValues];
@@ -248,7 +248,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             gridOrDescriptionCell = [OAGPXTableCellData withData:@{
                     kCellKey: @"color_grid",
                     kCellType: [OAColorsTableViewCell getCellIdentifier],
-                    kCellValues: @{
+                    kTableValues: @{
                             @"int_value": @(_selectedColor.colorValue),
                             @"array_value": _availableColors
                     }
@@ -257,7 +257,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             [gridOrDescriptionCell setData:@{
                     kTableUpdateData: ^() {
                         [gridOrDescriptionCell setData:@{
-                                kCellValues: @{
+                                kTableValues: @{
                                         @"int_value": @(_selectedColor.colorValue),
                                         @"array_value": _availableColors
                                 }
@@ -305,12 +305,12 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTableCellData *widthTitle = [OAGPXTableCellData withData:@{
             kCellKey: @"width_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellValues: @{ @"string_value": _selectedWidth.title },
+            kTableValues: @{ @"string_value": _selectedWidth.title },
             kCellTitle: OALocalizedString(@"shared_string_width")
     }];
     [widthTitle setData:@{
             kTableUpdateData: ^() {
-                [widthTitle setData:@{ kCellValues: @{ @"string_value": _selectedWidth.title } }];
+                [widthTitle setData:@{ kTableValues: @{@"string_value": _selectedWidth.title } }];
             }
     }];
     [widthCells addObject:widthTitle];
@@ -318,12 +318,12 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTableCellData *widthValue = [OAGPXTableCellData withData:@{
             kCellKey: @"width_value",
             kCellType: [OASegmentedControlCell getCellIdentifier],
-            kCellValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] },
+            kTableValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] },
             kCellToggle: @YES
     }];
     [widthValue setData:@{
             kTableUpdateData: ^() {
-                [widthValue setData:@{ kCellValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] } }];
+                [widthValue setData:@{ kTableValues: @{@"array_value": [_appearanceCollection getAvailableWidth] } }];
             }
     }];
     [widthCells addObject:widthValue];
@@ -331,7 +331,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     [widthCells addObject:[OAGPXTableCellData withData:@{
             kCellKey: @"width_empty_space",
             kCellType: [OADividerCell getCellIdentifier],
-            kCellValues: @{ @"float_value": @14.0 }
+            kTableValues: @{ @"float_value": @14.0 }
     }]];
 
     if ([_selectedWidth isCustom])
@@ -395,7 +395,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTableCellData *colorGradient = [OAGPXTableCellData withData:@{
             kCellKey: @"color_elevation_gradient",
             kCellType: [OAImageTextViewCell getCellIdentifier],
-            kCellValues: @{
+            kTableValues: @{
                     @"extra_desc": generateExtraDescription(),
                     @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
             },
@@ -405,7 +405,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     [colorGradient setData:@{
             kTableUpdateData: ^() {
                 [colorGradient setData:@{
-                        kCellValues: @{
+                        kTableValues: @{
                                 @"extra_desc": generateExtraDescription(),
                                 @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
                         },
@@ -423,7 +423,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTableCellData *customSliderCell = [OAGPXTableCellData withData:@{
             kCellKey: @"width_custom_slider",
             kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
-            kCellValues: @{
+            kTableValues: @{
                     @"int_value": _selectedWidth.customValue,
                     @"array_value": _customWidthValues,
                     @"has_top_labels": @NO,
@@ -433,7 +433,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     [customSliderCell setData:@{
             kTableUpdateData: ^() {
                 [customSliderCell setData:@{
-                        kCellValues: @{
+                        kTableValues: @{
                                 @"int_value": _selectedWidth.customValue,
                                 @"array_value": _customWidthValues,
                                 @"has_top_labels": @NO,

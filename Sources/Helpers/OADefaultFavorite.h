@@ -37,4 +37,6 @@
 
 + (UIColor *) getDefaultColor;
 
++ (OAFavoriteColor *)getFavoriteColor:(UIColor *)color;
+
 @end

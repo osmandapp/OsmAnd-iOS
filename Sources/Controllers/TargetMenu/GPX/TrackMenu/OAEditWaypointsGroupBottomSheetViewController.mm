@@ -7,6 +7,7 @@
 //
 
 #import "OAEditWaypointsGroupBottomSheetViewController.h"
+#import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OATrackMenuHudViewController.h"
 #import "OATitleIconRoundCell.h"
 #import "OATitleSwitchRoundCell.h"
@@ -14,7 +15,7 @@
 #import "OAColors.h"
 #import "OADefaultFavorite.h"
 
-@interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAEditWaypointsGroupOptionsDelegate>
 
 @end
 
@@ -82,7 +83,7 @@
     OAGPXTableCellData *showOnMap = [OAGPXTableCellData withData:@{
             kCellKey: @"control_show_on_map",
             kCellType: [OATitleSwitchRoundCell getCellIdentifier],
-            kCellValues: @{ @"bool_value": @(_isShown) },
+            kTableValues: @{ @"bool_value": @(_isShown) },
             kCellTitle: OALocalizedString(@"map_settings_show"),
             kCellOnSwitch: ^(BOOL toggle) { [self onShowHidePressed:nil]; },
             kCellIsOn: ^() { return _isShown; }
@@ -90,7 +91,7 @@
 
     [showOnMap setData:@{
             kTableUpdateData: ^() {
-                [showOnMap setData:@{ kCellValues: @{ @"bool_value": @(_isShown) } }];
+                [showOnMap setData:@{ kTableValues: @{@"bool_value": @(_isShown) } }];
             }
     }];
     [controlCells addObject:showOnMap];
@@ -162,6 +163,12 @@
     return NO;
 }
 
+- (void)onBottomSheetDismissed
+{
+    if (self.trackMenuDelegate)
+        [self.trackMenuDelegate refreshLocationServices];
+}
+
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
     return _tableData[indexPath.section].cells[indexPath.row];
@@ -172,6 +179,28 @@
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate setWaypointsGroupVisible:[self isDefaultGroup] ? @"" : _groupName
                                                     show:_isShown = !_isShown];
+}
+
+#pragma mark - OAEditWaypointsGroupOptionsDelegate
+
+- (void)updateWaypointsGroup:(NSString *)groupName
+                  groupColor:(UIColor *)groupColor
+{
+    if (self.trackMenuDelegate)
+        [self.trackMenuDelegate changeWaypointsGroup:_groupName
+                                        newGroupName:groupName
+                                       newGroupColor:groupColor];
+    if (groupName)
+    {
+        _groupName = groupName;
+        self.titleView.text = _groupName;
+    }
+
+    if (groupColor)
+    {
+        _groupColor = groupColor;
+        self.leftIconView.tintColor = _groupColor;
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -272,11 +301,21 @@
 
     if ([cellData.key isEqualToString:@"rename"])
     {
-
+        OAEditWaypointsGroupOptionsViewController * editWaypointsGroupOptions =
+                [[OAEditWaypointsGroupOptionsViewController alloc] initWithScreenType:EOAEditWaypointsGroupRenameScreen
+                                                                            groupName:_groupName
+                                                                           groupColor:nil];
+        editWaypointsGroupOptions.delegate = self;
+        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
     }
     else if ([cellData.key isEqualToString:@"change_color"])
     {
-
+        OAEditWaypointsGroupOptionsViewController * editWaypointsGroupOptions =
+                [[OAEditWaypointsGroupOptionsViewController alloc] initWithScreenType:EOAEditWaypointsGroupColorScreen
+                                                                            groupName:nil
+                                                                           groupColor:_groupColor];
+        editWaypointsGroupOptions.delegate = self;
+        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
     }
     else if ([cellData.key isEqualToString:@"delete"])
     {

@@ -189,7 +189,9 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
 
     NSArray<OAGpxWptItem *> *gpxWptItems = [self getGpxWptItems:indexPath.section];
-    NSString *groupName = [self checkGroupName:gpxWptItems.firstObject.point.type];
+    NSString *groupName = gpxWptItems.firstObject.point.type;
+    if (self.trackMenuDelegate)
+        groupName = [self.trackMenuDelegate checkGroupName:groupName];
     NSMutableArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
 
     if (waypoints)
@@ -217,7 +219,9 @@
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
     OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath.section row:indexPath.row - 1];
-    NSString *groupName = [self checkGroupName:gpxWptItem.point.type];
+    NSString *groupName = gpxWptItem.point.type;
+    if (self.trackMenuDelegate)
+        groupName = [self.trackMenuDelegate checkGroupName:groupName];
     NSMutableArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
 
     if (waypoints)
@@ -240,11 +244,6 @@
                           withRowAnimation:UITableViewRowAnimationNone];
 
     [self updateDeleteButtonView];
-}
-
-- (NSString *)checkGroupName:(NSString *)groupName
-{
-    return !groupName || groupName.length == 0 ? OALocalizedString(@"shared_string_gpx_points") : groupName;
 }
 
 - (OAGpxWptItem *)getGpxWptItem:(NSInteger)section row:(NSInteger)row
@@ -429,8 +428,9 @@
 
             if ([cellData.values[@"bool_value_selected"] boolValue])
             {
-                NSString *groupName = [self checkGroupName:
-                        _waypointGroups[_waypointGroups.allKeys[indexPath.section]][indexPath.row].point.type];
+                NSString *groupName = _waypointGroups[_waypointGroups.allKeys[indexPath.section]][indexPath.row].point.type;
+                if (self.trackMenuDelegate)
+                    groupName = [self.trackMenuDelegate checkGroupName:groupName];
                 UIImage *selectionImage =  _selectedWaypointGroups[groupName].count == _waypointGroups[groupName].count
                         ? [UIImage imageNamed:@"ic_system_checkbox_selected"]
                         : [UIImage imageNamed:@"ic_system_checkbox_indeterminate"];
@@ -457,7 +457,9 @@
     if (indexPath.row > 0)
     {
         OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath.section row:indexPath.row - 1];
-        NSString *groupName = [self checkGroupName:gpxWptItem.point.type];
+        NSString *groupName = gpxWptItem.point.type;
+        if (self.trackMenuDelegate)
+            groupName = [self.trackMenuDelegate checkGroupName:groupName];
         NSMutableArray<OAGpxWptItem *> *selectedWaypoints = _selectedWaypointGroups[groupName];
         BOOL selected = selectedWaypoints && [selectedWaypoints containsObject:gpxWptItem];
         [cell setSelected:selected animated:YES];

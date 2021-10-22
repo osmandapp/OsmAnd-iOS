@@ -52,11 +52,11 @@
     self.tableView.rowHeight = kEstimatedRowHeight;
 
     _isShown = self.trackMenuDelegate
-            ? [self.trackMenuDelegate isWaypointsGroupVisible:[self isDefaultGroup] ? @"" : _groupName]
+            ? [self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:_groupName] ? @"" : _groupName]
             : NO;
 
     _groupColor = self.trackMenuDelegate
-            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:[self isDefaultGroup] ? @"" : _groupName])
+            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
             : [OADefaultFavorite getDefaultColor];
 
     self.titleView.text = _groupName;
@@ -139,11 +139,6 @@
     _tableData = tableSections;
 }
 
-- (BOOL)isDefaultGroup
-{
-    return [_groupName isEqualToString:OALocalizedString(@"shared_string_gpx_points")];
-}
-
 - (void)setLeftIcon
 {
     UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? @"ic_custom_folder" : @"ic_custom_folder_hidden"];
@@ -184,7 +179,7 @@
 - (void)onShowHidePressed:(id)sender
 {
     if (self.trackMenuDelegate)
-        [self.trackMenuDelegate setWaypointsGroupVisible:[self isDefaultGroup] ? @"" : _groupName
+        [self.trackMenuDelegate setWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:_groupName] ? @"" : _groupName
                                                     show:_isShown = !_isShown];
 
     [self setLeftIcon];

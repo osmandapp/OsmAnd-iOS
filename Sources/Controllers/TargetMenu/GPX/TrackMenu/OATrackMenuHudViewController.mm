@@ -701,7 +701,7 @@
     {
         for (NSString *groupName in _waypointGroups.keyEnumerator)
         {
-            __block BOOL isHidden = [self.gpx.hiddenGroups containsObject:groupName];
+            __block BOOL isHidden = [self.gpx.hiddenGroups containsObject:[self isDefaultGroup:groupName] ? @"" : groupName];
             __block UIImage *leftIcon = [UIImage templateImageNamed:
                     isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
             __block UIColor *tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
@@ -733,7 +733,7 @@
             [groupCellData setData:@{
                     kTableUpdateData: ^() {
                         newGroupName();
-                        isHidden = [self.gpx.hiddenGroups containsObject:currentGroupName];
+                        isHidden = [self.gpx.hiddenGroups containsObject:[self isDefaultGroup:currentGroupName] ? @"" : currentGroupName];
                         leftIcon = [UIImage templateImageNamed:
                                 isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
                         tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
@@ -1405,6 +1405,7 @@
         [self.gpx addHiddenGroups:groupName];
     [[OAGPXDatabase sharedDb] save];
 
+    groupName = [self checkGroupName:groupName];
     NSInteger groupIndex = [_waypointGroups.allKeys indexOfObject:groupName];
     OAGPXTableSectionData *groupSection = self.tableData[groupIndex];
     if (groupSection.updateData)
@@ -1503,6 +1504,16 @@
             [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithGroupName:groupName];
     editWaypointsBottomSheet.trackMenuDelegate = self;
     [editWaypointsBottomSheet presentInViewController:self];
+}
+
+- (NSString *)checkGroupName:(NSString *)groupName
+{
+    return !groupName || groupName.length == 0 ? OALocalizedString(@"shared_string_gpx_points") : groupName;
+}
+
+- (BOOL)isDefaultGroup:(NSString *)groupName
+{
+    return [groupName isEqualToString:OALocalizedString(@"shared_string_gpx_points")];
 }
 
 #pragma mark - UITabBarDelegate

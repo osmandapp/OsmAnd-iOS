@@ -35,6 +35,8 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
                newGroupColor:(UIColor *)newGroupColor;
 - (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName;
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
+- (NSString *)checkGroupName:(NSString *)groupName;
+- (BOOL)isDefaultGroup:(NSString *)groupName;
 
 @end
 

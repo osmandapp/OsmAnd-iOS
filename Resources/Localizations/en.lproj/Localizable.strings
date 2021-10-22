@@ -517,6 +517,7 @@
 "shared_string_wifi_only" = "Only on Wi-Fi";
 "shared_string_turn_off" = "Turn off";
 "shared_strings_all_regions" = "All regions";
+"regions" = "Regions";
 "shared_string_width" = "Width";
 "shared_string_interval" = "Interval";
 "shared_string_none" = "None";

@@ -150,7 +150,7 @@
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
 {
     if ([self isDividerCell:indexPath])
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:(1.0 / [UIScreen mainScreen].scale) dividerInsets:UIEdgeInsetsZero];
     else if (_isSRTM && indexPath.section == 0)
         return 36.;
     else if (indexPath.row == 1 && ((_isSRTM && indexPath.section == 1 && !_isSingleSRTM) || (!_isSRTM && indexPath.section == 0)))
@@ -328,7 +328,7 @@
             cell = (OADividerCell *) nib[0];
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);
-            cell.dividerHight = 0.5;
+            cell.dividerHight = (1.0 / [UIScreen mainScreen].scale);
         }
         if (cell)
         {

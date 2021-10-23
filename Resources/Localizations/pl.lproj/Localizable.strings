@@ -2145,7 +2145,7 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "Kolor wg przeznaczenia trasy.";
 "transport" = "Transport publiczny";
 "shared_string_wifi_only" = "Tylko przez Wi-Fi";
-"navigate_point_easting" = "Linia współrzędnych \"x\";
+"navigate_point_easting" = "Linia współrzędnych \"x\"";
 "navigate_point_zone" = "Strefa";
 "start_of_track" = "Początek trasy";
 "last_used" = "Ostatnio używane";
@@ -2169,7 +2169,7 @@
 "srtm_download_list_help_message" = "OsmAnd udostępnia dane poziomic w metrach i stopach. Aby zmienić format, należy ponownie pobrać plik.";
 "product_title_mapillary" = "Mapillary";
 "route_between_points_warning_desc" = "Następnie, aby skorzystać z tej opcji, przyciągnij trasę do najbliższej dozwolonej drogi za pomocą jednego z profili nawigacyjnych.";
-"navigate_point_northing" = "Linia współrzędnych \"y\";
+"navigate_point_northing" = "Linia współrzędnych \"y\"";
 "contour_lines_hillshades_slope" = "Poziomice, mapy cieniowane, nachylenie";
 "context_menu_item_edit_waypoint" = "Edytuj punkt trasy GPX";
 "gpxup_identifiable" = "Identyfikowalny";
@@ -2184,3 +2184,6 @@
 "shared_string_all_languages" = "Wszystkie języki";
 "rendering_value_walkingRoutesOSMC_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i symbolu odznaki turystycznej.";
 "explore_wikipedia_offline" = "Przeglądaj Wikipedię w trybie offline.";
+"nautical" = "Morska";
+"dialogs_and_notifications_descr" = "Kontroluj wyskakujące okienka, okna dialogowe i powiadomienia";
+"years_short" = "Lata";

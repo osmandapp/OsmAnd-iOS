@@ -338,7 +338,7 @@
 "type_postcode" = "Scrie codul poștal";
 "gpx_route" = "Rută";
 "always_center_position_on_map" = "Arată întotdeauna poziția în centru";
-"coords_format" = "Format coordonate";
+"coords_format" = "Formatul coordonatelor";
 "translucent_orange" = "Portocaliu translucid";
 "starting_point" = "Punct de plecare";
 "help_trip_planning" = "Planificarea unei călătorii";
@@ -2088,7 +2088,7 @@
 "toggle_online_notes" = "Comutați notele OSM";
 "add_osm_note" = "Adăugați o notă OSM";
 "toggle_voice" = "Voce pornit/oprit";
-"population_num" = "Populația: %@";
+"population_num" = "Populație";
 "shared_string_turn_off" = "Opriți";
 "product_desc_ext_openplacereviews" = "Trimiteți fotografii, recenzii și link-uri despre locuri publice, cum ar fi restaurante, hoteluri, muzee și puncte de reper ca date deschise https://openplacereviews.org/data/.\n\nCitiți mai multe la https://openplacereviews.org";
 "product_desc_openplacereviews" = "Trimiteți fotografii, recenzii și link-uri despre locuri publice";
@@ -2125,3 +2125,38 @@
 "navigate_point_northing" = "Nordul";
 "navigate_point_easting" = "Estul";
 "navigate_point_olc" = "Codul locației deschise";
+"units_min_short" = "m";
+"read_full_description" = "Citiți descrierea completă";
+"nautical" = "Nautic";
+"ios_release_4_1" = "• Ecran nou pentru căutarea după coordonate în diferite formate\n• Căutare îmbunătățită a coordonatelor în format OLC\n• Un nou meniu ușor de utilizat pentru alegerea limbilor de afișare a articolelor Wikipedia pe hartă\n• A fost adăugată posibilitatea de a încărca cu ușurință hărțile tuturor regiunilor țării cu câteva clicuri\n• Adăugat linii de contur în picioare (Trebuie să reîncărcați fișierele)\n• Adăugată posibilitatea de a descărca hărți prin selectarea regiunii sau țării dorite de pe hartă, precum și adăugarea unei casete de dialog cu sugestia de a încărca harta dacă regiunea este vizualizată fără hartă\n• Apariție nouă a butoanelor de pe hartă și adăugarea posibilității de a schimba zoom-ul hărții prin apăsare dublă și glisare\n";
+
+// Shared Strings
+"shared_string_custom" = "Personalizat";
+"regions" = "Regiuni";
+"gpx_selection_segment_title" = "Segmente";
+"invalid_format" = "Format nevalabil";
+"m" = "m";
+"navigate_point_format_UTM" = "UTM";
+"gpx_dir_arrows" = "Săgeți de direcție";
+"shared_string_interval" = "Intervalul";
+"navigate_point_olc_short" = "OLC";
+"gpx_split_interval_descr" = "Selectați intervalul la care vor fi afișate marcajele cu distanța sau timpul de pe traseu.";
+"track_show_start_finish_icons" = "Afișați pictogramele de început și de sfârșit";
+"route_line_color_elevation_description" = "Linia traseului va fi colorată în funcție de profilul de altitudine al traseului.";
+"duplicate_track" = "Piesă duplicată";
+"coords_format_descr_quick_search" = "Puteți schimba formatul coordonatelor pentru profil în Setări generale";
+"shared_string_width" = "Lățime";
+"navigate_point_format_unknown" = "Format necunoscut";
+"track_coloring_solid" = "Masiv";
+"attribute" = "Atribut";
+"gpx_split_interval" = "Interval de divizare";
+"reset_to_original" = "Resetare la original";
+"gpx_join_gaps" = "Alăturați lacunele";
+"gpx_join_gaps_descr" = "Lacunele dintre segmente vor fi conectate.";
+"gpx_split_interval_none_descr" = "Selectați opțiunea de divizare dorită: în funcție de timp sau de distanță.";
+"slope_grey_color_descr" = "Culoarea gri este utilizată atunci când panta este nedefinită.";
+"shared_string_overview" = "Prezentare generală";
+"analyze_on_map" = "Analizați pe hartă";
+"upload_to_openstreetmap" = "Încărcați pe OpenStreetMap";
+"edit_track" = "Editați pista";
+"activity" = "Activitate";

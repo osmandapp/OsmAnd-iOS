@@ -86,13 +86,13 @@
 "daynight_mode_auto" = "Päikesetõus/loojang";
 "route_simulation" = "Teekonna simuleerimine";
 "auto_follow_location_enabled" = "Joonda kasutatav kaardivaade automaatselt keskele.";
-"unknown_location" = "Asukoht ei ole veel teada.";
+"unknown_location" = "Asukoht ei ole veel teada";
 "animate_routing_route_not_calculated" = "Palun arvuta kõigepealt teekond";
 "settings_preset" = "Vaikimisi profiil";
 "settings_preset_descr" = "Kaardivaate ja navigeerimise sätted jäetakse meelde iga kasutusprofiili kohta eraldi. Seadista siin oma vaikeprofiil.";
 "unit_of_length" = "Pikkusühikud";
 "unit_of_length_descr" = "Muuda pikkusühikuid.";
-"coords_format" = "Koordinaatide formaat";
+"coords_format" = "Koordinaatide vorming";
 "coords_format_descr" = "Geograafiliste koordinaatide formaat.";
 "do_not_show_discount_desc" = "Lülita välja rakenduste allahindluste ja kohalike sündmuste erisõnumite kuvamine.";
 "do_not_send_anonymous_data_desc" = "Me ei kogu asukoha andmeid. Ainult rakenduste kasutamist ja statistika allalaadimist kaardil.";
@@ -179,12 +179,12 @@
 "map_orientation_change_in_accordance_with_speed_descr" = "Vali allpool 'liikumise suunalt' 'kompassi suunale' vastavalt kaardi orientatsiooni ümber lülitamise kiirus";
 "route_parameters" = "Teekonna parameetrid";
 "fast_route_mode" = "Kiireim teekond";
-"fast_route_mode_descr" = "Luba, et arvutada kiireim teekond või keela kütusesäästliku teekonna jaoks.";
+"fast_route_mode_descr" = "Luba, et arvutada kiireim teekond või keela kütusesäästliku teekonna jaoks";
 "avoid_in_routing_title" = "Väldi…";
 "avoid_in_routing_descr" = "Väldi teemakse, sillutamata, parvlaevu";
 "prefer_in_routing_title" = "Eelista…";
-"prefer_in_routing_descr" = "Eelista kiirteid.";
-"relief_smoothness_factor_descr" = "Eelistatud maastik: tasane või künklik.";
+"prefer_in_routing_descr" = "Eelista kiirteid";
+"relief_smoothness_factor_descr" = "Eelistatud maastik: tasane või künklik";
 "choose_auto_follow_route" = "Kaardivaade automaatselt keskele";
 "choose_auto_follow_route_descr" = "Kaardivaate praeguse asukohaga sünkroonimise aeg";
 "auto_zoom_map" = "Automaatne kaardi suurendamine";
@@ -196,15 +196,15 @@
 "speak_title" = "Teata…";
 "speak_descr" = "Seadista teatama tänavanimesid, liiklushoiatusi (sunnitud peatusi, tänavakünniseid), kiiruskaamera hoiatusi, kiiruspiiranguid";
 "keep_informing" = "Korda navigeerimisjuhiseid";
-"keep_informing_descr" = "Teata navigeerimisjuhised korrapäraste ajavahemike järel uuesti.";
+"keep_informing_descr" = "Teata navigeerimisjuhised korrapäraste ajavahemike järel uuesti";
 "arrival_distance" = "Kohale jõudmise teavitus";
 "arrival_distance_descr" = "Kui vara soovid kohale jõudmise teavitust\?";
 "default_speed_system" = "Kiiruseühik";
-"default_speed_system_descr" = "Määra kiiruse ühik.";
+"default_speed_system_descr" = "Määra kiiruse ühik";
 "speed_limit_exceed" = "Kiiruspiirangu tolerants";
 "speed_limit_exceed_message" = "Vali kiirusepiirangu lubatud hälve, millest kõrgema taseme korral antakse hoiatus.";
 "wake_on_voice" = "Lülita ekraan sisse";
-"wake_on_voice_descr" = "Lülita pöörangule lähenedes seadme ekraan sisse (kui väljas).";
+"wake_on_voice_descr" = "Lülita pöörangule lähenedes seadme ekraan sisse (kui on väljas)";
 "voice_pref_title" = "Hääl";
 "voice_provider" = "Hääljuhised";
 "voice_provider_descr" = "Vali hääljuhised navigeerimiseks";
@@ -231,7 +231,7 @@
 "routing_settings_2" = "Navigatsiooni seaded";
 "gpx_navigation" = "Järgi teekonda";
 "impassable_road" = "Väldi teid";
-"impassable_road_desc" = "Vali teed, mida soovid navigeerimise ajal vältida.";
+"impassable_road_desc" = "Vali teed, mida soovid navigeerimise ajal vältida";
 "interrupt_music_descr" = "Peata hääljuhiste ajal täielikult igasugune muusika (mitte lihtsalt ära muuda vaiksemaks)";
 "interrupt_music" = "Peata muusika";
 "shared_string_do_not_use" = "Ära kasuta";
@@ -1153,7 +1153,7 @@
 "hist_select_remove" = "Palun vali eemaldatavad ajaloo kirjed";
 "hist_remove_q" = "Kas soovid eemaldada ajaloo kirjed?";
 "gpx_edit_mode" = "Muutmisrežiim";
-"go_to_map" = "Mine kaardile";
+"go_to_map" = "Kuva kaart";
 "device_memory" = "Seadme mälu";
 "free_memory" = "Vaba %@";
 "first_usage_greeting" = "Hangi juhiseid ja avasta uusi kohti ilma internetiühenduseta";
@@ -1712,7 +1712,7 @@
 "change_object_posiotion" = "Muuda objekti asukoha";
 "map_coords" = "Kaart: Laiuskraad %.5f Pikkuskraad %.5f";
 "default_speed_dialog_msg" = "Hindab saabumisaega tundmatute teede korral ja kiirusepiiranguid kõikidel teedel (võib muuta teekonda)";
-"vessel_width_limit_description" = "Määra laeva laius lühikeste sildade vältimiseks";
+"vessel_width_limit_description" = "Määra laeva laius lühikeste sildade vältimiseks.";
 "vessel_height_limit_description" = "Madalate sildade vältimiseks kirjelda laeva kõrgus. Palun arvesta, et liikuva silla puhul me kasutame seda kõrgust ka siis, kui sild on avatud.";
 "width_limit_description" = "Palun märgi oma sõiduki laius, et saaks arvestada mõnedel teekondadel kehtestatud sõidukite laiuspiirangutega.";
 "lenght_limit_description" = "Palun märgi oma sõiduki pikkus, et saaks arvestada mõnedel teekondadel kehtestatud sõidukite pikkuspiirangutega.";
@@ -1831,7 +1831,7 @@
 "map_settings_hillshade_description" = "Kasutades erinevaid halli varjundeid kuvavad kõrgusreljeefi kaardid nõlvasid, tippe ja tasandikke";
 "import_routing_file_descr" = "Saad importida teekonna faili mis tahes pilvesalvestusrakendusest, avades selle OsmAndis.";
 "help_nav_profiles" = "Navigeerimisprofiilid";
-"profile_prefs_reset_successful" = "Kõik profiili seadistused on lähtestatud.";
+"profile_prefs_reset_successful" = "Kõik profiili seadistused on lähtestatud";
 "import_profile_descr" = "Profiili importimiseks puuduta vajalikku faili (*.osf) mis tahes rakenduses ja vali \"Kopeeri OsmAnd Maps rakendusse\"";
 "reset_profile_action_descr" = "Muuda kõik profiili seadistused paigaldusjärgsesse algeolekusse. Klõpsates Lähtesta-nuppu kaovad kõik sinu tehtud muudatused ja seda tegevust ei saa tagasi pöörata.";
 "res_zoom_levels_desc" = "Need parameetrid mõjutavad kaardi kuvamist, kui seda kasutatakse kaardi liigina või ülekatte / aluskattena.\n\nKaardi liik: kaart piirdub valitud suurendustasemetega.\n\nÜlekate / aluskate: suurendustasemed, kus kaardiosad on nähtavad. Üles või alla skaleerimine toimub seatud väärtustest kõrgemal või madalamal.";
@@ -1938,7 +1938,7 @@
 "profile_type_osmand_string" = "OsmAnd profiil";
 "quick_action_mapillary_hide" = "Peida Mapillary andmed";
 "quick_action_switch_profile_descr" = "Toimingunupp lülitub valitud profiilide vahel.";
-"arrived_at_destination" = "Oled kohale jõudnud.";
+"arrived_at_destination" = "Oled kohale jõudnud";
 "quick_action_mapillary_show" = "Näita Mapillary andmeid";
 "quick_action_remove_next_destination_descr" = "Kustutab järgmise marsruudi sihtkoha. Kui see on lõppsihtkoht, siis navigeerimine peatub.";
 "profile_type_user_string" = "Kasutajaprofiil";
@@ -2109,7 +2109,7 @@
 "travel_routes" = "Reisimarsruudid";
 "added_profiles_descr" = "Pistikprogrammi poolt lisatud profiilid";
 "added_profiles" = "Lisatud profiilid";
-"suggested_maps_descr" = "Need kaardid on laienduse kasutamisel nõutud.";
+"suggested_maps_descr" = "Need kaardid on laienduse kasutamisel nõutud";
 "suggested_maps" = "Soovitatud kaardid";
 "product_desc_ext_openplacereviews" = "Saada fotosid, ülevaateid ja linke avalike kohtade, näiteks restoranide, hotellide, muuseumide ja teekonnapunktide kohta avatud andmetena https://openplacereviews.org/data/.\n\nLisateave aadressil https://openplacereviews.org";
 "product_desc_openplacereviews" = "Saada fotosid, ülevaateid ja linke avalike kohtade kohta";
@@ -2117,7 +2117,7 @@
 "product_desc_ext_mapillary" = "Veebis tänavataseme fotod kõigile. Avasta kohti, tee kaastööd, jäädvusta maailma.";
 "product_desc_mapillary" = "Tänavatasemel fotod veebis kõigile";
 "product_title_mapillary" = "Mapillary";
-"population_num" = "Rahvaarv: %@";
+"population_num" = "Rahvaarv";
 "foot" = "jalga";
 "shared_string_feet" = "jalad";
 "srtm_download_single_help_message" = "Palun vali vajalik formaat. Formaadi muutmiseks tuleb fail uuesti alla laadida.";
@@ -2137,3 +2137,22 @@
 "navigate_point_olc" = "Avatud asukohakood (OLC)";
 "navigate_point_zone" = "Ala";
 "navigate_point_easting" = "Itta";
+"coords_format_descr_quick_search" = "Profiili koordinaatide vormingut saad muuta üldseadetes";
+"track_coloring_solid" = "Ühtlane";
+"attribute" = "Omadus";
+
+// Shared Strings
+"shared_string_custom" = "Kohandatud";
+"regions" = "Piirkonnad";
+"shared_string_width" = "Laius";
+"shared_string_interval" = "Välp";
+"gpx_selection_segment_title" = "Lõigud";
+"navigate_point_format_UTM" = "UTM";
+"navigate_point_format_unknown" = "Tundmatu vorming";
+"navigate_point_olc_short" = "OLC";
+"invalid_format" = "Vigane vorming";
+"m" = "m";
+"read_full_description" = "Loe täielikku kirjeldust";
+"gpx_dir_arrows" = "Suunanooled";
+"gpx_split_interval" = "Jagamise vahemik";
+"units_min_short" = "m";

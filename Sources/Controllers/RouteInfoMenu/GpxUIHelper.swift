@@ -8,14 +8,22 @@
 
 import UIKit
 import Charts
+import Charts.Swift
 
-public enum GPXDataSetType: String {
-    case ALTITUDE = "map_widget_altitude"
-    case SPEED = "gpx_speed"
-    case SLOPE = "gpx_slope"
+@objc public enum GPXDataSetType: Int {
+    case ALTITUDE = 0
+    case SPEED = 1
+    case SLOPE = 2
     
     public func getName() -> String {
-        return NSLocalizedString(self.rawValue, comment: "");
+        switch self {
+            case .ALTITUDE:
+                return NSLocalizedString("map_widget_altitude", comment: "");
+            case .SPEED:
+                return NSLocalizedString("gpx_speed", comment: "");
+            case .SLOPE:
+                return NSLocalizedString("gpx_slope", comment: "");
+        }
     }
     
     public func getImageName() -> String {
@@ -302,18 +310,63 @@ public enum GPXDataSetAxisType: String {
             return offset
         }
     }
-    
-    @objc static public func refreshLineChart(chartView: LineChartView, analysis: OAGPXTrackAnalysis, useGesturesAndScale: Bool)
-    {
-        setupGPXChart(chartView: chartView, yLabelsCount: 4, topOffset: 20, bottomOffset: 4, useGesturesAndScale: useGesturesAndScale)
-        var dataSets = [ILineChartDataSet]()
-        var slopeDataSet: OrderedLineDataSet? = nil
-        let elevationDataSet = createGPXElevationDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
-        dataSets.append(elevationDataSet);
-        slopeDataSet = createGPXSlopeDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: elevationDataSet.entries, useRightAxis: true, drawFilled: true)
 
-        if (slopeDataSet != nil) {
-            dataSets.append(slopeDataSet!)
+    private static func getDataSet(chartView: LineChartView,
+                                   analysis: OAGPXTrackAnalysis,
+                                   type: GPXDataSetType) -> OrderedLineDataSet? {
+        switch type {
+            case .ALTITUDE:
+                return createGPXElevationDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
+            case .SLOPE:
+                return createGPXSlopeDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: Array(), useRightAxis: true, drawFilled: true)
+            case .SPEED:
+                return createGPXSpeedDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: true, drawFilled: true)
+            default:
+                return nil;
+        }
+    }
+
+    @objc static public func refreshLineChart(chartView: LineChartView,
+                                              analysis: OAGPXTrackAnalysis,
+                                              useGesturesAndScale: Bool,
+                                              firstType: GPXDataSetType,
+                                              useRightAxis: Bool)
+    {
+        var dataSets = [ILineChartDataSet]()
+        let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: firstType)
+        if (firstDataSet != nil) {
+            dataSets.append(firstDataSet!);
+        }
+        if (useRightAxis) {
+            chartView.leftAxis.enabled = false
+            chartView.leftAxis.drawLabelsEnabled = false
+            chartView.leftAxis.drawGridLinesEnabled = false
+            chartView.rightAxis.enabled = true
+        }
+        else {
+            chartView.rightAxis.enabled = false
+            chartView.leftAxis.enabled = true
+        }
+        chartView.data = LineChartData(dataSets: dataSets)
+    }
+
+    @objc static public func refreshLineChart(chartView: LineChartView,
+                                              analysis: OAGPXTrackAnalysis,
+                                              useGesturesAndScale: Bool,
+                                              firstType: GPXDataSetType,
+                                              secondType: GPXDataSetType)
+    {
+        var dataSets = [ILineChartDataSet]()
+        let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: firstType)
+        let secondDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: secondType)
+
+        if (firstDataSet != nil) {
+            dataSets.append(firstDataSet!);
+        }
+
+        if (secondDataSet != nil)
+        {
+            dataSets.append(secondDataSet!)
             chartView.leftAxis.drawLabelsEnabled = false
             chartView.leftAxis.drawGridLinesEnabled = false
         } else {
@@ -385,8 +438,8 @@ public enum GPXDataSetAxisType: String {
         
         chart.legend.enabled = false
     }
-    
-    public static func setupGPXChart(chartView: LineChartView, yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool)
+
+    @objc static public func setupGPXChart(chartView: LineChartView, yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool)
     {
         chartView.clear()
         chartView.fitScreen()
@@ -845,8 +898,10 @@ public enum GPXDataSetAxisType: String {
         return values;
     }
 
-    private static func createGPXSpeedDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType,
-                                              useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
+    private static func createGPXSpeedDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis,
+                                              axisType: GPXDataSetAxisType,
+                                              useRightAxis: Bool,
+                                              drawFilled: Bool) -> OrderedLineDataSet {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
         //    boolean light = settings.isLightContent();
         
@@ -892,8 +947,8 @@ public enum GPXDataSetAxisType: String {
             yAxis.labelTextColor = UIColor(rgbValue: color_chart_red_label)
             yAxis.gridColor = UIColor(argbValue: color_chart_red_grid)
         }
-        
-        yAxis.axisMaximum = 0
+
+        yAxis.resetCustomAxisMax()
         
         var values: Array<ChartDataEntry> = [ChartDataEntry]()
         let speedData: Array<OASpeed> = analysis.speedData

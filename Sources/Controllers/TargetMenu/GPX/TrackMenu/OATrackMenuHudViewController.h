@@ -13,6 +13,7 @@
 typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 {
     EOATrackMenuHudOverviewTab = 0,
+    EOATrackMenuHudSegmentsTab,
     EOATrackMenuHudPointsTab,
     EOATrackMenuHudActionsTab
 };

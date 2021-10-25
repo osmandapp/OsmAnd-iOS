@@ -94,7 +94,19 @@
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
     routeStatsCell.lineChartView.delegate = self;
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView analysis:self.analysis useGesturesAndScale:YES];
+
+    [GpxUIHelper setupGPXChartWithChartView:routeStatsCell.lineChartView
+                               yLabelsCount:4
+                                  topOffset:20
+                               bottomOffset:4
+                        useGesturesAndScale:YES
+    ];
+
+    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
+                                      analysis:self.analysis
+                           useGesturesAndScale:YES
+                                     firstType:GPXDataSetTypeALTITUDE
+                                    secondType:GPXDataSetTypeSLOPE];
     
     BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
     
@@ -562,7 +574,11 @@
               ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        [self refreshHighlightOnMap:YES];
+        if (!self.trackChartPoints)
+            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+        [self.routeLineChartHelper refreshHighlightOnMap:YES
+                                           lineChartView:self.statisticsChart
+                                        trackChartPoints:self.trackChartPoints];
     }
 }
 
@@ -698,7 +714,12 @@
             }
         }
     }
-    [self refreshHighlightOnMap:NO];
+
+    if (!self.trackChartPoints)
+        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+    [self.routeLineChartHelper refreshHighlightOnMap:NO
+                                       lineChartView:self.statisticsChart
+                                    trackChartPoints:self.trackChartPoints];
 }
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY

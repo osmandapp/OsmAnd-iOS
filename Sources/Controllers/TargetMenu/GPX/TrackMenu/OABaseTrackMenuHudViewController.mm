@@ -60,6 +60,8 @@
         _updateData = data[kTableUpdateData];
     if ([data.allKeys containsObject:kCellButtonPressed])
         _onButtonPressed = data[kCellButtonPressed];
+    if ([data.allKeys containsObject:kCellUpdateProperty])
+        _updateProperty = data[kCellUpdateProperty];
 }
 
 @end

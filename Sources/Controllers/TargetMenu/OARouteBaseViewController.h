@@ -19,9 +19,30 @@
 @class OAGPXTrackAnalysis;
 @class OARouteStatisticsModeCell;
 
+typedef void(^OARouteLineChartCenterMapOnBBox)(OABBox rect);
+typedef void(^OARouteLineChartAdjustViewPort)();
+
+@interface OARouteLineChartHelper : NSObject
+
+@property (nonatomic) BOOL isLandscape;
+@property (nonatomic) CGRect screenBBox;
+
+- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc
+               centerMapOnBBox:(OARouteLineChartCenterMapOnBBox)centerMapOnBBox
+                adjustViewPort:(OARouteLineChartAdjustViewPort)adjustViewPort;
+
+- (void)refreshHighlightOnMap:(BOOL)forceFit
+                lineChartView:(LineChartView *)lineChartView
+             trackChartPoints:(OATrackChartPoints *)trackChartPoints;
+
+- (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView;
+
+@end
+
 @interface OARouteBaseViewController : OATargetMenuViewController
 
 @property (nonatomic, readonly) OARoutingHelper *routingHelper;
+@property (nonatomic, readonly) OARouteLineChartHelper *routeLineChartHelper;
 
 @property (nonatomic) OAGPXDocument *gpx;
 @property (nonatomic) LineChartView *statisticsChart;
@@ -36,7 +57,6 @@
 
 - (BOOL) isLandscapeIPadAware;
 
-- (void) refreshHighlightOnMap:(BOOL)forceFit;
 - (void) adjustViewPort:(BOOL)landscape;
 
 - (void) changeChartMode:(EOARouteStatisticsMode)mode chart:(LineChartView *)chart modeCell:(OARouteStatisticsModeCell *)statsModeCell;

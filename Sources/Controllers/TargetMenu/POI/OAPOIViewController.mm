@@ -9,6 +9,7 @@
 #import "OAPOIViewController.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
 #import "OAPOIHelper.h"
 #import "OAPOILocationType.h"
 #import "OAUtilities.h"
@@ -23,6 +24,7 @@
 #import "Localization.h"
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAOsmAndFormatter.h"
+#import "OAResourcesUIHelper.h"
 
 #include <openingHoursParser.h>
 #include <OsmAndCore.h>
@@ -122,6 +124,11 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         return [self getCommonTypeStr];
     }
     
+    if (self.localMapIndexItem && self.localMapIndexItem.sizePkg && self.localMapIndexItem.sizePkg > 0)
+    {
+        return [NSString stringWithFormat:@"%@ - %@", str, [NSByteCountFormatter stringFromByteCount:self.localMapIndexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+    }
+    
     return str;
 }
 
@@ -192,6 +199,11 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
 - (BOOL) showNearestPoi
 {
     return YES;
+}
+
+- (BOOL) showRegionNameOnDownloadButton
+{
+    return NO;
 }
 
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows

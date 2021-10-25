@@ -28,6 +28,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) contentHeightChanged:(CGFloat)newHeight;
 - (void) contentHeightChanged;
 - (void) contentChanged;
+- (void) addresLabelUpdated;
 
 - (void) btnOkPressed;
 - (void) btnCancelPressed;
@@ -69,7 +70,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @end
 
-@class OATargetPoint, OATransportStopRoute;
+@class OATargetPoint, OATransportStopRoute, OARepositoryResourceItem;
 
 @interface OATargetMenuViewController : OACompoundViewController
 
@@ -105,6 +106,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic) OATargetMenuControlButton *downloadControlButton;
 
 @property (nonatomic) NSArray<OATransportStopRoute *> *routes;
+@property (nonatomic) OARepositoryResourceItem *localMapIndexItem;
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 

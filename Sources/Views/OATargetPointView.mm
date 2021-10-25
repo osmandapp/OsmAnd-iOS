@@ -1451,7 +1451,7 @@ static const NSInteger _buttonsCount = 4;
 - (CGFloat) getAdditionalContentOffset
 {
     if ([_customController showDetailsButton])
-        return self.customController.additionalContentOffset + [_customController detailsButtonHeight];
+        return self.customController.additionalContentOffset + [_customController detailsButtonHeight] + OAUtilities.getBottomMargin;
     else
         return self.customController.additionalContentOffset;
 }
@@ -2225,6 +2225,11 @@ static const NSInteger _buttonsCount = 4;
         [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
 
     [self doLayoutSubviews:YES];
+}
+
+- (void) addresLabelUpdated
+{
+    [self updateAddressLabel];
 }
 
 - (CGPoint) applyMode:(BOOL)applyOffset

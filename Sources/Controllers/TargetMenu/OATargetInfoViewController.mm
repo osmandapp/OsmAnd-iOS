@@ -732,11 +732,13 @@
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
             cell.backgroundColor = UIColorFromRGB(color_divider_light);
         }
+        [cell setButtonTopOffset:18];
         cell.iconView.hidden = YES;
         cell.button.hidden = NO;
         cell.button.userInteractionEnabled = NO;
         [cell.button setTitleColor:UIColorFromRGB(color_dialog_buttons_light) forState:UIControlStateNormal];
         [cell.button.titleLabel setFont:[UIFont systemFontOfSize:13 weight:UIFontWeightSemibold]];
+        
         if (self.delegate.isInFullMode)
             [cell.button setTitle:OALocalizedString(@"shared_string_collapse").upperCase forState:UIControlStateNormal];
         else
@@ -857,7 +859,10 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OARowInfo *info = _rows[indexPath.row];
-    return info.height;
+    if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
+        return info.height + OAUtilities.getBottomMargin;
+    else
+        return info.height;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

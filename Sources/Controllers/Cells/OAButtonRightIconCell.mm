@@ -20,4 +20,11 @@
     [super setSelected:selected animated:animated];
 }
 
+- (void)setButtonTopOffset:(CGFloat)offset
+{
+    self.buttonVerticallyAllignmentConstraint.active = NO;
+    self.buttonTopConstraint.constant = offset;
+    self.buttonHeightConstraint.constant = 17;
+}
+
 @end

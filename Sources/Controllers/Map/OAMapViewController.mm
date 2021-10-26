@@ -2361,7 +2361,7 @@
                                            srcLon:location.longitude
                                           destLat:point->position.latitude
                                           destLon:point->position.longitude
-                                       upToDigits:2])
+                                       upToDigits:3])
                     {
                         self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
                         return YES;
@@ -3030,7 +3030,7 @@
         QList<int> itValues = it.value();
         for (int itValue : itValues)
         {
-            [values addObject:@(itValue)];
+            [values addObject:@(itValue * 3)];
         }
         result[key] = values;
     }

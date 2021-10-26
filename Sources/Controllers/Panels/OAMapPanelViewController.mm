@@ -389,9 +389,7 @@ typedef enum
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
 
-- (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
-{
-    self.sidePanelController.recognizesPanGesture = NO;
+- (void)setupScrollableHud:(OABaseScrollableHudViewController *)controller {
     _scrollableHudViewController = controller;
     _scrollableHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addChildViewController:_scrollableHudViewController];
@@ -400,6 +398,20 @@ typedef enum
     [_hudViewController.quickActionController updateViewVisibility];
     _activeTargetType = OATargetRoutePlanning;
     [self enterContextMenuMode];
+}
+
+- (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
+{
+    self.sidePanelController.recognizesPanGesture = NO;
+    if (_scrollableHudViewController)
+    {
+        [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
+            [_scrollableHudViewController removeFromParentViewController];
+            [self setupScrollableHud:controller];
+        }];
+        return;
+    }
+    [self setupScrollableHud:controller];
 }
 
 - (void) hideScrollableHudViewController

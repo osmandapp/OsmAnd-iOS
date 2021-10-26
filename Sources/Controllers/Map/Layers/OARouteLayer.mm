@@ -202,7 +202,7 @@
                 builder.setBaseOrder(baseOrder--)
                 .setIsHidden(way->nodes.size() == 0)
                 .setLineId(1)
-                .setLineWidth(15.)
+                .setLineWidth(30.)
                 .setPoints(points)
                 .setFillColor(colorARGB);
                 builder.buildAndAddToCollection(_collection);
@@ -238,7 +238,7 @@
             .setIsHidden(points.size() == 0)
 //            .setApproximationEnabled(false)
             .setLineId(1)
-            .setLineWidth(15.)
+            .setLineWidth(30.)
             .setPoints(points);
             
             UIColor *color = UIColorFromARGB(lineColor.argb);

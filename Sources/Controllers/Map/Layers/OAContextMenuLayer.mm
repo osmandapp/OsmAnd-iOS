@@ -363,7 +363,8 @@
     {
         _pointLayers = @[self.mapViewController.mapLayers.myPositionLayer,
                          self.mapViewController.mapLayers.mapillaryLayer,
-                         self.mapViewController.mapLayers.downloadedRegionsLayer];
+                         self.mapViewController.mapLayers.downloadedRegionsLayer,
+                         self.mapViewController.mapLayers.gpxMapLayer];
     }
     for (OAMapLayer *layer in _pointLayers)
     {
@@ -371,7 +372,9 @@
            [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
     }
     NSMutableArray<OAMapLayer *> *layers = [[mapViewController.mapLayers getLayers] mutableCopy];
-    [layers removeObjectsInArray:_pointLayers];
+    [layers removeObjectsInArray:@[self.mapViewController.mapLayers.myPositionLayer,
+                                   self.mapViewController.mapLayers.mapillaryLayer,
+                                   self.mapViewController.mapLayers.downloadedRegionsLayer]];
 
     for (const auto symbolInfo : symbolInfos)
     {

@@ -67,8 +67,6 @@
 
 @interface OATargetMenuViewController ()
 
-@property (nonatomic) OARepositoryResourceItem *localMapIndexItem;
-
 @end
 
 @implementation OATargetMenuViewController
@@ -336,7 +334,11 @@
                 });
                 
                 if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable || isDownloading)
+                {
                     controller.localMapIndexItem = item;
+                    if (item && [controller isKindOfClass:OAPOIViewController.class])
+                        [((OAPOIViewController *)controller).delegate addresLabelUpdated];
+                }
             }
             [controller createMapDownloadControls];
         }];

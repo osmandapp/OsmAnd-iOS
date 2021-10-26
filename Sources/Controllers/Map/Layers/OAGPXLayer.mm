@@ -9,6 +9,7 @@
 #import "OAGPXLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
@@ -237,7 +238,7 @@
                 .setIsHidden(points.size() == 0)
                 .setLineId(lineId + 1000)
                 .setLineWidth(lineWidth + 5)
-                .setOutlineWidth(6)
+                .setOutlineWidth(5)
                 .setPoints(points)
                 .setFillColor(outlineColor);
             
@@ -342,22 +343,17 @@
             }
             else
             {
-                NSInteger zoom = self.mapView.zoomLevel;
+                double width = DBL_MIN;
                 NSArray<NSArray<NSNumber *> *> *allValues = trackWidth.allValues;
                 for (NSArray<NSNumber *> *values in allValues)
                 {
-                    NSInteger minZoom = values[0].intValue;
-                    NSInteger maxZoom = values[1].intValue;
-                    if (zoom >= minZoom && ((zoom <= maxZoom && maxZoom != -1) || maxZoom == -1))
-                    {
-                        lineWidth = values[2].intValue;
-                        break;
-                    }
+                    width = fmax(values[2].intValue, width);
                 }
+                lineWidth = width;
             }
         }
     }
-    return lineWidth * self.displayDensityFactor;
+    return lineWidth;
 }
 
 #pragma mark - OAContextMenuProvider
@@ -403,7 +399,7 @@
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     OAMapViewController *mapViewController = self.mapViewController;
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    if (!symbolInfo)
     {
         if ([mapViewController findTrack:point])
         {
@@ -412,6 +408,9 @@
             if (targetPoint && ![found containsObject:targetPoint])
                 [found addObject:targetPoint];
         }
+    }
+    else if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    {
         if ([mapViewController findWpt:point])
         {
             OAGpxWpt *wpt = mapViewController.foundWpt;
@@ -471,6 +470,9 @@
 {
     if (object && [self isObjectMovable:object])
     {
+        if ([OARootViewController instance].mapPanel.activeTargetType == OATargetNewMovableWpt)
+            return [UIImage imageNamed:@"ic_map_pin"];
+
         OAGpxWptItem *point = (OAGpxWptItem *)object;
         return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundIcon icon:[@"mx_" stringByAppendingString:point.point.getIcon]];
     }

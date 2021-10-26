@@ -985,6 +985,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
         for (OAWorldRegion *region in sortedSelectedRegions)
         {
+            BOOL found = NO;
             NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
             if (ids.count > 0)
             {
@@ -1010,6 +1011,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                             item.resource = localResource;
                             item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
+                            found = YES;
                             [res addObject:item];
                             continue;
                         }
@@ -1034,6 +1036,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                             item.resource = localResource;
                             item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
+                            found = YES;
                             [res addObject:item];
                         }
                         else
@@ -1052,11 +1055,15 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                             item.worldRegion = region;
                             item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
 
+                            found = YES;
                             [res addObject:item];
                         }
                     }
                 }
             }
+            
+            if (!found)
+                return nil;
         }
     }
     return [NSArray arrayWithArray:res];

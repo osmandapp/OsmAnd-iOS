@@ -435,7 +435,7 @@
 "unknown_location" = "Posição atual desconhecida.";
 "settings_preset" = "Perfil predefinido";
 "settings_preset_descr" = "A vista do mapa e as configurações de navegação são guardadas por perfil. Defina aqui o seu.";
-"coords_format" = "Formato de coordenadas";
+"coords_format" = "Formato de coordenada";
 "coords_format_descr" = "Formato para as coordenadas geográficas.";
 "rotate_map_to_bearing" = "Rotação do mapa";
 // Trip recording settings
@@ -771,13 +771,13 @@
 "routing_settings_descr" = "Configurar navegação";
 "fast_route_mode_descr" = "Ativar para calcular a rota mais rápida ou desativar para a rota de poupança de combustível.";
 "avoid_in_routing_descr" = "Evitar estradas com portagem, não pavimentadas e balsas/ferries";
-"prefer_in_routing_descr" = "Preferir autoestradas.";
+"prefer_in_routing_descr" = "Preferir autoestradas";
 "choose_auto_follow_route_descr" = "Tempo até o mapa ser centrado na posição atual";
 "auto_zoom_map_descr" = "Nível de ampliação automático de acordo com a velocidade (enquanto o mapa é sincronizado com a posição atual).";
 "snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação";
 "show_warnings_descr" = "Configure avisos de moderação de velocidade (limites de velocidade, portagens, lombas, passadeiras, túneis), radares e a faixa de rodagem";
 "speak_descr" = "Configure os avisos por voz de nomes de ruas, avisos de moderação de velocidade (portagens, lombas, passadeiras), radares e limites de velocidade";
-"keep_informing_descr" = "Repetir as instruções de navegação por voz em intervalos regulares.";
+"keep_informing_descr" = "Repetir as instruções de navegação por voz em intervalos regulares";
 "default_speed_system_descr" = "Definir unidade de velocidade.";
 "wake_on_voice_descr" = "Ligar o ecrã do aparelho (se estiver desligado) ao fazer a aproximação à próxima viragem.";
 "voice_provider_descr" = "Selecione a orientação por voz para navegação";
@@ -1694,7 +1694,7 @@
 "quick_action_remove_next_destination" = "Eliminar o ponto de destino mais próximo";
 "shared_string_terrain" = "Terreno";
 "announce" = "Avisar por voz";
-"profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem.";
+"profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem";
 "consider_limitations_param" = "Considerar limitações temporárias";
 "two" = "Dois";
 "shared_string_max" = "Máximo";
@@ -2108,10 +2108,10 @@
 "shared_string_all_languages" = "Todos os idiomas";
 "wiki_menu_download_descr" = "São necessários mapas adicionais para visualizar os POIs da Wikipédia no mapa.";
 "some_articles_may_not_available_in_lang" = "Alguns artigos da Wikipédia podem não estar disponíveis no seu idioma.";
-"population_num" = "População: %@";
+"population_num" = "População";
 "added_profiles_descr" = "Perfis adicionados pela extensão";
 "added_profiles" = "Perfis adicionados";
-"suggested_maps_descr" = "Estes mapas são necessários para a extensão.";
+"suggested_maps_descr" = "Estes mapas são necessários para a extensão";
 "suggested_maps" = "Mapas sugeridos";
 "product_desc_ext_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre lugares públicos como restaurantes, hotéis, museus e pontos de rotas em dados abertos https://openplacereviews.org/data/.\n\nLeia mais em https://openplacereviews.org";
 "product_desc_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre locais públicos";
@@ -2144,3 +2144,38 @@
 "navigate_point_easting" = "Este";
 "navigate_point_zone" = "Zona";
 "navigate_point_northing" = "Norte";
+"units_min_short" = "m";
+"reset_to_original" = "Repor o original";
+"route_line_color_elevation_description" = "A linha da rota será colorida dependendo do perfil de elevação da rota.";
+"nautical" = "Náutico";
+"track_coloring_solid" = "Sólido";
+"attribute" = "Atributo";
+
+// Shared Strings
+"shared_string_custom" = "Personalizado";
+"regions" = "Regiões";
+"shared_string_width" = "Largura";
+"shared_string_interval" = "Intervalo";
+"gpx_selection_segment_title" = "Segmentos";
+"invalid_format" = "Formato inválido";
+"m" = "m";
+"track_show_start_finish_icons" = "Mostrar ícones de início e fim";
+"activity" = "Atividade";
+"navigate_point_format_UTM" = "UTM";
+"coords_format_descr_quick_search" = "Pode alterar o formato das coordenadas para o perfil nas configurações gerais";
+"navigate_point_olc_short" = "OLC";
+"gpx_split_interval" = "Intervalo de divisão";
+"gpx_dir_arrows" = "Setas de direção";
+"navigate_point_format_unknown" = "Formato desconhecido";
+"read_full_description" = "Ler a descrição completa";
+"gpx_split_interval_none_descr" = "Selecione a opção de divisão desejada: por tempo ou por distância.";
+"gpx_split_interval_descr" = "Selecione o intervalo em que as marcas com distância ou tempo no trilho serão mostradas.";
+"gpx_join_gaps" = "Unir espaços";
+"gpx_join_gaps_descr" = "Os espaços entre os segmentos serão conectados.";
+"slope_grey_color_descr" = "A cor cinza é usada quando a inclinação é indefinida.";
+"analyze_on_map" = "Analisar no mapa";
+"upload_to_openstreetmap" = "Enviar para OpenStreetMap";
+"edit_track" = "Editar trilho";
+"duplicate_track" = "Duplicar trilho";
+"shared_string_overview" = "Visão geral";
+"ios_release_4_1" = "• Novo ecrã para pesquisa por coordenadas em diferentes formatos\n• Pesquisa de coordenadas melhorada no formato OLC\n• Novo menu amigável para escolher os idiomas dos artigos da Wikipédia a mostrar no mapa\n• Capacidade de carregar mapas de todas as regiões do país facilmente com alguns cliques\n• Adicionadas linhas de contorno na medida \"pés\" (é necessário descarregar novamente os ficheiros)\n• Adicionada capacidade de descarregar mapas selecionando a região ou país desejado no mapa, bem como adicionando uma janela com a sugestão de carregar o mapa se a região for visualizada sem um mapa\n• Nova aparência de botões no mapa e capacidade adicional de alterar a ampliação do mapa tocando duas vezes e deslizando\n";

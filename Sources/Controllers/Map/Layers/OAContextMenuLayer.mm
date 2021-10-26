@@ -122,11 +122,7 @@
     if (!_selectedObjectContextMenuProvider)
         return;
     
-    UIImage *icon;
-    if ([OARootViewController instance].mapPanel.activeTargetType == OATargetNewMovableWpt)
-        icon = [UIImage imageNamed:@"ic_map_pin"];
-    else
-        icon = [_selectedObjectContextMenuProvider getPointIcon:targetObject];
+    UIImage *icon = [_selectedObjectContextMenuProvider getPointIcon:targetObject];
 
     [_selectedObjectContextMenuProvider setPointVisibility:targetObject hidden:YES];
     if (!_changePositionPin)
@@ -368,7 +364,8 @@
     {
         _pointLayers = @[self.mapViewController.mapLayers.myPositionLayer,
                          self.mapViewController.mapLayers.mapillaryLayer,
-                         self.mapViewController.mapLayers.downloadedRegionsLayer];
+                         self.mapViewController.mapLayers.downloadedRegionsLayer,
+                         self.mapViewController.mapLayers.gpxMapLayer];
     }
     for (OAMapLayer *layer in _pointLayers)
     {
@@ -376,7 +373,9 @@
            [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
     }
     NSMutableArray<OAMapLayer *> *layers = [[mapViewController.mapLayers getLayers] mutableCopy];
-    [layers removeObjectsInArray:_pointLayers];
+    [layers removeObjectsInArray:@[self.mapViewController.mapLayers.myPositionLayer,
+                                   self.mapViewController.mapLayers.mapillaryLayer,
+                                   self.mapViewController.mapLayers.downloadedRegionsLayer]];
 
     for (const auto symbolInfo : symbolInfos)
     {

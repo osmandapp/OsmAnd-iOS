@@ -25,7 +25,7 @@
 #import "OATitleDescriptionIconRoundCell.h"
 #import "OATitleSwitchRoundCell.h"
 #import "OAPointWithRegionTableViewCell.h"
-#import "OASelectionIconTitleCollapsableWithIconCell.h"
+#import "OASelectionCollapsableCell.h"
 #import "OALineChartCell.h"
 #import "OASegmentTableViewCell.h"
 #import "Localization.h"
@@ -179,9 +179,6 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-
-    self.bottomSeparatorHeight.constant = 0.5;
-    self.bottomSeparatorTopConstraint.constant = -0.5;
 
     if (!self.isShown)
         [self onShowHidePressed:nil];
@@ -775,7 +772,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
                 : UIColorFromRGB([self getWaypointsGroupColor:groupName]);
         OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
-                kCellType: [OASelectionIconTitleCollapsableWithIconCell getCellIdentifier],
+                kCellType: [OASelectionCollapsableCell getCellIdentifier],
                 kCellTitle: groupName,
                 kCellLeftIcon: leftIcon,
                 kCellRightIconName: @"ic_custom_arrow_up",
@@ -1241,12 +1238,11 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     else
     {
         OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:sourcePath];
-        OAGPXTrackAnalysis *analysis = [gpxDoc getAnalysis:0];
         [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
                           title:newName
                            desc:gpxDoc.metadata.desc
                          bounds:gpxDoc.bounds
-                       analysis:analysis];
+                       document:gpxDoc];
 
         if ([self.settings.mapSettingVisibleGpx.get containsObject:oldPath])
             [self.settings showGpx:@[newStoringPath]];
@@ -1524,22 +1520,13 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     }
 }
 
-- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
         return 48.;
-    else if ([cellData.type isEqualToString:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]])
-        return 54.;
-    else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
-        return 60.;
-    else if ([cellData.type isEqualToString:[OAPointWithRegionTableViewCell getCellIdentifier]])
-        return 66.;
-    else
-        return estimated ? 48. : UITableViewAutomaticDimension;
+
+    return UITableViewAutomaticDimension;
 }
 
 - (double)getRoundedDouble:(double)toRound
@@ -2225,16 +2212,16 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OASelectionCollapsableCell getCellIdentifier]])
     {
-        OASelectionIconTitleCollapsableWithIconCell *cell =
-                [self.tableView dequeueReusableCellWithIdentifier:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]];
+        OASelectionCollapsableCell *cell =
+                [self.tableView dequeueReusableCellWithIdentifier:[OASelectionCollapsableCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASelectionCollapsableCell getCellIdentifier]
                                                          owner:self
                                                        options:nil];
-            cell = (OASelectionIconTitleCollapsableWithIconCell *) nib[0];
+            cell = (OASelectionCollapsableCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showOptionsButton:YES];
@@ -2311,7 +2298,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath estimated:NO];
+    return [self heightForRow:indexPath];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

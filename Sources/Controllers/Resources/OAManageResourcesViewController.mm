@@ -317,8 +317,8 @@ static BOOL _lackOfResources;
         _bannerView.buttonTitle = OALocalizedString(@"shared_string_buy");
     }
     
-    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
-    _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 100.0)];
+    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
+    _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
     _subscribeEmailView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchResultsUpdater = self;
@@ -2339,11 +2339,24 @@ static BOOL _lackOfResources;
                     }
                     else
                     {
-                        NSInteger allRegionsCount = [self.region.groupItem getItems:multipleItem.resourceType].count;
+                        NSInteger allRegionsCount = 0;
+                        NSInteger downloadedRegionsCount = 0;
+                        for (OAResourceItem *resourceItem in [self.region.groupItem getItems:multipleItem.resourceType])
+                        {
+                            allRegionsCount ++;
+                            if ([OsmAndApp instance].resourcesManager->isResourceInstalled(resourceItem.resourceId))
+                                downloadedRegionsCount ++;
+                        }
+                        
                         if ([OAResourceType isSRTMResourceItem:multipleItem])
                             allRegionsCount /= 2;
-                        NSString *allRegions = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"shared_strings_all_regions"), allRegionsCount];
-                        subtitle = [NSString stringWithFormat:@"%@  •  %@", allRegions, subtitle];
+                        
+                        if (downloadedRegionsCount == allRegionsCount)
+                            subtitle = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"shared_strings_all_regions"), allRegionsCount];
+                        else if (downloadedRegionsCount == 0)
+                            subtitle = [NSString stringWithFormat:@"%@: %li  •  %@", OALocalizedString(@"shared_strings_all_regions"), allRegionsCount, subtitle];
+                        else
+                            subtitle = [NSString stringWithFormat:@"%@: %li / %li  •  %@", OALocalizedString(@"regions"), (allRegionsCount - downloadedRegionsCount), allRegionsCount, subtitle];
                     }
                 }
                 else

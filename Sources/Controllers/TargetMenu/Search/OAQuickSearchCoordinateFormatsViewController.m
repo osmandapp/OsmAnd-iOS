@@ -19,6 +19,8 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAOsmAndFormatter.h"
 
+#define defaultNavBarHeight 58
+
 @interface OAQuickSearchCoordinateFormatsViewController() <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -26,15 +28,18 @@
 @implementation OAQuickSearchCoordinateFormatsViewController
 {
     NSInteger _currentFormat;
+    CLLocation *_location;
     NSMutableArray *_data;
+    UIView *_navBarBackgroundView;
 }
 
-- (instancetype) initWithCurrentFormat:(NSInteger)currentFormat
+- (instancetype) initWithCurrentFormat:(NSInteger)currentFormat location:(CLLocation *)location
 {
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
+    self = [super initWithNibName:@"OAQuickSearchCoordinateFormatsViewController" bundle:nil];
     if (self)
     {
         _currentFormat = currentFormat;
+        _location = location;
         [self commonInit];
     }
     return self;
@@ -48,13 +53,10 @@
 - (void) generateData
 {
     _data = [NSMutableArray array];
-    
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
-    if (!location)
-        location = mapPanel.mapViewController.getMapLocation;
-    double lat = location.coordinate.latitude;
-    double lon = location.coordinate.longitude;
+    if (!_location)
+        _location = [OARootViewController instance].mapPanel.mapViewController.getMapLocation;
+    double lat = _location.coordinate.latitude;
+    double lon = _location.coordinate.longitude;
 
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
@@ -100,11 +102,35 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
     self.doneButton.hidden = YES;
     self.doneButton.enabled = NO;
 
     self.titleLabel.text = OALocalizedString(@"coords_format");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    
+    _navBarBackgroundView = [self createNavBarBackgroundView];
+    _navBarBackgroundView.frame = self.navbarView.bounds;
+    [self.navbarView insertSubview:_navBarBackgroundView atIndex:0];
+}
+
+- (UIView *) createNavBarBackgroundView
+{
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        blurEffectView.alpha = 0;
+        return blurEffectView;
+    }
+    else
+    {
+        UIView *res = [[UIView alloc] init];
+        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.alpha = 0;
+        return res;
+    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -173,6 +199,27 @@
     [_delegate onCoordinateFormatChanged:indexPath.row];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewController];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat alpha = (self.tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((self.tableView.contentOffset.y + defaultNavBarHeight) / (fabs(self.tableView.contentSize.height - self.tableView.frame.size.height)));
+    if (alpha > 0)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            self.navbarView.backgroundColor = UIColor.clearColor;
+            _navBarBackgroundView.alpha = 1;
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            self.navbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            _navBarBackgroundView.alpha = 0;
+        }];
+    }
 }
 
 @end

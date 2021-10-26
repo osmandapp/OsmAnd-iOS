@@ -54,6 +54,233 @@
     }
 }
 
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key
+{
+    for (OAGpxExtension *e in ((OAGpxExtensions *)self.metadata.extraData).extensions)
+    {
+        if ([e.name isEqualToString:key])
+            return e;
+    }
+    return nil;
+}
+
+- (void) addExtension:(OAGpxExtension *)e
+{
+    if (!self.metadata.extraData)
+        self.metadata.extraData = [[OAGpxExtensions alloc] init];
+    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.metadata.extraData).extensions;
+    if (![exts containsObject:e])
+        ((OAGpxExtensions *)self.metadata.extraData).extensions = [exts arrayByAddingObject:e];
+}
+
+- (void) removeExtension:(OAGpxExtension *)e
+{
+    if (!self.metadata.extraData)
+        return;
+    NSMutableArray<OAGpxExtension *> *exts = [NSMutableArray arrayWithArray:((OAGpxExtensions *)self.metadata.extraData).extensions];
+    [exts removeObject:e];
+
+    ((OAGpxExtensions *)self.metadata.extraData).extensions = exts;
+}
+
+- (int) getColor:(int)defColor
+{
+    
+    OAGpxExtension *e = [self getExtensionByKey:@"color"];
+    if (!e)
+        e = [self getExtensionByKey:@"colour"];
+    if (!e)
+        e = [self getExtensionByKey:@"displaycolor"];
+    if (!e)
+        e = [self getExtensionByKey:@"displaycolour"];
+    
+    return [self parseColor:e.value defColor:defColor];
+}
+
+- (void) setColor:(int)value
+{
+    NSString *hexString = [NSString stringWithFormat:@"#%0X", value];
+    OAGpxExtension *e = [self getExtensionByKey:@"color"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"color";
+        e.value = hexString;
+        [self addExtension:e];
+        return;
+    }
+    e.value = hexString;
+}
+
+- (int) parseColor:(NSString *)colorString defColor:(int)defColor
+{
+    if (colorString.length > 0) {
+        unsigned result = 0;
+        NSScanner *scanner = [NSScanner scannerWithString:colorString];
+
+        [scanner setScanLocation:1]; // bypass '#' character
+        [scanner scanHexInt:&result];
+        return result;
+    }
+    return defColor;
+}
+
+- (NSString *) getColoringType
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"coloring_type"];
+    if (e) {
+        return e.value;
+    }
+    return nil;
+}
+
+- (NSString *) getGradientScaleType
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"gradient_scale_type"];
+    if (e) {
+        return e.value;
+    }
+    return nil;
+}
+
+- (void) setColoringType:(NSString *)coloringType
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"coloring_type"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"coloring_type";
+        e.value = coloringType;
+        [self addExtension:e];
+        return;
+    }
+    e.value = coloringType;
+}
+
+- (void) removeGradientScaleType
+{
+    [self removeExtension:[self getExtensionByKey:@"gradient_scale_type"]];
+}
+
+- (NSString *) getSplitType
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"split_type"];
+    if (e) {
+        return e.value;
+    }
+    return nil;
+}
+
+- (void) setSplitType:(NSString *)gpxSplitType
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"split_type"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"split_type";
+        e.value = gpxSplitType;
+        [self addExtension:e];
+        return;
+    }
+    e.value = gpxSplitType;
+}
+
+- (double) getSplitInterval
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"split_interval"];
+    if (e) {
+        return [e.value doubleValue];
+    }
+    return 0.;
+}
+
+- (void) setSplitInterval:(double)splitInterval
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"split_interval"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"split_interval";
+        e.value = @(splitInterval).stringValue;
+        [self addExtension:e];
+        return;
+    }
+    e.value = @(splitInterval).stringValue;
+}
+
+- (NSString *) getWidth:(NSString *)defWidth
+{
+    NSString *widthValue = nil;
+    OAGpxExtension *e = [self getExtensionByKey:@"width"];
+    if (e) {
+        widthValue = e.value;
+    }
+    return widthValue != nil ? widthValue : defWidth;
+}
+
+- (void) setWidth:(NSString *)width
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"width"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"width";
+        e.value = width;
+        [self addExtension:e];
+        return;
+    }
+    e.value = width;
+}
+
+- (BOOL) isShowArrows
+{
+    NSString *showArrows = nil;
+    OAGpxExtension *e = [self getExtensionByKey:@"show_arrows"];
+    if (e) {
+        showArrows = e.value;
+    }
+    return showArrows == nil || [showArrows isEqualToString:@"false"] ? NO : YES;
+}
+
+- (void) setShowArrows:(BOOL)showArrows
+{
+    NSString *strValue = showArrows ? @"true" : @"false";
+    OAGpxExtension *e = [self getExtensionByKey:@"show_arrows"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"show_arrows";
+        e.value = strValue;
+        [self addExtension:e];
+        return;
+    }
+    e.value = strValue;
+}
+
+- (BOOL) isShowStartFinish
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"show_start_finish"];
+    if (e) {
+        return [e.value isEqualToString:@"true"];
+    }
+    return YES;
+}
+
+- (void) setShowStartFinish:(BOOL)showStartFinish
+{
+    NSString *strValue = showStartFinish ? @"true" : @"false";
+    OAGpxExtension *e = [self getExtensionByKey:@"show_start_finish"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"show_start_finish";
+        e.value = strValue;
+        [self addExtension:e];
+        return;
+    }
+    e.value = strValue;
+}
+
 + (NSArray *)fetchExtensions:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtension>>)extensions
 {
     if (!extensions.isEmpty()) {
@@ -961,23 +1188,6 @@
                 return YES;
 
     return NO;
-}
-
-- (UIColor *) getColor:(NSArray<OAGpxExtension *> *)extensions
-{
-    for (OAGpxExtension *e in extensions)
-    {
-        if ([e.name isEqualToString:@"color"])
-        {
-            bool ok;
-            const auto color = OsmAnd::Utilities::parseColor(QString::fromNSString(e.value), OsmAnd::ColorARGB(), &ok);
-            if (!ok)
-                return nil;
-            
-            return UIColorFromARGB(color.argb);
-        }
-    }
-    return nil;
 }
 
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions

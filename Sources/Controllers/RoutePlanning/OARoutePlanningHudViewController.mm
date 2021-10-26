@@ -403,7 +403,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if ([self isLeftSidePresentation])
         return OAUtilities.getBottomMargin > 0 ? 48 : 60;
     else
-        return OAUtilities.getBottomMargin > 0 ? 30 : 48;
+        return OAUtilities.getBottomMargin > 0 ? 44 : 48;
 }
 
 - (BOOL)useGestureRecognizer

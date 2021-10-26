@@ -38,6 +38,7 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
 , _finishIcon([OANativeUtilities skBitmapFromPngResource:@"map_track_point_finish"])
 , _startFinishIcon([OANativeUtilities skBitmapFromPngResource:@"map_track_point_start_finish"])
 , _textRasterizer(TextRasterizer::getDefault())
+, _cachedZoomLevel(MinZoomLevel)
 {
     _captionStyle
         .setWrapWidth(100)
@@ -111,7 +112,7 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
                         if (splitByDistance)
                             stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedDistance:metricStartValue]);
                         else if (splitByTime)
-                            stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeHM:metricStartValue]);
+                            stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
                         _labelsAndCoordinates.push_back({pos31, {stringValue, (int) gpx.color}});
                     }
                 }
@@ -224,7 +225,7 @@ void OAGpxAdditionalIconsProvider::buildSplitIntervalsSymbolsGroup(const OsmAnd:
             const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
             mapSymbol->order = -120000;
             mapSymbol->bitmap = bitmap;
-            mapSymbol->size = OsmAnd::PointI(_startIcon->width(), _startIcon->height());
+            mapSymbol->size = OsmAnd::PointI(bitmap->width(), bitmap->height());
             mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
             mapSymbol->position31 = pos31;
             mapSymbolsGroup->symbols.push_back(mapSymbol);
@@ -306,7 +307,7 @@ void OAGpxAdditionalIconsProvider::buildVisibleSplits(const double metersPerPixe
             const auto nextPos31 = (*posIterator).first;
             NSString *nextTitle = (*posIterator).second.first.toNSString();
             CGSize size = [nextTitle sizeWithAttributes:attrs];
-            double nextDistance = ((fmax(size.width, size.height) + 20) * UIScreen.mainScreen.scale * metersPerPixel) / 2;
+            double nextDistance = ((fmax(size.width, size.height) + 40) * UIScreen.mainScreen.scale * metersPerPixel) / 2;
             const auto nextIconArea = Utilities::boundingBox31FromAreaInMeters(nextDistance, nextPos31);
             if (!currentIconArea.intersects(nextIconArea))
             {
@@ -324,9 +325,7 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> OAGpxAdditionalIconsProvider::bu
 
     QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> mapSymbolsGroups;
     buildStartFinishSymbolsGroup(bbox31, metersPerPixel, mapSymbolsGroups);
-    QList<QPair<PointI, QPair<QString, int>>> visibleLabels;
-    buildVisibleSplits(metersPerPixel, visibleLabels);
-    buildSplitIntervalsSymbolsGroup(bbox31, metersPerPixel, visibleLabels, mapSymbolsGroups);
+    buildSplitIntervalsSymbolsGroup(bbox31, metersPerPixel, _visibleSplitLabels, mapSymbolsGroups);
     return mapSymbolsGroups;
 }
 
@@ -343,6 +342,14 @@ bool OAGpxAdditionalIconsProvider::obtainData(const IMapDataProvider::Request& r
         outData.reset();
         return true;
     }
+    
+    if (req.mapState.zoomLevel != _cachedZoomLevel)
+    {
+        _cachedZoomLevel = req.mapState.zoomLevel;
+        _visibleSplitLabels.clear();
+        buildVisibleSplits(req.mapState.metersPerPixel, _visibleSplitLabels);
+    }
+    
     
     const auto tileId = req.tileId;
     const auto zoom = req.zoom;

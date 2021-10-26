@@ -65,7 +65,6 @@
 
 - (void)resetLayer
 {
-    QWriteLocker scopedLocker(&_lock);
     [self hide];
     _lineSymbolsCollection.reset(new OsmAnd::MapMarkersCollection());
     _fullSymbolsGroupByLine.clear();

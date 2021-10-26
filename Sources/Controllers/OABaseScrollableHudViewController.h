@@ -60,4 +60,6 @@ typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
 - (BOOL) isLandscape;
 - (BOOL) isLeftSidePresentation;
 
+- (BOOL) shouldScrollInAllModes;
+
 @end

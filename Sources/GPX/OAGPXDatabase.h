@@ -11,7 +11,7 @@
 #import "OACommonTypes.h"
 
 #define kDefaultTrackColor 0xFFFF0000
-#define kDefaultWidthMultiplier 7
+#define kDefaultWidthMultiplier 17.5
 
 typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
     EOAGpxSplitTypeNone = -1,
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 };
 
 @class OAGPXTrackAnalysis;
-@class OAGpxWpt;
+@class OAGpxWpt, OAGPXDocument;
 
 @interface OAGPX : NSObject
 
@@ -83,8 +83,8 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 
 + (OAGPXDatabase *)sharedDb;
 
--(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
+-(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
 -(OAGPX *)getGPXItem:(NSString *)filePath;
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;

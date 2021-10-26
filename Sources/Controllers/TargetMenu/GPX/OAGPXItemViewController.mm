@@ -1643,8 +1643,7 @@
     else
     {
         OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:sourcePath];
-        OAGPXTrackAnalysis *analysis = [gpxDoc getAnalysis:0];
-        [OAGPXDatabase.sharedDb addGpxItem:[newFolder stringByAppendingPathComponent:newName] title:newName desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds analysis:analysis];
+        [OAGPXDatabase.sharedDb addGpxItem:[newFolder stringByAppendingPathComponent:newName] title:newName desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc];
 
         NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:OAAppSettings.sharedManager.mapSettingVisibleGpx.get];
         if ([visibleGpx containsObject:oldPath])

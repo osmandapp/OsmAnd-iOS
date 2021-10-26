@@ -103,8 +103,13 @@
 
 - (NSString *) getTypeStr
 {
-    return [OAResourceType resourceTypeLocalized:_mapObject.indexItem.resourceType];
-}
+    NSString *text = [OAResourceType resourceTypeLocalized:_mapObject.indexItem.resourceType];
+    OAResourceItem *item = _mapObject.indexItem;
+    if (item.sizePkg && item.sizePkg > 0)
+        text = [NSString stringWithFormat:@"%@ - %@", text, [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+    
+    return text;
+}   
 
 - (UIColor *) getAdditionalInfoColor
 {

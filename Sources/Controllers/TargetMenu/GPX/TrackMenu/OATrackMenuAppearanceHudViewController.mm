@@ -129,7 +129,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     NSMutableArray *customWidthValues = [NSMutableArray array];
     for (NSInteger i = kCustomTrackWidthMin; i <= kCustomTrackWidthMax; i++)
     {
-        [customWidthValues addObject:@(i)];
+        [customWidthValues addObject:@(i * 3)];
     }
     _customWidthValues = customWidthValues;
 }
@@ -435,7 +435,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                 [customSliderCell setData:@{
                         kCellValues: @{
                                 @"int_value": _selectedWidth.customValue,
-                                @"array_value": _customWidthValues,
+                                @"array_value": @[@(kCustomTrackWidthMin), @(kCustomTrackWidthMax)],
                                 @"has_top_labels": @NO,
                                 @"has_bottom_labels": @YES,
                         }
@@ -754,11 +754,11 @@ static const NSInteger kCustomTrackWidthMax = 24;
             [cell showLabels:hasTopLabels topRight:hasTopLabels bottomLeft:hasBottomLabels bottomRight:hasBottomLabels];
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             cell.topLeftLabel.text = cellData.title;
-            cell.topRightLabel.text = [NSString stringWithFormat:@"%li", (long) [cellData.values[@"int_value"] intValue]];
-            cell.bottomLeftLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.firstObject intValue]];
-            cell.bottomRightLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.lastObject intValue]];
+            cell.topRightLabel.text = [NSString stringWithFormat:@"%li", (long) [cellData.values[@"int_value"] intValue] / 3];
+            cell.bottomLeftLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.firstObject intValue] / 3];
+            cell.bottomRightLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.lastObject intValue] / 3];
             cell.numberOfMarks = arrayValue.count;
-            cell.selectedMark = [cellData.values[@"int_value"] intValue];
+            cell.selectedMark = [cellData.values[@"int_value"] intValue] / 3;
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -882,7 +882,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             NSInteger selectedValue = _customWidthValues[index].intValue;
             if (_selectedWidth.customValue.intValue != selectedValue)
             {
-                _selectedWidth.customValue = [NSString stringWithFormat:@"%li", selectedValue];
+                _selectedWidth.customValue = [NSString stringWithFormat:@"%ld", selectedValue];
                 self.gpx.width = _selectedWidth.customValue;
 
                 [[_app updateGpxTracksOnMapObservable] notifyEvent];

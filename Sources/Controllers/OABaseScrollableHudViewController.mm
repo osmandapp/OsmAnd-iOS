@@ -114,8 +114,6 @@
     BOOL isLandscape = [self isLeftSidePresentation];
     [self updateLayoutCurrentState];
     
-    [_tableView setScrollEnabled:_currentState == EOADraggableMenuStateFullScreen || (!self.supportsFullScreen && EOADraggableMenuStateExpanded)];
-    
     [self adjustFrame];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     if (isLandscape)
@@ -286,6 +284,11 @@
 - (BOOL) isLeftSidePresentation
 {
     return OAUtilities.isLandscapeIpadAware;
+}
+
+- (BOOL) shouldScrollInAllModes
+{
+    return YES;
 }
 
 - (CGFloat) getViewWidthForPad
@@ -559,7 +562,10 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView.contentOffset.y <= 0)
+    if (self.shouldScrollInAllModes)
+        return;
+    
+    if (scrollView.contentOffset.y <= 0 || self.contentContainer.frame.origin.y != OAUtilities.getStatusBarHeight)
         [scrollView setContentOffset:CGPointZero animated:NO];
     
     [self setupModeViewShadowVisibility];

@@ -338,18 +338,13 @@
             }
             else
             {
-                NSInteger zoom = self.mapView.zoomLevel;
+                double width = DBL_MIN;
                 NSArray<NSArray<NSNumber *> *> *allValues = trackWidth.allValues;
                 for (NSArray<NSNumber *> *values in allValues)
                 {
-                    NSInteger minZoom = values[0].intValue;
-                    NSInteger maxZoom = values[1].intValue;
-                    if (zoom >= minZoom && ((zoom <= maxZoom && maxZoom != -1) || maxZoom == -1))
-                    {
-                        lineWidth = values[2].intValue;
-                        break;
-                    }
+                    width = fmax(values[2].intValue, width);
                 }
+                lineWidth = width;
             }
         }
     }
@@ -399,7 +394,7 @@
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     OAMapViewController *mapViewController = self.mapViewController;
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    if (!symbolInfo)
     {
         if ([mapViewController findTrack:point])
         {
@@ -408,6 +403,9 @@
             if (![found containsObject:targetPoint])
                 [found addObject:targetPoint];
         }
+    }
+    else if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    {
         if ([mapViewController findWpt:point])
         {
             OAGpxWpt *wpt = mapViewController.foundWpt;

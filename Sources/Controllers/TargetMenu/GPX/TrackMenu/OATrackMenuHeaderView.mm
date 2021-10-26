@@ -7,6 +7,7 @@
 //
 
 #import "OATrackMenuHeaderView.h"
+#import "OARouteDetailsGraphViewController.h"
 #import "OAGpxStatBlockCollectionViewCell.h"
 #import "OAColors.h"
 
@@ -267,6 +268,16 @@
         widthByValue += kBlockStatistickDivider;
     }
     return CGSizeMake(MAX(widthByTitle, widthByValue), kBlockStatistickHeight);
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _collectionData[indexPath.row];
+    EOARouteStatisticsMode modeType = (EOARouteStatisticsMode) [item[@"type"] integerValue];
+    if (self.trackMenuDelegate)
+        [self.trackMenuDelegate openAnalysis:modeType];
 }
 
 @end

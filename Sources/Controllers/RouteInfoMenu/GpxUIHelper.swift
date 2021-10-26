@@ -948,7 +948,7 @@ public enum GPXDataSetAxisType: String {
             yAxis.gridColor = UIColor(argbValue: color_chart_red_grid)
         }
 
-        yAxis.resetCustomAxisMax()
+        yAxis.axisMinimum = 0.0
         
         var values: Array<ChartDataEntry> = [ChartDataEntry]()
         let speedData: Array<OASpeed> = analysis.speedData

@@ -208,7 +208,7 @@
         self.analysis = [self.gpx getAnalysis:0];
     }
     _expandedSections = [NSMutableSet new];
-    _currentMode = EOARouteStatisticsModeBoth;
+    _currentMode = EOARouteStatisticsModeAltitudeSlope;
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -584,7 +584,7 @@
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode];
+    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode hasSpeed:self.analysis.hasSpeedData];
     statsModeBottomSheet.delegate = self;
     [statsModeBottomSheet show];
 }
@@ -775,8 +775,11 @@
     {
         OARouteStatisticsModeCell *statsModeCell = statsSection[0];
         OALineChartCell *graphCell = statsSection[1];
-        
-        [self changeChartMode:_currentMode chart:graphCell.lineChartView modeCell:statsModeCell];
+
+        [self.routeLineChartHelper changeChartMode:_currentMode
+                                             chart:graphCell.lineChartView
+                                          analysis:self.analysis
+                                          modeCell:statsModeCell];
     }
 }
 

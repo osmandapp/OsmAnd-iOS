@@ -347,6 +347,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
         [_headerView removeFromSuperview];
 
     _headerView = [[OATrackMenuHeaderView alloc] init];
+    _headerView.trackMenuDelegate = self;
     [_headerView setDescription:_description];
 
     BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
@@ -665,7 +666,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     {
         NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
         OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
-        __block EOAGpxTabItem mode = EOAGpxTabItemGeneral;
+        __block EOARouteStatisticsMode mode = EOARouteStatisticsModeAltitudeSpeed;
 
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
         OALineChartCell *cell = (OALineChartCell *) nib[0];
@@ -679,7 +680,10 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
                             useGesturesAndScale:YES
         ];
 
-        [self changeChartMode:mode chart:cell.lineChartView analysis:analysis];
+        [_routeLineChartHelper changeChartMode:mode
+                                         chart:cell.lineChartView
+                                      analysis:analysis
+                                      modeCell:nil];
 
         for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
         {
@@ -708,7 +712,10 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
         }];
         [chartCellData setData:@{
                 kTableUpdateData: ^() {
-                    [self changeChartMode:mode chart:cell.lineChartView analysis:analysis];
+                    [_routeLineChartHelper changeChartMode:mode
+                                                     chart:cell.lineChartView
+                                                  analysis:analysis
+                                                  modeCell:nil];
                 }
         }];
 
@@ -723,7 +730,9 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
         }];
         [tabsCellData setData:@{
                 kCellUpdateProperty: ^(id parameter) {
-                    mode = (EOAGpxTabItem) [parameter intValue];
+                    NSInteger selectedIndex = [parameter intValue];
+                    mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
+                            : selectedIndex == 1 ? EOARouteStatisticsModeAltitude : EOARouteStatisticsModeSpeed;
 
                     if (chartCellData.updateData)
                         chartCellData.updateData();
@@ -1136,6 +1145,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"shared_string_distance"),
                     @"value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
+                    @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_distance@2x"
             }];
         }
@@ -1145,6 +1155,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_ascent"),
                     @"value": [OAOsmAndFormatter getFormattedAlt:self.analysis.diffElevationUp],
+                    @"type": @(EOARouteStatisticsModeSlope),
                     @"icon": @"ic_small_ascent"
             }];
             [statistics addObject:@{
@@ -1157,6 +1168,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
                     @"value": [NSString stringWithFormat:@"%@ - %@",
                                                          [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation],
                                                          [OAOsmAndFormatter getFormattedAlt:self.analysis.maxElevation]],
+                    @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_altitude_range"
             }];
         }
@@ -1166,11 +1178,13 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_average_speed"),
                     @"value": [OAOsmAndFormatter getFormattedSpeed:self.analysis.avgSpeed],
+                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_speed"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_max_speed"),
                     @"value": [OAOsmAndFormatter getFormattedSpeed:self.analysis.maxSpeed],
+                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_max_speed"
             }];
         }
@@ -1181,6 +1195,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"total_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
+                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_time_interval"
             }];
         }
@@ -1191,6 +1206,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
             [statistics addObject:@{
                     @"title": OALocalizedString(@"moving_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
+                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_time_moving"
             }];
         }
@@ -1490,49 +1506,6 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 - (BOOL)hasWaypoints
 {
     return _waypointGroups.allKeys.count > 0;
-}
-
-- (void)changeChartMode:(EOAGpxTabItem)mode
-                  chart:(LineChartView *)lineChartView
-               analysis:(OAGPXTrackAnalysis *)analysis
-{
-    ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) lineChartView.rightYAxisRenderer;
-    switch (mode)
-    {
-        case EOAGpxTabItemGeneral:
-        {
-            [GpxUIHelper refreshLineChartWithChartView:lineChartView
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeALTITUDE
-                                            secondType:GPXDataSetTypeSPEED];
-            renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
-            break;
-        }
-        case EOAGpxTabItemAltitude:
-        {
-            [GpxUIHelper refreshLineChartWithChartView:lineChartView
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeALTITUDE
-                                            secondType:GPXDataSetTypeSLOPE];
-            renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
-            break;
-        }
-        case EOAGpxTabItemSpeed:
-        {
-            [GpxUIHelper refreshLineChartWithChartView:lineChartView
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeSPEED
-                                          useRightAxis:YES];
-            renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
-        }
-        default:
-            break;
-    }
-
-    [lineChartView notifyDataSetChanged];
 }
 
 - (void)syncVisibleCharts:(LineChartView *)chartView
@@ -2410,7 +2383,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     }
     else if ([cellData.key isEqualToString:@"analyze"])
     {
-        [self openAnalysis:EOARouteStatisticsModeBoth];
+        [self openAnalysis:EOARouteStatisticsModeAltitudeSlope];
     }
     else if ([cellData.key isEqualToString:@"share"])
     {

@@ -10,6 +10,8 @@
 
 @class OAGPXDocument, OAGPXTrackAnalysis, OAButton;
 
+@protocol OATrackMenuViewControllerDelegate;
+
 @interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UIView *titleContainerView;
@@ -48,6 +50,8 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
+
+@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
 - (void)updateFrame;
 

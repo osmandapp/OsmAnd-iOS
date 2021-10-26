@@ -131,7 +131,7 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _currentMode = _trackMenuControlState ? _trackMenuControlState.routeStatistics : EOARouteStatisticsModeBoth;
+    _currentMode = _trackMenuControlState ? _trackMenuControlState.routeStatistics : EOARouteStatisticsModeAltitudeSlope;
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -204,6 +204,7 @@
     [self.routeLineChartHelper refreshHighlightOnMap:NO
                                        lineChartView:self.statisticsChart
                                     trackChartPoints:self.trackChartPoints];
+    [self updateRouteStatisticsGraph];
 }
 
 - (BOOL)isLandscapeIPadAware
@@ -326,7 +327,7 @@
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode];
+    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode hasSpeed:self.analysis.hasSpeedData];
     statsModeBottomSheet.delegate = self;
     [statsModeBottomSheet show];
 }
@@ -482,8 +483,11 @@
     {
         OARouteStatisticsModeCell *statsModeCell = _data[0];
         OALineChartCell *graphCell = _data[1];
-        
-        [self changeChartMode:_currentMode chart:graphCell.lineChartView modeCell:statsModeCell];
+
+        [self.routeLineChartHelper changeChartMode:_currentMode
+                                             chart:graphCell.lineChartView
+                                          analysis:self.analysis
+                                          modeCell:statsModeCell];
     }
 }
 

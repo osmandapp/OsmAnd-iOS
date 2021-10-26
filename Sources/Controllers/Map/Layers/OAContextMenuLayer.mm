@@ -123,6 +123,7 @@
         return;
     
     UIImage *icon = [_selectedObjectContextMenuProvider getPointIcon:targetObject];
+
     [_selectedObjectContextMenuProvider setPointVisibility:targetObject hidden:YES];
     if (!_changePositionPin)
     {

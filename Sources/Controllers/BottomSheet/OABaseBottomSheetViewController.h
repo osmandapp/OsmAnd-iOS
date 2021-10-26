@@ -39,6 +39,7 @@
 - (void) goMinimized;
 - (void) hide:(BOOL)animated;
 - (void) hide:(BOOL)animated completion:(void (^ __nullable)(void))completion;
+- (void) hideSliderView;
 
 - (void) setHeaderViewVisibility:(BOOL)hidden;
 

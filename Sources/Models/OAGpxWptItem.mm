@@ -12,6 +12,16 @@
 
 @implementation OAGpxWptItem
 
++ (instancetype)withGpxWpt:(OAGpxWpt *)gpxWpt
+{
+    OAGpxWptItem *gpxWptItem = [[OAGpxWptItem alloc] init];
+    if (gpxWptItem)
+    {
+        gpxWptItem.point = gpxWpt;
+    }
+    return gpxWptItem;
+}
+
 - (void) setPoint:(OAGpxWpt *)point
 {
     _point = point;

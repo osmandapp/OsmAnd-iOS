@@ -290,6 +290,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [self hide:animated completion:nil];
 }
 
+- (void) hideSliderView
+{
+    [self.sliderView removeFromSuperview];
+}
+
 - (CGFloat) heightForLabel:(NSString *)text
 {
     UIFont *labelFont = [UIFont systemFontOfSize: 15.0];

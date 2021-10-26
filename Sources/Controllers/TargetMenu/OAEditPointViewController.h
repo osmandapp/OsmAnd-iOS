@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 };
 
 @class OAFavoriteItem, OAGpxWptItem;
+@class OATargetMenuViewControllerState;
 
 @protocol OAGpxWptEditingHandlerDelegate <NSObject>
 
@@ -46,6 +47,10 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 
 - (id)initWithFavorite:(OAFavoriteItem *)favorite;
 - (id)initWithGpxWpt:(OAGpxWptItem *)gpxWpt;
-- (id)initWithLocation:(CLLocationCoordinate2D)location title:(NSString *)formattedTitle customParam:(NSString *)customParam pointType:(EOAEditPointType)pointType;
+- (id)initWithLocation:(CLLocationCoordinate2D)location
+                 title:(NSString *)formattedTitle
+           customParam:(NSString *)customParam
+             pointType:(EOAEditPointType)pointType
+       targetMenuState:(OATargetMenuViewControllerState *)targetMenuState;
 
 @end

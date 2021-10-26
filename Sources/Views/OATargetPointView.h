@@ -90,13 +90,15 @@
 // Addons
 - (void) targetPointParking;
 - (void) targetPointAddWaypoint;
+- (void) targetPointAddWaypoint:(NSString *)gpxFileName
+                       location:(CLLocationCoordinate2D)location
+                          title:(NSString *)title;
 - (void) targetPointEditWaypoint:(OAGpxWptItem *)item;
 
 - (void) targetHideContextPinMarker;
 - (void) targetHide;
 - (void) targetOpenRouteSettings;
 - (void) targetOpenPlanRoute;
-- (void) targetOpenPlanRoute:(OAGPX *)gpx trackMenuState:(OATargetMenuViewControllerState *)trackMenuState;
 - (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked onComplete:(void (^)(void))onComplete;
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;

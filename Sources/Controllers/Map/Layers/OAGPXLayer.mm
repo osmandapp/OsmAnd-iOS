@@ -9,6 +9,7 @@
 #import "OAGPXLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
@@ -49,7 +50,6 @@
     std::shared_ptr<OAGpxAdditionalIconsProvider> _startFinishProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
-    CGFloat _cacheLineWidth;
 }
 
 - (NSString *) layerId
@@ -65,7 +65,7 @@
     _showCaptionsCache = self.showCaptions;
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    
+
     [self.mapView addKeyedSymbolsProvider:_linesCollection];
 }
 
@@ -226,13 +226,8 @@
 {
     if (points.size() > 1)
     {
-        CGFloat lineWidth = _cacheLineWidth;
-        if (![self.appearanceCollection.gpxName isEqualToString:gpx.gpxFileName])
-        {
-            _cacheLineWidth = lineWidth = [self getLineWidth:gpx.width];
-            self.appearanceCollection.gpxName = gpx.gpxFileName;
-        }
-        
+        CGFloat lineWidth = [self getLineWidth:gpx.width];
+
         // Add outline for colorized lines
         if (!colors.isEmpty())
         {
@@ -310,7 +305,17 @@
                 continue;
             
             if (!it.value()->locationMarks.empty())
-                locationMarks.append(it.value()->locationMarks);
+            {
+                NSString *gpxFilePath = [it.key().toNSString()
+                        stringByReplacingOccurrencesOfString:[self.app.gpxPath stringByAppendingString:@"/"]
+                                                  withString:@""];
+                OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+                for (const auto& waypoint : it.value()->locationMarks)
+                {
+                    if (![gpx.hiddenGroups containsObject:waypoint->type.toNSString()])
+                        locationMarks.append(waypoint);
+                }
+            }
         }
         
         const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
@@ -400,7 +405,7 @@
         {
             OAGPX *item = mapViewController.foundGpx;
             OATargetPoint *targetPoint = [self getTargetPoint:item];
-            if (![found containsObject:targetPoint])
+            if (targetPoint && ![found containsObject:targetPoint])
                 [found addObject:targetPoint];
         }
     }
@@ -465,6 +470,9 @@
 {
     if (object && [self isObjectMovable:object])
     {
+        if ([OARootViewController instance].mapPanel.activeTargetType == OATargetNewMovableWpt)
+            return [UIImage imageNamed:@"ic_map_pin"];
+
         OAGpxWptItem *point = (OAGpxWptItem *)object;
         return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundIcon icon:[@"mx_" stringByAppendingString:point.point.getIcon]];
     }

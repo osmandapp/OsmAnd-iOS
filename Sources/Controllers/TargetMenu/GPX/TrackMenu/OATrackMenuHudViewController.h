@@ -13,14 +13,30 @@
 typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 {
     EOATrackMenuHudOverviewTab = 0,
+    EOATrackMenuHudPointsTab,
     EOATrackMenuHudActionsTab
 };
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
-@optional
+@required
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType;
+- (void)refreshWaypoints;
+- (void)refreshLocationServices;
+- (NSInteger)getWaypointsCount:(NSString *)groupName;
+- (NSInteger)getWaypointsGroupColor:(NSString *)groupName;
+- (BOOL)isWaypointsGroupVisible:(NSString *)groupName;
+- (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show;
+- (void)deleteWaypointsGroup:(NSString *)groupName
+           selectedWaypoints:(NSArray<OAGpxWptItem *> *)selectedWaypoints;
+- (void)changeWaypointsGroup:(NSString *)groupName
+                newGroupName:(NSString *)newGroupName
+               newGroupColor:(UIColor *)newGroupColor;
+- (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName;
+- (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
+- (NSString *)checkGroupName:(NSString *)groupName;
+- (BOOL)isDefaultGroup:(NSString *)groupName;
 
 @end
 

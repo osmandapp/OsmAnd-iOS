@@ -30,6 +30,24 @@
     return self.gpxTitle;
 }
 
+- (void)removeHiddenGroups:(NSString *)groupName
+{
+    if (!self.hiddenGroups)
+    {
+        self.hiddenGroups = [NSSet set];
+        return;
+    }
+
+    NSMutableSet *newHiddenGroups = [self.hiddenGroups mutableCopy];
+    [newHiddenGroups removeObject:groupName];
+    self.hiddenGroups = newHiddenGroups;
+}
+
+- (void)addHiddenGroups:(NSString *)groupName
+{
+    self.hiddenGroups = self.hiddenGroups ? [self.hiddenGroups setByAddingObject:groupName] : [NSSet set];
+}
+
 - (NSInteger)color
 {
     return _color != 0 ? _color : kDefaultTrackColor;
@@ -317,6 +335,8 @@
         NSString *gpxFolderPath = [OsmAndApp instance].gpxPath;
         // Make compatible with old database data
         NSString *filePath = [gpx.gpxFilePath hasPrefix:gpxFolderPath] ? gpx.gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpx.gpxFilePath];
+        if (!gpx.gpxFilePath)
+            gpx.gpxFilePath = gpx.gpxFileName;
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
              [res addObject:gpx];
     }
@@ -378,6 +398,7 @@
     [d setObject:@(gpx.points) forKey:@"points"];
 
     [d setObject:@(gpx.wptPoints) forKey:@"wptPoints"];
+    [d setObject:gpx.hiddenGroups ? gpx.hiddenGroups.allObjects : [NSArray array] forKey:@"hiddenGroups"];
     [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
 
     [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
@@ -529,10 +550,13 @@
         {
             gpx.coloringType = value;
         }
+        else if ([key isEqualToString:@"hiddenGroups"])
+        {
+            gpx.hiddenGroups = [NSSet setWithArray:value];
+        }
     }
-
-    if (!gpx.gpxFilePath)
-        gpx.gpxFilePath = gpx.gpxFileName;
+    if (!gpx.hiddenGroups)
+        gpx.hiddenGroups = [NSSet set];
 
     return gpx;
 }

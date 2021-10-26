@@ -711,7 +711,8 @@
                                                      break;
                                                  case 3:  
                                                      [OARootViewController.instance.mapPanel hideTargetPointMenu];
-                                                     [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFileName]];
+                                                     [[OARootViewController instance].mapPanel showPlanRouteViewController:
+                                                             [[OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath]];
                                                      break;
                                                  case 4:
                                                      [self selectTrackClicked];

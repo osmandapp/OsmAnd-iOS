@@ -396,7 +396,6 @@ typedef enum
     _scrollableHudViewController.view.frame = self.view.bounds;
     [self.view addSubview:_scrollableHudViewController.view];
     [_hudViewController.quickActionController updateViewVisibility];
-    _activeTargetType = OATargetRoutePlanning;
     [self enterContextMenuMode];
 }
 
@@ -426,6 +425,12 @@ typedef enum
     [_hudViewController.quickActionController updateViewVisibility];
     [self resetActiveTargetMenu];
     [self restoreFromContextMenuMode];
+}
+
+- (void)showPlanRouteViewController:(OARoutePlanningHudViewController *)controller
+{
+    _activeTargetType = OATargetRoutePlanning;
+    [self showScrollableHudViewController:controller];
 }
 
 - (void) refreshToolbar
@@ -1655,7 +1660,12 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:self.targetMenuView.targetPoint.titleAddress pointType:EOAEditPointTypeFavorite];
+    OAEditPointViewController *controller =
+            [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
+                                                          title:self.targetMenuView.targetPoint.title
+                                                    customParam:self.targetMenuView.targetPoint.titleAddress
+                                                      pointType:EOAEditPointTypeFavorite
+                                                targetMenuState:nil];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
@@ -1840,12 +1850,25 @@ typedef enum
 }
 
 - (void) targetPointAddWaypoint:(NSString *)gpxFileName
+                       location:(CLLocationCoordinate2D)location
+                          title:(NSString *)title
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location title:self.targetMenuView.targetPoint.title customParam:gpxFileName pointType:EOAEditPointTypeWaypoint];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
+                                                                                          title:title
+                                                                                    customParam:gpxFileName
+                                                                                      pointType:EOAEditPointTypeWaypoint
+                                                                                targetMenuState:_activeViewControllerState];
     controller.gpxWptDelegate = self;
     [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (void) targetPointAddWaypoint:(NSString *)gpxFileName
+{
+    [self targetPointAddWaypoint:gpxFileName
+                        location:self.targetMenuView.targetPoint.location
+                           title:self.targetMenuView.targetPoint.title];
 }
 
 - (void) targetPointEditWaypoint:(OAGpxWptItem *)item
@@ -1897,16 +1920,9 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude]]];
-}
-
-- (void) targetOpenPlanRoute:(OAGPX *)gpx trackMenuState:(OATargetMenuViewControllerState *)trackMenuState;
-{
-    [self targetHideContextPinMarker];
-    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    OARoutePlanningHudViewController *routePlanningHudViewController =
-            [[OARoutePlanningHudViewController alloc] initWithFileName:gpx.gpxFilePath trackMenuState:trackMenuState];
-    [self showScrollableHudViewController:routePlanningHudViewController];
+    [self showPlanRouteViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc]
+                                                                                    initWithLatitude:_targetLatitude
+                                                                                           longitude:_targetLongitude]]];
 }
 
 - (void) targetGoToPoint
@@ -2055,6 +2071,7 @@ typedef enum
         case OATargetRouteDetailsGraph:
         case OATargetChangePosition:
         case OATargetTransportRouteDetails:
+        case OATargetNewMovableWpt:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
@@ -2731,6 +2748,33 @@ typedef enum
     _activeTargetType = target.type;
     _activeTargetObj = target.targetObj;
     _targetMenuView.activeTargetType = _activeTargetType;
+
+    [_targetMenuView setTargetPoint:target];
+    [self applyTargetPoint:target];
+
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void)openTargetViewWithNewGpxWptMovableTarget:(OAGPX *)gpx
+                                menuControlState:(OATargetMenuViewControllerState *)menuControlState
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+
+    OATargetPoint *target = [[OATargetPoint alloc] init];
+
+    target.type = OATargetNewMovableWpt;
+    target.toolbarNeeded = NO;
+    target.centerMap = YES;
+    target.targetObj = gpx;
+
+    _activeTargetType = target.type;
+    _activeTargetObj = target.targetObj;
+    _activeViewControllerState = menuControlState;
 
     [_targetMenuView setTargetPoint:target];
     [self applyTargetPoint:target];

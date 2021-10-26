@@ -1,15 +1,15 @@
 //
-//  OASelectionIconTitleCollapsableWithIconCell.mm
+//  OASelectionCollapsableCell.mm
 //  OsmAnd
 //
 //  Created by Skalii on 19.10.2021.
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OASelectionIconTitleCollapsableWithIconCell.h"
+#import "OASelectionCollapsableCell.h"
 #import "OAColors.h"
 
-@implementation OASelectionIconTitleCollapsableWithIconCell
+@implementation OASelectionCollapsableCell
 
 - (void)awakeFromNib
 {

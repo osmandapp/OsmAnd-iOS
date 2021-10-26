@@ -1,5 +1,5 @@
 //
-//  OASelectionIconTitleCollapsableWithIconCell.h
+//  OASelectionCollapsableCell.h
 //  OsmAnd
 //
 //  Created by Skalii on 19.10.2021.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OASelectionIconTitleCollapsableWithIconCell : UITableViewCell
+@interface OASelectionCollapsableCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIView *selectionButtonContainer;
 @property (weak, nonatomic) IBOutlet UIButton *selectionButton;

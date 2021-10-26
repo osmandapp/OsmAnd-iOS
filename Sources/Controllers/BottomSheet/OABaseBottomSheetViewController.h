@@ -10,7 +10,6 @@
 
 @interface OABaseBottomSheetViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIView *sliderView;
 @property (weak, nonatomic) IBOutlet UIButton *leftButton;
 @property (weak, nonatomic) IBOutlet UIButton *rightButton;
 @property (weak, nonatomic) IBOutlet UIImageView *leftIconView;
@@ -40,6 +39,7 @@
 - (void) goMinimized;
 - (void) hide:(BOOL)animated;
 - (void) hide:(BOOL)animated completion:(void (^ __nullable)(void))completion;
+- (void) hideSliderView;
 
 - (void) setHeaderViewVisibility:(BOOL)hidden;
 

@@ -18,7 +18,7 @@
 #define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.75
 
-@class OATargetPoint, OAFavoriteItem, OAGpxWptItem, OAGPX, OAMeasurementEditingContext;
+@class OATargetPoint, OAFavoriteItem, OAGpxWptItem, OAGPX;
 
 @protocol OATargetPointViewDelegate;
 

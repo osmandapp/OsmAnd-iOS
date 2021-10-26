@@ -11,7 +11,7 @@
 #import "OATrackMenuHudViewController.h"
 #import "OARootViewController.h"
 #import "OAPointWithRegionTableViewCell.h"
-#import "OASelectionIconTitleCollapsableWithIconCell.h"
+#import "OASelectionCollapsableCell.h"
 #import "OAGpxWptItem.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -379,16 +379,16 @@
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OASelectionCollapsableCell getCellIdentifier]])
     {
-        OASelectionIconTitleCollapsableWithIconCell *cell =
-                [self.tableView dequeueReusableCellWithIdentifier:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]];
+        OASelectionCollapsableCell *cell =
+                [self.tableView dequeueReusableCellWithIdentifier:[OASelectionCollapsableCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASelectionCollapsableCell getCellIdentifier]
                                                          owner:self
                                                        options:nil];
-            cell = (OASelectionIconTitleCollapsableWithIconCell *) nib[0];
+            cell = (OASelectionCollapsableCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showOptionsButton:NO];

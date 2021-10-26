@@ -9,6 +9,7 @@
 #import "OAGPXLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
@@ -471,6 +472,9 @@
 {
     if (object && [self isObjectMovable:object])
     {
+        if ([OARootViewController instance].mapPanel.activeTargetType == OATargetNewMovableWpt)
+            return [UIImage imageNamed:@"ic_map_pin"];
+
         OAGpxWptItem *point = (OAGpxWptItem *)object;
         return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundIcon icon:[@"mx_" stringByAppendingString:point.point.getIcon]];
     }

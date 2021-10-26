@@ -145,9 +145,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 
-    self.bottomSeparatorHeight.constant = 0.5;
-    self.bottomSeparatorTopConstraint.constant = -0.5;
-
     if (!self.isShown)
     {
         [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];

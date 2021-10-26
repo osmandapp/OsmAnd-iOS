@@ -122,11 +122,7 @@
     if (!_selectedObjectContextMenuProvider)
         return;
     
-    UIImage *icon;
-    if ([OARootViewController instance].mapPanel.activeTargetType == OATargetNewMovableWpt)
-        icon = [UIImage imageNamed:@"ic_map_pin"];
-    else
-        icon = [_selectedObjectContextMenuProvider getPointIcon:targetObject];
+    UIImage *icon = [_selectedObjectContextMenuProvider getPointIcon:targetObject];
 
     [_selectedObjectContextMenuProvider setPointVisibility:targetObject hidden:YES];
     if (!_changePositionPin)

@@ -62,7 +62,7 @@
     self.buttonsView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
     self.leftIconView.tintColor = UIColorFromRGB(color_primary_red);
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_remove_outlined"]];
-    [self.sliderView removeFromSuperview];
+    [self hideSliderView];
     [self.rightButton removeFromSuperview];
     [self.closeButton removeFromSuperview];
     [self.headerDividerView removeFromSuperview];

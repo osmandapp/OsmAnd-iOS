@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
+@property (weak, nonatomic) IBOutlet UIView *sliderView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *headerViewCollapsedHeight;
 
 @end
@@ -287,6 +288,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (void) hide:(BOOL)animated
 {
     [self hide:animated completion:nil];
+}
+
+- (void) hideSliderView
+{
+    [self.sliderView removeFromSuperview];
 }
 
 - (CGFloat) heightForLabel:(NSString *)text

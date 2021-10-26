@@ -62,7 +62,7 @@
     self.titleView.text = _groupName;
 
     [self setLeftIcon];
-    [self.sliderView removeFromSuperview];
+    [self hideSliderView];
     [self.rightButton removeFromSuperview];
     [self.closeButton removeFromSuperview];
     [self.headerDividerView removeFromSuperview];

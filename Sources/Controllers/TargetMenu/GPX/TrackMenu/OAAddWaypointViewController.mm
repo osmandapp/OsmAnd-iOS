@@ -17,6 +17,7 @@
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAPointDescription.h"
+#import "OASizes.h"
 
 @interface OAAddWaypointViewController () <OAChangePositionModeDelegate>
 
@@ -65,7 +66,7 @@
 - (void)commonInit
 {
     OAGpxWpt *movedPoint = [[OAGpxWpt alloc] init];
-    movedPoint.name = OALocalizedString(@"waypoint_one");
+    movedPoint.name = OALocalizedString(@"gpx_waypoint");
     movedPoint.position = _gpx.bounds.center;
     _movedPoint = [OAGpxWptItem withGpxWpt:movedPoint];
 }
@@ -73,9 +74,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.bottomSeparatorHeight.constant = 0.5;
-    self.bottomSeparatorTopConstraint.constant = -0.5;
 
     _iconView.image = [UIImage templateImageNamed:@"ic_action_marker"];
     _iconView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -176,7 +174,7 @@
 
 - (CGFloat)contentHeight
 {
-    return 12. + self.textView.frame.size.height + 8. + self.coordinatesView.frame.size.height + 24.;
+    return self.textView.frame.size.height + 8. + self.coordinatesView.frame.size.height + 12. + self.getToolBarHeight;
 }
 
 - (UIView *)getMiddleView
@@ -191,7 +189,7 @@
 
 - (CGFloat)getToolBarHeight
 {
-    return 60.;
+    return twoButtonsBottmomSheetHeight;
 }
 
 - (IBAction)addPressed:(id)sender
@@ -202,7 +200,7 @@
     [_mapPanelViewController targetPointAddWaypoint:_isCurrentTrack
                     ? nil : [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]
                                            location:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)
-                                              title:OALocalizedString(@"waypoint_one")];
+                                              title:OALocalizedString(@"gpx_waypoint")];
 }
 
 - (IBAction)cancelPressed:(id)sender

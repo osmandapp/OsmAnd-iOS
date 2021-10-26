@@ -1135,7 +1135,7 @@ static const NSInteger _buttonsCount = 4;
         _coordinateLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat topViewHeight = 0.0;
-    CGFloat topY = (_targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource) ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
+    CGFloat topY = (_targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource || _targetPoint.type == OATargetNewMovableWpt) ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
     BOOL hasDescription = !_descriptionLabel.hidden;
     BOOL hasTransport = !_transportView.hidden;
     if (hasTransport)
@@ -1203,7 +1203,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (!hasDescription && !hasTransport)
     {
-        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin && controlButtonsHeight == 0. ? OAUtilities.getBottomMargin : 0);
+        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource || _targetPoint.type == OATargetNewMovableWpt ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin && controlButtonsHeight == 0. ? OAUtilities.getBottomMargin : 0);
     }
     else
     {

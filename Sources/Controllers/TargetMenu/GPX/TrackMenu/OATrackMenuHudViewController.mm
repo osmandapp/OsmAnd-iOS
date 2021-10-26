@@ -24,7 +24,7 @@
 #import "OATitleDescriptionIconRoundCell.h"
 #import "OATitleSwitchRoundCell.h"
 #import "OAPointWithRegionTableViewCell.h"
-#import "OASelectionIconTitleCollapsableWithIconCell.h"
+#import "OASelectionCollapsableCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
@@ -141,9 +141,6 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-
-    self.bottomSeparatorHeight.constant = 0.5;
-    self.bottomSeparatorTopConstraint.constant = -0.5;
 
     if (!self.isShown)
         [self onShowHidePressed:nil];
@@ -708,7 +705,7 @@
                     : UIColorFromRGB([self getWaypointsGroupColor:groupName]);
             OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
                     kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
-                    kCellType: [OASelectionIconTitleCollapsableWithIconCell getCellIdentifier],
+                    kCellType: [OASelectionCollapsableCell getCellIdentifier],
                     kCellTitle: groupName,
                     kCellLeftIcon: leftIcon,
                     kCellRightIconName: @"ic_custom_arrow_up",
@@ -1299,22 +1296,13 @@
     return _waypointGroups.allKeys.count > 0;
 }
 
-- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
         return 48.;
-    else if ([cellData.type isEqualToString:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]])
-        return 54.;
-    else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
-        return 60.;
-    else if ([cellData.type isEqualToString:[OAPointWithRegionTableViewCell getCellIdentifier]])
-        return 66.;
-    else
-        return estimated ? 48. : UITableViewAutomaticDimension;
+
+    return UITableViewAutomaticDimension;
 }
 
 - (void)openCloseGroupButtonAction:(id)sender
@@ -1954,16 +1942,16 @@
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OASelectionCollapsableCell getCellIdentifier]])
     {
-        OASelectionIconTitleCollapsableWithIconCell *cell =
-                [self.tableView dequeueReusableCellWithIdentifier:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]];
+        OASelectionCollapsableCell *cell =
+                [self.tableView dequeueReusableCellWithIdentifier:[OASelectionCollapsableCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASelectionIconTitleCollapsableWithIconCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASelectionCollapsableCell getCellIdentifier]
                                                          owner:self
                                                        options:nil];
-            cell = (OASelectionIconTitleCollapsableWithIconCell *) nib[0];
+            cell = (OASelectionCollapsableCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showOptionsButton:YES];
@@ -2012,7 +2000,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath estimated:NO];
+    return [self heightForRow:indexPath];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

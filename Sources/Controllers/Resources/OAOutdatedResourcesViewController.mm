@@ -310,23 +310,26 @@
     if (item.downloadTask == nil)
         return;
     
-    FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-    
-    float progressCompleted = item.downloadTask.progressCompleted;
-    if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+    if (cell.accessoryView && [cell.accessoryView isKindOfClass:FFCircularProgressView.class])
     {
-        [progressView stopSpinProgressBackgroundLayer];
-        progressView.progress = progressCompleted;
-    }
-    else if (item.downloadTask.state == OADownloadTaskStateFinished)
-    {
-        [progressView stopSpinProgressBackgroundLayer];
-        progressView.progress = 1.0f;
-    }
-    else
-    {
-        if (!progressView.isSpinning)
-            [progressView startSpinProgressBackgroundLayer];
+        FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+        
+        float progressCompleted = item.downloadTask.progressCompleted;
+        if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+        {
+            [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = progressCompleted;
+        }
+        else if (item.downloadTask.state == OADownloadTaskStateFinished)
+        {
+            [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = 1.0f;
+        }
+        else
+        {
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+        }
     }
 }
 
@@ -406,23 +409,26 @@
     
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
-        FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+        if (cell.accessoryView && [cell.accessoryView isKindOfClass:FFCircularProgressView.class])
+        {
+            FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
 
-        float progressCompleted = item.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
-        {
-            [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted;
-        }
-        else if (item.downloadTask.state == OADownloadTaskStateFinished)
-        {
-            [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = 1.0f;
-        }
-        else
-        {
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
+            float progressCompleted = item.downloadTask.progressCompleted;
+            if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+            {
+                [progressView stopSpinProgressBackgroundLayer];
+                progressView.progress = progressCompleted;
+            }
+            else if (item.downloadTask.state == OADownloadTaskStateFinished)
+            {
+                [progressView stopSpinProgressBackgroundLayer];
+                progressView.progress = 1.0f;
+            }
+            else
+            {
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+            }
         }
     }
 

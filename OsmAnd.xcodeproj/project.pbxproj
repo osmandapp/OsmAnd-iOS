@@ -950,7 +950,6 @@
 		8A1CF1E1227ED4A70083A04E /* warnings_tunnel_us@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1D9227ED4A60083A04E /* warnings_tunnel_us@2x.png */; };
 		8A1CF1E3227ED4A70083A04E /* warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DA227ED4A60083A04E /* warnings_tunnel@2x.png */; };
 		8A1CF1E5227ED4A70083A04E /* warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DB227ED4A70083A04E /* warnings_tunnel@3x.png */; };
-		8A1CF863250D145D003D3829 /* test-resources in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF862250D145C003D3829 /* test-resources */; };
 		8A6CBCA821CE25F0004033C7 /* ic_live_purchased@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9821CE25EE004033C7 /* ic_live_purchased@3x.png */; };
 		8A6CBCAA21CE25F0004033C7 /* img_logo_38dp_sea_depth@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9921CE25EE004033C7 /* img_logo_38dp_sea_depth@3x.png */; };
 		8A6CBCAE21CE25F0004033C7 /* img_help_osmand_live@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9B21CE25EE004033C7 /* img_help_osmand_live@3x.png */; };
@@ -1046,6 +1045,7 @@
 		8AFC2C2124334A4E0095BA9F /* map_location_default_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2BBA24334A4E0095BA9F /* map_location_default_center@3x.png */; };
 		8AFC2C2524334A4E0095BA9F /* map_location_car_bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2BBC24334A4E0095BA9F /* map_location_car_bottom@2x.png */; };
 		8AFC2C2724334A4E0095BA9F /* map_location_default_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2BBD24334A4E0095BA9F /* map_location_default_top@2x.png */; };
+		8EBE587727297A320075B834 /* test-resources in Resources */ = {isa = PBXBuildFile; fileRef = 8EBE587627297A310075B834 /* test-resources */; };
 		A166C762BD53085527F42840 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4812C702BBB164A7AE849D7E /* libPods-OsmAnd Maps.a */; };
 		B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */; };
 		B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */; };
@@ -3971,6 +3971,7 @@
 		8AFC2BBA24334A4E0095BA9F /* map_location_default_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_default_center@3x.png"; sourceTree = "<group>"; };
 		8AFC2BBC24334A4E0095BA9F /* map_location_car_bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_car_bottom@2x.png"; sourceTree = "<group>"; };
 		8AFC2BBD24334A4E0095BA9F /* map_location_default_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_default_top@2x.png"; sourceTree = "<group>"; };
+		8EBE587627297A310075B834 /* test-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "test-resources"; path = "../resources/test-resources"; sourceTree = "<group>"; };
 		B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
 		B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectionCollapsableCell.h; sourceTree = "<group>"; };
 		B0D610F332AD1BD4E707EE60 /* OABaseTrackMenuHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseTrackMenuHudViewController.mm; sourceTree = "<group>"; };
@@ -6703,8 +6704,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DADC09EA27295A4C00ADBB3B /* MobileCoreServices.framework in Frameworks */,
 				DADC09E827295A2C00ADBB3B /* SystemConfiguration.framework in Frameworks */,
+				DADC09EA27295A4C00ADBB3B /* MobileCoreServices.framework in Frameworks */,
 				DADC09E62729591100ADBB3B /* libexpat_static.a in Frameworks */,
 				DADC09E42729581700ADBB3B /* CoreLocation.framework in Frameworks */,
 				DADC09E22729581000ADBB3B /* Foundation.framework in Frameworks */,
@@ -8250,6 +8251,7 @@
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
+				8EBE587627297A310075B834 /* test-resources */,
 				84F1F9B21DE826B9001AA520 /* OsmAnd Maps.entitlements */,
 				BBA858EB17C222C500AADCC7 /* README.md */,
 				BBE57D4F17C2208600C349CC /* Resources */,
@@ -13804,7 +13806,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A1CF863250D145D003D3829 /* test-resources in Resources */,
+				8EBE587727297A320075B834 /* test-resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13834,12 +13836,13 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
+				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-output-files.xcfilelist",
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

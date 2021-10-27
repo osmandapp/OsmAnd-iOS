@@ -36,7 +36,7 @@
 
 - (void)setUp {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf"];
+    NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf" inDirectory:@"test-resources"];
     initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
     
     _fe = std::make_shared<RoutePlannerFrontEnd>();
@@ -54,7 +54,7 @@
 
 - (void)testTurnLanes
 {
-    NSString *jsonFilePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"test_turn_lanes" ofType:@"json"];
+    NSString *jsonFilePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"test_turn_lanes" ofType:@"json" inDirectory:@"test-resources"];
     
     NSError *err = nil;
     NSString *sourceJsonText = [NSString stringWithContentsOfFile:jsonFilePath encoding:NSUTF8StringEncoding error:&err];

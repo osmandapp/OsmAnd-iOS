@@ -2156,3 +2156,8 @@
 "gpx_dir_arrows" = "Suunanooled";
 "gpx_split_interval" = "Jagamise vahemik";
 "units_min_short" = "m";
+"gpx_split_interval_descr" = "Vali välp, mille alusel kuvatakse rajal aja- või vahemaamärgid.";
+"gpx_join_gaps" = "Ühenda lüngad";
+"track_show_start_finish_icons" = "Näita alguse ja lõpu ikoone";
+"reset_to_original" = "Lähtesta originaalile";
+"gpx_join_gaps_descr" = "Lõikudevahelised lüngad ühendatakse.";

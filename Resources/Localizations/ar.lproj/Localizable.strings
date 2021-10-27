@@ -2150,3 +2150,36 @@
 "contour_lines_hillshades_slope" = "خطوط الكنتور ، التلال ، المنحدر";
 "navigate_point_olc" = "رمز التَّمَوْضُع المفتوح";
 "navigate_point_easting" = "تشريق";
+"coords_format_descr_quick_search" = "يمكنك تغيير تنسيق الملف في الإعدادات العامة";
+"track_coloring_solid" = "صلب";
+"attribute" = "ميزة";
+
+// Shared Strings
+"shared_string_custom" = "تخصيص";
+"regions" = "المناطق";
+"shared_string_width" = "العرض";
+"shared_string_interval" = "الفاصل الزمني";
+"gpx_selection_segment_title" = "قسم";
+"navigate_point_format_UTM" = "UTM";
+"navigate_point_format_unknown" = "تنسيق غير معروف";
+"navigate_point_olc_short" = "OLC";
+"invalid_format" = "تنسيق غير صالح";
+"gpx_dir_arrows" = "اتجاه الأسهم";
+"gpx_split_interval" = "فاصل التقسيم";
+"gpx_join_gaps" = "ربط الأجزاء";
+"analyze_on_map" = "تحليل";
+"upload_to_openstreetmap" = "رفع إلى خريطة الشارع المفتوح";
+"edit_track" = "تحرير المسار";
+"duplicate_track" = "مسار مكرر";
+"nautical" = "الملاحة البحرية";
+"track_show_start_finish_icons" = "إظهار رموز البدء والانتهاء";
+"read_full_description" = "قراءة الوصف الكامل";
+"gpx_split_interval_descr" = "حدد الفاصل الزمني الذي سيتم عرض العلامات مع المسافة أو الوقت على المسار.";
+"shared_string_overview" = "نظرة عامة";
+"gpx_join_gaps_descr" = "سيتم ربط الفراغات بين الشرائح.";
+"reset_to_original" = "إعادة الضبط إلى الأصلي";
+"route_line_color_elevation_description" = "سيتم تلوين خط المسار اعتمادا على ملف تعريف الارتفاع للمسار.";
+"gpx_split_interval_none_descr" = "حدد خيار التقسيم المطلوب: حسب الوقت أو بالمسافة.";
+"slope_grey_color_descr" = "يستخدم اللون الرمادي عندما يكون المنحدر غير محدد.";
+"activity" = "نشاط";
+"ios_release_4_1" = "• شاشة جديدة للبحث عن طريق الإحداثيات في أشكال مختلفة\n• تحسين تنسيق البحث في شكل OLC\n• قائمة جديدة سهلة الاستخدام لاختيار اللغات لعرض مقالات ويكيبيديا على الخريطة\n• إضافة القدرة على تحميل بسهولة خرائط لجميع مناطق البلاد مع بضع نقرات\n• خطوط كفاف المضافة في القدمين (تحتاج إلى إعادة تحميل الملفات)\n• إضافة القدرة على تحميل الخرائط عن طريق تحديد المنطقة أو البلد المطلوب على الخريطة، فضلا عن إضافة مربع حوار مع اقتراح لتحميل الخريطة إذا كان ينظر إلى المنطقة دون خريطة\n• ظهور جديد للأزرار على الخريطة، وأضاف القدرة على تغيير التكبير الخريطة عن طريق النقر المزدوج والضرب\n";

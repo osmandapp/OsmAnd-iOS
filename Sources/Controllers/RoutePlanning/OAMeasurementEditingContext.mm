@@ -240,7 +240,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 			[segment addObject:point];
 			if (isGap)
 			{
-				[res addObject:segment];
+                [res addObject:segment];
                 segment = [NSMutableArray array];
 			}
 		}

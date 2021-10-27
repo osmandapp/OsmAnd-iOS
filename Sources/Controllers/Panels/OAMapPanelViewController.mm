@@ -402,14 +402,6 @@ typedef enum
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
 {
     self.sidePanelController.recognizesPanGesture = NO;
-    if (_scrollableHudViewController)
-    {
-        [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
-            [_scrollableHudViewController removeFromParentViewController];
-            [self setupScrollableHud:controller];
-        }];
-        return;
-    }
     [self setupScrollableHud:controller];
 }
 
@@ -1234,7 +1226,8 @@ typedef enum
     return _activeTargetType == OATargetImpassableRoadSelection
     || _activeTargetType == OATargetRouteDetailsGraph
     || _activeTargetType == OATargetRouteDetails
-    || _activeTargetType == OATargetRoutePlanning;
+    || _activeTargetType == OATargetRoutePlanning
+    || _activeTargetType == OATargetGPX;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
@@ -2532,9 +2525,7 @@ typedef enum
                           state:nil];
 }
 
-- (void)openTargetViewWithGPX:(OAGPX *)item
-                 trackHudMode:(EOATrackHudMode)trackHudMode
-                        state:(OATargetMenuViewControllerState *)state;
+- (void)doShowGpxItem:(OAGPX *)item state:(OATargetMenuViewControllerState *)state trackHudMode:(EOATrackHudMode)trackHudMode
 {
     BOOL showCurrentTrack = NO;
     if (item == nil)
@@ -2543,14 +2534,14 @@ typedef enum
         item.gpxTitle = OALocalizedString(@"track_recording_name");
         showCurrentTrack = YES;
     }
-
+    
     [self hideMultiMenuIfNeeded];
-
+    
     if (_dashboard)
         [self closeDashboard];
-
+    
     [_mapViewController hideContextPinMarker];
-
+    
     OAMapRendererView *renderView = (OAMapRendererView *) _mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
@@ -2586,25 +2577,39 @@ typedef enum
     
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
-
+    
     OABaseTrackMenuHudViewController *trackMenuHudViewController;
-
+    
     switch (trackHudMode)
     {
         case EOATrackAppearanceHudMode:
             trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
                                                                                                state:state];
             break;
-
+            
         case EOATrackMenuHudMode:
         default:
             trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj state:state];
             break;
     }
-
+    
     [self showScrollableHudViewController:trackMenuHudViewController];
     _activeTargetActive = YES;
     [self enterContextMenuMode];
+}
+
+- (void)openTargetViewWithGPX:(OAGPX *)item
+                 trackHudMode:(EOATrackHudMode)trackHudMode
+                        state:(OATargetMenuViewControllerState *)state;
+{
+    if (_scrollableHudViewController)
+    {
+        [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
+            [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
+        }];
+        return;
+    }
+    [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
 }
 
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed

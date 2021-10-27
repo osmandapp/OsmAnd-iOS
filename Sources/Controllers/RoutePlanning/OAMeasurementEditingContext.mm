@@ -241,7 +241,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 			if (isGap)
 			{
 				[res addObject:segment];
-				[segment removeAllObjects];
+                segment = [NSMutableArray array];
 			}
 		}
 		prevProfileType = profileType;

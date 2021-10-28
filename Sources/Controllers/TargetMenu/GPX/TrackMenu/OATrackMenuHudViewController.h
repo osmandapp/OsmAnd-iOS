@@ -10,6 +10,8 @@
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAMapPanelViewController.h"
 
+@class OAGpxTrkSeg;
+
 typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 {
     EOATrackMenuHudOverviewTab = 0,
@@ -23,6 +25,12 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 @required
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType;
+- (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
+            withMode:(EOARouteStatisticsMode)mode;
+
+- (void)editSegment;
+- (void)deleteAndSaveSegment:(OAGpxTrkSeg *)segment;
+
 - (void)refreshWaypoints;
 - (void)refreshLocationServices;
 - (NSInteger)getWaypointsCount:(NSString *)groupName;

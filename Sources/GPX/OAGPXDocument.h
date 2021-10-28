@@ -54,6 +54,7 @@
 - (BOOL) isCloudmadeRouteFile;
 
 - (BOOL) isEmpty;
+- (void) addGeneralTrack;
 - (OALocationMark *) findPointToShow;
 - (BOOL) hasRtePt;
 - (BOOL) hasWptPt;

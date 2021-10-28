@@ -28,6 +28,7 @@
 #import "OASelectionCollapsableCell.h"
 #import "OALineChartCell.h"
 #import "OASegmentTableViewCell.h"
+#import "OARadiusCellEx.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
@@ -36,6 +37,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "OAMapActions.h"
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
@@ -49,19 +51,10 @@
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 
-#include <OsmAndCore/Utilities.h>
-
 #define kActionsSection 4
 
 #define kInfoCreatedOnCell 0
 #define kActionMoveCell 1
-
-typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
-{
-    EOAGpxTabItemGeneral = 0,
-    EOAGpxTabItemAltitude,
-    EOAGpxTabItemSpeed,
-};
 
 @implementation OATrackMenuViewControllerState
 
@@ -82,6 +75,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 @implementation OATrackMenuHudViewController
 {
     OsmAndAppInstance _app;
+    OAGPXMutableDocument *_mutableDoc;
     OARouteLineChartHelper *_routeLineChartHelper;
 
     OAAutoObserverProxy *_locationServicesUpdateObserver;
@@ -99,8 +93,8 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
     NSMutableDictionary<NSString *, NSString *> *_waypointGroupsOldNewNames;
+    NSArray<OAGpxTrkSeg *> *_segments;
 
-    NSMutableDictionary<NSString *, NSMutableDictionary *> *_segmentsData;
     BOOL _hasTranslated;
     CGPoint _lastTranslation;
     double _highlightDrawX;
@@ -153,6 +147,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _mutableDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
     _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc
                                                            centerMapOnBBox:^(OABBox rect) {
         [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
@@ -171,6 +166,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     _lastTranslation = CGPointZero;
 
     [self updateWaypointGroups];
+    [self updateSegments];
 }
 
 - (void)viewDidLoad
@@ -228,10 +224,10 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 
 - (void)setupTableView
 {
-    if (_selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudPointsTab)
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    else
+    if (_selectedTab == EOATrackMenuHudActionsTab)
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    else
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 }
 
 - (void)setupTabBar
@@ -314,11 +310,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
         }
         case EOATrackMenuHudSegmentsTab:
         {
-            NSInteger segmentsCount = 0;
-            for (OAGpxTrk *gpxTrk in self.doc.tracks)
-                segmentsCount += gpxTrk.segments.count;
-
-            _description = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"gpx_selection_segment_title"), segmentsCount];
+            _description = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"gpx_selection_segment_title"), _segments.count];
             break;
         }
         case EOATrackMenuHudPointsTab:
@@ -659,7 +651,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
 
     NSInteger index = 1;
-    for (OAGpxTrkSeg *segment in [self.doc getNonEmptyTrkSegments:NO])
+    for (OAGpxTrkSeg *segment in _segments)
     {
         NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
         OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
@@ -669,6 +661,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
         OALineChartCell *cell = (OALineChartCell *) nib[0];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.lineChartView.delegate = self;
+        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
 
         [GpxUIHelper setupGPXChartWithChartView:cell.lineChartView
                                    yLabelsCount:4
@@ -685,13 +678,11 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
         for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
         {
             if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
-            {
                 [recognizer addTarget:self action:@selector(onBarChartScrolled:lineChartView:)];
-            }
+
             [recognizer addTarget:self action:@selector(onChartGesture:lineChartView:)];
         }
 
-//        if ([key intValue] > 0)
         [segmentCells addObject:[OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"segment_%li", index],
                 kCellType: [OAIconTitleValueCell getCellIdentifier],
@@ -736,22 +727,53 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
                 }
         }];
 
+        OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"buttons_%li", index],
+                kCellType: [OARadiusCellEx getCellIdentifier],
+                kTableValues: @{
+                        @"left_title_string_value" : OALocalizedString(@"analyze_on_map"),
+                        @"right_title_string_value" : OALocalizedString(@"shared_string_options"),
+                        @"right_icon_string_value" : @"ic_custom_overflow_menu",
+                        @"left_on_button_pressed":  ^() {
+                            [self openAnalysis:analysis withMode:mode];
+                        },
+                        @"right_on_button_pressed": ^() {
+                            OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
+                                    [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithSegment:segment
+                                                                                                  analysis:analysis];
+                            editWaypointsBottomSheet.trackMenuDelegate = self;
+                            [editWaypointsBottomSheet presentInViewController:self];
+                        }
+                }
+        }];
+
         [segmentCells addObject:tabsCellData];
         [segmentCells addObject:chartCellData];
+        [segmentCells addObject:buttonsCellData];
 
         OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: segmentCells }];
         [segmentSectionData setData:@{
                 kTableUpdateData: ^() {
-                    for (OAGPXTableCellData *cellData in segmentSectionData.cells)
+                    if ([segmentSectionData.values[@"delete_section_bool_value"] boolValue])
                     {
-                        if (cellData.updateData)
-                            cellData.updateData();
+                        NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData mutableCopy];
+                        [newTableData removeObject:segmentSectionData];
+                        self.tableData = newTableData;
+                    }
+                    else
+                    {
+                        for (OAGPXTableCellData *cellData in segmentSectionData.cells)
+                        {
+                            if (cellData.updateData)
+                                cellData.updateData();
+                        }
                     }
                 }
         }];
         [tableSections addObject:segmentSectionData];
 
-        cell.lineChartView.tag = [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
+        cell.lineChartView.tag =
+                [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
 
         index++;
     }
@@ -1470,6 +1492,12 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     }
 }
 
+- (void)updateSegments
+{
+    if (_mutableDoc)
+        _segments = [_mutableDoc getNonEmptyTrkSegments:NO];
+}
+
 - (void)updateWaypointGroups
 {
     NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
@@ -1523,7 +1551,9 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
         return 48.;
 
     return UITableViewAutomaticDimension;
@@ -1538,11 +1568,68 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
 {
+    [self openAnalysis:self.analysis
+              withMode:modeType];
+}
+
+- (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
+            withMode:(EOARouteStatisticsMode)mode
+{
     [self hide:YES duration:.2 onComplete:^{
         [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
-                                                                analysis:self.analysis
-                                                        menuControlState:[self getCurrentStateForAnalyze:modeType]];
+                                                                analysis:analysis
+                                                        menuControlState:[self getCurrentStateForAnalyze:mode]];
     }];
+}
+
+- (void)editSegment
+{
+    [self hide:YES duration:.2 onComplete:^{
+        [self.mapPanelViewController showPlanRouteViewController:[
+                [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
+                                                          targetMenuState:[self getCurrentState]]];
+    }];
+}
+
+- (void)deleteAndSaveSegment:(OAGpxTrkSeg *)segment
+{
+    if (segment && _mutableDoc)
+    {
+        if (!_segments)
+            [self updateSegments];
+
+        if (_segments)
+        {
+            NSInteger segmentIndex = [_segments indexOfObject:segment];
+            if ([_mutableDoc removeTrackSegment:segment])
+            {
+                [_mutableDoc saveTo:_mutableDoc.path];
+                [self updateSegments];
+
+                if (self.isCurrentTrack)
+                    [[_app trackRecordingObservable] notifyEvent];
+                else
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+                if (segmentIndex != NSNotFound)
+                {
+                    OAGPXTableSectionData *sectionData = self.tableData[segmentIndex];
+                    [sectionData setData:@{kTableValues: @{@"delete_section_bool_value": @YES}}];
+                    if (sectionData.updateData)
+                        sectionData.updateData();
+
+                    [self.tableView beginUpdates];
+                    [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:segmentIndex]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+                    [self.tableView endUpdates];
+                }
+
+                [self setupDescription];
+                if (_headerView)
+                    [_headerView setDescription:_description];
+            }
+        }
+    }
 }
 
 - (void)refreshWaypoints
@@ -1702,7 +1789,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     [self stopLocationServices];
 
     OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
-            [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithGroupName:groupName];
+            [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithWaypointsGroupName:groupName];
     editWaypointsBottomSheet.trackMenuDelegate = self;
     [editWaypointsBottomSheet presentInViewController:self];
 }
@@ -1745,6 +1832,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
             }
             case EOATrackMenuHudSegmentsTab:
             {
+                [self updateSegments];
                 break;
             }
             case EOATrackMenuHudPointsTab:
@@ -2235,7 +2323,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
             cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
 
             [cell.optionsButton.imageView setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]];
-            cell.optionsButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.optionsButton.tintColor = UIColorFromRGB(color_primary_purple);
 
             cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
@@ -2286,6 +2374,44 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     else if ([cellData.type isEqualToString:[OALineChartCell getCellIdentifier]])
     {
         return cellData.values[@"cell_value"];
+    }
+    else if ([cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
+    {
+        OARadiusCellEx *cell = [tableView dequeueReusableCellWithIdentifier:[OARadiusCellEx getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCellEx getCellIdentifier] owner:self options:nil];
+            cell = (OARadiusCellEx *) nib[0];
+            cell.buttonRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+            cell.buttonRight.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., 30.);
+            cell.buttonRight.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonRight.frame.size.width + 19., 0., -21.);
+            cell.buttonRight.imageView.layer.cornerRadius = 12;
+            cell.buttonRight.imageView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1];
+            cell.buttonRight.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.buttonRight setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+            [cell.buttonLeft setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+        }
+        if (cell)
+        {
+            [cell.buttonLeft setTitle:cellData.values[@"left_title_string_value"] forState:UIControlStateNormal];
+            [cell.buttonRight setTitle:cellData.values[@"right_title_string_value"] forState:UIControlStateNormal];
+
+            UIImage *rightIcon = [UIImage templateImageNamed:cellData.values[@"right_icon_string_value"]];
+            [cell.buttonRight setImage:[OAUtilities resizeImage:rightIcon newSize:CGSizeMake(24., 24.)] forState:UIControlStateNormal];
+
+            cell.buttonLeft.tag = tag;
+            [cell.buttonLeft removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.buttonLeft addTarget:self
+                                action:@selector(cellButtonPressed:)
+                      forControlEvents:UIControlEventTouchUpInside];
+
+            cell.buttonRight.tag = tag;
+            [cell.buttonRight removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.buttonRight addTarget:self
+                                 action:@selector(cellButtonPressed:)
+                       forControlEvents:UIControlEventTouchUpInside];
+        }
+        outCell = cell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -2378,11 +2504,7 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
     }
     else if ([cellData.key isEqualToString:@"edit"])
     {
-        [self hide:YES duration:.2 onComplete:^{
-            [self.mapPanelViewController showPlanRouteViewController:[
-                    [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
-                                                              targetMenuState:[self getCurrentState]]];
-        }];
+        [self editSegment];
     }
     else if ([cellData.key isEqualToString:@"edit_create_duplicate"])
     {
@@ -2446,12 +2568,29 @@ typedef NS_ENUM(NSUInteger, EOAGpxTabItem)
 
 - (void)cellButtonPressed:(id)sender
 {
-    UIButton *switchView = (UIButton *) sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+    UIButton *button = (UIButton *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
     if (cellData.onButtonPressed)
         cellData.onButtonPressed();
+    else
+    {
+        for (UIGestureRecognizer *recognizer in self.tableView.gestureRecognizers)
+        {
+            if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
+            {
+                BOOL isLeftButton = [recognizer locationInView:self.view].x < self.tableView.frame.size.width / 2;
+
+                if (isLeftButton && cellData.values[@"left_on_button_pressed"])
+                    ((OAGPXTableDataUpdateData) cellData.values[@"left_on_button_pressed"])();
+                else if (!isLeftButton && cellData.values[@"right_on_button_pressed"])
+                    ((OAGPXTableDataUpdateData) cellData.values[@"right_on_button_pressed"])();
+
+                break;
+            }
+        }
+    }
 }
 
 - (void)segmentChanged:(id)sender

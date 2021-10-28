@@ -15,6 +15,12 @@
 #import "OAColors.h"
 #import "OADefaultFavorite.h"
 
+typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
+{
+    EOAEditTrackScreenWaypointsMode = 0,
+    EOAEditTrackScreenSegmentsMode
+};
+
 @interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAEditWaypointsGroupOptionsDelegate>
 
 @end
@@ -22,19 +28,38 @@
 @implementation OAEditWaypointsGroupBottomSheetViewController
 {
     NSArray<OAGPXTableSectionData *> *_tableData;
+    EOAEditTrackScreenMode _mode;
 
     BOOL _isShown;
     NSString *_groupName;
     UIColor *_groupColor;
+
+    OAGPXTrackAnalysis *_analysis;
+    OAGpxTrkSeg *_segment;
 }
 
-- (instancetype)initWithGroupName:(NSString *)groupName
+- (instancetype)initWithWaypointsGroupName:(NSString *)groupName
 
 {
     self = [super init];
     if (self)
     {
+        _mode = EOAEditTrackScreenWaypointsMode;
         _groupName = groupName;
+        [self generateData];
+    }
+    return self;
+}
+
+- (instancetype)initWithSegment:(OAGpxTrkSeg *)segment analysis:(OAGPXTrackAnalysis *)analysis
+
+{
+    self = [super init];
+    if (self)
+    {
+        _mode = EOAEditTrackScreenSegmentsMode;
+        _analysis = analysis;
+        _segment = segment;
         [self generateData];
     }
     return self;
@@ -51,21 +76,30 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight = kEstimatedRowHeight;
 
-    _isShown = self.trackMenuDelegate
-            ? [self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:_groupName] ? @"" : _groupName]
-            : NO;
+    if (_mode == EOAEditTrackScreenWaypointsMode)
+    {
+        _isShown = self.trackMenuDelegate
+                ? [self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:_groupName] ? @"" : _groupName]
+                : NO;
 
-    _groupColor = self.trackMenuDelegate
-            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
-            : [OADefaultFavorite getDefaultColor];
-
-    self.titleView.text = _groupName;
+        _groupColor = self.trackMenuDelegate
+                ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
+                : [OADefaultFavorite getDefaultColor];
+        [self.headerDividerView removeFromSuperview];
+        self.titleView.text = _groupName;
+    }
+    else
+    {
+        [self.titleView.centerXAnchor constraintEqualToAnchor:self.headerView.centerXAnchor].active = true;
+        self.titleView.attributedText =
+                [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_options")
+                                                attributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:17.] }];
+    }
 
     [self setLeftIcon];
     [self hideSliderView];
     [self.rightButton removeFromSuperview];
     [self.closeButton removeFromSuperview];
-    [self.headerDividerView removeFromSuperview];
     [self.buttonsSectionDividerView removeFromSuperview];
 }
 
@@ -79,50 +113,104 @@
     NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
     NSMutableArray<OAGPXTableCellData *> *controlCells = [NSMutableArray array];
 
-    OAGPXTableCellData *showOnMap = [OAGPXTableCellData withData:@{
-            kCellKey: @"control_show_on_map",
-            kCellType: [OATitleSwitchRoundCell getCellIdentifier],
-            kTableValues: @{ @"bool_value": @(_isShown) },
-            kCellTitle: OALocalizedString(@"map_settings_show"),
-            kCellOnSwitch: ^(BOOL toggle) { [self onShowHidePressed:nil]; },
-            kCellIsOn: ^() { return _isShown; }
-    }];
-
-    [showOnMap setData:@{
-            kTableUpdateData: ^() {
-                [showOnMap setData:@{ kTableValues: @{@"bool_value": @(_isShown) } }];
-            }
-    }];
-    [controlCells addObject:showOnMap];
-
-    OAGPXTableSectionData *controlsSection = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells }];
-    [controlsSection setData:@{
-            kTableUpdateData: ^() {
-                for (OAGPXTableCellData *cellData in controlsSection.cells)
-                {
-                    if (cellData.updateData)
-                        cellData.updateData();
+    if (_mode == EOAEditTrackScreenWaypointsMode)
+    {
+        OAGPXTableCellData *showOnMap = [OAGPXTableCellData withData:@{
+                kCellKey: @"control_show_on_map",
+                kCellType: [OATitleSwitchRoundCell getCellIdentifier],
+                kTableValues: @{@"bool_value": @(_isShown)},
+                kCellTitle: OALocalizedString(@"map_settings_show"),
+                kCellOnSwitch: ^(BOOL toggle) {
+                    [self onShowHidePressed:nil];
+                },
+                kCellIsOn: ^() {
+                    return _isShown;
                 }
-            }
-    }];
-    [tableSections addObject:controlsSection];
+        }];
 
-    [tableSections addObject:[OAGPXTableSectionData withData:@{
-            kSectionCells: @[
-                    [OAGPXTableCellData withData:@{
-                            kCellKey: @"rename",
-                            kCellType: [OATitleIconRoundCell getCellIdentifier],
-                            kCellRightIconName: @"ic_custom_edit",
-                            kCellTitle: OALocalizedString(@"fav_rename")
-                    }],
-                    [OAGPXTableCellData withData:@{
-                            kCellKey: @"change_color",
-                            kCellType: [OATitleIconRoundCell getCellIdentifier],
-                            kCellRightIconName: @"ic_custom_appearance",
-                            kCellTitle: OALocalizedString(@"change_color")
-                    }]
-            ]
-    }]];
+        [showOnMap setData:@{
+                kTableUpdateData: ^() {
+                    [showOnMap setData:@{ kTableValues: @{ @"bool_value": @(_isShown) } }];
+                }
+        }];
+        [controlCells addObject:showOnMap];
+
+        OAGPXTableSectionData *controlsSection = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells}];
+        [controlsSection setData:@{
+                kTableUpdateData: ^() {
+                    for (OAGPXTableCellData *cellData in controlsSection.cells) {
+                        if (cellData.updateData)
+                            cellData.updateData();
+                    }
+                }
+        }];
+        [tableSections addObject:controlsSection];
+
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
+                kSectionCells: @[
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"rename",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellRightIconName: @"ic_custom_edit",
+                                kCellTitle: OALocalizedString(@"fav_rename"),
+                                kCellButtonPressed: ^() {
+                                    OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+                                            [[OAEditWaypointsGroupOptionsViewController alloc]
+                                                    initWithScreenType:EOAEditWaypointsGroupRenameScreen
+                                                             groupName:_groupName
+                                                            groupColor:nil];
+                                    editWaypointsGroupOptions.delegate = self;
+                                    [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+                                }
+                        }],
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"change_color",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellRightIconName: @"ic_custom_appearance",
+                                kCellTitle: OALocalizedString(@"change_color"),
+                                kCellButtonPressed: ^() {
+                                    OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+                                            [[OAEditWaypointsGroupOptionsViewController alloc]
+                                                    initWithScreenType:EOAEditWaypointsGroupColorScreen
+                                                             groupName:nil
+                                                            groupColor:_groupColor];
+                                    editWaypointsGroupOptions.delegate = self;
+                                    [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+                                }
+                        }]
+                ]
+        }]];
+    }
+    else
+    {
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
+                kSectionCells: @[
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"analyze_on_map",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellTitle: OALocalizedString(@"analyze_on_map"),
+                                kCellRightIconName: @"none",
+                                kCellButtonPressed: ^() {
+                                    if (self.trackMenuDelegate)
+                                        [self.trackMenuDelegate openAnalysis:_analysis
+                                                                    withMode:EOARouteStatisticsModeAltitudeSlope];
+                                }
+                        }],
+                        [OAGPXTableCellData withData:@{
+                                kCellKey: @"edit",
+                                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                                kCellRightIconName: @"ic_custom_trip_edit",
+                                kCellTitle: OALocalizedString(@"shared_string_edit"),
+                                kCellButtonPressed: ^() {
+                                    [self hide:YES completion:^{
+                                        if (self.trackMenuDelegate)
+                                            [self.trackMenuDelegate editSegment];
+                                    }];
+                                }
+                        }]
+                ]
+        }]];
+    }
 
     [tableSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[
@@ -131,7 +219,23 @@
                             kCellType: [OATitleIconRoundCell getCellIdentifier],
                             kCellRightIconName: @"ic_custom_remove_outlined",
                             kCellTitle: OALocalizedString(@"shared_string_delete"),
-                            kCellTintColor: @color_primary_red
+                            kCellTintColor: @color_primary_red,
+                            kCellButtonPressed: ^() {
+                                if (_mode == EOAEditTrackScreenWaypointsMode)
+                                {
+                                    [self hide:YES completion:^{
+                                        if (self.trackMenuDelegate)
+                                            [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName];
+                                    }];
+                                }
+                                else
+                                {
+                                    [self hide:YES completion:^{
+                                        if (self.trackMenuDelegate)
+                                            [self.trackMenuDelegate deleteAndSaveSegment:_segment];
+                                    }];
+                                }
+                            }
                     }]
             ]
     }]];
@@ -141,10 +245,17 @@
 
 - (void)setLeftIcon
 {
-    UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? @"ic_custom_folder" : @"ic_custom_folder_hidden"];
-    UIColor *tintColor = _isShown ? _groupColor : UIColorFromRGB(color_footer_icon_gray);
-    self.leftIconView.image = leftIcon;
-    self.leftIconView.tintColor = tintColor;
+    if (_mode == EOAEditTrackScreenWaypointsMode)
+    {
+        UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? @"ic_custom_folder" : @"ic_custom_folder_hidden"];
+        UIColor *tintColor = _isShown ? _groupColor : UIColorFromRGB(color_footer_icon_gray);
+        self.leftIconView.image = leftIcon;
+        self.leftIconView.tintColor = tintColor;
+    }
+    else
+    {
+        [self.leftIconView removeFromSuperview];
+    }
 }
 
 - (CGFloat)initialHeight
@@ -156,7 +267,7 @@
         cellsCount += _tableData[i].cells.count;
     }
 
-    return self.headerView.frame.size.height + (sectionsCount - 1) * 20. + 16.
+    return self.headerView.frame.size.height + (sectionsCount - 1) * 20. + 23.
             + cellsCount * kEstimatedRowHeight + self.buttonsView.frame.size.height;
 }
 
@@ -241,12 +352,23 @@
         }
         if (cell)
         {
+            BOOL hasIcon = ![cellData.rightIconName isEqualToString:@"none"];
+
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
-            cell.iconColorNormal = cellData.tintColor > 0
-                    ? UIColorFromRGB(cellData.tintColor) : UIColorFromRGB(color_primary_purple);
-            cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
+            if (hasIcon)
+            {
+                cell.iconColorNormal = cellData.tintColor > 0
+                        ? UIColorFromRGB(cellData.tintColor) : UIColorFromRGB(color_primary_purple);
+                cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
+            }
+            else
+            {
+                cell.iconView.layer.cornerRadius = 12.;
+                cell.iconColorNormal = UIColorFromRGB(color_tint_gray);
+                cell.iconView.image = [OAUtilities resizeImage:[OAUtilities imageWithColor:UIColorFromRGB(color_tint_gray)] newSize:CGSizeMake(24., 24.)];
+            }
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
@@ -295,40 +417,27 @@
 
 #pragma mark - UItableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return section != 0 ? 20. : 0.001;
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+        || [cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
+        return 48.;
+
+    return UITableViewAutomaticDimension;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return section == 0 && _mode == EOAEditTrackScreenWaypointsMode ? 0.001 : 20.;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-    if ([cellData.key isEqualToString:@"rename"])
-    {
-        OAEditWaypointsGroupOptionsViewController * editWaypointsGroupOptions =
-                [[OAEditWaypointsGroupOptionsViewController alloc] initWithScreenType:EOAEditWaypointsGroupRenameScreen
-                                                                            groupName:_groupName
-                                                                           groupColor:nil];
-        editWaypointsGroupOptions.delegate = self;
-        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
-    }
-    else if ([cellData.key isEqualToString:@"change_color"])
-    {
-        OAEditWaypointsGroupOptionsViewController * editWaypointsGroupOptions =
-                [[OAEditWaypointsGroupOptionsViewController alloc] initWithScreenType:EOAEditWaypointsGroupColorScreen
-                                                                            groupName:nil
-                                                                           groupColor:_groupColor];
-        editWaypointsGroupOptions.delegate = self;
-        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
-    }
-    else if ([cellData.key isEqualToString:@"delete"])
-    {
-        [self hide:YES completion:^{
-            if (self.trackMenuDelegate)
-                [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName];
-        }];
-    }
+    if (cellData.onButtonPressed)
+        cellData.onButtonPressed();
 }
 
 #pragma mark - UISwitch pressed

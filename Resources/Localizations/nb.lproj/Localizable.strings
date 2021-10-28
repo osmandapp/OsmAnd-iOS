@@ -2015,3 +2015,15 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "Fargelegg etter nettverkstilhørighet.";
 "rendering_value_walkingRoutesOSMC_description" = "Fargelegg ruter i henhold til deres individuelle lokale farge (hvis den finnes på OpenStreetMap) og turgåingsskjold-symbol.";
 "shared_strings_all_regions" = "Alle regioner";
+"coords_format_descr_quick_search" = "Du kan endre koordinatformat for profil i generelle innstillinger";
+"shared_string_width" = "Bredde";
+"shared_string_interval" = "Intervall";
+"available_languages" = "Tilgjengelige språk";
+"preferred_languages" = "Foretrukne språk";
+"read_full_description" = "Les full beskrivelse";
+"gpx_dir_arrows" = "Retningspiler";
+"visible_categories" = "Synlige kategorier";
+"hidden_categories" = "Skjulte kategorier";
+"dialogs_and_notifications_descr" = "Kontroller oppsprett, dialoger, og merknader";
+"delete_group_confirm_short" = "Slett gruppe?";
+"delete_custom_categories" = "Slett egendefinerte kategorier";

@@ -28,6 +28,7 @@
 #import "OASelectionCollapsableCell.h"
 #import "OALineChartCell.h"
 #import "OASegmentTableViewCell.h"
+#import "OAQuadItemsWithTitleDescIconCell.h"
 #import "OARadiusCellEx.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -147,7 +148,6 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _mutableDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
     _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc
                                                            centerMapOnBBox:^(OABBox rect) {
         [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
@@ -164,9 +164,6 @@
             DeviceScreenWidth - ([self isLandscape]? DeviceScreenWidth * 0.45 : 0.0),
             DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
     _lastTranslation = CGPointZero;
-
-    [self updateWaypointGroups];
-    [self updateSegments];
 }
 
 - (void)viewDidLoad
@@ -653,7 +650,6 @@
     NSInteger index = 1;
     for (OAGpxTrkSeg *segment in _segments)
     {
-        NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
         OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
         __block EOARouteStatisticsMode mode = EOARouteStatisticsModeAltitudeSpeed;
 
@@ -683,12 +679,12 @@
             [recognizer addTarget:self action:@selector(onChartGesture:lineChartView:)];
         }
 
-        [segmentCells addObject:[OAGPXTableCellData withData:@{
+        OAGPXTableCellData *segmentCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"segment_%li", index],
                 kCellType: [OAIconTitleValueCell getCellIdentifier],
                 kCellTitle: [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index],
                 kCellToggle: @NO
-        }]];
+        }];
 
         OAGPXTableCellData *chartCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"chart_%li", index],
@@ -707,14 +703,22 @@
                 }
         }];
 
+        OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"statistics_%li", index],
+                kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
+                kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode]
+        }];
+        [statisticsCellData setData:@{
+                kTableUpdateData: ^() {
+                    [statisticsCellData setData:@{
+                            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode]
+                    }];
+                }
+        }];
+
         OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"tabs_%li", index],
-                kCellType: [OASegmentTableViewCell getCellIdentifier],
-                kTableValues: @{
-                        @"tab_0_string_value" : OALocalizedString(@"shared_string_overview"),
-                        @"tab_1_string_value" : OALocalizedString(@"map_widget_altitude"),
-                        @"tab_2_string_value" : OALocalizedString(@"gpx_speed")
-                }
+                kCellType: [OASegmentTableViewCell getCellIdentifier]
         }];
         [tabsCellData setData:@{
                 kCellUpdateProperty: ^(id parameter) {
@@ -724,6 +728,9 @@
 
                     if (chartCellData.updateData)
                         chartCellData.updateData();
+
+                    if (statisticsCellData.updateData)
+                        statisticsCellData.updateData();
                 }
         }];
 
@@ -747,9 +754,17 @@
                 }
         }];
 
-        [segmentCells addObject:tabsCellData];
-        [segmentCells addObject:chartCellData];
-        [segmentCells addObject:buttonsCellData];
+        NSArray<OAGPXTableCellData *> *segmentCells =
+                @[segmentCellData, tabsCellData, chartCellData, statisticsCellData, buttonsCellData];
+
+        [tabsCellData setData:@{
+                kTableValues: @{
+                        @"tab_0_string_value" : OALocalizedString(@"shared_string_overview"),
+                        @"tab_1_string_value" : OALocalizedString(@"map_widget_altitude"),
+                        @"tab_2_string_value" : OALocalizedString(@"gpx_speed"),
+                        @"statistics_row_int_value": @([segmentCells indexOfObject:statisticsCellData])
+                }
+        }];
 
         OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: segmentCells }];
         [segmentSectionData setData:@{
@@ -779,6 +794,107 @@
     }
 
     self.tableData = tableSections;
+}
+
+- (NSDictionary<NSString *, NSDictionary *> *)getStatisticsDataForAnalysis:(OAGPXTrackAnalysis *)analysis
+                                                                   segment:(OAGpxTrkSeg *)segment
+                                                                      mode:(EOARouteStatisticsMode)mode
+{
+    NSMutableDictionary *titles = [NSMutableDictionary dictionary];
+    NSMutableDictionary *icons = [NSMutableDictionary dictionary];
+    NSMutableDictionary *descriptions = [NSMutableDictionary dictionary];
+
+    OAGpxTrk *track;
+    for (OAGpxTrk *trk in _mutableDoc.tracks)
+    {
+        if ([trk.segments containsObject:segment])
+        {
+            track = trk;
+            break;
+        }
+    }
+
+    switch (mode)
+    {
+        case EOARouteStatisticsModeAltitudeSpeed:
+        {
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
+            titles[@"top_right_title_string_value"] = OALocalizedString(@"shared_string_time_span");
+            titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
+            titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
+
+            icons[@"top_left_icon_name_string_value"] = @"ic_small_track";
+            icons[@"top_right_icon_name_string_value"] = @"ic_small_time_interval";
+            icons[@"bottom_left_icon_name_string_value"] = @"ic_small_time_start";
+            icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
+
+            descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
+                    !self.gpx.joinSegments && track && track.generalTrack
+                            ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
+
+            descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
+                    !self.gpx.joinSegments && track && track.generalTrack
+                            ? analysis.timeSpanWithoutGaps : analysis.timeSpan shortFormat:YES];
+
+            descriptions[@"bottom_left_description_string_value"] = @"analysis.startTime";
+            descriptions[@"bottom_right_description_string_value"] = @"analysis.endTime";
+
+            break;
+        }
+        case EOARouteStatisticsModeAltitude:
+        {
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_avg_altitude");
+            titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_alt_range");
+            titles[@"bottom_left_title_string_value"] = OALocalizedString(@"gpx_ascent");
+            titles[@"bottom_right_title_string_value"] = OALocalizedString(@"gpx_descent");
+
+            icons[@"top_left_icon_name_string_value"] = @"ic_small_altitude_average";
+            icons[@"top_right_icon_name_string_value"] = @"ic_small_altitude_range";
+            icons[@"bottom_left_icon_name_string_value"] = @"";
+            icons[@"bottom_right_icon_name_string_value"] = @"ic_small_descent";
+
+            descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.avgElevation];
+            descriptions[@"top_right_description_string_value"] = [NSString stringWithFormat:@"%@ - %@",
+                            [OAOsmAndFormatter getFormattedAlt:analysis.minElevation],
+                            [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]];
+            descriptions[@"bottom_left_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp];
+            descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown];
+
+            break;
+        }
+        case EOARouteStatisticsModeSpeed:
+        {
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_average_speed");
+            titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_max_speed");
+            titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_time_moving");
+            titles[@"bottom_right_title_string_value"] = OALocalizedString(@"distance_moving");
+
+            icons[@"top_left_icon_name_string_value"] = @"ic_small_speed";
+            icons[@"top_right_icon_name_string_value"] = @"ic_small_max_speed";
+            icons[@"bottom_left_icon_name_string_value"] = @"ic_small_time_start";
+            icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
+
+            descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedSpeed:analysis.avgSpeed];
+            descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedSpeed:analysis.maxSpeed];
+
+            descriptions[@"bottom_left_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
+                    !self.gpx.joinSegments && track && track.generalTrack ? analysis.timeSpanWithoutGaps : analysis.timeSpan
+                                                                    shortFormat:YES];
+            descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
+                    !self.gpx.joinSegments && track && track.generalTrack
+                            ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
+
+            break;
+        }
+        default:
+            return @{ };
+    }
+
+    return @{
+            @"titles": titles,
+            @"icons": icons,
+            @"descriptions": descriptions
+    };
 }
 
 - (void)generateDataForPointsScreen
@@ -1437,6 +1553,41 @@
     }
 }
 
+- (void)updateGpxData
+{
+    [super updateGpxData];
+
+    _mutableDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:
+            [(_app ? _app : [OsmAndApp instance]).gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
+    _segments = _mutableDoc ? [_mutableDoc getNonEmptyTrkSegments:NO] : [NSArray array];
+
+    NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups = [NSMutableDictionary dictionary];
+    for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
+    {
+        OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
+        if (gpxWpt.type.length == 0)
+        {
+            [withoutGroup addObject:gpxWptItem];
+        }
+        else
+        {
+            NSMutableArray<OAGpxWptItem *> *group = waypointGroups[gpxWpt.type];
+            if (!group)
+                group = [@[gpxWptItem] mutableCopy];
+            else
+                [group addObject:gpxWptItem];
+
+            waypointGroups[gpxWpt.type] = group;
+        }
+    }
+
+    if (withoutGroup.count > 0)
+        waypointGroups[OALocalizedString(@"shared_string_gpx_points")] = withoutGroup;
+
+    _waypointGroups = waypointGroups;
+}
+
 - (void)updateDistanceAndDirection
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1490,41 +1641,6 @@
             [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
         });
     }
-}
-
-- (void)updateSegments
-{
-    if (_mutableDoc)
-        _segments = [_mutableDoc getNonEmptyTrkSegments:NO];
-}
-
-- (void)updateWaypointGroups
-{
-    NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
-    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups = [NSMutableDictionary dictionary];
-    for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
-    {
-        OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
-        if (gpxWpt.type.length == 0)
-        {
-            [withoutGroup addObject:gpxWptItem];
-        }
-        else
-        {
-            NSMutableArray<OAGpxWptItem *> *group = waypointGroups[gpxWpt.type];
-            if (!group)
-                group = [@[gpxWptItem] mutableCopy];
-            else
-                [group addObject:gpxWptItem];
-
-            waypointGroups[gpxWpt.type] = group;
-        }
-    }
-
-    if (withoutGroup.count > 0)
-        waypointGroups[OALocalizedString(@"shared_string_gpx_points")] = withoutGroup;
-
-    _waypointGroups = waypointGroups;
 }
 
 - (BOOL)hasWaypoints
@@ -1596,7 +1712,7 @@
     if (segment && _mutableDoc)
     {
         if (!_segments)
-            [self updateSegments];
+            [self updateGpxData];
 
         if (_segments)
         {
@@ -1604,7 +1720,7 @@
             if ([_mutableDoc removeTrackSegment:segment])
             {
                 [_mutableDoc saveTo:_mutableDoc.path];
-                [self updateSegments];
+                [self updateGpxData];
 
                 if (self.isCurrentTrack)
                     [[_app trackRecordingObservable] notifyEvent];
@@ -1635,7 +1751,6 @@
 - (void)refreshWaypoints
 {
     [self updateGpxData];
-    [self updateWaypointGroups];
     for (OAGPXTableSectionData *sectionData in self.tableData)
     {
         if (sectionData.updateData)
@@ -1826,15 +1941,6 @@
         switch (_selectedTab)
         {
             case EOATrackMenuHudOverviewTab:
-            {
-                [self startLocationServices];
-                break;
-            }
-            case EOATrackMenuHudSegmentsTab:
-            {
-                [self updateSegments];
-                break;
-            }
             case EOATrackMenuHudPointsTab:
             {
                 [self startLocationServices];
@@ -2413,6 +2519,45 @@
         }
         outCell = cell;
     }
+    else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
+    {
+        OAQuadItemsWithTitleDescIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAQuadItemsWithTitleDescIconCell getCellIdentifier] owner:self options:nil];
+            cell = (OAQuadItemsWithTitleDescIconCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsZero;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+            UIColor *tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.topLeftIcon.tintColor = tintColor;
+            cell.topRightIcon.tintColor = tintColor;
+            cell.bottomLeftIcon.tintColor = tintColor;
+            cell.bottomRightIcon.tintColor = tintColor;
+        }
+        if (cell)
+        {
+            NSDictionary *titles = cellData.values[@"titles"];
+            NSDictionary *icons = cellData.values[@"icons"];
+            NSDictionary *descriptions = cellData.values[@"descriptions"];
+
+            cell.topLeftTitle.text = titles[@"top_left_title_string_value"];
+            cell.topRightTitle.text = titles[@"top_right_title_string_value"];
+            cell.bottomLeftTitle.text = titles[@"bottom_left_title_string_value"];
+            cell.bottomRightTitle.text = titles[@"bottom_right_title_string_value"];
+
+            cell.topLeftIcon.image = [UIImage templateImageNamed:icons[@"top_left_icon_name_string_value"]];
+            cell.topRightIcon.image = [UIImage templateImageNamed:icons[@"top_right_icon_name_string_value"]];
+            cell.bottomLeftIcon.image = [UIImage templateImageNamed:icons[@"bottom_left_icon_name_string_value"]];
+            cell.bottomRightIcon.image = [UIImage templateImageNamed:icons[@"bottom_right_icon_name_string_value"]];
+
+            cell.topLeftDescription.text = descriptions[@"top_left_description_string_value"];
+            cell.topRightDescription.text = descriptions[@"top_right_description_string_value"];
+            cell.bottomLeftDescription.text = descriptions[@"bottom_left_description_string_value"];
+            cell.bottomRightDescription.text = descriptions[@"bottom_right_description_string_value"];
+        }
+        outCell = cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -2601,6 +2746,10 @@
 
     if (segment && cellData.updateProperty)
         cellData.updateProperty(@(segment.selectedSegmentIndex));
+
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[cellData.values[@"statistics_row_int_value"] intValue]
+                                                                inSection:indexPath.section]]
+                          withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)onBarChartScrolled:(UIPanGestureRecognizer *)recognizer

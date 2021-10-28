@@ -2191,3 +2191,6 @@
 "activity" = "Aktivität";
 "nautical" = "Nautisch";
 "units_min_short" = "m";
+"delete_group_confirm_short" = "Gruppe löschen?";
+"delete_group_confirm" = "Sind Sie sicher, dass Sie die Gruppe \"%@\" löschen wollen?";
+"delete_waypoints" = "Wegpunkte löschen";

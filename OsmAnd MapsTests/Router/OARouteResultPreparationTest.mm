@@ -36,7 +36,7 @@
 
 - (void)setUp {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf"];
+    NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf" inDirectory:@"test-resources"];
     initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
     
     _fe = std::make_shared<RoutePlannerFrontEnd>();
@@ -54,7 +54,7 @@
 
 - (void)testTurnLanes
 {
-    NSString *jsonFilePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"test_turn_lanes" ofType:@"json"];
+    NSString *jsonFilePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"test_turn_lanes" ofType:@"json" inDirectory:@"test-resources"];
     
     NSError *err = nil;
     NSString *sourceJsonText = [NSString stringWithContentsOfFile:jsonFilePath encoding:NSUTF8StringEncoding error:&err];
@@ -94,17 +94,23 @@
         {
             if (prevSegment >= 0)
             {
-                NSString *lanes = [self getLanesString:routeSegments[prevSegment]];
-                NSString *turn = [NSString stringWithUTF8String:routeSegments[prevSegment]->turnType->toXmlString().c_str()];
+                auto segment = routeSegments[prevSegment];
+                NSString *lanes = [self getLanesString:segment];
+                NSString *turn = [NSString stringWithUTF8String:segment->turnType->toXmlString().c_str()];
                 NSString *turnLanes = [NSString stringWithFormat:@"%@:%@", turn, lanes];
+                NSString *name = [NSString stringWithUTF8String:segment->description.c_str()];
+                bool skipToSpeak = segment->turnType->isSkipToSpeak();
+                long segmentId = segment->object->id >> 6;
                 
-                NSString *name = [NSString stringWithUTF8String:routeSegments[prevSegment]->description.c_str()];
-                
-                long segmentId = routeSegments[prevSegment]->object->id >> 6;
                 NSString *expectedResult = expectedResults[@(segmentId).stringValue];
+                
                 if (expectedResult != nil && ![expectedResult isKindOfClass:NSNull.class])
                 {
-                    if(![expectedResult isEqualToString:turnLanes] &&
+                    if ([@"skipToSpeak" isEqualToString:expectedResult])
+                    {
+                        XCTAssertTrue(skipToSpeak);
+                        NSLog(@"Test case %@ failed", testCase[@"testName"]);
+                    } else if (![expectedResult isEqualToString:turnLanes] &&
                        ![expectedResult isEqualToString:lanes] &&
                        ![expectedResult isEqualToString:turn])
                     {

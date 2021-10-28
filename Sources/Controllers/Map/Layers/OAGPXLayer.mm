@@ -237,10 +237,11 @@
             outlineBuilder.setBaseOrder(baseOrder--)
                 .setIsHidden(points.size() == 0)
                 .setLineId(lineId + 1000)
-                .setLineWidth(lineWidth + 5)
-                .setOutlineWidth(5)
+                .setLineWidth(lineWidth + 10)
+                .setOutlineWidth(10)
                 .setPoints(points)
-                .setFillColor(outlineColor);
+                .setFillColor(outlineColor)
+                .setApproximationEnabled(false);
             
             outlineBuilder.buildAndAddToCollection(_linesCollection);
         }

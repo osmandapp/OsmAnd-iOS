@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *topLeftView;
 @property (weak, nonatomic) IBOutlet UIView *topRightView;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 @property (weak, nonatomic) IBOutlet UIView *bottomLeftView;
 @property (weak, nonatomic) IBOutlet UIView *bottomRightView;
 
@@ -30,5 +31,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *bottomRightTitle;
 @property (weak, nonatomic) IBOutlet UILabel *bottomRightDescription;
 @property (weak, nonatomic) IBOutlet UIImageView *bottomRightIcon;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topButtonsWithBottomButtonsConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topButtonsNoBottomButtonsConstraint;
+
+- (void)showBottomButtons:(BOOL)show;
 
 @end

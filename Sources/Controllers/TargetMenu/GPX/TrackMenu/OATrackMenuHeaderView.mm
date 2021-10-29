@@ -133,7 +133,7 @@
     }
     else if (self.onlyTitleNoDescriptionConstraint.active)
     {
-        headerFrame.size.height = self.titleContainerView.frame.size.height;
+        headerFrame.size.height = self.titleContainerView.frame.size.height + self.onlyTitleNoDescriptionConstraint.constant;
     }
     else {
         if (self.descriptionContainerView.hidden)

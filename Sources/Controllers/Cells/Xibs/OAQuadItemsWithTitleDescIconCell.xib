@@ -13,7 +13,7 @@
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="a7J-O1-YQX" customClass="OAQuadItemsWithTitleDescIconCell">
             <rect key="frame" x="0.0" y="0.0" width="414" height="136"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="a7J-O1-YQX" id="Gfg-0U-V2k">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="a7J-O1-YQX" id="Gfg-0U-V2k">
                 <rect key="frame" x="0.0" y="0.0" width="414" height="136"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
@@ -107,7 +107,7 @@
                             <constraint firstAttribute="trailing" secondItem="NKc-Ip-ofc" secondAttribute="trailing" id="iUu-5S-EA8"/>
                         </constraints>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Azg-8w-bDb" userLabel="Separator">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Azg-8w-bDb" userLabel="Separator View">
                         <rect key="frame" x="20" y="64" width="374" height="0.5"/>
                         <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -199,6 +199,7 @@
                             <constraint firstItem="znz-Wq-yem" firstAttribute="top" secondItem="x6Y-UT-93h" secondAttribute="bottom" constant="4" id="3NW-Ja-xLN"/>
                             <constraint firstAttribute="trailing" secondItem="znz-Wq-yem" secondAttribute="trailing" id="5rX-Xs-h24"/>
                             <constraint firstItem="W3j-Po-VQQ" firstAttribute="leading" secondItem="x6Y-UT-93h" secondAttribute="trailing" id="6aT-DI-YPA"/>
+                            <constraint firstAttribute="trailing" secondItem="W3j-Po-VQQ" secondAttribute="trailing" id="TjH-dG-ol2"/>
                             <constraint firstItem="znz-Wq-yem" firstAttribute="leading" secondItem="egg-Ml-OGh" secondAttribute="leading" id="URE-my-9EG"/>
                             <constraint firstItem="W3j-Po-VQQ" firstAttribute="centerY" secondItem="x6Y-UT-93h" secondAttribute="centerY" id="Yux-oQ-P9x"/>
                             <constraint firstItem="x6Y-UT-93h" firstAttribute="leading" secondItem="egg-Ml-OGh" secondAttribute="leading" id="eDS-tC-OCC"/>
@@ -217,6 +218,7 @@
                     <constraint firstItem="egg-Ml-OGh" firstAttribute="centerY" secondItem="UI4-2F-Wcq" secondAttribute="centerY" id="TK4-mu-Rhw"/>
                     <constraint firstAttribute="trailingMargin" secondItem="KKG-sM-G1z" secondAttribute="trailing" id="TwZ-MZ-SRR"/>
                     <constraint firstItem="Azg-8w-bDb" firstAttribute="centerX" secondItem="Gfg-0U-V2k" secondAttribute="centerX" id="XeQ-hx-7ML"/>
+                    <constraint firstAttribute="bottom" secondItem="aBY-Rk-PI9" secondAttribute="bottom" priority="999" constant="16" id="Zmw-eg-c7J"/>
                     <constraint firstItem="egg-Ml-OGh" firstAttribute="trailing" secondItem="Gfg-0U-V2k" secondAttribute="trailingMargin" id="cgi-Od-HHz"/>
                     <constraint firstItem="UI4-2F-Wcq" firstAttribute="leading" secondItem="Gfg-0U-V2k" secondAttribute="leadingMargin" id="drq-qf-Vrg"/>
                     <constraint firstItem="Azg-8w-bDb" firstAttribute="trailing" secondItem="Gfg-0U-V2k" secondAttribute="trailingMargin" id="ePA-iM-a5c"/>
@@ -240,6 +242,9 @@
                 <outlet property="bottomRightIcon" destination="W3j-Po-VQQ" id="Fzl-Ve-fdh"/>
                 <outlet property="bottomRightTitle" destination="x6Y-UT-93h" id="wwH-MV-9a5"/>
                 <outlet property="bottomRightView" destination="egg-Ml-OGh" id="MHS-Ti-j9x"/>
+                <outlet property="separatorView" destination="Azg-8w-bDb" id="0ox-G9-HRa"/>
+                <outlet property="topButtonsNoBottomButtonsConstraint" destination="Zmw-eg-c7J" id="rAU-Ih-Bxa"/>
+                <outlet property="topButtonsWithBottomButtonsConstraint" destination="xDx-v2-8fE" id="8rd-Sm-EAI"/>
                 <outlet property="topLeftDescription" destination="Pcm-9s-d2c" id="lGC-zA-zfq"/>
                 <outlet property="topLeftIcon" destination="INu-1z-ZGs" id="HdY-Hr-2FE"/>
                 <outlet property="topLeftTitle" destination="SV7-JS-8nd" id="hzR-Xs-1Va"/>

@@ -105,6 +105,7 @@
 - (BOOL) isShowStartFinish;
 - (void) setShowStartFinish:(BOOL)showStartFinish;
 
+- (OAGpxTrkSeg *) getGeneralSegment;
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
 - (NSInteger) getNonEmptySegmentsCount;
 

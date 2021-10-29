@@ -81,17 +81,27 @@
         }
         case EOARouteStatisticsModeAltitudeSpeed:
         {
-            if (statsModeCell)
-                [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
-                                        OALocalizedString(@"map_widget_altitude"),
-                                        OALocalizedString(@"gpx_speed")]
-                                          forState:UIControlStateNormal];
-            [GpxUIHelper refreshLineChartWithChartView:chart
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeALTITUDE
-                                            secondType:GPXDataSetTypeSPEED];
-            renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
+            if (analysis.isSpeedSpecified)
+            {
+                if (statsModeCell)
+                    [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
+                                            OALocalizedString(@"map_widget_altitude"),
+                                            OALocalizedString(@"gpx_speed")]
+                                              forState:UIControlStateNormal];
+                [GpxUIHelper refreshLineChartWithChartView:chart
+                                                  analysis:analysis
+                                       useGesturesAndScale:YES
+                                                 firstType:GPXDataSetTypeALTITUDE
+                                                secondType:GPXDataSetTypeSPEED];
+                renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
+            }
+            else
+            {
+                [self changeChartMode:EOARouteStatisticsModeAltitude
+                                chart:chart
+                             analysis:analysis
+                             modeCell:statsModeCell];
+            }
             break;
         }
         case EOARouteStatisticsModeAltitude:

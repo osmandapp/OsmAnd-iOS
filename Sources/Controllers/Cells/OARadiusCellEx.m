@@ -35,6 +35,29 @@
     // Configure the view for the selected state
 }
 
+- (void)updateConstraints
+{
+    BOOL hasButtonRight = !self.buttonRight.hidden;
+
+    self.buttonLeftWithButtonRightConstraint.active = hasButtonRight;
+    self.buttonLeftNoButtonRightConstraint.active = !hasButtonRight;
+
+    [super updateConstraints];
+}
+
+- (BOOL)needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasButtonRight = !self.buttonRight.hidden;;
+
+        res = res || self.buttonLeftWithButtonRightConstraint.active != hasButtonRight;
+        res = res || self.buttonLeftNoButtonRightConstraint.active != !hasButtonRight;
+    }
+    return res;
+}
+
 - (void) setButton:(UIButton *)button title:(NSString *)title description:(NSString *)description
 {
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", title, description]];
@@ -54,6 +77,11 @@
 - (void) setButtonRightTitle:(NSString *)title description:(NSString *)description
 {
     [self setButton:self.buttonRight title:title description:description];
+}
+
+- (void)showButtonRight:(BOOL)show
+{
+    self.buttonRight.hidden = !show;
 }
 
 @end

@@ -40,7 +40,6 @@
     if (self)
     {
         document = gpxDocument;
-        [self fetchTrkSeg];
     }
     return self;
 }
@@ -50,10 +49,7 @@
     if (filename && filename.length > 0)
     {
         document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
-        BOOL fetch = [self fetch:document];
-        if (fetch)
-            [self fetchTrkSeg];
-        return fetch;
+        return [self fetch:document];
     }
     else
     {

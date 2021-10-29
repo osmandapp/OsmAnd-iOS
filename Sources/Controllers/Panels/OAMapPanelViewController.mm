@@ -2978,35 +2978,8 @@ typedef enum
 {
     if (item.bounds.topLeft.latitude == DBL_MAX)
         return;
-
-    OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
-
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - ([self.scrollableHudViewController isLandscape] ? DeviceScreenWidth * 0.45 : 0.0), DeviceScreenHeight - ([self.scrollableHudViewController isLandscape] ? 0.0 : [self.scrollableHudViewController getViewHeight]));
-    _targetZoom = [self getZoomForBounds:item.bounds mapSize:screenBBox];
-    _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
-
-    if (_targetMode == EOATargetBBOX)
-    {
-        _targetLatitude = item.bounds.bottomRight.latitude;
-        _targetLongitude = item.bounds.topLeft.longitude;
-    }
-    else
-    {
-        _targetLatitude = item.bounds.center.latitude;
-        _targetLongitude = item.bounds.center.longitude;
-    }
-
-    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(item.bounds.center.latitude, item.bounds.center.longitude))];
-    [_mapViewController goToPosition:targetPoint31
-                             andZoom:(_targetMode == EOATargetBBOX ? _targetZoom : kDefaultFavoriteZoomOnShow)
-                            animated:NO];
-
-    renderView.azimuth = 0.0;
-    renderView.elevationAngle = 90.0;
-
-    OsmAnd::LatLon latLon(item.bounds.center.latitude, item.bounds.center.longitude);
-    _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    _mainMapZoom = _targetZoom;
+    
+    [self displayAreaOnMap:item.bounds.topLeft bottomRight:item.bounds.bottomRight zoom:0 bottomInset:[self.scrollableHudViewController isLandscape] ? 0.0 : [self.scrollableHudViewController getViewHeight] leftInset:[self.scrollableHudViewController isLandscape] ? DeviceScreenWidth * 0.45 : 0.0 animated:NO];
 }
 
 - (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight

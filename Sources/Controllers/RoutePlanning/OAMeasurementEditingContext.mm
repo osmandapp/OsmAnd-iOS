@@ -633,7 +633,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 {
     NSMutableArray<NSNumber *> *roadSegmentIndexes = [NSMutableArray new];
     OAGpxTrkSeg *s = [[OAGpxTrkSeg alloc] init];
-    s.points = [NSArray new];
+    NSMutableArray<OAGpxTrkPt *> *sPnts = [NSMutableArray array];
     [segments addObject:s];
     BOOL defaultMode = YES;
     if (points.count > 1)
@@ -641,7 +641,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         for (NSInteger i = 0; i < points.count; i++)
         {
             OAGpxTrkPt *point = points[i];
-            s.points = [s.points arrayByAddingObject:point];
+            [sPnts addObject:point];
             NSString *profileType = point.getProfileType;
             if (profileType != nil)
             {
@@ -654,10 +654,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                 }
                 if (isGap)
                 {
-                    if (s.points.count > 0)
+                    if (sPnts.count > 0)
                     {
                         s = [[OAGpxTrkSeg alloc] init];
-                        s.points = [NSArray new];
+                        [sPnts removeAllObjects];
                         [segments addObject:s];
                         defaultMode = YES;
                     }
@@ -667,8 +667,9 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     }
     else
     {
-        s.points = [s.points arrayByAddingObjectsFromArray:points];
+        [sPnts addObjectsFromArray:points];
     }
+    s.points = sPnts;
     if (s.points.count == 0)
         [segments removeObject:s];
     
@@ -677,7 +678,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         for (OAGpxTrkSeg *segment in segments)
         {
             OAGpxTrkSeg *segmentForSnap = [[OAGpxTrkSeg alloc] init];
-            segmentForSnap.points = [NSArray new];
+            NSMutableArray<OAGpxTrkPt *> *pnts = [NSMutableArray new];
             for (NSInteger i = 0; i < (NSInteger) segment.points.count - 1; i++)
             {
                 NSArray<OAGpxTrkPt *> *pair = @[segment.points[i], segment.points[i + 1]];
@@ -685,18 +686,19 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                 NSArray<OAGpxTrkPt *> *pts = data != nil ? data.gpxPoints : nil;
                 if (pts != nil)
                 {
-                    segmentForSnap.points = [segmentForSnap.points arrayByAddingObjectsFromArray:pts];
+                    [pnts addObjectsFromArray:pts];
                 }
                 else
                 {
                     if (calculateIfNeeded && [roadSegmentIndexes containsObject:@(segmentsForSnap.count)])
                         [self scheduleRouteCalculateIfNotEmpty];
                     
-                    segmentForSnap.points = [segmentForSnap.points arrayByAddingObjectsFromArray:pair];
+                    [pnts addObjectsFromArray:pair];
                 }
             }
-            if (segmentForSnap.points.count == 0)
-                segmentForSnap.points = [segmentForSnap.points arrayByAddingObjectsFromArray:segment.points];
+            if (pnts.count == 0)
+                [pnts addObjectsFromArray:segment.points];
+            segmentForSnap.points = pnts;
             [segmentsForSnap addObject:segmentForSnap];
         }
     }

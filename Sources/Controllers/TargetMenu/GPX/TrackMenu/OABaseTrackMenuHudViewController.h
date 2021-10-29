@@ -19,7 +19,6 @@
 #define kCellOnSwitch @"on_switch"
 #define kCellIsOn @"isOn"
 #define kCellButtonPressed @"on_button_pressed"
-#define kCellUpdateProperty @"update_property"
 
 #define kSectionCells @"cells"
 #define kSectionHeader @"header"
@@ -37,7 +36,6 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 typedef void(^OAGPXTableCellDataOnSwitch)(BOOL toggle);
 typedef BOOL(^OAGPXTableCellDataIsOn)();
 typedef void(^OAGPXTableDataUpdateData)();
-typedef void(^OAGPXTableDataUpdateProperty)(id parameter);
 
 @class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
 
@@ -57,7 +55,6 @@ typedef void(^OAGPXTableDataUpdateProperty)(id parameter);
 @property (nonatomic, readonly) OAGPXTableCellDataOnSwitch onSwitch;
 @property (nonatomic, readonly) OAGPXTableCellDataIsOn isOn;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
-@property (nonatomic, readonly) OAGPXTableDataUpdateProperty updateProperty;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData onButtonPressed;
 
 - (void)setData:(NSDictionary *)data;

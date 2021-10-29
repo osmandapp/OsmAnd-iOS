@@ -721,8 +721,8 @@
                 kCellType: [OASegmentTableViewCell getCellIdentifier]
         }];
         [tabsCellData setData:@{
-                kCellUpdateProperty: ^(id parameter) {
-                    NSInteger selectedIndex = [parameter intValue];
+                kTableUpdateData: ^() {
+                    NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] intValue];
                     mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
                             : selectedIndex == 1 ? EOARouteStatisticsModeAltitude : EOARouteStatisticsModeSpeed;
 
@@ -738,9 +738,9 @@
                 kCellKey: [NSString stringWithFormat:@"buttons_%li", index],
                 kCellType: [OARadiusCellEx getCellIdentifier],
                 kTableValues: @{
-                        @"left_title_string_value" : OALocalizedString(@"analyze_on_map"),
-                        @"right_title_string_value" : OALocalizedString(@"shared_string_options"),
-                        @"right_icon_string_value" : @"ic_custom_overflow_menu",
+                        @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
+                        @"right_title_string_value": OALocalizedString(@"shared_string_options"),
+                        @"right_icon_string_value": @"ic_custom_overflow_menu",
                         @"left_on_button_pressed":  ^() {
                             [self openAnalysis:analysis withMode:mode];
                         },
@@ -759,10 +759,11 @@
 
         [tabsCellData setData:@{
                 kTableValues: @{
-                        @"tab_0_string_value" : OALocalizedString(@"shared_string_overview"),
-                        @"tab_1_string_value" : OALocalizedString(@"map_widget_altitude"),
-                        @"tab_2_string_value" : OALocalizedString(@"gpx_speed"),
-                        @"statistics_row_int_value": @([segmentCells indexOfObject:statisticsCellData])
+                        @"tab_0_string_value": OALocalizedString(@"shared_string_overview"),
+                        @"tab_1_string_value": OALocalizedString(@"map_widget_altitude"),
+                        @"tab_2_string_value": OALocalizedString(@"gpx_speed"),
+                        @"statistics_row_int_value": @([segmentCells indexOfObject:statisticsCellData]),
+                        @"selected_index_int_value": @0
                 }
         }];
 
@@ -823,7 +824,7 @@
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
 
-            icons[@"top_left_icon_name_string_value"] = @"ic_small_track";
+            icons[@"top_left_icon_name_string_value"] = @"ic_small_distance";
             icons[@"top_right_icon_name_string_value"] = @"ic_small_time_interval";
             icons[@"bottom_left_icon_name_string_value"] = @"ic_small_time_start";
             icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
@@ -850,7 +851,7 @@
 
             icons[@"top_left_icon_name_string_value"] = @"ic_small_altitude_average";
             icons[@"top_right_icon_name_string_value"] = @"ic_small_altitude_range";
-            icons[@"bottom_left_icon_name_string_value"] = @"";
+            icons[@"bottom_left_icon_name_string_value"] = @"ic_small_ascent";
             icons[@"bottom_right_icon_name_string_value"] = @"ic_small_descent";
 
             descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.avgElevation];
@@ -2474,6 +2475,7 @@
             cell.segmentControl.tag = tag;
             [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.segmentControl.selectedSegmentIndex = [cellData.values[@"selected_index_int_value"] intValue];
         }
         return cell;
     }
@@ -2744,8 +2746,12 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:segment.tag & 0x3FF inSection:segment.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-    if (segment && cellData.updateProperty)
-        cellData.updateProperty(@(segment.selectedSegmentIndex));
+    NSMutableDictionary *values = [cellData.values mutableCopy];
+    values[@"selected_index_int_value"] = @(segment.selectedSegmentIndex);
+    [cellData setData:@{ kTableValues: values }];
+
+    if (cellData.updateData)
+        cellData.updateData();
 
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[cellData.values[@"statistics_row_int_value"] intValue]
                                                                 inSection:indexPath.section]]

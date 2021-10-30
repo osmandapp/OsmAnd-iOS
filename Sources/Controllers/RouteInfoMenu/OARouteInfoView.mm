@@ -182,7 +182,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
     _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
-    
+
+    [GpxUIHelper setupGPXChartWithChartView:_routeStatsCell.lineChartView
+                               yLabelsCount:4
+                                  topOffset:20
+                               bottomOffset:4
+                        useGesturesAndScale:NO
+    ];
+
     self.sliderView.layer.cornerRadius = 2.;
     
     _appModeView = [NSBundle.mainBundle loadNibNamed:@"OAAppModeView" owner:nil options:nil].firstObject;
@@ -618,7 +625,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             OAGPXTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
             if (_needChartUpdate)
             {
-                [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView analysis:trackAnalysis useGesturesAndScale:NO];
+                [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView
+                                                  analysis:trackAnalysis
+                                       useGesturesAndScale:NO
+                                                 firstType:GPXDataSetTypeALTITUDE
+                                                secondType:GPXDataSetTypeSLOPE];
                 _needChartUpdate = NO;
             }
         }

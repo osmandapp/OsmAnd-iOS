@@ -16,6 +16,7 @@
 #import "OADeleteWaypointsViewController.h"
 #import "OAEditWaypointsGroupBottomSheetViewController.h"
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
+#import "OARouteBaseViewController.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
 #import "OATextViewSimpleCell.h"
@@ -25,6 +26,10 @@
 #import "OATitleSwitchRoundCell.h"
 #import "OAPointWithRegionTableViewCell.h"
 #import "OASelectionCollapsableCell.h"
+#import "OALineChartCell.h"
+#import "OASegmentTableViewCell.h"
+#import "OAQuadItemsWithTitleDescIconCell.h"
+#import "OARadiusCellEx.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
@@ -33,6 +38,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "OAMapActions.h"
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
@@ -40,8 +46,11 @@
 #import "OAAutoObserverProxy.h"
 #import "OAGpxWptItem.h"
 #import "OADefaultFavorite.h"
+#import "OAMapLayers.h"
+#import "OARouteStatisticsHelper.h"
 
-#include <OsmAndCore/Utilities.h>
+#import <Charts/Charts-Swift.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #define kActionsSection 4
 
@@ -52,7 +61,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
 
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
 
@@ -66,6 +75,10 @@
 
 @implementation OATrackMenuHudViewController
 {
+    OsmAndAppInstance _app;
+    OAGPXMutableDocument *_mutableDoc;
+    OARouteLineChartHelper *_routeLineChartHelper;
+
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     NSTimeInterval _lastUpdate;
 
@@ -79,10 +92,13 @@
     EOATrackMenuHudTab _selectedTab;
     OATrackMenuViewControllerState *_reopeningState;
 
-    OsmAndAppInstance _app;
-
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
     NSMutableDictionary<NSString *, NSString *> *_waypointGroupsOldNewNames;
+    NSArray<OAGpxTrkSeg *> *_segments;
+
+    BOOL _hasTranslated;
+    CGPoint _lastTranslation;
+    double _highlightDrawX;
 }
 
 @dynamic isShown, tableData;
@@ -132,7 +148,22 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    [self updateWaypointGroups];
+    _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc
+                                                           centerMapOnBBox:^(OABBox rect) {
+        [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
+                                          bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
+                                                 zoom:0
+                                          bottomInset:DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight])
+                                            leftInset:DeviceScreenWidth - ([self isLandscape] ? DeviceScreenWidth * 0.45 : 0.0)];
+                                                           }
+                                                            adjustViewPort:^() {
+                                                                [self adjustMapViewPort];
+                                                            }];
+    _routeLineChartHelper.isLandscape = [self isLandscape];
+    _routeLineChartHelper.screenBBox = CGRectMake(0., 0.,
+            DeviceScreenWidth - ([self isLandscape]? DeviceScreenWidth * 0.45 : 0.0),
+            DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
+    _lastTranslation = CGPointZero;
 }
 
 - (void)viewDidLoad
@@ -148,10 +179,24 @@
     [self startLocationServices];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _routeLineChartHelper.isLandscape = [self isLandscape];
+        _routeLineChartHelper.screenBBox = CGRectMake(0., 0.,
+                DeviceScreenWidth - ([self isLandscape] ? DeviceScreenWidth * 0.45 : 0.0),
+                DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
+    }];
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
         [self stopLocationServices];
+        [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
         if (onComplete)
             onComplete();
     }];
@@ -176,16 +221,17 @@
 
 - (void)setupTableView
 {
-    if (_selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudPointsTab)
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    else
+    if (_selectedTab == EOATrackMenuHudActionsTab)
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    else
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 }
 
 - (void)setupTabBar
 {
     [self.tabBarView setItems:@[
             [self createTabBarItem:EOATrackMenuHudOverviewTab],
+            [self createTabBarItem:EOATrackMenuHudSegmentsTab],
             [self createTabBarItem:EOATrackMenuHudPointsTab],
             [self createTabBarItem:EOATrackMenuHudActionsTab]
     ] animated:YES];
@@ -210,6 +256,12 @@
         {
             title = @"actions";
             icon = @"ic_custom_overflow_menu";
+            break;
+        }
+        case EOATrackMenuHudSegmentsTab:
+        {
+            title = @"track";
+            icon = @"ic_custom_trip";
             break;
         }
         case EOATrackMenuHudPointsTab:
@@ -253,6 +305,13 @@
             _description = self.doc.metadata.desc;
             break;
         }
+        case EOATrackMenuHudSegmentsTab:
+        {
+            _description = [NSString stringWithFormat:@"%@: %li",
+                    OALocalizedString(@"gpx_selection_segment_title"),
+                    _mutableDoc && [_segments containsObject:_mutableDoc.generalSegment] ? _segments.count - 1 : _segments.count];
+            break;
+        }
         case EOATrackMenuHudPointsTab:
         {
             NSInteger groupsCount = _waypointGroups.allKeys.count;
@@ -276,6 +335,7 @@
         [_headerView removeFromSuperview];
 
     _headerView = [[OATrackMenuHeaderView alloc] init];
+    _headerView.trackMenuDelegate = self;
     [_headerView setDescription:_description];
 
     BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
@@ -401,390 +461,551 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
-        if (_description && _description.length > 0)
-        {
-            NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
+        [self generateDataForOverviewScreen];
+    }
+    else if (_selectedTab == EOATrackMenuHudSegmentsTab)
+    {
+        [self generateDataForSegmentsScreen];
+    }
+    else if (_selectedTab == EOATrackMenuHudPointsTab)
+    {
+        [self generateDataForPointsScreen];
+    }
+    else if (_selectedTab == EOATrackMenuHudActionsTab)
+    {
+        [self generateDataForActionsScreen];
+    }
+}
 
-            NSAttributedString * (^generateDescriptionAttrString) (void) = ^{
-                return [OAUtilities createAttributedString:
-                                [_description componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
-                                                      font:[UIFont systemFontOfSize:17]
-                                                     color:UIColor.blackColor
-                                               strokeColor:nil
-                                               strokeWidth:0
-                                                 alignment:NSTextAlignmentNatural];
-            };
+- (void)generateDataForOverviewScreen
+{
+    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
 
-            NSAttributedString *descriptionAttr = generateDescriptionAttrString();
-            OAGPXTableCellData *description = [OAGPXTableCellData withData:@{
-                    kCellKey: @"description",
-                    kCellType: [OATextViewSimpleCell getCellIdentifier],
-                    kTableValues: @{ @"attr_string_value": descriptionAttr }
+    if (_description && _description.length > 0)
+    {
+        NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
+
+        NSAttributedString * (^generateDescriptionAttrString) (void) = ^{
+            return [OAUtilities createAttributedString:
+                            [_description componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
+                                                  font:[UIFont systemFontOfSize:17]
+                                                 color:UIColor.blackColor
+                                           strokeColor:nil
+                                           strokeWidth:0
+                                             alignment:NSTextAlignmentNatural];
+        };
+
+        NSAttributedString *descriptionAttr = generateDescriptionAttrString();
+        OAGPXTableCellData *description = [OAGPXTableCellData withData:@{
+                kCellKey: @"description",
+                kCellType: [OATextViewSimpleCell getCellIdentifier],
+                kTableValues: @{ @"attr_string_value": descriptionAttr }
+        }];
+
+        [description setData:@{
+                kTableUpdateData: ^() {
+                    [description setData:@{kTableValues: @{ @"attr_string_value": generateDescriptionAttrString() } }];
+                }
+        }];
+        [descriptionCells addObject:description];
+
+        OAGPXTableCellData * (^generateDataForFullDescriptionCell) (void) = ^{
+            return [OAGPXTableCellData withData:@{
+                    kCellKey: @"full_description",
+                    kCellType: [OATextLineViewCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"read_full_description")
             }];
+        };
 
-            [description setData:@{
-                    kTableUpdateData: ^() {
-                        [description setData:@{kTableValues: @{ @"attr_string_value": generateDescriptionAttrString() } }];
+        if (_description.length > descriptionAttr.length)
+            [descriptionCells addObject:generateDataForFullDescriptionCell()];
+
+        OAGPXTableSectionData *descriptionSection = [OAGPXTableSectionData withData:@{
+                kSectionCells: descriptionCells,
+                kSectionHeader: OALocalizedString(@"description")
+        }];
+        [descriptionSection setData:@{
+                kTableUpdateData: ^() {
+                    NSAttributedString *newDescriptionAttr = generateDescriptionAttrString();
+
+                    BOOL hasFullDescription = [descriptionSection.cells.lastObject.key isEqualToString:@"full_description"];
+                    if (_description.length > newDescriptionAttr.length && !hasFullDescription)
+                        [descriptionSection.cells addObject:generateDataForFullDescriptionCell()];
+                    else if (_description.length <= newDescriptionAttr.length && hasFullDescription)
+                        [descriptionSection.cells removeObject:descriptionSection.cells.lastObject];
+
+                    for (OAGPXTableCellData *cellData in descriptionSection.cells)
+                    {
+                        if (cellData.updateData)
+                            cellData.updateData();
                     }
-            }];
-            [descriptionCells addObject:description];
+                }
+        }];
+        [tableSections addObject:descriptionSection];
+    }
 
-            OAGPXTableCellData * (^generateDataForFullDescriptionCell) (void) = ^{
-                return [OAGPXTableCellData withData:@{
-                        kCellKey: @"full_description",
-                        kCellType: [OATextLineViewCell getCellIdentifier],
-                        kCellTitle: OALocalizedString(@"read_full_description")
-                }];
-            };
+    NSMutableArray<OAGPXTableCellData *> *infoCells = [NSMutableArray array];
 
-            if (_description.length > descriptionAttr.length)
-                [descriptionCells addObject:generateDataForFullDescriptionCell()];
+    NSString * (^generateSizeString) (void) = ^{
+        NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.isCurrentTrack
+                ? self.gpx.gpxFilePath : self.doc.path error:nil];
+        return [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
+                                              countStyle:NSByteCountFormatterCountStyleFile];
+    };
 
-            OAGPXTableSectionData *descriptionSection = [OAGPXTableSectionData withData:@{
-                    kSectionCells: descriptionCells,
-                    kSectionHeader: OALocalizedString(@"description")
-            }];
-            [descriptionSection setData:@{
-                    kTableUpdateData: ^() {
-                        NSAttributedString *newDescriptionAttr = generateDescriptionAttrString();
+    OAGPXTableCellData *size = [OAGPXTableCellData withData:@{
+            kCellKey: @"size",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellTitle: OALocalizedString(@"res_size"),
+            kCellDesc: generateSizeString()
+    }];
 
-                        BOOL hasFullDescription = [descriptionSection.cells.lastObject.key isEqualToString:@"full_description"];
-                        if (_description.length > newDescriptionAttr.length && !hasFullDescription)
-                            [descriptionSection.cells addObject:generateDataForFullDescriptionCell()];
-                        else if (_description.length <= newDescriptionAttr.length && hasFullDescription)
-                            [descriptionSection.cells removeObject:descriptionSection.cells.lastObject];
+    [size setData:@{
+            kTableUpdateData: ^() {
+                [size setData:@{ kCellDesc: generateSizeString() }];
+            }
+    }];
+    [infoCells addObject:size];
 
-                        for (OAGPXTableCellData *cellData in descriptionSection.cells)
+    OAGPXTableCellData * (^generateDataForCreatedOnCell) (void) = ^{
+
+        NSString * (^generateCreatedOnString) (void) = ^{
+            return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
+                                                  dateStyle:NSDateFormatterMediumStyle
+                                                  timeStyle:NSDateFormatterNoStyle];
+        };
+
+        OAGPXTableCellData *createdOn = [OAGPXTableCellData withData:@{
+                kCellKey: @"created_on",
+                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"res_created_on"),
+                kCellDesc: generateCreatedOnString()
+        }];
+        [createdOn setData:@{
+                kTableUpdateData: ^() {
+                    [createdOn setData:@{ kCellDesc: generateCreatedOnString() }];
+                }
+        }];
+
+        return createdOn;
+    };
+
+    if (self.doc.metadata.time > 0)
+        [infoCells addObject:generateDataForCreatedOnCell()];
+
+    OAGPXTableCellData * (^generateDataForLocationCell) (void) = ^{
+        OAGPXTableCellData *createdOn = [OAGPXTableCellData withData:@{
+                kCellKey: @"location",
+                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"sett_arr_loc"),
+                kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString
+        }];
+        [createdOn setData:@{
+                kTableUpdateData: ^() {
+                    [createdOn setData:@{ kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString }];
+                }
+        }];
+        return createdOn;
+    };
+
+    if (!self.isCurrentTrack)
+        [infoCells addObject:generateDataForLocationCell()];
+
+    OAGPXTableSectionData *infoSection = [OAGPXTableSectionData withData:@{
+            kSectionCells: infoCells,
+            kSectionHeader: OALocalizedString(@"shared_string_info")
+    }];
+    [infoSection setData:@{
+            kTableUpdateData: ^() {
+                BOOL hasCreatedOn = [infoSection containsCell:@"created_on"];
+                if (self.doc.metadata.time > 0 && !hasCreatedOn)
+                    [infoSection.cells insertObject:generateDataForCreatedOnCell() atIndex:kInfoCreatedOnCell];
+                else if (self.doc.metadata.time <= 0 && hasCreatedOn)
+                    [infoSection.cells removeObjectAtIndex:kInfoCreatedOnCell];
+
+                BOOL hasLocation = [infoSection.cells.lastObject.key isEqualToString:@"location"];
+                if (!self.isCurrentTrack && !hasLocation)
+                    [infoSection.cells addObject:generateDataForLocationCell()];
+                else if (self.isCurrentTrack && hasLocation)
+                    [infoSection.cells removeObject:infoSection.cells.lastObject];
+
+                for (OAGPXTableCellData *cellData in infoSection.cells)
+                {
+                    if (cellData.updateData)
+                        cellData.updateData();
+                }
+            }
+    }];
+
+    [tableSections addObject:infoSection];
+
+    self.tableData = tableSections;
+}
+
+- (void)generateDataForSegmentsScreen
+{
+    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+
+    NSInteger index = 0;
+    for (OAGpxTrkSeg *segment in _segments)
+    {
+        OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
+        __block EOARouteStatisticsMode mode = EOARouteStatisticsModeAltitudeSpeed;
+
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
+        OALineChartCell *cell = (OALineChartCell *) nib[0];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.lineChartView.delegate = self;
+        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+
+        [GpxUIHelper setupGPXChartWithChartView:cell.lineChartView
+                                   yLabelsCount:4
+                                      topOffset:20
+                                   bottomOffset:4
+                            useGesturesAndScale:YES
+        ];
+
+        [_routeLineChartHelper changeChartMode:mode
+                                         chart:cell.lineChartView
+                                      analysis:analysis
+                                      modeCell:nil];
+
+        for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
+        {
+            if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
+                [recognizer addTarget:self action:@selector(onBarChartScrolled:lineChartView:)];
+
+            [recognizer addTarget:self action:@selector(onChartGesture:lineChartView:)];
+        }
+
+        OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"segment_%li", index],
+                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellTitle: [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index],
+                kCellToggle: @NO
+        }] : nil;
+
+        OAGPXTableCellData *chartCellData = [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"chart_%li", index],
+                kCellType: [OALineChartCell getCellIdentifier],
+                kTableValues: @{
+                        @"cell_value": cell,
+                        @"points_value": [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView]
+                }
+        }];
+        [chartCellData setData:@{
+                kTableUpdateData: ^() {
+                    [_routeLineChartHelper changeChartMode:mode
+                                                     chart:cell.lineChartView
+                                                  analysis:analysis
+                                                  modeCell:nil];
+                }
+        }];
+
+        OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"statistics_%li", index],
+                kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
+                kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
+                kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
+                        || mode != EOARouteStatisticsModeAltitudeSpeed)
+        }];
+        [statisticsCellData setData:@{
+                kTableUpdateData: ^() {
+                    [statisticsCellData setData:@{
+                            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
+                            kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
+                                    || mode != EOARouteStatisticsModeAltitudeSpeed)
+                    }];
+                }
+        }];
+
+        OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"tabs_%li", index],
+                kCellType: [OASegmentTableViewCell getCellIdentifier]
+        }];
+        [tabsCellData setData:@{
+                kTableUpdateData: ^() {
+                    NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] intValue];
+                    mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
+                            : selectedIndex == 1 ? EOARouteStatisticsModeAltitudeSlope : EOARouteStatisticsModeSpeed;
+
+                    if (chartCellData.updateData)
+                        chartCellData.updateData();
+
+                    if (statisticsCellData.updateData)
+                        statisticsCellData.updateData();
+                }
+        }];
+
+        OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"buttons_%li", index],
+                kCellType: [OARadiusCellEx getCellIdentifier],
+                kTableValues: @{
+                        @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
+                        @"right_title_string_value": OALocalizedString(@"shared_string_options"),
+                        @"right_icon_string_value": @"ic_custom_overflow_menu",
+                        @"left_on_button_pressed":  ^() {
+                            [self openAnalysis:analysis withMode:mode];
+                        },
+                        @"right_on_button_pressed": ^() {
+                            OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
+                                    [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithSegment:segment
+                                                                                                  analysis:analysis];
+                            editWaypointsBottomSheet.trackMenuDelegate = self;
+                            [editWaypointsBottomSheet presentInViewController:self];
+                        }
+                },
+                kCellToggle: @(!segment.generalSegment)
+        }];
+
+        NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
+        if (segmentCellData != nil)
+            [segmentCells addObject:segmentCellData];
+        [segmentCells addObject:tabsCellData];
+        [segmentCells addObject:chartCellData];
+        [segmentCells addObject:statisticsCellData];
+        [segmentCells addObject:buttonsCellData];
+
+        NSMutableDictionary *values = [NSMutableDictionary dictionary];
+        values[@"tab_0_string_value"] = OALocalizedString(@"shared_string_overview");
+        values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
+        if (analysis.isSpeedSpecified)
+            values[@"tab_2_string_value"] = OALocalizedString(@"gpx_speed");
+        values[@"statistics_row_int_value"] = @([segmentCells indexOfObject:statisticsCellData]);
+        values[@"selected_index_int_value"] = @0;
+        [tabsCellData setData:@{ kTableValues: values }];
+
+        OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: segmentCells }];
+        [segmentSectionData setData:@{
+                kTableUpdateData: ^() {
+                    if ([segmentSectionData.values[@"delete_section_bool_value"] boolValue])
+                    {
+                        NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData mutableCopy];
+                        [newTableData removeObject:segmentSectionData];
+                        self.tableData = newTableData;
+                    }
+                    else
+                    {
+                        for (OAGPXTableCellData *cellData in segmentSectionData.cells)
                         {
                             if (cellData.updateData)
                                 cellData.updateData();
                         }
                     }
-            }];
-            [tableSections addObject:descriptionSection];
-        }
-
-        NSMutableArray<OAGPXTableCellData *> *infoCells = [NSMutableArray array];
-
-        NSString * (^generateSizeString) (void) = ^{
-            NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.isCurrentTrack
-                    ? self.gpx.gpxFilePath : self.doc.path error:nil];
-            return [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
-                                                  countStyle:NSByteCountFormatterCountStyleFile];
-        };
-
-        OAGPXTableCellData *size = [OAGPXTableCellData withData:@{
-                kCellKey: @"size",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"res_size"),
-                kCellDesc: generateSizeString()
-        }];
-
-        [size setData:@{
-                kTableUpdateData: ^() {
-                    [size setData:@{ kCellDesc: generateSizeString() }];
                 }
         }];
-        [infoCells addObject:size];
+        [tableSections addObject:segmentSectionData];
 
-        OAGPXTableCellData * (^generateDataForCreatedOnCell) (void) = ^{
+        cell.lineChartView.tag =
+                [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
 
-            NSString * (^generateCreatedOnString) (void) = ^{
-                return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
-                                                      dateStyle:NSDateFormatterMediumStyle
-                                                      timeStyle:NSDateFormatterNoStyle];
-            };
-
-            OAGPXTableCellData *createdOn = [OAGPXTableCellData withData:@{
-                    kCellKey: @"created_on",
-                    kCellType: [OAIconTitleValueCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"res_created_on"),
-                    kCellDesc: generateCreatedOnString()
-            }];
-            [createdOn setData:@{
-                    kTableUpdateData: ^() {
-                        [createdOn setData:@{ kCellDesc: generateCreatedOnString() }];
-                    }
-            }];
-
-            return createdOn;
-        };
-
-        if (self.doc.metadata.time > 0)
-            [infoCells addObject:generateDataForCreatedOnCell()];
-
-        OAGPXTableCellData * (^generateDataForLocationCell) (void) = ^{
-            OAGPXTableCellData *createdOn = [OAGPXTableCellData withData:@{
-                    kCellKey: @"location",
-                    kCellType: [OAIconTitleValueCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"sett_arr_loc"),
-                    kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString
-            }];
-            [createdOn setData:@{
-                    kTableUpdateData: ^() {
-                        [createdOn setData:@{ kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString }];
-                    }
-            }];
-            return createdOn;
-        };
-
-        if (!self.isCurrentTrack)
-            [infoCells addObject:generateDataForLocationCell()];
-
-        OAGPXTableSectionData *infoSection = [OAGPXTableSectionData withData:@{
-                kSectionCells: infoCells,
-                kSectionHeader: OALocalizedString(@"shared_string_info")
-        }];
-        [infoSection setData:@{
-                kTableUpdateData: ^() {
-                    BOOL hasCreatedOn = [infoSection containsCell:@"created_on"];
-                    if (self.doc.metadata.time > 0 && !hasCreatedOn)
-                        [infoSection.cells insertObject:generateDataForCreatedOnCell() atIndex:kInfoCreatedOnCell];
-                    else if (self.doc.metadata.time <= 0 && hasCreatedOn)
-                        [infoSection.cells removeObjectAtIndex:kInfoCreatedOnCell];
-
-                    BOOL hasLocation = [infoSection.cells.lastObject.key isEqualToString:@"location"];
-                    if (!self.isCurrentTrack && !hasLocation)
-                        [infoSection.cells addObject:generateDataForLocationCell()];
-                    else if (self.isCurrentTrack && hasLocation)
-                        [infoSection.cells removeObject:infoSection.cells.lastObject];
-
-                    for (OAGPXTableCellData *cellData in infoSection.cells)
-                    {
-                        if (cellData.updateData)
-                            cellData.updateData();
-                    }
-                }
-        }];
-
-        [tableSections addObject:infoSection];
+        index++;
     }
-    else if (_selectedTab == EOATrackMenuHudActionsTab)
+
+    self.tableData = tableSections;
+}
+
+- (NSDictionary<NSString *, NSDictionary *> *)getStatisticsDataForAnalysis:(OAGPXTrackAnalysis *)analysis
+                                                                   segment:(OAGpxTrkSeg *)segment
+                                                                      mode:(EOARouteStatisticsMode)mode
+{
+    NSMutableDictionary *titles = [NSMutableDictionary dictionary];
+    NSMutableDictionary *icons = [NSMutableDictionary dictionary];
+    NSMutableDictionary *descriptions = [NSMutableDictionary dictionary];
+
+    OAGpxTrk *track;
+    for (OAGpxTrk *trk in _mutableDoc.tracks)
     {
-        NSMutableArray<OAGPXTableCellData *> *controlCells = [NSMutableArray array];
-
-        OAGPXTableCellData *showOnMap = [OAGPXTableCellData withData:@{
-                kCellKey: @"control_show_on_map",
-                kCellType: [OATitleSwitchRoundCell getCellIdentifier],
-                kTableValues: @{ @"bool_value": @(self.isShown) },
-                kCellTitle: OALocalizedString(@"map_settings_show"),
-                kCellOnSwitch: ^(BOOL toggle) { [self onShowHidePressed:nil]; },
-                kCellIsOn: ^() { return self.isShown; }
-        }];
-
-        [showOnMap setData:@{
-                kTableUpdateData: ^() {
-                    [showOnMap setData:@{ kTableValues: @{ @"bool_value": @(self.isShown) } }];
-                }
-        }];
-        [controlCells addObject:showOnMap];
-
-        [controlCells addObject:[OAGPXTableCellData withData:@{
-                kCellKey: @"control_appearance",
-                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                kCellRightIconName: @"ic_custom_appearance",
-                kCellTitle: OALocalizedString(@"map_settings_appearance")
-        }]];
-
-        [controlCells addObject:[OAGPXTableCellData withData:@{
-                kCellKey: @"control_navigation",
-                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                kCellRightIconName: @"ic_custom_navigation",
-                kCellTitle: OALocalizedString(@"routing_settings")
-        }]];
-
-        OAGPXTableSectionData *controlsSection = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells }];
-        [controlsSection setData:@{
-                kTableUpdateData: ^() {
-                    for (OAGPXTableCellData *cellData in controlsSection.cells)
-                    {
-                        if (cellData.updateData)
-                            cellData.updateData();
-                    }
-                }
-        }];
-
-        [tableSections addObject:controlsSection];
-        [tableSections addObject:[OAGPXTableSectionData withData:@{
-                kSectionCells: @[
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"analyze",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellRightIconName: @"ic_custom_appearance",
-                                kCellTitle: OALocalizedString(@"analyze_on_map")
-                        }]
-                ]
-        }]];
-        [tableSections addObject:[OAGPXTableSectionData withData:@{
-                kSectionCells: @[
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"share",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellRightIconName: @"ic_custom_export",
-                                kCellTitle: OALocalizedString(@"ctx_mnu_share")
-                        }]
-                ]
-        }]];
-        [tableSections addObject:[OAGPXTableSectionData withData:@{
-                kSectionCells: @[
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"edit",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellRightIconName: @"ic_custom_trip_edit",
-                                kCellTitle: OALocalizedString(@"edit_track")
-                        }],
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"edit_create_duplicate",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellRightIconName: @"ic_custom_copy",
-                                kCellTitle: OALocalizedString(@"duplicate_track")
-                        }]
-                ]
-        }]];
-
-        NSMutableArray<OAGPXTableCellData *> *changeCells = [NSMutableArray array];
-
-        [changeCells addObject:[OAGPXTableCellData withData:@{
-                kCellKey: @"change_rename",
-                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                kCellRightIconName: @"ic_custom_edit",
-                kCellTitle: OALocalizedString(@"gpx_rename_q")
-        }]];
-
-        OAGPXTableCellData *move = [OAGPXTableCellData withData:@{
-                kCellKey: @"change_move",
-                kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
-                kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString,
-                kCellRightIconName: @"ic_custom_folder_move",
-                kCellTitle: OALocalizedString(@"plan_route_change_folder")
-        }];
-
-        [move setData:@{
-                kTableUpdateData: ^() {
-                    [move setData:@{ kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString }];
-                }
-        }];
-        [changeCells addObject:move];
-
-        OAGPXTableSectionData *changeSection = [OAGPXTableSectionData withData:@{ kSectionCells: changeCells }];
-        [changeSection setData:@{
-                kTableUpdateData: ^() {
-                    for (OAGPXTableCellData *cellData in changeSection.cells)
-                    {
-                        if (cellData.updateData)
-                            cellData.updateData();
-                    }
-                }
-        }];
-        [tableSections addObject:changeSection];
-
-        [tableSections addObject:[OAGPXTableSectionData withData:@{
-                kSectionCells: @[
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"delete",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellRightIconName: @"ic_custom_remove_outlined",
-                                kCellTitle: OALocalizedString(@"shared_string_delete"),
-                                kCellTintColor: @color_primary_red
-                        }]
-                ]
-        }]];
-    }
-    else if (_selectedTab == EOATrackMenuHudPointsTab)
-    {
-        for (NSString *groupName in _waypointGroups.keyEnumerator)
+        if ([trk.segments containsObject:segment])
         {
-            __block BOOL isHidden = [self.gpx.hiddenGroups containsObject:[self isDefaultGroup:groupName] ? @"" : groupName];
-            __block UIImage *leftIcon = [UIImage templateImageNamed:
-                    isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
-            __block UIColor *tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
-                    : UIColorFromRGB([self getWaypointsGroupColor:groupName]);
-            OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
-                    kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
-                    kCellType: [OASelectionCollapsableCell getCellIdentifier],
-                    kCellTitle: groupName,
-                    kCellLeftIcon: leftIcon,
-                    kCellRightIconName: @"ic_custom_arrow_up",
-                    kCellToggle: @YES,
-                    kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
-                    kCellButtonPressed: ^() {
-                        [self openWaypointsGroupOptionsScreen:groupName];
-                    }
-            }];
+            track = trk;
+            break;
+        }
+    }
 
-            __block NSString *currentGroupName = groupName;
-            __block BOOL updated = NO;
-            void (^newGroupName) (void) = ^{
-                if (_waypointGroupsOldNewNames && [_waypointGroupsOldNewNames.allKeys containsObject:currentGroupName])
-                {
-                    currentGroupName = _waypointGroupsOldNewNames[currentGroupName];
-                    [_waypointGroupsOldNewNames removeObjectForKey:groupCellData.title];
-                    updated = YES;
+    switch (mode)
+    {
+        case EOARouteStatisticsModeAltitudeSpeed:
+        {
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
+            titles[@"top_right_title_string_value"] = OALocalizedString(@"shared_string_time_span");
+            titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
+            titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
+
+            icons[@"top_left_icon_name_string_value"] = @"ic_small_distance";
+            icons[@"top_right_icon_name_string_value"] = @"ic_small_time_interval";
+            icons[@"bottom_left_icon_name_string_value"] = @"ic_small_time_start";
+            icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
+
+            descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
+                    /*!self.gpx.joinSegments &&*/ track && track.generalTrack
+                            ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
+
+            descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
+                    /*!self.gpx.joinSegments &&*/ track && track.generalTrack
+                            ? analysis.timeSpanWithoutGaps : analysis.timeSpan shortFormat:YES];
+
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"HH:mm, MM-dd-yy"];
+            descriptions[@"bottom_left_description_string_value"] =
+                    [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.startTime]];
+            descriptions[@"bottom_right_description_string_value"] =
+                    [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.endTime]];
+
+            break;
+        }
+        case EOARouteStatisticsModeAltitudeSlope:
+        {
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_avg_altitude");
+            titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_alt_range");
+            titles[@"bottom_left_title_string_value"] = OALocalizedString(@"gpx_ascent");
+            titles[@"bottom_right_title_string_value"] = OALocalizedString(@"gpx_descent");
+
+            icons[@"top_left_icon_name_string_value"] = @"ic_small_altitude_average";
+            icons[@"top_right_icon_name_string_value"] = @"ic_small_altitude_range";
+            icons[@"bottom_left_icon_name_string_value"] = @"ic_small_ascent";
+            icons[@"bottom_right_icon_name_string_value"] = @"ic_small_descent";
+
+            descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.avgElevation];
+            descriptions[@"top_right_description_string_value"] = [NSString stringWithFormat:@"%@ - %@",
+                            [OAOsmAndFormatter getFormattedAlt:analysis.minElevation],
+                            [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]];
+            descriptions[@"bottom_left_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp];
+            descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown];
+
+            break;
+        }
+        case EOARouteStatisticsModeSpeed:
+        {
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_average_speed");
+            titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_max_speed");
+            titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_time_moving");
+            titles[@"bottom_right_title_string_value"] = OALocalizedString(@"distance_moving");
+
+            icons[@"top_left_icon_name_string_value"] = @"ic_small_speed";
+            icons[@"top_right_icon_name_string_value"] = @"ic_small_max_speed";
+            icons[@"bottom_left_icon_name_string_value"] = @"ic_small_time_start";
+            icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
+
+            descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedSpeed:analysis.avgSpeed];
+            descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedSpeed:analysis.maxSpeed];
+
+            descriptions[@"bottom_left_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
+                    /*!self.gpx.joinSegments &&*/ track && track.generalTrack ? analysis.timeSpanWithoutGaps : analysis.timeSpan
+                                                                    shortFormat:YES];
+            descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
+                    /*!self.gpx.joinSegments &&*/ track && track.generalTrack
+                            ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
+
+            break;
+        }
+        default:
+            return @{ };
+    }
+
+    return @{
+            @"titles": titles,
+            @"icons": icons,
+            @"descriptions": descriptions
+    };
+}
+
+- (void)generateDataForPointsScreen
+{
+    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+
+    for (NSString *groupName in _waypointGroups.keyEnumerator)
+    {
+        __block BOOL isHidden = [self.gpx.hiddenGroups containsObject:[self isDefaultGroup:groupName] ? @"" : groupName];
+        __block UIImage *leftIcon = [UIImage templateImageNamed:
+                isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
+        __block UIColor *tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
+                : UIColorFromRGB([self getWaypointsGroupColor:groupName]);
+        OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
+                kCellType: [OASelectionCollapsableCell getCellIdentifier],
+                kCellTitle: groupName,
+                kCellLeftIcon: leftIcon,
+                kCellRightIconName: @"ic_custom_arrow_up",
+                kCellToggle: @YES,
+                kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
+                kCellButtonPressed: ^() {
+                    [self openWaypointsGroupOptionsScreen:groupName];
                 }
-            };
+        }];
 
-            [groupCellData setData:@{
-                    kTableUpdateData: ^() {
-                        newGroupName();
-                        isHidden = [self.gpx.hiddenGroups containsObject:[self isDefaultGroup:currentGroupName] ? @"" : currentGroupName];
-                        leftIcon = [UIImage templateImageNamed:
-                                isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
-                        tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
-                                : UIColorFromRGB([self getWaypointsGroupColor:currentGroupName]);
-                        [groupCellData setData:@{
-                                kCellKey: [NSString stringWithFormat:@"group_%@", currentGroupName],
-                                kCellTitle: currentGroupName,
-                                kCellLeftIcon: leftIcon,
-                                kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right",
-                                kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
-                                kCellButtonPressed: ^() {
-                                    [self openWaypointsGroupOptionsScreen:currentGroupName];
-                                }
-                        }];
-                    }
-            }];
+        __block NSString *currentGroupName = groupName;
+        __block BOOL updated = NO;
+        void (^newGroupName) (void) = ^{
+            if (_waypointGroupsOldNewNames && [_waypointGroupsOldNewNames.allKeys containsObject:currentGroupName])
+            {
+                currentGroupName = _waypointGroupsOldNewNames[currentGroupName];
+                [_waypointGroupsOldNewNames removeObjectForKey:groupCellData.title];
+                updated = YES;
+            }
+        };
 
-            NSArray<OAGPXTableCellData *> * (^generateDataForWaypointCells) (void) = ^{
-                NSMutableArray<OAGPXTableCellData *> *waypointsCells = [NSMutableArray array];
-                if (groupCellData.toggle)
-                {
-                    NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[currentGroupName];
-
-                    for (OAGpxWptItem *waypoint in waypoints)
-                    {
-                        NSInteger waypointIndex = [waypoints indexOfObject:waypoint];
-                        __block OAGpxWptItem *currentWaypoint = waypoint;
-                        void (^newWaypoint) (void) = ^{
-                            if (updated)
-                            {
-                                currentWaypoint = _waypointGroups[currentGroupName][waypointIndex];
-                                updated = NO;
+        [groupCellData setData:@{
+                kTableUpdateData: ^() {
+                    newGroupName();
+                    isHidden = [self.gpx.hiddenGroups containsObject:[self isDefaultGroup:currentGroupName] ? @"" : currentGroupName];
+                    leftIcon = [UIImage templateImageNamed:
+                            isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
+                    tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
+                            : UIColorFromRGB([self getWaypointsGroupColor:currentGroupName]);
+                    [groupCellData setData:@{
+                            kCellKey: [NSString stringWithFormat:@"group_%@", currentGroupName],
+                            kCellTitle: currentGroupName,
+                            kCellLeftIcon: leftIcon,
+                            kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right",
+                            kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
+                            kCellButtonPressed: ^() {
+                                [self openWaypointsGroupOptionsScreen:currentGroupName];
                             }
-                        };
-                        newWaypoint();
+                    }];
+                }
+        }];
 
-                        CLLocationCoordinate2D gpxLocation = self.doc.bounds.center;
-                        OAWorldRegion *worldRegion = gpxLocation.latitude != DBL_MAX
-                                ? [_app.worldRegion findAtLat:gpxLocation.latitude lon:gpxLocation.longitude] : nil;
+        NSArray<OAGPXTableCellData *> * (^generateDataForWaypointCells) (void) = ^{
+            NSMutableArray<OAGPXTableCellData *> *waypointsCells = [NSMutableArray array];
+            if (groupCellData.toggle)
+            {
+                NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[currentGroupName];
 
-                        OAGPXTableCellData *waypointCellData = [OAGPXTableCellData withData:@{
-                                kCellKey: [NSString stringWithFormat:@"waypoint_%@", currentWaypoint.point.name],
-                                kCellType: [OAPointWithRegionTableViewCell getCellIdentifier],
-                                kTableValues: @{
-                                        @"string_value_distance": currentWaypoint.distance
-                                                ? currentWaypoint.distance : [OAOsmAndFormatter getFormattedDistance:0],
-                                        @"float_value_direction": @(currentWaypoint.direction)
-                                },
-                                kCellTitle: currentWaypoint.point.name,
-                                kCellDesc: worldRegion != nil
-                                        ? (worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName)
-                                        : @"",
-                                kCellLeftIcon: [currentWaypoint getCompositeIcon]
-                        }];
+                for (OAGpxWptItem *waypoint in waypoints)
+                {
+                    NSInteger waypointIndex = [waypoints indexOfObject:waypoint];
+                    __block OAGpxWptItem *currentWaypoint = waypoint;
+                    void (^newWaypoint) (void) = ^{
+                        if (updated)
+                        {
+                            currentWaypoint = _waypointGroups[currentGroupName][waypointIndex];
+                            updated = NO;
+                        }
+                    };
+                    newWaypoint();
+
+                    CLLocationCoordinate2D gpxLocation = self.doc.bounds.center;
+                    OAWorldRegion *worldRegion = gpxLocation.latitude != DBL_MAX
+                            ? [_app.worldRegion findAtLat:gpxLocation.latitude lon:gpxLocation.longitude] : nil;
+
+                    OAGPXTableCellData *waypointCellData = [OAGPXTableCellData withData:@{
+                            kCellKey: [NSString stringWithFormat:@"waypoint_%@", currentWaypoint.point.name],
+                            kCellType: [OAPointWithRegionTableViewCell getCellIdentifier],
+                            kTableValues: @{
+                                    @"string_value_distance": currentWaypoint.distance
+                                            ? currentWaypoint.distance : [OAOsmAndFormatter getFormattedDistance:0],
+                                    @"float_value_direction": @(currentWaypoint.direction)
+                            },
+                            kCellTitle: currentWaypoint.point.name,
+                            kCellDesc: worldRegion != nil
+                                    ? (worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName)
+                                    : @"",
+                            kCellLeftIcon: [currentWaypoint getCompositeIcon]
+                    }];
 
                     [waypointCellData setData:@{
                             kTableUpdateData: ^() {
@@ -822,105 +1043,240 @@
                                                 @"string_value_distance": currentWaypoint.distance
                                                         ? currentWaypoint.distance : [OAOsmAndFormatter getFormattedDistance:0],
                                                 @"float_value_direction": @(currentWaypoint.direction)
-                                            },
+                                        },
                                         kCellTitle: currentWaypoint.point.name,
                                         kCellLeftIcon: [currentWaypoint getCompositeIcon]
-                                    }];
-                                }
-                        }];
-                        [waypointsCells addObject:waypointCellData];
-                    }
-                }
-                return waypointsCells;
-            };
-
-            OAGPXTableSectionData *waypointsSection = [OAGPXTableSectionData withData:@{
-                    kSectionCells: [@[groupCellData] arrayByAddingObjectsFromArray:generateDataForWaypointCells()],
-            }];
-            [tableSections addObject:waypointsSection];
-
-            [waypointsSection setData:@{
-                    kTableUpdateData: ^() {
-                        if (groupCellData.updateData)
-                            groupCellData.updateData();
-                        NSInteger sectionIndex = [_waypointGroups.allKeys indexOfObject:currentGroupName];
-
-                        BOOL isDuplicate = [waypointsSection.values[@"is_duplicate_bool_value"] boolValue];
-                        if (!isDuplicate && sectionIndex != NSNotFound)
-                        {
-                            if (updated || waypointsSection.cells.count != [self getWaypointsCount:currentGroupName] + 1
-                                    || !groupCellData.toggle)
-                            {
-                                [waypointsSection setData:@{
-                                        kSectionCells: [@[groupCellData] arrayByAddingObjectsFromArray:generateDataForWaypointCells()]
                                 }];
                             }
-                            else
+                    }];
+                    [waypointsCells addObject:waypointCellData];
+                }
+            }
+            return waypointsCells;
+        };
+
+        OAGPXTableSectionData *waypointsSection = [OAGPXTableSectionData withData:@{
+                kSectionCells: [@[groupCellData] arrayByAddingObjectsFromArray:generateDataForWaypointCells()],
+        }];
+        [tableSections addObject:waypointsSection];
+
+        [waypointsSection setData:@{
+                kTableUpdateData: ^() {
+                    if (groupCellData.updateData)
+                        groupCellData.updateData();
+                    NSInteger sectionIndex = [_waypointGroups.allKeys indexOfObject:currentGroupName];
+
+                    BOOL isDuplicate = [waypointsSection.values[@"is_duplicate_bool_value"] boolValue];
+                    if (!isDuplicate && sectionIndex != NSNotFound)
+                    {
+                        if (updated || waypointsSection.cells.count != [self getWaypointsCount:currentGroupName] + 1
+                                || !groupCellData.toggle)
+                        {
+                            [waypointsSection setData:@{
+                                    kSectionCells: [@[groupCellData] arrayByAddingObjectsFromArray:generateDataForWaypointCells()]
+                            }];
+                        }
+                        else
+                        {
+                            for (OAGPXTableCellData *cellData in waypointsSection.cells)
                             {
-                                for (OAGPXTableCellData *cellData in waypointsSection.cells)
-                                {
-                                    if (groupCellData != cellData && cellData.updateData)
-                                        cellData.updateData();
-                                }
+                                if (groupCellData != cellData && cellData.updateData)
+                                    cellData.updateData();
                             }
                         }
-
-                        if (isDuplicate || (waypointsSection.cells.count == 1 && [self getWaypointsCount:currentGroupName] == 0)
-                                || sectionIndex == NSNotFound)
-                        {
-                            NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData mutableCopy];
-                            [newTableData removeObject:waypointsSection];
-                            self.tableData = newTableData;
-                        }
                     }
-            }];
-        }
 
-        OAGPXTableCellData *deleteWaypoints = [OAGPXTableCellData withData:@{
-                kCellKey: @"delete_waypoints",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"delete_waypoints"),
-                kCellRightIconName: @"ic_custom_remove_outlined",
-                kCellToggle: @([self hasWaypoints]),
-                kCellTintColor: [self hasWaypoints] ? @color_primary_purple : @unselected_tab_icon
-        }];
-
-        [deleteWaypoints setData:@{
-                kTableUpdateData: ^() {
-                    [deleteWaypoints setData:@{
-                            kCellToggle: @([self hasWaypoints]),
-                            kCellTintColor: [self hasWaypoints] ? @color_primary_purple : @unselected_tab_icon
-                    }];
-                }
-        }];
-
-        OAGPXTableSectionData *actionsSection = [OAGPXTableSectionData withData:@{
-                kSectionCells: @[
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"add_waypoint",
-                                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                                kCellTitle: OALocalizedString(@"add_waypoint"),
-                                kCellRightIconName: @"ic_custom_add_gpx_waypoint",
-                                kCellToggle: @YES,
-                                kCellTintColor: @color_primary_purple
-                        }],
-                        deleteWaypoints
-                ],
-                kSectionHeader: OALocalizedString(@"actions")
-        }];
-
-        [actionsSection setData:@{
-                kTableUpdateData: ^() {
-                    for (OAGPXTableCellData *cellData in actionsSection.cells)
+                    if (isDuplicate || (waypointsSection.cells.count == 1 && [self getWaypointsCount:currentGroupName] == 0)
+                            || sectionIndex == NSNotFound)
                     {
-                        if (cellData.updateData)
-                            cellData.updateData();
+                        NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData mutableCopy];
+                        [newTableData removeObject:waypointsSection];
+                        self.tableData = newTableData;
                     }
                 }
         }];
-
-        [tableSections addObject:actionsSection];
     }
+
+    OAGPXTableCellData *deleteWaypoints = [OAGPXTableCellData withData:@{
+            kCellKey: @"delete_waypoints",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellTitle: OALocalizedString(@"delete_waypoints"),
+            kCellRightIconName: @"ic_custom_remove_outlined",
+            kCellToggle: @([self hasWaypoints]),
+            kCellTintColor: [self hasWaypoints] ? @color_primary_purple : @unselected_tab_icon
+    }];
+
+    [deleteWaypoints setData:@{
+            kTableUpdateData: ^() {
+                [deleteWaypoints setData:@{
+                        kCellToggle: @([self hasWaypoints]),
+                        kCellTintColor: [self hasWaypoints] ? @color_primary_purple : @unselected_tab_icon
+                }];
+            }
+    }];
+
+    OAGPXTableSectionData *actionsSection = [OAGPXTableSectionData withData:@{
+            kSectionCells: @[
+                    [OAGPXTableCellData withData:@{
+                            kCellKey: @"add_waypoint",
+                            kCellType: [OAIconTitleValueCell getCellIdentifier],
+                            kCellTitle: OALocalizedString(@"add_waypoint"),
+                            kCellRightIconName: @"ic_custom_add_gpx_waypoint",
+                            kCellToggle: @YES,
+                            kCellTintColor: @color_primary_purple
+                    }],
+                    deleteWaypoints
+            ],
+            kSectionHeader: OALocalizedString(@"actions")
+    }];
+
+    [actionsSection setData:@{
+            kTableUpdateData: ^() {
+                for (OAGPXTableCellData *cellData in actionsSection.cells)
+                {
+                    if (cellData.updateData)
+                        cellData.updateData();
+                }
+            }
+    }];
+
+    [tableSections addObject:actionsSection];
+
+    self.tableData = tableSections;
+}
+
+- (void)generateDataForActionsScreen
+{
+    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+
+    NSMutableArray<OAGPXTableCellData *> *controlCells = [NSMutableArray array];
+
+    OAGPXTableCellData *showOnMap = [OAGPXTableCellData withData:@{
+            kCellKey: @"control_show_on_map",
+            kCellType: [OATitleSwitchRoundCell getCellIdentifier],
+            kTableValues: @{ @"bool_value": @(self.isShown) },
+            kCellTitle: OALocalizedString(@"map_settings_show"),
+            kCellOnSwitch: ^(BOOL toggle) { [self onShowHidePressed:nil]; },
+            kCellIsOn: ^() { return self.isShown; }
+    }];
+
+    [showOnMap setData:@{
+            kTableUpdateData: ^() {
+                [showOnMap setData:@{ kTableValues: @{ @"bool_value": @(self.isShown) } }];
+            }
+    }];
+    [controlCells addObject:showOnMap];
+
+    [controlCells addObject:[OAGPXTableCellData withData:@{
+            kCellKey: @"control_appearance",
+            kCellType: [OATitleIconRoundCell getCellIdentifier],
+            kCellRightIconName: @"ic_custom_appearance",
+            kCellTitle: OALocalizedString(@"map_settings_appearance")
+    }]];
+
+    [controlCells addObject:[OAGPXTableCellData withData:@{
+            kCellKey: @"control_navigation",
+            kCellType: [OATitleIconRoundCell getCellIdentifier],
+            kCellRightIconName: @"ic_custom_navigation",
+            kCellTitle: OALocalizedString(@"routing_settings")
+    }]];
+
+    OAGPXTableSectionData *controlsSection = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells }];
+    [controlsSection setData:@{
+            kTableUpdateData: ^() {
+                for (OAGPXTableCellData *cellData in controlsSection.cells)
+                {
+                    if (cellData.updateData)
+                        cellData.updateData();
+                }
+            }
+    }];
+
+    [tableSections addObject:controlsSection];
+    [tableSections addObject:[OAGPXTableSectionData withData:@{
+            kSectionCells: @[
+                    [OAGPXTableCellData withData:@{
+                            kCellKey: @"analyze",
+                            kCellType: [OATitleIconRoundCell getCellIdentifier],
+                            kCellRightIconName: @"ic_custom_appearance",
+                            kCellTitle: OALocalizedString(@"analyze_on_map")
+                    }]
+            ]
+    }]];
+    [tableSections addObject:[OAGPXTableSectionData withData:@{
+            kSectionCells: @[
+                    [OAGPXTableCellData withData:@{
+                            kCellKey: @"share",
+                            kCellType: [OATitleIconRoundCell getCellIdentifier],
+                            kCellRightIconName: @"ic_custom_export",
+                            kCellTitle: OALocalizedString(@"ctx_mnu_share")
+                    }]
+            ]
+    }]];
+    [tableSections addObject:[OAGPXTableSectionData withData:@{
+            kSectionCells: @[
+                    [OAGPXTableCellData withData:@{
+                            kCellKey: @"edit",
+                            kCellType: [OATitleIconRoundCell getCellIdentifier],
+                            kCellRightIconName: @"ic_custom_trip_edit",
+                            kCellTitle: OALocalizedString(@"edit_track")
+                    }],
+                    [OAGPXTableCellData withData:@{
+                            kCellKey: @"edit_create_duplicate",
+                            kCellType: [OATitleIconRoundCell getCellIdentifier],
+                            kCellRightIconName: @"ic_custom_copy",
+                            kCellTitle: OALocalizedString(@"duplicate_track")
+                    }]
+            ]
+    }]];
+
+    NSMutableArray<OAGPXTableCellData *> *changeCells = [NSMutableArray array];
+
+    [changeCells addObject:[OAGPXTableCellData withData:@{
+            kCellKey: @"change_rename",
+            kCellType: [OATitleIconRoundCell getCellIdentifier],
+            kCellRightIconName: @"ic_custom_edit",
+            kCellTitle: OALocalizedString(@"gpx_rename_q")
+    }]];
+
+    OAGPXTableCellData *move = [OAGPXTableCellData withData:@{
+            kCellKey: @"change_move",
+            kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
+            kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString,
+            kCellRightIconName: @"ic_custom_folder_move",
+            kCellTitle: OALocalizedString(@"plan_route_change_folder")
+    }];
+
+    [move setData:@{
+            kTableUpdateData: ^() {
+                [move setData:@{ kCellDesc: [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString }];
+            }
+    }];
+    [changeCells addObject:move];
+
+    OAGPXTableSectionData *changeSection = [OAGPXTableSectionData withData:@{ kSectionCells: changeCells }];
+    [changeSection setData:@{
+            kTableUpdateData: ^() {
+                for (OAGPXTableCellData *cellData in changeSection.cells)
+                {
+                    if (cellData.updateData)
+                        cellData.updateData();
+                }
+            }
+    }];
+    [tableSections addObject:changeSection];
+
+    [tableSections addObject:[OAGPXTableSectionData withData:@{
+            kSectionCells: @[
+                    [OAGPXTableCellData withData:@{
+                            kCellKey: @"delete",
+                            kCellType: [OATitleIconRoundCell getCellIdentifier],
+                            kCellRightIconName: @"ic_custom_remove_outlined",
+                            kCellTitle: OALocalizedString(@"shared_string_delete"),
+                            kCellTintColor: @color_primary_red
+                    }]
+            ]
+    }]];
 
     self.tableData = tableSections;
 }
@@ -930,7 +1286,7 @@
     NSMutableArray *statistics = [NSMutableArray array];
     if (self.analysis)
     {
-        BOOL withoutGaps = !self.gpx.joinSegments && (self.isCurrentTrack
+        BOOL withoutGaps = /*!self.gpx.joinSegments &&*/ (self.isCurrentTrack
                 ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)
                 : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack));
 
@@ -940,6 +1296,7 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"shared_string_distance"),
                     @"value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
+                    @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_distance@2x"
             }];
         }
@@ -949,6 +1306,7 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_ascent"),
                     @"value": [OAOsmAndFormatter getFormattedAlt:self.analysis.diffElevationUp],
+                    @"type": @(EOARouteStatisticsModeSlope),
                     @"icon": @"ic_small_ascent"
             }];
             [statistics addObject:@{
@@ -961,6 +1319,7 @@
                     @"value": [NSString stringWithFormat:@"%@ - %@",
                                                          [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation],
                                                          [OAOsmAndFormatter getFormattedAlt:self.analysis.maxElevation]],
+                    @"type": @(EOARouteStatisticsModeAltitude),
                     @"icon": @"ic_small_altitude_range"
             }];
         }
@@ -970,11 +1329,13 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_average_speed"),
                     @"value": [OAOsmAndFormatter getFormattedSpeed:self.analysis.avgSpeed],
+                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_speed"
             }];
             [statistics addObject:@{
                     @"title": OALocalizedString(@"gpx_max_speed"),
                     @"value": [OAOsmAndFormatter getFormattedSpeed:self.analysis.maxSpeed],
+                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_max_speed"
             }];
         }
@@ -985,6 +1346,7 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"total_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
+                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_time_interval"
             }];
         }
@@ -995,6 +1357,7 @@
             [statistics addObject:@{
                     @"title": OALocalizedString(@"moving_time"),
                     @"value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
+                    @"type": @(EOARouteStatisticsModeSpeed),
                     @"icon": @"ic_small_time_moving"
             }];
         }
@@ -1206,6 +1569,42 @@
     }
 }
 
+- (void)updateGpxData
+{
+    [super updateGpxData];
+
+    _mutableDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:
+            [(_app ? _app : [OsmAndApp instance]).gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
+    _segments = [_mutableDoc && [_mutableDoc getGeneralSegment] ? @[_mutableDoc.generalSegment] : @[]
+            arrayByAddingObjectsFromArray:[_mutableDoc getNonEmptyTrkSegments:NO]];
+
+    NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups = [NSMutableDictionary dictionary];
+    for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
+    {
+        OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
+        if (gpxWpt.type.length == 0)
+        {
+            [withoutGroup addObject:gpxWptItem];
+        }
+        else
+        {
+            NSMutableArray<OAGpxWptItem *> *group = waypointGroups[gpxWpt.type];
+            if (!group)
+                group = [@[gpxWptItem] mutableCopy];
+            else
+                [group addObject:gpxWptItem];
+
+            waypointGroups[gpxWpt.type] = group;
+        }
+    }
+
+    if (withoutGroup.count > 0)
+        waypointGroups[OALocalizedString(@"shared_string_gpx_points")] = withoutGroup;
+
+    _waypointGroups = waypointGroups;
+}
+
 - (void)updateDistanceAndDirection
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1261,80 +1660,116 @@
     }
 }
 
-- (void)updateWaypointGroups
-{
-    NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
-    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups = [NSMutableDictionary dictionary];
-    for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
-    {
-        OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
-        if (gpxWpt.type.length == 0)
-        {
-            [withoutGroup addObject:gpxWptItem];
-        }
-        else
-        {
-            NSMutableArray<OAGpxWptItem *> *group = waypointGroups[gpxWpt.type];
-            if (!group)
-                group = [@[gpxWptItem] mutableCopy];
-            else
-                [group addObject:gpxWptItem];
-
-            waypointGroups[gpxWpt.type] = group;
-        }
-    }
-
-    if (withoutGroup.count > 0)
-        waypointGroups[OALocalizedString(@"shared_string_gpx_points")] = withoutGroup;
-
-    _waypointGroups = waypointGroups;
-}
-
 - (BOOL)hasWaypoints
 {
     return _waypointGroups.allKeys.count > 0;
 }
 
+- (void)syncVisibleCharts:(LineChartView *)chartView
+{
+    for (OAGPXTableSectionData *sectionData in self.tableData)
+    {
+        for (OAGPXTableCellData *cellData in sectionData.cells)
+        {
+            if ([cellData.type isEqualToString:[OALineChartCell getCellIdentifier]])
+            {
+                OALineChartCell *chartCell = cellData.values[@"cell_value"];
+                if (chartCell)
+                    [chartCell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.lineChartView invalidate:YES];
+            }
+        }
+    }
+}
+
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
         return 48.;
+    else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
+        return cellData.toggle ? 136. : 69.;
 
     return UITableViewAutomaticDimension;
 }
 
-- (void)openCloseGroupButtonAction:(id)sender
+- (double)getRoundedDouble:(double)toRound
 {
-    UIButton *button = (UIButton *)sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-    OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    [cellData setData:@{
-            kCellToggle: @(!cellData.toggle)
-    }];
-    if (self.tableData[indexPath.section].updateData)
-        self.tableData[indexPath.section].updateData();
-
-    [self.tableView beginUpdates];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
+    return floorf(toRound * 100 + 0.5) / 100;
 }
 
 #pragma mark - OATrackMenuViewControllerDelegate
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
 {
+    [self openAnalysis:self.analysis
+              withMode:modeType];
+}
+
+- (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
+            withMode:(EOARouteStatisticsMode)mode
+{
     [self hide:YES duration:.2 onComplete:^{
         [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
-                                                                analysis:self.analysis
-                                                        menuControlState:[self getCurrentStateForAnalyze:modeType]];
+                                                                analysis:analysis
+                                                        menuControlState:[self getCurrentStateForAnalyze:mode]];
     }];
+}
+
+- (void)editSegment
+{
+    [self hide:YES duration:.2 onComplete:^{
+        [self.mapPanelViewController showPlanRouteViewController:[
+                [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
+                                                          targetMenuState:[self getCurrentState]]];
+    }];
+}
+
+- (void)deleteAndSaveSegment:(OAGpxTrkSeg *)segment
+{
+    if (segment && _mutableDoc)
+    {
+        if (!_segments)
+            [self updateGpxData];
+
+        if (_segments)
+        {
+            NSInteger segmentIndex = [_segments indexOfObject:segment];
+            if ([_mutableDoc removeTrackSegment:segment])
+            {
+                [_mutableDoc saveTo:_mutableDoc.path];
+                [self updateGpxData];
+
+                if (self.isCurrentTrack)
+                    [[_app trackRecordingObservable] notifyEvent];
+                else
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+                if (segmentIndex != NSNotFound)
+                {
+                    OAGPXTableSectionData *sectionData = self.tableData[segmentIndex];
+                    [sectionData setData:@{kTableValues: @{@"delete_section_bool_value": @YES}}];
+                    if (sectionData.updateData)
+                        sectionData.updateData();
+
+                    [self.tableView beginUpdates];
+                    [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:segmentIndex]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+                    [self.tableView endUpdates];
+                }
+
+                [self setupDescription];
+                if (_headerView)
+                    [_headerView setDescription:_description];
+            }
+        }
+    }
 }
 
 - (void)refreshWaypoints
 {
     [self updateGpxData];
-    [self updateWaypointGroups];
     for (OAGPXTableSectionData *sectionData in self.tableData)
     {
         if (sectionData.updateData)
@@ -1488,7 +1923,7 @@
     [self stopLocationServices];
 
     OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
-            [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithGroupName:groupName];
+            [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithWaypointsGroupName:groupName];
     editWaypointsBottomSheet.trackMenuDelegate = self;
     [editWaypointsBottomSheet presentInViewController:self];
 }
@@ -1507,41 +1942,53 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
-    _selectedTab = (EOATrackMenuHudTab) item.tag;
-
-    [self setupTableView];
-    [self setupDescription];
-    [self generateData];
-    [self setupHeaderView];
-
-    switch (_selectedTab)
+    if (_selectedTab != item.tag)
     {
-        case EOATrackMenuHudActionsTab:
-        {
-            [self goFullScreen];
+        if (_selectedTab == EOATrackMenuHudSegmentsTab)
+            [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+
+        if (_selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudPointsTab)
             [self stopLocationServices];
-            break;
-        }
-        default:
+
+        _selectedTab = (EOATrackMenuHudTab) item.tag;
+
+        [self setupTableView];
+        [self setupDescription];
+        [self generateData];
+        [self setupHeaderView];
+
+        switch (_selectedTab)
         {
-            if (self.currentState == EOADraggableMenuStateInitial)
-                [self goExpanded];
-            else
-                [self updateViewAnimated];
-
-            [self startLocationServices];
-            break;
+            case EOATrackMenuHudOverviewTab:
+            case EOATrackMenuHudPointsTab:
+            {
+                [self startLocationServices];
+                break;
+            }
+            case EOATrackMenuHudActionsTab:
+            {
+                [self goFullScreen];
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
-    }
 
-    [UIView transitionWithView:self.tableView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-                    {
-                        [self.tableView reloadData];
-                    }
-                    completion: nil];
+        if (self.currentState == EOADraggableMenuStateInitial)
+            [self goExpanded];
+        else
+            [self updateViewAnimated];
+
+        [UIView transitionWithView:self.tableView
+                          duration:0.35f
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void) {
+                            [self.tableView reloadData];
+                        }
+                        completion:nil];
+    }
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate
@@ -1741,6 +2188,42 @@
     [self hide:YES duration:.2 onComplete:nil];
 }
 
+#pragma - mark ChartViewDelegate
+
+- (void)chartValueNothingSelected:(ChartViewBase *)chartView
+{
+    [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+}
+
+- (void)chartValueSelected:(ChartViewBase *)chartView
+                     entry:(ChartDataEntry *)entry
+                 highlight:(ChartHighlight *)highlight
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:chartView.tag & 0x3FF inSection:chartView.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+
+    [_routeLineChartHelper refreshHighlightOnMap:NO
+                                   lineChartView:(LineChartView *) chartView
+                                trackChartPoints:cellData.values[@"points_value"]];
+}
+
+- (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
+{
+        [self syncVisibleCharts:(LineChartView *) chartView];
+}
+
+- (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
+{
+    LineChartView *lineChartView = (LineChartView *) chartView;
+    _hasTranslated = YES;
+    if (_highlightDrawX != -1)
+    {
+        ChartHighlight *h = [lineChartView getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
+        if (h != nil)
+            [lineChartView highlightValue:h callDelegate:true];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -1771,10 +2254,12 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
             [cell showLeftIcon:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
         }
         if (cell)
         {
+            cell.separatorInset =
+                    UIEdgeInsetsMake(0., _selectedTab == EOATrackMenuHudSegmentsTab ? self.tableView.frame.size.width : 20., 0., 0.);
+
             UIColor *tintColor = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
@@ -1964,7 +2449,7 @@
             cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
 
             [cell.optionsButton.imageView setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]];
-            cell.optionsButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.optionsButton.tintColor = UIColorFromRGB(color_primary_purple);
 
             cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
@@ -1988,6 +2473,121 @@
         }
         outCell = cell;
     }
+    else if ([cellData.type isEqualToString:[OASegmentTableViewCell getCellIdentifier]])
+    {
+        OASegmentTableViewCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier]
+                                                         owner:self
+                                                       options:nil];
+            cell = (OASegmentTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+        }
+        if (cell)
+        {
+            NSInteger segmentsCount = cell.segmentControl.numberOfSegments;
+            if ([cellData.values.allKeys containsObject:@"tab_2_string_value"] && segmentsCount < 3)
+                [cell.segmentControl insertSegmentWithTitle:cellData.values[@"tab_2_string_value"] atIndex:2 animated:NO];
+
+            [cell.segmentControl setTitle:cellData.values[@"tab_0_string_value"] forSegmentAtIndex:0];
+            [cell.segmentControl setTitle:cellData.values[@"tab_1_string_value"] forSegmentAtIndex:1];
+            cell.segmentControl.tag = tag;
+            [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.segmentControl.selectedSegmentIndex = [cellData.values[@"selected_index_int_value"] intValue];
+        }
+        return cell;
+    }
+    else if ([cellData.type isEqualToString:[OALineChartCell getCellIdentifier]])
+    {
+        return cellData.values[@"cell_value"];
+    }
+    else if ([cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
+    {
+        OARadiusCellEx *cell = [tableView dequeueReusableCellWithIdentifier:[OARadiusCellEx getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCellEx getCellIdentifier] owner:self options:nil];
+            cell = (OARadiusCellEx *) nib[0];
+            cell.buttonRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+            cell.buttonRight.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., 30.);
+            cell.buttonRight.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonRight.frame.size.width + 19., 0., -21.);
+            cell.buttonRight.imageView.layer.cornerRadius = 12;
+            cell.buttonRight.imageView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1];
+            cell.buttonRight.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.buttonRight setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+            [cell.buttonLeft setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+        }
+        if (cell)
+        {
+            [cell.buttonLeft setTitle:cellData.values[@"left_title_string_value"] forState:UIControlStateNormal];
+
+            UIImage *rightIcon = [UIImage templateImageNamed:cellData.values[@"right_icon_string_value"]];
+
+            cell.buttonLeft.tag = tag;
+            [cell.buttonLeft removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.buttonLeft addTarget:self
+                                action:@selector(cellButtonPressed:)
+                      forControlEvents:UIControlEventTouchUpInside];
+
+            [cell showButtonRight:cellData.toggle];
+            if (cellData.toggle)
+            {
+                [cell.buttonRight setImage:[OAUtilities resizeImage:rightIcon newSize:CGSizeMake(24., 24.)] forState:UIControlStateNormal];
+                [cell.buttonRight setTitle:cellData.values[@"right_title_string_value"] forState:UIControlStateNormal];
+                cell.buttonRight.tag = tag;
+                [cell.buttonRight removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+                [cell.buttonRight addTarget:self
+                                     action:@selector(cellButtonPressed:)
+                           forControlEvents:UIControlEventTouchUpInside];
+            }
+        }
+        outCell = cell;
+    }
+    else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
+    {
+        OAQuadItemsWithTitleDescIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAQuadItemsWithTitleDescIconCell getCellIdentifier] owner:self options:nil];
+            cell = (OAQuadItemsWithTitleDescIconCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsZero;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+            UIColor *tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.topLeftIcon.tintColor = tintColor;
+            cell.topRightIcon.tintColor = tintColor;
+            cell.bottomLeftIcon.tintColor = tintColor;
+            cell.bottomRightIcon.tintColor = tintColor;
+        }
+        if (cell)
+        {
+            NSDictionary *titles = cellData.values[@"titles"];
+            NSDictionary *icons = cellData.values[@"icons"];
+            NSDictionary *descriptions = cellData.values[@"descriptions"];
+
+            cell.topLeftTitle.text = titles[@"top_left_title_string_value"];
+            cell.topRightTitle.text = titles[@"top_right_title_string_value"];
+            cell.bottomLeftTitle.text = titles[@"bottom_left_title_string_value"];
+            cell.bottomRightTitle.text = titles[@"bottom_right_title_string_value"];
+
+            cell.topLeftIcon.image = [UIImage templateImageNamed:icons[@"top_left_icon_name_string_value"]];
+            cell.topRightIcon.image = [UIImage templateImageNamed:icons[@"top_right_icon_name_string_value"]];
+            cell.bottomLeftIcon.image = [UIImage templateImageNamed:icons[@"bottom_left_icon_name_string_value"]];
+            cell.bottomRightIcon.image = [UIImage templateImageNamed:icons[@"bottom_right_icon_name_string_value"]];
+
+            cell.topLeftDescription.text = descriptions[@"top_left_description_string_value"];
+            cell.topRightDescription.text = descriptions[@"top_right_description_string_value"];
+            cell.bottomLeftDescription.text = descriptions[@"bottom_left_description_string_value"];
+            cell.bottomRightDescription.text = descriptions[@"bottom_right_description_string_value"];
+
+            [cell showBottomButtons:cellData.toggle];
+        }
+        outCell = cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -2005,8 +2605,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (_selectedTab == EOATrackMenuHudOverviewTab
-            || (_selectedTab == EOATrackMenuHudPointsTab && section == [self numberOfSectionsInTableView:self.tableView] - 1))
+            || (_selectedTab == EOATrackMenuHudPointsTab && section == self.tableData.count - 1))
         return 56.;
+    else if (_selectedTab == EOATrackMenuHudSegmentsTab && section != 0)
+        return 36.;
     else if (_selectedTab == EOATrackMenuHudPointsTab && section != 0)
         return 14.;
     else if (_selectedTab == EOATrackMenuHudActionsTab)
@@ -2069,7 +2671,7 @@
     }
     else if ([cellData.key isEqualToString:@"analyze"])
     {
-        [self openAnalysis:EOARouteStatisticsModeBoth];
+        [self openAnalysis:EOARouteStatisticsModeAltitudeSlope];
     }
     else if ([cellData.key isEqualToString:@"share"])
     {
@@ -2077,11 +2679,7 @@
     }
     else if ([cellData.key isEqualToString:@"edit"])
     {
-        [self hide:YES duration:.2 onComplete:^{
-            [self.mapPanelViewController showPlanRouteViewController:[
-                    [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
-                                                              targetMenuState:[self getCurrentState]]];
-        }];
+        [self editSegment];
     }
     else if ([cellData.key isEqualToString:@"edit_create_duplicate"])
     {
@@ -2126,14 +2724,123 @@
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
+- (void)openCloseGroupButtonAction:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    [cellData setData:@{
+            kCellToggle: @(!cellData.toggle)
+    }];
+    if (self.tableData[indexPath.section].updateData)
+        self.tableData[indexPath.section].updateData();
+
+    [self.tableView beginUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                  withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+}
+
 - (void)cellButtonPressed:(id)sender
 {
-    UIButton *switchView = (UIButton *) sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+    UIButton *button = (UIButton *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
     if (cellData.onButtonPressed)
         cellData.onButtonPressed();
+    else
+    {
+        for (UIGestureRecognizer *recognizer in self.tableView.gestureRecognizers)
+        {
+            if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
+            {
+                BOOL isLeftButton = [recognizer locationInView:self.view].x < self.tableView.frame.size.width / 2;
+
+                if (isLeftButton && cellData.values[@"left_on_button_pressed"])
+                    ((OAGPXTableDataUpdateData) cellData.values[@"left_on_button_pressed"])();
+                else if (!isLeftButton && cellData.values[@"right_on_button_pressed"])
+                    ((OAGPXTableDataUpdateData) cellData.values[@"right_on_button_pressed"])();
+
+                break;
+            }
+        }
+    }
+}
+
+- (void)segmentChanged:(id)sender
+{
+    UISegmentedControl *segment = (UISegmentedControl *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:segment.tag & 0x3FF inSection:segment.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+
+    NSMutableDictionary *values = [cellData.values mutableCopy];
+    values[@"selected_index_int_value"] = @(segment.selectedSegmentIndex);
+    [cellData setData:@{ kTableValues: values }];
+
+    if (cellData.updateData)
+        cellData.updateData();
+
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[cellData.values[@"statistics_row_int_value"] intValue]
+                                                                inSection:indexPath.section]]
+                          withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)onBarChartScrolled:(UIPanGestureRecognizer *)recognizer
+             lineChartView:(LineChartView *)lineChartView
+{
+    if (recognizer.state == UIGestureRecognizerStateChanged)
+    {
+        if (lineChartView.lowestVisibleX > 0.1
+                && [self getRoundedDouble:lineChartView.highestVisibleX] != [self getRoundedDouble:lineChartView.chartXMax])
+        {
+            _lastTranslation = [recognizer translationInView:lineChartView];
+            return;
+        }
+
+        ChartHighlight *lastHighlighted = lineChartView.lastHighlighted;
+        CGPoint touchPoint = [recognizer locationInView:lineChartView];
+        CGPoint translation = [recognizer translationInView:lineChartView];
+        ChartHighlight *h = [lineChartView getHighlightByTouchPoint:CGPointMake(lineChartView.isFullyZoomedOut
+                ? touchPoint.x : _highlightDrawX + (_lastTranslation.x - translation.x), 0.)];
+
+        if (h != lastHighlighted)
+        {
+            lineChartView.lastHighlighted = h;
+            [lineChartView highlightValue:h callDelegate:YES];
+        }
+    }
+    else if (recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        _lastTranslation = CGPointZero;
+        if (lineChartView.highlighted.count > 0)
+            _highlightDrawX = lineChartView.highlighted.firstObject.drawX;
+    }
+}
+
+- (void)onChartGesture:(UIGestureRecognizer *)recognizer
+         lineChartView:(LineChartView *)lineChartView
+{
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        _hasTranslated = NO;
+        if (lineChartView.highlighted.count > 0)
+            _highlightDrawX = lineChartView.highlighted.firstObject.drawX;
+        else
+            _highlightDrawX = -1;
+    }
+    else if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
+            ([recognizer isKindOfClass:UITapGestureRecognizer.class]
+                    && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
+            && recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lineChartView.tag & 0x3FF inSection:lineChartView.tag >> 10];
+        OAGPXTableCellData *cellData = [self getCellData:indexPath];
+
+        [_routeLineChartHelper refreshHighlightOnMap:YES
+                                           lineChartView:lineChartView
+                                        trackChartPoints:cellData.values[@"points_value"]];
+    }
 }
 
 @end

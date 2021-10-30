@@ -96,9 +96,27 @@
 
     [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
+            @"title" : OALocalizedString(@"gpx_speed"),
+            @"img" : @"ic_action_speed",
+            @"mode" : @(EOARouteStatisticsModeSpeed),
+            @"round_bottom" : @(NO),
+            @"round_top" : @(NO)
+    }];
+
+    [arr addObject:@{
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")],
             @"img" : @"ic_custom_altitude_and_slope",
-            @"mode" : @(EOARouteStatisticsModeBoth),
+            @"mode" : @(EOARouteStatisticsModeAltitudeSlope),
+            @"round_bottom" : @(NO),
+            @"round_top" : @(NO)
+    }];
+
+    [arr addObject:@{
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
+            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_speed")],
+            @"img" : @"ic_custom_altitude_and_slope",
+            @"mode" : @(EOARouteStatisticsModeAltitudeSpeed),
             @"round_bottom" : @(YES),
             @"round_top" : @(NO)
     }];
@@ -168,14 +186,17 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
         }
-        
         if (cell)
         {
+            EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [item[@"mode"] integerValue];
             cell.backgroundColor = UIColor.clearColor;
+
             cell.titleView.text = item[@"title"];
-            
+            cell.textColorNormal = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed) && !vwController.hasSpeed ? UIColorFromRGB(unselected_tab_icon) : UIColor.blackColor;
+
             [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            cell.iconColorNormal = vwController.mode == (EOARouteStatisticsMode) [item[@"mode"] integerValue] ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
+            cell.iconColorNormal = vwController.mode == mode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
+
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -222,9 +243,16 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (vwController.delegate)
-        [vwController.delegate onNewModeSelected:(EOARouteStatisticsMode)[[self getItem:indexPath][@"mode"] integerValue]];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self.vwController dismiss];
+    {
+        EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [[self getItem:indexPath][@"mode"] integerValue];
+        BOOL isSpeed = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed);
+        if ((isSpeed && vwController.hasSpeed) || !isSpeed)
+        {
+            [vwController.delegate onNewModeSelected:mode];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self.vwController dismiss];
+        }
+    };
 }
 
 @synthesize vwController;
@@ -237,9 +265,10 @@
 
 @implementation OAStatisticsSelectionBottomSheetViewController
 
-- (instancetype) initWithMode:(EOARouteStatisticsMode)mode
+- (instancetype)initWithMode:(EOARouteStatisticsMode)mode hasSpeed:(BOOL)hasSpeed
 {
     _mode = mode;
+    _hasSpeed = hasSpeed;
     return [super initWithParam:nil];
 }
 

@@ -34,6 +34,51 @@
     return self;
 }
 
+- (instancetype)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
+{
+    self = [super initWithGpxDocument:gpxDocument];
+    if (self)
+    {
+        document = gpxDocument;
+    }
+    return self;
+}
+
+- (BOOL)loadFrom:(NSString *)filename
+{
+    if (filename && filename.length > 0)
+    {
+        document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
+        return [self fetch:document];
+    }
+    else
+    {
+        return false;
+    }
+}
+
+- (void)fetchTrkSeg
+{
+    if (document == nullptr)
+        return;
+
+    if (!document->tracks.isEmpty())
+    {
+        for (const auto &t: document->tracks)
+        {
+            OAGpxTrk *track = self.tracks[document->tracks.indexOf(t)];
+            OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *_t = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *) &t;
+            track.trk = _t->shared_ptr();
+
+            for (const auto &s: t->segments)
+            {
+                OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *_s = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *) &s;
+                track.segments[t->segments.indexOf(s)].trkseg = _s->shared_ptr();
+            }
+        }
+    }
+}
+
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument
 {
     return document;
@@ -508,6 +553,40 @@
     trkseg = nullptr;
     
     [((NSMutableArray *)track.segments) addObject:s];
+}
+
+- (BOOL)removeTrackSegment:(OAGpxTrkSeg *)segment
+{
+    [self removeGeneralTrackIfExists];
+
+    for (OAGpxTrk *track in self.tracks)
+    {
+        for (OAGpxTrkSeg *trackSeg in track.segments)
+        {
+            if (trackSeg == segment || trackSeg.trkseg == segment.trkseg)
+            {
+                if (track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GeoInfoDocument::TrackSegment>(trackSeg.trkseg)))
+                {
+                    [self addGeneralTrack];
+                    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+                }
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (void)removeGeneralTrackIfExists
+{
+    if (self.generalTrack)
+    {
+        NSMutableArray *tracks = [self.tracks mutableCopy];
+        [tracks removeObject:self.generalTrack];
+        self.tracks = tracks;
+        self.generalTrack = nil;
+        self.generalSegment = nil;
+    }
 }
 
 - (void) addTrackPoint:(OAGpxTrkPt *)p segment:(OAGpxTrkSeg *)segment

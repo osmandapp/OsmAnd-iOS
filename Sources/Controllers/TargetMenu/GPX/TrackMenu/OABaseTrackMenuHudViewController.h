@@ -106,4 +106,6 @@ typedef void(^OAGPXTableDataUpdateData)();
                                   secondAttribute:(NSLayoutAttribute)secondAttribute
                                          constant:(CGFloat)constant;
 
+- (void)adjustMapViewPort;
+
 @end

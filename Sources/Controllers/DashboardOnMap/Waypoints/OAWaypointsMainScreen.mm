@@ -973,6 +973,7 @@
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCellEx getCellIdentifier] owner:self options:nil];
                 cell = (OARadiusCellEx *)[nib objectAtIndex:0];
+                [cell showButtonRight:YES];
             }
             if (cell)
             {

@@ -118,7 +118,6 @@
 @implementation OABaseTrackMenuHudViewController
 {
     CGFloat _cachedYViewPort;
-    OsmAndAppInstance _app;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
@@ -128,7 +127,6 @@
     {
         _gpx = gpx;
 
-        _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
@@ -155,7 +153,7 @@
         _gpx.gpxTitle = OALocalizedString(@"track_recording_name");
     }
     _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
-            : [[OAGPXDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
+            : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
 
     _analysis = [_doc getAnalysis:_isCurrentTrack ? 0
             : (long) [[OAUtilities getFileLastModificationDate:_gpx.gpxFilePath] timeIntervalSince1970]];

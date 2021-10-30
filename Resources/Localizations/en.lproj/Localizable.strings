@@ -496,6 +496,10 @@
 "shared_string_time" = "Time";
 "shared_string_time_of_day" = "Time of day";
 "shared_string_distance" = "Distance";
+"shared_string_time_span" = "Time span";
+"shared_string_start_time" = "Start time";
+"shared_string_end_time" = "End time";
+"shared_string_time_moving" = "Time moving";
 "shared_string_retry" = "Retry";
 "shared_string_enabled" = "Enabled";
 "shared_string_start_date" = "Start date";
@@ -658,6 +662,7 @@
 "gpx_descent" = "Descent";
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills total";
+"distance_moving" = "Distance corrected";
 "track_recording" = "Track recording";
 "track_recording_name" = "Currently recording track";
 "track_stop_rec" = "Stop recording";

@@ -2208,3 +2208,4 @@
 "ios_release_4_1" = "• Nova tela para pesquisa por coordenadas em diferentes formatos\n• Pesquisa de coordenadas melhorada no formato OLC\n• Novo menu amigável para escolher os idiomas dos artigos da Wikipédia a mostrar no mapa\n• Capacidade de carregar mapas de todas as regiões do país facilmente com alguns cliques\n• Adicionadas linhas de contorno na medida \"pés\" (é necessário descarregar novamente os arquivos)\n• Adicionada capacidade de descarregar mapas selecionando a região ou país desejado no mapa, bem como adicionando uma janela com a sugestão de carregar o mapa se a região for visualizada sem um mapa\n• Nova aparência de botões no mapa e capacidade adicional de alterar a ampliação do mapa tocando duas vezes e deslizando\n";
 "reset_to_original" = "Redefinir para original";
 "gpx_split_interval_none_descr" = "Selecione a opção de divisão desejada: por tempo ou por distância.";
+"delete_waypoints" = "Apagar ponto fixo";

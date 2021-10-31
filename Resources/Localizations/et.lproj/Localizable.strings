@@ -2161,3 +2161,17 @@
 "track_show_start_finish_icons" = "Näita alguse ja lõpu ikoone";
 "reset_to_original" = "Lähtesta originaalile";
 "gpx_join_gaps_descr" = "Lõikudevahelised lüngad ühendatakse.";
+"nautical" = "Merenduslik";
+"ios_release_4_1" = "- Uus ekraan koordinaatide otsimiseks eri formaatides\n- Parandatud koordinaatide otsing OLC-vormingus\n- Uus kasutajasõbralik menüü Vikipeedia artiklite kaardil kuvamise keelte valimiseks\n- Lisatud võimalus laadida paari klikiga hõlpsasti kõigi riigi piirkondade kaarte\n- Lisatud kõrgusjooned jalgades (peate failid uuesti alla laadima)\n- Lisatud võimalus kaardid alla laadida, valides kaardil soovitud piirkonna või riigi, samuti lisatud dialoogiaken ettepanekuga laadida kaart, kui piirkonda vaadatakse ilma kaardita\n- Kaardil olevate nuppude uus välimus ja lisatud võimalus muuta kaardi suumi topeltpuudutuse ja libistamise abil\n";
+"delete_group_confirm_short" = "Kustutada grupp?";
+"delete_group_confirm" = "Kas oled kindel, et soovid kustutada grupi \"%@\"?";
+"slope_grey_color_descr" = "Halli värvi kasutatakse, kui kalle on määratlemata.";
+"route_line_color_elevation_description" = "Marsruudi joon on värvitud sõltuvalt marsruudi kõrgusprofiilist.";
+"gpx_split_interval_none_descr" = "Vali soovitud jaotamise võimalus: aja või vahemaa järgi.";
+"delete_waypoints" = "Kustuta teekonnapunktid";
+"analyze_on_map" = "Analüüsi kaardil";
+"upload_to_openstreetmap" = "Lae üles OpenStreetMap-i";
+"edit_track" = "Muuda rada";
+"duplicate_track" = "Dubleeri rada";
+"shared_string_overview" = "Ülevaade";
+"activity" = "Tegevus";

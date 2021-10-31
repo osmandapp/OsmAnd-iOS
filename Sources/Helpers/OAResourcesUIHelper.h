@@ -241,6 +241,11 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
                                           resourceType:(OsmAndResourceType)resourceType
                                             subregions:(NSArray<OAWorldRegion *> *)subregions;
 
++ (NSArray<OAResourceItem *> *) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                                          resourceType:(OsmAndResourceType)resourceType
+                                            subregions:(NSArray<OAWorldRegion *> *)subregions
+                                        checkForMissed:(BOOL)checkForMissed;
+
 + (void) getMapsForType:(OsmAnd::ResourcesManager::ResourceType)type
                  latLon:(CLLocationCoordinate2D)latLon
              onComplete:(void (^)(NSArray<OARepositoryResourceItem *> *))onComplete;

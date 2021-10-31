@@ -315,6 +315,7 @@
                                          onComplete:^(NSArray<OAResourceItem *>* res) {
             if (res.count > 0)
             {
+                OARepositoryResourceItem *repositoryResourceItem;
                 for (OAResourceItem * item in res)
                 {
                     if ([item isKindOfClass:OALocalResourceItem.class])
@@ -323,9 +324,13 @@
                         [controller createMapDownloadControls];
                         return;
                     }
+                    if ([((OAPOIViewController *)controller).poi.name isEqualToString:item.worldRegion.nativeName])
+                        repositoryResourceItem = (OARepositoryResourceItem *)item;
                 }
-                OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
-                BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
+                if (!repositoryResourceItem)
+                    repositoryResourceItem = (OARepositoryResourceItem *)res[0];
+                
+                BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", repositoryResourceItem.resourceId.toNSString()]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (controller.delegate && [controller.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
                         [controller.delegate showProgressBar];
@@ -335,8 +340,8 @@
                 
                 if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable || isDownloading)
                 {
-                    controller.localMapIndexItem = item;
-                    if (item && [controller isKindOfClass:OAPOIViewController.class])
+                    controller.localMapIndexItem = repositoryResourceItem;
+                    if (repositoryResourceItem && [controller isKindOfClass:OAPOIViewController.class])
                         [((OAPOIViewController *)controller).delegate addresLabelUpdated];
                 }
             }

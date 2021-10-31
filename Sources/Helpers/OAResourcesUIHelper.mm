@@ -936,7 +936,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         OsmAndResourceType type = [OAResourceType toResourceType:resourceType isGroup:isGroup];
         if (type != [OAResourceType unknownType])
-            [resources addObjectsFromArray:[OAResourcesUIHelper requestMapDownloadInfo:kCLLocationCoordinate2DInvalid resourceType:type subregions:subregions]];
+            [resources addObjectsFromArray:[OAResourcesUIHelper requestMapDownloadInfo:kCLLocationCoordinate2DInvalid resourceType:type subregions:subregions checkForMissed:YES]];
     }
     return [NSArray arrayWithArray:resources];
 }
@@ -957,6 +957,14 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
                                          resourceType:(OsmAndResourceType)resourceType
                                            subregions:(NSArray<OAWorldRegion *> *)subregions
+{
+    return [self requestMapDownloadInfo:coordinate resourceType:resourceType subregions:subregions checkForMissed:NO];
+}
+
++ (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                                         resourceType:(OsmAndResourceType)resourceType
+                                           subregions:(NSArray<OAWorldRegion *> *)subregions
+                                       checkForMissed:(BOOL)checkForMissed
 {
     NSMutableArray<OAResourceItem *> *res = [NSMutableArray new];
     NSArray *sortedSelectedRegions;
@@ -1062,7 +1070,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                 }
             }
             
-            if (!found)
+            if (!found && checkForMissed)
                 return nil;
         }
     }

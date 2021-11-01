@@ -207,6 +207,18 @@
     }
 }
 
+- (void) downloadControlButtonPressed
+{
+    self.rightControlButton = nil;
+    [super downloadControlButtonPressed];
+}
+
+- (void) onDownloadCancelled
+{
+    [super onDownloadCancelled];
+    [self setupOtherMapsButton];
+}
+
 - (void)rightControlButtonPressed
 {
     OADownloadedRegionsLayer *layer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.downloadedRegionsLayer;

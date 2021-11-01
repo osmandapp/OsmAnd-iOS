@@ -1484,7 +1484,7 @@ static const NSInteger _buttonsCount = 4;
         if (hasDownloadControls && needsSecondRow)
             controlButtonsHeight += kButtonsViewHeight;
         
-        if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin)
+        if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin && !hasDownloadControls)
             controlButtonsHeight += OAUtilities.getBottomMargin;
     }
     

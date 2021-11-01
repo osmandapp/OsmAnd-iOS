@@ -155,7 +155,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
 - (void)applyLocalization
 {
     [self.titleView setText:OALocalizedString(@"map_settings_appearance")];
-    [self.doneButton.titleLabel setText:OALocalizedString(@"shared_string_done")];
 }
 
 - (void)setupView
@@ -164,6 +163,10 @@ static const NSInteger kCustomTrackWidthMax = 24;
     self.titleIconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
 
     [self.doneButton addBlurEffect:YES cornerRadius:12. padding:0.];
+    [self.doneButton setAttributedTitle:
+                    [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
+                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                               forState:UIControlStateNormal];
 
     CGRect toolBarFrame = self.toolBarView.frame;
     toolBarFrame.origin.y = self.scrollableView.frame.size.height;

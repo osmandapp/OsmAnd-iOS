@@ -406,6 +406,7 @@
         {
             OAGPX *item = mapViewController.foundGpx;
             OATargetPoint *targetPoint = [self getTargetPoint:item];
+            targetPoint.location = point;
             if (targetPoint && ![found containsObject:targetPoint])
                 [found addObject:targetPoint];
         }

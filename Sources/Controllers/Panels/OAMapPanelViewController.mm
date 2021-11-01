@@ -1131,7 +1131,7 @@ typedef enum
 {
     if (forceHide)
     {
-        if ([self.targetMenuView forceHideIfSupported])
+        if ([self.targetMenuView forceHideIfSupported] && !self.scrollableHudViewController)
             [self targetHideContextPinMarker];
     }
     else
@@ -1270,7 +1270,9 @@ typedef enum
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
     if (targetPoint.type == OATargetGPX)
-        return [self openTargetViewWithGPX:targetPoint.targetObj];
+        return [self openTargetViewWithGPX:targetPoint.targetObj
+                              trackHudMode:EOATrackMenuHudMode
+                                     state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location]];
     else
         return [self showContextMenu:targetPoint saveState:YES];
 }
@@ -2512,7 +2514,7 @@ typedef enum
     
     if (pushed && _activeTargetActive && [self hasGpxActiveTargetType])
         _activeTargetChildPushed = YES;
-    
+
     [self showTargetPointMenu:saveState showFullMenu:showFullMenu onComplete:^{
         [self goToTargetPointDefault];
     }];
@@ -2522,10 +2524,28 @@ typedef enum
 {
     [self openTargetViewWithGPX:item
                    trackHudMode:EOATrackMenuHudMode
-                          state:nil];
+                          state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
+                    ? _activeViewControllerState : [OATrackMenuViewControllerState withPinLocation:item.bounds.center]];
 }
 
-- (void)doShowGpxItem:(OAGPX *)item state:(OATargetMenuViewControllerState *)state trackHudMode:(EOATrackHudMode)trackHudMode
+- (void)openTargetViewWithGPX:(OAGPX *)item
+                 trackHudMode:(EOATrackHudMode)trackHudMode
+                        state:(OATrackMenuViewControllerState *)state;
+{
+    if (_scrollableHudViewController)
+    {
+        [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
+            state.pinLocation = item.bounds.center;
+            [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
+        }];
+        return;
+    }
+    [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
+}
+
+- (void)doShowGpxItem:(OAGPX *)item
+                state:(OATrackMenuViewControllerState *)state
+         trackHudMode:(EOATrackHudMode)trackHudMode
 {
     BOOL showCurrentTrack = NO;
     if (item == nil)
@@ -2534,26 +2554,14 @@ typedef enum
         item.gpxTitle = OALocalizedString(@"track_recording_name");
         showCurrentTrack = YES;
     }
-    
+
     [self hideMultiMenuIfNeeded];
-    
+
     if (_dashboard)
         [self closeDashboard];
-    
-    [_mapViewController hideContextPinMarker];
-    
+
     OAMapRendererView *renderView = (OAMapRendererView *) _mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    
-    NSString *caption = [item getNiceTitle];
-    
-    UIImage *icon = [UIImage imageNamed:@"icon_info"];
-    
-    targetPoint.type = OATargetGPX;
-    
-    _targetMenuView.isAddressFound = YES;
-    _formattedTargetName = caption;
-    
     if (item.bounds.center.latitude == DBL_MAX)
     {
         OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
@@ -2565,51 +2573,50 @@ typedef enum
     {
         targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
     }
-    
+
+    [_mapViewController showContextPinMarker:state && state.pinLocation.latitude != DBL_MAX
+                    ? state.pinLocation.latitude : targetPoint.location.latitude
+                                   longitude:state && state.pinLocation.latitude != DBL_MAX
+                    ? state.pinLocation.longitude : targetPoint.location.longitude
+                                    animated:_targetLatitude != item.bounds.bottomRight.latitude
+                                            && _targetLongitude != item.bounds.topLeft.longitude];
+
+
+    targetPoint.type = OATargetGPX;
     targetPoint.title = _formattedTargetName;
-    targetPoint.icon = icon;
+    targetPoint.icon = [UIImage imageNamed:@"icon_info"];
     targetPoint.toolbarNeeded = NO;
     if (!showCurrentTrack)
         targetPoint.targetObj = item;
-    
+
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
-    
+    _activeViewControllerState = state;
+
+    _formattedTargetName = [item getNiceTitle];
+    _targetMenuView.isAddressFound = YES;
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
-    
+
     OABaseTrackMenuHudViewController *trackMenuHudViewController;
-    
+
     switch (trackHudMode)
     {
         case EOATrackAppearanceHudMode:
             trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
                                                                                                state:state];
             break;
-            
+
         case EOATrackMenuHudMode:
         default:
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj state:state];
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj
+                                                                                     state:state];
             break;
     }
-    
+
     [self showScrollableHudViewController:trackMenuHudViewController];
     _activeTargetActive = YES;
     [self enterContextMenuMode];
-}
-
-- (void)openTargetViewWithGPX:(OAGPX *)item
-                 trackHudMode:(EOATrackHudMode)trackHudMode
-                        state:(OATargetMenuViewControllerState *)state;
-{
-    if (_scrollableHudViewController)
-    {
-        [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
-            [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
-        }];
-        return;
-    }
-    [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
 }
 
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed
@@ -2974,15 +2981,27 @@ typedef enum
     }];
 }
 
-- (void) displayGpxOnMap:(OAGPX *)item
+- (void)displayGpxOnMap:(OAGPX *)item
 {
     if (item.bounds.topLeft.latitude == DBL_MAX)
         return;
-    
-    [self displayAreaOnMap:item.bounds.topLeft bottomRight:item.bounds.bottomRight zoom:0 bottomInset:[self.scrollableHudViewController isLandscape] ? 0.0 : [self.scrollableHudViewController getViewHeight] leftInset:[self.scrollableHudViewController isLandscape] ? DeviceScreenWidth * 0.45 : 0.0 animated:NO];
+
+    BOOL landscape = [self.scrollableHudViewController isLandscape];
+    CGSize screenBBox = CGSizeMake(
+            landscape ? DeviceScreenWidth - [self.scrollableHudViewController getLandscapeViewWidth] : DeviceScreenWidth,
+            landscape ? DeviceScreenHeight : DeviceScreenHeight - [self.scrollableHudViewController getViewHeight]);
+
+    [self displayAreaOnMap:item.bounds
+                      zoom:0.
+                screenBBox:screenBBox
+               bottomInset:0.
+                 leftInset:0.
+                  topInset:0.
+                  animated:NO];
 }
 
-- (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
+- (BOOL)goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft
+                   bottomRight:(CLLocationCoordinate2D)bottomRight
 {
     BOOL res = NO;
     
@@ -3027,34 +3046,59 @@ typedef enum
     return res;
 }
 
-- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset
-{
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom bottomInset:bottomInset leftInset:leftInset animated:YES];
-}
-
-- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset animated:(BOOL)animated
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+             bottomRight:(CLLocationCoordinate2D)bottomRight
+                    zoom:(float)zoom
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                animated:(BOOL)animated
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
     CGFloat topInset = 0.0;
     if (toolbar && [toolbar.navBarView superview])
         topInset = toolbar.navBarView.frame.size.height;
     CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset animated:animated];
+    [self displayAreaOnMap:topLeft
+               bottomRight:bottomRight
+                      zoom:zoom
+                screenBBox:screenBBox
+               bottomInset:bottomInset
+                 leftInset:leftInset
+                  topInset:topInset
+                  animated:animated];
 }
 
-- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset
-{
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset animated:YES];
-}
-
-- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset animated:(BOOL)animated
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+             bottomRight:(CLLocationCoordinate2D)bottomRight
+                    zoom:(float)zoom
+              screenBBox:(CGSize)screenBBox
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                topInset:(float)topInset
+                animated:(BOOL)animated
 {
     OAGpxBounds bounds;
     bounds.topLeft = topLeft;
     bounds.bottomRight = bottomRight;
     bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
-    
+    [self displayAreaOnMap:bounds
+                      zoom:zoom
+                screenBBox:screenBBox
+               bottomInset:bottomInset
+                 leftInset:leftInset
+                  topInset:topInset
+                  animated:animated];
+}
+
+- (void)displayAreaOnMap:(OAGpxBounds)bounds
+                    zoom:(float)zoom
+              screenBBox:(CGSize)screenBBox
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                topInset:(float)topInset
+                animated:(BOOL)animated
+{
     if (bounds.topLeft.latitude == DBL_MAX)
         return;
     
@@ -3081,15 +3125,30 @@ typedef enum
     targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     if (bottomInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+        [_mapViewController correctPosition:targetPoint31
+                           originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
+                                  leftInset:leftInset
+                                bottomInset:bottomInset
+                                 centerBBox:(_targetMode == EOATargetBBOX)
+                                   animated:animated];
     }
     else if (topInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+        [_mapViewController correctPosition:targetPoint31
+                           originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
+                                  leftInset:leftInset
+                                bottomInset:-topInset
+                                 centerBBox:(_targetMode == EOATargetBBOX)
+                                   animated:animated];
     }
-    else if (leftInset > 0)
+    else
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:0 centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+        [_mapViewController correctPosition:targetPoint31
+                           originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
+                                  leftInset:leftInset > 0 ? leftInset : 0
+                                bottomInset:0
+                                 centerBBox:(_targetMode == EOATargetBBOX)
+                                   animated:animated];
     }
 }
 

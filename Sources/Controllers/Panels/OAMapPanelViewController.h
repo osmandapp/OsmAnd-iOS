@@ -22,6 +22,7 @@
 @class OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode;
 @class OAGPXDocument, OAGPXTrackAnalysis;
 @class OARoutePlanningHudViewController;
+@class OATrackMenuViewControllerState;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -122,7 +123,7 @@
 - (void) openTargetViewWithGPX:(OAGPX *)item;
 - (void) openTargetViewWithGPX:(OAGPX *)item
                   trackHudMode:(EOATrackHudMode)trackHudMode
-                         state:(OATargetMenuViewControllerState *)state;
+                         state:(OATrackMenuViewControllerState *)state;
 
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
@@ -141,10 +142,27 @@
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;
 
 - (BOOL) hasGpxActiveTargetType;
+
 - (void) displayGpxOnMap:(OAGPX *)item;
-- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset;
-- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset;
-- (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
+
+- (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft
+                    bottomRight:(CLLocationCoordinate2D)bottomRight;
+
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+              bottomRight:(CLLocationCoordinate2D)bottomRight
+                     zoom:(float)zoom
+              bottomInset:(float)bottomInset
+                leftInset:(float)leftInset
+                 animated:(BOOL)animated;
+
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+              bottomRight:(CLLocationCoordinate2D)bottomRight
+                     zoom:(float)zoom
+               screenBBox:(CGSize)screenBBox
+              bottomInset:(float)bottomInset
+                leftInset:(float)leftInset
+                 topInset:(float)topInset
+                 animated:(BOOL)animated;
 
 - (void) applyTargetPoint:(OATargetPoint *)targetPoint;
 

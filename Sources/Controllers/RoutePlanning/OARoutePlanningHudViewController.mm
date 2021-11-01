@@ -58,6 +58,7 @@
 #import "OAHudButton.h"
 #import "OAMapHudViewController.h"
 #import "OAOsmAndFormatter.h"
+#import "OATrackMenuHudViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -589,7 +590,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     BOOL landscape = [self isLeftSidePresentation];
-    [mapPanel displayAreaOnMap:routeBBox.topLeft bottomRight:routeBBox.bottomRight zoom:0 bottomInset:!landscape ? self.getViewHeight : 0 leftInset:landscape ? self.tableView.frame.size.width : 0];
+    [mapPanel displayAreaOnMap:routeBBox.topLeft
+                   bottomRight:routeBBox.bottomRight
+                          zoom:0
+                   bottomInset:!landscape ? self.getViewHeight : 0
+                     leftInset:landscape ? self.tableView.frame.size.width : 0
+                      animated:YES];
 }
 
 - (OAGpxData *) setupGpxData:(OAGPXMutableDocument *)gpxFile
@@ -681,10 +687,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         _layer.editingCtx = nil;
         [_layer resetLayer];
 
-        if (_targetMenuState)
+        if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
             [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
                                                   trackHudMode:EOATrackMenuHudMode
-                                                         state:_targetMenuState];
+                                                         state:(OATrackMenuViewControllerState *) _targetMenuState];
     }];
 }
 

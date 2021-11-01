@@ -59,6 +59,16 @@
 
 @implementation OATrackMenuViewControllerState
 
++ (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation
+{
+    OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+    if (state)
+    {
+        state.pinLocation = pinLocation;
+    }
+    return state;
+}
+
 @end
 
 @interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
@@ -153,16 +163,19 @@
         [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                           bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
                                                  zoom:0
-                                          bottomInset:DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight])
-                                            leftInset:DeviceScreenWidth - ([self isLandscape] ? DeviceScreenWidth * 0.45 : 0.0)];
+                                          bottomInset:([self isLandscape] ? 0. : [self getViewHeight])
+                                            leftInset:([self isLandscape] ? [self getLandscapeViewWidth] : 0.)
+                                             animated:YES];
                                                            }
                                                             adjustViewPort:^() {
                                                                 [self adjustMapViewPort];
                                                             }];
     _routeLineChartHelper.isLandscape = [self isLandscape];
-    _routeLineChartHelper.screenBBox = CGRectMake(0., 0.,
-            DeviceScreenWidth - ([self isLandscape]? DeviceScreenWidth * 0.45 : 0.0),
-            DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
+    _routeLineChartHelper.screenBBox = CGRectMake(
+            [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
+            0.,
+            [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
+            [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
     _lastTranslation = CGPointZero;
 }
 
@@ -186,9 +199,11 @@
 
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(0., 0.,
-                DeviceScreenWidth - ([self isLandscape] ? DeviceScreenWidth * 0.45 : 0.0),
-                DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
+        _routeLineChartHelper.screenBBox = CGRectMake(
+                [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
+                0.,
+                [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
+                [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
     }];
 }
 
@@ -1426,7 +1441,9 @@
             [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
         }
 
-        [self hide:YES duration:.2 onComplete:nil];
+        [self hide:YES duration:.2 onComplete:^{
+            [self.mapViewController hideContextPinMarker];
+        }];
         }]
     ];
 
@@ -1538,7 +1555,7 @@
 
 - (OATrackMenuViewControllerState *)getCurrentState
 {
-    OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+    OATrackMenuViewControllerState *state = _reopeningState ? _reopeningState : [[OATrackMenuViewControllerState alloc] init];
     state.lastSelectedTab = _selectedTab;
     state.gpxFilePath = self.gpx.gpxFilePath;
 
@@ -1720,6 +1737,7 @@
 - (void)editSegment
 {
     [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController showPlanRouteViewController:[
                 [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
                                                           targetMenuState:[self getCurrentState]]];
@@ -2055,6 +2073,7 @@
 - (void)onAppearancePressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                               trackHudMode:EOATrackAppearanceHudMode
                                                      state:[self getCurrentState]];
@@ -2111,7 +2130,9 @@
                                                                       fromName:nil
                                                 useIntermediatePointsByDefault:YES
                                                                     showDialog:YES];
-        [self hide:YES duration:.2 onComplete:nil];
+        [self hide:YES duration:.2 onComplete:^{
+            [self.mapViewController hideContextPinMarker];
+        }];
     }
 }
 
@@ -2185,7 +2206,9 @@
                                                                   fromName:nil
                                             useIntermediatePointsByDefault:YES
                                                                 showDialog:YES];
-    [self hide:YES duration:.2 onComplete:nil];
+    [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
+    }];
 }
 
 #pragma - mark ChartViewDelegate

@@ -151,6 +151,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top;
 
 + (NSString *) colorToString:(UIColor *)color;
++ (int) colorToNumberFromString:(NSString *)string;
 + (UIColor *) colorFromString:(NSString *)colorStr;
 + (int) colorToNumber:(UIColor *)color;
 + (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2;

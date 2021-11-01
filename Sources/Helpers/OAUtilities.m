@@ -897,13 +897,12 @@
     return res;
 }
 
-
-+ (UIColor *) colorFromString:(NSString *)string
++ (int) colorToNumberFromString:(NSString *)string
 {
     string = [string lowercaseString];
     string = [string stringByReplacingOccurrencesOfString:@"#" withString:@""];
     string = [string stringByReplacingOccurrencesOfString:@"0x" withString:@""];
-    
+
     switch ([string length])
     {
         case 0:
@@ -938,7 +937,12 @@
     uint32_t rgba;
     NSScanner *scanner = [NSScanner scannerWithString:string];
     [scanner scanHexInt:&rgba];
-    return UIColorFromRGBA(rgba);
+    return rgba;
+}
+
++ (UIColor *) colorFromString:(NSString *)string
+{
+    return UIColorFromRGBA([self.class colorToNumberFromString:string]);
 }
 
 + (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2

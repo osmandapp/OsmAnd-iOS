@@ -388,7 +388,7 @@
 "m_style_car" = "القيادة";
 "m_style_walk" = "مشي";
 "m_style_bicycle" = "دراجة";
-"map_settings_map" = "إدارة الخرائط";
+"map_settings_map" = "الخرائط العادية";
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_mode" = "مظهرالخريطة";
@@ -1277,7 +1277,7 @@
 // World Regions
 "region_antarctica" = "القارة القطبية الجنوبية";
 "region_others" = "خرائط أخرى";
-"gpx_descent" = "منحدر";
+"gpx_descent" = "المنحدرات";
 "gpx_avg_altitude" = "متوسط الارتفاع";
 "gpx_ascent" = "مرتفع";
 "download_depth_countours" = "محيطات الأعماق البحرية";

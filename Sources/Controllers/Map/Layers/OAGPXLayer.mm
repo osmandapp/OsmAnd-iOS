@@ -340,7 +340,10 @@
         {
             if ([trackWidth isCustom])
             {
-                lineWidth = [trackWidth.customValue floatValue];
+                if (trackWidth.customValue.floatValue > [OAGPXTrackWidth getCustomTrackWidthMax] * 3)
+                    lineWidth = [OAGPXTrackWidth getDefault].customValue.floatValue;
+                else
+                    lineWidth = trackWidth.customValue.floatValue;
             }
             else
             {

@@ -30,9 +30,6 @@
 
 #define kColorGridOrDescriptionCell 2
 
-static const NSInteger kCustomTrackWidthMin = 1;
-static const NSInteger kCustomTrackWidthMax = 24;
-
 @interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -85,7 +82,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
     if (self)
     {
         _reopeningTrackMenuState = state;
-        [self commonInit];
     }
     return self;
 }
@@ -127,7 +123,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     _availableColors = trackColors;
 
     NSMutableArray *customWidthValues = [NSMutableArray array];
-    for (NSInteger i = kCustomTrackWidthMin; i <= kCustomTrackWidthMax; i++)
+    for (NSInteger i = [OAGPXTrackWidth getCustomTrackWidthMin]; i <= [OAGPXTrackWidth getCustomTrackWidthMax]; i++)
     {
         [customWidthValues addObject:@(i * 3)];
     }
@@ -435,7 +431,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                 [customSliderCell setData:@{
                         kTableValues: @{
                                 @"int_value": _selectedWidth.customValue,
-                                @"array_value": @[@(kCustomTrackWidthMin), @(kCustomTrackWidthMax)],
+                                @"array_value": _customWidthValues,
                                 @"has_top_labels": @NO,
                                 @"has_bottom_labels": @YES,
                         }
@@ -852,6 +848,10 @@ static const NSInteger kCustomTrackWidthMax = 24;
         if ([cellData.key isEqualToString:@"width_value"])
         {
             _selectedWidth = [_appearanceCollection getAvailableWidth][segment.selectedSegmentIndex];
+
+            if ([_selectedWidth.customValue floatValue] > _customWidthValues.lastObject.floatValue * 3)
+                _selectedWidth = [OAGPXTrackWidth getDefault];
+
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
 
             [[_app updateGpxTracksOnMapObservable] notifyEvent];

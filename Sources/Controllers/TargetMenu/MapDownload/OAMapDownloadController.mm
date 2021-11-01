@@ -92,6 +92,11 @@
     _otherResources = res;
 }
 
+-(void) updateButtons
+{
+    [self setupOtherMapsButton];
+}
+
 - (void) setupOtherMapsButton
 {
     if (_otherResources.count > 0)

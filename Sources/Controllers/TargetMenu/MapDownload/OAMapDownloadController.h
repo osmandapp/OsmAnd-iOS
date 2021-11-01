@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) initWithMapObject:(OADownloadMapObject *)downloadMapObject;
 
+-(void) updateButtons;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -618,20 +618,20 @@
     return self;
 }
 
--(NSArray*) splitByDistance:(double)meters
+-(NSArray*) splitByDistance:(double)meters joinSegments:(BOOL)joinSegments
 {
-    return [self split:[[OADistanceMetric alloc] init] secondaryMetric:[[OATimeSplit alloc] init] metricLimit:meters];
+    return [self split:[[OADistanceMetric alloc] init] secondaryMetric:[[OATimeSplit alloc] init] metricLimit:meters joinSegments:joinSegments];
 }
 
--(NSArray*) splitByTime:(int)seconds
+-(NSArray*) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments
 {
-    return [self split:[[OATimeSplit alloc] init] secondaryMetric:[[OADistanceMetric alloc] init] metricLimit:seconds];
+    return [self split:[[OATimeSplit alloc] init] secondaryMetric:[[OADistanceMetric alloc] init] metricLimit:seconds joinSegments:joinSegments];
 }
 
--(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit
+-(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit joinSegments:(BOOL)joinSegments
 {
     NSMutableArray *splitSegments = [NSMutableArray array];
-    [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:self];
+    [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:self joinSegments:joinSegments];
     return [OAGPXTrackAnalysis convert:splitSegments];
 }
 

@@ -181,24 +181,32 @@
             if (it.value()->hasTrkPt())
             {
                 int segStartIndex = 0;
+                QVector<OsmAnd::PointI> points;
+                QList<OsmAnd::FColorARGB> segmentColors;
                 for (const auto& track : it.value()->tracks)
                 {
                     for (const auto& seg : track->segments)
                     {
-                        QVector<OsmAnd::PointI> points;
-                        
                         for (const auto& pt : seg->points)
                         {
                             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                         }
-                        QList<OsmAnd::FColorARGB> segmentColors;
                         if (points.size() > 1 && !colors.isEmpty() && segStartIndex < colors.size() && segStartIndex + points.size() - 1 < colors.size())
                         {
                             segmentColors = colors.mid(segStartIndex, points.size());
                         }
                         segStartIndex += points.size() - 1;
-                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:colorizationScheme];
+                        if (!gpx.joinSegments || !segmentColors.isEmpty())
+                        {
+                            [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:colorizationScheme];
+                            points.clear();
+                            segmentColors.clear();
+                        }
                     }
+                }
+                if (gpx.joinSegments && segmentColors.isEmpty())
+                {
+                    [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:colorizationScheme];
                 }
             }
             else if (it.value()->hasRtePt())
@@ -354,7 +362,7 @@
             }
         }
     }
-    return lineWidth;
+    return lineWidth * 3;
 }
 
 #pragma mark - OAContextMenuProvider

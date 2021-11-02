@@ -3048,7 +3048,7 @@
         QList<int> itValues = it.value();
         for (int itValue : itValues)
         {
-            [values addObject:@(itValue * 3)];
+            [values addObject:@(itValue)];
         }
         result[key] = values;
     }

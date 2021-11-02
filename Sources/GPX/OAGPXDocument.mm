@@ -56,7 +56,7 @@
 
 - (OAGpxExtension *)getExtensionByKey:(NSString *)key
 {
-    for (OAGpxExtension *e in ((OAGpxExtensions *)self.metadata.extraData).extensions)
+    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
     {
         if ([e.name isEqualToString:key])
             return e;
@@ -66,21 +66,21 @@
 
 - (void) addExtension:(OAGpxExtension *)e
 {
-    if (!self.metadata.extraData)
-        self.metadata.extraData = [[OAGpxExtensions alloc] init];
-    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.metadata.extraData).extensions;
+    if (!self.extraData)
+        self.extraData = [[OAGpxExtensions alloc] init];
+    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
     if (![exts containsObject:e])
-        ((OAGpxExtensions *)self.metadata.extraData).extensions = [exts arrayByAddingObject:e];
+        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
 }
 
 - (void) removeExtension:(OAGpxExtension *)e
 {
-    if (!self.metadata.extraData)
+    if (!self.extraData)
         return;
-    NSMutableArray<OAGpxExtension *> *exts = [NSMutableArray arrayWithArray:((OAGpxExtensions *)self.metadata.extraData).extensions];
+    NSMutableArray<OAGpxExtension *> *exts = [NSMutableArray arrayWithArray:((OAGpxExtensions *)self.extraData).extensions];
     [exts removeObject:e];
 
-    ((OAGpxExtensions *)self.metadata.extraData).extensions = exts;
+    ((OAGpxExtensions *)self.extraData).extensions = exts;
 }
 
 - (int) getColor:(int)defColor
@@ -449,7 +449,7 @@
         metadata.desc = gpxDocument->metadata->description.toNSString();
         metadata.time = gpxDocument->metadata->timestamp.toTime_t();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
-        metadata.extraData = [self.class fetchExtra:gpxDocument->extraData];
+        _extraData = [self.class fetchExtra:gpxDocument->extraData];
         
         self.metadata = metadata;
     }
@@ -1147,22 +1147,22 @@
     return g;
 }
 
--(NSArray*) splitByDistance:(int)meters
+-(NSArray*) splitByDistance:(int)meters joinSegments:(BOOL)joinSegments
 {
-    return [self split:[[OADistanceMetric alloc] init] secondaryMetric:[[OATimeSplit alloc] init] metricLimit:meters];
+    return [self split:[[OADistanceMetric alloc] init] secondaryMetric:[[OATimeSplit alloc] init] metricLimit:meters joinSegments:joinSegments];
 }
 
--(NSArray*) splitByTime:(int)seconds
+-(NSArray*) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments
 {
-    return [self split:[[OATimeSplit alloc] init] secondaryMetric:[[OADistanceMetric alloc] init] metricLimit:seconds];
+    return [self split:[[OATimeSplit alloc] init] secondaryMetric:[[OADistanceMetric alloc] init] metricLimit:seconds joinSegments:joinSegments];
 }
 
--(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit
+-(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit joinSegments:(BOOL)joinSegments
 {
     NSMutableArray *splitSegments = [NSMutableArray array];
     for (OAGpxTrk *subtrack in self.tracks) {
         for (OAGpxTrkSeg *segment in subtrack.segments) {
-            [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:segment];
+            [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:segment joinSegments:joinSegments];
         }
     }
     return [OAGPXTrackAnalysis convert:splitSegments];

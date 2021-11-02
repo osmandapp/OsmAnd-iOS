@@ -125,7 +125,7 @@
     NSMutableArray *customWidthValues = [NSMutableArray array];
     for (NSInteger i = [OAGPXTrackWidth getCustomTrackWidthMin]; i <= [OAGPXTrackWidth getCustomTrackWidthMax]; i++)
     {
-        [customWidthValues addObject:@(i * 3)];
+        [customWidthValues addObject:@(i)];
     }
     _customWidthValues = customWidthValues;
 }
@@ -349,8 +349,18 @@
                 }
         }
     }];
-
     [appearanceSections addObject:widthSection];
+
+    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
+            kSectionCells: @[[OAGPXTableCellData withData:@{
+                    kCellKey:@"join_gaps",
+                    kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                    kCellTitle:OALocalizedString(@"gpx_join_gaps"),
+                    kCellOnSwitch: ^(BOOL toggle) { self.gpx.joinSegments = toggle; },
+                    kCellIsOn: ^() { return self.gpx.joinSegments; }
+            }]],
+            kSectionFooter: OALocalizedString(@"gpx_join_gaps_descr")
+    }]];
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[[OAGPXTableCellData withData:@{
@@ -750,11 +760,11 @@
             [cell showLabels:hasTopLabels topRight:hasTopLabels bottomLeft:hasBottomLabels bottomRight:hasBottomLabels];
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             cell.topLeftLabel.text = cellData.title;
-            cell.topRightLabel.text = [NSString stringWithFormat:@"%li", (long) [cellData.values[@"int_value"] intValue] / 3];
-            cell.bottomLeftLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.firstObject intValue] / 3];
-            cell.bottomRightLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.lastObject intValue] / 3];
+            cell.topRightLabel.text = [NSString stringWithFormat:@"%li", (long) [cellData.values[@"int_value"] intValue]];
+            cell.bottomLeftLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.firstObject intValue]];
+            cell.bottomRightLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.lastObject intValue]];
             cell.numberOfMarks = arrayValue.count;
-            cell.selectedMark = [cellData.values[@"int_value"] intValue] / 3;
+            cell.selectedMark = [cellData.values[@"int_value"] intValue];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -788,6 +798,32 @@
         return 0.001;
 
     return 36.;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    NSString *footer = self.tableData[section].footer;
+    if (!footer || footer.length == 0)
+        return 0.001;
+
+    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    NSString *footer = self.tableData[section].footer;
+    if (!footer || footer.length == 0)
+        return nil;
+
+    OATableViewCustomFooterView *vw =
+            [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    UIFont *textFont = [UIFont systemFontOfSize:13];
+    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
+            NSFontAttributeName: textFont,
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+    }];
+    vw.label.attributedText = textStr;
+    return vw;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -884,6 +920,7 @@
             {
                 _selectedWidth.customValue = [NSString stringWithFormat:@"%ld", selectedValue];
                 self.gpx.width = _selectedWidth.customValue;
+                cellData.updateData();
 
                 [[_app updateGpxTracksOnMapObservable] notifyEvent];
             }

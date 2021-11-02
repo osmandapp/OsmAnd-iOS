@@ -175,7 +175,7 @@
     gpx.locationStart = analysis.locationStart;
     gpx.locationEnd = analysis.locationEnd;
     
-    gpx.splitType = [self splitTypeByName:document.getSplitType];
+    gpx.splitType = [self.class splitTypeByName:document.getSplitType];
     gpx.splitInterval = [document getSplitInterval];
     gpx.color = [document getColor:kDefaultTrackColor];
     gpx.coloringType = [document getColoringType];
@@ -186,7 +186,7 @@
     return gpx;
 }
 
-- (EOAGpxSplitType) splitTypeByName:(NSString *)splitName
++ (EOAGpxSplitType) splitTypeByName:(NSString *)splitName
 {
     if (splitName.length == 0 || [splitName isEqualToString:@"no_split"])
         return EOAGpxSplitTypeNone;
@@ -196,6 +196,20 @@
         return EOAGpxSplitTypeTime;
     
     return EOAGpxSplitTypeNone;
+}
+
++ (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType
+{
+    switch (splitType)
+    {
+        case EOAGpxSplitTypeDistance:
+            return @"distance";
+        case EOAGpxSplitTypeTime:
+            return @"time";
+            
+        default:
+            return @"no_split";
+    }
 }
 
 -(OAGPX *)getGPXItem:(NSString *)filePath

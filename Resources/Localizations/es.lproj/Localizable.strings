@@ -638,7 +638,7 @@
 "arrival_distance_factor_early" = "Lejos";
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Cerca";
-"arrival_distance_factor_at_last" = "En losúltimos metros";
+"arrival_distance_factor_at_last" = "En los últimos metros";
 "map_orientation_change_in_accordance_with_speed" = "Umbral de orientación del mapa";
 "map_orientation_change_in_accordance_with_speed_descr" = "Elige la velocidad a partir de la cual la orientación del mapa cambia de «Dirección del movimiento» a «Brújula»";
 "fast_route_mode" = "Ruta más rápida";
@@ -1302,7 +1302,7 @@
 "rendering_value_medium_w_name" = "Medio";
 "rendering_value_yellow_name" = "Amarillo";
 "rendering_attr_showLez_name" = "Mostrar Zonas de Bajas Emisiones";
-"routing_attr_allow_private_description" = "Permite acceder aáreas privadas.";
+"routing_attr_allow_private_description" = "Permite acceder a áreas privadas.";
 "rendering_attr_highway_class_road_name" = "Carretera principal";
 "rendering_attr_currentTrackColor_name" = "Color del GPX";
 "rendering_attr_busRoutes_name" = "Rutas de autobús";
@@ -2066,7 +2066,7 @@
 "no_waypoints_found" = "No se encontraron puntos de referencia";
 "walking_route_osmc_description" = "Asigna color a las rutas en función del color asignado localmente (si está presente en OpenStreetMap) y del tipo (internacional, regional, local)";
 "gpxup_private" = "Privado";
-"last_used" = "Utilizado porúltima vez";
+"last_used" = "Último usado";
 "shared_string_feet" = "pies";
 "routes_color_by_type" = "Rutas de color por…";
 "product_title_openplacereviews" = "OpenPlaceReviews";

@@ -804,10 +804,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         _showZoomPicker = !_showZoomPicker;
         [self generateData];
-        if (_showZoomPicker)
-            [self.tblView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationTop];
-        else
-            [self.tblView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationTop];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_showZoomPicker)
+                [self.tblView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationTop];
+            else
+                [self.tblView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationTop];
+        });
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {

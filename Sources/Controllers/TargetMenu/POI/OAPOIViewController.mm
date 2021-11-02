@@ -203,7 +203,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
 
 - (BOOL) showRegionNameOnDownloadButton
 {
-    return NO;
+    return YES;
 }
 
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows

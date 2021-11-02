@@ -382,26 +382,22 @@ static BOOL _lackOfResources;
     
     if (!_viewAppeared)
     {
-        // If there's no repository available and there's internet connection, just update it
-        if (!_app.resourcesManager->isRepositoryAvailable())
+        if (!_app.isRepositoryUpdating &&
+            [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && self.region == _app.worldRegion)
         {
-            if (!_app.isRepositoryUpdating &&
-                [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-            {
-                [self updateRepository];
-            }
-            else if (self.region == _app.worldRegion &&
-                     [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
-            {
-                // show no internet popup
-                [OAPluginPopupViewController showNoInternetConnectionFirst];
-            }
-            else if (_app.isRepositoryUpdating)
-            {
-                _repositoryUpdating = YES;
-                _updateButton.enabled = NO;
-                [_refreshRepositoryProgressHUD show:YES];
-            }
+            [self updateRepository];
+        }
+        else if (self.region == _app.worldRegion &&
+                 [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+        {
+            // show no internet popup
+            [OAPluginPopupViewController showNoInternetConnectionFirst];
+        }
+        else if (_app.isRepositoryUpdating)
+        {
+            _repositoryUpdating = YES;
+            _updateButton.enabled = NO;
+            [_refreshRepositoryProgressHUD show:YES];
         }
         else if (self.openFromSplash)
         {
@@ -1621,6 +1617,7 @@ static BOOL _lackOfResources;
                                 [_app startRepositoryUpdateAsync:NO];
                             }
                                 completionBlock:^{
+                                    [_app.worldRegion buildResourceGroupItem];
                                     _updateButton.enabled = YES;
                                     if (self.openFromSplash)
                                         [self onSearchBtnClicked:nil];

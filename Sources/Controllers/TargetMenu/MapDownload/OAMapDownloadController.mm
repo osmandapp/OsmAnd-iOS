@@ -92,6 +92,11 @@
     _otherResources = res;
 }
 
+-(void) updateButtons
+{
+    [self setupOtherMapsButton];
+}
+
 - (void) setupOtherMapsButton
 {
     if (_otherResources.count > 0)
@@ -205,6 +210,18 @@
     {
         [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:OALocalizedString(@"population_num") text:[OAOsmAndFormatter getFormattedOsmTagValue:region.population] textColor:nil isText:YES needLinks:NO order:3 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
+}
+
+- (void) downloadControlButtonPressed
+{
+    self.rightControlButton = nil;
+    [super downloadControlButtonPressed];
+}
+
+- (void) onDownloadCancelled
+{
+    [super onDownloadCancelled];
+    [self setupOtherMapsButton];
 }
 
 - (void)rightControlButtonPressed

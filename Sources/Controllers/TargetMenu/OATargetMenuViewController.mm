@@ -616,7 +616,11 @@
             _localMapIndexItem = nil;
             _downloadControlButton = nil;
             if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])
+            {
                 [self.delegate hideProgressBar];
+                if ([self isKindOfClass:OAMapDownloadController.class])
+                    [((OAMapDownloadController *)self) updateButtons];
+            }
         }
     });
 }

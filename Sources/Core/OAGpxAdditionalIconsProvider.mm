@@ -60,15 +60,31 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
             if (!doc)
                 continue;
             const auto& tracks = doc->tracks;
+            LatLon start, finish;
             for (auto trkIt = tracks.begin(); trkIt != tracks.end(); ++trkIt)
             {
                 const auto& trk = *trkIt;
                 for (auto segIt = trk->segments.begin(); segIt != trk->segments.end(); ++segIt)
                 {
                     const auto& seg = *segIt;
-                    _startFinishLocations.append({OsmAnd::Utilities::convertLatLonTo31(seg->points.first()->position),
-                        OsmAnd::Utilities::convertLatLonTo31(seg->points.last()->position)});
+                    if (gpx.joinSegments)
+                    {
+                        if (segIt == trk->segments.begin())
+                            start = seg->points.first()->position;
+                        else if (segIt + 1 == trk->segments.end())
+                            finish = seg->points.last()->position;
+                    }
+                    else
+                    {
+                        _startFinishLocations.append({OsmAnd::Utilities::convertLatLonTo31(seg->points.first()->position),
+                            OsmAnd::Utilities::convertLatLonTo31(seg->points.last()->position)});
+                    }
                 }
+            }
+            if (gpx.joinSegments)
+            {
+                _startFinishLocations.append({OsmAnd::Utilities::convertLatLonTo31(start),
+                    OsmAnd::Utilities::convertLatLonTo31(finish)});
             }
         }
         if (gpx.splitType != EOAGpxSplitTypeNone)
@@ -83,12 +99,12 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
             BOOL splitByDistance = NO;
             switch (gpx.splitType) {
                 case EOAGpxSplitTypeDistance: {
-                    splitData = [gpxDoc splitByDistance:gpx.splitInterval];
+                    splitData = [gpxDoc splitByDistance:gpx.splitInterval joinSegments:gpx.joinSegments];
                     splitByDistance = YES;
                     break;
                 }
                 case EOAGpxSplitTypeTime: {
-                    splitData = [gpxDoc splitByTime:gpx.splitInterval];
+                    splitData = [gpxDoc splitByTime:gpx.splitInterval joinSegments:gpx.joinSegments];
                     splitByTime = YES;
                     break;
                 }

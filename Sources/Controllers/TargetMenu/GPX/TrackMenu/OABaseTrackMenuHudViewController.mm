@@ -273,7 +273,6 @@
 - (void)adjustMapViewPort
 {
     _mapViewController.mapView.viewportXScale = [self isLandscape] ? VIEWPORT_SHIFTED_SCALE : VIEWPORT_NON_SHIFTED_SCALE;
-    _mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
 }
 
 - (void)restoreMapViewPort
@@ -338,8 +337,12 @@
                                                  menuHeight:[self isLandscape] ? 0
                                                          : height - [OAUtilities getBottomMargin]
                                                    animated:YES];
-    [self changeMapRulerPosition];
-    [self adjustMapViewPort];
+    if (self.currentState != EOADraggableMenuStateFullScreen)
+    {
+        [self changeMapRulerPosition];
+        [self adjustMapViewPort];
+        [_mapPanelViewController targetGoToGPX];
+    }
 }
 
 @end

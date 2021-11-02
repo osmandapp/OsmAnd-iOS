@@ -35,6 +35,7 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OASelectedGPXHelper.h"
+#import "OAGPXUIHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
@@ -1286,7 +1287,7 @@
     NSMutableArray *statistics = [NSMutableArray array];
     if (self.analysis)
     {
-        BOOL withoutGaps = /*!self.gpx.joinSegments &&*/ (self.isCurrentTrack
+        BOOL withoutGaps = !self.gpx.joinSegments && (self.isCurrentTrack
                 ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)
                 : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack));
 
@@ -2083,7 +2084,9 @@
     else
     {
         _exportFileName = self.gpx.gpxFileName;
-        _exportFilePath = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFilePath];
+        [OAGPXUIHelper addAppearanceToGpx:self.doc gpxItem:self.gpx];
+        [self.doc saveTo:_exportFilePath];
     }
 
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];

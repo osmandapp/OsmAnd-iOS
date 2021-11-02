@@ -207,4 +207,20 @@
     return NO;
 }
 
++ (void) addAppearanceToGpx:(OAGPXDocument *)gpxFile gpxItem:(OAGPX *)gpxItem
+{
+    [gpxFile setShowArrows:gpxItem.showArrows];
+    [gpxFile setShowStartFinish:gpxItem.showStartFinish];
+    [gpxFile setSplitInterval:gpxItem.splitInterval];
+    [gpxFile setSplitType:[OAGPXDatabase splitTypeNameByValue:gpxItem.splitType]];
+    if (gpxItem.color != 0)
+        [gpxFile setColor:(int)gpxItem.color];
+    
+    if (gpxItem.width && gpxItem.width.length > 0)
+        [gpxFile setWidth:gpxItem.width];
+    
+    if (gpxItem.coloringType && gpxItem.coloringType.length > 0)
+        [gpxFile setColoringType:gpxItem.coloringType];
+}
+
 @end

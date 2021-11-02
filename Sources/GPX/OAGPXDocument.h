@@ -63,9 +63,9 @@
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
 
-- (NSArray*) splitByDistance:(int)meters;
-- (NSArray*) splitByTime:(int)seconds;
-- (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit;
+- (NSArray*) splitByDistance:(int)meters joinSegments:(BOOL)joinSegments;
+- (NSArray*) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;
+- (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit joinSegments:(BOOL)joinSegments;
 
 - (NSArray<OAGpxRtePt *> *) getRoutePoints;
 - (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex;

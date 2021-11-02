@@ -102,4 +102,6 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 - (void)reloadGPXFile:(NSString *)filePath onComplete:(void (^)(void))onComplete;
 - (void)save;
 
++ (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType;
+
 @end

@@ -385,8 +385,8 @@
 "show_alt_in_drive" = "Afficher l'altitude en mode conduite";
 "srtm_disabled" = "Courbes de niveau désactivées";
 "wpt_select" = "Veuillez sélectionner des points de passage";
-"gpx_remove_wpts_q" = "Voulez supprimer les points de passage sélectionnés ?";
-"editing_waypoints" = "Editer les points de passage";
+"gpx_remove_wpts_q" = "Supprimer les points de passage sélectionnés ?";
+"editing_waypoints" = "Modifier les points de passage";
 "map_settings_over" = "Superposition";
 "map_settings_under" = "Sous-couche";
 "map_settings_avail_lay" = "Couches disponibles";
@@ -417,7 +417,7 @@
 "no_inet_connection" = "Aucune connexion Internet";
 "no_inet_connection_desc_map" = "Indispensable pour télécharger des cartes.";
 "search_location" = "Recherche de la position…";
-"first_usage_greeting" = "Visualisez les cartes hors ligne, laissez-vous guider sur vos itinéraires sans connexion Internet et découvrez de nouveaux lieux.";
+"first_usage_greeting" = "Suivez des itinéraires et découvrez de nouveaux lieux sans connexion Internet";
 "search_my_location" = "Rechercher ma position";
 "get_started" = "Démarrons ensemble";
 "shared_string_is_open_24_7" = "Ouvert 24/7";
@@ -496,7 +496,7 @@
 "traffic_warning_stop" = "Panneau stop";
 "traffic_warning_calming" = "Ralentisseur";
 "traffic_warning_speed_camera" = "Radar de vitesse";
-"traffic_warning" = "Alerte de circulation";
+"traffic_warning" = "Éléments sur la route";
 "ending_point_too_far" = "Point d\'arrivée trop éloigné de la route la plus proche.";
 "starting_point_too_far" = "Point de départ trop éloigné de la route la plus proche.";
 "route_kl" = "Serrezà gauche";
@@ -1591,7 +1591,7 @@
 "selected_roads" = "Routes sélectionnées";
 "select_work_point" = "Sélectionnez votre lieu de travail";
 "consider_limitations_param" = "Prendre en compte les limitations temporaires";
-"allow_3d_descr" = "Activez cette option pour voir la carte en perspective (vue 2,5D)";
+"allow_3d_descr" = "Activez cette option pour visualiser la carte dans une perspective 2.5D";
 "active_markers" = "Marques actives";
 "shared_string_exit" = "Quitter";
 "base_profile_descr_aircraft" = "Avion, parapente";
@@ -1612,8 +1612,8 @@
 "appearance_on_map" = "Apparence sur la carte";
 "arrows_on_map" = "Flèches sur la carte";
 "two" = "Deux";
-"max_speed" = "Vitesse max.";
-"min_speed" = "Vitesse min.";
+"max_speed" = "Vitesse Max.";
+"min_speed" = "Vitesse Min.";
 "default_speed" = "Vitesse par défaut";
 "routing_attr_length_name" = "Limite de longueur";
 "send_anonymous_data_desc" = "Envoyez à OsmAnd des statistiques de téléchargement des cartes. Nous ne collectons aucune donnée de localisation, ni aucune information personnelle.";
@@ -2180,3 +2180,6 @@
 "m" = "m";
 "ios_release_4_1" = "- Nouvel écran pour la recherche par coordonnées dans différents formats\n- Amélioration de la recherche de coordonnées dans le format OLC\n- Nouveau menu convivial permettant de choisir la langue d'affichage des articles de Wikipédia sur la carte\n- Ajout de la possibilité de charger facilement les cartes de toutes les régions du pays en quelques clics\n- Ajout de courbes de niveau en pieds (Vous devez retélécharger les fichiers)\n- Ajout de la possibilité de télécharger des cartes en sélectionnant la région ou le pays souhaité sur la carte, ainsi que l'ajout d'une boîte de dialogue avec la suggestion de télécharger la carte si la région n’a pas été préalablement téléchargée.\n- Nouvelle apparence des boutons sur l’écran et ajout de la possibilité de modifier le zoom de la carte par un double tapotement ou un glissement.\n";
 "units_min_short" = "m";
+"delete_waypoints" = "Supprimer les points de passage";
+"delete_group_confirm_short" = "Supprimer le groupe ?";
+"delete_group_confirm" = "Êtes-vous sûr de vouloir supprimer le groupe \"%@\" ?";

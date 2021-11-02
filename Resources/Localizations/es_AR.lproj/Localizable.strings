@@ -2207,3 +2207,6 @@
 "edit_track" = "Editar traza";
 "activity" = "Actividad";
 "ios_release_4_1" = "• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas en los que se muestran los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es necesario volver a descargar los archivos)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar el mapa si la región se ve sin mapa\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zum del mapa pulsando dos veces y deslizando el dedo.\n";
+"delete_group_confirm_short" = "¿Borrar grupo?";
+"delete_waypoints" = "Borrar puntos de referencia";
+"delete_group_confirm" = "¿Borrar el grupo «%@»?";

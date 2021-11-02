@@ -359,7 +359,8 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     kCellTitle:OALocalizedString(@"gpx_join_gaps"),
                     kCellOnSwitch: ^(BOOL toggle) { self.gpx.joinSegments = toggle; },
                     kCellIsOn: ^() { return self.gpx.joinSegments; }
-            }]]
+            }]],
+            kSectionFooter: OALocalizedString(@"gpx_join_gaps_descr")
     }]];
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
@@ -798,6 +799,32 @@ static const NSInteger kCustomTrackWidthMax = 24;
         return 0.001;
 
     return 36.;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    NSString *footer = self.tableData[section].footer;
+    if (!footer || footer.length == 0)
+        return 0.001;
+
+    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    NSString *footer = self.tableData[section].footer;
+    if (!footer || footer.length == 0)
+        return nil;
+
+    OATableViewCustomFooterView *vw =
+            [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    UIFont *textFont = [UIFont systemFontOfSize:13];
+    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
+            NSFontAttributeName: textFont,
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+    }];
+    vw.label.attributedText = textStr;
+    return vw;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

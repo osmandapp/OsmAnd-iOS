@@ -842,11 +842,11 @@
             icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
 
             descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
-                    /*!self.gpx.joinSegments &&*/ track && track.generalTrack
+                    !self.gpx.joinSegments && track && track.generalTrack
                             ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
 
             descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
-                    /*!self.gpx.joinSegments &&*/ track && track.generalTrack
+                    !self.gpx.joinSegments && track && track.generalTrack
                             ? analysis.timeSpanWithoutGaps : analysis.timeSpan shortFormat:YES];
 
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -895,10 +895,10 @@
             descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedSpeed:analysis.maxSpeed];
 
             descriptions[@"bottom_left_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
-                    /*!self.gpx.joinSegments &&*/ track && track.generalTrack ? analysis.timeSpanWithoutGaps : analysis.timeSpan
+                    !self.gpx.joinSegments && track && track.generalTrack ? analysis.timeSpanWithoutGaps : analysis.timeSpan
                                                                     shortFormat:YES];
             descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
-                    /*!self.gpx.joinSegments &&*/ track && track.generalTrack
+                    !self.gpx.joinSegments && track && track.generalTrack
                             ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
 
             break;

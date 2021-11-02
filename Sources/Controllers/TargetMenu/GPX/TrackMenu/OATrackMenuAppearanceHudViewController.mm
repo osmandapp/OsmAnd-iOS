@@ -350,8 +350,17 @@ static const NSInteger kCustomTrackWidthMax = 24;
                 }
         }
     }];
-
     [appearanceSections addObject:widthSection];
+
+    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
+            kSectionCells: @[[OAGPXTableCellData withData:@{
+                    kCellKey:@"join_gaps",
+                    kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                    kCellTitle:OALocalizedString(@"gpx_join_gaps"),
+                    kCellOnSwitch: ^(BOOL toggle) { self.gpx.joinSegments = toggle; },
+                    kCellIsOn: ^() { return self.gpx.joinSegments; }
+            }]]
+    }]];
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[[OAGPXTableCellData withData:@{

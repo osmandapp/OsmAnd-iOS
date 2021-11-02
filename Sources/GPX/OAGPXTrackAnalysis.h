@@ -121,8 +121,12 @@
 +(OAGPXTrackAnalysis *) segment:(long)filetimestamp seg:(OAGpxTrkSeg *)seg;
 -(void) prepareInformation:(long)fileStamp  splitSegments:(NSArray *)splitSegments;
 
-+(void) splitSegment:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit splitSegments:(NSMutableArray*)splitSegments
-             segment:(OAGpxTrkSeg*)segment;
++(void) splitSegment:(OASplitMetric*)metric
+     secondaryMetric:(OASplitMetric *)secondaryMetric
+         metricLimit:(double)metricLimit
+       splitSegments:(NSMutableArray*)splitSegments
+             segment:(OAGpxTrkSeg*)segment
+        joinSegments:(BOOL)joinSegments;
 +(NSArray*) convert:(NSArray*)splitSegments;
 
 @end

@@ -594,8 +594,12 @@
     _speedData = [NSArray arrayWithArray:speedData];
 }
 
-+(void) splitSegment:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit splitSegments:(NSMutableArray*)splitSegments
++(void) splitSegment:(OASplitMetric*)metric
+     secondaryMetric:(OASplitMetric *)secondaryMetric
+         metricLimit:(double)metricLimit
+       splitSegments:(NSMutableArray*)splitSegments
              segment:(OAGpxTrkSeg*)segment
+        joinSegments:(BOOL)joinSegments
 {
     double currentMetricEnd = metricLimit;
     double secondaryMetricEnd = 0;
@@ -605,8 +609,12 @@
     for (int k = 0; k < segment.points.count; k++) {
         OALocationMark *point = [segment.points objectAtIndex:k];
         if (k > 0) {
-            double currentSegment = [metric metric:prev p2:point];
-            secondaryMetricEnd += [secondaryMetric metric:prev p2:point];
+            double currentSegment = 0;
+            if (!(segment.generalSegment && !joinSegments && point.firstPoint))
+            {
+                currentSegment = [metric metric:prev p2:point];
+                secondaryMetricEnd += [secondaryMetric metric:prev p2:point];
+            }
             while (total + currentSegment > currentMetricEnd) {
                 double p = currentMetricEnd - total;
                 double cf = (p / currentSegment);

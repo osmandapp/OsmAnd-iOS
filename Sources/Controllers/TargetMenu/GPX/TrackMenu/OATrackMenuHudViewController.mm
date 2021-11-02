@@ -30,6 +30,7 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OASelectedGPXHelper.h"
+#import "OAGPXUIHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
@@ -599,16 +600,40 @@
 
         OAGPXTableSectionData *controlsSection = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells }];
         [controlsSection setData:@{
-                kTableUpdateData: ^() {
-                    for (OAGPXTableCellData *cellData in controlsSection.cells)
-                    {
-                        if (cellData.updateData)
-                            cellData.updateData();
-                    }
-                }
+            kTableUpdateData: ^() {
+            for (OAGPXTableCellData *cellData in controlsSection.cells)
+            {
+                if (cellData.updateData)
+                    cellData.updateData();
+            }
+        }
         }];
 
         [tableSections addObject:controlsSection];
+        
+        OAGPXTableCellData *joinGaps = [OAGPXTableCellData withData:@{
+            kCellKey: @"control_join_gaps",
+            kCellType: [OATitleSwitchRoundCell getCellIdentifier],
+            kTableValues: @{ @"bool_value": @(self.gpx.joinSegments) },
+            kCellTitle: OALocalizedString(@"gpx_join_gaps"),
+            kCellOnSwitch: ^(BOOL toggle) {
+            self.gpx.joinSegments = toggle;
+            [OAGPXDatabase.sharedDb save];
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        },
+            kCellIsOn: ^() { return self.gpx.joinSegments; }
+        }];
+
+        [joinGaps setData:@{
+            kTableUpdateData: ^() {
+            [showOnMap setData:@{ kTableValues: @{ @"bool_value": @(self.gpx.joinSegments) } }];
+        }
+        }];
+        
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
+            kSectionCells: @[joinGaps]
+        }]];
+        
         [tableSections addObject:[OAGPXTableSectionData withData:@{
                 kSectionCells: @[
                         [OAGPXTableCellData withData:@{
@@ -1636,7 +1661,9 @@
     else
     {
         _exportFileName = self.gpx.gpxFileName;
-        _exportFilePath = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFilePath];
+        [OAGPXUIHelper addAppearanceToGpx:self.doc gpxItem:self.gpx];
+        [self.doc saveTo:_exportFilePath];
     }
 
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];

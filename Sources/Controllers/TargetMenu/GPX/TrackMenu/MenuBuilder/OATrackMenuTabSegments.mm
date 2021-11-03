@@ -95,9 +95,9 @@
         for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
         {
             if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
-                [recognizer addTarget:self action:@selector(onBarChartScrolled:lineChartView:)];
+                [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
 
-            [recognizer addTarget:self action:@selector(onChartGesture:lineChartView:)];
+            [recognizer addTarget:self action:@selector(onChartGesture:)];
         }
 
         OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
@@ -398,60 +398,68 @@
 #pragma - mark Selectors
 
 - (void)onBarChartScrolled:(UIPanGestureRecognizer *)recognizer
-             lineChartView:(LineChartView *)lineChartView
 {
-    if (recognizer.state == UIGestureRecognizerStateChanged)
+    if (recognizer.view && [recognizer.view isKindOfClass:LineChartView.class])
     {
-        if (lineChartView.lowestVisibleX > 0.1
-                && [self getRoundedDouble:lineChartView.highestVisibleX] != [self getRoundedDouble:lineChartView.chartXMax])
+        LineChartView *lineChartView = (LineChartView *) recognizer.view;
+        if (recognizer.state == UIGestureRecognizerStateChanged)
         {
-            _lastTranslation = [recognizer translationInView:lineChartView];
-            return;
+            if (lineChartView.lowestVisibleX > 0.1
+                    && [self getRoundedDouble:lineChartView.highestVisibleX]
+                    != [self getRoundedDouble:lineChartView.chartXMax])
+            {
+                _lastTranslation = [recognizer translationInView:lineChartView];
+                return;
+            }
+
+            ChartHighlight *lastHighlighted = lineChartView.lastHighlighted;
+            CGPoint touchPoint = [recognizer locationInView:lineChartView];
+            CGPoint translation = [recognizer translationInView:lineChartView];
+            ChartHighlight *h = [lineChartView getHighlightByTouchPoint:CGPointMake(lineChartView.isFullyZoomedOut
+                    ? touchPoint.x : _highlightDrawX + (_lastTranslation.x - translation.x), 0.)];
+
+            if (h != lastHighlighted)
+            {
+                lineChartView.lastHighlighted = h;
+                [lineChartView highlightValue:h callDelegate:YES];
+            }
         }
-
-        ChartHighlight *lastHighlighted = lineChartView.lastHighlighted;
-        CGPoint touchPoint = [recognizer locationInView:lineChartView];
-        CGPoint translation = [recognizer translationInView:lineChartView];
-        ChartHighlight *h = [lineChartView getHighlightByTouchPoint:CGPointMake(lineChartView.isFullyZoomedOut
-                ? touchPoint.x : _highlightDrawX + (_lastTranslation.x - translation.x), 0.)];
-
-        if (h != lastHighlighted)
+        else if (recognizer.state == UIGestureRecognizerStateEnded)
         {
-            lineChartView.lastHighlighted = h;
-            [lineChartView highlightValue:h callDelegate:YES];
+            _lastTranslation = CGPointZero;
+            if (lineChartView.highlighted.count > 0)
+                _highlightDrawX = lineChartView.highlighted.firstObject.drawX;
         }
-    }
-    else if (recognizer.state == UIGestureRecognizerStateEnded)
-    {
-        _lastTranslation = CGPointZero;
-        if (lineChartView.highlighted.count > 0)
-            _highlightDrawX = lineChartView.highlighted.firstObject.drawX;
     }
 }
 
 - (void)onChartGesture:(UIGestureRecognizer *)recognizer
-         lineChartView:(LineChartView *)lineChartView
 {
-    if (recognizer.state == UIGestureRecognizerStateBegan)
+    if (recognizer.view && [recognizer.view isKindOfClass:LineChartView.class])
     {
-        _hasTranslated = NO;
-        if (lineChartView.highlighted.count > 0)
-            _highlightDrawX = lineChartView.highlighted.firstObject.drawX;
-        else
-            _highlightDrawX = -1;
-    }
-    else if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
-            ([recognizer isKindOfClass:UITapGestureRecognizer.class]
-                    && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
-            && recognizer.state == UIGestureRecognizerStateEnded)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lineChartView.tag & 0x3FF inSection:lineChartView.tag >> 10];
-        OAGPXTableCellData *cellData = self.tableData.sections[indexPath.section].cells[indexPath.row];
+        LineChartView *lineChartView = (LineChartView *) recognizer.view;
+        if (recognizer.state == UIGestureRecognizerStateBegan)
+        {
+            _hasTranslated = NO;
+            if (lineChartView.highlighted.count > 0)
+                _highlightDrawX = lineChartView.highlighted.firstObject.drawX;
+            else
+                _highlightDrawX = -1;
+        }
+        else if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class]
+                || ([recognizer isKindOfClass:UITapGestureRecognizer.class]
+                        && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
+                && recognizer.state == UIGestureRecognizerStateEnded)
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lineChartView.tag & 0x3FF
+                                                        inSection:lineChartView.tag >> 10];
+            OAGPXTableCellData *cellData = self.tableData.sections[indexPath.section].cells[indexPath.row];
 
-        if (_routeLineChartHelper)
-            [_routeLineChartHelper refreshHighlightOnMap:YES
-                                           lineChartView:lineChartView
-                                        trackChartPoints:cellData.values[@"points_value"]];
+            if (_routeLineChartHelper)
+                [_routeLineChartHelper refreshHighlightOnMap:YES
+                                               lineChartView:lineChartView
+                                            trackChartPoints:cellData.values[@"points_value"]];
+        }
     }
 }
 

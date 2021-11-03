@@ -818,7 +818,7 @@
 "shared_string_milliradians" = "Мілірадіани";
 "osm_live_routing_descr" = "Використовувати оновлення OsmAnd Live для навігації";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Самооновлення";
+"osmand_live_updates" = "Оновлення OsmAnd Live";
 "osmand_live_available_maps" = "Доступні мапи";
 "osmand_live_last_changed" = "Остання зміна мапи: %@";
 "osmand_live_last_live_update" = "Останнє оновлення: %@";

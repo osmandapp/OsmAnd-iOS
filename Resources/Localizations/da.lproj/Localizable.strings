@@ -638,7 +638,7 @@
 "speak_pedestrian" = "Fodgængerovergange";
 "int_seconds" = "sekunder";
 "shared_string_never" = "Aldrig";
-"general_settings_2" = "Globale indstillinger";
+"general_settings_2" = "Generelle indstillinger";
 "general_settings_descr" = "Konfigurer visning og generelle indstillinger";
 "routing_settings_descr" = "Indstillinger for navigation";
 "auto_zoom_none" = "Ingen automatisk zoom";
@@ -1410,7 +1410,7 @@
 "routing_attr_driving_style_speed_name" = "Kortere ruter";
 "routing_attr_avoid_subway_name" = "Ingen metro";
 "rendering_attr_piste_difficulty_advanced_name" = "Avanceret";
-"routing_attr_allow_classic_only_description" = "Ruter forberedt til den klassiske stil uden skøjtebaner. Omfatter ruter udarbejdet af en mindre snescooter med løsere pister og spor lavet manuelt af skiløbere.";
+"routing_attr_allow_classic_only_description" = "Ruter forberedt til den klassiske stil uden skøjtebaner. Dette omfatter ruter forberedt af en mindre snescooter med løsere pister og spor lavet manuelt af skiløbere.";
 "routeInfo_piste_difficulty_name" = "Pistesværhedsgrad";
 "rendering_value_black_name" = "Sort";
 "routing_attr_height_obstacles_name" = "Brug højdedata";
@@ -1532,7 +1532,7 @@
 "rendering_attr_tracktype_grade5_name" = "Blød";
 "routing_attr_avoid_toll_name" = "Ingen betalingsveje";
 "routing_attr_short_way_description" = "Brug brændstofbesparende rute (normalt kortere).";
-"routing_attr_allow_skating_only_name" = "Tillad kun skøjteløb ruter";
+"routing_attr_allow_skating_only_name" = "Tillad ruter kun for skøjteløb";
 "rendering_attr_smoothness_very_horrible_name" = "Meget forfærdelig";
 "routing_attr_piste_type_nordic_name" = "Langrend / nordisk ski";
 "rendering_attr_hmRendered_name" = "Vis flere kortdetaljer";
@@ -1547,10 +1547,10 @@
 "routing_attr_driving_style_prefer_unpaved_name" = "Foretræk ikke-asfalterede veje";
 "rendering_attr_tracktype_grade3_name" = "Mest fast";
 "rendering_attr_highway_class_road_name" = "Vej";
-"rendering_attr_piste_type_snow_park_name" = "Snowpark";
+"rendering_attr_piste_type_snow_park_name" = "Terrænpark";
 "rendering_attr_currentTrackColor_description" = "GPX-farve";
 "rendering_attr_hideWaterPolygons_description" = "Vand";
-"routing_attr_piste_type_skitour_name" = "Langrend ski";
+"routing_attr_piste_type_skitour_name" = "Turski";
 "routing_attr_freeride_policy_name" = "Off-piste";
 "rendering_attr_piste_type_sleigh_name" = "Slæde";
 "rendering_attr_hikingRoutesOSMC_name" = "Vandreruter";
@@ -2029,3 +2029,4 @@
 "context_menu_item_edit_waypoint" = "Rediger GPX-rutepunkt";
 "no_waypoints_found" = "Ingen rutepunkter fundet";
 "gpxup_public" = "Offentligt";
+"track_coloring_solid" = "Ensfarvet";

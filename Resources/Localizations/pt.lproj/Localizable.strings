@@ -141,9 +141,9 @@
 "maps" = "Mapas";
 "purchases" = "Compras";
 // Purchases
-"prch_addons" = "Addons";
+"prch_addons" = "Complementos";
 "prch_ski_q" = "Por favor, ative o estilo \"Mapa de esqui\" nas configurações do mapa";
-"prch_nau_q1" = "Por favor, ative estilo \"Náutico\" nas configurações do mapa e instale mapa base de marcos náuticos.";
+"prch_nau_q1" = "Por favor, ative o estilo \"Náutico\" nas configurações do mapa e instale o mapa base de balizas marítimas.";
 "prch_nau_q2_cell" = "O descarregamento necessita de %@ pela rede de telemóveis.";
 "incur_high_charges" = "Isto pode incorrer em custos elevados.";
 "prch_nau_q2_wifi" = "O descarregamento necessita de %@ pela rede Wi-Fi.";
@@ -153,7 +153,7 @@
 "nothanks" = "Não, obrigado";
 "download_now" = "Descarregar o mapa agora";
 "prch_failed" = "A aquisição de \"%@\" falhou";
-"prch_items_failed" = "Item(ns) não foram restaurados. Por favor, tente novamente.";
+"prch_items_failed" = "itens não foram restaurados. Por favor, tente novamente.";
 // Resources
 "res_mapsres" = "Mapas e recursos";
 "download_tab_local" = "Descarregados";
@@ -169,7 +169,7 @@
 "res_updates_avail" = "Atualizações disponíveis";
 "res_maps_inst" = "mapa(s)";
 "res_deleting" = "A eliminar…";
-"res_wsea_map" = "Mapa base mundial náutico";
+"res_wsea_map" = "Mapa base mundial de balizas marítimas";
 "res_wmap" = "Mapa mundial de visão geral";
 "res_dmap" = "Visão geral detalhada do mapa";
 "res_map_of_region" = "Mapa da região";
@@ -366,9 +366,9 @@
 "shared_string_current" = "Atual";
 "make_as_start_point" = "Usar como ponto de partida";
 "add_as_first_destination_point" = "Adicionar primeiro destino intermédio";
-"add_as_last_destination_point" = "Adicionarúltimo destino intermédio";
-"open_from" = "Abreàs";
-"open_till" = "Fechaàs";
+"add_as_last_destination_point" = "Adicionar último destino intermédio";
+"open_from" = "Abre às";
+"open_till" = "Fecha às";
 "driving_region_automatic" = "Automático";
 "map_widget_magnetic_bearing" = "Rumo magnético";
 "map_widget_bearing" = "Rumo relativo";
@@ -476,7 +476,7 @@
 "arrival_distance_factor_early" = "Adiantado";
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Atrasado";
-"arrival_distance_factor_at_last" = "Nosúltimos metros";
+"arrival_distance_factor_at_last" = "Nos últimos metros";
 "fast_route_mode" = "Caminho mais rápido";
 "avoid_in_routing_title" = "Evitar…";
 "prefer_in_routing_title" = "Preferir…";
@@ -503,7 +503,7 @@
 "app_mode_motorcycle" = "Motorizada";
 "app_mode_boat" = "Barco";
 "app_mode_aircraft" = "Aeronave";
-"gpx_option_calculate_first_last_segment" = "Calcular rota de OsmAnd para o primeiro eúltimo segmento da rota";
+"gpx_option_calculate_first_last_segment" = "Calcular rota OsmAnd para o primeiro e último segmento da rota";
 "gpx_option_from_start_point" = "Percorrer toda a rota";
 "gpx_option_reverse_route" = "Inverter direção GPX";
 "use_points_as_intermediates" = "Calcular rota entre pontos";
@@ -525,14 +525,14 @@
 "route_from" = "De";
 "starting_point_too_far" = "Ponto de partida demasiado distante da estrada mais próxima.";
 "ending_point_too_far" = "Destino muito longe da estrada mais próxima.";
-"route_kl" = "Mantenha-seà esquerda e continue em";
-"route_kr" = "Mantenha-seà direita e continue em";
-"route_tr" = "Vireà direita e continue em";
-"route_tshr" = "Vire acentuadamenteà direita e continue em";
-"route_tslr" = "Vire ligeiramenteà direita e continue em";
-"route_tl" = "Vireà esquerda e continue em";
-"route_tshl" = "Vire acentuadamenteà esquerda e continue em";
-"route_tsll" = "Vire ligeiramenteà esquerda e continue em";
+"route_kl" = "Mantenha-se à esquerda e continue em";
+"route_kr" = "Mantenha-se à direita e continue em";
+"route_tr" = "Vire à direita e continue em";
+"route_tshr" = "Vire acentuadamente à direita e continue em";
+"route_tslr" = "Vire ligeiramente à direita e continue em";
+"route_tl" = "Vire à esquerda e continue em";
+"route_tshl" = "Vire acentuadamente à esquerda e continue em";
+"route_tsll" = "Vire ligeiramente à esquerda e continue em";
 "route_tu" = "Faça inversão de marcha e continue em";
 "route_head" = "Comece em";
 "looking_up_address" = "A procurar o endereço";
@@ -599,7 +599,7 @@
 "osm_note" = "Nota do OSM";
 "osm_deleted" = "Eliminado";
 "osm_editing_offline" = "Edição offline";
-"osm_working_days" = "Diasúteis";
+"osm_working_days" = "Dias úteis";
 "osm_opening_hours_time" = "Tempo";
 "osm_editing_contact_info" = "Informações de contacto";
 "osm_str_name" = "Nome da rua";
@@ -920,7 +920,7 @@
 "product_desc_srtm" = "Mostrar curvas de nível";
 "product_desc_ext_srtm" = "Esta extensão fornece as camadas curvas de nível e sombra de colinas (relevo) por cima dos mapas offline do OsmAnd. As curvas de nível fornecem as informações sobre altura da área enquanto sombra de colina é sua visualização. Veja os nomes dos cumes das montanhas e características específicas do terreno usando esta extensão.\n\nOs dados globais (entre as latitudes 70º norte e 70º sul) são baseados em medições do SRTM (Shuttle Radar Topography Mission) e ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), um instrumento de imagens do satélite \"Terra\", o principal satélite do Sistema de Observação da Terra da NASA. ASTER é um esforço conjunto da NASA, do Ministério Japonês da Economia, Comércio e Indústria (METI) e do Sistema Espacial Japonês (J-spacesystems).";
 "product_title_sea_depth_contours" = "Curvas de profundidades náuticas";
-"product_desc_sea_depth_contours" = "Curvas de nível e cartografia náutica";
+"product_desc_sea_depth_contours" = "Curvas de nível e balizas marítimas";
 "enter_description" = "Insira a descrição";
 "enter_fav_name" = "Digite o nome do favorito";
 "res_installing" = "A instalar…";
@@ -1132,7 +1132,7 @@
 "osmand_live_updates_size" = "Tamanho das atualizações descarregadas";
 "mapil_select_user" = "Selecionar utilizador";
 "get_discount_title" = "Obtenha %d %@ com %d%% de desconto.";
-"get_free_trial_title" = "Inicie sua avaliação gratuita de %1$d %2$s.";
+"get_free_trial_title" = "Comece a avaliação gratuita de %1$d %2$s.";
 "get_discount_short_descr" = "%@ por %d %@, depois %@";
 "osm_succsessful_uploads" = "Sucesso";
 "osm_upload_complete" = "Envio terminado";
@@ -1351,7 +1351,7 @@
 "rendering_value_translucent_purple_name" = "Roxo translúcido";
 "routing_attr_avoid_shuttle_train_description" = "Evita usar comboios vaivém, em pequenos trajetos predefinidos como aeroportos";
 "rendering_attr_tracktype_grade3_name" = "Maioritariamente sólido";
-"routing_attr_allow_private_description" = "Permitir acesso aáreas privadas.";
+"routing_attr_allow_private_description" = "Permitir acesso a áreas privadas.";
 "routing_attr_allow_skating_only_name" = "Permitir apenas rotas de patinagem";
 "rendering_value_brown_name" = "Castanho";
 "routing_attr_allow_intermediate_description" = "Rotas mais difíceis com secções mais íngremes. Geralmente, contém alguns obstáculos que deviam ser evitados.";
@@ -1369,7 +1369,7 @@
 "rendering_attr_surface_compacted_name" = "Compactado";
 "routing_attr_allow_classic_only_description" = "Rotas preparadas apenas para o estilo clássico sem pistas de patinagem. Isso inclui rotas preparadas por uma moto de neve menor com pista mais solta e pistas feitas manualmente por esquiadores.";
 "rendering_attr_subwayMode_name" = "Rotas de metropolitanos";
-"rendering_attr_hideOverground_name" = "Objetosà superfície";
+"rendering_attr_hideOverground_name" = "Objetos à superfície";
 "rendering_attr_appMode_name" = "Modo de visualização";
 "rendering_attr_transportStops_name" = "Paragens de transporte";
 "rendering_attr_hikingRoutesOSMC_name" = "Rotas de montanhismo";
@@ -1532,7 +1532,7 @@
 "rendering_attr_moreDetailed_name" = "Mais detalhes";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "routing_attr_avoid_sett_name" = "Sem pedras irregulares ou paralelos";
-"rendering_attr_hideWaterPolygons_name" = "Corpos deágua largos";
+"rendering_attr_hideWaterPolygons_name" = "Corpos de água largos";
 "rendering_value_black_name" = "Preto";
 "rendering_attr_contourDensity_name" = "Quantidade de curvas de nível";
 "rendering_attr_piste_type_snow_park_name" = "Parque de neve";
@@ -1540,7 +1540,7 @@
 "routeInfo_steepness_name" = "Inclinação";
 "routing_attr_avoid_toll_description" = "Evitar estradas com portagem";
 "rendering_value_germanRoadAtlas_name" = "Atlas de vias alemãs";
-"rendering_attr_whiteWaterSports_name" = "Desportos deágua doce";
+"rendering_attr_whiteWaterSports_name" = "Desportos de água doce";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferir estradas não pavimentadas";
 "rendering_value_translucent_lightblue_name" = "Azul claro translúcido";
 "routing_attr_avoid_motorway_name" = "Evitar autoestradas";
@@ -1584,7 +1584,7 @@
 "app_mode_wagon" = "Vagão";
 "app_mode_utv" = "Lado a lado";
 "app_mode_osm" = "OSM";
-"rendering_attr_streetLightingNight_name" = "Mostrar apenasà noite";
+"rendering_attr_streetLightingNight_name" = "Mostrar apenas à noite";
 "all_group_points" = "Todos os pontos do grupo";
 "res_zoom_levels" = "Níveis de ampliação";
 "region_antarctica" = "Antártida";
@@ -1722,7 +1722,7 @@
 "plugin_settings_reset" = "Repor configurações originais da extensão";
 "help_purchases" = "Compras de OsmAnd";
 "avoid_routes_and_road" = "Evitar determinados tipos de rotas e estradas";
-"select_icon" = "Selecionarícone";
+"select_icon" = "Selecionar ícone";
 "product_title_antarctica" = "Antártida";
 "units_t" = "t";
 "position_icon_while_moving" = "Ícone de posição durante a movimentação";
@@ -1829,7 +1829,7 @@
 "hide_coordinates" = "Ocultar coordenadas";
 "show_coordinates" = "Mostrar coordenadas";
 "toggle_coordinates" = "Mostrar/ocultar widget de coordenadas";
-"copied_to_clipboard" = "Copiado para aárea de transferência";
+"copied_to_clipboard" = "Copiado para a área de transferência";
 "searching_gps" = "A procurar GPS";
 
 // Coordinate widget
@@ -2041,7 +2041,7 @@
 "max_speed" = "Velocidade máxima";
 "ui_customization" = "Personalização da interface";
 "units_nm" = "mn";
-"attach_to_the_roads" = "Fixaràs estradas";
+"attach_to_the_roads" = "Fixar às estradas";
 "follow_track" = "Seguir o trilho";
 "select_another_track" = "Selecionar outro trilho";
 "map_widget_distance_by_tap" = "Distância com 2 dedos";
@@ -2126,7 +2126,7 @@
 "rendering_value_walkingRoutesOSMC_description" = "Atribua uma cor a rotas de acordo com a sua cor local individual (se existir no OpenStreetMap) e o símbolo de escudo de caminhada.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Cor por afiliação de rede.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Atribuir uma cor a rotas de acordo com o tipo de rede do nó (internacional, regional, local).";
-"walking_route_osmc_description" = "Atribua uma coràs rotas de acordo com a sua cor local individual (se existir no OpenStreetMap) e tipo (internacional, regional, local).";
+"walking_route_osmc_description" = "Atribua uma cor às rotas de acordo com a sua cor local individual (se existir no OpenStreetMap) e tipo (internacional, regional, local).";
 "travel_routes" = "Rotas de viagem";
 "foot" = "ft";
 "shared_string_feet" = "pés";

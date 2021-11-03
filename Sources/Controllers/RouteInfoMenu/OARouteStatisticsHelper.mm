@@ -32,6 +32,7 @@
 #define STEP 4
 
 #define STEEPNESS_TAG @"steepness="
+#define ROUTE_INFO_STEEPNESS @"routeInfo_steepness"
 
 static NSArray<NSNumber *> *_boundariesArray;
 static NSArray<NSString *> *_boundariesClass;
@@ -283,6 +284,37 @@ static NSArray<NSString *> *_boundariesClass;
 + (NSString *) formatSlopeString:(int) slope next:(int) next
 {
     return [NSString stringWithFormat:@"%d%% → %d%%", slope, next];
+}
+
++ (NSArray<NSString *> *) getRouteStatisticAttrsNames:(BOOL)excludeSteepness
+{
+    NSMutableArray<NSString *> *attributeNames = [NSMutableArray new];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    auto resourceId = QString::fromNSString(app.data.lastMapSource.resourceId);
+    auto mapSourceResource = app.resourcesManager->getResource(resourceId);
+    
+    if (!mapSourceResource)
+    {
+        resourceId = QString::fromNSString([OAAppData defaultMapSource].resourceId);
+        mapSourceResource = app.resourcesManager->getResource(resourceId);
+    }
+    
+    if (!mapSourceResource)
+        return nil;
+    
+    [self getAttributeNames:attributeNames mapSourceResource:mapSourceResource];
+    
+    if (attributeNames.count == 0)
+    {
+        resourceId = QString::fromNSString([OAAppData defaultMapSource].resourceId);
+        mapSourceResource = app.resourcesManager->getResource(resourceId);
+        [self getAttributeNames:attributeNames mapSourceResource:mapSourceResource];
+    }
+    if (excludeSteepness)
+        [attributeNames removeObject:ROUTE_INFO_STEEPNESS];
+    
+    return attributeNames;
 }
 
 @end

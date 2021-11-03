@@ -49,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(std::vector<SHARED_PTR<RouteSegmentResult> >)route;
 + (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames;
++ (NSArray<NSString *> *) getRouteStatisticAttrsNames:(BOOL)excludeSteepness;
 
 @end
 

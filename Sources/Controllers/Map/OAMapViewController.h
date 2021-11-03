@@ -168,6 +168,7 @@
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth;
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings;
+- (NSArray<NSString *> *) getAttributeNames;
 
 - (void) showProgressHUDWithMessage:(NSString *)message;
 - (void) hideProgressHUD;

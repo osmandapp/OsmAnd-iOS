@@ -383,7 +383,7 @@ static BOOL _lackOfResources;
     if (!_viewAppeared)
     {
         if (!_app.isRepositoryUpdating &&
-            [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && self.region == _app.worldRegion)
+            [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && self.region == _app.worldRegion && _currentScope != kLocalResourcesScope)
         {
             [self updateRepository];
         }

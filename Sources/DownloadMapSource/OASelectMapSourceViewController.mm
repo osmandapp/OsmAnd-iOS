@@ -153,7 +153,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cell.textView.text = caption;
         cell.imgView.image = img;
         if ([_app.data.lastMapSource isEqual:itemMapSource])
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checmark_default.png"]];
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checkmark_default.png"]];
         else
             cell.accessoryView = nil;
     }

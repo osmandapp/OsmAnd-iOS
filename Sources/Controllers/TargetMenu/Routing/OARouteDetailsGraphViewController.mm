@@ -79,8 +79,20 @@
     OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.lineChartView.delegate = self;
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView analysis:self.analysis useGesturesAndScale:YES];
-    
+
+    [GpxUIHelper setupGPXChartWithChartView:routeStatsCell.lineChartView
+                               yLabelsCount:4
+                                  topOffset:20
+                               bottomOffset:4
+                        useGesturesAndScale:YES
+    ];
+
+    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
+                                      analysis:self.analysis
+                           useGesturesAndScale:YES
+                                     firstType:GPXDataSetTypeALTITUDE
+                                    secondType:GPXDataSetTypeSLOPE];
+
     BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
     
     self.statisticsChart = routeStatsCell.lineChartView;
@@ -119,7 +131,7 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _currentMode = _trackMenuControlState ? _trackMenuControlState.routeStatistics : EOARouteStatisticsModeBoth;
+    _currentMode = _trackMenuControlState ? _trackMenuControlState.routeStatistics : EOARouteStatisticsModeAltitudeSlope;
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -187,7 +199,12 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
 
-    [self refreshHighlightOnMap:NO];
+    if (!self.trackChartPoints)
+        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+    [self.routeLineChartHelper refreshHighlightOnMap:NO
+                                       lineChartView:self.statisticsChart
+                                    trackChartPoints:self.trackChartPoints];
+    [self updateRouteStatisticsGraph];
 }
 
 - (BOOL)isLandscapeIPadAware
@@ -310,7 +327,7 @@
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode];
+    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode hasSpeed:self.analysis.hasSpeedData];
     statsModeBottomSheet.delegate = self;
     [statsModeBottomSheet show];
 }
@@ -329,7 +346,11 @@
               ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        [self refreshHighlightOnMap:YES];
+        if (!self.trackChartPoints)
+            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+        [self.routeLineChartHelper refreshHighlightOnMap:YES
+                                           lineChartView:self.statisticsChart
+                                        trackChartPoints:self.trackChartPoints];
     }
 }
 
@@ -440,7 +461,11 @@
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
-    [self refreshHighlightOnMap:NO];
+    if (!self.trackChartPoints)
+        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+    [self.routeLineChartHelper refreshHighlightOnMap:NO
+                                       lineChartView:self.statisticsChart
+                                    trackChartPoints:self.trackChartPoints];
 }
 
 
@@ -458,8 +483,11 @@
     {
         OARouteStatisticsModeCell *statsModeCell = _data[0];
         OALineChartCell *graphCell = _data[1];
-        
-        [self changeChartMode:_currentMode chart:graphCell.lineChartView modeCell:statsModeCell];
+
+        [self.routeLineChartHelper changeChartMode:_currentMode
+                                             chart:graphCell.lineChartView
+                                          analysis:self.analysis
+                                          modeCell:statsModeCell];
     }
 }
 

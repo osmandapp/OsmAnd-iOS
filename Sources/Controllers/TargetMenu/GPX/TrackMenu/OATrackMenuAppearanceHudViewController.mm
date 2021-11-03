@@ -76,13 +76,13 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) BOOL isShown;
-@property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
 
 @end
 
 @implementation OATrackMenuAppearanceHudViewController
 {
     OAGPXAppearanceCollection *_appearanceCollection;
+    NSArray<OAGPXTableSectionData *> *_tableData;
 
     OAFoldersCell *_colorValuesCell;
     OACollectionViewCellState *_scrollCellsState;
@@ -106,7 +106,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OsmAndAppInstance _app;
 }
 
-@dynamic gpx, isShown, tableData;
+@dynamic gpx, isShown;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx state:(OATargetMenuViewControllerState *)state
 {
@@ -403,8 +403,18 @@ static const NSInteger kCustomTrackWidthMax = 24;
                 }
         }
     }];
-
     [appearanceSections addObject:widthSection];
+
+    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
+            kSectionCells: @[[OAGPXTableCellData withData:@{
+                    kCellKey:@"join_gaps",
+                    kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                    kCellTitle:OALocalizedString(@"gpx_join_gaps"),
+                    kCellOnSwitch: ^(BOOL toggle) { self.gpx.joinSegments = toggle; },
+                    kCellIsOn: ^() { return self.gpx.joinSegments; }
+            }]],
+            kSectionFooter: OALocalizedString(@"gpx_join_gaps_descr")
+    }]];
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[[OAGPXTableCellData withData:@{
@@ -417,7 +427,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             kSectionHeader:OALocalizedString(@"actions")
     }]];
 
-    self.tableData = appearanceSections;
+    _tableData = appearanceSections;
 }
 
 - (OAGPXTableCellData *)generateDataForColorElevationGradientCell
@@ -496,6 +506,11 @@ static const NSInteger kCustomTrackWidthMax = 24;
     return customSliderCell;
 }
 
+- (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
+{
+    return _tableData[indexPath.section].cells[indexPath.row];
+}
+
 - (void)doAdditionalLayout
 {
     [super doAdditionalLayout];
@@ -556,17 +571,17 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.tableData.count;
+    return _tableData.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.tableData[section].cells.count;
+    return _tableData[section].cells.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return self.tableData[section].header;
+    return _tableData[section].header;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -844,6 +859,32 @@ static const NSInteger kCustomTrackWidthMax = 24;
     return 36.;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    NSString *footer = _tableData[section].footer;
+    if (!footer || footer.length == 0)
+        return 0.001;
+
+    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    NSString *footer = _tableData[section].footer;
+    if (!footer || footer.length == 0)
+        return nil;
+
+    OATableViewCustomFooterView *vw =
+            [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    UIFont *textFont = [UIFont systemFontOfSize:13];
+    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
+            NSFontAttributeName: textFont,
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+    }];
+    vw.label.attributedText = textStr;
+    return vw;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
@@ -906,7 +947,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
-            self.tableData[indexPath.section].updateData();
+            _tableData[indexPath.section].updateData();
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kWidthSection]
                           withRowAnimation:UITableViewRowAnimationNone];
@@ -951,7 +992,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
-    self.tableData[kColorsSection].updateData();
+    _tableData[kColorsSection].updateData();
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -971,7 +1012,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
 
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
-    self.tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
+    _tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
     [UIView setAnimationsEnabled:NO];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection]]
                           withRowAnimation:UITableViewRowAnimationNone];

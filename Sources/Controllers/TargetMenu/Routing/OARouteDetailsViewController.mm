@@ -94,7 +94,19 @@
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
     routeStatsCell.lineChartView.delegate = self;
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView analysis:self.analysis useGesturesAndScale:YES];
+
+    [GpxUIHelper setupGPXChartWithChartView:routeStatsCell.lineChartView
+                               yLabelsCount:4
+                                  topOffset:20
+                               bottomOffset:4
+                        useGesturesAndScale:YES
+    ];
+
+    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
+                                      analysis:self.analysis
+                           useGesturesAndScale:YES
+                                     firstType:GPXDataSetTypeALTITUDE
+                                    secondType:GPXDataSetTypeSLOPE];
     
     BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
     
@@ -196,7 +208,7 @@
         self.analysis = [self.gpx getAnalysis:0];
     }
     _expandedSections = [NSMutableSet new];
-    _currentMode = EOARouteStatisticsModeBoth;
+    _currentMode = EOARouteStatisticsModeAltitudeSlope;
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -562,13 +574,17 @@
               ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        [self refreshHighlightOnMap:YES];
+        if (!self.trackChartPoints)
+            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+        [self.routeLineChartHelper refreshHighlightOnMap:YES
+                                           lineChartView:self.statisticsChart
+                                        trackChartPoints:self.trackChartPoints];
     }
 }
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode];
+    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode hasSpeed:self.analysis.hasSpeedData];
     statsModeBottomSheet.delegate = self;
     [statsModeBottomSheet show];
 }
@@ -698,7 +714,12 @@
             }
         }
     }
-    [self refreshHighlightOnMap:NO];
+
+    if (!self.trackChartPoints)
+        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+    [self.routeLineChartHelper refreshHighlightOnMap:NO
+                                       lineChartView:self.statisticsChart
+                                    trackChartPoints:self.trackChartPoints];
 }
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
@@ -754,8 +775,11 @@
     {
         OARouteStatisticsModeCell *statsModeCell = statsSection[0];
         OALineChartCell *graphCell = statsSection[1];
-        
-        [self changeChartMode:_currentMode chart:graphCell.lineChartView modeCell:statsModeCell];
+
+        [self.routeLineChartHelper changeChartMode:_currentMode
+                                             chart:graphCell.lineChartView
+                                          analysis:self.analysis
+                                          modeCell:statsModeCell];
     }
 }
 

@@ -22,8 +22,10 @@
 
 #define kSectionCells @"cells"
 #define kSectionHeader @"header"
+#define kSectionHeaderHeight @"header_height"
 #define kSectionFooter @"footer"
 
+#define kTableSections @"sections"
 #define kTableValues @"values"
 #define kTableUpdateData @"update_data"
 
@@ -67,12 +69,24 @@ typedef void(^OAGPXTableDataUpdateData)();
 
 @property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *cells;
 @property (nonatomic, readonly) NSString *header;
+@property (nonatomic, readonly) CGFloat headerHeight;
 @property (nonatomic, readonly) NSString *footer;
 @property (nonatomic, readonly) NSDictionary *values;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
 
 - (void)setData:(NSDictionary *)data;
 - (BOOL)containsCell:(NSString *)key;
+
+@end
+
+@interface OAGPXTableData : NSObject
+
++ (instancetype)withData:(NSDictionary *)data;
+
+@property (nonatomic, readonly) NSMutableArray<OAGPXTableSectionData *> *sections;
+@property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
+
+- (void)setData:(NSDictionary *)data;
 
 @end
 
@@ -93,7 +107,6 @@ typedef void(^OAGPXTableDataUpdateData)();
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 
 - (void)updateGpxData;
-- (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath;
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
                                    firstAttribute:(NSLayoutAttribute)firstAttribute
@@ -105,5 +118,7 @@ typedef void(^OAGPXTableDataUpdateData)();
                                        secondItem:(UIView *)secondItem
                                   secondAttribute:(NSLayoutAttribute)secondAttribute
                                          constant:(CGFloat)constant;
+
+- (void)adjustMapViewPort;
 
 @end

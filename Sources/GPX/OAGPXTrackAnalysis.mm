@@ -478,7 +478,8 @@
                 _totalDistance += distance;
                 segmentDistance += distance;
                 point.distance = segmentDistance;
-                timeDiff = (NSInteger)((point.time - prev.time));
+                long timeDiffMillis = MAX(0, point.time - prev.time);
+                timeDiff = (NSInteger) (timeDiffMillis / 1000);
                 
                 //Last resort: Derive speed values from displacement if track does not originally contain speed
                 if (!_hasSpeedInTrack && speed == 0 && timeDiff > 0)
@@ -487,13 +488,14 @@
                 // Motion detection:
                 //   speed > 0  uses GPS chipset's motion detection
                 //   calculations[0] > minDisplacment * time  is heuristic needed because tracks may be filtered at recording time, so points at rest may not be present in file at all
-                if ((speed > 0) && (distance > 0.1 / (point.time - prev.time)) && point.time != 0 && prev.time != 0)
+                BOOL timeSpecified = point.time != 0 && prev.time != 0;
+                if (speed > 0 && timeSpecified && distance > timeDiffMillis / 10000)
                 {
-                    _timeMoving += (point.time - prev.time);
+                    _timeMoving += timeDiffMillis;
                     _totalDistanceMoving += distance;
                     if (s.segment.generalSegment && !point.firstPoint)
                     {
-                        timeMovingOfSingleSegment += point.time - prev.time;
+                        timeMovingOfSingleSegment += timeDiffMillis;
                         distanceMovingOfSingleSegment += distance;
                     }
                 }

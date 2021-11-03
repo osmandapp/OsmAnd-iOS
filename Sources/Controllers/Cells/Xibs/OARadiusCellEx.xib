@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,11 +32,12 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="IxZ-Dm-ngp" firstAttribute="leading" secondItem="LCC-ks-yWz" secondAttribute="trailing" id="70i-jj-j7R"/>
+                    <constraint firstAttribute="trailing" secondItem="LCC-ks-yWz" secondAttribute="trailing" priority="999" id="70i-jj-j7R"/>
                     <constraint firstAttribute="bottom" secondItem="LCC-ks-yWz" secondAttribute="bottom" id="8H7-Jf-cMN"/>
                     <constraint firstItem="LCC-ks-yWz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Ie4-nK-jXM"/>
                     <constraint firstItem="IxZ-Dm-ngp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Rjp-ik-OwT"/>
                     <constraint firstItem="LCC-ks-yWz" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="cEu-9B-Zf0"/>
+                    <constraint firstItem="IxZ-Dm-ngp" firstAttribute="leading" secondItem="LCC-ks-yWz" secondAttribute="trailing" id="cpd-jx-YPq"/>
                     <constraint firstAttribute="bottom" secondItem="IxZ-Dm-ngp" secondAttribute="bottom" id="d94-mi-cbX"/>
                     <constraint firstItem="IxZ-Dm-ngp" firstAttribute="width" secondItem="LCC-ks-yWz" secondAttribute="width" id="lZk-dy-AK0"/>
                     <constraint firstAttribute="trailingMargin" secondItem="IxZ-Dm-ngp" secondAttribute="trailing" id="uci-Bo-qN4"/>
@@ -44,6 +45,8 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="buttonLeft" destination="LCC-ks-yWz" id="Jit-BH-dLp"/>
+                <outlet property="buttonLeftNoButtonRightConstraint" destination="70i-jj-j7R" id="fij-ob-5c3"/>
+                <outlet property="buttonLeftWithButtonRightConstraint" destination="cpd-jx-YPq" id="epv-mg-XnQ"/>
                 <outlet property="buttonRight" destination="IxZ-Dm-ngp" id="u7v-Yp-2wA"/>
             </connections>
             <point key="canvasLocation" x="52.173913043478265" y="39.508928571428569"/>

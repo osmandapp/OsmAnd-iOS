@@ -502,7 +502,8 @@
                 
                 for (const auto& s : track->segments)
                 {
-                    OAGpxTrkSeg *_s = [[OAGpxTrkSeg alloc] init];
+                    OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *_s = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *) &s;
+                    OAGpxTrkSeg *_seg = [[OAGpxTrkSeg alloc] init];
 
                     if (!s->points.isEmpty()) {
                         NSMutableArray<OAGpxTrkPt *> *pts = [NSMutableArray array];
@@ -549,19 +550,20 @@
                             [self processBounds:_p.position];
                             [pts addObject:_p];
                         }
-                        _s.points = pts;
+                        _seg.points = pts;
                     }
                     
-                    _s.extraData = [self.class fetchExtra:s->extraData];
-                    [_s fillRouteDetails];
-                    [seg addObject:_s];
+                    _seg.extraData = [self.class fetchExtra:s->extraData];
+                    [_seg fillRouteDetails];
+                    _seg.trkseg = _s->shared_ptr();
+                    [seg addObject:_seg];
                 }
                 
                 _track.segments = seg;
             }
             
             _track.extraData = [self.class fetchExtra:t->extraData];
-            
+            _track.trk = _t->shared_ptr();
             [_trcks addObject:_track];
         }
         self.tracks = _trcks;
@@ -645,7 +647,8 @@
     }
 
     [self applyBounds];
-    
+    [self addGeneralTrack];
+
     return YES;
 }
 
@@ -1101,7 +1104,7 @@
                 }
                 waypoints[0].firstPoint = YES;
                 waypoints[waypoints.count - 1].lastPoint = YES;
-                segment.points = segment.points ? [segment.points arrayByAddingObjectsFromArray:waypoints] : @[waypoints];
+                segment.points = segment.points ? [segment.points arrayByAddingObjectsFromArray:waypoints] : waypoints;
             }
         }
     }
@@ -1130,13 +1133,17 @@
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
     OAGPXTrackAnalysis *g = [[OAGPXTrackAnalysis alloc] init];
-    g.wptPoints = (int)self.locationMarks.count;
+    g.wptPoints = (int) self.locationMarks.count;
     NSMutableArray *splitSegments = [NSMutableArray array];
-    for(OAGpxTrk *subtrack in self.tracks){
-        for(OAGpxTrkSeg *segment in subtrack.segments){
-            g.totalTracks ++;
-            if(segment.points.count > 1) {
-                [splitSegments addObject:[[OASplitSegment alloc] initWithTrackSegment:segment]];
+    for (OAGpxTrk *subtrack in self.tracks)
+    {
+        for (OAGpxTrkSeg *segment in subtrack.segments)
+        {
+            if (!segment.generalSegment)
+            {
+                g.totalTracks ++;
+                if (segment.points.count > 1)
+                    [splitSegments addObject:[[OASplitSegment alloc] initWithTrackSegment:segment]];
             }
         }
     }

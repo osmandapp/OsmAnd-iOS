@@ -82,6 +82,8 @@
         _cells = data[kSectionCells];
     if ([data.allKeys containsObject:kSectionHeader])
         _header = data[kSectionHeader];
+    if ([data.allKeys containsObject:kSectionHeaderHeight])
+        _headerHeight = [data[kSectionHeaderHeight] floatValue];
     if ([data.allKeys containsObject:kSectionFooter])
         _footer = data[kSectionFooter];
     if ([data.allKeys containsObject:kTableValues])
@@ -102,6 +104,28 @@
 
 @end
 
+@implementation OAGPXTableData
+
++ (instancetype)withData:(NSDictionary *)data
+{
+    OAGPXTableData *tableData = [OAGPXTableData new];
+    if (tableData)
+    {
+        [tableData setData:data];
+    }
+    return tableData;
+}
+
+- (void)setData:(NSDictionary *)data
+{
+    if ([data.allKeys containsObject:kTableSections])
+        _sections = data[kTableSections];
+    if ([data.allKeys containsObject:kTableUpdateData])
+        _updateData = data[kTableUpdateData];
+}
+
+@end
+
 @interface OABaseTrackMenuHudViewController()
 
 @property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
@@ -118,7 +142,6 @@
 @implementation OABaseTrackMenuHudViewController
 {
     CGFloat _cachedYViewPort;
-    OsmAndAppInstance _app;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
@@ -128,7 +151,6 @@
     {
         _gpx = gpx;
 
-        _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
@@ -155,7 +177,7 @@
         _gpx.gpxTitle = OALocalizedString(@"track_recording_name");
     }
     _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
-            : [[OAGPXDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
+            : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
 
     _analysis = [_doc getAnalysis:_isCurrentTrack ? 0
             : (long) [[OAUtilities getFileLastModificationDate:_gpx.gpxFilePath] timeIntervalSince1970]];
@@ -292,11 +314,6 @@
     [_mapPanelViewController targetSetMapRulerPosition:bottomMargin
                                                   left:([self isLandscape] ? self.tableView.frame.size.width
                                                           : [OAUtilities getLeftMargin] + 20.)];
-}
-
-- (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
-{
-    return _tableData[indexPath.section].cells[indexPath.row];
 }
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem

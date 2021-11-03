@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OATrackMenuHudViewController.h"
 
-@class OAGPXDocument, OAGPXTrackAnalysis, OAButton;
+@class OAGPX, OAGPXDocument, OAGPXTrackAnalysis;
+@class OAButton;
+
+@protocol OATrackMenuViewControllerDelegate;
 
 @interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -49,12 +53,18 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
 
-- (void)updateFrame;
+@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
+
+- (void)updateHeader:(EOATrackMenuHudTab)selectedTab
+        currentTrack:(BOOL)currentTrack
+          shownTrack:(BOOL)shownTrack
+               title:(NSString *)title;
+
+- (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
+                       withoutGaps:(BOOL)withoutGaps;
 
 - (void)setDirection:(NSString *)direction;
-- (void)setDescription:(NSString *)description;
+- (void)setDescription;
 - (void)setCollection:(NSArray *)data;
-- (void)makeOnlyHeader:(BOOL)hasDescription;
-- (void)showLocation:(BOOL)show;
 
 @end

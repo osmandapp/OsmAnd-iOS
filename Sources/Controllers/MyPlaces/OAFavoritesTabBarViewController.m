@@ -9,6 +9,7 @@
 #import "OAFavoritesTabBarViewController.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
+#import "OAColors.h"
 
 @implementation OAFavoritesTabBarViewController
 
@@ -22,6 +23,15 @@
         [self setViewControllers:newTabs];
     }
     [self applyLocalization];
+
+    if (@available(iOS 15.0, *))
+    {
+        UIImageView *tabBackground = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.tabBar.frame.size.width, 1)];
+        tabBackground.image = [OAUtilities imageWithColor:UIColorFromRGB(color_tint_gray)];
+        tabBackground.clipsToBounds = NO;
+        [self.tabBar insertSubview:tabBackground atIndex:0];
+    }
+
     [super viewDidLoad];
 }
 

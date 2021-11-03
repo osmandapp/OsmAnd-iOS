@@ -82,6 +82,8 @@
         _cells = data[kSectionCells];
     if ([data.allKeys containsObject:kSectionHeader])
         _header = data[kSectionHeader];
+    if ([data.allKeys containsObject:kSectionHeaderHeight])
+        _headerHeight = [data[kSectionHeaderHeight] floatValue];
     if ([data.allKeys containsObject:kSectionFooter])
         _footer = data[kSectionFooter];
     if ([data.allKeys containsObject:kTableValues])
@@ -98,6 +100,28 @@
             return YES;
     }
     return NO;
+}
+
+@end
+
+@implementation OAGPXTableData
+
++ (instancetype)withData:(NSDictionary *)data
+{
+    OAGPXTableData *tableData = [OAGPXTableData new];
+    if (tableData)
+    {
+        [tableData setData:data];
+    }
+    return tableData;
+}
+
+- (void)setData:(NSDictionary *)data
+{
+    if ([data.allKeys containsObject:kTableSections])
+        _sections = data[kTableSections];
+    if ([data.allKeys containsObject:kTableUpdateData])
+        _updateData = data[kTableUpdateData];
 }
 
 @end
@@ -284,11 +308,6 @@
             : [OAUtilities getLeftMargin] + 20.;
     [_mapPanelViewController targetSetMapRulerPosition:bottomMargin
                                                   left:leftMargin];
-}
-
-- (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
-{
-    return _tableData[indexPath.section].cells[indexPath.row];
 }
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem

@@ -24,11 +24,46 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAColoringType.h"
+#import "OARouteStatisticsHelper.h"
 
 #define kColorsSection 1
 #define kWidthSection 2
 
 #define kColorGridOrDescriptionCell 2
+
+@interface OATrackAppearanceItem : NSObject
+
+@property (nonatomic) OAColoringType *coloringType;
+@property (nonatomic) NSString *title;
+@property (nonatomic) NSString *attrName;
+@property (nonatomic, assign) BOOL isActive;
+
+- (instancetype)initWithColoringType:(OAColoringType *)coloringType
+                               title:(NSString *)title
+                            attrName:(NSString *)attrName
+                            isActive:(BOOL)isActive;
+
+@end
+
+@implementation OATrackAppearanceItem
+
+- (instancetype)initWithColoringType:(OAColoringType *)coloringType
+                               title:(NSString *)title
+                            attrName:(NSString *)attrName
+                            isActive:(BOOL)isActive
+{
+    self = [super init];
+    if (self)
+    {
+        _coloringType = coloringType;
+        _title = title;
+        _attrName = attrName;
+        _isActive = isActive;
+    }
+    return self;
+}
+
+@end
 
 @interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate>
 
@@ -44,18 +79,18 @@
 
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) BOOL isShown;
-@property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
 
 @end
 
 @implementation OATrackMenuAppearanceHudViewController
 {
     OAGPXAppearanceCollection *_appearanceCollection;
+    NSArray<OAGPXTableSectionData *> *_tableData;
 
     OAFoldersCell *_colorValuesCell;
     OACollectionViewCellState *_scrollCellsState;
-    OAColoringType *_selectedColoringType;
-    NSArray<OAColoringType *> *_availableColoringTypes;
+    OATrackAppearanceItem *_selectedItem;
+    NSArray<OATrackAppearanceItem *> *_availableColoringTypes;
 
     OAGPXTrackColor *_selectedColor;
     NSArray<NSNumber *> *_availableColors;
@@ -74,7 +109,7 @@
     OsmAndAppInstance _app;
 }
 
-@dynamic gpx, isShown, tableData;
+@dynamic gpx, isShown;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx state:(OATargetMenuViewControllerState *)state
 {
@@ -106,14 +141,34 @@
         _selectedWidth = [OAGPXTrackWidth getDefault];
 
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
-    _selectedColoringType = [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType];
+    OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType];
 
-    NSMutableArray<OAColoringType *> *coloringTypes = [NSMutableArray array];
+    NSMutableArray<OATrackAppearanceItem *> *items = [NSMutableArray array];
     for (OAColoringType *coloringType in [OAColoringType getTrackColoringTypes])
     {
-        [coloringTypes addObject:coloringType];
+        if ([coloringType isRouteInfoAttribute])
+            continue;
+
+        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:coloringType title:coloringType.title attrName:nil isActive:[coloringType isAvailableForDrawingTrack:self.doc attributeName:nil]];
+        [items addObject:item];
+
+        if (currentType == coloringType)
+            _selectedItem = item;
     }
-    _availableColoringTypes = coloringTypes;
+
+    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
+
+    for (NSString *attribute in attributes)
+    {
+        BOOL isAvailable = [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
+        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:OAColoringType.ATTRIBUTE title:OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]) attrName:attribute isActive:isAvailable];
+        [items addObject:item];
+
+        if (currentType == OAColoringType.ATTRIBUTE && [self.gpx.coloringType isEqualToString:attribute])
+            _selectedItem = item;
+    }
+
+    _availableColoringTypes = items;
 
     NSMutableArray<NSNumber *> *trackColors = [NSMutableArray array];
     for (OAGPXTrackColor *trackColor in [_appearanceCollection getAvailableColors])
@@ -193,24 +248,24 @@
     OAGPXTableCellData *colorTitle = [OAGPXTableCellData withData:@{
             kCellKey: @"color_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"string_value": _selectedColoringType.title },
+            kTableValues: @{ @"string_value": _selectedItem.title },
             kCellTitle: OALocalizedString(@"fav_color")
     }];
 
     [colorTitle setData:@{
             kTableUpdateData: ^() {
-                [colorTitle setData:@{ kTableValues: @{@"string_value": _selectedColoringType.title } }];
+                [colorTitle setData:@{ kTableValues: @{@"string_value": _selectedItem.title } }];
             }
     }];
     [colorsCells addObject:colorTitle];
 
     NSMutableArray<NSDictionary *> *trackColoringTypes = [NSMutableArray array];
-    for (OAColoringType *type in _availableColoringTypes)
+    for (OATrackAppearanceItem *item in _availableColoringTypes)
     {
         [trackColoringTypes addObject:@{
-                @"title": type.title,
-                @"type": type.name,
-                @"available": @([type isAvailableForDrawingTrack:self.doc attributeName:nil])
+            @"title": item.title,
+            @"type": item.coloringType == OAColoringType.ATTRIBUTE ? item.attrName : item.coloringType.name,
+            @"available": @(item.isActive)
         }];
     }
 
@@ -222,77 +277,81 @@
     }];
 
     [colorValues setData:@{
-            kTableUpdateData: ^() {
-                NSMutableArray<NSDictionary *> *newTrackColoringTypes = [NSMutableArray array];
-                for (OAColoringType *type in _availableColoringTypes)
-                {
-                    [newTrackColoringTypes addObject:@{
-                            @"title": type.title,
-                            @"type": type.name,
-                            @"available": @([type isAvailableForDrawingTrack:self.doc attributeName:nil])
-                    }];
-                }
-                [colorValues setData:@{ kTableValues: @{@"array_value": newTrackColoringTypes } }];
-            }
+        kTableUpdateData: ^() {
+        NSMutableArray<NSDictionary *> *newTrackColoringTypes = [NSMutableArray array];
+        for (OATrackAppearanceItem *item in _availableColoringTypes)
+        {
+            [newTrackColoringTypes addObject:@{
+                @"title": item.title,
+                @"type": item.coloringType == OAColoringType.ATTRIBUTE ? item.attrName : item.coloringType.name,
+                @"available": @(item.isActive)
+            }];
+        }
+        [colorValues setData:@{ kTableValues: @{@"array_value": newTrackColoringTypes } }];
+    }
     }];
     [colorsCells addObject:colorValues];
 
     OAGPXTableCellData * (^generateGridOrDescriptionCell) (void) = ^{
         OAGPXTableCellData *gridOrDescriptionCell;
-        if ([_selectedColoringType isTrackSolid])
+        if ([_selectedItem.coloringType isTrackSolid])
         {
             gridOrDescriptionCell = [OAGPXTableCellData withData:@{
-                    kCellKey: @"color_grid",
-                    kCellType: [OAColorsTableViewCell getCellIdentifier],
-                    kTableValues: @{
-                            @"int_value": @(_selectedColor.colorValue),
-                            @"array_value": _availableColors
-                    }
+                kCellKey: @"color_grid",
+                kCellType: [OAColorsTableViewCell getCellIdentifier],
+                kTableValues: @{
+                    @"int_value": @(_selectedColor.colorValue),
+                    @"array_value": _availableColors
+                }
             }];
 
             [gridOrDescriptionCell setData:@{
-                    kTableUpdateData: ^() {
-                        [gridOrDescriptionCell setData:@{
-                                kTableValues: @{
-                                        @"int_value": @(_selectedColor.colorValue),
-                                        @"array_value": _availableColors
-                                }
-                        }];
+                kTableUpdateData: ^() {
+                [gridOrDescriptionCell setData:@{
+                    kTableValues: @{
+                        @"int_value": @(_selectedColor.colorValue),
+                        @"array_value": _availableColors
                     }
+                }];
+            }
             }];
         }
-        else if ([_selectedColoringType isGradient])
+        else if ([_selectedItem.coloringType isGradient])
         {
             gridOrDescriptionCell = [OAGPXTableCellData withData:@{
-                    kCellKey: @"color_elevation_description",
-                    kCellType: [OATextLineViewCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"route_line_color_elevation_description")
+                kCellKey: @"color_elevation_description",
+                kCellType: [OATextLineViewCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"route_line_color_elevation_description")
             }];
         }
         return gridOrDescriptionCell;
     };
     [colorsCells addObject:generateGridOrDescriptionCell()];
 
-    if ([_selectedColoringType isGradient])
+    if ([_selectedItem.coloringType isGradient])
         [colorsCells addObject:[self generateDataForColorElevationGradientCell]];
 
     OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{ kSectionCells: colorsCells }];
     [colorsSection setData:@{
-            kTableUpdateData: ^() {
-                colorsSection.cells[kColorGridOrDescriptionCell] = generateGridOrDescriptionCell();
+        kTableUpdateData: ^() {
+        OAGPXTableCellData *data = generateGridOrDescriptionCell();
+        if (data)
+        {
+            colorsSection.cells[kColorGridOrDescriptionCell] = data;
 
-                BOOL hasElevationGradient = [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"];
-                if ([_selectedColoringType isGradient] && !hasElevationGradient)
-                    [colorsSection.cells addObject:[self generateDataForColorElevationGradientCell]];
-                else if (![_selectedColoringType isGradient] && hasElevationGradient)
-                    [colorsSection.cells removeObject:colorsSection.cells.lastObject];
+            BOOL hasElevationGradient = [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"];
+            if ([_selectedItem.coloringType isGradient] && !hasElevationGradient)
+                [colorsSection.cells addObject:[self generateDataForColorElevationGradientCell]];
+            else if (![_selectedItem.coloringType isGradient] && hasElevationGradient)
+                [colorsSection.cells removeObject:colorsSection.cells.lastObject];
 
-                for (OAGPXTableCellData *cell in colorsSection.cells)
-                {
-                    if (cell.updateData)
-                        cell.updateData();
-                }
+            for (OAGPXTableCellData *cell in colorsSection.cells)
+            {
+                if (cell.updateData)
+                    cell.updateData();
             }
+        }
+    }
     }];
 
     [appearanceSections addObject:colorsSection];
@@ -373,7 +432,7 @@
             kSectionHeader:OALocalizedString(@"actions")
     }]];
 
-    self.tableData = appearanceSections;
+    _tableData = appearanceSections;
 }
 
 - (OAGPXTableCellData *)generateDataForColorElevationGradientCell
@@ -452,6 +511,11 @@
     return customSliderCell;
 }
 
+- (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
+{
+    return _tableData[indexPath.section].cells[indexPath.row];
+}
+
 - (void)doAdditionalLayout
 {
     [super doAdditionalLayout];
@@ -466,17 +530,17 @@
 
 - (BOOL)isSelectedTypeSlope
 {
-    return _selectedColoringType == OAColoringType.SLOPE;
+    return _selectedItem.coloringType == OAColoringType.SLOPE;
 }
 
 - (BOOL)isSelectedTypeSpeed
 {
-    return _selectedColoringType == OAColoringType.SPEED;
+    return _selectedItem.coloringType == OAColoringType.SPEED;
 }
 
 - (BOOL)isSelectedTypeAltitude
 {
-    return _selectedColoringType == OAColoringType.ALTITUDE;
+    return _selectedItem.coloringType == OAColoringType.ALTITUDE;
 }
 
 - (IBAction)onBackButtonPressed:(id)sender
@@ -512,17 +576,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.tableData.count;
+    return _tableData.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.tableData[section].cells.count;
+    return _tableData[section].cells.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return self.tableData[section].header;
+    return _tableData[section].header;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -628,7 +692,7 @@
         }
         if (cell)
         {
-            [cell setValues:cellData.values[@"array_value"] withSelectedIndex:[_availableColoringTypes indexOfObject:_selectedColoringType]];
+            [cell setValues:cellData.values[@"array_value"] withSelectedIndex:[_availableColoringTypes indexOfObject:_selectedItem]];
         }
         outCell = _colorValuesCell = cell;
     }
@@ -802,7 +866,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    NSString *footer = self.tableData[section].footer;
+    NSString *footer = _tableData[section].footer;
     if (!footer || footer.length == 0)
         return 0.001;
 
@@ -811,7 +875,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    NSString *footer = self.tableData[section].footer;
+    NSString *footer = _tableData[section].footer;
     if (!footer || footer.length == 0)
         return nil;
 
@@ -892,7 +956,7 @@
 
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
-            self.tableData[indexPath.section].updateData();
+            _tableData[indexPath.section].updateData();
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kWidthSection]
                           withRowAnimation:UITableViewRowAnimationNone];
@@ -932,12 +996,12 @@
 
 - (void)onItemSelected:(NSInteger)index type:(NSString *)type
 {
-    _selectedColoringType = _availableColoringTypes[index];
-    self.gpx.coloringType = _selectedColoringType.name;
+    _selectedItem = _availableColoringTypes[index];
+    self.gpx.coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;
 
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
-    self.tableData[kColorsSection].updateData();
+    _tableData[kColorsSection].updateData();
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -957,7 +1021,7 @@
 
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
-    self.tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
+    _tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
     [UIView setAnimationsEnabled:NO];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection]]
                           withRowAnimation:UITableViewRowAnimationNone];

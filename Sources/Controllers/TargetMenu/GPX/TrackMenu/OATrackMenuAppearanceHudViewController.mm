@@ -949,7 +949,7 @@
         {
             _selectedWidth = [_appearanceCollection getAvailableWidth][segment.selectedSegmentIndex];
 
-            if ([_selectedWidth.customValue floatValue] > _customWidthValues.lastObject.floatValue * 3)
+            if ([_selectedWidth.customValue floatValue] > _customWidthValues.lastObject.floatValue)
                 _selectedWidth = [OAGPXTrackWidth getDefault];
 
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;

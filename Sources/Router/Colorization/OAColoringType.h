@@ -35,6 +35,7 @@
 
 - (BOOL) isTrackSolid;
 - (BOOL) isGradient;
+- (BOOL) isRouteInfoAttribute;
 
 @end
 

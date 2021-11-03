@@ -188,6 +188,11 @@
                  lroundf(b * 255)];
 }
 
++ (UIColor *) colorFromString:(NSString *)string
+{
+    return UIColorFromRGBA([OAUtilities colorToNumberFromString:string]);
+}
+
 @end
 
 @implementation NSString (util)
@@ -938,11 +943,6 @@
     NSScanner *scanner = [NSScanner scannerWithString:string];
     [scanner scanHexInt:&rgba];
     return rgba;
-}
-
-+ (UIColor *) colorFromString:(NSString *)string
-{
-    return UIColorFromRGBA([self.class colorToNumberFromString:string]);
 }
 
 + (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2

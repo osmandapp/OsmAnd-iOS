@@ -645,7 +645,7 @@
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
         groupColor = waypoint.color ? waypoint.color
-                : waypoint.point.color ? [OAUtilities colorFromString:waypoint.point.color] : nil;
+                : waypoint.point.color ? [UIColor colorFromString:waypoint.point.color] : nil;
     }
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];

@@ -134,7 +134,7 @@
         const auto& values = extraData->getValues();
         const auto& it = values.find(QStringLiteral("color"));
         if (it != values.end())
-            return [OAUtilities colorFromString:it.value().toString().toNSString()];
+            return [UIColor colorFromString:it.value().toString().toNSString()];
     }
     return nil;
 }

@@ -2190,3 +2190,8 @@
 "delete_group_confirm" = "Ви впевнені, що хочете видалити групу «%@»?";
 "delete_waypoints" = "Видалити маршрутні точки";
 "delete_group_confirm_short" = "Видалити групу?";
+"shared_string_start_time" = "Час початку";
+"shared_string_end_time" = "Час завершення";
+"shared_string_time_span" = "Проміжок часу";
+"shared_string_time_moving" = "Час переміщення";
+"distance_moving" = "Відкоригована відстань";

@@ -2182,3 +2182,8 @@
 "delete_waypoints" = "Eliminar pontos de rotas";
 "delete_group_confirm_short" = "Eliminar grupo?";
 "delete_group_confirm" = "Quer mesmo eliminar o grupo ”%@”?";
+"shared_string_time_span" = "Período de tempo";
+"shared_string_start_time" = "Hora de início";
+"shared_string_end_time" = "Hora de fim";
+"shared_string_time_moving" = "Tempo em movimento";
+"distance_moving" = "Distância corrigida";

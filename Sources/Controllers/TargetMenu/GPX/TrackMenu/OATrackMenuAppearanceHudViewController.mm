@@ -27,7 +27,6 @@
 #import "OARouteStatisticsHelper.h"
 
 #define kColorsSection 1
-#define kWidthSection 2
 
 #define kColorGridOrDescriptionCell 2
 
@@ -92,14 +91,17 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTrackColor *_selectedColor;
     NSArray<NSNumber *> *_availableColors;
 
-    OASegmentedControlCell *_widthValuesCell;
     OAGPXTrackWidth *_selectedWidth;
-    NSArray<NSNumber *> *_customWidthValues;
+    NSArray<NSString *> *_customWidthValues;
+
+    OAGPXTrackSplitInterval *_selectedSplit;
 
     NSInteger _oldColor;
     BOOL _oldShowArrows;
     NSString *_oldWidth;
     NSString *_oldColoringType;
+    EOAGpxSplitType _oldSplitType;
+    double _oldSplitInterval;
 
     OATrackMenuViewControllerState *_reopeningTrackMenuState;
     
@@ -131,12 +133,17 @@ static const NSInteger kCustomTrackWidthMax = 24;
     _oldShowArrows = self.gpx.showArrows;
     _oldWidth = self.gpx.width;
     _oldColoringType = self.gpx.coloringType;
+    _oldSplitType = self.gpx.splitType;
+    _oldSplitInterval = self.gpx.splitInterval;
 
     _appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
     _selectedColor = [_appearanceCollection getColorForValue:self.gpx.color];
     _selectedWidth = [_appearanceCollection getWidthForValue:self.gpx.width];
     if (!_selectedWidth)
         _selectedWidth = [OAGPXTrackWidth getDefault];
+    _selectedSplit = [_appearanceCollection getSplitIntervalForType:self.gpx.splitType];
+    if (self.gpx.splitInterval > 0 && self.gpx.splitType != EOAGpxSplitTypeNone)
+        _selectedSplit.customValue = _selectedSplit.titles[[_selectedSplit.values indexOfObject:@(self.gpx.splitInterval)]];
 
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
     OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType];
@@ -178,7 +185,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     NSMutableArray *customWidthValues = [NSMutableArray array];
     for (NSInteger i = kCustomTrackWidthMin; i <= kCustomTrackWidthMax; i++)
     {
-        [customWidthValues addObject:@(i)];
+        [customWidthValues addObject:[NSString stringWithFormat:@"%li", i]];
     }
     _customWidthValues = customWidthValues;
 }
@@ -233,7 +240,10 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     kCellKey:@"direction_arrows",
                     kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                     kCellTitle:OALocalizedString(@"gpx_dir_arrows"),
-                    kCellOnSwitch: ^(BOOL toggle) { self.gpx.showArrows = toggle; },
+                    kCellOnSwitch: ^(BOOL toggle) {
+                            self.gpx.showArrows = toggle;
+                            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                        },
                     kCellIsOn: ^() { return self.gpx.showArrows; }
             }]]
     }]];
@@ -321,7 +331,8 @@ static const NSInteger kCustomTrackWidthMax = 24;
         }
         return gridOrDescriptionCell;
     };
-    [colorsCells addObject:generateGridOrDescriptionCell()];
+    __block OAGPXTableCellData *gridOrDescriptionCell = generateGridOrDescriptionCell();
+    [colorsCells addObject:gridOrDescriptionCell];
 
     if ([_selectedItem.coloringType isGradient])
         [colorsCells addObject:[self generateDataForColorElevationGradientCell]];
@@ -329,22 +340,22 @@ static const NSInteger kCustomTrackWidthMax = 24;
     OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{ kSectionCells: colorsCells }];
     [colorsSection setData:@{
         kTableUpdateData: ^() {
-        OAGPXTableCellData *data = generateGridOrDescriptionCell();
-        if (data)
+        NSInteger index = [colorsCells indexOfObject:gridOrDescriptionCell];
+        if (index != NSNotFound)
         {
-            colorsSection.cells[kColorGridOrDescriptionCell] = data;
-            
+            gridOrDescriptionCell = generateGridOrDescriptionCell();
+            colorsSection.cells[index] = gridOrDescriptionCell;
+
             BOOL hasElevationGradient = [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"];
             if ([_selectedItem.coloringType isGradient] && !hasElevationGradient)
                 [colorsSection.cells addObject:[self generateDataForColorElevationGradientCell]];
             else if (![_selectedItem.coloringType isGradient] && hasElevationGradient)
                 [colorsSection.cells removeObject:colorsSection.cells.lastObject];
-            
-            for (OAGPXTableCellData *cell in colorsSection.cells)
-            {
-                if (cell.updateData)
-                    cell.updateData();
-            }
+        }
+        for (OAGPXTableCellData *cell in colorsSection.cells)
+        {
+            if (cell.updateData)
+                cell.updateData();
         }
     }
     }];
@@ -360,7 +371,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     }];
     [widthTitle setData:@{
             kTableUpdateData: ^() {
-                [widthTitle setData:@{ kTableValues: @{@"string_value": _selectedWidth.title } }];
+                [widthTitle setData:@{ kTableValues: @{ @"string_value": _selectedWidth.title } }];
             }
     }];
     [widthCells addObject:widthTitle];
@@ -373,7 +384,16 @@ static const NSInteger kCustomTrackWidthMax = 24;
     }];
     [widthValue setData:@{
             kTableUpdateData: ^() {
-                [widthValue setData:@{ kTableValues: @{@"array_value": [_appearanceCollection getAvailableWidth] } }];
+                [widthValue setData:@{ kTableValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] } }];
+            },
+            kTableUpdateProperty: ^(id value) {
+                if ([value isKindOfClass:NSNumber.class])
+                {
+                    _selectedWidth = [_appearanceCollection getAvailableWidth][[value intValue]];
+                    self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
+
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                }
             }
     }];
     [widthCells addObject:widthValue];
@@ -405,12 +425,80 @@ static const NSInteger kCustomTrackWidthMax = 24;
     }];
     [appearanceSections addObject:widthSection];
 
+    NSMutableArray<OAGPXTableCellData *> *splitCells = [NSMutableArray array];
+    OAGPXTableCellData *splitTitle = [OAGPXTableCellData withData:@{
+            kCellKey: @"split_title",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kTableValues: @{ @"string_value": _selectedSplit.title },
+            kCellTitle: OALocalizedString(@"gpx_split_interval")
+    }];
+    [splitTitle setData:@{
+            kTableUpdateData: ^() {
+                [splitTitle setData:@{ kTableValues: @{ @"string_value": _selectedSplit.title } }];
+            }
+    }];
+    [splitCells addObject:splitTitle];
+
+    __block OAGPXTableCellData *sliderOrDescriptionCell = [self generateDataForSplitCustomSliderCell];
+
+    OAGPXTableCellData *splitValue = [OAGPXTableCellData withData:@{
+            kCellKey: @"split_value",
+            kCellType: [OASegmentedControlCell getCellIdentifier],
+            kTableValues: @{ @"array_value": [_appearanceCollection getAvailableSplitIntervals] },
+            kCellToggle: @NO
+    }];
+    [splitValue setData:@{
+            kTableUpdateData: ^() {
+                [splitValue setData:@{ kTableValues: @{ @"array_value": [_appearanceCollection getAvailableSplitIntervals] } }];
+            },
+            kTableUpdateProperty: ^(id value) {
+                if ([value isKindOfClass:NSNumber.class])
+                {
+                    _selectedSplit = [_appearanceCollection getAvailableSplitIntervals][[value intValue]];
+                    self.gpx.splitType = _selectedSplit.type;
+                    self.gpx.splitInterval = [_selectedSplit isCustom]
+                            ? [_selectedSplit.values[[sliderOrDescriptionCell.values[@"array_value"]
+                                    indexOfObject:sliderOrDescriptionCell.values[@"custom_string_value"]]] doubleValue]
+                            : 0.;
+                    if (self.gpx.splitInterval > 0 && self.gpx.splitType != EOAGpxSplitTypeNone)
+                        _selectedSplit.customValue =
+                                _selectedSplit.titles[[_selectedSplit.values indexOfObject:@(self.gpx.splitInterval)]];
+
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                }
+            }
+    }];
+    [splitCells addObject:splitValue];
+
+    [splitCells addObject:sliderOrDescriptionCell];
+
+    OAGPXTableSectionData *splitSection = [OAGPXTableSectionData withData:@{ kSectionCells: splitCells }];
+    [splitSection setData:@{
+            kTableUpdateData: ^() {
+                NSInteger index = [splitCells indexOfObject:sliderOrDescriptionCell];
+                if (index != NSNotFound)
+                {
+                    sliderOrDescriptionCell = [self generateDataForSplitCustomSliderCell];
+                    splitSection.cells[index] = sliderOrDescriptionCell;
+                }
+                for (OAGPXTableCellData *cell in splitSection.cells)
+                {
+                    if (cell.updateData)
+                        cell.updateData();
+                }
+            }
+    }];
+    [appearanceSections addObject:splitSection];
+
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[[OAGPXTableCellData withData:@{
                     kCellKey:@"join_gaps",
                     kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                     kCellTitle:OALocalizedString(@"gpx_join_gaps"),
-                    kCellOnSwitch: ^(BOOL toggle) { self.gpx.joinSegments = toggle; },
+                    kCellOnSwitch: ^(BOOL toggle) {
+                            self.gpx.joinSegments = toggle;
+                            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                    },
                     kCellIsOn: ^() { return self.gpx.joinSegments; }
             }]],
             kSectionFooter: OALocalizedString(@"gpx_join_gaps_descr")
@@ -422,7 +510,29 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     kCellType: [OAIconTitleValueCell getCellIdentifier],
                     kCellTitle: OALocalizedString(@"reset_to_original"),
                     kCellRightIconName: @"ic_custom_reset",
-                    kCellToggle: @YES
+                    kCellToggle: @YES,
+                    kCellButtonPressed: ^() {
+                        [[OAGPXDatabase sharedDb] reloadGPXFile:[_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]
+                                                     onComplete:^{
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                self.gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.gpxFilePath];
+                                [self updateGpxData];
+                                [self commonInit];
+                                [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
+                                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                                [self generateData];
+                                [self setupHeaderView];
+                                [UIView transitionWithView:self.tableView
+                                                  duration:0.35f
+                                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                                animations:^(void)
+                                                {
+                                                    [self.tableView reloadData];
+                                                }
+                                                completion:nil];
+                            });
+                        }];
+                    }
             }]],
             kSectionHeader:OALocalizedString(@"actions")
     }]];
@@ -484,7 +594,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             kCellKey: @"width_custom_slider",
             kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
             kTableValues: @{
-                    @"int_value": _selectedWidth.customValue,
+                    @"custom_string_value": _selectedWidth.customValue,
                     @"array_value": _customWidthValues,
                     @"has_top_labels": @NO,
                     @"has_bottom_labels": @YES,
@@ -494,16 +604,79 @@ static const NSInteger kCustomTrackWidthMax = 24;
             kTableUpdateData: ^() {
                 [customSliderCell setData:@{
                         kTableValues: @{
-                                @"int_value": _selectedWidth.customValue,
+                                @"custom_string_value": _selectedWidth.customValue,
                                 @"array_value": _customWidthValues,
                                 @"has_top_labels": @NO,
                                 @"has_bottom_labels": @YES,
                         }
                 }];
+            },
+            kTableUpdateProperty: ^(id value) {
+                if ([value isKindOfClass:NSNumber.class])
+                {
+                    NSString *selectedValue = _customWidthValues[[value intValue]];
+                    if (![_selectedWidth.customValue isEqualToString:selectedValue])
+                        self.gpx.width = _selectedWidth.customValue = selectedValue;
+
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                }
             }
     }];
 
     return customSliderCell;
+}
+
+- (OAGPXTableCellData *)generateDataForSplitCustomSliderCell
+{
+    OAGPXTableCellData *sliderOrDescriptionCell;
+    if (_selectedSplit.isCustom)
+    {
+        sliderOrDescriptionCell = [OAGPXTableCellData withData:@{
+                kCellKey: @"split_custom_slider",
+                kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"shared_string_interval"),
+                kTableValues: @{
+                        @"custom_string_value": _selectedSplit.customValue,
+                        @"array_value": _selectedSplit.titles,
+                        @"has_top_labels": @YES,
+                        @"has_bottom_labels": @YES,
+                }
+        }];
+        [sliderOrDescriptionCell setData:@{
+                kTableUpdateData: ^() {
+                    [sliderOrDescriptionCell setData:@{
+                            kTableValues: @{
+                                    @"custom_string_value": _selectedSplit.customValue,
+                                    @"array_value": _selectedSplit.titles,
+                                    @"has_top_labels": @YES,
+                                    @"has_bottom_labels": @YES,
+                            }
+                    }];
+                },
+                kTableUpdateProperty: ^(id value) {
+                    if ([value isKindOfClass:NSNumber.class])
+                    {
+                        NSString *customValue = _selectedSplit.titles[[value intValue]];
+                        if (![_selectedSplit.customValue isEqualToString:customValue])
+                        {
+                            _selectedSplit.customValue = customValue;
+                            self.gpx.splitInterval = _selectedSplit.values[[value intValue]].doubleValue;
+                        }
+                        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                    }
+                }
+        }];
+    }
+    else
+    {
+        sliderOrDescriptionCell = [OAGPXTableCellData withData:@{
+                kCellKey: @"split_none_descr",
+                kCellType: [OATextLineViewCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"gpx_split_interval_none_descr")
+        }];
+    }
+
+    return sliderOrDescriptionCell;
 }
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
@@ -547,6 +720,8 @@ static const NSInteger kCustomTrackWidthMax = 24;
             self.gpx.showArrows = _oldShowArrows;
             self.gpx.width = _oldWidth;
             self.gpx.coloringType = _oldColoringType;
+            self.gpx.splitType = _oldSplitType;
+            self.gpx.splitInterval = _oldSplitInterval;
             [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                                   trackHudMode:EOATrackMenuHudMode
                                                          state:_reopeningTrackMenuState];
@@ -737,7 +912,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     else if ([cellData.type isEqualToString:[OASegmentedControlCell getCellIdentifier]])
     {
         NSArray *arrayValue = cellData.values[@"array_value"];
-        OASegmentedControlCell *cell = _widthValuesCell;
+        OASegmentedControlCell *cell = cellData.values[@"cell_value"];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControlCell getCellIdentifier]
@@ -772,18 +947,33 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     else
                         [cell.segmentedControl setImage:icon forSegmentAtIndex:i++];
                 }
+                else if (!cellData.toggle && [value isKindOfClass:OAGPXTrackSplitInterval.class])
+                {
+                    if (i == cell.segmentedControl.numberOfSegments)
+                        [cell.segmentedControl insertSegmentWithTitle:value.title atIndex:i++ animated:NO];
+                    else
+                        [cell.segmentedControl setTitle:value.title forSegmentAtIndex:i++];
+                }
             }
 
-            [cell.segmentedControl setSelectedSegmentIndex:[arrayValue indexOfObject:_selectedWidth]];
+            NSInteger selectedIndex = 0;
+            if ([cellData.key isEqualToString:@"width_value"])
+                selectedIndex = [arrayValue indexOfObject:_selectedWidth];
+            else if ([cellData.key isEqualToString:@"split_value"])
+                selectedIndex = [arrayValue indexOfObject:_selectedSplit];
+            [cell.segmentedControl setSelectedSegmentIndex:selectedIndex];
 
             cell.segmentedControl.tag = indexPath.section << 10 | indexPath.row;
             [cell.segmentedControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentedControl addTarget:self
                                       action:@selector(segmentChanged:)
                             forControlEvents:UIControlEventValueChanged];
-        }
 
-        outCell = _widthValuesCell = cell;
+            NSMutableDictionary *values = [cellData.values mutableCopy];
+            values[@"cell_value"] = cell;
+            [cellData setData:values];
+        }
+        outCell = cell;
     }
     else if ([cellData.type isEqualToString:[OADividerCell getCellIdentifier]])
     {
@@ -819,11 +1009,11 @@ static const NSInteger kCustomTrackWidthMax = 24;
             [cell showLabels:hasTopLabels topRight:hasTopLabels bottomLeft:hasBottomLabels bottomRight:hasBottomLabels];
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             cell.topLeftLabel.text = cellData.title;
-            cell.topRightLabel.text = [NSString stringWithFormat:@"%li", (long) [cellData.values[@"int_value"] intValue]];
-            cell.bottomLeftLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.firstObject intValue]];
-            cell.bottomRightLabel.text = [NSString stringWithFormat:@"%li", (long) [arrayValue.lastObject intValue]];
+            cell.topRightLabel.text = cellData.values[@"custom_string_value"];
+            cell.bottomLeftLabel.text = arrayValue.firstObject;
+            cell.bottomRightLabel.text = arrayValue.lastObject;
             cell.numberOfMarks = arrayValue.count;
-            cell.selectedMark = [cellData.values[@"int_value"] intValue];
+            cell.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -889,28 +1079,8 @@ static const NSInteger kCustomTrackWidthMax = 24;
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-    if ([cellData.key isEqualToString:@"reset"])
-    {
-        [[OAGPXDatabase sharedDb] reloadGPXFile:[_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] onComplete:^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.gpxFilePath];
-                [self updateGpxData];
-                [self commonInit];
-                [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
-                [[_app updateGpxTracksOnMapObservable] notifyEvent];
-                [self generateData];
-                [self setupHeaderView];
-                [UIView transitionWithView:self.tableView
-                                  duration:0.35f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^(void)
-                                {
-                                    [self.tableView reloadData];
-                                }
-                                completion:nil];
-            });
-        }];
-    }
+    if (cellData.onButtonPressed)
+        cellData.onButtonPressed();
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -926,7 +1096,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
     if (cellData.onSwitch)
         cellData.onSwitch(switchView.isOn);
 
-    [[_app updateGpxTracksOnMapObservable] notifyEvent];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
@@ -940,19 +1109,16 @@ static const NSInteger kCustomTrackWidthMax = 24;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:segment.tag & 0x3FF inSection:segment.tag >> 10];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-        if ([cellData.key isEqualToString:@"width_value"])
-        {
-            _selectedWidth = [_appearanceCollection getAvailableWidth][segment.selectedSegmentIndex];
-            self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
+        if (cellData.updateProperty)
+            cellData.updateProperty(@(segment.selectedSegmentIndex));
 
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
-
+        if (_tableData[indexPath.section].updateData)
             _tableData[indexPath.section].updateData();
-            [UIView setAnimationsEnabled:NO];
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kWidthSection]
-                          withRowAnimation:UITableViewRowAnimationNone];
-            [UIView setAnimationsEnabled:YES];
-        }
+
+        [UIView setAnimationsEnabled:NO];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                      withRowAnimation:UITableViewRowAnimationNone];
+        [UIView setAnimationsEnabled:YES];
     }
 }
 
@@ -967,19 +1133,13 @@ static const NSInteger kCustomTrackWidthMax = 24;
         OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-        if ([cellData.key isEqualToString:@"width_custom_slider"])
-        {
-            NSInteger index = cell.selectedMark;
-            NSInteger selectedValue = _customWidthValues[index].intValue;
-            if (_selectedWidth.customValue.intValue != selectedValue)
-            {
-                _selectedWidth.customValue = [NSString stringWithFormat:@"%ld", selectedValue];
-                self.gpx.width = _selectedWidth.customValue;
-                cellData.updateData();
+        if (cellData.updateProperty)
+            cellData.updateProperty(@(cell.selectedMark));
 
-                [[_app updateGpxTracksOnMapObservable] notifyEvent];
-            }
-        }
+        if (cellData.updateData)
+            cellData.updateData();
+
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

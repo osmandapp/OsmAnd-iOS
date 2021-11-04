@@ -417,6 +417,12 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     return coordinate;
 }
 
++ (NSString *) getFormattedDistanceInterval:(double)interval
+{
+    double roundedDist = [self.class calculateRoundedDist:interval];
+    return [self.class getFormattedDistance:(float) roundedDist];
+}
+
 + (NSString *) getFormattedOsmTagValue:(NSString *)tagValue
 {
     if ([tagValue rangeOfCharacterFromSet: [ [NSCharacterSet characterSetWithCharactersInString:@"0123456789.-"] invertedSet] ].location == NSNotFound)
@@ -431,6 +437,5 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     }
     return tagValue;
 }
-
 
 @end

@@ -2194,3 +2194,8 @@
 "delete_group_confirm_short" = "Gruppe löschen?";
 "delete_group_confirm" = "Sind Sie sicher, dass Sie die Gruppe \"%@\" löschen wollen?";
 "delete_waypoints" = "Wegpunkte löschen";
+"shared_string_start_time" = "Startzeit";
+"shared_string_time_moving" = "Zeit in Bewegung";
+"shared_string_time_span" = "Dauer";
+"shared_string_end_time" = "Beendigungszeit";
+"distance_moving" = "Korrigierte Distanz";

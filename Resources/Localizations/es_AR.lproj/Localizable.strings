@@ -2210,3 +2210,8 @@
 "delete_group_confirm_short" = "¿Borrar grupo?";
 "delete_waypoints" = "Borrar puntos de referencia";
 "delete_group_confirm" = "¿Borrar el grupo «%@»?";
+"shared_string_start_time" = "Hora de inicio";
+"shared_string_time_span" = "Duración";
+"shared_string_end_time" = "Hora de fin";
+"shared_string_time_moving" = "Tiempo moviéndose";
+"distance_moving" = "Distancia recorrida";

@@ -8,6 +8,7 @@
 
 #import "OAAddWaypointViewController.h"
 #import "OARootViewController.h"
+#import "OATrackMenuHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAContextMenuLayer.h"
 #import "OAMapLayers.h"
@@ -207,9 +208,10 @@
 {
     [_contextLayer exitChangePositionMode:_movedPoint applyNewPosition:NO];
     [_mapPanelViewController targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-        [_mapPanelViewController openTargetViewWithGPX:_gpx
-                                          trackHudMode:EOATrackMenuHudMode
-                                                 state:_targetMenuState];
+        if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
+            [_mapPanelViewController openTargetViewWithGPX:_gpx
+                                              trackHudMode:EOATrackMenuHudMode
+                                                     state:(OATrackMenuViewControllerState *) _targetMenuState];
     }];
 
 }

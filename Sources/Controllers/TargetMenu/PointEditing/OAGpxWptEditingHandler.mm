@@ -81,7 +81,7 @@
 
 - (UIColor *)getColor
 {
-    return _gpxWpt.color ? _gpxWpt.color : [OAUtilities colorFromString:_gpxWpt.point.color];
+    return _gpxWpt.color ? _gpxWpt.color : [UIColor colorFromString:_gpxWpt.point.color];
 }
 
 - (NSString *)getGroupTitle

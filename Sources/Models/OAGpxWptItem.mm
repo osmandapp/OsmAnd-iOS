@@ -45,7 +45,7 @@
 - (void) acquireColor
 {
     if (self.point.color.length > 0)
-        self.color = [OAUtilities colorFromString:self.point.color];
+        self.color = [UIColor colorFromString:self.point.color];
 }
 
 - (BOOL) isEqual:(id)o

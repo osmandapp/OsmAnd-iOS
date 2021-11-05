@@ -9,7 +9,6 @@
 #import "OAFavoritesTabBarViewController.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
-#import "OAColors.h"
 
 @implementation OAFavoritesTabBarViewController
 
